@@ -19,17 +19,21 @@ The museum is a stretch-goal capstone that ties the achievement system to a phys
 
 ## Island Layout Decision
 
-**District islands with predefined building plots + dedicated single-building special islands.**
+**Main districts and islands are built by hand in the instance; plot sign blocks mark where buildings can go.**
 
-- Each district island is a single prefab with 3–5 building footprints baked into the terrain.
-  Plots are identified by a marker NPC placed at the center of each empty footprint.
-- District types: Residential, Market, Military, Civic (stretch: Museum)
-- Landmark structures get their own small island: Watchtower, Forge, later the Museum.
-  These are visually distinct and serve as waypoints the player navigates toward.
-- Bridges connect adjacent grid slots. The grid system handles alignment automatically.
+- The arrival island, district islands (Residential, Market, Military, Civic), and landmark islands
+  (Watchtower, Forge, etc.) are built directly in the Aetherhaven instance world. Chunks are saved
+  as part of the mod assets (see `Docs/INSTANCE_EDITING_GUIDE.md`). No programmatic island placement.
+- **Plot signs** — a custom block type, placed manually on each empty building footprint — mark
+  where a prefab can be built. Interacting with a plot sign opens the construction GUI; the sign
+  is not an NPC. District types: Residential, Market, Military, Civic (stretch: Museum). Landmark
+  islands (Watchtower, Forge, later Museum) are built the same way.
+- Bridges and layout are part of the hand-built world. A grid system is not required for the main
+  village; a grid setup may be introduced later as a stretch goal for the museum (e.g. exhibit
+  placement) and does not need to be built until museum work begins.
 
-This approach lets the art direction of each district tell a story the contest video can show in
-seconds, and makes the village feel coherent rather than scattered.
+This keeps art direction and level design in the hands of the designer while the code focuses on
+plot-sign logic, prefab placement on those plots, and villager progression.
 
 ---
 
@@ -45,37 +49,31 @@ the player builds or discovers. The portal triggers a dimension teleport.
   `BlockChange` sensor on a manager NPC (or event listener), triggers the teleport interaction
 - Players respawn at a designated arrival platform island if they die in the dimension
 
-### 2. Island Grid + Prefab Placement
+### 2. Plot Signs + Prefab Placement
 
-A 2D integer grid in the void dimension maps grid coordinates to island slots. Each slot has:
-- A world-space anchor position (computed from grid coords × cell size)
-- An occupancy state: EMPTY, DISTRICT, SPECIAL, BRIDGE
-- A reference to the placed IslandData asset
+Islands and districts are built by hand in the instance; no IslandGrid is used for the main village.
+A **plot sign** is a custom block placed manually on each empty building footprint. Each sign
+references a building type (e.g. which prefab and which villager “owns” the plot).
 
-**`IslandData` (JSON asset):**
-```json
-{
-  "id": "district_market",
-  "type": "DISTRICT",
-  "gridWidth": 1,
-  "gridHeight": 1,
-  "prefabFile": "Islands/Market_District.prefab",
-  "buildingPlots": ["market_stall_a", "market_stall_b", "traders_lodge"],
-  "bridgeAttachPoints": { "north": [0, 0], "south": [0, -1], "east": [1, 0], "west": [-1, 0] }
-}
-```
+**Plot sign behaviour:**
+- Interacting with the block opens a **Construction GUI** (see §4). Building the structure
+  requires: (1) the villager for that plot is in town, and (2) the player has the required
+  resources. The GUI shows the required NPC and materials; requirement text is green if met, red
+  if not. A “Build” button is greyed out until both conditions are satisfied.
+- When the player builds, the system consumes resources and places the building prefab at the
+  plot (anchor derived from the sign position). The plot sign can be removed or repurposed per
+  design (e.g. become a “completed” sign or stay as decoration).
 
-**`IslandGrid` (Java system):**
-- `placeIsland(gridX, gridZ, islandDataId)` — loads prefab, places blocks at anchor, spawns plot
-  markers for each empty building plot, places bridge prefabs to occupied adjacent slots
-- `removeIsland(gridX, gridZ)` — used for raid cleanup (removes raid-structure prefabs)
-- Grid persists in a custom data file so the village survives server restart
+**`BuildingData`** (or equivalent) still defines per-building prefab, cost, and which villager
+is tied to the plot. No `IslandData` or grid is required for core flow. A grid setup may be
+added later as a stretch goal for the museum (e.g. exhibit slots) and is out of scope until then.
 
 **`PrefabLoader` (Java system):**
 - Prefab files are JSON: block palette + 3D run-length-encoded block array
-- `place(prefabId, World, Vector3d anchor, Rotation)` — iterates block data and calls world block
-  placement API for each non-air block
+- `place(prefabId, World, Vector3d anchor, Rotation)` — places the building prefab when the
+  player confirms construction from a plot sign
 - Async-friendly: can batch placements over multiple ticks to avoid freeze on large prefabs
+- Also used for raid cleanup (e.g. placing/removing raid structures if needed)
 
 ### 3. Dialogue System
 
@@ -118,27 +116,35 @@ Hytale has NPC interactions but no branching dialogue. This is a custom system.
 
 ### 4. Construction System
 
-Each empty building plot in a district has a **Plot Marker NPC** — a simple non-combat NPC with
-a sign/post appearance and a name matching the building slot.
+Each empty building plot has a **plot sign block** (custom block, placed manually). Interacting
+with the plot sign opens the Construction GUI. Two conditions must both be satisfied to build:
 
-**Player interaction flow:**
-1. Player right-clicks the Plot Marker → `OpenCustomUIInteraction` fires
-2. **Construction UI** (`CustomUIPage`) shows:
-   - Building name and description
-   - Required resources (item list with counts)
-   - Player's current inventory (green = have enough, red = missing)
-   - "Construct" button (enabled only when all resources met)
-3. On confirm: Java checks inventory server-side, consumes resources, calls `PrefabLoader.place()`
-   at the plot's anchor, despawns the Plot Marker NPC, spawns the building's resident NPC(s),
-   fires the relevant achievement unlock
+1. **Villager in town** — The NPC assigned to this plot must be present in the village (e.g. has
+   already appeared at the inn and the player has accepted their quest; they may still be “at the
+   inn” or have moved into another building, but they must not be locked behind progression).
+2. **Player has resources** — The player’s inventory (or tracked materials) must meet the
+   building’s required item list.
 
-**`BuildingData` (JSON asset):**
+**Construction GUI (CustomUIPage):**
+- **Close** button — dismisses the window.
+- **Required NPC** — shows which villager must be in town for this plot; text colour **green** if
+  that villager is in town, **red** if not.
+- **Required materials** — list of items and counts; each line **green** if the player has
+  enough, **red** if not.
+- **Build** button — builds the structure when pressed. **Greyed out** (disabled) until both
+  “villager in town” and “all materials present” are true. When enabled and pressed: server
+  consumes resources, calls `PrefabLoader.place()` at the plot anchor (derived from the sign
+  position), updates village state (e.g. villager moves in, achievement unlock).
+
+**`BuildingData` (JSON asset):** defines prefab, cost, and which villager is tied to the plot
+(e.g. `requiredVillagerId`, `spawnsNpcs` for who moves in after build). Example shape:
 ```json
 {
   "id": "market_stall_a",
   "displayName": "Market Stall",
   "prefabFile": "Buildings/Market_Stall.prefab",
   "plotAnchorOffset": [0, 0, 0],
+  "requiredVillagerId": "merchant",
   "cost": [
     { "item": "Wood_Plank", "count": 20 },
     { "item": "Iron_Ingot", "count": 5 }
@@ -148,7 +154,39 @@ a sign/post appearance and a name matching the building slot.
 }
 ```
 
-### 5. Achievement + Village Growth System
+### 5. Villager Progression
+
+Villagers appear and unlock in a fixed sequence; who is “in town” drives which plot signs can be
+used to build.
+
+**Initial state**
+- Only the **Village Elder** is present, in the center of town. He greets the player and asks
+  them to restore the town.
+
+**After the player accepts the Elder’s request**
+- The **Innkeeper** appears in the village and asks the player to restore the **village Inn**.
+  Until the inn is built, no other villagers appear.
+
+**After the Inn is restored**
+- New villagers appear **in the inn** based on the player’s **achievements**. Each achievement can
+  unlock a specific villager type. Only villagers that are already unlocked can appear.
+- **At most two** unlocked NPCs are present in the inn at any time (e.g. two from the pool of
+  unlocked types, chosen by design or rotation).
+- When the player talks to a villager in the inn, that villager asks to have their **house**
+  restored first (or place of work, but house first). The corresponding plot sign(s) become
+  buildable once that villager is in town (and the player has resources).
+
+**When a villager’s house is restored**
+- That villager **moves in** to the new building and no longer counts as “in the inn.”
+- A **new slot** opens in the inn, so another unlocked villager (if any) can appear, keeping the
+  “max two in the inn” rule.
+
+So: Elder → accept quest → Innkeeper appears → build Inn → villagers start appearing in the inn
+(up to 2, gated by achievements) → player talks to them, they ask for their house → player builds
+via plot sign (villager in town + resources) → villager moves in, new villager can take their
+place in the inn.
+
+### 6. Achievement + Village Growth System
 
 `AchievementSystem` (Java) tracks a list of named boolean flags per player and globally for the
 village. Achievements fire when conditions are met (building constructed, item donated, raid
@@ -156,21 +194,17 @@ survived, etc.).
 
 Each achievement entry in `achievements.json` defines:
 - `id`, `displayName`, `description`
-- `onUnlock` actions: spawn NPC, unlock new plot on a district island, send dialogue, add museum
-  exhibit slot (stretch)
+- `onUnlock` actions: **unlock a villager** (so they can appear in the inn), send dialogue, add
+  museum exhibit slot (stretch)
 - `icon` (for museum exhibit display, stretch)
 
-**Village Growth Tiers** (drive new district islands unlocking):
-- Tier 1 — Arrival (start): 1 district island, 3 plots, Village Elder + 2 Guards
-- Tier 2 — Settlement: Market district unlocks after building trade post + 3 residents
-- Tier 3 — Town: Military district + Watchtower unlock after surviving first raid
-- Tier 4 — Haven: Civic district + Forge unlock after reaching 8 residents
-- Stretch — Museum island unlocks at Tier 4 + Scholar NPC arrival
+Achievements drive **which villagers can appear in the inn** (see §5). Islands and districts
+are already built in the instance; growth is expressed through which NPCs are in town and which
+buildings the player has constructed via plot signs. Tiers (e.g. “Settlement”, “Town”) can still
+be used to group achievements and narrative (e.g. “restore the inn” → “first villagers in inn” →
+“survive a raid” → more villagers unlocked). No IslandGrid or programmatic island placement.
 
-When a new district unlocks, `IslandGrid.placeIsland()` is called and the island appears in
-the void — visually the village grows outward.
-
-### 6. Economy + Currency
+### 7. Economy + Currency
 
 **Aether Shards** — custom item that acts as the village currency. Dropped by raid enemies,
 earned from completing construction objectives, and traded at the market.
@@ -181,20 +215,20 @@ earned from completing construction objectives, and traded at the market.
 - Merchant's `OpenBarterShop` action uses standard Hytale barter — the economy layer can tune
   prices by modifying the barter asset at runtime based on supply (stretch goal)
 
-### 7. Raid System
+### 8. Raid System
 
 Raids spawn when the village reaches a growth tier threshold and a cooldown timer has expired.
 
 **Raid flow:**
-1. `RaidSystem` (Java, tick-based) monitors village tier + last raid time
-2. On raid trigger: select a grid-edge anchor point, call `PrefabLoader.place()` to place the
-   **Sky Raider Barge** block structure prefab, then spawn a wave of Raider NPCs near it
+1. `RaidSystem` (Java, tick-based) monitors village state + last raid time
+2. On raid trigger: choose an anchor position (e.g. near the village edge), call `PrefabLoader.place()`
+   to place the **Sky Raider Barge** block structure prefab, then spawn a wave of Raider NPCs near it
 3. Raiders use the full Walk MotionController + Combat Action Evaluator to path toward the village
    and attack buildings/players
 4. Guards respond via `Alarm` + `Beacon` — one guard spots a Raider (using the `Mob` sensor),
    fires a beacon, all guards switch to combat state and converge
-5. Raid ends when all Raiders are dead (or timer expires): `IslandGrid.removeIsland()` cleans up
-   the barge prefab, `AchievementSystem` fires `raid_survived`, village tier advance check runs
+5. Raid ends when all Raiders are dead (or timer expires): remove the barge prefab (block clear or
+   prefab removal as implemented), `AchievementSystem` fires `raid_survived`, unlock/advance checks run
 6. Escalating difficulty: each subsequent raid adds more Raiders and uses a larger barge prefab
 
 **Sky Raider Barge prefab:** A Blockbench-modelled flying galleon skeleton — rough planks, crows
@@ -207,20 +241,20 @@ a static block structure that exists for the duration of the raid.
 
 | # | NPC | Role in Village | Key Systems Used | Unlocks At |
 |---|-----|-----------------|------------------|------------|
-| 1 | **Village Elder** | Quest hub, arrival greeter, tracks village state | Full dialogue tree, achievement listeners, custom component for village knowledge | Start |
-| 2 | **Guard** (×2 initially) | Patrols village, defends against raids | Combat Action Evaluator, Alarm+Beacon, Walk+path patrol, flock behavior | Start |
-| 3 | **Guard Captain** | Commands guards, escalates raid response, has own combat abilities | CAE with coordinated orders via Beacon, multi-phase raid AI, timer-gated abilities | Tier 3 (Military district) |
-| 4 | **Merchant** | Sells goods, buys Aether Shards, daily schedule | OpenBarterShop interaction, daily open/close schedule (Time sensor), custom dialogue | Tier 2 (Market district) |
-| 5 | **Farmer** | Produces food for economy, visible daily work routine | Day/night schedule (Time + timer states), PlaceBlock + PickUpItem AI actions, no combat | Tier 2 |
-| 6 | **Blacksmith** | Unlocks guard equipment upgrades, gives crafting quests | Dialogue-driven upgrade system, custom component tracking upgrade tiers, idle forge animations | Tier 4 (Forge island) |
-| 7 | **Scholar** | Drives collection quests, links to museum | Dialogue tree with objectives, HasTask sensor for quest tracking, custom achievement hooks | Tier 4 (Civic district) |
-| 8 | **Innkeeper** | Social hub, sells food/lodging bonuses, daily schedule | OpenShop interaction, time-based open/close, ambient socialising AI (Observe + Wander) | Tier 2 |
-| 9 | **Village Child** | Ambient life, reacts to events, plays/runs during raids | Simple curiosity AI (random wander + Watch player), Flee on Damage, Beacon listener for raids | Tier 1 (after first building) |
-| 10 | **Visiting Trader** | Periodic rare-goods vendor, arrives and departs on schedule | Timer-gated spawn/despawn, rare barter inventory, departure dialogue, unique model variant | Tier 2+ (every N minutes) |
+| 1 | **Village Elder** | Quest hub, arrival greeter, asks player to restore the town | Full dialogue tree, achievement listeners, custom component for village knowledge | Start (center of town) |
+| 2 | **Guard** (×2 initially) | Patrols village, defends against raids | Combat Action Evaluator, Alarm+Beacon, Walk+path patrol, flock behavior | Start (or as designed) |
+| 3 | **Guard Captain** | Commands guards, escalates raid response, has own combat abilities | CAE with coordinated orders via Beacon, multi-phase raid AI, timer-gated abilities | Unlocked by achievement; appears in inn |
+| 4 | **Merchant** | Sells goods, buys Aether Shards, daily schedule | OpenBarterShop interaction, daily open/close schedule (Time sensor), custom dialogue | Unlocked by achievement; appears in inn (max 2 at a time) |
+| 5 | **Farmer** | Produces food for economy, visible daily work routine | Day/night schedule (Time + timer states), PlaceBlock + PickUpItem AI actions, no combat | Unlocked by achievement; appears in inn |
+| 6 | **Blacksmith** | Unlocks guard equipment upgrades, gives crafting quests | Dialogue-driven upgrade system, custom component tracking upgrade tiers, idle forge animations | Unlocked by achievement; appears in inn |
+| 7 | **Scholar** | Drives collection quests, links to museum | Dialogue tree with objectives, HasTask sensor for quest tracking, custom achievement hooks | Unlocked by achievement; appears in inn |
+| 8 | **Innkeeper** | Social hub, sells food/lodging bonuses, daily schedule | OpenShop interaction, time-based open/close, ambient socialising AI (Observe + Wander) | Appears after player accepts Elder’s “restore the town” request; asks to restore Inn |
+| 9 | **Village Child** | Ambient life, reacts to events, plays/runs during raids | Simple curiosity AI (random wander + Watch player), Flee on Damage, Beacon listener for raids | Unlocked by achievement; appears in inn |
+| 10 | **Visiting Trader** | Periodic rare-goods vendor, arrives and departs on schedule | Timer-gated spawn/despawn, rare barter inventory, departure dialogue, unique model variant | Unlocked / schedule (every N minutes) |
 
 **Stretch NPC:**
-**Museum Curator** — Arrives when Museum island is placed. Commission quests, exhibit dialogues,
-achievement display management. Reuses the dialogue system heavily.
+**Museum Curator** — Present when the Museum (hand-built in instance) is used; commission quests,
+exhibit dialogues, achievement display management. Reuses the dialogue system heavily.
 
 ---
 
@@ -228,53 +262,53 @@ achievement display management. Reuses the dialogue system heavily.
 
 **Week 1 (Mar 10–16) — Foundation**
 - [ ] Set up Aetherhaven mod project, build pipeline, CurseForge page (get it live early)
-- [ ] Void dimension registration, portal structure detection, player teleport
+- [X] Void dimension registration, portal structure detection, player teleport
 - [ ] `PrefabLoader` core: JSON format spec, block palette, placement API
-- [ ] Hand-build first test island prefab (flat stone island, small) to validate placement
-- [ ] `IslandGrid` core: grid data structure, anchor computation, slot occupancy
+- [X] Hand-build first test island prefab (flat stone island, small) to validate placement
+- [ ] Plot sign block: custom block asset, placement in instance; interaction opens placeholder Construction GUI
 
 **Week 2 (Mar 17–23) — Village Scaffolding**
-- [ ] `IslandData` + `BuildingData` JSON assets defined and loading
-- [ ] Plot Marker NPC: appears at empty plots, basic interaction triggers placeholder UI
-- [ ] `AchievementSystem`: flag tracking, unlock actions (NPC spawn, tier advance), persistence
-- [ ] Village arrival island prefab (the first thing the player sees — make it beautiful)
-- [ ] Village Elder NPC with basic (non-branching) dialogue, starter quest
+- [ ] `BuildingData` JSON assets (prefab, cost, requiredVillagerId) defined and loading
+- [ ] Plot sign: wire to Construction GUI (NPC required + materials, green/red text, Build button greyed out when requirements not met)
+- [ ] `AchievementSystem`: flag tracking, unlock actions (villager unlock for inn), persistence
+- [ ] Village arrival island built in instance (Elder in center); plot signs placed where buildings will go
+- [ ] Village Elder NPC: dialogue asking player to restore the town; on accept, Innkeeper appears
 
 **Week 3 (Mar 24–30) — Dialogue System**
 - [ ] Dialogue tree JSON format, loader, node resolution
 - [ ] `DialogueUI` (CustomUIPage + .ui template): text area, portrait, choice buttons
 - [ ] Typewriter animation, keyboard navigation (1/2/3/4 keys for choices)
-- [ ] Wire Elder, Merchant, and Innkeeper NPCs to real dialogue trees
-- [ ] Condition evaluation: check achievements, village tier, inventory
+- [ ] Wire Elder and Innkeeper to dialogue (Elder: “restore the town”; Innkeeper: “restore the Inn”)
+- [ ] Condition evaluation: check achievements, “villager in town”, inventory
+- [ ] Villager progression: after Elder accept → Innkeeper appears; after Inn built → up to 2 unlocked villagers in inn; they ask for house first
 
 **Week 4 (Mar 31–Apr 6) — Construction + Economy**
-- [ ] Construction UI (CustomUIPage): resource list, inventory check, confirm button
-- [ ] Server-side resource consumption on confirm, prefab placement, NPC spawn
+- [ ] Construction UI: required NPC (green/red), required materials (green/red), Close, Build (greyed out until both conditions met)
+- [ ] Server-side: villager-in-town check, resource consumption on confirm, PrefabLoader.place() at plot, villager moves in, achievement unlock
 - [ ] Aether Shard custom item + currency tracking
-- [ ] Market district prefab + Merchant NPC with barter shop
-- [ ] Residential district prefab, Farmer NPC with day/night schedule
-- [ ] Tier 2 unlock flow end-to-end (build market → district appears → Merchant arrives)
+- [ ] Inn prefab + Innkeeper; first unlocked villagers (e.g. Merchant, Farmer) appear in inn, ask for house
+- [ ] Building prefabs for first residences/market; plot signs on hand-built islands
+- [ ] End-to-end: build Inn → villagers in inn → talk to villager → build their house → they move in, new slot in inn
 
 **Week 5 (Apr 7–13) — Guards + Raids**
 - [ ] Guard NPC: patrol path, Combat Action Evaluator setup, Alarm/Beacon chain
 - [ ] Guard Captain: coordinated commands, multi-phase raid response AI
-- [ ] `RaidSystem`: tier-gated trigger, prefab spawn, Raider NPC wave, cleanup
+- [ ] `RaidSystem`: state-gated trigger, barge prefab placement at anchor, Raider NPC wave, cleanup
 - [ ] Sky Raider Barge prefab (block structure)
 - [ ] Raider NPC roles: basic combat AI with Walk controller, target village NPCs + player
-- [ ] Raid survival → achievement → tier advance → Military district + Watchtower unlock
+- [ ] Raid survival → achievement → unlock new villagers for inn
 
 **Week 6 (Apr 14–19) — Remaining NPCs + Content Pass**
-- [ ] Blacksmith (Forge island), Scholar (Civic district), Village Child, Visiting Trader
-- [ ] Tier 3 + Tier 4 unlock flows end-to-end
+- [ ] Blacksmith, Scholar, Village Child, Visiting Trader: unlocked by achievements, appear in inn (max 2 at a time), ask for house/work
+- [ ] All 10 NPC dialogue trees written and wired to progression
 - [ ] Second and third raid difficulty tiers
-- [ ] All 10 NPC dialogue trees written and wired
-- [ ] Aetherhaven dimension: build out the full island art (not just test geometry)
+- [ ] Aetherhaven dimension: full island art built in instance (districts, landmarks, plot signs)
 
 **Week 7 (Apr 20–24) — Polish**
-- [ ] Playtest the full arc from portal entry to Tier 4 — fix pacing, tune resource costs
+- [ ] Playtest full arc: portal → Elder → accept → Innkeeper → build Inn → villagers in inn → build houses → move-in, new villagers
 - [ ] Performance pass on prefab placement (async batching)
 - [ ] Sound pass: ambient village sounds, raid alarm, construction completion
-- [ ] UI polish: construction UI, dialogue UI, achievement notification
+- [ ] UI polish: Construction GUI (plot sign), dialogue UI, achievement notification
 - [ ] Edge cases: player death in dimension, server restart persistence, raid during construction
 
 **Week 8 (Apr 25–28) — Submission**
@@ -296,28 +330,29 @@ achievement display management. Reuses the dialogue system heavily.
 - Prefab data: JSON. The block layout of every island and building is a data file, not hardcoded.
 
 **Persistence:**
-- Village state (grid occupancy, achievement flags, economy) serialises to a JSON file in the
-  world's plugin data directory on server stop. Loaded back on startup.
+- Village state (achievement flags, which villagers are unlocked / in town / moved in, economy)
+  serialises to a JSON file in the world's plugin data directory on server stop. Loaded back on startup.
 - Per-player state (dialogue progress, objectives) uses a custom ECS component.
 
 **Extensibility (the "hire me" signal):**
 - `AchievementSystem` has a public `register(AchievementDefinition)` API so other mods can add
-  achievements that drive new NPCs and (stretch) museum exhibits.
-- `BuildingData` and `IslandData` are loaded from `Server/Aetherhaven/` asset directories — other
-  mods can drop files there to add buildings without touching Aetherhaven's Java code.
+  achievements that drive new villagers (inn pool) and (stretch) museum exhibits.
+- `BuildingData` is loaded from asset directories — other mods can add building definitions.
+  Plot signs reference building IDs; islands and layout are hand-built in the instance.
 
 ---
 
 ## Fallback Scoping
 
 **If behind at Week 5:** Cut Visiting Trader and Scholar, simplify raids to enemy waves without
-the barge prefab (enemies spawn at the grid edge). Village Elder carries more of the dialogue weight.
+the barge prefab. Village Elder and Innkeeper carry more of the dialogue weight.
 
-**If behind at Week 6:** Submit with Tier 1–3 only. A village that grows to Military tier with a
-working raid defense is a complete, demonstrable experience. Tier 4 becomes post-contest content.
+**If behind at Week 6:** Submit with Elder → Innkeeper → Inn → a subset of villagers (e.g. 2–3
+types) appearing in inn and moving into houses. Raid defense and plot-sign construction still
+demonstrate the full loop.
 
-**If ahead:** Add Museum island (Stretch Tier 5), Curator NPC, and at least 5 exhibit displays
-driven by achievements already tracked. The museum wing takes roughly one week.
+**If ahead:** Add Museum (stretch): museum island built in instance, grid setup for exhibit slots
+if needed, Curator NPC, and at least 5 exhibit displays driven by achievements. Roughly one week.
 
 ---
 

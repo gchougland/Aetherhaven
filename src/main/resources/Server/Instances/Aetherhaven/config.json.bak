@@ -1,0 +1,95 @@
+{
+  "Version": 4,
+  "UUID": {
+    "$binary": "Vqu4gqYBQNmXMZuIWe5mbg==",
+    "$type": "04"
+  },
+  "DisplayName": "Aetherhaven",
+  "Seed": 0,
+  "SpawnProvider": {
+    "Id": "Global",
+    "SpawnPoint": {
+      "X": 0.0,
+      "Y": 100.0,
+      "Z": 0.0,
+      "Pitch": 0.0,
+      "Yaw": 0.0,
+      "Roll": 0.0
+    }
+  },
+  "WorldGen": {
+    "Type": "Void",
+    "Environment": "Default"
+  },
+  "WorldMap": {
+    "Type": "WorldGen"
+  },
+  "ChunkStorage": {
+    "Type": "Hytale"
+  },
+  "ChunkConfig": {},
+  "IsTicking": false,
+  "IsBlockTicking": true,
+  "IsPvpEnabled": false,
+  "IsFallDamageEnabled": true,
+  "IsGameTimePaused": true,
+  "GameTime": "0001-01-04T08:00:00.000858306Z",
+  "ClientEffects": {
+    "SunHeightPercent": 100.0,
+    "SunAngleDegrees": 0.0,
+    "BloomIntensity": 0.30000001192092896,
+    "BloomPower": 8.0,
+    "SunIntensity": 0.25,
+    "SunshaftIntensity": 0.30000001192092896,
+    "SunshaftScaleFactor": 4.0
+  },
+  "RequiredPlugins": {},
+  "GameMode": "Adventure",
+  "IsSpawningNPC": true,
+  "IsSpawnMarkersEnabled": true,
+  "IsAllNPCFrozen": false,
+  "GameplayConfig": "Aetherhaven",
+  "IsCompassUpdating": true,
+  "IsSavingPlayers": false,
+  "IsSavingChunks": true,
+  "SaveNewChunks": true,
+  "IsUnloadingChunks": true,
+  "IsObjectiveMarkersEnabled": false,
+  "DeleteOnUniverseStart": false,
+  "DeleteOnRemove": false,
+  "ResourceStorage": {
+    "Type": "Hytale"
+  },
+  "Plugin": {
+    "Instance": {
+      "RemovalConditions": [],
+      "ReturnPoint": {
+        "World": {
+          "$binary": "VgcU48wpQhyqNWBc2UYqsA==",
+          "$type": "04"
+        },
+        "ReturnPoint": {
+          "X": -1883.607421875,
+          "Y": 121.4500961303711,
+          "Z": -126.51649475097656,
+          "Pitch": 0.0,
+          "Yaw": 0.0,
+          "Roll": 0.0
+        },
+        "ReturnOnReconnect": false
+      },
+      "PreventReconnection": false,
+      "Discovery": {
+        "TitleKey": "server.instances.aetherhaven.title",
+        "SubtitleKey": "server.instances.aetherhaven.subtitle",
+        "Display": true,
+        "AlwaysDisplay": true,
+        "Icon": "Temple_Gateway.png",
+        "Major": true,
+        "Duration": 4.0,
+        "FadeInDuration": 1.5,
+        "FadeOutDuration": 1.5
+      }
+    }
+  }
+}

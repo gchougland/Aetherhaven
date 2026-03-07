@@ -1,1 +1,11 @@
 # Aetherhaven server-side language strings
+
+# Portals
+items.Aetherhaven_Portal_Exit.name=Aetherhaven Exit
+items.Aetherhaven_Portal_Exit.description=Use to return to the overworld.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven Gateway
+items.Aetherhaven_Portal_Enter.description=Use to enter Aetherhaven.
+
+# Instance discovery
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=The sky village
