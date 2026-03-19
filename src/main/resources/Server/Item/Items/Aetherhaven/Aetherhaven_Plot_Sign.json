@@ -1,0 +1,70 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Plot_Sign.name",
+    "Description": "server.items.Aetherhaven_Plot_Sign.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Furniture.Signs"
+  ],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",
+  "IconProperties": {
+    "Rotation": [35, 179.44, 0],
+    "Scale": 0.32,
+    "Translation": [-2.085, -40.7]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Lumberjack/Sign_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Gathering": {
+      "Soft": {
+        "IsWeaponBreakable": false
+      }
+    },
+    "HitboxType": "Sign_Tall",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#793e21",
+    "Support": {
+      "Down": [{ "FaceType": "Full" }]
+    },
+    "VariantRotation": "NESW",
+    "Flags": {
+      "IsUsable": true
+    },
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenPlotSign": {
+          "ConstructionId": ""
+        }
+      }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenPlotConstruction"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "ResourceTypes": [{ "Id": "Fuel" }, { "Id": "Charcoal" }],
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

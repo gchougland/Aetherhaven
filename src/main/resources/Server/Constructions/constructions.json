@@ -1,0 +1,17 @@
+{
+  "constructions": [
+    {
+      "id": "test_house_site",
+      "displayName": "Test house",
+      "description": "Places the test_house prefab. Sign block is removed when complete.",
+      "prefabPath": "test_house.prefab.json",
+      "plotAnchorOffset": [5, 0, 5],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 4 },
+        { "itemId": "Rock_Stone_Cobble", "count": 2 }
+      ]
+    }
+  ]
+}

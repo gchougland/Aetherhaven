@@ -9,3 +9,17 @@ items.Aetherhaven_Portal_Enter.description=Use to enter Aetherhaven.
 # Instance discovery
 instances.aetherhaven.title=Aetherhaven
 instances.aetherhaven.subtitle=The sky village
+
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Construction
+aetherhaven.ui.plotconstruction.materials=Materials
+aetherhaven.ui.plotconstruction.build=Build
+aetherhaven.ui.plotadmin.title=Plot sign (admin)
+aetherhaven.ui.plotadmin.construction=Construction
+aetherhaven.ui.plotadmin.give=Give plot sign & close
+
+commands.aetherhaven.root.desc=Aetherhaven mod commands
+commands.aetherhaven.plot.desc=Open plot sign admin UI (pick construction, get item)
+
+items.Aetherhaven_Plot_Sign.name=Plot sign
+items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.

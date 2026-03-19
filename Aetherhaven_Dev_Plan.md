@@ -263,13 +263,13 @@ exhibit dialogues, achievement display management. Reuses the dialogue system he
 **Week 1 (Mar 10–16) — Foundation**
 - [ ] Set up Aetherhaven mod project, build pipeline, CurseForge page (get it live early)
 - [X] Void dimension registration, portal structure detection, player teleport
-- [ ] `PrefabLoader` core: JSON format spec, block palette, placement API
+- [X] `PrefabLoader` core: JSON format spec, block palette, placement API
 - [X] Hand-build first test island prefab (flat stone island, small) to validate placement
-- [ ] Plot sign block: custom block asset, placement in instance; interaction opens placeholder Construction GUI
+- [X] Plot sign block: custom block asset, placement in instance; interaction opens placeholder Construction GUI
 
 **Week 2 (Mar 17–23) — Village Scaffolding**
-- [ ] `BuildingData` JSON assets (prefab, cost, requiredVillagerId) defined and loading
-- [ ] Plot sign: wire to Construction GUI (NPC required + materials, green/red text, Build button greyed out when requirements not met)
+- [X] `BuildingData` JSON assets (prefab, cost, requiredVillagerId) defined and loading
+- [X] Plot sign: wire to Construction GUI (NPC required + materials, green/red text, Build button greyed out when requirements not met)
 - [ ] `AchievementSystem`: flag tracking, unlock actions (villager unlock for inn), persistence
 - [ ] Village arrival island built in instance (Elder in center); plot signs placed where buildings will go
 - [ ] Village Elder NPC: dialogue asking player to restore the town; on accept, Innkeeper appears

@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
+    implementation("com.google.code.gson:gson:2.11.0")
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
 }
