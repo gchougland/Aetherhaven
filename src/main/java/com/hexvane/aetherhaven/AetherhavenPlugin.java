@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
+import com.hexvane.aetherhaven.dialogue.DialogueResolver;
+import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
+import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
@@ -17,6 +21,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
@@ -37,6 +42,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     /** Same pattern as OrbisOrigins: {@code config.json} under the plugin data directory. */
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
+    private DialogueCatalog dialogueCatalog = DialogueCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
+    private final DialogueResolver dialogueResolver = new DialogueResolver();
+    private final DialogueWorldView dialogueWorldView = new DialogueWorldView.DefaultDialogueWorldView();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "Aetherhaven-Construction");
         t.setDaemon(true);
@@ -60,6 +68,21 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public ConstructionCatalog getConstructionCatalog() {
         return constructionCatalog;
+    }
+
+    @Nonnull
+    public DialogueCatalog getDialogueCatalog() {
+        return dialogueCatalog;
+    }
+
+    @Nonnull
+    public DialogueResolver getDialogueResolver() {
+        return dialogueResolver;
+    }
+
+    @Nonnull
+    public DialogueWorldView getDialogueWorldView() {
+        return dialogueWorldView;
     }
 
     /**
@@ -113,6 +136,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
             AetherhavenConstants.PAGE_PLOT_SIGN_ADMIN,
             PlotSignAdminPage::new
         );
+        NPCPlugin npc = NPCPlugin.get();
+        if (npc != null) {
+            npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
+            LOGGER.atInfo().log("Registered NPC action OpenAetherhavenDialogue");
+        } else {
+            LOGGER.atWarning().log("NPCPlugin not loaded; OpenAetherhavenDialogue action unavailable");
+        }
         this.getCommandRegistry().registerCommand(new AetherhavenCommand());
         LOGGER.atInfo().log("Aetherhaven v%s loaded", this.getManifest().getVersion().toString());
     }
@@ -121,7 +151,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     protected void start() {
         this.config.get();
         this.constructionCatalog = ConstructionCatalog.loadFromClasspath(this.getClassLoader());
+        this.dialogueCatalog = DialogueCatalog.loadFromClasspath(this.getClassLoader());
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
+        LOGGER.atInfo().log("Aetherhaven dialogues loaded: %s", this.dialogueCatalog.all().keySet());
     }
 
     @Override

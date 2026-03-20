@@ -1,0 +1,18 @@
+$C = "../Common.ui";
+
+Button #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Style: (
+    Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+    Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+    Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75))),
+    Disabled: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #000000(0.35)))
+  );
+
+  Label #Text {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
+    FlexWeight: 1;
+  }
+}

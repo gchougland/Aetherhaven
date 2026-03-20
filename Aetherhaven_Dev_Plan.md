@@ -111,7 +111,7 @@ Hytale has NPC interactions but no branching dialogue. This is a custom system.
 
 **`DialogueUI` (CustomUIPage + .ui template):**
 - Full-screen dialogue overlay: NPC portrait on the left, text area centre, up to 4 choice buttons
-- Typewriter effect on text reveal (handled in the .ui template animation layer)
+- Full node text and choices shown together (no typewriter; avoids custom-page ack churn)
 - Exits cleanly on Escape or when `next` is null
 
 ### 4. Construction System
@@ -275,9 +275,9 @@ exhibit dialogues, achievement display management. Reuses the dialogue system he
 - [ ] Village Elder NPC: dialogue asking player to restore the town; on accept, Innkeeper appears
 
 **Week 3 (Mar 24–30) — Dialogue System**
-- [ ] Dialogue tree JSON format, loader, node resolution
-- [ ] `DialogueUI` (CustomUIPage + .ui template): text area, portrait, choice buttons
-- [ ] Typewriter animation, keyboard navigation (1/2/3/4 keys for choices)
+- [X] Dialogue tree JSON format, loader, node resolution
+- [X] `DialogueUI` (CustomUIPage + .ui template): text area, choice buttons
+- [ ] Optional: typewriter / keyboard navigation (deferred; server-driven typewriter hits custom-page ack limits)
 - [ ] Wire Elder and Innkeeper to dialogue (Elder: “restore the town”; Innkeeper: “restore the Inn”)
 - [ ] Condition evaluation: check achievements, “villager in town”, inventory
 - [ ] Villager progression: after Elder accept → Innkeeper appears; after Inn built → up to 2 unlocked villagers in inn; they ask for house first

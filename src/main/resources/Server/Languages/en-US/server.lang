@@ -21,5 +21,21 @@ aetherhaven.ui.plotadmin.give=Give plot sign & close
 commands.aetherhaven.root.desc=Aetherhaven mod commands
 commands.aetherhaven.plot.desc=Open plot sign admin UI (pick construction, get item)
 
+commands.aetherhaven.exportskin.desc=Export your avatar skin as a model JSON (Parent: Player)
+commands.aetherhaven.exportskin.other.desc=Export another player's avatar skin as model JSON
+commands.aetherhaven.exportskin.arg.path=Optional output file path (default: plugin data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=No character skin is available for this player.
+commands.aetherhaven.exportskin.invalidSkin=Skin validation failed: {detail}
+commands.aetherhaven.exportskin.resolveError=Could not resolve skin to model attachments: {detail}
+commands.aetherhaven.exportskin.ioError=Failed to write {path}: {detail}
+commands.aetherhaven.exportskin.success=Wrote model JSON to {path}
+
 items.Aetherhaven_Plot_Sign.name=Plot sign
 items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.
+
+# Dialogue
+commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)
+commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (e.g. aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Optional entry node id (default: root)
+aetherhaven.interaction.dialogue=Press [{key}] to talk
+npcRoles.Aetherhaven_Test_Villager.name=Dialogue Test Villager

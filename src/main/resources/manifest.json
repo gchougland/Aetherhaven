@@ -10,7 +10,9 @@
   ],
   "Website": "${plugin_website}",
   "ServerVersion": "${server_version}",
-  "Dependencies": {},
+  "Dependencies": {
+    "Hytale:NPC": "*"
+  },
   "OptionalDependencies": {},
   "DisabledByDefault": false,
   "IncludesAssetPack": true,

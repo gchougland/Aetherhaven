@@ -1,0 +1,43 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [],
+  "entities": [
+    {
+      "Components": {
+        "SpawnMarkerComponent": {
+          "SpawnMarker": "Aetherhaven_Test_Villager",
+          "RespawnTime": 0.0,
+          "SpawnCount": 0
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.5,
+            "Y": 0.0,
+            "Z": 0.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.0,
+            "Roll": 0.0
+          }
+        },
+        "Model": {
+          "Model": {
+            "Id": "NPC_Spawn_Marker",
+            "Scale": 1.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "7QVnH0dXRU+ZqJqYq6Yk1A==",
+            "$type": "04"
+          }
+        }
+      }
+    }
+  ]
+}

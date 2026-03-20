@@ -1,0 +1,115 @@
+{
+  "id": "aetherhaven_dialogue_test",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "QA Villager",
+      "text": "Welcome to the Aetherhaven dialogue harness. This line is intentionally long so you can check layout and scrolling. Choices appear below the body text.",
+      "choices": [
+        { "text": "Continue to the conditions lab.", "next": "conditions_lab" },
+        { "text": "Leave (end with next null).", "next": null },
+        {
+          "text": "Leave (explicit close action).",
+          "next": null,
+          "actions": [{ "type": "close" }]
+        }
+      ]
+    },
+    "conditions_lab": {
+      "speaker": "QA Villager",
+      "text": "Conditions lab. You should NOT see a hidden choice. You SHOULD see a greyed choice. Use the compound gates to continue.",
+      "choices": [
+        {
+          "text": "This choice is hidden (literal false).",
+          "next": "root",
+          "condition": { "type": "literal", "value": false },
+          "whenFalse": "hide"
+        },
+        {
+          "text": "This should be greyed out.",
+          "next": "conditions_lab",
+          "condition": { "type": "literal", "value": false },
+          "whenFalse": "disabled",
+          "disabledReason": "(requires literal true)"
+        },
+        {
+          "text": "Pass compound: NOT false AND true",
+          "next": "item_demo",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "literal", "value": false } },
+              { "type": "literal", "value": true }
+            ]
+          }
+        },
+        {
+          "text": "OR branch (true OR false)",
+          "next": "item_demo",
+          "condition": {
+            "type": "or",
+            "conditions": [
+              { "type": "literal", "value": true },
+              { "type": "literal", "value": false }
+            ]
+          }
+        }
+      ]
+    },
+    "item_demo": {
+      "speaker": "QA Villager",
+      "text": "A node-enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.",
+      "actions": [{ "type": "give_item", "item": "Tool_Shovel_Crude", "count": 1 }],
+      "choices": [
+        {
+          "text": "Give me 3 dirt, then continue.",
+          "next": "shop_demo",
+          "actions": [{ "type": "give_item", "item": "Soil_Dirt", "count": 3 }]
+        }
+      ]
+    },
+    "shop_demo": {
+      "speaker": "QA Villager",
+      "text": "You can open the Kweebec merchant barter UI, or skip to stub actions.",
+      "choices": [
+        {
+          "text": "Open Kweebec_Merchant barter shop",
+          "actions": [
+            { "type": "close" },
+            { "type": "open_barter_shop", "shop": "Kweebec_Merchant" }
+          ]
+        },
+        { "text": "Skip shop, go to stubs", "next": "stubs_demo" }
+      ]
+    },
+    "stubs_demo": {
+      "speaker": "QA Villager",
+      "text": "Stub actions: unlock achievement and start quest should log until those systems exist.",
+      "choices": [
+        {
+          "text": "Run unlock_achievement + start_quest stubs",
+          "next": "goto_demo",
+          "actions": [
+            { "type": "unlock_achievement", "id": "aetherhaven_dialogue_test" },
+            { "type": "start_quest", "id": "aetherhaven_dialogue_test_quest" }
+          ]
+        }
+      ]
+    },
+    "goto_demo": {
+      "speaker": "QA Villager",
+      "text": "Pick below to jump to farewell using a goto action instead of next.",
+      "choices": [
+        {
+          "text": "goto farewell",
+          "actions": [{ "type": "goto", "node": "farewell" }]
+        }
+      ]
+    },
+    "farewell": {
+      "speaker": "QA Villager",
+      "text": "Thanks for testing. Goodbye!",
+      "choices": [{ "text": "Bye!", "actions": [{ "type": "close" }] }]
+    }
+  }
+}

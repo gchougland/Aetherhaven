@@ -1,0 +1,65 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Bottom;
+
+  Group #DialoguePanel {
+    Anchor: (Left: 200, Right: 200, Bottom: 40, Height: 400);
+    LayoutMode: Top;
+    Padding: (Full: 16);
+    Background: (TexturePath: "../Common/ContainerFullPatch.png", Border: 20);
+
+    Group #DialogueFill {
+      FlexWeight: 1;
+      LayoutMode: Top;
+
+      Group #DialogueColumn {
+        Anchor: (Full: 0);
+        LayoutMode: Top;
+
+        Group #SpeakerFrame {
+          LayoutMode: Top;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Label #Speaker {
+            Anchor: (Bottom: 0);
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d4c4a8);
+          }
+        }
+
+        Group #TextBlock {
+          LayoutMode: Top;
+          Anchor: (Bottom: 8, Height: 108);
+          Padding: (Horizontal: 10, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Label #BodyText {
+            Anchor: (Full: 0);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8dcc8);
+          }
+        }
+
+        Group #ChoicesFrame {
+          FlexWeight: 1;
+          LayoutMode: Top;
+          Anchor: (Top: 2);
+          Padding: (Horizontal: 8, Vertical: 8);
+          Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+          Group #ChoicesScroll {
+            FlexWeight: 1;
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+            Group #ChoicesRoot {
+              LayoutMode: Top;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

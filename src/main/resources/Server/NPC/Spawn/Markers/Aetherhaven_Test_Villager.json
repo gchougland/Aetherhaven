@@ -1,0 +1,14 @@
+{
+  "Model": "NPC_Spawn_Marker",
+  "NPCs": [
+    {
+      "Name": "Aetherhaven_Test_Villager",
+      "Weight": 100,
+      "RealtimeRespawnTime": 3
+    }
+  ],
+  "RealtimeRespawn": true,
+  "ExclusionRadius": 2,
+  "MaxDropHeight": 4,
+  "DeactivationDistance": 150
+}
