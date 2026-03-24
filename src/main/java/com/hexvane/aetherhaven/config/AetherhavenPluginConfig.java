@@ -29,11 +29,18 @@ public final class AetherhavenPluginConfig {
             o -> o.ignoreVillagerRequirement
         )
         .add()
+        .append(
+            new KeyedCodec<>("DefaultTerritoryChunkRadius", Codec.INTEGER),
+            (o, v) -> o.defaultTerritoryChunkRadius = v,
+            o -> o.defaultTerritoryChunkRadius
+        )
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
     private long constructionMinIntervalMs = 25L;
     private boolean ignoreVillagerRequirement = false;
+    private int defaultTerritoryChunkRadius = 8;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -45,6 +52,10 @@ public final class AetherhavenPluginConfig {
 
     public boolean isIgnoreVillagerRequirement() {
         return ignoreVillagerRequirement;
+    }
+
+    public int getDefaultTerritoryChunkRadius() {
+        return Math.max(1, defaultTerritoryChunkRadius);
     }
 
     @Nonnull

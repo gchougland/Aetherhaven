@@ -1,0 +1,40 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Plot_Placement_Tool.name",
+    "Description": "server.items.Aetherhaven_Plot_Placement_Tool.description"
+  },
+  "Categories": ["Items.Weapons"],
+  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
+  "Quality": "Common",
+  "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",
+  "Texture": "Items/Weapons/Staff/Crystal_Purple_Texture.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 0.31,
+    "Translation": [-30.6, -31.2],
+    "Rotation": [45, 90, 0]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": { "Id": "AetherhavenPlotPlacement" }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 64,
+      "Creative": 64
+    }
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

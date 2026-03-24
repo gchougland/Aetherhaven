@@ -22,6 +22,11 @@ public final class ConstructionDefinition {
     @SerializedName("plotAnchorOffset")
     private int[] plotAnchorOffset = new int[] {0, 0, 0};
 
+    /** If set, player must carry this item to select this construction in the placement tool UI. */
+    @SerializedName("plotTokenItemId")
+    @Nullable
+    private String plotTokenItemId;
+
     @SerializedName("rotationYaw")
     private String rotationYaw = "None";
 
@@ -63,6 +68,11 @@ public final class ConstructionDefinition {
 
     public int[] getPlotAnchorOffset() {
         return plotAnchorOffset != null && plotAnchorOffset.length == 3 ? plotAnchorOffset : new int[] {0, 0, 0};
+    }
+
+    @Nullable
+    public String getPlotTokenItemId() {
+        return plotTokenItemId;
     }
 
     public String getRotationYaw() {

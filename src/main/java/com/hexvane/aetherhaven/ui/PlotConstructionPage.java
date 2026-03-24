@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hypixel.hytale.codec.Codec;
@@ -140,7 +141,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         Vector3i signPos = interactionSignWorldPos;
         int[] o = def.getPlotAnchorOffset();
         Vector3i anchor = new Vector3i(signPos.x + o[0], signPos.y + o[1], signPos.z + o[2]);
-        Rotation yaw = parseRotation(def.getRotationYaw());
+        // Prefab yaw follows the placed plot sign block rotation (NESW), not only JSON defaults.
+        Rotation yaw = PlotBlockRotationUtil.readBlockYaw(world, signPos);
         Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
         if (prefabPath == null) {
             sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());
@@ -245,17 +247,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             return "Villager: not required";
         }
         return "Villager required: " + vid + " (not implemented — enable IgnoreVillagerRequirement in config to test)";
-    }
-
-    private static Rotation parseRotation(String name) {
-        if (name == null || name.isEmpty()) {
-            return Rotation.None;
-        }
-        try {
-            return Rotation.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            return Rotation.None;
-        }
     }
 
     public static final class PageData {

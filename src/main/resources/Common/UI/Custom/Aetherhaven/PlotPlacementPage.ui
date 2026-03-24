@@ -1,0 +1,137 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+// Compact square-ish nudge controls (avoids wide primary TextButton min width and "..." from uppercase shrink).
+@PlotNudgeLabel = (
+  FontSize: 15,
+  TextColor: #bfcdd5,
+  RenderBold: true,
+  RenderUppercase: false,
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+// Square 9-slice: files live next to Common.ui under Custom/Common/Buttons (*@2x.png). Relative from this file (Aetherhaven/).
+@PlotNudgeTBStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary_Square.png", Border: 12), LabelStyle: (...@PlotNudgeLabel)),
+  Hovered: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary_Square_Hovered.png", Border: 12), LabelStyle: (...@PlotNudgeLabel)),
+  Pressed: (Background: PatchStyle(TexturePath: "../Common/Buttons/Primary_Square_Pressed.png", Border: 12), LabelStyle: (...@PlotNudgeLabel)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@PlotNudgeLabel, TextColor: #797b7c)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+  Anchor: (Left: 16, Top: 48, Width: 380);
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 380);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.plotplacement.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 12);
+
+      Label #Info {
+        Anchor: (Bottom: 8);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true);
+      }
+
+      Label #Error {
+        Anchor: (Bottom: 6);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #cc4444);
+        Visible: false;
+      }
+
+      Label #PlotTypeLabel {
+        Anchor: (Bottom: 4);
+        Style: (...$C.@DefaultLabelStyle);
+        Text: %server.aetherhaven.ui.plotplacement.plotType;
+        Visible: false;
+      }
+
+      $C.@DropdownBox #PlotTypeDropdown {
+        Anchor: (Bottom: 10, Width: 340, Height: $C.@DropdownBoxHeight);
+        Visible: false;
+      }
+
+      Label #MoveLabel {
+        Anchor: (Top: 4, Bottom: 4);
+        Style: (...$C.@DefaultLabelStyle);
+        Text: %server.aetherhaven.ui.plotplacement.moveLabel;
+      }
+
+      Group #RowXZ {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        TextButton #BtnXm {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-X";
+        }
+        TextButton #BtnXp {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+X";
+        }
+        TextButton #BtnZm {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-Z";
+        }
+        TextButton #BtnZp {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+Z";
+        }
+      }
+
+      Group #RowYRot {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+        TextButton #BtnYm {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-Y";
+        }
+        TextButton #BtnYp {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+Y";
+        }
+        TextButton #BtnRotate {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 48, Height: 36);
+          Padding: (Horizontal: 4, Vertical: 2);
+          Text: %server.aetherhaven.ui.plotplacement.rotate;
+        }
+      }
+
+      Group #RowActions {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+        $C.@TextButton #PlaceButton {
+          Text: %server.aetherhaven.ui.plotplacement.place;
+          Anchor: (Width: 164);
+        }
+        $C.@TextButton #CancelButton {
+          Text: %server.aetherhaven.ui.plotplacement.cancel;
+          Anchor: (Width: 164);
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

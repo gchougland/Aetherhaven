@@ -1,0 +1,17 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Plot_Token_Inn.name",
+    "Description": "server.items.Aetherhaven_Plot_Token_Inn.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Item",
+  "Categories": ["Items.Utility"],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "Tags": {
+    "Type": ["Tool"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

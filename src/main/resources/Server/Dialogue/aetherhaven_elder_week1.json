@@ -1,0 +1,11 @@
+{
+  "id": "aetherhaven_elder_week1",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Elder Lyren",
+      "text": "The charter stands; our story begins. More words and quests will come—walk the land and prepare a place for others.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    }
+  }
+}

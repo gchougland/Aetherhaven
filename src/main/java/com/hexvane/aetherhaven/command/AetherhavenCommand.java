@@ -7,6 +7,7 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         super("aetherhaven", "server.commands.aetherhaven.root.desc");
         this.addAliases("ah");
         this.addSubCommand(new PlotSignAdminCommand());
+        this.addSubCommand(new AetherhavenTownsCommand());
         this.addSubCommand(new ExportAvatarSkinCommand());
         this.addSubCommand(new DialogueCommand());
     }

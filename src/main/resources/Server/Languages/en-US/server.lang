@@ -33,6 +33,30 @@ commands.aetherhaven.exportskin.success=Wrote model JSON to {path}
 items.Aetherhaven_Plot_Sign.name=Plot sign
 items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.
 
+items.Aetherhaven_Charter.name=Town charter
+items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
+
+items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
+items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-click a block moves the sign anchor.
+
+items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
+items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn placeholder footprint.
+
+npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
+
+aetherhaven.ui.chartertown.title=Town charter
+aetherhaven.ui.chartertown.dissolve=Dissolve town
+aetherhaven.ui.chartertown.dissolveHint=Disabled until a later milestone.
+
+aetherhaven.ui.plotplacement.title=Plot placement
+aetherhaven.ui.plotplacement.plotType=Building
+aetherhaven.ui.plotplacement.moveLabel=Move
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.place=Place plot sign
+aetherhaven.ui.plotplacement.cancel=Cancel preview
+
+commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
+
 # Dialogue
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)
 commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (e.g. aetherhaven_dialogue_test)

@@ -9,6 +9,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.asset.builder.BuilderSupport;
 import com.hypixel.hytale.server.npc.corecomponents.ActionBase;
@@ -60,13 +61,30 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         DialogueResolver resolver = plugin.getDialogueResolver();
         DialogueResolver.ResolvedDialogue resolved = resolver.resolve(this.dialogueId, this.villagerKind, ref, playerRef, store);
         DialogueWorldView worldView = plugin.getDialogueWorldView();
-        playerComponent
-            .getPageManager()
-            .openCustomPage(
-                playerRef,
-                store,
-                new DialoguePage(playerRefComponent, catalog, worldView, resolved.treeId(), resolved.entryNodeId(), ref)
-            );
+        Ref<EntityStore> npcRef = ref;
+        Ref<EntityStore> playerEntityRef = playerRef;
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!playerEntityRef.isValid()) {
+                    return;
+                }
+                Player player = store.getComponent(playerEntityRef, Player.getComponentType());
+                if (player == null) {
+                    return;
+                }
+                PlayerRef pr = store.getComponent(playerEntityRef, PlayerRef.getComponentType());
+                if (pr == null) {
+                    return;
+                }
+                player.getPageManager()
+                    .openCustomPage(
+                        playerEntityRef,
+                        store,
+                        new DialoguePage(pr, catalog, worldView, resolved.treeId(), resolved.entryNodeId(), npcRef)
+                    );
+            }
+        );
         return true;
     }
 }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven;
 
+import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
@@ -7,8 +8,13 @@ import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
+import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
+import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
+import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,6 +25,9 @@ import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
@@ -106,6 +115,16 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
 
         PlotSignBlock.register(this.getChunkStoreRegistry());
+        CharterBlock.register(this.getChunkStoreRegistry());
+
+        this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
+
+        this.getEventRegistry()
+            .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));
+        this.getEventRegistry()
+            .registerGlobal(AddWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));
+        this.getEventRegistry().registerGlobal(RemoveWorldEvent.class, e -> AetherhavenWorldRegistries.unloadWorld(e.getWorld()));
+
         OpenCustomUIInteraction.registerCustomPageSupplier(
             this,
             PlotConstructionPage.class,
@@ -129,6 +148,35 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 Vector3i signWorld = new Vector3i(base.x, base.y, base.z);
                 return new PlotConstructionPage(playerRef, blockRef, signWorld);
             }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            CharterTownPage.class,
+            AetherhavenConstants.PAGE_CHARTER_TOWN,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
+                if (chunk == null) {
+                    return null;
+                }
+                BlockPosition base = world.getBaseBlock(targetBlock);
+                Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(base.x, base.y, base.z);
+                if (blockRef == null || blockRef.getStore().getComponent(blockRef, CharterBlock.getComponentType()) == null) {
+                    return null;
+                }
+                return new CharterTownPage(playerRef, blockRef);
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            PlotPlacementPage.class,
+            AetherhavenConstants.PAGE_PLOT_PLACEMENT,
+            PlotPlacementOpenHelper::tryOpen
         );
         OpenCustomUIInteraction.registerSimple(
             this,
@@ -159,6 +207,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Override
     protected void shutdown() {
         instance = null;
+        AetherhavenWorldRegistries.saveAll();
         this.constructionScheduler.shutdown();
         try {
             if (!this.constructionScheduler.awaitTermination(5, TimeUnit.SECONDS)) {

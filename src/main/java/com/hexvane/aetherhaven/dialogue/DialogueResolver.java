@@ -10,12 +10,15 @@ import javax.annotation.Nullable;
 
 public final class DialogueResolver {
     public static final String KIND_TEST_VILLAGER = "test_villager";
+    public static final String KIND_ELDER_LYREN = "elder_lyren";
     public static final String TREE_TEST = "aetherhaven_dialogue_test";
+    public static final String TREE_ELDER_WEEK1 = "aetherhaven_elder_week1";
 
     private final Map<String, String> kindToTree = new HashMap<>();
 
     public DialogueResolver() {
         kindToTree.put(KIND_TEST_VILLAGER, TREE_TEST);
+        kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK1);
     }
 
     @Nonnull

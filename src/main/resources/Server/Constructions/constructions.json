@@ -12,6 +12,20 @@
         { "itemId": "Wood_Softwood_Planks", "count": 4 },
         { "itemId": "Rock_Stone_Cobble", "count": 2 }
       ]
+    },
+    {
+      "id": "inn_placeholder",
+      "displayName": "Inn (placeholder)",
+      "description": "Week 1 footprint for the placement tool; same prefab as test house until inn art lands.",
+      "prefabPath": "test_house.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
+      "plotAnchorOffset": [5, 0, 5],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 4 },
+        { "itemId": "Rock_Stone_Cobble", "count": 2 }
+      ]
     }
   ]
 }

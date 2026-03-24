@@ -1,0 +1,109 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": {
+      "Value": true,
+      "Description": "Whether the NPC is invulnerable."
+    },
+    "MemoriesNameOverride": {
+      "Value": "Aetherhaven_Elder_Lyren",
+      "Description": "Memory name override"
+    },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Aetherhaven_Elder_Lyren.name",
+      "Description": "Translation key for NPC name display"
+    }
+  },
+  "StartState": "Idle",
+  "DefaultNPCAttitude": "Ignore",
+  "DefaultPlayerAttitude": "Neutral",
+  "Appearance": "Village_Elder",
+  "MaxHealth": 100,
+  "IsMemory": true,
+  "MemoriesCategory": "Aetherhaven",
+  "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
+  "DisableDamageGroups": ["Self"],
+  "CombatConfig": {
+    "EntityEffect": "Immunity_Environmental"
+  },
+  "BusyStates": ["$Interaction"],
+  "Invulnerable": { "Compute": "Invulnerable" },
+  "KnockbackScale": 0.5,
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 4,
+      "Gravity": 10,
+      "RunThreshold": 0.3,
+      "MaxFallSpeed": 15,
+      "MaxRotationSpeed": 360,
+      "Acceleration": 10
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": { "Type": "State", "State": "Idle" },
+          "Instructions": [
+            {
+              "Sensor": { "Type": "Any" },
+              "BodyMotion": { "Type": "Nothing" }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "InteractionInstruction": {
+    "Instructions": [
+      {
+        "Sensor": {
+          "Type": "Not",
+          "Sensor": {
+            "Type": "CanInteract",
+            "ViewSector": 180
+          }
+        },
+        "Actions": [
+          {
+            "Type": "SetInteractable",
+            "Interactable": false
+          }
+        ]
+      },
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Any" },
+        "Actions": [
+          {
+            "Type": "SetInteractable",
+            "Interactable": true,
+            "Hint": "server.aetherhaven.interaction.dialogue"
+          }
+        ]
+      },
+      {
+        "Sensor": { "Type": "HasInteracted" },
+        "Instructions": [
+          {
+            "Sensor": {
+              "Type": "Not",
+              "Sensor": { "Type": "State", "State": "$Interaction" }
+            },
+            "Actions": [
+              { "Type": "LockOnInteractionTarget" },
+              {
+                "Type": "OpenAetherhavenDialogue",
+                "DialogueId": "aetherhaven_elder_week1",
+                "VillagerKind": "elder_lyren"
+              },
+              { "Type": "State", "State": "$Interaction" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "NameTranslationKey": { "Compute": "NameTranslationKey" }
+}

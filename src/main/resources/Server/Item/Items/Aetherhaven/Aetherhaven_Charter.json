@@ -1,0 +1,66 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Charter.name",
+    "Description": "server.items.Aetherhaven_Charter.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": ["Furniture.Beds"],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Furniture_Village_Tombstone.png",
+  "IconProperties": {
+    "Rotation": [22.5, 45, 22.5],
+    "Scale": 0.445,
+    "Translation": [0, -22.7]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "CustomModel": "Blocks/Decorative_Sets/Village/Gravestone.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Village/Gravestone_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Gathering": {
+      "Soft": {
+        "IsWeaponBreakable": false
+      }
+    },
+    "HitboxType": "Tombstone_Village",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#797668",
+    "Support": {
+      "Down": [{ "FaceType": "Full" }]
+    },
+    "VariantRotation": "NESW",
+    "Flags": {
+      "IsUsable": true
+    },
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenCharter": {
+          "TownId": ""
+        }
+      }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": { "Id": "AetherhavenCharterTown" }
+          }
+        ]
+      }
+    }
+  },
+  "ResourceTypes": [{ "Id": "Fuel" }, { "Id": "Charcoal" }],
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}
