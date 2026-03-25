@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  * each slot through {@link CosmeticRegistry}, matching {@code CosmeticsModule} validation rules.
  *
  * <p>Haircut + hat: matches {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#isValidHaircutAttachment}
- * — a {@link PlayerSkinPart.HeadAccessoryType#HalfCovering} head accessory with a haircut that
+ * a {@link PlayerSkinPart.HeadAccessoryType#HalfCovering} head accessory with a haircut that
  * {@link PlayerSkinPart#doesRequireGenericHaircut()} exports as {@code Generic{HairType}} plus the same hair
  * gradient id as the chosen style (see server validation using {@code Generic} + {@link PlayerSkinPart#getHairType()}).
  *

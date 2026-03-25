@@ -19,6 +19,32 @@ public interface DialogueWorldView {
 
     boolean isVillagerInTown(@Nonnull String villagerId);
 
+    /** Town-scoped quest active (Aetherhaven towns). Default: false. */
+    default boolean townQuestActive(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        return false;
+    }
+
+    /** Town-scoped quest completed. Default: false. */
+    default boolean townQuestCompleted(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        return false;
+    }
+
+    /** True if the player's town has a COMPLETE plot with this construction id. */
+    default boolean townHasCompletePlot(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String constructionId
+    ) {
+        return false;
+    }
+
+    /** True if the player owns an Aetherhaven town in the current world. */
+    default boolean aetherhavenHasTown(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return false;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {

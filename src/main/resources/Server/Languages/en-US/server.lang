@@ -40,7 +40,10 @@ items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-click a block moves the sign anchor.
 
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
-items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn placeholder footprint.
+items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
+
+items.Aetherhaven_Management_Block.name=Town records shelf
+items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
 
@@ -56,6 +59,29 @@ aetherhaven.ui.plotplacement.place=Place plot sign
 aetherhaven.ui.plotplacement.cancel=Cancel preview
 
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
+
+commands.aetherhaven.poi.desc=Debug: POI commands (requires DebugCommandsEnabled)
+commands.aetherhaven.poi.list.desc=List POIs for a town (optional town UUID, or omit / use \"me\" for your town)
+commands.aetherhaven.poi.town.desc=Town UUID, or me, or omit for caller town
+commands.aetherhaven.poi.dump.desc=List every POI in this world's in-memory registry (any town)
+
+commands.aetherhaven.plots.desc=Debug: list plot instances (requires DebugCommandsEnabled; use plots to avoid clashing with /aetherhaven plot)
+commands.aetherhaven.plots.list.desc=List plot instances for your town
+
+commands.aetherhaven.needs.desc=Debug: villager needs (requires DebugCommandsEnabled)
+commands.aetherhaven.needs.inspect.desc=List entities in loaded chunks that have VillagerNeeds
+commands.aetherhaven.needs.set.desc=Set a need meter 0..100 (target: handle from inspect, Elder, or uuid)
+commands.aetherhaven.needs.target.desc=Handle (e.g. Villager_Elder_xxxxxxxx), Elder, or entity UUID
+commands.aetherhaven.needs.entity.desc=Deprecated; use target (handle, Elder, or uuid)
+commands.aetherhaven.needs.which.desc=hunger, energy, or fun
+commands.aetherhaven.needs.value.desc=Value from 0 to 100 (100 = fully satisfied)
+
+commands.aetherhaven.questdebug.desc=Debug: town quest bypass (requires DebugCommandsEnabled)
+commands.aetherhaven.questdebug.grant.desc=Mark quest active on your town
+commands.aetherhaven.questdebug.complete.desc=Mark quest completed on your town
+commands.aetherhaven.questdebug.clear.desc=Remove quest from active list on your town
+commands.aetherhaven.questdebug.id.desc=Quest id (default q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Show active and completed quests for your town (display name + id)
 
 # Dialogue
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)

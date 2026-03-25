@@ -44,7 +44,8 @@
     "BlockEntity": {
       "Components": {
         "AetherhavenPlotSign": {
-          "ConstructionId": ""
+          "ConstructionId": "",
+          "PlotId": ""
         }
       }
     },

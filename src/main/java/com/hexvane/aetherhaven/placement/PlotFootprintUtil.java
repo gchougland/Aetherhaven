@@ -15,7 +15,7 @@ public final class PlotFootprintUtil {
 
     /**
      * Axis-aligned bounds in world space for all non-air prefab voxels. {@code origin} is the prefab (0,0,0) corner in
-     * world space — same as {@link com.hexvane.aetherhaven.prefab.ConstructionAnimator} (sign position + plot anchor offset).
+     * world space, same as {@link com.hexvane.aetherhaven.prefab.ConstructionAnimator} (sign position + plot anchor offset).
      * {@link IPrefabBuffer#forEach} with {@link PrefabBufferCall} already applies placement yaw to x/z and per-block rotation.
      */
     @Nonnull

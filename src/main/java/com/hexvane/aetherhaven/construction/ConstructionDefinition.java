@@ -49,6 +49,11 @@ public final class ConstructionDefinition {
     @Nullable
     private String styleId;
 
+    /** Prefab-local position (same space as prefab `blocks[].x/y/z`) of the management block voxel to stamp after build. */
+    @SerializedName("managementBlockLocalPos")
+    @Nullable
+    private int[] managementBlockLocalPos;
+
     public String getId() {
         return id;
     }
@@ -101,5 +106,11 @@ public final class ConstructionDefinition {
     @Nullable
     public String getStyleId() {
         return styleId;
+    }
+
+    /** @return prefab-local x,y,z of management block, or null if not configured */
+    @Nullable
+    public int[] getManagementBlockLocalPos() {
+        return managementBlockLocalPos != null && managementBlockLocalPos.length == 3 ? managementBlockLocalPos : null;
     }
 }

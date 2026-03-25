@@ -62,7 +62,7 @@ public final class DialogueCommand extends AbstractPlayerCommand {
                 new DialoguePage(
                     playerRef,
                     plugin.getDialogueCatalog(),
-                    plugin.getDialogueWorldView(),
+                    plugin.createDialogueWorldView(world),
                     treeId,
                     entry,
                     null

@@ -15,6 +15,8 @@ public final class PlotSignBlock implements Component<ChunkStore> {
     public static final BuilderCodec<PlotSignBlock> CODEC = BuilderCodec.builder(PlotSignBlock.class, PlotSignBlock::new)
         .append(new KeyedCodec<>("ConstructionId", Codec.STRING), (s, v) -> s.constructionId = v != null ? v : "", s -> s.constructionId)
         .add()
+        .append(new KeyedCodec<>("PlotId", Codec.STRING), (s, v) -> s.plotId = v != null ? v : "", s -> s.plotId)
+        .add()
         .build();
 
     @Nullable
@@ -34,11 +36,17 @@ public final class PlotSignBlock implements Component<ChunkStore> {
     }
 
     private String constructionId = "";
+    private String plotId = "";
 
     public PlotSignBlock() {}
 
     public PlotSignBlock(@Nullable String constructionId) {
         this.constructionId = constructionId != null ? constructionId : "";
+    }
+
+    public PlotSignBlock(@Nullable String constructionId, @Nullable String plotId) {
+        this.constructionId = constructionId != null ? constructionId : "";
+        this.plotId = plotId != null ? plotId : "";
     }
 
     public String getConstructionId() {
@@ -49,9 +57,18 @@ public final class PlotSignBlock implements Component<ChunkStore> {
         this.constructionId = constructionId != null ? constructionId : "";
     }
 
+    @Nonnull
+    public String getPlotId() {
+        return plotId;
+    }
+
+    public void setPlotId(@Nonnull String plotId) {
+        this.plotId = plotId != null ? plotId : "";
+    }
+
     @Nullable
     @Override
     public Component<ChunkStore> clone() {
-        return new PlotSignBlock(constructionId);
+        return new PlotSignBlock(constructionId, plotId);
     }
 }

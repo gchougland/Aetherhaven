@@ -89,6 +89,10 @@ public final class DialogueConditionEvaluator {
                 yield worldView.hasItem(playerRef, store, itemId, Math.max(1, count));
             }
             case "villagerInTown" -> worldView.isVillagerInTown(stringOrEmpty(o, "id"));
+            case "town_quest_active" -> worldView.townQuestActive(playerRef, store, stringOrEmpty(o, "questId"));
+            case "town_quest_completed" -> worldView.townQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
+            case "town_has_complete_plot" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
+            case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

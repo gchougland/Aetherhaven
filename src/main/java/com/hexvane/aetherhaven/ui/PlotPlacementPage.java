@@ -11,6 +11,8 @@ import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
@@ -41,6 +43,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -205,6 +208,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             sendError(store, ref, err);
             return false;
         }
+        UUID plotId = UUID.randomUUID();
         boolean placed =
             PlotPlacementCommit.placePlotSign(
                 world,
@@ -213,6 +217,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 signPos.z,
                 session.getPrefabYaw(),
                 session.getConstructionId(),
+                plotId,
                 store
             );
         if (!placed) {
@@ -225,11 +230,37 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             try {
                 Vector3i prefabOrigin = prefabOriginForSign(signPos, def.getPlotAnchorOffset());
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
-                town.addPlotFootprint(fp);
+                PlotInstance inst =
+                    new PlotInstance(
+                        plotId,
+                        session.getConstructionId(),
+                        PlotInstanceState.BLUEPRINTING,
+                        fp,
+                        signPos.x,
+                        signPos.y,
+                        signPos.z,
+                        System.currentTimeMillis()
+                    );
+                town.addPlotInstance(inst);
                 tm.updateTown(town);
             } finally {
                 buf.release();
             }
+        } else {
+            PlotFootprintRecord mini = new PlotFootprintRecord(signPos.x, signPos.y, signPos.z, signPos.x, signPos.y, signPos.z);
+            town.addPlotInstance(
+                new PlotInstance(
+                    plotId,
+                    session.getConstructionId(),
+                    PlotInstanceState.BLUEPRINTING,
+                    mini,
+                    signPos.x,
+                    signPos.y,
+                    signPos.z,
+                    System.currentTimeMillis()
+                )
+            );
+            tm.updateTown(town);
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {

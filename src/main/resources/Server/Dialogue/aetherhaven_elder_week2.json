@@ -1,0 +1,75 @@
+{
+  "id": "aetherhaven_elder_week2",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Elder Lyren",
+      "text": "The charter still warms the stone. Our people will need shelter and a hearth. When you are ready, we should raise an inn for travelers and kin.",
+      "choices": [
+        {
+          "text": "I'll help build the inn.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "aetherhaven_has_town" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_build_inn" },
+                    { "type": "town_quest_completed", "questId": "q_build_inn" }
+                  ]
+                }
+              }
+            ]
+          },
+          "actions": [{ "type": "start_quest", "id": "q_build_inn" }],
+          "next": "quest_accepted"
+        },
+        {
+          "text": "I'm still working on the inn.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "aetherhaven_has_town" },
+              { "type": "town_quest_active", "questId": "q_build_inn" }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "remind_inn"
+        },
+        {
+          "text": "The inn is built.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "aetherhaven_has_town" },
+              { "type": "town_quest_active", "questId": "q_build_inn" },
+              { "type": "town_has_complete_plot", "constructionId": "inn_v1" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_build_inn" }],
+          "next": "inn_done"
+        },
+        { "text": "Farewell.", "next": null }
+      ]
+    },
+    "quest_accepted": {
+      "speaker": "Elder Lyren",
+      "text": "Good. Mark the ground with the plot sign and gather what the builders ask. The timbers will follow your care.",
+      "choices": [{ "text": "I'll begin.", "next": null }]
+    },
+    "remind_inn": {
+      "speaker": "Elder Lyren",
+      "text": "Take your time. When the roof is sound and the hearth laid, come tell me.",
+      "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "inn_done": {
+      "speaker": "Elder Lyren",
+      "text": "Word spreads already: a roof over travelers' heads. You've done well by Aetherhaven.",
+      "choices": [{ "text": "Glad to help.", "next": null }]
+    }
+  }
+}

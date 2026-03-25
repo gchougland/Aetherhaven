@@ -48,7 +48,27 @@
           "Instructions": [
             {
               "Sensor": { "Type": "Any" },
-              "BodyMotion": { "Type": "Nothing" }
+              "BodyMotion": {
+                "Type": "Sequence",
+                "Looped": true,
+                "Motions": [
+                  {
+                    "Type": "Timer",
+                    "Time": [3, 8],
+                    "Motion": {
+                      "Type": "WanderInRect",
+                      "Width": 12,
+                      "Depth": 12,
+                      "MaxHeadingChange": 135
+                    }
+                  },
+                  {
+                    "Type": "Timer",
+                    "Time": [2, 5],
+                    "Motion": { "Type": "Nothing" }
+                  }
+                ]
+              }
             }
           ]
         }
@@ -95,7 +115,7 @@
               { "Type": "LockOnInteractionTarget" },
               {
                 "Type": "OpenAetherhavenDialogue",
-                "DialogueId": "aetherhaven_elder_week1",
+                "DialogueId": "aetherhaven_elder_week2",
                 "VillagerKind": "elder_lyren"
               },
               { "Type": "State", "State": "$Interaction" }

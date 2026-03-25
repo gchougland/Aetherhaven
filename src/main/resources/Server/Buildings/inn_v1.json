@@ -1,0 +1,12 @@
+{
+  "pois": [
+    { "localX": -2, "localY": 0, "localZ": 0, "tags": ["WORK_INN_COUNTER"], "capacity": 1 },
+    { "localX": 2, "localY": 0, "localZ": 2, "tags": ["SLEEP"], "capacity": 1 },
+    { "localX": 3, "localY": 0, "localZ": 2, "tags": ["SLEEP"], "capacity": 1 },
+    { "localX": -2, "localY": 0, "localZ": 3, "tags": ["EAT"], "capacity": 1 },
+    { "localX": -1, "localY": 0, "localZ": 3, "tags": ["EAT"], "capacity": 1 },
+    { "localX": 0, "localY": 0, "localZ": 3, "tags": ["EAT"], "capacity": 1 },
+    { "localX": 1, "localY": 0, "localZ": 3, "tags": ["EAT"], "capacity": 1 },
+    { "localX": 0, "localY": 0, "localZ": -2, "tags": ["FUN"], "capacity": 2 }
+  ]
+}

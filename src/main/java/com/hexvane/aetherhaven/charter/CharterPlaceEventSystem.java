@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Archetype;
@@ -121,7 +123,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         cstore.putComponent(blockRef, CharterBlock.getComponentType(), charter);
 
         if (!record.isElderSpawned()) {
-            spawnElder(world, record);
+            spawnElder(world, record, tm);
             record.setElderSpawned(true);
             tm.updateTown(record);
         }
@@ -130,7 +132,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
     }
 
-    private static void spawnElder(@Nonnull World world, @Nonnull TownRecord town) {
+    private static void spawnElder(@Nonnull World world, @Nonnull TownRecord town, @Nonnull TownManager tm) {
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
             return;
@@ -140,6 +142,16 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         var pair = npc.spawnNPC(store, AetherhavenConstants.ELDER_NPC_ROLE_ID, null, p, Vector3f.ZERO);
         if (pair == null) {
             LOGGER.atWarning().log("Failed to spawn elder NPC for town %s", town.getTownId());
+            return;
+        }
+        Ref<EntityStore> elderRef = pair.first();
+        store.putComponent(elderRef, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+        String handle = elderDebugHandle(town.getTownId());
+        store.putComponent(elderRef, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
+        UUIDComponent elderUuid = store.getComponent(elderRef, UUIDComponent.getComponentType());
+        if (elderUuid != null) {
+            town.setElderEntityUuid(elderUuid.getUuid());
+            tm.updateTown(town);
         }
     }
 
@@ -147,5 +159,12 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
     @Override
     public Query<EntityStore> getQuery() {
         return Archetype.empty();
+    }
+
+    @Nonnull
+    private static String elderDebugHandle(@Nonnull UUID townId) {
+        String hex = townId.toString().replace("-", "");
+        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
+        return "Villager_Elder_" + suffix;
     }
 }

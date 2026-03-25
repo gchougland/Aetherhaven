@@ -51,6 +51,7 @@ public final class TownManager {
         try {
             TownWorldFile file = TownWorldFile.readOrEmpty(saveFile);
             for (TownRecord t : file.getTowns()) {
+                t.migrateLegacyPlotFootprintsIfNeeded();
                 byTownId.put(t.getTownId(), t);
             }
             LOGGER.atInfo().log("Aetherhaven loaded %s towns for world %s from %s", byTownId.size(), world.getName(), saveFile);

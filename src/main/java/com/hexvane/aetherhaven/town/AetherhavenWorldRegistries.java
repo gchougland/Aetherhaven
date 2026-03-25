@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,8 +24,12 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
-    public static PoiRegistry getOrCreatePoiRegistry(@Nonnull World world) {
-        return POI_REGISTRIES.computeIfAbsent(world.getName(), n -> new PoiRegistry());
+    public static PoiRegistry getOrCreatePoiRegistry(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        return POI_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            PoiRegistry r = new PoiRegistry(world);
+            PoiPersistence.load(world, plugin, r);
+            return r;
+        });
     }
 
     @Nonnull
@@ -50,7 +55,13 @@ public final class AetherhavenWorldRegistries {
         if (tm != null) {
             tm.saveToDisk();
         }
-        POI_REGISTRIES.remove(world.getName());
+        PoiRegistry pr = POI_REGISTRIES.remove(world.getName());
+        if (pr != null) {
+            AetherhavenPlugin p = AetherhavenPlugin.get();
+            if (p != null) {
+                PoiPersistence.save(world, p, pr);
+            }
+        }
     }
 
     /** Save all town files (e.g. server shutdown). */
@@ -62,6 +73,6 @@ public final class AetherhavenWorldRegistries {
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
         getOrCreateTownManager(world, plugin);
-        getOrCreatePoiRegistry(world);
+        getOrCreatePoiRegistry(world, plugin);
     }
 }

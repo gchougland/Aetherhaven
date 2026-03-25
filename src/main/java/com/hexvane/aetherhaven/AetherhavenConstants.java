@@ -7,6 +7,8 @@ public final class AetherhavenConstants {
     public static final String CHARTER_BLOCK_TYPE_ID = "Aetherhaven_Charter";
 
     public static final String PAGE_PLOT_CONSTRUCTION = "AetherhavenPlotConstruction";
+    /** Management bookcase after build; separate id so OpenCustomUI resolves the correct supplier. */
+    public static final String PAGE_PLOT_MANAGEMENT = "AetherhavenPlotManagement";
     public static final String PAGE_PLOT_SIGN_ADMIN = "AetherhavenPlotSignAdmin";
     public static final String PAGE_CHARTER_TOWN = "AetherhavenCharterTown";
     public static final String PAGE_PLOT_PLACEMENT = "AetherhavenPlotPlacement";
@@ -19,7 +21,12 @@ public final class AetherhavenConstants {
     /** Non-block token: player must hold in inventory to select this plot type in the placement tool. */
     public static final String PLOT_TOKEN_INN_PLACEHOLDER = "Aetherhaven_Plot_Token_Inn";
 
-    public static final String CONSTRUCTION_INN_PLACEHOLDER = "inn_placeholder";
+    /** Inn construction id in {@code constructions.json} and building POI file name. */
+    public static final String CONSTRUCTION_INN_V1 = "inn_v1";
+
+    public static final String QUEST_BUILD_INN = "q_build_inn";
+
+    public static final String MANAGEMENT_BLOCK_TYPE_ID = "Aetherhaven_Management_Block";
 
     public static final String ELDER_NPC_ROLE_ID = "Aetherhaven_Elder_Lyren";
 

@@ -14,12 +14,13 @@
       ]
     },
     {
-      "id": "inn_placeholder",
-      "displayName": "Inn (placeholder)",
-      "description": "Week 1 footprint for the placement tool; same prefab as test house until inn art lands.",
-      "prefabPath": "test_house.prefab.json",
+      "id": "inn_v1",
+      "displayName": "Inn",
+      "description": "Founding inn prefab with management bookcase and visitor-ready POIs.",
+      "prefabPath": "inn_v1.prefab.json",
       "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
       "plotAnchorOffset": [5, 0, 5],
+      "managementBlockLocalPos": [0, 1, 0],
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [

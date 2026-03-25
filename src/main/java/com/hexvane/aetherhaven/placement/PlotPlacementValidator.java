@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import java.nio.file.Path;
@@ -33,7 +34,7 @@ public final class PlotPlacementValidator {
         if (!townManager.isInsideTerritory(town, signPosition.x, signPosition.z)) {
             return "Plot sign position is outside your town territory.";
         }
-        Path prefabPath = resolvePrefabPath(def.getPrefabPath());
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabPath == null) {
             return "Prefab not found for construction: " + def.getId();
         }
@@ -59,33 +60,4 @@ public final class PlotPlacementValidator {
         }
     }
 
-    @Nullable
-    private static Path resolvePrefabPath(@Nonnull String key) {
-        String k = key.trim();
-        var ps = com.hypixel.hytale.server.core.prefab.PrefabStore.get();
-        Path p = ps.findAssetPrefabPath(k);
-        if (p != null) {
-            return p;
-        }
-        if (!k.endsWith(".prefab.json")) {
-            p = ps.findAssetPrefabPath(k + ".prefab.json");
-            if (p != null) {
-                return p;
-            }
-        }
-        String dotted = k.replace('.', '/');
-        if (!dotted.equals(k)) {
-            p = ps.findAssetPrefabPath(dotted);
-            if (p != null) {
-                return p;
-            }
-            if (!dotted.endsWith(".prefab.json")) {
-                p = ps.findAssetPrefabPath(dotted + ".prefab.json");
-                if (p != null) {
-                    return p;
-                }
-            }
-        }
-        return null;
-    }
 }

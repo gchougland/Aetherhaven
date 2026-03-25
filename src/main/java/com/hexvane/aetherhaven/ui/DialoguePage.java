@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueNodeDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
+import com.hexvane.aetherhaven.npc.NpcDialogueCleanup;
 import com.hypixel.hytale.builtin.adventure.shop.barter.BarterPage;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -76,6 +77,11 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         this.npcRef = npcRef;
         this.tree = catalog.get(treeId);
         this.nodeId = entryNodeId;
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
     }
 
     @Override

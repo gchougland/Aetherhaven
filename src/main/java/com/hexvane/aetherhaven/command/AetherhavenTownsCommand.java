@@ -47,7 +47,7 @@ public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
                         + ","
                         + t.getCharterZ()
                         + " plots="
-                        + t.getPlotFootprints().size()
+                        + t.getPlotInstances().size()
                 )
             );
         }

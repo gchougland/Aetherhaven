@@ -11,6 +11,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class PlotPlacementCommit {
@@ -29,6 +30,7 @@ public final class PlotPlacementCommit {
         int z,
         @Nonnull Rotation prefabYaw,
         @Nonnull String constructionId,
+        @Nonnull UUID plotId,
         @Nonnull Store<EntityStore> entityStore
     ) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
@@ -45,7 +47,7 @@ public final class PlotPlacementCommit {
             return false;
         }
         Store<ChunkStore> cs = signRef.getStore();
-        cs.putComponent(signRef, PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId));
+        cs.putComponent(signRef, PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotId.toString()));
         return true;
     }
 }

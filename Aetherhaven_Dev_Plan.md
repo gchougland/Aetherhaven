@@ -1,4 +1,4 @@
-# Aetherhaven — Dev Plan (v2)
+# Aetherhaven - Dev Plan (v2)
 
 **Contest:** Hytale New Worlds Modding Contest  
 **Deadline:** April 28, 2026  
@@ -6,74 +6,74 @@
 **Category:** NPCs (primary), Experiences (secondary / stretch)  
 **Goal:** Win NPC category + demonstrate systems-level engineering to Hypixel  
 
-**Irreversible design pillar:** The mod is built around **world-integrated colonies** in the **player’s Hytale world** — not a hand-sculpted void layout. Growth is **free placement** of governed **plots** and **POIs**; NPCs use **Sims-like autonomy** (needs, wants, utility / affordance scoring) backed by a **POI registry** and a **quest system** (including dailies and expansion arcs). The **museum** is a **fixed-footprint plot building** whose **interior** is a separate **expandable instance** (TARDIS model). **Expansion mods** register plots, quests, NPC roles, POI types, and exhibits through documented extension points.
+**Irreversible design pillar:** The mod is built around **world-integrated colonies** in the **player’s Hytale world** - not a hand-sculpted void layout. Growth is **free placement** of governed **plots** and **POIs**; NPCs use **Sims-like autonomy** (needs, wants, utility / affordance scoring) backed by a **POI registry** and a **quest system** (including dailies and expansion arcs). The **museum** is a **fixed-footprint plot building** whose **interior** is a separate **expandable instance** (TARDIS model). **Expansion mods** register plots, quests, NPC roles, POI types, and exhibits through documented extension points.
 
 ---
 
 ## Vision (long term)
 
-Players found and grow a **town** in the overworld (or any dimension you officially support). They place the **charter block**, which spawns the **Village Elder** and kicks off a **build-the-Inn** arc. Once the **Inn** exists, **visitors** appear from an **unlocked pool** (cap **two at a time** in the Inn); they offer quests to build **their** house or workplace on **player-placed plots**. **Villagers** are autonomous day-to-day: they satisfy **needs** and pursue **wants** via **POIs**. **Quests** (story, expansion, daily, NPC-specific) tie progression to construction, economy, combat, and discovery. **Raids** (when the owner/party is present) apply **controlled** building damage. The **museum** is a small door in the world and a vast interior for exhibits — including **other mods** via data registration.
+Players found and grow a **town** in the overworld (or any dimension you officially support). They place the **charter block**, which spawns the **Village Elder** and kicks off a **build-the-Inn** arc. Once the **Inn** exists, **visitors** appear from an **unlocked pool** (cap **two at a time** in the Inn); they offer quests to build **their** house or workplace on **player-placed plots**. **Villagers** are autonomous day-to-day: they satisfy **needs** and pursue **wants** via **POIs**. **Quests** (story, expansion, daily, NPC-specific) tie progression to construction, economy, combat, and discovery. **Raids** (when the owner/party is present) apply **controlled** building damage. The **museum** is a small door in the world and a vast interior for exhibits - including **other mods** via data registration.
 
 ---
 
-## Design questions — answer these to lock details
+## Design questions - answer these to lock details
 
 > **How to use this section:** Copy answers inline, or tick choices. Until answered, implementation defaults are suggestions in *italics*.
 
 ### Town ownership & multiplayer
 
-- **Q1 — Colony identity:** Is a town **per player**, **per party / guild**, **per chunk claim**, or **server-wide shared**? **Legal owner** is always **one player UUID**; **party** = permission group (members get configured rights; see Q3). Not server-wide shared.
-- **Q2 — Multiple towns:** Can one player own **more than one** active town in a world? If yes, how are NPC budgets split? **Default: one town per player per dimension** (unless creative/admin overrides).
-- **Q3 — Permissions:** Who can place plots, destroy buildings, withdraw from shared storage, trigger town upgrades? RBAC matrix (owner / member / visitor)? Owners and members can place plots and withdraw from shared storage and trigger town upgrade. Only Owners can destroy buildings. Visitors can't do any of these things. This should all be configurable in the config file though.
-- **Q4 — PvP & griefing:** Are town plots **protected** from other players’ block breaking? Explosions? Fluid? *Needs explicit policy for public servers.* By default it should be protected but should be configurable.
+- **Q1 - Colony identity:** Is a town **per player**, **per party / guild**, **per chunk claim**, or **server-wide shared**? **Legal owner** is always **one player UUID**; **party** = permission group (members get configured rights; see Q3). Not server-wide shared.
+- **Q2 - Multiple towns:** Can one player own **more than one** active town in a world? If yes, how are NPC budgets split? **Default: one town per player per dimension** (unless creative/admin overrides).
+- **Q3 - Permissions:** Who can place plots, destroy buildings, withdraw from shared storage, trigger town upgrades? RBAC matrix (owner / member / visitor)? Owners and members can place plots and withdraw from shared storage and trigger town upgrade. Only Owners can destroy buildings. Visitors can't do any of these things. This should all be configurable in the config file though.
+- **Q4 - PvP & griefing:** Are town plots **protected** from other players’ block breaking? Explosions? Fluid? *Needs explicit policy for public servers.* By default it should be protected but should be configurable.
 
 ### Governed placement rules
 
-- **Q5 — Town anchor:** What **exact item/block** establishes the town (town hall kit, charter block, NPC-placed ritual)? **Can the anchor be moved** after placement? Charter block and can't be broken normally, has option in blocks gui though to destroy town and pickup charter. This is irreversible. 
-- **Q6 — Territory shape:** **Radius from anchor**, **chunk-aligned grid**, **polygon** from boundary markers, or **scanned connected plots**? Max radius or chunk count? Should be chunk aligned with radius around anchor. But expands with constructed plots near edge of radius. Radius should be configurable.
-- **Q7 — Plot spacing:** Minimum edge-to-edge distance between building footprints? **Shared walls** allowed (like city row houses) or **mandatory gap**? Shared walls allowed
-- **Q8 — Verticality:** Can plots stack (multi-floor cities) or **ground-contact only**? Basements? Verticality would be preferred if feasible
-- **Q9 — Biome / dimension:** Town allowed **everywhere**, or **blacklisted biomes** (e.g. deep ocean)? Support **multiple dimensions** or **overworld only** for v1? Support multiple dimension, no blacklisted biomes
-- **Q10 — Validation UX:** Ghost preview + red/green outline? Snapping to **90°** only? **Terrain flatten** option or strict “must be flat”?Yes ghost preview, Yes snap to 90 degree only, Terrain flatten option.
+- **Q5 - Town anchor:** What **exact item/block** establishes the town (town hall kit, charter block, NPC-placed ritual)? **Can the anchor be moved** after placement? Charter block and can't be broken normally, has option in blocks gui though to destroy town and pickup charter. This is irreversible. 
+- **Q6 - Territory shape:** **Radius from anchor**, **chunk-aligned grid**, **polygon** from boundary markers, or **scanned connected plots**? Max radius or chunk count? Should be chunk aligned with radius around anchor. But expands with constructed plots near edge of radius. Radius should be configurable.
+- **Q7 - Plot spacing:** Minimum edge-to-edge distance between building footprints? **Shared walls** allowed (like city row houses) or **mandatory gap**? Shared walls allowed
+- **Q8 - Verticality:** Can plots stack (multi-floor cities) or **ground-contact only**? Basements? Verticality would be preferred if feasible
+- **Q9 - Biome / dimension:** Town allowed **everywhere**, or **blacklisted biomes** (e.g. deep ocean)? Support **multiple dimensions** or **overworld only** for v1? Support multiple dimension, no blacklisted biomes
+- **Q10 - Validation UX:** Ghost preview + red/green outline? Snapping to **90°** only? **Terrain flatten** option or strict “must be flat”?Yes ghost preview, Yes snap to 90 degree only, Terrain flatten option.
 
 ### NPCs & performance
 
-- **Q11 — Population cap:** Hard cap per town by **tier**, **performance profile**, or **player setting**? by tier
-- **Q12 — LOD / simulation:** Do distant/off-screen NPCs use **abstract simulation** (needs tick down, no pathing) or **full AI** always? abstract simulation using game time, similar to how crops grow using game time
-- **Q13 — Naming & persistence:** Procedural names? Permadeath? **Respawn** same villager or new entity? Most npcs are hand-crafted with specific names, possibly have basic "worker" npcs that have procedural names. Villagers can be revived at the charter stone for a cost and should be the same villager.
+- **Q11 - Population cap:** Hard cap per town by **tier**, **performance profile**, or **player setting**? by tier
+- **Q12 - LOD / simulation:** Do distant/off-screen NPCs use **abstract simulation** (needs tick down, no pathing) or **full AI** always? abstract simulation using game time, similar to how crops grow using game time
+- **Q13 - Naming & persistence:** Procedural names? Permadeath? **Respawn** same villager or new entity? Most npcs are hand-crafted with specific names, possibly have basic "worker" npcs that have procedural names. Villagers can be revived at the charter stone for a cost and should be the same villager.
 
 ### Sims-like autonomy
 
-- **Q14 — Need list (v1):** Which needs ship in contest MVP? (e.g. **Energy**, **Hunger**, **Fun**, **Social**, **Hygiene**, **Bladder**, **Environment**.) Which are **stretch**? MVP: Hunger, Energy, Fun; Stretch: Social, Hygiene, Bladder, Environment
-- **Q15 — Decay curves:** Linear decay per game-minute, **sleep-dependent**, **activity-dependent**? **All of the above** (combine linear time decay with modifiers for sleep and current activity).
-- **Q16 — Failure states:** At 0 need: **mood debuff only**, **refusal to work**, **collapse / pass out**, **leave town**? Mood debuff and refusal to work
+- **Q14 - Need list (v1):** Which needs ship in contest MVP? (e.g. **Energy**, **Hunger**, **Fun**, **Social**, **Hygiene**, **Bladder**, **Environment**.) Which are **stretch**? MVP: Hunger, Energy, Fun; Stretch: Social, Hygiene, Bladder, Environment
+- **Q15 - Decay curves:** Linear decay per game-minute, **sleep-dependent**, **activity-dependent**? **All of the above** (combine linear time decay with modifiers for sleep and current activity).
+- **Q16 - Failure states:** At 0 need: **mood debuff only**, **refusal to work**, **collapse / pass out**, **leave town**? Mood debuff and refusal to work
 - **Wants / whims:** Separate from needs? **UI notification** to player? How often rerolled? Separate from needs, no notification but should have somewhere the player can see overview, every few in-game days
-- **Q17 — Player control:** Can the player **direct-assign** jobs / “go here” like Rimworld drafts, or **pure autonomy** with only indirect influence (build POIs)? For most NPCs they will have specific roles like blacksmith, chef, etc. Generic workers will need to be directly assigned jobs. Mostly pure autonomy.
+- **Q17 - Player control:** Can the player **direct-assign** jobs / “go here” like Rimworld drafts, or **pure autonomy** with only indirect influence (build POIs)? For most NPCs they will have specific roles like blacksmith, chef, etc. Generic workers will need to be directly assigned jobs. Mostly pure autonomy.
 
 ### Quests
 
-- **Q18 — Quest sources:** **NPC dialogue only**, **physical quest board**, **both**, **radio/mail** stretch? NPC dialogue for MVP, quest board and radio/mail for stretch
-- **Q19 — Daily reset:** **Server midnight**, **per-player 24h from first login**, **fixed UTC**? Configurable
-- **Q20 — Co-op quests:** Party progress shared or individual turn-in? Shared
-- **Q21 — Failure & abandon:** Time limits? **Abandon** penalty? **Retry** rules? Depends on quest, usually no penalty for abandoning. Important quests should always be able to be picked up again from source.
+- **Q18 - Quest sources:** **NPC dialogue only**, **physical quest board**, **both**, **radio/mail** stretch? NPC dialogue for MVP, quest board and radio/mail for stretch
+- **Q19 - Daily reset:** **Server midnight**, **per-player 24h from first login**, **fixed UTC**? Configurable
+- **Q20 - Co-op quests:** Party progress shared or individual turn-in? Shared
+- **Q21 - Failure & abandon:** Time limits? **Abandon** penalty? **Retry** rules? Depends on quest, usually no penalty for abandoning. Important quests should always be able to be picked up again from source.
 
 ### Museum (TARDIS)
 
-- **Q22 — Instance ownership:** **Per player**, **per town**, or **global server** museum? Per town
-- **Q23 — Multiplayer inside:** Can two players be in the **same** museum instance together? **Party only**? **Per town** museum instance. **Visitors** (non–town-members) may **enter and look around only** — no placing exhibits, donations, museum quests, or any modification. **Town members** (owner + party per Q3) can **contribute** in the full sense: exhibits, donations, museum quests, and any future museum progression hooks.
-- **Q24 — Exhibit placement:** **Auto-slot** along gallery spine, **grid picker UI**, or **manual creative placement** in instance? Auto-slot along gallery spine
-- **Q25 — Exit rules:** Always return to **same door block**? What if door is **broken** while inside? Always return to same door block, if broken go to world spawn
+- **Q22 - Instance ownership:** **Per player**, **per town**, or **global server** museum? Per town
+- **Q23 - Multiplayer inside:** Can two players be in the **same** museum instance together? **Party only**? **Per town** museum instance. **Visitors** (non–town-members) may **enter and look around only** - no placing exhibits, donations, museum quests, or any modification. **Town members** (owner + party per Q3) can **contribute** in the full sense: exhibits, donations, museum quests, and any future museum progression hooks.
+- **Q24 - Exhibit placement:** **Auto-slot** along gallery spine, **grid picker UI**, or **manual creative placement** in instance? Auto-slot along gallery spine
+- **Q25 - Exit rules:** Always return to **same door block**? What if door is **broken** while inside? Always return to same door block, if broken go to world spawn
 
 ### Modding & versioning
 
-- **Q26 — API stability:** Semantic versioning for **data schemas** (quests, POI defs) — breaking changes only on major? yes
-- **Q27 — Namespace:** Required **`aetherhaven:`** / **`modid:`** prefix for all registered IDs? yes
-- **Q28 — Optional dependency:** Base mod runs **without** expansion packs; expansions **soft-fail** if base API missing features? yes
+- **Q26 - API stability:** Semantic versioning for **data schemas** (quests, POI defs) - breaking changes only on major? yes
+- **Q27 - Namespace:** Required **`aetherhaven:`** / **`modid:`** prefix for all registered IDs? yes
+- **Q28 - Optional dependency:** Base mod runs **without** expansion packs; expansions **soft-fail** if base API missing features? yes
 
 ### Contest vs vision
 
-- **Q29 — MVP sacrifice:** For April 28, are you willing to ship **abstract raid** (waves at edge) instead of **barge prefab**, or **2–3 needs** instead of full set? **Contest submission excludes raids and museum entirely** (see § Contest MVP). If slipping, cut **breadth** (dailies, NPCs, park) per fallback table — **not** core loop. Post-contest, raids/museum return per roadmap.
-- **Q30 — Judge story:** Single **scripted demo biome** allowed for video while code is **generic** for any world? **Demo will likely use a relatively flat area for video**; this is **production / recording choice only** and **does not constrain code** (gameplay remains generic for any valid world).
+- **Q29 - MVP sacrifice:** For April 28, are you willing to ship **abstract raid** (waves at edge) instead of **barge prefab**, or **2–3 needs** instead of full set? **Contest submission excludes raids and museum entirely** (see § Contest MVP). If slipping, cut **breadth** (dailies, NPCs, park) per fallback table - **not** core loop. Post-contest, raids/museum return per roadmap.
+- **Q30 - Judge story:** Single **scripted demo biome** allowed for video while code is **generic** for any world? **Demo will likely use a relatively flat area for video**; this is **production / recording choice only** and **does not constrain code** (gameplay remains generic for any valid world).
 
 ---
 
@@ -95,7 +95,7 @@ Use this table for implementation; inline bullets above remain the **source of t
 | **Placement UX** | Ghost preview; **90°** snap; **optional terrain flatten**. |
 | **Population cap** | **By town tier**. |
 | **Off-screen NPCs** | **Abstract simulation** using **game time** (crop-like), not full pathing. |
-| **Villagers** | Mostly **hand-crafted names**; optional procedural **workers**; **revive at charter** for cost — **same identity**. |
+| **Villagers** | Mostly **hand-crafted names**; optional procedural **workers**; **revive at charter** for cost - **same identity**. |
 | **MVP needs** | **Hunger, Energy, Fun**. Stretch: Social, Hygiene, Bladder, Environment. |
 | **Need decay** | Combined: time + sleep + activity modifiers. |
 | **Need at 0** | **Mood debuff** + **refusal to work**. |
@@ -105,7 +105,7 @@ Use this table for implementation; inline bullets above remain the **source of t
 | **Daily reset** | **Configurable** (server midnight / per-player / UTC modes). |
 | **Co-op quests** | **Shared** party progress. |
 | **Quest abandon** | Per-quest rules; **usually no** abandon penalty; **key quests** re-offered from source if dropped. |
-| **Museum** | **Per town** instance. **Town members** (owner + party): full **contribute** (exhibits, donations, museum quests, progression). **Visitors**: **walk and view only** — no modifications. |
+| **Museum** | **Per town** instance. **Town members** (owner + party): full **contribute** (exhibits, donations, museum quests, progression). **Visitors**: **walk and view only** - no modifications. |
 | **Exhibits** | **Auto-slot** along gallery spine. |
 | **Museum exit** | Return to **door**; if door destroyed → **world spawn**. |
 | **Modding** | **Semver** schemas; **`modid:`** namespaced IDs; expansions **soft-fail**; **data-only** packs supported. |
@@ -117,10 +117,10 @@ Use this table for implementation; inline bullets above remain the **source of t
 | **Dailies** | Procedural templates; parameters influenced by **which villagers exist** and **who posted** the quest. |
 | **Localization** | All player-facing text **data-driven**. |
 | **Construction** | **Blueprint** flow (not one-click from chest for survival). |
-| **Raid rebuild** | **Player-paid repair quest** preferred — **stretch**. |
+| **Raid rebuild** | **Player-paid repair quest** preferred - **stretch**. |
 | **Museum interior** | **Procedural generation** on first visit. |
-| **Raid structural damage** | **Raids are an exception** to normal plot protection: raiders **only target a few** buildings (marked **damaged**), **minor block destruction** (no critical/griefing blocks — design allowlist). **Repair** restores state. Not open-ended griefing. |
-| **Raid activation** | Raids **only run while the town-owning context is present** — i.e. **at least one relevant player is in/near their town** (exact radius TBD). No offline / empty-town raid punishment. |
+| **Raid structural damage** | **Raids are an exception** to normal plot protection: raiders **only target a few** buildings (marked **damaged**), **minor block destruction** (no critical/griefing blocks - design allowlist). **Repair** restores state. Not open-ended griefing. |
+| **Raid activation** | Raids **only run while the town-owning context is present** - i.e. **at least one relevant player is in/near their town** (exact radius TBD). No offline / empty-town raid punishment. |
 | **Demo / video (Q30)** | Flat area for trailer **only**; **code stays world-generic**. |
 | **Town treasury** | **Shared currency pool** for the town, usable by **owner + party members** (aligned with Q3 storage/upgrades). Player/party **owns** pooled town money; not a separate NPC wallet unless needed for barter UI. |
 | **Inn pool progression** | **Retained** with free placement: see **§1a Inn pool & villager lock**. |
@@ -163,7 +163,7 @@ Use this table for implementation; inline bullets above remain the **source of t
 
 **Town tier** gates: max population, plot count, building catalog, raid difficulty, quest chapters.
 
-> **Q31 — Tier progression:** Purely **quest-driven**, **economy + population**, **built POI score**, or hybrid? Hybrid of quest-driven and economy+population
+> **Q31 - Tier progression:** Purely **quest-driven**, **economy + population**, **built POI score**, or hybrid? Hybrid of quest-driven and economy+population
 
 ---
 
@@ -177,7 +177,7 @@ This is the **same core loop as the original void-village design**, adapted to *
 2. Elder offers the **founding quest**: build the **Inn** (blueprint + costs per §5). Inn requires a **valid plot** anywhere inside territory.  
 3. **After Inn completes** → **Inn visitor pool** activates: each day (or on configurable schedule), up to **two** NPCs from the **eligible pool** appear **in the Inn** (seats / rooms / markers as POIs). Eligibility = **unlocked** by tier / achievements / story flags (data-driven).  
 4. Player talks to a visitor → they offer a **build my house / workplace** quest tied to a **plot type** and prefab.  
-5. **Lock rule:** When the player **accepts** that quest, that villager is **`locked_in`**: they **do not** get shuffled out on the next daily pool refresh. They remain until the building is completed (or quest abandoned per Q21 — define whether abandon **unlocks** shuffle again; yes, return to pool unless one-off story NPC).  
+5. **Lock rule:** When the player **accepts** that quest, that villager is **`locked_in`**: they **do not** get shuffled out on the next daily pool refresh. They remain until the building is completed (or quest abandoned per Q21 - define whether abandon **unlocks** shuffle again; yes, return to pool unless one-off story NPC).  
 6. When the building completes → villager **moves in** / assumes job POI → **frees an Inn slot** → next refresh can pull another eligible NPC from the pool.
 
 **Why max two:** Keeps dialogue and UI scannable; matches original design; avoids ten simultaneous “build me” quests early game.
@@ -186,13 +186,13 @@ This is the **same core loop as the original void-village design**, adapted to *
 
 - Track `inn_occupants: [npcId, npcId]` (max 2) + `lockedQuestNpcIds: set`.  
 - Daily shuffle: only refill **empty** slots from pool; **never** remove `locked_in` or `moved_in` villagers from their commitments.  
-- **Free placement** only changes **where** the Inn and follow-up plots sit — not this state machine.
+- **Free placement** only changes **where** the Inn and follow-up plots sit - not this state machine.
 
 ---
 
 ## 2. POI registry & plot types
 
-**POI (point of interest)** — logical gameplay object, not only a block:
+**POI (point of interest)** - logical gameplay object, not only a block:
 
 - **Spatial:** anchor, facing, interaction volumes (bench seat, stove use point).
 - **Tags:** `WORK_FORGE`, `EAT`, `SLEEP`, `SOCIALIZE`, `FUN_PARK`, `SHOP`, `QUEST_BOARD`, etc.
@@ -217,16 +217,16 @@ This is the **same core loop as the original void-village design**, adapted to *
 2. **POIExtractor** (data-driven per building id) spawns POI entries linked to that plot.
 3. On upgrade / damage / removal → POIs updated or unregistered.
 
-> **Q32 — Decorative roads:** Purely cosmetic, or do they **register** low-strength `ENVIRONMENT` POI along polylines? Preferably register low-strength POI
-> **Q33 — Modular buildings:** Multi-phase construction (foundation → walls → roof) one plot or **staged plot ids**? Most buildings will have a management block that can be used to interface with the plot including upgrades, construction, residents, and destruction
+> **Q32 - Decorative roads:** Purely cosmetic, or do they **register** low-strength `ENVIRONMENT` POI along polylines? Preferably register low-strength POI
+> **Q33 - Modular buildings:** Multi-phase construction (foundation → walls → roof) one plot or **staged plot ids**? Most buildings will have a management block that can be used to interface with the plot including upgrades, construction, residents, and destruction
 
 ---
 
 ## 3. Sims-like autonomy (needs & wants)
 
-**Needs** — scalar meters (0–100 or 0–1). Tick down over time; **interactions** at POIs restore them.
+**Needs** - scalar meters (0–100 or 0–1). Tick down over time; **interactions** at POIs restore them.
 
-**Wants** — short-term **weighted desires** (e.g. “wants to chat”, “wants premium meal”) that **bias** utility scores until satisfied or timeout.
+**Wants** - short-term **weighted desires** (e.g. “wants to chat”, “wants premium meal”) that **bias** utility scores until satisfied or timeout.
 
 **Decision loop (simplified):**
 
@@ -235,10 +235,10 @@ This is the **same core loop as the original void-village design**, adapted to *
 3. Select top action; path; play interaction **state** (duration, animation hook).
 4. On interrupt (raid, fire, conversation with player), **replan**.
 
-**Job / duty layer:** Optional **scheduled obligation** (guard shift, shop hours) as **hard constraint** or **large utility bonus** — answers Q17.
+**Job / duty layer:** Optional **scheduled obligation** (guard shift, shop hours) as **hard constraint** or **large utility bonus** - answers Q17.
 
-> **Q34 — Social graph:** Relationship scores per villager pair? Gossip system?  Yes; Maybe?
-> **Q35 — Memories:** Event log affecting dialogue only, or **utility modifiers** (“afraid of raiders”)? yes
+> **Q34 - Social graph:** Relationship scores per villager pair? Gossip system?  Yes; Maybe?
+> **Q35 - Memories:** Event log affecting dialogue only, or **utility modifiers** (“afraid of raiders”)? yes
 
 ---
 
@@ -272,8 +272,8 @@ This is the **same core loop as the original void-village design**, adapted to *
 - **Quest board POI**: offers subset of dailies without NPC conversation
 - **Inn pool** (§1a): `StartQuest` from an Inn visitor can set **`locksInnSlot: true`** (or equivalent) so the NPC is excluded from next shuffle until complete/abandon.
 
-> **Q36 — Procedural dailies:** Template pools with **random parameters** (deliver 5–10 of item A)? yes, but some parameters are driven by what villagers are in the town and who put up the quest
-> **Q37 — Voice / tone:** All text data-driven for **localization** later? Yes
+> **Q36 - Procedural dailies:** Template pools with **random parameters** (deliver 5–10 of item A)? yes, but some parameters are driven by what villagers are in the town and who put up the quest
+> **Q37 - Voice / tone:** All text data-driven for **localization** later? Yes
 
 ---
 
@@ -287,26 +287,26 @@ Reuse **`PrefabLoader`** pattern: JSON (or project format) prefabs, anchored pla
 - **Cost** and **unlocks** still data-driven (`BuildingData` / `PlotTypeData`).
 - **Required NPC in town** remains a valid gate for narrative buildings; optional for generic housing.
 
-> **Q38 — Blueprint vs instant:** Survival places block-by-block **preview** then consumes items, or **one-click** prefab if materials in town chest? Blueprint
+> **Q38 - Blueprint vs instant:** Survival places block-by-block **preview** then consumes items, or **one-click** prefab if materials in town chest? Blueprint
 
 ---
 
 ## 6. Raids & combat (world-integrated)
 
-- **Trigger:** town tier + cooldown + optional time-of-day; **only when at least one town-relevant player is in range** of the town (owner or party member — match Q3). **No raids** against an “empty” town while everyone is far away/offline unless you add an explicit opt-in later.
-- **Spawn anchor:** **Toward territory edge** facing town center, or random valid air/ground ring — define in data.
-- **Defense:** guard POIs, alarm POI, beacon buff — adapted to **dynamic** town layout.
-- **Structural damage (exception to Q4 protection):** Raiders **do not** free-grief the whole base. They **select a small number** of target buildings (data: max count by tier), mark them **`DAMAGED`**, and may **remove/replace only non-critical blocks** from an allowlist (cosmetic / repairable layers — no charter, no management block, no chest core, etc. — **exact rules in data**). **Repair** (block restore + clear damaged flag) via gameplay; **player-paid repair quest** as preferred loop — **stretch** (Q39).
+- **Trigger:** town tier + cooldown + optional time-of-day; **only when at least one town-relevant player is in range** of the town (owner or party member - match Q3). **No raids** against an “empty” town while everyone is far away/offline unless you add an explicit opt-in later.
+- **Spawn anchor:** **Toward territory edge** facing town center, or random valid air/ground ring - define in data.
+- **Defense:** guard POIs, alarm POI, beacon buff - adapted to **dynamic** town layout.
+- **Structural damage (exception to Q4 protection):** Raiders **do not** free-grief the whole base. They **select a small number** of target buildings (data: max count by tier), mark them **`DAMAGED`**, and may **remove/replace only non-critical blocks** from an allowlist (cosmetic / repairable layers - no charter, no management block, no chest core, etc. - **exact rules in data**). **Repair** (block restore + clear damaged flag) via gameplay; **player-paid repair quest** as preferred loop - **stretch** (Q39).
 
-> **Q39 — Rebuild rules:** Auto-repair timer, player-paid repair quest, or **permanent** until rebuilt? Player-paid repair quest would be preferred but is stretch goal
+> **Q39 - Rebuild rules:** Auto-repair timer, player-paid repair quest, or **permanent** until rebuilt? Player-paid repair quest would be preferred but is stretch goal
 
 ---
 
 ## 7. Museum (TARDIS model)
 
-**Exterior:** One **museum plot type** — fixed footprint (e.g. 3×3 door facade). Matches your “same size outside” rule.
+**Exterior:** One **museum plot type** - fixed footprint (e.g. 3×3 door facade). Matches your “same size outside” rule.
 
-**Interior:** Separate **dimension or isolated instance** per museum (or per town — Q22):
+**Interior:** Separate **dimension or isolated instance** per museum (or per town - Q22):
 
 - **Chunk / wing allocator:** data-driven **gallery modules** snap to a growing graph (linear hall, cross junction, vertical stair wing).
 - **Exhibit slots:** registry entries from base mod + expansions (`exhibit_id` → prefab / entity / item display).
@@ -314,9 +314,9 @@ Reuse **`PrefabLoader`** pattern: JSON (or project format) prefabs, anchored pla
 
 **Player flow:** Use door interaction → teleport to **saved interior state** for that museum entity id → exit returns to door.
 
-**Permissions (Q23):** **Town members** (owner + party per Q3) may complete museum quests, donate, place/unlock exhibits, and any other **mutating** action. **Non-members** who can enter (e.g. server guests) have **view-only** access — no donations, no exhibit placement, no progression hooks that change state.
+**Permissions (Q23):** **Town members** (owner + party per Q3) may complete museum quests, donate, place/unlock exhibits, and any other **mutating** action. **Non-members** who can enter (e.g. server guests) have **view-only** access - no donations, no exhibit placement, no progression hooks that change state.
 
-> **Q40 — Loading:** Interior chunks generated **procedurally** on first visit vs **preauthored template** segments mixed with empty slots? generated procedurally on first visit
+> **Q40 - Loading:** Interior chunks generated **procedurally** on first visit vs **preauthored template** segments mixed with empty slots? generated procedurally on first visit
 
 ---
 
@@ -339,16 +339,16 @@ Reuse **`PrefabLoader`** pattern: JSON (or project format) prefabs, anchored pla
 - `TownCreated`, `PlotPlaced`, `PlotRemoved`, `RaidWaveStart`, `QuestCompleted`, `NpcNeedCritical`
 - **Cancelable** validation: `CanPlacePlot` for compatibility mods
 
-**Documentation deliverable (post-MVP):** `Docs/EXTENSION_GUIDE.md` — ID conventions, folder layout, example expansion project, **schema version** field in JSON.
+**Documentation deliverable (post-MVP):** `Docs/EXTENSION_GUIDE.md` - ID conventions, folder layout, example expansion project, **schema version** field in JSON.
 
-> **Q41 — Code vs data-only expansions:** Support **data-only** packs with no Java, or Java required for anything beyond assets? Support data-only packs with no Java
+> **Q41 - Code vs data-only expansions:** Support **data-only** packs with no Java, or Java required for anything beyond assets? Support data-only packs with no Java
 
 ---
 
 ## 9. Economy & progression
 
 - **Currency** (e.g. Aether Shards): mob drops, quest rewards, trade.
-- **Town treasury:** **Shared pool** of currency for the town, **owned by the owner + party members** in the sense of **who may spend / withdraw** per config (Q3). Deposits and withdrawals should respect the same permission tiers as shared storage where applicable. Blueprint costs can pull from **treasury** and/or **player inventory** — *recommend: configurable per recipe (early game player-held, late game treasury)*.
+- **Town treasury:** **Shared pool** of currency for the town, **owned by the owner + party members** in the sense of **who may spend / withdraw** per config (Q3). Deposits and withdrawals should respect the same permission tiers as shared storage where applicable. Blueprint costs can pull from **treasury** and/or **player inventory** - *recommend: configurable per recipe (early game player-held, late game treasury)*.
 - **Supply / demand** (stretch): dynamic prices from town production POIs.
 
 ---
@@ -357,31 +357,35 @@ Reuse **`PrefabLoader`** pattern: JSON (or project format) prefabs, anchored pla
 
 Keep **branching dialogue** (JSON trees + `CustomUIPage`) as in v1; extend **actions** to hook **quest**, **autonomy** (temporary buff), and **town** state.
 
+### Player-facing copy (mandatory)
+
+**Do not use the em dash** (Unicode U+2014, the long dash character) in dialogue JSON, `.lang` strings, `Message.raw` text, or other in-game UI copy. Use a **period, comma, colon, semicolon, or parentheses** instead. A normal ASCII hyphen (`-`) inside compound words (e.g. `co-op`) is fine.
+
 ---
 
-## Contest MVP — scope & timeline
+## Contest MVP - scope & timeline
 
-**Goal:** A **polished, fun** judge-and-player experience — not a tech demo. The submission must **feel like a small slice of the final game**: founding a town, watching villagers **live** (needs + POIs), **talking** to them (dialogue), and **growing** the settlement (plots + blueprints + quests).
+**Goal:** A **polished, fun** judge-and-player experience - not a tech demo. The submission must **feel like a small slice of the final game**: founding a town, watching villagers **live** (needs + POIs), **talking** to them (dialogue), and **growing** the settlement (plots + blueprints + quests).
 
 **Explicitly out of scope for the contest build (April 28):**
 
-- **Raids** — no raid waves, no raid damage, no guard-combat loop for submission (moves to **Phase A** post-contest).
-- **Museum** — no TARDIS door, no interior instance, no exhibits for submission (moves to **Phase C** post-contest).
+- **Raids** - no raid waves, no raid damage, no guard-combat loop for submission (moves to **Phase A** post-contest).
+- **Museum** - no TARDIS door, no interior instance, no exhibits for submission (moves to **Phase C** post-contest).
 
 **Still in scope:** Charter, territory, plots, blueprint construction, **Inn pool (max 2)** + lock-on-accept, **Sims-like autonomy** (MVP needs: **Hunger, Energy, Fun**), **story chapter 1** + **daily quests** (NPC-given per Q18), economy/treasury basics, permissions/config, persistence, **juice** (feedback, tutorial hints, stable UX).
 
 ---
 
-### Contest MVP — master deliverables checklist
+### Contest MVP - master deliverables checklist
 
 Use this as the **definition of done** for submission. Every row should be assignable to a week below.
 
-### Progress snapshot (Mar 23, 2026)
+### Progress snapshot (Mar 24, 2026)
 
 What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Server/` assets):
 
-- **Done (MVP slice):** `TownRecord` / `TownManager` → `worlds/<world>/towns.json`; charter place → town + **Elder** spawn; **CharterTownPage**; fixed **chunk-radius** territory + footprint **overlap** checks; **plot placement tool** + **PlotPlacementPage** (ghost `BlockEntity` preview, 90° yaw, nudge, token-gated types); **PlotPlacementValidator** + **PlotPlacementCommit**; **plot sign** + **PlotConstructionPage** + **ConstructionAnimator** (batched prefab place, materials); **ConstructionCatalog** from `constructions.json`; **PlotFootprintRecord** on town after place; **PoiRegistry** API (stub — not fed by builds yet); branching **dialogue** (JSON + **DialoguePage**); plugin **config.json** (territory radius, construction tuning).
-- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; formal **`PlotInstance`** state machine; **`POIExtractor`**; autonomy, inn pool, quest engine, treasury, permissions service, flatten toggle, most contest GUIs/NPC roster/quest data.
+- **Done (MVP slice):** Same as prior snapshot, plus: **`PlotInstance`** on `TownRecord` (BLUEPRINTING → COMPLETE); **management block** after inn build (`OpenCustomUI` + `PlotConstructionPage`, prefab re-place so interactions work); **`POIExtractor`** from `Server/Buildings/<id>.json` on complete build; **`PoiRegistry`** persists **`worlds/<world>/pois.json`**; **VillagerNeeds** on 0-100 scale with decay + config; Elder **wander** + dialogue cleanup; **town quest ids** on `TownRecord` with dialogue **start/complete** + conditions (`q_build_inn` flow); **QuestCatalog** display names for player messages; debug commands (`needs`, `poi`, etc.) behind config.
+- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; full **AutonomySystem** (POI utility, pathing, Q12 unload sim); **InnPoolSystem**; full **QuestEngine** / journal UI / party objectives; **TownTreasury**; **permissions** service; flatten toggle; most contest GUIs/NPC roster beyond Elder week1–2 dialogue.
 
 #### Core simulation (Java / persistence)
 
@@ -389,14 +393,15 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 - [x] **Charter block**: place → create town + spawn **Elder**; **CharterTownPage** shows town info. *Still missing: irreversible dissolve + return item; break-protection rules.*
 - [x] **Territory**: chunk-aligned radius from charter; overlap / inside checks for placement + prefab footprint. *Still missing: auto-expand when plots built near edge.*
 - [x] **Plot tool / plot block**: construction from catalog + optional plot token; ghost preview; 90° snap; server validation (territory, overlap, prefab load). *Still missing: flatten toggle; slope messaging.*
-- [ ] **`PlotInstance`**: state `EMPTY | BLUEPRINTING | COMPLETE`, rotation, owner town, links to management block entity id.
+- [x] **`PlotInstance`**: `BLUEPRINTING` / `COMPLETE` on `TownRecord`; rotation and footprint; plot id on sign + management block components (no `EMPTY` enum yet; no separate entity-id link beyond UUID strings).
 - [x] **Prefab placement pipeline**: `ConstructionAnimator` + `PrefabBufferUtil` / `PrefabStore`; batched place on Build. *No standalone `PrefabLoader` type name.*
-- [x] **Plot sign “management” flow**: **PlotConstructionPage** — materials (green/red), Build consumes inventory, prefab completes, sign removed. *No residents list, destroy-building GUI, or upgrade stages.*
-- [x] **`PoiRegistry`**: add/remove/query by tag + town (in-memory stub). *Nothing registers POIs from completed builds yet.*
-- [ ] **`POIExtractor`**: data-driven POI markers from completed building id (sleep, eat, work bench, fun node, inn counter, etc.).
-- [ ] **`AutonomySystem`**: need decay (time + sleep + activity modifiers); utility pick; path to POI; interaction duration; interrupt on dialogue; **abstract sim** when chunk unloaded (Q12).
+- [x] **Plot sign “management” flow**: **PlotConstructionPage** - materials (green/red), Build consumes inventory, prefab completes, sign removed. *No residents list, destroy-building GUI, or upgrade stages.*
+- [x] **`PoiRegistry`**: add/remove/query by tag + town; **persists** `pois.json` per world with towns.
+- [x] **`POIExtractor`**: reads building JSON POI lists (e.g. `inn_v1`); registers on construction complete; clears by plot on rebuild.
+- [x] **`VillagerNeeds` + decay** (partial autonomy): 0-100 meters, world-time decay, config rate, Elder gets component on spawn; debug `/aetherhaven needs`. *Still missing: sleep/activity modifiers, utility, pathing, POI interactions, Q12 abstract sim when unloaded.*
+- [ ] **`AutonomySystem`**: full loop: utility pick; path to POI; interaction duration; interrupt on dialogue; **abstract sim** when chunk unloaded (Q12).
 - [ ] **`InnPoolSystem`**: max 2 occupants; eligible pool from data; daily/periodic refresh; **lock** on accepted quest; free slot on building complete / abandon rules.
-- [ ] **`QuestEngine`**: prerequisites, objectives (place_building, talk_to_npc, deliver_item, reach_tier), rewards, abandon, persistence; **party-shared progress** (Q20). *Dialogue actions exist but no full quest state machine.*
+- [ ] **`QuestEngine`**: prerequisites, objectives (place_building, talk_to_npc, deliver_item, reach_tier), rewards, abandon, persistence; **party-shared progress** (Q20). *Partial: `TownRecord` stores active/completed quest ids; dialogue `start_quest` / `complete_quest`; graph conditions for inn quest; `QuestCatalog` titles. No journal UI, objective pipeline, or party sync.*
 - [ ] **Daily reset**: configurable mode; reroll eligible dailies; persist cooldowns.
 - [ ] **`TownTreasury`**: deposit/withdraw permissions (owner/member per config); balance in save data; pay from treasury **or** player inv per recipe (pick one default for MVP and document).
 - [ ] **Permissions service**: canPlacePlot, canOpenManagement, canWithdraw, etc. (mirrors Q3 + config).
@@ -416,9 +421,9 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 
 \* *Plot placement may be entirely in-world (ghost only); if so, still ship **on-screen validation text** or action-bar hints so players know why placement fails.*
 
-**GUI status (Mar 23, 2026):** **CharterTownPage** and **PlotPlacementPage** ship; **PlotConstructionPage** + **PlotSignAdminPage** for sign/build; **DialoguePage** + choice row. **Quest journal**, **needs overview**, **treasury**, **daily offer** not built yet.
+**GUI status (Mar 24, 2026):** **CharterTownPage** and **PlotPlacementPage** ship; **PlotConstructionPage** for plot sign + **prefab-placed management block** (`AetherhavenPlotManagement`); **PlotSignAdminPage**; **DialoguePage** + choice row. **Quest journal**, **needs overview**, **treasury**, **daily offer** not built yet.
 
-#### NPCs (contest roster — hand-authored)
+#### NPCs (contest roster - hand-authored)
 
 | NPC | Role | Spawn / home | MVP dialogues (minimum nodes) | Autonomy / behavior |
 |-----|------|----------------|--------------------------------|---------------------|
@@ -427,36 +432,36 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 | **Merchant Vex** (id `merchant`) | Wants **market stall** built | Inn pool visitor #1 (until locked/moved) | `vex_arrival`, `vex_quest_stall`, `vex_stall_complete`, `vex_repeat_shop_stub`* | **Work** at stall when complete; **Fun** at park; idle at stall |
 | **Farmer Corra** (id `farmer`) | Wants **house** (optional small farm POI if time) | Inn pool visitor #2 | `corra_arrival`, `corra_quest_home`, `corra_home_complete` | **Sleep** home; **Eat** inn or home; **Work** at farm POI if present, else generic field marker |
 
-\* *`vex_repeat_shop_stub`: barter can be “coming soon” text if economy integration slips — prefer minimal **sell 1 item** if API allows.*
+\* *`vex_repeat_shop_stub`: barter can be “coming soon” text if economy integration slips - prefer minimal **sell 1 item** if API allows.*
 
 **Contest count:** **4** named NPCs; **max 2** in Inn at once before they move to their buildings.
 
-#### Dialogue files (JSON trees) — minimum episode list
+#### Dialogue files (JSON trees) - minimum episode list
 
-- `dialogue/elder_*.json` — **≥25 nodes total** across files (intro, choices, conditions for “inn built”, “daily available”).
-- `dialogue/innkeeper_*.json` — **≥12 nodes**.
-- `dialogue/merchant_*.json` — **≥12 nodes**.
-- `dialogue/farmer_*.json` — **≥12 nodes**.
+- `dialogue/elder_*.json` - **≥25 nodes total** across files (intro, choices, conditions for “inn built”, “daily available”).
+- `dialogue/innkeeper_*.json` - **≥12 nodes**.
+- `dialogue/merchant_*.json` - **≥12 nodes**.
+- `dialogue/farmer_*.json` - **≥12 nodes**.
 - All dialogue actions wired: **`StartQuest`**, **`CompleteQuest`**, **`OpenQuestJournal`**, **`GrantItem`** (if needed), **`SetTownFlag`**.
 
 #### Quests (data)
 
 - **Story chapter 1** (`quests/chapter1_founding.json` or split files):
-  - `q_found_town` (implicit complete on charter — optional formal quest)
-  - `q_build_inn` — objective: complete **Inn** blueprint on valid plot; rewards: unlock inn pool + spawn innkeeper
-  - `q_merchant_stall` — from Vex; place + complete **Market stall** plot
-  - `q_farmer_house` — from Corra; place + complete **Settler house** plot
+  - `q_found_town` (implicit complete on charter - optional formal quest)
+  - `q_build_inn` - objective: complete **Inn** blueprint on valid plot; rewards: unlock inn pool + spawn innkeeper
+  - `q_merchant_stall` - from Vex; place + complete **Market stall** plot
+  - `q_farmer_house` - from Corra; place + complete **Settler house** plot
 - **Dailies** (`quests/dailies_pool.json`): **≥3** distinct templates, e.g.  
   - Deliver **N** of item X to Elder (N random in range)  
   - Talk to **named** NPC after they moved in  
-  - “Keep **Energy** above Y% for M minutes” (stretch objective — cut if hard)  
+  - “Keep **Energy** above Y% for M minutes” (stretch objective - cut if hard)  
   Reset per Q19 config; **1 active daily** at a time for MVP is OK if polish demands.
 
-#### Buildings & art (Blockbench / prefabs — you must produce)
+#### Buildings & art (Blockbench / prefabs - you must produce)
 
 | Asset id | Plot footprint | POIs inside (minimum) | Notes |
 |----------|----------------|-------------------------|--------|
-| **`charter_monolith`** | 1×1 block (not a plot) | — | Distinct readable silhouette; particle optional |
+| **`charter_monolith`** | 1×1 block (not a plot) | - | Distinct readable silhouette; particle optional |
 | **`plot_inn`** | e.g. 12×10 (adjust to art) | counter (**Work**), **2 sleep**, **4 eat** seats, **fun** hearth | Inn interior readable; management block visible |
 | **`plot_settler_house`** | smaller | **1 sleep**, **1 eat** | Cozy; window lighting |
 | **`plot_market_stall`** | small | **1 work**, **1 shop** interact | Sign readable from distance |
@@ -491,11 +496,11 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ### Week-by-week schedule (contest)
 
-**Calendar anchor:** Start **Mar 10**, deadline **Apr 28** — **8 weeks**. Adjust labels yearly; **do not** slip scope into raids/museum.
+**Calendar anchor:** Start **Mar 10**, deadline **Apr 28** - **8 weeks**. Adjust labels yearly; **do not** slip scope into raids/museum.
 
 ---
 
-#### Week 1 — Mar 10–16 — Foundation & town birth
+#### Week 1 - Mar 10–16 - Foundation & town birth
 
 | Track | Deliverables |
 |--------|----------------|
@@ -503,18 +508,18 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 | **Charter** | Block/item definition; onPlace → create town, persist, spawn **Elder** at offset; interaction opens **`CharterTownPanel`** (stub OK: title + “Dissolve” disabled until Week 5). |
 | **Plots** | **One** `PlotType`: `inn_placeholder` footprint only; plot item places ghost mesh; **server-side** validity: inside radius, no overlap; **failure reason** string for client HUD text. |
 | **POI** | `PoiRegistry` stub: register/unregister/list by town id. |
-| **NPC** | Elder entity spawns; **no** dialogue yet — interaction logs or chat message “…” |
+| **NPC** | Elder entity spawns; **no** dialogue yet - interaction logs or chat message “…” |
 | **Art** | **Charter block** model + texture; **plot frame** ghost model; flat test platform prefab for dev. |
-| **Dialogue** | — |
+| **Dialogue** | - |
 | **GUI** | Placeholder page for charter (blank layout wired). |
 | **QA** | Single-player: place charter, relog, town persists. |
-| **Status** | **Met (Mar 23, 2026)** — charter + Elder + `towns.json` persistence; plot placement tool with ghost, rotation, and validation; construction from plot sign for catalog entries. Dissolve town deferred. |
+| **Status** | **Met (Mar 24, 2026)** - charter + Elder + `towns.json` persistence; plot placement tool with ghost, rotation, and validation; construction from plot sign for catalog entries. Dissolve town deferred. |
 
 **Exit criteria:** Player can place charter, see Elder, place one invalid/valid plot with feedback.
 
 ---
 
-#### Week 2 — Mar 17–23 — Blueprint pipeline & first prefab
+#### Week 2 - Mar 17–23 - Blueprint pipeline & first prefab
 
 | Track | Deliverables |
 |--------|----------------|
@@ -523,17 +528,24 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 | **POI** | **`POIExtractor`** reads `buildings/inn.json` POI list; registers on complete. |
 | **Needs** | Component `VillagerNeeds` (hunger, energy, fun); **decay** tick using world time / abstract when unloaded. |
 | **NPC** | Elder **idle + wander** within radius of charter. |
-| **Art** | **Inn prefab v1** (blockout OK): includes management block + innkeeper spawn marker. |
+| **Art** | **Inn prefab v1** (blockout OK): includes **management voxel** using **`Furniture_Village_Bookcase`** + innkeeper spawn marker. |
 | **Dialogue** | `elder_intro` + `elder_inn_quest` minimal: **StartQuest(`q_build_inn`)** on choice. |
 | **GUI** | **`DialoguePanel`** functional with 2 test trees. **`ConstructionPanel`** wired to management block. |
 | **QA** | Complete inn via cheats/fast-cost config; POIs appear in debug overlay/list command. |
-| **Status** | **Partial (Mar 23, 2026)** — `PlotConstructionPage` + `ConstructionAnimator` + `constructions.json`; test house / inn placeholder prefab path. **Not yet:** `PlotInstance` state machine, `POIExtractor`, `VillagerNeeds`, elder `StartQuest(q_build_inn)` wiring, POI debug listing. |
+| **Status** | **Met (Mar 24, 2026)** for core exit criteria - `PlotInstance` + COMPLETE; **`Aetherhaven_Management_Block`** in prefab + post-build re-place + `OpenCustomUI`; `POIExtractor` + **`pois.json`**; `VillagerNeeds` + decay; Elder dialogue **`q_build_inn`** start/complete + turn-in branch; `/aetherhaven poi` debug. *Still polish:* treasury flag on Build, innkeeper spawn marker NPC, formal `PrefabLoader` type name. |
 
 **Exit criteria:** Elder gives quest; player can finish Inn blueprint; world shows completed inn.
 
+**Week 2 implementation addendum (plan / execution reference):**
+
+- **Detailed engineering plan (in-repo, edit with normal tools):** [Docs/WEEK2_IMPLEMENTATION_PLAN.md](Docs/WEEK2_IMPLEMENTATION_PLAN.md)
+- **Management block visual:** Use base-game **`Furniture_Village_Bookcase`** as the placed block in **`inn_v1`** (and any programmatic placement). If vanilla bookcases cannot carry mod `ChunkStore` components + `OpenCustomUI`, add a thin mod block that **reuses the bookcase model/appearance** (mirror asset references from base block JSON) while registering the `ManagementBlock` component and interaction - verify against decompiled sources and base assets.
+- **Source & asset lookup:** Use **`C:\Users\gchou\Documents\HytaleModding\HytaleSourceCode`** when checking block definitions, NPC instruction/`BodyMotion` types, prefab paste behavior, and APIs not present in this repo.
+- **`q_build_inn` resolution:** Quest becomes active from dialogue; **complete** only after the inn plot reaches **COMPLETE** and the player **talks to the Elder again** (turn-in branch), not automatically on build finish.
+
 ---
 
-#### Week 3 — Mar 24–30 — Autonomy v1 + Innkeeper life
+#### Week 3 - Mar 24–30 - Autonomy v1 + Innkeeper life
 
 | Track | Deliverables |
 |--------|----------------|
@@ -549,7 +561,7 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-#### Week 4 — Mar 31–Apr 6 — Inn visitors, lock-on-accept, second building
+#### Week 4 - Mar 31–Apr 6 - Inn visitors, lock-on-accept, second building
 
 | Track | Deliverables |
 |--------|----------------|
@@ -565,7 +577,7 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-#### Week 5 — Apr 7–13 — Third villager, park, dailies, permissions
+#### Week 5 - Apr 7–13 - Third villager, park, dailies, permissions
 
 | Track | Deliverables |
 |--------|----------------|
@@ -581,14 +593,14 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-#### Week 6 — Apr 14–19 — Polish, economy, tutorial friction pass
+#### Week 6 - Apr 14–19 - Polish, economy, tutorial friction pass
 
 | Track | Deliverables |
 |--------|----------------|
-| **Engineering** | **Treasury** finalize (deposit/withdraw + construction pay rules). **Need @ 0** debuff + refuse work (Q16). **Want** roll stub optional (skip if time — overview only). |
+| **Engineering** | **Treasury** finalize (deposit/withdraw + construction pay rules). **Need @ 0** debuff + refuse work (Q16). **Want** roll stub optional (skip if time - overview only). |
 | **Economy** | **Aether Shard** item (if not done); quest rewards pay into treasury or inv; merchant **sell 1 item** OR dialogue stub with clear “post-contest” label (prefer real if easy). |
 | **Art** | **Beauty pass** all buildings; consistent palette; **Elder staff** / **Corra hat** readable silhouettes. |
-| **Dialogue** | Bark lines when needs critical (“I’m starving!”) — **data-driven** hooks from autonomy. |
+| **Dialogue** | Bark lines when needs critical (“I’m starving!”) - **data-driven** hooks from autonomy. |
 | **GUI** | Journal polish: empty state art; construction panel **tooltips** for materials. First-time **hint** after charter: “Place a plot from your inventory…” |
 | **Audio** | As per audio checklist minimum. |
 | **QA** | **30-minute** fresh playthrough timed; note boring segments; fix top 3 friction bugs. |
@@ -597,11 +609,11 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-#### Week 7 — Apr 20–24 — Hardening, performance, multiplayer smoke
+#### Week 7 - Apr 20–24 - Hardening, performance, multiplayer smoke
 
 | Track | Deliverables |
 |--------|----------------|
-| **Engineering** | **Stress:** 4 NPCs + full POIs; spread autonomy ticks across frames. **Chunk unload:** abstract sim verified. **Multiplayer:** two clients same town — quest progress shared, no dup exploit. |
+| **Engineering** | **Stress:** 4 NPCs + full POIs; spread autonomy ticks across frames. **Chunk unload:** abstract sim verified. **Multiplayer:** two clients same town - quest progress shared, no dup exploit. |
 | **Bugs** | No hard locks; dialogue re-entry safe; plot overlap edge cases; dissolve town cleans entities. |
 | **Content** | **Third daily** template if cut earlier; optional road POI strip. |
 | **Docs** | `JUDGE_ARCHITECTURE.md` draft; config comments. |
@@ -611,7 +623,7 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-#### Week 8 — Apr 25–28 — Submission package
+#### Week 8 - Apr 25–28 - Submission package
 
 | Track | Deliverables |
 |--------|----------------|
@@ -624,7 +636,7 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-### Fallback if behind (contest — do **not** add raids/museum)
+### Fallback if behind (contest - do **not** add raids/museum)
 
 | Priority cut | Sacrifice |
 |--------------|-----------|
@@ -639,35 +651,35 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 ---
 
-## Post-contest roadmap — toward final vision
+## Post-contest roadmap - toward final vision
 
 Phases are **sequential guides**, not commitments. Length depends on team size and Hytale API maturity.
 
-### Phase A — Colony completeness (≈ 2–4 months post-contest)
+### Phase A - Colony completeness (≈ 2–4 months post-contest)
 
 - Full **tier** progression; **party permissions**; **terrain** tools (flatten optional)
 - **8–12** building types; **4+** recreation POIs; **guard / economy** loops
 - **Relationship** + **memory** light model (if desired)
 - **Balanced raid** tiers + **controlled** structural damage + **in-town-only** raid presence rule
 
-### Phase B — Quest & narrative depth (≈ 2–3 months)
+### Phase B - Quest & narrative depth (≈ 2–3 months)
 
 - **Chapter** system; **branching** consequences; **NPC personal** chains
 - **Procedural daily** templates; **town board** + **mail** (if Q18 includes)
 - **Voice / localization** pipeline (if Q37)
 
-### Phase C — Museum & collection (≈ 2–4 months)
+### Phase C - Museum & collection (≈ 2–4 months)
 
 - **Full wing generator**; **exhibit** dependency graph; **cross-mod** exhibits
-- **Interior multiplayer** policy (**Q23** — view-only for non–town-members; full contribute for owner + party)
+- **Interior multiplayer** policy (**Q23** - view-only for non–town-members; full contribute for owner + party)
 - **Curator** NPC + donation quests
 
-### Phase D — Extension ecosystem (ongoing)
+### Phase D - Extension ecosystem (ongoing)
 
 - Stable **semver** APIs; **example mods**; **CurseForge** “Aetherhaven Extensions” tag
 - **Steam Workshop**-style zip packs if platform allows
 
-### Phase E — Advanced autonomy (ongoing)
+### Phase E - Advanced autonomy (ongoing)
 
 - **Group activities** (multi-NPC interactions)
 - **Emergent schedules** from utility only vs **hybrid** job shifts
@@ -700,7 +712,7 @@ Use this as a **pick list**; none are promised on a date.
 
 | Risk | Mitigation |
 |------|------------|
-| Pathfinding fails in player-built towns | Conservative POI placement; **reachability** check; fallback actions; **flat demo area** for video only (Q30 — does not affect code paths) |
+| Pathfinding fails in player-built towns | Conservative POI placement; **reachability** check; fallback actions; **flat demo area** for video only (Q30 - does not affect code paths) |
 | Scope explosion (Sims + quests + colony) | **Contest MVP** contract: **no raids/museum**; use § fallback table; timebox autonomy v1 |
 | Multiplayer desync on town state | **Server authority**; single writer for `TownRecord`; test two clients early |
 | Mod API churn | **Version** field; integration test mod in CI (when available) |
@@ -713,10 +725,10 @@ Use this as a **pick list**; none are promised on a date.
 
 The following are **no longer** the primary design:
 
-- Sky void as **main** village space (optional **test / video** dimension only — see Q30)
+- Sky void as **main** village space (optional **test / video** dimension only - see Q30)
 - Hand-built **island** layout with static plot signs in shipped world
 
-**Explicitly retained from v1 narrative:** **Inn pool / max two visitors**, Elder-led opening, visitors requesting **houses/workplaces** — now implemented via **charter → plot-placed Inn → governed plots** (§1a), not void islands.
+**Explicitly retained from v1 narrative:** **Inn pool / max two visitors**, Elder-led opening, visitors requesting **houses/workplaces** - now implemented via **charter → plot-placed Inn → governed plots** (§1a), not void islands.
 
 **Reusable from v1:** `PrefabLoader`, dialogue UI pattern, achievement-style flags (fold into **quest/town** state), economy item ideas, NPC **character** concepts (roles map to **archetypes** + POI jobs).
 
@@ -724,8 +736,8 @@ The following are **no longer** the primary design:
 
 ## Next step
 
-1. **README + judge doc** — align README with world-integrated colony design; add `Docs/JUDGE_ARCHITECTURE.md`.
-2. Derive **exact** JSON schemas for `PlotType`, `Quest`, `PoiBlueprint`, `TownConfig`, and **`InnPoolState`** (occupants, locked NPC ids, eligible pool ids, refresh schedule) from the locked summary — align with **§ Contest MVP** master checklist.  
-3. Spike **territory expansion** rule: precise algorithm when “plot near edge” extends chunk radius (prevent exploit: zigzag single plots — consider **min plot value** or **tier gate**).  
+1. **README + judge doc** - align README with world-integrated colony design; add `Docs/JUDGE_ARCHITECTURE.md`.
+2. Derive **exact** JSON schemas for `PlotType`, `Quest`, `PoiBlueprint`, `TownConfig`, and **`InnPoolState`** (occupants, locked NPC ids, eligible pool ids, refresh schedule) from the locked summary - align with **§ Contest MVP** master checklist.  
+3. Spike **territory expansion** rule: precise algorithm when “plot near edge” extends chunk radius (prevent exploit: zigzag single plots - consider **min plot value** or **tier gate**).  
 4. Decide **quest abandon** for locked Inn visitors: **return to shuffle pool** vs **cooldown**? Return to pool with optional story exceptions (`innPoolBehavior` per quest).  
 5. **Post-contest:** data-design **raid damage allowlist** per building tier (Raids not in contest build).

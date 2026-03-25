@@ -4,13 +4,19 @@ import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
+import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
+import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
@@ -53,7 +59,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
     private DialogueCatalog dialogueCatalog = DialogueCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
     private final DialogueResolver dialogueResolver = new DialogueResolver();
-    private final DialogueWorldView dialogueWorldView = new DialogueWorldView.DefaultDialogueWorldView();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "Aetherhaven-Construction");
         t.setDaemon(true);
@@ -90,8 +95,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
-    public DialogueWorldView getDialogueWorldView() {
-        return dialogueWorldView;
+    public DialogueWorldView createDialogueWorldView(@Nonnull World world) {
+        return new AetherhavenDialogueWorldView(world, this);
     }
 
     /**
@@ -115,8 +120,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
 
         PlotSignBlock.register(this.getChunkStoreRegistry());
+        ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
 
+        VillagerNeeds.register(this.getEntityStoreRegistry());
+        AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
+        this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
 
         this.getEventRegistry()
@@ -136,17 +145,41 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(targetBlock.x, targetBlock.z));
-                if (chunk == null) {
+                PlotConstructionBlockResolver.PlotConstructionTarget target = PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock);
+                if (target == null) {
                     return null;
                 }
-                BlockPosition base = world.getBaseBlock(targetBlock);
-                Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(base.x, base.y, base.z);
-                if (blockRef == null || blockRef.getStore().getComponent(blockRef, PlotSignBlock.getComponentType()) == null) {
+                Ref<ChunkStore> blockRef = target.blockRef();
+                Vector3i blockWorld = target.blockWorldPos();
+                Store<ChunkStore> cs = blockRef.getStore();
+                if (cs.getComponent(blockRef, PlotSignBlock.getComponentType()) != null) {
+                    return new PlotConstructionPage(playerRef, blockRef, blockWorld, false);
+                }
+                return null;
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            PlotConstructionPage.class,
+            AetherhavenConstants.PAGE_PLOT_MANAGEMENT,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
                     return null;
                 }
-                Vector3i signWorld = new Vector3i(base.x, base.y, base.z);
-                return new PlotConstructionPage(playerRef, blockRef, signWorld);
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                PlotConstructionBlockResolver.PlotConstructionTarget target = PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock);
+                if (target == null) {
+                    return null;
+                }
+                Ref<ChunkStore> blockRef = target.blockRef();
+                Vector3i blockWorld = target.blockWorldPos();
+                Store<ChunkStore> cs = blockRef.getStore();
+                if (cs.getComponent(blockRef, ManagementBlock.getComponentType()) != null) {
+                    return new PlotConstructionPage(playerRef, blockRef, blockWorld, true);
+                }
+                return null;
             }
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(

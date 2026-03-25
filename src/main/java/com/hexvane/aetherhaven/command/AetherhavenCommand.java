@@ -10,5 +10,9 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenTownsCommand());
         this.addSubCommand(new ExportAvatarSkinCommand());
         this.addSubCommand(new DialogueCommand());
+        this.addSubCommand(new AetherhavenPoiCommand());
+        this.addSubCommand(new AetherhavenPlotsCommand());
+        this.addSubCommand(new AetherhavenNeedsCommand());
+        this.addSubCommand(new AetherhavenQuestDebugCommand());
     }
 }
