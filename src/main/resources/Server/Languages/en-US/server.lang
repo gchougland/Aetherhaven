@@ -14,6 +14,14 @@ instances.aetherhaven.subtitle=The sky village
 aetherhaven.ui.plotconstruction.title=Construction
 aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
+aetherhaven.ui.plotconstruction.townNeeds=Town needs
+
+aetherhaven.ui.villagerneeds.title=Town needs
+aetherhaven.ui.villagerneeds.hint=Select a villager to view meters and portrait.
+aetherhaven.ui.villagerneeds.hunger=Hunger
+aetherhaven.ui.villagerneeds.energy=Energy
+aetherhaven.ui.villagerneeds.fun=Fun
+aetherhaven.ui.villagerneeds.villagers=Villagers
 aetherhaven.ui.plotadmin.title=Plot sign (admin)
 aetherhaven.ui.plotadmin.construction=Construction
 aetherhaven.ui.plotadmin.give=Give plot sign & close
@@ -46,6 +54,7 @@ items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
+npcRoles.Aetherhaven_Innkeeper.name=Innkeeper
 
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.dissolve=Dissolve town

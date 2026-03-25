@@ -30,5 +30,21 @@ public final class AetherhavenConstants {
 
     public static final String ELDER_NPC_ROLE_ID = "Aetherhaven_Elder_Lyren";
 
+    public static final String INNKEEPER_NPC_ROLE_ID = "Aetherhaven_Innkeeper";
+
+    /** Shown during autonomous campfire “eating”; matches vanilla cooked meat (consume / third-person eat anim). */
+    public static final String CAMPFIRE_EAT_ITEM_ID = "Food_Wildmeat_Cooked";
+
+    /**
+     * NPC role state with {@code BodyMotion: Nothing} while {@link com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem}
+     * moves or plays POI animations, so Idle {@code WanderInRect} does not fight scripted motion.
+     */
+    public static final String NPC_STATE_AUTONOMY_POI = "AetherhavenAutonomy";
+
+    public static final String PAGE_VILLAGER_NEEDS = "AetherhavenVillagerNeeds";
+
+    /** {@link com.hypixel.hytale.server.core.inventory.ItemStack.Metadata#BLOCK_HOLDER} key for plot sign items. */
+    public static final String ITEM_METADATA_BLOCK_HOLDER = "BlockHolder";
+
     private AetherhavenConstants() {}
 }

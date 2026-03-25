@@ -6,26 +6,26 @@
       "Description": "Whether the NPC is invulnerable."
     },
     "MemoriesNameOverride": {
-      "Value": "Aetherhaven_Elder_Lyren",
+      "Value": "Aetherhaven_Innkeeper",
       "Description": "Memory name override"
     },
     "NameTranslationKey": {
-      "Value": "server.npcRoles.Aetherhaven_Elder_Lyren.name",
+      "Value": "server.npcRoles.Aetherhaven_Innkeeper.name",
       "Description": "Translation key for NPC name display"
     },
     "AetherhavenWanderPhaseTime": {
-      "Value": [3, 8],
-      "Description": "Rect-wander phase duration bounds (seconds); see Component_Instruction_Aetherhaven_Town_Villager_Rect_Wander_Idle"
+      "Value": [4, 10],
+      "Description": "Rect-wander phase duration bounds (seconds)"
     },
     "AetherhavenPausePhaseTime": {
-      "Value": [2, 5],
+      "Value": [3, 7],
       "Description": "Idle pause between wander bursts (seconds)"
     }
   },
   "StartState": "Idle",
   "DefaultNPCAttitude": "Ignore",
   "DefaultPlayerAttitude": "Neutral",
-  "Appearance": "Village_Elder",
+  "Appearance": "Innkeep",
   "MaxHealth": 100,
   "IsMemory": true,
   "MemoriesCategory": "Aetherhaven",
@@ -134,8 +134,7 @@
               { "Type": "LockOnInteractionTarget" },
               {
                 "Type": "OpenAetherhavenDialogue",
-                "DialogueId": "aetherhaven_elder_week2",
-                "VillagerKind": "elder_lyren"
+                "VillagerKind": "innkeeper"
               },
               { "Type": "State", "State": "$Interaction" }
             ]

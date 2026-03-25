@@ -20,7 +20,8 @@
       "prefabPath": "inn_v1.prefab.json",
       "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
       "plotAnchorOffset": [5, 0, 5],
-      "managementBlockLocalPos": [0, 1, 0],
+      "managementBlockLocalPos": [1, 2, 3],
+      "innkeeperSpawnLocal": [0, 0, 1],
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [

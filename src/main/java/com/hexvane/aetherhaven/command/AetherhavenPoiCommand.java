@@ -77,12 +77,7 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
             List<PoiEntry> list = reg.listByTown(townUuid);
             playerRef.sendMessage(Message.raw("POIs for town " + townUuid + " (" + list.size() + "):"));
             if (list.isEmpty()) {
-                playerRef.sendMessage(
-                    Message.raw(
-                        "None in the in-memory registry (POIs are not saved to disk; they clear on restart). "
-                            + "Use /aetherhaven poi dump to see any POIs still cached this session."
-                    )
-                );
+                playerRef.sendMessage(Message.raw("None registered for this town (complete a building or check pois.json)."));
                 return;
             }
             for (PoiEntry e : list) {
@@ -94,6 +89,10 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                             + e.getY()
                             + ","
                             + e.getZ()
+                            + " kind="
+                            + e.getInteractionKind()
+                            + " blockTypeId="
+                            + e.getBlockTypeId()
                             + " tags="
                             + e.getTags()
                             + " cap="
@@ -136,6 +135,10 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                             + e.getY()
                             + ","
                             + e.getZ()
+                            + " kind="
+                            + e.getInteractionKind()
+                            + " blockTypeId="
+                            + e.getBlockTypeId()
                             + " tags="
                             + e.getTags()
                             + " plot="

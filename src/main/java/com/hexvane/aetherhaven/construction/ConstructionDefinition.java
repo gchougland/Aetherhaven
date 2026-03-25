@@ -54,6 +54,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[] managementBlockLocalPos;
 
+    /** Prefab-local spawn cell for the innkeeper NPC (same space as prefab blocks); optional. */
+    @SerializedName("innkeeperSpawnLocal")
+    @Nullable
+    private int[] innkeeperSpawnLocal;
+
     public String getId() {
         return id;
     }
@@ -112,5 +117,11 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getManagementBlockLocalPos() {
         return managementBlockLocalPos != null && managementBlockLocalPos.length == 3 ? managementBlockLocalPos : null;
+    }
+
+    /** @return prefab-local x,y,z for innkeeper spawn, or null */
+    @Nullable
+    public int[] getInnkeeperSpawnLocal() {
+        return innkeeperSpawnLocal != null && innkeeperSpawnLocal.length == 3 ? innkeeperSpawnLocal : null;
     }
 }

@@ -68,7 +68,7 @@
     },
     "inn_done": {
       "speaker": "Elder Lyren",
-      "text": "Word spreads already: a roof over travelers' heads. You've done well by Aetherhaven.",
+      "text": "Word spreads already: a roof over travelers' heads. Our innkeeper has taken the key—go greet them by the hearth. You've done well by Aetherhaven.",
       "choices": [{ "text": "Glad to help.", "next": null }]
     }
   }

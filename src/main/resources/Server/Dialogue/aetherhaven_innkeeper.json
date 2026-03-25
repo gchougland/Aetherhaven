@@ -1,0 +1,22 @@
+{
+  "id": "aetherhaven_inn_welcome",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Innkeeper",
+      "text": "Welcome to the inn. The hearth is yours while you're in Aetherhaven.",
+      "choices": [
+        {
+          "text": "Tell me about the guest pool.",
+          "next": "inn_explain_pool"
+        },
+        { "text": "Farewell.", "next": null }
+      ]
+    },
+    "inn_explain_pool": {
+      "speaker": "Innkeeper",
+      "text": "We've no travelers booked yet—the guest pool is empty. When word spreads, they'll rest here safe and fed.",
+      "choices": [{ "text": "Good to know.", "next": null }]
+    }
+  }
+}

@@ -33,3 +33,5 @@ build/
 
 ### Misc ###
 /run/
+/Docs/
+/.cursor/

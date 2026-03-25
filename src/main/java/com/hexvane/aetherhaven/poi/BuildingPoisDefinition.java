@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Gson root for {@code Server/Buildings/<constructionId>.json}. */
 public final class BuildingPoisDefinition {
@@ -31,6 +32,14 @@ public final class BuildingPoisDefinition {
 
         @SerializedName("capacity")
         private int capacity = 1;
+
+        /** Expected block type id at the anchor cell after build; when blank, registration skips validation. */
+        @Nullable
+        @SerializedName("blockTypeId")
+        private String blockTypeId;
+
+        @SerializedName("interactionKind")
+        private String interactionKind = "NONE";
 
         public int getLocalX() {
             return localX;
@@ -59,6 +68,16 @@ public final class BuildingPoisDefinition {
 
         public int getCapacity() {
             return Math.max(1, capacity);
+        }
+
+        @Nullable
+        public String getBlockTypeId() {
+            return blockTypeId != null && !blockTypeId.isBlank() ? blockTypeId.trim() : null;
+        }
+
+        @Nonnull
+        public PoiInteractionKind getInteractionKind() {
+            return PoiInteractionKind.fromJson(interactionKind);
         }
     }
 }

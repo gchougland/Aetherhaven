@@ -61,6 +61,17 @@ public final class TownRecord {
     @SerializedName("elderEntityUuid")
     private String elderEntityUuid;
 
+    @SerializedName("innActive")
+    private boolean innActive;
+
+    @Nullable
+    @SerializedName("innkeeperEntityUuid")
+    private String innkeeperEntityUuid;
+
+    /** Reserved for future visitor NPC pool; empty when the inn activates. */
+    @SerializedName("innPoolNpcIds")
+    private List<String> innPoolNpcIds = new ArrayList<>();
+
     public TownRecord() {}
 
     public TownRecord(
@@ -107,6 +118,12 @@ public final class TownRecord {
         }
         LOGGER.atInfo().log("Migrated %s legacy plot footprints for town %s", legacy.size(), townId);
         plotFootprints = null;
+    }
+
+    public void migrateInnFieldsIfNeeded() {
+        if (innPoolNpcIds == null) {
+            innPoolNpcIds = new ArrayList<>();
+        }
     }
 
     @Nonnull
@@ -175,6 +192,31 @@ public final class TownRecord {
 
     public void setElderEntityUuid(@Nullable UUID uuid) {
         this.elderEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
+    public boolean isInnActive() {
+        return innActive;
+    }
+
+    public void setInnActive(boolean innActive) {
+        this.innActive = innActive;
+    }
+
+    @Nullable
+    public UUID getInnkeeperEntityUuid() {
+        return innkeeperEntityUuid != null && !innkeeperEntityUuid.isEmpty() ? UUID.fromString(innkeeperEntityUuid) : null;
+    }
+
+    public void setInnkeeperEntityUuid(@Nullable UUID uuid) {
+        this.innkeeperEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
+    @Nonnull
+    public List<String> getInnPoolNpcIds() {
+        if (innPoolNpcIds == null) {
+            innPoolNpcIds = new ArrayList<>();
+        }
+        return innPoolNpcIds;
     }
 
     @Nonnull
@@ -289,5 +331,19 @@ public final class TownRecord {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public PlotInstance findCompletePlotWithConstruction(@Nonnull String constructionId) {
+        String c = constructionId.trim();
+        if (c.isEmpty()) {
+            return null;
+        }
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(p.getConstructionId())) {
+                return p;
+            }
+        }
+        return null;
     }
 }

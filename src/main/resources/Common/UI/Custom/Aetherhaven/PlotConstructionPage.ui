@@ -57,6 +57,12 @@ $C.@PageOverlay {
         Background: #5e512c(0.0);
       }
 
+      $C.@TextButton #TownNeedsButton {
+        Text: %server.aetherhaven.ui.plotconstruction.townNeeds;
+        Visible: false;
+        Anchor: (Bottom: 8);
+      }
+
       $C.@TextButton #BuildButton {
         Text: %server.aetherhaven.ui.plotconstruction.build;
       }

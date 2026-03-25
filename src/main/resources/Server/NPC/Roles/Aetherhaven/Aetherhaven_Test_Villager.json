@@ -40,9 +40,37 @@
       "Acceleration": 10
     }
   ],
+  "StateTransitions": [
+    {
+      "$Comment": "Clear Status-slot POI animation when Java returns NPC to Idle (see VillagerAutonomySystem.clearAutonomyRoleState).",
+      "States": [
+        {
+          "From": ["AetherhavenAutonomy"],
+          "To": ["Idle"]
+        }
+      ],
+      "Actions": {
+        "Reference": "Component_ActionList_Aetherhaven_Clear_Status"
+      }
+    }
+  ],
   "Instructions": [
     {
       "Instructions": [
+        {
+          "$Comment": "Main NPC states cannot live in Components; inline so AetherhavenAutonomy registers for StateTransitions.",
+          "Sensor": {
+            "Type": "State",
+            "State": "AetherhavenAutonomy",
+            "IgnoreMissingSetState": true
+          },
+          "Instructions": [
+            {
+              "Sensor": { "Type": "Any" },
+              "BodyMotion": { "Type": "Nothing" }
+            }
+          ]
+        },
         {
           "Sensor": {
             "Type": "State",

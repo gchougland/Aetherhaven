@@ -1,0 +1,40 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
+  "$Comment": "Looped WanderInRect + pause. Override WanderRectTimer/PauseTimer via Reference Modify. Width/Depth/MaxHeadingChange are literals — engine does not support Compute on WanderInRect box params in this context.",
+  "Parameters": {
+    "WanderRectTimer": {
+      "Value": [3, 8],
+      "Description": "Seconds (min,max) for each WanderInRect phase"
+    },
+    "PauseTimer": {
+      "Value": [2, 5],
+      "Description": "Seconds (min,max) for each Nothing pause between wander bursts"
+    }
+  },
+  "Content": {
+    "Sensor": { "Type": "Any" },
+    "BodyMotion": {
+      "Type": "Sequence",
+      "Looped": true,
+      "Motions": [
+        {
+          "Type": "Timer",
+          "Time": { "Compute": "WanderRectTimer" },
+          "Motion": {
+            "Type": "WanderInRect",
+            "Width": 4,
+            "Depth": 4,
+            "MaxHeadingChange": 90
+          }
+        },
+        {
+          "Type": "Timer",
+          "Time": { "Compute": "PauseTimer" },
+          "Motion": { "Type": "Nothing" }
+        }
+      ]
+    }
+  }
+}

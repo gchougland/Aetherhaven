@@ -1,0 +1,155 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 420);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.villagerneeds.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Label #Hint {
+        Anchor: (Bottom: 10);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true);
+        Text: %server.aetherhaven.ui.villagerneeds.hint;
+      }
+
+      Group {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12);
+
+        AssetImage #Portrait {
+          Anchor: (Width: 96, Height: 96, Right: 12);
+          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        }
+
+        Group {
+          LayoutMode: Top;
+          FlexWeight: 1;
+
+          Label #NeedHungerLabel {
+            Text: %server.aetherhaven.ui.villagerneeds.hunger;
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+            Anchor: (Bottom: 4);
+          }
+          $C.@ProgressBar #HungerBar {
+            @Anchor = (Bottom: 8, Left: 0, Right: 0);
+            Value: 1.0;
+          }
+
+          Label #NeedEnergyLabel {
+            Text: %server.aetherhaven.ui.villagerneeds.energy;
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+            Anchor: (Bottom: 4);
+          }
+          $C.@ProgressBar #EnergyBar {
+            @Anchor = (Bottom: 8, Left: 0, Right: 0);
+            Value: 1.0;
+          }
+
+          Label #NeedFunLabel {
+            Text: %server.aetherhaven.ui.villagerneeds.fun;
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+            Anchor: (Bottom: 4);
+          }
+          $C.@ProgressBar #FunBar {
+            @Anchor = (Bottom: 0, Left: 0, Right: 0);
+            Value: 1.0;
+          }
+        }
+      }
+
+      Label #VillagersHeader {
+        Text: %server.aetherhaven.ui.villagerneeds.villagers;
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        Anchor: (Top: 8, Bottom: 6);
+      }
+
+      Group #Row0 {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        Button #Pick0 {
+          LayoutMode: Left;
+          FlexWeight: 1;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Style: (
+            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+          );
+          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+        }
+      }
+      Group #Row1 {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        Button #Pick1 {
+          LayoutMode: Left;
+          FlexWeight: 1;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Style: (
+            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+          );
+          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+        }
+      }
+      Group #Row2 {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        Button #Pick2 {
+          LayoutMode: Left;
+          FlexWeight: 1;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Style: (
+            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+          );
+          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+        }
+      }
+      Group #Row3 {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        Button #Pick3 {
+          LayoutMode: Left;
+          FlexWeight: 1;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Style: (
+            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+          );
+          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+        }
+      }
+      Group #Row4 {
+        LayoutMode: Left;
+        Anchor: (Bottom: 4);
+        Button #Pick4 {
+          LayoutMode: Left;
+          FlexWeight: 1;
+          Padding: (Horizontal: 10, Vertical: 8);
+          Style: (
+            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+          );
+          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

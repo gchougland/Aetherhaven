@@ -62,6 +62,7 @@ public final class ConstructionCompleter {
         long now = System.currentTimeMillis();
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
+        plot.setPrefabWorldPlacement(prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw);
         tm.updateTown(town);
 
         if (def != null) {

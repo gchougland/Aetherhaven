@@ -14,7 +14,10 @@ import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -22,6 +25,7 @@ import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
+import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -42,6 +46,7 @@ import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
 import com.hypixel.hytale.server.core.util.Config;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -125,7 +130,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
+        TownVillagerBinding.register(this.getEntityStoreRegistry());
+        VillagerAutonomyState.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
 
         this.getEventRegistry()
@@ -145,17 +153,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                PlotConstructionBlockResolver.PlotConstructionTarget target = PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock);
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, PlotSignBlock.getComponentType());
                 if (target == null) {
                     return null;
                 }
                 Ref<ChunkStore> blockRef = target.blockRef();
                 Vector3i blockWorld = target.blockWorldPos();
-                Store<ChunkStore> cs = blockRef.getStore();
-                if (cs.getComponent(blockRef, PlotSignBlock.getComponentType()) != null) {
-                    return new PlotConstructionPage(playerRef, blockRef, blockWorld, false);
-                }
-                return null;
+                return new PlotConstructionPage(playerRef, blockRef, blockWorld, false);
             }
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(
@@ -169,17 +174,44 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 }
                 Store<EntityStore> store = ref.getStore();
                 World world = store.getExternalData().getWorld();
-                PlotConstructionBlockResolver.PlotConstructionTarget target = PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock);
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, ManagementBlock.getComponentType());
                 if (target == null) {
                     return null;
                 }
                 Ref<ChunkStore> blockRef = target.blockRef();
                 Vector3i blockWorld = target.blockWorldPos();
-                Store<ChunkStore> cs = blockRef.getStore();
-                if (cs.getComponent(blockRef, ManagementBlock.getComponentType()) != null) {
-                    return new PlotConstructionPage(playerRef, blockRef, blockWorld, true);
+                return new PlotConstructionPage(playerRef, blockRef, blockWorld, true);
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            VillagerNeedsOverviewPage.class,
+            AetherhavenConstants.PAGE_VILLAGER_NEEDS,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
                 }
-                return null;
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, ManagementBlock.getComponentType());
+                if (target == null) {
+                    return null;
+                }
+                Ref<ChunkStore> blockRef = target.blockRef();
+                Store<ChunkStore> cs = blockRef.getStore();
+                ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+                if (mb == null || mb.getTownId().isBlank()) {
+                    return null;
+                }
+                try {
+                    UUID townUuid = UUID.fromString(mb.getTownId().trim());
+                    return new VillagerNeedsOverviewPage(playerRef, townUuid);
+                } catch (IllegalArgumentException e) {
+                    return null;
+                }
             }
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(

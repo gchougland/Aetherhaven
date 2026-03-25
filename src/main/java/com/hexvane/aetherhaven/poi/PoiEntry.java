@@ -16,6 +16,10 @@ public final class PoiEntry {
     private final int capacity;
     @Nullable
     private final UUID plotId;
+    @Nullable
+    private final String blockTypeId;
+    @Nonnull
+    private final PoiInteractionKind interactionKind;
 
     public PoiEntry(
         @Nonnull UUID id,
@@ -25,7 +29,9 @@ public final class PoiEntry {
         int z,
         @Nonnull Set<String> tags,
         int capacity,
-        @Nullable UUID plotId
+        @Nullable UUID plotId,
+        @Nullable String blockTypeId,
+        @Nonnull PoiInteractionKind interactionKind
     ) {
         this.id = id;
         this.townId = townId;
@@ -35,6 +41,8 @@ public final class PoiEntry {
         this.tags = new HashSet<>(tags);
         this.capacity = capacity;
         this.plotId = plotId;
+        this.blockTypeId = blockTypeId;
+        this.interactionKind = interactionKind;
     }
 
     @Nonnull
@@ -71,5 +79,15 @@ public final class PoiEntry {
     @Nullable
     public UUID getPlotId() {
         return plotId;
+    }
+
+    @Nullable
+    public String getBlockTypeId() {
+        return blockTypeId;
+    }
+
+    @Nonnull
+    public PoiInteractionKind getInteractionKind() {
+        return interactionKind;
     }
 }

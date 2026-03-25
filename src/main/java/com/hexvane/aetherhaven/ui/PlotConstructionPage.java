@@ -123,6 +123,16 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean canBuild = !managementUi && !completed && villagerOk && matsOk;
         commandBuilder.set("#BuildButton.Disabled", !canBuild);
 
+        commandBuilder.set("#TownNeedsButton.Visible", managementUi && completed);
+        if (managementUi && completed) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TownNeedsButton",
+                new EventData().append("Action", "OpenTownNeeds"),
+                false
+            );
+        }
+
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#BuildButton",
@@ -133,6 +143,32 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("OpenTownNeeds")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState st = resolvePlotState(store, ref);
+            if (st != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            Store<ChunkStore> cs = blockRef.getStore();
+            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mb == null || mb.getTownId().isBlank()) {
+                return;
+            }
+            UUID townUuid;
+            try {
+                townUuid = UUID.fromString(mb.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                // openCustomPage replaces this UI; do not call close() — that sets Page.None and clears the new page.
+                player.getPageManager().openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townUuid));
+            }
+            return;
+        }
         if (data.action == null || !data.action.equalsIgnoreCase("Build")) {
             return;
         }

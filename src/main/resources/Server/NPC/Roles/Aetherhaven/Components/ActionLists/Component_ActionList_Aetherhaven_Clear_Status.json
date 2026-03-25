@@ -1,0 +1,11 @@
+{
+  "Class": "ActionList",
+  "Type": "Component",
+  "$Comment": "Clears Status slot (no Animation key). Use from StateTransitions, e.g. AetherhavenAutonomy -> Idle. Same effect as vanilla Component_Instruction_Clear_Status_Animation but as ActionList for transition References.",
+  "Content": [
+    {
+      "Type": "PlayAnimation",
+      "Slot": "Status"
+    }
+  ]
+}

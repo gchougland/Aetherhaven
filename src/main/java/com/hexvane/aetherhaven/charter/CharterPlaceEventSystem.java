@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -148,6 +149,11 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         store.putComponent(elderRef, VillagerNeeds.getComponentType(), VillagerNeeds.full());
         String handle = elderDebugHandle(town.getTownId());
         store.putComponent(elderRef, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
+        store.putComponent(
+            elderRef,
+            TownVillagerBinding.getComponentType(),
+            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_ELDER, null)
+        );
         UUIDComponent elderUuid = store.getComponent(elderRef, UUIDComponent.getComponentType());
         if (elderUuid != null) {
             town.setElderEntityUuid(elderUuid.getUuid());

@@ -8,6 +8,10 @@
 
 **Irreversible design pillar:** The mod is built around **world-integrated colonies** in the **player’s Hytale world** - not a hand-sculpted void layout. Growth is **free placement** of governed **plots** and **POIs**; NPCs use **Sims-like autonomy** (needs, wants, utility / affordance scoring) backed by a **POI registry** and a **quest system** (including dailies and expansion arcs). The **museum** is a **fixed-footprint plot building** whose **interior** is a separate **expandable instance** (TARDIS model). **Expansion mods** register plots, quests, NPC roles, POI types, and exhibits through documented extension points.
 
+### NPC / AI implementation philosophy
+
+**Prefer vanilla NPC behavior over custom code.** Extend **role JSON** first: `Instructions`, `InteractionInstruction`, **`StateTransitions`**, `StateEvaluator`, and referenced **component instructions** (see workspace `Docs/NPC_Notes.md` and base-game templates). **Custom Java for villager AI** is a **last resort** for what the tree cannot express (e.g. reading the mod **POI registry**, **needs–POI scoring**, or stepping toward data-driven world positions without a vanilla path target). When Java is required, keep it **small and modular** under `com.hexvane.aetherhaven.autonomy` (orchestration, movement, POI-facing visuals) and avoid duplicating effects that belong in assets—e.g. **clearing Status-slot animations** when leaving a mod-driven state should use **`StateTransitions`**, not redundant Status clears in code. **Exception:** item-driven clips on **Action** / **Emote** (e.g. food **Consume**) still need explicit Java teardown + `invalidateEquipmentNetwork` patterns; see **`docs/AUTONOMY_POI_NOTES.md`**. Persistent guidance for tools and contributors: **`.cursor/rules/aetherhaven-npc-ai.mdc`**. Inventory of vanilla `_Core/Components` and mod components: **`docs/NPC_COMPONENTS.md`**.
+
 ---
 
 ## Vision (long term)
@@ -380,12 +384,13 @@ Keep **branching dialogue** (JSON trees + `CustomUIPage`) as in v1; extend **act
 
 Use this as the **definition of done** for submission. Every row should be assignable to a week below.
 
-### Progress snapshot (Mar 24, 2026)
+### Progress snapshot (Mar 25, 2026)
 
 What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Server/` assets):
 
 - **Done (MVP slice):** Same as prior snapshot, plus: **`PlotInstance`** on `TownRecord` (BLUEPRINTING → COMPLETE); **management block** after inn build (`OpenCustomUI` + `PlotConstructionPage`, prefab re-place so interactions work); **`POIExtractor`** from `Server/Buildings/<id>.json` on complete build; **`PoiRegistry`** persists **`worlds/<world>/pois.json`**; **VillagerNeeds** on 0-100 scale with decay + config; Elder **wander** + dialogue cleanup; **town quest ids** on `TownRecord` with dialogue **start/complete** + conditions (`q_build_inn` flow); **QuestCatalog** display names for player messages; debug commands (`needs`, `poi`, etc.) behind config.
-- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; full **AutonomySystem** (POI utility, pathing, Q12 unload sim); **InnPoolSystem**; full **QuestEngine** / journal UI / party objectives; **TownTreasury**; **permissions** service; flatten toggle; most contest GUIs/NPC roster beyond Elder week1–2 dialogue.
+- **Done (autonomy v1):** **`VillagerAutonomySystem`** + **`PoiScoring`** / travel / USE phases; **`PoiAutonomyVisuals`** (chair + bed via **`BlockMountAPI`**, campfire eat with item anim + hotbar display); **`PoiEffectTable`** need restore on POI complete; **`VillagerNeedsOverview`** GUI + management hook; NPC **`AetherhavenAutonomy`** role state + dialogue skip while in interaction. *Implementation pitfalls documented in **`docs/AUTONOMY_POI_NOTES.md`**.*
+- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; **abstract sim** when NPC chunk unloaded (Q12); **InnPoolSystem**; full **QuestEngine** / journal UI / party objectives; **TownTreasury**; **permissions** service; flatten toggle; much of contest NPC roster / visitor pool beyond current Elder + innkeeper + test villager paths.
 
 #### Core simulation (Java / persistence)
 
@@ -398,8 +403,8 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 - [x] **Plot sign “management” flow**: **PlotConstructionPage** - materials (green/red), Build consumes inventory, prefab completes, sign removed. *No residents list, destroy-building GUI, or upgrade stages.*
 - [x] **`PoiRegistry`**: add/remove/query by tag + town; **persists** `pois.json` per world with towns.
 - [x] **`POIExtractor`**: reads building JSON POI lists (e.g. `inn_v1`); registers on construction complete; clears by plot on rebuild.
-- [x] **`VillagerNeeds` + decay** (partial autonomy): 0-100 meters, world-time decay, config rate, Elder gets component on spawn; debug `/aetherhaven needs`. *Still missing: sleep/activity modifiers, utility, pathing, POI interactions, Q12 abstract sim when unloaded.*
-- [ ] **`AutonomySystem`**: full loop: utility pick; path to POI; interaction duration; interrupt on dialogue; **abstract sim** when chunk unloaded (Q12).
+- [x] **`VillagerNeeds` + decay**: 0-100 meters, world-time decay, config rate; **POI USE** restores via `PoiEffectTable` on phase complete. *Still missing: sleep/activity decay modifiers; Q12 abstract sim when unloaded.*
+- [x] **`AutonomySystem` (v1)**: utility pick (`PoiScoring`); path + step toward POI (`VillagerPoiPathfinder` / `VillagerPoiMovement`); USE timer + visuals (`PoiAutonomyVisuals`); **interrupt** via role state (skip tick while NPC in `$Interaction` / dialogue). *Not done: **abstract sim** when chunk unloaded (Q12).*
 - [ ] **`InnPoolSystem`**: max 2 occupants; eligible pool from data; daily/periodic refresh; **lock** on accepted quest; free slot on building complete / abandon rules.
 - [ ] **`QuestEngine`**: prerequisites, objectives (place_building, talk_to_npc, deliver_item, reach_tier), rewards, abandon, persistence; **party-shared progress** (Q20). *Partial: `TownRecord` stores active/completed quest ids; dialogue `start_quest` / `complete_quest`; graph conditions for inn quest; `QuestCatalog` titles. No journal UI, objective pipeline, or party sync.*
 - [ ] **Daily reset**: configurable mode; reroll eligible dailies; persist cooldowns.
@@ -416,7 +421,7 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 | **`DialoguePanel`** | Branching text, portrait, 4 choices, actions | NPC interact |
 | **`QuestJournal`** | Active + completed (contest: last 10 ok), pin/track, abandon with confirm | Key bind + Elder “remind me” |
 | **`DailyQuestOffer`** | Optional compact panel when Elder has new daily (or embed in dialogue only for MVP) | Elder dialogue action |
-| **`VillagerNeedsOverview`** | Town roster: per-villager **Hunger / Energy / Fun** bars + current action (“Eating at inn…”) | Management block “Town” tab or key bind |
+| **`VillagerNeedsOverview`** | Town roster: per-villager **Hunger / Energy / Fun** bars + current action (“Eating at inn…”) | Management block “Town” tab or key bind — **shipped** (Mar 25, 2026) |
 | **`TreasuryPanel`** | Balance, deposit, withdraw (if not deferred to chat commands) | Town hall / charter sub-menu or management block |
 
 \* *Plot placement may be entirely in-world (ghost only); if so, still ship **on-screen validation text** or action-bar hints so players know why placement fails.*
@@ -549,15 +554,15 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 | Track | Deliverables |
 |--------|----------------|
-| **Engineering** | **`AutonomySystem` v1**: utility = need deficit × POI restore weight − distance; pick best; **path** (or straight-line + collision stub if path API lags). **Interaction** runs timer → apply need deltas. |
+| **Engineering** | **`AutonomySystem` v1**: utility = need deficit × POI restore weight − distance; pick best; **path** (or straight-line + collision stub if path API lags). **Interaction** runs timer → apply need deltas. **Done Mar 25** — see `docs/AUTONOMY_POI_NOTES.md`; Q12 unload sim still open. |
 | **Inn pool** | On `q_build_inn` complete: mark `inn_active`; spawn **Innkeeper** at marker; **initialize pool** (empty). |
 | **NPC** | Innkeeper uses **inn POIs**; Elder keeps wandering. |
 | **Art** | Inn **art pass**: signs, lights, interior props; **innkeeper** skin/model variant. |
 | **Dialogue** | `inn_welcome`, `inn_explain_pool`; Elder lines for “inn built” branch. |
-| **GUI** | **`VillagerNeedsOverview` v1**: lists entities with needs in town. |
-| **QA** | Watch innkeeper **walk** to seat and eat/sleep in test world; fix stuck. |
+| **GUI** | **`VillagerNeedsOverview` v1**: lists entities with needs in town. **Shipped Mar 25.** |
+| **QA** | Watch innkeeper **walk** to seat and eat/sleep in test world; fix stuck. **Validated:** chair mount + Sit, bed mount + Sleep, campfire eat/clear. |
 
-**Exit criteria:** At least **one** NPC autonomously fills **two** different need types using **two** POI kinds.
+**Exit criteria:** At least **one** NPC autonomously fills **two** different need types using **two** POI kinds. **Met (Mar 25, 2026)** for bound town villagers + inn POI set (EAT / SLEEP / SIT / WORK tags).
 
 ---
 

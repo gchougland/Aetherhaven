@@ -89,7 +89,9 @@ public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdm
         Holder<ChunkStore> holder = ChunkStore.REGISTRY.newHolder();
         holder.addComponent(PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, java.util.UUID.randomUUID().toString()));
         BsonDocument blockHolderDoc = ChunkStore.REGISTRY.getEntityCodec().encode(holder, EmptyExtraInfo.EMPTY).asDocument();
-        ItemStack stack = new ItemStack(AetherhavenConstants.PLOT_SIGN_ITEM_ID, 1).withMetadata(ItemStack.Metadata.BLOCK_HOLDER, blockHolderDoc);
+        ItemStack stack =
+            new ItemStack(AetherhavenConstants.PLOT_SIGN_ITEM_ID, 1)
+                .withMetadata(AetherhavenConstants.ITEM_METADATA_BLOCK_HOLDER, blockHolderDoc);
         ItemStackTransaction tx = player.getInventory().getCombinedHotbarFirst().addItemStack(stack);
         if (!tx.succeeded()) {
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());

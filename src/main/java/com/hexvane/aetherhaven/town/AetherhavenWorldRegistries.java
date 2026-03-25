@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -74,5 +75,7 @@ public final class AetherhavenWorldRegistries {
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
+        TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
+        InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
     }
 }

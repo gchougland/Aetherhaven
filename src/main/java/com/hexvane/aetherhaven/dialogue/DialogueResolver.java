@@ -14,12 +14,15 @@ public final class DialogueResolver {
     public static final String TREE_TEST = "aetherhaven_dialogue_test";
     public static final String TREE_ELDER_WEEK1 = "aetherhaven_elder_week1";
     public static final String TREE_ELDER_WEEK2 = "aetherhaven_elder_week2";
+    public static final String KIND_INNKEEPER = "innkeeper";
+    public static final String TREE_INN_WELCOME = "aetherhaven_inn_welcome";
 
     private final Map<String, String> kindToTree = new HashMap<>();
 
     public DialogueResolver() {
         kindToTree.put(KIND_TEST_VILLAGER, TREE_TEST);
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
+        kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
     }
 
     @Nonnull

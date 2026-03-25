@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.dialogue;
 
 import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -113,11 +115,15 @@ public final class DialogueActionExecutor {
         if (town == null) {
             return;
         }
-        town.completeQuest(id.trim());
+        String qid = id.trim();
+        town.completeQuest(qid);
         tm.updateTown(town);
+        if (AetherhavenConstants.QUEST_BUILD_INN.equals(qid)) {
+            InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
+        }
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest completed: " + QuestCatalog.displayName(id.trim())));
+            pr.sendMessage(Message.raw("Quest completed: " + QuestCatalog.displayName(qid)));
         }
     }
 

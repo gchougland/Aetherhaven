@@ -50,6 +50,10 @@ public final class PoiWorldFile {
         public int capacity;
         @Nullable
         public String plotId;
+        @Nullable
+        public String blockTypeId;
+        @Nullable
+        public String interactionKind;
     }
 
     @Nonnull
@@ -102,7 +106,9 @@ public final class PoiWorldFile {
                 if (row.plotId != null && !row.plotId.isBlank()) {
                     plotUuid = UUID.fromString(row.plotId);
                 }
-                out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid));
+                String blockType = row.blockTypeId != null && !row.blockTypeId.isBlank() ? row.blockTypeId.trim() : null;
+                PoiInteractionKind kind = PoiInteractionKind.fromJson(row.interactionKind);
+                out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind));
             } catch (IllegalArgumentException e) {
                 LOGGER.atWarning().withCause(e).log("Skipping invalid POI row id=%s town=%s", row.id, row.townId);
             }
@@ -124,6 +130,8 @@ public final class PoiWorldFile {
             r.capacity = e.getCapacity();
             UUID p = e.getPlotId();
             r.plotId = p != null ? p.toString() : null;
+            r.blockTypeId = e.getBlockTypeId();
+            r.interactionKind = e.getInteractionKind().name();
             f.getPois().add(r);
         }
         return f;
