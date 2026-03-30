@@ -384,20 +384,21 @@ Keep **branching dialogue** (JSON trees + `CustomUIPage`) as in v1; extend **act
 
 Use this as the **definition of done** for submission. Every row should be assignable to a week below.
 
-### Progress snapshot (Mar 25, 2026)
+### Progress snapshot (Mar 30, 2026)
 
 What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Server/` assets):
 
 - **Done (MVP slice):** Same as prior snapshot, plus: **`PlotInstance`** on `TownRecord` (BLUEPRINTING → COMPLETE); **management block** after inn build (`OpenCustomUI` + `PlotConstructionPage`, prefab re-place so interactions work); **`POIExtractor`** from `Server/Buildings/<id>.json` on complete build; **`PoiRegistry`** persists **`worlds/<world>/pois.json`**; **VillagerNeeds** on 0-100 scale with decay + config; Elder **wander** + dialogue cleanup; **town quest ids** on `TownRecord` with dialogue **start/complete** + conditions (`q_build_inn` flow); **QuestCatalog** display names for player messages; debug commands (`needs`, `poi`, etc.) behind config.
 - **Done (autonomy v1):** **`VillagerAutonomySystem`** + **`PoiScoring`** / travel / USE phases; **`PoiAutonomyVisuals`** (chair + bed via **`BlockMountAPI`**, campfire eat with item anim + hotbar display); **`PoiEffectTable`** need restore on POI complete; **`VillagerNeedsOverview`** GUI + management hook; NPC **`AetherhavenAutonomy`** role state + dialogue skip while in interaction. *Implementation pitfalls documented in **`docs/AUTONOMY_POI_NOTES.md`**.*
-- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; **abstract sim** when NPC chunk unloaded (Q12); **InnPoolSystem**; full **QuestEngine** / journal UI / party objectives; **TownTreasury**; **permissions** service; flatten toggle; much of contest NPC roster / visitor pool beyond current Elder + innkeeper + test villager paths.
+- **Not started / stub only:** dissolve town + return charter; territory **expansion** when plots hug edge; **abstract sim** when NPC chunk unloaded (Q12); full **QuestEngine** (generic objectives pipeline / party sync); **TownTreasury**; **permissions** service; flatten toggle; Farmer/park/dailies scope (Week 5+).
+- **Done (Week 4, Mar 30, 2026):** **`InnPoolService`** (max 2, morning fill, lock-on-accept, resident role exclusion + save field); **`q_merchant_stall`** + **`plot_market_stall`** prefab/construction/POIs; **Merchant Vex** dialogue + turn-in after stall build (not auto-complete on build); **Quest journal** UI + item; plot placement **solid support** under sign validation.
 
 #### Core simulation (Java / persistence)
 
 - [x] **`TownRecord`**: owner UUID, world name, charter position, tier, territory chunk radius, plot footprint list, elder-spawned flag, created time (`towns.json`). *Dimension is implicit via world file path.*
 - [x] **Charter block**: place → create town + spawn **Elder**; **CharterTownPage** shows town info. *Still missing: irreversible dissolve + return item; break-protection rules.*
 - [x] **Territory**: chunk-aligned radius from charter; overlap / inside checks for placement + prefab footprint. *Still missing: auto-expand when plots built near edge.*
-- [x] **Plot tool / plot block**: construction from catalog + optional plot token; ghost preview; 90° snap; server validation (territory, overlap, prefab load). *Still missing: flatten toggle; slope messaging.*
+- [x] **Plot tool / plot block**: construction from catalog + optional plot token; ghost preview; 90° snap; server validation (territory, overlap, prefab load, **solid block under plot sign**). *Still missing: flatten toggle; slope messaging.*
 - [x] **`PlotInstance`**: `BLUEPRINTING` / `COMPLETE` on `TownRecord`; rotation and footprint; plot id on sign + management block components (no `EMPTY` enum yet; no separate entity-id link beyond UUID strings).
 - [x] **Prefab placement pipeline**: `ConstructionAnimator` + `PrefabBufferUtil` / `PrefabStore`; batched place on Build. *No standalone `PrefabLoader` type name.*
 - [x] **Plot sign “management” flow**: **PlotConstructionPage** - materials (green/red), Build consumes inventory, prefab completes, sign removed. *No residents list, destroy-building GUI, or upgrade stages.*
@@ -405,8 +406,8 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 - [x] **`POIExtractor`**: reads building JSON POI lists (e.g. `inn_v1`); registers on construction complete; clears by plot on rebuild.
 - [x] **`VillagerNeeds` + decay**: 0-100 meters, world-time decay, config rate; **POI USE** restores via `PoiEffectTable` on phase complete. *Still missing: sleep/activity decay modifiers; Q12 abstract sim when unloaded.*
 - [x] **`AutonomySystem` (v1)**: utility pick (`PoiScoring`); path + step toward POI (`VillagerPoiPathfinder` / `VillagerPoiMovement`); USE timer + visuals (`PoiAutonomyVisuals`); **interrupt** via role state (skip tick while NPC in `$Interaction` / dialogue). *Not done: **abstract sim** when chunk unloaded (Q12).*
-- [ ] **`InnPoolSystem`**: max 2 occupants; eligible pool from data; daily/periodic refresh; **lock** on accepted quest; free slot on building complete / abandon rules.
-- [ ] **`QuestEngine`**: prerequisites, objectives (place_building, talk_to_npc, deliver_item, reach_tier), rewards, abandon, persistence; **party-shared progress** (Q20). *Partial: `TownRecord` stores active/completed quest ids; dialogue `start_quest` / `complete_quest`; graph conditions for inn quest; `QuestCatalog` titles. No journal UI, objective pipeline, or party sync.*
+- [x] **`InnPoolSystem`**: max 2 occupants; eligible pool (merchant/blacksmith/farmer roles); morning-window refresh + game-day epoch; **lock** on accepted merchant quest; sync/prune with `TownVillagerBinding`; **resident NPC roles excluded** from refill (saved `innVisitorPoolExcludedRoleIds` + live scan). *Abandon / edge cases still Week 5 QA.*
+- [ ] **`QuestEngine`**: prerequisites, objectives (place_building, talk_to_npc, deliver_item, reach_tier), rewards, **party-shared progress** (Q20). *Partial: `TownRecord` active/completed quest ids; dialogue `start_quest` / `complete_quest` / `abandon_quest`; conditions for inn + merchant stall; `QuestCatalog` + **Quest journal UI** (`Aetherhaven_Quest_Journal`). No generic objective pipeline or party sync.*
 - [ ] **Daily reset**: configurable mode; reroll eligible dailies; persist cooldowns.
 - [ ] **`TownTreasury`**: deposit/withdraw permissions (owner/member per config); balance in save data; pay from treasury **or** player inv per recipe (pick one default for MVP and document).
 - [ ] **Permissions service**: canPlacePlot, canOpenManagement, canWithdraw, etc. (mirrors Q3 + config).
@@ -419,14 +420,14 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 | **`PlotPlacementHud`*** | If not world-only: show footprint name, valid/invalid reason, rotate hint | Plot tool in hand |
 | **`ConstructionPanel`** | Blueprint stages, material list (green/red per line), progress, **Build** / **Cancel**, linked NPC requirement if any | Management block |
 | **`DialoguePanel`** | Branching text, portrait, 4 choices, actions | NPC interact |
-| **`QuestJournal`** | Active + completed (contest: last 10 ok), pin/track, abandon with confirm | Key bind + Elder “remind me” |
+| **`QuestJournal`** | Active + completed (contest: last 10 ok), pin/track, abandon with confirm — **shipped** (`Aetherhaven_Quest_Journal`, Mar 30, 2026) | Key bind + Elder “remind me” |
 | **`DailyQuestOffer`** | Optional compact panel when Elder has new daily (or embed in dialogue only for MVP) | Elder dialogue action |
 | **`VillagerNeedsOverview`** | Town roster: per-villager **Hunger / Energy / Fun** bars + current action (“Eating at inn…”) | Management block “Town” tab or key bind — **shipped** (Mar 25, 2026) |
 | **`TreasuryPanel`** | Balance, deposit, withdraw (if not deferred to chat commands) | Town hall / charter sub-menu or management block |
 
 \* *Plot placement may be entirely in-world (ghost only); if so, still ship **on-screen validation text** or action-bar hints so players know why placement fails.*
 
-**GUI status (Mar 24, 2026):** **CharterTownPage** and **PlotPlacementPage** ship; **PlotConstructionPage** for plot sign + **prefab-placed management block** (`AetherhavenPlotManagement`); **PlotSignAdminPage**; **DialoguePage** + choice row. **Quest journal**, **needs overview**, **treasury**, **daily offer** not built yet.
+**GUI status (Mar 30, 2026):** **CharterTownPage** and **PlotPlacementPage** ship; **PlotConstructionPage** for plot sign + **prefab-placed management block** (`AetherhavenPlotManagement`); **PlotSignAdminPage**; **DialoguePage** + choice row; **`QuestJournal`** (`AetherhavenQuestJournal`). **VillagerNeedsOverview** shipped (Mar 25). **Treasury**, **daily offer** not built yet.
 
 #### NPCs (contest roster - hand-authored)
 
@@ -454,7 +455,7 @@ What the repo implements today (see Java under `com.hexvane.aetherhaven` and `Se
 - **Story chapter 1** (`quests/chapter1_founding.json` or split files):
   - `q_found_town` (implicit complete on charter - optional formal quest)
   - `q_build_inn` - objective: complete **Inn** blueprint on valid plot; rewards: unlock inn pool + spawn innkeeper
-  - `q_merchant_stall` - from Vex; place + complete **Market stall** plot
+  - `q_merchant_stall` - from Vex; place + build **Market stall** plot; **complete via dialogue** at stall (not on build alone)
   - `q_farmer_house` - from Corra; place + complete **Settler house** plot
 - **Dailies** (`quests/dailies_pool.json`): **≥3** distinct templates, e.g.  
   - Deliver **N** of item X to Elder (N random in range)  
@@ -570,15 +571,15 @@ Each completed building: **management block** embedded in prefab + **POI marker*
 
 | Track | Deliverables |
 |--------|----------------|
-| **Engineering** | **`InnPoolSystem`**: roll **Merchant** into slot 0 on timer; **lock** on `StartQuest` with flag; second slot optional duplicate test NPC or empty until Week 5. |
-| **Quest** | **`QuestEngine` v1** persistence; objectives: `TalkTo`, `PlaceOrCompleteBuilding` (implement as “building id complete”). |
-| **Building** | **`plot_market_stall`** prefab + `BuildingData` + POIs (**work**, **shop** stub). |
-| **NPC** | Merchant NPC template; appears in inn; moves to stall on quest complete. |
-| **Dialogue** | `vex_arrival`, `vex_quest_stall`, completion branch. |
-| **GUI** | **`QuestJournal`**: active quests, abandon confirm, track to map optional (text only OK). |
-| **QA** | Full loop: inn → visitor → accept → locked → build stall → merchant relocates; **save/load** mid-quest. |
+| **Engineering** | ~~**`InnPoolSystem`**: roll **Merchant** into slot 0 on timer; **lock** on `StartQuest` with flag; second slot optional duplicate test NPC or empty until Week 5.~~ **Done:** `InnPoolService` + morning window + 3-role shuffle; lock-on-accept for `q_merchant_stall`; no duplicate resident role in pool. |
+| **Quest** | ~~**`QuestEngine` v1** persistence; objectives: `TalkTo`, `PlaceOrCompleteBuilding` (implement as “building id complete”).~~ **Done (MVP):** town quest ids + `QuestCatalog` + merchant stall flow; **complete on dialogue** after stall built, not on prefab complete. *Full objective graph / party: still open.* |
+| **Building** | ~~**`plot_market_stall`** prefab + `BuildingData` + POIs (**work**, **shop** stub).~~ **Done** |
+| **NPC** | ~~Merchant NPC template; appears in inn; moves to stall on quest complete.~~ **Done** (visitor → stall WORK POI + `KIND_MERCHANT` on build) |
+| **Dialogue** | ~~`vex_arrival`, `vex_quest_stall`, completion branch.~~ **Done** (`Server/Dialogue/aetherhaven_merchant.json` + role) |
+| **GUI** | ~~**`QuestJournal`**: active quests, abandon confirm, track to map optional (text only OK).~~ **Done** (`Aetherhaven_Quest_Journal` + journal page) |
+| **QA** | ~~Full loop: inn → visitor → accept → locked → build stall → merchant relocates; **save/load** mid-quest.~~ **Validated in play (Mar 30, 2026)** |
 
-**Exit criteria:** **Lock-on-accept** proven; merchant no longer shuffled after accept.
+**Exit criteria:** **Lock-on-accept** proven; merchant no longer shuffled after accept. **Met (Mar 30, 2026).**
 
 ---
 

@@ -1,0 +1,109 @@
+{
+  "id": "aetherhaven_merchant",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Vex",
+      "text": "Name is Vex. I move goods from town to town, and your inn has a fine hearth.",
+      "choices": [
+        {
+          "text": "Glad you made it.",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_merchant_stall"
+          },
+          "next": "vex_done"
+        },
+        {
+          "text": "I've finished the stall.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_merchant_stall" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_market_stall" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_merchant_stall" }],
+          "next": "vex_done"
+        },
+        {
+          "text": "About that stall...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_merchant_stall" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_market_stall"
+                }
+              }
+            ]
+          },
+          "next": "vex_building"
+        },
+        {
+          "text": "I need a place for your stall.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" } },
+              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_merchant_stall" } }
+            ]
+          },
+          "next": "vex_quest_stall"
+        },
+        {
+          "text": "Farewell.",
+          "next": null
+        }
+      ]
+    },
+    "vex_quest_stall": {
+      "speaker": "Vex",
+      "text": "A small market stall is all I need. Place it from your plot staff while you carry the token I give you. Costs are on you, but I will work the counter when it stands.",
+      "choices": [
+        {
+          "text": "I'll build it.",
+          "actions": [
+            { "type": "start_quest", "id": "q_merchant_stall" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Market_Stall", "count": 1 }
+          ],
+          "next": "vex_accepted"
+        },
+        {
+          "text": "Not right now.",
+          "next": null
+        }
+      ]
+    },
+    "vex_accepted": {
+      "speaker": "Vex",
+      "text": "Good. I'll stay at the inn until the stall is ready.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "vex_building": {
+      "speaker": "Vex",
+      "text": "Take your time. When the stall is built, I'll head over and open shop — come find me there and we'll wrap this up.",
+      "choices": [
+        {
+          "text": "I need to drop the quest.",
+          "actions": [{ "type": "abandon_quest", "id": "q_merchant_stall" }],
+          "next": "vex_abandoned"
+        },
+        { "text": "Understood.", "next": null }
+      ]
+    },
+    "vex_abandoned": {
+      "speaker": "Vex",
+      "text": "No harm done. If you change your mind, ask again about the stall.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    },
+    "vex_done": {
+      "speaker": "Vex",
+      "text": "The stall looks solid. Trade will be thin at first, but we will grow it.",
+      "choices": [{ "text": "Good luck.", "next": null }]
+    }
+  }
+}

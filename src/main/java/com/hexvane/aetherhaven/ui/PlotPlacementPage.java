@@ -95,6 +95,10 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         commandBuilder.set("#Error.Visible", false);
 
         if (plugin != null && inv != null) {
+            List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
+            if (!validIds.isEmpty() && !validIds.contains(session.getConstructionId())) {
+                session.setConstructionId(validIds.get(0));
+            }
             List<DropdownEntryInfo> entries = collectPlotDropdownEntries(plugin, inv);
             commandBuilder.set("#PlotTypeDropdown.Entries", entries);
             commandBuilder.set("#PlotTypeDropdown.Visible", !entries.isEmpty());
@@ -203,7 +207,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             return false;
         }
         Vector3i signPos = session.getAnchor();
-        String err = PlotPlacementValidator.validate(tm, town, uc.getUuid(), signPos, session.getPrefabYaw(), def, plugin);
+        String err = PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), signPos, session.getPrefabYaw(), def, plugin);
         if (err != null) {
             sendError(store, ref, err);
             return false;
@@ -368,17 +372,35 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         return new Vector3i(signPosition.x + o[0], signPosition.y + o[1], signPosition.z + o[2]);
     }
 
+    /**
+     * Catalog order: first construction the player has a plot token for becomes the default when opening placement.
+     */
     @Nonnull
-    private static List<DropdownEntryInfo> collectPlotDropdownEntries(
+    private static List<String> listConstructionIdsWithPlotTokens(
         @Nonnull AetherhavenPlugin plugin, @Nonnull CombinedItemContainer inv
     ) {
-        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        ObjectArrayList<String> ids = new ObjectArrayList<>();
         for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
             String token = d.getPlotTokenItemId();
             if (token == null || token.isBlank()) {
                 continue;
             }
             if (InventoryMaterials.count(inv, token) <= 0) {
+                continue;
+            }
+            ids.add(d.getId());
+        }
+        return ids;
+    }
+
+    @Nonnull
+    private static List<DropdownEntryInfo> collectPlotDropdownEntries(
+        @Nonnull AetherhavenPlugin plugin, @Nonnull CombinedItemContainer inv
+    ) {
+        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        for (String id : listConstructionIdsWithPlotTokens(plugin, inv)) {
+            ConstructionDefinition d = plugin.getConstructionCatalog().get(id);
+            if (d == null) {
                 continue;
             }
             entries.add(new DropdownEntryInfo(LocalizableString.fromString(d.getDisplayName()), d.getId()));
@@ -435,19 +457,15 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             return null;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        for (ConstructionDefinition d : plugin.getConstructionCatalog().list()) {
-            if (hasPlotToken(inv, d)) {
-                return d.getId();
-            }
-        }
-        return null;
+        List<String> ids = listConstructionIdsWithPlotTokens(plugin, inv);
+        return ids.isEmpty() ? null : ids.get(0);
     }
 
     public static final class PageData {
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
-            .append(new KeyedCodec<>("ConstructionId", Codec.STRING), (d, v) -> d.constructionId = v, d -> d.constructionId)
+            .append(new KeyedCodec<>("@ConstructionId", Codec.STRING), (d, v) -> d.constructionId = v, d -> d.constructionId)
             .add()
             .build();
 

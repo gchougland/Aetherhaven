@@ -1,0 +1,27 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    { "x": -1, "y": 0, "z": -1, "name": "Rock_Stone_Cobble" },
+    { "x": 0, "y": 0, "z": -1, "name": "Rock_Stone_Cobble" },
+    { "x": 1, "y": 0, "z": -1, "name": "Rock_Stone_Cobble" },
+    { "x": 2, "y": 0, "z": -1, "name": "Rock_Stone_Cobble" },
+    { "x": -1, "y": 0, "z": 0, "name": "Rock_Stone_Cobble" },
+    { "x": 0, "y": 0, "z": 0, "name": "Rock_Stone_Cobble" },
+    { "x": 1, "y": 0, "z": 0, "name": "Rock_Stone_Cobble" },
+    { "x": 2, "y": 0, "z": 0, "name": "Rock_Stone_Cobble" },
+    { "x": -1, "y": 0, "z": 1, "name": "Rock_Stone_Cobble" },
+    { "x": 0, "y": 0, "z": 1, "name": "Rock_Stone_Cobble" },
+    { "x": 1, "y": 0, "z": 1, "name": "Rock_Stone_Cobble" },
+    { "x": 2, "y": 0, "z": 1, "name": "Rock_Stone_Cobble" },
+    { "x": -1, "y": 0, "z": 2, "name": "Rock_Stone_Cobble" },
+    { "x": 0, "y": 0, "z": 2, "name": "Rock_Stone_Cobble" },
+    { "x": 1, "y": 0, "z": 2, "name": "Rock_Stone_Cobble" },
+    { "x": 2, "y": 0, "z": 2, "name": "Rock_Stone_Cobble" },
+    { "x": 0, "y": 1, "z": 0, "name": "Furniture_Village_Bookcase" },
+    { "x": 1, "y": 1, "z": 0, "name": "Furniture_Village_Bookcase" }
+  ]
+}

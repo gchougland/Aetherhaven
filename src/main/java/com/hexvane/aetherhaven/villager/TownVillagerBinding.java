@@ -15,6 +15,16 @@ import javax.annotation.Nullable;
 public final class TownVillagerBinding implements Component<EntityStore> {
     public static final String KIND_ELDER = "elder";
     public static final String KIND_INNKEEPER = "innkeeper";
+    /** Permanent stall / resident merchant (not an inn visitor). */
+    public static final String KIND_MERCHANT = "merchant";
+    public static final String KIND_VISITOR_MERCHANT = "visitor_merchant";
+    public static final String KIND_VISITOR_BLACKSMITH = "visitor_blacksmith";
+    public static final String KIND_VISITOR_FARMER = "visitor_farmer";
+
+    /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
+    public static boolean isVisitorKind(@Nonnull String kind) {
+        return kind.startsWith("visitor_");
+    }
 
     @Nonnull
     public static final BuilderCodec<TownVillagerBinding> CODEC =

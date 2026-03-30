@@ -50,7 +50,10 @@
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_build_inn" }],
+          "actions": [
+            { "type": "complete_quest", "id": "q_build_inn" },
+            { "type": "give_item", "item": "Aetherhaven_Quest_Journal", "count": 1 }
+          ],
           "next": "inn_done"
         },
         { "text": "Farewell.", "next": null }

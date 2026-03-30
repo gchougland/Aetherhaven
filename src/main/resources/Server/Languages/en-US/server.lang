@@ -50,11 +50,27 @@ items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
 items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
 
+items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
+items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
+
+items.Aetherhaven_Quest_Journal.name=Town quest journal
+items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.
+
+aetherhaven.ui.questjournal.title=Quest journal
+aetherhaven.ui.questjournal.hint=Select a quest for details.
+aetherhaven.ui.questjournal.abandon=Abandon
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Quest details
+aetherhaven.ui.questjournal.detailPlaceholderBody=Choose a quest above.
+
 items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
 npcRoles.Aetherhaven_Innkeeper.name=Innkeeper
+npcRoles.Aetherhaven_Merchant.name=Vex the Merchant
+npcRoles.Aetherhaven_Blacksmith.name=Traveling Blacksmith
+npcRoles.Aetherhaven_Farmer.name=Traveling Farmer
 
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.dissolve=Dissolve town

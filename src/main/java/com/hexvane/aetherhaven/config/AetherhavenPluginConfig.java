@@ -56,6 +56,23 @@ public final class AetherhavenPluginConfig {
                 + "to be legacy 0..1-scale rates and are multiplied by 100. Values >= 20 are capped to the default."
         )
         .add()
+        .append(
+            new KeyedCodec<>("InnPoolMorningStartHour", Codec.INTEGER),
+            (o, v) -> o.innPoolMorningStartHour = v,
+            o -> o.innPoolMorningStartHour
+        )
+        .documentation(
+            "In-game hour (0-23) when the morning inn refresh window starts. With InnPoolMorningEndHour, visitors are "
+                + "reshuffled at most once per calendar game day while the hour is in [start, end)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("InnPoolMorningEndHour", Codec.INTEGER),
+            (o, v) -> o.innPoolMorningEndHour = v,
+            o -> o.innPoolMorningEndHour
+        )
+        .documentation("Exclusive end hour (0-24). Default 6-12 is morning (6:00 up to but not including 12:00).")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -65,6 +82,11 @@ public final class AetherhavenPluginConfig {
     private boolean debugCommandsEnabled = false;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
     private float villagerNeedsDecayPerSecond = 0.04f;
+
+    /** Inclusive start hour for the daily morning inn refresh (game clock, {@link com.hypixel.hytale.server.core.modules.time.WorldTimeResource}). */
+    private int innPoolMorningStartHour = 5;
+    /** Exclusive end hour (e.g. 15 means 5:00-14:59). */
+    private int innPoolMorningEndHour = 15;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -84,6 +106,25 @@ public final class AetherhavenPluginConfig {
 
     public boolean isDebugCommandsEnabled() {
         return debugCommandsEnabled;
+    }
+
+    /** Inclusive start, 0-23. */
+    public int getInnPoolMorningStartHour() {
+        int h = innPoolMorningStartHour;
+        if (h < 0) {
+            return 0;
+        }
+        return Math.min(h, 23);
+    }
+
+    /** Exclusive end, 1-24; if invalid, defaults to start+6 capped at 24. */
+    public int getInnPoolMorningEndHourExclusive() {
+        int start = getInnPoolMorningStartHour();
+        int end = innPoolMorningEndHour;
+        if (end <= start || end > 24) {
+            end = Math.min(start + 6, 24);
+        }
+        return Math.max(start + 1, end);
     }
 
     public float getVillagerNeedsDecayPerSecond() {

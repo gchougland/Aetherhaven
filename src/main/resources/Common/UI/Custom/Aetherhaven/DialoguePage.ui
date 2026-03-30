@@ -18,11 +18,17 @@ $C.@PageOverlay {
         LayoutMode: Top;
 
         Group #SpeakerFrame {
-          LayoutMode: Top;
+          LayoutMode: Left;
           Padding: (Horizontal: 10, Vertical: 8);
           Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
 
+          AssetImage #Portrait {
+            Anchor: (Width: 72, Height: 72, Right: 10);
+            FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+          }
+
           Label #Speaker {
+            FlexWeight: 1;
             Anchor: (Bottom: 0);
             Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d4c4a8);
           }

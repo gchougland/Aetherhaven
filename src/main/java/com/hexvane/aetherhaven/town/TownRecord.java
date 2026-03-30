@@ -2,6 +2,9 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import com.hypixel.hytale.logger.HytaleLogger;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -68,9 +71,41 @@ public final class TownRecord {
     @SerializedName("innkeeperEntityUuid")
     private String innkeeperEntityUuid;
 
-    /** Reserved for future visitor NPC pool; empty when the inn activates. */
+    /**
+     * Up to two inn visitor NPC entity UUID strings (see {@link #getInnPoolNpcIds}).
+     * Cleared when innkeeper first spawns; repopulated by {@link com.hexvane.aetherhaven.inn.InnPoolSystem}.
+     */
     @SerializedName("innPoolNpcIds")
     private List<String> innPoolNpcIds = new ArrayList<>();
+
+    /** Entity UUIDs that must not be removed on inn pool refresh (lock-on-accept). */
+    @SerializedName("innLockedEntityUuids")
+    private List<String> innLockedEntityUuids = new ArrayList<>();
+
+    /** Last inn pool refresh instant in world game time (ISO-8601), not wall clock. Legacy; see {@link #innPoolLastMorningGameDate}. */
+    @Nullable
+    @SerializedName("innPoolLastRefreshGameTime")
+    private String innPoolLastRefreshGameTime;
+
+    /** Calendar game date (UTC, YYYY-MM-DD) when we last ran the morning inn shuffle; kept for saves readability. */
+    @Nullable
+    @SerializedName("innPoolLastMorningGameDate")
+    private String innPoolLastMorningGameDate;
+
+    /**
+     * Game calendar epoch day ({@link LocalDate#toEpochDay()}) when we last ran the morning inn shuffle.
+     * Compared to current game date so {@code /time} to the next morning on a new day triggers refresh.
+     */
+    @Nullable
+    @SerializedName("innPoolLastMorningEpochDay")
+    private Long innPoolLastMorningEpochDay;
+
+    /**
+     * NPC role ids (e.g. {@link com.hexvane.aetherhaven.AetherhavenConstants#NPC_MERCHANT}) that must never be chosen
+     * when filling the inn visitor pool (e.g. after promotion to a permanent town role).
+     */
+    @SerializedName("innVisitorPoolExcludedRoleIds")
+    private LinkedHashSet<String> innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
 
     public TownRecord() {}
 
@@ -124,6 +159,40 @@ public final class TownRecord {
         if (innPoolNpcIds == null) {
             innPoolNpcIds = new ArrayList<>();
         }
+        if (innLockedEntityUuids == null) {
+            innLockedEntityUuids = new ArrayList<>();
+        }
+        if (innPoolLastMorningGameDate == null && innPoolLastRefreshGameTime != null && !innPoolLastRefreshGameTime.isBlank()) {
+            try {
+                Instant inst = Instant.parse(innPoolLastRefreshGameTime.trim());
+                innPoolLastMorningGameDate = inst.atZone(ZoneOffset.UTC).toLocalDate().toString();
+            } catch (Exception ignored) {
+            }
+        }
+        if (innPoolLastMorningEpochDay == null && innPoolLastMorningGameDate != null && !innPoolLastMorningGameDate.isBlank()) {
+            try {
+                innPoolLastMorningEpochDay = LocalDate.parse(innPoolLastMorningGameDate.trim()).toEpochDay();
+            } catch (Exception ignored) {
+            }
+        }
+        if (innVisitorPoolExcludedRoleIds == null) {
+            innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
+        }
+    }
+
+    @Nonnull
+    public Set<String> getInnVisitorPoolExcludedRoleIds() {
+        if (innVisitorPoolExcludedRoleIds == null) {
+            innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
+        }
+        return innVisitorPoolExcludedRoleIds;
+    }
+
+    public void addInnVisitorPoolExcludedRoleId(@Nonnull String roleId) {
+        if (roleId.isBlank()) {
+            return;
+        }
+        getInnVisitorPoolExcludedRoleIds().add(roleId.trim());
     }
 
     @Nonnull
@@ -217,6 +286,75 @@ public final class TownRecord {
             innPoolNpcIds = new ArrayList<>();
         }
         return innPoolNpcIds;
+    }
+
+    @Nonnull
+    public List<String> getInnLockedEntityUuids() {
+        if (innLockedEntityUuids == null) {
+            innLockedEntityUuids = new ArrayList<>();
+        }
+        return innLockedEntityUuids;
+    }
+
+    public boolean isInnVisitorLocked(@Nonnull UUID entityUuid) {
+        String s = entityUuid.toString();
+        for (String x : getInnLockedEntityUuids()) {
+            if (s.equalsIgnoreCase(x)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addInnLockedEntity(@Nonnull UUID entityUuid) {
+        String s = entityUuid.toString();
+        for (String x : getInnLockedEntityUuids()) {
+            if (s.equalsIgnoreCase(x)) {
+                return;
+            }
+        }
+        getInnLockedEntityUuids().add(s);
+    }
+
+    public void removeInnLockedEntity(@Nonnull UUID entityUuid) {
+        String s = entityUuid.toString();
+        getInnLockedEntityUuids().removeIf(x -> s.equalsIgnoreCase(x));
+    }
+
+    @Nullable
+    public Instant getInnPoolLastRefreshGameTime() {
+        String t = innPoolLastRefreshGameTime;
+        if (t == null || t.isBlank()) {
+            return null;
+        }
+        try {
+            return Instant.parse(t.trim());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void setInnPoolLastRefreshGameTime(@Nullable Instant gameTime) {
+        this.innPoolLastRefreshGameTime = gameTime != null ? gameTime.toString() : null;
+    }
+
+    @Nullable
+    public String getInnPoolLastMorningGameDate() {
+        String s = innPoolLastMorningGameDate;
+        return s != null && !s.isBlank() ? s.trim() : null;
+    }
+
+    public void setInnPoolLastMorningGameDate(@Nullable String dateIsoUtc) {
+        this.innPoolLastMorningGameDate = dateIsoUtc != null && !dateIsoUtc.isBlank() ? dateIsoUtc.trim() : null;
+    }
+
+    @Nullable
+    public Long getInnPoolLastMorningEpochDay() {
+        return innPoolLastMorningEpochDay;
+    }
+
+    public void setInnPoolLastMorningEpochDay(@Nullable Long epochDay) {
+        this.innPoolLastMorningEpochDay = epochDay;
     }
 
     @Nonnull

@@ -59,6 +59,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[] innkeeperSpawnLocal;
 
+    /** Prefab-local spawn cells for inn visitors (max two in Week 4); optional. */
+    @SerializedName("visitorSpawnLocals")
+    @Nullable
+    private int[][] visitorSpawnLocals;
+
     public String getId() {
         return id;
     }
@@ -123,5 +128,11 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getInnkeeperSpawnLocal() {
         return innkeeperSpawnLocal != null && innkeeperSpawnLocal.length == 3 ? innkeeperSpawnLocal : null;
+    }
+
+    /** @return up to two prefab-local visitor spawn positions, or null */
+    @Nullable
+    public int[][] getVisitorSpawnLocals() {
+        return visitorSpawnLocals;
     }
 }

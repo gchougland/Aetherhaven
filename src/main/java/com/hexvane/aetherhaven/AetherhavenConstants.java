@@ -24,7 +24,22 @@ public final class AetherhavenConstants {
     /** Inn construction id in {@code constructions.json} and building POI file name. */
     public static final String CONSTRUCTION_INN_V1 = "inn_v1";
 
+    /** Market stall plot construction id (Week 4). */
+    public static final String CONSTRUCTION_PLOT_MARKET_STALL = "plot_market_stall";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
+
+    public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
+
+    public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
+    public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
+    public static final String NPC_FARMER = "Aetherhaven_Farmer";
+
+    public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
+
+    public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
+
+    public static final String ITEM_QUEST_JOURNAL = "Aetherhaven_Quest_Journal";
 
     public static final String MANAGEMENT_BLOCK_TYPE_ID = "Aetherhaven_Management_Block";
 

@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,11 +47,29 @@ public final class PoiScoring {
         @Nonnull VillagerNeeds needs,
         @Nonnull TownVillagerBinding binding
     ) {
+        return pickBest(candidates, needs, binding, Map.of());
+    }
+
+    /**
+     * @param occupancy POI id → count of town NPCs already traveling to or using that POI (see {@link com.hexvane.aetherhaven.poi.PoiOccupancy})
+     */
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<UUID, Integer> occupancy
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         PoiEntry best = null;
         float bestScore = 0f;
         for (PoiEntry e : candidates) {
             if (preferredPlot != null && e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
+                continue;
+            }
+            int cap = Math.max(1, e.getCapacity());
+            int used = occupancy.getOrDefault(e.getId(), 0);
+            if (used >= cap) {
                 continue;
             }
             float sc = score(needs, e);

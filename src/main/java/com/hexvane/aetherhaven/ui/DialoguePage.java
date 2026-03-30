@@ -26,6 +26,7 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -34,6 +35,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     private static final String DIALOGUE_PANEL = "#DialoguePanel";
     private static final String DIALOGUE_COLUMN = DIALOGUE_PANEL + " #DialogueFill #DialogueColumn";
     /** Full path so command targets match the appended layout tree. */
+    private static final String PORTRAIT_ASSET = DIALOGUE_COLUMN + " #SpeakerFrame #Portrait.AssetPath";
     private static final String SPEAKER_SPANS = DIALOGUE_COLUMN + " #SpeakerFrame #Speaker.TextSpans";
     private static final String BODY_TEXT_SPANS = DIALOGUE_COLUMN + " #TextBlock #BodyText.TextSpans";
     private static final String CHOICES_FRAME = DIALOGUE_COLUMN + " #ChoicesFrame";
@@ -96,6 +98,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             tree = catalog.get(treeId);
         }
         if (tree == null) {
+            applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Unknown dialogue: " + treeId));
             setChoicesFrameVisible(commandBuilder, false);
@@ -104,6 +107,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
         DialogueNodeDefinition node = tree.getNode(nodeId);
         if (node == null) {
+            applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
             setChoicesFrameVisible(commandBuilder, false);
@@ -117,7 +121,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                     break;
                 }
                 DialogueActionBatchResult nodeEnter = new DialogueActionBatchResult();
-                actions.runBatch(enterNode.getActions(), ref, store, nodeEnter);
+                actions.runBatch(enterNode.getActions(), ref, store, nodeEnter, npcRef);
                 String enterGoto = nodeEnter.getGotoNodeId();
                 if (enterGoto != null && !enterGoto.isBlank()) {
                     nodeId = enterGoto.trim();
@@ -130,11 +134,13 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
         node = tree.getNode(nodeId);
         if (node == null) {
+            applyPortrait(commandBuilder, store);
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
             setChoicesFrameVisible(commandBuilder, false);
             return;
         }
 
+        applyPortrait(commandBuilder, store);
         String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
         String body = node.getText() != null ? node.getText() : "";
 
@@ -146,6 +152,20 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
     private static void setChoicesFrameVisible(@Nonnull UICommandBuilder cmd, boolean visible) {
         cmd.set(CHOICES_FRAME + ".Visible", visible);
+    }
+
+    private void applyPortrait(@Nonnull UICommandBuilder commandBuilder, @Nonnull Store<EntityStore> store) {
+        if (npcRef == null || !npcRef.isValid()) {
+            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
+            return;
+        }
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null) {
+            commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(""));
+            return;
+        }
+        String roleName = npc.getRoleName();
+        commandBuilder.set(PORTRAIT_ASSET, NpcPortraitProvider.portraitPathForRoleId(roleName != null ? roleName : ""));
     }
 
     private void appendChoices(
@@ -209,7 +229,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             }
         }
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
-        actions.runBatch(choice.getActions(), ref, store, batch);
+        actions.runBatch(choice.getActions(), ref, store, batch, npcRef);
         applyBatchNavigation(ref, store, batch, choice.getNext());
     }
 

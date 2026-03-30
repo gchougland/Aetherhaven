@@ -20,11 +20,13 @@ import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
+import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
+import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -135,6 +137,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));
@@ -243,6 +246,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             AetherhavenConstants.PAGE_PLOT_PLACEMENT,
             PlotPlacementOpenHelper::tryOpen
         );
+        OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
             PlotSignAdminPage.class,
@@ -265,6 +269,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.config.get();
         this.constructionCatalog = ConstructionCatalog.loadFromClasspath(this.getClassLoader());
         this.dialogueCatalog = DialogueCatalog.loadFromClasspath(this.getClassLoader());
+        this.dialogueResolver.registerKind("merchant", "aetherhaven_merchant");
+        this.dialogueResolver.registerKind("blacksmith", "aetherhaven_blacksmith");
+        this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
         LOGGER.atInfo().log("Aetherhaven dialogues loaded: %s", this.dialogueCatalog.all().keySet());
     }

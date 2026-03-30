@@ -4,10 +4,13 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -15,7 +18,6 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -23,14 +25,19 @@ import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<VillagerNeedsOverviewPage.PageData> {
-    private static final int ROW_CAP = 5;
+    private static final String VILLAGER_ROWS = "#VillagerRows";
+    private static final int MAX_ROWS = 16;
 
     private final UUID townId;
     private int selectedIndex;
@@ -54,41 +61,42 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
             commandBuilder.set("#Hint.TextSpans", Message.raw("Aetherhaven not loaded."));
-            hideRows(commandBuilder);
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
         if (town == null) {
             commandBuilder.set("#Hint.TextSpans", Message.raw("Town not found."));
-            hideRows(commandBuilder);
             return;
         }
 
-        List<VillagerRow> rows = new ArrayList<>();
-        addRowIfPresent(rows, "Elder", town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
-        addRowIfPresent(rows, "Innkeeper", town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
+        List<VillagerRow> rows = buildResidentRows(entityStore, town);
         if (rows.isEmpty()) {
-            commandBuilder.set("#Hint.TextSpans", Message.raw("No tracked villagers in this town yet."));
-            hideRows(commandBuilder);
+            commandBuilder.set("#Hint.TextSpans", Message.raw("No town residents tracked yet."));
+            commandBuilder.clear(VILLAGER_ROWS);
             return;
         }
         if (selectedIndex >= rows.size()) {
             selectedIndex = 0;
         }
 
-        commandBuilder.set("#Hint.TextSpans", Message.raw("Select a villager. Meters show loaded entities only (unloaded chunks show as neutral)."));
-        for (int i = 0; i < ROW_CAP; i++) {
-            if (i < rows.size()) {
-                VillagerRow r = rows.get(i);
-                commandBuilder.set("#Row" + i + ".Visible", true);
-                commandBuilder.set("#Row" + i + " #Pick" + i + " #Label.TextSpans", Message.raw(r.label()));
-            } else {
-                commandBuilder.set("#Row" + i + ".Visible", false);
-            }
+        commandBuilder.set("#Hint.TextSpans", Message.raw("Residents with a town binding (inn visitors are not listed). Meters show loaded entities only."));
+        commandBuilder.clear(VILLAGER_ROWS);
+        int n = Math.min(rows.size(), MAX_ROWS);
+        for (int i = 0; i < n; i++) {
+            VillagerRow r = rows.get(i);
+            commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/VillagerNeedsRow.ui");
+            String row = VILLAGER_ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #Pick #Label.TextSpans", Message.raw(r.label()));
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Pick",
+                new EventData().append("Action", "Select").append("Index", Integer.toString(i)),
+                false
+            );
         }
 
         VillagerRow sel = rows.get(selectedIndex);
-        Store<EntityStore> entityStore = world.getEntityStore().getStore();
         VillagerNeeds needs = findNeeds(entityStore, sel.entityUuid());
         float hunger = needs != null ? needs.getHunger() / VillagerNeeds.MAX : 0.5f;
         float energy = needs != null ? needs.getEnergy() / VillagerNeeds.MAX : 0.5f;
@@ -97,16 +105,6 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         commandBuilder.set("#EnergyBar.Value", energy);
         commandBuilder.set("#FunBar.Value", fun);
         commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(sel.roleId()));
-
-        for (int i = 0; i < rows.size(); i++) {
-            final int idx = i;
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#Pick" + i,
-                new EventData().append("Action", "Select").append("Index", Integer.toString(idx)),
-                false
-            );
-        }
     }
 
     @Override
@@ -114,7 +112,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         if (data.action == null || !data.action.equalsIgnoreCase("Select")) {
             return;
         }
-        if (data.index >= 0 && data.index < ROW_CAP) {
+        if (data.index >= 0 && data.index < MAX_ROWS) {
             selectedIndex = data.index;
         }
         UICommandBuilder cmd = new UICommandBuilder();
@@ -123,22 +121,82 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         sendUpdate(cmd, ev, false);
     }
 
-    private static void hideRows(@Nonnull UICommandBuilder commandBuilder) {
-        for (int i = 0; i < ROW_CAP; i++) {
-            commandBuilder.set("#Row" + i + ".Visible", false);
-        }
+    @Nonnull
+    private static List<VillagerRow> buildResidentRows(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        UUID tid = town.getTownId();
+        Map<UUID, VillagerRow> byUuid = new LinkedHashMap<>();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), NPCEntity.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                        continue;
+                    }
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
+                    if (uc == null || npc == null || npc.getRoleName() == null) {
+                        continue;
+                    }
+                    UUID u = uc.getUuid();
+                    String roleId = npc.getRoleName();
+                    String label = NpcPortraitProvider.displayLabelForRoleId(roleId);
+                    int ko = kindOrderForBindingKind(b.getKind());
+                    byUuid.put(u, new VillagerRow(label, u, roleId, ko));
+                }
+            }
+        );
+
+        addFallbackIfMissing(byUuid, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
+        addFallbackIfMissing(byUuid, town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
+
+        List<VillagerRow> out = new ArrayList<>(byUuid.values());
+        out.sort(
+            Comparator.comparingInt(VillagerRow::kindOrder).thenComparing(VillagerRow::label, String.CASE_INSENSITIVE_ORDER)
+        );
+        return out;
     }
 
-    private static void addRowIfPresent(
-        @Nonnull List<VillagerRow> rows,
-        @Nonnull String label,
+    private static void addFallbackIfMissing(
+        @Nonnull Map<UUID, VillagerRow> byUuid,
         @Nullable UUID entityUuid,
         @Nonnull String roleId
     ) {
-        if (entityUuid == null) {
+        if (entityUuid == null || byUuid.containsKey(entityUuid)) {
             return;
         }
-        rows.add(new VillagerRow(label, entityUuid, roleId));
+        byUuid.put(
+            entityUuid,
+            new VillagerRow(NpcPortraitProvider.displayLabelForRoleId(roleId), entityUuid, roleId, kindOrderForRoleId(roleId))
+        );
+    }
+
+    private static int kindOrderForBindingKind(@Nonnull String kind) {
+        if (TownVillagerBinding.KIND_ELDER.equals(kind)) {
+            return 0;
+        }
+        if (TownVillagerBinding.KIND_INNKEEPER.equals(kind)) {
+            return 1;
+        }
+        if (TownVillagerBinding.KIND_MERCHANT.equals(kind)) {
+            return 2;
+        }
+        return 3;
+    }
+
+    private static int kindOrderForRoleId(@Nonnull String roleId) {
+        if (AetherhavenConstants.ELDER_NPC_ROLE_ID.equals(roleId)) {
+            return 0;
+        }
+        if (AetherhavenConstants.INNKEEPER_NPC_ROLE_ID.equals(roleId)) {
+            return 1;
+        }
+        if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
+            return 2;
+        }
+        return 3;
     }
 
     @Nullable
@@ -146,7 +204,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         VillagerNeeds[] found = new VillagerNeeds[1];
         store.forEachChunk(
             Query.and(VillagerNeeds.getComponentType(), UUIDComponent.getComponentType()),
-            (archetypeChunk, commandBuffer) -> {
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
                 if (found[0] != null) {
                     return;
                 }
@@ -162,7 +220,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         return found[0];
     }
 
-    private record VillagerRow(@Nonnull String label, @Nonnull UUID entityUuid, @Nonnull String roleId) {}
+    private record VillagerRow(@Nonnull String label, @Nonnull UUID entityUuid, @Nonnull String roleId, int kindOrder) {}
 
     public static final class PageData {
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)

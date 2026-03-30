@@ -15,7 +15,7 @@
     },
     "inn_explain_pool": {
       "speaker": "Innkeeper",
-      "text": "We've no travelers booked yet—the guest pool is empty. When word spreads, they'll rest here safe and fed.",
+      "text": "Travelers rotate through when the road brings them. The inn keeps two guest spots at a time for visitors like traders and craftsfolk.",
       "choices": [{ "text": "Good to know.", "next": null }]
     }
   }

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -77,5 +78,6 @@ public final class AetherhavenWorldRegistries {
         getOrCreatePoiRegistry(world, plugin);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
+        InnPoolService.reconcileAfterWorldLoad(world, plugin);
     }
 }

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Plot_Token_Inn.name",
-    "Description": "server.items.Aetherhaven_Plot_Token_Inn.description"
+    "Name": "server.items.Aetherhaven_Plot_Token_Market_Stall.name",
+    "Description": "server.items.Aetherhaven_Plot_Token_Market_Stall.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",
   "Model": "Items/Weapons/Stick/Stick.blockymodel",

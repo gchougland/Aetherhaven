@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
@@ -68,6 +69,9 @@ public final class ConstructionCompleter {
         if (def != null) {
             PoiExtractor.registerForCompletedBuild(plugin, world, town, plotId, def.getId(), prefabAnchorWorld, prefabYaw);
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(def.getId())) {
+                MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
+            }
         }
     }
 

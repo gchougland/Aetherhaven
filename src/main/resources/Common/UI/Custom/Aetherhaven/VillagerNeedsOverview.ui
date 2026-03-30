@@ -73,80 +73,9 @@ $C.@PageOverlay {
         Anchor: (Top: 8, Bottom: 6);
       }
 
-      Group #Row0 {
-        LayoutMode: Left;
+      Group #VillagerRows {
+        LayoutMode: Top;
         Anchor: (Bottom: 4);
-        Button #Pick0 {
-          LayoutMode: Left;
-          FlexWeight: 1;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Style: (
-            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
-            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
-            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
-          );
-          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
-        }
-      }
-      Group #Row1 {
-        LayoutMode: Left;
-        Anchor: (Bottom: 4);
-        Button #Pick1 {
-          LayoutMode: Left;
-          FlexWeight: 1;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Style: (
-            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
-            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
-            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
-          );
-          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
-        }
-      }
-      Group #Row2 {
-        LayoutMode: Left;
-        Anchor: (Bottom: 4);
-        Button #Pick2 {
-          LayoutMode: Left;
-          FlexWeight: 1;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Style: (
-            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
-            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
-            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
-          );
-          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
-        }
-      }
-      Group #Row3 {
-        LayoutMode: Left;
-        Anchor: (Bottom: 4);
-        Button #Pick3 {
-          LayoutMode: Left;
-          FlexWeight: 1;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Style: (
-            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
-            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
-            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
-          );
-          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
-        }
-      }
-      Group #Row4 {
-        LayoutMode: Left;
-        Anchor: (Bottom: 4);
-        Button #Pick4 {
-          LayoutMode: Left;
-          FlexWeight: 1;
-          Padding: (Horizontal: 10, Vertical: 8);
-          Style: (
-            Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
-            Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
-            Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
-          );
-          Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
-        }
       }
     }
   }

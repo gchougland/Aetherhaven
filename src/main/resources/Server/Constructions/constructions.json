@@ -22,11 +22,26 @@
       "plotAnchorOffset": [5, 0, 5],
       "managementBlockLocalPos": [1, 2, 3],
       "innkeeperSpawnLocal": [0, 0, 1],
+      "visitorSpawnLocals": [[-2, 1, 2], [2, 1, 2]],
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
         { "itemId": "Wood_Softwood_Planks", "count": 4 },
         { "itemId": "Rock_Stone_Cobble", "count": 2 }
+      ]
+    },
+    {
+      "id": "plot_market_stall",
+      "displayName": "Market stall",
+      "description": "A small stall for a traveling merchant.",
+      "prefabPath": "market_stall.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_Market_Stall",
+      "plotAnchorOffset": [5, 0, 5],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 6 },
+        { "itemId": "Rock_Stone_Cobble", "count": 4 }
       ]
     }
   ]

@@ -1,0 +1,11 @@
+{
+  "id": "aetherhaven_farmer",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Farmer",
+      "text": "Road was long. A warm inn beats sleeping in the ditch.",
+      "choices": [{ "text": "Rest well.", "next": null }]
+    }
+  }
+}

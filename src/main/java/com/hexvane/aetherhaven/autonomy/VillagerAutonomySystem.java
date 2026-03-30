@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
+import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -18,12 +19,15 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -118,14 +122,23 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (now < autonomy.getNextDecisionEpochMs()) {
             return;
         }
-        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding);
+        Map<UUID, Integer> occ = PoiOccupancy.countsForTown(world, binding.getTownId(), store);
+        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, occ);
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return;
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
-        autonomy.setTravelTarget(pick.getX() + 0.5, pick.getY(), pick.getZ() + 0.5, pick.getId());
+        double tx = pick.getX() + 0.5;
+        double tz = pick.getZ() + 0.5;
+        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        long salt =
+            (uuidComp != null ? uuidComp.getUuid().getLeastSignificantBits() : 0L) ^ pick.getId().getLeastSignificantBits();
+        Random rnd = new Random(salt);
+        tx += (rnd.nextDouble() - 0.5) * 0.95;
+        tz += (rnd.nextDouble() - 0.5) * 0.95;
+        autonomy.setTravelTarget(tx, pick.getY(), tz, pick.getId());
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc != null) {
             String path = VillagerPoiPathfinder.findPath(world, tc.getPosition(), pick);

@@ -1,0 +1,11 @@
+{
+  "id": "aetherhaven_blacksmith",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Blacksmith",
+      "text": "Fine forge weather today. I am just passing through.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    }
+  }
+}

@@ -32,8 +32,18 @@ public final class DialogueActionExecutor {
         @Nonnull Store<EntityStore> store,
         @Nonnull DialogueActionBatchResult out
     ) {
+        runBatch(actions, playerRef, store, out, null);
+    }
+
+    public void runBatch(
+        @Nonnull List<JsonObject> actions,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
         for (JsonObject a : actions) {
-            apply(a, playerRef, store, out);
+            apply(a, playerRef, store, out, npcRef);
         }
     }
 
@@ -41,7 +51,8 @@ public final class DialogueActionExecutor {
         @Nonnull JsonObject a,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull DialogueActionBatchResult out
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
     ) {
         String type = getType(a);
         if (type == null) {
@@ -67,39 +78,18 @@ public final class DialogueActionExecutor {
                 "[Dialogue stub] unlock_achievement id=%s",
                 stringField(a, "id")
             );
-            case "start_quest" -> startQuest(a, playerRef, store);
-            case "complete_quest" -> completeQuest(a, playerRef, store);
+            case "start_quest" -> startQuest(a, playerRef, store, npcRef);
+            case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
+            case "abandon_quest" -> abandonQuest(a, playerRef, store);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
 
     private static void startQuest(
-        @Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
-    ) {
-        String id = stringField(a, "id");
-        if (id == null || id.isBlank()) {
-            return;
-        }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
-        if (town == null) {
-            return;
-        }
-        town.addActiveQuest(id.trim());
-        tm.updateTown(town);
-        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (pr != null) {
-            pr.sendMessage(Message.raw("Quest started: " + QuestCatalog.displayName(id.trim())));
-        }
-    }
-
-    private static void completeQuest(
-        @Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
     ) {
         String id = stringField(a, "id");
         if (id == null || id.isBlank()) {
@@ -116,14 +106,92 @@ public final class DialogueActionExecutor {
             return;
         }
         String qid = id.trim();
-        town.completeQuest(qid);
-        tm.updateTown(town);
-        if (AetherhavenConstants.QUEST_BUILD_INN.equals(qid)) {
-            InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
+        town.addActiveQuest(qid);
+        boolean lockInn =
+            (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean())
+                || AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid);
+        if (lockInn && npcRef != null && npcRef.isValid()) {
+            UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+            if (nu != null) {
+                town.addInnLockedEntity(nu.getUuid());
+            }
         }
+        tm.updateTown(town);
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.raw("Quest started: " + QuestCatalog.displayName(qid)));
+        }
+    }
+
+    private static void completeQuest(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        String id = stringField(a, "id");
+        if (id == null || id.isBlank()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForPlayer(playerRef, store, tm);
+        if (town == null) {
+            return;
+        }
+        String qid = id.trim();
+        applyQuestCompletion(world, plugin, town, tm, qid);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.raw("Quest completed: " + QuestCatalog.displayName(qid)));
+        }
+    }
+
+    public static void applyQuestCompletion(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull String qid
+    ) {
+        town.completeQuest(qid);
+        if (AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid)) {
+            town.getInnLockedEntityUuids().clear();
+        }
+        if (AetherhavenConstants.QUEST_BUILD_INN.equals(qid)) {
+            InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
+        }
+        tm.updateTown(town);
+    }
+
+    private static void abandonQuest(@Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        String id = stringField(a, "id");
+        if (id == null || id.isBlank()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForPlayer(playerRef, store, tm);
+        if (town == null) {
+            return;
+        }
+        String qid = id.trim();
+        town.clearActiveQuest(qid);
+        if (AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid)) {
+            town.getInnLockedEntityUuids().clear();
+        }
+        tm.updateTown(town);
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr != null) {
+            pr.sendMessage(Message.raw("Quest abandoned: " + QuestCatalog.displayName(qid)));
         }
     }
 

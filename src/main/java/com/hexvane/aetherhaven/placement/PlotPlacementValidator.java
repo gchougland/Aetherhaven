@@ -8,8 +8,11 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hypixel.hytale.protocol.BlockMaterial;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.universe.world.World;
 import java.nio.file.Path;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -20,6 +23,7 @@ public final class PlotPlacementValidator {
 
     @Nullable
     public static String validate(
+        @Nonnull World world,
         @Nonnull TownManager townManager,
         @Nonnull TownRecord town,
         @Nonnull UUID ownerUuid,
@@ -30,6 +34,10 @@ public final class PlotPlacementValidator {
     ) {
         if (!town.getOwnerUuid().equals(ownerUuid)) {
             return "You do not own this town.";
+        }
+        String support = validatePlotSignHasSolidSupportBelow(world, signPosition);
+        if (support != null) {
+            return support;
         }
         if (!townManager.isInsideTerritory(town, signPosition.x, signPosition.z)) {
             return "Plot sign position is outside your town territory.";
@@ -60,4 +68,19 @@ public final class PlotPlacementValidator {
         }
     }
 
+    /**
+     * Plot sign must sit on solid ground so it does not float and pop as an item.
+     */
+    @Nullable
+    private static String validatePlotSignHasSolidSupportBelow(@Nonnull World world, @Nonnull Vector3i signPosition) {
+        int belowY = signPosition.y - 1;
+        if (belowY < 0) {
+            return "Place the plot sign on solid ground (a block must be directly beneath it).";
+        }
+        BlockType below = world.getBlockType(signPosition.x, belowY, signPosition.z);
+        if (below == null || below.getMaterial() == BlockMaterial.Empty) {
+            return "Place the plot sign on solid ground (a block must be directly beneath it).";
+        }
+        return null;
+    }
 }

@@ -1,0 +1,34 @@
+$C = "../Common.ui";
+
+Group #QuestRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8);
+  Padding: (Horizontal: 6, Vertical: 4);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+  Button #Select {
+    LayoutMode: Left;
+    FlexWeight: 1;
+    Padding: (Horizontal: 6, Vertical: 4);
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
+
+    Label #QuestTitle {
+      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+      FlexWeight: 1;
+    }
+  }
+
+  // Icon close (ContainerCloseButton) — avoids narrow TextButton squashing "×"
+  Button #Abandon {
+    Anchor: (Width: 28, Height: 28);
+    Style: (
+      Default: (Background: (TexturePath: "../Common/ContainerCloseButton.png")),
+      Hovered: (Background: (TexturePath: "../Common/ContainerCloseButtonHovered.png")),
+      Pressed: (Background: (TexturePath: "../Common/ContainerCloseButtonPressed.png"))
+    );
+  }
+}

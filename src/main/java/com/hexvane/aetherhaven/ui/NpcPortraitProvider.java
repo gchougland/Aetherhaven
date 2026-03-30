@@ -20,11 +20,26 @@ public final class NpcPortraitProvider {
         Map.entry("Aetherhaven_Farmer", "Farmer.png")
     );
 
+    /** Short labels for town needs UI (aligned with server.lang npcRoles.*.name). */
+    private static final Map<String, String> ROLE_ID_TO_LABEL = Map.ofEntries(
+        Map.entry(AetherhavenConstants.ELDER_NPC_ROLE_ID, "Elder Lyren"),
+        Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Innkeeper"),
+        Map.entry(AetherhavenConstants.NPC_MERCHANT, "Vex the Merchant"),
+        Map.entry(AetherhavenConstants.NPC_BLACKSMITH, "Traveling Blacksmith"),
+        Map.entry(AetherhavenConstants.NPC_FARMER, "Traveling Farmer")
+    );
+
     private NpcPortraitProvider() {}
 
     @Nonnull
     public static String portraitPathForRoleId(@Nonnull String roleId) {
         String file = ROLE_ID_TO_FILE.get(roleId.trim());
         return file != null ? ICON_DIR + file : MISSING;
+    }
+
+    @Nonnull
+    public static String displayLabelForRoleId(@Nonnull String roleId) {
+        String label = ROLE_ID_TO_LABEL.get(roleId.trim());
+        return label != null ? label : roleId.trim();
     }
 }

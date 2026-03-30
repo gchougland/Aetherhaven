@@ -1,0 +1,17 @@
+$C = "../Common.ui";
+
+Group #VillagerRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 4);
+  Button #Pick {
+    LayoutMode: Left;
+    FlexWeight: 1;
+    Padding: (Horizontal: 10, Vertical: 8);
+    Style: (
+      Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+      Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+      Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+    );
+    Label #Label { Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true); FlexWeight: 1; }
+  }
+}

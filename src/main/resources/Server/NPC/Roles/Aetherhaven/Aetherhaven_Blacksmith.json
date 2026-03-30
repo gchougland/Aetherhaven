@@ -1,0 +1,94 @@
+{
+  "Type": "Generic",
+  "Parameters": {
+    "Invulnerable": { "Value": true, "Description": "Whether the NPC is invulnerable." },
+    "MemoriesNameOverride": { "Value": "Aetherhaven_Blacksmith", "Description": "Memory name override" },
+    "NameTranslationKey": {
+      "Value": "server.npcRoles.Aetherhaven_Blacksmith.name",
+      "Description": "Translation key for NPC name display"
+    },
+    "AetherhavenWanderPhaseTime": { "Value": [4, 10], "Description": "Rect-wander phase duration bounds (seconds)" },
+    "AetherhavenPausePhaseTime": { "Value": [3, 7], "Description": "Idle pause between wander bursts (seconds)" }
+  },
+  "StartState": "Idle",
+  "DefaultNPCAttitude": "Ignore",
+  "DefaultPlayerAttitude": "Neutral",
+  "Appearance": "Blacksmith",
+  "MaxHealth": 100,
+  "IsMemory": true,
+  "MemoriesCategory": "Aetherhaven",
+  "MemoriesNameOverride": { "Compute": "MemoriesNameOverride" },
+  "DisableDamageGroups": ["Self"],
+  "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
+  "BusyStates": ["$Interaction"],
+  "Invulnerable": { "Compute": "Invulnerable" },
+  "KnockbackScale": 0.5,
+  "MotionControllerList": [
+    {
+      "Type": "Walk",
+      "MaxWalkSpeed": 4,
+      "Gravity": 10,
+      "RunThreshold": 0.3,
+      "MaxFallSpeed": 15,
+      "MaxRotationSpeed": 360,
+      "Acceleration": 10
+    }
+  ],
+  "StateTransitions": [
+    {
+      "States": [{ "From": ["AetherhavenAutonomy"], "To": ["Idle"] }],
+      "Actions": { "Reference": "Component_ActionList_Aetherhaven_Clear_Status" }
+    }
+  ],
+  "Instructions": [
+    {
+      "Instructions": [
+        {
+          "Sensor": { "Type": "State", "State": "AetherhavenAutonomy", "IgnoreMissingSetState": true },
+          "Instructions": [{ "Sensor": { "Type": "Any" }, "BodyMotion": { "Type": "Nothing" } }]
+        },
+        {
+          "Sensor": { "Type": "State", "State": "Idle" },
+          "Instructions": [
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Town_Villager_Rect_Wander_Idle",
+              "Modify": {
+                "WanderRectTimer": { "Compute": "AetherhavenWanderPhaseTime" },
+                "PauseTimer": { "Compute": "AetherhavenPausePhaseTime" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "InteractionInstruction": {
+    "Instructions": [
+      {
+        "Sensor": { "Type": "Not", "Sensor": { "Type": "CanInteract", "ViewSector": 180 } },
+        "Actions": [{ "Type": "SetInteractable", "Interactable": false }]
+      },
+      {
+        "Continue": true,
+        "Sensor": { "Type": "Any" },
+        "Actions": [
+          { "Type": "SetInteractable", "Interactable": true, "Hint": "server.aetherhaven.interaction.dialogue" }
+        ]
+      },
+      {
+        "Sensor": { "Type": "HasInteracted" },
+        "Instructions": [
+          {
+            "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
+            "Actions": [
+              { "Type": "LockOnInteractionTarget" },
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "blacksmith" },
+              { "Type": "State", "State": "$Interaction" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "NameTranslationKey": { "Compute": "NameTranslationKey" }
+}
