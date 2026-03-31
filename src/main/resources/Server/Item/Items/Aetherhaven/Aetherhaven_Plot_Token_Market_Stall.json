@@ -3,8 +3,25 @@
     "Name": "server.items.Aetherhaven_Plot_Token_Market_Stall.name",
     "Description": "server.items.Aetherhaven_Plot_Token_Market_Stall.description"
   },
+  "Recipe": {
+    "TimeSeconds": 2,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Planks",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
   "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",
-  "Model": "Items/Weapons/Stick/Stick.blockymodel",
+  "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+  "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
   "MaxStack": 64,
   "PlayerAnimationsId": "Item",
   "Categories": ["Items.Utility"],

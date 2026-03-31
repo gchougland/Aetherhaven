@@ -3,6 +3,22 @@
     "Name": "server.items.Aetherhaven_Plot_Placement_Tool.name",
     "Description": "server.items.Aetherhaven_Plot_Placement_Tool.description"
   },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 8
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
   "Categories": ["Items.Weapons"],
   "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
   "Quality": "Common",

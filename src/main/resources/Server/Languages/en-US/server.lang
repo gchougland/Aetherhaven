@@ -44,6 +44,11 @@ items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /
 items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
+items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
+items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, plot tokens, the plot placement staff, and the quest journal. Build one at a workbench.
+
+server.benchCategories.aetherhaven.town_planning=Town planning
+
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-click a block moves the sign anchor.
 

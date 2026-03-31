@@ -3,6 +3,22 @@
     "Name": "server.items.Aetherhaven_Quest_Journal.name",
     "Description": "server.items.Aetherhaven_Quest_Journal.description"
   },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
   "Categories": ["Items.Utility"],
   "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Purple.png",
   "Quality": "Common",

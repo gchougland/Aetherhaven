@@ -3,6 +3,22 @@
     "Name": "server.items.Aetherhaven_Charter.name",
     "Description": "server.items.Aetherhaven_Charter.description"
   },
+  "Recipe": {
+    "TimeSeconds": 3,
+    "Input": [
+      {
+        "ItemId": "Rock_Stone_Cobble",
+        "Quantity": 16
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
   "PlayerAnimationsId": "Block",
   "Categories": ["Furniture.Beds"],
   "Set": "Aetherhaven",

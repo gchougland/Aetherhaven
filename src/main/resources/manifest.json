@@ -10,10 +10,13 @@
   ],
   "Website": "${plugin_website}",
   "ServerVersion": "${server_version}",
-  "Dependencies": {
+  "Dependencies": {},
+  "OptionalDependencies": {
     "Hytale:NPC": "*"
   },
-  "OptionalDependencies": {},
+  "LoadBefore": {
+    "Hytale:AssetEditor": "*"
+  },
   "DisabledByDefault": false,
   "IncludesAssetPack": true,
   "Main": "${plugin_main_entrypoint}"
