@@ -10,18 +10,18 @@
       "capacity": 2
     },
     {
-      "localX": -5,
+      "localX": -6,
       "localY": 1,
-      "localZ": 3,
+      "localZ": 4,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
       "capacity": 1
     },
     {
-      "localX": 0,
+      "localX": -2,
       "localY": 1,
-      "localZ": 3,
+      "localZ": 4,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],

@@ -17,4 +17,27 @@ public final class PrefabLocalOffset {
         pr.rotate(p);
         return new Vector3i((int) Math.round(p.x), (int) Math.round(p.y), (int) Math.round(p.z));
     }
+
+    /**
+     * Inverse of {@link #rotate} for horizontal prefab yaw (Y unchanged). World delta from anchor to POI cell
+     * → prefab-local cell offset.
+     */
+    @Nonnull
+    public static Vector3i inverseRotateWorldDelta(@Nonnull Rotation yaw, int dx, int dy, int dz) {
+        PrefabRotation forward = PrefabRotation.fromRotation(yaw);
+        PrefabRotation inverse = inverseHorizontal(forward);
+        Vector3d p = new Vector3d(dx, dy, dz);
+        inverse.rotate(p);
+        return new Vector3i((int) Math.round(p.x), (int) Math.round(p.y), (int) Math.round(p.z));
+    }
+
+    @Nonnull
+    private static PrefabRotation inverseHorizontal(@Nonnull PrefabRotation pr) {
+        return switch (pr) {
+            case ROTATION_0 -> PrefabRotation.ROTATION_0;
+            case ROTATION_90 -> PrefabRotation.ROTATION_270;
+            case ROTATION_180 -> PrefabRotation.ROTATION_180;
+            case ROTATION_270 -> PrefabRotation.ROTATION_90;
+        };
+    }
 }

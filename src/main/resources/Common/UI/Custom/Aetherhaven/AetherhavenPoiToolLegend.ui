@@ -1,0 +1,25 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group #Legend {
+    Anchor: (Top: 120, Left: 20, Width: 320);
+    Background: #000000(0.55);
+    Padding: (Left: 12, Right: 12, Top: 8, Bottom: 8);
+    LayoutMode: Top;
+
+    Label #Title {
+      Text: %server.aetherhaven.poiTool.legendTitle;
+      Style: (...$C.@DefaultLabelStyle, TextColor: #e8e8e8, FontSize: 15);
+    }
+    Label #Line1 {
+      Text: %server.aetherhaven.poiTool.legendPrimary;
+      Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
+    }
+    Label #Line2 {
+      Text: %server.aetherhaven.poiTool.legendSecondary;
+      Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
+    }
+  }
+}

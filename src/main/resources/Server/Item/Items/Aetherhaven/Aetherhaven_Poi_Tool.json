@@ -1,0 +1,49 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Poi_Tool.name",
+    "Description": "server.items.Aetherhaven_Poi_Tool.description"
+  },
+  "Categories": ["Items.Tools"],
+  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
+  "Quality": "Tool",
+  "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",
+  "Texture": "Items/Weapons/Staff/Crystal_Purple_Texture.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Scale": 0.55,
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPoiToolSelect"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPoiToolMove"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "DebugOutlines": true,
+    "UseDistance": {
+      "Adventure": 96,
+      "Creative": 96
+    },
+    "AllEntities": false
+  },
+  "HudUI": [
+    {
+      "Path": "Custom/Aetherhaven/AetherhavenPoiToolLegend.ui",
+      "Type": "Legend"
+    }
+  ],
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

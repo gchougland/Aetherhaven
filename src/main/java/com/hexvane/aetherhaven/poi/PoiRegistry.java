@@ -61,6 +61,30 @@ public final class PoiRegistry {
         }
     }
 
+    /**
+     * Replace an existing POI (same id and town). Used when moving a POI cell.
+     */
+    public void replace(@Nonnull PoiEntry updated) {
+        PoiEntry old = byId.get(updated.getId());
+        if (old == null) {
+            throw new IllegalArgumentException("Unknown POI id: " + updated.getId());
+        }
+        if (!old.getTownId().equals(updated.getTownId())) {
+            throw new IllegalArgumentException("POI town mismatch");
+        }
+        byId.put(updated.getId(), updated);
+        List<PoiEntry> list = byTownId.get(updated.getTownId());
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getId().equals(updated.getId())) {
+                    list.set(i, updated);
+                    break;
+                }
+            }
+        }
+        persist();
+    }
+
     public void unregister(@Nonnull UUID poiId) {
         if (removeInternal(poiId)) {
             persist();

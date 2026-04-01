@@ -14,6 +14,11 @@ import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
+import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
+import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
+import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
+import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
@@ -34,6 +39,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
@@ -134,10 +140,23 @@ public final class AetherhavenPlugin extends JavaPlugin {
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenPoiDebugLabel",
+                PoiDebugLabelEntity.class,
+                PoiDebugLabelEntity::new,
+                PoiDebugLabelEntity.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPoiToolMove", PoiToolMoveInteraction.class, PoiToolMoveInteraction.CODEC);
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));

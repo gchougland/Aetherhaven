@@ -90,4 +90,21 @@ public final class PoiEntry {
     public PoiInteractionKind getInteractionKind() {
         return interactionKind;
     }
+
+    /** Same POI id and metadata with an updated world cell (e.g. POI tool move). */
+    @Nonnull
+    public PoiEntry copyWithPosition(int nx, int ny, int nz) {
+        return new PoiEntry(
+            id,
+            townId,
+            nx,
+            ny,
+            nz,
+            new HashSet<>(tags),
+            capacity,
+            plotId,
+            blockTypeId,
+            interactionKind
+        );
+    }
 }

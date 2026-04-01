@@ -18,6 +18,14 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_PLACEMENT_TOOL_ITEM_ID = "Aetherhaven_Plot_Placement_Tool";
 
+    /** Debug POI visualization / move tool item id. */
+    public static final String POI_TOOL_ITEM_ID = "Aetherhaven_Poi_Tool";
+
+    /**
+     * Permission for POI tool use, visualization, and edit. Grant to server operators via the permission system.
+     */
+    public static final String PERMISSION_POI_TOOL = "aetherhaven.poi.tool";
+
     /** Non-block token: player must hold in inventory to select this plot type in the placement tool. */
     public static final String PLOT_TOKEN_INN_PLACEHOLDER = "Aetherhaven_Plot_Token_Inn";
 
