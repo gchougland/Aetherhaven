@@ -63,6 +63,12 @@ $C.@PageOverlay {
         Anchor: (Bottom: 8);
       }
 
+      $C.@TextButton #PickUpPlotButton {
+        Text: %server.aetherhaven.ui.plotconstruction.pickUpPlot;
+        Visible: false;
+        Anchor: (Bottom: 8);
+      }
+
       $C.@TextButton #BuildButton {
         Text: %server.aetherhaven.ui.plotconstruction.build;
       }

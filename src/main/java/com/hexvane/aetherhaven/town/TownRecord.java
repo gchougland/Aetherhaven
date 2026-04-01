@@ -369,6 +369,11 @@ public final class TownRecord {
         getPlotInstances().add(instance);
     }
 
+    /** Removes a registered plot (e.g. plot sign picked up). @return true if a row was removed */
+    public boolean removePlotInstance(@Nonnull UUID plotId) {
+        return getPlotInstances().removeIf(p -> p.getPlotId().equals(plotId));
+    }
+
     @Nullable
     public PlotInstance findPlotById(@Nonnull UUID plotId) {
         for (PlotInstance p : getPlotInstances()) {

@@ -14,6 +14,7 @@ instances.aetherhaven.subtitle=The sky village
 aetherhaven.ui.plotconstruction.title=Construction
 aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
+aetherhaven.ui.plotconstruction.pickUpPlot=Pick up plot (return token)
 aetherhaven.ui.plotconstruction.townNeeds=Town needs
 
 aetherhaven.ui.villagerneeds.title=Town needs

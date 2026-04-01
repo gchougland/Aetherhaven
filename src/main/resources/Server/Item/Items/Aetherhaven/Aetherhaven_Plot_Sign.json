@@ -26,17 +26,15 @@
     ],
     "DrawType": "Model",
     "Gathering": {
-      "Soft": {
-        "IsWeaponBreakable": false
+      "Breaking": {
+        "GatherType": "Unbreakable"
       }
     },
     "HitboxType": "Sign_Tall",
+    "IgnoreSupportWhenPlaced": true,
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#793e21",
-    "Support": {
-      "Down": [{ "FaceType": "Full" }]
-    },
     "VariantRotation": "NESW",
     "Flags": {
       "IsUsable": true

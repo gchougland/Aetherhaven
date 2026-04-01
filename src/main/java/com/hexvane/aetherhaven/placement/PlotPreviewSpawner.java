@@ -30,9 +30,12 @@ import javax.annotation.Nonnull;
 
 /**
  * Preview by spawning transient {@link BlockEntity} markers (same idea as the NPC spawn page block preview).
+ * Builder paste previews send the full clipboard to the client; here we must cap server-spawned entities.
+ * Large constructions (e.g. inn prefabs) exceed a few hundred solid blocks — a low cap only shows a fragment.
  */
 public final class PlotPreviewSpawner {
-    private static final int MAX_BLOCKS = 400;
+    /** Upper bound on preview block-entity count per refresh (large prefabs need thousands). */
+    private static final int MAX_BLOCKS = 16384;
 
     private PlotPreviewSpawner() {}
 

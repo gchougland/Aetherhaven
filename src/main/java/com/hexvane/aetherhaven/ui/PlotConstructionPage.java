@@ -29,7 +29,9 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -84,6 +86,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 commandBuilder.set("#Mat" + i + ".Visible", false);
             }
             commandBuilder.set("#BuildButton.Disabled", true);
+            commandBuilder.set("#PickUpPlotButton.Visible", false);
             return;
         }
 
@@ -123,6 +126,14 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean canBuild = !managementUi && !completed && villagerOk && matsOk;
         commandBuilder.set("#BuildButton.Disabled", !canBuild);
 
+        boolean canPickupPlot =
+            !managementUi
+                && !completed
+                && def.getPlotTokenItemId() != null
+                && !def.getPlotTokenItemId().isBlank();
+        commandBuilder.set("#PickUpPlotButton.Visible", canPickupPlot);
+        commandBuilder.set("#PickUpPlotButton.Disabled", !canPickupPlot);
+
         commandBuilder.set("#TownNeedsButton.Visible", managementUi && completed);
         if (managementUi && completed) {
             eventBuilder.addEventBinding(
@@ -139,10 +150,92 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             new EventData().append("Action", "Build"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#PickUpPlotButton",
+            new EventData().append("Action", "PickupPlot"),
+            false
+        );
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("PickupPlot")) {
+            if (managementUi) {
+                return;
+            }
+            PlotInstanceState st = resolvePlotState(store, ref);
+            if (st == PlotInstanceState.COMPLETE) {
+                return;
+            }
+            ConstructionDefinition def = resolveDefinition(store, ref);
+            if (def == null) {
+                return;
+            }
+            String tokenId = def.getPlotTokenItemId();
+            if (tokenId == null || tokenId.isBlank()) {
+                return;
+            }
+            Store<ChunkStore> cstore = blockRef.getStore();
+            PlotSignBlock plot = cstore.getComponent(blockRef, PlotSignBlock.getComponentType());
+            if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
+                sendBuildError(store, ref, "This plot sign has no plot id (legacy); replace the sign.");
+                return;
+            }
+            UUID plotId;
+            try {
+                plotId = UUID.fromString(plot.getPlotId().trim());
+            } catch (IllegalArgumentException e) {
+                sendBuildError(store, ref, "Invalid plot id on sign.");
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+            if (town == null) {
+                sendBuildError(store, ref, "Only the town owner can pick up this plot.");
+                return;
+            }
+            if (town.findPlotById(plotId) == null) {
+                sendBuildError(store, ref, "This plot is not registered in your town.");
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            CombinedItemContainer inv =
+                player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+            ItemStack tokenStack = new ItemStack(tokenId, 1);
+            if (inv == null || !inv.canAddItemStack(tokenStack)) {
+                sendBuildError(store, ref, "Make room in your inventory for the plot token.");
+                return;
+            }
+            if (!town.removePlotInstance(plotId)) {
+                sendBuildError(store, ref, "Could not remove plot from town data.");
+                return;
+            }
+            tm.updateTown(town);
+            world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
+            if (player != null) {
+                ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
+                if (!giveTx.succeeded()) {
+                    sendBuildError(store, ref, "Could not add plot token to inventory.");
+                    return;
+                }
+            }
+            PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+            if (pr != null) {
+                pr.sendMessage(Message.raw("Plot removed and plot token returned."));
+            }
+            close();
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("OpenTownNeeds")) {
             if (!managementUi) {
                 return;

@@ -1,39 +1,39 @@
 {
   "pois": [
     {
-      "localX": 1,
+      "localX": 6,
       "localY": 2,
-      "localZ": 3,
+      "localZ": 4,
       "blockTypeId": "Aetherhaven_Management_Block",
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK"],
       "capacity": 2
     },
     {
-      "localX": -2,
+      "localX": -5,
       "localY": 1,
-      "localZ": 2,
+      "localZ": 3,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
       "capacity": 1
     },
     {
-      "localX": -2,
+      "localX": 0,
       "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Bench_Campfire",
-      "interactionKind": "USE_BENCH",
-      "tags": ["EAT"],
-      "capacity": 2
+      "localZ": 3,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "tags": ["SLEEP", "ENERGY"],
+      "capacity": 1
     },
     {
-      "localX": 2,
+      "localX": 7,
       "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "SIT",
-      "tags": ["FUN", "SIT"],
+      "localZ": -1,
+      "blockTypeId": "Furniture_Crude_Brazier",
+      "interactionKind": "USE_BENCH",
+      "tags": ["EAT"],
       "capacity": 2
     }
   ]

@@ -103,7 +103,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
             case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, needs, autonomy, dt, now);
-            default -> tickIdle(ref, store, commandBuffer, world, npc, pois, needs, binding, autonomy, now);
+            default -> tickIdle(ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now);
         }
     }
 
@@ -113,6 +113,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull World world,
         @Nonnull NPCEntity npc,
+        @Nonnull PoiRegistry reg,
         @Nonnull List<PoiEntry> pois,
         @Nonnull VillagerNeeds needs,
         @Nonnull TownVillagerBinding binding,
@@ -122,8 +123,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (now < autonomy.getNextDecisionEpochMs()) {
             return;
         }
-        Map<UUID, Integer> occ = PoiOccupancy.countsForTown(world, binding.getTownId(), store);
-        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, occ);
+        Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        double npcX = tc != null ? tc.getPosition().x : Double.NaN;
+        double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
+        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, cellOcc, npcX, npcZ);
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
@@ -139,7 +143,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         tx += (rnd.nextDouble() - 0.5) * 0.95;
         tz += (rnd.nextDouble() - 0.5) * 0.95;
         autonomy.setTravelTarget(tx, pick.getY(), tz, pick.getId());
-        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc != null) {
             String path = VillagerPoiPathfinder.findPath(world, tc.getPosition(), pick);
             autonomy.setTravelPath(path != null ? path : "");

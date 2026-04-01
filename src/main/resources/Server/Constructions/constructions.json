@@ -1,28 +1,15 @@
 {
   "constructions": [
     {
-      "id": "test_house_site",
-      "displayName": "Test house",
-      "description": "Places the test_house prefab. Sign block is removed when complete.",
-      "prefabPath": "test_house.prefab.json",
-      "plotAnchorOffset": [5, 0, 5],
-      "rotationYaw": "None",
-      "requiredVillagerId": null,
-      "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 4 },
-        { "itemId": "Rock_Stone_Cobble", "count": 2 }
-      ]
-    },
-    {
       "id": "inn_v1",
       "displayName": "Inn",
       "description": "Founding inn prefab with management bookcase and visitor-ready POIs.",
-      "prefabPath": "inn_v1.prefab.json",
+      "prefabPath": "Inn.prefab.json",
       "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
-      "plotAnchorOffset": [5, 0, 5],
-      "managementBlockLocalPos": [1, 2, 3],
-      "innkeeperSpawnLocal": [0, 0, 1],
-      "visitorSpawnLocals": [[-2, 1, 2], [2, 1, 2]],
+      "plotAnchorOffset": [9, 0, 6],
+      "managementBlockLocalPos": [6, 2, 4],
+      "innkeeperSpawnLocal": [4, 1, 4],
+      "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [

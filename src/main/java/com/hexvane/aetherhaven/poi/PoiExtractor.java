@@ -130,6 +130,15 @@ public final class PoiExtractor {
         if (center != null && expectedType.equals(center.getId())) {
             return new Vector3i(cx, cy, cz);
         }
+        /*
+         * Pick the *closest* matching block to the prefab hint cell. Nested-loop order used to return the first
+         * match, which could snap two nearby bed POIs to the same multi-block bed.
+         */
+        int bestX = 0;
+        int bestY = 0;
+        int bestZ = 0;
+        long bestD2 = Long.MAX_VALUE;
+        boolean found = false;
         for (int dy = -ANCHOR_SEARCH_Y; dy <= ANCHOR_SEARCH_Y; dy++) {
             for (int dx = -ANCHOR_SEARCH_XY; dx <= ANCHOR_SEARCH_XY; dx++) {
                 for (int dz = -ANCHOR_SEARCH_XY; dz <= ANCHOR_SEARCH_XY; dz++) {
@@ -141,11 +150,18 @@ public final class PoiExtractor {
                     int z = cz + dz;
                     BlockType bt = world.getBlockType(x, y, z);
                     if (bt != null && expectedType.equals(bt.getId())) {
-                        return new Vector3i(x, y, z);
+                        long d2 = (long) dx * dx + (long) dy * dy + (long) dz * dz;
+                        if (!found || d2 < bestD2) {
+                            found = true;
+                            bestD2 = d2;
+                            bestX = x;
+                            bestY = y;
+                            bestZ = z;
+                        }
                     }
                 }
             }
         }
-        return null;
+        return found ? new Vector3i(bestX, bestY, bestZ) : null;
     }
 }

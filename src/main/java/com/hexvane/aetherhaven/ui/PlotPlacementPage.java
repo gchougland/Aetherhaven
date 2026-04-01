@@ -28,7 +28,9 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -212,6 +214,16 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             sendError(store, ref, err);
             return false;
         }
+        String tokenId = def.getPlotTokenItemId();
+        if (tokenId == null || tokenId.isBlank()) {
+            sendError(store, ref, "This construction has no plot token configured.");
+            return false;
+        }
+        ItemStackTransaction tokenTx = inv.removeItemStack(new ItemStack(tokenId, 1));
+        if (!tokenTx.succeeded()) {
+            sendError(store, ref, "Could not consume plot token (inventory changed?).");
+            return false;
+        }
         UUID plotId = UUID.randomUUID();
         boolean placed =
             PlotPlacementCommit.placePlotSign(
@@ -225,6 +237,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 store
             );
         if (!placed) {
+            inv.addItemStack(new ItemStack(tokenId, 1));
             sendError(store, ref, "Could not place plot sign (blocked or invalid spot).");
             return false;
         }

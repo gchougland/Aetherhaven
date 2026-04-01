@@ -38,7 +38,8 @@ public final class PlotPlacementCommit {
             return false;
         }
         RotationTuple rt = RotationTuple.of(prefabYaw, Rotation.None, Rotation.None);
-        boolean ok = chunk.placeBlock(x, y, z, AetherhavenConstants.PLOT_SIGN_ITEM_ID, rt.yaw(), rt.pitch(), rt.roll(), PLACE_SETTINGS);
+        // validatePlacement=false: replace existing blocks/fluids at the anchor (same idea as paste replacing voxels).
+        boolean ok = chunk.placeBlock(x, y, z, AetherhavenConstants.PLOT_SIGN_ITEM_ID, rt, PLACE_SETTINGS, false);
         if (!ok) {
             return false;
         }

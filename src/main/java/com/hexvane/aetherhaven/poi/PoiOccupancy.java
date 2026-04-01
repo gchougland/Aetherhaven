@@ -12,23 +12,29 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 
 /**
- * Counts how many town villagers are already traveling to or using each POI, so {@link com.hexvane.aetherhaven.autonomy.PoiScoring}
- * does not assign more NPCs than {@link PoiEntry#getCapacity()} (bed/chair = 1).
+ * Counts how many town villagers are already traveling to or using each <strong>world cell</strong> targeted by a POI,
+ * so {@link com.hexvane.aetherhaven.autonomy.PoiScoring} does not overfill a bed (capacity 1) even when two registry
+ * entries accidentally share the same block coordinates.
  * <p>
  * Cached per world tick + town to avoid O(n^2) scans when many villagers decide in the same frame.
  */
 public final class PoiOccupancy {
-    private static final ConcurrentHashMap<String, Map<UUID, Integer>> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Map<String, Integer>> CACHE = new ConcurrentHashMap<>();
     private static volatile long cachedWorldTick = -1L;
     private static volatile String cachedWorldName = "";
 
     private PoiOccupancy() {}
 
+    /**
+     * @return map key {@code "x,y,z"} of the target POI's anchor cell → number of town NPCs traveling to or using a POI
+     *         at that cell
+     */
     @Nonnull
-    public static Map<UUID, Integer> countsForTown(
+    public static Map<String, Integer> cellOccupancyForTown(
         @Nonnull com.hypixel.hytale.server.core.universe.world.World world,
         @Nonnull UUID townId,
-        @Nonnull Store<EntityStore> store
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PoiRegistry registry
     ) {
         long t = world.getTick();
         String w = world.getName();
@@ -38,12 +44,21 @@ public final class PoiOccupancy {
             cachedWorldName = w;
         }
         String key = townId.toString();
-        return CACHE.computeIfAbsent(key, k -> buildCounts(store, townId));
+        return CACHE.computeIfAbsent(key, k -> buildCellCounts(store, townId, registry));
     }
 
     @Nonnull
-    private static Map<UUID, Integer> buildCounts(@Nonnull Store<EntityStore> store, @Nonnull UUID townId) {
-        ConcurrentHashMap<UUID, Integer> counts = new ConcurrentHashMap<>();
+    public static String cellKey(int x, int y, int z) {
+        return x + "," + y + "," + z;
+    }
+
+    @Nonnull
+    private static Map<String, Integer> buildCellCounts(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
+        @Nonnull PoiRegistry registry
+    ) {
+        ConcurrentHashMap<String, Integer> counts = new ConcurrentHashMap<>();
         Query<EntityStore> q = Query.and(VillagerAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
         store.forEachEntityParallel(q, (index, chunk, commandBuffer) -> {
             TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
@@ -62,7 +77,12 @@ public final class PoiOccupancy {
             if (pid == null) {
                 return;
             }
-            counts.merge(pid, 1, Integer::sum);
+            PoiEntry target = registry.get(pid);
+            if (target == null) {
+                return;
+            }
+            String cell = cellKey(target.getX(), target.getY(), target.getZ());
+            counts.merge(cell, 1, Integer::sum);
         });
         return Collections.unmodifiableMap(counts);
     }

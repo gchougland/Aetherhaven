@@ -39,11 +39,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Places prefab blocks bottom-up in batches; applies fluids and entities once at the end.
- * Batches are spaced using {@link AetherhavenPlugin#scheduleOnWorld(World, Runnable, long)} so work spreads across time.
+ * Places prefab blocks in bottom-up order (y, then x, z) like vanilla buffer column streams — not in two phases.
+ * Two-phase (all primary y levels before any secondary) placed roof / air above before flowers at lower y and broke plants.
+ * For each cell, applies fluid then block like vanilla prefab paste. Entities are applied once at the end.
+ * Batches are spaced using {@link AetherhavenPlugin#scheduleOnWorld(World, Runnable, long)}.
  */
 public final class ConstructionAnimator {
-    private static final int SET_BLOCK_SETTINGS = 10;
+    /**
+     * Forced block placement: bit 2 only. {@link com.hypixel.hytale.server.core.util.FillerBlockUtil#setFillerBlocksAt}
+     * runs when {@code (settings & 8) == 0} (see {@link WorldChunk#setBlock}); bit 8 suppresses that and breaks
+     * multi-block furniture (beds): sibling cells keep old terrain and overlap the model.
+     */
+    private static final int SET_BLOCK_SETTINGS_PLACE = 2;
+    /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
+    private static final int SET_BLOCK_SETTINGS_CLEAR = 10;
 
     private final AetherhavenPlugin plugin;
     private final World world;
@@ -52,7 +61,8 @@ public final class ConstructionAnimator {
     private final boolean force;
     private final Random random;
     private final ComponentAccessor<EntityStore> entityAccessor;
-    private final List<PendingBlock> blocks;
+    /** All prefab cells to place, sorted by (y, x, z) to match vanilla column stream order. */
+    private final List<PendingBlock> pendingBlocks;
     private final IPrefabBuffer bufferAccess;
     private final PrefabRotation prefabRotation;
     private final int prefabId;
@@ -71,7 +81,7 @@ public final class ConstructionAnimator {
         boolean force,
         Random random,
         ComponentAccessor<EntityStore> entityAccessor,
-        List<PendingBlock> blocks,
+        List<PendingBlock> pendingBlocks,
         IPrefabBuffer bufferAccess,
         PrefabRotation prefabRotation,
         int prefabId,
@@ -86,7 +96,7 @@ public final class ConstructionAnimator {
         this.force = force;
         this.random = random;
         this.entityAccessor = entityAccessor;
-        this.blocks = blocks;
+        this.pendingBlocks = pendingBlocks;
         this.bufferAccess = bufferAccess;
         this.prefabRotation = prefabRotation;
         this.prefabId = prefabId;
@@ -127,20 +137,27 @@ public final class ConstructionAnimator {
         Random random = new FastRandom();
         PrefabRotation prefabRotation = PrefabRotation.fromRotation(yaw);
         PrefabBufferCall call = new PrefabBufferCall(random, prefabRotation);
-        List<PendingBlock> list = new ArrayList<>();
+        List<PendingBlock> pending = new ArrayList<>();
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
-                if (filler != 0 || blockId == 0) {
+                // Do not skip filler != 0: vanilla PrefabUtil.paste applies fluid then setState(holder) for those cells.
+                // Prefab air: only blockId==0 (BlockType.EMPTY_ID) clears terrain. Do NOT use BlockMaterial.Empty —
+                // BlockType defaults material to Empty; plants/vines are Model blocks and keep that default, so
+                // treating "material Empty" as prefab air incorrectly replaced every plant with an air-clear entry.
+                if (blockId == 0 && filler == 0) {
+                    pending.add(new PendingBlock(x, y, z, 0, null, 0, 0, 0, fluidId, fluidLevel));
                     return;
                 }
-                list.add(new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler));
+                pending.add(new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel));
             },
             null,
             null,
             call
         );
-        list.sort(Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z));
+        Comparator<PendingBlock> byColumn = Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z);
+        pending.sort(byColumn);
         int prefabId = PrefabUtil.getNextPrefabId();
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityAccessor.invoke(start);
@@ -156,7 +173,7 @@ public final class ConstructionAnimator {
             force,
             random,
             entityAccessor,
-            list,
+            pending,
             bufferAccess,
             prefabRotation,
             prefabId,
@@ -177,23 +194,23 @@ public final class ConstructionAnimator {
         LocalCachedChunkAccessor chunkAccessor = LocalCachedChunkAccessor.atWorldCoords(world, origin.getX(), origin.getZ(), prefabRadius);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int placed = 0;
-        while (index < blocks.size() && placed < blocksPerBatch) {
-            PendingBlock pb = blocks.get(index++);
+        while (index < pendingBlocks.size() && placed < blocksPerBatch) {
+            PendingBlock pb = pendingBlocks.get(index++);
             placeOne(pb, chunkAccessor, blockTypeMap);
             placed++;
         }
-        if (index >= blocks.size()) {
-            finishFluidsAndEntities(chunkAccessor);
-            PrefabPasteEvent end = new PrefabPasteEvent(prefabId, false);
-            entityAccessor.invoke(end);
-            if (onComplete != null) {
-                onComplete.run();
-            }
-            bufferAccess.release();
-            finished.set(true);
-        } else {
+        if (index < pendingBlocks.size()) {
             plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
+            return;
         }
+        finishFluidsAndEntities(chunkAccessor);
+        PrefabPasteEvent end = new PrefabPasteEvent(prefabId, false);
+        entityAccessor.invoke(end);
+        if (onComplete != null) {
+            onComplete.run();
+        }
+        bufferAccess.release();
+        finished.set(true);
     }
 
     private void placeOne(
@@ -205,15 +222,32 @@ public final class ConstructionAnimator {
         int by = origin.y + pb.y;
         int bz = origin.z + pb.z;
         WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        // Match PrefabUtil.paste: fluid for this cell before any block change (global fluid-after-blocks broke plants).
+        applyPrefabFluidForCell(bx, by, bz, pb.fluidId, pb.fluidLevel, chunkAccessor);
         BlockType block = blockTypeMap.getAsset(pb.blockId);
         String blockKey = block.getId();
+        // PrefabUtil.paste: filler != 0 only applies setState when holder is present (no setBlock in that branch).
+        if (pb.filler != 0) {
+            if (pb.holder != null) {
+                chunk.setState(bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+            }
+            return;
+        }
+        if (pb.blockId == 0) {
+            if (force) {
+                chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+            } else {
+                chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
+            }
+            return;
+        }
         if (!force) {
             RotationTuple rot = RotationTuple.get(pb.blockRotation);
-            chunk.placeBlock(bx, by, bz, blockKey, rot.yaw(), rot.pitch(), rot.roll(), SET_BLOCK_SETTINGS);
+            chunk.placeBlock(bx, by, bz, blockKey, rot.yaw(), rot.pitch(), rot.roll(), SET_BLOCK_SETTINGS_PLACE);
         } else {
             int indexKey = blockTypeMap.getIndex(blockKey);
             BlockType type = blockTypeMap.getAsset(indexKey);
-            chunk.setBlock(bx, by, bz, indexKey, type, pb.blockRotation, pb.filler, SET_BLOCK_SETTINGS);
+            chunk.setBlock(bx, by, bz, indexKey, type, pb.blockRotation, pb.filler, SET_BLOCK_SETTINGS_PLACE);
         }
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
@@ -226,20 +260,34 @@ public final class ConstructionAnimator {
         }
     }
 
-    private void finishFluidsAndEntities(LocalCachedChunkAccessor chunkAccessor) {
+    private void applyPrefabFluidForCell(
+        int bx,
+        int by,
+        int bz,
+        int fluidId,
+        int fluidLevel,
+        LocalCachedChunkAccessor chunkAccessor
+    ) {
+        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
         Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
+        ChunkColumn fluidColumn = fluidStore.getComponent(chunk.getReference(), ChunkColumn.getComponentType());
+        Ref<ChunkStore> section = fluidColumn.getSection(ChunkUtil.chunkCoordinate(by));
+        FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
+        fluidSection.setFluid(bx, by, bz, fluidId, (byte) fluidLevel);
+    }
+
+    private void finishFluidsAndEntities(LocalCachedChunkAccessor chunkAccessor) {
         PrefabBufferCall call = new PrefabBufferCall(random, prefabRotation);
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
+                if (filler == 0) {
+                    return;
+                }
                 int bx = origin.x + x;
                 int by = origin.y + y;
                 int bz = origin.z + z;
-                WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-                ChunkColumn fluidColumn = fluidStore.getComponent(chunk.getReference(), ChunkColumn.getComponentType());
-                Ref<ChunkStore> section = fluidColumn.getSection(ChunkUtil.chunkCoordinate(by));
-                FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
-                fluidSection.setFluid(bx, by, bz, fluidId, (byte) fluidLevel);
+                applyPrefabFluidForCell(bx, by, bz, fluidId, fluidLevel, chunkAccessor);
             },
             (x, z, entityWrappers, tt) -> {
                 if (entityWrappers != null && entityWrappers.length != 0) {
@@ -275,5 +323,16 @@ public final class ConstructionAnimator {
         );
     }
 
-    private record PendingBlock(int x, int y, int z, int blockId, @Nullable Holder<ChunkStore> holder, int supportValue, int blockRotation, int filler) {}
+    private record PendingBlock(
+        int x,
+        int y,
+        int z,
+        int blockId,
+        @Nullable Holder<ChunkStore> holder,
+        int supportValue,
+        int blockRotation,
+        int filler,
+        int fluidId,
+        int fluidLevel
+    ) {}
 }
