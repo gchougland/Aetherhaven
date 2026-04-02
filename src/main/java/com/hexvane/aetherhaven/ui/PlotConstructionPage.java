@@ -313,9 +313,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
         World world = store.getExternalData().getWorld();
         Vector3i signPos = blockWorldPos;
-        int[] o = def.getPlotAnchorOffset();
-        Vector3i anchor = new Vector3i(signPos.x + o[0], signPos.y + o[1], signPos.z + o[2]);
         Rotation yaw = PlotBlockRotationUtil.readBlockYaw(world, signPos);
+        Vector3i anchor = def.resolvePrefabAnchorWorld(signPos, yaw);
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabPath == null) {
             sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());

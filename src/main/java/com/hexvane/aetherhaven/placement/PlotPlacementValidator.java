@@ -40,8 +40,7 @@ public final class PlotPlacementValidator {
         if (prefabPath == null) {
             return "Prefab not found for construction: " + def.getId();
         }
-        int[] o = def.getPlotAnchorOffset();
-        Vector3i prefabOrigin = new Vector3i(signPosition.x + o[0], signPosition.y + o[1], signPosition.z + o[2]);
+        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPosition, prefabYaw);
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
             PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf);

@@ -8,14 +8,15 @@ import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.util.FastRandom;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
+import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.modules.entity.component.FromPrefab;
+import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
@@ -53,16 +54,27 @@ public final class ConstructionAnimator {
     private static final int SET_BLOCK_SETTINGS_PLACE = 2;
     /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
     private static final int SET_BLOCK_SETTINGS_CLEAR = 10;
+    /**
+     * Each {@link IPrefabBuffer#forEach} pass that reads chance blocks must use the same RNG sequence from the
+     * start of the iteration (see {@link com.hypixel.hytale.server.core.prefab.selection.buffer.impl.PrefabBuffer}).
+     * Reusing one {@link Random} across two full passes desyncs chance checks vs. the first pass.
+     */
+    private static final long PREFAB_BUFFER_ITERATION_SEED = 0L;
 
     private final AetherhavenPlugin plugin;
     private final World world;
     private final Vector3i origin;
     private final Rotation yaw;
     private final boolean force;
-    private final Random random;
     private final ComponentAccessor<EntityStore> entityAccessor;
     /** All prefab cells to place, sorted by (y, x, z) to match vanilla column stream order. */
     private final List<PendingBlock> pendingBlocks;
+    /**
+     * Entity holders collected during the same {@link IPrefabBuffer#forEach} pass as {@link #pendingBlocks}, in
+     * vanilla column order (see {@link com.hypixel.hytale.server.core.util.PrefabUtil#paste}). Spawned after blocks
+     * finish; cloning happens at spawn time like vanilla paste.
+     */
+    private final List<Holder<EntityStore>> prefabEntitiesInOrder;
     private final IPrefabBuffer bufferAccess;
     private final PrefabRotation prefabRotation;
     private final int prefabId;
@@ -79,9 +91,9 @@ public final class ConstructionAnimator {
         Vector3i origin,
         Rotation yaw,
         boolean force,
-        Random random,
         ComponentAccessor<EntityStore> entityAccessor,
         List<PendingBlock> pendingBlocks,
+        List<Holder<EntityStore>> prefabEntitiesInOrder,
         IPrefabBuffer bufferAccess,
         PrefabRotation prefabRotation,
         int prefabId,
@@ -94,9 +106,9 @@ public final class ConstructionAnimator {
         this.origin = origin;
         this.yaw = yaw;
         this.force = force;
-        this.random = random;
         this.entityAccessor = entityAccessor;
         this.pendingBlocks = pendingBlocks;
+        this.prefabEntitiesInOrder = prefabEntitiesInOrder;
         this.bufferAccess = bufferAccess;
         this.prefabRotation = prefabRotation;
         this.prefabId = prefabId;
@@ -134,11 +146,11 @@ public final class ConstructionAnimator {
         long batchDelayMs,
         @Nullable Runnable onComplete
     ) {
-        Random random = new FastRandom();
+        Random bufferIterationRandom = new Random(PREFAB_BUFFER_ITERATION_SEED);
         PrefabRotation prefabRotation = PrefabRotation.fromRotation(yaw);
-        PrefabBufferCall call = new PrefabBufferCall(random, prefabRotation);
+        PrefabBufferCall call = new PrefabBufferCall(bufferIterationRandom, prefabRotation);
         List<PendingBlock> pending = new ArrayList<>();
-        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        List<Holder<EntityStore>> prefabEntitiesInOrder = new ArrayList<>();
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
@@ -152,7 +164,16 @@ public final class ConstructionAnimator {
                 }
                 pending.add(new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel));
             },
-            null,
+            (x, z, entityWrappers, tt) -> {
+                if (entityWrappers == null || entityWrappers.length == 0) {
+                    return;
+                }
+                for (Holder<EntityStore> h : entityWrappers) {
+                    if (h != null) {
+                        prefabEntitiesInOrder.add(h);
+                    }
+                }
+            },
             null,
             call
         );
@@ -171,9 +192,9 @@ public final class ConstructionAnimator {
             origin,
             yaw,
             force,
-            random,
             entityAccessor,
             pending,
+            prefabEntitiesInOrder,
             bufferAccess,
             prefabRotation,
             prefabId,
@@ -277,7 +298,8 @@ public final class ConstructionAnimator {
     }
 
     private void finishFluidsAndEntities(LocalCachedChunkAccessor chunkAccessor) {
-        PrefabBufferCall call = new PrefabBufferCall(random, prefabRotation);
+        // Second full buffer pass: must reset RNG like the first pass so chance masks stay aligned with bytes.
+        PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
@@ -289,38 +311,51 @@ public final class ConstructionAnimator {
                 int bz = origin.z + z;
                 applyPrefabFluidForCell(bx, by, bz, fluidId, fluidLevel, chunkAccessor);
             },
-            (x, z, entityWrappers, tt) -> {
-                if (entityWrappers != null && entityWrappers.length != 0) {
-                    for (int ei = 0; ei < entityWrappers.length; ei++) {
-                        Holder<EntityStore> entityToAdd = entityWrappers[ei];
-                        if (entityToAdd == null) {
-                            continue;
-                        }
-                        Holder<EntityStore> clone = entityToAdd.clone();
-                        TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
-                        if (transformComp == null) {
-                            continue;
-                        }
-                        Vector3d entityPosition = transformComp.getPosition().clone();
-                        prefabRotation.rotate(entityPosition);
-                        Vector3d entityWorldPosition = entityPosition.add(origin);
-                        transformComp = clone.getComponent(TransformComponent.getComponentType());
-                        if (transformComp != null) {
-                            Vector3d p = transformComp.getPosition();
-                            p.x = entityWorldPosition.x;
-                            p.y = entityWorldPosition.y;
-                            p.z = entityWorldPosition.z;
-                            PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
-                            entityAccessor.invoke(prefabPlaceEntityEvent);
-                            clone.ensureComponent(FromPrefab.getComponentType());
-                            entityAccessor.addEntity(clone, AddReason.LOAD);
-                        }
-                    }
-                }
-            },
             null,
-            call
+            null,
+            secondPassCall
         );
+        for (int i = 0; i < prefabEntitiesInOrder.size(); i++) {
+            Holder<EntityStore> source = prefabEntitiesInOrder.get(i);
+            spawnPrefabEntityLikePaste(source);
+        }
+    }
+
+    /**
+     * Matches {@link PrefabUtil#paste} entity branch (event, FromPrefab, addEntity) with the same position fix as
+     * {@link com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection#rotate(Axis, int)}: prefab
+     * blocks are iterated on <strong>integer corners</strong> (see {@link PrefabRotation#getX(int, int)}), while
+     * entity transforms are usually at <strong>block centers</strong> (e.g. 0.5 offsets). Applying
+     * {@link PrefabRotation#rotate(Vector3d)} directly to a center rotates around the anchor corner, which skews
+     * centers by a full block at 90° (e.g. (1.5, 0.5) → (0.5, -1.5) instead of (0.5, -0.5)). Subtract the center
+     * offset, rotate, then add it back — same as builder clipboard rotation.
+     */
+    private void spawnPrefabEntityLikePaste(Holder<EntityStore> entityToAdd) {
+        Holder<EntityStore> clone = entityToAdd.clone();
+        TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
+        if (transformComp == null) {
+            return;
+        }
+        Vector3d entityPosition = transformComp.getPosition().clone();
+        boolean isBlockEntity = clone.getComponent(BlockEntity.getComponentType()) != null;
+        Vector3d centerOffset = isBlockEntity ? new Vector3d(0.5, 0.0, 0.5) : new Vector3d(0.5, 0.5, 0.5);
+        entityPosition.subtract(centerOffset);
+        prefabRotation.rotate(entityPosition);
+        entityPosition.add(centerOffset);
+        entityPosition.add(origin);
+        transformComp.setPosition(entityPosition);
+        float prefabYawRad = prefabRotation.getYaw();
+        if (prefabYawRad != 0.0f) {
+            transformComp.getRotation().addYaw(prefabYawRad);
+            HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
+            if (headRotation != null) {
+                headRotation.getRotation().addYaw(prefabYawRad);
+            }
+        }
+        PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
+        entityAccessor.invoke(prefabPlaceEntityEvent);
+        clone.ensureComponent(FromPrefab.getComponentType());
+        entityAccessor.addEntity(clone, AddReason.LOAD);
     }
 
     private record PendingBlock(

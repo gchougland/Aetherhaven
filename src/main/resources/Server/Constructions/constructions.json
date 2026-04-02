@@ -21,9 +21,10 @@
       "id": "plot_market_stall",
       "displayName": "Market stall",
       "description": "A small stall for a traveling merchant.",
-      "prefabPath": "market_stall.prefab.json",
+      "prefabPath": "Market_Stall.prefab.json",
       "plotTokenItemId": "Aetherhaven_Plot_Token_Market_Stall",
-      "plotAnchorOffset": [5, 0, 5],
+      "plotAnchorOffset": [4, 0, 3],
+      "managementBlockLocalPos": [-1, 1, 1],
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [

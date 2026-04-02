@@ -1,8 +1,12 @@
 package com.hexvane.aetherhaven.construction;
 
 import com.google.gson.annotations.SerializedName;
+import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class ConstructionDefinition {
@@ -19,6 +23,10 @@ public final class ConstructionDefinition {
     @SerializedName("prefabPath")
     private String prefabPath;
 
+    /**
+     * Prefab-local offset from the plot sign cell to prefab buffer (0,0,0), same axes as unrotated prefab blocks.
+     * At build time this is rotated by the sign's yaw before adding to the sign world position.
+     */
     @SerializedName("plotAnchorOffset")
     private int[] plotAnchorOffset = new int[] {0, 0, 0};
 
@@ -83,6 +91,25 @@ public final class ConstructionDefinition {
 
     public int[] getPlotAnchorOffset() {
         return plotAnchorOffset != null && plotAnchorOffset.length == 3 ? plotAnchorOffset : new int[] {0, 0, 0};
+    }
+
+    /**
+     * World position of prefab buffer (0,0,0) / anchor when the plot sign is at {@code signPos}.
+     * {@link #plotAnchorOffset} is in prefab-local axes; it must be rotated by {@code placementYaw} before adding
+     * to the sign (same convention as {@link com.hexvane.aetherhaven.construction.PrefabLocalOffset}).
+     */
+    @Nonnull
+    public Vector3i resolvePrefabAnchorWorld(@Nonnull Vector3i signPos, @Nonnull Rotation placementYaw) {
+        int[] o = getPlotAnchorOffset();
+        Vector3i off = new Vector3i(o[0], o[1], o[2]);
+        PrefabRotation.fromRotation(placementYaw).rotate(off);
+        return new Vector3i(signPos.x + off.x, signPos.y + off.y, signPos.z + off.z);
+    }
+
+    /** Same as {@link #resolvePrefabAnchorWorld(Vector3i, Rotation)} with {@link Rotation#None} (offset not rotated). */
+    @Nonnull
+    public Vector3i resolvePrefabAnchorWorld(@Nonnull Vector3i signPos) {
+        return resolvePrefabAnchorWorld(signPos, Rotation.None);
     }
 
     @Nullable

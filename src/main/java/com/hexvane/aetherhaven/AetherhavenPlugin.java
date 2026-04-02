@@ -21,6 +21,7 @@ import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -153,6 +154,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolMove", PoiToolMoveInteraction.class, PoiToolMoveInteraction.CODEC);
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));

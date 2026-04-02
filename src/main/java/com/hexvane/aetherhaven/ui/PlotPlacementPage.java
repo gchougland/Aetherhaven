@@ -71,8 +71,10 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             plugin != null ? plugin.getConstructionCatalog().get(session.getConstructionId()) : null;
         String name = def != null ? def.getDisplayName() : session.getConstructionId();
         Vector3i sign = session.getAnchor();
-        int[] o = def != null ? def.getPlotAnchorOffset() : new int[] {0, 0, 0};
-        Vector3i prefabO = prefabOriginForSign(sign, o);
+        Vector3i prefabO =
+            def != null
+                ? def.resolvePrefabAnchorWorld(sign, session.getPrefabYaw())
+                : new Vector3i(sign.x, sign.y, sign.z);
         commandBuilder.set(
             "#Info.TextSpans",
             Message.raw(
@@ -245,7 +247,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = prefabOriginForSign(signPos, def.getPlotAnchorOffset());
+                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPos, session.getPrefabYaw());
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
@@ -258,6 +260,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                         signPos.z,
                         System.currentTimeMillis()
                     );
+                inst.setPlacementPrefabYaw(session.getPrefabYaw());
                 town.addPlotInstance(inst);
                 tm.updateTown(town);
             } finally {
@@ -265,7 +268,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             }
         } else {
             PlotFootprintRecord mini = new PlotFootprintRecord(signPos.x, signPos.y, signPos.z, signPos.x, signPos.y, signPos.z);
-            town.addPlotInstance(
+            PlotInstance miniPlot =
                 new PlotInstance(
                     plotId,
                     session.getConstructionId(),
@@ -275,8 +278,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                     signPos.y,
                     signPos.z,
                     System.currentTimeMillis()
-                )
-            );
+                );
+            miniPlot.setPlacementPrefabYaw(session.getPrefabYaw());
+            town.addPlotInstance(miniPlot);
             tm.updateTown(town);
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
@@ -363,9 +367,29 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
             return;
         }
+        // Do not spawn block-entity previews when placement is already invalid (e.g. outside territory).
+        // Avoids loading huge previews in chunks that will immediately unload.
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        if (town == null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
+        String placementErr =
+            PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), session.getAnchor(), session.getPrefabYaw(), def, plugin);
+        if (placementErr != null) {
+            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            return;
+        }
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
-            Vector3i prefabOrigin = prefabOriginForSign(session.getAnchor(), def.getPlotAnchorOffset());
+            Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
             PlotPreviewSpawner.rebuild(store, prefabOrigin, session.getPrefabYaw(), buf, session.getPreviewEntityRefs());
         } finally {
             buf.release();
@@ -377,12 +401,6 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         if (pr != null) {
             pr.sendMessage(Message.raw(text));
         }
-    }
-
-    @Nonnull
-    private static Vector3i prefabOriginForSign(@Nonnull Vector3i signPosition, int[] plotAnchorOffset) {
-        int[] o = plotAnchorOffset != null && plotAnchorOffset.length == 3 ? plotAnchorOffset : new int[] {0, 0, 0};
-        return new Vector3i(signPosition.x + o[0], signPosition.y + o[1], signPosition.z + o[2]);
     }
 
     /**

@@ -1,21 +1,12 @@
 {
   "pois": [
     {
-      "localX": 0,
-      "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Furniture_Village_Bookcase",
-      "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK"],
-      "capacity": 1
-    },
-    {
       "localX": 1,
       "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Furniture_Village_Bookcase",
+      "localZ": -2,
+      "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["SHOP"],
+      "tags": ["WORK", "SHOP"],
       "capacity": 1
     }
   ]

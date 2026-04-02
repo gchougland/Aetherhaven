@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hypixel.hytale.builtin.mounts.MountedComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -31,6 +32,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Orchestrates town-villager POI autonomy in phases. Scoring, registry access, and transform stepping stay here;
@@ -40,6 +42,45 @@ import javax.annotation.Nonnull;
 public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStore> {
     private static final double REACH_SQ = 1.45 * 1.45;
     private static final double MOVE_BLOCKS_PER_SEC = 3.2;
+
+    /**
+     * When no player has this chunk in {@link com.hypixel.hytale.server.core.modules.entity.player.ChunkTracker.ChunkVisibility#HOT},
+     * end block-seat POI use and remove {@link MountedComponent} while the entity store is still ticking.
+     * Otherwise chunk stop/unload can remove the NPC while the chunk store is processing; vanilla
+     * {@code MountSystems.handleMountedRemoval} then calls {@code chunkStore.removeComponent} and trips
+     * {@code Store#assertWriteProcessing}.
+     */
+    static void onUnloadSafetyDismount(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable NPCEntity npc,
+        @Nullable VillagerAutonomyState autonomy,
+        @Nullable VillagerNeeds needs,
+        @Nonnull PoiRegistry reg,
+        long now
+    ) {
+        if (autonomy != null && autonomy.getPhase() == VillagerAutonomyState.PHASE_USE) {
+            UUID poiId = autonomy.getTargetPoiUuid();
+            PoiEntry poi = poiId != null ? reg.get(poiId) : null;
+            if (poi != null) {
+                PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
+                if (needs != null) {
+                    PoiEffectTable.applyUseComplete(needs, poi);
+                    commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+                }
+            }
+            autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+            autonomy.setTargetPoiUuid(null);
+            autonomy.setTravelPath("");
+            autonomy.setNextDecisionEpochMs(now + 2500L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            if (npc != null) {
+                clearAutonomyRoleState(ref, npc, commandBuffer);
+            }
+        }
+        commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
+    }
 
     private final AetherhavenPlugin plugin;
     @Nonnull

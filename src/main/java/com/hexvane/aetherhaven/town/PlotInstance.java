@@ -156,13 +156,21 @@ public final class PlotInstance {
         this.prefabYaw = yaw.name();
     }
 
+    /**
+     * When registering a plot from the placement UI, the prefab yaw matches the sign block; needed so
+     * {@link #resolvePrefabAnchorWorld(ConstructionDefinition)} can rotate {@code plotAnchorOffset} before the build
+     * completes and stores the final anchor.
+     */
+    public void setPlacementPrefabYaw(@Nonnull Rotation yaw) {
+        this.prefabYaw = yaw.name();
+    }
+
     @Nonnull
     public Vector3i resolvePrefabAnchorWorld(@Nonnull ConstructionDefinition def) {
         if (prefabAnchorX != null && prefabAnchorY != null && prefabAnchorZ != null) {
             return new Vector3i(prefabAnchorX, prefabAnchorY, prefabAnchorZ);
         }
-        int[] o = def.getPlotAnchorOffset();
-        return new Vector3i(signX + o[0], signY + o[1], signZ + o[2]);
+        return def.resolvePrefabAnchorWorld(new Vector3i(signX, signY, signZ), resolvePrefabYaw());
     }
 
     @Nonnull
