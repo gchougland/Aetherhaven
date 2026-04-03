@@ -110,7 +110,7 @@ public final class InnkeeperSpawnService {
         store.putComponent(
             ref,
             TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_INNKEEPER, plot.getPlotId())
+            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_INNKEEPER, plot.getPlotId(), plot.getPlotId())
         );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uuidComp != null) {

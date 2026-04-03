@@ -24,6 +24,9 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleSystem;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -74,6 +77,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
     private DialogueCatalog dialogueCatalog = DialogueCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
+    private final VillagerScheduleRegistry villagerScheduleRegistry =
+        new VillagerScheduleRegistry(AetherhavenPlugin.class.getClassLoader());
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "Aetherhaven-Construction");
@@ -111,6 +116,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public VillagerScheduleRegistry getVillagerScheduleRegistry() {
+        return villagerScheduleRegistry;
+    }
+
+    @Nonnull
     public DialogueWorldView createDialogueWorldView(@Nonnull World world) {
         return new AetherhavenDialogueWorldView(world, this);
     }
@@ -143,6 +153,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
@@ -164,6 +175,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new VillagerScheduleSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));

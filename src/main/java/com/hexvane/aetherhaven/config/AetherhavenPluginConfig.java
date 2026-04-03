@@ -73,6 +73,20 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Exclusive end hour (0-24). Default 6-12 is morning (6:00 up to but not including 12:00).")
         .add()
+        .append(
+            new KeyedCodec<>("VillagerScheduleEnabled", Codec.BOOLEAN),
+            (o, v) -> o.villagerScheduleEnabled = v,
+            o -> o.villagerScheduleEnabled
+        )
+        .documentation("When true, resident NPCs follow weekly JSON schedules under Server/VillagerSchedules/<roleId>.json.")
+        .add()
+        .append(
+            new KeyedCodec<>("VillagerScheduleDebugLog", Codec.BOOLEAN),
+            (o, v) -> o.villagerScheduleDebugLog = v,
+            o -> o.villagerScheduleDebugLog
+        )
+        .documentation("Logs schedule segment resolution and preferred plot updates.")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -87,6 +101,9 @@ public final class AetherhavenPluginConfig {
     private int innPoolMorningStartHour = 5;
     /** Exclusive end hour (e.g. 15 means 5:00-14:59). */
     private int innPoolMorningEndHour = 15;
+
+    private boolean villagerScheduleEnabled = true;
+    private boolean villagerScheduleDebugLog = false;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -136,6 +153,14 @@ public final class AetherhavenPluginConfig {
             return 0.04f;
         }
         return v;
+    }
+
+    public boolean isVillagerScheduleEnabled() {
+        return villagerScheduleEnabled;
+    }
+
+    public boolean isVillagerScheduleDebugLog() {
+        return villagerScheduleDebugLog;
     }
 
     @Nonnull

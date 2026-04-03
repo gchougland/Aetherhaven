@@ -84,7 +84,7 @@ public final class FarmerPlotCompletion {
         store.putComponent(
             farmerRef,
             TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_FARMER, farmPlotId)
+            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_FARMER, farmPlotId, farmPlotId)
         );
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_FARMER);
         tm.updateTown(town);

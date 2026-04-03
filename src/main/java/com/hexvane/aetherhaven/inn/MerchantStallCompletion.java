@@ -84,7 +84,7 @@ public final class MerchantStallCompletion {
         store.putComponent(
             merchantRef,
             TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_MERCHANT, stallPlotId)
+            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_MERCHANT, stallPlotId, stallPlotId)
         );
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_MERCHANT);
         tm.updateTown(town);

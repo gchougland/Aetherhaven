@@ -42,6 +42,16 @@ public final class TownVillagerBinding implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("PreferredPlotId", Codec.STRING), (b, v) -> b.preferredPlotId = v, b -> b.preferredPlotId)
             .add()
+            .append(
+                new KeyedCodec<>("JobPlotId", Codec.STRING),
+                (b, v) -> b.jobPlotId = v,
+                b -> b.jobPlotId
+            )
+            .documentation(
+                "Workplace plot for schedule segment \"work\"; set when a villager is assigned a job plot. "
+                    + "PreferredPlotId is updated by the weekly schedule for current location."
+            )
+            .add()
             .build();
 
     @Nullable
@@ -64,13 +74,26 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     private String kind = "";
     @Nullable
     private String preferredPlotId;
+    /** Workplace plot UUID; stable while PreferredPlotId changes with daily schedule. */
+    @Nullable
+    private String jobPlotId;
 
     public TownVillagerBinding() {}
 
     public TownVillagerBinding(@Nonnull UUID townId, @Nonnull String kind, @Nullable UUID preferredPlotId) {
+        this(townId, kind, preferredPlotId, null);
+    }
+
+    public TownVillagerBinding(
+        @Nonnull UUID townId,
+        @Nonnull String kind,
+        @Nullable UUID preferredPlotId,
+        @Nullable UUID jobPlotId
+    ) {
         this.townId = townId.toString();
         this.kind = kind;
         this.preferredPlotId = preferredPlotId != null ? preferredPlotId.toString() : null;
+        this.jobPlotId = jobPlotId != null ? jobPlotId.toString() : null;
     }
 
     @Nonnull
@@ -88,9 +111,22 @@ public final class TownVillagerBinding implements Component<EntityStore> {
         return preferredPlotId != null && !preferredPlotId.isBlank() ? UUID.fromString(preferredPlotId) : null;
     }
 
+    public void setPreferredPlotId(@Nullable UUID plotId) {
+        this.preferredPlotId = plotId != null ? plotId.toString() : null;
+    }
+
+    @Nullable
+    public UUID getJobPlotId() {
+        return jobPlotId != null && !jobPlotId.isBlank() ? UUID.fromString(jobPlotId) : null;
+    }
+
+    public void setJobPlotId(@Nullable UUID plotId) {
+        this.jobPlotId = plotId != null ? plotId.toString() : null;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
-        return new TownVillagerBinding(getTownId(), kind, getPreferredPlotId());
+        return new TownVillagerBinding(getTownId(), kind, getPreferredPlotId(), getJobPlotId());
     }
 }

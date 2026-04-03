@@ -1,0 +1,257 @@
+{
+  "schemaVersion": 1,
+  "transitions": [
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "MONDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "inn"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 13,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 16,
+      "minute": 15,
+      "location": "park"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 18,
+      "minute": 30,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 20,
+      "minute": 0,
+      "location": "home"
+    }
+  ]
+}

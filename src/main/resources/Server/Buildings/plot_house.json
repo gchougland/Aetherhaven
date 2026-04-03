@@ -1,16 +1,16 @@
 {
   "pois": [
     {
-      "localX": -2,
+      "localX": -1,
       "localY": 1,
-      "localZ": 0,
+      "localZ": 2,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
       "capacity": 1,
-      "interactionTargetLocalX": -1,
+      "interactionTargetLocalX": 0,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 0
+      "interactionTargetLocalZ": 1
     }
   ]
 }
