@@ -107,6 +107,15 @@ public final class TownRecord {
     @SerializedName("innVisitorPoolExcludedRoleIds")
     private LinkedHashSet<String> innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
 
+    /** Shared town treasury balance (gold coins); all treasury blocks in this town read/write this. */
+    @SerializedName("treasuryGoldCoinCount")
+    private long treasuryGoldCoinCount;
+
+    /** Game calendar epoch day when daily villager tax was last applied. */
+    @Nullable
+    @SerializedName("treasuryLastTaxEpochDay")
+    private Long treasuryLastTaxEpochDay;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -501,5 +510,30 @@ public final class TownRecord {
                 p.setHomeResidentEntityUuid(null);
             }
         }
+    }
+
+    public long getTreasuryGoldCoinCount() {
+        return Math.max(0L, treasuryGoldCoinCount);
+    }
+
+    public void setTreasuryGoldCoinCount(long count) {
+        this.treasuryGoldCoinCount = Math.max(0L, count);
+    }
+
+    public void addTreasuryGoldCoins(long delta) {
+        if (delta == 0L) {
+            return;
+        }
+        long next = getTreasuryGoldCoinCount() + delta;
+        this.treasuryGoldCoinCount = Math.max(0L, next);
+    }
+
+    @Nullable
+    public Long getTreasuryLastTaxEpochDay() {
+        return treasuryLastTaxEpochDay;
+    }
+
+    public void setTreasuryLastTaxEpochDay(@Nullable Long epochDay) {
+        this.treasuryLastTaxEpochDay = epochDay;
     }
 }

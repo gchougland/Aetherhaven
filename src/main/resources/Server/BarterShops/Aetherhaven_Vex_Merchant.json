@@ -1,0 +1,123 @@
+{
+  "DisplayNameKey": "server.barter.aetherhaven_vex.title",
+  "RefreshInterval": {
+    "Days": 1
+  },
+  "RestockHour": 6,
+  "TradeSlots": [
+    {
+      "Type": "Pool",
+      "SlotCount": 6,
+      "Trades": [
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Health_Small", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 12 }],
+          "Stock": [12, 22]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Health", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 30 }],
+          "Stock": [8, 16]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Signature_Small", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 14 }],
+          "Stock": [12, 22]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Signature", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 34 }],
+          "Stock": [8, 16]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Stamina_Small", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 12 }],
+          "Stock": [12, 22]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Potion_Stamina", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 30 }],
+          "Stock": [8, 16]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Food_Pie_Meat", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 35 }],
+          "Stock": [8, 14]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Food_Pie_Apple", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 28 }],
+          "Stock": [8, 14]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Topaz", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 48 }],
+          "Stock": [2, 4]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Zephyr", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 52 }],
+          "Stock": [2, 4]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Emerald", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 68 }],
+          "Stock": [2, 4]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Sapphire", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 72 }],
+          "Stock": [2, 4]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Ruby", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 88 }],
+          "Stock": [2, 3]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Diamond", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 125 }],
+          "Stock": [1, 3]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Rock_Gem_Voidstone", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 98 }],
+          "Stock": [2, 3]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Tool_Repair_Kit_Iron", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 36 }],
+          "Stock": [6, 12]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Tool_Fertilizer", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 40 }],
+          "Stock": [5, 10]
+        },
+        {
+          "Weight": 1,
+          "Output": { "ItemId": "Tool_Fertilizer_Crystal", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 70 }],
+          "Stock": [3, 6]
+        }
+      ]
+    }
+  ]
+}

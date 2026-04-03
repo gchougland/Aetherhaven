@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
+import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -70,6 +71,7 @@ public final class ConstructionCompleter {
         if (def != null) {
             PoiExtractor.registerForCompletedBuild(plugin, world, town, plotId, def.getId(), prefabAnchorWorld, prefabYaw);
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
+            stampTreasuryBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(def.getId())) {
                 MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
             }
@@ -191,6 +193,115 @@ public final class ConstructionCompleter {
             blockRef,
             ManagementBlock.getComponentType(),
             new ManagementBlock(plotId.toString(), town.getTownId().toString())
+        );
+    }
+
+    private static void stampTreasuryBlock(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw
+    ) {
+        int[] local = def.getTreasuryLocalPos();
+        if (local == null) {
+            return;
+        }
+        Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);
+        int wx = anchor.x + d.x;
+        int wy = anchor.y + d.y;
+        int wz = anchor.z + d.z;
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null) {
+            LOGGER.atWarning().log("Treasury block chunk not loaded at %s,%s,%s", wx, wy, wz);
+            return;
+        }
+
+        Integer treasuryY = null;
+        for (int dy = -4; dy <= 4; dy++) {
+            int y = wy + dy;
+            if (y < 0 || y >= 320) {
+                continue;
+            }
+            BlockType bt = world.getBlockType(wx, y, wz);
+            if (bt != null && AetherhavenConstants.TREASURY_BLOCK_TYPE_ID.equals(bt.getId())) {
+                treasuryY = y;
+                break;
+            }
+        }
+        if (treasuryY == null) {
+            LOGGER.atWarning().log(
+                "No %s in column %s,*,%s near y=%s (prefab must place treasury at treasuryLocalPos)",
+                AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
+                wx,
+                wz,
+                wy
+            );
+            return;
+        }
+
+        Vector3i cell = new Vector3i(wx, treasuryY, wz);
+        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+
+        boolean placed =
+            chunk.placeBlock(
+                wx,
+                treasuryY,
+                wz,
+                AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
+                rt.yaw(),
+                rt.pitch(),
+                rt.roll(),
+                MANAGEMENT_PLACE_SETTINGS
+            );
+        if (!placed) {
+            world.breakBlock(wx, treasuryY, wz, MANAGEMENT_PLACE_SETTINGS);
+            placed =
+                chunk.placeBlock(
+                    wx,
+                    treasuryY,
+                    wz,
+                    AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
+                    rt.yaw(),
+                    rt.pitch(),
+                    rt.roll(),
+                    MANAGEMENT_PLACE_SETTINGS
+                );
+        }
+        if (!placed) {
+            BlockTypeAssetMap<String, BlockType> typeMap = BlockType.getAssetMap();
+            String blockId = AetherhavenConstants.TREASURY_BLOCK_TYPE_ID;
+            int indexKey = typeMap.getIndex(blockId);
+            BlockType blockType = typeMap.getAsset(indexKey);
+            chunk.setBlock(wx, treasuryY, wz, indexKey, blockType, rotationIndex, 0, MANAGEMENT_PLACE_SETTINGS);
+        }
+
+        Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(wx, treasuryY, wz);
+        if (blockRef == null) {
+            for (int dy : new int[] {-1, 1, -2, 2}) {
+                int y = treasuryY + dy;
+                if (y < 0 || y >= 320) {
+                    continue;
+                }
+                Ref<ChunkStore> r = chunk.getBlockComponentEntity(wx, y, wz);
+                if (r != null) {
+                    blockRef = r;
+                    break;
+                }
+            }
+        }
+        if (blockRef == null) {
+            LOGGER.atWarning().log("No block entity after re-placing treasury at %s,%s,%s", wx, treasuryY, wz);
+            return;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        cs.putComponent(
+            blockRef,
+            TreasuryBlock.getComponentType(),
+            new TreasuryBlock(plotId.toString(), town.getTownId().toString())
         );
     }
 }

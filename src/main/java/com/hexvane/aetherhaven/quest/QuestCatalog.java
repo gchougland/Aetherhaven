@@ -15,7 +15,8 @@ public final class QuestCatalog {
         Map.entry(AetherhavenConstants.QUEST_HOUSE_INNKEEPER, "Corin's Home"),
         Map.entry(AetherhavenConstants.QUEST_HOUSE_MERCHANT, "Vex's Home"),
         Map.entry(AetherhavenConstants.QUEST_HOUSE_FARMER, "Irienne's Home"),
-        Map.entry(AetherhavenConstants.QUEST_HOUSE_BLACKSMITH, "Garren's Home")
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_BLACKSMITH, "Garren's Home"),
+        Map.entry(AetherhavenConstants.QUEST_BUILD_TOWN_HALL, "Build the Town Hall")
     );
 
     private static final Map<String, String> DESCRIPTIONS = Map.ofEntries(
@@ -50,6 +51,10 @@ public final class QuestCatalog {
         Map.entry(
             AetherhavenConstants.QUEST_HOUSE_BLACKSMITH,
             "Garren wants a cot that doesn't smell like another traveler's pack. Build the house and assign him as resident."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_BUILD_TOWN_HALL,
+            "Lyren asked you to raise a town hall: a place for records, planning, and the village treasury."
         )
     );
 
@@ -115,6 +120,14 @@ public final class QuestCatalog {
                 "Receive the house plot token from Garren.",
                 "Place and build the house prefab.",
                 "Assign Garren as resident on the house management block."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_BUILD_TOWN_HALL,
+            List.of(
+                "Receive the town hall plot token from Lyren.",
+                "Place and build the town hall prefab.",
+                "Tell Lyren when construction is complete."
             )
         )
     );

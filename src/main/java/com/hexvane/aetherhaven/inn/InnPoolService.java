@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.inn;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.TownTaxService;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -163,6 +164,7 @@ public final class InnPoolService {
                 );
             }
         }
+        TownTaxService.tickMorningTax(world, plugin, wtr, store);
     }
 
     /**

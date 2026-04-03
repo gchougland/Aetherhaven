@@ -1,0 +1,24 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Gold_Coin.name",
+    "Description": "server.items.Aetherhaven_Gold_Coin.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Deco_Scrap_Treasure.png",
+  "Model": "Blocks/Dungeons/Treasure_Object.blockymodel",
+  "Texture": "Items/Aetherhaven/Gold_Coin_Texture.png",
+  "MaxStack": 9999,
+  "PlayerAnimationsId": "Item",
+  "Categories": ["Items.Utility"],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "IconProperties": {
+    "Scale": 0.6,
+    "Rotation": [358, 265, 341],
+    "Translation": [-1, -10]
+  },
+  "Tags": {
+    "Type": ["Currency"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

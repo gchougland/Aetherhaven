@@ -42,7 +42,12 @@ public final class AetherhavenConstants {
     /** Shared residential prefab; completion is tracked per villager via house management assignment. */
     public static final String CONSTRUCTION_PLOT_HOUSE = "plot_house";
 
+    /** Town hall civic building; POIs in {@code Server/Buildings/town_hall_v1.json}. */
+    public static final String CONSTRUCTION_TOWN_HALL_V1 = "town_hall_v1";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
+
+    public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
 
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
@@ -70,11 +75,21 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_TOKEN_HOUSE = "Aetherhaven_Plot_Token_House";
 
+    public static final String PLOT_TOKEN_TOWN_HALL = "Aetherhaven_Plot_Token_Town_Hall";
+
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 
     public static final String ITEM_QUEST_JOURNAL = "Aetherhaven_Quest_Journal";
 
     public static final String MANAGEMENT_BLOCK_TYPE_ID = "Aetherhaven_Management_Block";
+
+    /** Town treasury chest; visuals match vanilla {@code Furniture_Dungeon_Chest_Epic}; balance stored on the town record. */
+    public static final String TREASURY_BLOCK_TYPE_ID = "Aetherhaven_Treasury";
+
+    /** Currency item; visuals aligned with vanilla {@code Deco_Treasure}. */
+    public static final String ITEM_GOLD_COIN = "Aetherhaven_Gold_Coin";
+
+    public static final String PAGE_TREASURY = "AetherhavenTreasury";
 
     public static final String ELDER_NPC_ROLE_ID = "Aetherhaven_Elder_Lyren";
 

@@ -273,7 +273,6 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (world != null && shop != null && !shop.isBlank()) {
             String sid = shop.trim();
             world.execute(() -> {
-                close();
                 Ref<EntityStore> pref = playerRef.getReference();
                 if (pref == null || !pref.isValid()) {
                     return;
@@ -282,6 +281,9 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                 Player player = st.getComponent(pref, Player.getComponentType());
                 PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
                 if (player != null && pr != null) {
+                    // Do not call close() before openCustomPage: setPage(None) increments
+                    // PageManager's custom-page ack counter, and openCustomPage increments again,
+                    // leaving Data events (trade clicks) ignored until multiple client ACKs arrive.
                     player.getPageManager().openCustomPage(pref, st, new BarterPage(pr, sid));
                 }
             });

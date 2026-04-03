@@ -1,0 +1,16 @@
+{
+  "pois": [
+    {
+      "localX": -4,
+      "localY": 1,
+      "localZ": 0,
+      "blockTypeId": "Aetherhaven_Town_Planning_Desk",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": -5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1
+    }
+  ]
+}

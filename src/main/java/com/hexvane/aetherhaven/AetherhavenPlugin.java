@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
@@ -31,6 +32,7 @@ import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
+import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
@@ -38,6 +40,7 @@ import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
+import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -148,6 +151,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PlotSignBlock.register(this.getChunkStoreRegistry());
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
+        TreasuryBlock.register(this.getChunkStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
@@ -179,6 +183,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
 
         this.getEventRegistry()
@@ -227,6 +232,26 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 Ref<ChunkStore> blockRef = target.blockRef();
                 Vector3i blockWorld = target.blockWorldPos();
                 return new PlotConstructionPage(playerRef, blockRef, blockWorld, true);
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            TreasuryPage.class,
+            AetherhavenConstants.PAGE_TREASURY,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, TreasuryBlock.getComponentType());
+                if (target == null) {
+                    return null;
+                }
+                Ref<ChunkStore> blockRef = target.blockRef();
+                return new TreasuryPage(playerRef, blockRef);
             }
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(

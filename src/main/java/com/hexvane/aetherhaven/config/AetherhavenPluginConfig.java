@@ -87,6 +87,16 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Logs schedule segment resolution and preferred plot updates.")
         .add()
+        .append(
+            new KeyedCodec<>("TreasuryMaxGoldTaxPerVillagerPerDay", Codec.INTEGER),
+            (o, v) -> o.treasuryMaxGoldTaxPerVillagerPerDay = v,
+            o -> o.treasuryMaxGoldTaxPerVillagerPerDay
+        )
+        .documentation(
+            "Maximum gold coins collected per resident villager per in-game morning when town hall exists; "
+                + "actual tax scales with average villager needs (hunger, energy, fun)."
+        )
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -104,6 +114,9 @@ public final class AetherhavenPluginConfig {
 
     private boolean villagerScheduleEnabled = true;
     private boolean villagerScheduleDebugLog = false;
+
+    /** Max gold coins per resident per morning tax tick (needs-scaled). */
+    private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -161,6 +174,11 @@ public final class AetherhavenPluginConfig {
 
     public boolean isVillagerScheduleDebugLog() {
         return villagerScheduleDebugLog;
+    }
+
+    public int getTreasuryMaxGoldTaxPerVillagerPerDay() {
+        int v = treasuryMaxGoldTaxPerVillagerPerDay;
+        return v > 0 ? v : 10;
     }
 
     @Nonnull

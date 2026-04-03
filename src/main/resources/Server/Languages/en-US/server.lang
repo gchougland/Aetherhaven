@@ -82,6 +82,17 @@ items.Aetherhaven_Plot_Token_Park.description=Required to place the park footpri
 items.Aetherhaven_Plot_Token_House.name=House plot token
 items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
 
+items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
+items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
+
+items.Aetherhaven_Gold_Coin.name=Gold coin
+items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
+
+barter.aetherhaven_vex.title=Vex's daily stock
+
+items.Aetherhaven_Treasury.name=Town treasury
+items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).
+
 items.Aetherhaven_Quest_Journal.name=Town quest journal
 items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.
 
@@ -104,6 +115,11 @@ npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.dissolve=Dissolve town
 aetherhaven.ui.chartertown.dissolveHint=Disabled until a later milestone.
+
+aetherhaven.ui.treasury.title=Town treasury
+aetherhaven.ui.treasury.deposit=Deposit all gold coins
+aetherhaven.ui.treasury.withdraw=Withdraw gold coins
+aetherhaven.ui.treasury.hint=Morning taxes from villagers (by their needs) add coins here. Inn visitors do not pay tax.
 
 aetherhaven.ui.plotplacement.title=Plot placement
 aetherhaven.ui.plotplacement.plotType=Building

@@ -72,6 +72,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[][] visitorSpawnLocals;
 
+    /** Prefab-local position of the treasury block (town-shared gold storage); optional. */
+    @SerializedName("treasuryLocalPos")
+    @Nullable
+    private int[] treasuryLocalPos;
+
     public String getId() {
         return id;
     }
@@ -161,5 +166,11 @@ public final class ConstructionDefinition {
     @Nullable
     public int[][] getVisitorSpawnLocals() {
         return visitorSpawnLocals;
+    }
+
+    /** @return prefab-local x,y,z of treasury block, or null */
+    @Nullable
+    public int[] getTreasuryLocalPos() {
+        return treasuryLocalPos != null && treasuryLocalPos.length == 3 ? treasuryLocalPos : null;
     }
 }

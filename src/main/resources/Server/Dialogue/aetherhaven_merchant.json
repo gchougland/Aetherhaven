@@ -7,6 +7,12 @@
       "text": "Vex Sunderlane. I deal in salvage, barter, and whatever still has a price. There aren't other towns to run to, so if your inn has a hearth, you've already got the best amenity left on Orbis.",
       "choices": [
         {
+          "text": "Browse your wares (gold coins).",
+          "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" },
+          "actions": [{ "type": "open_barter_shop", "shop": "Aetherhaven_Vex_Merchant" }],
+          "next": null
+        },
+        {
           "text": "About a home in town...",
           "condition": {
             "type": "and",

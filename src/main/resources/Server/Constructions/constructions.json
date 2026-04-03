@@ -76,6 +76,22 @@
         { "itemId": "Wood_Softwood_Planks", "count": 12 },
         { "itemId": "Rock_Stone_Cobble", "count": 8 }
       ]
+    },
+    {
+      "id": "town_hall_v1",
+      "displayName": "Town hall",
+      "description": "A civic hall with a town records shelf, planning desk, and treasury. Adjust plot anchor in placement if the footprint misaligns.",
+      "prefabPath": "Townhall.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
+      "plotAnchorOffset": [9, 0, 7],
+      "managementBlockLocalPos": [-7, 2, 3],
+      "treasuryLocalPos": [7, 1, 2],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 24 },
+        { "itemId": "Rock_Stone_Cobble", "count": 16 }
+      ]
     }
   ]
 }
