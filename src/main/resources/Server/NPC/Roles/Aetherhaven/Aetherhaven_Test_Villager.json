@@ -58,7 +58,7 @@
     {
       "Instructions": [
         {
-          "$Comment": "Main NPC states cannot live in Components; inline so AetherhavenAutonomy registers for StateTransitions.",
+          "$Comment": "Main state sensor stays in role; travel motion is Component_Instruction_Aetherhaven_Autonomy_Poi_Travel (Seek + leash).",
           "Sensor": {
             "Type": "State",
             "State": "AetherhavenAutonomy",
@@ -66,8 +66,7 @@
           },
           "Instructions": [
             {
-              "Sensor": { "Type": "Any" },
-              "BodyMotion": { "Type": "Nothing" }
+              "Reference": "Component_Instruction_Aetherhaven_Autonomy_Poi_Travel"
             }
           ]
         },

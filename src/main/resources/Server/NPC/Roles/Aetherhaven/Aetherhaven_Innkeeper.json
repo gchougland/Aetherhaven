@@ -66,18 +66,13 @@
     {
       "Instructions": [
         {
-          "$Comment": "Main NPC states cannot be referenced from Components; keep this block in the role so StateTransitions and sensors register AetherhavenAutonomy.",
+          "$Comment": "Main state sensor in role; travel via Component_Instruction_Aetherhaven_Autonomy_Poi_Travel.",
           "Sensor": {
             "Type": "State",
             "State": "AetherhavenAutonomy",
             "IgnoreMissingSetState": true
           },
-          "Instructions": [
-            {
-              "Sensor": { "Type": "Any" },
-              "BodyMotion": { "Type": "Nothing" }
-            }
-          ]
+          "Instructions": [{ "Reference": "Component_Instruction_Aetherhaven_Autonomy_Poi_Travel" }]
         },
         {
           "Sensor": { "Type": "State", "State": "Idle" },

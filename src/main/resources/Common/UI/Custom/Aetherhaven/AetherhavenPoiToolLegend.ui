@@ -21,5 +21,9 @@ $C.@PageOverlay {
       Text: %server.aetherhaven.poiTool.legendSecondary;
       Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
     }
+    Label #Line3 {
+      Text: %server.aetherhaven.poiTool.legendUse;
+      Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
+    }
   }
 }

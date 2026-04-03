@@ -1,0 +1,29 @@
+{
+  "Type": "Component",
+  "Class": "Instruction",
+  "$Comment": "POI travel: Seek toward NPCEntity leash point (set by Java) using vanilla pathfinder. When within Leash Range, fall through to Nothing so Java can start USE. Parent role must wrap with State AetherhavenAutonomy.",
+  "Content": {
+    "Instructions": [
+      {
+        "Sensor": { "Type": "Leash", "Range": 1.5 },
+        "BodyMotion": {
+          "Type": "Seek",
+          "StopDistance": 1.2,
+          "SlowDownDistance": 5,
+          "AbortDistance": 256,
+          "UsePathfinder": true,
+          "UseSteering": true,
+          "RelativeSpeed": 0.85,
+          "ThrottleDelayRange": [0.5, 1.5],
+          "ThrottleIgnoreCount": 2,
+          "MaxPathLength": 400,
+          "MaxTotalNodes": 1200
+        }
+      },
+      {
+        "Sensor": { "Type": "Any" },
+        "BodyMotion": { "Type": "Nothing" }
+      }
+    ]
+  }
+}

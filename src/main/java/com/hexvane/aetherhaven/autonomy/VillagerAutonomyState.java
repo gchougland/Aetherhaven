@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,9 +34,19 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("NextPickMs", Codec.LONG), (v, x) -> v.nextDecisionEpochMs = x, v -> v.nextDecisionEpochMs)
             .add()
-            .append(new KeyedCodec<>("TravelPath", Codec.STRING), (v, x) -> v.travelPath = x != null ? x : "", v -> v.travelPath)
+            .append(
+                new KeyedCodec<>("PathFailureReason", Codec.STRING),
+                (v, x) -> v.pathFailureReason = x != null ? x : "",
+                v -> v.pathFailureReason
+            )
             .add()
-            .append(new KeyedCodec<>("TravelPathIdx", Codec.INTEGER), (v, x) -> v.travelPathIndex = x, v -> v.travelPathIndex)
+            .append(new KeyedCodec<>("TravelStuckTicks", Codec.INTEGER), (v, x) -> v.travelStuckTicks = x, v -> v.travelStuckTicks)
+            .add()
+            .append(
+                new KeyedCodec<>("PendingDoors", Codec.STRING),
+                (v, x) -> v.decodePendingDoors(x),
+                v -> v.encodePendingDoors()
+            )
             .add()
             .build();
 
@@ -68,8 +79,11 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
     private long phaseEndEpochMs;
     private long nextDecisionEpochMs;
     @Nonnull
-    private String travelPath = "";
-    private int travelPathIndex;
+    private String pathFailureReason = "";
+    private int travelStuckTicks;
+    /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
+    @Nonnull
+    private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
 
     public VillagerAutonomyState() {}
 
@@ -121,24 +135,84 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         this.targetY = y;
         this.targetZ = z;
         this.targetPoiId = poiId.toString();
+        clearPendingDoorClose();
     }
 
-    public void setTravelPath(@Nonnull String encodedWaypoints) {
-        this.travelPath = encodedWaypoints;
-        this.travelPathIndex = 0;
+    /** Doors we opened and should close once the NPC is past them (toward the leash). */
+    @Nonnull
+    ArrayList<int[]> getPendingOpenDoorsMutable() {
+        return pendingOpenDoors;
+    }
+
+    public void addPendingDoorOpened(int x, int y, int z) {
+        for (int[] d : pendingOpenDoors) {
+            if (d[0] == x && d[1] == y && d[2] == z) {
+                return;
+            }
+        }
+        pendingOpenDoors.add(new int[] { x, y, z });
+    }
+
+    public void clearPendingDoorClose() {
+        pendingOpenDoors.clear();
+    }
+
+    private void decodePendingDoors(@Nullable String raw) {
+        pendingOpenDoors.clear();
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split(";")) {
+            part = part.trim();
+            if (part.isEmpty()) {
+                continue;
+            }
+            String[] xyz = part.split(",");
+            if (xyz.length != 3) {
+                continue;
+            }
+            try {
+                int bx = Integer.parseInt(xyz[0].trim());
+                int by = Integer.parseInt(xyz[1].trim());
+                int bz = Integer.parseInt(xyz[2].trim());
+                pendingOpenDoors.add(new int[] { bx, by, bz });
+            } catch (NumberFormatException ignored) {
+                // skip malformed segment
+            }
+        }
     }
 
     @Nonnull
-    public String getTravelPath() {
-        return travelPath;
+    private String encodePendingDoors() {
+        if (pendingOpenDoors.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < pendingOpenDoors.size(); i++) {
+            int[] d = pendingOpenDoors.get(i);
+            if (i > 0) {
+                sb.append(';');
+            }
+            sb.append(d[0]).append(',').append(d[1]).append(',').append(d[2]);
+        }
+        return sb.toString();
     }
 
-    public int getTravelPathIndex() {
-        return travelPathIndex;
+    @Nonnull
+    public String getPathFailureReason() {
+        return pathFailureReason;
     }
 
-    public void setTravelPathIndex(int travelPathIndex) {
-        this.travelPathIndex = travelPathIndex;
+    public void setPathFailureReason(@Nonnull String pathFailureReason) {
+        this.pathFailureReason = pathFailureReason;
+    }
+
+    public int getTravelStuckTicks() {
+        return travelStuckTicks;
+    }
+
+    public void setTravelStuckTicks(int travelStuckTicks) {
+        this.travelStuckTicks = travelStuckTicks;
     }
 
     public long getPhaseEndEpochMs() {
@@ -168,8 +242,11 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         c.targetZ = targetZ;
         c.phaseEndEpochMs = phaseEndEpochMs;
         c.nextDecisionEpochMs = nextDecisionEpochMs;
-        c.travelPath = travelPath;
-        c.travelPathIndex = travelPathIndex;
+        c.pathFailureReason = pathFailureReason;
+        c.travelStuckTicks = travelStuckTicks;
+        for (int[] d : pendingOpenDoors) {
+            c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });
+        }
         return c;
     }
 }

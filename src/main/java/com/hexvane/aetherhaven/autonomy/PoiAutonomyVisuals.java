@@ -80,7 +80,23 @@ public final class PoiAutonomyVisuals {
                 }
                 return;
             }
-            sleepPoiFallbackPose(npcRef, store, commandBuffer, poi);
+            World world = store.getExternalData().getWorld();
+            TransformComponent tcSleep = store.getComponent(npcRef, TransformComponent.getComponentType());
+            if (tcSleep != null
+                && (poi.hasInteractionTarget()
+                    || VillagerBlockUtil.canNpcMountBlockPoi(
+                        world,
+                        tcSleep.getPosition().x,
+                        tcSleep.getPosition().y,
+                        tcSleep.getPosition().z,
+                        poi.getX(),
+                        poi.getY(),
+                        poi.getZ()
+                    ))) {
+                sleepPoiFallbackPose(npcRef, store, commandBuffer, poi);
+            } else {
+                faceTowardBlock(npcRef, store, commandBuffer, poi);
+            }
         } else {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
         }
@@ -171,6 +187,16 @@ public final class PoiAutonomyVisuals {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        World world = store.getExternalData().getWorld();
+        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            return false;
+        }
+        Vector3d p = tc.getPosition();
+        if (!poi.hasInteractionTarget()
+            && !VillagerBlockUtil.canNpcMountBlockPoi(world, p.x, p.y, p.z, poi.getX(), poi.getY(), poi.getZ())) {
+            return false;
+        }
         try {
             Vector3i block = new Vector3i(poi.getX(), poi.getY(), poi.getZ());
             Vector3f hit = mountPickHit(store, npcRef, poi);
@@ -227,7 +253,7 @@ public final class PoiAutonomyVisuals {
             return;
         }
         World world = store.getExternalData().getWorld();
-        int rotIdx = VillagerPoiPathfinder.blockRotationIndexNoLoad(world, poi.getX(), poi.getY(), poi.getZ());
+        int rotIdx = VillagerBlockUtil.blockRotationIndexNoLoad(world, poi.getX(), poi.getY(), poi.getZ());
         RotationTuple rt = rotationTupleOrNone(rotIdx);
         Vector3d forward = rt.rotatedVector(new Vector3d(0, 0, 1));
         tc.getRotation().setYaw(bodyYawAlongMove(forward.x, forward.z));

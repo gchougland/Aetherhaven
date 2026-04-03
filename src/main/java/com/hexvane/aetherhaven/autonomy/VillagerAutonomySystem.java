@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
+import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -18,38 +19,40 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.movement.NavState;
+import com.hypixel.hytale.server.npc.movement.controllers.MotionController;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Orchestrates town-villager POI autonomy in phases. Scoring, registry access, and transform stepping stay here;
- * facing/Status playback for {@code USE} is {@link PoiAutonomyVisuals}; horizontal motion is {@link VillagerPoiMovement}.
+ * POI autonomy: idle pick + leash target, travel via vanilla {@code Seek} (role JSON), use + visuals.
  * Role {@code StateTransitions} clear Status when leaving {@link AetherhavenConstants#NPC_STATE_AUTONOMY_POI} for Idle.
  */
 public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStore> {
-    private static final double REACH_SQ = 1.45 * 1.45;
-    private static final double MOVE_BLOCKS_PER_SEC = 3.2;
-
+    private static final double ARRIVE_HORIZONTAL_SQ = 1.55 * 1.55;
+    /** Tighter leash arrival for SIT/SLEEP when there is no interaction target (leash is the POI block). */
+    private static final double MOUNT_ARRIVE_HORIZONTAL_SQ = 0.88 * 0.88;
     /**
-     * When no player has this chunk in {@link com.hypixel.hytale.server.core.modules.entity.player.ChunkTracker.ChunkVisibility#HOT},
-     * end block-seat POI use and remove {@link MountedComponent} while the entity store is still ticking.
-     * Otherwise chunk stop/unload can remove the NPC while the chunk store is processing; vanilla
-     * {@code MountSystems.handleMountedRemoval} then calls {@code chunkStore.removeComponent} and trips
-     * {@code Store#assertWriteProcessing}.
+     * Horizontal distance to the entry leash (interaction target) that counts as "reached the POI entry". Seek often
+     * stops 1–3 blocks short of the leash; we do not require walking to the bed after that when an interaction target
+     * is set.
      */
+    private static final double POI_ENTRY_ARRIVE_HORIZONTAL_SQ = 3.5 * 3.5;
+    private static final int BLOCKED_FAIL_TICKS = 100;
+    private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
+
     static void onUnloadSafetyDismount(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -72,7 +75,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
             autonomy.setTargetPoiUuid(null);
-            autonomy.setTravelPath("");
+            autonomy.setPathFailureReason("");
+            autonomy.setTravelStuckTicks(0);
+            autonomy.clearPendingDoorClose();
             autonomy.setNextDecisionEpochMs(now + 2500L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             if (npc != null) {
@@ -119,10 +124,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (npc == null || npc.getRole() == null) {
             return;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
-        if (stateName.contains("Interaction")) {
-            return;
-        }
 
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         VillagerNeeds needs = archetypeChunk.getComponent(index, VillagerNeeds.getComponentType());
@@ -133,7 +134,16 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         long now = resolveNowMs(store);
         VillagerAutonomyState autonomy = archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());
         if (autonomy == null) {
-            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), VillagerAutonomyState.fresh(now));
+            autonomy = VillagerAutonomyState.fresh(now);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, autonomy);
+            return;
+        }
+
+        applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, autonomy);
+
+        String stateName = npc.getRole().getStateSupport().getStateName();
+        if (stateName.contains("Interaction")) {
             return;
         }
 
@@ -143,7 +153,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
 
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
-            case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, needs, autonomy, dt, now);
+            case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
             default -> tickIdle(ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now);
         }
     }
@@ -175,23 +185,40 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
-        double tx = pick.getX() + 0.5;
-        double tz = pick.getZ() + 0.5;
-        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
-        long salt =
-            (uuidComp != null ? uuidComp.getUuid().getLeastSignificantBits() : 0L) ^ pick.getId().getLeastSignificantBits();
-        Random rnd = new Random(salt);
-        tx += (rnd.nextDouble() - 0.5) * 0.95;
-        tz += (rnd.nextDouble() - 0.5) * 0.95;
-        autonomy.setTravelTarget(tx, pick.getY(), tz, pick.getId());
-        if (tc != null) {
-            String path = VillagerPoiPathfinder.findPath(world, tc.getPosition(), pick);
-            autonomy.setTravelPath(path != null ? path : "");
+        double tx;
+        double tz;
+        double leashY;
+        if (pick.hasInteractionTarget()) {
+            Double tpx = pick.getInteractionTargetX();
+            Double tpy = pick.getInteractionTargetY();
+            Double tpz = pick.getInteractionTargetZ();
+            if (tpx == null || tpy == null || tpz == null) {
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                autonomy.setNextDecisionEpochMs(now + 4000L);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                return;
+            }
+            tx = tpx;
+            tz = tpz;
+            leashY = tpy;
         } else {
-            autonomy.setTravelPath("");
+            int bx = pick.getX();
+            int bz = pick.getZ();
+            tx = bx + 0.5;
+            tz = bz + 0.5;
+            int standY =
+                tc != null
+                    ? VillagerBlockUtil.findStandY(world, bx, bz, (int) Math.floor(tc.getPosition().y) + 3)
+                    : Integer.MIN_VALUE;
+            leashY = standY != Integer.MIN_VALUE ? standY + 0.02 : pick.getY();
         }
+        autonomy.setTravelTarget(tx, leashY, tz, pick.getId());
+        autonomy.setPathFailureReason("");
+        autonomy.setTravelStuckTicks(0);
+        npc.setLeashPoint(new Vector3d(tx, leashY, tz));
         autonomy.setNextDecisionEpochMs(now + 120_000L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         applyAutonomyRoleState(ref, npc, commandBuffer);
     }
 
@@ -201,81 +228,132 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull NPCEntity npc,
         @Nonnull PoiRegistry reg,
-        @Nonnull VillagerNeeds needs,
         @Nonnull VillagerAutonomyState autonomy,
-        float dt,
         long now
     ) {
         UUID poiId = autonomy.getTargetPoiUuid();
-        PoiEntry poi = poiId != null ? reg.get(poiId) : null;
-        if (poi == null) {
+        if (poiId == null) {
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
-            autonomy.setTravelPath("");
+            autonomy.setPathFailureReason("");
+            autonomy.setTravelStuckTicks(0);
             autonomy.setNextDecisionEpochMs(now + 2000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             clearAutonomyRoleState(ref, npc, commandBuffer);
             return;
         }
 
-        if (store.getComponent(ref, TransformComponent.getComponentType()) == null) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
             return;
         }
 
+        Vector3d pos = tc.getPosition();
+        Vector3d leash = npc.getLeashPoint();
+        double dx = pos.x - leash.x;
+        double dz = pos.z - leash.z;
+        double horizSq = dx * dx + dz * dz;
+
+        PoiEntry poiEarly = reg.get(poiId);
+        double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
+        boolean mountKind =
+            poiEarly != null
+                && (poiEarly.getInteractionKind() == PoiInteractionKind.SIT
+                    || poiEarly.getInteractionKind() == PoiInteractionKind.SLEEP);
+        if (mountKind && poiEarly != null && poiEarly.hasInteractionTarget()) {
+            maxArriveSq = POI_ENTRY_ARRIVE_HORIZONTAL_SQ;
+        } else if (mountKind) {
+            maxArriveSq = MOUNT_ARRIVE_HORIZONTAL_SQ;
+        }
+
         World world = store.getExternalData().getWorld();
-        String tp = autonomy.getTravelPath();
-        int wpCount = waypointCount(tp);
-        int wpIdx = autonomy.getTravelPathIndex();
-        double aimX = autonomy.getTargetX();
-        double aimZ = autonomy.getTargetZ();
-        double aimY = autonomy.getTargetY();
-        if (wpCount > 0 && wpIdx < wpCount) {
-            double[] xz = new double[2];
-            if (parseWaypointCenter(tp, wpIdx, xz)) {
-                aimX = xz[0];
-                aimZ = xz[1];
-                int bx = (int) Math.floor(aimX);
-                int bz = (int) Math.floor(aimZ);
-                int sy = VillagerPoiPathfinder.findStandY(world, bx, bz, (int) Math.floor(aimY) + 3);
-                if (sy != Integer.MIN_VALUE) {
-                    aimY = sy;
-                }
-            }
-        }
-        double reachSq = wpCount > 0 && wpIdx < wpCount ? 0.42 * 0.42 : REACH_SQ;
-        boolean arrived = VillagerPoiMovement.stepHorizontalToward(
-            ref,
-            store,
-            commandBuffer,
-            aimX,
-            aimY,
-            aimZ,
+
+        VillagerDoorUtil.closePendingDoorsWhenPassed(world, pos, leash, autonomy.getPendingOpenDoorsMutable());
+        VillagerDoorUtil.tryOpenDoorsTowardLeash(
             world,
-            MOVE_BLOCKS_PER_SEC,
-            dt,
-            reachSq
+            pos,
+            leash,
+            (x, y, z) -> autonomy.addPendingDoorOpened(x, y, z)
         );
-        if (!arrived) {
-            npc.playAnimation(ref, AnimationSlot.Movement, "Walk", store);
+
+        boolean mountLimbo =
+            mountKind
+                && horizSq <= maxArriveSq
+                && poiEarly != null
+                && !poiEarly.hasInteractionTarget()
+                && !VillagerBlockUtil.canNpcMountBlockPoi(world, pos.x, pos.y, pos.z, poiEarly.getX(), poiEarly.getY(), poiEarly.getZ());
+
+        NavState nav = NavState.INIT;
+        MotionController mc = npc.getRole() != null ? npc.getRole().getActiveMotionController() : null;
+        if (mc != null) {
+            nav = mc.getNavState();
         }
+
+        if (nav == NavState.ABORTED) {
+            failTravel(autonomy, now, "NO_PATH", commandBuffer, ref, npc);
+            return;
+        }
+
+        if (mountLimbo) {
+            autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
+            if (autonomy.getTravelStuckTicks() >= MOUNT_UNREACHABLE_FAIL_TICKS) {
+                failTravel(autonomy, now, "MOUNT_UNREACHABLE", commandBuffer, ref, npc);
+                return;
+            }
+        } else if (nav == NavState.BLOCKED) {
+            autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
+            if (autonomy.getTravelStuckTicks() >= BLOCKED_FAIL_TICKS) {
+                failTravel(autonomy, now, "BLOCKED", commandBuffer, ref, npc);
+                return;
+            }
+        } else if (nav == NavState.PROGRESSING || nav == NavState.INIT || nav == NavState.DEFER) {
+            autonomy.setTravelStuckTicks(0);
+        }
+
+        boolean arrived = horizSq <= maxArriveSq;
         if (arrived) {
-            if (wpCount > 0 && wpIdx < wpCount) {
-                autonomy.setTravelPathIndex(wpIdx + 1);
+            PoiEntry poi = poiEarly;
+            if (poi == null) {
+                failTravel(autonomy, now, "POI_GONE", commandBuffer, ref, npc);
+                return;
+            }
+            if (mountKind
+                && !poi.hasInteractionTarget()
+                && !VillagerBlockUtil.canNpcMountBlockPoi(world, pos.x, pos.y, pos.z, poi.getX(), poi.getY(), poi.getZ())) {
                 commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
                 applyAutonomyRoleState(ref, npc, commandBuffer);
                 return;
             }
+            autonomy.setTravelStuckTicks(0);
             npc.playAnimation(ref, AnimationSlot.Movement, null, store);
             float dur = PoiEffectTable.useDurationSeconds(poi.getInteractionKind());
             autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
             autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
-            autonomy.setTravelPath("");
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return;
         }
 
+        commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private static void failTravel(
+        @Nonnull VillagerAutonomyState autonomy,
+        long now,
+        @Nonnull String reason,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc
+    ) {
+        autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+        autonomy.setTargetPoiUuid(null);
+        autonomy.setPathFailureReason(reason);
+        autonomy.setTravelStuckTicks(0);
+        autonomy.clearPendingDoorClose();
+        autonomy.setNextDecisionEpochMs(now + 5000L);
+        commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        clearAutonomyRoleState(ref, npc, commandBuffer);
     }
 
     private static void tickUse(
@@ -301,43 +379,55 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
         autonomy.setTargetPoiUuid(null);
-        autonomy.setTravelPath("");
+        autonomy.setPathFailureReason("");
+        autonomy.setTravelStuckTicks(0);
         autonomy.setNextDecisionEpochMs(now + 2500L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
     }
 
-    private static int waypointCount(@Nonnull String tp) {
-        if (tp.isBlank()) {
-            return 0;
+    private static void applyAutonomyDebugOverlay(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull VillagerAutonomyState autonomy
+    ) {
+        if (npc.getRole() == null) {
+            return;
         }
-        int c = 0;
-        for (String s : tp.split(";")) {
-            if (!s.isBlank()) {
-                c++;
-            }
+        boolean showAhDebug = store.getComponent(ref, VillagerAutonomyDebugTag.getComponentType()) != null;
+        if (!showAhDebug) {
+            VillagerAutonomyDebug.clearAutonomyDebugForNpc(ref, commandBuffer, npc);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            return;
         }
-        return c;
-    }
-
-    private static boolean parseWaypointCenter(@Nonnull String tp, int logicalIndex, @Nonnull double[] outXZ) {
-        int i = 0;
-        for (String seg : tp.split(";")) {
-            if (seg.isBlank()) {
-                continue;
-            }
-            if (i == logicalIndex) {
-                String[] xz = seg.split(",");
-                if (xz.length < 2) {
-                    return false;
-                }
-                outXZ[0] = Integer.parseInt(xz[0].trim()) + 0.5;
-                outXZ[1] = Integer.parseInt(xz[1].trim()) + 0.5;
-                return true;
-            }
-            i++;
+        VillagerAutonomyDebug.ensureAutonomyDebugRoleFlags(npc);
+        StringBuilder sb = new StringBuilder();
+        sb.append("AH ");
+        sb.append(switch (autonomy.getPhase()) {
+            case VillagerAutonomyState.PHASE_TRAVEL -> "TR";
+            case VillagerAutonomyState.PHASE_USE -> "USE";
+            default -> "IDLE";
+        });
+        UUID tgtPoi = autonomy.getTargetPoiUuid();
+        if (tgtPoi != null) {
+            String u = tgtPoi.toString();
+            sb.append(" POI:").append(u, 0, Math.min(8, u.length()));
         }
-        return false;
+        if (!autonomy.getPathFailureReason().isEmpty()) {
+            sb.append(" FAIL:").append(autonomy.getPathFailureReason());
+        }
+        Vector3d leash = npc.getLeashPoint();
+        sb.append(" L:").append((int) leash.x).append(',').append((int) leash.z);
+        NavState nav = NavState.INIT;
+        MotionController mc = npc.getRole().getActiveMotionController();
+        if (mc != null) {
+            nav = mc.getNavState();
+        }
+        sb.append(" NAV:").append(nav);
+        npc.getRole().getDebugSupport().setDisplayCustomString(sb.toString());
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
     private static long resolveNowMs(@Nonnull Store<EntityStore> store) {

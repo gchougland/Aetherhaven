@@ -28,8 +28,10 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.entity.nameplate.Nameplate;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -247,66 +249,140 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
             return;
         }
         Model markerModel = Model.createUnitScaleModel(markerAsset);
+        Model anchorModel = Model.createScaledModel(markerAsset, NAMEPLATE_ANCHOR_MODEL_SCALE);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        Vector3f rot = new Vector3f(0.0F, 0.0F, 0.0F);
         for (PoiEntry poi : nearby) {
-            String text = buildLabelText(poi, tm);
             Vector3d markerPos = new Vector3d(
                 poi.getX() + POI_BLOCK_CENTER,
                 poi.getY() + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
                 poi.getZ() + POI_BLOCK_CENTER
             );
-            Vector3f rot = new Vector3f(0.0F, 0.0F, 0.0F);
-
-            PoiDebugLabelEntity markerEnt = new PoiDebugLabelEntity(world);
-            markerEnt.setOwnerPlayerUuid(ownerUuid);
-            PoiDebugLabelEntity markerSpawned = addPoiDebugLabelEntity(world, markerEnt, markerPos, rot);
-            if (markerSpawned == null) {
-                continue;
-            }
-            Ref<EntityStore> markerRef = markerSpawned.getReference();
-            if (markerRef == null || !markerRef.isValid()) {
-                continue;
-            }
-            store.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(markerModel));
-            store.addComponent(markerRef, Intangible.getComponentType(), Intangible.INSTANCE);
-            UUIDComponent markerUc = store.getComponent(markerRef, UUIDComponent.getComponentType());
-            if (markerUc != null) {
-                state.getDebugLabelEntityUuids().add(markerUc.getUuid());
-            }
-
-            Vector3d nameplatePos = new Vector3d(
-                markerPos.getX(),
-                markerPos.getY() + NAMEPLATE_PIVOT_OFFSET_Y,
-                markerPos.getZ()
+            spawnDebugMarkerPair(
+                world,
+                ownerUuid,
+                store,
+                state,
+                markerPos,
+                rot,
+                buildLabelText(poi, tm),
+                markerModel,
+                anchorModel
             );
-            PoiDebugLabelEntity nameplateEnt = new PoiDebugLabelEntity(world);
-            nameplateEnt.setOwnerPlayerUuid(ownerUuid);
-            PoiDebugLabelEntity nameplateSpawned = addPoiDebugLabelEntity(world, nameplateEnt, nameplatePos, rot);
-            if (nameplateSpawned == null) {
-                store.removeEntity(markerRef, RemoveReason.REMOVE);
-                if (markerUc != null) {
-                    state.getDebugLabelEntityUuids().remove(markerUc.getUuid());
+            if (poi.hasInteractionTarget()) {
+                Double tx = poi.getInteractionTargetX();
+                Double ty = poi.getInteractionTargetY();
+                Double tz = poi.getInteractionTargetZ();
+                if (tx != null && ty != null && tz != null) {
+                    Vector3d targetMarkerPos = new Vector3d(
+                        tx,
+                        ty + POI_BLOCK_CENTER + MARKER_MODEL_Y_OFFSET,
+                        tz
+                    );
+                    spawnDebugMarkerPair(
+                        world,
+                        ownerUuid,
+                        store,
+                        state,
+                        targetMarkerPos,
+                        rot,
+                        buildInteractionTargetLabelText(poi, tm, tx, ty, tz),
+                        markerModel,
+                        anchorModel
+                    );
                 }
-                continue;
             }
-            Ref<EntityStore> nameplateRef = nameplateSpawned.getReference();
-            if (nameplateRef == null || !nameplateRef.isValid()) {
-                store.removeEntity(markerRef, RemoveReason.REMOVE);
-                if (markerUc != null) {
-                    state.getDebugLabelEntityUuids().remove(markerUc.getUuid());
+        }
+        PlayerRef playerRefComp = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (playerRefComp != null) {
+            for (PoiEntry poi : nearby) {
+                if (!poi.hasInteractionTarget()) {
+                    continue;
                 }
-                continue;
+                Double tx = poi.getInteractionTargetX();
+                Double ty = poi.getInteractionTargetY();
+                Double tz = poi.getInteractionTargetZ();
+                if (tx == null || ty == null || tz == null) {
+                    continue;
+                }
+                double sx = tx;
+                double sy = ty + 1.0;
+                double sz = tz;
+                double ex = poi.getX() + POI_BLOCK_CENTER;
+                double ey = poi.getY() + POI_BLOCK_CENTER;
+                double ez = poi.getZ() + POI_BLOCK_CENTER;
+                PoiDebugLineHelper.addLineToPlayer(
+                    playerRefComp,
+                    sx,
+                    sy,
+                    sz,
+                    ex,
+                    ey,
+                    ez,
+                    DebugUtils.COLOR_CYAN,
+                    0.06,
+                    2.5F,
+                    0
+                );
             }
-            Model anchorModel = Model.createScaledModel(markerAsset, NAMEPLATE_ANCHOR_MODEL_SCALE);
-            store.putComponent(nameplateRef, ModelComponent.getComponentType(), new ModelComponent(anchorModel));
-            store.putComponent(nameplateRef, Nameplate.getComponentType(), new Nameplate(truncate(text, 240)));
-            store.addComponent(nameplateRef, Intangible.getComponentType(), Intangible.INSTANCE);
-            Message msg = Message.raw(truncate(text, 120));
-            store.putComponent(nameplateRef, DisplayNameComponent.getComponentType(), new DisplayNameComponent(msg));
-            UUIDComponent nameplateUc = store.getComponent(nameplateRef, UUIDComponent.getComponentType());
-            if (nameplateUc != null) {
-                state.getDebugLabelEntityUuids().add(nameplateUc.getUuid());
+        }
+    }
+
+    private void spawnDebugMarkerPair(
+        @Nonnull World world,
+        @Nonnull UUID ownerUuid,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PoiToolPlayerComponent state,
+        @Nonnull Vector3d markerPos,
+        @Nonnull Vector3f rot,
+        @Nonnull String text,
+        @Nonnull Model markerModel,
+        @Nonnull Model anchorModel
+    ) {
+        PoiDebugLabelEntity markerEnt = new PoiDebugLabelEntity(world);
+        markerEnt.setOwnerPlayerUuid(ownerUuid);
+        PoiDebugLabelEntity markerSpawned = addPoiDebugLabelEntity(world, markerEnt, markerPos, rot);
+        if (markerSpawned == null) {
+            return;
+        }
+        Ref<EntityStore> markerRef = markerSpawned.getReference();
+        if (markerRef == null || !markerRef.isValid()) {
+            return;
+        }
+        store.putComponent(markerRef, ModelComponent.getComponentType(), new ModelComponent(markerModel));
+        store.addComponent(markerRef, Intangible.getComponentType(), Intangible.INSTANCE);
+        UUIDComponent markerUc = store.getComponent(markerRef, UUIDComponent.getComponentType());
+        if (markerUc != null) {
+            state.getDebugLabelEntityUuids().add(markerUc.getUuid());
+        }
+
+        Vector3d nameplatePos = new Vector3d(markerPos.getX(), markerPos.getY() + NAMEPLATE_PIVOT_OFFSET_Y, markerPos.getZ());
+        PoiDebugLabelEntity nameplateEnt = new PoiDebugLabelEntity(world);
+        nameplateEnt.setOwnerPlayerUuid(ownerUuid);
+        PoiDebugLabelEntity nameplateSpawned = addPoiDebugLabelEntity(world, nameplateEnt, nameplatePos, rot);
+        if (nameplateSpawned == null) {
+            store.removeEntity(markerRef, RemoveReason.REMOVE);
+            if (markerUc != null) {
+                state.getDebugLabelEntityUuids().remove(markerUc.getUuid());
             }
+            return;
+        }
+        Ref<EntityStore> nameplateRef = nameplateSpawned.getReference();
+        if (nameplateRef == null || !nameplateRef.isValid()) {
+            store.removeEntity(markerRef, RemoveReason.REMOVE);
+            if (markerUc != null) {
+                state.getDebugLabelEntityUuids().remove(markerUc.getUuid());
+            }
+            return;
+        }
+        store.putComponent(nameplateRef, ModelComponent.getComponentType(), new ModelComponent(anchorModel));
+        store.putComponent(nameplateRef, Nameplate.getComponentType(), new Nameplate(truncate(text, 240)));
+        store.addComponent(nameplateRef, Intangible.getComponentType(), Intangible.INSTANCE);
+        Message msg = Message.raw(truncate(text, 120));
+        store.putComponent(nameplateRef, DisplayNameComponent.getComponentType(), new DisplayNameComponent(msg));
+        UUIDComponent nameplateUc = store.getComponent(nameplateRef, UUIDComponent.getComponentType());
+        if (nameplateUc != null) {
+            state.getDebugLabelEntityUuids().add(nameplateUc.getUuid());
         }
     }
 
@@ -325,6 +401,39 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         }
         if (town != null && def != null) {
             Vector3i local = PoiPrefabCoords.tryLocalFromWorld(poi, town, def);
+            if (local != null) {
+                sb.append(" | L ").append(local.x).append(",").append(local.y).append(",").append(local.z);
+            }
+        }
+        return sb.toString();
+    }
+
+    @Nonnull
+    private String buildInteractionTargetLabelText(
+        @Nonnull PoiEntry poi,
+        @Nonnull TownManager tm,
+        double wx,
+        double wy,
+        double wz
+    ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Target ")
+            .append(String.format("%.2f", wx))
+            .append(",")
+            .append(String.format("%.2f", wy))
+            .append(",")
+            .append(String.format("%.2f", wz));
+        TownRecord town = tm.getTown(poi.getTownId());
+        ConstructionDefinition def = null;
+        UUID plotUuid = poi.getPlotId();
+        if (town != null && plotUuid != null) {
+            PlotInstance plot = town.findPlotById(plotUuid);
+            if (plot != null) {
+                def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+            }
+        }
+        if (town != null && def != null) {
+            Vector3i local = PoiPrefabCoords.tryLocalFromWorldPoint(wx, wy, wz, poi, town, def);
             if (local != null) {
                 sb.append(" | L ").append(local.x).append(",").append(local.y).append(",").append(local.z);
             }

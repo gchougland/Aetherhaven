@@ -41,6 +41,22 @@ public final class BuildingPoisDefinition {
         @SerializedName("interactionKind")
         private String interactionKind = "NONE";
 
+        /**
+         * Optional prefab-local cell for autonomy leash / Seek (same space as {@code localX/Y/Z}). When all three are
+         * set, world position is computed at build time (with the same anchor shift delta as the POI furniture).
+         */
+        @Nullable
+        @SerializedName("interactionTargetLocalX")
+        private Integer interactionTargetLocalX;
+
+        @Nullable
+        @SerializedName("interactionTargetLocalY")
+        private Integer interactionTargetLocalY;
+
+        @Nullable
+        @SerializedName("interactionTargetLocalZ")
+        private Integer interactionTargetLocalZ;
+
         public int getLocalX() {
             return localX;
         }
@@ -78,6 +94,22 @@ public final class BuildingPoisDefinition {
         @Nonnull
         public PoiInteractionKind getInteractionKind() {
             return PoiInteractionKind.fromJson(interactionKind);
+        }
+
+        public boolean hasInteractionTargetLocal() {
+            return interactionTargetLocalX != null && interactionTargetLocalY != null && interactionTargetLocalZ != null;
+        }
+
+        public int getInteractionTargetLocalX() {
+            return interactionTargetLocalX != null ? interactionTargetLocalX : 0;
+        }
+
+        public int getInteractionTargetLocalY() {
+            return interactionTargetLocalY != null ? interactionTargetLocalY : 0;
+        }
+
+        public int getInteractionTargetLocalZ() {
+            return interactionTargetLocalZ != null ? interactionTargetLocalZ : 0;
         }
     }
 }

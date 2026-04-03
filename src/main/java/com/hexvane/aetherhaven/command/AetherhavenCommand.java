@@ -14,5 +14,6 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenPlotsCommand());
         this.addSubCommand(new AetherhavenNeedsCommand());
         this.addSubCommand(new AetherhavenQuestDebugCommand());
+        this.addSubCommand(new AetherhavenAutonomyDebugCommand());
     }
 }

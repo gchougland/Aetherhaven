@@ -25,6 +25,13 @@
           "Type": "AetherhavenPoiToolMove"
         }
       ]
+    },
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPoiToolSetTarget"
+        }
+      ]
     }
   },
   "InteractionConfig": {

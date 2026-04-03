@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.poi.tool;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiMoveValidation;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -177,6 +178,68 @@ public final class PoiToolInteractions {
         PoiEntry moved = current.copyWithPosition(nx, ny, nz);
         reg.replace(moved);
         send(playerRef, commandBuffer, Message.raw("Moved POI to " + nx + ", " + ny + ", " + nz + "."));
+    }
+
+    /**
+     * Sets the autonomy leash / Seek goal for the selected POI (any block). Use on the POI anchor block again to
+     * clear and fall back to the furniture cell center.
+     */
+    public static void handleSetInteractionTarget(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull InteractionContext context
+    ) {
+        if (!hasPoiToolPermission(playerRef, commandBuffer)) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        ensureState(playerRef, commandBuffer);
+        PoiToolPlayerComponent state = commandBuffer.getComponent(playerRef, PoiToolPlayerComponent.getComponentType());
+        if (state == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        UUID id = state.getSelectedPoiId();
+        if (id == null) {
+            send(playerRef, commandBuffer, Message.raw("No POI selected. Primary-click a POI block first."));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        PoiEntry current = reg.get(id);
+        if (current == null) {
+            state.setSelectedPoiId(null);
+            send(playerRef, commandBuffer, Message.raw("Selected POI no longer exists."));
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        int nx = targetBlock.x;
+        int ny = targetBlock.y;
+        int nz = targetBlock.z;
+        if (nx == current.getX() && ny == current.getY() && nz == current.getZ()) {
+            PoiEntry cleared = current.copyWithInteractionTarget(null, null, null);
+            reg.replace(cleared);
+            send(playerRef, commandBuffer, Message.raw("Cleared interaction target; NPCs use the POI block center."));
+            return;
+        }
+        int standY = VillagerBlockUtil.findStandY(world, nx, nz, ny + 2);
+        double wx = nx + 0.5;
+        double wz = nz + 0.5;
+        double wy = standY != Integer.MIN_VALUE ? standY + 0.02 : ny + 0.5;
+        PoiEntry updated = current.copyWithInteractionTarget(wx, wy, wz);
+        reg.replace(updated);
+        send(
+            playerRef,
+            commandBuffer,
+            Message.raw("Set interaction target to " + String.format("%.2f", wx) + ", " + String.format("%.2f", wy) + ", " + String.format("%.2f", wz) + ".")
+        );
     }
 
     private static void send(

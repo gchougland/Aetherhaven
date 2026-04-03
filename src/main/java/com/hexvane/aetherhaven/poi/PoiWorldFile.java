@@ -54,6 +54,12 @@ public final class PoiWorldFile {
         public String blockTypeId;
         @Nullable
         public String interactionKind;
+        @Nullable
+        public Double interactionTargetX;
+        @Nullable
+        public Double interactionTargetY;
+        @Nullable
+        public Double interactionTargetZ;
     }
 
     @Nonnull
@@ -108,7 +114,17 @@ public final class PoiWorldFile {
                 }
                 String blockType = row.blockTypeId != null && !row.blockTypeId.isBlank() ? row.blockTypeId.trim() : null;
                 PoiInteractionKind kind = PoiInteractionKind.fromJson(row.interactionKind);
-                out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind));
+                Double tx = row.interactionTargetX;
+                Double ty = row.interactionTargetY;
+                Double tz = row.interactionTargetZ;
+                if (tx != null && ty != null && tz != null) {
+                    out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind, tx, ty, tz));
+                } else {
+                    if (tx != null || ty != null || tz != null) {
+                        LOGGER.atWarning().log("POI %s: ignoring partial interaction target (need all X,Y,Z)", row.id);
+                    }
+                    out.add(new PoiEntry(id, townId, row.x, row.y, row.z, tags, row.capacity, plotUuid, blockType, kind));
+                }
             } catch (IllegalArgumentException e) {
                 LOGGER.atWarning().withCause(e).log("Skipping invalid POI row id=%s town=%s", row.id, row.townId);
             }
@@ -132,6 +148,11 @@ public final class PoiWorldFile {
             r.plotId = p != null ? p.toString() : null;
             r.blockTypeId = e.getBlockTypeId();
             r.interactionKind = e.getInteractionKind().name();
+            if (e.hasInteractionTarget()) {
+                r.interactionTargetX = e.getInteractionTargetX();
+                r.interactionTargetY = e.getInteractionTargetY();
+                r.interactionTargetZ = e.getInteractionTargetZ();
+            }
             f.getPois().add(r);
         }
         return f;

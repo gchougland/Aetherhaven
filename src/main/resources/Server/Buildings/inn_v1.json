@@ -7,7 +7,10 @@
       "blockTypeId": "Aetherhaven_Management_Block",
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK"],
-      "capacity": 2
+      "capacity": 2,
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 4
     },
     {
       "localX": -6,
@@ -16,7 +19,10 @@
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
-      "capacity": 1
+      "capacity": 1,
+      "interactionTargetLocalX": -5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 2
     },
     {
       "localX": -2,
@@ -25,16 +31,22 @@
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
-      "capacity": 1
+      "capacity": 1,
+      "interactionTargetLocalX": -1,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 2
     },
     {
       "localX": 7,
       "localY": 1,
       "localZ": -1,
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1,
       "blockTypeId": "Furniture_Crude_Brazier",
       "interactionKind": "USE_BENCH",
       "tags": ["EAT"],
-      "capacity": 2
+      "capacity": 1
     }
   ]
 }

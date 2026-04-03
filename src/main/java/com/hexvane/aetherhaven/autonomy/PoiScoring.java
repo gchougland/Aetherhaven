@@ -141,8 +141,22 @@ public final class PoiScoring {
         if (Double.isNaN(npcX) || Double.isNaN(npcZ)) {
             return Double.NaN;
         }
-        double px = e.getX() + 0.5;
-        double pz = e.getZ() + 0.5;
+        double px;
+        double pz;
+        if (e.hasInteractionTarget()) {
+            Double tx = e.getInteractionTargetX();
+            Double tz = e.getInteractionTargetZ();
+            if (tx == null || tz == null) {
+                px = e.getX() + 0.5;
+                pz = e.getZ() + 0.5;
+            } else {
+                px = tx;
+                pz = tz;
+            }
+        } else {
+            px = e.getX() + 0.5;
+            pz = e.getZ() + 0.5;
+        }
         double dx = px - npcX;
         double dz = pz - npcZ;
         return dx * dx + dz * dz;

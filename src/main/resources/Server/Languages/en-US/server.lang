@@ -54,14 +54,16 @@ items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-click a block moves the sign anchor.
 
 items.Aetherhaven_Poi_Tool.name=POI debug tool
-items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary-click a block: select nearest POI. Secondary-click: move the selected POI to that block.
+items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
 items.Aetherhaven_Poi_Tool.legendTitle=POI tool
 items.Aetherhaven_Poi_Tool.legendPrimary=Primary: select nearest POI near the block
 items.Aetherhaven_Poi_Tool.legendSecondary=Secondary: move selected POI to the block
+items.Aetherhaven_Poi_Tool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
 
 aetherhaven.poiTool.legendTitle=POI tool
 aetherhaven.poiTool.legendPrimary=Primary: select nearest POI near the block
 aetherhaven.poiTool.legendSecondary=Secondary: move selected POI to the block
+aetherhaven.poiTool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
 
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
 items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
@@ -123,6 +125,11 @@ commands.aetherhaven.questdebug.complete.desc=Mark quest completed on your town
 commands.aetherhaven.questdebug.clear.desc=Remove quest from active list on your town
 commands.aetherhaven.questdebug.id.desc=Quest id (default q_build_inn)
 commands.aetherhaven.questdebug.status.desc=Show active and completed quests for your town (display name + id)
+
+commands.aetherhaven.debug_autonomy.desc=Debug: villager autonomy overlay (requires DebugCommandsEnabled)
+commands.aetherhaven.debug_autonomy.toggle.desc=Toggle autonomy debug on a town villager (look at NPC or use --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Show whether autonomy debug is enabled for this villager
+commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug for this villager
 
 # Dialogue
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)

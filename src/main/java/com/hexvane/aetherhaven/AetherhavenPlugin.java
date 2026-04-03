@@ -17,8 +17,10 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
+import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
@@ -141,6 +143,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
+        VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
@@ -153,6 +156,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
             .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolMove", PoiToolMoveInteraction.class, PoiToolMoveInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPoiToolSetTarget",
+                PoiToolSetTargetInteraction.class,
+                PoiToolSetTargetInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));

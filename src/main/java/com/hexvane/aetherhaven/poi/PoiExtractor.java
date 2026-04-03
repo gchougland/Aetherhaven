@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.poi;
 
 import com.google.gson.Gson;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -60,9 +61,12 @@ public final class PoiExtractor {
         List<PoiEntry> batch = new ArrayList<>();
         for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
             Vector3i d = PrefabLocalOffset.rotate(prefabYaw, row.getLocalX(), row.getLocalY(), row.getLocalZ());
-            int wx = prefabAnchorWorld.x + d.x;
-            int wy = prefabAnchorWorld.y + d.y;
-            int wz = prefabAnchorWorld.z + d.z;
+            int baseWx = prefabAnchorWorld.x + d.x;
+            int baseWy = prefabAnchorWorld.y + d.y;
+            int baseWz = prefabAnchorWorld.z + d.z;
+            int wx = baseWx;
+            int wy = baseWy;
+            int wz = baseWz;
             String expectedType = row.getBlockTypeId();
             if (expectedType != null) {
                 Vector3i anchor = resolveAnchorForExpectedBlock(world, wx, wy, wz, expectedType);
@@ -95,20 +99,64 @@ public final class PoiExtractor {
                 wy = anchor.y;
                 wz = anchor.z;
             }
-            batch.add(
-                new PoiEntry(
-                    UUID.randomUUID(),
-                    town.getTownId(),
-                    wx,
-                    wy,
-                    wz,
-                    row.getTags(),
-                    row.getCapacity(),
-                    plotId,
-                    expectedType,
-                    row.getInteractionKind()
-                )
-            );
+            int deltaX = wx - baseWx;
+            int deltaY = wy - baseWy;
+            int deltaZ = wz - baseWz;
+
+            Double itx = null;
+            Double ity = null;
+            Double itz = null;
+            if (row.hasInteractionTargetLocal()) {
+                Vector3i td =
+                    PrefabLocalOffset.rotate(
+                        prefabYaw,
+                        row.getInteractionTargetLocalX(),
+                        row.getInteractionTargetLocalY(),
+                        row.getInteractionTargetLocalZ()
+                    );
+                int twx = prefabAnchorWorld.x + td.x + deltaX;
+                int twy = prefabAnchorWorld.y + td.y + deltaY;
+                int twz = prefabAnchorWorld.z + td.z + deltaZ;
+                int standY = VillagerBlockUtil.findStandY(world, twx, twz, twy + 3);
+                itx = twx + 0.5;
+                itz = twz + 0.5;
+                ity = standY != Integer.MIN_VALUE ? standY + 0.02 : twy + 0.5;
+            }
+
+            if (itx != null && ity != null && itz != null) {
+                batch.add(
+                    new PoiEntry(
+                        UUID.randomUUID(),
+                        town.getTownId(),
+                        wx,
+                        wy,
+                        wz,
+                        row.getTags(),
+                        row.getCapacity(),
+                        plotId,
+                        expectedType,
+                        row.getInteractionKind(),
+                        itx,
+                        ity,
+                        itz
+                    )
+                );
+            } else {
+                batch.add(
+                    new PoiEntry(
+                        UUID.randomUUID(),
+                        town.getTownId(),
+                        wx,
+                        wy,
+                        wz,
+                        row.getTags(),
+                        row.getCapacity(),
+                        plotId,
+                        expectedType,
+                        row.getInteractionKind()
+                    )
+                );
+            }
         }
         reg.registerAll(batch);
         LOGGER.atInfo().log("Registered %s POIs for construction %s plot %s", batch.size(), constructionId, plotId);

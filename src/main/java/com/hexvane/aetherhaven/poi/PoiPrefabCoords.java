@@ -36,4 +36,31 @@ public final class PoiPrefabCoords {
         int dz = poi.getZ() - anchor.z;
         return PrefabLocalOffset.inverseRotateWorldDelta(yaw, dx, dy, dz);
     }
+
+    /**
+     * Prefab-local cell for an arbitrary world point (e.g. interaction target), using floored block coordinates.
+     */
+    @Nullable
+    public static Vector3i tryLocalFromWorldPoint(
+        double wx,
+        double wy,
+        double wz,
+        @Nonnull PoiEntry poi,
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionDefinition construction
+    ) {
+        if (poi.getPlotId() == null) {
+            return null;
+        }
+        PlotInstance plot = town.findPlotById(poi.getPlotId());
+        if (plot == null) {
+            return null;
+        }
+        Vector3i anchor = plot.resolvePrefabAnchorWorld(construction);
+        Rotation yaw = plot.resolvePrefabYaw();
+        int dx = (int) Math.floor(wx) - anchor.x;
+        int dy = (int) Math.floor(wy) - anchor.y;
+        int dz = (int) Math.floor(wz) - anchor.z;
+        return PrefabLocalOffset.inverseRotateWorldDelta(yaw, dx, dy, dz);
+    }
 }

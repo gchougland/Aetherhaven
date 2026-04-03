@@ -7,7 +7,10 @@
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK", "SHOP"],
-      "capacity": 1
+      "capacity": 1,
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1
     }
   ]
 }
