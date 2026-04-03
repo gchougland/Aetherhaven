@@ -42,12 +42,6 @@ $C.@PageOverlay {
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
       }
 
-      Label #Error {
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #cc4444);
-        Visible: false;
-      }
-
       Label #PlotTypeLabel {
         Anchor: (Bottom: 4);
         Style: (...$C.@DefaultLabelStyle);

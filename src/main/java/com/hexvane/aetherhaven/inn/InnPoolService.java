@@ -461,7 +461,6 @@ public final class InnPoolService {
             dedupeInnPoolIds(town, tm);
             trimInnPoolListToMax(town, tm, store);
         }
-        LOGGER.atInfo().log("Inn pool reconcile for world %s at game time %s", world.getName(), now);
     }
 
     /**

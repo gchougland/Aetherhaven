@@ -7,7 +7,9 @@ import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementSession;
 import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
+import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
+import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -96,7 +98,6 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                     + " / 4 (90° each)\nEscape: close panel only · Cancel: remove preview · Air right-click reopens while preview is active."
             )
         );
-        commandBuilder.set("#Error.Visible", false);
 
         if (plugin != null && inv != null) {
             List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
@@ -135,6 +136,30 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         scheduleRefreshPreview(ref, store);
     }
 
+    /**
+     * Rotates the prefab 90° while keeping the axis-aligned footprint center fixed (avoids spinning around the buffer
+     * origin corner).
+     */
+    private void applyRotatePreservingFootprintCenter() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        ConstructionDefinition def = plugin != null ? plugin.getConstructionCatalog().get(session.getConstructionId()) : null;
+        if (def == null) {
+            session.rotateClockwise90();
+            return;
+        }
+        Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            session.rotateClockwise90();
+            return;
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            PlotPlacementRotationUtil.rotateClockwise90PreservingFootprintCenter(session, def, buf);
+        } finally {
+            buf.release();
+        }
+    }
+
     private static void bind(@Nonnull UIEventBuilder eventBuilder, @Nonnull String selector, @Nonnull String action) {
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, selector, new EventData().append("Action", action), false);
     }
@@ -166,7 +191,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             case "MoveZp" -> session.nudge(0, 0, 1);
             case "MoveYm" -> session.nudge(0, -1, 0);
             case "MoveYp" -> session.nudge(0, 1, 0);
-            case "Rotate" -> session.rotateClockwise90();
+            case "Rotate" -> applyRotatePreservingFootprintCenter();
             case "Cancel" -> {
                 scheduleCancel(ref, store);
                 return;
@@ -322,6 +347,8 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                     return;
                 }
                 PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+                PlayerRef prCancel = store.getComponent(ref, PlayerRef.getComponentType());
+                PlotPlacementWireframeOverlay.clearFor(prCancel);
                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                 if (uc != null) {
                     PlotPlacementSessions.remove(uc.getUuid());
@@ -340,6 +367,8 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 }
                 if (tryPlace(ref, store)) {
                     PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+                    PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
+                    PlotPlacementWireframeOverlay.clearFor(prDone);
                     UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                     if (uc != null) {
                         PlotPlacementSessions.remove(uc.getUuid());
@@ -354,43 +383,46 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
     private void refreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null) {
             return;
         }
         ConstructionDefinition def = plugin.getConstructionCatalog().get(session.getConstructionId());
         if (def == null) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            PlotPlacementWireframeOverlay.clearFor(pr);
             return;
         }
         Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
         if (prefabPath == null) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            PlotPlacementWireframeOverlay.clearFor(pr);
             return;
         }
-        // Do not spawn block-entity previews when placement is already invalid (e.g. outside territory).
-        // Avoids loading huge previews in chunks that will immediately unload.
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
+            PlotPlacementWireframeOverlay.clearFor(pr);
             return;
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        String placementErr;
         if (town == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            return;
+            placementErr = "You need a town (place a charter) first.";
+        } else {
+            placementErr = PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), session.getAnchor(), session.getPrefabYaw(), def, plugin);
         }
-        String placementErr =
-            PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), session.getAnchor(), session.getPrefabYaw(), def, plugin);
-        if (placementErr != null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            return;
-        }
+        boolean placementValid = placementErr == null;
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
             Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
             PlotPreviewSpawner.rebuild(store, prefabOrigin, session.getPrefabYaw(), buf, session.getPreviewEntityRefs());
+            if (pr != null) {
+                PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
+            }
         } finally {
             buf.release();
         }
