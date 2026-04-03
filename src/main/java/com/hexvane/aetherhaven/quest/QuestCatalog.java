@@ -9,7 +9,13 @@ import javax.annotation.Nonnull;
 public final class QuestCatalog {
     private static final Map<String, String> DISPLAY_NAMES = Map.ofEntries(
         Map.entry(AetherhavenConstants.QUEST_BUILD_INN, "Build the Inn"),
-        Map.entry(AetherhavenConstants.QUEST_MERCHANT_STALL, "Build the Market Stall")
+        Map.entry(AetherhavenConstants.QUEST_MERCHANT_STALL, "Build the Market Stall"),
+        Map.entry(AetherhavenConstants.QUEST_FARM_PLOT, "Irienne's Farm Plot"),
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_ELDER, "Lyren's Home"),
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_INNKEEPER, "Corin's Home"),
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_MERCHANT, "Vex's Home"),
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_FARMER, "Irienne's Home"),
+        Map.entry(AetherhavenConstants.QUEST_HOUSE_BLACKSMITH, "Garren's Home")
     );
 
     private static final Map<String, String> DESCRIPTIONS = Map.ofEntries(
@@ -20,6 +26,30 @@ public final class QuestCatalog {
         Map.entry(
             AetherhavenConstants.QUEST_MERCHANT_STALL,
             "Help the merchant open a stall, then speak to them at the stall to finish up."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_FARM_PLOT,
+            "Help Irienne set up a farm plot in town so she can move in and work the soil."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_ELDER,
+            "Lyren asked for a proper home in town. The same house footprint can serve anyone. She finishes the quest when you assign her at the management block."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_INNKEEPER,
+            "Corin wants a roof of his own beyond the inn's ledger. Build the house, then assign him as resident on its management block."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_MERCHANT,
+            "Vex wants a place to stow their boots after the stall closes. Build the house and register them as resident there."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_FARMER,
+            "Irienne would like a bed that isn't borrowed from the inn hall. Build the house and assign her as resident."
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_BLACKSMITH,
+            "Garren wants a cot that doesn't smell like another traveler's pack. Build the house and assign him as resident."
         )
     );
 
@@ -37,6 +67,54 @@ public final class QuestCatalog {
                 "Receive the market stall plot token from the merchant.",
                 "Place and build the market stall prefab.",
                 "Talk to the merchant at the stall to complete the quest."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_FARM_PLOT,
+            List.of(
+                "Receive the farm plot token from Irienne.",
+                "Place and build the farm plot prefab.",
+                "Talk to Irienne at the farm to complete the quest."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_ELDER,
+            List.of(
+                "Receive the house plot token from Lyren.",
+                "Place and build the house prefab.",
+                "Assign Lyren as resident on the house management block."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_INNKEEPER,
+            List.of(
+                "Receive the house plot token from Corin.",
+                "Place and build the house prefab.",
+                "Assign Corin as resident on the house management block."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_MERCHANT,
+            List.of(
+                "Receive the house plot token from Vex.",
+                "Place and build the house prefab.",
+                "Assign Vex as resident on the house management block."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_FARMER,
+            List.of(
+                "Receive the house plot token from Irienne.",
+                "Place and build the house prefab.",
+                "Assign Irienne as resident on the house management block."
+            )
+        ),
+        Map.entry(
+            AetherhavenConstants.QUEST_HOUSE_BLACKSMITH,
+            List.of(
+                "Receive the house plot token from Garren.",
+                "Place and build the house prefab.",
+                "Assign Garren as resident on the house management block."
             )
         )
     );

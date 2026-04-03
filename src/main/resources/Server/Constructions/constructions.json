@@ -31,6 +31,51 @@
         { "itemId": "Wood_Softwood_Planks", "count": 6 },
         { "itemId": "Rock_Stone_Cobble", "count": 4 }
       ]
+    },
+    {
+      "id": "plot_farm",
+      "displayName": "Farm plot",
+      "description": "Fenced fields, a farming bench, and a small shelter.",
+      "prefabPath": "Farm_Plot.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_Farm",
+      "plotAnchorOffset": [6, 0, 6],
+      "managementBlockLocalPos": [-3, 1, -1],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 10 },
+        { "itemId": "Rock_Stone_Cobble", "count": 8 }
+      ]
+    },
+    {
+      "id": "plot_park",
+      "displayName": "Park",
+      "description": "Trees, paths, and two village benches for relaxing.",
+      "prefabPath": "Park_01.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_Park",
+      "plotAnchorOffset": [10, 0, 10],
+      "managementBlockLocalPos": [-3, 2, -4],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 10 },
+        { "itemId": "Rock_Stone_Cobble", "count": 6 }
+      ]
+    },
+    {
+      "id": "plot_house",
+      "displayName": "House",
+      "description": "A compact home with a bed and a town records shelf. Assign who lives here from the management block.",
+      "prefabPath": "House.prefab.json",
+      "plotTokenItemId": "Aetherhaven_Plot_Token_House",
+      "plotAnchorOffset": [4, 0, 4],
+      "managementBlockLocalPos": [1, 2, 2],
+      "rotationYaw": "None",
+      "requiredVillagerId": null,
+      "materials": [
+        { "itemId": "Wood_Softwood_Planks", "count": 12 },
+        { "itemId": "Rock_Stone_Cobble", "count": 8 }
+      ]
     }
   ]
 }

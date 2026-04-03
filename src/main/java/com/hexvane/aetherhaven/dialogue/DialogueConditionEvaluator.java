@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.dialogue;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -93,6 +94,8 @@ public final class DialogueConditionEvaluator {
             case "town_quest_completed" -> worldView.townQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
             case "town_has_complete_plot" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
             case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
+            case "npc_binding_is_visitor" -> npcBindingIsVisitor(store, npcRef);
+            case "npc_inn_pool_role" -> worldView.innPoolHasNpcRole(playerRef, store, stringOrEmpty(o, "roleId"));
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;
@@ -112,5 +115,13 @@ public final class DialogueConditionEvaluator {
     private static String stringOrEmpty(@Nonnull JsonObject o, @Nonnull String key) {
         String s = getString(o, key);
         return s != null ? s : "";
+    }
+
+    private static boolean npcBindingIsVisitor(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        return b != null && TownVillagerBinding.isVisitorKind(b.getKind());
     }
 }

@@ -63,6 +63,36 @@ $C.@PageOverlay {
         Anchor: (Bottom: 8);
       }
 
+      Group #HouseResidentRow {
+        LayoutMode: Top;
+        Visible: false;
+        Anchor: (Bottom: 12);
+
+        Label #HouseResidentHint {
+          Style: (...$C.@DefaultLabelStyle, Wrap: true);
+          Anchor: (Bottom: 8);
+        }
+
+        Group #HouseResidentDropdown {
+          LayoutMode: Left;
+          Anchor: (Bottom: 8);
+
+          Label {
+            Text: %server.aetherhaven.ui.plotconstruction.houseResident;
+            Anchor: (Top: 6, Left: 6, Right: 16);
+            Style: $C.@DefaultLabelStyle;
+          }
+
+          $C.@DropdownBox #Input {
+            @Anchor = (Left: 0, Right: 16);
+          }
+        }
+
+        $C.@TextButton #AssignHouseResidentButton {
+          Text: %server.aetherhaven.ui.plotconstruction.assignHouseResident;
+        }
+      }
+
       $C.@TextButton #PickUpPlotButton {
         Text: %server.aetherhaven.ui.plotconstruction.pickUpPlot;
         Visible: false;

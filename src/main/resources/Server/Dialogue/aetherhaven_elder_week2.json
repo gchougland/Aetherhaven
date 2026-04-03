@@ -4,7 +4,7 @@
   "nodes": {
     "root": {
       "speaker": "Elder Lyren",
-      "text": "The charter still warms the stone. Our people will need shelter and a hearth. When you are ready, we should raise an inn for travelers and kin.",
+      "text": "The charter still warms the stone. There is no other town left to take us in, so our people will need shelter and a hearth here. When you are ready, we should raise an inn for wanderers and kin.",
       "choices": [
         {
           "text": "I'll help build the inn.",
@@ -56,12 +56,59 @@
           ],
           "next": "inn_done"
         },
+        {
+          "text": "About a home for you...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "aetherhaven_has_town" },
+              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_elder" },
+                    { "type": "town_quest_completed", "questId": "q_house_elder" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "lyren_house_offer"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_elder" }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "lyren_house_remind"
+        },
+        {
+          "text": "I'll vouch for Garren to stay as a resident.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              { "type": "npc_inn_pool_role", "roleId": "Aetherhaven_Blacksmith" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "promote_blacksmith" }],
+          "next": "garren_promoted"
+        },
         { "text": "Farewell.", "next": null }
       ]
     },
     "quest_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. Mark the ground with the plot sign and gather what the builders ask. The timbers will follow your care.",
+      "text": "Good. Mark the ground with the plot sign and gather what the builders ask. Let it be witnessed: the timbers will follow your care.",
       "choices": [{ "text": "I'll begin.", "next": null }]
     },
     "remind_inn": {
@@ -71,8 +118,38 @@
     },
     "inn_done": {
       "speaker": "Elder Lyren",
-      "text": "Word spreads already: a roof over travelers' heads. Our innkeeper has taken the key—go greet them by the hearth. You've done well by Aetherhaven.",
+      "text": "Word spreads already: a roof over wanderers' heads. Corin Mosscup has taken the key. Go greet him by the hearth. You've done well by Aetherhaven.",
       "choices": [{ "text": "Glad to help.", "next": null }]
+    },
+    "lyren_house_offer": {
+      "speaker": "Elder Lyren",
+      "text": "A charter is not a bed. If you can stake a small house, the same plan as any other roof in town, I'll owe you more than speeches. Craft the house token at your planning desk, place it with your staff, pay the sign, then put my name on the shelf inside.",
+      "choices": [
+        {
+          "text": "I'll see it done.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_elder" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "lyren_house_accepted"
+        },
+        { "text": "Not yet.", "next": null }
+      ]
+    },
+    "lyren_house_accepted": {
+      "speaker": "Elder Lyren",
+      "text": "Good. When the walls are up, use the management block and assign me as resident. That is how we'll know the roof is truly mine.",
+      "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "lyren_house_remind": {
+      "speaker": "Elder Lyren",
+      "text": "Timber and patience in equal measure. When the house stands, register me on its management block and we'll call it finished.",
+      "choices": [{ "text": "Right.", "next": null }]
+    },
+    "garren_promoted": {
+      "speaker": "Elder Lyren",
+      "text": "Then Garren is one of us, not a rumor passing through. He can ask for a roof like anyone else who stays.",
+      "choices": [{ "text": "Good.", "next": null }]
     }
   }
 }

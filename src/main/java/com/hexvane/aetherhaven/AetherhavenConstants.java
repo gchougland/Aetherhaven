@@ -35,15 +35,40 @@ public final class AetherhavenConstants {
     /** Market stall plot construction id (Week 4). */
     public static final String CONSTRUCTION_PLOT_MARKET_STALL = "plot_market_stall";
 
+    public static final String CONSTRUCTION_PLOT_FARM = "plot_farm";
+
+    public static final String CONSTRUCTION_PLOT_PARK = "plot_park";
+
+    /** Shared residential prefab; completion is tracked per villager via house management assignment. */
+    public static final String CONSTRUCTION_PLOT_HOUSE = "plot_house";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
+
+    public static final String QUEST_FARM_PLOT = "q_farm_plot";
+
+    public static final String QUEST_HOUSE_ELDER = "q_house_elder";
+
+    public static final String QUEST_HOUSE_INNKEEPER = "q_house_innkeeper";
+
+    public static final String QUEST_HOUSE_MERCHANT = "q_house_merchant";
+
+    public static final String QUEST_HOUSE_FARMER = "q_house_farmer";
+
+    public static final String QUEST_HOUSE_BLACKSMITH = "q_house_blacksmith";
 
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
     public static final String NPC_FARMER = "Aetherhaven_Farmer";
 
     public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
+
+    public static final String PLOT_TOKEN_FARM = "Aetherhaven_Plot_Token_Farm";
+
+    public static final String PLOT_TOKEN_PARK = "Aetherhaven_Plot_Token_Park";
+
+    public static final String PLOT_TOKEN_HOUSE = "Aetherhaven_Plot_Token_House";
 
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 

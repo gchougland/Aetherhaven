@@ -1,0 +1,16 @@
+{
+  "pois": [
+    {
+      "localX": -2,
+      "localY": 1,
+      "localZ": -4,
+      "blockTypeId": "Bench_Farming",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": -2,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3
+    }
+  ]
+}

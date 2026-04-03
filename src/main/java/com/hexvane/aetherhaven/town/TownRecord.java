@@ -489,4 +489,17 @@ public final class TownRecord {
         }
         return null;
     }
+
+    /** If {@code residentUuid} is home in another plot, clears that assignment (one home per villager). */
+    public void clearHomeResidentFromOtherPlots(@Nonnull UUID exceptPlotId, @Nonnull UUID residentUuid) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getPlotId().equals(exceptPlotId)) {
+                continue;
+            }
+            UUID h = p.getHomeResidentEntityUuid();
+            if (h != null && h.equals(residentUuid)) {
+                p.setHomeResidentEntityUuid(null);
+            }
+        }
+    }
 }

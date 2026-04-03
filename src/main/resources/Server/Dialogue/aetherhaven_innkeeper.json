@@ -3,20 +3,76 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Innkeeper",
-      "text": "Welcome to the inn. The hearth is yours while you're in Aetherhaven.",
+      "speaker": "Corin Mosscup",
+      "text": "Welcome in. I'm Corin. This hearth's mine to keep, and it's yours while you're in Aetherhaven. After everything the old world went through, a warm bowl still fixes a lot.",
       "choices": [
         {
           "text": "Tell me about the guest pool.",
           "next": "inn_explain_pool"
         },
+        {
+          "text": "About a place for you to live...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_innkeeper" },
+                    { "type": "town_quest_completed", "questId": "q_house_innkeeper" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "corin_house_offer"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [{ "type": "town_quest_active", "questId": "q_house_innkeeper" }]
+          },
+          "whenFalse": "hide",
+          "next": "corin_house_remind"
+        },
         { "text": "Farewell.", "next": null }
       ]
     },
     "inn_explain_pool": {
-      "speaker": "Innkeeper",
-      "text": "Travelers rotate through when the road brings them. The inn keeps two guest spots at a time for visitors like traders and craftsfolk.",
+      "speaker": "Corin Mosscup",
+      "text": "Wanderers still find us when the roads allow. The inn keeps two guest spots at a time, room for traders, craftsfolk, anyone we're willing to vouch for. There isn't another town to send them to.",
       "choices": [{ "text": "Good to know.", "next": null }]
+    },
+    "corin_house_offer": {
+      "speaker": "Corin Mosscup",
+      "text": "I keep the inn for everyone, but I'd like a door that locks with my name on it. Same house as anyone else. Build it from the token, then list me on the management block when it's ready.",
+      "choices": [
+        {
+          "text": "I'll build it.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_innkeeper" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "corin_house_accepted"
+        },
+        { "text": "Later.", "next": null }
+      ]
+    },
+    "corin_house_accepted": {
+      "speaker": "Corin Mosscup",
+      "text": "Thanks. I'll keep the kettle on here until the house is yours to place.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "corin_house_remind": {
+      "speaker": "Corin Mosscup",
+      "text": "No rush. When the house is built, assign me on its shelf. I'll know it was mine.",
+      "choices": [{ "text": "Understood.", "next": null }]
     }
   }
 }

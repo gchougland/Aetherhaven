@@ -3,9 +3,40 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Vex",
-      "text": "Name is Vex. I move goods from town to town, and your inn has a fine hearth.",
+      "speaker": "Vex Sunderlane",
+      "text": "Vex Sunderlane. I deal in salvage, barter, and whatever still has a price. There aren't other towns to run to, so if your inn has a hearth, you've already got the best amenity left on Orbis.",
       "choices": [
+        {
+          "text": "About a home in town...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_merchant_stall" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_merchant" },
+                    { "type": "town_quest_completed", "questId": "q_house_merchant" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "vex_house_offer"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [{ "type": "town_quest_active", "questId": "q_house_merchant" }]
+          },
+          "whenFalse": "hide",
+          "next": "vex_house_remind"
+        },
         {
           "text": "Glad you made it.",
           "condition": {
@@ -61,8 +92,8 @@
       ]
     },
     "vex_quest_stall": {
-      "speaker": "Vex",
-      "text": "A small market stall is all I need. Place it from your plot staff while you carry the token I give you. Costs are on you, but I will work the counter when it stands.",
+      "speaker": "Vex Sunderlane",
+      "text": "A small market stall is all I need, somewhere honest to stack what the ruins still give up. Place it from your plot staff while you carry the token I give you. Costs are on you, but I'll work the counter when it stands.",
       "choices": [
         {
           "text": "I'll build it.",
@@ -79,13 +110,13 @@
       ]
     },
     "vex_accepted": {
-      "speaker": "Vex",
-      "text": "Good. I'll stay at the inn until the stall is ready.",
+      "speaker": "Vex Sunderlane",
+      "text": "Good. I'll camp at Corin's inn until the stall is ready. Fewer teeth out there than in a good soup.",
       "choices": [{ "text": "See you soon.", "next": null }]
     },
     "vex_building": {
-      "speaker": "Vex",
-      "text": "Take your time. When the stall is built, I'll head over and open shop — come find me there and we'll wrap this up.",
+      "speaker": "Vex Sunderlane",
+      "text": "Take your time. When the stall is built, I'll head over and open shop. Come find me there and we'll wrap this up.",
       "choices": [
         {
           "text": "I need to drop the quest.",
@@ -96,14 +127,39 @@
       ]
     },
     "vex_abandoned": {
-      "speaker": "Vex",
+      "speaker": "Vex Sunderlane",
       "text": "No harm done. If you change your mind, ask again about the stall.",
       "choices": [{ "text": "Farewell.", "next": null }]
     },
     "vex_done": {
-      "speaker": "Vex",
-      "text": "The stall looks solid. Trade will be thin at first, but we will grow it.",
+      "speaker": "Vex Sunderlane",
+      "text": "The stall looks solid. Trade'll be thin at first. There's no next town over to lean on, but we'll grow it. That's how rebuilding works.",
       "choices": [{ "text": "Good luck.", "next": null }]
+    },
+    "vex_house_offer": {
+      "speaker": "Vex Sunderlane",
+      "text": "The stall is honest work, but I'd like a shelf that isn't inventory. Build the house plot with the same footprint as anyone else, then register me on the management block when it's up.",
+      "choices": [
+        {
+          "text": "I'll stake a house.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_merchant" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "vex_house_accepted"
+        },
+        { "text": "Another time.", "next": null }
+      ]
+    },
+    "vex_house_accepted": {
+      "speaker": "Vex Sunderlane",
+      "text": "Good. When the walls are yours to open, put my name on the block inside. That's the proof.",
+      "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "vex_house_remind": {
+      "speaker": "Vex Sunderlane",
+      "text": "Take your time. When the house stands, assign me there and we'll call it settled.",
+      "choices": [{ "text": "Right.", "next": null }]
     }
   }
 }

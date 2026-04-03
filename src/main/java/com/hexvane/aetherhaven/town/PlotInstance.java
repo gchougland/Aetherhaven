@@ -66,6 +66,11 @@ public final class PlotInstance {
     @SerializedName("prefabYaw")
     private String prefabYaw;
 
+    /** For residential plots: entity UUID of the villager assigned to this home (house management block). */
+    @Nullable
+    @SerializedName("homeResidentEntityUuid")
+    private String homeResidentEntityUuid;
+
     public PlotInstance() {}
 
     public PlotInstance(
@@ -192,5 +197,16 @@ public final class PlotInstance {
     /** True if this plot's AABB intersects {@code candidate} (same rule as legacy overlap). */
     public boolean intersectsFootprint(@Nonnull PlotFootprintRecord candidate) {
         return toFootprint().intersects(candidate);
+    }
+
+    @Nullable
+    public UUID getHomeResidentEntityUuid() {
+        return homeResidentEntityUuid != null && !homeResidentEntityUuid.isBlank()
+            ? UUID.fromString(homeResidentEntityUuid.trim())
+            : null;
+    }
+
+    public void setHomeResidentEntityUuid(@Nullable UUID uuid) {
+        this.homeResidentEntityUuid = uuid != null ? uuid.toString() : null;
     }
 }

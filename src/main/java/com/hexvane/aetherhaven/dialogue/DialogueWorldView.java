@@ -45,6 +45,13 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /** True if an NPC with this role id is currently listed in the town's inn visitor pool (loaded entity only). */
+    default boolean innPoolHasNpcRole(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String npcRoleId
+    ) {
+        return false;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {

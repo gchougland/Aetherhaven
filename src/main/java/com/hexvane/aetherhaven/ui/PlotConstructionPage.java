@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -10,15 +11,21 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.HouseResidentAssignment;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -35,6 +42,8 @@ import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
+import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -42,7 +51,14 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,6 +98,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set("#BuildingTitle.TextSpans", Message.raw(managementUi ? "Building" : "Plot sign"));
             commandBuilder.set("#Description.TextSpans", Message.raw("No construction is configured for this plot."));
             commandBuilder.set("#VillagerRow.Visible", false);
+            commandBuilder.set("#HouseResidentRow.Visible", false);
             for (int i = 0; i < MATERIAL_ROW_CAP; i++) {
                 commandBuilder.set("#Mat" + i + ".Visible", false);
             }
@@ -144,6 +161,67 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             );
         }
 
+        boolean showHouseResident =
+            managementUi
+                && completed
+                && def != null
+                && AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getId());
+        commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
+        if (showHouseResident) {
+            commandBuilder.set(
+                "#HouseResidentHint.TextSpans",
+                Message.raw("Assign a villager who lives here (completes their house quest when it matches).")
+            );
+            Store<ChunkStore> cs = blockRef.getStore();
+            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+            UUID plotUuid = null;
+            UUID townUuid = null;
+            if (mb != null && mb.getPlotId() != null && !mb.getPlotId().isBlank()) {
+                try {
+                    plotUuid = UUID.fromString(mb.getPlotId().trim());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            if (mb != null && mb.getTownId() != null && !mb.getTownId().isBlank()) {
+                try {
+                    townUuid = UUID.fromString(mb.getTownId().trim());
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            ObjectArrayList<DropdownEntryInfo> resEntries = new ObjectArrayList<>();
+            resEntries.add(new DropdownEntryInfo(LocalizableString.fromString("Unassigned"), ""));
+            String selectedValue = "";
+            if (plotUuid != null && townUuid != null) {
+                AetherhavenPlugin plug = AetherhavenPlugin.get();
+                if (plug != null) {
+                    World world = store.getExternalData().getWorld();
+                    TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plug);
+                    TownRecord town = townManager.getTown(townUuid);
+                    if (town != null) {
+                        PlotInstance pi = town.findPlotById(plotUuid);
+                        UUID cur = pi != null ? pi.getHomeResidentEntityUuid() : null;
+                        if (cur != null) {
+                            selectedValue = cur.toString();
+                        }
+                        List<HouseResidentRow> rows = collectHouseResidentRows(store, town);
+                        for (HouseResidentRow row : rows) {
+                            resEntries.add(
+                                new DropdownEntryInfo(LocalizableString.fromString(row.label()), row.entityUuid().toString())
+                            );
+                        }
+                    }
+                }
+            }
+            commandBuilder.set("#HouseResidentDropdown #Input.Entries", resEntries);
+            commandBuilder.set("#HouseResidentDropdown #Input.Value", selectedValue.isEmpty() ? "" : selectedValue);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#AssignHouseResidentButton",
+                new EventData().append("Action", "AssignHouseResident").append("@HouseResidentUuid", "#HouseResidentDropdown #Input.Value"),
+                false
+            );
+        }
+
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#BuildButton",
@@ -160,6 +238,58 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("AssignHouseResident")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState st = resolvePlotState(store, ref);
+            if (st != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            ConstructionDefinition def = resolveDefinition(store, ref);
+            if (def == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getId())) {
+                return;
+            }
+            Store<ChunkStore> cs = blockRef.getStore();
+            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mb == null || mb.getPlotId().isBlank() || mb.getTownId().isBlank()) {
+                return;
+            }
+            UUID plotId;
+            UUID townId;
+            try {
+                plotId = UUID.fromString(mb.getPlotId().trim());
+                townId = UUID.fromString(mb.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null) {
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = tm.getTown(townId);
+            if (town == null) {
+                return;
+            }
+            UUID residentUuid = null;
+            String raw = data.houseResidentUuid;
+            if (raw != null && !raw.isBlank()) {
+                try {
+                    residentUuid = UUID.fromString(raw.trim());
+                } catch (IllegalArgumentException e) {
+                    sendBuildError(store, ref, "Invalid villager selection.");
+                    return;
+                }
+            }
+            HouseResidentAssignment.assignResident(world, plugin, town, plotId, residentUuid, tm);
+            PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+            if (pr != null) {
+                pr.sendMessage(Message.raw(residentUuid == null ? "Cleared home assignment." : "Home assignment updated."));
+            }
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("PickupPlot")) {
             if (managementUi) {
                 return;
@@ -257,7 +387,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             Player player = store.getComponent(ref, Player.getComponentType());
             if (player != null) {
-                // openCustomPage replaces this UI; do not call close() — that sets Page.None and clears the new page.
+                // openCustomPage replaces this UI; do not call close() or Page.None clears the new page.
                 player.getPageManager().openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townUuid));
             }
             return;
@@ -463,12 +593,65 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         return "Villager required: " + vid + " (not implemented; enable IgnoreVillagerRequirement in config to test)";
     }
 
+    private record HouseResidentRow(@Nonnull String label, @Nonnull UUID entityUuid) {}
+
+    @Nonnull
+    private static List<HouseResidentRow> collectHouseResidentRows(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        ComponentType<EntityStore, NPCEntity> npcType = NPCEntity.getComponentType();
+        if (npcType == null) {
+            return List.of();
+        }
+        UUID tid = town.getTownId();
+        Map<UUID, HouseResidentRow> byUuid = new LinkedHashMap<>();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), npcType);
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                        continue;
+                    }
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    NPCEntity npc = archetypeChunk.getComponent(i, npcType);
+                    if (uc == null || npc == null || npc.getRoleName() == null) {
+                        continue;
+                    }
+                    UUID u = uc.getUuid();
+                    String label = NpcPortraitProvider.displayLabelForRoleId(npc.getRoleName());
+                    byUuid.put(u, new HouseResidentRow(label, u));
+                }
+            }
+        );
+        addHouseFallbackIfMissing(byUuid, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
+        addHouseFallbackIfMissing(byUuid, town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
+        List<HouseResidentRow> out = new ArrayList<>(byUuid.values());
+        out.sort(Comparator.comparing(HouseResidentRow::label, String.CASE_INSENSITIVE_ORDER));
+        return out;
+    }
+
+    private static void addHouseFallbackIfMissing(
+        @Nonnull Map<UUID, HouseResidentRow> byUuid, @Nullable UUID entityUuid, @Nonnull String roleId
+    ) {
+        if (entityUuid == null || byUuid.containsKey(entityUuid)) {
+            return;
+        }
+        byUuid.put(
+            entityUuid,
+            new HouseResidentRow(NpcPortraitProvider.displayLabelForRoleId(roleId), entityUuid)
+        );
+    }
+
     public static final class PageData {
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
+            .append(new KeyedCodec<>("@HouseResidentUuid", Codec.STRING), (d, v) -> d.houseResidentUuid = v, d -> d.houseResidentUuid)
+            .add()
             .build();
 
         private String action;
+        private String houseResidentUuid;
     }
 }

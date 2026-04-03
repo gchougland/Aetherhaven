@@ -3,9 +3,67 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Blacksmith",
-      "text": "Fine forge weather today. I am just passing through.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "speaker": "Garren Vale",
+      "text": "Garren Vale. Fine forge weather, if the wind stays out of the coals. I'm not here for sightseeing. Metal out here misbehaves, and someone has to teach it manners.",
+      "choices": [
+        {
+          "text": "About a home in town...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_blacksmith" },
+                    { "type": "town_quest_completed", "questId": "q_house_blacksmith" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "garren_house_offer"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [{ "type": "town_quest_active", "questId": "q_house_blacksmith" }]
+          },
+          "whenFalse": "hide",
+          "next": "garren_house_remind"
+        },
+        { "text": "Farewell.", "next": null }
+      ]
+    },
+    "garren_house_offer": {
+      "speaker": "Garren Vale",
+      "text": "A roof that isn't borrowed would keep the rust off my temper. Build the house footprint, same as anyone's, then put my name on the management block when it's done.",
+      "choices": [
+        {
+          "text": "I'll stake a house.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_blacksmith" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "garren_house_accepted"
+        },
+        { "text": "Another time.", "next": null }
+      ]
+    },
+    "garren_house_accepted": {
+      "speaker": "Garren Vale",
+      "text": "Good. When the walls are up, assign me inside. That's the proof I live here.",
+      "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "garren_house_remind": {
+      "speaker": "Garren Vale",
+      "text": "Take your time. When the house stands, register me on the block and we're square.",
+      "choices": [{ "text": "Right.", "next": null }]
     }
   }
 }

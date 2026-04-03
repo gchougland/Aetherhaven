@@ -17,6 +17,13 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     public static final String KIND_INNKEEPER = "innkeeper";
     /** Permanent stall / resident merchant (not an inn visitor). */
     public static final String KIND_MERCHANT = "merchant";
+
+    /** Resident farmer tied to a completed farm plot. */
+    public static final String KIND_FARMER = "farmer";
+
+    /** Resident blacksmith (promoted from inn visitor; not a forge plot yet). */
+    public static final String KIND_BLACKSMITH = "blacksmith";
+
     public static final String KIND_VISITOR_MERCHANT = "visitor_merchant";
     public static final String KIND_VISITOR_BLACKSMITH = "visitor_blacksmith";
     public static final String KIND_VISITOR_FARMER = "visitor_farmer";

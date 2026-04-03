@@ -23,10 +23,10 @@ public final class NpcPortraitProvider {
     /** Short labels for town needs UI (aligned with server.lang npcRoles.*.name). */
     private static final Map<String, String> ROLE_ID_TO_LABEL = Map.ofEntries(
         Map.entry(AetherhavenConstants.ELDER_NPC_ROLE_ID, "Elder Lyren"),
-        Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Innkeeper"),
-        Map.entry(AetherhavenConstants.NPC_MERCHANT, "Vex the Merchant"),
-        Map.entry(AetherhavenConstants.NPC_BLACKSMITH, "Traveling Blacksmith"),
-        Map.entry(AetherhavenConstants.NPC_FARMER, "Traveling Farmer")
+        Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Corin Mosscup"),
+        Map.entry(AetherhavenConstants.NPC_MERCHANT, "Vex Sunderlane"),
+        Map.entry(AetherhavenConstants.NPC_BLACKSMITH, "Garren Vale"),
+        Map.entry(AetherhavenConstants.NPC_FARMER, "Irienne Mossmark")
     );
 
     private NpcPortraitProvider() {}

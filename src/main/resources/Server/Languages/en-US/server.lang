@@ -16,6 +16,8 @@ aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
 aetherhaven.ui.plotconstruction.pickUpPlot=Pick up plot (return token)
 aetherhaven.ui.plotconstruction.townNeeds=Town needs
+aetherhaven.ui.plotconstruction.houseResident=Resident
+aetherhaven.ui.plotconstruction.assignHouseResident=Set resident
 
 aetherhaven.ui.villagerneeds.title=Town needs
 aetherhaven.ui.villagerneeds.hint=Select a villager to view meters and portrait.
@@ -71,6 +73,15 @@ items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the pl
 items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
 items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
 
+items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
+items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_Park.name=Park plot token
+items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_House.name=House plot token
+items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
+
 items.Aetherhaven_Quest_Journal.name=Town quest journal
 items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.
 
@@ -85,10 +96,10 @@ items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
-npcRoles.Aetherhaven_Innkeeper.name=Innkeeper
-npcRoles.Aetherhaven_Merchant.name=Vex the Merchant
-npcRoles.Aetherhaven_Blacksmith.name=Traveling Blacksmith
-npcRoles.Aetherhaven_Farmer.name=Traveling Farmer
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
 
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.dissolve=Dissolve town

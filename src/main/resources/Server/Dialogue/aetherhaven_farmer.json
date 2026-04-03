@@ -3,9 +3,163 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Farmer",
-      "text": "Road was long. A warm inn beats sleeping in the ditch.",
-      "choices": [{ "text": "Rest well.", "next": null }]
+      "speaker": "Irienne Mossmark",
+      "text": "Irienne Mossmark. Soil doesn't care what fell before. It only cares what you plant next. The road here was long. A warm inn still beats a ditch and a hungry night.",
+      "choices": [
+        {
+          "text": "About a home for you...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_farm_plot" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_farmer" },
+                    { "type": "town_quest_completed", "questId": "q_house_farmer" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "irienne_house_offer"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [{ "type": "town_quest_active", "questId": "q_house_farmer" }]
+          },
+          "whenFalse": "hide",
+          "next": "irienne_house_remind"
+        },
+        {
+          "text": "Good to see you settled in.",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_farm_plot"
+          },
+          "next": "irienne_done"
+        },
+        {
+          "text": "The farm's ready for you.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_farm_plot" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_farm" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_farm_plot" }],
+          "next": "irienne_done"
+        },
+        {
+          "text": "About the farm plot...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_farm_plot" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_farm"
+                }
+              }
+            ]
+          },
+          "next": "irienne_building"
+        },
+        {
+          "text": "I could use a farmhand in town.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_farm_plot" } },
+              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_farm_plot" } }
+            ]
+          },
+          "next": "irienne_quest_farm"
+        },
+        {
+          "text": "Rest well.",
+          "next": null
+        }
+      ]
+    },
+    "irienne_quest_farm": {
+      "speaker": "Irienne Mossmark",
+      "text": "I've been sleeping on Corin's floor and dreaming of rows I could call mine. If you stake a farm plot and build the fence and bench, I'll move in proper, tend the soil, keep the town fed. Craft the plot token at your planning desk, place it with your staff, and pay the materials at the sign. I'll meet you at the farming bench when it stands.",
+      "choices": [
+        {
+          "text": "We'll get it built.",
+          "actions": [
+            { "type": "start_quest", "id": "q_farm_plot" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Farm", "count": 1 }
+          ],
+          "next": "irienne_accepted"
+        },
+        {
+          "text": "Not right now.",
+          "next": null
+        }
+      ]
+    },
+    "irienne_accepted": {
+      "speaker": "Irienne Mossmark",
+      "text": "Good. I'll stay at the inn until the soil's ready. Then you'll see me behind the bench, sleeves rolled.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "irienne_building": {
+      "speaker": "Irienne Mossmark",
+      "text": "Take your time. When the plot's built, I'll walk over to the farming bench and set up. Come find me there and we'll call it done.",
+      "choices": [
+        {
+          "text": "I need to drop the quest.",
+          "actions": [{ "type": "abandon_quest", "id": "q_farm_plot" }],
+          "next": "irienne_abandoned"
+        },
+        { "text": "Understood.", "next": null }
+      ]
+    },
+    "irienne_abandoned": {
+      "speaker": "Irienne Mossmark",
+      "text": "No harm done. If you still want rows in town, ask again.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    },
+    "irienne_done": {
+      "speaker": "Irienne Mossmark",
+      "text": "The plot's honest work. Roots go deeper than complaints. I'll keep the beds turning while the town grows around us.",
+      "choices": [{ "text": "Good luck.", "next": null }]
+    },
+    "irienne_house_offer": {
+      "speaker": "Irienne Mossmark",
+      "text": "The farm feeds the town, but I'd still like a door that isn't the inn's. Same house token as anyone. Build it, then assign me on the shelf inside.",
+      "choices": [
+        {
+          "text": "I'll build it.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_farmer" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "irienne_house_accepted"
+        },
+        { "text": "Not yet.", "next": null }
+      ]
+    },
+    "irienne_house_accepted": {
+      "speaker": "Irienne Mossmark",
+      "text": "Good. When the roof is sound, register me on the management block. That's how we'll know it's mine.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "irienne_house_remind": {
+      "speaker": "Irienne Mossmark",
+      "text": "Soil doesn't hurry. When the house is built, assign me there and we'll be done.",
+      "choices": [{ "text": "Understood.", "next": null }]
     }
   }
 }

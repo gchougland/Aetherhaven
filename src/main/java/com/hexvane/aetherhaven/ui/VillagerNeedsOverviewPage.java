@@ -183,6 +183,12 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         if (TownVillagerBinding.KIND_MERCHANT.equals(kind)) {
             return 2;
         }
+        if (TownVillagerBinding.KIND_FARMER.equals(kind)) {
+            return 2;
+        }
+        if (TownVillagerBinding.KIND_BLACKSMITH.equals(kind)) {
+            return 2;
+        }
         return 3;
     }
 
@@ -194,6 +200,12 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             return 1;
         }
         if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_FARMER.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
             return 2;
         }
         return 3;

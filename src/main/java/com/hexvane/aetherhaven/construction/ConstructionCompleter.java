@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.FarmerPlotCompletion;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -71,6 +72,9 @@ public final class ConstructionCompleter {
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(def.getId())) {
                 MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(def.getId())) {
+                FarmerPlotCompletion.onFarmBuilt(world, plugin, town, plotId, tm);
             }
         }
     }

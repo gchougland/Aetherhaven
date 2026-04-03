@@ -3,11 +3,13 @@ package com.hexvane.aetherhaven.dialogue;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,5 +84,43 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     @Override
     public boolean aetherhavenHasTown(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         return townFor(playerRef, store) != null;
+    }
+
+    @Override
+    public boolean innPoolHasNpcRole(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String npcRoleId
+    ) {
+        String want = npcRoleId.trim();
+        if (want.isEmpty()) {
+            return false;
+        }
+        TownRecord t = townFor(playerRef, store);
+        if (t == null) {
+            return false;
+        }
+        var es = world.getEntityStore();
+        if (es == null) {
+            return false;
+        }
+        Store<EntityStore> entityStore = es.getStore();
+        ComponentType<EntityStore, NPCEntity> npcType = NPCEntity.getComponentType();
+        if (npcType == null) {
+            return false;
+        }
+        for (String sid : t.getInnPoolNpcIds()) {
+            try {
+                UUID u = UUID.fromString(sid.trim());
+                Ref<EntityStore> ref = entityStore.getExternalData().getRefFromUUID(u);
+                if (ref == null || !ref.isValid()) {
+                    continue;
+                }
+                NPCEntity npc = entityStore.getComponent(ref, npcType);
+                if (npc != null && want.equals(npc.getRoleName())) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return false;
     }
 }
