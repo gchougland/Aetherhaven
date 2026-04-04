@@ -57,6 +57,11 @@ import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.assetstore.AssetPack;
+import com.hypixel.hytale.common.plugin.PluginIdentifier;
+import com.hypixel.hytale.server.core.HytaleServer;
+import com.hypixel.hytale.server.core.asset.AssetModule;
+import com.hypixel.hytale.server.core.asset.AssetPackRegisterEvent;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.plugin.JavaPluginInit;
@@ -333,6 +338,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void start() {
+        // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
+        // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.
+        if (this.getManifest().includesAssetPack()) {
+            String packId = new PluginIdentifier(this.getManifest()).toString();
+            AssetPack pack = AssetModule.get().getAssetPack(packId);
+            if (pack != null) {
+                HytaleServer.get()
+                    .getEventBus()
+                    .<Void, AssetPackRegisterEvent>dispatchFor(AssetPackRegisterEvent.class)
+                    .dispatch(new AssetPackRegisterEvent(pack));
+            } else {
+                LOGGER.atWarning().log("Asset pack %s not found in AssetModule; Asset Editor may not list this mod", packId);
+            }
+        }
         this.config.get();
         this.constructionCatalog = ConstructionCatalog.loadFromClasspath(this.getClassLoader());
         this.dialogueCatalog = DialogueCatalog.loadFromClasspath(this.getClassLoader());

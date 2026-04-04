@@ -14,9 +14,6 @@
   "OptionalDependencies": {
     "Hytale:NPC": "*"
   },
-  "LoadBefore": {
-    "Hytale:AssetEditor": "*"
-  },
   "DisabledByDefault": false,
   "IncludesAssetPack": true,
   "Main": "${plugin_main_entrypoint}"
