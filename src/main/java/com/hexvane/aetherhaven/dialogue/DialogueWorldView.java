@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Pluggable game state for dialogue conditions; extend when achievements / village sim exist. */
 public interface DialogueWorldView {
@@ -48,6 +49,16 @@ public interface DialogueWorldView {
     /** True if an NPC with this role id is currently listed in the town's inn visitor pool (loaded entity only). */
     default boolean innPoolHasNpcRole(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String npcRoleId
+    ) {
+        return false;
+    }
+
+    /**
+     * True if the speaking NPC is registered as home resident on a complete house plot in the player's town
+     * (used to finish house quests after the management block assignment).
+     */
+    default boolean townNpcHomeResidentOnHousePlot(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
         return false;
     }

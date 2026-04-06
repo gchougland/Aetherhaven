@@ -33,10 +33,29 @@
           "next": "corin_house_offer"
         },
         {
+          "text": "You're on the house ledger—I wanted to tell you.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_innkeeper" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_innkeeper" }],
+          "next": "corin_house_finish"
+        },
+        {
           "text": "I'm still building your house.",
           "condition": {
             "type": "and",
-            "conditions": [{ "type": "town_quest_active", "questId": "q_house_innkeeper" }]
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_innkeeper" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
           },
           "whenFalse": "hide",
           "next": "corin_house_remind"
@@ -66,13 +85,18 @@
     },
     "corin_house_accepted": {
       "speaker": "Corin Mosscup",
-      "text": "Thanks. I'll keep the kettle on here until the house is yours to place.",
+      "text": "Thanks. I'll keep the kettle on here until the house is yours to place. Once I'm on the ledger, come find me—we'll wrap it up face to face.",
       "choices": [{ "text": "See you soon.", "next": null }]
     },
     "corin_house_remind": {
       "speaker": "Corin Mosscup",
-      "text": "No rush. When the house is built, assign me on its shelf. I'll know it was mine.",
+      "text": "No rush. When the house is built, assign me on its shelf, then come tell me so we can close the book on this.",
       "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "corin_house_finish": {
+      "speaker": "Corin Mosscup",
+      "text": "Good. A hearth for everyone, and a door that's mine when the night ends. That means more than the key.",
+      "choices": [{ "text": "Glad it's sorted.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Corin Mosscup",

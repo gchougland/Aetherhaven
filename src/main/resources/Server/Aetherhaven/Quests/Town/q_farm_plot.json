@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q_farm_plot",
+  "category": "town",
+  "title": "Irienne's Farm Plot",
+  "description": "Help Irienne set up a farm plot in town so she can move in and work the soil.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the farm plot token from Irienne."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the farm plot prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to Irienne at the farm to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Farmer",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.time.Instant;
@@ -62,6 +63,13 @@ public final class TownRecord {
 
     @SerializedName("completedQuestIds")
     private List<String> completedQuestIds = new ArrayList<>();
+
+    /**
+     * Per-quest objective completion for non-{@code journal} objectives. Outer key: quest id; inner: objective id.
+     */
+    @Nullable
+    @SerializedName("questObjectiveProgress")
+    private Map<String, Map<String, Boolean>> questObjectiveProgress;
 
     @Nullable
     @SerializedName("elderEntityUuid")
@@ -473,6 +481,7 @@ public final class TownRecord {
         Set<String> done = normalizedQuestSet(completedQuestIds);
         done.add(q);
         completedQuestIds = new ArrayList<>(done);
+        clearQuestObjectiveProgress(q);
     }
 
     public void clearActiveQuest(@Nonnull String questId) {
@@ -483,6 +492,29 @@ public final class TownRecord {
         Set<String> active = normalizedQuestSet(activeQuestIds);
         active.remove(q);
         activeQuestIds = new ArrayList<>(active);
+        clearQuestObjectiveProgress(q);
+    }
+
+    /** Initializes tracking entries for objectives that are not {@code journal} kind (future hooks). */
+    public void initQuestObjectiveProgress(@Nonnull String questId, @Nonnull List<String> trackableObjectiveIds) {
+        if (trackableObjectiveIds.isEmpty()) {
+            return;
+        }
+        if (questObjectiveProgress == null) {
+            questObjectiveProgress = new LinkedHashMap<>();
+        }
+        Map<String, Boolean> m = questObjectiveProgress.computeIfAbsent(questId.trim(), k -> new LinkedHashMap<>());
+        for (String oid : trackableObjectiveIds) {
+            if (oid != null && !oid.isBlank()) {
+                m.putIfAbsent(oid.trim(), Boolean.FALSE);
+            }
+        }
+    }
+
+    public void clearQuestObjectiveProgress(@Nonnull String questId) {
+        if (questObjectiveProgress != null) {
+            questObjectiveProgress.remove(questId.trim());
+        }
     }
 
     @Nonnull
@@ -534,6 +566,26 @@ public final class TownRecord {
             }
         }
         return null;
+    }
+
+    /**
+     * True if this villager NPC is listed as home resident on any complete residential plot in this town
+     * (used for house-quest dialogue completion after assignment).
+     */
+    public boolean isNpcHomeResidentOnHousePlot(@Nonnull UUID npcEntityUuid) {
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(p.getConstructionId())) {
+                continue;
+            }
+            UUID h = p.getHomeResidentEntityUuid();
+            if (h != null && h.equals(npcEntityUuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** If {@code residentUuid} is home in another plot, clears that assignment (one home per villager). */

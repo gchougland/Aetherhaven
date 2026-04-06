@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
+import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
@@ -84,7 +85,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     /** Same pattern as OrbisOrigins: {@code config.json} under the plugin data directory. */
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
-    private DialogueCatalog dialogueCatalog = DialogueCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
+    private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
+    private QuestCatalog questCatalog = QuestCatalog.empty();
     private final VillagerScheduleRegistry villagerScheduleRegistry =
         new VillagerScheduleRegistry(AetherhavenPlugin.class.getClassLoader());
     private final DialogueResolver dialogueResolver = new DialogueResolver();
@@ -116,6 +118,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public DialogueCatalog getDialogueCatalog() {
         return dialogueCatalog;
+    }
+
+    @Nonnull
+    public QuestCatalog getQuestCatalog() {
+        return questCatalog;
     }
 
     @Nonnull
@@ -354,12 +361,23 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         this.config.get();
         this.constructionCatalog = ConstructionCatalog.loadFromClasspath(this.getClassLoader());
-        this.dialogueCatalog = DialogueCatalog.loadFromClasspath(this.getClassLoader());
+        this.reloadAetherhavenDialogueAndQuestCatalogs();
+        this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenDialogueAndQuestCatalogs());
         this.dialogueResolver.registerKind("merchant", "aetherhaven_merchant");
         this.dialogueResolver.registerKind("blacksmith", "aetherhaven_blacksmith");
         this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
-        LOGGER.atInfo().log("Aetherhaven dialogues loaded: %s", this.dialogueCatalog.all().keySet());
+    }
+
+    private void reloadAetherhavenDialogueAndQuestCatalogs() {
+        ClassLoader cl = this.getClassLoader();
+        this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
+        LOGGER.atInfo().log(
+            "Aetherhaven dialogue/quest catalogs reloaded (dialogue=%s, quests=%s)",
+            this.dialogueCatalog.all().keySet(),
+            this.questCatalog.all().keySet()
+        );
     }
 
     @Override

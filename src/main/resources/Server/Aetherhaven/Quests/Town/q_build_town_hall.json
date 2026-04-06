@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "q_build_town_hall",
+  "category": "town",
+  "title": "Build the Town Hall",
+  "description": "Lyren asked you to raise a town hall: a place for records, planning, and the village treasury.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the town hall plot token from Lyren."
+    },
+    {
+      "id": "place_build",
+      "kind": "journal",
+      "text": "Place and build the town hall prefab."
+    },
+    {
+      "id": "tell_elder",
+      "kind": "journal",
+      "text": "Tell Lyren when construction is complete."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Elder_Lyren",
+      "amount": 20,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

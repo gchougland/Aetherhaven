@@ -96,6 +96,7 @@ public final class DialogueConditionEvaluator {
             case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
             case "npc_binding_is_visitor" -> npcBindingIsVisitor(store, npcRef);
             case "npc_inn_pool_role" -> worldView.innPoolHasNpcRole(playerRef, store, stringOrEmpty(o, "roleId"));
+            case "town_npc_home_resident_house" -> worldView.townNpcHomeResidentOnHousePlot(playerRef, store, npcRef);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

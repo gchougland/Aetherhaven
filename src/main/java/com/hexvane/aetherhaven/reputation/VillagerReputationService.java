@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.reputation;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -118,7 +120,11 @@ public final class VillagerReputationService {
         @Nonnull String beneficiaryNpcRoleName,
         @Nonnull String questId
     ) {
-        QuestReputationConfig.QuestRep qr = QuestReputationConfig.forQuest(questId);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return false;
+        }
+        QuestCatalog.QuestReputationGrant qr = plugin.getQuestCatalog().findQuestBeneficiaryReputation(questId);
         if (qr == null) {
             return false;
         }

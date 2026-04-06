@@ -35,10 +35,29 @@
           "next": "vex_house_offer"
         },
         {
+          "text": "You're on the house ledger.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_merchant" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_merchant" }],
+          "next": "vex_house_finish"
+        },
+        {
           "text": "I'm still building your house.",
           "condition": {
             "type": "and",
-            "conditions": [{ "type": "town_quest_active", "questId": "q_house_merchant" }]
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_merchant" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
           },
           "whenFalse": "hide",
           "next": "vex_house_remind"
@@ -159,13 +178,18 @@
     },
     "vex_house_accepted": {
       "speaker": "Vex Sunderlane",
-      "text": "Good. When the walls are yours to open, put my name on the block inside. That's the proof.",
+      "text": "Good. When the walls are yours to open, put my name on the block inside. Then find me—I'll want the receipt in words, not just ink.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "vex_house_remind": {
       "speaker": "Vex Sunderlane",
-      "text": "Take your time. When the house stands, assign me there and we'll call it settled.",
+      "text": "Take your time. When the house stands, assign me there, then come back so we can close the ledger properly.",
       "choices": [{ "text": "Right.", "next": null }]
+    },
+    "vex_house_finish": {
+      "speaker": "Vex Sunderlane",
+      "text": "Then it's not just inventory. I've got a door that answers to me. That's worth more than coin.",
+      "choices": [{ "text": "Enjoy it.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Vex Sunderlane",

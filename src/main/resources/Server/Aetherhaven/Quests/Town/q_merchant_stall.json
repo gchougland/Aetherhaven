@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q_merchant_stall",
+  "category": "town",
+  "title": "Build the Market Stall",
+  "description": "Help the merchant open a stall, then speak to them at the stall to finish up.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the market stall plot token from the merchant."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the market stall prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to the merchant at the stall to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Merchant",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

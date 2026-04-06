@@ -29,10 +29,29 @@
           "next": "irienne_house_offer"
         },
         {
+          "text": "You're registered at the house.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_farmer" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_farmer" }],
+          "next": "irienne_house_finish"
+        },
+        {
           "text": "I'm still building your house.",
           "condition": {
             "type": "and",
-            "conditions": [{ "type": "town_quest_active", "questId": "q_house_farmer" }]
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_farmer" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
           },
           "whenFalse": "hide",
           "next": "irienne_house_remind"
@@ -153,13 +172,18 @@
     },
     "irienne_house_accepted": {
       "speaker": "Irienne Mossmark",
-      "text": "Good. When the roof is sound, register me on the management block. That's how we'll know it's mine.",
+      "text": "Good. When the roof is sound, register me on the management block. Then come find me—we'll put a proper end on it.",
       "choices": [{ "text": "See you soon.", "next": null }]
     },
     "irienne_house_remind": {
       "speaker": "Irienne Mossmark",
-      "text": "Soil doesn't hurry. When the house is built, assign me there and we'll be done.",
+      "text": "Soil doesn't hurry. When the house is built, assign me there, then come speak with me so we can finish the story.",
       "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "irienne_house_finish": {
+      "speaker": "Irienne Mossmark",
+      "text": "Then I've got roots under a roof that's mine. That's a better kind of planting.",
+      "choices": [{ "text": "Glad to hear it.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Irienne Mossmark",

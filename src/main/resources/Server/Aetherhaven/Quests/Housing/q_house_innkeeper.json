@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_innkeeper",
+  "category": "housing",
+  "title": "Corin's Home",
+  "description": "Corin wants a roof of his own beyond the inn's ledger. Build the house, assign him on its management block, then speak with him to finish the quest.",
+  "assignNpcRoleId": "Aetherhaven_Innkeeper",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the house plot token from Corin."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the house prefab."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Innkeeper",
+      "text": "Assign Corin as resident on the house management block."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to Corin to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Innkeeper",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

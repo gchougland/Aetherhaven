@@ -80,11 +80,28 @@
           "next": "lyren_house_offer"
         },
         {
+          "text": "You're registered at the house—I wanted you to hear it from me.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_elder" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_elder" }],
+          "next": "lyren_house_finish"
+        },
+        {
           "text": "I'm still building your house.",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_elder" }
+              { "type": "town_quest_active", "questId": "q_house_elder" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
             ]
           },
           "whenFalse": "hide",
@@ -184,13 +201,18 @@
     },
     "lyren_house_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. When the walls are up, use the management block and assign me as resident. That is how we'll know the roof is truly mine.",
+      "text": "Good. When the walls are up, use the management block and assign me as resident. After that, come find me—I'll want to hear it in person before we close the matter.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "lyren_house_remind": {
       "speaker": "Elder Lyren",
-      "text": "Timber and patience in equal measure. When the house stands, register me on its management block and we'll call it finished.",
+      "text": "Timber and patience in equal measure. When the house stands, register me on its management block, then come speak with me so we can finish this properly.",
       "choices": [{ "text": "Right.", "next": null }]
+    },
+    "lyren_house_finish": {
+      "speaker": "Elder Lyren",
+      "text": "Then it is settled. A roof under the charter, and a bed that doesn't ask permission. Thank you for seeing it through.",
+      "choices": [{ "text": "Welcome home.", "next": null }]
     },
     "garren_promoted": {
       "speaker": "Elder Lyren",

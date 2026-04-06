@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "q_build_inn",
+  "category": "town",
+  "title": "Build the Inn",
+  "description": "Lyren asked you to construct an inn so travelers have a place to rest.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "place_plot",
+      "kind": "journal",
+      "text": "Place the inn plot with your placement staff."
+    },
+    {
+      "id": "build_prefab",
+      "kind": "journal",
+      "text": "Gather materials and complete construction at the plot sign."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Elder_Lyren",
+      "amount": 18,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [
+      { "effect": "spawn_innkeeper_if_inn_ready", "params": {} }
+    ],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

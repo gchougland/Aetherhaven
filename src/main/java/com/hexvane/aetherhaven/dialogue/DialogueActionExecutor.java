@@ -3,9 +3,11 @@ package com.hexvane.aetherhaven.dialogue;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
+import com.hexvane.aetherhaven.quest.QuestRewardService;
+import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
@@ -113,20 +115,21 @@ public final class DialogueActionExecutor {
         }
         String qid = id.trim();
         town.addActiveQuest(qid);
-        boolean lockInn =
-            (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean())
-                || AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid)
-                || AetherhavenConstants.QUEST_FARM_PLOT.equals(qid);
-        if (lockInn && npcRef != null && npcRef.isValid()) {
-            UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
-            if (nu != null) {
-                town.addInnLockedEntity(nu.getUuid());
-            }
+        QuestCatalog quests = plugin.getQuestCatalog();
+        QuestDefinition qdef = quests.get(qid);
+        UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (qdef != null) {
+            town.initQuestObjectiveProgress(qid, qdef.trackableObjectiveIds());
+            QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
+        }
+        if (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean()
+            && npcUuid != null) {
+            town.addInnLockedEntity(npcUuid);
         }
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest started: " + QuestCatalog.displayName(qid)));
+            pr.sendMessage(Message.raw("Quest started: " + quests.displayName(qid)));
         }
     }
 
@@ -155,7 +158,7 @@ public final class DialogueActionExecutor {
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest completed: " + QuestCatalog.displayName(qid)));
+            pr.sendMessage(Message.raw("Quest completed: " + plugin.getQuestCatalog().displayName(qid)));
         }
     }
 
@@ -180,11 +183,12 @@ public final class DialogueActionExecutor {
         @Nullable Store<EntityStore> store
     ) {
         town.completeQuest(qid);
-        if (AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid) || AetherhavenConstants.QUEST_FARM_PLOT.equals(qid)) {
-            town.getInnLockedEntityUuids().clear();
-        }
-        if (AetherhavenConstants.QUEST_BUILD_INN.equals(qid)) {
-            InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
+        QuestDefinition def = plugin.getQuestCatalog().get(qid);
+        if (def != null) {
+            QuestLifecycleEffects.runOnComplete(world, plugin, town, tm, def, null);
+            if (rewardPlayerRef != null && store != null) {
+                QuestRewardService.grantNonReputationRewards(def, rewardPlayerRef, store);
+            }
         }
         tm.updateTown(town);
         if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {
@@ -272,13 +276,14 @@ public final class DialogueActionExecutor {
         }
         String qid = id.trim();
         town.clearActiveQuest(qid);
-        if (AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid) || AetherhavenConstants.QUEST_FARM_PLOT.equals(qid)) {
-            town.getInnLockedEntityUuids().clear();
+        QuestDefinition def = plugin.getQuestCatalog().get(qid);
+        if (def != null) {
+            QuestLifecycleEffects.runOnAbandon(world, plugin, town, tm, def, null);
         }
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest abandoned: " + QuestCatalog.displayName(qid)));
+            pr.sendMessage(Message.raw("Quest abandoned: " + plugin.getQuestCatalog().displayName(qid)));
         }
     }
 

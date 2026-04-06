@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "aetherhaven_dialogue_test_quest",
+  "category": "test",
+  "title": "Dialogue test quest",
+  "description": "Test quest for dialogue wiring.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "one",
+      "kind": "journal",
+      "text": "Complete the test."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Test_Villager",
+      "amount": 3,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

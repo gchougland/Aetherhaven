@@ -123,4 +123,20 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         }
         return false;
     }
+
+    @Override
+    public boolean townNpcHomeResidentOnHousePlot(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return false;
+        }
+        UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (uuidComp == null) {
+            return false;
+        }
+        UUID npcUuid = uuidComp.getUuid();
+        TownRecord t = townFor(playerRef, store);
+        return t != null && t.isNpcHomeResidentOnHousePlot(npcUuid);
+    }
 }

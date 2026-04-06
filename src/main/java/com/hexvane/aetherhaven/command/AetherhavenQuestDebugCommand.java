@@ -2,7 +2,7 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -47,13 +47,14 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     }
 
     @Nonnull
-    private static String questLine(@Nonnull String label, @Nonnull List<String> ids) {
+    private static String questLine(@Nonnull AetherhavenPlugin plugin, @Nonnull String label, @Nonnull List<String> ids) {
         if (ids.isEmpty()) {
             return label + " (none)";
         }
+        var quests = plugin.getQuestCatalog();
         List<String> parts = new ArrayList<>();
         for (String id : ids) {
-            parts.add(QuestCatalog.displayName(id) + " [" + id + "]");
+            parts.add(quests.displayName(id) + " [" + id + "]");
         }
         return label + ": " + String.join(", ", parts);
     }
@@ -80,8 +81,8 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
                 playerRef.sendMessage(Message.raw("No town for you in this world."));
                 return;
             }
-            playerRef.sendMessage(Message.raw(questLine("Active", town.getActiveQuestIdsSnapshot())));
-            playerRef.sendMessage(Message.raw(questLine("Completed", town.getCompletedQuestIdsSnapshot())));
+            playerRef.sendMessage(Message.raw(questLine(plugin, "Active", town.getActiveQuestIdsSnapshot())));
+            playerRef.sendMessage(Message.raw(questLine(plugin, "Completed", town.getCompletedQuestIdsSnapshot())));
         }
     }
 
@@ -117,8 +118,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             }
             qid = qid.trim();
             town.addActiveQuest(qid);
+            QuestDefinition def = plugin.getQuestCatalog().get(qid);
+            if (def != null) {
+                town.initQuestObjectiveProgress(qid, def.trackableObjectiveIds());
+            }
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Granted active quest: " + QuestCatalog.displayName(qid)));
+            playerRef.sendMessage(Message.raw("Granted active quest: " + plugin.getQuestCatalog().displayName(qid)));
         }
     }
 
@@ -155,7 +160,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             qid = qid.trim();
             town.completeQuest(qid);
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Completed quest: " + QuestCatalog.displayName(qid)));
+            playerRef.sendMessage(Message.raw("Completed quest: " + plugin.getQuestCatalog().displayName(qid)));
         }
     }
 
@@ -192,7 +197,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             qid = qid.trim();
             town.clearActiveQuest(qid);
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Cleared active quest: " + QuestCatalog.displayName(qid)));
+            playerRef.sendMessage(Message.raw("Cleared active quest: " + plugin.getQuestCatalog().displayName(qid)));
         }
     }
 }

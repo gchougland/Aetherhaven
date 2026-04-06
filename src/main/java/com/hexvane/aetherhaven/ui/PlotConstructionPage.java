@@ -284,7 +284,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                     return;
                 }
             }
-            HouseResidentAssignment.assignResident(world, plugin, town, plotId, residentUuid, tm, ref);
+            HouseResidentAssignment.assignResident(town, plotId, residentUuid, tm);
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
                 pr.sendMessage(Message.raw(residentUuid == null ? "Cleared home assignment." : "Home assignment updated."));

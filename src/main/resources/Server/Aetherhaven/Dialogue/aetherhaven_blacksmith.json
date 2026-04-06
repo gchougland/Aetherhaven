@@ -29,10 +29,29 @@
           "next": "garren_house_offer"
         },
         {
+          "text": "You're registered at the house.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_blacksmith" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_blacksmith" }],
+          "next": "garren_house_finish"
+        },
+        {
           "text": "I'm still building your house.",
           "condition": {
             "type": "and",
-            "conditions": [{ "type": "town_quest_active", "questId": "q_house_blacksmith" }]
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_blacksmith" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
           },
           "whenFalse": "hide",
           "next": "garren_house_remind"
@@ -57,13 +76,18 @@
     },
     "garren_house_accepted": {
       "speaker": "Garren Vale",
-      "text": "Good. When the walls are up, assign me inside. That's the proof I live here.",
+      "text": "Good. When the walls are up, assign me inside. After that, find me and say so—I'll want to hear it before we call it done.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "garren_house_remind": {
       "speaker": "Garren Vale",
-      "text": "Take your time. When the house stands, register me on the block and we're square.",
+      "text": "Take your time. When the house stands, register me on the block, then come talk. That's when we're square.",
       "choices": [{ "text": "Right.", "next": null }]
+    },
+    "garren_house_finish": {
+      "speaker": "Garren Vale",
+      "text": "Then the roof's honest. No borrowed floor, no borrowed name. Good.",
+      "choices": [{ "text": "Fair enough.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Garren Vale",

@@ -4,7 +4,6 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
-import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
@@ -60,6 +59,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             commandBuilder.clear(ROWS);
             return;
         }
+        var quests = plugin.getQuestCatalog();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             commandBuilder.set("#Hint.TextSpans", Message.raw("No player id."));
@@ -99,7 +99,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             String qid = active.get(i);
             commandBuilder.append(ROWS, "Aetherhaven/QuestJournalRow.ui");
             String row = ROWS + "[" + i + "]";
-            commandBuilder.set(row + " #Select #QuestTitle.TextSpans", Message.raw(QuestCatalog.displayName(qid)));
+            commandBuilder.set(row + " #Select #QuestTitle.TextSpans", Message.raw(quests.displayName(qid)));
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #Select",
@@ -115,8 +115,8 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
         }
 
         String sel = selectedQuestId != null ? selectedQuestId : active.get(0);
-        commandBuilder.set("#DetailTitle.TextSpans", Message.raw(QuestCatalog.displayName(sel)));
-        commandBuilder.set("#DetailBody.TextSpans", Message.raw(QuestCatalog.detailBody(sel)));
+        commandBuilder.set("#DetailTitle.TextSpans", Message.raw(quests.displayName(sel)));
+        commandBuilder.set("#DetailBody.TextSpans", Message.raw(quests.detailBody(sel)));
     }
 
     @Override
