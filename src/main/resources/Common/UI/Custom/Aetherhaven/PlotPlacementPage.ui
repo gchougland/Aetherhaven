@@ -42,6 +42,94 @@ $C.@PageOverlay {
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
       }
 
+      Label #CameraSectionLabel {
+        Anchor: (Top: 4, Bottom: 4);
+        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        Text: %server.aetherhaven.ui.plotplacement.cameraSection;
+      }
+
+      $C.@CheckBoxWithLabel #BirdsEyeToggle {
+        @Text = %server.aetherhaven.ui.plotplacement.birdsEye;
+        TooltipText: %server.aetherhaven.ui.plotplacement.birdsEyeTooltip;
+        Anchor: (Bottom: 6);
+      }
+
+      Group #BirdsEyeZoomRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+        Visible: false;
+
+        Label #BirdsEyeZoomLabel {
+          Anchor: (Right: 8);
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+          Text: %server.aetherhaven.ui.plotplacement.viewDistance;
+        }
+
+        TextButton #BtnZoomOut {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-";
+          TooltipText: %server.aetherhaven.ui.plotplacement.zoomOutTooltip;
+        }
+
+        Label #BirdsEyeDistanceValue {
+          Anchor: (Width: 44);
+          Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, VerticalAlignment: Center);
+          Text: "20";
+        }
+
+        TextButton #BtnZoomIn {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+";
+          TooltipText: %server.aetherhaven.ui.plotplacement.zoomInTooltip;
+        }
+      }
+
+      Label #BirdsEyePanLabel {
+        Anchor: (Top: 2, Bottom: 4);
+        Style: (...$C.@DefaultLabelStyle);
+        Text: %server.aetherhaven.ui.plotplacement.panLabel;
+        Visible: false;
+      }
+
+      Group #BirdsEyePanRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+        Visible: false;
+
+        TextButton #BtnPanXm {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-X";
+          TooltipText: %server.aetherhaven.ui.plotplacement.panXmTooltip;
+        }
+        TextButton #BtnPanXp {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+X";
+          TooltipText: %server.aetherhaven.ui.plotplacement.panXpTooltip;
+        }
+        TextButton #BtnPanZm {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "-Z";
+          TooltipText: %server.aetherhaven.ui.plotplacement.panZmTooltip;
+        }
+        TextButton #BtnPanZp {
+          Style: @PlotNudgeTBStyle;
+          Anchor: (Width: 40, Height: 36);
+          Padding: (Horizontal: 2, Vertical: 2);
+          Text: "+Z";
+          TooltipText: %server.aetherhaven.ui.plotplacement.panZpTooltip;
+        }
+      }
+
       Label #PlotTypeLabel {
         Anchor: (Bottom: 4);
         Style: (...$C.@DefaultLabelStyle);

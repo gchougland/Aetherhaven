@@ -67,7 +67,7 @@
   "InteractionInstruction": {
     "Instructions": [
       {
-        "Sensor": { "Type": "Not", "Sensor": { "Type": "CanInteract", "ViewSector": 180 } },
+        "Sensor": { "Type": "Not", "Sensor": { "Type": "CanInteract", "ViewSector": 360 } },
         "Actions": [{ "Type": "SetInteractable", "Interactable": false }]
       },
       {

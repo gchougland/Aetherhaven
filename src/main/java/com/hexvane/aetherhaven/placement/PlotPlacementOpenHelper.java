@@ -36,9 +36,8 @@ public final class PlotPlacementOpenHelper {
         World world = store.getExternalData().getWorld();
         PlotPlacementSession existing = PlotPlacementSessions.get(uc.getUuid());
         if (existing != null && existing.getWorld().getName().equals(world.getName())) {
-            if (tb != null) {
-                existing.setAnchor(pickAnchor(world, tb));
-            }
+            // Active preview: do not move anchor on block right-click; only Cancel clears the session so a new
+            // right-click on a block can start placement elsewhere.
             return new PlotPlacementPage(playerRef, existing);
         }
         if (tb == null) {

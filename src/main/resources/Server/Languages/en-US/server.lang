@@ -53,7 +53,7 @@ items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, plot token
 server.benchCategories.aetherhaven.town_planning=Town planning
 
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
-items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-click a block moves the sign anchor.
+items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start placement (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-clicking a block does not move the preview—use Cancel first to pick a new spot.
 
 items.Aetherhaven_Poi_Tool.name=POI debug tool
 items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
@@ -119,7 +119,7 @@ aetherhaven.ui.chartertown.dissolveHint=Disabled until a later milestone.
 aetherhaven.ui.treasury.title=Town treasury
 aetherhaven.ui.treasury.deposit=Deposit all gold coins
 aetherhaven.ui.treasury.withdraw=Withdraw gold coins
-aetherhaven.ui.treasury.hint=Morning taxes from villagers (by their needs) add coins here. Inn visitors do not pay tax.
+aetherhaven.ui.treasury.hint=Morning taxes from villagers (Based on their needs) add coins here. Inn visitors do not pay tax.
 
 aetherhaven.ui.plotplacement.title=Plot placement
 aetherhaven.ui.plotplacement.plotType=Building
@@ -127,6 +127,18 @@ aetherhaven.ui.plotplacement.moveLabel=Move
 aetherhaven.ui.plotplacement.rotate=90°
 aetherhaven.ui.plotplacement.place=Place plot sign
 aetherhaven.ui.plotplacement.cancel=Cancel preview
+aetherhaven.ui.plotplacement.cameraSection=Camera
+aetherhaven.ui.plotplacement.cameraHint=Bird's-eye frames once when you turn it on (above the preview), then stays put while you move the plot.
+aetherhaven.ui.plotplacement.birdsEye=Bird's-eye view
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Top-down view: initial aim is the preview center. Uncheck to return to first-person. Use Pan to slide the view.
+aetherhaven.ui.plotplacement.viewDistance=Distance
+aetherhaven.ui.plotplacement.panLabel=Pan camera
+aetherhaven.ui.plotplacement.panXmTooltip=Shift view one step toward -X
+aetherhaven.ui.plotplacement.panXpTooltip=Shift view one step toward +X
+aetherhaven.ui.plotplacement.panZmTooltip=Shift view one step toward -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Shift view one step toward +Z
+aetherhaven.ui.plotplacement.zoomOutTooltip=Closer camera (smaller overview, more detail)
+aetherhaven.ui.plotplacement.zoomInTooltip=Farther camera (wider overview of the plot)
 
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
 

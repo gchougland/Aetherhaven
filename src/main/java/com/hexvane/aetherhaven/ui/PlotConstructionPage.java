@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
@@ -32,6 +33,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import com.hypixel.hytale.server.core.asset.type.item.config.ResourceType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
@@ -126,11 +128,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         int mi = 0;
         for (; mi < def.getMaterials().size() && mi < MATERIAL_ROW_CAP; mi++) {
             var m = def.getMaterials().get(mi);
-            String itemId = m.getItemId() != null ? m.getItemId() : "?";
             int need = m.getCount();
-            int has = inv != null ? InventoryMaterials.count(inv, itemId) : 0;
+            int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
             boolean ok = completed || has >= need;
-            String itemLabel = itemLabelForUi(lang, itemId);
+            String itemLabel = materialLabelForUi(lang, m);
             commandBuilder.set("#Mat" + mi + ".Visible", true);
             commandBuilder.set("#Mat" + mi + " #Line.TextSpans", Message.raw(itemLabel + " x" + need + " (have " + has + ")"));
             commandBuilder.set("#Mat" + mi + " #Line.Style.TextColor", ok ? "#3d913f" : "#962f2f");
@@ -574,6 +575,32 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         String lang = language != null ? language : "en-US";
         String resolved = I18nModule.get().getMessage(lang, trKey);
         return resolved != null ? resolved : itemId;
+    }
+
+    @Nonnull
+    private static String materialLabelForUi(@Nullable String language, @Nonnull MaterialRequirement m) {
+        String rt = m.getResourceTypeId();
+        if (rt != null && !rt.isBlank()) {
+            String id = rt.trim();
+            String lang = language != null ? language : "en-US";
+            // Lang files are keyed as <fileBasename>.<entryKey>; vanilla uses Server/Languages/*/server.lang
+            // so entries like resourceType.Wood_Trunk.name become server.resourceType.Wood_Trunk.name
+            String key = "server.resourceType." + id + ".name";
+            String resolved = I18nModule.get().getMessage(lang, key);
+            if (resolved != null) {
+                return resolved;
+            }
+            ResourceType asset = ResourceType.getAssetMap().getAsset(id);
+            if (asset != null) {
+                String n = asset.getName();
+                if (n != null && !n.isBlank()) {
+                    return n;
+                }
+            }
+            return id;
+        }
+        String itemId = m.getItemId();
+        return itemId != null && !itemId.isBlank() ? itemLabelForUi(language, itemId) : "?";
     }
 
     private boolean villagerRequirementMet(ConstructionDefinition def) {

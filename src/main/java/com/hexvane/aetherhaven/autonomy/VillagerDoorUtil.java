@@ -20,6 +20,10 @@ import javax.annotation.Nullable;
  * Opens/closes doors for villager autonomy without running the full {@link
  * com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction} pipeline (no
  * InteractionContext). Logic mirrors that class so pathfinding is not swapped to a different motion mode.
+ *
+ * <p>Block updates are scheduled with {@link World#execute(Runnable)} so they run after the entity store tick — {@code
+ * setBlockInteractionState} can load chunks and touch the entity store, which must not happen during {@link
+ * com.hypixel.hytale.component.system.tick.EntityTickingSystem} execution.
  */
 public final class VillagerDoorUtil {
     private VillagerDoorUtil() {}
@@ -61,11 +65,22 @@ public final class VillagerDoorUtil {
 
     /**
      * Scans a short segment from NPC toward the leash plus a small neighborhood for closed doors and opens them.
+     * Runs the scan on the world task queue (see class Javadoc).
      *
      * @param onOpened optional callback with door block position (for closing behind later)
-     * @return true if any door was opened
      */
-    public static boolean tryOpenDoorsTowardLeash(
+    public static void tryOpenDoorsTowardLeash(
+        @Nonnull World world,
+        @Nonnull Vector3d npcPos,
+        @Nonnull Vector3d leashPos,
+        @Nullable DoorOpenedCallback onOpened
+    ) {
+        Vector3d npcCopy = new Vector3d(npcPos);
+        Vector3d leashCopy = new Vector3d(leashPos);
+        world.execute(() -> tryOpenDoorsTowardLeashSync(world, npcCopy, leashCopy, onOpened));
+    }
+
+    private static void tryOpenDoorsTowardLeashSync(
         @Nonnull World world,
         @Nonnull Vector3d npcPos,
         @Nonnull Vector3d leashPos,
@@ -76,7 +91,6 @@ public final class VillagerDoorUtil {
         int x1 = (int) Math.floor(leashPos.x);
         int z1 = (int) Math.floor(leashPos.z);
         int y0 = (int) Math.floor(npcPos.y);
-        boolean any = false;
         int steps = Math.max(Math.abs(x1 - x0), Math.abs(z1 - z0)) + 3;
         for (int s = 0; s <= steps; s++) {
             double t = steps == 0 ? 0.0 : (double) s / (double) steps;
@@ -92,7 +106,6 @@ public final class VillagerDoorUtil {
                             continue;
                         }
                         if (tryOpenDoorAt(world, npcPos, new Vector3i(bx, by, bz))) {
-                            any = true;
                             if (onOpened != null) {
                                 onOpened.onOpened(bx, by, bz);
                             }
@@ -101,7 +114,6 @@ public final class VillagerDoorUtil {
                 }
             }
         }
-        return any;
     }
 
     /** Callback for the last door block opened (world cell). */
@@ -200,9 +212,21 @@ public final class VillagerDoorUtil {
 
     /**
      * For each door in {@code pendingOpenDoors} that the NPC has passed through (toward the leash), closes it and
-     * removes it from the list. Supports multiple doors on one route; does not wait for the POI.
+     * removes it from the list. Supports multiple doors on one route; does not wait for the POI. Runs on the world task
+     * queue (see class Javadoc).
      */
     public static void closePendingDoorsWhenPassed(
+        @Nonnull World world,
+        @Nonnull Vector3d npcPos,
+        @Nonnull Vector3d leashPos,
+        @Nonnull ArrayList<int[]> pendingOpenDoors
+    ) {
+        Vector3d npcCopy = new Vector3d(npcPos);
+        Vector3d leashCopy = new Vector3d(leashPos);
+        world.execute(() -> closePendingDoorsWhenPassedSync(world, npcCopy, leashCopy, pendingOpenDoors));
+    }
+
+    private static void closePendingDoorsWhenPassedSync(
         @Nonnull World world,
         @Nonnull Vector3d npcPos,
         @Nonnull Vector3d leashPos,

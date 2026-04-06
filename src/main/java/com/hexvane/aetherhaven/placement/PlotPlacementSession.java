@@ -26,6 +26,19 @@ public final class PlotPlacementSession {
     @Nonnull
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
 
+    /**
+     * World-space point the birds-eye rig looks at when first enabled (footprint center or anchor).
+     * Not updated when the preview moves — only captured once per birds-eye session.
+     */
+    private boolean birdsEyeSnapshotValid;
+    private double birdsEyeSnapshotX;
+    private double birdsEyeSnapshotY;
+    private double birdsEyeSnapshotZ;
+
+    /** Extra pan in world space (blocks), on top of the snapshot. */
+    private double birdsEyePanX;
+    private double birdsEyePanZ;
+
     public PlotPlacementSession(@Nonnull World world, @Nonnull Vector3i anchor, int rotationSteps, @Nonnull String constructionId) {
         this.world = world;
         this.anchor = anchor.clone();
@@ -85,5 +98,50 @@ public final class PlotPlacementSession {
 
     public void nudge(int dx, int dy, int dz) {
         anchor = anchor.add(dx, dy, dz);
+    }
+
+    public void clearBirdsEyeSnapshot() {
+        this.birdsEyeSnapshotValid = false;
+    }
+
+    public void setBirdsEyeSnapshot(double x, double y, double z) {
+        this.birdsEyeSnapshotX = x;
+        this.birdsEyeSnapshotY = y;
+        this.birdsEyeSnapshotZ = z;
+        this.birdsEyeSnapshotValid = true;
+    }
+
+    public boolean hasBirdsEyeSnapshot() {
+        return birdsEyeSnapshotValid;
+    }
+
+    public double getBirdsEyeSnapshotX() {
+        return birdsEyeSnapshotX;
+    }
+
+    public double getBirdsEyeSnapshotY() {
+        return birdsEyeSnapshotY;
+    }
+
+    public double getBirdsEyeSnapshotZ() {
+        return birdsEyeSnapshotZ;
+    }
+
+    public void resetBirdsEyePan() {
+        this.birdsEyePanX = 0.0;
+        this.birdsEyePanZ = 0.0;
+    }
+
+    public void addBirdsEyePan(double dx, double dz) {
+        this.birdsEyePanX += dx;
+        this.birdsEyePanZ += dz;
+    }
+
+    public double getBirdsEyePanX() {
+        return birdsEyePanX;
+    }
+
+    public double getBirdsEyePanZ() {
+        return birdsEyePanZ;
     }
 }

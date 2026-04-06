@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementSession;
 import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
+import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -27,8 +28,10 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -55,6 +58,12 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
     @Nonnull
     private final PlotPlacementSession session;
 
+    private boolean birdsEyeEnabled;
+    private float birdsEyeDistance = PlotPlacementCameraUtil.DEFAULT_DISTANCE;
+
+    /** Cancels in-flight smoothed pan when starting a new pan or closing birds-eye. */
+    private int smoothPanGeneration;
+
     public PlotPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull PlotPlacementSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.session = session;
@@ -79,25 +88,40 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 : new Vector3i(sign.x, sign.y, sign.z);
         commandBuilder.set(
             "#Info.TextSpans",
-            Message.raw(
-                name
-                    + "\nPlot sign "
-                    + sign.x
-                    + ", "
-                    + sign.y
-                    + ", "
-                    + sign.z
-                    + " · Prefab origin "
-                    + prefabO.x
-                    + ", "
-                    + prefabO.y
-                    + ", "
-                    + prefabO.z
-                    + "\nYaw step "
-                    + session.getRotationSteps()
-                    + " / 4 (90° each)\nEscape: close panel only · Cancel: remove preview · Air right-click reopens while preview is active."
+            Message.join(
+                Message.raw(
+                    name
+                        + "\nPlot sign "
+                        + sign.x
+                        + ", "
+                        + sign.y
+                        + ", "
+                        + sign.z
+                        + " · Prefab origin "
+                        + prefabO.x
+                        + ", "
+                        + prefabO.y
+                        + ", "
+                        + prefabO.z
+                        + "\nYaw step "
+                        + session.getRotationSteps()
+                        + " / 4 (90° each)\nEscape: close panel only · Cancel: clear preview · Air right-click reopens; block right-click does not move an active preview."
+                ),
+                Message.raw("\n\n"),
+                Message.translation("server.aetherhaven.ui.plotplacement.cameraHint")
             )
         );
+
+        commandBuilder.set("#BirdsEyeToggle #CheckBox.Value", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyeZoomRow.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyePanLabel.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyePanRow.Visible", birdsEyeEnabled);
+        commandBuilder.set(
+            "#BirdsEyeDistanceValue.TextSpans",
+            Message.raw(String.format("%.0f", birdsEyeDistance))
+        );
+        commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
+        commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
 
         if (plugin != null && inv != null) {
             List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
@@ -123,6 +147,12 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         bind(eventBuilder, "#BtnYm", "MoveYm");
         bind(eventBuilder, "#BtnYp", "MoveYp");
         bind(eventBuilder, "#BtnRotate", "Rotate");
+        bind(eventBuilder, "#BtnZoomOut", "ZoomOut");
+        bind(eventBuilder, "#BtnZoomIn", "ZoomIn");
+        bind(eventBuilder, "#BtnPanXm", "PanXm");
+        bind(eventBuilder, "#BtnPanXp", "PanXp");
+        bind(eventBuilder, "#BtnPanZm", "PanZm");
+        bind(eventBuilder, "#BtnPanZp", "PanZp");
         bind(eventBuilder, "#PlaceButton", "Place");
         bind(eventBuilder, "#CancelButton", "Cancel");
 
@@ -132,8 +162,34 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             EventData.of("@ConstructionId", "#PlotTypeDropdown.Value"),
             false
         );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#BirdsEyeToggle #CheckBox",
+            EventData.of("@BirdsEye", "#BirdsEyeToggle #CheckBox.Value"),
+            false
+        );
 
         scheduleRefreshPreview(ref, store);
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                smoothPanGeneration++;
+                if (!birdsEyeEnabled) {
+                    return;
+                }
+                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                if (pr != null) {
+                    PlotPlacementCameraUtil.resetToPlayerCamera(pr);
+                }
+            }
+        );
     }
 
     /**
@@ -181,6 +237,23 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             scheduleRebuild(ref, store);
             return;
         }
+        if (data.birdsEye != null) {
+            birdsEyeEnabled = data.birdsEye;
+            smoothPanGeneration++;
+            if (birdsEyeEnabled) {
+                session.resetBirdsEyePan();
+                session.clearBirdsEyeSnapshot();
+            } else {
+                session.clearBirdsEyeSnapshot();
+            }
+            birdsEyeDistance =
+                Math.max(
+                    PlotPlacementCameraUtil.MIN_DISTANCE,
+                    Math.min(PlotPlacementCameraUtil.MAX_DISTANCE, birdsEyeDistance)
+                );
+            scheduleApplyCameraAndRebuild(ref, store);
+            return;
+        }
         if (data.action == null) {
             return;
         }
@@ -192,6 +265,48 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             case "MoveYm" -> session.nudge(0, -1, 0);
             case "MoveYp" -> session.nudge(0, 1, 0);
             case "Rotate" -> applyRotatePreservingFootprintCenter();
+            case "PanXm" -> {
+                scheduleSmoothPan(ref, store, -PlotPlacementCameraUtil.PAN_STEP, 0.0);
+                return;
+            }
+            case "PanXp" -> {
+                scheduleSmoothPan(ref, store, PlotPlacementCameraUtil.PAN_STEP, 0.0);
+                return;
+            }
+            case "PanZm" -> {
+                scheduleSmoothPan(ref, store, 0.0, -PlotPlacementCameraUtil.PAN_STEP);
+                return;
+            }
+            case "PanZp" -> {
+                scheduleSmoothPan(ref, store, 0.0, PlotPlacementCameraUtil.PAN_STEP);
+                return;
+            }
+            case "ZoomOut" -> {
+                birdsEyeDistance =
+                    Math.max(
+                        PlotPlacementCameraUtil.MIN_DISTANCE,
+                        birdsEyeDistance - PlotPlacementCameraUtil.DISTANCE_STEP
+                    );
+                if (birdsEyeEnabled) {
+                    scheduleApplyCameraAndRebuild(ref, store);
+                } else {
+                    scheduleRebuild(ref, store);
+                }
+                return;
+            }
+            case "ZoomIn" -> {
+                birdsEyeDistance =
+                    Math.min(
+                        PlotPlacementCameraUtil.MAX_DISTANCE,
+                        birdsEyeDistance + PlotPlacementCameraUtil.DISTANCE_STEP
+                    );
+                if (birdsEyeEnabled) {
+                    scheduleApplyCameraAndRebuild(ref, store);
+                } else {
+                    scheduleRebuild(ref, store);
+                }
+                return;
+            }
             case "Cancel" -> {
                 scheduleCancel(ref, store);
                 return;
@@ -205,6 +320,129 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             }
         }
         scheduleRebuild(ref, store);
+    }
+
+    private void scheduleApplyCameraAndRebuild(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+                if (pr != null) {
+                    if (birdsEyeEnabled) {
+                        applyBirdsEyeCameraPacket(ref, store);
+                    } else {
+                        PlotPlacementCameraUtil.resetToPlayerCamera(pr);
+                    }
+                }
+                rebuild();
+            }
+        );
+    }
+
+    /**
+     * One-time framing when birds-eye is enabled: center on the current preview footprint (or plot sign if
+     * unavailable). Does not run again when the preview moves.
+     */
+    private void captureBirdsEyeSnapshot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Vector3i anchor = session.getAnchor();
+        if (plugin == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(session.getConstructionId());
+        if (def == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            session.setBirdsEyeSnapshot(anchor.x + 0.5, anchor.y + 0.5, anchor.z + 0.5);
+            return;
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(anchor, session.getPrefabYaw());
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
+            session.setBirdsEyeSnapshot(
+                (fp.getMinX() + fp.getMaxX() + 1) / 2.0,
+                (fp.getMinY() + fp.getMaxY() + 1) / 2.0,
+                (fp.getMinZ() + fp.getMaxZ() + 1) / 2.0
+            );
+        } finally {
+            buf.release();
+        }
+    }
+
+    private void scheduleSmoothPan(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, double totalDx, double totalDz) {
+        if (!birdsEyeEnabled) {
+            scheduleRebuild(ref, store);
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        smoothPanGeneration++;
+        final int gen = smoothPanGeneration;
+        int steps = PlotPlacementCameraUtil.SMOOTH_PAN_STEPS;
+        long stepDelay = PlotPlacementCameraUtil.SMOOTH_PAN_STEP_DELAY_MS;
+        double stepDx = totalDx / steps;
+        double stepDz = totalDz / steps;
+        for (int i = 1; i <= steps; i++) {
+            long delayMs = stepDelay * i;
+            plugin.scheduleOnWorld(
+                world,
+                () -> {
+                    if (gen != smoothPanGeneration || !ref.isValid() || !birdsEyeEnabled) {
+                        return;
+                    }
+                    session.addBirdsEyePan(stepDx, stepDz);
+                    applyBirdsEyeCameraPacket(ref, store);
+                },
+                delayMs
+            );
+        }
+    }
+
+    /** Sends the birds-eye camera packet without rebuilding the UI. */
+    private void applyBirdsEyeCameraPacket(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (!birdsEyeEnabled) {
+            return;
+        }
+        if (!session.hasBirdsEyeSnapshot()) {
+            captureBirdsEyeSnapshot(ref, store);
+        }
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (pr == null) {
+            return;
+        }
+        if (tc == null) {
+            PlotPlacementCameraUtil.resetToPlayerCamera(pr);
+            return;
+        }
+        Vector3d p = tc.getPosition();
+        double fx;
+        double fy;
+        double fz;
+        if (session.hasBirdsEyeSnapshot()) {
+            fx = session.getBirdsEyeSnapshotX();
+            fy = session.getBirdsEyeSnapshotY();
+            fz = session.getBirdsEyeSnapshotZ();
+        } else {
+            Vector3i a = session.getAnchor();
+            fx = a.x + 0.5;
+            fy = a.y + 0.5;
+            fz = a.z + 0.5;
+        }
+        fx += session.getBirdsEyePanX();
+        fz += session.getBirdsEyePanZ();
+        PlotPlacementCameraUtil.applyBirdsEye(pr, birdsEyeDistance, p.x, p.y, p.z, fx, fy, fz);
     }
 
     private boolean tryPlace(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -530,11 +768,15 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             .add()
             .append(new KeyedCodec<>("@ConstructionId", Codec.STRING), (d, v) -> d.constructionId = v, d -> d.constructionId)
             .add()
+            .append(new KeyedCodec<>("@BirdsEye", Codec.BOOLEAN), (d, v) -> d.birdsEye = v, d -> d.birdsEye)
+            .add()
             .build();
 
         @Nullable
         private String action;
         @Nullable
         private String constructionId;
+        @Nullable
+        private Boolean birdsEye;
     }
 }

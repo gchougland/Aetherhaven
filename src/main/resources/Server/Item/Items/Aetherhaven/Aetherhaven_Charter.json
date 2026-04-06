@@ -40,8 +40,8 @@
     ],
     "DrawType": "Model",
     "Gathering": {
-      "Soft": {
-        "IsWeaponBreakable": false
+      "Breaking": {
+        "GatherType": "Unbreakable"
       }
     },
     "HitboxType": "Tombstone_Village",

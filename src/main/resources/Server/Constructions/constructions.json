@@ -13,8 +13,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 4 },
-        { "itemId": "Rock_Stone_Cobble", "count": 2 }
+        { "resourceTypeId": "Wood_Trunk", "count": 4 },
+        { "resourceTypeId": "Rock", "count": 2 }
       ]
     },
     {
@@ -28,8 +28,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 6 },
-        { "itemId": "Rock_Stone_Cobble", "count": 4 }
+        { "resourceTypeId": "Wood_Trunk", "count": 6 },
+        { "resourceTypeId": "Rock", "count": 4 }
       ]
     },
     {
@@ -43,8 +43,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 10 },
-        { "itemId": "Rock_Stone_Cobble", "count": 8 }
+        { "resourceTypeId": "Wood_Trunk", "count": 10 },
+        { "resourceTypeId": "Rock", "count": 8 }
       ]
     },
     {
@@ -58,8 +58,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 10 },
-        { "itemId": "Rock_Stone_Cobble", "count": 6 }
+        { "resourceTypeId": "Wood_Trunk", "count": 10 },
+        { "resourceTypeId": "Rock", "count": 6 }
       ]
     },
     {
@@ -73,8 +73,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 12 },
-        { "itemId": "Rock_Stone_Cobble", "count": 8 }
+        { "resourceTypeId": "Wood_Trunk", "count": 12 },
+        { "resourceTypeId": "Rock", "count": 8 }
       ]
     },
     {
@@ -89,8 +89,8 @@
       "rotationYaw": "None",
       "requiredVillagerId": null,
       "materials": [
-        { "itemId": "Wood_Softwood_Planks", "count": 24 },
-        { "itemId": "Rock_Stone_Cobble", "count": 16 }
+        { "resourceTypeId": "Wood_Trunk", "count": 24 },
+        { "resourceTypeId": "Rock", "count": 16 }
       ]
     }
   ]
