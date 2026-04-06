@@ -4,11 +4,16 @@ import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueNodeDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.npc.NpcDialogueCleanup;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.builtin.adventure.shop.barter.BarterPage;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -17,12 +22,15 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
+import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
+import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -41,6 +49,8 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     private static final String CHOICES_FRAME = DIALOGUE_COLUMN + " #ChoicesFrame";
     /** Inner list inside {@link #CHOICES_FRAME} scroll; append/clear/indexed selectors need full path. */
     private static final String CHOICES_ROOT = DIALOGUE_COLUMN + " #ChoicesFrame #ChoicesScroll #ChoicesRoot";
+    private static final String REPUTATION_ROW = DIALOGUE_COLUMN + " #ReputationRow";
+    private static final String HEART_SLOTS = REPUTATION_ROW + " #HeartSlots";
 
     @Nonnull
     private static String choiceRowSelector(int slot) {
@@ -94,10 +104,15 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.append("Aetherhaven/DialoguePage.ui");
+        commandBuilder.clear(HEART_SLOTS);
+        for (int h = 0; h < 10; h++) {
+            commandBuilder.append(HEART_SLOTS, "Aetherhaven/HeartSlot.ui");
+        }
         if (tree == null) {
             tree = catalog.get(treeId);
         }
         if (tree == null) {
+            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Unknown dialogue: " + treeId));
@@ -107,6 +122,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
         DialogueNodeDefinition node = tree.getNode(nodeId);
         if (node == null) {
+            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
@@ -134,20 +150,64 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
         node = tree.getNode(nodeId);
         if (node == null) {
+            commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
             commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
             setChoicesFrameVisible(commandBuilder, false);
             return;
         }
 
+        boolean showRep = npcRef != null && npcRef.isValid();
+        commandBuilder.set(REPUTATION_ROW + ".Visible", showRep);
+        if (showRep) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                World world = store.getExternalData().getWorld();
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = VillagerReputationService.findTownForPlayer(ref, store, tm);
+                if (town != null) {
+                    UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+                    UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+                    if (pu != null && nu != null) {
+                        long day = VillagerReputationService.currentGameEpochDay(store);
+                        int dailyGain = VillagerReputationService.applyDailyTalkBonus(world, town, tm, pu.getUuid(), nu.getUuid(), day);
+                        if (dailyGain > 0) {
+                            NotificationUtil.sendNotification(
+                                playerRef.getPacketHandler(),
+                                Message.translation("server.aetherhaven.reputation.dailyTalkGain").param("amount", dailyGain),
+                                NotificationStyle.Success
+                            );
+                        }
+                        int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), nu.getUuid()).getReputation();
+                        ReputationHeartUi.applyHearts(commandBuilder, HEART_SLOTS, rep);
+                        commandBuilder.set(
+                            REPUTATION_ROW + ".TooltipText",
+                            rep + "/" + VillagerReputationService.MAX_REPUTATION
+                        );
+                    }
+                }
+            }
+        }
+
         applyPortrait(commandBuilder, store);
         String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
         String body = node.getText() != null ? node.getText() : "";
 
-        commandBuilder.set(SPEAKER_SPANS, Message.raw(speaker));
-        commandBuilder.set(BODY_TEXT_SPANS, Message.raw(body));
+        commandBuilder.set(SPEAKER_SPANS, dialogueMessage(speaker));
+        commandBuilder.set(BODY_TEXT_SPANS, dialogueMessage(body));
         setChoicesFrameVisible(commandBuilder, true);
         appendChoices(ref, store, commandBuilder, eventBuilder, node);
+    }
+
+    @Nonnull
+    private static Message dialogueMessage(@Nullable String s) {
+        if (s == null || s.isEmpty()) {
+            return Message.raw("");
+        }
+        if (s.startsWith("server.")) {
+            return Message.translation(s);
+        }
+        return Message.raw(s);
     }
 
     private static void setChoicesFrameVisible(@Nonnull UICommandBuilder cmd, boolean visible) {
@@ -191,7 +251,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             }
             commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
             String sel = choiceRowSelector(uiSlot);
-            commandBuilder.set(sel + " #Text.TextSpans", Message.raw(text));
+            commandBuilder.set(sel + " #Text.TextSpans", dialogueMessage(text));
             commandBuilder.set(sel + ".Disabled", disabled);
             commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
             if (!disabled) {

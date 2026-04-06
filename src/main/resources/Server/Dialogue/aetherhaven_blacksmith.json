@@ -64,6 +64,18 @@
       "speaker": "Garren Vale",
       "text": "Take your time. When the house stands, register me on the block and we're square.",
       "choices": [{ "text": "Right.", "next": null }]
+    },
+    "rep_reward_25": {
+      "speaker": "Garren Vale",
+      "text": "server.aetherhaven.reputation.reward.blacksmith.25",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_blacksmith_25" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_50": {
+      "speaker": "Garren Vale",
+      "text": "server.aetherhaven.reputation.reward.blacksmith.50",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_blacksmith_50" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }
 }

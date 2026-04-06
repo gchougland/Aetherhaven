@@ -166,6 +166,24 @@
       "speaker": "Vex Sunderlane",
       "text": "Take your time. When the house stands, assign me there and we'll call it settled.",
       "choices": [{ "text": "Right.", "next": null }]
+    },
+    "rep_reward_25": {
+      "speaker": "Vex Sunderlane",
+      "text": "server.aetherhaven.reputation.reward.merchant.25",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_25" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_50": {
+      "speaker": "Vex Sunderlane",
+      "text": "server.aetherhaven.reputation.reward.merchant.50",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_50" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_75": {
+      "speaker": "Vex Sunderlane",
+      "text": "server.aetherhaven.reputation.reward.merchant.75",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_75" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }
 }

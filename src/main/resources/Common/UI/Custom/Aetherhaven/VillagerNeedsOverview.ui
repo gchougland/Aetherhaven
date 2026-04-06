@@ -35,6 +35,20 @@ $C.@PageOverlay {
           LayoutMode: Top;
           FlexWeight: 1;
 
+          Group #ReputationBlock {
+            LayoutMode: Top;
+            Anchor: (Bottom: 8);
+            HitTestVisible: true;
+            Label #ReputationLabel {
+              Text: %server.aetherhaven.ui.reputation.label;
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+              Anchor: (Bottom: 4);
+            }
+            Group #ReputationHeartSlots {
+              LayoutMode: Left;
+            }
+          }
+
           Label #NeedHungerLabel {
             Text: %server.aetherhaven.ui.villagerneeds.hunger;
             Style: (...$C.@DefaultLabelStyle, RenderBold: true);

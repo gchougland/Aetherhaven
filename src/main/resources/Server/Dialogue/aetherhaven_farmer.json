@@ -160,6 +160,18 @@
       "speaker": "Irienne Mossmark",
       "text": "Soil doesn't hurry. When the house is built, assign me there and we'll be done.",
       "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "rep_reward_25": {
+      "speaker": "Irienne Mossmark",
+      "text": "server.aetherhaven.reputation.reward.farmer.25",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_farmer_25" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_50": {
+      "speaker": "Irienne Mossmark",
+      "text": "server.aetherhaven.reputation.reward.farmer.50",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_farmer_50" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }
 }

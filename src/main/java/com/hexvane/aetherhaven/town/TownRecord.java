@@ -1,13 +1,16 @@
 package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -116,6 +119,14 @@ public final class TownRecord {
     @SerializedName("treasuryLastTaxEpochDay")
     private Long treasuryLastTaxEpochDay;
 
+    /**
+     * Outer key: player UUID string. Inner key: villager NPC entity UUID string.
+     * Values: reputation, daily talk tracking, milestone rewards.
+     */
+    @Nullable
+    @SerializedName("playerVillagerReputation")
+    private Map<String, Map<String, VillagerReputationEntry>> playerVillagerReputation;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -187,6 +198,32 @@ public final class TownRecord {
         if (innVisitorPoolExcludedRoleIds == null) {
             innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
         }
+        migrateVillagerReputationIfNeeded();
+    }
+
+    public void migrateVillagerReputationIfNeeded() {
+        if (playerVillagerReputation == null) {
+            playerVillagerReputation = new LinkedHashMap<>();
+            return;
+        }
+        for (Map<String, VillagerReputationEntry> inner : playerVillagerReputation.values()) {
+            if (inner == null) {
+                continue;
+            }
+            for (VillagerReputationEntry e : inner.values()) {
+                if (e != null) {
+                    e.migrateIfNeeded();
+                }
+            }
+        }
+    }
+
+    @Nonnull
+    public Map<String, Map<String, VillagerReputationEntry>> getPlayerVillagerReputation() {
+        if (playerVillagerReputation == null) {
+            playerVillagerReputation = new LinkedHashMap<>();
+        }
+        return playerVillagerReputation;
     }
 
     @Nonnull

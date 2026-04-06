@@ -30,7 +30,8 @@ public final class HouseResidentAssignment {
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
         @Nullable UUID residentUuid,
-        @Nonnull TownManager tm
+        @Nonnull TownManager tm,
+        @Nullable Ref<EntityStore> assignerPlayerRef
     ) {
         PlotInstance pi = town.findPlotById(plotId);
         if (pi == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(pi.getConstructionId())) {
@@ -45,7 +46,7 @@ public final class HouseResidentAssignment {
         pi.setHomeResidentEntityUuid(residentUuid);
         tm.updateTown(town);
         if (residentUuid != null) {
-            tryCompleteHouseQuest(world, plugin, town, tm, residentUuid);
+            tryCompleteHouseQuest(world, plugin, town, tm, residentUuid, assignerPlayerRef);
         }
     }
 
@@ -54,7 +55,8 @@ public final class HouseResidentAssignment {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
-        @Nonnull UUID assignedNpcUuid
+        @Nonnull UUID assignedNpcUuid,
+        @Nullable Ref<EntityStore> assignerPlayerRef
     ) {
         String role = resolveRoleForEntity(world, assignedNpcUuid);
         if (role == null) {
@@ -64,7 +66,9 @@ public final class HouseResidentAssignment {
         if (qid == null || !town.hasQuestActive(qid)) {
             return;
         }
-        DialogueActionExecutor.applyQuestCompletion(world, plugin, town, tm, qid);
+        var es = world.getEntityStore();
+        Store<EntityStore> store = es != null ? es.getStore() : null;
+        DialogueActionExecutor.applyQuestCompletion(world, plugin, town, tm, qid, assignerPlayerRef, assignedNpcUuid, store);
         LOGGER.atInfo().log("House quest completed via assignment: %s for %s", qid, assignedNpcUuid);
     }
 

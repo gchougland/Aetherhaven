@@ -226,6 +226,24 @@
       "speaker": "Elder Lyren",
       "text": "Then Aetherhaven has a proper heart. Records, plans, and the treasury under one roof, with a desk where I can work for us all.",
       "choices": [{ "text": "Glad to help.", "next": null }]
+    },
+    "rep_reward_25": {
+      "speaker": "Elder Lyren",
+      "text": "server.aetherhaven.reputation.reward.elder.25",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_elder_25" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_50": {
+      "speaker": "Elder Lyren",
+      "text": "server.aetherhaven.reputation.reward.elder.50",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_elder_50" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_75": {
+      "speaker": "Elder Lyren",
+      "text": "server.aetherhaven.reputation.reward.elder.75",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_elder_75" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }
 }

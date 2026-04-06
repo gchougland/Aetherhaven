@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -84,6 +86,7 @@ public final class DialogueActionExecutor {
             case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
             case "abandon_quest" -> abandonQuest(a, playerRef, store);
             case "promote_blacksmith" -> promoteBlacksmith(playerRef, store);
+            case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -148,7 +151,8 @@ public final class DialogueActionExecutor {
             return;
         }
         String qid = id.trim();
-        applyQuestCompletion(world, plugin, town, tm, qid);
+        UUID npcUuid = npcUuidFromRef(store, npcRef);
+        applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.raw("Quest completed: " + QuestCatalog.displayName(qid)));
@@ -162,6 +166,19 @@ public final class DialogueActionExecutor {
         @Nonnull TownManager tm,
         @Nonnull String qid
     ) {
+        applyQuestCompletion(world, plugin, town, tm, qid, null, null, null);
+    }
+
+    public static void applyQuestCompletion(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull String qid,
+        @Nullable Ref<EntityStore> rewardPlayerRef,
+        @Nullable UUID beneficiaryNpcUuid,
+        @Nullable Store<EntityStore> store
+    ) {
         town.completeQuest(qid);
         if (AetherhavenConstants.QUEST_MERCHANT_STALL.equals(qid) || AetherhavenConstants.QUEST_FARM_PLOT.equals(qid)) {
             town.getInnLockedEntityUuids().clear();
@@ -170,6 +187,72 @@ public final class DialogueActionExecutor {
             InnkeeperSpawnService.trySpawnAfterInnQuestComplete(world, plugin, town);
         }
         tm.updateTown(town);
+        if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {
+            UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
+            Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(beneficiaryNpcUuid);
+            NPCEntity npc = npcRef != null ? store.getComponent(npcRef, NPCEntity.getComponentType()) : null;
+            if (pu != null && npc != null && npc.getRoleName() != null) {
+                VillagerReputationService.addQuestReputation(
+                    world,
+                    town,
+                    tm,
+                    pu.getUuid(),
+                    beneficiaryNpcUuid,
+                    npc.getRoleName(),
+                    qid
+                );
+            }
+        }
+    }
+
+    @Nullable
+    private static UUID npcUuidFromRef(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        return nu != null ? nu.getUuid() : null;
+    }
+
+    private static void reputationRewardGrant(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        String rewardId = stringField(a, "rewardId");
+        if (rewardId == null || rewardId.isBlank() || npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        ReputationRewardCatalog.ReputationRewardDefinition def = ReputationRewardCatalog.byId(rewardId.trim());
+        if (def == null) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForPlayer(playerRef, store, tm);
+        if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (pu == null || nu == null) {
+            return;
+        }
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        if (!VillagerReputationService.claimPendingReward(town, tm, pu.getUuid(), nu.getUuid(), def.rewardId())) {
+            return;
+        }
+        int count = Math.max(1, Math.min(def.itemCount(), 9999));
+        ItemStack stack = new ItemStack(def.itemId().trim(), count);
+        player.giveItem(stack, playerRef, store);
     }
 
     private static void abandonQuest(@Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -37,12 +38,14 @@ import javax.annotation.Nullable;
 
 public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<VillagerNeedsOverviewPage.PageData> {
     private static final String VILLAGER_ROWS = "#VillagerRows";
+    private static final String REPUTATION_HEART_SLOTS = "#ReputationHeartSlots";
     private static final int MAX_ROWS = 16;
 
     private final UUID townId;
     private int selectedIndex;
     /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
     private boolean templateAppended;
+    private boolean reputationHeartSlotsAppended;
 
     public VillagerNeedsOverviewPage(@Nonnull PlayerRef playerRef, @Nonnull UUID townId) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -56,6 +59,12 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/VillagerNeedsOverview.ui");
             templateAppended = true;
+        }
+        if (templateAppended && !reputationHeartSlotsAppended) {
+            for (int h = 0; h < 10; h++) {
+                commandBuilder.append(REPUTATION_HEART_SLOTS, "Aetherhaven/HeartSlot.ui");
+            }
+            reputationHeartSlotsAppended = true;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
@@ -105,6 +114,16 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         commandBuilder.set("#EnergyBar.Value", energy);
         commandBuilder.set("#FunBar.Value", fun);
         commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(sel.roleId()));
+
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (pu != null) {
+            int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), sel.entityUuid()).getReputation();
+            ReputationHeartUi.applyHearts(commandBuilder, REPUTATION_HEART_SLOTS, rep);
+            commandBuilder.set(
+                "#ReputationBlock.TooltipText",
+                rep + "/" + VillagerReputationService.MAX_REPUTATION
+            );
+        }
     }
 
     @Override

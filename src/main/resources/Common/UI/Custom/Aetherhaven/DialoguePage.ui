@@ -17,6 +17,22 @@ $C.@PageOverlay {
         Anchor: (Full: 0);
         LayoutMode: Top;
 
+        Group #ReputationRow {
+          LayoutMode: Left;
+          Anchor: (Bottom: 8);
+          Padding: (Horizontal: 4, Vertical: 2);
+          HitTestVisible: true;
+          Label #ReputationLabel {
+            Anchor: (Right: 8, Width: 120);
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c4b8a8, RenderBold: true);
+            Text: %server.aetherhaven.ui.reputation.label;
+          }
+          Group #HeartSlots {
+            LayoutMode: Left;
+            FlexWeight: 1;
+          }
+        }
+
         Group #SpeakerFrame {
           LayoutMode: Left;
           Padding: (Horizontal: 10, Vertical: 8);

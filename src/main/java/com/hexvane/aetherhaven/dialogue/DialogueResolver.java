@@ -1,10 +1,17 @@
 package com.hexvane.aetherhaven.dialogue;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -38,7 +45,21 @@ public final class DialogueResolver {
         }
         String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : KIND_TEST_VILLAGER;
         String tree = kindToTree.getOrDefault(kind, TREE_TEST);
-        return new ResolvedDialogue(tree, "root");
+        String entry = "root";
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && npcRef != null && npcRef.isValid()) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+            TownRecord town = VillagerReputationService.findTownForPlayer(playerRef, store, tm);
+            UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+            UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+            if (town != null && pu != null && nu != null) {
+                String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(town, pu.getUuid(), nu.getUuid());
+                if (pendingEntry != null && !pendingEntry.isBlank()) {
+                    entry = pendingEntry.trim();
+                }
+            }
+        }
+        return new ResolvedDialogue(tree, entry);
     }
 
     public void registerKind(@Nonnull String kind, @Nonnull String treeId) {
