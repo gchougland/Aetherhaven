@@ -8,7 +8,10 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Gson root for {@code Server/Buildings/<constructionId>.json}. */
+/**
+ * POI rows embedded under {@code "pois"} in each {@code Server/Aetherhaven/Buildings/} construction JSON file
+ * (also deserializable as a standalone array root for tooling).
+ */
 public final class BuildingPoisDefinition {
     @SerializedName("pois")
     private List<PoiRow> pois = new ArrayList<>();

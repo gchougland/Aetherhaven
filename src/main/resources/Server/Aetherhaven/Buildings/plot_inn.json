@@ -1,4 +1,19 @@
 {
+  "id": "plot_inn",
+  "displayName": "Inn",
+  "description": "Founding inn prefab with management bookcase and visitor-ready POIs.",
+  "prefabPath": "Inn.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
+  "plotAnchorOffset": [9, 0, 6],
+  "managementBlockLocalPos": [6, 2, 4],
+  "innkeeperSpawnLocal": [4, 1, 4],
+  "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 4 },
+    { "resourceTypeId": "Rock", "count": 2 }
+  ],
   "pois": [
     {
       "localX": 6,

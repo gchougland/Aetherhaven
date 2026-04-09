@@ -24,7 +24,8 @@ import javax.annotation.Nullable;
 public final class ClasspathResourceScanner {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private static final String ANCHOR_RESOURCE = "Server/Constructions/constructions.json";
+    /** Stable resource under {@code Server/} so the JAR can be scanned for {@code Server/Aetherhaven/...} paths. */
+    private static final String ANCHOR_RESOURCE = "Server/Aetherhaven/ClasspathAnchor.json";
 
     private ClasspathResourceScanner() {}
 

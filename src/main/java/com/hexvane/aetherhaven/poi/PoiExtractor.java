@@ -1,8 +1,8 @@
 package com.hexvane.aetherhaven.poi;
 
-import com.google.gson.Gson;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -11,9 +11,6 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +19,6 @@ import javax.annotation.Nullable;
 
 public final class PoiExtractor {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final Gson GSON = new Gson();
     private static final int ANCHOR_SEARCH_XY = 2;
     private static final int ANCHOR_SEARCH_Y = 3;
 
@@ -37,21 +33,11 @@ public final class PoiExtractor {
         @Nonnull Vector3i prefabAnchorWorld,
         @Nonnull Rotation prefabYaw
     ) {
-        ClassLoader cl = plugin.getClass().getClassLoader();
-        String path = "Server/Buildings/" + constructionId + ".json";
-        InputStream in = cl.getResourceAsStream(path);
-        if (in == null) {
-            LOGGER.atInfo().log("No building POI file at classpath %s", path);
-            return;
-        }
-        BuildingPoisDefinition def;
-        try (InputStreamReader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
-            def = GSON.fromJson(r, BuildingPoisDefinition.class);
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Failed to read %s", path);
-            return;
-        }
-        if (def == null || def.getPois().isEmpty()) {
+        ConstructionDefinition cdef = plugin.getConstructionCatalog().get(constructionId);
+        if (cdef == null || cdef.getPois().isEmpty()) {
+            if (cdef == null) {
+                LOGGER.atInfo().log("No construction definition for id %s (POIs skipped)", constructionId);
+            }
             return;
         }
 
@@ -59,7 +45,7 @@ public final class PoiExtractor {
         reg.unregisterByPlotId(plotId);
 
         List<PoiEntry> batch = new ArrayList<>();
-        for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
+        for (BuildingPoisDefinition.PoiRow row : cdef.getPois()) {
             Vector3i d = PrefabLocalOffset.rotate(prefabYaw, row.getLocalX(), row.getLocalY(), row.getLocalZ());
             int baseWx = prefabAnchorWorld.x + d.x;
             int baseWy = prefabAnchorWorld.y + d.y;

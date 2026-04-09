@@ -76,7 +76,7 @@
     },
     "garren_house_accepted": {
       "speaker": "Garren Vale",
-      "text": "Good. When the walls are up, assign me inside. After that, find me and say so—I'll want to hear it before we call it done.",
+      "text": "Good. When the walls are up, assign me inside. After that, find me and say so. I'll want to hear it before we call it done.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "garren_house_remind": {

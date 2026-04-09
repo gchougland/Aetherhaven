@@ -178,7 +178,7 @@
     },
     "vex_house_accepted": {
       "speaker": "Vex Sunderlane",
-      "text": "Good. When the walls are yours to open, put my name on the block inside. Then find me—I'll want the receipt in words, not just ink.",
+      "text": "Good. When the walls are yours to open, put my name on the block inside. Then find me. I'll want the receipt in words, not just ink.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "vex_house_remind": {

@@ -116,11 +116,11 @@ public final class InnPoolService {
             if (town.getInnkeeperEntityUuid() == null) {
                 continue;
             }
-            PlotInstance innPlot = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_INN_V1);
+            PlotInstance innPlot = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             if (innPlot == null) {
                 continue;
             }
-            ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_INN_V1);
+            ConstructionDefinition innDef = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             if (innDef == null) {
                 continue;
             }

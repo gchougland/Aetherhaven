@@ -1,0 +1,29 @@
+{
+  "id": "plot_farm",
+  "displayName": "Farm plot",
+  "description": "Fenced fields, a farming bench, and a small shelter.",
+  "prefabPath": "Farm_Plot.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Farm",
+  "plotAnchorOffset": [6, 0, 6],
+  "managementBlockLocalPos": [-3, 1, -1],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 10 },
+    { "resourceTypeId": "Rock", "count": 8 }
+  ],
+  "pois": [
+    {
+      "localX": -2,
+      "localY": 1,
+      "localZ": -4,
+      "blockTypeId": "Bench_Farming",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": -2,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -3
+    }
+  ]
+}

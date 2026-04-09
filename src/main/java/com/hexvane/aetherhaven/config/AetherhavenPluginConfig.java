@@ -78,7 +78,9 @@ public final class AetherhavenPluginConfig {
             (o, v) -> o.villagerScheduleEnabled = v,
             o -> o.villagerScheduleEnabled
         )
-        .documentation("When true, resident NPCs follow weekly JSON schedules under Server/VillagerSchedules/<roleId>.json.")
+        .documentation(
+            "When true, resident NPCs follow weekly JSON schedules under Server/Aetherhaven/VillagerSchedules/<roleId>.json."
+        )
         .add()
         .append(
             new KeyedCodec<>("VillagerScheduleDebugLog", Codec.BOOLEAN),

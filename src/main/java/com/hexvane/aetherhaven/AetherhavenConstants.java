@@ -29,8 +29,8 @@ public final class AetherhavenConstants {
     /** Non-block token: player must hold in inventory to select this plot type in the placement tool. */
     public static final String PLOT_TOKEN_INN_PLACEHOLDER = "Aetherhaven_Plot_Token_Inn";
 
-    /** Inn construction id in {@code constructions.json} and building POI file name. */
-    public static final String CONSTRUCTION_INN_V1 = "inn_v1";
+    /** Inn construction id; definition in {@code Server/Aetherhaven/Buildings/plot_inn.json}. */
+    public static final String CONSTRUCTION_PLOT_INN = "plot_inn";
 
     /** Market stall plot construction id (Week 4). */
     public static final String CONSTRUCTION_PLOT_MARKET_STALL = "plot_market_stall";
@@ -42,8 +42,8 @@ public final class AetherhavenConstants {
     /** Shared residential prefab; completion is tracked per villager via house management assignment. */
     public static final String CONSTRUCTION_PLOT_HOUSE = "plot_house";
 
-    /** Town hall civic building; POIs in {@code Server/Buildings/town_hall_v1.json}. */
-    public static final String CONSTRUCTION_TOWN_HALL_V1 = "town_hall_v1";
+    /** Town hall civic building; definition in {@code Server/Aetherhaven/Buildings/plot_town_hall.json}. */
+    public static final String CONSTRUCTION_PLOT_TOWN_HALL = "plot_town_hall";
 
     public static final String QUEST_BUILD_INN = "q_build_inn";
 

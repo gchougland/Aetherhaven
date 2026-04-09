@@ -46,7 +46,7 @@
             "conditions": [
               { "type": "aetherhaven_has_town" },
               { "type": "town_quest_active", "questId": "q_build_inn" },
-              { "type": "town_has_complete_plot", "constructionId": "inn_v1" }
+              { "type": "town_has_complete_plot", "constructionId": "plot_inn" }
             ]
           },
           "whenFalse": "hide",
@@ -80,7 +80,7 @@
           "next": "lyren_house_offer"
         },
         {
-          "text": "You're registered at the house—I wanted you to hear it from me.",
+          "text": "You're registered at the house. I wanted you to hear it from me.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -146,7 +146,7 @@
             "conditions": [
               { "type": "aetherhaven_has_town" },
               { "type": "town_quest_active", "questId": "q_build_town_hall" },
-              { "type": "town_has_complete_plot", "constructionId": "town_hall_v1" }
+              { "type": "town_has_complete_plot", "constructionId": "plot_town_hall" }
             ]
           },
           "whenFalse": "hide",
@@ -201,7 +201,7 @@
     },
     "lyren_house_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. When the walls are up, use the management block and assign me as resident. After that, come find me—I'll want to hear it in person before we close the matter.",
+      "text": "Good. When the walls are up, use the management block and assign me as resident. After that, come find me. I'll want to hear it in person before we close the matter.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "lyren_house_remind": {

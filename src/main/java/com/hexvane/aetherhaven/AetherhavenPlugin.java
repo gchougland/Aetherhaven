@@ -84,11 +84,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     /** Same pattern as OrbisOrigins: {@code config.json} under the plugin data directory. */
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
-    private ConstructionCatalog constructionCatalog = ConstructionCatalog.loadFromClasspath(AetherhavenPlugin.class.getClassLoader());
+    private ConstructionCatalog constructionCatalog = ConstructionCatalog.empty();
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
-    private final VillagerScheduleRegistry villagerScheduleRegistry =
-        new VillagerScheduleRegistry(AetherhavenPlugin.class.getClassLoader());
+    private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "Aetherhaven-Construction");
@@ -360,21 +359,23 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         this.config.get();
-        this.constructionCatalog = ConstructionCatalog.loadFromClasspath(this.getClassLoader());
-        this.reloadAetherhavenDialogueAndQuestCatalogs();
-        this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenDialogueAndQuestCatalogs());
+        this.reloadAetherhavenAssetCatalogs();
+        this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         this.dialogueResolver.registerKind("merchant", "aetherhaven_merchant");
         this.dialogueResolver.registerKind("blacksmith", "aetherhaven_blacksmith");
         this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
-    private void reloadAetherhavenDialogueAndQuestCatalogs() {
+    private void reloadAetherhavenAssetCatalogs() {
         ClassLoader cl = this.getClassLoader();
+        this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         LOGGER.atInfo().log(
-            "Aetherhaven dialogue/quest catalogs reloaded (dialogue=%s, quests=%s)",
+            "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerSchedules=loaded)",
+            this.constructionCatalog.ids(),
             this.dialogueCatalog.all().keySet(),
             this.questCatalog.all().keySet()
         );

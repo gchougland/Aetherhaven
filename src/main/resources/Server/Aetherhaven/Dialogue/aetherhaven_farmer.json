@@ -172,7 +172,7 @@
     },
     "irienne_house_accepted": {
       "speaker": "Irienne Mossmark",
-      "text": "Good. When the roof is sound, register me on the management block. Then come find me—we'll put a proper end on it.",
+      "text": "Good. When the roof is sound, register me on the management block. Then come find me. We'll put a proper end on it.",
       "choices": [{ "text": "See you soon.", "next": null }]
     },
     "irienne_house_remind": {

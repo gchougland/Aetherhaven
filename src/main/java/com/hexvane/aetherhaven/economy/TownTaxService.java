@@ -47,7 +47,7 @@ public final class TownTaxService {
             if (!world.getName().equals(town.getWorldName())) {
                 continue;
             }
-            PlotInstance hall = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_TOWN_HALL_V1);
+            PlotInstance hall = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
             if (hall == null) {
                 continue;
             }

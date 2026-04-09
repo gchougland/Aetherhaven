@@ -1,4 +1,17 @@
 {
+  "id": "plot_park",
+  "displayName": "Park",
+  "description": "Trees, paths, and two village benches for relaxing.",
+  "prefabPath": "Park_01.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Park",
+  "plotAnchorOffset": [10, 0, 10],
+  "managementBlockLocalPos": [-3, 2, -4],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 10 },
+    { "resourceTypeId": "Rock", "count": 6 }
+  ],
   "pois": [
     {
       "localX": -6,

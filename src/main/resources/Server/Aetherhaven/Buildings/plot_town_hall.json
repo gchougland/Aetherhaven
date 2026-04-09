@@ -1,0 +1,30 @@
+{
+  "id": "plot_town_hall",
+  "displayName": "Town hall",
+  "description": "A civic hall with a town records shelf, planning desk, and treasury. Adjust plot anchor in placement if the footprint misaligns.",
+  "prefabPath": "Townhall.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
+  "plotAnchorOffset": [9, 0, 7],
+  "managementBlockLocalPos": [-7, 2, 3],
+  "treasuryLocalPos": [7, 1, 2],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 24 },
+    { "resourceTypeId": "Rock", "count": 16 }
+  ],
+  "pois": [
+    {
+      "localX": -4,
+      "localY": 1,
+      "localZ": 0,
+      "blockTypeId": "Aetherhaven_Town_Planning_Desk",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": -5,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1
+    }
+  ]
+}

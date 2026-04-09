@@ -33,7 +33,7 @@
           "next": "corin_house_offer"
         },
         {
-          "text": "You're on the house ledger—I wanted to tell you.",
+          "text": "You're on the house ledger. I wanted to tell you.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -85,7 +85,7 @@
     },
     "corin_house_accepted": {
       "speaker": "Corin Mosscup",
-      "text": "Thanks. I'll keep the kettle on here until the house is yours to place. Once I'm on the ledger, come find me—we'll wrap it up face to face.",
+      "text": "Thanks. I'll keep the kettle on here until the house is yours to place. Once I'm on the ledger, come find me. We'll wrap it up face to face.",
       "choices": [{ "text": "See you soon.", "next": null }]
     },
     "corin_house_remind": {

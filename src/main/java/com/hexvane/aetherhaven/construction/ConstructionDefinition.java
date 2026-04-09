@@ -1,9 +1,11 @@
 package com.hexvane.aetherhaven.construction;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -76,6 +78,10 @@ public final class ConstructionDefinition {
     @SerializedName("treasuryLocalPos")
     @Nullable
     private int[] treasuryLocalPos;
+
+    /** Prefab-local POI anchors for autonomy; listed in each construction JSON under {@code Server/Aetherhaven/Buildings/}. */
+    @SerializedName("pois")
+    private List<BuildingPoisDefinition.PoiRow> pois = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -172,5 +178,10 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getTreasuryLocalPos() {
         return treasuryLocalPos != null && treasuryLocalPos.length == 3 ? treasuryLocalPos : null;
+    }
+
+    @Nonnull
+    public List<BuildingPoisDefinition.PoiRow> getPois() {
+        return pois != null && !pois.isEmpty() ? pois : Collections.emptyList();
     }
 }

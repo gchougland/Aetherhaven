@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Root Gson type for {@code Server/VillagerSchedules/<roleId>.json}. */
+/** Root Gson type for {@code Server/Aetherhaven/VillagerSchedules/<roleId>.json}. */
 public final class VillagerScheduleDefinition {
     private int schemaVersion = 1;
     @Nullable

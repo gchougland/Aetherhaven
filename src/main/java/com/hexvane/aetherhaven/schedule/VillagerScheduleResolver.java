@@ -130,7 +130,7 @@ public final class VillagerScheduleResolver {
         return switch (loc) {
             case LOC_HOME -> resolveHome(town, entityUuid);
             case LOC_WORK -> resolveWork(town, binding);
-            case LOC_INN -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_INN_V1);
+            case LOC_INN -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case LOC_PARK -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
             default -> VillagerScheduleResolveOutcome.skip();
         };
@@ -175,8 +175,8 @@ public final class VillagerScheduleResolver {
         return switch (kind) {
             case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM);
             case TownVillagerBinding.KIND_MERCHANT -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL);
-            case TownVillagerBinding.KIND_INNKEEPER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_INN_V1);
-            case TownVillagerBinding.KIND_ELDER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_TOWN_HALL_V1);
+            case TownVillagerBinding.KIND_INNKEEPER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+            case TownVillagerBinding.KIND_ELDER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
             default -> null;
         };
     }
