@@ -4,6 +4,7 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,12 +18,27 @@ public final class VillagerBlockUtil {
 
     private VillagerBlockUtil() {}
 
+    /**
+     * Block rotation at world coords via {@link com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection}
+     * (avoids deprecated {@link WorldChunk#getRotationIndex(int, int, int)}).
+     */
+    static int rotationIndexForLoadedChunk(@Nonnull WorldChunk chunk, int x, int y, int z) {
+        if (y < 0 || y >= 320) {
+            return 0;
+        }
+        BlockChunk bc = chunk.getBlockChunk();
+        if (bc == null) {
+            return 0;
+        }
+        return bc.getSectionAtBlockY(y).getRotationIndex(x, y, z);
+    }
+
     public static int blockRotationIndexNoLoad(@Nonnull World world, int x, int y, int z) {
         if (y < 0 || y >= 320) {
             return 0;
         }
         WorldChunk wc = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
-        return wc != null ? wc.getRotationIndex(x, y, z) : 0;
+        return wc != null ? rotationIndexForLoadedChunk(wc, x, y, z) : 0;
     }
 
     /** Feet Y at column or {@link Integer#MIN_VALUE} if unknown (chunk not loaded). */

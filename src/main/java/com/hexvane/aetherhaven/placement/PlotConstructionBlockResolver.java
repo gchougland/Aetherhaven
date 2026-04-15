@@ -8,14 +8,17 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Resolves block entities for plot sign / management UI. Uses the ray-hit cell and {@link World#getBaseBlock}
- * with a tall Y sweep so {@code Block_Vertical_Half} and multi-voxel props still find the chunk component holder.
+ * Resolves block entities for plot sign / management UI. Uses the ray-hit cell and filler-unpacked base position
+ * (same logic as former {@code IChunkAccessorSync#getBaseBlock}) with a tall Y sweep so {@code Block_Vertical_Half}
+ * and multi-voxel props still find the chunk component holder.
  *
  * <p>Resolves by <em>required</em> component so a plot sign and management block in the same column (e.g. origin
  * stack) do not steal each other's interactions. The match closest to the hit Y wins.
@@ -27,13 +30,37 @@ public final class PlotConstructionBlockResolver {
 
     private PlotConstructionBlockResolver() {}
 
+    @Nonnull
+    private static BlockPosition baseBlockPosition(@Nonnull World world, @Nonnull BlockPosition position) {
+        if (position.y < 0 || position.y >= 320) {
+            return position;
+        }
+        WorldChunk chunk = world.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(position.x, position.z));
+        if (chunk == null) {
+            return position;
+        }
+        BlockChunk bc = chunk.getBlockChunk();
+        if (bc == null) {
+            return position;
+        }
+        int filler = bc.getSectionAtBlockY(position.y).getFiller(position.x, position.y, position.z);
+        if (filler == 0) {
+            return position;
+        }
+        return new BlockPosition(
+            position.x - FillerBlockUtil.unpackX(filler),
+            position.y - FillerBlockUtil.unpackY(filler),
+            position.z - FillerBlockUtil.unpackZ(filler)
+        );
+    }
+
     @Nullable
     public static <C extends Component<ChunkStore>> PlotConstructionTarget resolveForPlotUi(
         @Nonnull World world,
         @Nonnull BlockPosition targetBlock,
         @Nonnull ComponentType<ChunkStore, C> requiredComponent
     ) {
-        BlockPosition base = world.getBaseBlock(targetBlock);
+        BlockPosition base = baseBlockPosition(world, targetBlock);
         int hitX = targetBlock.x;
         int hitY = targetBlock.y;
         int hitZ = targetBlock.z;

@@ -138,7 +138,7 @@ public final class VillagerDoorUtil {
         if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
-        int rotation = chunk.getRotationIndex(blockPos.x, blockPos.y, blockPos.z);
+        int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z);
         RotationTuple rotationTuple = RotationTuple.get(rotation);
         DoorState primary = isInFrontOfDoor(blockPos, rotationTuple.yaw(), entityPos) ? DoorState.OPENED_OUT : DoorState.OPENED_IN;
         DoorState alternate = primary == DoorState.OPENED_OUT ? DoorState.OPENED_IN : DoorState.OPENED_OUT;
@@ -357,7 +357,7 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        int rotationIndex = chunk.getRotationIndex(blockPosition.x, blockPosition.y, blockPosition.z);
+        int rotationIndex = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
         BlockBoundingBoxes oldHitbox = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
         world.setBlockInteractionState(blockPosition, blockType, interactionStateToSend);
         BlockType currentBlockType = world.getBlockType(blockPosition);

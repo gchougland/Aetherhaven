@@ -1,9 +1,0 @@
-# Cursor Rules
-
-## Hytale Source Code Location
-The Hytale server source code  and uncompressed assets is located at:
-`C:\Users\gchou\Documents\HytaleModding\HytaleSourceCode`
-
-When analyzing Hytale game mechanics, implementation details, or debugging issues related to how Hytale handles items, blocks, world generation, or other game systems, refer to the source code in this directory.
-
-Also refer to other mods found in this directory: `C:\Users\gchou\Documents\HytaleModding`
