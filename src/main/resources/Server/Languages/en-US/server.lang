@@ -37,8 +37,10 @@ aetherhaven.reputation.reward.innkeeper.50=Hearth's warm because folk like you k
 aetherhaven.reputation.reward.merchant.25=Regular faces make thin markets feel like home. Count these toward your next trade.
 aetherhaven.reputation.reward.merchant.50=Word gets around when someone pays their tab. Here's a heavier purse.
 aetherhaven.reputation.reward.merchant.75=I'd shake your hand in any town left standing. Take this—serious coin for serious help.
-aetherhaven.reputation.reward.farmer.25=Good tilth starts with good neighbors. Some soil for your own beds.
-aetherhaven.reputation.reward.farmer.50=Rows don't dig themselves. Take a spare shovel—may it stay muddy.
+aetherhaven.reputation.reward.farmer.25=You've earned my trust in the rows. I've sketched an iron sprinkler—craft it at the farming bench when you have water essence and iron.
+aetherhaven.reputation.reward.farmer.50=Here's the thorium pattern: wider reach, same dawn rhythm. The Farming tab on the bench will show it once you know the schematic.
+aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page unlocks the third sprinkler tier—still one good soak at sunrise.
+aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care; the town's fields will drink at dawn.
 aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You've got both.
 aetherhaven.reputation.reward.blacksmith.50=Hammer tells the truth. Here's more raw weight for the next swing.
 aetherhaven.ui.plotadmin.title=Plot sign (admin)
@@ -124,6 +126,15 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Choose a quest above.
 
 items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
+
+items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
+items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a 3×3 area. Runs once each in-game morning. Smallest coverage.
+items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
+items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a 5×5 area. Once each in-game morning. Larger than iron.
+items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
+items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a 7×7 area. Once each in-game morning. Wide coverage.
+items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
+items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a 9×9 area. Once each in-game morning. Widest coverage.
 
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
 npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup

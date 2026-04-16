@@ -39,6 +39,10 @@ java {
     withSourcesJar()
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal"))
+}
+
 tasks.named<ProcessResources>("processResources") {
     var replaceProperties = mapOf(
         "plugin_group" to findProperty("plugin_group"),

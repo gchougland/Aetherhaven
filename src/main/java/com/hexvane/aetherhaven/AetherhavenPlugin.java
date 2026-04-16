@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
@@ -34,6 +35,8 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
+import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
+import com.hexvane.aetherhaven.farming.SprinklerEpochTickSystem;
 import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
@@ -163,6 +166,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
         TreasuryBlock.register(this.getChunkStoreRegistry());
+        SprinklerBlock.register(this.getChunkStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
@@ -175,7 +179,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
                 PoiDebugLabelEntity.class,
-                PoiDebugLabelEntity::new,
+                world -> {
+                    PoiDebugLabelEntity e = new PoiDebugLabelEntity();
+                    // Entity.clone() invokes the factory with null world; match deprecated Entity(World) behavior.
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
                 PoiDebugLabelEntity.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
@@ -188,12 +199,19 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PoiToolSetTargetInteraction.class,
                 PoiToolSetTargetInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenSprinklerActivate",
+                SprinklerActivateInteraction.class,
+                SprinklerActivateInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerScheduleSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new SprinklerEpochTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
 

@@ -7,9 +7,7 @@ import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.entity.Entity;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -39,10 +37,6 @@ public final class PoiDebugLabelEntity extends Entity {
     }
 
     public PoiDebugLabelEntity() {}
-
-    public PoiDebugLabelEntity(@Nonnull World world) {
-        super(world);
-    }
 
     public void setOwnerPlayerUuid(@Nonnull UUID ownerPlayerUuid) {
         this.ownerPlayerUuid = ownerPlayerUuid;

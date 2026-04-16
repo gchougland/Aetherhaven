@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
@@ -53,6 +54,7 @@ public final class AetherhavenWorldRegistries {
     }
 
     public static void unloadWorld(@Nonnull World world) {
+        SprinklerWateringService.clearWorldState(world.getName());
         TownManager tm = TOWN_MANAGERS.remove(world.getName());
         if (tm != null) {
             tm.saveToDisk();

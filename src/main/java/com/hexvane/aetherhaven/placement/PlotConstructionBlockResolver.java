@@ -8,7 +8,6 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -31,6 +30,7 @@ public final class PlotConstructionBlockResolver {
     private PlotConstructionBlockResolver() {}
 
     @Nonnull
+    @SuppressWarnings({ "deprecation", "removal" })
     private static BlockPosition baseBlockPosition(@Nonnull World world, @Nonnull BlockPosition position) {
         if (position.y < 0 || position.y >= 320) {
             return position;
@@ -39,11 +39,7 @@ public final class PlotConstructionBlockResolver {
         if (chunk == null) {
             return position;
         }
-        BlockChunk bc = chunk.getBlockChunk();
-        if (bc == null) {
-            return position;
-        }
-        int filler = bc.getSectionAtBlockY(position.y).getFiller(position.x, position.y, position.z);
+        int filler = chunk.getFiller(position.x, position.y, position.z);
         if (filler == 0) {
             return position;
         }

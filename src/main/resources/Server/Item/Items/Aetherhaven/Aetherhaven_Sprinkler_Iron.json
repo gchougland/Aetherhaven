@@ -1,0 +1,99 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Sprinkler_Iron.name",
+    "Description": "server.items.Aetherhaven_Sprinkler_Iron.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 5,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Water_Essence",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 2
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Farmingbench",
+        "Type": "Crafting",
+        "Categories": [
+          "Farming"
+        ]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Sprinkler_Iron.png",
+  "Categories": [
+    "Furniture.Decorative"
+  ],
+  "Set": "Aetherhaven",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Transparent",
+    "CustomModel": "Blocks/Sprinkler/Sprinkler.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Sprinkler/Sprinkler_V1.png",
+        "Weight": 1
+      }
+    ],
+    "HitboxType": "Full",
+    "VariantRotation": "NESW",
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Benches"
+      }
+    },
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenSprinklerBlock": {
+          "Tier": 1
+        }
+      }
+    },
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "AetherhavenSprinklerActivate"
+          }
+        ]
+      }
+    },
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#6b8f7a",
+    "BlockSoundSetId": "Wood"
+  },
+  "PlayerAnimationsId": "Block",
+  "IconProperties": {
+    "Scale": 1.4,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -2
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Furniture"
+    ]
+  },
+  "MaxStack": 64,
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

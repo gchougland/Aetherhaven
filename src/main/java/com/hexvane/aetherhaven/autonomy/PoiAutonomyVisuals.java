@@ -18,9 +18,6 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.AnimationUtils;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
@@ -170,9 +167,9 @@ public final class PoiAutonomyVisuals {
      * components; cloning hotbar desyncs {@code getItemInHand()} and skips equipment network updates.
      */
     private static void invalidateLivingEquipment(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        Entity entity = EntityUtils.getEntity(npcRef, store);
-        if (entity instanceof LivingEntity living) {
-            living.invalidateEquipmentNetwork();
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc != null) {
+            npc.invalidateEquipmentNetwork();
         }
     }
 

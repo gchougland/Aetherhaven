@@ -1,0 +1,22 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Sprinkler_Splash",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0.22,
+        "Z": 0
+      },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Sprinkler_Fine",
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0.12,
+        "Z": 0
+      },
+      "FixedRotation": false
+    }
+  ]
+}

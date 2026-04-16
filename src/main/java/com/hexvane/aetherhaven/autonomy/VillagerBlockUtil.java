@@ -3,8 +3,9 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,18 +20,16 @@ public final class VillagerBlockUtil {
     private VillagerBlockUtil() {}
 
     /**
-     * Block rotation at world coords via {@link com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection}
-     * (avoids deprecated {@link WorldChunk#getRotationIndex(int, int, int)}).
+     * Block rotation index; delegates to {@link WorldChunk#getRotationIndex(int, int, int)} (same path as
+     * {@link com.hypixel.hytale.server.core.universe.world.accessor.IChunkAccessorSync}) until section access is
+     * non-deprecated.
      */
+    @SuppressWarnings({ "deprecation", "removal" })
     static int rotationIndexForLoadedChunk(@Nonnull WorldChunk chunk, int x, int y, int z) {
         if (y < 0 || y >= 320) {
             return 0;
         }
-        BlockChunk bc = chunk.getBlockChunk();
-        if (bc == null) {
-            return 0;
-        }
-        return bc.getSectionAtBlockY(y).getRotationIndex(x, y, z);
+        return chunk.getRotationIndex(x, y, z);
     }
 
     public static int blockRotationIndexNoLoad(@Nonnull World world, int x, int y, int z) {
@@ -71,16 +70,27 @@ public final class VillagerBlockUtil {
         if (feet == null || head == null || below == null) {
             return false;
         }
-        return isPassable(feet) && isPassable(head) && isGround(below);
+        return isPassable(world, bx, by, bz, feet) && isPassable(world, bx, by + 1, bz, head) && isGround(below);
     }
 
-    private static boolean isPassable(@Nullable BlockType t) {
+    private static boolean isPassable(@Nonnull World world, int x, int y, int z, @Nullable BlockType t) {
         if (t == null || t == BlockType.EMPTY) {
             return true;
         }
         if (t.getMaterial() == BlockMaterial.Empty) {
             return true;
         }
+        WorldChunk wc = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (wc != null) {
+            RotationTuple rt = RotationTuple.get(rotationIndexForLoadedChunk(wc, x, y, z));
+            return DoorInteraction.getDoorAtPosition(world, x, y, z, rt.yaw()) != null;
+        }
+        return isDoorBlockTypeWhenChunkUnknown(t);
+    }
+
+    /** When the column is not resident, fall back to asset metadata (same as vanilla door checks before chunk load). */
+    @SuppressWarnings("deprecation")
+    private static boolean isDoorBlockTypeWhenChunkUnknown(@Nonnull BlockType t) {
         return t.isDoor();
     }
 
@@ -149,6 +159,7 @@ public final class VillagerBlockUtil {
     }
 
     private static boolean columnPassableForNpcBody(@Nonnull World world, int x, int y, int z) {
-        return isPassable(blockTypeNoLoad(world, x, y, z)) && isPassable(blockTypeNoLoad(world, x, y + 1, z));
+        return isPassable(world, x, y, z, blockTypeNoLoad(world, x, y, z))
+            && isPassable(world, x, y + 1, z, blockTypeNoLoad(world, x, y + 1, z));
     }
 }

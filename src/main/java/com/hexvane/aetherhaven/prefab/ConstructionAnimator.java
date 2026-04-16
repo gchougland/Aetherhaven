@@ -250,7 +250,7 @@ public final class ConstructionAnimator {
         // PrefabUtil.paste: filler != 0 only applies setState when holder is present (no setBlock in that branch).
         if (pb.filler != 0) {
             if (pb.holder != null) {
-                chunk.setState(bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+                setBlockEntityHolder(chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
             }
             return;
         }
@@ -273,12 +273,49 @@ public final class ConstructionAnimator {
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
             Store<ChunkStore> store = ref.getStore();
-            ChunkColumn column = store.getComponent(ref, ChunkColumn.getComponentType());
-            BlockPhysics.setSupportValue(store, column.getSection(ChunkUtil.chunkCoordinate(by)), bx, by, bz, pb.supportValue);
+            Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+            if (section != null) {
+                BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue);
+            }
         }
         if (pb.holder != null) {
-            chunk.setState(bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+            setBlockEntityHolder(chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
         }
+    }
+
+    /**
+     * Preferred over deprecated {@link WorldChunk#setState(int, int, int, BlockType, int, Holder)} — matches
+     * {@link com.hypixel.hytale.server.core.modules.block.BlockEntity#setBlockEntity}.
+     */
+    private void setBlockEntityHolder(
+        WorldChunk chunk,
+        int bx,
+        int by,
+        int bz,
+        BlockType blockType,
+        int rotation,
+        Holder<ChunkStore> holder
+    ) {
+        com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
+            world.getChunkStore().getStore(),
+            chunk.getReference(),
+            chunk.getBlockComponentChunk(),
+            bx,
+            by,
+            bz,
+            blockType,
+            rotation,
+            holder
+        );
+    }
+
+    /** Section ref for block Y; uses legacy {@link ChunkColumn} like {@link WorldChunk#getFluidId(int, int, int)}. */
+    @SuppressWarnings("deprecation")
+    private Ref<ChunkStore> sectionRefForBlockY(@Nonnull WorldChunk chunk, int blockY) {
+        Ref<ChunkStore> columnRef = chunk.getReference();
+        Store<ChunkStore> store = columnRef.getStore();
+        ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
+        return column == null ? null : column.getSection(ChunkUtil.chunkCoordinate(blockY));
     }
 
     private void applyPrefabFluidForCell(
@@ -291,8 +328,10 @@ public final class ConstructionAnimator {
     ) {
         WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
         Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
-        ChunkColumn fluidColumn = fluidStore.getComponent(chunk.getReference(), ChunkColumn.getComponentType());
-        Ref<ChunkStore> section = fluidColumn.getSection(ChunkUtil.chunkCoordinate(by));
+        Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+        if (section == null) {
+            return;
+        }
         FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
         fluidSection.setFluid(bx, by, bz, fluidId, (byte) fluidLevel);
     }

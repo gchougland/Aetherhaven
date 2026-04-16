@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -250,6 +251,11 @@ public final class DialogueActionExecutor {
             return;
         }
         if (!VillagerReputationService.claimPendingReward(town, tm, pu.getUuid(), nu.getUuid(), def.rewardId())) {
+            return;
+        }
+        String learnId = def.learnRecipeItemId();
+        if (learnId != null && !learnId.isBlank()) {
+            CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
             return;
         }
         int count = Math.max(1, Math.min(def.itemCount(), 9999));

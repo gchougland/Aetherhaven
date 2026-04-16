@@ -1,0 +1,131 @@
+{
+  "RenderMode": "Erosion",
+  "EmitOffset": {
+    "X": {
+      "Min": -0.2,
+      "Max": 0.2
+    },
+    "Y": {
+      "Min": 0,
+      "Max": 0.05
+    },
+    "Z": {
+      "Min": -0.2,
+      "Max": 0.2
+    }
+  },
+  "ParticleRotationInfluence": "None",
+  "LinearFiltering": false,
+  "LightInfluence": 1,
+  "TrailSpawnerPositionMultiplier": 0,
+  "TrailSpawnerRotationMultiplier": 1,
+  "ParticleLifeSpan": {
+    "Min": 0.25,
+    "Max": 0.45
+  },
+  "SpawnRate": {
+    "Min": 90,
+    "Max": 140
+  },
+  "TotalParticles": {
+    "Min": 6,
+    "Max": 8
+  },
+  "Attractors": [],
+  "ParticleRotateWithSpawner": true,
+  "MaxConcurrentParticles": 8,
+  "Particle": {
+    "Texture": "Particles/Textures/Rnd/Water_Splash_Small2.png",
+    "FrameSize": {
+      "Width": 64,
+      "Height": 64
+    },
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "FrameIndex": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Scale": {
+          "X": {
+            "Min": 1,
+            "Max": 1
+          }
+        },
+        "Rotation": {
+          "X": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Y": {
+            "Min": 0,
+            "Max": 0
+          },
+          "Z": {
+            "Min": 0,
+            "Max": 0
+          }
+        },
+        "Opacity": 1
+      },
+      "10": {
+        "Opacity": 0.9
+      },
+      "30": {
+        "Opacity": 0.85,
+        "Scale": {
+          "X": {
+            "Min": 3.2,
+            "Max": 2.2
+          }
+        }
+      },
+      "100": {
+        "Opacity": 0
+      }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Y": {
+          "Min": 0,
+          "Max": 0
+        },
+        "Z": {
+          "Min": 0,
+          "Max": 360
+        }
+      },
+      "Scale": {
+        "X": {
+          "Min": 0.04,
+          "Max": 0.09
+        }
+      },
+      "Opacity": 0.85,
+      "FrameIndex": {
+        "Min": 0,
+        "Max": 0
+      }
+    }
+  },
+  "InitialVelocity": {
+    "Speed": {
+      "Min": -2.2,
+      "Max": -1.2
+    },
+    "Yaw": {
+      "Min": -180,
+      "Max": 180
+    },
+    "Pitch": {
+      "Min": -88,
+      "Max": -55
+    }
+  },
+  "SpawnBurst": false
+}

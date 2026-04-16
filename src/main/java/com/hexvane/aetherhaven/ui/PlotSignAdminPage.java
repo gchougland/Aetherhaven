@@ -4,7 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
-import com.hypixel.hytale.codec.EmptyExtraInfo;
+import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.component.Holder;
@@ -88,7 +88,7 @@ public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdm
         }
         Holder<ChunkStore> holder = ChunkStore.REGISTRY.newHolder();
         holder.addComponent(PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, java.util.UUID.randomUUID().toString()));
-        BsonDocument blockHolderDoc = ChunkStore.REGISTRY.getEntityCodec().encode(holder, EmptyExtraInfo.EMPTY).asDocument();
+        BsonDocument blockHolderDoc = ChunkStore.REGISTRY.getEntityCodec().encode(holder, new ExtraInfo()).asDocument();
         ItemStack stack =
             new ItemStack(AetherhavenConstants.PLOT_SIGN_ITEM_ID, 1)
                 .withMetadata(AetherhavenConstants.ITEM_METADATA_BLOCK_HOLDER, blockHolderDoc);

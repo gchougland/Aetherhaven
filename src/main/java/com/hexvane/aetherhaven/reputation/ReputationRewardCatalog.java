@@ -22,7 +22,8 @@ public final class ReputationRewardCatalog {
             25,
             "Aetherhaven_Gold_Coin",
             8,
-            "rep_reward_25"
+            "rep_reward_25",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_elder_50",
@@ -30,7 +31,8 @@ public final class ReputationRewardCatalog {
             50,
             "Aetherhaven_Gold_Coin",
             16,
-            "rep_reward_50"
+            "rep_reward_50",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_elder_75",
@@ -38,7 +40,8 @@ public final class ReputationRewardCatalog {
             75,
             "Aetherhaven_Town_Planning_Desk",
             1,
-            "rep_reward_75"
+            "rep_reward_75",
+            null
         ),
         // Innkeeper
         new ReputationRewardDefinition(
@@ -47,7 +50,8 @@ public final class ReputationRewardCatalog {
             25,
             AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID,
             6,
-            "rep_reward_25"
+            "rep_reward_25",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_innkeeper_50",
@@ -55,7 +59,8 @@ public final class ReputationRewardCatalog {
             50,
             AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID,
             12,
-            "rep_reward_50"
+            "rep_reward_50",
+            null
         ),
         // Merchant
         new ReputationRewardDefinition(
@@ -64,7 +69,8 @@ public final class ReputationRewardCatalog {
             25,
             "Aetherhaven_Gold_Coin",
             10,
-            "rep_reward_25"
+            "rep_reward_25",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_merchant_50",
@@ -72,7 +78,8 @@ public final class ReputationRewardCatalog {
             50,
             "Aetherhaven_Gold_Coin",
             20,
-            "rep_reward_50"
+            "rep_reward_50",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_merchant_75",
@@ -80,24 +87,45 @@ public final class ReputationRewardCatalog {
             75,
             "Aetherhaven_Gold_Coin",
             35,
-            "rep_reward_75"
+            "rep_reward_75",
+            null
         ),
-        // Farmer
+        // Farmer — sprinkler recipe unlocks (crafting knowledge); no item grant
         new ReputationRewardDefinition(
             "rep_farmer_25",
             AetherhavenConstants.NPC_FARMER,
             25,
-            "Soil_Dirt",
-            24,
-            "rep_reward_25"
+            "",
+            0,
+            "rep_reward_25",
+            "Aetherhaven_Sprinkler_Iron"
         ),
         new ReputationRewardDefinition(
             "rep_farmer_50",
             AetherhavenConstants.NPC_FARMER,
             50,
-            "Tool_Shovel_Crude",
-            1,
-            "rep_reward_50"
+            "",
+            0,
+            "rep_reward_50",
+            "Aetherhaven_Sprinkler_Thorium"
+        ),
+        new ReputationRewardDefinition(
+            "rep_farmer_75",
+            AetherhavenConstants.NPC_FARMER,
+            75,
+            "",
+            0,
+            "rep_reward_75",
+            "Aetherhaven_Sprinkler_Cobalt"
+        ),
+        new ReputationRewardDefinition(
+            "rep_farmer_100",
+            AetherhavenConstants.NPC_FARMER,
+            100,
+            "",
+            0,
+            "rep_reward_100",
+            "Aetherhaven_Sprinkler_Adamantite"
         ),
         // Blacksmith
         new ReputationRewardDefinition(
@@ -106,7 +134,8 @@ public final class ReputationRewardCatalog {
             25,
             "Rock_Stone",
             32,
-            "rep_reward_25"
+            "rep_reward_25",
+            null
         ),
         new ReputationRewardDefinition(
             "rep_blacksmith_50",
@@ -114,7 +143,8 @@ public final class ReputationRewardCatalog {
             50,
             "Rock_Stone",
             64,
-            "rep_reward_50"
+            "rep_reward_50",
+            null
         )
     );
 
@@ -146,12 +176,17 @@ public final class ReputationRewardCatalog {
         return out;
     }
 
+    /**
+     * @param learnRecipeItemId when non-null, grants crafting knowledge for this output item id instead of {@link
+     *     #itemId()}/{@link #itemCount()}.
+     */
     public record ReputationRewardDefinition(
         @Nonnull String rewardId,
         @Nonnull String roleId,
         int minReputation,
         @Nonnull String itemId,
         int itemCount,
-        @Nonnull String dialogueNodeId
+        @Nonnull String dialogueNodeId,
+        @Nullable String learnRecipeItemId
     ) {}
 }

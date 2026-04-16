@@ -208,7 +208,7 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         if (!EntityModule.get().isKnown(entity)) {
             throw new IllegalArgumentException("Unknown entity");
         }
-        // Avoid Entity#getNetworkId() (deprecated for removal): caller must use e.g. new PoiDebugLabelEntity(world).
+        // Caller must associate the entity with this world (e.g. loadIntoWorld) before addEntity.
         if (!world.equals(entity.getWorld())) {
             throw new IllegalStateException("Expected entity to already have its world set to " + world.getName());
         }
@@ -339,7 +339,8 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         @Nonnull Model markerModel,
         @Nonnull Model anchorModel
     ) {
-        PoiDebugLabelEntity markerEnt = new PoiDebugLabelEntity(world);
+        PoiDebugLabelEntity markerEnt = new PoiDebugLabelEntity();
+        markerEnt.loadIntoWorld(world);
         markerEnt.setOwnerPlayerUuid(ownerUuid);
         PoiDebugLabelEntity markerSpawned = addPoiDebugLabelEntity(world, markerEnt, markerPos, rot);
         if (markerSpawned == null) {
@@ -357,7 +358,8 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         }
 
         Vector3d nameplatePos = new Vector3d(markerPos.getX(), markerPos.getY() + NAMEPLATE_PIVOT_OFFSET_Y, markerPos.getZ());
-        PoiDebugLabelEntity nameplateEnt = new PoiDebugLabelEntity(world);
+        PoiDebugLabelEntity nameplateEnt = new PoiDebugLabelEntity();
+        nameplateEnt.loadIntoWorld(world);
         nameplateEnt.setOwnerPlayerUuid(ownerUuid);
         PoiDebugLabelEntity nameplateSpawned = addPoiDebugLabelEntity(world, nameplateEnt, nameplatePos, rot);
         if (nameplateSpawned == null) {

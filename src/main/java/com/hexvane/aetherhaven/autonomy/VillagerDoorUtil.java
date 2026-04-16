@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.asset.type.blockhitbox.BlockBoundingBoxes;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
@@ -131,15 +132,23 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        BlockType blockType = chunk.getBlockType(blockPos.x, blockPos.y, blockPos.z);
-        if (blockType == null || !blockType.isDoor()) {
+        RotationTuple rotationTuple = RotationTuple.get(
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+        );
+        DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
+            world,
+            blockPos.x,
+            blockPos.y,
+            blockPos.z,
+            rotationTuple.yaw()
+        );
+        if (doorInfo == null) {
             return false;
         }
+        BlockType blockType = doorInfo.getBlockType();
         if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
-        int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z);
-        RotationTuple rotationTuple = RotationTuple.get(rotation);
         DoorState primary = isInFrontOfDoor(blockPos, rotationTuple.yaw(), entityPos) ? DoorState.OPENED_OUT : DoorState.OPENED_IN;
         DoorState alternate = primary == DoorState.OPENED_OUT ? DoorState.OPENED_IN : DoorState.OPENED_OUT;
         if (tryOpenClosedDoor(world, blockPos, primary)) {
@@ -149,10 +158,15 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        blockType = chunk.getBlockType(blockPos.x, blockPos.y, blockPos.z);
-        if (blockType == null
-            || !blockType.isDoor()
-            || DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
+        rotationTuple = RotationTuple.get(
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+        );
+        doorInfo = DoorInteraction.getDoorAtPosition(world, blockPos.x, blockPos.y, blockPos.z, rotationTuple.yaw());
+        if (doorInfo == null) {
+            return false;
+        }
+        blockType = doorInfo.getBlockType();
+        if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
         return tryOpenClosedDoor(world, blockPos, alternate);
@@ -163,10 +177,20 @@ public final class VillagerDoorUtil {
         if (chunk == null) {
             return false;
         }
-        BlockType blockType = chunk.getBlockType(blockPos.x, blockPos.y, blockPos.z);
-        if (blockType == null || !blockType.isDoor()) {
+        RotationTuple rotationTuple = RotationTuple.get(
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+        );
+        DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
+            world,
+            blockPos.x,
+            blockPos.y,
+            blockPos.z,
+            rotationTuple.yaw()
+        );
+        if (doorInfo == null) {
             return false;
         }
+        BlockType blockType = doorInfo.getBlockType();
         if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
@@ -185,10 +209,12 @@ public final class VillagerDoorUtil {
             if (chunk == null) {
                 return false;
             }
-            BlockType blockType = chunk.getBlockType(x, y, z);
-            if (blockType == null || !blockType.isDoor()) {
+            RotationTuple rotationTuple = RotationTuple.get(VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, x, y, z));
+            DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(world, x, y, z, rotationTuple.yaw());
+            if (doorInfo == null) {
                 return false;
             }
+            BlockType blockType = doorInfo.getBlockType();
             String blockState = blockType.getStateForBlock(blockType);
             DoorState doorState = DoorState.fromBlockState(blockState);
             if (doorState == DoorState.CLOSED) {
