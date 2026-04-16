@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Archetype;
@@ -157,6 +158,14 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         UUIDComponent elderUuid = store.getComponent(elderRef, UUIDComponent.getComponentType());
         if (elderUuid != null) {
             town.setElderEntityUuid(elderUuid.getUuid());
+            ResidentRegistryService.upsert(
+                town,
+                tm,
+                AetherhavenConstants.ELDER_NPC_ROLE_ID,
+                TownVillagerBinding.KIND_ELDER,
+                null,
+                elderUuid.getUuid()
+            );
             tm.updateTown(town);
         }
     }

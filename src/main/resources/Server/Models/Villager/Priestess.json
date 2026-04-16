@@ -75,5 +75,18 @@
       "Model": "Cosmetics/Head/SilverHoopsBead.blockymodel",
       "Texture": "Cosmetics/Head/SilverHoopsBead_Textures/Green+Brown+Yellow.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Priestess.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      25,
+      0
+    ],
+    "Translation": [
+      0,
+      -108
+    ]
+  }
 }

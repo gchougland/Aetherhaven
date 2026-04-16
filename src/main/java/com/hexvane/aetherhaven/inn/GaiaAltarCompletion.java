@@ -11,9 +11,9 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -23,20 +23,20 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** When the market stall prefab completes, move Vex to the stall WORK POI. Quest completes when the player talks to Vex. */
-public final class MerchantStallCompletion {
+/** When the Gaia altar prefab completes, move the priestess from the inn pool to the WORK POI. Quest completes on dialogue. */
+public final class GaiaAltarCompletion {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private MerchantStallCompletion() {}
+    private GaiaAltarCompletion() {}
 
-    public static void onStallBuilt(
+    public static void onAltarBuilt(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town,
-        @Nonnull UUID stallPlotId,
+        @Nonnull UUID altarPlotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
+        if (!town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();
@@ -44,13 +44,13 @@ public final class MerchantStallCompletion {
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PoiEntry work = null;
         for (PoiEntry e : reg.listByTown(town.getTownId())) {
-            if (stallPlotId.equals(e.getPlotId()) && e.getTags().contains("WORK")) {
+            if (altarPlotId.equals(e.getPlotId()) && e.getTags().contains("WORK")) {
                 work = e;
                 break;
             }
         }
         if (work == null) {
-            LOGGER.atWarning().log("No WORK POI for stall plot %s", stallPlotId);
+            LOGGER.atWarning().log("No WORK POI for Gaia altar plot %s", altarPlotId);
             return;
         }
 
@@ -58,11 +58,11 @@ public final class MerchantStallCompletion {
         double ty = work.getY();
         double tz = work.getZ() + 0.5;
 
-        Ref<EntityStore> merchantRef = findMerchantRef(store, town);
-        if (merchantRef == null || !merchantRef.isValid()) {
+        Ref<EntityStore> priestessRef = findPriestessRef(store, town);
+        if (priestessRef == null || !priestessRef.isValid()) {
             return;
         }
-        TransformComponent tc = store.getComponent(merchantRef, TransformComponent.getComponentType());
+        TransformComponent tc = store.getComponent(priestessRef, TransformComponent.getComponentType());
         if (tc == null) {
             return;
         }
@@ -70,40 +70,40 @@ public final class MerchantStallCompletion {
         p.x = tx;
         p.y = ty + 0.02;
         p.z = tz;
-        store.putComponent(merchantRef, TransformComponent.getComponentType(), tc);
-        UUIDComponent uuidComp = store.getComponent(merchantRef, UUIDComponent.getComponentType());
-        UUID merchantUuid = uuidComp != null ? uuidComp.getUuid() : null;
-        if (merchantUuid != null) {
+        store.putComponent(priestessRef, TransformComponent.getComponentType(), tc);
+        UUIDComponent uuidComp = store.getComponent(priestessRef, UUIDComponent.getComponentType());
+        UUID npcUuid = uuidComp != null ? uuidComp.getUuid() : null;
+        if (npcUuid != null) {
             town.getInnPoolNpcIds().removeIf(s -> {
                 try {
-                    return merchantUuid.equals(UUID.fromString(s.trim()));
+                    return npcUuid.equals(UUID.fromString(s.trim()));
                 } catch (Exception e) {
                     return false;
                 }
             });
         }
         store.putComponent(
-            merchantRef,
+            priestessRef,
             TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_MERCHANT, stallPlotId, stallPlotId)
+            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_PRIESTESS, altarPlotId, altarPlotId)
         );
-        town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_MERCHANT);
+        town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_PRIESTESS);
         if (uuidComp != null) {
             ResidentRegistryService.upsert(
                 town,
                 tm,
-                AetherhavenConstants.NPC_MERCHANT,
-                TownVillagerBinding.KIND_MERCHANT,
-                stallPlotId,
+                AetherhavenConstants.NPC_PRIESTESS,
+                TownVillagerBinding.KIND_PRIESTESS,
+                altarPlotId,
                 uuidComp.getUuid()
             );
         }
         tm.updateTown(town);
-        LOGGER.atInfo().log("Moved merchant to stall at %s,%s,%s", work.getX(), work.getY(), work.getZ());
+        LOGGER.atInfo().log("Moved priestess to Gaia altar at %s,%s,%s", work.getX(), work.getY(), work.getZ());
     }
 
     @Nullable
-    private static Ref<EntityStore> findMerchantRef(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+    private static Ref<EntityStore> findPriestessRef(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
         List<String> ids = town.getInnPoolNpcIds();
         for (String sid : ids) {
             try {
@@ -114,7 +114,7 @@ public final class MerchantStallCompletion {
                 }
                 var npcType = NPCEntity.getComponentType();
                 NPCEntity npc = npcType != null ? store.getComponent(ref, npcType) : null;
-                if (npc != null && AetherhavenConstants.NPC_MERCHANT.equals(npc.getRoleName())) {
+                if (npc != null && AetherhavenConstants.NPC_PRIESTESS.equals(npc.getRoleName())) {
                     return ref;
                 }
             } catch (Exception ignored) {

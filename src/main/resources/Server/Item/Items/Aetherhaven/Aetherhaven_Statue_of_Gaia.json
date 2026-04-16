@@ -1,0 +1,70 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Statue_of_Gaia.name",
+    "Description": "server.items.Aetherhaven_Statue_of_Gaia.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": ["Furniture.Decorative"],
+  "Set": "Aetherhaven",
+  "Icon": "Icons/ItemsGenerated/Furniture_Temple_Light_Statue.png",
+  "BlockType": {
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "CustomModel": "Blocks/Decorative_Sets/Temple_Light/Gaia_Statue_01.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Temple_Light/Gaia_Statue_01_Textures/default.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Full",
+    "Material": "Solid",
+    "Opacity": "Transparent",
+    "ParticleColor": "#8a9ba8",
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenGaiaStatueBlock": {
+          "PlotId": "",
+          "TownId": ""
+        }
+      }
+    },
+    "Supporting": {
+      "Up": [{ "FaceType": "Full" }]
+    },
+    "Support": {
+      "Down": [{ "FaceType": "Full" }]
+    },
+    "VariantRotation": "NESW",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": { "Id": "AetherhavenGaiaStatue" }
+          }
+        ]
+      }
+    }
+  },
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "IconProperties": {
+    "Scale": 0.45,
+    "Translation": [0, -10],
+    "Rotation": [22.5, 45, 22.5]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "MaxStack": 25
+}

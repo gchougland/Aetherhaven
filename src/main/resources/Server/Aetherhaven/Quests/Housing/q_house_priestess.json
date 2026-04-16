@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_priestess",
+  "category": "housing",
+  "title": "Serah's Home",
+  "description": "Serah has her altar; now she wants a door that does not answer to the inn. Build the house, assign her as resident at the management block, then talk to her to finish.",
+  "assignNpcRoleId": "Aetherhaven_Priestess",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the house plot token from Serah."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the house prefab."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Priestess",
+      "text": "Assign Serah as resident on the house management block."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to Serah to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Priestess",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

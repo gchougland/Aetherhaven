@@ -1,0 +1,189 @@
+{
+  "id": "aetherhaven_priestess",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Serah Thornwell",
+      "text": "Serah Thornwell. Gaia does not shout over tavern noise. She waits where roots remember water. I came to help this town remember the same.",
+      "choices": [
+        {
+          "text": "About a home in town...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_gaia_altar" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_priestess" },
+                    { "type": "town_quest_completed", "questId": "q_house_priestess" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "serah_house_offer"
+        },
+        {
+          "text": "You're registered at the house.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_priestess" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_priestess" }],
+          "next": "serah_house_finish"
+        },
+        {
+          "text": "I'm still building your house.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_priestess" },
+              {
+                "type": "not",
+                "condition": { "type": "town_npc_home_resident_house" }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "serah_house_remind"
+        },
+        {
+          "text": "Good to see the altar standing.",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_gaia_altar"
+          },
+          "next": "serah_done"
+        },
+        {
+          "text": "I've finished the altar grounds.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_gaia_altar" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_gaia_altar" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_gaia_altar" }],
+          "next": "serah_done"
+        },
+        {
+          "text": "About the altar build...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_gaia_altar" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_gaia_altar"
+                }
+              }
+            ]
+          },
+          "next": "serah_building"
+        },
+        {
+          "text": "I need a proper place for Gaia's rites.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_gaia_altar" } },
+              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_gaia_altar" } }
+            ]
+          },
+          "next": "serah_quest_altar"
+        },
+        {
+          "text": "Farewell.",
+          "next": null
+        }
+      ]
+    },
+    "serah_quest_altar": {
+      "speaker": "Serah Thornwell",
+      "text": "The inn is kind, but incense does not belong in a soup bowl. Stake a Gaia altar plot: paths, stools to rest, and the statue where I can work. Craft the token at your planning desk, place it with your staff, and pay the sign. When the ground is blessed, meet me at the statue.",
+      "choices": [
+        {
+          "text": "We'll get it built.",
+          "actions": [
+            { "type": "start_quest", "id": "q_gaia_altar" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Gaia_Altar", "count": 1 }
+          ],
+          "next": "serah_altar_accepted"
+        },
+        {
+          "text": "Not right now.",
+          "next": null
+        }
+      ]
+    },
+    "serah_altar_accepted": {
+      "speaker": "Serah Thornwell",
+      "text": "Good. I'll stay at the inn until the stone speaks. Then come find me at the statue and we will close the verse.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "serah_building": {
+      "speaker": "Serah Thornwell",
+      "text": "Take your time. When the altar stands, I'll walk to the statue. Come find me there and we will call it done.",
+      "choices": [
+        {
+          "text": "I need to drop the quest.",
+          "actions": [{ "type": "abandon_quest", "id": "q_gaia_altar" }],
+          "next": "serah_abandoned"
+        },
+        { "text": "Understood.", "next": null }
+      ]
+    },
+    "serah_abandoned": {
+      "speaker": "Serah Thornwell",
+      "text": "No harm done. If you still want a shrine in town, ask again.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    },
+    "serah_done": {
+      "speaker": "Serah Thornwell",
+      "text": "The statue is steady. What comes next is patience, not noise. There is no other town to flee to, so we tend what Orbis leaves us.",
+      "choices": [{ "text": "Good luck.", "next": null }]
+    },
+    "serah_house_offer": {
+      "speaker": "Serah Thornwell",
+      "text": "The altar is honest work, but I would like a door that does not answer to the inn. Build the house plot like anyone else, then register me on the management block when it stands.",
+      "choices": [
+        {
+          "text": "I'll stake a house.",
+          "actions": [
+            { "type": "start_quest", "id": "q_house_priestess" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
+          ],
+          "next": "serah_house_accepted"
+        },
+        { "text": "Another time.", "next": null }
+      ]
+    },
+    "serah_house_accepted": {
+      "speaker": "Serah Thornwell",
+      "text": "Good. When the walls are up, put my name on the block inside. After that, find me. I will want to hear it before we call it done.",
+      "choices": [{ "text": "Understood.", "next": null }]
+    },
+    "serah_house_remind": {
+      "speaker": "Serah Thornwell",
+      "text": "Take your time. When the house stands, register me on the block, then come talk. That is when we are square.",
+      "choices": [{ "text": "Right.", "next": null }]
+    },
+    "serah_house_finish": {
+      "speaker": "Serah Thornwell",
+      "text": "Then the roof is honest. No borrowed floor, no borrowed name. Good.",
+      "choices": [{ "text": "Fair enough.", "next": null }]
+    }
+  }
+}

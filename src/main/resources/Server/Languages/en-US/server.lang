@@ -141,6 +141,29 @@ npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
 npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
 npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
 npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.
+
+items.Aetherhaven_Statue_of_Gaia.name=Statue of Gaia
+items.Aetherhaven_Statue_of_Gaia.description=A blessed likeness for the altar. Town owners may call missing residents back with life essence.
+
+aetherhaven.ui.gaiaStatue.title=Statue of Gaia
+aetherhaven.ui.gaiaStatue.hint=Each revival consumes {cost} life essence.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}) — {status}
+aetherhaven.ui.gaiaStatue.status.present=In town
+aetherhaven.ui.gaiaStatue.status.missing=Away
+aetherhaven.ui.gaiaStatue.footer=Only the town owner may use this blessing. Missing villagers can be called back near the statue.
+aetherhaven.ui.gaiaStatue.revive=Revive
+
+aetherhaven.profession.kind.elder=Elder
+aetherhaven.profession.kind.innkeeper=Innkeeper
+aetherhaven.profession.kind.merchant=Merchant
+aetherhaven.profession.kind.farmer=Farmer
+aetherhaven.profession.kind.blacksmith=Blacksmith
+aetherhaven.profession.kind.priestess=Priestess
+aetherhaven.profession.kind.unknown=Resident
 
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.dissolve=Dissolve town

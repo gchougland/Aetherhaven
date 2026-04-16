@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
+import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
@@ -44,6 +45,7 @@ import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
+import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.component.Ref;
@@ -166,6 +168,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
         TreasuryBlock.register(this.getChunkStoreRegistry());
+        GaiaStatueBlock.register(this.getChunkStoreRegistry());
         SprinklerBlock.register(this.getChunkStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
@@ -285,6 +288,25 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             this,
+            GaiaStatueRevivePage.class,
+            AetherhavenConstants.PAGE_GAIA_STATUE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, GaiaStatueBlock.getComponentType());
+                if (target == null) {
+                    return null;
+                }
+                return new GaiaStatueRevivePage(playerRef, target.blockRef(), target.blockWorldPos());
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
             VillagerNeedsOverviewPage.class,
             AetherhavenConstants.PAGE_VILLAGER_NEEDS,
             (ref, componentAccessor, playerRef, context) -> {
@@ -382,6 +404,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueResolver.registerKind("merchant", "aetherhaven_merchant");
         this.dialogueResolver.registerKind("blacksmith", "aetherhaven_blacksmith");
         this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
+        this.dialogueResolver.registerKind("priestess", "aetherhaven_priestess");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 

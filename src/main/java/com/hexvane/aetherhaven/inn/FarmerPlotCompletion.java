@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -87,6 +88,16 @@ public final class FarmerPlotCompletion {
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_FARMER, farmPlotId, farmPlotId)
         );
         town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_FARMER);
+        if (uuidComp != null) {
+            ResidentRegistryService.upsert(
+                town,
+                tm,
+                AetherhavenConstants.NPC_FARMER,
+                TownVillagerBinding.KIND_FARMER,
+                farmPlotId,
+                uuidComp.getUuid()
+            );
+        }
         tm.updateTown(town);
         LOGGER.atInfo().log("Moved farmer to farm plot at %s,%s,%s", work.getX(), work.getY(), work.getZ());
     }

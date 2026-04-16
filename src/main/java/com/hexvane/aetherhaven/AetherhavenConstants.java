@@ -48,6 +48,9 @@ public final class AetherhavenConstants {
     /** Blacksmith workplace; definition in {@code Server/Aetherhaven/Buildings/plot_blacksmith_shop.json}. */
     public static final String CONSTRUCTION_PLOT_BLACKSMITH_SHOP = "plot_blacksmith_shop";
 
+    /** Gaia altar workplace; definition in {@code Server/Aetherhaven/Buildings/plot_gaia_altar.json}. */
+    public static final String CONSTRUCTION_PLOT_GAIA_ALTAR = "plot_gaia_altar";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
@@ -68,9 +71,15 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_BLACKSMITH = "q_house_blacksmith";
 
+    public static final String QUEST_GAIA_ALTAR = "q_gaia_altar";
+
+    public static final String QUEST_HOUSE_PRIESTESS = "q_house_priestess";
+
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
     public static final String NPC_FARMER = "Aetherhaven_Farmer";
+
+    public static final String NPC_PRIESTESS = "Aetherhaven_Priestess";
 
     public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
 
@@ -83,6 +92,8 @@ public final class AetherhavenConstants {
     public static final String PLOT_TOKEN_HOUSE = "Aetherhaven_Plot_Token_House";
 
     public static final String PLOT_TOKEN_TOWN_HALL = "Aetherhaven_Plot_Token_Town_Hall";
+
+    public static final String PLOT_TOKEN_GAIA_ALTAR = "Aetherhaven_Plot_Token_Gaia_Altar";
 
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 
@@ -100,6 +111,18 @@ public final class AetherhavenConstants {
     public static final int BLACKSMITH_REPAIR_COST_FULL = 10;
 
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
+
+    /** Gaia statue revival UI; OpenCustomUI page id matches block interaction. */
+    public static final String PAGE_GAIA_STATUE = "AetherhavenGaiaStatue";
+
+    /** Block and item id for the Statue of Gaia (revival interaction). */
+    public static final String STATUE_OF_GAIA_BLOCK_TYPE_ID = "Aetherhaven_Statue_of_Gaia";
+
+    /** Vanilla ingredient consumed to revive a missing villager at the statue. */
+    public static final String ITEM_LIFE_ESSENCE = "Ingredient_Life_Essence";
+
+    /** Life essence stacks consumed per revival at the Gaia statue. */
+    public static final int GAIA_STATUE_REVIVE_COST_ESSENCE = 10;
 
     public static final String ELDER_NPC_ROLE_ID = "Aetherhaven_Elder_Lyren";
 

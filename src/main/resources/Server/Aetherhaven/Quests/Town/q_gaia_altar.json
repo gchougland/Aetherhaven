@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q_gaia_altar",
+  "category": "town",
+  "title": "Serah's Altar",
+  "description": "Serah needs a Gaia altar with a statue and resting stools before she leaves the inn floor. Build the altar, then speak to her at the statue to finish.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the Gaia altar plot token from Serah."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the Gaia altar prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to Serah at the altar to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Priestess",
+      "amount": 13,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

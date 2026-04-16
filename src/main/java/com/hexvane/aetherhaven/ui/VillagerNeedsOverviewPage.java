@@ -208,6 +208,9 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         if (TownVillagerBinding.KIND_BLACKSMITH.equals(kind)) {
             return 2;
         }
+        if (TownVillagerBinding.KIND_PRIESTESS.equals(kind)) {
+            return 2;
+        }
         return 3;
     }
 
@@ -225,6 +228,9 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             return 2;
         }
         if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
             return 2;
         }
         return 3;

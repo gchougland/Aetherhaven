@@ -176,6 +176,7 @@ public final class VillagerScheduleResolver {
             case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM);
             case TownVillagerBinding.KIND_MERCHANT -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL);
             case TownVillagerBinding.KIND_BLACKSMITH -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP);
+            case TownVillagerBinding.KIND_PRIESTESS -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
             case TownVillagerBinding.KIND_INNKEEPER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case TownVillagerBinding.KIND_ELDER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
             default -> null;

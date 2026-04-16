@@ -1,11 +1,13 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
 /**
- * GUI portraits for {@link VillagerNeedsOverviewPage}: PNGs under {@code Common/Icons/ModelsGenerated/}
+ * GUI portraits for {@link VillagerNeedsOverviewPage}, {@link GaiaStatueRevivePage}, etc.: PNGs under
+ * {@code Common/Icons/ModelsGenerated/}
  * (asset path {@code Icons/ModelsGenerated/&lt;file&gt;}).
  */
 public final class NpcPortraitProvider {
@@ -17,7 +19,8 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Innkeep.png"),
         Map.entry("Aetherhaven_Merchant", "Merchant.png"),
         Map.entry("Aetherhaven_Blacksmith", "Blacksmith.png"),
-        Map.entry("Aetherhaven_Farmer", "Farmer.png")
+        Map.entry("Aetherhaven_Farmer", "Farmer.png"),
+        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Priestess.png")
     );
 
     /** Short labels for town needs UI (aligned with server.lang npcRoles.*.name). */
@@ -26,7 +29,8 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Corin Mosscup"),
         Map.entry(AetherhavenConstants.NPC_MERCHANT, "Vex Sunderlane"),
         Map.entry(AetherhavenConstants.NPC_BLACKSMITH, "Garren Vale"),
-        Map.entry(AetherhavenConstants.NPC_FARMER, "Irienne Mossmark")
+        Map.entry(AetherhavenConstants.NPC_FARMER, "Irienne Mossmark"),
+        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Serah Thornwell")
     );
 
     private NpcPortraitProvider() {}
@@ -41,5 +45,40 @@ public final class NpcPortraitProvider {
     public static String displayLabelForRoleId(@Nonnull String roleId) {
         String label = ROLE_ID_TO_LABEL.get(roleId.trim());
         return label != null ? label : roleId.trim();
+    }
+
+    /**
+     * Lang key {@code server.aetherhaven.profession.kind.&lt;slug&gt;} for UI lines such as {@code Name (Profession)}.
+     */
+    @Nonnull
+    public static String professionTranslationKey(@Nonnull String roleId, @Nonnull String kind) {
+        String k = kind != null ? kind.trim() : "";
+        if (!k.isEmpty() && !TownVillagerBinding.isVisitorKind(k)) {
+            return "server.aetherhaven.profession.kind." + k;
+        }
+        return "server.aetherhaven.profession.kind." + professionKindSlugFromRoleId(roleId.trim());
+    }
+
+    @Nonnull
+    private static String professionKindSlugFromRoleId(@Nonnull String roleId) {
+        if (AetherhavenConstants.ELDER_NPC_ROLE_ID.equals(roleId)) {
+            return TownVillagerBinding.KIND_ELDER;
+        }
+        if (AetherhavenConstants.INNKEEPER_NPC_ROLE_ID.equals(roleId)) {
+            return TownVillagerBinding.KIND_INNKEEPER;
+        }
+        if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
+            return TownVillagerBinding.KIND_MERCHANT;
+        }
+        if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
+            return TownVillagerBinding.KIND_BLACKSMITH;
+        }
+        if (AetherhavenConstants.NPC_FARMER.equals(roleId)) {
+            return TownVillagerBinding.KIND_FARMER;
+        }
+        if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
+            return TownVillagerBinding.KIND_PRIESTESS;
+        }
+        return "unknown";
     }
 }

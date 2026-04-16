@@ -60,13 +60,15 @@ public final class InnPoolService {
     private static final List<String> POOL_ROLE_IDS = List.of(
         AetherhavenConstants.NPC_MERCHANT,
         AetherhavenConstants.NPC_BLACKSMITH,
-        AetherhavenConstants.NPC_FARMER
+        AetherhavenConstants.NPC_FARMER,
+        AetherhavenConstants.NPC_PRIESTESS
     );
 
     private static final List<String> POOL_KINDS = List.of(
         TownVillagerBinding.KIND_VISITOR_MERCHANT,
         TownVillagerBinding.KIND_VISITOR_BLACKSMITH,
-        TownVillagerBinding.KIND_VISITOR_FARMER
+        TownVillagerBinding.KIND_VISITOR_FARMER,
+        TownVillagerBinding.KIND_VISITOR_PRIESTESS
     );
 
     private static final Object TICK_LOCK = new Object();

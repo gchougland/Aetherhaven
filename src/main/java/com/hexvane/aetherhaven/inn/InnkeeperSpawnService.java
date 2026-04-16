@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
@@ -115,6 +116,14 @@ public final class InnkeeperSpawnService {
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uuidComp != null) {
             town.setInnkeeperEntityUuid(uuidComp.getUuid());
+            ResidentRegistryService.upsert(
+                town,
+                tm,
+                AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+                TownVillagerBinding.KIND_INNKEEPER,
+                plot.getPlotId(),
+                uuidComp.getUuid()
+            );
         }
         town.setInnActive(true);
         town.getInnPoolNpcIds().clear();

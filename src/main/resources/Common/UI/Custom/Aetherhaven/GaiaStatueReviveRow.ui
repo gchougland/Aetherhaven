@@ -1,0 +1,23 @@
+$C = "../Common.ui";
+
+Group #ReviveRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8);
+  Padding: (Horizontal: 6, Vertical: 4);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+  AssetImage #Portrait {
+    Anchor: (Width: 56, Height: 56, Right: 8);
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+
+  Label #VillagerLine {
+    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+  }
+
+  $C.@TextButton #ReviveButton {
+    Text: %server.aetherhaven.ui.gaiaStatue.revive;
+  }
+}

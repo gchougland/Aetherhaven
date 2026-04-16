@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -222,6 +223,65 @@ public final class VillagerReputationService {
      * @return true if the reward was newly claimed from the pending queue (caller should grant items). False if
      *     already claimed, queue mismatch, or empty.
      */
+    /**
+     * Moves per-player reputation rows from {@code oldUuid} to {@code newUuid} (e.g. after reviving a missing NPC).
+     * Merges into an existing {@code newUuid} entry if present.
+     */
+    public static void migrateVillagerEntityUuid(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID oldUuid,
+        @Nonnull UUID newUuid
+    ) {
+        String oldS = oldUuid.toString();
+        String newS = newUuid.toString();
+        if (oldS.equals(newS)) {
+            return;
+        }
+        boolean changed = false;
+        for (Map<String, VillagerReputationEntry> inner : town.getPlayerVillagerReputation().values()) {
+            if (inner == null || !inner.containsKey(oldS)) {
+                continue;
+            }
+            VillagerReputationEntry from = inner.remove(oldS);
+            if (from == null) {
+                continue;
+            }
+            VillagerReputationEntry to = inner.get(newS);
+            if (to == null) {
+                inner.put(newS, from);
+            } else {
+                mergeReputationEntries(to, from);
+            }
+            changed = true;
+        }
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    private static void mergeReputationEntries(@Nonnull VillagerReputationEntry into, @Nonnull VillagerReputationEntry from) {
+        into.setReputation(Math.max(into.getReputation(), from.getReputation()));
+        Long a = into.getLastTalkGameEpochDay();
+        Long b = from.getLastTalkGameEpochDay();
+        if (b != null && (a == null || b > a)) {
+            into.setLastTalkGameEpochDay(b);
+        }
+        for (String id : from.getClaimedRewardIds()) {
+            if (id != null && !id.isBlank() && !into.getClaimedRewardIds().contains(id)) {
+                into.getClaimedRewardIds().add(id);
+            }
+        }
+        java.util.LinkedHashSet<String> pending = new java.util.LinkedHashSet<>(into.getPendingRewardIds());
+        for (String id : from.getPendingRewardIds()) {
+            if (id != null && !id.isBlank()) {
+                pending.add(id);
+            }
+        }
+        into.getPendingRewardIds().clear();
+        into.getPendingRewardIds().addAll(pending);
+    }
+
     public static boolean claimPendingReward(
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,

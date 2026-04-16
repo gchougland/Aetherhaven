@@ -135,6 +135,13 @@ public final class TownRecord {
     @SerializedName("playerVillagerReputation")
     private Map<String, Map<String, VillagerReputationEntry>> playerVillagerReputation;
 
+    /**
+     * Last known town resident NPCs (role id, binding kind, job plot, entity UUID) for revival UI and saves
+     * when entities are unloaded or missing.
+     */
+    @SerializedName("residentNpcRecords")
+    private List<ResidentNpcRecord> residentNpcRecords = new ArrayList<>();
+
     public TownRecord() {}
 
     public TownRecord(
@@ -206,6 +213,9 @@ public final class TownRecord {
         if (innVisitorPoolExcludedRoleIds == null) {
             innVisitorPoolExcludedRoleIds = new LinkedHashSet<>();
         }
+        if (residentNpcRecords == null) {
+            residentNpcRecords = new ArrayList<>();
+        }
         migrateVillagerReputationIfNeeded();
     }
 
@@ -232,6 +242,14 @@ public final class TownRecord {
             playerVillagerReputation = new LinkedHashMap<>();
         }
         return playerVillagerReputation;
+    }
+
+    @Nonnull
+    public List<ResidentNpcRecord> getResidentNpcRecords() {
+        if (residentNpcRecords == null) {
+            residentNpcRecords = new ArrayList<>();
+        }
+        return residentNpcRecords;
     }
 
     @Nonnull

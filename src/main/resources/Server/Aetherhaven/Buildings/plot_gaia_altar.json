@@ -1,0 +1,54 @@
+{
+  "id": "plot_gaia_altar",
+  "displayName": "Gaia altar",
+  "description": "A quiet shrine with a Gaia statue for the priestess to tend, and stools to rest by the path.",
+  "prefabPath": "Gaia_Altar.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Gaia_Altar",
+  "plotAnchorOffset": [5, 0, 5],
+  "managementBlockLocalPos": [2, 1, 3],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 6 },
+    { "resourceTypeId": "Rock", "count": 10 },
+    { "itemId": "Ingredient_Life_Essence", "count": 2 }
+  ],
+  "pois": [
+    {
+      "localX": -3,
+      "localY": 1,
+      "localZ": -2,
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT",
+      "tags": ["FUN", "SIT"],
+      "capacity": 1,
+      "interactionTargetLocalX": -3,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1
+    },
+    {
+      "localX": 3,
+      "localY": 1,
+      "localZ": 2,
+      "blockTypeId": "Furniture_Temple_Emerald_Stool",
+      "interactionKind": "SIT",
+      "tags": ["FUN", "SIT"],
+      "capacity": 1,
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 1
+    },
+    {
+      "localX": 0,
+      "localY": 2,
+      "localZ": 0,
+      "blockTypeId": "Aetherhaven_Statue_of_Gaia",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 1
+    }
+  ]
+}
