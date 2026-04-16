@@ -11,7 +11,7 @@
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
               {
                 "type": "not",
                 "condition": {
@@ -56,12 +56,108 @@
           "whenFalse": "hide",
           "next": "garren_house_remind"
         },
-        { "text": "Farewell.", "next": null }
+        {
+          "text": "Good to see the forge up.",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_blacksmith_shop"
+          },
+          "next": "garren_done"
+        },
+        {
+          "text": "I've finished the shop.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_blacksmith_shop" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_blacksmith_shop" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_blacksmith_shop" }],
+          "next": "garren_done"
+        },
+        {
+          "text": "About the shop build...",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_blacksmith_shop" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_blacksmith_shop"
+                }
+              }
+            ]
+          },
+          "next": "garren_building"
+        },
+        {
+          "text": "I need a forge in town.",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" } },
+              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_blacksmith_shop" } }
+            ]
+          },
+          "next": "garren_quest_shop"
+        },
+        {
+          "text": "Farewell.",
+          "next": null
+        }
       ]
+    },
+    "garren_quest_shop": {
+      "speaker": "Garren Vale",
+      "text": "Corin's floor is fine for sleeping, not for swinging a hammer. Stake a blacksmith shop: walls, a counter, and a weapon bench I can claim. Craft the plot token at your planning desk, place it with your staff, and pay the sign. When it stands, I'll meet you at the bench.",
+      "choices": [
+        {
+          "text": "We'll get it built.",
+          "actions": [
+            { "type": "start_quest", "id": "q_blacksmith_shop" },
+            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Blacksmith_Shop", "count": 1 }
+          ],
+          "next": "garren_shop_accepted"
+        },
+        {
+          "text": "Not right now.",
+          "next": null
+        }
+      ]
+    },
+    "garren_shop_accepted": {
+      "speaker": "Garren Vale",
+      "text": "Good. I'll stay at the inn until the smokestack's honest. Then come find me at the bench and we'll close the ledger.",
+      "choices": [{ "text": "See you soon.", "next": null }]
+    },
+    "garren_building": {
+      "speaker": "Garren Vale",
+      "text": "Take your time. When the shop is built, I'll walk to the weapon bench. Come find me there and we'll call it done.",
+      "choices": [
+        {
+          "text": "I need to drop the quest.",
+          "actions": [{ "type": "abandon_quest", "id": "q_blacksmith_shop" }],
+          "next": "garren_abandoned"
+        },
+        { "text": "Understood.", "next": null }
+      ]
+    },
+    "garren_abandoned": {
+      "speaker": "Garren Vale",
+      "text": "No harm done. If you still want a forge in town, ask again.",
+      "choices": [{ "text": "Farewell.", "next": null }]
+    },
+    "garren_done": {
+      "speaker": "Garren Vale",
+      "text": "The bench is solid. Heat'll follow honest work. There's no other town to ship to, so we'll make do with what Orbis leaves us.",
+      "choices": [{ "text": "Good luck.", "next": null }]
     },
     "garren_house_offer": {
       "speaker": "Garren Vale",
-      "text": "A roof that isn't borrowed would keep the rust off my temper. Build the house footprint, same as anyone's, then put my name on the management block when it's done.",
+      "text": "The shop's honest work, but I'd still like a roof that isn't borrowed. Build the house plot with the same footprint as anyone else, then register me on the management block when it's up.",
       "choices": [
         {
           "text": "I'll stake a house.",
@@ -76,7 +172,7 @@
     },
     "garren_house_accepted": {
       "speaker": "Garren Vale",
-      "text": "Good. When the walls are up, assign me inside. After that, find me and say so. I'll want to hear it before we call it done.",
+      "text": "Good. When the walls are up, put my name on the block inside. After that, find me. I'll want to hear it before we call it done.",
       "choices": [{ "text": "Understood.", "next": null }]
     },
     "garren_house_remind": {

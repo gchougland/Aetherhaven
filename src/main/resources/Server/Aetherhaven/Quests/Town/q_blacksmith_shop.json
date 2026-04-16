@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "id": "q_blacksmith_shop",
+  "category": "town",
+  "title": "Garren's Forge",
+  "description": "Garren needs a proper forge and bench in town before he leaves the inn floor. Build the blacksmith shop, then speak to him at the weapon bench to finish.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Receive the blacksmith shop plot token from Garren."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Place and build the blacksmith shop prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Talk to Garren at the shop to complete the quest."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Blacksmith",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

@@ -21,7 +21,7 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** Resident farmer tied to a completed farm plot. */
     public static final String KIND_FARMER = "farmer";
 
-    /** Resident blacksmith (promoted from inn visitor; not a forge plot yet). */
+    /** Resident blacksmith tied to a completed blacksmith shop plot (job/home plot id). */
     public static final String KIND_BLACKSMITH = "blacksmith";
 
     public static final String KIND_VISITOR_MERCHANT = "visitor_merchant";

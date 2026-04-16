@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.BlacksmithShopCompletion;
 import com.hexvane.aetherhaven.inn.FarmerPlotCompletion;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
@@ -77,6 +78,9 @@ public final class ConstructionCompleter {
             }
             if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(def.getId())) {
                 FarmerPlotCompletion.onFarmBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP.equals(def.getId())) {
+                BlacksmithShopCompletion.onShopBuilt(world, plugin, town, plotId, tm);
             }
         }
     }

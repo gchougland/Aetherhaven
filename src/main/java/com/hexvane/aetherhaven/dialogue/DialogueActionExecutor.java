@@ -12,7 +12,6 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
-import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -87,7 +86,6 @@ public final class DialogueActionExecutor {
             case "start_quest" -> startQuest(a, playerRef, store, npcRef);
             case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
             case "abandon_quest" -> abandonQuest(a, playerRef, store);
-            case "promote_blacksmith" -> promoteBlacksmith(playerRef, store);
             case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
@@ -284,57 +282,6 @@ public final class DialogueActionExecutor {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.raw("Quest abandoned: " + plugin.getQuestCatalog().displayName(qid)));
-        }
-    }
-
-    private static void promoteBlacksmith(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
-        if (town == null) {
-            return;
-        }
-        var es = world.getEntityStore();
-        if (es == null) {
-            return;
-        }
-        Store<EntityStore> entityStore = es.getStore();
-        for (String sid : town.getInnPoolNpcIds()) {
-            try {
-                UUID u = UUID.fromString(sid.trim());
-                Ref<EntityStore> npcRef = entityStore.getExternalData().getRefFromUUID(u);
-                if (npcRef == null || !npcRef.isValid()) {
-                    continue;
-                }
-                NPCEntity npc = entityStore.getComponent(npcRef, NPCEntity.getComponentType());
-                if (npc == null || !AetherhavenConstants.NPC_BLACKSMITH.equals(npc.getRoleName())) {
-                    continue;
-                }
-                entityStore.putComponent(
-                    npcRef,
-                    TownVillagerBinding.getComponentType(),
-                    new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_BLACKSMITH, null)
-                );
-                town.removeInnLockedEntity(u);
-                String us = u.toString();
-                town.getInnPoolNpcIds().removeIf(x -> us.equalsIgnoreCase(x != null ? x.trim() : ""));
-                town.addInnVisitorPoolExcludedRoleId(AetherhavenConstants.NPC_BLACKSMITH);
-                tm.updateTown(town);
-                PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
-                if (pr != null) {
-                    pr.sendMessage(Message.raw("Garren is counted among Aetherhaven's residents."));
-                }
-                return;
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (pr != null) {
-            pr.sendMessage(Message.raw("No visiting blacksmith is in town right now."));
         }
     }
 

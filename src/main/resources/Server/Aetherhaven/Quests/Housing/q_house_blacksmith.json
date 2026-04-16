@@ -3,7 +3,7 @@
   "id": "q_house_blacksmith",
   "category": "housing",
   "title": "Garren's Home",
-  "description": "Garren wants a cot that doesn't smell like another traveler's pack. Build the house, assign him as resident at the management block, then talk to him to finish.",
+  "description": "Garren has his forge; now he wants a door that doesn't answer to the inn. Build the house, assign him as resident at the management block, then talk to him to finish.",
   "assignNpcRoleId": "Aetherhaven_Blacksmith",
   "prerequisites": {
     "completedQuestIds": [],

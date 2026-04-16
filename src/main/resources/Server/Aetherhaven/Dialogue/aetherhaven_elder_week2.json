@@ -153,19 +153,6 @@
           "actions": [{ "type": "complete_quest", "id": "q_build_town_hall" }],
           "next": "town_hall_done"
         },
-        {
-          "text": "I'll vouch for Garren to stay as a resident.",
-          "condition": {
-            "type": "and",
-            "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_inn" },
-              { "type": "npc_inn_pool_role", "roleId": "Aetherhaven_Blacksmith" }
-            ]
-          },
-          "whenFalse": "hide",
-          "actions": [{ "type": "promote_blacksmith" }],
-          "next": "garren_promoted"
-        },
         { "text": "Farewell.", "next": null }
       ]
     },
@@ -213,11 +200,6 @@
       "speaker": "Elder Lyren",
       "text": "Then it is settled. A roof under the charter, and a bed that doesn't ask permission. Thank you for seeing it through.",
       "choices": [{ "text": "Welcome home.", "next": null }]
-    },
-    "garren_promoted": {
-      "speaker": "Elder Lyren",
-      "text": "Then Garren is one of us, not a rumor passing through. He can ask for a roof like anyone else who stays.",
-      "choices": [{ "text": "Good.", "next": null }]
     },
     "town_hall_offer": {
       "speaker": "Elder Lyren",

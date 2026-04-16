@@ -1,0 +1,29 @@
+{
+  "id": "plot_blacksmith_shop",
+  "displayName": "Blacksmith shop",
+  "description": "A forge and counter for Garren to work metal in town.",
+  "prefabPath": "Blacksmith_Shop.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Blacksmith_Shop",
+  "plotAnchorOffset": [5, 0, 5],
+  "managementBlockLocalPos": [2, 1, 5],
+  "rotationYaw": "None",
+  "requiredVillagerId": null,
+  "materials": [
+    { "resourceTypeId": "Wood_Trunk", "count": 8 },
+    { "resourceTypeId": "Rock", "count": 8 }
+  ],
+  "pois": [
+    {
+      "localX": 2,
+      "localY": 1,
+      "localZ": 0,
+      "blockTypeId": "Bench_Weapon",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -1
+    }
+  ]
+}

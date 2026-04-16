@@ -45,6 +45,9 @@ public final class AetherhavenConstants {
     /** Town hall civic building; definition in {@code Server/Aetherhaven/Buildings/plot_town_hall.json}. */
     public static final String CONSTRUCTION_PLOT_TOWN_HALL = "plot_town_hall";
 
+    /** Blacksmith workplace; definition in {@code Server/Aetherhaven/Buildings/plot_blacksmith_shop.json}. */
+    public static final String CONSTRUCTION_PLOT_BLACKSMITH_SHOP = "plot_blacksmith_shop";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
@@ -52,6 +55,8 @@ public final class AetherhavenConstants {
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
 
     public static final String QUEST_FARM_PLOT = "q_farm_plot";
+
+    public static final String QUEST_BLACKSMITH_SHOP = "q_blacksmith_shop";
 
     public static final String QUEST_HOUSE_ELDER = "q_house_elder";
 
@@ -70,6 +75,8 @@ public final class AetherhavenConstants {
     public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
 
     public static final String PLOT_TOKEN_FARM = "Aetherhaven_Plot_Token_Farm";
+
+    public static final String PLOT_TOKEN_BLACKSMITH_SHOP = "Aetherhaven_Plot_Token_Blacksmith_Shop";
 
     public static final String PLOT_TOKEN_PARK = "Aetherhaven_Plot_Token_Park";
 

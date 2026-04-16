@@ -92,6 +92,9 @@ items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the mark
 items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
 items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
 
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
+
 items.Aetherhaven_Plot_Token_Park.name=Park plot token
 items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
 
