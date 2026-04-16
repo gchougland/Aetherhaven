@@ -4,7 +4,7 @@
   "nodes": {
     "root": {
       "speaker": "Garren Vale",
-      "text": "Garren Vale. Fine forge weather, if the wind stays out of the coals. I'm not here for sightseeing. Metal out here misbehaves, and someone has to teach it manners.",
+      "text": "Garren Vale. Wind is low enough that the forge might behave. Metal this far out has opinions. I am here to argue with it.",
       "choices": [
         {
           "text": "server.aetherhaven.dialogue.blacksmith.repairGear",
@@ -13,7 +13,7 @@
           "next": null
         },
         {
-          "text": "About a home in town...",
+          "text": "You wanted to talk about a house.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -35,7 +35,7 @@
           "next": "garren_house_offer"
         },
         {
-          "text": "You're registered at the house.",
+          "text": "Your name is on the block. I figured you should hear it.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -48,7 +48,7 @@
           "next": "garren_house_finish"
         },
         {
-          "text": "I'm still building your house.",
+          "text": "The house is still in progress.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -63,7 +63,7 @@
           "next": "garren_house_remind"
         },
         {
-          "text": "Good to see the forge up.",
+          "text": "Good to see you working the steel.",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_blacksmith_shop"
@@ -71,7 +71,7 @@
           "next": "garren_done"
         },
         {
-          "text": "I've finished the shop.",
+          "text": "The shop is built. The bench is ready.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -83,7 +83,7 @@
           "next": "garren_done"
         },
         {
-          "text": "About the shop build...",
+          "text": "About the forge build...",
           "condition": {
             "type": "and",
             "conditions": [
@@ -100,7 +100,7 @@
           "next": "garren_building"
         },
         {
-          "text": "I need a forge in town.",
+          "text": "You said you needed a real forge here.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -111,14 +111,14 @@
           "next": "garren_quest_shop"
         },
         {
-          "text": "Farewell.",
+          "text": "Mind your fingers.",
           "next": null
         }
       ]
     },
     "garren_quest_shop": {
       "speaker": "Garren Vale",
-      "text": "Corin's floor is fine for sleeping, not for swinging a hammer. Stake a blacksmith shop: walls, a counter, and a weapon bench I can claim. Craft the plot token at your planning desk, place it with your staff, and pay the sign. When it stands, I'll meet you at the bench.",
+      "text": "Corin's boards are fine for sleep. They are lousy for a hammer swing. Stake a blacksmith shop with walls, a counter, and a weapon bench I can own. Craft the plot token at your planning desk, place it with your staff, and pay the sign. When it stands, meet me at the bench.",
       "choices": [
         {
           "text": "We'll get it built.",
@@ -136,34 +136,34 @@
     },
     "garren_shop_accepted": {
       "speaker": "Garren Vale",
-      "text": "Good. I'll stay at the inn until the smokestack's honest. Then come find me at the bench and we'll close the ledger.",
-      "choices": [{ "text": "See you soon.", "next": null }]
+      "text": "Good. I will camp at the inn until the chimney tells the truth. Then find me at the bench and we will close the ledger.",
+      "choices": [{ "text": "See you there.", "next": null }]
     },
     "garren_building": {
       "speaker": "Garren Vale",
-      "text": "Take your time. When the shop is built, I'll walk to the weapon bench. Come find me there and we'll call it done.",
+      "text": "When the shop is built, I will walk to the weapon bench and set up. Come find me there and we will call it done.",
       "choices": [
         {
           "text": "I need to drop the quest.",
           "actions": [{ "type": "abandon_quest", "id": "q_blacksmith_shop" }],
           "next": "garren_abandoned"
         },
-        { "text": "Understood.", "next": null }
+        { "text": "I will keep at it.", "next": null }
       ]
     },
     "garren_abandoned": {
       "speaker": "Garren Vale",
-      "text": "No harm done. If you still want a forge in town, ask again.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "text": "No grudge. If you still want smoke in town, ask again.",
+      "choices": [{ "text": "Fair enough.", "next": null }]
     },
     "garren_done": {
       "speaker": "Garren Vale",
-      "text": "The bench is solid. Heat'll follow honest work. There's no other town to ship to, so we'll make do with what Orbis leaves us.",
-      "choices": [{ "text": "Good luck.", "next": null }]
+      "text": "Solid bench. The heat will come when the work does. We are not shipping ore across the map anymore. We use what this ground still gives.",
+      "choices": [{ "text": "Hammer well.", "next": null }]
     },
     "garren_house_offer": {
       "speaker": "Garren Vale",
-      "text": "The shop's honest work, but I'd still like a roof that isn't borrowed. Build the house plot with the same footprint as anyone else, then register me on the management block when it's up.",
+      "text": "The shop earns me blisters. I still want a roof I do not borrow. Same house plot as anyone. Register me when the walls are real.",
       "choices": [
         {
           "text": "I'll stake a house.",
@@ -178,18 +178,18 @@
     },
     "garren_house_accepted": {
       "speaker": "Garren Vale",
-      "text": "Good. When the walls are up, put my name on the block inside. After that, find me. I'll want to hear it before we call it done.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "When the place is up, put my name on the block inside, then come find me. I want to hear you say it out loud.",
+      "choices": [{ "text": "You'll hear it.", "next": null }]
     },
     "garren_house_remind": {
       "speaker": "Garren Vale",
-      "text": "Take your time. When the house stands, register me on the block, then come talk. That's when we're square.",
-      "choices": [{ "text": "Right.", "next": null }]
+      "text": "Iron does not rush. When the house is done, register me, then come talk. That is when we are even.",
+      "choices": [{ "text": "Understood.", "next": null }]
     },
     "garren_house_finish": {
       "speaker": "Garren Vale",
-      "text": "Then the roof's honest. No borrowed floor, no borrowed name. Good.",
-      "choices": [{ "text": "Fair enough.", "next": null }]
+      "text": "Good. A roof that does not smell like someone else's stew.",
+      "choices": [{ "text": "Enjoy it.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Garren Vale",

@@ -4,10 +4,10 @@
   "nodes": {
     "root": {
       "speaker": "Irienne Mossmark",
-      "text": "Irienne Mossmark. Soil doesn't care what fell before. It only cares what you plant next. The road here was long. A warm inn still beats a ditch and a hungry night.",
+      "text": "Irienne Mossmark. Dirt does not care who owned it yesterday. It cares what you feed it tomorrow. I slept enough nights on Corin's floor to know a warm bowl beats pride.",
       "choices": [
         {
-          "text": "About a home for you...",
+          "text": "You wanted to talk about your own place.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -29,7 +29,7 @@
           "next": "irienne_house_offer"
         },
         {
-          "text": "You're registered at the house.",
+          "text": "Your name is on the shelf. Figured you'd want to hear it.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -42,7 +42,7 @@
           "next": "irienne_house_finish"
         },
         {
-          "text": "I'm still building your house.",
+          "text": "Your house is still rising.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -57,7 +57,7 @@
           "next": "irienne_house_remind"
         },
         {
-          "text": "Good to see you settled in.",
+          "text": "Good to see the farm feeding you.",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_farm_plot"
@@ -65,7 +65,7 @@
           "next": "irienne_done"
         },
         {
-          "text": "The farm's ready for you.",
+          "text": "The farm is ready when you are.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -77,7 +77,7 @@
           "next": "irienne_done"
         },
         {
-          "text": "About the farm plot...",
+          "text": "About the fields...",
           "condition": {
             "type": "and",
             "conditions": [
@@ -94,7 +94,7 @@
           "next": "irienne_building"
         },
         {
-          "text": "I could use a farmhand in town.",
+          "text": "You said you could use a farmer in town.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -105,14 +105,14 @@
           "next": "irienne_quest_farm"
         },
         {
-          "text": "Rest well.",
+          "text": "Get some rest.",
           "next": null
         }
       ]
     },
     "irienne_quest_farm": {
       "speaker": "Irienne Mossmark",
-      "text": "I've been sleeping on Corin's floor and dreaming of rows I could call mine. If you stake a farm plot and build the fence and bench, I'll move in proper, tend the soil, keep the town fed. Craft the plot token at your planning desk, place it with your staff, and pay the materials at the sign. I'll meet you at the farming bench when it stands.",
+      "text": "I have been counting cracks in Corin's floorboards and dreaming of rows with my name on them. Stake a farm plot, fence it, set the bench. Craft the plot token at your planning desk, place it with your staff, pay the sign. I will meet you at the farming bench when the ground is ready.",
       "choices": [
         {
           "text": "We'll get it built.",
@@ -130,34 +130,34 @@
     },
     "irienne_accepted": {
       "speaker": "Irienne Mossmark",
-      "text": "Good. I'll stay at the inn until the soil's ready. Then you'll see me behind the bench, sleeves rolled.",
-      "choices": [{ "text": "See you soon.", "next": null }]
+      "text": "I will stay at the inn until the soil stops pretending it is floorboards. Then find me behind the bench with mud on my boots.",
+      "choices": [{ "text": "See you there.", "next": null }]
     },
     "irienne_building": {
       "speaker": "Irienne Mossmark",
-      "text": "Take your time. When the plot's built, I'll walk over to the farming bench and set up. Come find me there and we'll call it done.",
+      "text": "When the plot is built, I will walk over to the farming bench and set up. Come find me there and we will call it done.",
       "choices": [
         {
           "text": "I need to drop the quest.",
           "actions": [{ "type": "abandon_quest", "id": "q_farm_plot" }],
           "next": "irienne_abandoned"
         },
-        { "text": "Understood.", "next": null }
+        { "text": "I will keep going.", "next": null }
       ]
     },
     "irienne_abandoned": {
       "speaker": "Irienne Mossmark",
-      "text": "No harm done. If you still want rows in town, ask again.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "text": "All right. If you still want rows here, say so.",
+      "choices": [{ "text": "Will do.", "next": null }]
     },
     "irienne_done": {
       "speaker": "Irienne Mossmark",
-      "text": "The plot's honest work. Roots go deeper than complaints. I'll keep the beds turning while the town grows around us.",
-      "choices": [{ "text": "Good luck.", "next": null }]
+      "text": "That plot will feed more than complaints. I will keep the beds turning while the town grows.",
+      "choices": [{ "text": "Grow well.", "next": null }]
     },
     "irienne_house_offer": {
       "speaker": "Irienne Mossmark",
-      "text": "The farm feeds the town, but I'd still like a door that isn't the inn's. Same house token as anyone. Build it, then assign me on the shelf inside.",
+      "text": "The fields are honest work. I still want a door that is not the inn's. Same token as anyone. Build it, then list me on the shelf.",
       "choices": [
         {
           "text": "I'll build it.",
@@ -172,17 +172,17 @@
     },
     "irienne_house_accepted": {
       "speaker": "Irienne Mossmark",
-      "text": "Good. When the roof is sound, register me on the management block. Then come find me. We'll put a proper end on it.",
-      "choices": [{ "text": "See you soon.", "next": null }]
+      "text": "When the roof holds, register me on the block, then find me. I want to end this with both feet on my own floorboards.",
+      "choices": [{ "text": "Count on it.", "next": null }]
     },
     "irienne_house_remind": {
       "speaker": "Irienne Mossmark",
-      "text": "Soil doesn't hurry. When the house is built, assign me there, then come speak with me so we can finish the story.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "Wood and weather take their time. When the house is done, assign me, then come tell me the rest.",
+      "choices": [{ "text": "I'll find you.", "next": null }]
     },
     "irienne_house_finish": {
       "speaker": "Irienne Mossmark",
-      "text": "Then I've got roots under a roof that's mine. That's a better kind of planting.",
+      "text": "Roots under my own rafters. That is the crop I wanted.",
       "choices": [{ "text": "Glad to hear it.", "next": null }]
     },
     "rep_reward_25": {

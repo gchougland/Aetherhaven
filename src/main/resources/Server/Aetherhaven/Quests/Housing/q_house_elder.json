@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_house_elder",
   "category": "housing",
-  "title": "Lyren's Home",
-  "description": "Lyren asked for a proper home in town. The same house footprint can serve anyone. Assign her at the management block when the house is ready, then speak with her to finish the quest.",
+  "title": "Lyren's home",
+  "description": "Lyren wants a house like anyone else's: four walls, a shelf with her name, and no speeches about privilege.",
   "assignNpcRoleId": "Aetherhaven_Elder_Lyren",
   "prerequisites": {
     "completedQuestIds": [],
@@ -13,12 +13,12 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the house plot token from Lyren."
+      "text": "Take the house plot token from Lyren."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the house prefab."
+      "text": "Stake and build the house prefab."
     },
     {
       "id": "assign",
@@ -29,7 +29,7 @@
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Lyren to complete the quest."
+      "text": "Find Lyren and close the quest in dialogue."
     }
   ],
   "rewards": [

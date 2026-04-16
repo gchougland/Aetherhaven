@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_blacksmith_shop",
   "category": "town",
-  "title": "Garren's Forge",
-  "description": "Garren needs a proper forge and bench in town before he leaves the inn floor. Build the blacksmith shop, then speak to him at the weapon bench to finish.",
+  "title": "Garren's forge",
+  "description": "Garren wants a real forge and a weapon bench he can claim before he loses his mind on Corin's floorboards.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,17 +12,17 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the blacksmith shop plot token from Garren."
+      "text": "Take the blacksmith shop plot token from Garren."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the blacksmith shop prefab."
+      "text": "Stake and build the blacksmith shop prefab."
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Garren at the shop to complete the quest."
+      "text": "Find Garren at the weapon bench and close the quest in dialogue."
     }
   ],
   "rewards": [

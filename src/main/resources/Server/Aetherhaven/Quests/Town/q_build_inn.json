@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_build_inn",
   "category": "town",
-  "title": "Build the Inn",
-  "description": "Lyren asked you to construct an inn so travelers have a place to rest.",
+  "title": "Raise the inn",
+  "description": "Lyren wants a proper inn so wanderers have a roof that does not feel like charity.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,12 +12,12 @@
     {
       "id": "place_plot",
       "kind": "journal",
-      "text": "Place the inn plot with your placement staff."
+      "text": "Stake the inn plot with your placement staff."
     },
     {
       "id": "build_prefab",
       "kind": "journal",
-      "text": "Gather materials and complete construction at the plot sign."
+      "text": "Gather materials and finish construction at the plot sign."
     }
   ],
   "rewards": [

@@ -4,7 +4,7 @@
   "nodes": {
     "root": {
       "speaker": "QA Villager",
-      "text": "Welcome to the Aetherhaven dialogue harness. This line is intentionally long so you can check layout and scrolling. Choices appear below the body text.",
+      "text": "Welcome to the Aetherhaven dialogue harness. This line stays long on purpose so you can check layout and scrolling. Your choices sit below the body text.",
       "choices": [
         { "text": "Continue to the conditions lab.", "next": "conditions_lab" },
         { "text": "Leave (end with next null).", "next": null },
@@ -17,7 +17,7 @@
     },
     "conditions_lab": {
       "speaker": "QA Villager",
-      "text": "Conditions lab. You should NOT see a hidden choice. You SHOULD see a greyed choice. Use the compound gates to continue.",
+      "text": "Conditions lab. You should not see a hidden choice. You should see a greyed choice. Use the compound gates to continue.",
       "choices": [
         {
           "text": "This choice is hidden (literal false).",
@@ -58,7 +58,7 @@
     },
     "item_demo": {
       "speaker": "QA Villager",
-      "text": "A node-enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.",
+      "text": "A node enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.",
       "actions": [{ "type": "give_item", "item": "Tool_Shovel_Crude", "count": 1 }],
       "choices": [
         {

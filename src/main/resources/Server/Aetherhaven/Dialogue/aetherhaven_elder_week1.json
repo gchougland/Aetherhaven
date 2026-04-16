@@ -4,8 +4,8 @@
   "nodes": {
     "root": {
       "speaker": "Elder Lyren",
-      "text": "The charter stands, witnessed on the surface of Orbis, where the old cities are only rubble and memory. Our story begins again here. Walk the land and prepare a place for others. Civilization will need room to grow.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "text": "I'm Lyren. I speak for the charter we signed when we put this town on Orbis. The old cities are gone. What we have is this ground and the people who are already here, and more will come. Before we start laying new plots, I need you to learn the land around Aetherhaven: where it is flat enough to build, where water runs, where we might put fields or a commons later. Keep it practical. When you have looked the place over, come find me again.",
+      "choices": [{ "text": "I'll scout the area and report back.", "next": null }]
     }
   }
 }

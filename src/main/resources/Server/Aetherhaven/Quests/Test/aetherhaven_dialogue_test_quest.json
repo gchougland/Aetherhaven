@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "aetherhaven_dialogue_test_quest",
   "category": "test",
-  "title": "Dialogue test quest",
-  "description": "Test quest for dialogue wiring.",
+  "title": "Dialogue wiring test",
+  "description": "Sandbox quest used by the dialogue harness to exercise start and complete hooks.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,7 +12,7 @@
     {
       "id": "one",
       "kind": "journal",
-      "text": "Complete the test."
+      "text": "Trigger the test flow from the dialogue harness."
     }
   ],
   "rewards": [

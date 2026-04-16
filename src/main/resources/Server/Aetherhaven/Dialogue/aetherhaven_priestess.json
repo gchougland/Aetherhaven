@@ -4,10 +4,10 @@
   "nodes": {
     "root": {
       "speaker": "Serah Thornwell",
-      "text": "Serah Thornwell. Gaia does not shout over tavern noise. She waits where roots remember water. I came to help this town remember the same.",
+      "text": "Serah Thornwell. I lead Gaia's rites for this town. The inn is a roof over my head, and I am grateful, but I cannot run services wedged between supper and card games. I need a real altar outside: paths, a few stools, and the statue where people can pray without holding their breath from the kitchen smoke.",
       "choices": [
         {
-          "text": "About a home in town...",
+          "text": "You wanted to speak about a home.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -29,7 +29,7 @@
           "next": "serah_house_offer"
         },
         {
-          "text": "You're registered at the house.",
+          "text": "You're on the shelf now. I thought you should know.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -42,7 +42,7 @@
           "next": "serah_house_finish"
         },
         {
-          "text": "I'm still building your house.",
+          "text": "The house is still unfinished.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -57,7 +57,7 @@
           "next": "serah_house_remind"
         },
         {
-          "text": "Good to see the altar standing.",
+          "text": "How is the altar working out for you?",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_gaia_altar"
@@ -65,7 +65,7 @@
           "next": "serah_done"
         },
         {
-          "text": "I've finished the altar grounds.",
+          "text": "The altar grounds are ready.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -77,7 +77,7 @@
           "next": "serah_done"
         },
         {
-          "text": "About the altar build...",
+          "text": "About the blessing...",
           "condition": {
             "type": "and",
             "conditions": [
@@ -94,7 +94,7 @@
           "next": "serah_building"
         },
         {
-          "text": "I need a proper place for Gaia's rites.",
+          "text": "You said you needed ground for Gaia.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -105,14 +105,14 @@
           "next": "serah_quest_altar"
         },
         {
-          "text": "Farewell.",
+          "text": "I'll leave you to it.",
           "next": null
         }
       ]
     },
     "serah_quest_altar": {
       "speaker": "Serah Thornwell",
-      "text": "The inn is kind, but incense does not belong in a soup bowl. Stake a Gaia altar plot: paths, stools to rest, and the statue where I can work. Craft the token at your planning desk, place it with your staff, and pay the sign. When the ground is blessed, meet me at the statue.",
+      "text": "Stake a Gaia altar plot: paths, stools, and the statue where I can stand and folk can sit. Craft the token at your planning desk, place it with your staff, and pay the sign. When it is built, meet me at the statue and we will bless it properly.",
       "choices": [
         {
           "text": "We'll get it built.",
@@ -130,34 +130,34 @@
     },
     "serah_altar_accepted": {
       "speaker": "Serah Thornwell",
-      "text": "Good. I'll stay at the inn until the stone speaks. Then come find me at the statue and we will close the verse.",
-      "choices": [{ "text": "See you soon.", "next": null }]
+      "text": "I will stay at the inn until the altar is built. Then find me at the statue and we will finish the blessing.",
+      "choices": [{ "text": "I'll see you there.", "next": null }]
     },
     "serah_building": {
       "speaker": "Serah Thornwell",
-      "text": "Take your time. When the altar stands, I'll walk to the statue. Come find me there and we will call it done.",
+      "text": "When the altar stands, I will walk to the statue. Come find me there and we will call it done.",
       "choices": [
         {
           "text": "I need to drop the quest.",
           "actions": [{ "type": "abandon_quest", "id": "q_gaia_altar" }],
           "next": "serah_abandoned"
         },
-        { "text": "Understood.", "next": null }
+        { "text": "I'm still working on it.", "next": null }
       ]
     },
     "serah_abandoned": {
       "speaker": "Serah Thornwell",
-      "text": "No harm done. If you still want a shrine in town, ask again.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "text": "No hard feelings. If you still want an altar in town, ask again.",
+      "choices": [{ "text": "All right.", "next": null }]
     },
     "serah_done": {
       "speaker": "Serah Thornwell",
-      "text": "The statue is steady. What comes next is patience, not noise. There is no other town to flee to, so we tend what Orbis leaves us.",
-      "choices": [{ "text": "Good luck.", "next": null }]
+      "text": "The altar is finished. Thank you. I will keep the grounds tended and hold rites here as the town grows.",
+      "choices": [{ "text": "Good luck with it.", "next": null }]
     },
     "serah_house_offer": {
       "speaker": "Serah Thornwell",
-      "text": "The altar is honest work, but I would like a door that does not answer to the inn. Build the house plot like anyone else, then register me on the management block when it stands.",
+      "text": "The altar is for everyone. I still want a small house of my own, same as anyone else, so I am not living out of the inn hall forever. Build it from the usual token, then register me on the management block when it is up.",
       "choices": [
         {
           "text": "I'll stake a house.",
@@ -172,17 +172,17 @@
     },
     "serah_house_accepted": {
       "speaker": "Serah Thornwell",
-      "text": "Good. When the walls are up, put my name on the block inside. After that, find me. I will want to hear it before we call it done.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "When the house is up, put my name on the management block inside, then come find me. I want to hear you say it in person, not just read it off a list.",
+      "choices": [{ "text": "You will.", "next": null }]
     },
     "serah_house_remind": {
       "speaker": "Serah Thornwell",
-      "text": "Take your time. When the house stands, register me on the block, then come talk. That is when we are square.",
-      "choices": [{ "text": "Right.", "next": null }]
+      "text": "These things take time. When the house is done, register me on the block, then come talk. That is when we are finished.",
+      "choices": [{ "text": "I'll come back.", "next": null }]
     },
     "serah_house_finish": {
       "speaker": "Serah Thornwell",
-      "text": "Then the roof is honest. No borrowed floor, no borrowed name. Good.",
+      "text": "Good. A roof that is actually mine.",
       "choices": [{ "text": "Fair enough.", "next": null }]
     }
   }

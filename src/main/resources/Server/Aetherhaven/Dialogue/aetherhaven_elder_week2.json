@@ -4,10 +4,10 @@
   "nodes": {
     "root": {
       "speaker": "Elder Lyren",
-      "text": "The charter still warms the stone. There is no other town left to take us in, so our people will need shelter and a hearth here. When you are ready, we should raise an inn for wanderers and kin.",
+      "text": "The charter still stands, and I still stand by it. We do not have spare shelter to send people to, so the first real building here has to be an inn: a roof, a hearth, and a door that stays open to travelers and to our own kin when the road is long. When you are ready to stake it, say so.",
       "choices": [
         {
-          "text": "I'll help build the inn.",
+          "text": "I'm in. Let's raise the inn.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -28,7 +28,7 @@
           "next": "quest_accepted"
         },
         {
-          "text": "I'm still working on the inn.",
+          "text": "The inn is still on my list. I wanted to check in.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -40,7 +40,7 @@
           "next": "remind_inn"
         },
         {
-          "text": "The inn is built.",
+          "text": "The inn is finished. Corin should have what he needs.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -57,7 +57,7 @@
           "next": "inn_done"
         },
         {
-          "text": "About a home for you...",
+          "text": "You mentioned wanting a house of your own.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -80,7 +80,7 @@
           "next": "lyren_house_offer"
         },
         {
-          "text": "You're registered at the house. I wanted you to hear it from me.",
+          "text": "I put your name on the shelf. You should hear it from me first.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -93,7 +93,7 @@
           "next": "lyren_house_finish"
         },
         {
-          "text": "I'm still building your house.",
+          "text": "Your house is not done yet, but I am on it.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -108,7 +108,7 @@
           "next": "lyren_house_remind"
         },
         {
-          "text": "About a town hall for the village...",
+          "text": "You wanted to talk about the town hall.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -131,7 +131,7 @@
           "next": "town_hall_offer"
         },
         {
-          "text": "I'm still building the town hall.",
+          "text": "The town hall build is still underway.",
           "condition": {
             "type": "and",
             "conditions": [{ "type": "town_quest_active", "questId": "q_build_town_hall" }]
@@ -140,7 +140,7 @@
           "next": "town_hall_remind"
         },
         {
-          "text": "The town hall is built.",
+          "text": "The town hall is up.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -153,60 +153,60 @@
           "actions": [{ "type": "complete_quest", "id": "q_build_town_hall" }],
           "next": "town_hall_done"
         },
-        { "text": "Farewell.", "next": null }
+        { "text": "I'll leave you to it.", "next": null }
       ]
     },
     "quest_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. Mark the ground with the plot sign and gather what the builders ask. Let it be witnessed: the timbers will follow your care.",
-      "choices": [{ "text": "I'll begin.", "next": null }]
+      "text": "Good. Place the inn plot with your staff, pay the materials the sign lists, and finish the build. When the roof is on and the hearth is in, come tell me yourself. I will be waiting on word.",
+      "choices": [{ "text": "I'll start as soon as I can.", "next": null }]
     },
     "remind_inn": {
       "speaker": "Elder Lyren",
-      "text": "Take your time. When the roof is sound and the hearth laid, come tell me.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "When the roof holds and the hearth is lit, come back and tell me in person. I am not rushing you, but I am not leaving until this town has a proper inn for anyone who needs a bed.",
+      "choices": [{ "text": "I'll come back when it is ready.", "next": null }]
     },
     "inn_done": {
       "speaker": "Elder Lyren",
-      "text": "Word spreads already: a roof over wanderers' heads. Corin Mosscup has taken the key. Go greet him by the hearth. You've done well by Aetherhaven.",
-      "choices": [{ "text": "Glad to help.", "next": null }]
+      "text": "There. A real inn for people who would otherwise sleep rough. Corin has the key. Go introduce yourself by the hearth. You earned more than thanks, but thanks is where I will start.",
+      "choices": [{ "text": "Happy to help.", "next": null }]
     },
     "lyren_house_offer": {
       "speaker": "Elder Lyren",
-      "text": "A charter is not a bed. If you can stake a small house, the same plan as any other roof in town, I'll owe you more than speeches. Craft the house token at your planning desk, place it with your staff, pay the sign, then put my name on the shelf inside.",
+      "text": "The charter gave us rules for the town. It did not give me a bed. I want the same small house anyone else gets. Craft the house token at your planning desk, stake the plot with your staff, pay the sign, then put my name on the management shelf inside when it is built. I will not forget who made room for me.",
       "choices": [
         {
-          "text": "I'll see it done.",
+          "text": "I'll handle it.",
           "actions": [
             { "type": "start_quest", "id": "q_house_elder" },
             { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
           ],
           "next": "lyren_house_accepted"
         },
-        { "text": "Not yet.", "next": null }
+        { "text": "I cannot commit to that yet.", "next": null }
       ]
     },
     "lyren_house_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. When the walls are up, use the management block and assign me as resident. After that, come find me. I'll want to hear it in person before we close the matter.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "When the walls are up, use the management block and set me as resident. Then come find me. I want to hear you say it, not read it off a shelf.",
+      "choices": [{ "text": "You will get both.", "next": null }]
     },
     "lyren_house_remind": {
       "speaker": "Elder Lyren",
-      "text": "Timber and patience in equal measure. When the house stands, register me on its management block, then come speak with me so we can finish this properly.",
-      "choices": [{ "text": "Right.", "next": null }]
+      "text": "Take the time you need. When the house is done, register me on the block, then come find me so we can finish this face to face.",
+      "choices": [{ "text": "I'll come when it is done.", "next": null }]
     },
     "lyren_house_finish": {
       "speaker": "Elder Lyren",
-      "text": "Then it is settled. A roof under the charter, and a bed that doesn't ask permission. Thank you for seeing it through.",
-      "choices": [{ "text": "Welcome home.", "next": null }]
+      "text": "Then it is settled. I have a home under the same rules as everyone else. Thank you for seeing it through.",
+      "choices": [{ "text": "Welcome home, Lyren.", "next": null }]
     },
     "town_hall_offer": {
       "speaker": "Elder Lyren",
-      "text": "A home was the first roof. Next we need a hall: a shelf for the charter, a desk for plans, and a chest for what the town holds in common. Stake the plot, pay the builders, and we'll have a place that belongs to everyone.",
+      "text": "We have homes. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, a chest for shared funds. Stake the plot, pay what the sign asks, and we finally have a place to meet as a whole town.",
       "choices": [
         {
-          "text": "I'll raise the town hall.",
+          "text": "I'll put the hall up.",
           "actions": [
             { "type": "start_quest", "id": "q_build_town_hall" },
             { "type": "give_item", "item": "Aetherhaven_Plot_Token_Town_Hall", "count": 1 }
@@ -218,18 +218,18 @@
     },
     "town_hall_accepted": {
       "speaker": "Elder Lyren",
-      "text": "Good. Use your staff with the town hall token, pay the sign, and when the timbers stand, come tell me.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "Use the town hall token with your staff, pay the materials, and build it out. When the hall is finished, tell me in person. I want to see your face when you say it is done.",
+      "choices": [{ "text": "I'll tell you the moment it is finished.", "next": null }]
     },
     "town_hall_remind": {
       "speaker": "Elder Lyren",
-      "text": "Stone and ledger in good time. When the hall is complete, say the word.",
-      "choices": [{ "text": "Right.", "next": null }]
+      "text": "Stone and paperwork both take time. When the hall is finished, tell me. I will be here.",
+      "choices": [{ "text": "Still working on it.", "next": null }]
     },
     "town_hall_done": {
       "speaker": "Elder Lyren",
-      "text": "Then Aetherhaven has a proper heart. Records, plans, and the treasury under one roof, with a desk where I can work for us all.",
-      "choices": [{ "text": "Glad to help.", "next": null }]
+      "text": "There. Aetherhaven has a proper town hall: records, treasury, and a room where we can meet without yelling across the square. That is what I needed from you.",
+      "choices": [{ "text": "Glad it helps.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Elder Lyren",

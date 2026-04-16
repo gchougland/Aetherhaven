@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_build_town_hall",
   "category": "town",
-  "title": "Build the Town Hall",
-  "description": "Lyren asked you to raise a town hall: a place for records, planning, and the village treasury.",
+  "title": "Raise the town hall",
+  "description": "Lyren wants a hall that belongs to everyone: records, plans, and the treasury under one roof.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,17 +12,17 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the town hall plot token from Lyren."
+      "text": "Take the town hall plot token from Lyren."
     },
     {
       "id": "place_build",
       "kind": "journal",
-      "text": "Place and build the town hall prefab."
+      "text": "Stake and build the town hall prefab."
     },
     {
       "id": "tell_elder",
       "kind": "journal",
-      "text": "Tell Lyren when construction is complete."
+      "text": "Tell Lyren in person when construction is complete."
     }
   ],
   "rewards": [

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_house_farmer",
   "category": "housing",
-  "title": "Irienne's Home",
-  "description": "Irienne would like a bed that isn't borrowed from the inn hall. Build the house, assign her at the management block, then speak with her to finish.",
+  "title": "Irienne's home",
+  "description": "Irienne wants roots under rafters that belong to her, not borrowed floorboards by the kettle.",
   "assignNpcRoleId": "Aetherhaven_Farmer",
   "prerequisites": {
     "completedQuestIds": [],
@@ -13,7 +13,7 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the house plot token from Irienne."
+      "text": "Take the house plot token from Irienne."
     },
     {
       "id": "build",
@@ -29,7 +29,7 @@
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Irienne to complete the quest."
+      "text": "Find Irienne and close the quest in dialogue."
     }
   ],
   "rewards": [

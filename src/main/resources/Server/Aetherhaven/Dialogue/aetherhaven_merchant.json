@@ -4,7 +4,7 @@
   "nodes": {
     "root": {
       "speaker": "Vex Sunderlane",
-      "text": "Vex Sunderlane. I deal in salvage, barter, and whatever still has a price. There aren't other towns to run to, so if your inn has a hearth, you've already got the best amenity left on Orbis.",
+      "text": "Vex Sunderlane. I buy salvage, sell hope, and count coins twice. Your inn with a working hearth is already the best shop front for miles. Everything else is negotiation.",
       "choices": [
         {
           "text": "Browse your wares (gold coins).",
@@ -13,7 +13,7 @@
           "next": null
         },
         {
-          "text": "About a home in town...",
+          "text": "You mentioned wanting a house.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -35,7 +35,7 @@
           "next": "vex_house_offer"
         },
         {
-          "text": "You're on the house ledger.",
+          "text": "I put you on the ledger. Paper should match reality.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -48,7 +48,7 @@
           "next": "vex_house_finish"
         },
         {
-          "text": "I'm still building your house.",
+          "text": "Your house is still on the pile.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -63,7 +63,7 @@
           "next": "vex_house_remind"
         },
         {
-          "text": "Glad you made it.",
+          "text": "Good to see you trading here.",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_merchant_stall"
@@ -71,7 +71,7 @@
           "next": "vex_done"
         },
         {
-          "text": "I've finished the stall.",
+          "text": "The stall is up. Come see.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -83,7 +83,7 @@
           "next": "vex_done"
         },
         {
-          "text": "About that stall...",
+          "text": "About the stall build...",
           "condition": {
             "type": "and",
             "conditions": [
@@ -100,7 +100,7 @@
           "next": "vex_building"
         },
         {
-          "text": "I need a place for your stall.",
+          "text": "You asked me to find space for a stall.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -111,14 +111,14 @@
           "next": "vex_quest_stall"
         },
         {
-          "text": "Farewell.",
+          "text": "Keep your purse closed in the wind.",
           "next": null
         }
       ]
     },
     "vex_quest_stall": {
       "speaker": "Vex Sunderlane",
-      "text": "A small market stall is all I need, somewhere honest to stack what the ruins still give up. Place it from your plot staff while you carry the token I give you. Costs are on you, but I'll work the counter when it stands.",
+      "text": "I need a little roof and a counter I can lean on. You place it with your staff while you hold the token I hand you. Materials are your problem. I will run the counter when the nails hold.",
       "choices": [
         {
           "text": "I'll build it.",
@@ -136,34 +136,34 @@
     },
     "vex_accepted": {
       "speaker": "Vex Sunderlane",
-      "text": "Good. I'll camp at Corin's inn until the stall is ready. Fewer teeth out there than in a good soup.",
-      "choices": [{ "text": "See you soon.", "next": null }]
+      "text": "I will camp at Corin's until the stall is standing. Safer than a ditch, and the soup is better.",
+      "choices": [{ "text": "See you when it is up.", "next": null }]
     },
     "vex_building": {
       "speaker": "Vex Sunderlane",
-      "text": "Take your time. When the stall is built, I'll head over and open shop. Come find me there and we'll wrap this up.",
+      "text": "When the stall is built, I will head over and open shop. Come find me there and we will wrap this up.",
       "choices": [
         {
           "text": "I need to drop the quest.",
           "actions": [{ "type": "abandon_quest", "id": "q_merchant_stall" }],
           "next": "vex_abandoned"
         },
-        { "text": "Understood.", "next": null }
+        { "text": "I will keep working on it.", "next": null }
       ]
     },
     "vex_abandoned": {
       "speaker": "Vex Sunderlane",
-      "text": "No harm done. If you change your mind, ask again about the stall.",
-      "choices": [{ "text": "Farewell.", "next": null }]
+      "text": "Fair. If you change your mind, the offer stays.",
+      "choices": [{ "text": "Thanks.", "next": null }]
     },
     "vex_done": {
       "speaker": "Vex Sunderlane",
-      "text": "The stall looks solid. Trade'll be thin at first. There's no next town over to lean on, but we'll grow it. That's how rebuilding works.",
-      "choices": [{ "text": "Good luck.", "next": null }]
+      "text": "Stall looks honest. Trade will be thin at first. We grow it the slow way, same as everything worth keeping.",
+      "choices": [{ "text": "Here's to that.", "next": null }]
     },
     "vex_house_offer": {
       "speaker": "Vex Sunderlane",
-      "text": "The stall is honest work, but I'd like a shelf that isn't inventory. Build the house plot with the same footprint as anyone else, then register me on the management block when it's up.",
+      "text": "Stock belongs on shelves. My boots belong somewhere dry. Same house token as the rest of town. Register me when it is built.",
       "choices": [
         {
           "text": "I'll stake a house.",
@@ -178,17 +178,17 @@
     },
     "vex_house_accepted": {
       "speaker": "Vex Sunderlane",
-      "text": "Good. When the walls are yours to open, put my name on the block inside. Then find me. I'll want the receipt in words, not just ink.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "text": "When the door swings, put my name on the block, then find me. I want the story, not just the ink.",
+      "choices": [{ "text": "You will get both.", "next": null }]
     },
     "vex_house_remind": {
       "speaker": "Vex Sunderlane",
-      "text": "Take your time. When the house stands, assign me there, then come back so we can close the ledger properly.",
-      "choices": [{ "text": "Right.", "next": null }]
+      "text": "Houses take seasons sometimes. Finish it, assign me, then come back and we will balance the ledger.",
+      "choices": [{ "text": "I'll come back.", "next": null }]
     },
     "vex_house_finish": {
       "speaker": "Vex Sunderlane",
-      "text": "Then it's not just inventory. I've got a door that answers to me. That's worth more than coin.",
+      "text": "There. A door that knows my knock. That beats a full strongbox.",
       "choices": [{ "text": "Enjoy it.", "next": null }]
     },
     "rep_reward_25": {

@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_house_merchant",
   "category": "housing",
-  "title": "Vex's Home",
-  "description": "Vex wants a place to stow their boots after the stall closes. Build the house, register them on the management block, then talk to them to finish.",
+  "title": "Vex's home",
+  "description": "Vex can stack inventory anywhere. They still want a dry corner that answers to their knock.",
   "assignNpcRoleId": "Aetherhaven_Merchant",
   "prerequisites": {
     "completedQuestIds": [],
@@ -13,12 +13,12 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the house plot token from Vex."
+      "text": "Take the house plot token from Vex."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the house prefab."
+      "text": "Stake and build the house prefab."
     },
     {
       "id": "assign",
@@ -29,7 +29,7 @@
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Vex to complete the quest."
+      "text": "Find Vex and close the quest in dialogue."
     }
   ],
   "rewards": [

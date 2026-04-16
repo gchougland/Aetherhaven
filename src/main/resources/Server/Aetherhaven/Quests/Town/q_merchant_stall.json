@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_merchant_stall",
   "category": "town",
-  "title": "Build the Market Stall",
-  "description": "Help the merchant open a stall, then speak to them at the stall to finish up.",
+  "title": "Vex's market stall",
+  "description": "Give Vex a counter and a roof so salvage has somewhere honest to land.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,17 +12,17 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the market stall plot token from the merchant."
+      "text": "Take the market stall plot token from Vex."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the market stall prefab."
+      "text": "Stake and build the market stall prefab."
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to the merchant at the stall to complete the quest."
+      "text": "Find Vex at the stall and close the quest in dialogue."
     }
   ],
   "rewards": [

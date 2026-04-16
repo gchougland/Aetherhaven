@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_farm_plot",
   "category": "town",
-  "title": "Irienne's Farm Plot",
-  "description": "Help Irienne set up a farm plot in town so she can move in and work the soil.",
+  "title": "Irienne's farm plot",
+  "description": "Give Irienne fenced ground and a bench so she can stop dreaming of rows on an inn floor.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,17 +12,17 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the farm plot token from Irienne."
+      "text": "Take the farm plot token from Irienne."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the farm plot prefab."
+      "text": "Stake and build the farm plot prefab."
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Irienne at the farm to complete the quest."
+      "text": "Find Irienne at the farming bench and close the quest in dialogue."
     }
   ],
   "rewards": [

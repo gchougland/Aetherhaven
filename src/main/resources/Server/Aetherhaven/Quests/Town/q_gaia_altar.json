@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_gaia_altar",
   "category": "town",
-  "title": "Serah's Altar",
-  "description": "Serah needs a Gaia altar with a statue and resting stools before she leaves the inn floor. Build the altar, then speak to her at the statue to finish.",
+  "title": "Serah's altar",
+  "description": "Give Serah ground for Gaia: paths, stools, and a statue where she can work without kitchen smoke in her hair.",
   "prerequisites": {
     "completedQuestIds": [],
     "anyCompletedQuestIds": []
@@ -12,17 +12,17 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the Gaia altar plot token from Serah."
+      "text": "Take the Gaia altar plot token from Serah."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the Gaia altar prefab."
+      "text": "Stake and build the Gaia altar prefab."
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Serah at the altar to complete the quest."
+      "text": "Find Serah at the statue and close the quest in dialogue."
     }
   ],
   "rewards": [

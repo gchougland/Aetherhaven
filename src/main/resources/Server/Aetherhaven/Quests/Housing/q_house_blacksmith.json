@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "q_house_blacksmith",
   "category": "housing",
-  "title": "Garren's Home",
-  "description": "Garren has his forge; now he wants a door that doesn't answer to the inn. Build the house, assign him as resident at the management block, then talk to him to finish.",
+  "title": "Garren's home",
+  "description": "Garren has smoke and sparks at work. He wants a roof at night that does not smell like someone else's supper.",
   "assignNpcRoleId": "Aetherhaven_Blacksmith",
   "prerequisites": {
     "completedQuestIds": [],
@@ -13,12 +13,12 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Receive the house plot token from Garren."
+      "text": "Take the house plot token from Garren."
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Place and build the house prefab."
+      "text": "Stake and build the house prefab."
     },
     {
       "id": "assign",
@@ -29,7 +29,7 @@
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to Garren to complete the quest."
+      "text": "Find Garren and close the quest in dialogue."
     }
   ],
   "rewards": [
