@@ -79,6 +79,7 @@ public final class DialogueActionExecutor {
                     out.setOpenBarterShopAfterClose(shop.trim());
                 }
             }
+            case "open_blacksmith_repair" -> out.setOpenBlacksmithRepairAfterClose(true);
             case "give_item" -> giveItem(a, playerRef, store);
             case "unlock_achievement" -> LOGGER.atInfo().log(
                 "[Dialogue stub] unlock_achievement id=%s",

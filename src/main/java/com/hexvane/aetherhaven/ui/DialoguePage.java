@@ -27,6 +27,8 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -303,14 +305,18 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         String gotoId = batch.getGotoNodeId();
         if (gotoId != null && !gotoId.isBlank()) {
             nodeId = gotoId.trim();
-            if (batch.isCloseDialogue() || batch.getOpenBarterShopAfterClose() != null) {
+            if (batch.isCloseDialogue()
+                || batch.getOpenBarterShopAfterClose() != null
+                || batch.isOpenBlacksmithRepairAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
             }
             rebuild();
             return;
         }
-        if (batch.isCloseDialogue() || batch.getOpenBarterShopAfterClose() != null) {
+        if (batch.isCloseDialogue()
+            || batch.getOpenBarterShopAfterClose() != null
+            || batch.isOpenBlacksmithRepairAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
         }
@@ -346,6 +352,22 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                     // leaving Data events (trade clicks) ignored until multiple client ACKs arrive.
                     player.getPageManager().openCustomPage(pref, st, new BarterPage(pr, sid));
                 }
+            });
+        } else if (world != null && batch.isOpenBlacksmithRepairAfterClose()) {
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                CombinedItemContainer inv =
+                    InventoryComponent.getCombined(st, pref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+                player.getPageManager().openCustomPage(pref, st, new BlacksmithRepairPage(pr, inv));
             });
         } else {
             close();

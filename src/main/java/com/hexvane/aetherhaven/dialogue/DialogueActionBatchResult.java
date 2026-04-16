@@ -10,6 +10,8 @@ public final class DialogueActionBatchResult {
     @Nullable
     private String openBarterShopAfterClose;
 
+    private boolean openBlacksmithRepairAfterClose;
+
     public boolean isCloseDialogue() {
         return closeDialogue;
     }
@@ -34,5 +36,13 @@ public final class DialogueActionBatchResult {
 
     public void setOpenBarterShopAfterClose(@Nullable String openBarterShopAfterClose) {
         this.openBarterShopAfterClose = openBarterShopAfterClose;
+    }
+
+    public boolean isOpenBlacksmithRepairAfterClose() {
+        return openBlacksmithRepairAfterClose;
+    }
+
+    public void setOpenBlacksmithRepairAfterClose(boolean openBlacksmithRepairAfterClose) {
+        this.openBlacksmithRepairAfterClose = openBlacksmithRepairAfterClose;
     }
 }

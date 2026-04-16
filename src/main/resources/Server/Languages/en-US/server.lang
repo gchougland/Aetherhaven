@@ -201,6 +201,9 @@ commands.aetherhaven.debug_autonomy.show.desc=Show whether autonomy debug is ena
 commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug for this villager
 
 # Dialogue
+aetherhaven.dialogue.blacksmith.repairGear=Repair my gear (gold coins)
+aetherhaven.blacksmith.repair.insufficientGold=Not enough gold coins for this repair.
+aetherhaven.blacksmith.repair.success={itemName} is brought back to full strength.
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)
 commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (e.g. aetherhaven_dialogue_test)
 commands.aetherhaven.dialogue.entry.desc=Optional entry node id (default: root)

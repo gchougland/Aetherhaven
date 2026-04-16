@@ -7,6 +7,12 @@
       "text": "Garren Vale. Fine forge weather, if the wind stays out of the coals. I'm not here for sightseeing. Metal out here misbehaves, and someone has to teach it manners.",
       "choices": [
         {
+          "text": "server.aetherhaven.dialogue.blacksmith.repairGear",
+          "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
+          "actions": [{ "type": "open_blacksmith_repair" }],
+          "next": null
+        },
+        {
           "text": "About a home in town...",
           "condition": {
             "type": "and",

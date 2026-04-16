@@ -96,6 +96,9 @@ public final class AetherhavenConstants {
     /** Currency item; visuals aligned with vanilla {@code Deco_Treasure}. */
     public static final String ITEM_GOLD_COIN = "Aetherhaven_Gold_Coin";
 
+    /** Gold coins to fully restore an item from 0 durability at the blacksmith (scaled down for partial wear). */
+    public static final int BLACKSMITH_REPAIR_COST_FULL = 10;
+
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
 
     public static final String ELDER_NPC_ROLE_ID = "Aetherhaven_Elder_Lyren";
