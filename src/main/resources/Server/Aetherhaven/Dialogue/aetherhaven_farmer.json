@@ -116,10 +116,7 @@
       "choices": [
         {
           "text": "We'll get it built.",
-          "actions": [
-            { "type": "start_quest", "id": "q_farm_plot" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Farm", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_farm_plot" }],
           "next": "irienne_accepted"
         },
         {
@@ -161,10 +158,7 @@
       "choices": [
         {
           "text": "I'll build it.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_farmer" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_farmer" }],
           "next": "irienne_house_accepted"
         },
         { "text": "Not yet.", "next": null }

@@ -9,10 +9,9 @@
   "innkeeperSpawnLocal": [4, 1, 4],
   "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
   "rotationYaw": "None",
-  "requiredVillagerId": null,
   "materials": [
-    { "resourceTypeId": "Wood_Trunk", "count": 4 },
-    { "resourceTypeId": "Rock", "count": 2 }
+    { "resourceTypeId": "Wood_All", "count": 200 },
+    { "resourceTypeId": "Rock", "count": 100 }
   ],
   "pois": [
     {

@@ -74,10 +74,7 @@
       "choices": [
         {
           "text": "I'll get it built.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_innkeeper" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_innkeeper" }],
           "next": "corin_house_accepted"
         },
         { "text": "Another time.", "next": null }

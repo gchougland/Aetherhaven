@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_blacksmith_shop",
   "category": "town",
+  "grantPlotTokenConstructionId": "plot_blacksmith_shop",
   "title": "Garren's forge",
   "description": "Garren wants a real forge and a weapon bench he can claim before he loses his mind on Corin's floorboards.",
   "prerequisites": {

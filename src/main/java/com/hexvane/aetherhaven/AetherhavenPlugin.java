@@ -91,7 +91,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nullable
     private static volatile AetherhavenPlugin instance;
 
-    /** Same pattern as OrbisOrigins: {@code config.json} under the plugin data directory. */
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.empty();
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();

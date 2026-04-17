@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_house_farmer",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Irienne's home",
   "description": "Irienne wants roots under rafters that belong to her, not borrowed floorboards by the kettle.",
   "assignNpcRoleId": "Aetherhaven_Farmer",

@@ -128,10 +128,7 @@
       "choices": [
         {
           "text": "We'll get it built.",
-          "actions": [
-            { "type": "start_quest", "id": "q_blacksmith_shop" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Blacksmith_Shop", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_blacksmith_shop" }],
           "next": "garren_shop_accepted"
         },
         {
@@ -173,10 +170,7 @@
       "choices": [
         {
           "text": "I'll stake a house.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_blacksmith" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_blacksmith" }],
           "next": "garren_house_accepted"
         },
         { "text": "Another time.", "next": null }

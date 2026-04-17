@@ -18,6 +18,13 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_PLACEMENT_TOOL_ITEM_ID = "Aetherhaven_Plot_Placement_Tool";
 
+    /**
+     * Plot sign blocks sit this many cells above the logical anchor used for prefab placement math
+     * ({@link com.hexvane.aetherhaven.construction.ConstructionDefinition#resolvePrefabAnchorWorld}). Raises the sign
+     * above sunken floors without moving preview or construction.
+     */
+    public static final int PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR = 1;
+
     /** Debug POI visualization / move tool item id. */
     public static final String POI_TOOL_ITEM_ID = "Aetherhaven_Poi_Tool";
 

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.vector.Vector3d;
@@ -16,14 +17,19 @@ public final class PlotPlacementRotationUtil {
     private PlotPlacementRotationUtil() {}
 
     /**
-     * Footprint center in world space when the plot sign block is at (0,0,0) for {@code yaw}. Shifting the sign by
-     * {@code S} shifts the footprint by {@code S}, so center(sign, yaw) = sign + centerAtSignOrigin(yaw).
+     * Footprint center in world space when the plot sign block is one cell above the logical anchor origin (see
+     * {@link ConstructionDefinition#resolvePrefabAnchorWorld}) for {@code yaw}. Shifting the sign by {@code S} shifts
+     * the footprint by {@code S}, so center(sign, yaw) = sign + centerAtSignOrigin(yaw).
      */
     @Nonnull
     public static Vector3d footprintCenterAtSignOrigin(
         @Nonnull ConstructionDefinition def, @Nonnull Rotation yaw, @Nonnull IPrefabBuffer buf
     ) {
-        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(new Vector3i(0, 0, 0), yaw);
+        Vector3i prefabOrigin =
+            def.resolvePrefabAnchorWorld(
+                new Vector3i(0, AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR, 0),
+                yaw
+            );
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, yaw, buf);
         return new Vector3d(
             (fp.getMinX() + fp.getMaxX() + 1) * 0.5,

@@ -2,11 +2,12 @@
   "schemaVersion": 1,
   "id": "q_house_elder",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Lyren's home",
   "description": "Lyren wants a house like anyone else's: four walls, a shelf with her name, and no speeches about privilege.",
   "assignNpcRoleId": "Aetherhaven_Elder_Lyren",
   "prerequisites": {
-    "completedQuestIds": [],
+    "completedQuestIds": ["q_build_town_hall"],
     "anyCompletedQuestIds": []
   },
   "objectives": [

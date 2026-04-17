@@ -116,10 +116,7 @@
       "choices": [
         {
           "text": "We'll get it built.",
-          "actions": [
-            { "type": "start_quest", "id": "q_gaia_altar" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Gaia_Altar", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_gaia_altar" }],
           "next": "serah_altar_accepted"
         },
         {
@@ -161,10 +158,7 @@
       "choices": [
         {
           "text": "I'll stake a house.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_priestess" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_priestess" }],
           "next": "serah_house_accepted"
         },
         { "text": "Another time.", "next": null }

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_gaia_altar",
   "category": "town",
+  "grantPlotTokenConstructionId": "plot_gaia_altar",
   "title": "Serah's altar",
   "description": "Give Serah ground for Gaia: paths, stools, and a statue where she can work without kitchen smoke in her hair.",
   "prerequisites": {

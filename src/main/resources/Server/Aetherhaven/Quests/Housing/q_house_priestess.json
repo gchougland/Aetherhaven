@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_house_priestess",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Serah's home",
   "description": "Serah has public work at the altar. She still wants a quiet room where the only voice is hers.",
   "assignNpcRoleId": "Aetherhaven_Priestess",

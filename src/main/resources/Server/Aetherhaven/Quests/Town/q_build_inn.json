@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_build_inn",
   "category": "town",
+  "grantPlotTokenConstructionId": "plot_inn",
   "title": "Raise the inn",
   "description": "Lyren wants a proper inn so wanderers have a roof that does not feel like charity.",
   "prerequisites": {

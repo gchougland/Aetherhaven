@@ -57,7 +57,7 @@
           "next": "inn_done"
         },
         {
-          "text": "You mentioned wanting a house of your own.",
+          "text": "About the town hall.",
           "condition": {
             "type": "and",
             "conditions": [
@@ -68,8 +68,8 @@
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_elder" },
-                    { "type": "town_quest_completed", "questId": "q_house_elder" }
+                    { "type": "town_quest_active", "questId": "q_build_town_hall" },
+                    { "type": "town_quest_completed", "questId": "q_build_town_hall" }
                   ]
                 }
               },
@@ -77,7 +77,7 @@
             ]
           },
           "whenFalse": "hide",
-          "next": "lyren_house_offer"
+          "next": "town_hall_offer"
         },
         {
           "text": "I put your name on the shelf. You should hear it from me first.",
@@ -108,19 +108,19 @@
           "next": "lyren_house_remind"
         },
         {
-          "text": "You wanted to talk about the town hall.",
+          "text": "You mentioned wanting a house of your own.",
           "condition": {
             "type": "and",
             "conditions": [
               { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_completed", "questId": "q_house_elder" },
+              { "type": "town_quest_completed", "questId": "q_build_town_hall" },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_build_town_hall" },
-                    { "type": "town_quest_completed", "questId": "q_build_town_hall" }
+                    { "type": "town_quest_active", "questId": "q_house_elder" },
+                    { "type": "town_quest_completed", "questId": "q_house_elder" }
                   ]
                 }
               },
@@ -128,7 +128,7 @@
             ]
           },
           "whenFalse": "hide",
-          "next": "town_hall_offer"
+          "next": "lyren_house_offer"
         },
         {
           "text": "The town hall build is still underway.",
@@ -173,14 +173,11 @@
     },
     "lyren_house_offer": {
       "speaker": "Elder Lyren",
-      "text": "The charter gave us rules for the town. It did not give me a bed. I want the same small house anyone else gets. Craft the house token at your planning desk, stake the plot with your staff, pay the sign, then put my name on the management shelf inside when it is built. I will not forget who made room for me.",
+      "text": "The hall is up and the treasury can breathe. The charter gave us rules for the town; it did not give me a bed. I want the same small house anyone else gets. Take the token I offer, stake the plot with your staff, pay materials and the town share from the treasury, then put my name on the management shelf when it is built. I will not forget who made room for me.",
       "choices": [
         {
           "text": "I'll handle it.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_elder" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_elder" }],
           "next": "lyren_house_accepted"
         },
         { "text": "I cannot commit to that yet.", "next": null }
@@ -203,14 +200,11 @@
     },
     "town_hall_offer": {
       "speaker": "Elder Lyren",
-      "text": "We have homes. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, a chest for shared funds. Stake the plot, pay what the sign asks, and we finally have a place to meet as a whole town.",
+      "text": "The inn is standing. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, and a treasury so shared coin can fund the rest of what we build. Stake the plot, pay what the sign asks in materials, and we finally have a place to meet as a whole town.",
       "choices": [
         {
           "text": "I'll put the hall up.",
-          "actions": [
-            { "type": "start_quest", "id": "q_build_town_hall" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Town_Hall", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_build_town_hall" }],
           "next": "town_hall_accepted"
         },
         { "text": "Not yet.", "next": null }

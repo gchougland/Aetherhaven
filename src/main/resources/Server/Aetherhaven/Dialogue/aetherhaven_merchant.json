@@ -122,10 +122,7 @@
       "choices": [
         {
           "text": "I'll build it.",
-          "actions": [
-            { "type": "start_quest", "id": "q_merchant_stall" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_Market_Stall", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_merchant_stall" }],
           "next": "vex_accepted"
         },
         {
@@ -167,10 +164,7 @@
       "choices": [
         {
           "text": "I'll stake a house.",
-          "actions": [
-            { "type": "start_quest", "id": "q_house_merchant" },
-            { "type": "give_item", "item": "Aetherhaven_Plot_Token_House", "count": 1 }
-          ],
+          "actions": [{ "type": "start_quest", "id": "q_house_merchant" }],
           "next": "vex_house_accepted"
         },
         { "text": "Another time.", "next": null }

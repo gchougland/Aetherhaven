@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_house_blacksmith",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Garren's home",
   "description": "Garren has smoke and sparks at work. He wants a roof at night that does not smell like someone else's supper.",
   "assignNpcRoleId": "Aetherhaven_Blacksmith",

@@ -2,10 +2,11 @@
   "schemaVersion": 1,
   "id": "q_build_town_hall",
   "category": "town",
+  "grantPlotTokenConstructionId": "plot_town_hall",
   "title": "Raise the town hall",
   "description": "Lyren wants a hall that belongs to everyone: records, plans, and the treasury under one roof.",
   "prerequisites": {
-    "completedQuestIds": [],
+    "completedQuestIds": ["q_build_inn"],
     "anyCompletedQuestIds": []
   },
   "objectives": [

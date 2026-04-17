@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_house_merchant",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Vex's home",
   "description": "Vex can stack inventory anywhere. They still want a dry corner that answers to their knock.",
   "assignNpcRoleId": "Aetherhaven_Merchant",

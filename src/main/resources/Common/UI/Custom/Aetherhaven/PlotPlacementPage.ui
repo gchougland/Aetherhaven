@@ -205,11 +205,13 @@ $C.@PageOverlay {
         Anchor: (Top: 8);
         $C.@TextButton #PlaceButton {
           Text: %server.aetherhaven.ui.plotplacement.place;
-          Anchor: (Width: 164);
+          Anchor: (Right: 8, Width: 164, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
         }
         $C.@TextButton #CancelButton {
           Text: %server.aetherhaven.ui.plotplacement.cancel;
-          Anchor: (Width: 164);
+          Anchor: (Width: 164, Height: 48);
+          Padding: (Horizontal: 10, Vertical: 10);
         }
       }
     }

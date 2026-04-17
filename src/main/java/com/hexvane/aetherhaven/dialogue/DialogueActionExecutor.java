@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
+import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -127,6 +128,7 @@ public final class DialogueActionExecutor {
         if (qdef != null) {
             town.initQuestObjectiveProgress(qid, qdef.trackableObjectiveIds());
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
+            QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
         }
         if (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean()
             && npcUuid != null) {

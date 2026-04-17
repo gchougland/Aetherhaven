@@ -53,9 +53,20 @@ $C.@PageOverlay {
 
         Group #VillagerRow {
           LayoutMode: Top;
+          Visible: false;
           Anchor: (Bottom: 12);
 
           Label #VillagerLabel {
+            Style: $C.@DefaultLabelStyle;
+          }
+        }
+
+        Group #TreasuryRow {
+          LayoutMode: Top;
+          Visible: false;
+          Anchor: (Bottom: 12);
+
+          Label #TreasuryLabel {
             Style: $C.@DefaultLabelStyle;
           }
         }

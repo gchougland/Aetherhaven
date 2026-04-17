@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
@@ -60,14 +61,22 @@ public final class PlotPlacementOpenHelper {
     @Nonnull
     private static Vector3i pickAnchor(@Nonnull World world, @Nonnull BlockPosition tb) {
         Vector3i above = new Vector3i(tb.x, tb.y + 1, tb.z);
+        Vector3i picked;
         if (isReplaceable(world, above.x, above.y, above.z)) {
-            return above;
+            picked = above;
+        } else {
+            Vector3i on = new Vector3i(tb.x, tb.y, tb.z);
+            if (isReplaceable(world, on.x, on.y, on.z)) {
+                picked = on;
+            } else {
+                picked = above;
+            }
         }
-        Vector3i on = new Vector3i(tb.x, tb.y, tb.z);
-        if (isReplaceable(world, on.x, on.y, on.z)) {
-            return on;
-        }
-        return above;
+        return new Vector3i(
+            picked.x,
+            picked.y + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+            picked.z
+        );
     }
 
     private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {

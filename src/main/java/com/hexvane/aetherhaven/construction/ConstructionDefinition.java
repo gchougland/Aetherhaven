@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hypixel.hytale.math.vector.Vector3i;
@@ -46,6 +47,13 @@ public final class ConstructionDefinition {
 
     @SerializedName("materials")
     private List<MaterialRequirement> materials = Collections.emptyList();
+
+    /**
+     * Gold coins paid from the town treasury when construction starts (plot sign UI). Inn and town hall typically use 0;
+     * other buildings contribute pacing via shared funds after the hall exists.
+     */
+    @SerializedName("treasuryGoldCoinCost")
+    private long treasuryGoldCoinCost;
 
     @SerializedName("tier")
     @Nullable
@@ -105,16 +113,23 @@ public final class ConstructionDefinition {
     }
 
     /**
-     * World position of prefab buffer (0,0,0) / anchor when the plot sign is at {@code signPos}.
+     * World position of prefab buffer (0,0,0) / anchor for a plot sign block at {@code plotSignBlockWorldPos}.
+     * The sign voxel is {@link AetherhavenConstants#PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR} above the logical cell used
+     * with {@link #plotAnchorOffset} so the sign can sit higher without shifting the built prefab.
      * {@link #plotAnchorOffset} is in prefab-local axes; it must be rotated by {@code placementYaw} before adding
-     * to the sign (same convention as {@link com.hexvane.aetherhaven.construction.PrefabLocalOffset}).
+     * to the logical anchor (same convention as {@link com.hexvane.aetherhaven.construction.PrefabLocalOffset}).
      */
     @Nonnull
-    public Vector3i resolvePrefabAnchorWorld(@Nonnull Vector3i signPos, @Nonnull Rotation placementYaw) {
+    public Vector3i resolvePrefabAnchorWorld(@Nonnull Vector3i plotSignBlockWorldPos, @Nonnull Rotation placementYaw) {
+        Vector3i logical = new Vector3i(
+            plotSignBlockWorldPos.x,
+            plotSignBlockWorldPos.y - AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+            plotSignBlockWorldPos.z
+        );
         int[] o = getPlotAnchorOffset();
         Vector3i off = new Vector3i(o[0], o[1], o[2]);
         PrefabRotation.fromRotation(placementYaw).rotate(off);
-        return new Vector3i(signPos.x + off.x, signPos.y + off.y, signPos.z + off.z);
+        return new Vector3i(logical.x + off.x, logical.y + off.y, logical.z + off.z);
     }
 
     /** Same as {@link #resolvePrefabAnchorWorld(Vector3i, Rotation)} with {@link Rotation#None} (offset not rotated). */
@@ -139,6 +154,10 @@ public final class ConstructionDefinition {
 
     public List<MaterialRequirement> getMaterials() {
         return materials != null ? materials : Collections.emptyList();
+    }
+
+    public long getTreasuryGoldCoinCost() {
+        return Math.max(0L, treasuryGoldCoinCost);
     }
 
     @Nullable

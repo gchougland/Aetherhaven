@@ -7,11 +7,10 @@
   "plotAnchorOffset": [5, 0, 5],
   "managementBlockLocalPos": [2, 1, 3],
   "rotationYaw": "None",
-  "requiredVillagerId": null,
+  "treasuryGoldCoinCost": 50,
   "materials": [
-    { "resourceTypeId": "Wood_Trunk", "count": 6 },
-    { "resourceTypeId": "Rock", "count": 10 },
-    { "itemId": "Ingredient_Life_Essence", "count": 2 }
+    { "resourceTypeId": "Rock", "count": 50 },
+    { "itemId": "Ingredient_Life_Essence", "count": 10 }
   ],
   "pois": [
     {

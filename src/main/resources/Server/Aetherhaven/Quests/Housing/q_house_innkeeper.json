@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_house_innkeeper",
   "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
   "title": "Corin's home",
   "description": "Corin feeds everyone else first. He would like a door that closes on his own mess when the night is done.",
   "assignNpcRoleId": "Aetherhaven_Innkeeper",

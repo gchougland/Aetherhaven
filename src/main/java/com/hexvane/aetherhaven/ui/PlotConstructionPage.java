@@ -126,6 +126,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set("#BuildingTitle.TextSpans", Message.raw(managementUi ? "Building" : "Plot sign"));
             commandBuilder.set("#Description.TextSpans", Message.raw("No construction is configured for this plot."));
             commandBuilder.set("#VillagerRow.Visible", false);
+            commandBuilder.set("#TreasuryRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
             commandBuilder.set("#MaterialsHeader.Visible", false);
             for (int i = 0; i < MATERIAL_ROW_CAP; i++) {
@@ -160,12 +161,36 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set("#Description.TextSpans", Message.raw(desc));
         commandBuilder.set("#Description.Visible", !desc.isBlank());
 
-        boolean villagerOk = villagerRequirementMet(def) || completed;
-        commandBuilder.set("#VillagerRow.Visible", !hideConstructionDetails);
-        commandBuilder.set("#MaterialsHeader.Visible", !hideConstructionDetails);
-        commandBuilder.set("#VillagerLabel.TextSpans", Message.raw(completed ? "Villager: n/a (complete)" : villagerLabel(def)));
-        commandBuilder.set("#VillagerLabel.Style.TextColor", villagerOk ? "#3d913f" : "#962f2f");
+        commandBuilder.set("#VillagerRow.Visible", false);
 
+        long goldCost = def.getTreasuryGoldCoinCost();
+        TownRecord treasuryTown =
+            !managementUi && !completed && goldCost > 0 ? resolveTownForPlotSign(store, ref) : null;
+        UUIDComponent ucComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID playerUuid = ucComp != null ? ucComp.getUuid() : null;
+        boolean treasuryPerm =
+            treasuryTown != null && playerUuid != null && treasuryTown.playerHasBuildPermission(playerUuid);
+        long treasuryBal = treasuryTown != null ? treasuryTown.getTreasuryGoldCoinCount() : 0L;
+        boolean treasuryOk = completed || goldCost <= 0 || (treasuryTown != null && treasuryBal >= goldCost && treasuryPerm);
+        boolean showTreasury = !hideConstructionDetails && goldCost > 0;
+        commandBuilder.set("#TreasuryRow.Visible", showTreasury);
+        if (showTreasury) {
+            String tLine;
+            if (treasuryTown == null) {
+                tLine = "Town treasury: " + goldCost + " gold (town not found for this plot.)";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
+            } else if (!treasuryPerm) {
+                tLine = "Town treasury: " + goldCost + " gold (have " + treasuryBal + ") — no permission to spend.";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
+            } else {
+                tLine = "Town treasury: pay " + goldCost + " gold (have " + treasuryBal + ")";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", treasuryBal >= goldCost ? "#3d913f" : "#962f2f");
+            }
+            commandBuilder.set("#TreasuryLabel.TextSpans", Message.raw(tLine));
+        }
+
+        boolean showMaterialsHeader = !hideConstructionDetails && !def.getMaterials().isEmpty();
+        commandBuilder.set("#MaterialsHeader.Visible", showMaterialsHeader);
         String lang = this.playerRef.getLanguage();
         int mi = 0;
         if (!hideConstructionDetails) {
@@ -185,7 +210,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
 
         boolean matsOk = completed || (inv != null && InventoryMaterials.hasAll(inv, def.getMaterials()));
-        boolean canBuild = !managementUi && !completed && villagerOk && matsOk;
+        boolean canBuild = !managementUi && !completed && matsOk && treasuryOk;
         commandBuilder.set("#BuildButton.Disabled", !canBuild);
 
         boolean canPickupPlot =
@@ -720,9 +745,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (state == PlotInstanceState.COMPLETE) {
             return;
         }
-        if (!villagerRequirementMet(def)) {
-            return;
-        }
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player == null) {
             return;
@@ -747,6 +769,30 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         } catch (IllegalArgumentException e) {
             sendBuildError(store, ref, "Invalid plot id on sign.");
             return;
+        }
+        long goldCost = def.getTreasuryGoldCoinCost();
+        if (goldCost > 0) {
+            AetherhavenPlugin plugPre = AetherhavenPlugin.get();
+            World worldPre = store.getExternalData().getWorld();
+            if (plugPre == null) {
+                return;
+            }
+            TownManager tmPre = AetherhavenWorldRegistries.getOrCreateTownManager(worldPre, plugPre);
+            TownRecord tr = tmPre.findTownOwningPlot(plotId);
+            if (tr == null) {
+                sendBuildError(store, ref, "No town owns this plot.");
+                return;
+            }
+            if (!tr.playerHasBuildPermission(uc.getUuid())) {
+                sendBuildError(store, ref, "You cannot spend town treasury for this build.");
+                return;
+            }
+            if (tr.getTreasuryGoldCoinCount() < goldCost) {
+                sendBuildError(store, ref, "Not enough gold in the town treasury.");
+                return;
+            }
+            tr.addTreasuryGoldCoins(-goldCost);
+            tmPre.updateTown(tr);
         }
 
         InventoryMaterials.removeAll(inv, def.getMaterials());
@@ -792,6 +838,28 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (pr != null) {
             pr.sendMessage(Message.raw(text));
         }
+    }
+
+    @Nullable
+    private TownRecord resolveTownForPlotSign(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        AetherhavenPlugin p = AetherhavenPlugin.get();
+        if (p == null) {
+            return null;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        PlotSignBlock plot = cs.getComponent(blockRef, PlotSignBlock.getComponentType());
+        if (plot == null || plot.getPlotId() == null || plot.getPlotId().isBlank()) {
+            return null;
+        }
+        UUID plotId;
+        try {
+            plotId = UUID.fromString(plot.getPlotId().trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
+        return tm.findTownOwningPlot(plotId);
     }
 
     @Nullable
@@ -914,23 +982,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
         String itemId = m.getItemId();
         return itemId != null && !itemId.isBlank() ? itemLabelForUi(language, itemId) : "?";
-    }
-
-    private boolean villagerRequirementMet(ConstructionDefinition def) {
-        String vid = def.getRequiredVillagerId();
-        if (vid == null || vid.isEmpty()) {
-            return true;
-        }
-        AetherhavenPlugin p = AetherhavenPlugin.get();
-        return p != null && p.getConfig().get().isIgnoreVillagerRequirement();
-    }
-
-    private static String villagerLabel(ConstructionDefinition def) {
-        String vid = def.getRequiredVillagerId();
-        if (vid == null || vid.isEmpty()) {
-            return "Villager: not required";
-        }
-        return "Villager required: " + vid + " (not implemented; enable IgnoreVillagerRequirement in config to test)";
     }
 
     private record HouseResidentRow(@Nonnull String label, @Nonnull UUID entityUuid) {}

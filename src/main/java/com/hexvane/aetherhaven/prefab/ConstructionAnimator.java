@@ -170,7 +170,10 @@ public final class ConstructionAnimator {
                 }
                 for (Holder<EntityStore> h : entityWrappers) {
                     if (h != null) {
-                        prefabEntitiesInOrder.add(h);
+                        // Clone immediately: holders in the cached IPrefabBuffer are shared across callers. Paste-time
+                        // math mutates TransformComponent positions; retaining live refs would corrupt the cache
+                        // (worse after rotation). Vanilla PrefabUtil never keeps buffer refs — it clones per entity.
+                        prefabEntitiesInOrder.add(h.clone());
                     }
                 }
             },
@@ -361,13 +364,13 @@ public final class ConstructionAnimator {
     }
 
     /**
-     * Matches {@link PrefabUtil#paste} entity branch (event, FromPrefab, addEntity) with the same position fix as
-     * {@link com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection#rotate(Axis, int)}: prefab
-     * blocks are iterated on <strong>integer corners</strong> (see {@link PrefabRotation#getX(int, int)}), while
-     * entity transforms are usually at <strong>block centers</strong> (e.g. 0.5 offsets). Applying
-     * {@link PrefabRotation#rotate(Vector3d)} directly to a center rotates around the anchor corner, which skews
-     * centers by a full block at 90° (e.g. (1.5, 0.5) → (0.5, -1.5) instead of (0.5, -0.5)). Subtract the center
-     * offset, rotate, then add it back — same as builder clipboard rotation.
+     * Positions and headings for prefab entities match {@link com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection#rotate}:
+     * transforms are stored in block-center space, so we subtract a voxel-center offset, apply
+     * {@link PrefabRotation#rotate(Vector3d)}, then add the offset back before adding {@link #origin}. Raw
+     * {@link PrefabRotation#rotate} on the saved position (as in {@link PrefabUtil#paste}) skews centers vs. the
+     * integer column rotation used for blocks (e.g. one voxel along Z at 90°). We add {@link PrefabRotation#getYaw()}
+     * to {@link TransformComponent} and {@link HeadRotation}; for {@link PrefabRotation#ROTATION_90} and
+     * {@link PrefabRotation#ROTATION_270} we add an extra π rad so entity facing matches blocks (grid yaw vs. model forward).
      */
     private void spawnPrefabEntityLikePaste(Holder<EntityStore> entityToAdd) {
         Holder<EntityStore> clone = entityToAdd.clone();
@@ -375,21 +378,25 @@ public final class ConstructionAnimator {
         if (transformComp == null) {
             return;
         }
-        Vector3d entityPosition = transformComp.getPosition().clone();
-        boolean isBlockEntity = clone.getComponent(BlockEntity.getComponentType()) != null;
-        Vector3d centerOffset = isBlockEntity ? new Vector3d(0.5, 0.0, 0.5) : new Vector3d(0.5, 0.5, 0.5);
-        entityPosition.subtract(centerOffset);
-        prefabRotation.rotate(entityPosition);
-        entityPosition.add(centerOffset);
-        entityPosition.add(origin);
-        transformComp.setPosition(entityPosition);
-        float prefabYawRad = prefabRotation.getYaw();
-        if (prefabYawRad != 0.0f) {
-            transformComp.getRotation().addYaw(prefabYawRad);
-            HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
-            if (headRotation != null) {
-                headRotation.getRotation().addYaw(prefabYawRad);
-            }
+        Vector3d world = transformComp.getPosition().clone();
+        boolean blockEntity = clone.getComponent(BlockEntity.getComponentType()) != null;
+        Vector3d centerOffset = blockEntity ? new Vector3d(0.5, 0.0, 0.5) : new Vector3d(0.5, 0.5, 0.5);
+        world.subtract(centerOffset);
+        prefabRotation.rotate(world);
+        world.add(centerOffset);
+        world.add(origin);
+        Vector3d pos = transformComp.getPosition();
+        pos.x = world.x;
+        pos.y = world.y;
+        pos.z = world.z;
+        float dyaw = prefabRotation.getYaw();
+        if (prefabRotation == PrefabRotation.ROTATION_90 || prefabRotation == PrefabRotation.ROTATION_270) {
+            dyaw += (float) Math.PI;
+        }
+        transformComp.getRotation().setYaw(transformComp.getRotation().getYaw() + dyaw);
+        HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
+        if (headRotation != null) {
+            headRotation.getRotation().setYaw(headRotation.getRotation().getYaw() + dyaw);
         }
         PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
         entityAccessor.invoke(prefabPlaceEntityEvent);

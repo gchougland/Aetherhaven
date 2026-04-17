@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "q_farm_plot",
   "category": "town",
+  "grantPlotTokenConstructionId": "plot_farm",
   "title": "Irienne's farm plot",
   "description": "Give Irienne fenced ground and a bench so she can stop dreaming of rows on an inn floor.",
   "prerequisites": {

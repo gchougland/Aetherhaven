@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -121,6 +122,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             QuestDefinition def = plugin.getQuestCatalog().get(qid);
             if (def != null) {
                 town.initQuestObjectiveProgress(qid, def.trackableObjectiveIds());
+                QuestPlotTokenOnStart.grantIfConfigured(plugin, def, ref, store);
             }
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
             playerRef.sendMessage(Message.raw("Granted active quest: " + plugin.getQuestCatalog().displayName(qid)));

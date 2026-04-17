@@ -63,6 +63,14 @@ public final class QuestDefinition {
     @Nullable
     private String assignNpcRoleId;
 
+    /**
+     * If set, the plot sign item for this construction (see {@code plotTokenItemId} on the building JSON) is given to the
+     * player when the quest starts (dialogue accept or debug grant).
+     */
+    @SerializedName("grantPlotTokenConstructionId")
+    @Nullable
+    private String grantPlotTokenConstructionId;
+
     @Nonnull
     public String idOrEmpty() {
         return id != null ? id.trim() : "";
@@ -131,6 +139,11 @@ public final class QuestDefinition {
     @Nullable
     public String assignNpcRoleId() {
         return assignNpcRoleId != null ? assignNpcRoleId.trim() : null;
+    }
+
+    @Nullable
+    public String grantPlotTokenConstructionId() {
+        return grantPlotTokenConstructionId != null ? grantPlotTokenConstructionId.trim() : null;
     }
 
     /** @return true if this objective should be tracked in {@link com.hexvane.aetherhaven.town.TownRecord} progress maps */
