@@ -141,10 +141,10 @@ public final class ReputationRewardCatalog {
             "rep_blacksmith_50",
             AetherhavenConstants.NPC_BLACKSMITH,
             50,
-            "Rock_Stone",
-            64,
+            "",
+            0,
             "rep_reward_50",
-            null
+            AetherhavenConstants.ITEM_GEODE_ANVIL
         )
     );
 

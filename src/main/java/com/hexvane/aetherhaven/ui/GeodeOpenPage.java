@@ -32,15 +32,24 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Pay gold to open geodes from inventory; stays open until Back. */
+/** Open geodes from inventory; blacksmith charges gold, geode anvil does not. Stays open until Back. */
 public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.PageData> {
     private static final String ROWS = "#Content #GeodeRows";
     private static final int MAX_ROWS = 48;
 
+    private final boolean chargeGold;
     private boolean templateAppended;
 
     public GeodeOpenPage(@Nonnull PlayerRef playerRef) {
+        this(playerRef, true);
+    }
+
+    /**
+     * @param chargeGold when true, deducts {@link AetherhavenConstants#GEODE_OPEN_GOLD_COST} per open (blacksmith); when false, only consumes the geode (anvil block).
+     */
+    public GeodeOpenPage(@Nonnull PlayerRef playerRef, boolean chargeGold) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
+        this.chargeGold = chargeGold;
     }
 
     @Override
@@ -83,7 +92,12 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             return;
         }
 
-        commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.geodeopen.hint"));
+        commandBuilder.set(
+            "#Hint.TextSpans",
+            Message.translation(
+                chargeGold ? "server.aetherhaven.ui.geodeopen.hint" : "server.aetherhaven.ui.geodeopen.hintAnvil"
+            )
+        );
         commandBuilder.clear(ROWS);
         int n = Math.min(slots.size(), MAX_ROWS);
         for (int i = 0; i < n; i++) {
@@ -140,29 +154,33 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             refresh(ref, store);
             return;
         }
-        int goldCost = AetherhavenConstants.GEODE_OPEN_GOLD_COST;
-        if (InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) < goldCost) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.geode.open.insufficientGold"),
-                NotificationStyle.Danger
-            );
-            refresh(ref, store);
-            return;
-        }
-        ItemStackTransaction pay = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost));
-        if (!pay.succeeded()) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.geode.open.failed"),
-                NotificationStyle.Danger
-            );
-            refresh(ref, store);
-            return;
+        int goldCost = chargeGold ? AetherhavenConstants.GEODE_OPEN_GOLD_COST : 0;
+        if (chargeGold) {
+            if (InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) < goldCost) {
+                NotificationUtil.sendNotification(
+                    pr.getPacketHandler(),
+                    Message.translation("server.aetherhaven.geode.open.insufficientGold"),
+                    NotificationStyle.Danger
+                );
+                refresh(ref, store);
+                return;
+            }
+            ItemStackTransaction pay = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost));
+            if (!pay.succeeded()) {
+                NotificationUtil.sendNotification(
+                    pr.getPacketHandler(),
+                    Message.translation("server.aetherhaven.geode.open.failed"),
+                    NotificationStyle.Danger
+                );
+                refresh(ref, store);
+                return;
+            }
         }
         ItemStackSlotTransaction takeGeode = inv.removeItemStackFromSlot(slot, 1);
         if (!takeGeode.succeeded()) {
-            player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            if (goldCost > 0) {
+                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            }
             refresh(ref, store);
             return;
         }
@@ -170,7 +188,9 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         GeodeLootTable table = GeodeLootFiles.loadTable(plugin);
         ItemStack reward = table.rollStack();
         if (reward == null) {
-            player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            if (goldCost > 0) {
+                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            }
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
@@ -183,7 +203,9 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
 
         ItemStackTransaction giveTx = player.giveItem(reward, ref, store);
         if (!giveTx.succeeded()) {
-            player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            if (goldCost > 0) {
+                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            }
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

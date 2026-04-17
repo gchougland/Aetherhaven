@@ -46,6 +46,7 @@ import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
+import com.hexvane.aetherhaven.ui.GeodeOpenPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
@@ -369,6 +370,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
             PlotPlacementOpenHelper::tryOpen
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
+        OpenCustomUIInteraction.registerSimple(
+            this,
+            GeodeOpenPage.class,
+            AetherhavenConstants.PAGE_GEODE_ANVIL,
+            pr -> new GeodeOpenPage(pr, false)
+        );
         OpenCustomUIInteraction.registerSimple(
             this,
             PlotSignAdminPage.class,

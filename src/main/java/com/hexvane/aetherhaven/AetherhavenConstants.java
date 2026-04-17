@@ -110,6 +110,12 @@ public final class AetherhavenConstants {
     /** Rare drop from mining ore blocks; opened at the blacksmith for a fee. */
     public static final String ITEM_GEODE = "Aetherhaven_Geode";
 
+    /** Placeable anvil; opens geode UI without gold cost. Recipe learned from blacksmith reputation. */
+    public static final String ITEM_GEODE_ANVIL = "Aetherhaven_Geode_Anvil";
+
+    /** OpenCustomUI page id; must match {@code Aetherhaven_Geode_Anvil.json} block interaction. */
+    public static final String PAGE_GEODE_ANVIL = "AetherhavenGeodeAnvil";
+
     /** Gold coins to fully restore an item from 0 durability at the blacksmith (scaled down for partial wear). */
     public static final int BLACKSMITH_REPAIR_COST_FULL = 10;
 

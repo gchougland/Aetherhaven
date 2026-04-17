@@ -42,7 +42,7 @@ aetherhaven.reputation.reward.farmer.50=Here is the thorium pattern: wider reach
 aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page unlocks the third sprinkler tier, still one good soak at sunrise.
 aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care. The town's fields will drink at dawn.
 aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You have both, and it shows.
-aetherhaven.reputation.reward.blacksmith.50=The hammer does not lie. Here is more raw weight for the next swing.
+aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil—craft it at the workbench when you have the bars and stone.
 aetherhaven.ui.plotadmin.title=Plot sign (admin)
 aetherhaven.ui.plotadmin.construction=Construction
 aetherhaven.ui.plotadmin.give=Give plot sign & close
@@ -116,6 +116,9 @@ items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
 items.Aetherhaven_Geode.name=Geode
 items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems, or ore. Pay a blacksmith to crack it open.
 
+items.Aetherhaven_Geode_Anvil.name=Geode anvil
+items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; you must know the schematic to craft it at a workbench.
+
 barter.aetherhaven_vex.title=Vex's daily stock
 
 items.Aetherhaven_Treasury.name=Town treasury
@@ -183,6 +186,7 @@ aetherhaven.ui.treasury.hint=Morning taxes from villagers (Based on their needs)
 
 aetherhaven.ui.geodeopen.title=Open geodes
 aetherhaven.ui.geodeopen.hint=5 gold coins per geode. Click a row to open one. Use Back when you are done.
+aetherhaven.ui.geodeopen.hintAnvil=No gold fee. Click a row to open one geode. Use Back when you are done.
 aetherhaven.ui.geodeopen.empty=No geodes in your hotbar, armor, or storage.
 
 aetherhaven.geode.row={count} × {itemName}
