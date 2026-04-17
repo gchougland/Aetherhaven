@@ -1,7 +1,7 @@
 {
   "id": "plot_town_hall",
   "displayName": "Town hall",
-  "description": "A civic hall with a town records shelf, planning desk, and treasury. Adjust plot anchor in placement if the footprint misaligns.",
+  "description": "A civic hall with a town records shelf, planning desk, and treasury.",
   "prefabPath": "Townhall.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
   "plotAnchorOffset": [9, 0, 7],

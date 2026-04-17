@@ -35,6 +35,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -69,9 +70,9 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         UUID owner = uuidComp.getUuid();
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        if (tm.findTownForOwnerInWorld(owner) != null) {
+        if (tm.findTownForPlayerInWorld(owner) != null) {
             event.setCancelled(true);
-            pr.sendMessage(Message.raw("You already have a town in this world."));
+            pr.sendMessage(Message.raw("You are already part of a town in this world. Leave it before founding a new one."));
             return;
         }
 
@@ -119,6 +120,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         );
 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        record.setDisplayName(plugin.getTownNameCatalog().pickUniqueDisplayName(tm, ThreadLocalRandom.current()));
         tm.putTown(record);
 
         charter.setTownId(townId.toString());
@@ -130,7 +132,9 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             tm.updateTown(record);
         }
 
-        playerRef.sendMessage(Message.raw("Town founded! The Village Elder has arrived."));
+        playerRef.sendMessage(
+            Message.raw("Town founded: " + record.getDisplayName() + ". The Village Elder has arrived. Use the charter to rename the town.")
+        );
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
     }
 

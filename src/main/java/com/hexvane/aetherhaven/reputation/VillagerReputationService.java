@@ -34,7 +34,7 @@ public final class VillagerReputationService {
         if (uuidComp == null) {
             return null;
         }
-        return tm.findTownForOwnerInWorld(uuidComp.getUuid());
+        return tm.findTownForPlayerInWorld(uuidComp.getUuid());
     }
 
     /**

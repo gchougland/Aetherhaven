@@ -42,6 +42,7 @@ import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
 import com.hexvane.aetherhaven.farming.SprinklerEpochTickSystem;
 import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownNameCatalog;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
@@ -97,6 +98,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
+    private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "Aetherhaven-Construction");
         t.setDaemon(true);
@@ -138,6 +140,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public TownNameCatalog getTownNameCatalog() {
+        return townNameCatalog;
+    }
+
+    @Nonnull
     public VillagerScheduleRegistry getVillagerScheduleRegistry() {
         return villagerScheduleRegistry;
     }
@@ -145,6 +152,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public DialogueWorldView createDialogueWorldView(@Nonnull World world) {
         return new AetherhavenDialogueWorldView(world, this);
+    }
+
+    @Nonnull
+    public DialogueWorldView createDialogueWorldView(@Nonnull World world, @Nullable Ref<EntityStore> npcRef) {
+        return new AetherhavenDialogueWorldView(world, this, npcRef);
     }
 
     /**
@@ -433,6 +445,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
+        this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),

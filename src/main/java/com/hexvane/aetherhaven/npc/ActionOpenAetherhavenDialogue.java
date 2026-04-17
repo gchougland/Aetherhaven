@@ -61,7 +61,7 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         DialogueResolver resolver = plugin.getDialogueResolver();
         DialogueResolver.ResolvedDialogue resolved = resolver.resolve(this.dialogueId, this.villagerKind, ref, playerRef, store);
         World world = store.getExternalData().getWorld();
-        DialogueWorldView worldView = plugin.createDialogueWorldView(world);
+        DialogueWorldView worldView = plugin.createDialogueWorldView(world, ref);
         Ref<EntityStore> npcRef = ref;
         Ref<EntityStore> playerEntityRef = playerRef;
         world.execute(

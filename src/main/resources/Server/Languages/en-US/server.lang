@@ -12,6 +12,16 @@ instances.aetherhaven.subtitle=The sky village
 
 # Plot / construction UI (keys use lowercase segments so client lookup matches % references)
 aetherhaven.ui.plotconstruction.title=Construction
+aetherhaven.ui.plotmanagement.title=Town Management
+aetherhaven.ui.plotmanagement.tabPlot=Plot
+aetherhaven.ui.plotmanagement.tabPlayers=Players
+aetherhaven.ui.plotmanagement.playersHint=Invite online players by name. Change roles or remove members below.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Members of this town. Only the owner can invite or change roles.
+aetherhaven.ui.plotmanagement.inviteLabel=Invite player
+aetherhaven.ui.plotmanagement.invitePlaceholder=Player name (online)
+aetherhaven.ui.plotmanagement.inviteSend=Send invite
+aetherhaven.ui.plotmanagement.kick=Remove
+aetherhaven.ui.plotmanagement.roleOwner=Owner
 aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
 aetherhaven.ui.plotconstruction.pickUpPlot=Pick up plot (return token)
@@ -176,6 +186,10 @@ aetherhaven.profession.kind.priestess=Priestess
 aetherhaven.profession.kind.unknown=Resident
 
 aetherhaven.ui.chartertown.title=Town charter
+aetherhaven.ui.chartertown.townNameLabel=Town display name
+aetherhaven.ui.chartertown.namePlaceholder=Type a unique name for your town
+aetherhaven.ui.chartertown.ownerOnlyHint=Only the town owner can change the display name from the charter.
+aetherhaven.ui.chartertown.saveTownName=Save name
 aetherhaven.ui.chartertown.dissolve=Dissolve town
 aetherhaven.ui.chartertown.dissolveHint=Disabled until a later milestone.
 
@@ -215,6 +229,19 @@ aetherhaven.ui.plotplacement.zoomOutTooltip=Closer camera (smaller overview, mor
 aetherhaven.ui.plotplacement.zoomInTooltip=Farther camera (wider overview of the plot)
 
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
+
+commands.aetherhaven.town.desc=Town membership: invite, roles, leave
+commands.aetherhaven.town.invite.desc=Invite an online player to your town
+commands.aetherhaven.town.invite.player.desc=Player username (must be online)
+commands.aetherhaven.town.accept.desc=Accept a pending town invite
+commands.aetherhaven.town.decline.desc=Decline a pending town invite
+commands.aetherhaven.town.kick.desc=Remove a member from your town
+commands.aetherhaven.town.kick.player.desc=Member username (must be online)
+commands.aetherhaven.town.role.desc=Set a member's role (BUILD, QUEST, or BOTH)
+commands.aetherhaven.town.role.player.desc=Member username (must be online)
+commands.aetherhaven.town.role.role.desc=BUILD, QUEST, or BOTH
+commands.aetherhaven.town.leave.desc=Leave a town you are a member of (not as owner)
+commands.aetherhaven.town.townName.desc=Optional town display name (for multiple invites or admin)
 
 commands.aetherhaven.poi.desc=Debug: POI commands (requires DebugCommandsEnabled)
 commands.aetherhaven.poi.list.desc=List POIs for a town (optional town UUID, or omit / use \"me\" for your town)

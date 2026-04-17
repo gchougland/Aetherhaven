@@ -1,7 +1,7 @@
 {
   "id": "plot_inn",
   "displayName": "Inn",
-  "description": "Founding inn prefab with management bookcase and visitor-ready POIs.",
+  "description": "A proper inn for your town: guest rooms, a hearth for meals, and a desk for town records and welcoming travelers.",
   "prefabPath": "Inn.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
   "plotAnchorOffset": [9, 0, 6],

@@ -47,7 +47,7 @@ public final class VillagerNeedsTargetResolver {
             if (uc == null) {
                 return new Result(null, ResolveProblem.NO_TOWN);
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
+            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
                 return new Result(null, ResolveProblem.NO_TOWN);
             }

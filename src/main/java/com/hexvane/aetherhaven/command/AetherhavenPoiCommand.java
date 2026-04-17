@@ -67,7 +67,7 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                     return;
                 }
                 TownRecord tr =
-                    AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
+                    AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
                 if (tr == null) {
                     playerRef.sendMessage(Message.raw("You have no town in this world (use a town UUID argument)."));
                     return;

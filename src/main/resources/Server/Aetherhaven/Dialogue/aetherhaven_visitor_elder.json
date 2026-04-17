@@ -1,0 +1,11 @@
+{
+  "id": "aetherhaven_visitor_elder",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Elder Lyren",
+      "text": "You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.",
+      "choices": [{ "text": "I understand.", "next": null, "actions": [{ "type": "close" }] }]
+    }
+  }
+}

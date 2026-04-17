@@ -16,6 +16,9 @@ import com.hexvane.aetherhaven.town.HouseResidentAssignment;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberRole;
+import com.hexvane.aetherhaven.town.TownMembershipActions;
+import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
@@ -68,11 +71,20 @@ import javax.annotation.Nullable;
 public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotConstructionPage.PageData> {
     private static final int MATERIAL_ROW_CAP = 10;
     private static final int BREAK_SETTINGS = 10;
+    private static final String MEMBER_ROWS = "#MemberRows";
+    private static final int MAX_MEMBER_ROWS = 24;
 
     private final Ref<ChunkStore> blockRef;
     @Nonnull
     private final Vector3i blockWorldPos;
     private final boolean managementUi;
+    /** 0 = Plot, 1 = Players (management UI only). */
+    private int managementTab;
+    /**
+     * {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the
+     * whole tree and breaks selectors (wrong title, orphan "Materials" label, empty tabs).
+     */
+    private boolean templateAppended;
 
     public PlotConstructionPage(
         @Nonnull PlayerRef playerRef,
@@ -90,7 +102,21 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
     public void build(
         @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
     ) {
-        commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
+        if (!templateAppended) {
+            commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
+            templateAppended = true;
+        }
+        commandBuilder.set(
+            "#ShellTitleText.TextSpans",
+            managementUi
+                ? Message.translation("server.aetherhaven.ui.plotmanagement.title")
+                : Message.translation("server.aetherhaven.ui.plotconstruction.title")
+        );
+        boolean plotTabActive = !managementUi || managementTab == 0;
+        commandBuilder.set("#ManagementTabStrip.Visible", managementUi);
+        commandBuilder.set("#PlotTabContent.Visible", plotTabActive);
+        commandBuilder.set("#PlayersTabContent.Visible", managementUi && managementTab == 1);
+
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
@@ -101,40 +127,58 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set("#Description.TextSpans", Message.raw("No construction is configured for this plot."));
             commandBuilder.set("#VillagerRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
+            commandBuilder.set("#MaterialsHeader.Visible", false);
             for (int i = 0; i < MATERIAL_ROW_CAP; i++) {
                 commandBuilder.set("#Mat" + i + ".Visible", false);
             }
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
+            if (managementUi) {
+                bindManagementTabEvents(eventBuilder);
+                if (managementTab == 1) {
+                    buildManagementPlayersTab(ref, store, commandBuilder, eventBuilder);
+                } else {
+                    commandBuilder.clear(MEMBER_ROWS);
+                }
+            }
             return;
         }
 
         PlotInstanceState state = resolvePlotState(store, ref);
         boolean completed = state == PlotInstanceState.COMPLETE;
+        boolean hideConstructionDetails = managementUi && completed;
 
         commandBuilder.set("#BuildingTitle.TextSpans", Message.raw(def.getDisplayName()));
         String desc = def.getDescription() != null ? def.getDescription() : "";
         if (completed) {
-            desc = desc.isEmpty() ? "Construction complete." : desc + "\n\nConstruction complete.";
+            if (hideConstructionDetails) {
+                // Management block: hide the completion line (and leave only prefab text if present).
+            } else {
+                desc = desc.isEmpty() ? "Construction complete." : desc + "\n\nConstruction complete.";
+            }
         }
         commandBuilder.set("#Description.TextSpans", Message.raw(desc));
+        commandBuilder.set("#Description.Visible", !desc.isBlank());
 
         boolean villagerOk = villagerRequirementMet(def) || completed;
-        commandBuilder.set("#VillagerRow.Visible", true);
+        commandBuilder.set("#VillagerRow.Visible", !hideConstructionDetails);
+        commandBuilder.set("#MaterialsHeader.Visible", !hideConstructionDetails);
         commandBuilder.set("#VillagerLabel.TextSpans", Message.raw(completed ? "Villager: n/a (complete)" : villagerLabel(def)));
         commandBuilder.set("#VillagerLabel.Style.TextColor", villagerOk ? "#3d913f" : "#962f2f");
 
         String lang = this.playerRef.getLanguage();
         int mi = 0;
-        for (; mi < def.getMaterials().size() && mi < MATERIAL_ROW_CAP; mi++) {
-            var m = def.getMaterials().get(mi);
-            int need = m.getCount();
-            int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
-            boolean ok = completed || has >= need;
-            String itemLabel = materialLabelForUi(lang, m);
-            commandBuilder.set("#Mat" + mi + ".Visible", true);
-            commandBuilder.set("#Mat" + mi + " #Line.TextSpans", Message.raw(itemLabel + " x" + need + " (have " + has + ")"));
-            commandBuilder.set("#Mat" + mi + " #Line.Style.TextColor", ok ? "#3d913f" : "#962f2f");
+        if (!hideConstructionDetails) {
+            for (; mi < def.getMaterials().size() && mi < MATERIAL_ROW_CAP; mi++) {
+                var m = def.getMaterials().get(mi);
+                int need = m.getCount();
+                int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
+                boolean ok = completed || has >= need;
+                String itemLabel = materialLabelForUi(lang, m);
+                commandBuilder.set("#Mat" + mi + ".Visible", true);
+                commandBuilder.set("#Mat" + mi + " #Line.TextSpans", Message.raw(itemLabel + " x" + need + " (have " + has + ")"));
+                commandBuilder.set("#Mat" + mi + " #Line.Style.TextColor", ok ? "#3d913f" : "#962f2f");
+            }
         }
         for (; mi < MATERIAL_ROW_CAP; mi++) {
             commandBuilder.set("#Mat" + mi + ".Visible", false);
@@ -153,7 +197,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set("#PickUpPlotButton.Disabled", !canPickupPlot);
 
         commandBuilder.set("#TownNeedsButton.Visible", managementUi && completed);
-        if (managementUi && completed) {
+        if (managementUi && completed && plotTabActive) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 "#TownNeedsButton",
@@ -165,10 +209,9 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean showHouseResident =
             managementUi
                 && completed
-                && def != null
                 && AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getId());
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
-        if (showHouseResident) {
+        if (showHouseResident && plotTabActive) {
             commandBuilder.set(
                 "#HouseResidentHint.TextSpans",
                 Message.raw("Assign a villager who lives here (completes their house quest when it matches).")
@@ -235,10 +278,280 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             new EventData().append("Action", "PickupPlot"),
             false
         );
+
+        if (managementUi) {
+            bindManagementTabEvents(eventBuilder);
+            if (managementTab == 1) {
+                buildManagementPlayersTab(ref, store, commandBuilder, eventBuilder);
+            } else {
+                commandBuilder.clear(MEMBER_ROWS);
+            }
+        }
+    }
+
+    private void bindManagementTabEvents(@Nonnull UIEventBuilder eventBuilder) {
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabPlotButton",
+            new EventData().append("Action", "SwitchTabPlot"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabPlayersButton",
+            new EventData().append("Action", "SwitchTabPlayers"),
+            false
+        );
+    }
+
+    private void buildManagementPlayersTab(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder
+    ) {
+        World world = store.getExternalData().getWorld();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (plugin == null || uc == null) {
+            commandBuilder.set("#PlayersHint.TextSpans", Message.raw("Could not load player data."));
+            commandBuilder.clear(MEMBER_ROWS);
+            return;
+        }
+        TownRecord town = resolveManagementTown(store);
+        if (town == null) {
+            commandBuilder.set("#PlayersHint.TextSpans", Message.raw("Town data not found for this block."));
+            commandBuilder.clear(MEMBER_ROWS);
+            return;
+        }
+        UUID viewer = uc.getUuid();
+        boolean viewerOwner = town.getOwnerUuid().equals(viewer);
+        commandBuilder.set(
+            "#PlayersHint.TextSpans",
+            viewerOwner
+                ? Message.translation("server.aetherhaven.ui.plotmanagement.playersHint")
+                : Message.translation("server.aetherhaven.ui.plotmanagement.playersHintReadOnly")
+        );
+        commandBuilder.set("#InviteLabel.Visible", viewerOwner);
+        commandBuilder.set("#InvitePlayerInput.Visible", viewerOwner);
+        commandBuilder.set("#InviteSendButton.Visible", viewerOwner);
+        if (viewerOwner) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#InviteSendButton",
+                new EventData().append("Action", "InviteMember").append("@InviteName", "#InvitePlayerInput.Value"),
+                false
+            );
+        }
+
+        commandBuilder.clear(MEMBER_ROWS);
+        ObjectArrayList<DropdownEntryInfo> roleEntries = new ObjectArrayList<>();
+        for (TownMemberRole r : TownMemberRole.values()) {
+            roleEntries.add(new DropdownEntryInfo(LocalizableString.fromString(r.name()), r.name()));
+        }
+
+        List<UUID> ordered = new ArrayList<>();
+        ordered.add(town.getOwnerUuid());
+        List<UUID> mem = new ArrayList<>(town.getMemberPlayerUuids());
+        mem.sort(Comparator.comparing(u -> TownPlayerLookup.displayNameForUuid(world, u), String.CASE_INSENSITIVE_ORDER));
+        ordered.addAll(mem);
+
+        int n = Math.min(ordered.size(), MAX_MEMBER_ROWS);
+        for (int i = 0; i < n; i++) {
+            UUID pid = ordered.get(i);
+            boolean isOwner = pid.equals(town.getOwnerUuid());
+            String rowPath = MEMBER_ROWS + "[" + i + "]";
+            commandBuilder.append(MEMBER_ROWS, "Aetherhaven/TownMemberRow.ui");
+            String display = TownPlayerLookup.displayNameForUuid(world, pid);
+            commandBuilder.set(rowPath + " #NameLabel.TextSpans", Message.raw(display));
+            if (isOwner) {
+                commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
+                commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.translation("server.aetherhaven.ui.plotmanagement.roleOwner"));
+                commandBuilder.set(rowPath + " #RoleDropdown.Visible", false);
+                commandBuilder.set(rowPath + " #KickButton.Visible", false);
+            } else {
+                TownMemberRole role = town.getMemberRoleOrNull(pid);
+                String roleName = role != null ? role.name() : TownMemberRole.BOTH.name();
+                if (viewerOwner) {
+                    commandBuilder.set(rowPath + " #RoleReadOnly.Visible", false);
+                    commandBuilder.set(rowPath + " #RoleDropdown.Visible", true);
+                    commandBuilder.set(rowPath + " #RoleDropdown.Entries", roleEntries);
+                    commandBuilder.set(rowPath + " #RoleDropdown.Value", roleName);
+                    commandBuilder.set(rowPath + " #KickButton.Visible", true);
+                    eventBuilder.addEventBinding(
+                        CustomUIEventBindingType.ValueChanged,
+                        rowPath + " #RoleDropdown",
+                        new EventData()
+                            .append("Action", "ChangeMemberRole")
+                            .append("@MemberUuid", pid.toString())
+                            .append("@Role", rowPath + " #RoleDropdown.Value"),
+                        false
+                    );
+                    eventBuilder.addEventBinding(
+                        CustomUIEventBindingType.Activating,
+                        rowPath + " #KickButton",
+                        new EventData().append("Action", "KickMember").append("@MemberUuid", pid.toString()),
+                        false
+                    );
+                } else {
+                    commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
+                    commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.raw(roleName));
+                    commandBuilder.set(rowPath + " #RoleDropdown.Visible", false);
+                    commandBuilder.set(rowPath + " #KickButton.Visible", false);
+                }
+            }
+        }
+    }
+
+    @Nullable
+    private TownRecord resolveManagementTown(@Nonnull Store<EntityStore> store) {
+        if (!managementUi) {
+            return null;
+        }
+        Store<ChunkStore> cs = blockRef.getStore();
+        ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+        if (mb == null || mb.getTownId() == null || mb.getTownId().isBlank()) {
+            return null;
+        }
+        try {
+            UUID tid = UUID.fromString(mb.getTownId().trim());
+            AetherhavenPlugin p = AetherhavenPlugin.get();
+            if (p == null) {
+                return null;
+            }
+            World world = store.getExternalData().getWorld();
+            return AetherhavenWorldRegistries.getOrCreateTownManager(world, p).getTown(tid);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("SwitchTabPlot")) {
+            if (!managementUi) {
+                return;
+            }
+            managementTab = 0;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("SwitchTabPlayers")) {
+            if (!managementUi) {
+                return;
+            }
+            managementTab = 1;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("ChangeMemberRole")) {
+            if (!managementUi || data.memberUuid == null || data.role == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            TownRecord town = resolveManagementTown(store);
+            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+                return;
+            }
+            UUID memberId;
+            try {
+                memberId = UUID.fromString(data.memberUuid.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            TownMemberRole role;
+            try {
+                role = TownMemberRole.valueOf(data.role.trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String err = TownMembershipActions.trySetMemberRole(world, tm, town, playerRef, memberId, role);
+            if (err != null) {
+                playerRef.sendMessage(Message.raw(err));
+            }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("KickMember")) {
+            if (!managementUi || data.memberUuid == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            TownRecord town = resolveManagementTown(store);
+            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+                return;
+            }
+            UUID memberId;
+            try {
+                memberId = UUID.fromString(data.memberUuid.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String err = TownMembershipActions.tryKickMemberUuid(world, tm, town, playerRef, memberId);
+            if (err != null) {
+                playerRef.sendMessage(Message.raw(err));
+            }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("InviteMember")) {
+            if (!managementUi || data.inviteName == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            TownRecord town = resolveManagementTown(store);
+            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String err = TownMembershipActions.tryInviteMember(world, tm, town, uc.getUuid(), playerRef, data.inviteName);
+            if (err != null) {
+                playerRef.sendMessage(Message.raw(err));
+            }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("AssignHouseResident")) {
             if (!managementUi) {
                 return;
@@ -330,8 +643,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             World world = store.getExternalData().getWorld();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
-            if (town == null) {
+            TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+            if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
                 sendBuildError(store, ref, "Only the town owner can pick up this plot.");
                 return;
             }
@@ -553,7 +866,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (uc == null) {
             return PlotInstanceState.BLUEPRINTING;
         }
-        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
             return PlotInstanceState.BLUEPRINTING;
         }
@@ -674,11 +987,23 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
+            .append(new KeyedCodec<>("@MemberUuid", Codec.STRING), (d, v) -> d.memberUuid = v, d -> d.memberUuid)
+            .add()
+            .append(new KeyedCodec<>("@Role", Codec.STRING), (d, v) -> d.role = v, d -> d.role)
+            .add()
+            .append(new KeyedCodec<>("@InviteName", Codec.STRING), (d, v) -> d.inviteName = v, d -> d.inviteName)
+            .add()
             .append(new KeyedCodec<>("@HouseResidentUuid", Codec.STRING), (d, v) -> d.houseResidentUuid = v, d -> d.houseResidentUuid)
             .add()
             .build();
 
         private String action;
+        @Nullable
+        private String memberUuid;
+        @Nullable
+        private String role;
+        @Nullable
+        private String inviteName;
         private String houseResidentUuid;
     }
 }

@@ -68,9 +68,17 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             commandBuilder.clear(ROWS);
             return;
         }
-        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
+        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
             commandBuilder.set("#Hint.TextSpans", Message.raw("You need a town in this world to track quests."));
+            commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
+            commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
+            commandBuilder.clear(ROWS);
+            selectedQuestId = null;
+            return;
+        }
+        if (!town.playerHasQuestPermission(uc.getUuid())) {
+            commandBuilder.set("#Hint.TextSpans", Message.raw("You do not have permission to manage town quests."));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -152,8 +160,8 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
         if (uc == null) {
             return;
         }
-        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
-        if (town == null) {
+        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+        if (town == null || !town.playerHasQuestPermission(uc.getUuid())) {
             return;
         }
         JsonObject a = new JsonObject();

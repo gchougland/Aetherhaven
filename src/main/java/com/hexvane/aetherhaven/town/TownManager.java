@@ -8,8 +8,11 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -53,8 +56,10 @@ public final class TownManager {
             for (TownRecord t : file.getTowns()) {
                 t.migrateLegacyPlotFootprintsIfNeeded();
                 t.migrateInnFieldsIfNeeded();
+                t.migrateTownSocialFieldsIfNeeded();
                 byTownId.put(t.getTownId(), t);
             }
+            dedupeDisplayNamesAfterLoad();
             LOGGER.atInfo().log("Aetherhaven loaded %s towns for world %s from %s", byTownId.size(), world.getName(), saveFile);
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load towns for world %s", world.getName());
@@ -86,6 +91,157 @@ public final class TownManager {
         return null;
     }
 
+    /**
+     * Town this player belongs to in this world: as owner or as a listed member (one affiliation per world).
+     */
+    @Nullable
+    public TownRecord findTownForPlayerInWorld(@Nonnull UUID playerUuid) {
+        for (TownRecord t : byTownId.values()) {
+            if (!world.getName().equals(t.getWorldName())) {
+                continue;
+            }
+            if (t.getOwnerUuid().equals(playerUuid)) {
+                return t;
+            }
+            if (t.isMemberPlayer(playerUuid)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /** True if the player is owner or member of any town in this world. */
+    public boolean isPlayerAffiliatedInWorld(@Nonnull UUID playerUuid) {
+        return findTownForPlayerInWorld(playerUuid) != null;
+    }
+
+    @Nullable
+    public TownRecord findTownOwningPlot(@Nonnull UUID plotId) {
+        for (TownRecord t : byTownId.values()) {
+            if (t.findPlotById(plotId) != null) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public TownRecord findTownWithPendingInviteFor(@Nonnull UUID inviteeUuid) {
+        for (TownRecord t : byTownId.values()) {
+            if (!world.getName().equals(t.getWorldName())) {
+                continue;
+            }
+            if (t.findPendingInvite(inviteeUuid) != null) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public TownRecord findTownByDisplayName(@Nonnull String displayName) {
+        String want = displayName.trim();
+        if (want.isEmpty()) {
+            return null;
+        }
+        String lower = want.toLowerCase(Locale.ROOT);
+        for (TownRecord t : byTownId.values()) {
+            if (!world.getName().equals(t.getWorldName())) {
+                continue;
+            }
+            if (t.getDisplayName().toLowerCase(Locale.ROOT).equals(lower)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public boolean isDisplayNameAvailable(@Nonnull String displayName, @Nullable UUID excludeTownId) {
+        String want = displayName.trim();
+        if (want.isEmpty()) {
+            return false;
+        }
+        String lower = want.toLowerCase(Locale.ROOT);
+        for (TownRecord t : byTownId.values()) {
+            if (!world.getName().equals(t.getWorldName())) {
+                continue;
+            }
+            if (excludeTownId != null && t.getTownId().equals(excludeTownId)) {
+                continue;
+            }
+            if (t.getDisplayName().toLowerCase(Locale.ROOT).equals(lower)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void ensureDisplayNameUnique(@Nonnull TownRecord record) {
+        if (!isDisplayNameAvailable(record.getDisplayName(), record.getTownId())) {
+            throw new IllegalArgumentException("That town name is already used in this world.");
+        }
+    }
+
+    /**
+     * If saves ever contain two towns with the same display name (case-insensitive), rename duplicates so
+     * {@link #findTownByDisplayName} and invite/command targeting stay unambiguous.
+     */
+    private void dedupeDisplayNamesAfterLoad() {
+        List<TownRecord> inWorld = new ArrayList<>();
+        for (TownRecord t : byTownId.values()) {
+            if (world.getName().equals(t.getWorldName())) {
+                inWorld.add(t);
+            }
+        }
+        Map<String, List<TownRecord>> byLower = new HashMap<>();
+        for (TownRecord t : inWorld) {
+            String key = t.getDisplayName().toLowerCase(Locale.ROOT);
+            byLower.computeIfAbsent(key, k -> new ArrayList<>()).add(t);
+        }
+        boolean changed = false;
+        for (List<TownRecord> group : byLower.values()) {
+            if (group.size() <= 1) {
+                continue;
+            }
+            group.sort(Comparator.comparing(TownRecord::getTownId));
+            for (int i = 1; i < group.size(); i++) {
+                TownRecord t = group.get(i);
+                String base = t.getDisplayName().trim();
+                if (base.isEmpty()) {
+                    base = "Town";
+                }
+                boolean renamed = false;
+                for (int suffix = 2; suffix < 1_000_000; suffix++) {
+                    String candidate = base + " (" + suffix + ")";
+                    if (isDisplayNameAvailable(candidate, t.getTownId())) {
+                        LOGGER.atWarning().log(
+                            "Renamed duplicate town display name to \"%s\" (town id %s) in world %s",
+                            candidate,
+                            t.getTownId(),
+                            world.getName()
+                        );
+                        t.setDisplayName(candidate);
+                        changed = true;
+                        renamed = true;
+                        break;
+                    }
+                }
+                if (!renamed) {
+                    String fallback = "Town " + t.getTownId();
+                    LOGGER.atSevere().log(
+                        "Could not find a free duplicate suffix for town in world %s; using unique id-based name",
+                        world.getName()
+                    );
+                    t.setDisplayName(fallback);
+                    changed = true;
+                }
+            }
+        }
+        if (changed) {
+            saveToDisk();
+        }
+    }
+
     @Nullable
     public TownRecord findTownContainingChunk(int chunkX, int chunkZ, @Nonnull UUID ownerUuid) {
         TownRecord owned = findTownForOwnerInWorld(ownerUuid);
@@ -112,13 +268,40 @@ public final class TownManager {
     }
 
     public void putTown(@Nonnull TownRecord record) {
+        record.migrateTownSocialFieldsIfNeeded();
+        ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
         saveToDisk();
     }
 
     public void updateTown(@Nonnull TownRecord record) {
+        record.migrateTownSocialFieldsIfNeeded();
+        ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
         saveToDisk();
+    }
+
+    /** Rename without throwing; caller shows message on failure. */
+    public boolean trySetDisplayName(@Nonnull TownRecord record, @Nonnull String newName) {
+        String trimmed = newName.trim();
+        if (trimmed.isEmpty()) {
+            return false;
+        }
+        String old = record.getDisplayName();
+        if (trimmed.toLowerCase(Locale.ROOT).equals(old.toLowerCase(Locale.ROOT))) {
+            if (!trimmed.equals(old)) {
+                record.setDisplayName(trimmed);
+                updateTown(record);
+            }
+            return true;
+        }
+        record.setDisplayName(trimmed);
+        if (!isDisplayNameAvailable(record.getDisplayName(), record.getTownId())) {
+            record.setDisplayName(old);
+            return false;
+        }
+        updateTown(record);
+        return true;
     }
 
     @Nonnull

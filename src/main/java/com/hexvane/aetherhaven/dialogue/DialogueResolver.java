@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -24,12 +25,24 @@ public final class DialogueResolver {
     public static final String KIND_INNKEEPER = "innkeeper";
     public static final String TREE_INN_WELCOME = "aetherhaven_inn_welcome";
 
+    public static final String VISITOR_DEFAULT = "aetherhaven_visitor_generic";
+    public static final String VISITOR_ELDER = "aetherhaven_visitor_elder";
+    public static final String VISITOR_INN = "aetherhaven_visitor_inn";
+
     private final Map<String, String> kindToTree = new HashMap<>();
+    private final Map<String, String> kindToVisitorTree = new HashMap<>();
 
     public DialogueResolver() {
         kindToTree.put(KIND_TEST_VILLAGER, TREE_TEST);
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
+        kindToVisitorTree.put(KIND_TEST_VILLAGER, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_ELDER_LYREN, VISITOR_ELDER);
+        kindToVisitorTree.put(KIND_INNKEEPER, VISITOR_INN);
+        kindToVisitorTree.put("merchant", VISITOR_DEFAULT);
+        kindToVisitorTree.put("blacksmith", VISITOR_DEFAULT);
+        kindToVisitorTree.put("farmer", VISITOR_DEFAULT);
+        kindToVisitorTree.put("priestess", VISITOR_DEFAULT);
     }
 
     @Nonnull
@@ -49,8 +62,17 @@ public final class DialogueResolver {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null && npcRef != null && npcRef.isValid()) {
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
-            TownRecord town = VillagerReputationService.findTownForPlayer(playerRef, store, tm);
             UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+            TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (pu != null && binding != null) {
+                TownRecord npcTown = tm.getTown(binding.getTownId());
+                boolean outsider = npcTown == null || !npcTown.hasMemberOrOwner(pu.getUuid());
+                if (outsider) {
+                    String vTree = kindToVisitorTree.getOrDefault(kind, VISITOR_DEFAULT);
+                    return new ResolvedDialogue(vTree, "root");
+                }
+            }
+            TownRecord town = VillagerReputationService.findTownForPlayer(playerRef, store, tm);
             UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
             if (town != null && pu != null && nu != null) {
                 String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(town, pu.getUuid(), nu.getUuid());

@@ -48,7 +48,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
                 return;
             }
             TownRecord town =
-                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
+                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
                 playerRef.sendMessage(Message.raw("No town for you in this world."));
                 return;

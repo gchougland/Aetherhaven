@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 480);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.plotconstruction.title;
+      Label #ShellTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: %server.aetherhaven.ui.plotconstruction.title;
       }
     }
 
@@ -16,91 +18,146 @@ $C.@PageOverlay {
       LayoutMode: Top;
       Padding: (Full: 16);
 
-      Label #BuildingTitle {
-        Anchor: (Bottom: 8);
-        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-      }
+      Group #ManagementTabStrip {
+        LayoutMode: Left;
+        Visible: false;
+        Anchor: (Bottom: 14, Left: 0, Right: 0);
+        Padding: (Horizontal: 4, Vertical: 6);
+        Background: #1e2430(0.85);
 
-      Label #Description {
-        Anchor: (Left: 0, Right: 0, Bottom: 12);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true);
-      }
+        $C.@TextButton #TabPlotButton {
+          Text: %server.aetherhaven.ui.plotmanagement.tabPlot;
+          FlexWeight: 1;
+          Anchor: (Right: 4, Height: 36);
+        }
 
-      Group #VillagerRow {
-        LayoutMode: Top;
-        Anchor: (Bottom: 12);
-
-        Label #VillagerLabel {
-          Style: $C.@DefaultLabelStyle;
+        $C.@TextButton #TabPlayersButton {
+          Text: %server.aetherhaven.ui.plotmanagement.tabPlayers;
+          FlexWeight: 1;
+          Anchor: (Left: 4, Height: 36);
         }
       }
 
-      Label #MaterialsHeader {
-        Text: %server.aetherhaven.ui.plotconstruction.materials;
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-      }
-
-      Group #Mat0 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat1 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat2 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat3 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat4 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat5 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat6 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat7 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat8 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-      Group #Mat9 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
-
-      Group {
-        Anchor: (Vertical: 12, Height: 1);
-        Background: #5e512c(0.0);
-      }
-
-      $C.@TextButton #TownNeedsButton {
-        Text: %server.aetherhaven.ui.plotconstruction.townNeeds;
-        Visible: false;
-        Anchor: (Bottom: 8);
-      }
-
-      Group #HouseResidentRow {
+      Group #PlotTabContent {
         LayoutMode: Top;
-        Visible: false;
-        Anchor: (Bottom: 12);
 
-        Label #HouseResidentHint {
+        Label #BuildingTitle {
+          Anchor: (Bottom: 8);
+          Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        }
+
+        Label #Description {
+          Anchor: (Left: 0, Right: 0, Bottom: 12);
           Style: (...$C.@DefaultLabelStyle, Wrap: true);
-          Anchor: (Bottom: 8);
         }
 
-        Group #HouseResidentDropdown {
-          LayoutMode: Left;
-          Anchor: (Bottom: 8);
+        Group #VillagerRow {
+          LayoutMode: Top;
+          Anchor: (Bottom: 12);
 
-          Label {
-            Text: %server.aetherhaven.ui.plotconstruction.houseResident;
-            Anchor: (Top: 6, Left: 6, Right: 16);
+          Label #VillagerLabel {
             Style: $C.@DefaultLabelStyle;
           }
+        }
 
-          $C.@DropdownBox #Input {
-            @Anchor = (Left: 0, Right: 16);
+        Label #MaterialsHeader {
+          Text: %server.aetherhaven.ui.plotconstruction.materials;
+          Anchor: (Bottom: 6);
+          Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        }
+
+        Group #Mat0 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat1 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat2 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat3 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat4 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat5 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat6 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat7 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat8 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+        Group #Mat9 { LayoutMode: Top; Anchor: (Bottom: 4); Label #Line { Style: $C.@DefaultLabelStyle; } }
+
+        Group {
+          Anchor: (Vertical: 12, Height: 1);
+          Background: #5e512c(0.0);
+        }
+
+        $C.@TextButton #TownNeedsButton {
+          Text: %server.aetherhaven.ui.plotconstruction.townNeeds;
+          Visible: false;
+          Anchor: (Bottom: 8);
+        }
+
+        Group #HouseResidentRow {
+          LayoutMode: Top;
+          Visible: false;
+          Anchor: (Bottom: 12);
+
+          Label #HouseResidentHint {
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Anchor: (Bottom: 8);
+          }
+
+          Group #HouseResidentDropdown {
+            LayoutMode: Left;
+            Anchor: (Bottom: 8);
+
+            Label {
+              Text: %server.aetherhaven.ui.plotconstruction.houseResident;
+              Anchor: (Top: 6, Left: 6, Right: 16);
+              Style: $C.@DefaultLabelStyle;
+            }
+
+            $C.@DropdownBox #Input {
+              @Anchor = (Left: 0, Right: 16);
+            }
+          }
+
+          $C.@TextButton #AssignHouseResidentButton {
+            Text: %server.aetherhaven.ui.plotconstruction.assignHouseResident;
           }
         }
 
-        $C.@TextButton #AssignHouseResidentButton {
-          Text: %server.aetherhaven.ui.plotconstruction.assignHouseResident;
+        $C.@TextButton #PickUpPlotButton {
+          Text: %server.aetherhaven.ui.plotconstruction.pickUpPlot;
+          Visible: false;
+          Anchor: (Bottom: 8);
+        }
+
+        $C.@TextButton #BuildButton {
+          Text: %server.aetherhaven.ui.plotconstruction.build;
         }
       }
 
-      $C.@TextButton #PickUpPlotButton {
-        Text: %server.aetherhaven.ui.plotconstruction.pickUpPlot;
+      Group #PlayersTabContent {
+        LayoutMode: Top;
         Visible: false;
-        Anchor: (Bottom: 8);
-      }
 
-      $C.@TextButton #BuildButton {
-        Text: %server.aetherhaven.ui.plotconstruction.build;
+        Label #PlayersHint {
+          Anchor: (Bottom: 8);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true);
+          Text: %server.aetherhaven.ui.plotmanagement.playersHint;
+        }
+
+        Group #MemberRows {
+          LayoutMode: Top;
+        }
+
+        Label #InviteLabel {
+          Text: %server.aetherhaven.ui.plotmanagement.inviteLabel;
+          Anchor: (Top: 12, Bottom: 6);
+          Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+        }
+
+        $C.@TextField #InvitePlayerInput {
+          Anchor: (Top: 4, Height: 44, Left: 0, Right: 0);
+          PlaceholderText: %server.aetherhaven.ui.plotmanagement.invitePlaceholder;
+        }
+
+        $C.@TextButton #InviteSendButton {
+          Text: %server.aetherhaven.ui.plotmanagement.inviteSend;
+          Anchor: (Top: 14);
+        }
       }
     }
   }

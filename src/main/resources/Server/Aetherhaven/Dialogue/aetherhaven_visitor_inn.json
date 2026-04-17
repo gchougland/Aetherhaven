@@ -1,0 +1,11 @@
+{
+  "id": "aetherhaven_visitor_inn",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "Innkeeper",
+      "text": "The hearth is warm, but the ledger is for townsfolk and their guests. Come back when you are invited.",
+      "choices": [{ "text": "Fair enough.", "next": null, "actions": [{ "type": "close" }] }]
+    }
+  }
+}

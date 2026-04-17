@@ -26,6 +26,9 @@ public final class AetherhavenConstants {
      */
     public static final String PERMISSION_POI_TOOL = "aetherhaven.poi.tool";
 
+    /** Bypass town ownership checks for commands (grant to moderators). Creative mode also bypasses. */
+    public static final String PERMISSION_TOWN_ADMIN = "aetherhaven.town.admin";
+
     /** Non-block token: player must hold in inventory to select this plot type in the placement tool. */
     public static final String PLOT_TOKEN_INN_PLACEHOLDER = "Aetherhaven_Plot_Token_Inn";
 

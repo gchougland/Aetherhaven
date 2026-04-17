@@ -43,7 +43,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
         if (uc == null) {
             return null;
         }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(uc.getUuid());
+        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
     }
 
     @Nonnull

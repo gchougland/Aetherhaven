@@ -142,6 +142,21 @@ public final class TownRecord {
     @SerializedName("residentNpcRecords")
     private List<ResidentNpcRecord> residentNpcRecords = new ArrayList<>();
 
+    /**
+     * Player-visible name; unique per world (case-insensitive). Set at charter placement (random default) or charter UI.
+     */
+    @Nullable
+    @SerializedName("displayName")
+    private String displayName;
+
+    /** Non-owner members: player UUID string -> {@link TownMemberRole} name. */
+    @Nullable
+    @SerializedName("memberRoles")
+    private Map<String, String> memberRoles;
+
+    @SerializedName("pendingInvites")
+    private List<TownPendingInvite> pendingInvites = new ArrayList<>();
+
     public TownRecord() {}
 
     public TownRecord(
@@ -217,6 +232,21 @@ public final class TownRecord {
             residentNpcRecords = new ArrayList<>();
         }
         migrateVillagerReputationIfNeeded();
+        migrateTownSocialFieldsIfNeeded();
+    }
+
+    public void migrateTownSocialFieldsIfNeeded() {
+        if (displayName == null || displayName.isBlank()) {
+            String hex = townId != null ? townId.replace("-", "") : "town";
+            String suffix = hex.length() >= 4 ? hex.substring(0, 4) : hex;
+            displayName = "Town " + suffix;
+        }
+        if (memberRoles == null) {
+            memberRoles = new LinkedHashMap<>();
+        }
+        if (pendingInvites == null) {
+            pendingInvites = new ArrayList<>();
+        }
     }
 
     public void migrateVillagerReputationIfNeeded() {
@@ -642,5 +672,118 @@ public final class TownRecord {
 
     public void setTreasuryLastTaxEpochDay(@Nullable Long epochDay) {
         this.treasuryLastTaxEpochDay = epochDay;
+    }
+
+    @Nonnull
+    public String getDisplayName() {
+        migrateTownSocialFieldsIfNeeded();
+        return displayName != null && !displayName.isBlank() ? displayName.trim() : "Town";
+    }
+
+    public void setDisplayName(@Nonnull String name) {
+        this.displayName = name.trim();
+    }
+
+    @Nonnull
+    public Map<String, String> getMemberRolesRaw() {
+        migrateTownSocialFieldsIfNeeded();
+        return memberRoles;
+    }
+
+    public boolean isMemberPlayer(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return false;
+        }
+        return getMemberRolesRaw().containsKey(playerUuid.toString());
+    }
+
+    public boolean hasMemberOrOwner(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        return getMemberRolesRaw().containsKey(playerUuid.toString());
+    }
+
+    /**
+     * Owner is not stored in the member map; returns {@link TownMemberRole#BOTH} as a sentinel for "full access".
+     * For anyone who is not the owner and not in {@link #getMemberRolesRaw()}, returns null.
+     */
+    @Nullable
+    public TownMemberRole getMemberRoleOrNull(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return TownMemberRole.BOTH;
+        }
+        String s = getMemberRolesRaw().get(playerUuid.toString());
+        if (s == null) {
+            return null;
+        }
+        return TownMemberRole.fromSerialized(s);
+    }
+
+    /** Owner always true for both; members use {@link TownMemberRole}. */
+    public boolean playerHasBuildPermission(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        TownMemberRole r = getMemberRoleOrNull(playerUuid);
+        return r != null && r.allowsBuild();
+    }
+
+    /** Owner always true for both; members use {@link TownMemberRole}. */
+    public boolean playerHasQuestPermission(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        TownMemberRole r = getMemberRoleOrNull(playerUuid);
+        return r != null && r.allowsQuest();
+    }
+
+    public void putMember(@Nonnull UUID playerUuid, @Nonnull TownMemberRole role) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return;
+        }
+        getMemberRolesRaw().put(playerUuid.toString(), role.name());
+    }
+
+    public boolean removeMember(@Nonnull UUID playerUuid) {
+        return getMemberRolesRaw().remove(playerUuid.toString()) != null;
+    }
+
+    @Nonnull
+    public List<TownPendingInvite> getPendingInvites() {
+        migrateTownSocialFieldsIfNeeded();
+        return pendingInvites;
+    }
+
+    public void addPendingInvite(@Nonnull TownPendingInvite invite) {
+        UUID invitee = invite.getInviteeUuid();
+        getPendingInvites().removeIf(p -> p.getInviteeUuid().equals(invitee));
+        getPendingInvites().add(invite);
+    }
+
+    public boolean removePendingInviteForInvitee(@Nonnull UUID inviteeUuid) {
+        return getPendingInvites().removeIf(p -> p.getInviteeUuid().equals(inviteeUuid));
+    }
+
+    @Nullable
+    public TownPendingInvite findPendingInvite(@Nonnull UUID inviteeUuid) {
+        for (TownPendingInvite p : getPendingInvites()) {
+            if (p.getInviteeUuid().equals(inviteeUuid)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    @Nonnull
+    public List<UUID> getMemberPlayerUuids() {
+        List<UUID> out = new ArrayList<>();
+        for (String k : getMemberRolesRaw().keySet()) {
+            try {
+                out.add(UUID.fromString(k));
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return out;
     }
 }

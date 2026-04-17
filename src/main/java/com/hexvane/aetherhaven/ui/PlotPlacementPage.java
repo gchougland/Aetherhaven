@@ -456,9 +456,13 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
             sendError(store, ref, "You need a town (place a charter) first.");
+            return false;
+        }
+        if (!town.playerHasBuildPermission(uc.getUuid())) {
+            sendError(store, ref, "You do not have permission to place buildings for this town.");
             return false;
         }
         ConstructionDefinition def = plugin.getConstructionCatalog().get(session.getConstructionId());
@@ -645,10 +649,12 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         String placementErr;
         if (town == null) {
             placementErr = "You need a town (place a charter) first.";
+        } else if (!town.playerHasBuildPermission(uc.getUuid())) {
+            placementErr = "You do not have permission to place buildings for this town.";
         } else {
             placementErr = PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), session.getAnchor(), session.getPrefabYaw(), def, plugin);
         }

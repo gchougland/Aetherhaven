@@ -37,6 +37,8 @@ public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
             playerRef.sendMessage(
                 Message.raw(
                     "  "
+                        + t.getDisplayName()
+                        + "  id="
                         + t.getTownId()
                         + " owner="
                         + t.getOwnerUuid()

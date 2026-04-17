@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.dialogue;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,10 +20,23 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     private final World world;
     private final AetherhavenPlugin plugin;
     private final DialogueWorldView base = new DialogueWorldView.DefaultDialogueWorldView();
+    @Nullable
+    private final Ref<EntityStore> contextNpcRef;
 
     public AetherhavenDialogueWorldView(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        this(world, plugin, null);
+    }
+
+    /**
+     * When opening dialogue with an NPC, pass their entity ref so town-scoped conditions use that NPC's town
+     * when the player is a resident (owner or member), not another town the player may own elsewhere.
+     */
+    public AetherhavenDialogueWorldView(
+        @Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nullable Ref<EntityStore> contextNpcRef
+    ) {
         this.world = world;
         this.plugin = plugin;
+        this.contextNpcRef = contextNpcRef;
     }
 
     @Nullable
@@ -31,8 +45,19 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (uuidComp == null) {
             return null;
         }
-        UUID owner = uuidComp.getUuid();
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForOwnerInWorld(owner);
+        UUID playerUuid = uuidComp.getUuid();
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        if (contextNpcRef != null && contextNpcRef.isValid()) {
+            TownVillagerBinding b = store.getComponent(contextNpcRef, TownVillagerBinding.getComponentType());
+            if (b != null) {
+                TownRecord nt = tm.getTown(b.getTownId());
+                if (nt != null && nt.hasMemberOrOwner(playerUuid)) {
+                    return nt;
+                }
+                return null;
+            }
+        }
+        return tm.findTownForPlayerInWorld(playerUuid);
     }
 
     @Override
@@ -136,7 +161,22 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             return false;
         }
         UUID npcUuid = uuidComp.getUuid();
-        TownRecord t = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return false;
+        }
+        UUID playerUuid = pu.getUuid();
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord t;
+        TownVillagerBinding nb = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (nb != null) {
+            t = tm.getTown(nb.getTownId());
+            if (t != null && !t.hasMemberOrOwner(playerUuid)) {
+                t = null;
+            }
+        } else {
+            t = townFor(playerRef, store);
+        }
         return t != null && t.isNpcHomeResidentOnHousePlot(npcUuid);
     }
 }

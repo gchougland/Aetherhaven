@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
@@ -110,8 +111,12 @@ public final class DialogueActionExecutor {
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
         if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null || !town.playerHasQuestPermission(pu.getUuid())) {
             return;
         }
         String qid = id.trim();
@@ -150,8 +155,12 @@ public final class DialogueActionExecutor {
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
         if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null || !town.playerHasQuestPermission(pu.getUuid())) {
             return;
         }
         String qid = id.trim();
@@ -239,13 +248,13 @@ public final class DialogueActionExecutor {
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
         if (town == null) {
             return;
         }
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
-        if (pu == null || nu == null) {
+        if (pu == null || nu == null || !town.playerHasQuestPermission(pu.getUuid())) {
             return;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());
@@ -276,8 +285,12 @@ public final class DialogueActionExecutor {
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForPlayer(playerRef, store, tm);
-        if (town == null) {
+        UUIDComponent puAb = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (puAb == null) {
+            return;
+        }
+        TownRecord town = tm.findTownForPlayerInWorld(puAb.getUuid());
+        if (town == null || !town.playerHasQuestPermission(puAb.getUuid())) {
             return;
         }
         String qid = id.trim();
@@ -294,15 +307,28 @@ public final class DialogueActionExecutor {
     }
 
     @Nullable
-    private static TownRecord townForPlayer(
-        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull TownManager tm
+    private static TownRecord townForDialogue(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownManager tm,
+        @Nullable Ref<EntityStore> npcRef
     ) {
         UUIDComponent uuidComp = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (uuidComp == null) {
             return null;
         }
-        UUID owner = uuidComp.getUuid();
-        return tm.findTownForOwnerInWorld(owner);
+        UUID playerUuid = uuidComp.getUuid();
+        if (npcRef != null && npcRef.isValid()) {
+            TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (b != null) {
+                TownRecord t = tm.getTown(b.getTownId());
+                if (t != null && t.hasMemberOrOwner(playerUuid)) {
+                    return t;
+                }
+                return null;
+            }
+        }
+        return tm.findTownForPlayerInWorld(playerUuid);
     }
 
     private static void giveItem(

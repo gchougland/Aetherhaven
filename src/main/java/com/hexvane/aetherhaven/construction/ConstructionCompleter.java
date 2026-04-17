@@ -50,9 +50,13 @@ public final class ConstructionCompleter {
         @Nonnull Rotation prefabYaw
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForOwnerInWorld(ownerUuid);
+        TownRecord town = tm.findTownOwningPlot(plotId);
         if (town == null) {
-            LOGGER.atWarning().log("Construction complete but no town for owner %s", ownerUuid);
+            LOGGER.atWarning().log("Construction complete but no town owns plot %s", plotId);
+            return;
+        }
+        if (!town.playerHasBuildPermission(ownerUuid)) {
+            LOGGER.atWarning().log("Construction complete but player %s cannot build for this town", ownerUuid);
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);

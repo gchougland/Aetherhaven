@@ -30,8 +30,8 @@ public final class PlotPlacementValidator {
         @Nonnull ConstructionDefinition def,
         @Nonnull AetherhavenPlugin plugin
     ) {
-        if (!town.getOwnerUuid().equals(ownerUuid)) {
-            return "You do not own this town.";
+        if (!town.playerHasBuildPermission(ownerUuid)) {
+            return "You do not have permission to place buildings for this town.";
         }
         if (!townManager.isInsideTerritory(town, signPosition.x, signPosition.z)) {
             return "Plot sign position is outside your town territory.";
