@@ -1,0 +1,37 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Geode.name",
+    "Description": "server.items.Aetherhaven_Geode.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Geode.png",
+  "Model": "Items/Aetherhaven/Geode.blockymodel",
+  "Texture": "Items/Aetherhaven/Geode.png",
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Utility"
+  ],
+  "Set": "Aetherhaven",
+  "Quality": "Uncommon",
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -16
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Misc"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Stone"
+}

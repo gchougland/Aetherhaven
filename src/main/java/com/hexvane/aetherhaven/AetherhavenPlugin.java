@@ -36,6 +36,8 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
+import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
 import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
 import com.hexvane.aetherhaven.farming.SprinklerEpochTickSystem;
 import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
@@ -163,6 +165,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.config.save().join();
             LOGGER.atInfo().log("Created default config at %s", configPath);
         }
+        GeodeLootFiles.ensureDefaultLootFile(this);
 
         PlotSignBlock.register(this.getChunkStoreRegistry());
         ManagementBlock.register(this.getChunkStoreRegistry());
@@ -216,6 +219,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new SprinklerEpochTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
 
         this.getEventRegistry()
@@ -406,6 +410,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
         this.dialogueResolver.registerKind("priestess", "aetherhaven_priestess");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
+    }
+
+    /**
+     * Reloads {@code config.json} from disk and refreshes JSON-backed asset catalogs (constructions, dialogue, quests, villager schedules).
+     */
+    public void reloadConfigsAndAssetCatalogs() {
+        this.config.load().join();
+        this.reloadAetherhavenAssetCatalogs();
     }
 
     private void reloadAetherhavenAssetCatalogs() {

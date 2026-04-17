@@ -307,7 +307,8 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             nodeId = gotoId.trim();
             if (batch.isCloseDialogue()
                 || batch.getOpenBarterShopAfterClose() != null
-                || batch.isOpenBlacksmithRepairAfterClose()) {
+                || batch.isOpenBlacksmithRepairAfterClose()
+                || batch.isOpenGeodePageAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
             }
@@ -316,7 +317,8 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         }
         if (batch.isCloseDialogue()
             || batch.getOpenBarterShopAfterClose() != null
-            || batch.isOpenBlacksmithRepairAfterClose()) {
+            || batch.isOpenBlacksmithRepairAfterClose()
+            || batch.isOpenGeodePageAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
         }
@@ -368,6 +370,20 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                 CombinedItemContainer inv =
                     InventoryComponent.getCombined(st, pref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
                 player.getPageManager().openCustomPage(pref, st, new BlacksmithRepairPage(pr, inv));
+            });
+        } else if (world != null && batch.isOpenGeodePageAfterClose()) {
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new GeodeOpenPage(pr));
             });
         } else {
             close();

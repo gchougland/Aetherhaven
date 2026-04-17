@@ -13,6 +13,12 @@
           "next": null
         },
         {
+          "text": "server.aetherhaven.dialogue.blacksmith.openGeodes",
+          "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
+          "actions": [{ "type": "open_geode_ui" }],
+          "next": null
+        },
+        {
           "text": "You wanted to talk about a house.",
           "condition": {
             "type": "and",

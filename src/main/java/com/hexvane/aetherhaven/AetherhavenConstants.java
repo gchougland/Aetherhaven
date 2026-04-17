@@ -107,8 +107,14 @@ public final class AetherhavenConstants {
     /** Currency item; visuals aligned with vanilla {@code Deco_Treasure}. */
     public static final String ITEM_GOLD_COIN = "Aetherhaven_Gold_Coin";
 
+    /** Rare drop from mining ore blocks; opened at the blacksmith for a fee. */
+    public static final String ITEM_GEODE = "Aetherhaven_Geode";
+
     /** Gold coins to fully restore an item from 0 durability at the blacksmith (scaled down for partial wear). */
     public static final int BLACKSMITH_REPAIR_COST_FULL = 10;
+
+    /** Gold coins charged per geode opened at the blacksmith UI. */
+    public static final int GEODE_OPEN_GOLD_COST = 5;
 
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
 

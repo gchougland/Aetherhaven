@@ -1,0 +1,28 @@
+$C = "../Common.ui";
+
+Group #Row {
+  LayoutMode: Top;
+  Anchor: (Bottom: 6);
+
+  Button #Open {
+    LayoutMode: Left;
+    FlexWeight: 1;
+    Padding: (Horizontal: 8, Vertical: 6);
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
+
+    ItemSlot #GeodeIcon {
+      Anchor: (Width: 40, Height: 40);
+      ShowQualityBackground: true;
+      ShowQuantity: true;
+    }
+
+    Label #Line {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true);
+      FlexWeight: 1;
+    }
+  }
+}

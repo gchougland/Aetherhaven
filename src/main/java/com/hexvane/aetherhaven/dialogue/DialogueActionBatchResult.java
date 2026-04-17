@@ -12,6 +12,8 @@ public final class DialogueActionBatchResult {
 
     private boolean openBlacksmithRepairAfterClose;
 
+    private boolean openGeodePageAfterClose;
+
     public boolean isCloseDialogue() {
         return closeDialogue;
     }
@@ -44,5 +46,13 @@ public final class DialogueActionBatchResult {
 
     public void setOpenBlacksmithRepairAfterClose(boolean openBlacksmithRepairAfterClose) {
         this.openBlacksmithRepairAfterClose = openBlacksmithRepairAfterClose;
+    }
+
+    public boolean isOpenGeodePageAfterClose() {
+        return openGeodePageAfterClose;
+    }
+
+    public void setOpenGeodePageAfterClose(boolean openGeodePageAfterClose) {
+        this.openGeodePageAfterClose = openGeodePageAfterClose;
     }
 }

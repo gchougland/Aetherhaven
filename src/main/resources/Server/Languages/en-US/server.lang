@@ -48,6 +48,10 @@ aetherhaven.ui.plotadmin.construction=Construction
 aetherhaven.ui.plotadmin.give=Give plot sign & close
 
 commands.aetherhaven.root.desc=Aetherhaven mod commands
+commands.aetherhaven.reload.desc=Reload config.json and Aetherhaven JSON catalogs from disk (creative mode)
+commands.aetherhaven.reload.success=Aetherhaven config and asset catalogs reloaded.
+commands.aetherhaven.reload.failure=Reload failed: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven plugin is not loaded.
 commands.aetherhaven.plot.desc=Open plot sign admin UI (pick construction, get item)
 
 commands.aetherhaven.exportskin.desc=Export your avatar skin as a model JSON (Parent: Player)
@@ -108,6 +112,9 @@ items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town ha
 
 items.Aetherhaven_Gold_Coin.name=Gold coin
 items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
+
+items.Aetherhaven_Geode.name=Geode
+items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems, or ore. Pay a blacksmith to crack it open.
 
 barter.aetherhaven_vex.title=Vex's daily stock
 
@@ -174,6 +181,16 @@ aetherhaven.ui.treasury.deposit=Deposit all gold coins
 aetherhaven.ui.treasury.withdraw=Withdraw gold coins
 aetherhaven.ui.treasury.hint=Morning taxes from villagers (Based on their needs) add coins here. Inn visitors do not pay tax.
 
+aetherhaven.ui.geodeopen.title=Open geodes
+aetherhaven.ui.geodeopen.hint=5 gold coins per geode. Click a row to open one. Use Back when you are done.
+aetherhaven.ui.geodeopen.empty=No geodes in your hotbar, armor, or storage.
+
+aetherhaven.geode.row={count} × {itemName}
+aetherhaven.geode.open.insufficientGold=You need 5 gold coins per geode.
+aetherhaven.geode.open.reward=Geode: {amount} × {itemName}
+aetherhaven.geode.open.failed=Could not roll loot; your coins and geode were returned.
+aetherhaven.geode.open.noRoom=Not enough inventory space; your coins and geode were returned.
+
 aetherhaven.ui.plotplacement.title=Plot placement
 aetherhaven.ui.plotplacement.plotType=Building
 aetherhaven.ui.plotplacement.moveLabel=Move
@@ -225,6 +242,7 @@ commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug 
 
 # Dialogue
 aetherhaven.dialogue.blacksmith.repairGear=Fix my gear (pay in gold coins)
+aetherhaven.dialogue.blacksmith.openGeodes=Crack open geodes (5 gold each)
 aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
 aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)

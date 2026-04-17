@@ -80,6 +80,7 @@ public final class DialogueActionExecutor {
                 }
             }
             case "open_blacksmith_repair" -> out.setOpenBlacksmithRepairAfterClose(true);
+            case "open_geode_ui" -> out.setOpenGeodePageAfterClose(true);
             case "give_item" -> giveItem(a, playerRef, store);
             case "unlock_achievement" -> LOGGER.atInfo().log(
                 "[Dialogue stub] unlock_achievement id=%s",

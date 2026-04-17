@@ -1,0 +1,29 @@
+{
+  "entries": [
+    { "itemId": "Ingredient_Crystal_Red", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Blue", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Cyan", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Green", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Pink", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Purple", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_White", "weight": 55, "count": 10 },
+    { "itemId": "Ingredient_Crystal_Yellow", "weight": 55, "count": 10 },
+    { "itemId": "Rock_Gem_Topaz", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Zephyr", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Emerald", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Sapphire", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Ruby", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Diamond", "weight": 35, "count": 1 },
+    { "itemId": "Rock_Gem_Voidstone", "weight": 35, "count": 1 },
+    { "itemId": "Ore_Copper", "weight": 80, "count": 10 },
+    { "itemId": "Ore_Iron", "weight": 80, "count": 10 },
+    { "itemId": "Ore_Gold", "weight": 50, "count": 5 },
+    { "itemId": "Ore_Silver", "weight": 50, "count": 5 },
+    { "itemId": "Ore_Cobalt", "weight": 50, "count": 5 },
+    { "itemId": "Ore_Thorium", "weight": 50, "count": 5 },
+    { "itemId": "Ore_Adamantite", "weight": 25, "count": 3 },
+    { "itemId": "Ore_Mithril", "weight": 12, "count": 1 },
+    { "itemId": "Ore_Onyxium", "weight": 12, "count": 1 },
+    { "itemId": "Ore_Prisma", "weight": 12, "count": 1 }
+  ]
+}

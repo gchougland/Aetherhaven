@@ -3,6 +3,9 @@ package com.hexvane.aetherhaven.config;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.annotation.Nonnull;
 
 /**
@@ -99,6 +102,53 @@ public final class AetherhavenPluginConfig {
                 + "actual tax scales with average villager needs (hunger, energy, fun)."
         )
         .add()
+        .append(
+            new KeyedCodec<>("GeodeDropChancePerOreBreak", Codec.DOUBLE),
+            (o, v) -> o.geodeDropChancePerOreBreak = v,
+            o -> o.geodeDropChancePerOreBreak
+        )
+        .documentation("Probability 0..1 that breaking an ore block also drops one geode (event-driven, not block loot).")
+        .add()
+        .append(
+            new KeyedCodec<>("GeodeOreUseBlocksOresCategory", Codec.BOOLEAN),
+            (o, v) -> o.geodeOreUseBlocksOresCategory = v,
+            o -> o.geodeOreUseBlocksOresCategory
+        )
+        .documentation(
+            "When true, ore blocks include those whose Item has category Blocks.Ores (excluding excluded subcategories). "
+                + "When false, subcategory / gather-type / extra lists only."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("GeodeOreSubcategories", Codec.STRING),
+            (o, v) -> o.geodeOreSubcategories = v != null ? v : "",
+            o -> o.geodeOreSubcategories
+        )
+        .documentation("Comma-separated Item subcategories that count as ore (default: Ore,Ores).")
+        .add()
+        .append(
+            new KeyedCodec<>("GeodeOreExcludedSubcategories", Codec.STRING),
+            (o, v) -> o.geodeOreExcludedSubcategories = v != null ? v : "",
+            o -> o.geodeOreExcludedSubcategories
+        )
+        .documentation(
+            "When using Blocks.Ores category, exclude these subcategories (default: Gem so gem blocks are not 'ore' for geodes)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("GeodeExtraOreGatherTypes", Codec.STRING),
+            (o, v) -> o.geodeExtraOreGatherTypes = v != null ? v : "",
+            o -> o.geodeExtraOreGatherTypes
+        )
+        .documentation("Comma-separated extra block breaking gather types that count (e.g. mod OreFoo).")
+        .add()
+        .append(
+            new KeyedCodec<>("GeodeExtraOreBlockTypeIds", Codec.STRING),
+            (o, v) -> o.geodeExtraOreBlockTypeIds = v != null ? v : "",
+            o -> o.geodeExtraOreBlockTypeIds
+        )
+        .documentation("Comma-separated extra block type ids that always count as ore for geode drops.")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -119,6 +169,20 @@ public final class AetherhavenPluginConfig {
 
     /** Max gold coins per resident per morning tax tick (needs-scaled). */
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
+
+    /** Chance per ore block break to drop an extra geode item. */
+    private double geodeDropChancePerOreBreak = 0.015;
+
+    private boolean geodeOreUseBlocksOresCategory = true;
+
+    /** Comma-separated; default filled in getter if blank. */
+    private String geodeOreSubcategories = "";
+
+    private String geodeOreExcludedSubcategories = "";
+
+    private String geodeExtraOreGatherTypes = "";
+
+    private String geodeExtraOreBlockTypeIds = "";
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -181,6 +245,54 @@ public final class AetherhavenPluginConfig {
     public int getTreasuryMaxGoldTaxPerVillagerPerDay() {
         int v = treasuryMaxGoldTaxPerVillagerPerDay;
         return v > 0 ? v : 10;
+    }
+
+    /** Clamped to [0, 1]. */
+    public double getGeodeDropChancePerOreBreak() {
+        double v = geodeDropChancePerOreBreak;
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    public boolean isGeodeOreUseBlocksOresCategory() {
+        return geodeOreUseBlocksOresCategory;
+    }
+
+    @Nonnull
+    public Set<String> geodeOreSubcategorySet() {
+        return splitCsv(geodeOreSubcategories.isBlank() ? "Ore,Ores" : geodeOreSubcategories);
+    }
+
+    @Nonnull
+    public Set<String> geodeOreExcludedSubcategorySet() {
+        return splitCsv(geodeOreExcludedSubcategories.isBlank() ? "Gem" : geodeOreExcludedSubcategories);
+    }
+
+    @Nonnull
+    public Set<String> geodeExtraOreGatherTypeSet() {
+        return splitCsv(geodeExtraOreGatherTypes);
+    }
+
+    @Nonnull
+    public Set<String> geodeExtraOreBlockTypeIdSet() {
+        return splitCsv(geodeExtraOreBlockTypeIds);
+    }
+
+    @Nonnull
+    private static Set<String> splitCsv(@Nonnull String s) {
+        if (s.isBlank()) {
+            return Collections.emptySet();
+        }
+        LinkedHashSet<String> out = new LinkedHashSet<>();
+        for (String part : s.split(",")) {
+            String t = part.trim();
+            if (!t.isEmpty()) {
+                out.add(t);
+            }
+        }
+        return out;
     }
 
     @Nonnull
