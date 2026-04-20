@@ -6,8 +6,8 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -107,7 +107,7 @@ public final class ConstructionCatalog {
             return;
         }
         String id = def.getId();
-        Path prefabResolved = PrefabStore.get().findAssetPrefabPath(def.getPrefabPath());
+        Path prefabResolved = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabResolved == null) {
             LOGGER.atWarning().log(
                 "Construction %s prefabPath '%s' not found in asset packs (may load later) (%s)",

@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -37,7 +38,6 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
-import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
@@ -784,35 +784,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
     @Nullable
     private static Path resolvePrefabAssetPath(@Nullable String key) {
-        if (key == null || key.isBlank()) {
-            return null;
-        }
-        String k = key.trim();
-        PrefabStore ps = PrefabStore.get();
-        Path p = ps.findAssetPrefabPath(k);
-        if (p != null) {
-            return p;
-        }
-        if (!k.endsWith(".prefab.json")) {
-            p = ps.findAssetPrefabPath(k + ".prefab.json");
-            if (p != null) {
-                return p;
-            }
-        }
-        String dotted = k.replace('.', '/');
-        if (!dotted.equals(k)) {
-            p = ps.findAssetPrefabPath(dotted);
-            if (p != null) {
-                return p;
-            }
-            if (!dotted.endsWith(".prefab.json")) {
-                p = ps.findAssetPrefabPath(dotted + ".prefab.json");
-                if (p != null) {
-                    return p;
-                }
-            }
-        }
-        return null;
+        return PrefabResolveUtil.resolvePrefabPath(key);
     }
 
     @Nullable
