@@ -4,7 +4,7 @@
     "Description": "server.items.Aetherhaven_Geode_Anvil.description"
   },
   "Recipe": {
-    "TimeSeconds": 5,
+    "TimeSeconds": 0,
     "KnowledgeRequired": true,
     "Input": [
       {

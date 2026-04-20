@@ -11,6 +11,8 @@ import javax.annotation.Nonnull;
 /**
  * Loaded from the plugin data directory as {@code config.json}.
  * On first run, {@code AetherhavenPlugin} writes {@code config.json} with these defaults if the file is absent.
+ * When the file already exists, startup merges in any missing keys from the current plugin defaults so new
+ * options appear without discarding existing settings.
  */
 public final class AetherhavenPluginConfig {
     public static final BuilderCodec<AetherhavenPluginConfig> CODEC = BuilderCodec.builder(AetherhavenPluginConfig.class, AetherhavenPluginConfig::new)
@@ -90,7 +92,10 @@ public final class AetherhavenPluginConfig {
             (o, v) -> o.villagerScheduleDebugLog = v,
             o -> o.villagerScheduleDebugLog
         )
-        .documentation("Logs schedule segment resolution and preferred plot updates.")
+        .documentation(
+            "When true with VillagerScheduleEnabled, emits villager schedule diagnostics to the server log at INFO "
+                + "(never to players). Unresolved-plot messages are limited to once per in-game hour per villager."
+        )
         .add()
         .append(
             new KeyedCodec<>("TreasuryMaxGoldTaxPerVillagerPerDay", Codec.INTEGER),

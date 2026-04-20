@@ -116,6 +116,29 @@ public final class VillagerScheduleResolver {
     /**
      * Resolves symbolic location to a plot UUID. Skipped segments return {@link VillagerScheduleResolveOutcome#skip()}.
      */
+    /**
+     * Explains why {@link #resolvePlot} returned no plot (for server logs). Not for in-game chat.
+     */
+    @Nonnull
+    public static String describeSchedulePlotUnresolvedReason(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol
+    ) {
+        String loc = normalizeLocation(locationSymbol);
+        if (loc == null) {
+            return "empty or invalid location symbol";
+        }
+        return switch (loc) {
+            case LOC_HOME -> describeHomeUnresolved(town, entityUuid);
+            case LOC_WORK -> describeWorkUnresolved(town, binding);
+            case LOC_INN -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+            case LOC_PARK -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
+            default -> "unsupported location '" + loc + "' (not home/work/inn/park)";
+        };
+    }
+
     @Nonnull
     public static VillagerScheduleResolveOutcome resolvePlot(
         @Nonnull TownRecord town,
@@ -133,6 +156,83 @@ public final class VillagerScheduleResolver {
             case LOC_INN -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case LOC_PARK -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
             default -> VillagerScheduleResolveOutcome.skip();
+        };
+    }
+
+    @Nonnull
+    private static String describeHomeUnresolved(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (PlotInstance p : town.getPlotInstances()) {
+            if (p.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(p.getConstructionId())) {
+                continue;
+            }
+            UUID resident = p.getHomeResidentEntityUuid();
+            if (entityUuid.equals(resident)) {
+                return "home: unexpected (plot exists)";
+            }
+        }
+        return "home: no COMPLETE house plot with homeResidentEntityUuid=" + entityUuid;
+    }
+
+    @Nonnull
+    private static String describeWorkUnresolved(@Nonnull TownRecord town, @Nonnull TownVillagerBinding binding) {
+        UUID job = binding.getJobPlotId();
+        if (job != null) {
+            PlotInstance pi = town.findPlotById(job);
+            if (pi == null) {
+                return "work: JobPlotId " + job + " not found in town plot list (stale save?)";
+            }
+            if (pi.getState() != PlotInstanceState.COMPLETE) {
+                return "work: job plot " + job + " state is " + pi.getState() + " (need COMPLETE)";
+            }
+            return "work: JobPlotId resolves but resolvePlot failed elsewhere (report as bug)";
+        }
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind());
+        if (inferred == null) {
+            String c = constructionIdForKind(binding.getKind());
+            if (c == null) {
+                return "work: cannot infer job plot for binding kind=\"" + binding.getKind() + "\"";
+            }
+            if (!townHasAnyPlotWithConstruction(town, c)) {
+                return "work: no plot with construction " + c + " in town";
+            }
+            return "work: no COMPLETE plot for construction " + c + " (building not finished?)";
+        }
+        return "work: unexpected (infer returned " + inferred + ")";
+    }
+
+    private static boolean townHasAnyPlotWithConstruction(@Nonnull TownRecord town, @Nonnull String constructionId) {
+        for (PlotInstance p : town.getPlotInstances()) {
+            if (constructionId.equals(p.getConstructionId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nonnull
+    private static String describeSharedUnresolved(@Nonnull TownRecord town, @Nonnull String constructionId) {
+        if (town.findCompletePlotWithConstruction(constructionId) == null) {
+            if (!townHasAnyPlotWithConstruction(town, constructionId)) {
+                return "shared: no plot for construction " + constructionId;
+            }
+            return "shared: plot exists for " + constructionId + " but not COMPLETE";
+        }
+        return "shared: unexpected (complete plot exists)";
+    }
+
+    @Nullable
+    private static String constructionIdForKind(@Nonnull String kind) {
+        return switch (kind) {
+            case TownVillagerBinding.KIND_FARMER -> AetherhavenConstants.CONSTRUCTION_PLOT_FARM;
+            case TownVillagerBinding.KIND_MERCHANT -> AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL;
+            case TownVillagerBinding.KIND_BLACKSMITH -> AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP;
+            case TownVillagerBinding.KIND_PRIESTESS -> AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
+            case TownVillagerBinding.KIND_INNKEEPER -> AetherhavenConstants.CONSTRUCTION_PLOT_INN;
+            case TownVillagerBinding.KIND_ELDER -> AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL;
+            default -> null;
         };
     }
 
@@ -161,7 +261,7 @@ public final class VillagerScheduleResolver {
             if (pi != null && pi.getState() == PlotInstanceState.COMPLETE) {
                 return new VillagerScheduleResolveOutcome(job, null);
             }
-            return VillagerScheduleResolveOutcome.skip();
+            // Stale UUID or plot not complete yet: fall back like we do when JobPlotId was never set.
         }
         UUID inferred = inferJobPlotFromTown(town, binding.getKind());
         if (inferred == null) {

@@ -158,6 +158,11 @@ public final class ReputationRewardCatalog {
 
     private ReputationRewardCatalog() {}
 
+    @Nonnull
+    public static List<ReputationRewardDefinition> allDefinitions() {
+        return ALL;
+    }
+
     @Nullable
     public static ReputationRewardDefinition byId(@Nonnull String rewardId) {
         return BY_ID.get(rewardId.trim());

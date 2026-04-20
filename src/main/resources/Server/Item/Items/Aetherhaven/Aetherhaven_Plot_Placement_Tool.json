@@ -4,7 +4,7 @@
     "Description": "server.items.Aetherhaven_Plot_Placement_Tool.description"
   },
   "Recipe": {
-    "TimeSeconds": 3,
+    "TimeSeconds": 0,
     "Input": [
       {
         "ItemId": "Ingredient_Stick",

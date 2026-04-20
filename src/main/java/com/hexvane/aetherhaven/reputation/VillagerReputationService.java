@@ -4,9 +4,12 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -160,6 +163,90 @@ public final class VillagerReputationService {
         }
         tm.updateTown(town);
         return true;
+    }
+
+    /**
+     * Sets reputation and enqueues milestone rewards for every threshold crossed between {@code old} and {@code newRep}
+     * (same rules as incremental gains), so jumping to max still queues lower tiers that were skipped.
+     *
+     * @return true if the stored reputation value changed
+     */
+    public static boolean setReputationCrossingMilestones(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID playerUuid,
+        @Nonnull UUID villagerEntityUuid,
+        int newReputation
+    ) {
+        int clamped = Math.max(0, Math.min(MAX_REPUTATION, newReputation));
+        VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
+        int old = e.getReputation();
+        if (old == clamped) {
+            return false;
+        }
+        e.setReputation(clamped);
+        String roleId = resolveRoleForVillager(town, world, villagerEntityUuid);
+        if (roleId != null) {
+            enqueueNewlyCrossedMilestones(e, old, clamped, roleId);
+        }
+        tm.updateTown(town);
+        return true;
+    }
+
+    /**
+     * Grants one reputation milestone immediately (items/recipe), marks it claimed, and strips it from the pending queue.
+     * Does not require the reward to be at the front of the queue (unlike dialogue claim flow).
+     *
+     * @return null on success, or a short error reason
+     */
+    @Nullable
+    public static String grantReputationRewardDirect(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID playerUuid,
+        @Nonnull UUID villagerEntityUuid,
+        @Nonnull String rewardId,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        ReputationRewardCatalog.ReputationRewardDefinition def = ReputationRewardCatalog.byId(rewardId);
+        if (def == null) {
+            return "Unknown reward id.";
+        }
+        String roleId = resolveRoleForVillager(town, world, villagerEntityUuid);
+        if (roleId == null) {
+            return "Could not resolve villager role (is the NPC loaded?).";
+        }
+        if (!def.roleId().equals(roleId)) {
+            return "This reward does not match this villager's role.";
+        }
+        VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
+        String rid = def.rewardId().trim();
+        if (e.getClaimedRewardIds().contains(rid)) {
+            return "That reward was already claimed.";
+        }
+        e.getPendingRewardIds().removeIf(rid::equals);
+        e.getClaimedRewardIds().add(rid);
+        tm.updateTown(town);
+
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (player == null) {
+            return "Player component missing.";
+        }
+        String learnId = def.learnRecipeItemId();
+        if (learnId != null && !learnId.isBlank()) {
+            CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
+            return null;
+        }
+        String itemId = def.itemId() != null ? def.itemId().trim() : "";
+        if (itemId.isBlank() || def.itemCount() <= 0) {
+            return null;
+        }
+        int count = Math.max(1, Math.min(def.itemCount(), 9999));
+        player.giveItem(new ItemStack(itemId, count), playerRef, store);
+        return null;
     }
 
     private static void enqueueNewlyCrossedMilestones(

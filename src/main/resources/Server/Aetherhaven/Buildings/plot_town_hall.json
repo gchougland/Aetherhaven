@@ -9,8 +9,8 @@
   "treasuryLocalPos": [7, 1, 2],
   "rotationYaw": "None",
   "materials": [
-    { "resourceTypeId": "Wood_Trunk", "count": 24 },
-    { "resourceTypeId": "Rock", "count": 16 }
+    { "resourceTypeId": "Wood_All", "count": 300 },
+    { "resourceTypeId": "Rock", "count": 100 }
   ],
   "pois": [
     {

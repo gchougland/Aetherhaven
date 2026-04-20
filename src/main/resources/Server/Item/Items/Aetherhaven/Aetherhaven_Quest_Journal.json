@@ -4,7 +4,7 @@
     "Description": "server.items.Aetherhaven_Quest_Journal.description"
   },
   "Recipe": {
-    "TimeSeconds": 3,
+    "TimeSeconds": 0,
     "Input": [
       {
         "ItemId": "Ingredient_Life_Essence",

@@ -4,7 +4,7 @@
     "Description": "server.items.Aetherhaven_Charter.description"
   },
   "Recipe": {
-    "TimeSeconds": 3,
+    "TimeSeconds": 0,
     "Input": [
       {
         "ItemId": "Rock_Stone_Cobble",

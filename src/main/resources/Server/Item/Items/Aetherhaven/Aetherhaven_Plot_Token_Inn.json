@@ -4,7 +4,7 @@
     "Description": "server.items.Aetherhaven_Plot_Token_Inn.description"
   },
   "Recipe": {
-    "TimeSeconds": 2,
+    "TimeSeconds": 0,
     "Input": [
       {
         "ResourceTypeId": "Wood_Planks",

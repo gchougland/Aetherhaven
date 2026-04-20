@@ -266,6 +266,25 @@ commands.aetherhaven.questdebug.clear.desc=Remove quest from active list on your
 commands.aetherhaven.questdebug.id.desc=Quest id (default q_build_inn)
 commands.aetherhaven.questdebug.status.desc=Show active and completed quests for your town (display name + id)
 
+commands.aetherhaven.reputation.desc=Debug: reputation (requires DebugCommandsEnabled)
+commands.aetherhaven.reputation.set.desc=Set your reputation with a villager and queue crossed milestone rewards for dialogue
+commands.aetherhaven.reputation.villagerUuid.desc=Villager NPC entity UUID
+commands.aetherhaven.reputation.villagerTarget.desc=Villager entity UUID or NPC role id in your town (e.g. Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Reputation 0–100
+commands.aetherhaven.reputation.reward.desc=List milestone definitions or grant one reward directly
+commands.aetherhaven.reputation.reward.list.desc=List reputation milestones (optional: filter by NPC role id)
+commands.aetherhaven.reputation.reward.roleFilter.desc=NPC role id (e.g. Aetherhaven_Merchant) to filter the list
+commands.aetherhaven.reputation.reward.grant.desc=Grant one milestone reward now (marks claimed); use rep reward list for ids
+commands.aetherhaven.reputation.rewardId.desc=Reputation reward id (e.g. rep_merchant_25)
+
+commands.aetherhaven.villager.desc=Debug: town villager helpers (requires DebugCommandsEnabled)
+commands.aetherhaven.villager.list.desc=List town villager NPC entity UUIDs (for reputation / locate commands)
+commands.aetherhaven.villager.locate.desc=Print a town villager's position; optional teleport (operators only)
+commands.aetherhaven.villager.uuid.desc=Villager NPC entity UUID
+commands.aetherhaven.villager.target.desc=Villager entity UUID or NPC role id in your town (e.g. Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=true to teleport to the villager (operators only); or use --tp instead
+commands.aetherhaven.villager.tp_flag.desc=Teleport to the villager (operators only; same as passing true)
+
 commands.aetherhaven.debug_autonomy.desc=Debug: villager autonomy overlay (requires DebugCommandsEnabled)
 commands.aetherhaven.debug_autonomy.toggle.desc=Toggle autonomy debug on a town villager (look at NPC or use --ray)
 commands.aetherhaven.debug_autonomy.show.desc=Show whether autonomy debug is enabled for this villager

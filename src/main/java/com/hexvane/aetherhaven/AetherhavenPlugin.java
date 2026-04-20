@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
@@ -176,6 +177,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (!Files.exists(configPath)) {
             this.config.save().join();
             LOGGER.atInfo().log("Created default config at %s", configPath);
+        } else {
+            int merged = PluginConfigMerge.appendMissingKeys(configPath, AetherhavenPluginConfig.CODEC);
+            if (merged > 0) {
+                LOGGER
+                    .atInfo()
+                    .log("Updated %s: appended %d missing default config key(s) (existing values unchanged).", configPath, merged);
+            }
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
 
