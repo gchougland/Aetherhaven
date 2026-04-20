@@ -1,6 +1,12 @@
 # Changelog
 
-## [0.3.1]
+## [0.4.0] - 4/19/2026
+
+### Added
+
+- **Move completed buildings:** From a plot’s management block, **Move building** opens the placement UI at the current sign; you can nudge, rotate, and confirm. The old footprint is cleared (blocks and fluids), prefab entities in the volume are removed (players and town NPCs stay protected), and the construction is rebuilt at the new pose. A confirmation step warns about items and loose entities in the footprint.
+- **Move town charter:** The town charter UI (owner) includes **Move charter**, which opens the same placement-style flow to pick a new charter block position and rotation. Territory stays a chunk-radius square centered on the charter; placement is blocked if any registered plot would fall outside that area. A block preview shows position and rotation before you commit.
+- **Dissolve town:** The charter UI (owner) includes **Dissolve town** with a confirmation step. Dissolving removes town NPCs and buildings, clears related POIs and persistence, and destroys the charter block.
 
 ### Changes
 

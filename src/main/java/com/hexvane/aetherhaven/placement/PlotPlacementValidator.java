@@ -30,6 +30,24 @@ public final class PlotPlacementValidator {
         @Nonnull ConstructionDefinition def,
         @Nonnull AetherhavenPlugin plugin
     ) {
+        return validate(world, townManager, town, ownerUuid, signPosition, prefabYaw, def, plugin, null);
+    }
+
+    /**
+     * @param excludePlotId when relocating, the plot being moved is ignored for overlap checks.
+     */
+    @Nullable
+    public static String validate(
+        @Nonnull World world,
+        @Nonnull TownManager townManager,
+        @Nonnull TownRecord town,
+        @Nonnull UUID ownerUuid,
+        @Nonnull Vector3i signPosition,
+        @Nonnull Rotation prefabYaw,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable UUID excludePlotId
+    ) {
         if (!town.playerHasBuildPermission(ownerUuid)) {
             return "You do not have permission to place buildings for this town.";
         }
@@ -51,7 +69,7 @@ public final class PlotPlacementValidator {
                     }
                 }
             }
-            PlotFootprintRecord overlap = town.findOverlappingPlot(fp);
+            PlotFootprintRecord overlap = town.findOverlappingPlot(fp, excludePlotId);
             if (overlap != null) {
                 return "This plot overlaps another registered plot in your town.";
             }

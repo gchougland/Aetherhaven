@@ -103,6 +103,23 @@ public final class PoiRegistry {
         return true;
     }
 
+    /** Remove every POI for this town (e.g. town dissolution). */
+    public void unregisterAllForTown(@Nonnull UUID townId) {
+        List<PoiEntry> list = listByTown(townId);
+        if (list.isEmpty()) {
+            return;
+        }
+        boolean any = false;
+        for (PoiEntry e : new ArrayList<>(list)) {
+            if (removeInternal(e.getId())) {
+                any = true;
+            }
+        }
+        if (any) {
+            persist();
+        }
+    }
+
     /** Remove every POI tagged with this plot (e.g. before re-registering after rebuild). */
     public void unregisterByPlotId(@Nonnull UUID plotId) {
         List<UUID> toRemove = new ArrayList<>();

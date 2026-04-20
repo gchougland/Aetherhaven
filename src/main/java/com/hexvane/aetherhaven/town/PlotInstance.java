@@ -134,6 +134,19 @@ public final class PlotInstance {
         return new PlotFootprintRecord(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
+    /** Updates logical sign position and axis-aligned footprint (e.g. building relocation). */
+    public void applySignAndFootprint(int signX, int signY, int signZ, @Nonnull PlotFootprintRecord footprint) {
+        this.signX = signX;
+        this.signY = signY;
+        this.signZ = signZ;
+        this.minX = footprint.getMinX();
+        this.minY = footprint.getMinY();
+        this.minZ = footprint.getMinZ();
+        this.maxX = footprint.getMaxX();
+        this.maxY = footprint.getMaxY();
+        this.maxZ = footprint.getMaxZ();
+    }
+
     public int getSignX() {
         return signX;
     }

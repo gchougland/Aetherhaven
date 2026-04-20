@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -63,6 +64,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
     /** Cancels in-flight smoothed pan when starting a new pan or closing birds-eye. */
     private int smoothPanGeneration;
+
+    /** Move building: first Place click shows warning; confirm commits. */
+    private boolean movePlaceConfirmOpen;
 
     public PlotPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull PlotPlacementSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -123,7 +127,19 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
         commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
 
-        if (plugin != null && inv != null) {
+        boolean moveMode = session.isMoveMode();
+        boolean moveConfirm = moveMode && movePlaceConfirmOpen;
+        commandBuilder.set("#MoveConfirmGroup.Visible", moveConfirm);
+        commandBuilder.set("#PlaceButton.Visible", !moveConfirm);
+        if (moveMode) {
+            commandBuilder.set(
+                "#PlaceButton.TextSpans",
+                Message.translation("server.aetherhaven.ui.plotplacement.placeMove")
+            );
+        } else {
+            commandBuilder.set("#PlaceButton.TextSpans", Message.translation("server.aetherhaven.ui.plotplacement.place"));
+        }
+        if (!moveMode && plugin != null && inv != null) {
             List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
             if (!validIds.isEmpty() && !validIds.contains(session.getConstructionId())) {
                 session.setConstructionId(validIds.get(0));
@@ -153,7 +169,12 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         bind(eventBuilder, "#BtnPanXp", "PanXp");
         bind(eventBuilder, "#BtnPanZm", "PanZm");
         bind(eventBuilder, "#BtnPanZp", "PanZp");
-        bind(eventBuilder, "#PlaceButton", "Place");
+        if (moveConfirm) {
+            bind(eventBuilder, "#MoveConfirmButton", "ConfirmMove");
+            bind(eventBuilder, "#MoveConfirmBackButton", "BackMove");
+        } else {
+            bind(eventBuilder, "#PlaceButton", "Place");
+        }
         bind(eventBuilder, "#CancelButton", "Cancel");
 
         eventBuilder.addEventBinding(
@@ -223,6 +244,10 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
         if (data.constructionId != null && !data.constructionId.isBlank()) {
+            if (session.isMoveMode()) {
+                scheduleRebuild(ref, store);
+                return;
+            }
             String id = data.constructionId.trim();
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             ConstructionDefinition def = plugin != null ? plugin.getConstructionCatalog().get(id) : null;
@@ -308,10 +333,30 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 return;
             }
             case "Cancel" -> {
+                if (session.isMoveMode() && movePlaceConfirmOpen) {
+                    movePlaceConfirmOpen = false;
+                    scheduleRebuild(ref, store);
+                    return;
+                }
                 scheduleCancel(ref, store);
                 return;
             }
+            case "BackMove" -> {
+                movePlaceConfirmOpen = false;
+                scheduleRebuild(ref, store);
+                return;
+            }
+            case "ConfirmMove" -> {
+                movePlaceConfirmOpen = false;
+                schedulePlace(ref, store);
+                return;
+            }
             case "Place" -> {
+                if (session.isMoveMode() && !movePlaceConfirmOpen) {
+                    movePlaceConfirmOpen = true;
+                    scheduleRebuild(ref, store);
+                    return;
+                }
                 schedulePlace(ref, store);
                 return;
             }
@@ -453,6 +498,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
             return false;
+        }
+        if (session.isMoveMode()) {
+            return PlotBuildingRelocation.tryCommit(ref, store, session, uc.getUuid());
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -656,7 +704,18 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         } else if (!town.playerHasBuildPermission(uc.getUuid())) {
             placementErr = "You do not have permission to place buildings for this town.";
         } else {
-            placementErr = PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), session.getAnchor(), session.getPrefabYaw(), def, plugin);
+            placementErr =
+                PlotPlacementValidator.validate(
+                    world,
+                    tm,
+                    town,
+                    uc.getUuid(),
+                    session.getAnchor(),
+                    session.getPrefabYaw(),
+                    def,
+                    plugin,
+                    session.getMovePlotId()
+                );
         }
         boolean placementValid = placementErr == null;
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);

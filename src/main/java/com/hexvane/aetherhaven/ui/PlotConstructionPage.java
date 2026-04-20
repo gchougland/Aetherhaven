@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -134,6 +135,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
+            commandBuilder.set("#MoveBuildingButton.Visible", false);
+            commandBuilder.set("#TownNeedsButton.Visible", false);
             if (managementUi) {
                 bindManagementTabEvents(eventBuilder);
                 if (managementTab == 1) {
@@ -227,6 +230,16 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 CustomUIEventBindingType.Activating,
                 "#TownNeedsButton",
                 new EventData().append("Action", "OpenTownNeeds"),
+                false
+            );
+        }
+
+        commandBuilder.set("#MoveBuildingButton.Visible", managementUi && completed);
+        if (managementUi && completed && plotTabActive) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#MoveBuildingButton",
+                new EventData().append("Action", "MoveBuilding"),
                 false
             );
         }
@@ -453,6 +466,36 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null && data.action.equalsIgnoreCase("MoveBuilding")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState stMove = resolvePlotState(store, ref);
+            if (stMove != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            Store<ChunkStore> csMove = blockRef.getStore();
+            ManagementBlock mbMove = csMove.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mbMove == null || mbMove.getPlotId().isBlank() || mbMove.getTownId().isBlank()) {
+                return;
+            }
+            UUID plotIdMove;
+            UUID townIdMove;
+            try {
+                plotIdMove = UUID.fromString(mbMove.getPlotId().trim());
+                townIdMove = UUID.fromString(mbMove.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            Player playerMove = store.getComponent(ref, Player.getComponentType());
+            if (playerMove != null) {
+                PlotPlacementPage placementPage = PlotPlacementOpenHelper.openForMove(ref, store, playerRef, townIdMove, plotIdMove);
+                if (placementPage != null) {
+                    playerMove.getPageManager().openCustomPage(ref, store, placementPage);
+                }
+            }
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("SwitchTabPlot")) {
             if (!managementUi) {
                 return;

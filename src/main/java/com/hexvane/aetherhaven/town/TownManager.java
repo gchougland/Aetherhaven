@@ -81,6 +81,16 @@ public final class TownManager {
         return byTownId.get(townId);
     }
 
+    /** Removes a town from this world's index and saves. @return true if a town was removed */
+    public boolean removeTown(@Nonnull UUID townId) {
+        TownRecord removed = byTownId.remove(townId);
+        if (removed == null) {
+            return false;
+        }
+        saveToDisk();
+        return true;
+    }
+
     @Nullable
     public TownRecord findTownForOwnerInWorld(@Nonnull UUID ownerUuid) {
         for (TownRecord t : byTownId.values()) {
@@ -265,6 +275,29 @@ public final class TownManager {
         int bz = ChunkUtil.chunkCoordinate(blockZ);
         int r = town.getTerritoryChunkRadius();
         return Math.abs(bx - cx) <= r && Math.abs(bz - cz) <= r;
+    }
+
+    /**
+     * True if every registered plot footprint would still lie inside the territory when the charter were moved to
+     * {@code charterBlockX}/{@code charterBlockZ} (territory is the chunk-radius square centered on the charter).
+     */
+    public boolean allPlotFootprintsFitTerritoryWithCharterAt(@Nonnull TownRecord town, int charterBlockX, int charterBlockZ) {
+        int ccx = ChunkUtil.chunkCoordinate(charterBlockX);
+        int ccz = ChunkUtil.chunkCoordinate(charterBlockZ);
+        int r = town.getTerritoryChunkRadius();
+        for (PlotInstance plot : town.getPlotInstances()) {
+            PlotFootprintRecord fp = plot.toFootprint();
+            for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    int bx = ChunkUtil.chunkCoordinate(x);
+                    int bz = ChunkUtil.chunkCoordinate(z);
+                    if (Math.abs(bx - ccx) > r || Math.abs(bz - ccz) > r) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public void putTown(@Nonnull TownRecord record) {

@@ -38,7 +38,7 @@ $C.@PageOverlay {
       Padding: (Full: 12);
 
       Label #Info {
-        Anchor: (Bottom: 8);
+        Anchor: (Bottom: 8, Width: 356);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
       }
 
@@ -197,6 +197,35 @@ $C.@PageOverlay {
           Anchor: (Width: 48, Height: 36);
           Padding: (Horizontal: 4, Vertical: 2);
           Text: %server.aetherhaven.ui.plotplacement.rotate;
+        }
+      }
+
+      Group #MoveConfirmGroup {
+        LayoutMode: Top;
+        Visible: false;
+        Anchor: (Bottom: 8);
+
+        Label #MoveConfirmText {
+          Anchor: (Bottom: 10, Width: 356);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c);
+          Text: %server.aetherhaven.ui.plotplacement.moveWarningText;
+        }
+
+        Group {
+          LayoutMode: Left;
+          Anchor: (Top: 4);
+
+          $C.@TextButton #MoveConfirmButton {
+            Text: %server.aetherhaven.ui.plotplacement.moveConfirm;
+            FlexWeight: 1;
+            Anchor: (Right: 6);
+          }
+
+          $C.@TextButton #MoveConfirmBackButton {
+            Text: %server.aetherhaven.ui.plotplacement.moveBack;
+            FlexWeight: 1;
+            Anchor: (Left: 6);
+          }
         }
       }
 

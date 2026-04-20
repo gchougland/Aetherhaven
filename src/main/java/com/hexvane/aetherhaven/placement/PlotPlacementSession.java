@@ -7,7 +7,9 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Server-side state while a player is positioning a plot (preview + UI). */
 public final class PlotPlacementSession {
@@ -22,6 +24,10 @@ public final class PlotPlacementSession {
 
     @Nonnull
     private String constructionId;
+
+    /** When non-null, placement commits relocate this existing plot instead of consuming a token / new plot id. */
+    @Nullable
+    private final UUID movePlotId;
 
     @Nonnull
     private final List<Ref<EntityStore>> previewEntityRefs = new ArrayList<>();
@@ -40,10 +46,53 @@ public final class PlotPlacementSession {
     private double birdsEyePanZ;
 
     public PlotPlacementSession(@Nonnull World world, @Nonnull Vector3i anchor, int rotationSteps, @Nonnull String constructionId) {
+        this(world, anchor, rotationSteps, constructionId, null);
+    }
+
+    private PlotPlacementSession(
+        @Nonnull World world,
+        @Nonnull Vector3i anchor,
+        int rotationSteps,
+        @Nonnull String constructionId,
+        @Nullable UUID movePlotId
+    ) {
         this.world = world;
         this.anchor = anchor.clone();
         this.rotationSteps = rotationSteps;
         this.constructionId = constructionId;
+        this.movePlotId = movePlotId;
+    }
+
+    /**
+     * Relocate preview: anchor starts at the plot sign coordinates stored on the {@link com.hexvane.aetherhaven.town.PlotInstance}.
+     */
+    @Nonnull
+    public static PlotPlacementSession forRelocatingPlot(
+        @Nonnull World world,
+        @Nonnull Vector3i signAnchor,
+        int rotationSteps,
+        @Nonnull String constructionId,
+        @Nonnull UUID plotIdBeingMoved
+    ) {
+        return new PlotPlacementSession(world, signAnchor, rotationSteps, constructionId, plotIdBeingMoved);
+    }
+
+    public static int rotationStepsFromPrefabYaw(@Nonnull Rotation yaw) {
+        return switch (yaw) {
+            case Ninety -> 1;
+            case OneEighty -> 2;
+            case TwoSeventy -> 3;
+            default -> 0;
+        };
+    }
+
+    public boolean isMoveMode() {
+        return movePlotId != null;
+    }
+
+    @Nullable
+    public UUID getMovePlotId() {
+        return movePlotId;
     }
 
     @Nonnull
@@ -88,6 +137,9 @@ public final class PlotPlacementSession {
     }
 
     public void setConstructionId(@Nonnull String constructionId) {
+        if (movePlotId != null) {
+            return;
+        }
         this.constructionId = constructionId;
     }
 

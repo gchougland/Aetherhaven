@@ -26,6 +26,7 @@ aetherhaven.ui.plotconstruction.materials=Materials
 aetherhaven.ui.plotconstruction.build=Build
 aetherhaven.ui.plotconstruction.pickUpPlot=Pick up plot (return token)
 aetherhaven.ui.plotconstruction.townNeeds=Town needs
+aetherhaven.ui.plotconstruction.moveBuilding=Move building
 aetherhaven.ui.plotconstruction.houseResident=Resident
 aetherhaven.ui.plotconstruction.assignHouseResident=Set resident
 
@@ -191,7 +192,17 @@ aetherhaven.ui.chartertown.namePlaceholder=Type a unique name for your town
 aetherhaven.ui.chartertown.ownerOnlyHint=Only the town owner can change the display name from the charter.
 aetherhaven.ui.chartertown.saveTownName=Save name
 aetherhaven.ui.chartertown.dissolve=Dissolve town
-aetherhaven.ui.chartertown.dissolveHint=Disabled until a later milestone.
+aetherhaven.ui.chartertown.dissolveHint=Permanently removes the town, all buildings, villagers, and this charter. Cannot be undone.
+aetherhaven.ui.chartertown.dissolveConfirmText=Are you sure? This permanently deletes the town, removes every building and villager, and destroys this charter. This cannot be undone.
+aetherhaven.ui.chartertown.dissolveConfirm=Yes, dissolve town
+aetherhaven.ui.chartertown.dissolveCancel=Cancel
+aetherhaven.ui.chartertown.dissolved=Town dissolved: buildings cleared, villagers removed, charter destroyed.
+aetherhaven.ui.chartertown.moveCharter=Move charter
+aetherhaven.ui.chartertown.moveCharterHint=Recenters your territory on a new charter block. You can only place where every building still fits inside the town border.
+aetherhaven.ui.chartertown.moveCharterConfirmText=You will position the new charter like plot placement (nudge and confirm). If any building would end up outside the territory, placement will be blocked.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continue
+aetherhaven.ui.chartertown.moveCharterCancel=Cancel
+aetherhaven.ui.chartertown.charterMoved=Charter moved. Your territory is now centered on the new charter.
 
 aetherhaven.ui.treasury.title=Town treasury
 aetherhaven.ui.treasury.deposit=Deposit all gold coins
@@ -214,6 +225,10 @@ aetherhaven.ui.plotplacement.plotType=Building
 aetherhaven.ui.plotplacement.moveLabel=Move
 aetherhaven.ui.plotplacement.rotate=90°
 aetherhaven.ui.plotplacement.place=Place plot sign
+aetherhaven.ui.plotplacement.placeMove=Move building
+aetherhaven.ui.plotplacement.moveWarningText=Moving destroys and rebuilds the old site. Remove valuables, pets, and loose items from inside the building footprint first. Town NPCs tied to this town are protected.
+aetherhaven.ui.plotplacement.moveConfirm=Confirm
+aetherhaven.ui.plotplacement.moveBack=Go back
 aetherhaven.ui.plotplacement.cancel=Cancel preview
 aetherhaven.ui.plotplacement.cameraSection=Camera
 aetherhaven.ui.plotplacement.cameraHint=Bird's-eye frames once when you turn it on (above the preview), then stays put while you move the plot.
@@ -227,6 +242,9 @@ aetherhaven.ui.plotplacement.panZmTooltip=Shift view one step toward -Z
 aetherhaven.ui.plotplacement.panZpTooltip=Shift view one step toward +Z
 aetherhaven.ui.plotplacement.zoomOutTooltip=Closer camera (smaller overview, more detail)
 aetherhaven.ui.plotplacement.zoomInTooltip=Farther camera (wider overview of the plot)
+aetherhaven.ui.charterrelocation.title=Move charter
+aetherhaven.ui.charterrelocation.info=Territory is a square of chunks around the charter. All your buildings must stay inside that area after the move. Nudge the ghost block to the new charter position, then confirm.
+aetherhaven.ui.charterrelocation.place=Place charter
 
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
 

@@ -282,6 +282,56 @@ public final class TownRecord {
         return residentNpcRecords;
     }
 
+    /**
+     * Elder, innkeeper, inn visitors, locked visitors, resident registry rows, and house assignments — every NPC entity
+     * UUID the town persists. Used when stripping prefab volumes so these are never removed as debris.
+     */
+    public void collectTrackedNpcEntityUuids(@Nonnull Set<UUID> out) {
+        UUID nil = new UUID(0L, 0L);
+        if (getElderEntityUuid() != null && !nil.equals(getElderEntityUuid())) {
+            out.add(getElderEntityUuid());
+        }
+        if (getInnkeeperEntityUuid() != null && !nil.equals(getInnkeeperEntityUuid())) {
+            out.add(getInnkeeperEntityUuid());
+        }
+        for (String s : getInnPoolNpcIds()) {
+            if (s == null || s.isBlank()) {
+                continue;
+            }
+            try {
+                UUID u = UUID.fromString(s.trim());
+                if (!nil.equals(u)) {
+                    out.add(u);
+                }
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        for (String s : getInnLockedEntityUuids()) {
+            if (s == null || s.isBlank()) {
+                continue;
+            }
+            try {
+                UUID u = UUID.fromString(s.trim());
+                if (!nil.equals(u)) {
+                    out.add(u);
+                }
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        for (ResidentNpcRecord r : getResidentNpcRecords()) {
+            UUID u = r.getLastEntityUuid();
+            if (!nil.equals(u)) {
+                out.add(u);
+            }
+        }
+        for (PlotInstance p : getPlotInstances()) {
+            UUID h = p.getHomeResidentEntityUuid();
+            if (h != null && !nil.equals(h)) {
+                out.add(h);
+            }
+        }
+    }
+
     @Nonnull
     public Set<String> getInnVisitorPoolExcludedRoleIds() {
         if (innVisitorPoolExcludedRoleIds == null) {
@@ -326,6 +376,13 @@ public final class TownRecord {
 
     public int getCharterZ() {
         return charterZ;
+    }
+
+    /** Updates the charter block position (used when relocating the physical charter in-world). */
+    public void setCharterPosition(int x, int y, int z) {
+        this.charterX = x;
+        this.charterY = y;
+        this.charterZ = z;
     }
 
     public int getTier() {
@@ -488,7 +545,18 @@ public final class TownRecord {
 
     @Nullable
     public PlotFootprintRecord findOverlappingPlot(@Nonnull PlotFootprintRecord candidate) {
+        return findOverlappingPlot(candidate, null);
+    }
+
+    /**
+     * @param excludePlotId optional plot to ignore (e.g. building being relocated).
+     */
+    @Nullable
+    public PlotFootprintRecord findOverlappingPlot(@Nonnull PlotFootprintRecord candidate, @Nullable UUID excludePlotId) {
         for (PlotInstance p : getPlotInstances()) {
+            if (excludePlotId != null && p.getPlotId().equals(excludePlotId)) {
+                continue;
+            }
             if (p.intersectsFootprint(candidate)) {
                 return p.toFootprint();
             }

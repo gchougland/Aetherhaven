@@ -99,6 +99,12 @@ $C.@PageOverlay {
           Anchor: (Bottom: 8);
         }
 
+        $C.@TextButton #MoveBuildingButton {
+          Text: %server.aetherhaven.ui.plotconstruction.moveBuilding;
+          Visible: false;
+          Anchor: (Bottom: 8);
+        }
+
         Group #HouseResidentRow {
           LayoutMode: Top;
           Visible: false;

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.Holder;
@@ -46,6 +47,24 @@ public final class PlotPreviewSpawner {
             }
         }
         refs.clear();
+    }
+
+    /**
+     * Single-block ghost for charter relocation (same {@link BlockEntity} approach as {@link #rebuild}, with rotation
+     * matching {@link com.hexvane.aetherhaven.placement.CharterRelocationService}).
+     */
+    public static void rebuildCharterBlockPreview(
+        @Nonnull Store<EntityStore> store,
+        int wx,
+        int wy,
+        int wz,
+        @Nonnull Rotation horizontalYaw,
+        @Nonnull List<Ref<EntityStore>> outRefs
+    ) {
+        clear(store, outRefs);
+        RotationTuple rt = RotationTuple.of(horizontalYaw, Rotation.None, Rotation.None);
+        AtomicInteger spawned = new AtomicInteger();
+        spawnOne(store, outRefs, AetherhavenConstants.CHARTER_BLOCK_TYPE_ID, wx, wy, wz, rt.index(), spawned);
     }
 
     public static void rebuild(

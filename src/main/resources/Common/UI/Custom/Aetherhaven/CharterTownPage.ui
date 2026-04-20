@@ -50,20 +50,92 @@ $C.@PageOverlay {
       }
 
       Label #TownInfo {
-        Anchor: (Bottom: 12);
+        Anchor: (Bottom: 12, Width: 424);
         Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
       }
 
       $C.@TextButton #DissolveButton {
         Text: %server.aetherhaven.ui.chartertown.dissolve;
-        Disabled: true;
+        Visible: false;
         Anchor: (Top: 4);
       }
 
       Label #DissolveHint {
-        Anchor: (Top: 8);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #6a7a8a);
+        Visible: false;
+        Anchor: (Top: 8, Width: 424);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
         Text: %server.aetherhaven.ui.chartertown.dissolveHint;
+      }
+
+      Group #DissolveConfirmGroup {
+        LayoutMode: Top;
+        Visible: false;
+        Anchor: (Top: 8);
+
+        Label #DissolveConfirmText {
+          Anchor: (Bottom: 10);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c);
+          Text: %server.aetherhaven.ui.chartertown.dissolveConfirmText;
+        }
+
+        Group {
+          LayoutMode: Left;
+          Anchor: (Top: 4);
+
+          $C.@TextButton #DissolveConfirmButton {
+            Text: %server.aetherhaven.ui.chartertown.dissolveConfirm;
+            FlexWeight: 1;
+            Anchor: (Right: 6);
+          }
+
+          $C.@TextButton #DissolveCancelButton {
+            Text: %server.aetherhaven.ui.chartertown.dissolveCancel;
+            FlexWeight: 1;
+            Anchor: (Left: 6);
+          }
+        }
+      }
+
+      $C.@TextButton #MoveCharterButton {
+        Text: %server.aetherhaven.ui.chartertown.moveCharter;
+        Visible: false;
+        Anchor: (Top: 8);
+      }
+
+      Label #MoveCharterHint {
+        Visible: false;
+        Anchor: (Top: 8, Width: 424);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
+        Text: %server.aetherhaven.ui.chartertown.moveCharterHint;
+      }
+
+      Group #MoveCharterConfirmGroup {
+        LayoutMode: Top;
+        Visible: false;
+        Anchor: (Top: 8);
+
+        Label #MoveCharterConfirmText {
+          Anchor: (Bottom: 10);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c);
+          Text: %server.aetherhaven.ui.chartertown.moveCharterConfirmText;
+        }
+
+        Group {
+          LayoutMode: Left;
+          Anchor: (Top: 4);
+
+          $C.@TextButton #MoveCharterConfirmButton {
+            Text: %server.aetherhaven.ui.chartertown.moveCharterConfirm;
+            FlexWeight: 1;
+            Anchor: (Right: 6);
+          }
+
+          $C.@TextButton #MoveCharterCancelButton {
+            Text: %server.aetherhaven.ui.chartertown.moveCharterCancel;
+            FlexWeight: 1;
+            Anchor: (Left: 6);
+          }
+        }
       }
     }
   }
