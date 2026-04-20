@@ -10,64 +10,39 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.dependency.Dependency;
-import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
-import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
-/**
- * Applies weekly JSON schedules by updating {@link TownVillagerBinding#setPreferredPlotId}. Runs before
- * {@link com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem}. Inn visitors are excluded.
- *
- * <p><b>Server logs only</b> — nothing here is sent to players. When {@code VillagerScheduleDebugLog} is enabled
- * in {@code config.json}, diagnostics are emitted at INFO. Unresolved-plot lines are throttled to at most once per
- * in-game hour per NPC so repeated retries do not flood the console.
- */
-public final class VillagerScheduleSystem extends EntityTickingSystem<EntityStore> {
+/** Batch schedule application driven by {@link com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem}. */
+public final class VillagerScheduleService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    private final AetherhavenPlugin plugin;
-    @Nonnull
-    private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
+    static final Query<EntityStore> SCHEDULE_ENTITY_QUERY =
+        Query.and(TownVillagerBinding.getComponentType(), NPCEntity.getComponentType(), UUIDComponent.getComponentType());
 
-    public VillagerScheduleSystem(@Nonnull AetherhavenPlugin plugin) {
-        this.plugin = plugin;
-    }
+    private VillagerScheduleService() {}
 
-    @Nonnull
-    @Override
-    public Set<Dependency<EntityStore>> getDependencies() {
-        return dependencies;
-    }
-
-    @Nonnull
-    @Override
-    public Query<EntityStore> getQuery() {
-        return Query.and(
-            TownVillagerBinding.getComponentType(),
-            NPCEntity.getComponentType(),
-            UUIDComponent.getComponentType()
-        );
-    }
-
-    @Override
-    public void tick(
-        float dt,
-        int index,
-        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+    /**
+     * Applies weekly JSON schedules for all loaded matching NPCs in this world.
+     *
+     * @param timeJump if true (e.g. /time set), evaluate at current game time only — final segment/plot — and do not
+     *     rely on per-minute throttle state for staleness.
+     */
+    public static void applyForWorld(
+        @Nonnull World world,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer
+        @Nonnull AetherhavenPlugin plugin,
+        boolean timeJump
     ) {
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
         if (!cfg.isVillagerScheduleEnabled()) {
@@ -78,9 +53,43 @@ public final class VillagerScheduleSystem extends EntityTickingSystem<EntityStor
             return;
         }
         LocalDateTime gameTime = wtr.getGameDateTime();
-        long epochMinute = gameTime.toLocalDate().toEpochDay() * 24L * 60L + gameTime.toLocalTime().toSecondOfDay() / 60L;
+        long epochMinute =
+            gameTime.toLocalDate().toEpochDay() * 24L * 60L + gameTime.toLocalTime().toSecondOfDay() / 60L;
         long gameEpochHour = epochMinute / 60L;
 
+        store.forEachChunk(SCHEDULE_ENTITY_QUERY, (chunk, commandBuffer) -> {
+            int n = chunk.size();
+            for (int index = 0; index < n; index++) {
+                processEntity(
+                    plugin,
+                    cfg,
+                    world,
+                    store,
+                    commandBuffer,
+                    chunk,
+                    index,
+                    gameTime,
+                    epochMinute,
+                    gameEpochHour,
+                    timeJump
+                );
+            }
+        });
+    }
+
+    private static void processEntity(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+        int index,
+        @Nonnull LocalDateTime gameTime,
+        long epochMinute,
+        long gameEpochHour,
+        boolean timeJump
+    ) {
         Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());
@@ -101,9 +110,11 @@ public final class VillagerScheduleSystem extends EntityTickingSystem<EntityStor
             tickState = new VillagerScheduleTickState();
         }
 
+        boolean newCalendarMinute = timeJump || tickState.getLastGameEpochMinute() != epochMinute;
+
         VillagerScheduleDefinition def = plugin.getVillagerScheduleRegistry().getOrLoad(roleId);
         if (def == null) {
-            if (tickState.getLastGameEpochMinute() != epochMinute) {
+            if (newCalendarMinute) {
                 tickState.setLastGameEpochMinute(epochMinute);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
             }
@@ -111,33 +122,30 @@ public final class VillagerScheduleSystem extends EntityTickingSystem<EntityStor
         }
         String loc = VillagerScheduleResolver.activeLocationSymbol(def, gameTime);
         if (loc == null) {
-            if (tickState.getLastGameEpochMinute() != epochMinute) {
+            if (newCalendarMinute) {
                 tickState.setLastGameEpochMinute(epochMinute);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
             }
             return;
         }
 
-        var world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(binding.getTownId());
         if (town == null) {
-            if (tickState.getLastGameEpochMinute() != epochMinute) {
+            if (newCalendarMinute) {
                 tickState.setLastGameEpochMinute(epochMinute);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
             }
             return;
         }
 
-        boolean newCalendarMinute = tickState.getLastGameEpochMinute() != epochMinute;
         VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(town, binding, uc.getUuid(), loc);
         UUID targetPlot = out.plotId();
         if (targetPlot == null) {
             if (cfg.isVillagerScheduleDebugLog() && gameEpochHour != tickState.getLastUnresolvedDebugLogGameEpochHour()) {
                 tickState.setLastUnresolvedDebugLogGameEpochHour(gameEpochHour);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
-                String why =
-                    VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(town, binding, uc.getUuid(), loc);
+                String why = VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(town, binding, uc.getUuid(), loc);
                 LOGGER.at(Level.INFO).log(
                     "[Aetherhaven schedule] unresolved plot — role=%s npc=%s segment=%s time=%s town=%s kind=%s jobPlot=%s preferredPlot=%s reason=%s (retrying)",
                     roleId,
@@ -151,12 +159,11 @@ public final class VillagerScheduleSystem extends EntityTickingSystem<EntityStor
                     why
                 );
             }
-            // Do not advance LastGameEpochMinute — resolution can fail if town/plot data loads late; retry every tick.
             return;
         }
 
         UUID current = binding.getPreferredPlotId();
-        boolean needsApply = newCalendarMinute || current == null || !targetPlot.equals(current);
+        boolean needsApply = timeJump || newCalendarMinute || current == null || !targetPlot.equals(current);
         if (!needsApply) {
             return;
         }

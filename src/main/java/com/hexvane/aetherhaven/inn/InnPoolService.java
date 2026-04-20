@@ -37,6 +37,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
@@ -78,7 +80,7 @@ public final class InnPoolService {
     private InnPoolService() {}
 
     /**
-     * Throttled entry from {@link InnPoolTickSystem}: at most once per game-second per world.
+     * Legacy throttled entry (at most once per game-second per world); prefer {@link #scheduleTickFromHub}.
      * <p>
      * Work is queued with {@link World#execute} so spawn/despawn does not run during {@link Store} tick processing.
      */
@@ -93,6 +95,85 @@ public final class InnPoolService {
             lastTickGameEpochSecond = sec;
         }
         world.execute(() -> tick(world, plugin, wtr));
+    }
+
+    /**
+     * {@link com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem} calls this once per in-game minute
+     * (smooth) or after a time discontinuity (along with {@link #catchUpAfterTimeJump}); no per-player tick spam.
+     */
+    public static void scheduleTickFromHub(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull WorldTimeResource wtr) {
+        world.execute(() -> tick(world, plugin, wtr));
+    }
+
+    /**
+     * When game time jumps forward (e.g. midnight to midday), run inn morning unlock refresh for each calendar day whose
+     * configured morning hour fell strictly inside {@code (from, to]} and was not yet recorded on the town.
+     */
+    public static void catchUpAfterTimeJump(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WorldTimeResource wtr,
+        @Nonnull Instant from,
+        @Nonnull Instant to
+    ) {
+        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
+        LinkedHashSet<Long> days = new LinkedHashSet<>();
+        com.hexvane.aetherhaven.time.GameTimeEpochs.collectEpochDaysWhereMorningStartOccurred(
+            from, to, morningStart, WorldTimeResource.ZONE_OFFSET, days
+        );
+        if (days.isEmpty()) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        for (TownRecord town : tm.allTowns()) {
+            if (!world.getName().equals(town.getWorldName())) {
+                continue;
+            }
+            town.migrateInnFieldsIfNeeded();
+            for (long epochDay : days) {
+                Long last = town.getInnPoolLastMorningEpochDay();
+                if (last != null && last >= epochDay) {
+                    continue;
+                }
+                refreshUnlockedPoolForEpochMorning(town, tm, store, epochDay);
+            }
+        }
+    }
+
+    /**
+     * Same visitor removals as {@link #morningUnlockedRefreshIfDue} when the inn morning timestamp for {@code epochDay}
+     * was skipped by a time jump.
+     */
+    private static void refreshUnlockedPoolForEpochMorning(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        long epochDay
+    ) {
+        for (String sid : new ArrayList<>(town.getInnPoolNpcIds())) {
+            UUID u = parseUuid(sid);
+            if (u == null) {
+                town.getInnPoolNpcIds().remove(sid);
+                continue;
+            }
+            if (town.isInnVisitorLocked(u)) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref == null) {
+                continue;
+            }
+            if (!ref.isValid()) {
+                town.getInnPoolNpcIds().remove(sid);
+                continue;
+            }
+            town.getInnPoolNpcIds().remove(sid);
+            store.removeEntity(ref, RemoveReason.REMOVE);
+        }
+        town.setInnPoolLastMorningEpochDay(epochDay);
+        town.setInnPoolLastMorningGameDate(LocalDate.ofEpochDay(epochDay).toString());
+        tm.updateTown(town);
     }
 
     public static void tick(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull WorldTimeResource wtr) {

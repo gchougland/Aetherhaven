@@ -4,6 +4,7 @@
 
 ### Changes
 
+- **Game time hub:** A single per-world coordinator (`AetherhavenGameTimeCoordinatorSystem`) now drives villager schedules, inn pool ticks, and sprinkler morning passes from **smooth in-game minute** advances and **time discontinuities** (e.g. `/time set`). Replaces per-entity schedule ticking and per-player inn/sprinkler tick spam. Time jumps run schedule logic at the **final** game time only; inn and sprinklers **catch up** skipped mornings when the configured morning hour falls inside the skipped interval, then apply normal logic at the new time.
 - Removed crafting time from recipes
 - Corrected cost of building Town Hall
 - **Debug commands** (requires `DebugCommandsEnabled` in plugin `config.json`):

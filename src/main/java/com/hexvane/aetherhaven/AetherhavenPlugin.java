@@ -30,7 +30,6 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
-import com.hexvane.aetherhaven.schedule.VillagerScheduleSystem;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -40,8 +39,10 @@ import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
 import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
-import com.hexvane.aetherhaven.farming.SprinklerEpochTickSystem;
-import com.hexvane.aetherhaven.inn.InnPoolTickSystem;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
@@ -54,6 +55,7 @@ import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -104,6 +106,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
         t.setDaemon(true);
         return t;
     });
+
+    private final AetherhavenGameTimeHub gameTimeHub = new AetherhavenGameTimeHub();
+    private final AetherhavenGameTimeBridgeSubscriber gameTimeBridgeSubscriber = new AetherhavenGameTimeBridgeSubscriber(this);
+    /** Filled in {@link #setup}; used by {@link AetherhavenGameTimeCoordinatorSystem}. */
+    @Nullable
+    private ResourceType<EntityStore, AetherhavenGameTimeCursorResource> gameTimeCursorResourceType;
 
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
@@ -187,6 +195,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
 
+        this.gameTimeCursorResourceType =
+            this.getEntityStoreRegistry()
+                .registerResource(AetherhavenGameTimeCursorResource.class, AetherhavenGameTimeCursorResource::new);
+        this.gameTimeHub.register(this.gameTimeBridgeSubscriber);
+        this.getEntityStoreRegistry()
+            .registerSystem(new AetherhavenGameTimeCoordinatorSystem(this.gameTimeHub, this.gameTimeCursorResourceType));
+
         PlotSignBlock.register(this.getChunkStoreRegistry());
         ManagementBlock.register(this.getChunkStoreRegistry());
         CharterBlock.register(this.getChunkStoreRegistry());
@@ -233,11 +248,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
             );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
-        this.getEntityStoreRegistry().registerSystem(new VillagerScheduleSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
-        this.getEntityStoreRegistry().registerSystem(new InnPoolTickSystem(this));
-        this.getEntityStoreRegistry().registerSystem(new SprinklerEpochTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));

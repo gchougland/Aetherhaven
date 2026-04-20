@@ -18,6 +18,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import javax.annotation.Nonnull;
@@ -64,6 +65,56 @@ public final class SprinklerWateringService {
             return;
         }
         onGameTimeTick(world, store, plugin);
+    }
+
+    /**
+     * {@link com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem} — once per game minute (smooth) or after
+     * a discontinuity (with optional catch-up); replaces per-player tick spam.
+     */
+    public static void scheduleFromHub(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull AetherhavenPlugin plugin) {
+        onGameTimeTick(world, store, plugin);
+    }
+
+    /**
+     * If game time jumps over a configured morning hour, run one automatic watering pass when that morning was missed.
+     */
+    public static void catchUpAfterTimeJump(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Instant from,
+        @Nonnull Instant to
+    ) {
+        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
+        LinkedHashSet<Long> days = new LinkedHashSet<>();
+        com.hexvane.aetherhaven.time.GameTimeEpochs.collectEpochDaysWhereMorningStartOccurred(
+            from, to, morningStart, WorldTimeResource.ZONE_OFFSET, days
+        );
+        if (days.isEmpty()) {
+            return;
+        }
+        long maxDay = Long.MIN_VALUE;
+        for (Long d : days) {
+            maxDay = Math.max(maxDay, d);
+        }
+        final long claimedDay = maxDay;
+        String w = world.getName();
+        Long lastMorningDay = LAST_AUTOMATIC_SPRINKLER_CALENDAR_DAY.get(w);
+        if (lastMorningDay != null && lastMorningDay >= claimedDay) {
+            return;
+        }
+        LAST_AUTOMATIC_SPRINKLER_CALENDAR_DAY.put(w, claimedDay);
+        world.execute(() -> {
+            try {
+                waterAllSprinklers(world, store);
+            } catch (Throwable t) {
+                LOGGER.at(Level.SEVERE).withCause(t).log(
+                    "[Aetherhaven] Sprinkler jump catch-up watering failed world=%s — will retry",
+                    w
+                );
+                LAST_AUTOMATIC_SPRINKLER_CALENDAR_DAY.remove(w, claimedDay);
+            }
+        });
     }
 
     static void onGameTimeTick(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull AetherhavenPlugin plugin) {
