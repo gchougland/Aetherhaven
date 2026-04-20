@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven;
 
+import java.util.UUID;
+import javax.annotation.Nullable;
+
 public final class AetherhavenConstants {
     public static final String PLOT_SIGN_ITEM_ID = "Aetherhaven_Plot_Sign";
     public static final String CHARTER_ITEM_ID = "Aetherhaven_Charter";
@@ -158,6 +161,16 @@ public final class AetherhavenConstants {
      * moves or plays POI animations, so Idle {@code WanderInRect} does not fight scripted motion.
      */
     public static final String NPC_STATE_AUTONOMY_POI = "AetherhavenAutonomy";
+
+    /**
+     * Synthetic autonomy target: path to the scheduled plot's footprint (no POI interaction). Vanilla wander rects are
+     * centered on the NPC, so off-plot idles (e.g. after Gaia revival) must commute here first.
+     */
+    public static final UUID SCHEDULE_ZONE_COMMUTE_POI_ID = UUID.fromString("a8e3c2d0-4b1e-4f2a-9c0d-000000000001");
+
+    public static boolean isScheduleZoneCommutePoi(@Nullable UUID poiId) {
+        return poiId != null && SCHEDULE_ZONE_COMMUTE_POI_ID.equals(poiId);
+    }
 
     public static final String PAGE_VILLAGER_NEEDS = "AetherhavenVillagerNeeds";
 

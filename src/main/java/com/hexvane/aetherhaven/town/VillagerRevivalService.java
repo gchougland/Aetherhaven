@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -76,6 +78,12 @@ public final class VillagerRevivalService {
         UUID newUuid = nu.getUuid();
         VillagerReputationService.migrateVillagerEntityUuid(town, tm, oldUuid, newUuid);
         ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, oldUuid, newUuid);
+        world.execute(
+            () -> {
+                VillagerScheduleService.applyForWorld(world, store, plugin, true);
+                VillagerAutonomyTravelKick.kickTravelToSchedulePoi(plugin, world, store, newUuid, false);
+            }
+        );
         LOGGER.atInfo().log("Revived villager role %s at %s,%s,%s", roleId, spawnPos.x, spawnPos.y, spawnPos.z);
         return true;
     }

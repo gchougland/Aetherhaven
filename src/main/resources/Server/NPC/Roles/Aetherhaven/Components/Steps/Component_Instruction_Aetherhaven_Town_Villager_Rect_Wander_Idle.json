@@ -2,7 +2,7 @@
   "Type": "Component",
   "Class": "Instruction",
   "Interface": "Hytale.Instruction.Intelligent.Idle.Motion",
-  "$Comment": "Looped WanderInRect + pause. Override WanderRectTimer/PauseTimer via Reference Modify. Width/Depth/MaxHeadingChange are literals — engine does not support Compute on WanderInRect box params in this context.",
+  "$Comment": "Looped WanderInRectGroundPreference + pause. DefaultGroundWeight applies to normal terrain; ObstacleWeight penalizes bench/seat/bed blocks. Optional GroundWeights override by BlockTypeId.",
   "Parameters": {
     "WanderRectTimer": {
       "Value": [3, 8],
@@ -23,10 +23,13 @@
           "Type": "Timer",
           "Time": { "Compute": "WanderRectTimer" },
           "Motion": {
-            "Type": "WanderInRect",
+            "Type": "WanderInRectGroundPreference",
             "Width": 4,
             "Depth": 4,
-            "MaxHeadingChange": 90
+            "MaxHeadingChange": 90,
+            "DefaultGroundWeight": 1.0,
+            "ObstacleWeight": 0.12,
+            "GroundWeights": []
           }
         },
         {

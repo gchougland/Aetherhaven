@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -52,7 +53,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     private static final double POI_ENTRY_ARRIVE_HORIZONTAL_SQ = 3.5 * 3.5;
     private static final int BLOCKED_FAIL_TICKS = 100;
     private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
-
     static void onUnloadSafetyDismount(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -154,7 +154,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
             case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
-            default -> tickIdle(ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now);
+            default -> tickIdle(ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, this.plugin);
         }
     }
 
@@ -169,8 +169,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull VillagerNeeds needs,
         @Nonnull TownVillagerBinding binding,
         @Nonnull VillagerAutonomyState autonomy,
-        long now
+        long now,
+        @Nonnull AetherhavenPlugin plugin
     ) {
+        if (SchedulePlotCommute.tryBeginIfOffSchedulePlot(ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin)) {
+            return;
+        }
         if (now < autonomy.getNextDecisionEpochMs()) {
             return;
         }
@@ -178,7 +182,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         double npcX = tc != null ? tc.getPosition().x : Double.NaN;
         double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
-        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, cellOcc, npcX, npcZ);
+        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
+        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg);
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
@@ -311,6 +317,17 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
 
         boolean arrived = horizSq <= maxArriveSq;
         if (arrived) {
+            if (AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {
+                autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
+                autonomy.setTargetPoiUuid(null);
+                autonomy.setPathFailureReason("");
+                autonomy.setTravelStuckTicks(0);
+                autonomy.clearPendingDoorClose();
+                autonomy.setNextDecisionEpochMs(now);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                clearAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
             PoiEntry poi = poiEarly;
             if (poi == null) {
                 failTravel(autonomy, now, "POI_GONE", commandBuffer, ref, npc);
@@ -441,7 +458,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         return System.currentTimeMillis();
     }
 
-    private static void applyAutonomyRoleState(
+    static void applyAutonomyRoleState(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.poi.PoiOccupancy;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.List;
@@ -13,8 +14,29 @@ import javax.annotation.Nullable;
 
 public final class PoiScoring {
     private static final float SCORE_EPS = 1e-4f;
+    /** When any need meter falls below this (0..{@link VillagerNeeds#MAX}), work shift allows break POIs town-wide. */
+    private static final float NEEDS_BREAK_THRESHOLD = 40f;
 
     private PoiScoring() {}
+
+    /** True if the POI is for job activity (schedule {@code work} segment should prefer these over breaks). */
+    public static boolean isWorkPoi(@Nonnull PoiEntry e) {
+        if (e.getInteractionKind() == PoiInteractionKind.WORK_SURFACE) {
+            return true;
+        }
+        return e.getTags().contains("WORK");
+    }
+
+    /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
+    public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs) {
+        return needs.getHunger() < NEEDS_BREAK_THRESHOLD
+            || needs.getEnergy() < NEEDS_BREAK_THRESHOLD
+            || needs.getFun() < NEEDS_BREAK_THRESHOLD;
+    }
+
+    static boolean isWorkScheduleSegment(@Nullable String scheduleLocation) {
+        return scheduleLocation != null && VillagerScheduleResolver.LOC_WORK.equalsIgnoreCase(scheduleLocation.trim());
+    }
 
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {
         float hungerDef = VillagerNeeds.MAX - needs.getHunger();
@@ -63,13 +85,16 @@ public final class PoiScoring {
         @Nonnull TownVillagerBinding binding,
         @Nonnull Map<String, Integer> cellOccupancy
     ) {
-        return pickBest(candidates, needs, binding, cellOccupancy, Double.NaN, Double.NaN);
+        return pickBest(candidates, needs, binding, cellOccupancy, Double.NaN, Double.NaN, null);
     }
 
     /**
      * @param npcX world X of NPC (e.g. from {@link com.hypixel.hytale.server.core.modules.entity.component.TransformComponent}),
      *             or NaN to skip distance tie-breaking
      * @param npcZ world Z of NPC
+     * @param scheduleLocation last applied schedule segment (e.g. {@link VillagerScheduleResolver#LOC_WORK}); when {@code
+     *     work} and needs are satisfied, only {@link #isWorkPoi} on the preferred plot are considered; when needs are
+     *     low, break POIs are allowed town-wide.
      */
     @Nullable
     public static PoiEntry pickBest(
@@ -80,14 +105,39 @@ public final class PoiScoring {
         double npcX,
         double npcZ
     ) {
+        return pickBest(candidates, needs, binding, cellOccupancy, npcX, npcZ, null);
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
+        boolean atWork = isWorkScheduleSegment(scheduleLocation);
+        boolean breakOverride = atWork && needsBreakForSchedule(needs);
+        boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride;
         PoiEntry best = null;
         float bestScore = 0f;
         int bestUsed = Integer.MAX_VALUE;
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
-            if (preferredPlot != null && e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
-                continue;
+            if (workOnlyShift) {
+                if (e.getPlotId() == null || !preferredPlot.equals(e.getPlotId())) {
+                    continue;
+                }
+                if (!isWorkPoi(e)) {
+                    continue;
+                }
+            } else if (preferredPlot != null && !(atWork && breakOverride)) {
+                if (e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
+                    continue;
+                }
             }
             int cap = Math.max(1, e.getCapacity());
             String cell = PoiOccupancy.cellKey(e.getX(), e.getY(), e.getZ());
@@ -131,7 +181,13 @@ public final class PoiScoring {
                 bestDistSq = distSq;
             }
         }
-        if (bestScore < 8f) {
+        if (best == null) {
+            return null;
+        }
+        // Idle discretionary visits: require some unmet need so villagers do not crisscross town when already satisfied.
+        // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
+        // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
+        if (preferredPlot == null && bestScore < 8f) {
             return null;
         }
         return best;

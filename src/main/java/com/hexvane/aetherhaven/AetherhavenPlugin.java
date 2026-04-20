@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
+import com.hexvane.aetherhaven.npc.movement.BuilderBodyMotionWanderInRectGroundPreference;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -416,7 +417,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         NPCPlugin npc = NPCPlugin.get();
         if (npc != null) {
             npc.registerCoreComponentType("OpenAetherhavenDialogue", BuilderActionOpenAetherhavenDialogue::new);
-            LOGGER.atInfo().log("Registered NPC action OpenAetherhavenDialogue");
+            npc.registerCoreComponentType("WanderInRectGroundPreference", BuilderBodyMotionWanderInRectGroundPreference::new);
+            LOGGER.atInfo().log("Registered NPC action OpenAetherhavenDialogue and body motion WanderInRectGroundPreference");
         } else {
             LOGGER.atWarning().log("NPCPlugin not loaded; OpenAetherhavenDialogue action unavailable");
         }

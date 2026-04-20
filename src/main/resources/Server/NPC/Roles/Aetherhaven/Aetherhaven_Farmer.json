@@ -58,6 +58,33 @@
               }
             }
           ]
+        },
+        {
+          "$Comment": "$Interaction cannot live in a referenced Component (engine validation); duplicate this block for dialogue roles.",
+          "Sensor": {
+            "Type": "State",
+            "State": "$Interaction"
+          },
+          "Instructions": [
+            {
+              "Continue": true,
+              "Sensor": {
+                "Type": "Target",
+                "Range": 16
+              },
+              "HeadMotion": {
+                "Type": "Watch"
+              }
+            },
+            {
+              "Sensor": {
+                "Type": "Any"
+              },
+              "BodyMotion": {
+                "Type": "Nothing"
+              }
+            }
+          ]
         }
       ]
     }

@@ -15,8 +15,7 @@
       "x": -5,
       "y": 1,
       "z": -5,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner",
-      "rotation": 1
+      "name": "Wood_Softwood_Beam"
     },
     {
       "x": -5,
@@ -52,8 +51,7 @@
       "x": -5,
       "y": 1,
       "z": -4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -89,8 +87,7 @@
       "x": -5,
       "y": 1,
       "z": -3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -126,8 +123,7 @@
       "x": -5,
       "y": 1,
       "z": -2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -163,8 +159,7 @@
       "x": -5,
       "y": 1,
       "z": -1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -200,8 +195,7 @@
       "x": -5,
       "y": 1,
       "z": 0,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -237,8 +231,7 @@
       "x": -5,
       "y": 1,
       "z": 1,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -274,8 +267,7 @@
       "x": -5,
       "y": 1,
       "z": 2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -311,8 +303,7 @@
       "x": -5,
       "y": 1,
       "z": 3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -348,8 +339,7 @@
       "x": -5,
       "y": 1,
       "z": 4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -385,8 +375,7 @@
       "x": -5,
       "y": 1,
       "z": 5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": -5,
@@ -422,8 +411,7 @@
       "x": -5,
       "y": 1,
       "z": 6,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner",
-      "rotation": 2
+      "name": "Wood_Softwood_Beam"
     },
     {
       "x": -5,
@@ -459,8 +447,7 @@
       "x": -4,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -723,7 +710,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:42:28.189226206Z"
+            "DecayTime": "0001-01-12T01:58:54.946100411Z"
           }
         }
       }
@@ -767,7 +754,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:01:05.189226206Z"
+            "DecayTime": "0001-01-12T07:31:07.945533747Z"
           }
         }
       }
@@ -811,7 +798,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T12:23:25.189226206Z"
+            "DecayTime": "0001-01-12T00:45:54.945344859Z"
           }
         }
       }
@@ -855,7 +842,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:04:49.189226206Z"
+            "DecayTime": "0001-01-12T04:36:42.945128987Z"
           }
         }
       }
@@ -900,7 +887,7 @@
       "x": -4,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -4,
@@ -936,8 +923,7 @@
       "x": -3,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -1206,7 +1192,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T18:26:11.189226206Z"
+            "DecayTime": "0001-01-12T06:18:42.945749619Z"
           }
         }
       }
@@ -1250,7 +1236,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:52:29.189226206Z"
+            "DecayTime": "0001-01-12T05:22:14.945836161Z"
           }
         }
       }
@@ -1294,7 +1280,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:52:16.189226206Z"
+            "DecayTime": "0001-01-12T05:11:29.946079017Z"
           }
         }
       }
@@ -1338,7 +1324,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T18:42:57.189226206Z"
+            "DecayTime": "0001-01-12T05:39:38.946267905Z"
           }
         }
       }
@@ -1383,7 +1369,7 @@
       "x": -3,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -3,
@@ -1419,8 +1405,7 @@
       "x": -2,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -1687,7 +1672,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:19:10.189226206Z"
+            "DecayTime": "0001-01-12T06:30:54.947212345Z"
           }
         }
       }
@@ -1731,7 +1716,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T15:47:43.189226206Z"
+            "DecayTime": "0001-01-12T05:25:33.947023457Z"
           }
         }
       }
@@ -1775,7 +1760,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T15:32:24.189226206Z"
+            "DecayTime": "0001-01-12T00:20:16.946753617Z"
           }
         }
       }
@@ -1819,7 +1804,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:24:05.189226206Z"
+            "DecayTime": "0001-01-12T02:13:39.946483777Z"
           }
         }
       }
@@ -1864,7 +1849,7 @@
       "x": -2,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -2,
@@ -1900,8 +1885,7 @@
       "x": -1,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2158,7 +2142,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:23:19.189226206Z"
+            "DecayTime": "0001-01-12T03:07:40.947401233Z"
           }
         }
       }
@@ -2202,7 +2186,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:41:39.189226206Z"
+            "DecayTime": "0001-01-12T06:58:40.947617105Z"
           }
         }
       }
@@ -2246,7 +2230,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T12:43:22.189226206Z"
+            "DecayTime": "0001-01-12T03:09:01.947859961Z"
           }
         }
       }
@@ -2290,7 +2274,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:44:20.189226206Z"
+            "DecayTime": "0001-01-12T06:36:18.948075833Z"
           }
         }
       }
@@ -2335,7 +2319,7 @@
       "x": -1,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": -1,
@@ -2371,7 +2355,7 @@
       "x": 0,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence_Gate"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2767,7 +2751,7 @@
       "x": 0,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence_Gate"
+      "name": "Empty"
     },
     {
       "x": 0,
@@ -2803,8 +2787,7 @@
       "x": 1,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -3200,8 +3183,7 @@
       "x": 1,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -3237,8 +3219,7 @@
       "x": 2,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -3273,7 +3254,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:58:58.189226206Z"
+            "DecayTime": "0001-01-12T05:22:22.953724135Z"
           }
         }
       }
@@ -3317,7 +3298,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T11:57:38.189226206Z"
+            "DecayTime": "0001-01-12T07:18:57.953373343Z"
           }
         }
       }
@@ -3361,7 +3342,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T12:04:33.189226206Z"
+            "DecayTime": "0001-01-12T05:37:42.954128895Z"
           }
         }
       }
@@ -3405,7 +3386,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:58:48.189226206Z"
+            "DecayTime": "0001-01-12T03:49:13.954344767Z"
           }
         }
       }
@@ -3521,7 +3502,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T18:20:18.189226206Z"
+            "DecayTime": "0001-01-12T05:25:09.943590899Z"
           }
         }
       }
@@ -3565,7 +3546,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T11:39:31.189226206Z"
+            "DecayTime": "0001-01-12T02:18:07.943779787Z"
           }
         }
       }
@@ -3609,7 +3590,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:32:46.189226206Z"
+            "DecayTime": "0001-01-12T05:12:56.943968675Z"
           }
         }
       }
@@ -3653,7 +3634,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:10:53.189226206Z"
+            "DecayTime": "0001-01-12T04:23:42.944184547Z"
           }
         }
       }
@@ -3698,7 +3679,7 @@
       "x": 2,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -3734,8 +3715,7 @@
       "x": 3,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -3770,7 +3750,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:11:16.189226206Z"
+            "DecayTime": "0001-01-12T01:27:53.953157471Z"
           }
         }
       }
@@ -3814,7 +3794,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:33:07.189226206Z"
+            "DecayTime": "0001-01-12T06:39:25.951889223Z"
           }
         }
       }
@@ -3858,7 +3838,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T11:38:33.189226206Z"
+            "DecayTime": "0001-01-12T06:56:35.952968583Z"
           }
         }
       }
@@ -3902,7 +3882,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T12:02:23.189226206Z"
+            "DecayTime": "0001-01-12T02:51:49.952779695Z"
           }
         }
       }
@@ -4018,7 +3998,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:38:15.189226206Z"
+            "DecayTime": "0001-01-12T02:19:01.943267091Z"
           }
         }
       }
@@ -4062,7 +4042,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:03:41.189226206Z"
+            "DecayTime": "0001-01-12T02:40:12.942943283Z"
           }
         }
       }
@@ -4106,7 +4086,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:39:56.189226206Z"
+            "DecayTime": "0001-01-12T01:53:33.942436642Z"
           }
         }
       }
@@ -4150,7 +4130,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:00:19.189226206Z"
+            "DecayTime": "0001-01-12T02:47:35.942565507Z"
           }
         }
       }
@@ -4195,22 +4175,22 @@
       "x": 3,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
-    },
-    {
-      "x": 3,
-      "y": 2,
-      "z": 6,
       "name": "Empty"
     },
     {
       "x": 3,
-      "y": 3,
+      "y": 2,
       "z": 6,
       "name": "Empty"
     },
     {
       "x": 3,
+      "y": 3,
+      "z": 6,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 4,
       "z": 6,
       "name": "Empty"
@@ -4231,8 +4211,7 @@
       "x": 4,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -4267,7 +4246,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T11:35:45.189226206Z"
+            "DecayTime": "0001-01-12T06:40:32.952105095Z"
           }
         }
       }
@@ -4311,7 +4290,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T18:18:05.189226206Z"
+            "DecayTime": "0001-01-12T02:09:02.951673351Z"
           }
         }
       }
@@ -4355,7 +4334,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:40:11.189226206Z"
+            "DecayTime": "0001-01-12T02:38:37.952293983Z"
           }
         }
       }
@@ -4399,7 +4378,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:09:24.189226206Z"
+            "DecayTime": "0001-01-12T01:36:31.952509855Z"
           }
         }
       }
@@ -4515,7 +4494,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T11:55:59.189226206Z"
+            "DecayTime": "0001-01-12T04:17:39.941573154Z"
           }
         }
       }
@@ -4559,7 +4538,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:02:56.189226206Z"
+            "DecayTime": "0001-01-12T06:34:01.941789026Z"
           }
         }
       }
@@ -4603,7 +4582,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T12:15:33.189226206Z"
+            "DecayTime": "0001-01-12T01:06:46.942031882Z"
           }
         }
       }
@@ -4647,7 +4626,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:13:46.189226206Z"
+            "DecayTime": "0001-01-12T06:11:16.942220770Z"
           }
         }
       }
@@ -4692,7 +4671,7 @@
       "x": 4,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -4728,8 +4707,7 @@
       "x": 5,
       "y": 1,
       "z": -5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 2
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4764,7 +4742,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:38:18.189226206Z"
+            "DecayTime": "0001-01-12T02:12:14.951484463Z"
           }
         }
       }
@@ -4808,7 +4786,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T14:20:56.189226206Z"
+            "DecayTime": "0001-01-12T03:05:16.951295575Z"
           }
         }
       }
@@ -4852,7 +4830,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:14:11.189226206Z"
+            "DecayTime": "0001-01-12T03:54:18.951106687Z"
           }
         }
       }
@@ -4896,7 +4874,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T15:33:41.189226206Z"
+            "DecayTime": "0001-01-12T02:04:03.950917799Z"
           }
         }
       }
@@ -5012,7 +4990,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T18:09:16.189226206Z"
+            "DecayTime": "0001-01-12T06:03:16.942458297Z"
           }
         }
       }
@@ -5056,7 +5034,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T16:37:20.189226206Z"
+            "DecayTime": "0001-01-12T04:37:30.943226432Z"
           }
         }
       }
@@ -5100,7 +5078,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T13:16:09.189226206Z"
+            "DecayTime": "0001-01-12T07:12:57.943037544Z"
           }
         }
       }
@@ -5144,7 +5122,7 @@
         "Components": {
           "TilledSoil": {
             "Version": 1,
-            "DecayTime": "0001-01-09T17:03:05.189226206Z"
+            "DecayTime": "0001-01-12T04:41:51.950132492Z"
           }
         }
       }
@@ -5189,7 +5167,7 @@
       "x": 5,
       "y": 1,
       "z": 6,
-      "name": "Wood_Softwood_Fence"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -5225,7 +5203,7 @@
       "x": 6,
       "y": 1,
       "z": -5,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner"
+      "name": "Wood_Softwood_Beam"
     },
     {
       "x": 6,
@@ -5261,8 +5239,7 @@
       "x": 6,
       "y": 1,
       "z": -4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5298,8 +5275,7 @@
       "x": 6,
       "y": 1,
       "z": -3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5335,8 +5311,7 @@
       "x": 6,
       "y": 1,
       "z": -2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5372,8 +5347,7 @@
       "x": 6,
       "y": 1,
       "z": -1,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5409,8 +5383,7 @@
       "x": 6,
       "y": 1,
       "z": 0,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5446,8 +5419,7 @@
       "x": 6,
       "y": 1,
       "z": 1,
-      "name": "Wood_Softwood_Fence_Gate",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5483,8 +5455,7 @@
       "x": 6,
       "y": 1,
       "z": 2,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5520,8 +5491,7 @@
       "x": 6,
       "y": 1,
       "z": 3,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5557,8 +5527,7 @@
       "x": 6,
       "y": 1,
       "z": 4,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5594,8 +5563,7 @@
       "x": 6,
       "y": 1,
       "z": 5,
-      "name": "Wood_Softwood_Fence",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5631,8 +5599,7 @@
       "x": 6,
       "y": 1,
       "z": 6,
-      "name": "*Wood_Softwood_Fence_State_Definitions_Corner",
-      "rotation": 3
+      "name": "Wood_Softwood_Beam"
     },
     {
       "x": 6,
@@ -11707,6 +11674,2140 @@
       "z": 6,
       "name": "Empty",
       "level": 0
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -2.499776840209961,
+            "Y": 1.0,
+            "Z": 5.40989875793457
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "PEkCGfF9QX2ZvYD40MGQzw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9962513446807861,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.6449508666992188,
+            "Y": 1.0,
+            "Z": 5.444934844970703
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9lV+KsQBSMmeyCIXcGy1Fw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -2.555215835571289,
+            "Y": 1.0,
+            "Z": 4.471225738525391
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "53ShsvkGRTeytvh3FjWrfQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.5522756576538086,
+            "Y": 1.0,
+            "Z": 4.567104339599609
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "gEyr0YdiS+myJsFIugjd3Q==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.759676694869995,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.467988967895508,
+            "Y": 1.0,
+            "Z": -3.514037609100342
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "1gVl5fwLQ5u6Ukb38SdN1w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.480123996734619,
+            "Y": 1.0,
+            "Z": -2.4703369140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "g63wq4D1SrW/PPQUofhymA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.016310811042785645,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.468090534210205,
+            "Y": 0.959259033203125,
+            "Z": -1.4021921157836914
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HWGgEeAWQk+RxlsmdekQ+A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.526327610015869,
+            "Y": 1.0,
+            "Z": -0.5743322372436523
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "2wZbA0RJSweUR37HLRi+lw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.9088501930236816,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.570648670196533,
+            "Y": 1.0,
+            "Z": -0.537750244140625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "JX6VJ6D0RsGRJhi596MJmA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.39066505432128906,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.6028685569763184,
+            "Y": 0.959259033203125,
+            "Z": -1.6004276275634766
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "zaGy6FAAQUSPmO9Tr8dPZw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.603553295135498,
+            "Y": 1.0,
+            "Z": -2.542325973510742
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "GxMAzSuVTlO51GxMd0yI1A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.17774677276611328,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.60286808013916,
+            "Y": 0.959259033203125,
+            "Z": -3.463825225830078
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "WzJstyffRvSyYpC5omtt9w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.559960126876831,
+            "Y": 0.959259033203125,
+            "Z": -3.3790512084960938
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "NBL5HOHARICg3J+7dXx6pg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 4.689809083938599,
+            "Y": 1.0,
+            "Z": -3.4412307739257812
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "4leILrTfQYe5vSB6oVkPmw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.7919702529907227,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 4.606139183044434,
+            "Y": 0.959259033203125,
+            "Z": -2.472881317138672
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "O4wbdIvWSlujts+eCMDnpg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 4.617542505264282,
+            "Y": 1.0,
+            "Z": -1.6535835266113281
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8YHN0TA+S2SI0IZZIwHIFQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.0683469772338867,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 4.606139421463013,
+            "Y": 0.959259033203125,
+            "Z": -0.4841165542602539
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8Bgk3y22TIS+s1AYwHCzDw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.55271053314209,
+            "Y": 1.0,
+            "Z": -0.5010299682617188
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HhbexOvxQcqB2r9mCm8CIA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.1338260173797607,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.559960126876831,
+            "Y": 0.959259033203125,
+            "Z": -1.4725589752197266
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "IWKAGnjxT6Wd97NHBdLHyQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Lettuce_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.559960126876831,
+            "Y": 0.959259033203125,
+            "Z": -2.436309814453125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ts6Zh4vzS+Ka21X8DwXtHw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Lettuce_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.2402280569076538,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.592991828918457,
+            "Y": 1.0,
+            "Z": 2.689152717590332
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "C6cDqmi0NlO51PiRUMAq+w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5338473320007324,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.509735584259033,
+            "Y": 1.0,
+            "Z": 5.395145416259766
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "3JinXSQPT8aZhhFcl0/KHQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.025937080383301,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.4331436157226562,
+            "Y": 1.0,
+            "Z": 3.975459098815918
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "DqoumJ3hRGmQKZQIUK8pTw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.549002170562744,
+            "Y": 1.0,
+            "Z": 5.371870040893555
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "vNcTveYqSemO5aR92iPi1A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.3771075010299683,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 4.023618459701538,
+            "Y": 1.0,
+            "Z": 5.303829193115234
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "8OMy+e9uReGIf6qHr2TP9w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.994128704071045,
+            "Y": 1.0,
+            "Z": 3.8627500534057617
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "S/4CnYIKSWacOIKDvYUlkA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.3802406787872314,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.8888297080993652,
+            "Y": 1.0,
+            "Z": 2.3971643447875977
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "P+4Plj3CQbqMdGRgygI7Gg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.3198347091674805,
+            "Y": 1.0,
+            "Z": 2.6113338470458984
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ADIsDpQBS5mrfF6lGtJDsA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Pumpkin_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": 5.480635166168213,
+            "Y": 1.0,
+            "Z": 3.9263219833374023
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "+V1JZFNdSoS0O8sdiFrqVQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Pumpkin_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9780669212341309,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.679417610168457,
+            "Y": 1.0,
+            "Z": 2.5267648696899414
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "08A6CVlpS9+7Naty4NC15A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -3.572230339050293,
+            "Y": 1.0,
+            "Z": 2.4761886596679688
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "HkCCagpHRSmn0uzGFbKqCw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -3.6225128173828125,
+            "Y": 1.0,
+            "Z": 3.501246452331543
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "avs0cQjwRgyyE11N+tp1ow==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.5913805961608887,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -3.5397109985351562,
+            "Y": 1.0,
+            "Z": 4.44283390045166
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "UsRuue22Q6GaSREi5fybkg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -3.565526008605957,
+            "Y": 1.0,
+            "Z": 5.5329132080078125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "mfBO4wYxSJikl/YqS/WzLQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.966087818145752,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.634119987487793,
+            "Y": 1.0,
+            "Z": 3.3603858947753906
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "tKx/SFXhQhqZjpeUNHfF0g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.929964542388916,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.6333417892456055,
+            "Y": 1.0,
+            "Z": 5.496955871582031
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "RJp9JUMeSc+BGrTYLYdzkg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 6.930352210998535,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -2.593602180480957,
+            "Y": 1.0,
+            "Z": 3.5514907836914062
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "oxpUe/6+RBqeQsfTm0H4yA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 4.2950968742370605,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -2.69036865234375,
+            "Y": 1.0,
+            "Z": 2.571918487548828
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "EwulhduTTTekqsMzGRrGxA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.68145751953125,
+            "Y": 1.0,
+            "Z": 2.563720703125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "9SlIIM5AQp+KorBMxE2V2A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.5655899047851562,
+            "Y": 1.0,
+            "Z": 3.5849905014038086
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "JB+4WjB/SP2Mo3RY8Xrw/w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.2947993278503418,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Plant_Crop_Aubergine_Item"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.5894651412963867,
+            "Y": 1.0,
+            "Z": 4.388352394104004
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6yFAXGMyQuu4qcDH9r/xOg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Plant_Crop_Aubergine_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.119356393814087,
+            "Roll": 0.0
+          }
+        }
+      }
     }
   ]
 }
