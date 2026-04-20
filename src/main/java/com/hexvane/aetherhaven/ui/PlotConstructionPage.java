@@ -81,6 +81,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
     private final boolean managementUi;
     /** 0 = Plot, 1 = Players (management UI only). */
     private int managementTab;
+    /** Move-building confirmation modal (management block, completed plot). */
+    private boolean moveBuildingConfirmOpen;
+    /** Open the move-building modal on the first {@link #build} (e.g. returning from town needs). */
+    private boolean pendingMoveBuildingModal;
     /**
      * {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the
      * whole tree and breaks selectors (wrong title, orphan "Materials" label, empty tabs).
@@ -93,10 +97,23 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         @Nonnull Vector3i blockWorldPos,
         boolean managementUi
     ) {
+        this(playerRef, blockRef, blockWorldPos, managementUi, 0, false);
+    }
+
+    public PlotConstructionPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull Vector3i blockWorldPos,
+        boolean managementUi,
+        int initialManagementTab,
+        boolean openMoveBuildingModalOnFirstBuild
+    ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.blockRef = blockRef;
         this.blockWorldPos = blockWorldPos.clone();
         this.managementUi = managementUi;
+        this.managementTab = initialManagementTab;
+        this.pendingMoveBuildingModal = openMoveBuildingModalOnFirstBuild;
     }
 
     @Override
@@ -106,6 +123,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
             templateAppended = true;
+        }
+        if (managementUi && pendingMoveBuildingModal) {
+            moveBuildingConfirmOpen = true;
+            pendingMoveBuildingModal = false;
         }
         commandBuilder.set(
             "#ShellTitleText.TextSpans",
@@ -117,6 +138,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set("#ManagementTabStrip.Visible", managementUi);
         commandBuilder.set("#PlotTabContent.Visible", plotTabActive);
         commandBuilder.set("#PlayersTabContent.Visible", managementUi && managementTab == 1);
+        commandBuilder.set("#MoveBuildingModal.Visible", managementUi && moveBuildingConfirmOpen);
 
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -135,10 +157,12 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
-            commandBuilder.set("#MoveBuildingButton.Visible", false);
-            commandBuilder.set("#TownNeedsButton.Visible", false);
+            commandBuilder.set("#TabNeedsButton.Disabled", true);
+            commandBuilder.set("#TabMoveButton.Disabled", true);
             if (managementUi) {
-                bindManagementTabEvents(eventBuilder);
+                commandBuilder.set("#TabPlotButton.Disabled", managementTab == 0);
+                commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
+                bindManagementTabEvents(eventBuilder, false);
                 if (managementTab == 1) {
                     buildManagementPlayersTab(ref, store, commandBuilder, eventBuilder);
                 } else {
@@ -224,24 +248,12 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set("#PickUpPlotButton.Visible", canPickupPlot);
         commandBuilder.set("#PickUpPlotButton.Disabled", !canPickupPlot);
 
-        commandBuilder.set("#TownNeedsButton.Visible", managementUi && completed);
-        if (managementUi && completed && plotTabActive) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#TownNeedsButton",
-                new EventData().append("Action", "OpenTownNeeds"),
-                false
-            );
-        }
-
-        commandBuilder.set("#MoveBuildingButton.Visible", managementUi && completed);
-        if (managementUi && completed && plotTabActive) {
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#MoveBuildingButton",
-                new EventData().append("Action", "MoveBuilding"),
-                false
-            );
+        boolean needsMoveTabsOk = managementUi && completed;
+        commandBuilder.set("#TabNeedsButton.Disabled", !needsMoveTabsOk);
+        commandBuilder.set("#TabMoveButton.Disabled", !needsMoveTabsOk);
+        if (managementUi) {
+            commandBuilder.set("#TabPlotButton.Disabled", managementTab == 0);
+            commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
         }
 
         boolean showHouseResident =
@@ -318,16 +330,30 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         );
 
         if (managementUi) {
-            bindManagementTabEvents(eventBuilder);
+            bindManagementTabEvents(eventBuilder, needsMoveTabsOk);
             if (managementTab == 1) {
                 buildManagementPlayersTab(ref, store, commandBuilder, eventBuilder);
             } else {
                 commandBuilder.clear(MEMBER_ROWS);
             }
         }
+        if (managementUi && moveBuildingConfirmOpen) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#MoveBuildingConfirmButton",
+                new EventData().append("Action", "ConfirmMoveBuilding"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#MoveBuildingCancelButton",
+                new EventData().append("Action", "CancelMoveBuilding"),
+                false
+            );
+        }
     }
 
-    private void bindManagementTabEvents(@Nonnull UIEventBuilder eventBuilder) {
+    private void bindManagementTabEvents(@Nonnull UIEventBuilder eventBuilder, boolean needsMoveTabsEnabled) {
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#TabPlotButton",
@@ -340,6 +366,20 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             new EventData().append("Action", "SwitchTabPlayers"),
             false
         );
+        if (needsMoveTabsEnabled) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabNeedsButton",
+                new EventData().append("Action", "OpenTownNeeds"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabMoveButton",
+                new EventData().append("Action", "BeginMoveBuilding"),
+                false
+            );
+        }
     }
 
     private void buildManagementPlayersTab(
@@ -466,12 +506,40 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
-        if (data.action != null && data.action.equalsIgnoreCase("MoveBuilding")) {
+        if (data.action != null && data.action.equalsIgnoreCase("BeginMoveBuilding")) {
             if (!managementUi) {
                 return;
             }
+            PlotInstanceState stBegin = resolvePlotState(store, ref);
+            if (stBegin != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            moveBuildingConfirmOpen = true;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("CancelMoveBuilding")) {
+            moveBuildingConfirmOpen = false;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("ConfirmMoveBuilding")) {
+            if (!managementUi) {
+                return;
+            }
+            moveBuildingConfirmOpen = false;
             PlotInstanceState stMove = resolvePlotState(store, ref);
             if (stMove != PlotInstanceState.COMPLETE) {
+                UICommandBuilder cmd = new UICommandBuilder();
+                UIEventBuilder ev = new UIEventBuilder();
+                build(ref, cmd, ev, store);
+                sendUpdate(cmd, ev, false);
                 return;
             }
             Store<ChunkStore> csMove = blockRef.getStore();
@@ -501,6 +569,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 return;
             }
             managementTab = 0;
+            moveBuildingConfirmOpen = false;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -512,6 +581,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 return;
             }
             managementTab = 1;
+            moveBuildingConfirmOpen = false;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -752,6 +822,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             if (!managementUi) {
                 return;
             }
+            moveBuildingConfirmOpen = false;
             PlotInstanceState st = resolvePlotState(store, ref);
             if (st != PlotInstanceState.COMPLETE) {
                 return;
@@ -770,7 +841,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             Player player = store.getComponent(ref, Player.getComponentType());
             if (player != null) {
                 // openCustomPage replaces this UI; do not call close() or Page.None clears the new page.
-                player.getPageManager().openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townUuid));
+                player.getPageManager()
+                    .openCustomPage(ref, store, new VillagerNeedsOverviewPage(playerRef, townUuid, blockRef, blockWorldPos));
             }
             return;
         }

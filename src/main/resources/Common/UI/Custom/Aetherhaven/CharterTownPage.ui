@@ -1,143 +1,171 @@
 $C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@MoveIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@CharterMoveIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@MoveIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@MoveIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@MoveIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@MoveIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 $C.@PageOverlay {
-  LayoutMode: Middle;
+  LayoutMode: Top;
 
-  $C.@DecoratedContainer {
-    Anchor: (Width: 480);
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
 
-    #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.chartertown.title;
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+    $C.@DecoratedContainer {
+      Anchor: (Width: 480);
+
+      #Title {
+        $C.@Title {
+          @Text = %server.aetherhaven.ui.chartertown.title;
+        }
+      }
+
+      #Content {
+        LayoutMode: Top;
+        Padding: (Vertical: 20, Horizontal: 28);
+
+        Group #CharterTopBar {
+          LayoutMode: Left;
+          Anchor: (Bottom: 12);
+          Visible: false;
+
+          Label #MoveCharterHint {
+            FlexWeight: 1;
+            Anchor: (Right: 12, Vertical: 4);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8a9aac);
+            Text: %server.aetherhaven.ui.chartertown.moveCharterHint;
+          }
+
+          Group {
+            LayoutMode: Middle;
+            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+            Padding: (Horizontal: 10, Vertical: 8);
+
+            TextButton #MoveCharterButton {
+              Style: @CharterMoveIconStyle;
+              Anchor: (Width: 44, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.chartertown.moveCharterTooltip;
+            }
+          }
+        }
+
+        Group #TownNameEditor {
+          LayoutMode: Top;
+          Anchor: (Bottom: 16);
+
+          Label #TownNameLabel {
+            Text: %server.aetherhaven.ui.chartertown.townNameLabel;
+            Anchor: (Bottom: 8);
+            Style: (RenderBold: true, RenderUppercase: true, TextColor: #94a7bb, FontSize: 13);
+          }
+
+          $C.@TextField #NameInput {
+            Anchor: (Top: 8, Height: 44);
+            PlaceholderText: %server.aetherhaven.ui.chartertown.namePlaceholder;
+          }
+
+          $C.@TextButton #SaveTownNameButton {
+            Anchor: (Top: 12);
+            Text: %server.aetherhaven.ui.chartertown.saveTownName;
+          }
+        }
+
+        Label #OwnerOnlyHint {
+          Visible: false;
+          Anchor: (Bottom: 12);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8899aa);
+          Text: %server.aetherhaven.ui.chartertown.ownerOnlyHint;
+        }
+
+        Group #TownInfoSeparator {
+          Anchor: (Height: 2, Vertical: 8);
+          Background: #292b2a;
+        }
+
+        Label #TownInfo {
+          Anchor: (Bottom: 12, Width: 424);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
+        }
+
+        $C.@TextButton #DissolveButton {
+          Text: %server.aetherhaven.ui.chartertown.dissolve;
+          Visible: false;
+          Anchor: (Top: 4);
+        }
+
+        Label #DissolveHint {
+          Visible: false;
+          Anchor: (Top: 8, Width: 424);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
+          Text: %server.aetherhaven.ui.chartertown.dissolveHint;
+        }
       }
     }
+    }
 
-    #Content {
-      LayoutMode: Top;
-      Padding: (Vertical: 20, Horizontal: 28);
+    Group #CharterConfirmModal {
+    LayoutMode: Middle;
+    Visible: false;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+    Background: #000000(0.55);
 
-      Group #TownNameEditor {
+    $C.@DecoratedContainer {
+      Anchor: (Width: 440);
+
+      #Title {
+        Label #CharterModalTitle {
+          Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+          Padding: (Horizontal: 12);
+          Text: "";
+        }
+      }
+
+      #Content {
         LayoutMode: Top;
-        Anchor: (Bottom: 16);
+        Padding: (Full: 18);
 
-        Label #TownNameLabel {
-          Text: %server.aetherhaven.ui.chartertown.townNameLabel;
-          Anchor: (Bottom: 8);
-          Style: (RenderBold: true, RenderUppercase: true, TextColor: #94a7bb, FontSize: 13);
-        }
-
-        $C.@TextField #NameInput {
-          Anchor: (Top: 8, Height: 44);
-          PlaceholderText: %server.aetherhaven.ui.chartertown.namePlaceholder;
-        }
-
-        $C.@TextButton #SaveTownNameButton {
-          Anchor: (Top: 12);
-          Text: %server.aetherhaven.ui.chartertown.saveTownName;
-        }
-      }
-
-      Label #OwnerOnlyHint {
-        Visible: false;
-        Anchor: (Bottom: 12);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8899aa);
-        Text: %server.aetherhaven.ui.chartertown.ownerOnlyHint;
-      }
-
-      Group #TownInfoSeparator {
-        Anchor: (Height: 2, Vertical: 8);
-        Background: #292b2a;
-      }
-
-      Label #TownInfo {
-        Anchor: (Bottom: 12, Width: 424);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
-      }
-
-      $C.@TextButton #DissolveButton {
-        Text: %server.aetherhaven.ui.chartertown.dissolve;
-        Visible: false;
-        Anchor: (Top: 4);
-      }
-
-      Label #DissolveHint {
-        Visible: false;
-        Anchor: (Top: 8, Width: 424);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
-        Text: %server.aetherhaven.ui.chartertown.dissolveHint;
-      }
-
-      Group #DissolveConfirmGroup {
-        LayoutMode: Top;
-        Visible: false;
-        Anchor: (Top: 8);
-
-        Label #DissolveConfirmText {
-          Anchor: (Bottom: 10);
-          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c);
-          Text: %server.aetherhaven.ui.chartertown.dissolveConfirmText;
+        Label #CharterModalText {
+          Anchor: (Bottom: 16);
+          Style: (...$C.@DefaultLabelStyle, Wrap: true);
+          Text: "";
         }
 
         Group {
           LayoutMode: Left;
-          Anchor: (Top: 4);
 
-          $C.@TextButton #DissolveConfirmButton {
-            Text: %server.aetherhaven.ui.chartertown.dissolveConfirm;
+          $C.@TextButton #CharterModalConfirmButton {
+            Text: %server.aetherhaven.ui.chartertown.modalConfirm;
             FlexWeight: 1;
-            Anchor: (Right: 6);
+            Anchor: (Right: 8);
           }
 
-          $C.@TextButton #DissolveCancelButton {
-            Text: %server.aetherhaven.ui.chartertown.dissolveCancel;
+          $C.@CancelTextButton #CharterModalCancelButton {
+            Text: %server.aetherhaven.ui.chartertown.modalCancel;
             FlexWeight: 1;
-            Anchor: (Left: 6);
-          }
-        }
-      }
-
-      $C.@TextButton #MoveCharterButton {
-        Text: %server.aetherhaven.ui.chartertown.moveCharter;
-        Visible: false;
-        Anchor: (Top: 8);
-      }
-
-      Label #MoveCharterHint {
-        Visible: false;
-        Anchor: (Top: 8, Width: 424);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
-        Text: %server.aetherhaven.ui.chartertown.moveCharterHint;
-      }
-
-      Group #MoveCharterConfirmGroup {
-        LayoutMode: Top;
-        Visible: false;
-        Anchor: (Top: 8);
-
-        Label #MoveCharterConfirmText {
-          Anchor: (Bottom: 10);
-          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c);
-          Text: %server.aetherhaven.ui.chartertown.moveCharterConfirmText;
-        }
-
-        Group {
-          LayoutMode: Left;
-          Anchor: (Top: 4);
-
-          $C.@TextButton #MoveCharterConfirmButton {
-            Text: %server.aetherhaven.ui.chartertown.moveCharterConfirm;
-            FlexWeight: 1;
-            Anchor: (Right: 6);
-          }
-
-          $C.@TextButton #MoveCharterCancelButton {
-            Text: %server.aetherhaven.ui.chartertown.moveCharterCancel;
-            FlexWeight: 1;
-            Anchor: (Left: 6);
+            Anchor: (Left: 8);
           }
         }
       }
     }
+  }
   }
 }
 

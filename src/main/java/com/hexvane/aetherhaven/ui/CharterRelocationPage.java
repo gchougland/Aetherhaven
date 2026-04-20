@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.placement.CharterRelocationService;
 import com.hexvane.aetherhaven.placement.CharterRelocationSession;
 import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
+import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -62,13 +63,21 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
         commandBuilder.append("Aetherhaven/PlotPlacementPage.ui");
         Vector3i a = session.getAnchor();
         commandBuilder.set(
-            "#Info.TextSpans",
+            "#Summary.TextSpans",
+            Message.translation("server.aetherhaven.ui.charterrelocation.summary")
+        );
+        commandBuilder.set(
+            "#Details.TextSpans",
+            Message.translation("server.aetherhaven.ui.charterrelocation.details")
+                .param("sx", a.x)
+                .param("sy", a.y)
+                .param("sz", a.z)
+                .param("step", session.getRotationSteps())
+        );
+        commandBuilder.set(
+            "#Tips.TextSpans",
             Message.join(
-                Message.translation("server.aetherhaven.ui.charterrelocation.title"),
-                Message.raw("\n\n"),
-                Message.translation("server.aetherhaven.ui.charterrelocation.info"),
-                Message.raw("\n\n" + a.x + ", " + a.y + ", " + a.z + "\n"),
-                Message.raw("Yaw step " + session.getRotationSteps() + " / 4 (90° each)"),
+                Message.translation("server.aetherhaven.ui.charterrelocation.tips"),
                 Message.raw("\n\n"),
                 Message.translation("server.aetherhaven.ui.plotplacement.cameraHint")
             )
@@ -80,14 +89,14 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
 
         commandBuilder.set("#BirdsEyeToggle #CheckBox.Value", birdsEyeEnabled);
         commandBuilder.set("#BirdsEyeZoomRow.Visible", birdsEyeEnabled);
-        commandBuilder.set("#BirdsEyePanLabel.Visible", birdsEyeEnabled);
-        commandBuilder.set("#BirdsEyePanRow.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyePanColumn.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyeDistanceSlider.Value", birdsEyeDistance);
         commandBuilder.set(
             "#BirdsEyeDistanceValue.TextSpans",
             Message.raw(String.format("%.0f", birdsEyeDistance))
         );
-        commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
-        commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
 
         commandBuilder.set(
             "#PlaceButton.TextSpans",
@@ -114,6 +123,12 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
             CustomUIEventBindingType.ValueChanged,
             "#BirdsEyeToggle #CheckBox",
             EventData.of("@BirdsEye", "#BirdsEyeToggle #CheckBox.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#BirdsEyeDistanceSlider",
+            EventData.of("@BirdsEyeDistance", "#BirdsEyeDistanceSlider.Value"),
             false
         );
 
@@ -163,14 +178,40 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
             scheduleApplyCameraAndRebuild(ref, store);
             return;
         }
+        if (data.birdsEyeDistance != null) {
+            birdsEyeDistance =
+                Math.max(
+                    PlotPlacementCameraUtil.MIN_DISTANCE,
+                    Math.min(PlotPlacementCameraUtil.MAX_DISTANCE, data.birdsEyeDistance)
+                );
+            if (birdsEyeEnabled) {
+                scheduleApplyCameraAfterSliderDrag(ref, store);
+            } else {
+                scheduleRebuild(ref, store);
+            }
+            return;
+        }
         if (data.action == null) {
             return;
         }
+        float yawRad = PlotPlacementNudgeUtil.getPlayerYawRadians(ref, store);
         switch (data.action) {
-            case "MoveXm" -> session.nudge(-1, 0, 0);
-            case "MoveXp" -> session.nudge(1, 0, 0);
-            case "MoveZm" -> session.nudge(0, 0, -1);
-            case "MoveZp" -> session.nudge(0, 0, 1);
+            case "MoveXm" ->
+                PlotPlacementNudgeUtil.nudgeCharterHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.NEG_X
+                );
+            case "MoveXp" ->
+                PlotPlacementNudgeUtil.nudgeCharterHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.POS_X
+                );
+            case "MoveZm" ->
+                PlotPlacementNudgeUtil.nudgeCharterHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.NEG_Z
+                );
+            case "MoveZp" ->
+                PlotPlacementNudgeUtil.nudgeCharterHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.POS_Z
+                );
             case "MoveYm" -> session.nudge(0, -1, 0);
             case "MoveYp" -> session.nudge(0, 1, 0);
             case "Rotate" -> session.rotateClockwise90();
@@ -192,9 +233,9 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
             }
             case "ZoomOut" -> {
                 birdsEyeDistance =
-                    Math.max(
-                        PlotPlacementCameraUtil.MIN_DISTANCE,
-                        birdsEyeDistance - PlotPlacementCameraUtil.DISTANCE_STEP
+                    Math.min(
+                        PlotPlacementCameraUtil.MAX_DISTANCE,
+                        birdsEyeDistance + PlotPlacementCameraUtil.DISTANCE_STEP
                     );
                 if (birdsEyeEnabled) {
                     scheduleApplyCameraAndRebuild(ref, store);
@@ -205,9 +246,9 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
             }
             case "ZoomIn" -> {
                 birdsEyeDistance =
-                    Math.min(
-                        PlotPlacementCameraUtil.MAX_DISTANCE,
-                        birdsEyeDistance + PlotPlacementCameraUtil.DISTANCE_STEP
+                    Math.max(
+                        PlotPlacementCameraUtil.MIN_DISTANCE,
+                        birdsEyeDistance - PlotPlacementCameraUtil.DISTANCE_STEP
                     );
                 if (birdsEyeEnabled) {
                     scheduleApplyCameraAndRebuild(ref, store);
@@ -249,6 +290,29 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
                 rebuild();
             }
         );
+    }
+
+    private void scheduleApplyCameraAfterSliderDrag(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                if (birdsEyeEnabled) {
+                    applyBirdsEyeCameraPacket(ref, store);
+                }
+                syncBirdsEyeDistanceUiOnly();
+            }
+        );
+    }
+
+    private void syncBirdsEyeDistanceUiOnly() {
+        UICommandBuilder cmd = new UICommandBuilder();
+        cmd.set("#BirdsEyeDistanceValue.TextSpans", Message.raw(String.format("%.0f", birdsEyeDistance)));
+        cmd.set("#BtnZoomOut.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        cmd.set("#BtnZoomIn.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
+        sendUpdate(cmd, new UIEventBuilder(), false);
     }
 
     private void captureBirdsEyeSnapshot(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -442,11 +506,15 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
             .add()
             .append(new KeyedCodec<>("@BirdsEye", Codec.BOOLEAN), (d, v) -> d.birdsEye = v, d -> d.birdsEye)
             .add()
+            .append(new KeyedCodec<>("@BirdsEyeDistance", Codec.FLOAT), (d, v) -> d.birdsEyeDistance = v, d -> d.birdsEyeDistance)
+            .add()
             .build();
 
         @Nullable
         private String action;
         @Nullable
         private Boolean birdsEye;
+        @Nullable
+        private Float birdsEyeDistance;
     }
 }

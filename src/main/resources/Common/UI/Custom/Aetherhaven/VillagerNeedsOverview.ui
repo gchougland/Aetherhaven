@@ -1,95 +1,187 @@
 $C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@TabIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@MgmtTabIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../house_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabFoodStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../food_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabGroupStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../group_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@MgmtTabMoveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 $C.@PageOverlay {
-  LayoutMode: Middle;
+  LayoutMode: Top;
 
-  $C.@DecoratedContainer {
-    Anchor: (Width: 420);
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
 
-    #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.villagerneeds.title;
-      }
-    }
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
 
-    #Content {
-      LayoutMode: Top;
-      Padding: (Full: 16);
+      $C.@DecoratedContainer {
+        Anchor: (Width: 420);
 
-      Label #Hint {
-        Anchor: (Bottom: 10);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true);
-        Text: %server.aetherhaven.ui.villagerneeds.hint;
-      }
-
-      Group {
-        LayoutMode: Left;
-        Anchor: (Bottom: 12);
-
-        AssetImage #Portrait {
-          Anchor: (Width: 96, Height: 96, Right: 12);
-          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        #Title {
+          $C.@Title {
+            @Text = %server.aetherhaven.ui.villagerneeds.title;
+          }
         }
 
-        Group {
+        #Content {
           LayoutMode: Top;
-          FlexWeight: 1;
+          Padding: (Full: 16);
 
-          Group #ReputationBlock {
+          Group #ManagementTabStrip {
+            LayoutMode: Left;
+            Visible: false;
+            Anchor: (Bottom: 14, Left: 0, Right: 0);
+            Padding: (Horizontal: 6, Vertical: 8);
+            Background: #1e2430(0.92);
+
+            TextButton #TabPlotButton {
+              Style: @MgmtTabIconStyle;
+              FlexWeight: 1;
+              Anchor: (Right: 4, Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlotTooltip;
+            }
+
+            TextButton #TabNeedsButton {
+              Style: @MgmtTabFoodStyle;
+              FlexWeight: 1;
+              Anchor: (Right: 4, Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.plotmanagement.tabNeedsTooltip;
+            }
+
+            TextButton #TabPlayersButton {
+              Style: @MgmtTabGroupStyle;
+              FlexWeight: 1;
+              Anchor: (Right: 4, Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlayersTooltip;
+            }
+
+            TextButton #TabMoveButton {
+              Style: @MgmtTabMoveStyle;
+              FlexWeight: 1;
+              Anchor: (Height: 40, Width: 44);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.plotmanagement.tabMoveTooltip;
+            }
+          }
+
+          Label #Hint {
+            Visible: false;
+            Anchor: (Bottom: 10);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: %server.aetherhaven.ui.villagerneeds.hint;
+          }
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 12);
+
+            AssetImage #Portrait {
+              Anchor: (Width: 96, Height: 96, Right: 12);
+              FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+            }
+
+            Group {
+              LayoutMode: Top;
+              FlexWeight: 1;
+
+              Group #ReputationBlock {
+                LayoutMode: Top;
+                Anchor: (Bottom: 8);
+                HitTestVisible: true;
+                Label #ReputationLabel {
+                  Text: %server.aetherhaven.ui.reputation.label;
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                  Anchor: (Bottom: 4);
+                }
+                Group #ReputationHeartSlots {
+                  LayoutMode: Left;
+                }
+              }
+
+              Label #NeedHungerLabel {
+                Text: %server.aetherhaven.ui.villagerneeds.hunger;
+                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                Anchor: (Bottom: 4);
+              }
+              $C.@ProgressBar #HungerBar {
+                @Anchor = (Bottom: 8, Left: 0, Right: 0);
+                Value: 1.0;
+              }
+
+              Label #NeedEnergyLabel {
+                Text: %server.aetherhaven.ui.villagerneeds.energy;
+                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                Anchor: (Bottom: 4);
+              }
+              $C.@ProgressBar #EnergyBar {
+                @Anchor = (Bottom: 8, Left: 0, Right: 0);
+                Value: 1.0;
+              }
+
+              Label #NeedFunLabel {
+                Text: %server.aetherhaven.ui.villagerneeds.fun;
+                Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+                Anchor: (Bottom: 4);
+              }
+              $C.@ProgressBar #FunBar {
+                @Anchor = (Bottom: 0, Left: 0, Right: 0);
+                Value: 1.0;
+              }
+            }
+          }
+
+          Label #VillagersHeader {
+            Text: %server.aetherhaven.ui.villagerneeds.villagers;
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+            Anchor: (Top: 8, Bottom: 6);
+          }
+
+          Group #VillagerRows {
             LayoutMode: Top;
-            Anchor: (Bottom: 8);
-            HitTestVisible: true;
-            Label #ReputationLabel {
-              Text: %server.aetherhaven.ui.reputation.label;
-              Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-              Anchor: (Bottom: 4);
-            }
-            Group #ReputationHeartSlots {
-              LayoutMode: Left;
-            }
-          }
-
-          Label #NeedHungerLabel {
-            Text: %server.aetherhaven.ui.villagerneeds.hunger;
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
             Anchor: (Bottom: 4);
-          }
-          $C.@ProgressBar #HungerBar {
-            @Anchor = (Bottom: 8, Left: 0, Right: 0);
-            Value: 1.0;
-          }
-
-          Label #NeedEnergyLabel {
-            Text: %server.aetherhaven.ui.villagerneeds.energy;
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-            Anchor: (Bottom: 4);
-          }
-          $C.@ProgressBar #EnergyBar {
-            @Anchor = (Bottom: 8, Left: 0, Right: 0);
-            Value: 1.0;
-          }
-
-          Label #NeedFunLabel {
-            Text: %server.aetherhaven.ui.villagerneeds.fun;
-            Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-            Anchor: (Bottom: 4);
-          }
-          $C.@ProgressBar #FunBar {
-            @Anchor = (Bottom: 0, Left: 0, Right: 0);
-            Value: 1.0;
           }
         }
-      }
-
-      Label #VillagersHeader {
-        Text: %server.aetherhaven.ui.villagerneeds.villagers;
-        Style: (...$C.@DefaultLabelStyle, RenderBold: true);
-        Anchor: (Top: 8, Bottom: 6);
-      }
-
-      Group #VillagerRows {
-        LayoutMode: Top;
-        Anchor: (Bottom: 4);
       }
     }
   }

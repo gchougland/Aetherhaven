@@ -3,7 +3,11 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -14,17 +18,20 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
@@ -42,14 +49,29 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
     private static final int MAX_ROWS = 16;
 
     private final UUID townId;
+    @Nullable
+    private final Ref<ChunkStore> managementBlockRef;
+    @Nullable
+    private final Vector3i managementBlockPos;
     private int selectedIndex;
     /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
     private boolean templateAppended;
     private boolean reputationHeartSlotsAppended;
 
     public VillagerNeedsOverviewPage(@Nonnull PlayerRef playerRef, @Nonnull UUID townId) {
+        this(playerRef, townId, null, null);
+    }
+
+    public VillagerNeedsOverviewPage(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull UUID townId,
+        @Nullable Ref<ChunkStore> managementBlockRef,
+        @Nullable Vector3i managementBlockPos
+    ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.townId = townId;
+        this.managementBlockRef = managementBlockRef;
+        this.managementBlockPos = managementBlockPos != null ? managementBlockPos.clone() : null;
     }
 
     @Override
@@ -68,12 +90,24 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
+        boolean showMgmtTabs = managementBlockRef != null && managementBlockPos != null;
+        commandBuilder.set("#ManagementTabStrip.Visible", showMgmtTabs);
+        if (showMgmtTabs) {
+            boolean needsOk = computeNeedsMoveTabsOk(store);
+            commandBuilder.set("#TabPlotButton.Disabled", false);
+            commandBuilder.set("#TabPlayersButton.Disabled", false);
+            commandBuilder.set("#TabNeedsButton.Disabled", true);
+            commandBuilder.set("#TabMoveButton.Disabled", !needsOk);
+            bindManagementReturnNav(eventBuilder, needsOk);
+        }
         if (plugin == null) {
+            commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.raw("Aetherhaven not loaded."));
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
         if (town == null) {
+            commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.raw("Town not found."));
             return;
         }
@@ -81,6 +115,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
         List<VillagerRow> rows = buildResidentRows(entityStore, town);
         if (rows.isEmpty()) {
+            commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.raw("No town residents tracked yet."));
             commandBuilder.clear(VILLAGER_ROWS);
             return;
@@ -89,7 +124,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             selectedIndex = 0;
         }
 
-        commandBuilder.set("#Hint.TextSpans", Message.raw("Residents with a town binding (inn visitors are not listed). Meters show loaded entities only."));
+        commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
         int n = Math.min(rows.size(), MAX_ROWS);
         for (int i = 0; i < n; i++) {
@@ -128,6 +163,20 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.action != null) {
+            if (data.action.equalsIgnoreCase("SwitchTabPlot")) {
+                openPlotManagement(ref, store, 0, false);
+                return;
+            }
+            if (data.action.equalsIgnoreCase("SwitchTabPlayers")) {
+                openPlotManagement(ref, store, 1, false);
+                return;
+            }
+            if (data.action.equalsIgnoreCase("BeginMoveBuilding")) {
+                openPlotManagement(ref, store, 0, true);
+                return;
+            }
+        }
         if (data.action == null || !data.action.equalsIgnoreCase("Select")) {
             return;
         }
@@ -138,6 +187,74 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         UIEventBuilder ev = new UIEventBuilder();
         build(ref, cmd, ev, store);
         sendUpdate(cmd, ev, false);
+    }
+
+    private void bindManagementReturnNav(@Nonnull UIEventBuilder eventBuilder, boolean needsMoveTabsEnabled) {
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabPlotButton",
+            new EventData().append("Action", "SwitchTabPlot"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#TabPlayersButton",
+            new EventData().append("Action", "SwitchTabPlayers"),
+            false
+        );
+        if (needsMoveTabsEnabled) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#TabMoveButton",
+                new EventData().append("Action", "BeginMoveBuilding"),
+                false
+            );
+        }
+    }
+
+    private void openPlotManagement(
+        @Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, int managementTab, boolean openMoveBuildingModalOnFirstBuild
+    ) {
+        if (managementBlockRef == null || managementBlockPos == null) {
+            return;
+        }
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        player.getPageManager()
+            .openCustomPage(
+                ref,
+                store,
+                new PlotConstructionPage(playerRef, managementBlockRef, managementBlockPos, true, managementTab, openMoveBuildingModalOnFirstBuild)
+            );
+    }
+
+    private boolean computeNeedsMoveTabsOk(@Nonnull Store<EntityStore> store) {
+        if (managementBlockRef == null) {
+            return false;
+        }
+        AetherhavenPlugin p = AetherhavenPlugin.get();
+        if (p == null) {
+            return false;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
+        Store<ChunkStore> cs = managementBlockRef.getStore();
+        ManagementBlock mb = cs.getComponent(managementBlockRef, ManagementBlock.getComponentType());
+        if (mb == null || mb.getTownId().isBlank() || mb.getPlotId().isBlank()) {
+            return false;
+        }
+        try {
+            TownRecord town = tm.getTown(UUID.fromString(mb.getTownId().trim()));
+            if (town == null) {
+                return false;
+            }
+            PlotInstance pi = town.findPlotById(UUID.fromString(mb.getPlotId().trim()));
+            return pi != null && pi.getState() == PlotInstanceState.COMPLETE;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     @Nonnull

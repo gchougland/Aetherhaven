@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 4/20/2026
+
+### Changes
+
+- Improved plot management, town needs, charter, and related confirmation UIs for clarity and layout.
+
 ## [0.4.0] - 4/19/2026
 
 ### Added

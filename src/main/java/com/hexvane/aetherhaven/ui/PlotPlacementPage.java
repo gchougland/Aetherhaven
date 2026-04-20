@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
+import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
@@ -91,26 +92,24 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 ? def.resolvePrefabAnchorWorld(sign, session.getPrefabYaw())
                 : new Vector3i(sign.x, sign.y, sign.z);
         commandBuilder.set(
-            "#Info.TextSpans",
+            "#Summary.TextSpans",
+            Message.translation("server.aetherhaven.ui.plotplacement.summary").param("building", name)
+        );
+        commandBuilder.set(
+            "#Details.TextSpans",
+            Message.translation("server.aetherhaven.ui.plotplacement.detailsBlock")
+                .param("sx", sign.x)
+                .param("sy", sign.y)
+                .param("sz", sign.z)
+                .param("ox", prefabO.x)
+                .param("oy", prefabO.y)
+                .param("oz", prefabO.z)
+                .param("step", session.getRotationSteps())
+        );
+        commandBuilder.set(
+            "#Tips.TextSpans",
             Message.join(
-                Message.raw(
-                    name
-                        + "\nPlot sign "
-                        + sign.x
-                        + ", "
-                        + sign.y
-                        + ", "
-                        + sign.z
-                        + " · Prefab origin "
-                        + prefabO.x
-                        + ", "
-                        + prefabO.y
-                        + ", "
-                        + prefabO.z
-                        + "\nYaw step "
-                        + session.getRotationSteps()
-                        + " / 4 (90° each)\nEscape: close panel only · Cancel: clear preview · Air right-click reopens; block right-click does not move an active preview."
-                ),
+                Message.translation("server.aetherhaven.ui.plotplacement.tipsControls"),
                 Message.raw("\n\n"),
                 Message.translation("server.aetherhaven.ui.plotplacement.cameraHint")
             )
@@ -118,14 +117,14 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
         commandBuilder.set("#BirdsEyeToggle #CheckBox.Value", birdsEyeEnabled);
         commandBuilder.set("#BirdsEyeZoomRow.Visible", birdsEyeEnabled);
-        commandBuilder.set("#BirdsEyePanLabel.Visible", birdsEyeEnabled);
-        commandBuilder.set("#BirdsEyePanRow.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyePanColumn.Visible", birdsEyeEnabled);
+        commandBuilder.set("#BirdsEyeDistanceSlider.Value", birdsEyeDistance);
         commandBuilder.set(
             "#BirdsEyeDistanceValue.TextSpans",
             Message.raw(String.format("%.0f", birdsEyeDistance))
         );
-        commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
-        commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        commandBuilder.set("#BtnZoomOut.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        commandBuilder.set("#BtnZoomIn.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
 
         boolean moveMode = session.isMoveMode();
         boolean moveConfirm = moveMode && movePlaceConfirmOpen;
@@ -187,6 +186,12 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             CustomUIEventBindingType.ValueChanged,
             "#BirdsEyeToggle #CheckBox",
             EventData.of("@BirdsEye", "#BirdsEyeToggle #CheckBox.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#BirdsEyeDistanceSlider",
+            EventData.of("@BirdsEyeDistance", "#BirdsEyeDistanceSlider.Value"),
             false
         );
 
@@ -279,14 +284,41 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             scheduleApplyCameraAndRebuild(ref, store);
             return;
         }
+        if (data.birdsEyeDistance != null) {
+            birdsEyeDistance =
+                Math.max(
+                    PlotPlacementCameraUtil.MIN_DISTANCE,
+                    Math.min(PlotPlacementCameraUtil.MAX_DISTANCE, data.birdsEyeDistance)
+                );
+            if (birdsEyeEnabled) {
+                // Full rebuild resets the slider mid-drag; only sync labels + camera.
+                scheduleApplyCameraAfterSliderDrag(ref, store);
+            } else {
+                scheduleRebuild(ref, store);
+            }
+            return;
+        }
         if (data.action == null) {
             return;
         }
+        float yawRad = PlotPlacementNudgeUtil.getPlayerYawRadians(ref, store);
         switch (data.action) {
-            case "MoveXm" -> session.nudge(-1, 0, 0);
-            case "MoveXp" -> session.nudge(1, 0, 0);
-            case "MoveZm" -> session.nudge(0, 0, -1);
-            case "MoveZp" -> session.nudge(0, 0, 1);
+            case "MoveXm" ->
+                PlotPlacementNudgeUtil.nudgeHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.NEG_X
+                );
+            case "MoveXp" ->
+                PlotPlacementNudgeUtil.nudgeHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.POS_X
+                );
+            case "MoveZm" ->
+                PlotPlacementNudgeUtil.nudgeHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.NEG_Z
+                );
+            case "MoveZp" ->
+                PlotPlacementNudgeUtil.nudgeHorizontal(
+                    session, birdsEyeEnabled, yawRad, PlotPlacementNudgeUtil.Horizontal.POS_Z
+                );
             case "MoveYm" -> session.nudge(0, -1, 0);
             case "MoveYp" -> session.nudge(0, 1, 0);
             case "Rotate" -> applyRotatePreservingFootprintCenter();
@@ -307,10 +339,11 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 return;
             }
             case "ZoomOut" -> {
+                // Larger distance = farther camera / wider overview (matches zoom-out icon).
                 birdsEyeDistance =
-                    Math.max(
-                        PlotPlacementCameraUtil.MIN_DISTANCE,
-                        birdsEyeDistance - PlotPlacementCameraUtil.DISTANCE_STEP
+                    Math.min(
+                        PlotPlacementCameraUtil.MAX_DISTANCE,
+                        birdsEyeDistance + PlotPlacementCameraUtil.DISTANCE_STEP
                     );
                 if (birdsEyeEnabled) {
                     scheduleApplyCameraAndRebuild(ref, store);
@@ -320,10 +353,11 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 return;
             }
             case "ZoomIn" -> {
+                // Smaller distance = closer camera / tighter view (matches zoom-in icon).
                 birdsEyeDistance =
-                    Math.min(
-                        PlotPlacementCameraUtil.MAX_DISTANCE,
-                        birdsEyeDistance + PlotPlacementCameraUtil.DISTANCE_STEP
+                    Math.max(
+                        PlotPlacementCameraUtil.MIN_DISTANCE,
+                        birdsEyeDistance - PlotPlacementCameraUtil.DISTANCE_STEP
                     );
                 if (birdsEyeEnabled) {
                     scheduleApplyCameraAndRebuild(ref, store);
@@ -385,6 +419,29 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 rebuild();
             }
         );
+    }
+
+    private void scheduleApplyCameraAfterSliderDrag(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                if (birdsEyeEnabled) {
+                    applyBirdsEyeCameraPacket(ref, store);
+                }
+                syncBirdsEyeDistanceUiOnly();
+            }
+        );
+    }
+
+    private void syncBirdsEyeDistanceUiOnly() {
+        UICommandBuilder cmd = new UICommandBuilder();
+        cmd.set("#BirdsEyeDistanceValue.TextSpans", Message.raw(String.format("%.0f", birdsEyeDistance)));
+        cmd.set("#BtnZoomOut.Disabled", birdsEyeDistance >= PlotPlacementCameraUtil.MAX_DISTANCE - 0.01f);
+        cmd.set("#BtnZoomIn.Disabled", birdsEyeDistance <= PlotPlacementCameraUtil.MIN_DISTANCE + 0.01f);
+        sendUpdate(cmd, new UIEventBuilder(), false);
     }
 
     /**
@@ -807,6 +864,8 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             .add()
             .append(new KeyedCodec<>("@BirdsEye", Codec.BOOLEAN), (d, v) -> d.birdsEye = v, d -> d.birdsEye)
             .add()
+            .append(new KeyedCodec<>("@BirdsEyeDistance", Codec.FLOAT), (d, v) -> d.birdsEyeDistance = v, d -> d.birdsEyeDistance)
+            .add()
             .build();
 
         @Nullable
@@ -815,5 +874,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         private String constructionId;
         @Nullable
         private Boolean birdsEye;
+        @Nullable
+        private Float birdsEyeDistance;
     }
 }

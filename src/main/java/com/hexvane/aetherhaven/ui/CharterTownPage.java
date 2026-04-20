@@ -68,10 +68,10 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
-            commandBuilder.set("#DissolveConfirmGroup.Visible", false);
+            commandBuilder.set("#CharterConfirmModal.Visible", false);
+            commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
             commandBuilder.set("#MoveCharterHint.Visible", false);
-            commandBuilder.set("#MoveCharterConfirmGroup.Visible", false);
             return;
         }
         UUID townId;
@@ -84,10 +84,10 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
-            commandBuilder.set("#DissolveConfirmGroup.Visible", false);
+            commandBuilder.set("#CharterConfirmModal.Visible", false);
+            commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
             commandBuilder.set("#MoveCharterHint.Visible", false);
-            commandBuilder.set("#MoveCharterConfirmGroup.Visible", false);
             return;
         }
         World world = store.getExternalData().getWorld();
@@ -99,10 +99,10 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
-            commandBuilder.set("#DissolveConfirmGroup.Visible", false);
+            commandBuilder.set("#CharterConfirmModal.Visible", false);
+            commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
             commandBuilder.set("#MoveCharterHint.Visible", false);
-            commandBuilder.set("#MoveCharterConfirmGroup.Visible", false);
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -114,10 +114,10 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             commandBuilder.set("#TownInfoSeparator.Visible", false);
             commandBuilder.set("#DissolveButton.Visible", false);
             commandBuilder.set("#DissolveHint.Visible", false);
-            commandBuilder.set("#DissolveConfirmGroup.Visible", false);
+            commandBuilder.set("#CharterConfirmModal.Visible", false);
+            commandBuilder.set("#CharterTopBar.Visible", false);
             commandBuilder.set("#MoveCharterButton.Visible", false);
             commandBuilder.set("#MoveCharterHint.Visible", false);
-            commandBuilder.set("#MoveCharterConfirmGroup.Visible", false);
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -151,12 +151,22 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         );
         boolean relocateFlow = owner && charterRelocateConfirmOpen;
         boolean dissolveFlow = owner && dissolveConfirmOpen;
-        commandBuilder.set("#DissolveConfirmGroup.Visible", dissolveFlow);
-        commandBuilder.set("#MoveCharterConfirmGroup.Visible", relocateFlow);
-        commandBuilder.set("#DissolveButton.Visible", owner && !dissolveFlow && !relocateFlow);
-        commandBuilder.set("#DissolveHint.Visible", owner && !dissolveFlow && !relocateFlow);
-        commandBuilder.set("#MoveCharterButton.Visible", owner && !dissolveFlow && !relocateFlow);
-        commandBuilder.set("#MoveCharterHint.Visible", owner && !dissolveFlow && !relocateFlow);
+        boolean modalOpen = dissolveFlow || relocateFlow;
+        commandBuilder.set("#CharterConfirmModal.Visible", modalOpen);
+        commandBuilder.set("#CharterTopBar.Visible", owner && !modalOpen);
+        commandBuilder.set("#DissolveButton.Visible", owner && !modalOpen);
+        commandBuilder.set("#DissolveHint.Visible", owner && !modalOpen);
+        commandBuilder.set("#MoveCharterButton.Visible", owner && !modalOpen);
+        commandBuilder.set("#MoveCharterHint.Visible", owner && !modalOpen);
+        if (dissolveFlow) {
+            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.modalDissolveTitle"));
+            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.dissolveConfirmText"));
+            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.dissolveConfirm"));
+        } else if (relocateFlow) {
+            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.modalMoveTitle"));
+            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.moveCharterConfirmText"));
+            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("server.aetherhaven.ui.chartertown.moveCharterConfirm"));
+        }
         if (owner) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -164,30 +174,17 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
                 new EventData().append("Action", "SaveTownName").append("@TownName", "#NameInput.Value"),
                 false
             );
-            if (dissolveFlow) {
+            if (modalOpen) {
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
-                    "#DissolveConfirmButton",
-                    new EventData().append("Action", "DissolveTownConfirm"),
+                    "#CharterModalConfirmButton",
+                    new EventData().append("Action", "CharterModalConfirm"),
                     false
                 );
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
-                    "#DissolveCancelButton",
-                    new EventData().append("Action", "CancelDissolveConfirm"),
-                    false
-                );
-            } else if (relocateFlow) {
-                eventBuilder.addEventBinding(
-                    CustomUIEventBindingType.Activating,
-                    "#MoveCharterConfirmButton",
-                    new EventData().append("Action", "ConfirmMoveCharter"),
-                    false
-                );
-                eventBuilder.addEventBinding(
-                    CustomUIEventBindingType.Activating,
-                    "#MoveCharterCancelButton",
-                    new EventData().append("Action", "CancelMoveCharter"),
+                    "#CharterModalCancelButton",
+                    new EventData().append("Action", "CharterModalCancel"),
                     false
                 );
             } else {
@@ -236,7 +233,8 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             sendUpdate(cmdMove, evMove, false);
             return;
         }
-        if (data.action.equalsIgnoreCase("CancelMoveCharter")) {
+        if (data.action.equalsIgnoreCase("CharterModalCancel")) {
+            dissolveConfirmOpen = false;
             charterRelocateConfirmOpen = false;
             UICommandBuilder cmdMc = new UICommandBuilder();
             UIEventBuilder evMc = new UIEventBuilder();
@@ -244,102 +242,92 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
             sendUpdate(cmdMc, evMc, false);
             return;
         }
-        if (data.action.equalsIgnoreCase("ConfirmMoveCharter")) {
-            UUIDComponent ucMc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (ucMc == null || !tryResolveOwnerTown(ref, store)) {
-                return;
-            }
-            AetherhavenPlugin pluginMc = AetherhavenPlugin.get();
-            World worldMc = store.getExternalData().getWorld();
-            if (pluginMc == null) {
-                return;
-            }
-            Store<ChunkStore> csMc = charterBlockRef.getStore();
-            CharterBlock chMc = csMc.getComponent(charterBlockRef, CharterBlock.getComponentType());
-            if (chMc == null || chMc.getTownId().isBlank()) {
-                return;
-            }
-            UUID townIdMc;
-            try {
-                townIdMc = UUID.fromString(chMc.getTownId().trim());
-            } catch (IllegalArgumentException e) {
-                return;
-            }
-            TownManager tmMc = AetherhavenWorldRegistries.getOrCreateTownManager(worldMc, pluginMc);
-            TownRecord trMc = tmMc.getTown(townIdMc);
-            if (trMc == null || !trMc.getOwnerUuid().equals(ucMc.getUuid()) || !charterRelocateConfirmOpen) {
-                return;
-            }
-            charterRelocateConfirmOpen = false;
-            Player playerMc = store.getComponent(ref, Player.getComponentType());
-            if (playerMc == null) {
-                return;
-            }
-            PlotPlacementOpenHelper.cancelActivePlotPlacement(ref, store, playerRef);
-            CharterRelocationSession staleCharter = CharterRelocationSessions.get(ucMc.getUuid());
-            if (staleCharter != null) {
-                PlotPreviewSpawner.clear(store, staleCharter.getPreviewEntityRefs());
-            }
-            CharterRelocationSessions.remove(ucMc.getUuid());
-            CharterRelocationSession sessionMc =
-                new CharterRelocationSession(
-                    worldMc,
-                    new Vector3i(trMc.getCharterX(), trMc.getCharterY(), trMc.getCharterZ()),
-                    trMc.getTownId()
-                );
-            CharterRelocationSessions.put(ucMc.getUuid(), sessionMc);
-            // openCustomPage replaces this UI; do not call close() or the new page can be cleared.
-            playerMc.getPageManager().openCustomPage(ref, store, new CharterRelocationPage(playerRef, sessionMc));
-            return;
-        }
-        if (data.action.equalsIgnoreCase("CancelDissolveConfirm")) {
-            dissolveConfirmOpen = false;
-            UICommandBuilder cmdCancel = new UICommandBuilder();
-            UIEventBuilder evCancel = new UIEventBuilder();
-            build(ref, cmdCancel, evCancel, store);
-            sendUpdate(cmdCancel, evCancel, false);
-            return;
-        }
-        if (data.action.equalsIgnoreCase("DissolveTownConfirm")) {
-            UUIDComponent ucDissolve = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (ucDissolve == null) {
-                return;
-            }
-            AetherhavenPlugin pluginDissolve = AetherhavenPlugin.get();
-            World worldDissolve = store.getExternalData().getWorld();
-            if (pluginDissolve == null) {
-                return;
-            }
-            Store<ChunkStore> csDissolve = charterBlockRef.getStore();
-            CharterBlock chDissolve = csDissolve.getComponent(charterBlockRef, CharterBlock.getComponentType());
-            if (chDissolve == null || chDissolve.getTownId().isBlank()) {
-                return;
-            }
-            UUID townIdDissolve;
-            try {
-                townIdDissolve = UUID.fromString(chDissolve.getTownId().trim());
-            } catch (IllegalArgumentException e) {
-                return;
-            }
-            TownManager tmDissolve = AetherhavenWorldRegistries.getOrCreateTownManager(worldDissolve, pluginDissolve);
-            TownRecord trDissolve = tmDissolve.getTown(townIdDissolve);
-            if (trDissolve == null || !trDissolve.getOwnerUuid().equals(ucDissolve.getUuid())) {
-                return;
-            }
-            if (!dissolveConfirmOpen) {
-                return;
-            }
-            dissolveConfirmOpen = false;
-            worldDissolve.execute(
-                () -> {
-                    TownDissolutionService.dissolveTown(worldDissolve, pluginDissolve, trDissolve, store);
-                    PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
-                    if (prDone != null) {
-                        prDone.sendMessage(Message.translation("server.aetherhaven.ui.chartertown.dissolved"));
-                    }
-                    close();
+        if (data.action.equalsIgnoreCase("CharterModalConfirm")) {
+            if (dissolveConfirmOpen) {
+                UUIDComponent ucDissolve = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (ucDissolve == null) {
+                    return;
                 }
-            );
+                AetherhavenPlugin pluginDissolve = AetherhavenPlugin.get();
+                World worldDissolve = store.getExternalData().getWorld();
+                if (pluginDissolve == null) {
+                    return;
+                }
+                Store<ChunkStore> csDissolve = charterBlockRef.getStore();
+                CharterBlock chDissolve = csDissolve.getComponent(charterBlockRef, CharterBlock.getComponentType());
+                if (chDissolve == null || chDissolve.getTownId().isBlank()) {
+                    return;
+                }
+                UUID townIdDissolve;
+                try {
+                    townIdDissolve = UUID.fromString(chDissolve.getTownId().trim());
+                } catch (IllegalArgumentException e) {
+                    return;
+                }
+                TownManager tmDissolve = AetherhavenWorldRegistries.getOrCreateTownManager(worldDissolve, pluginDissolve);
+                TownRecord trDissolve = tmDissolve.getTown(townIdDissolve);
+                if (trDissolve == null || !trDissolve.getOwnerUuid().equals(ucDissolve.getUuid())) {
+                    return;
+                }
+                dissolveConfirmOpen = false;
+                worldDissolve.execute(
+                    () -> {
+                        TownDissolutionService.dissolveTown(worldDissolve, pluginDissolve, trDissolve, store);
+                        PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
+                        if (prDone != null) {
+                            prDone.sendMessage(Message.translation("server.aetherhaven.ui.chartertown.dissolved"));
+                        }
+                        close();
+                    }
+                );
+                return;
+            }
+            if (charterRelocateConfirmOpen) {
+                UUIDComponent ucMc = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (ucMc == null || !tryResolveOwnerTown(ref, store)) {
+                    return;
+                }
+                AetherhavenPlugin pluginMc = AetherhavenPlugin.get();
+                World worldMc = store.getExternalData().getWorld();
+                if (pluginMc == null) {
+                    return;
+                }
+                Store<ChunkStore> csMc = charterBlockRef.getStore();
+                CharterBlock chMc = csMc.getComponent(charterBlockRef, CharterBlock.getComponentType());
+                if (chMc == null || chMc.getTownId().isBlank()) {
+                    return;
+                }
+                UUID townIdMc;
+                try {
+                    townIdMc = UUID.fromString(chMc.getTownId().trim());
+                } catch (IllegalArgumentException e) {
+                    return;
+                }
+                TownManager tmMc = AetherhavenWorldRegistries.getOrCreateTownManager(worldMc, pluginMc);
+                TownRecord trMc = tmMc.getTown(townIdMc);
+                if (trMc == null || !trMc.getOwnerUuid().equals(ucMc.getUuid())) {
+                    return;
+                }
+                charterRelocateConfirmOpen = false;
+                Player playerMc = store.getComponent(ref, Player.getComponentType());
+                if (playerMc == null) {
+                    return;
+                }
+                PlotPlacementOpenHelper.cancelActivePlotPlacement(ref, store, playerRef);
+                CharterRelocationSession staleCharter = CharterRelocationSessions.get(ucMc.getUuid());
+                if (staleCharter != null) {
+                    PlotPreviewSpawner.clear(store, staleCharter.getPreviewEntityRefs());
+                }
+                CharterRelocationSessions.remove(ucMc.getUuid());
+                CharterRelocationSession sessionMc =
+                    new CharterRelocationSession(
+                        worldMc,
+                        new Vector3i(trMc.getCharterX(), trMc.getCharterY(), trMc.getCharterZ()),
+                        trMc.getTownId()
+                    );
+                CharterRelocationSessions.put(ucMc.getUuid(), sessionMc);
+                playerMc.getPageManager().openCustomPage(ref, store, new CharterRelocationPage(playerRef, sessionMc));
+            }
             return;
         }
         if (!data.action.equalsIgnoreCase("SaveTownName")) {
