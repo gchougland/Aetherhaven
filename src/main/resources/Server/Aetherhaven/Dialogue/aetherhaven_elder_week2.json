@@ -153,6 +153,12 @@
           "actions": [{ "type": "complete_quest", "id": "q_build_town_hall" }],
           "next": "town_hall_done"
         },
+        {
+          "text": "How do people get gold coins around here?",
+          "condition": { "type": "aetherhaven_has_town" },
+          "whenFalse": "hide",
+          "next": "gold_explainer"
+        },
         { "text": "I'll leave you to it.", "next": null }
       ]
     },
@@ -224,6 +230,11 @@
       "speaker": "Elder Lyren",
       "text": "There. Aetherhaven has a proper town hall: records, treasury, and a room where we can meet without yelling across the square. That is what I needed from you.",
       "choices": [{ "text": "Glad it helps.", "next": null }]
+    },
+    "gold_explainer": {
+      "speaker": "Elder Lyren",
+      "text": "You pick some up from the work we send you on, and from trading when someone is buying. The town purse is its own thing. Once the hall is built, the treasury lives in there. Use the block there to put coin in or pull it out if the charter says you may. After that, each morning a little gold flows into that treasury from the people who actually live here, not visitors passing through. How much depends on how they are holding up. If they are fed, rested, and in decent spirits, the pot does better. If they are stretched thin, it does worse. That keeps the commons honest.",
+      "choices": [{ "text": "Good to know. Thanks.", "next": null }]
     },
     "rep_reward_25": {
       "speaker": "Elder Lyren",

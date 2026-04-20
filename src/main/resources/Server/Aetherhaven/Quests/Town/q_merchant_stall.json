@@ -32,6 +32,12 @@
       "npcRoleId": "Aetherhaven_Merchant",
       "amount": 14,
       "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
     }
   ],
   "lifecycle": {

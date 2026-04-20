@@ -1,13 +1,15 @@
 # Changelog
 
-## [0.5.0] - 4/20/2026
+## [0.5.0]
 
 ### Added
 
 - **Mod icon** for the plugin package.
+- Dialogue to the Elder for explaining how to obtain gold coins
 
 ### Changes
 
+- Added gold coins to most quest rewards
 - Updated Farm prefab
 - **Improved villager pathfinding and idle behavior:** Schedule-driven **commute** to the assigned plot footprint when villagers would otherwise wander off-plot (e.g. after Gaia revival); POI picking respects work vs break; fence/window and **`Furniture_Village_Counter`** use low wander weights so NPCs rarely end steps on thin colliders or shop counters; Gaia revival reapplies weekly schedules and travel kicks on the world thread.
 - **Villagers look at the player when speaking to them:** While dialogue is open (`$Interaction`), dialogue roles inline **watch the player** (Target + HeadMotion Watch; engine rules forbid putting `$Interaction` in a referenced Component).

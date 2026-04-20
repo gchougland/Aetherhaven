@@ -32,6 +32,12 @@
       "npcRoleId": "Aetherhaven_Elder_Lyren",
       "amount": 20,
       "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 20,
+      "grantTo": "player"
     }
   ],
   "lifecycle": {

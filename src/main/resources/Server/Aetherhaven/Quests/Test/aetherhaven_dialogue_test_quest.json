@@ -21,6 +21,12 @@
       "npcRoleId": "Aetherhaven_Test_Villager",
       "amount": 3,
       "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 10,
+      "grantTo": "player"
     }
   ],
   "lifecycle": {

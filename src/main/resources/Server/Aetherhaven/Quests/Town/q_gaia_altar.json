@@ -32,6 +32,12 @@
       "npcRoleId": "Aetherhaven_Priestess",
       "amount": 13,
       "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 12,
+      "grantTo": "player"
     }
   ],
   "lifecycle": {
