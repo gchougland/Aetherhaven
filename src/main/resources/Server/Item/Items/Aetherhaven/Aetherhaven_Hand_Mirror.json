@@ -1,0 +1,82 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Hand_Mirror.name",
+    "Description": "server.items.Aetherhaven_Hand_Mirror.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "KnowledgeRequired": false,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Fibre",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "Categories": [
+    "Items.Utility"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Hand_Mirror.png",
+  "Model": "Items/Aetherhaven/Hand_Mirror.blockymodel",
+  "Texture": "Items/Aetherhaven/Hand_Mirror.png",
+  "MaxStack": 1,
+  "PlayerAnimationsId": "Item",
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      9,
+      20,
+      37
+    ],
+    "Translation": [
+      8,
+      -12
+    ]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "OpenCustomUI",
+          "Page": {
+            "Id": "AetherhavenHandMirror"
+          }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 64,
+      "Creative": 64
+    }
+  },
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

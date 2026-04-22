@@ -13,6 +13,12 @@
           "next": null
         },
         {
+          "text": "server.aetherhaven.dialogue.merchant.appraiseJewelry",
+          "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" },
+          "actions": [{ "type": "open_jewelry_appraisal", "chargeGold": true }],
+          "next": null
+        },
+        {
           "text": "You mentioned wanting a house.",
           "condition": {
             "type": "and",
@@ -185,22 +191,10 @@
       "text": "There. A door that knows my knock. That beats a full strongbox.",
       "choices": [{ "text": "Enjoy it.", "next": null }]
     },
-    "rep_reward_25": {
-      "speaker": "Vex Sunderlane",
-      "text": "server.aetherhaven.reputation.reward.merchant.25",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_25" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
-    },
     "rep_reward_50": {
       "speaker": "Vex Sunderlane",
       "text": "server.aetherhaven.reputation.reward.merchant.50",
       "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_50" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
-    },
-    "rep_reward_75": {
-      "speaker": "Vex Sunderlane",
-      "text": "server.aetherhaven.reputation.reward.merchant.75",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_75" }],
       "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }

@@ -83,6 +83,10 @@ public final class DialogueActionExecutor {
             }
             case "open_blacksmith_repair" -> out.setOpenBlacksmithRepairAfterClose(true);
             case "open_geode_ui" -> out.setOpenGeodePageAfterClose(true);
+            case "open_jewelry_appraisal" -> {
+                out.setOpenJewelryAppraisalAfterClose(true);
+                out.setJewelryAppraisalChargeGold(boolField(a, "chargeGold", true));
+            }
             case "give_item" -> giveItem(a, playerRef, store);
             case "unlock_achievement" -> LOGGER.atInfo().log(
                 "[Dialogue stub] unlock_achievement id=%s",
@@ -360,6 +364,17 @@ public final class DialogueActionExecutor {
         }
         ItemStack stack = new ItemStack(item.trim(), count);
         player.giveItem(stack, playerRef, store);
+    }
+
+    private static boolean boolField(@Nonnull JsonObject a, @Nonnull String key, boolean def) {
+        if (!a.has(key) || !a.get(key).isJsonPrimitive()) {
+            return def;
+        }
+        try {
+            return a.get(key).getAsBoolean();
+        } catch (Exception e) {
+            return def;
+        }
     }
 
     @Nullable

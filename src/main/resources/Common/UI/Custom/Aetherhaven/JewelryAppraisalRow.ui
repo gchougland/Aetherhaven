@@ -1,0 +1,23 @@
+$C = "../Common.ui";
+
+Button #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Style: (
+    Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+    Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+    Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
+  );
+
+  ItemSlot #Icon {
+    Anchor: (Width: 40, Height: 40, Right: 10);
+    ShowQualityBackground: true;
+    ShowQuantity: true;
+  }
+
+  Label #Line {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true);
+    FlexWeight: 1;
+  }
+}

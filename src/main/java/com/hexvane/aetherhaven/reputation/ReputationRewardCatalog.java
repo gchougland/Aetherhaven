@@ -53,33 +53,15 @@ public final class ReputationRewardCatalog {
             "rep_reward_50",
             null
         ),
-        // Merchant
-        new ReputationRewardDefinition(
-            "rep_merchant_25",
-            AetherhavenConstants.NPC_MERCHANT,
-            25,
-            "Aetherhaven_Gold_Coin",
-            10,
-            "rep_reward_25",
-            null
-        ),
+        // Merchant — appraisal bench recipe at 50 (crafting knowledge)
         new ReputationRewardDefinition(
             "rep_merchant_50",
             AetherhavenConstants.NPC_MERCHANT,
             50,
-            "Aetherhaven_Gold_Coin",
-            20,
+            "",
+            0,
             "rep_reward_50",
-            null
-        ),
-        new ReputationRewardDefinition(
-            "rep_merchant_75",
-            AetherhavenConstants.NPC_MERCHANT,
-            75,
-            "Aetherhaven_Gold_Coin",
-            35,
-            "rep_reward_75",
-            null
+            AetherhavenConstants.ITEM_APPRAISAL_BENCH
         ),
         // Farmer — sprinkler recipe unlocks (crafting knowledge); no item grant
         new ReputationRewardDefinition(

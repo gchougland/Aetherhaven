@@ -1,0 +1,58 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 560);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.jewelryAppraisal.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Label #Hint {
+        Anchor: (Bottom: 10);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true);
+        Text: "";
+      }
+
+      Group #Rows {
+        LayoutMode: Top;
+        Anchor: (Bottom: 10);
+      }
+
+      Label #DetailPick {
+        Anchor: (Bottom: 6);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
+        Text: %server.aetherhaven.ui.jewelryAppraisal.pick;
+      }
+
+      Label #DetailRarity {
+        Anchor: (Bottom: 4);
+        Visible: false;
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true);
+        Text: "";
+      }
+
+      Label #DetailTraits {
+        Anchor: (Bottom: 8);
+        Visible: false;
+        Style: (...$C.@DefaultLabelStyle, TextColor: #d8c8a8, Wrap: true);
+        Text: "";
+      }
+
+      $C.@TextButton #Appraise {
+        Anchor: (Bottom: 8);
+        Text: %server.aetherhaven.ui.jewelryAppraisal.appraise;
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

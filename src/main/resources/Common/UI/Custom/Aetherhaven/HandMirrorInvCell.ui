@@ -1,0 +1,15 @@
+$C = "../Common.ui";
+
+Group #Cell {
+  Padding: (Right: 4, Bottom: 4);
+  Anchor: ();
+
+  ItemSlotButton #CellBtn {
+    Anchor: (Width: 48, Height: 48);
+    ItemSlot #CellSlot {
+      Anchor: (Full: 0);
+      ShowQualityBackground: true;
+      ShowQuantity: true;
+    }
+  }
+}

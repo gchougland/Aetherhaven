@@ -14,6 +14,10 @@ public final class DialogueActionBatchResult {
 
     private boolean openGeodePageAfterClose;
 
+    private boolean openJewelryAppraisalAfterClose;
+
+    private boolean jewelryAppraisalChargeGold = true;
+
     public boolean isCloseDialogue() {
         return closeDialogue;
     }
@@ -54,5 +58,21 @@ public final class DialogueActionBatchResult {
 
     public void setOpenGeodePageAfterClose(boolean openGeodePageAfterClose) {
         this.openGeodePageAfterClose = openGeodePageAfterClose;
+    }
+
+    public boolean isOpenJewelryAppraisalAfterClose() {
+        return openJewelryAppraisalAfterClose;
+    }
+
+    public void setOpenJewelryAppraisalAfterClose(boolean openJewelryAppraisalAfterClose) {
+        this.openJewelryAppraisalAfterClose = openJewelryAppraisalAfterClose;
+    }
+
+    public boolean isJewelryAppraisalChargeGold() {
+        return jewelryAppraisalChargeGold;
+    }
+
+    public void setJewelryAppraisalChargeGold(boolean jewelryAppraisalChargeGold) {
+        this.jewelryAppraisalChargeGold = jewelryAppraisalChargeGold;
     }
 }

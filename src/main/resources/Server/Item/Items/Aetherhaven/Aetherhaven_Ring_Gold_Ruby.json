@@ -1,0 +1,37 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Ring_Gold_Ruby.name",
+    "Description": "server.items.Aetherhaven_Jewelry.genericDescription"
+  },
+  "Categories": [
+    "Items.Utility"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Ring_Gold_Ruby.png",
+  "Model": "Items/Aetherhaven/Jewelry/Ring.blockymodel",
+  "Texture": "Items/Aetherhaven/Jewelry/Gold_Ring_Ruby.png",
+  "MaxStack": 1,
+  "PlayerAnimationsId": "Item",
+  "Quality": "Rare",
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 1.2,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -5
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Jewelry"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

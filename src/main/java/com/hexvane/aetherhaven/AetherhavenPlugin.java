@@ -39,6 +39,10 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
+import com.hexvane.aetherhaven.jewelry.JewelryPlayerInitSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
+import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
@@ -57,6 +61,8 @@ import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
+import com.hexvane.aetherhaven.ui.HandMirrorPage;
+import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
@@ -202,6 +208,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
+        JewelryGemTraits.validateStatIdsAtStartup();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -220,6 +227,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
+        PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
+        this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
+        this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
@@ -434,6 +444,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
+        OpenCustomUIInteraction.registerSimple(this, HandMirrorPage.class, AetherhavenConstants.PAGE_HAND_MIRROR, HandMirrorPage::new);
+        OpenCustomUIInteraction.registerSimple(
+            this,
+            JewelryAppraisalPage.class,
+            AetherhavenConstants.PAGE_JEWELRY_APPRAISAL_BENCH,
+            pr -> new JewelryAppraisalPage(pr, false)
+        );
         OpenCustomUIInteraction.registerSimple(
             this,
             GeodeOpenPage.class,

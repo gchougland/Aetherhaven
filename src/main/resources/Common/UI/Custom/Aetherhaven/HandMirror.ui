@@ -1,0 +1,116 @@
+$C = "../Common.ui";
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 720);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.handmirror.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Label #EquipLabel {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8);
+        Text: %server.aetherhaven.ui.handmirror.equipment;
+        Anchor: (Bottom: 6);
+      }
+
+      Group #EquipmentRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12);
+
+        Group #Ring1Wrap {
+          LayoutMode: Top;
+          Padding: (Right: 12);
+          Label #Ring1Lbl {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+            Text: %server.aetherhaven.ui.handmirror.ring1;
+            Anchor: (Bottom: 4);
+          }
+          ItemSlotButton #Ring1Btn {
+            Anchor: (Width: 56, Height: 56);
+            ItemSlot #Ring1Slot {
+              Anchor: (Full: 0);
+              ShowQualityBackground: true;
+              ShowQuantity: true;
+            }
+          }
+        }
+
+        Group #Ring2Wrap {
+          LayoutMode: Top;
+          Padding: (Right: 12);
+          Label #Ring2Lbl {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+            Text: %server.aetherhaven.ui.handmirror.ring2;
+            Anchor: (Bottom: 4);
+          }
+          ItemSlotButton #Ring2Btn {
+            Anchor: (Width: 56, Height: 56);
+            ItemSlot #Ring2Slot {
+              Anchor: (Full: 0);
+              ShowQualityBackground: true;
+              ShowQuantity: true;
+            }
+          }
+        }
+
+        Group #NeckWrap {
+          LayoutMode: Top;
+          Label #NeckLbl {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+            Text: %server.aetherhaven.ui.handmirror.necklace;
+            Anchor: (Bottom: 4);
+          }
+          ItemSlotButton #NeckBtn {
+            Anchor: (Width: 56, Height: 56);
+            ItemSlot #NeckSlot {
+              Anchor: (Full: 0);
+              ShowQualityBackground: true;
+              ShowQuantity: true;
+            }
+          }
+        }
+      }
+
+      Label #InvLabel {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8);
+        Text: %server.aetherhaven.ui.handmirror.inventory;
+        Anchor: (Bottom: 6);
+      }
+
+      Label #Hint {
+        Anchor: (Bottom: 6);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a89878);
+        Text: %server.aetherhaven.ui.handmirror.hint;
+      }
+
+      Group #JewelryCallout {
+        Visible: false;
+        LayoutMode: Top;
+        Anchor: (Bottom: 8);
+        Padding: (Full: 8);
+        Background: (Color: #1a1a22(0.92));
+
+        Label #JewelryCalloutText {
+          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8c8a8);
+          TextSpans: [];
+        }
+      }
+
+      Group #InvGrid {
+        LayoutMode: Top;
+        Anchor: (Bottom: 8);
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

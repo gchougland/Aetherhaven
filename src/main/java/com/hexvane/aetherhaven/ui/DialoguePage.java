@@ -308,7 +308,8 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             if (batch.isCloseDialogue()
                 || batch.getOpenBarterShopAfterClose() != null
                 || batch.isOpenBlacksmithRepairAfterClose()
-                || batch.isOpenGeodePageAfterClose()) {
+                || batch.isOpenGeodePageAfterClose()
+                || batch.isOpenJewelryAppraisalAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
             }
@@ -318,7 +319,8 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (batch.isCloseDialogue()
             || batch.getOpenBarterShopAfterClose() != null
             || batch.isOpenBlacksmithRepairAfterClose()
-            || batch.isOpenGeodePageAfterClose()) {
+            || batch.isOpenGeodePageAfterClose()
+            || batch.isOpenJewelryAppraisalAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
         }
@@ -384,6 +386,21 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                     return;
                 }
                 player.getPageManager().openCustomPage(pref, st, new GeodeOpenPage(pr));
+            });
+        } else if (world != null && batch.isOpenJewelryAppraisalAfterClose()) {
+            boolean chargeGold = batch.isJewelryAppraisalChargeGold();
+            world.execute(() -> {
+                Ref<EntityStore> pref = playerRef.getReference();
+                if (pref == null || !pref.isValid()) {
+                    return;
+                }
+                Store<EntityStore> st = pref.getStore();
+                Player player = st.getComponent(pref, Player.getComponentType());
+                PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+                if (player == null || pr == null) {
+                    return;
+                }
+                player.getPageManager().openCustomPage(pref, st, new JewelryAppraisalPage(pr, chargeGold));
             });
         } else {
             close();

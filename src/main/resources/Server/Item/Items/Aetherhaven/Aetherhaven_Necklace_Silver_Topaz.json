@@ -1,0 +1,37 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Necklace_Silver_Topaz.name",
+    "Description": "server.items.Aetherhaven_Jewelry.genericDescription"
+  },
+  "Categories": [
+    "Items.Utility"
+  ],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Necklace_Silver_Topaz.png",
+  "Model": "Items/Aetherhaven/Jewelry/Necklace.blockymodel",
+  "Texture": "Items/Aetherhaven/Jewelry/Silver_Ring_Topaz.png",
+  "MaxStack": 1,
+  "PlayerAnimationsId": "Item",
+  "Quality": "Rare",
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Scale": 1,
+    "Rotation": [
+      0,
+      16,
+      0
+    ],
+    "Translation": [
+      0,
+      -11
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Jewelry"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}
