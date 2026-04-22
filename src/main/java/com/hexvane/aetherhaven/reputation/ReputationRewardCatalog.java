@@ -15,32 +15,23 @@ import javax.annotation.Nullable;
  */
 public final class ReputationRewardCatalog {
     private static final List<ReputationRewardDefinition> ALL = List.of(
-        // Elder
-        new ReputationRewardDefinition(
-            "rep_elder_25",
-            AetherhavenConstants.ELDER_NPC_ROLE_ID,
-            25,
-            "Aetherhaven_Gold_Coin",
-            8,
-            "rep_reward_25",
-            null
-        ),
+        // Elder — charter amendments table recipe; founder monument item
         new ReputationRewardDefinition(
             "rep_elder_50",
             AetherhavenConstants.ELDER_NPC_ROLE_ID,
             50,
-            "Aetherhaven_Gold_Coin",
-            16,
+            "",
+            0,
             "rep_reward_50",
-            null
+            AetherhavenConstants.ITEM_CHARTER_AMENDMENTS_TABLE
         ),
         new ReputationRewardDefinition(
-            "rep_elder_75",
+            "rep_elder_100",
             AetherhavenConstants.ELDER_NPC_ROLE_ID,
-            75,
-            "Aetherhaven_Town_Planning_Desk",
+            100,
+            AetherhavenConstants.ITEM_FOUNDER_MONUMENT,
             1,
-            "rep_reward_75",
+            "rep_reward_100",
             null
         ),
         // Innkeeper

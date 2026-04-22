@@ -61,6 +61,8 @@ public final class VillagerReputationEntry {
         if (pendingRewardIds == null) {
             pendingRewardIds = new ArrayList<>();
         }
+        // Elder reputation rewards were replaced; drop obsolete pending ids so dialogue does not stall.
+        pendingRewardIds.removeIf(id -> id != null && (id.equals("rep_elder_25") || id.equals("rep_elder_75")));
     }
 
     @Nonnull

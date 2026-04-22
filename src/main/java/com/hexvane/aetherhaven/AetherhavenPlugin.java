@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
+import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
@@ -39,6 +40,10 @@ import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
+import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
+import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
+import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
+import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
@@ -46,6 +51,7 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
+import com.hexvane.aetherhaven.ui.CharterAmendmentsPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
@@ -62,6 +68,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -209,6 +216,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         TreasuryBlock.register(this.getChunkStoreRegistry());
         GaiaStatueBlock.register(this.getChunkStoreRegistry());
         SprinklerBlock.register(this.getChunkStoreRegistry());
+        FounderMonumentBlock.register(this.getChunkStoreRegistry());
+        FounderMonumentStatueSkin.register(this.getEntityStoreRegistry());
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
@@ -253,6 +262,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
+        this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
 
         this.getEventRegistry()
@@ -400,6 +412,26 @@ public final class AetherhavenPlugin extends JavaPlugin {
             PlotPlacementPage.class,
             AetherhavenConstants.PAGE_PLOT_PLACEMENT,
             PlotPlacementOpenHelper::tryOpen
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            CharterAmendmentsPage.class,
+            AetherhavenConstants.PAGE_CHARTER_AMENDMENTS,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                BlockPosition base = world.getBaseBlock(targetBlock);
+                BlockType bt = world.getBlockType(base.x, base.y, base.z);
+                if (bt == null || bt == BlockType.EMPTY
+                    || !AetherhavenConstants.ITEM_CHARTER_AMENDMENTS_TABLE.equals(bt.getId())) {
+                    return null;
+                }
+                return new CharterAmendmentsPage(playerRef);
+            }
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
         OpenCustomUIInteraction.registerSimple(

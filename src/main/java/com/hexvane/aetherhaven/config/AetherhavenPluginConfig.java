@@ -154,6 +154,29 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Comma-separated extra block type ids that always count as ore for geode drops.")
         .add()
+        .append(
+            new KeyedCodec<>("CharterTaxPerCapitaFlatFraction", Codec.DOUBLE),
+            (o, v) -> o.charterTaxPerCapitaFlatFraction = v != null ? v : 0.35,
+            o -> o.charterTaxPerCapitaFlatFraction
+        )
+        .documentation(
+            "For per-capita charter tax policy: blend maxPer * (flatFraction + (1-flatFraction) * needsRatio). Clamped internally."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("CharterTaxHappinessExponent", Codec.DOUBLE),
+            (o, v) -> o.charterTaxHappinessExponent = v != null ? v : 1.25,
+            o -> o.charterTaxHappinessExponent
+        )
+        .documentation("For happiness-weighted charter tax: maxPer * needsRatio^exponent. Exponent >= 1.")
+        .add()
+        .append(
+            new KeyedCodec<>("FounderMonumentTaxPermille", Codec.INTEGER),
+            (o, v) -> o.founderMonumentTaxPermille = v != null ? v : 1100,
+            o -> o.founderMonumentTaxPermille
+        )
+        .documentation("Morning tax sum multiplier when founder monument is active, in permille (1100 = +10%).")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -188,6 +211,10 @@ public final class AetherhavenPluginConfig {
     private String geodeExtraOreGatherTypes = "";
 
     private String geodeExtraOreBlockTypeIds = "";
+
+    private double charterTaxPerCapitaFlatFraction = 0.35;
+    private double charterTaxHappinessExponent = 1.25;
+    private int founderMonumentTaxPermille = 1100;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -250,6 +277,30 @@ public final class AetherhavenPluginConfig {
     public int getTreasuryMaxGoldTaxPerVillagerPerDay() {
         int v = treasuryMaxGoldTaxPerVillagerPerDay;
         return v > 0 ? v : 10;
+    }
+
+    /** Clamped to [0, 0.95]. */
+    public double getCharterTaxPerCapitaFlatFraction() {
+        double v = charterTaxPerCapitaFlatFraction;
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 0.95);
+    }
+
+    /** At least 1.0. */
+    public double getCharterTaxHappinessExponent() {
+        double v = charterTaxHappinessExponent;
+        return v >= 1.0 ? v : 1.25;
+    }
+
+    /** Clamped to [1000, 2000]. */
+    public int getFounderMonumentTaxPermille() {
+        int v = founderMonumentTaxPermille;
+        if (v < 1000) {
+            return 1000;
+        }
+        return Math.min(v, 2000);
     }
 
     /** Clamped to [0, 1]. */

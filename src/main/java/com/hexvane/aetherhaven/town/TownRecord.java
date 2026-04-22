@@ -157,6 +157,31 @@ public final class TownRecord {
     @SerializedName("pendingInvites")
     private List<TownPendingInvite> pendingInvites = new ArrayList<>();
 
+    /**
+     * Level-1 charter amendment: {@link CharterTaxPolicy#id()}; immutable once set.
+     */
+    @Nullable
+    @SerializedName("charterTaxPolicy")
+    private String charterTaxPolicy;
+
+    /**
+     * Level-2 specialization: {@link CharterSpecialization#id()}; immutable once set.
+     */
+    @Nullable
+    @SerializedName("charterSpecialization")
+    private String charterSpecialization;
+
+    /**
+     * Legacy/synced flag: morning tax bonus applies when {@link #founderMonumentCount} is positive. Kept for Gson
+     * backward compatibility.
+     */
+    @SerializedName("founderMonumentActive")
+    private boolean founderMonumentActive;
+
+    /** Placed founder monument blocks in this town; bonus does not stack (tax uses {@link #isFounderMonumentActive()} only). */
+    @SerializedName("founderMonumentCount")
+    private int founderMonumentCount;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -233,6 +258,22 @@ public final class TownRecord {
         }
         migrateVillagerReputationIfNeeded();
         migrateTownSocialFieldsIfNeeded();
+        migrateFounderMonumentCountIfNeeded();
+    }
+
+    /** Reconciles {@link #founderMonumentCount} with legacy {@link #founderMonumentActive} from older saves. */
+    public void migrateFounderMonumentCountIfNeeded() {
+        if (founderMonumentCount < 0) {
+            founderMonumentCount = 0;
+        }
+        if (founderMonumentCount > 0) {
+            founderMonumentActive = true;
+            return;
+        }
+        if (founderMonumentActive) {
+            founderMonumentCount = 1;
+        }
+        founderMonumentActive = founderMonumentCount > 0;
     }
 
     public void migrateTownSocialFieldsIfNeeded() {
@@ -740,6 +781,55 @@ public final class TownRecord {
 
     public void setTreasuryLastTaxEpochDay(@Nullable Long epochDay) {
         this.treasuryLastTaxEpochDay = epochDay;
+    }
+
+    @Nullable
+    public String getCharterTaxPolicy() {
+        return charterTaxPolicy != null && !charterTaxPolicy.isBlank() ? charterTaxPolicy.trim() : null;
+    }
+
+    public void setCharterTaxPolicy(@Nullable String charterTaxPolicy) {
+        this.charterTaxPolicy = charterTaxPolicy != null ? charterTaxPolicy.trim() : null;
+    }
+
+    @Nullable
+    public CharterTaxPolicy getCharterTaxPolicyEnum() {
+        return CharterTaxPolicy.fromId(getCharterTaxPolicy());
+    }
+
+    @Nullable
+    public String getCharterSpecialization() {
+        return charterSpecialization != null && !charterSpecialization.isBlank() ? charterSpecialization.trim() : null;
+    }
+
+    public void setCharterSpecialization(@Nullable String charterSpecialization) {
+        this.charterSpecialization = charterSpecialization != null ? charterSpecialization.trim() : null;
+    }
+
+    @Nullable
+    public CharterSpecialization getCharterSpecializationEnum() {
+        return CharterSpecialization.fromId(getCharterSpecialization());
+    }
+
+    /** Morning founder-monument tax bonus: one multiplier regardless of how many monuments are placed. */
+    public boolean isFounderMonumentActive() {
+        return founderMonumentCount > 0;
+    }
+
+    public int getFounderMonumentCount() {
+        return founderMonumentCount;
+    }
+
+    public void incrementFounderMonumentPlaced() {
+        founderMonumentCount++;
+        founderMonumentActive = founderMonumentCount > 0;
+    }
+
+    public void decrementFounderMonumentPlaced() {
+        if (founderMonumentCount > 0) {
+            founderMonumentCount--;
+        }
+        founderMonumentActive = founderMonumentCount > 0;
     }
 
     @Nonnull

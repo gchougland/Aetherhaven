@@ -3,10 +3,13 @@ package com.hexvane.aetherhaven.cosmetics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hypixel.hytale.protocol.PlayerSkin;
+import com.hypixel.hytale.server.core.asset.type.model.config.ModelAttachment;
 import com.hypixel.hytale.server.core.cosmetics.CosmeticRegistry;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinGradientSet;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPart;
 import com.hypixel.hytale.server.core.cosmetics.PlayerSkinPartTexture;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -24,6 +27,10 @@ import javax.annotation.Nullable;
  *
  * <p>Attachment order (inner → outer draw order): body, underwear, skin feature, face features,
  * hair, lower body, tops, footwear, gloves, head/face/ear accessories, cape.
+ *
+ * <p><b>Important:</b> {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#createModel(com.hypixel.hytale.protocol.PlayerSkin)}
+ * does <strong>not</strong> apply the skin — it only validates and returns {@code Model.createScaledModel(Player)}.
+ * Clothing and other cosmetics must be resolved from the registry (this class), not from {@code createModel}.
  */
 public final class PlayerSkinModelExporter {
     private static final String PARENT_PLAYER = "Player";
@@ -35,16 +42,8 @@ public final class PlayerSkinModelExporter {
     @Nonnull
     public static JsonObject toModelJson(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
         JsonArray attachments = new JsonArray();
-        for (Slot slot : Slot.values()) {
-            String raw =
-                slot == Slot.HAIRCUT ? effectiveHaircutIdForHeadAccessory(skin, registry) : slot.getter.apply(skin);
-            if (raw == null || raw.isEmpty()) {
-                continue;
-            }
-            JsonObject one = resolveSlot(slot.label, raw, slot.map.apply(registry), registry, skin);
-            if (one != null) {
-                attachments.add(one);
-            }
+        for (ModelAttachment ma : toModelAttachments(skin, registry)) {
+            attachments.add(modelAttachmentToJson(ma));
         }
         JsonObject root = new JsonObject();
         root.addProperty("Parent", PARENT_PLAYER);
@@ -53,10 +52,46 @@ public final class PlayerSkinModelExporter {
     }
 
     /**
+     * Resolves every equipped cosmetic slot into engine {@link ModelAttachment}s (same rules as JSON export). Use this
+     * to build a server-side {@link com.hypixel.hytale.server.core.asset.type.model.config.Model} with the placer's
+     * full silhouette — {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#createModel(com.hypixel.hytale.protocol.PlayerSkin)}
+     * does not include skin-specific attachments.
+     */
+    @Nonnull
+    public static ModelAttachment[] toModelAttachments(@Nonnull PlayerSkin skin, @Nonnull CosmeticRegistry registry) {
+        List<ModelAttachment> list = new ArrayList<>();
+        for (Slot slot : Slot.values()) {
+            String raw =
+                slot == Slot.HAIRCUT ? effectiveHaircutIdForHeadAccessory(skin, registry) : slot.getter.apply(skin);
+            if (raw == null || raw.isEmpty()) {
+                continue;
+            }
+            ModelAttachment one = resolveSlot(slot.label, raw, slot.map.apply(registry), registry, skin);
+            if (one != null) {
+                list.add(one);
+            }
+        }
+        return list.toArray(ModelAttachment[]::new);
+    }
+
+    @Nonnull
+    private static JsonObject modelAttachmentToJson(@Nonnull ModelAttachment a) {
+        JsonObject o = new JsonObject();
+        o.addProperty("Model", a.getModel());
+        o.addProperty("Texture", a.getTexture());
+        String gs = a.getGradientSet();
+        if (gs != null && !gs.isEmpty()) {
+            o.addProperty("GradientSet", gs);
+            o.addProperty("GradientId", a.getGradientId());
+        }
+        return o;
+    }
+
+    /**
      * @return null when the slot is skipped (e.g. body uses base player mesh only).
      */
     @Nullable
-    private static JsonObject resolveSlot(
+    private static ModelAttachment resolveSlot(
         @Nonnull String slotLabel,
         @Nonnull String id,
         @Nonnull Map<String, PlayerSkinPart> map,
@@ -144,17 +179,17 @@ public final class PlayerSkinModelExporter {
             }
         }
 
-        JsonObject attachment = new JsonObject();
-        attachment.addProperty("Model", modelPath);
-
         if (gradientMatch) {
             if (greyscale == null || greyscale.isEmpty()) {
                 throw new IllegalArgumentException(slotLabel + " gradient part missing GreyscaleTexture for id: " + id);
             }
-            attachment.addProperty("Texture", greyscale);
-            attachment.addProperty("GradientSet", Objects.requireNonNull(part.getGradientSet()));
-            attachment.addProperty("GradientId", selector);
-            return attachment;
+            return new ModelAttachment(
+                modelPath,
+                greyscale,
+                Objects.requireNonNull(part.getGradientSet()),
+                selector,
+                1.0
+            );
         }
 
         PlayerSkinPartTexture textureEntry = textureMap != null ? textureMap.get(selector) : null;
@@ -167,8 +202,7 @@ public final class PlayerSkinModelExporter {
         if (texPath == null || texPath.isEmpty()) {
             throw new IllegalArgumentException(slotLabel + " empty texture path for id: " + id);
         }
-        attachment.addProperty("Texture", texPath);
-        return attachment;
+        return new ModelAttachment(modelPath, texPath, null, null, 1.0);
     }
 
     /**

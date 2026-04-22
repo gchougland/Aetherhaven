@@ -1,23 +1,23 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Geode_Anvil.name",
-    "Description": "server.items.Aetherhaven_Geode_Anvil.description"
+    "Name": "server.items.Aetherhaven_Charter_Amendments_Table.name",
+    "Description": "server.items.Aetherhaven_Charter_Amendments_Table.description"
   },
   "Recipe": {
     "TimeSeconds": 0,
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ItemId": "Ingredient_Bar_Iron",
+        "ResourceTypeId": "Wood_Planks",
         "Quantity": 6
       },
       {
-        "ItemId": "Ingredient_Bar_Copper",
+        "ItemId": "Ingredient_Stick",
         "Quantity": 4
       },
       {
         "ItemId": "Rock_Stone_Cobble",
-        "Quantity": 16
+        "Quantity": 8
       }
     ],
     "BenchRequirement": [
@@ -30,7 +30,7 @@
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Aetherhaven_Geode_Anvil.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Charter_Amendments_Table.png",
   "Categories": [
     "Furniture.Benches"
   ],
@@ -39,26 +39,24 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/Benches/Aetherhaven_Geode_Anvil.blockymodel",
+    "CustomModel": "Blocks/Charter_Amendments_Table.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Benches/Aetherhaven_Geode_Anvil.png",
+        "Texture": "Blocks/Charter_Amendments_Table.png",
         "Weight": 1
       }
     ],
+    "Group": "Wood",
     "HitboxType": "Full",
-    "VariantRotation": "NESW",
     "Flags": {
       "IsUsable": true
     },
     "Gathering": {
       "Breaking": {
-        "GatherType": "Benches"
+        "GatherType": "Woods"
       }
     },
-    "BlockParticleSetId": "Ore",
-    "ParticleColor": "#5a5a62",
-    "BlockSoundSetId": "Stone",
+    "BlockParticleSetId": "Wood",
     "Support": {
       "Down": [
         {
@@ -66,13 +64,16 @@
         }
       ]
     },
+    "ParticleColor": "#5b3222",
+    "BlockSoundSetId": "Wood",
+    "VariantRotation": "NESW",
     "Interactions": {
       "Use": {
         "Interactions": [
           {
             "Type": "OpenCustomUI",
             "Page": {
-              "Id": "AetherhavenGeodeAnvil"
+              "Id": "AetherhavenCharterAmendments"
             }
           }
         ]
@@ -81,25 +82,25 @@
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
-    "Scale": 0.5,
+    "Scale": 0.6,
     "Rotation": [
-      22.5,
+      24,
       45,
       22.5
     ],
     "Translation": [
-      0,
-      -16
+      1,
+      -14
     ]
   },
   "Tags": {
     "Type": [
-      "Bench"
+      "Furniture"
     ],
     "Family": [
       "Aetherhaven"
     ]
   },
   "MaxStack": 1,
-  "ItemSoundSetId": "ISS_Blocks_Stone"
+  "ItemSoundSetId": "ISS_Blocks_Wood"
 }

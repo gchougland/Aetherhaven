@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.npc.corecomponents.movement.builders.BuilderBod
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Extends rect wander: penalizes probed steps that end on bench/seat/bed surfaces; optional per-{@link
@@ -31,7 +32,10 @@ public final class BuilderBodyMotionWanderInRectGroundPreference extends Builder
 
     @Nonnull
     @Override
-    public BuilderBodyMotionWanderInRectGroundPreference readConfig(@Nonnull JsonElement data) {
+    public BuilderBodyMotionWanderInRectGroundPreference readConfig(@Nullable JsonElement data) {
+        if (data == null) {
+            return this;
+        }
         super.readConfig(data);
         if (!data.isJsonObject()) {
             return this;

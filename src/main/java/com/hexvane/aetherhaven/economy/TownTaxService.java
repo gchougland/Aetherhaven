@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.CharterTaxPolicy;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -55,15 +56,23 @@ public final class TownTaxService {
             if (last != null && last >= epochDay) {
                 continue;
             }
-            long added = computeTaxForTown(town, store, maxPer);
+            long added = computeTaxForTown(town, store, maxPer, cfg);
             town.addTreasuryGoldCoins(added);
             town.setTreasuryLastTaxEpochDay(epochDay);
             tm.updateTown(town);
         }
     }
 
-    private static long computeTaxForTown(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store, int maxPerVillager) {
+    private static long computeTaxForTown(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        int maxPerVillager,
+        @Nonnull AetherhavenPluginConfig cfg
+    ) {
         UUID tid = town.getTownId();
+        CharterTaxPolicy policy = town.getCharterTaxPolicyEnum();
+        double flatFrac = cfg.getCharterTaxPerCapitaFlatFraction();
+        double exp = cfg.getCharterTaxHappinessExponent();
         long[] sum = new long[1];
         Query<EntityStore> q =
             Query.and(
@@ -86,11 +95,23 @@ public final class TownTaxService {
                     }
                     float avg = (needs.getHunger() + needs.getEnergy() + needs.getFun()) / 3f;
                     float ratio = Math.max(0f, Math.min(1f, avg / VillagerNeeds.MAX));
-                    sum[0] += (long) Math.floor(maxPerVillager * ratio);
+                    double per;
+                    if (policy == null) {
+                        per = maxPerVillager * ratio;
+                    } else if (policy == CharterTaxPolicy.PER_CAPITA) {
+                        per = maxPerVillager * (flatFrac + (1.0 - flatFrac) * ratio);
+                    } else {
+                        per = maxPerVillager * Math.pow(ratio, exp);
+                    }
+                    sum[0] += (long) Math.floor(per);
                 }
             }
         );
-        return sum[0];
+        long total = sum[0];
+        if (town.isFounderMonumentActive()) {
+            total = (long) Math.floor(total * (cfg.getFounderMonumentTaxPermille() / 1000.0));
+        }
+        return total;
     }
 
     private static boolean isMorningForTax(

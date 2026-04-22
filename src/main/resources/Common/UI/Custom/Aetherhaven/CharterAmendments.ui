@@ -1,0 +1,373 @@
+$C = "../Common.ui";
+
+@NodeTitle = (
+  ...$C.@DefaultLabelStyle,
+  FontSize: 12,
+  HorizontalAlignment: Center,
+  Wrap: false,
+  TextColor: #e4dfd4
+);
+
+/** Tier 1 button captions can be longer (e.g. happiness); allow wrap so they are not ellipsized. */
+@NodeTitleTier1 = (
+  ...$C.@DefaultLabelStyle,
+  FontSize: 12,
+  HorizontalAlignment: Center,
+  Wrap: true,
+  TextColor: #e4dfd4
+);
+
+@TierRailStyle = (
+  ...$C.@DefaultLabelStyle,
+  FontSize: 22,
+  RenderBold: true,
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center,
+  TextColor: #a89a82
+);
+
+@NodeBtnStyle = (
+  Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #252b38(0.98))),
+  Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #323a4c(0.98))),
+  Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #1c2230(0.98))),
+  Disabled: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #141820(0.96)))
+);
+
+/** Use vanilla tooltip style from Common.ui so paths resolve; do not redefine Background here (breaks texture lookup for mod UIs). */
+/** Tier 2: four picks share one panel — inner buttons stay flat inside #Tier2Panel. */
+@Tier2ChoiceBtnStyle = (
+  Default: (Background: #000000(0)),
+  Hovered: (Background: #ffffff(0.08)),
+  Pressed: (Background: #ffffff(0.12)),
+  Disabled: (Background: #000000(0))
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 660);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.charter.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Label #PopHint {
+        Anchor: (Bottom: 12);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, HorizontalAlignment: Center);
+        Text: %server.aetherhaven.ui.charter.popHint;
+      }
+
+      Group #SkillTreeRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12);
+
+        Group #TierRail {
+          LayoutMode: Top;
+          Anchor: (Width: 44, Right: 12);
+
+          Label #TierRailMark1 {
+            Anchor: (Bottom: 6);
+            Style: (...@TierRailStyle);
+            Text: %server.aetherhaven.ui.charter.tierMark1;
+          }
+
+          Group #TierRailGap {
+            Anchor: (Height: 108);
+          }
+
+          Label #TierRailMark2 {
+            Anchor: (Top: 6);
+            Style: (...@TierRailStyle);
+            Text: %server.aetherhaven.ui.charter.tierMark2;
+          }
+        }
+
+        Group #TreeCanvas {
+          LayoutMode: Top;
+          FlexWeight: 1;
+
+          Group #Tier1Wrap {
+            LayoutMode: Center;
+            Anchor: (Bottom: 10);
+
+            Group #Tier1Stack {
+              LayoutMode: Top;
+
+              Group #Tier1Row {
+                LayoutMode: Left;
+
+                Button #T1PerCapita {
+                  LayoutMode: Top;
+                  Style: @NodeBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 138);
+                  Padding: (Horizontal: 8, Vertical: 8);
+                  Label #T1PerCapitaText {
+                    Anchor: (Bottom: 6);
+                    Style: (...@NodeTitleTier1);
+                  }
+                  Group #T1PerCapitaIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 48, Height: 48);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T1PerCapitaIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T1PerCapitaIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/multiple-users-silhouette.png";
+                      }
+                      Group #T1PerCapitaDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+
+                Group #T1HConn {
+                  LayoutMode: Middle;
+                  FlexWeight: 1;
+                  Anchor: (Height: 52);
+                  Group #T1HLine {
+                    Anchor: (Left: 0, Right: 0, Height: 4);
+                    Background: #7a6c5a;
+                  }
+                }
+
+                Button #T1Happiness {
+                  LayoutMode: Top;
+                  Style: @NodeBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 138);
+                  Padding: (Horizontal: 8, Vertical: 8);
+                  Label #T1HappinessText {
+                    Anchor: (Bottom: 6);
+                    Style: (...@NodeTitleTier1);
+                  }
+                  Group #T1HappinessIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 48, Height: 48);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T1HappinessIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T1HappinessIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/emotions.png";
+                      }
+                      Group #T1HappinessDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+              }
+
+              Group #Trunk1 {
+                LayoutMode: Center;
+                Anchor: (Top: 0);
+                Group #Trunk1Line {
+                  Anchor: (Width: 4, Height: 30);
+                  Background: #7a6c5a;
+                }
+              }
+            }
+          }
+
+          Group #Tier2Wrap {
+            LayoutMode: Center;
+
+            Group #Tier2Panel {
+              LayoutMode: Top;
+              Padding: (Full: 10);
+              Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 10, Color: #252b38(0.98));
+
+              Group #Tier2Row1 {
+                LayoutMode: Left;
+                Anchor: (Bottom: 6);
+
+                Button #T2Mining {
+                  LayoutMode: Top;
+                  Style: @Tier2ChoiceBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 120);
+                  Padding: (Horizontal: 6, Vertical: 6);
+                  Label #T2MiningText {
+                    Anchor: (Bottom: 4);
+                    Style: (...@NodeTitle);
+                  }
+                  Group #T2MiningIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 44, Height: 44);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T2MiningIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T2MiningIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/pickaxe.png";
+                      }
+                      Group #T2MiningDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+
+                Button #T2Logging {
+                  LayoutMode: Top;
+                  Style: @Tier2ChoiceBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 120, Left: 8);
+                  Padding: (Horizontal: 6, Vertical: 6);
+                  Label #T2LoggingText {
+                    Anchor: (Bottom: 4);
+                    Style: (...@NodeTitle);
+                  }
+                  Group #T2LoggingIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 44, Height: 44);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T2LoggingIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T2LoggingIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/axe.png";
+                      }
+                      Group #T2LoggingDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+              }
+
+              Group #Tier2Row2 {
+                LayoutMode: Left;
+
+                Button #T2Farming {
+                  LayoutMode: Top;
+                  Style: @Tier2ChoiceBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 120);
+                  Padding: (Horizontal: 6, Vertical: 6);
+                  Label #T2FarmingText {
+                    Anchor: (Bottom: 4);
+                    Style: (...@NodeTitle);
+                  }
+                  Group #T2FarmingIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 44, Height: 44);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T2FarmingIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T2FarmingIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/farmer.png";
+                      }
+                      Group #T2FarmingDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+
+                Button #T2Smithing {
+                  LayoutMode: Top;
+                  Style: @Tier2ChoiceBtnStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Width: 120, Left: 8);
+                  Padding: (Horizontal: 6, Vertical: 6);
+                  Label #T2SmithingText {
+                    Anchor: (Bottom: 4);
+                    Style: (...@NodeTitle);
+                  }
+                  Group #T2SmithingIconFrame {
+                    LayoutMode: Full;
+                    Anchor: (Width: 44, Height: 44);
+                    Padding: (Full: 2);
+                    Background: #5a5468;
+
+                    Group #T2SmithingIconStack {
+                      LayoutMode: Full;
+                      Anchor: (Full: 0);
+                      Padding: (Full: 3);
+                      Background: #1c2230;
+
+                      AssetImage #T2SmithingIcon {
+                        Anchor: (Full: 0);
+                        AssetPath: "Icons/ItemsGenerated/blacksmith.png";
+                      }
+                      Group #T2SmithingDim {
+                        LayoutMode: Full;
+                        Anchor: (Full: 0);
+                        Visible: false;
+                        Background: #000000(0.55);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Label #Status {
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c9b99a, HorizontalAlignment: Center);
+        Text: "";
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

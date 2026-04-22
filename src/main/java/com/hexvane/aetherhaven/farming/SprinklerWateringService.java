@@ -2,6 +2,10 @@ package com.hexvane.aetherhaven.farming;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.CharterSpecializationModifiers;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.builtin.adventure.farming.states.TilledSoilBlock;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -206,7 +210,9 @@ public final class SprinklerWateringService {
         if (sb == null) {
             return -1;
         }
-        int watered = waterSprinklerCells(world, x, y, z, sb.getTier(), wateredUntil);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        int extraR = plugin != null ? extraSprinklerRadiusForPosition(world, plugin, x, z) : 0;
+        int watered = waterSprinklerCells(world, x, y, z, sb.getTier(), wateredUntil, extraR);
         SprinklerActivationEffects.playAtSprinklerBlock(entityStore, x, y, z);
         return watered;
     }
@@ -214,6 +220,7 @@ public final class SprinklerWateringService {
     static void waterAllSprinklers(@Nonnull World world, @Nonnull Store<EntityStore> entityStore) {
         Instant gameTime = entityStore.getResource(WorldTimeResource.getResourceType()).getGameTime();
         Instant wateredUntil = gameTime.plus(WATER_DURATION_SECONDS, ChronoUnit.SECONDS);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
         Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
         Query<ChunkStore> q = Query.and(SprinklerBlock.getComponentType(), BlockModule.BlockStateInfo.getComponentType());
         chunkStore.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
@@ -238,10 +245,20 @@ public final class SprinklerWateringService {
                 int sx = lx + columnChunk.getX() * CHUNK_HORIZONTAL_BLOCK_SIZE;
                 int sy = ly;
                 int sz = lz + columnChunk.getZ() * CHUNK_HORIZONTAL_BLOCK_SIZE;
-                waterSprinklerCells(world, sx, sy, sz, sb.getTier(), wateredUntil);
+                int extraR = plugin != null ? extraSprinklerRadiusForPosition(world, plugin, sx, sz) : 0;
+                waterSprinklerCells(world, sx, sy, sz, sb.getTier(), wateredUntil, extraR);
                 SprinklerActivationEffects.playAtSprinklerBlock(entityStore, sx, sy, sz);
             }
         });
+    }
+
+    private static int extraSprinklerRadiusForPosition(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, int blockX, int blockZ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownContainingBlock(world.getName(), blockX, blockZ);
+        if (town == null || !CharterSpecializationModifiers.farmSprinklerRadiusBonus(town)) {
+            return 0;
+        }
+        return CharterSpecializationModifiers.FARM_SPRINKLER_EXTRA_RADIUS;
     }
 
     /** Waters soil in the Chebyshev radius below the sprinkler block (same as vanilla area). */
@@ -251,10 +268,11 @@ public final class SprinklerWateringService {
         int sprinklerY,
         int sprinklerZ,
         int tier,
-        @Nonnull Instant wateredUntil
+        @Nonnull Instant wateredUntil,
+        int extraChebyshevRadius
     ) {
         int soilY = sprinklerY - 1;
-        int r = SprinklerBlock.radiusForTier(tier);
+        int r = Math.min(8, SprinklerBlock.radiusForTier(tier) + Math.max(0, extraChebyshevRadius));
         int watered = 0;
         for (int dx = -r; dx <= r; dx++) {
             for (int dz = -r; dz <= r; dz++) {

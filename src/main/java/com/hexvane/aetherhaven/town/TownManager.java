@@ -278,6 +278,23 @@ public final class TownManager {
     }
 
     /**
+     * First town in this world whose territory contains the block column. Used when multiple towns could exist per
+     * world (rare); deterministic order follows {@link #allTowns()}.
+     */
+    @Nullable
+    public TownRecord findTownContainingBlock(@Nonnull String worldName, int blockX, int blockZ) {
+        for (TownRecord t : allTowns()) {
+            if (!worldName.equals(t.getWorldName())) {
+                continue;
+            }
+            if (isInsideTerritory(t, blockX, blockZ)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /**
      * True if every registered plot footprint would still lie inside the territory when the charter were moved to
      * {@code charterBlockX}/{@code charterBlockZ} (territory is the chunk-radius square centered on the charter).
      */
@@ -302,6 +319,7 @@ public final class TownManager {
 
     public void putTown(@Nonnull TownRecord record) {
         record.migrateTownSocialFieldsIfNeeded();
+        record.migrateFounderMonumentCountIfNeeded();
         ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
         saveToDisk();
@@ -309,6 +327,7 @@ public final class TownManager {
 
     public void updateTown(@Nonnull TownRecord record) {
         record.migrateTownSocialFieldsIfNeeded();
+        record.migrateFounderMonumentCountIfNeeded();
         ensureDisplayNameUnique(record);
         byTownId.put(record.getTownId(), record);
         saveToDisk();

@@ -47,10 +47,35 @@ aetherhaven.ui.villagerneeds.villagers=Villagers
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 
+aetherhaven.ui.charter.title=Charter amendments
+aetherhaven.ui.charter.popHint=Residents (non-visitors): {count}. Tier 1 unlocks at 3; tier 2 at 5.
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Tier 1 — Tithe style
+aetherhaven.ui.charter.tier2=Tier 2 — Town focus
+aetherhaven.ui.charter.t1.perCapitaShort=Per capita
+aetherhaven.ui.charter.t1.happinessShort=Happiness-weighted
+aetherhaven.ui.charter.t1.perCapitaTooltip=Headcount-first tithe.\n\nMorning gold leans on how many residents live here. Day-to-day comfort still nudges the total a little, but population is what moves the needle.
+aetherhaven.ui.charter.t1.happinessTooltip=Needs-first tithe.\n\nMorning gold leans harder on how well residents are fed, rested, and in good spirits. A few extra citizens matter less than keeping everyone in decent shape.
+aetherhaven.ui.charter.t2.miningShort=Mining
+aetherhaven.ui.charter.t2.loggingShort=Logging
+aetherhaven.ui.charter.t2.farmingShort=Farming
+aetherhaven.ui.charter.t2.smithingShort=Smithing
+aetherhaven.ui.charter.t2.miningTooltip=The charter backs the mines.\n\nBonuses tied to mining production will favor this town when they arrive. Pick only one focus below—mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.loggingTooltip=The charter backs the forest.\n\nBonuses tied to logging and woodcutting will favor this town when they arrive. Pick only one focus below—mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.farmingTooltip=The charter backs the fields.\n\nWhen your town has a completed farm plot, sprinklers here reach a bit farther—extra tiles at the edge of their spray. Pick only one focus below—mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.smithingTooltip=The charter backs the forge.\n\nBonuses tied to smithing and metalwork will favor this town when they arrive. Pick only one focus below—mining, logging, farming, or smithing.
+aetherhaven.ui.charter.hint=Choose one option per tier. Choices cannot be changed later.
+aetherhaven.ui.charter.allChosen=All amendments chosen for this town.
+aetherhaven.ui.charter.noTown=You must belong to a town to use this.
+aetherhaven.ui.charter.noPermission=You cannot change charter amendments for this town.
+aetherhaven.ui.charter.err.locked=That amendment is locked or already chosen.
+aetherhaven.ui.charter.err.invalid=Invalid choice.
+aetherhaven.ui.charter.saved=Charter amendments updated.
+
 aetherhaven.reputation.reward.continue=Continue
-aetherhaven.reputation.reward.elder.25=You keep showing up when it counts. Take these coins for the next thing the town cannot afford to ignore.
-aetherhaven.reputation.reward.elder.50=You are carrying more of the load than most. Here is a little more for the treasury.
-aetherhaven.reputation.reward.elder.75=A desk for plans, maps, and the nights that run long. Sit down. You have earned the chair.
+aetherhaven.reputation.reward.elder.50=The charter is not carved in stone forever. Here is the pattern for an amendments table—craft it at your town planning desk once you know the schematic. Seat it in the hall and choose how the town's morning tithe leans.
+aetherhaven.reputation.reward.elder.100=You have carried this place farther than anyone asked. Take this foundation stone: set a founder's monument where the charter allows. The treasury will remember.
 aetherhaven.reputation.reward.innkeeper.25=You keep filling bowls without making a fuss about it. Take a few from the kitchen, on the house.
 aetherhaven.reputation.reward.innkeeper.50=The hearth stays honest because people like you keep the road from turning cruel. Eat well.
 aetherhaven.reputation.reward.merchant.25=Regular faces turn a thin market into something like home. Count this toward your next trade.
@@ -61,7 +86,7 @@ aetherhaven.reputation.reward.farmer.50=Here is the thorium pattern: wider reach
 aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page unlocks the third sprinkler tier, still one good soak at sunrise.
 aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care. The town's fields will drink at dawn.
 aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You have both, and it shows.
-aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil—craft it at the workbench when you have the bars and stone.
+aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil—craft it at your town planning desk when you have the bars and stone.
 aetherhaven.ui.plotadmin.title=Plot sign (admin)
 aetherhaven.ui.plotadmin.construction=Construction
 aetherhaven.ui.plotadmin.give=Give plot sign & close
@@ -89,12 +114,17 @@ items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
 items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
-items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, plot tokens, the plot placement staff, and the quest journal. Build one at a workbench.
+items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
+items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
+items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; you must know the schematic.
+items.Aetherhaven_Founder_Monument.name=Founder monument
+items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a likeness of the founder. Place inside town territory to honor them; the treasury's morning share grows slightly while it stands. Only one per town.
 
-server.benchCategories.aetherhaven.town_planning=Town planning
+benchCategories.aetherhaven.town_planning=Town planning
+benchCategories.aetherhaven.plot_tokens=Plot tokens
 
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
-items.Aetherhaven_Plot_Placement_Tool.description=Right-click a block to start placement (secondary use): carry a plot token, position the preview, then place. With a preview active, right-click air reopens this panel; right-clicking a block does not move the preview—use Cancel first to pick a new spot.
+items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building—nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.
 
 items.Aetherhaven_Poi_Tool.name=POI debug tool
 items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
@@ -136,7 +166,7 @@ items.Aetherhaven_Geode.name=Geode
 items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems, or ore. Pay a blacksmith to crack it open.
 
 items.Aetherhaven_Geode_Anvil.name=Geode anvil
-items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; you must know the schematic to craft it at a workbench.
+items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; you must know the schematic to craft it at your town planning desk.
 
 barter.aetherhaven_vex.title=Vex's daily stock
 

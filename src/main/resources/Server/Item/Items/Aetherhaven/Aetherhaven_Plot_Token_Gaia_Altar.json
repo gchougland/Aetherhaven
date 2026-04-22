@@ -19,7 +19,7 @@
       {
         "Id": "Aetherhaven_TownPlanningDesk",
         "Type": "Crafting",
-        "Categories": ["Aetherhaven_TownPlanning"]
+        "Categories": ["Aetherhaven_TownPlanningPlotTokens"]
       }
     ]
   },

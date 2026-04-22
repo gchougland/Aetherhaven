@@ -1,0 +1,53 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Founder_Monument.name",
+    "Description": "server.items.Aetherhaven_Founder_Monument.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Furniture_Village_Statue.png",
+  "Categories": ["Blocks.Rocks"],
+  "Set": "Aetherhaven",
+  "PlayerAnimationsId": "Block",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "CustomModel": "Blocks/Structures/Pillars/Pillar_Base.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Structures/Pillars/Pillar_Base_Textures/Stone_Brick.png",
+        "Weight": 1
+      }
+    ],
+    "Group": "Stone",
+    "HitboxType": "Statue",
+    "Flags": {},
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Rocks"
+      }
+    },
+    "VariantRotation": "DoublePipe",
+    "BlockParticleSetId": "Stone",
+    "Supporting": {
+      "Down": [{}],
+      "Up": [{}]
+    },
+    "ParticleColor": "#737055",
+    "BlockSoundSetId": "Stone",
+    "BlockEntity": {
+      "Components": {
+        "AetherhavenFounderMonumentBlock": {}
+      }
+    }
+  },
+  "Tags": {
+    "Type": ["Rock"],
+    "Family": ["Aetherhaven"]
+  },
+  "MaxStack": 1,
+  "ItemSoundSetId": "ISS_Blocks_Stone",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [22.5, 45, 22.5],
+    "Translation": [0, -12]
+  }
+}

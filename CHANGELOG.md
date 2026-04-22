@@ -1,9 +1,11 @@
 # Changelog
 
-## [0.5.0]
+## [0.5.0] - 4/21/2026
 
 ### Added
 
+- **Charter amendments table** (workbench recipe, reputation-gated schematic from the Elder): place in town to open **charter amendments**—choose **tier 1** tithe style (per-resident vs needs-weighted) and **tier 2** town specialization (mining, logging, farming, smithing). Choices persist on the town record and affect treasury math / future hooks. Includes custom block model and UI with dedicated icons, tooltips, and tier layout.
+- **Founder’s monument** block: place a **stone statue** of the placer’s **cosmetics silhouette** (resolved from the cosmetic registry, not the base player model alone), with **Statue** collision, **DoublePipe** placement rotation from the placer’s facing, and **block-entity persistence** so the statue survives reloads.
 - **Mod icon** for the plugin package.
 - Dialogue to the Elder for explaining how to obtain gold coins
 
@@ -15,6 +17,7 @@
 - **Villagers look at the player when speaking to them:** While dialogue is open (`$Interaction`), dialogue roles inline **watch the player** (Target + HeadMotion Watch; engine rules forbid putting `$Interaction` in a referenced Component).
 - Improved plot management, town needs, charter, and related confirmation UIs for clarity and layout.
 - Town **idle wander** uses `WanderInRectGroundPreference`: **normal terrain** uses `DefaultGroundWeight` (1.0); **benches, seats, beds**, and configured obstacles use `ObstacleWeight` (default 0.12); optional `GroundWeights` override by `BlockTypeId`.
+- Re-organized Town Planning Desk
 
 ## [0.4.0] - 4/19/2026
 
