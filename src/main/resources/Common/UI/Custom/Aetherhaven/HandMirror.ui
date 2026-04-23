@@ -4,7 +4,7 @@ $C.@PageOverlay {
   LayoutMode: Middle;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 720);
+    Anchor: (Width: 920);
 
     #Title {
       $C.@Title {
@@ -13,101 +13,171 @@ $C.@PageOverlay {
     }
 
     #Content {
-      LayoutMode: Top;
+      LayoutMode: Left;
       Padding: (Full: 16);
 
-      Label #EquipLabel {
-        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8);
-        Text: %server.aetherhaven.ui.handmirror.equipment;
+      Group #LeftColumn {
+        LayoutMode: Top;
+        FlexWeight: 1;
+
+      Label #EquipSection {
         Anchor: (Bottom: 6);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
+        Text: %server.aetherhaven.ui.handmirror.equipment;
       }
 
-      Group #EquipmentRow {
+      Group #EquippedRow {
         LayoutMode: Left;
-        Anchor: (Bottom: 12);
+        Anchor: (Bottom: 14);
 
-        Group #Ring1Wrap {
+        Group #Ring1Column {
           LayoutMode: Top;
-          Padding: (Right: 12);
-          Label #Ring1Lbl {
-            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+          Label #Ring1Label {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
             Text: %server.aetherhaven.ui.handmirror.ring1;
             Anchor: (Bottom: 4);
           }
-          ItemSlotButton #Ring1Btn {
+          Group #Ring1SlotBox {
             Anchor: (Width: 56, Height: 56);
-            ItemSlot #Ring1Slot {
-              Anchor: (Full: 0);
-              ShowQualityBackground: true;
-              ShowQuantity: true;
+            LayoutMode: Full;
+            Background: #1a2530;
+            Padding: 2;
+            Group #Ring1Slot {
+              LayoutMode: Full;
+              ItemGrid #Ring1Icon {
+                Anchor: (Full: 0);
+                SlotsPerRow: 1;
+                Style: (
+                  SlotSize: 52,
+                  SlotIconSize: 52,
+                  SlotSpacing: 0,
+                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                );
+              }
             }
+          }
+          Button #UnequipRing1 {
+            Anchor: (Top: 4, Width: 28, Height: 24);
+            Visible: false;
+            Style: (
+              Default: (Background: (TexturePath: "../eject.png")),
+              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
+              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
+            );
           }
         }
 
-        Group #Ring2Wrap {
+        Group #Ring2Column {
           LayoutMode: Top;
-          Padding: (Right: 12);
-          Label #Ring2Lbl {
-            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+          Label #Ring2Label {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
             Text: %server.aetherhaven.ui.handmirror.ring2;
             Anchor: (Bottom: 4);
           }
-          ItemSlotButton #Ring2Btn {
+          Group #Ring2SlotBox {
             Anchor: (Width: 56, Height: 56);
-            ItemSlot #Ring2Slot {
-              Anchor: (Full: 0);
-              ShowQualityBackground: true;
-              ShowQuantity: true;
+            LayoutMode: Full;
+            Background: #1a2530;
+            Padding: 2;
+            Group #Ring2Slot {
+              LayoutMode: Full;
+              ItemGrid #Ring2Icon {
+                Anchor: (Full: 0);
+                SlotsPerRow: 1;
+                Style: (
+                  SlotSize: 52,
+                  SlotIconSize: 52,
+                  SlotSpacing: 0,
+                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                );
+              }
             }
+          }
+          Button #UnequipRing2 {
+            Anchor: (Top: 4, Width: 28, Height: 24);
+            Visible: false;
+            Style: (
+              Default: (Background: (TexturePath: "../eject.png")),
+              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
+              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
+            );
           }
         }
 
-        Group #NeckWrap {
+        Group #NeckColumn {
           LayoutMode: Top;
-          Label #NeckLbl {
-            Style: (...$C.@DefaultLabelStyle, FontSize: 12, TextColor: #b8a88c);
+          Label #NeckLabel {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
             Text: %server.aetherhaven.ui.handmirror.necklace;
             Anchor: (Bottom: 4);
           }
-          ItemSlotButton #NeckBtn {
+          Group #NeckSlotBox {
             Anchor: (Width: 56, Height: 56);
-            ItemSlot #NeckSlot {
-              Anchor: (Full: 0);
-              ShowQualityBackground: true;
-              ShowQuantity: true;
+            LayoutMode: Full;
+            Background: #1a2530;
+            Padding: 2;
+            Group #NeckSlot {
+              LayoutMode: Full;
+              ItemGrid #NeckIcon {
+                Anchor: (Full: 0);
+                SlotsPerRow: 1;
+                Style: (
+                  SlotSize: 52,
+                  SlotIconSize: 52,
+                  SlotSpacing: 0,
+                  SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                );
+              }
             }
+          }
+          Button #UnequipNeck {
+            Anchor: (Top: 4, Width: 28, Height: 24);
+            Visible: false;
+            Style: (
+              Default: (Background: (TexturePath: "../eject.png")),
+              Hovered: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.18))),
+              Pressed: (Background: (TexturePath: "../eject.png", Color: #ffffff(0.38))),
+            );
           }
         }
       }
 
-      Label #InvLabel {
-        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8);
+      Label #ListSection {
+        Anchor: (Bottom: 6);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
         Text: %server.aetherhaven.ui.handmirror.inventory;
-        Anchor: (Bottom: 6);
       }
 
-      Label #Hint {
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a89878);
-        Text: %server.aetherhaven.ui.handmirror.hint;
-      }
+      Group #JewelryListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 10);
 
-      Group #JewelryCallout {
-        Visible: false;
-        LayoutMode: Top;
-        Anchor: (Bottom: 8);
-        Padding: (Full: 8);
-        Background: (Color: #1a1a22(0.92));
-
-        Label #JewelryCalloutText {
-          Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8c8a8);
-          TextSpans: [];
+        Group #Rows {
+          LayoutMode: Top;
         }
       }
 
-      Group #InvGrid {
+      Label #Hint {
+        Anchor: (Top: 8);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #8a7a60, Wrap: true);
+        Text: "";
+      }
+      }
+
+      Group #TraitColumn {
         LayoutMode: Top;
-        Anchor: (Bottom: 8);
+        Anchor: (Width: 300, Left: 12);
+        Padding: (Left: 8);
+        Label #TraitTitle {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
+          Text: %server.aetherhaven.ui.handmirror.traitsColumnHeading;
+        }
+        Label #TraitBody {
+          Anchor: (Top: 6);
+          Style: (...$C.@DefaultLabelStyle, TextColor: #d8d0c8, Wrap: true, FontSize: 13);
+          Text: "";
+        }
       }
     }
   }

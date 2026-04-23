@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "0.5.0"
+version = "0.6.0"
 val javaVersion = 25
 
 repositories {
@@ -12,12 +12,19 @@ repositories {
     maven("https://maven.hytale-modding.info/releases") {
         name = "HytaleModdingReleases"
     }
+    maven("https://cursemaven.com") {
+        name = "CurseMaven"
+    }
 }
+
+val dynamicTooltipsLib = "curse.maven:dynamictooltipslib-1459711:7939479"
 
 dependencies {
     implementation("com.google.code.gson:gson:2.11.0")
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
+    compileOnly(dynamicTooltipsLib)
+    runtimeOnly(dynamicTooltipsLib)
 }
 
 hytale {
@@ -40,7 +47,7 @@ java {
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal"))
+    options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:removal", "-Xlint:unchecked"))
 }
 
 tasks.named<ProcessResources>("processResources") {

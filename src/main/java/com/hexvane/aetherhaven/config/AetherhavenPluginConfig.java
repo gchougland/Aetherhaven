@@ -13,6 +13,10 @@ import javax.annotation.Nonnull;
  * On first run, {@code AetherhavenPlugin} writes {@code config.json} with these defaults if the file is absent.
  * When the file already exists, startup merges in any missing keys from the current plugin defaults so new
  * options appear without discarding existing settings.
+ *
+ * <p>Reference: vanilla base player stats in Hytale {@code Assets/Server/Entity/Stats} use Health 100/100, Stamina
+ * 10/10, Oxygen 100/100; {@code Mana.json} and {@code SignatureEnergy.json} are 0/0 in the base data (values are
+ * often granted by items or abilities). Tune paths like {@code Jewelry.Stat.Oxygen} in {@code config.json}.
  */
 public final class AetherhavenPluginConfig {
     public static final BuilderCodec<AetherhavenPluginConfig> CODEC = BuilderCodec.builder(AetherhavenPluginConfig.class, AetherhavenPluginConfig::new)
@@ -177,6 +181,22 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Morning tax sum multiplier when founder monument is active, in permille (1100 = +10%).")
         .add()
+        .append(
+            new KeyedCodec<>("LootChest", LootChestConfig.CODEC),
+            (o, v) -> o.lootChest = v != null ? v : new LootChestConfig(),
+            o -> o.lootChest
+        )
+        .documentation(
+            "World chest bonus rolls (jewelry, gold, plot token). Use nested keys: JewelryChance, BlockIdSubstrings, Gold, PlotToken."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("Jewelry", JewelryConfig.CODEC),
+            (o, v) -> o.jewelry = v != null ? v : new JewelryConfig(),
+            o -> o.jewelry
+        )
+        .documentation("Jewelry trait rolling: RarityWeights, TraitMultipliers, and Stat (per-stat Common/Legendary Min/Max).")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -215,6 +235,9 @@ public final class AetherhavenPluginConfig {
     private double charterTaxPerCapitaFlatFraction = 0.35;
     private double charterTaxHappinessExponent = 1.25;
     private int founderMonumentTaxPermille = 1100;
+
+    private LootChestConfig lootChest = new LootChestConfig();
+    private JewelryConfig jewelry = new JewelryConfig();
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -310,6 +333,211 @@ public final class AetherhavenPluginConfig {
             return 0.0;
         }
         return Math.min(v, 1.0);
+    }
+
+    @Nonnull
+    public LootChestConfig getLootChest() {
+        return lootChest != null ? lootChest : new LootChestConfig();
+    }
+
+    @Nonnull
+    public JewelryConfig getJewelry() {
+        return jewelry != null ? jewelry : new JewelryConfig();
+    }
+
+    /** Clamped to [0, 1]. Zero disables extra chest jewelry. */
+    public double getLootChestJewelryChance() {
+        double v = getLootChest().getJewelryChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    /** Clamped to [0, 1]. */
+    public double getLootChestGoldCoinChance() {
+        double v = getLootChest().getGold().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    public int getLootChestGoldCoinMin() {
+        return Math.max(1, getLootChest().getGold().getMin());
+    }
+
+    public int getLootChestGoldCoinMax() {
+        return Math.max(getLootChestGoldCoinMin(), getLootChest().getGold().getMax());
+    }
+
+    @Nonnull
+    public String getLootChestGoldCoinItemId() {
+        return getLootChest().getGold().getItemId();
+    }
+
+    public double getLootChestPlotTokenChance() {
+        double v = getLootChest().getPlotToken().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    /**
+     * When true, world-load bonus injection also runs in Creative. Default false (Stash and many chest paths skip
+     * Creative for stability).
+     */
+    public boolean isLootChestApplyInCreative() {
+        return getLootChest().isApplyInCreative();
+    }
+
+    @Nonnull
+    public String getLootChestPlotTokenItemId() {
+        return getLootChest().getPlotToken().getItemId();
+    }
+
+    public double getJewelryRarityWeightCommon() {
+        return Math.max(0.0, getJewelry().getRarityWeights().getCommon());
+    }
+
+    public double getJewelryRarityWeightUncommon() {
+        return Math.max(0.0, getJewelry().getRarityWeights().getUncommon());
+    }
+
+    public double getJewelryRarityWeightRare() {
+        return Math.max(0.0, getJewelry().getRarityWeights().getRare());
+    }
+
+    public double getJewelryRarityWeightMythic() {
+        return Math.max(0.0, getJewelry().getRarityWeights().getMythic());
+    }
+
+    public double getJewelryRarityWeightLegendary() {
+        return Math.max(0.0, getJewelry().getRarityWeights().getLegendary());
+    }
+
+    public double getJewelryGoldMetalTraitMultiplier() {
+        double v = getJewelry().getTraitMultipliers().getGoldMetal();
+        return v > 0.0 ? v : 1.2;
+    }
+
+    public double getJewelryNecklaceTraitMultiplier() {
+        double v = getJewelry().getTraitMultipliers().getNecklace();
+        return v > 0.0 ? v : 1.15;
+    }
+
+    public double getJewelryStatHealthCommonMin() {
+        return getJewelry().getStat().getHealth().getCommon().getMin();
+    }
+
+    public double getJewelryStatHealthCommonMax() {
+        return getJewelry().getStat().getHealth().getCommon().getMax();
+    }
+
+    public double getJewelryStatHealthLegendaryMin() {
+        return getJewelry().getStat().getHealth().getLegendary().getMin();
+    }
+
+    public double getJewelryStatHealthLegendaryMax() {
+        return getJewelry().getStat().getHealth().getLegendary().getMax();
+    }
+
+    public double getJewelryStatStaminaCommonMin() {
+        return getJewelry().getStat().getStamina().getCommon().getMin();
+    }
+
+    public double getJewelryStatStaminaCommonMax() {
+        return getJewelry().getStat().getStamina().getCommon().getMax();
+    }
+
+    public double getJewelryStatStaminaLegendaryMin() {
+        return getJewelry().getStat().getStamina().getLegendary().getMin();
+    }
+
+    public double getJewelryStatStaminaLegendaryMax() {
+        return getJewelry().getStat().getStamina().getLegendary().getMax();
+    }
+
+    public double getJewelryStatAmmoCommonMin() {
+        return getJewelry().getStat().getAmmo().getCommon().getMin();
+    }
+
+    public double getJewelryStatAmmoCommonMax() {
+        return getJewelry().getStat().getAmmo().getCommon().getMax();
+    }
+
+    public double getJewelryStatAmmoLegendaryMin() {
+        return getJewelry().getStat().getAmmo().getLegendary().getMin();
+    }
+
+    public double getJewelryStatAmmoLegendaryMax() {
+        return getJewelry().getStat().getAmmo().getLegendary().getMax();
+    }
+
+    public double getJewelryStatManaCommonMin() {
+        return getJewelry().getStat().getMana().getCommon().getMin();
+    }
+
+    public double getJewelryStatManaCommonMax() {
+        return getJewelry().getStat().getMana().getCommon().getMax();
+    }
+
+    public double getJewelryStatManaLegendaryMin() {
+        return getJewelry().getStat().getMana().getLegendary().getMin();
+    }
+
+    public double getJewelryStatManaLegendaryMax() {
+        return getJewelry().getStat().getMana().getLegendary().getMax();
+    }
+
+    public double getJewelryStatOxygenCommonMin() {
+        return getJewelry().getStat().getOxygen().getCommon().getMin();
+    }
+
+    public double getJewelryStatOxygenCommonMax() {
+        return getJewelry().getStat().getOxygen().getCommon().getMax();
+    }
+
+    public double getJewelryStatOxygenLegendaryMin() {
+        return getJewelry().getStat().getOxygen().getLegendary().getMin();
+    }
+
+    public double getJewelryStatOxygenLegendaryMax() {
+        return getJewelry().getStat().getOxygen().getLegendary().getMax();
+    }
+
+    public double getJewelryStatSignatureEnergyCommonMin() {
+        return getJewelry().getStat().getSignatureEnergy().getCommon().getMin();
+    }
+
+    public double getJewelryStatSignatureEnergyCommonMax() {
+        return getJewelry().getStat().getSignatureEnergy().getCommon().getMax();
+    }
+
+    public double getJewelryStatSignatureEnergyLegendaryMin() {
+        return getJewelry().getStat().getSignatureEnergy().getLegendary().getMin();
+    }
+
+    public double getJewelryStatSignatureEnergyLegendaryMax() {
+        return getJewelry().getStat().getSignatureEnergy().getLegendary().getMax();
+    }
+
+    /**
+     * When non-empty, block type id must contain one of these (case-sensitive). When empty, every block id passes the
+     * include filter (exclude list still applies).
+     */
+    @Nonnull
+    public Set<String> lootChestBlockIdSubstrings() {
+        return splitCsv(getLootChest().getBlockIdSubstrings());
+    }
+
+    /**
+     * If a block type id contains any of these substrings, skip chest bonuses (opt-out for specific crates, etc.).
+     */
+    @Nonnull
+    public Set<String> lootChestExcludeBlockIdSubstrings() {
+        return splitCsv(getLootChest().getExcludeBlockIdSubstrings());
     }
 
     public boolean isGeodeOreUseBlocksOresCategory() {

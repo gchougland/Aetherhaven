@@ -22,9 +22,14 @@ $C.@PageOverlay {
         Text: "";
       }
 
-      Group #Rows {
-        LayoutMode: Top;
-        Anchor: (Bottom: 10);
+      Group #ListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 260, Bottom: 10);
+
+        Group #Rows {
+          LayoutMode: Top;
+        }
       }
 
       Label #DetailPick {

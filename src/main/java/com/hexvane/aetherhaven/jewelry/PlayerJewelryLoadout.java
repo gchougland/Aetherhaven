@@ -6,6 +6,7 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.protocol.ItemWithAllMetadata;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
@@ -22,7 +23,10 @@ public final class PlayerJewelryLoadout implements Component<EntityStore> {
 
     @Nonnull
     public static final BuilderCodec<PlayerJewelryLoadout> CODEC = BuilderCodec.builder(PlayerJewelryLoadout.class, PlayerJewelryLoadout::new)
-        .append(new KeyedCodec<>("Slots", Codec.BSON_DOCUMENT), (l, v) -> l.slots = v != null ? v : new BsonDocument(), l -> l.slots)
+        .append(
+            new KeyedCodec<>("Slots", AetherhavenBsonCodecs.BSON_DOCUMENT),
+            (l, v) -> l.slots = v != null ? v : new BsonDocument(),
+            l -> l.slots)
         .add()
         .append(new KeyedCodec<>("StatsDirty", Codec.BOOLEAN), (l, v) -> l.statsDirty = v, l -> l.statsDirty)
         .add()
@@ -129,8 +133,9 @@ public final class PlayerJewelryLoadout implements Component<EntityStore> {
             BsonDocument d = new BsonDocument();
             d.put("id", new BsonString(stack.getItemId()));
             d.put("q", new BsonInt32(stack.getQuantity()));
-            if (stack.getMetadata() != null) {
-                d.put("meta", stack.getMetadata().clone());
+            ItemWithAllMetadata packet = stack.toPacket();
+            if (packet.metadata != null && !packet.metadata.isBlank()) {
+                d.put("meta", BsonDocument.parse(packet.metadata));
             }
             slots.put(key, d);
         }

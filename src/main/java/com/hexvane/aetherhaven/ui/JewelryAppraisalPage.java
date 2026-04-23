@@ -4,7 +4,6 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
-import com.hexvane.aetherhaven.jewelry.JewelryTooltipMessages;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -22,6 +21,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
+import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
 public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
-    private static final String ROWS = "#Content #Rows";
+    private static final String ROWS = "#Content #ListScroll #Rows";
     private static final int MAX_ROWS = 48;
 
     private final boolean chargeGold;
@@ -127,13 +127,13 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
                 JewelryMetadata.isAppraised(stack)
                     ? Message.translation("server.aetherhaven.ui.jewelryAppraisal.statusAppraised")
                     : Message.translation("server.aetherhaven.ui.jewelryAppraisal.statusUnidentified");
-            commandBuilder.set(row + " #Icon.ItemId", stack.getItemId());
-            commandBuilder.set(row + " #Icon.Quantity", stack.getQuantity());
+            ItemStack forRow = JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(stack));
+            commandBuilder.set(
+                row + " #Icon.Slots", new ItemGridSlot[] {new ItemGridSlot(forRow)});
             commandBuilder.set(
                 row + " #Line.TextSpans",
                 Message.translation("server.aetherhaven.ui.jewelryAppraisal.row").param("itemName", itemName).param("status", statusMsg)
             );
-            commandBuilder.set(row + ".TooltipTextSpans", JewelryTooltipMessages.forStack(stack));
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row,

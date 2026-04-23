@@ -10,10 +10,15 @@ Button #Row {
     Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
   );
 
-  ItemSlot #Icon {
+  ItemGrid #Icon {
     Anchor: (Width: 40, Height: 40, Right: 10);
-    ShowQualityBackground: true;
-    ShowQuantity: true;
+    SlotsPerRow: 1;
+    Style: (
+      SlotSize: 40,
+      SlotIconSize: 40,
+      SlotSpacing: 0,
+      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+    );
   }
 
   Label #Line {

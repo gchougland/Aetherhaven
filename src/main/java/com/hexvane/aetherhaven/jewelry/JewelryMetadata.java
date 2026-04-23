@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -19,13 +20,19 @@ import org.bson.BsonValue;
 public final class JewelryMetadata {
     public static final String BSON_KEY = "AetherhavenJewelry";
 
+    /**
+     * Same key as item JSON {@code TranslationProperties}; instance metadata overrides the static
+     * {@code Description} translation key for that stack when the client merges instance data into the item tooltip.
+     */
+    public static final String INSTANCE_TRANSLATION_PROPERTIES_KEY = "TranslationProperties";
+
     private JewelryMetadata() {}
 
     public static boolean hasJewelryMeta(@Nullable ItemStack stack) {
-        if (ItemStack.isEmpty(stack) || stack.getMetadata() == null) {
+        if (ItemStack.isEmpty(stack)) {
             return false;
         }
-        return stack.getMetadata().containsKey(BSON_KEY);
+        return stack.getFromMetadataOrNull(BSON_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT) != null;
     }
 
     public static boolean isAppraised(@Nonnull ItemStack stack) {
@@ -41,7 +48,7 @@ public final class JewelryMetadata {
     public static ItemStack setAppraised(@Nonnull ItemStack stack, boolean appraised) {
         BsonDocument root = readOrCreateRoot(stack);
         root.put("appraised", BsonBoolean.valueOf(appraised));
-        return writeRoot(stack, root);
+        return syncInstanceDescriptionForTooltip(writeRoot(stack, root));
     }
 
     @Nullable
@@ -77,8 +84,8 @@ public final class JewelryMetadata {
             int idx = readInt(t, "i", 0);
             String stat = readString(t, "stat", "");
             String calc = readString(t, "calc", "ADDITIVE");
-            float amt = readDouble(t, "amt", 0.0);
-            out.add(new RolledTrait(idx, stat, calc, amt));
+            float raw = readDouble(t, "amt", 0.0);
+            out.add(new RolledTrait(idx, stat, calc, JewelryStatTuning.roundForStorage(stat, raw)));
         }
         return out;
     }
@@ -87,18 +94,19 @@ public final class JewelryMetadata {
     @Nonnull
     public static ItemStack ensureRolled(@Nonnull ItemStack stack) {
         if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
-            return stack;
+            return syncInstanceDescriptionForTooltip(stack);
         }
         BsonDocument root = readRoot(stack);
         if (root != null && root.containsKey("traits")) {
-            return stack;
+            return syncInstanceDescriptionForTooltip(stack);
         }
         JewelryGem gem = JewelryGem.fromItemId(stack.getItemId());
         if (gem == null) {
-            return stack;
+            return syncInstanceDescriptionForTooltip(stack);
         }
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
-        JewelryRarity rarity = JewelryRarity.roll(rnd);
+        AetherhavenPluginConfig cfg = JewelryRolling.config();
+        JewelryRarity rarity = JewelryRarity.roll(rnd, cfg);
         String[] pool = JewelryGemTraits.statIdsFor(gem);
         int want = rarity.traitCount();
         IntSet picked = new IntOpenHashSet();
@@ -106,12 +114,12 @@ public final class JewelryMetadata {
             picked.add(rnd.nextInt(3));
         }
         BsonArray traits = new BsonArray();
-        float metal = stack.getItemId().contains("_Gold_") ? 1.12f : 1.0f;
-        float neck = JewelryItemIds.isNecklace(stack.getItemId()) ? 1.15f : 1.0f;
+        float metal = stack.getItemId().contains("_Gold_") ? (float) cfg.getJewelryGoldMetalTraitMultiplier() : 1.0f;
+        float neck = JewelryItemIds.isNecklace(stack.getItemId()) ? (float) cfg.getJewelryNecklaceTraitMultiplier() : 1.0f;
         for (int idx : picked) {
             String statId = pool[idx];
-            float base = baseAmountFor(statId);
-            float amt = base * rarity.magnitudeMultiplier() * metal * neck;
+            float baseAmt = JewelryStatTuning.rollMagnitudeFor(statId, rarity, rnd, cfg);
+            float amt = JewelryStatTuning.roundForStorage(statId, baseAmt * metal * neck);
             BsonDocument td = new BsonDocument();
             td.put("i", new BsonInt32(idx));
             td.put("stat", new BsonString(statId));
@@ -123,23 +131,38 @@ public final class JewelryMetadata {
         next.put("rarity", new BsonString(rarity.wireName()));
         next.put("appraised", BsonBoolean.FALSE);
         next.put("traits", traits);
-        return writeRoot(stack, next);
+        return syncInstanceDescriptionForTooltip(writeRoot(stack, next));
     }
 
-    private static float baseAmountFor(@Nonnull String statId) {
-        return switch (statId) {
-            case "Health", "Mana", "Stamina", "Oxygen", "Ammo", "SignatureEnergy" -> 1.0f;
-            default -> 0.5f;
-        };
+    /**
+     * Writes {@code TranslationProperties.Description} on the stack metadata with plain English text so the default
+     * tooltip can show rolled traits (and hidden lines when unappraised) instead of only the static item description key.
+     */
+    @Nonnull
+    public static ItemStack syncInstanceDescriptionForTooltip(@Nonnull ItemStack stack) {
+        if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
+            return stripInstanceDescriptionOverride(stack);
+        }
+        if (!hasJewelryMeta(stack)) {
+            return stripInstanceDescriptionOverride(stack);
+        }
+        BsonDocument tp = new BsonDocument();
+        tp.put("Description", new BsonString(JewelryTooltipMessages.toPlainEnglishDescription(stack)));
+        return stack.withMetadata(INSTANCE_TRANSLATION_PROPERTIES_KEY, tp);
+    }
+
+    @Nonnull
+    private static ItemStack stripInstanceDescriptionOverride(@Nonnull ItemStack stack) {
+        if (stack.getFromMetadataOrNull(INSTANCE_TRANSLATION_PROPERTIES_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT)
+            == null) {
+            return stack;
+        }
+        return stack.withMetadata(INSTANCE_TRANSLATION_PROPERTIES_KEY, null);
     }
 
     @Nullable
     private static BsonDocument readRoot(@Nonnull ItemStack stack) {
-        if (stack.getMetadata() == null) {
-            return null;
-        }
-        BsonValue v = stack.getMetadata().get(BSON_KEY);
-        return v != null && v.isDocument() ? v.asDocument() : null;
+        return stack.getFromMetadataOrNull(BSON_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT);
     }
 
     @Nonnull
@@ -150,9 +173,7 @@ public final class JewelryMetadata {
 
     @Nonnull
     private static ItemStack writeRoot(@Nonnull ItemStack stack, @Nonnull BsonDocument root) {
-        BsonDocument meta = stack.getMetadata() == null ? new BsonDocument() : stack.getMetadata().clone();
-        meta.put(BSON_KEY, root);
-        return stack.withMetadata(meta);
+        return stack.withMetadata(BSON_KEY, root);
     }
 
     private static int readInt(@Nonnull BsonDocument d, @Nonnull String k, int def) {

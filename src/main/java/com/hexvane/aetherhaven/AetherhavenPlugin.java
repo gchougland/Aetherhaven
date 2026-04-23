@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven;
 
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
+import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
@@ -39,8 +40,13 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.jewelry.TooltipBridge;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryPlayerInitSystem;
+import com.hexvane.aetherhaven.jewelry.JewelryRolling;
+import com.hexvane.aetherhaven.jewelry.LootChestBonusInjectSystem;
+import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
+import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
 import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
@@ -61,7 +67,7 @@ import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
-import com.hexvane.aetherhaven.ui.HandMirrorPage;
+import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
@@ -194,12 +200,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     protected void setup() {
         instance = this;
 
-        this.config.get();
         Path configPath = this.getDataDirectory().resolve("config.json");
-        if (!Files.exists(configPath)) {
-            this.config.save().join();
-            LOGGER.atInfo().log("Created default config at %s", configPath);
-        } else {
+        if (Files.exists(configPath)) {
+            AetherhavenConfigJsonMigration.migrateIfNeeded(configPath);
             int merged = PluginConfigMerge.appendMissingKeys(configPath, AetherhavenPluginConfig.CODEC);
             if (merged > 0) {
                 LOGGER
@@ -207,8 +210,15 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     .log("Updated %s: appended %d missing default config key(s) (existing values unchanged).", configPath, merged);
             }
         }
+        this.config.get();
+        JewelryRolling.bind(() -> this.getConfig().get());
+        if (!Files.exists(configPath)) {
+            this.config.save().join();
+            LOGGER.atInfo().log("Created default config at %s", configPath);
+        }
         GeodeLootFiles.ensureDefaultLootFile(this);
         JewelryGemTraits.validateStatIdsAtStartup();
+        TooltipBridge.register();
 
         this.gameTimeCursorResourceType =
             this.getEntityStoreRegistry()
@@ -230,6 +240,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
+        LootChestWorldLootPending.register(this.getChunkStoreRegistry());
+        this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
+        this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
@@ -265,6 +278,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 "AetherhavenSprinklerActivate",
                 SprinklerActivateInteraction.class,
                 SprinklerActivateInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenOpenHandMirror",
+                OpenHandMirrorUiInteraction.class,
+                OpenHandMirrorUiInteraction.CODEC
             );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
@@ -444,7 +463,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
-        OpenCustomUIInteraction.registerSimple(this, HandMirrorPage.class, AetherhavenConstants.PAGE_HAND_MIRROR, HandMirrorPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
             JewelryAppraisalPage.class,

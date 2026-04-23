@@ -116,6 +116,30 @@
           "Output": { "ItemId": "Tool_Fertilizer_Crystal", "Quantity": 1 },
           "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 70 }],
           "Stock": [3, 6]
+        },
+        {
+          "Weight": 0.18,
+          "Output": { "ItemId": "Aetherhaven_Ring_Silver_Topaz", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 64 }],
+          "Stock": [0, 1]
+        },
+        {
+          "Weight": 0.18,
+          "Output": { "ItemId": "Aetherhaven_Ring_Gold_Emerald", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 88 }],
+          "Stock": [0, 1]
+        },
+        {
+          "Weight": 0.18,
+          "Output": { "ItemId": "Aetherhaven_Necklace_Silver_Sapphire", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 102 }],
+          "Stock": [0, 1]
+        },
+        {
+          "Weight": 0.18,
+          "Output": { "ItemId": "Aetherhaven_Necklace_Gold_Diamond", "Quantity": 1 },
+          "Input": [{ "ItemId": "Aetherhaven_Gold_Coin", "Quantity": 125 }],
+          "Stock": [0, 1]
         }
       ]
     }

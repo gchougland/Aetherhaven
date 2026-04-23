@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,29 +20,56 @@ public enum JewelryRarity {
         };
     }
 
-    public float magnitudeMultiplier() {
-        return switch (this) {
-            case COMMON -> 1.0f;
-            case UNCOMMON -> 1.25f;
-            case RARE -> 1.55f;
-            case MYTHIC -> 1.85f;
-            case LEGENDARY -> 2.2f;
-        };
+    /** Weighted by {@link AetherhavenPluginConfig} rarity weights (relative, normalized to 1.0 on the server). */
+    @Nonnull
+    public static JewelryRarity roll(@Nonnull ThreadLocalRandom rnd) {
+        return roll(rnd, JewelryRolling.config());
     }
 
     @Nonnull
-    public static JewelryRarity roll(@Nonnull ThreadLocalRandom rnd) {
-        int r = rnd.nextInt(100);
-        if (r < 50) {
+    public static JewelryRarity roll(@Nonnull ThreadLocalRandom rnd, @Nonnull AetherhavenPluginConfig cfg) {
+        double c = cfg.getJewelryRarityWeightCommon();
+        double u = cfg.getJewelryRarityWeightUncommon();
+        double r = cfg.getJewelryRarityWeightRare();
+        double m = cfg.getJewelryRarityWeightMythic();
+        double l = cfg.getJewelryRarityWeightLegendary();
+        double sum = c + u + r + m + l;
+        if (sum <= 0.0) {
+            return rollTable100(rnd);
+        }
+        double p = rnd.nextDouble() * sum;
+        if (p < c) {
             return COMMON;
         }
-        if (r < 80) {
+        p -= c;
+        if (p < u) {
             return UNCOMMON;
         }
-        if (r < 95) {
+        p -= u;
+        if (p < r) {
             return RARE;
         }
-        if (r < 99) {
+        p -= r;
+        if (p < m) {
+            return MYTHIC;
+        }
+        return LEGENDARY;
+    }
+
+    /** Fixed distribution: 50% / 30% / 15% / 4% / 1% (used when all configured weights are zero). */
+    @Nonnull
+    public static JewelryRarity rollTable100(@Nonnull ThreadLocalRandom rnd) {
+        int t = rnd.nextInt(100);
+        if (t < 50) {
+            return COMMON;
+        }
+        if (t < 80) {
+            return UNCOMMON;
+        }
+        if (t < 95) {
+            return RARE;
+        }
+        if (t < 99) {
             return MYTHIC;
         }
         return LEGENDARY;
@@ -50,6 +78,21 @@ public enum JewelryRarity {
     @Nonnull
     public String wireName() {
         return name();
+    }
+
+    /**
+     * Hytale item {@code Quality} id (drives default slot / tooltip tier art). Not the same as every {@link
+     * #wireName()} value: mythic maps to {@code Epic} which is the closest vanilla tier.
+     */
+    @Nonnull
+    public String itemQualityId() {
+        return switch (this) {
+            case COMMON -> "Common";
+            case UNCOMMON -> "Uncommon";
+            case RARE -> "Rare";
+            case MYTHIC -> "Epic";
+            case LEGENDARY -> "Legendary";
+        };
     }
 
     @Nonnull

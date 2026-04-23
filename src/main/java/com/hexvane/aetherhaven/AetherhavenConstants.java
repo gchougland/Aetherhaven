@@ -155,9 +155,6 @@ public final class AetherhavenConstants {
     /** Gold coins charged per jewelry appraisal at the merchant UI. */
     public static final int JEWELRY_APPRAISAL_GOLD_COST = 10;
 
-    /** Opens the three-slot jewelry loadout; must match {@code Aetherhaven_Hand_Mirror.json}. */
-    public static final String PAGE_HAND_MIRROR = "AetherhavenHandMirror";
-
     /** Free appraisal UI on the placed bench; must match {@code Aetherhaven_Appraisal_Bench.json}. */
     public static final String PAGE_JEWELRY_APPRAISAL_BENCH = "AetherhavenJewelryAppraisalBench";
 

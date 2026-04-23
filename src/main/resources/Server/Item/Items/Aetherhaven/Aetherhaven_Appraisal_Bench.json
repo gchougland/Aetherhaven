@@ -8,15 +8,11 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ItemId": "Ingredient_Bar_Iron",
-        "Quantity": 4
-      },
-      {
-        "ItemId": "Rock_Stone_Cobble",
+        "ResourceTypeId": "Wood_Planks",
         "Quantity": 8
       },
       {
-        "ItemId": "Ingredient_Life_Essence",
+        "ItemId": "Ingredient_Bar_Gold",
         "Quantity": 2
       }
     ],
@@ -24,21 +20,25 @@
       {
         "Id": "Aetherhaven_TownPlanningDesk",
         "Type": "Crafting",
-        "Categories": ["Aetherhaven_TownPlanning"]
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Furniture_Village_Stool.png",
-  "Categories": ["Furniture.Decorative"],
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Appraisal_Bench.png",
+  "Categories": [
+    "Furniture.Decorative"
+  ],
   "Set": "Aetherhaven",
   "BlockType": {
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/Decorative_Sets/Crude/Stool.blockymodel",
+    "CustomModel": "Items/Aetherhaven/Appraisal_Bench.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Decorative_Sets/Crude/Stool_Village.png",
+        "Texture": "Items/Aetherhaven/Appraisal_Bench.png",
         "Weight": 1
       }
     ],
@@ -77,13 +77,24 @@
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
-    "Scale": 0.45,
-    "Rotation": [22.5, 45, 22.5],
-    "Translation": [0, -14]
+    "Scale": 0.6,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -14
+    ]
   },
   "Tags": {
-    "Type": ["Furniture"],
-    "Family": ["Aetherhaven"]
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
   },
   "MaxStack": 1,
   "ItemSoundSetId": "ISS_Blocks_Wood"

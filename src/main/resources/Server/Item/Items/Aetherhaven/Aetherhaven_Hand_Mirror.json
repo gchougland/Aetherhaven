@@ -36,6 +36,7 @@
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Hand_Mirror.png",
   "Model": "Items/Aetherhaven/Hand_Mirror.blockymodel",
   "Texture": "Items/Aetherhaven/Hand_Mirror.png",
+  "Scale": 2,
   "MaxStack": 1,
   "PlayerAnimationsId": "Item",
   "Quality": "Uncommon",
@@ -56,10 +57,7 @@
     "Secondary": {
       "Interactions": [
         {
-          "Type": "OpenCustomUI",
-          "Page": {
-            "Id": "AetherhavenHandMirror"
-          }
+          "Type": "AetherhavenOpenHandMirror"
         }
       ]
     }

@@ -1,0 +1,50 @@
+$C = "../Common.ui";
+
+Group #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+
+  Group #IconFrame {
+    Anchor: (Width: 44, Height: 44, Right: 8);
+    LayoutMode: Full;
+    Background: #1a2530;
+    Padding: 2;
+    ItemGrid #Icon {
+      Anchor: (Full: 0);
+      SlotsPerRow: 1;
+      Style: (
+        SlotSize: 40,
+        SlotIconSize: 40,
+        SlotSpacing: 0,
+        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+      );
+    }
+  }
+
+  Label #Line {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true);
+    FlexWeight: 1;
+    Anchor: (Right: 6);
+  }
+
+  Group #RingActions {
+    Visible: false;
+    LayoutMode: Left;
+    $C.@SmallSecondaryTextButton #ToRing1 {
+      @Text = "";
+      Anchor: (Width: 96, Right: 4);
+    }
+    $C.@SmallSecondaryTextButton #ToRing2 {
+      @Text = "";
+      Anchor: (Width: 96);
+    }
+  }
+
+  Group #NeckActions {
+    Visible: false;
+    $C.@SmallSecondaryTextButton #ToNeck {
+      @Text = "";
+      Anchor: (Width: 112);
+    }
+  }
+}
