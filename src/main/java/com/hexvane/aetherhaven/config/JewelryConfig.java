@@ -37,6 +37,12 @@ public final class JewelryConfig {
                 o -> o.stat
             )
             .add()
+            .append(
+                new KeyedCodec<>("Crafting", JewelryCraftingConfig.CODEC),
+                (o, v) -> o.crafting = v != null ? v : new JewelryCraftingConfig(),
+                o -> o.crafting
+            )
+            .add()
             .build();
 
     @Nullable
@@ -47,6 +53,8 @@ public final class JewelryConfig {
     private JewelryTraitMultiplierConfig traitMultipliers = new JewelryTraitMultiplierConfig();
     @Nonnull
     private JewelryStatBlockConfig stat = new JewelryStatBlockConfig();
+    @Nonnull
+    private JewelryCraftingConfig crafting = new JewelryCraftingConfig();
 
     public JewelryConfig() {}
 
@@ -57,6 +65,7 @@ public final class JewelryConfig {
                 + " RarityWeights: relative tier weights. TraitMultipliers: gold band vs neck slot."
                 + " Stat: per-entity-stat min/max for common/legendary bounds (see sub-keys)."
                 + " (Chest jewelry injection only adds a random jewelry item; values still use this file.)"
+                + " Crafting: life-essence point weights and tier floors for the jewelry workbench."
                 + " (Not related to the built-in /droplist command, which is for simulating drop list assets on demand.)";
     }
 
@@ -78,5 +87,10 @@ public final class JewelryConfig {
     @Nonnull
     public JewelryStatBlockConfig getStat() {
         return stat != null ? stat : new JewelryStatBlockConfig();
+    }
+
+    @Nonnull
+    public JewelryCraftingConfig getCrafting() {
+        return crafting != null ? crafting : new JewelryCraftingConfig();
     }
 }

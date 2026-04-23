@@ -34,7 +34,7 @@ $C = "../Common.ui";
 );
 
 /** Use vanilla tooltip style from Common.ui so paths resolve; do not redefine Background here (breaks texture lookup for mod UIs). */
-/** Tier 2: four picks share one panel — inner buttons stay flat inside #Tier2Panel. */
+/** Tier 2: four picks share one panel; inner buttons stay flat inside #Tier2Panel. */
 @Tier2ChoiceBtnStyle = (
   Default: (Background: #000000(0)),
   Hovered: (Background: #ffffff(0.08)),

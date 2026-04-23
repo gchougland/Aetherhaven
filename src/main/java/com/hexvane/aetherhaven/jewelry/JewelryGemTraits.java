@@ -25,7 +25,11 @@ public final class JewelryGemTraits {
         };
     }
 
-    /** Logs unknown stat ids once at startup so jewelry rolls skip them safely at runtime. */
+    /**
+     * Logs unknown stat ids once at startup so jewelry rolls skip them safely at runtime.
+     * Call from {@code JavaPlugin.start()}, not {@code setup()}, so {@link EntityStatType} assets are loaded and
+     * {@code DefaultEntityStatTypes.update()} has run (same string ids as {@code DefaultEntityStatTypes}).
+     */
     public static void validateStatIdsAtStartup() {
         for (JewelryGem gem : JewelryGem.values()) {
             for (String statId : statIdsFor(gem)) {

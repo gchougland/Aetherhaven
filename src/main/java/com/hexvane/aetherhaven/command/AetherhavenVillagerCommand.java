@@ -149,12 +149,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 return;
             }
             playerRef.sendMessage(Message.raw(
-                "Town villagers: entity UUID — source — role if loaded (use UUID or role id with /aetherhaven reputation … and villager locate):"
+                "Town villagers: entity UUID, source, role if loaded (use UUID or role id with /aetherhaven reputation … and villager locate):"
             ));
             for (Map.Entry<UUID, String> e : notes.entrySet()) {
                 UUID id = e.getKey();
                 String live = npcRoleIfLoaded(store, id);
-                playerRef.sendMessage(Message.raw("  " + id + " — " + e.getValue() + " — role: " + live));
+                playerRef.sendMessage(Message.raw("  " + id + " | " + e.getValue() + " | role: " + live));
             }
         }
     }

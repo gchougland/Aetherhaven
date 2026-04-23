@@ -22,7 +22,7 @@ Group #QuestRow {
     }
   }
 
-  // Icon close (ContainerCloseButton) — avoids narrow TextButton squashing "×"
+  // Icon close (ContainerCloseButton) so a narrow TextButton does not squash "×"
   Button #Abandon {
     Anchor: (Width: 28, Height: 28);
     Style: (

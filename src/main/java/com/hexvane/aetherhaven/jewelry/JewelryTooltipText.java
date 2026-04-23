@@ -47,7 +47,7 @@ public final class JewelryTooltipText {
         if (!JewelryMetadata.isAppraised(stack)) {
             out.add(
                 c(C_DIM)
-                    + "Appraisal only reveals names on ledgers — the enchantment is already in the metal."
+                    + "Appraisal only reveals names on ledgers. The enchantment is already in the metal."
                     + cEnd());
             var traits = JewelryMetadata.readTraits(stack);
             int n = !traits.isEmpty() ? traits.size() : (rarity != null ? rarity.traitCount() : 1);

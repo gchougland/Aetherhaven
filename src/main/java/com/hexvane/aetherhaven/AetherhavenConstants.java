@@ -163,6 +163,12 @@ public final class AetherhavenConstants {
     /** Block item id for the appraisal bench. */
     public static final String ITEM_APPRAISAL_BENCH = "Aetherhaven_Appraisal_Bench";
 
+    /** Jewelry crafting bench; recipe from merchant rep 100; must match item JSON. */
+    public static final String ITEM_JEWELRY_CRAFTING_BENCH = "Aetherhaven_Jewelry_Crafting_Bench";
+
+    /** OpenCustomUI id; must match block interaction in {@code Aetherhaven_Jewelry_Crafting_Bench.json}. */
+    public static final String PAGE_JEWELRY_CRAFTING_BENCH = "AetherhavenJewelryCraftingBench";
+
     public static final String PAGE_TREASURY = "AetherhavenTreasury";
 
     /** Gaia statue revival UI; OpenCustomUI page id matches block interaction. */
@@ -173,6 +179,19 @@ public final class AetherhavenConstants {
 
     /** Vanilla ingredient consumed to revive a missing villager at the statue. */
     public static final String ITEM_LIFE_ESSENCE = "Ingredient_Life_Essence";
+
+    /** Concentrated life essence (vanilla); used for high-tier jewelry crafting. */
+    public static final String ITEM_LIFE_ESSENCE_CONCENTRATED = "Ingredient_Life_Essence_Concentrated";
+
+    public static final String INGREDIENT_BAR_GOLD = "Ingredient_Bar_Gold";
+
+    public static final String INGREDIENT_BAR_SILVER = "Ingredient_Bar_Silver";
+
+    /** Gold/silver ingots consumed when forging a ring at the jewelry workbench. */
+    public static final int JEWELRY_CRAFT_BARS_PER_RING = 5;
+
+    /** Ingot cost is higher for necklaces. */
+    public static final int JEWELRY_CRAFT_BARS_PER_NECKLACE = 10;
 
     /** Life essence stacks consumed per revival at the Gaia statue. */
     public static final int GAIA_STATUE_REVIVE_COST_ESSENCE = 10;

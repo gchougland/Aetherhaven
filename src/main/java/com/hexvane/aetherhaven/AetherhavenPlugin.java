@@ -69,6 +69,7 @@ import com.hexvane.aetherhaven.ui.PlotSignAdminPage;
 import com.hexvane.aetherhaven.ui.GeodeOpenPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
+import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
@@ -217,7 +218,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
             LOGGER.atInfo().log("Created default config at %s", configPath);
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
-        JewelryGemTraits.validateStatIdsAtStartup();
         TooltipBridge.register();
 
         this.gameTimeCursorResourceType =
@@ -471,6 +471,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
         );
         OpenCustomUIInteraction.registerSimple(
             this,
+            JewelryCraftingPage.class,
+            AetherhavenConstants.PAGE_JEWELRY_CRAFTING_BENCH,
+            JewelryCraftingPage::new
+        );
+        OpenCustomUIInteraction.registerSimple(
+            this,
             GeodeOpenPage.class,
             AetherhavenConstants.PAGE_GEODE_ANVIL,
             pr -> new GeodeOpenPage(pr, false)
@@ -495,6 +501,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void start() {
+        JewelryGemTraits.validateStatIdsAtStartup();
         // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
         // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.
         if (this.getManifest().includesAssetPack()) {

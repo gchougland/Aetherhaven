@@ -139,7 +139,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             String filter = context.provided(roleFilterArg) ? context.get(roleFilterArg).trim() : "";
             List<ReputationRewardCatalog.ReputationRewardDefinition> defs = ReputationRewardCatalog.allDefinitions();
-            playerRef.sendMessage(Message.raw("Reputation milestones (reward id — role — min rep — dialogue node):"));
+            playerRef.sendMessage(Message.raw("Reputation milestones (reward id, role, min rep, dialogue node):"));
             for (ReputationRewardCatalog.ReputationRewardDefinition d : defs) {
                 if (!filter.isEmpty() && !d.roleId().equalsIgnoreCase(filter)) {
                     continue;
@@ -151,7 +151,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                     ? " item=" + d.itemId() + " x" + d.itemCount()
                     : "";
                 playerRef.sendMessage(Message.raw(
-                    "  " + d.rewardId() + " — " + d.roleId() + " — " + d.minReputation() + " — " + d.dialogueNodeId()
+                    "  " + d.rewardId() + " | " + d.roleId() + " | " + d.minReputation() + " | " + d.dialogueNodeId()
                         + items + learn
                 ));
             }

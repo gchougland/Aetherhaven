@@ -1,19 +1,23 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Appraisal_Bench.name",
-    "Description": "server.items.Aetherhaven_Appraisal_Bench.description"
+    "Name": "server.items.Aetherhaven_Jewelry_Crafting_Bench.name",
+    "Description": "server.items.Aetherhaven_Jewelry_Crafting_Bench.description"
   },
   "Recipe": {
     "TimeSeconds": 0,
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Planks",
-        "Quantity": 8
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 15
+      },
+      {
+        "ItemId": "Ingredient_Bar_Silver",
+        "Quantity": 1
       },
       {
         "ItemId": "Ingredient_Bar_Gold",
-        "Quantity": 2
+        "Quantity": 1
       }
     ],
     "BenchRequirement": [
@@ -26,7 +30,7 @@
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Aetherhaven_Appraisal_Bench.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Jewelry_Crafting_Bench.png",
   "Categories": [
     "Furniture.Decorative"
   ],
@@ -35,10 +39,10 @@
     "Material": "Solid",
     "DrawType": "Model",
     "Opacity": "Transparent",
-    "CustomModel": "Blocks/Appraisal_Bench.blockymodel",
+    "CustomModel": "Blocks/Jewelry_Crafting_Bench.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Appraisal_Bench.png",
+        "Texture": "Blocks/Jewelry_Crafting_Bench.png",
         "Weight": 1
       }
     ],
@@ -48,12 +52,12 @@
     },
     "Gathering": {
       "Breaking": {
-        "GatherType": "Woods"
+        "GatherType": "Benches"
       }
     },
-    "BlockParticleSetId": "Wood",
-    "ParticleColor": "#5b3222",
-    "BlockSoundSetId": "Wood",
+    "BlockParticleSetId": "Ore",
+    "ParticleColor": "#5a5a62",
+    "BlockSoundSetId": "Stone",
     "VariantRotation": "NESW",
     "Support": {
       "Down": [
@@ -68,7 +72,7 @@
           {
             "Type": "OpenCustomUI",
             "Page": {
-              "Id": "AetherhavenJewelryAppraisalBench"
+              "Id": "AetherhavenJewelryCraftingBench"
             }
           }
         ]
@@ -77,15 +81,15 @@
   },
   "PlayerAnimationsId": "Block",
   "IconProperties": {
-    "Scale": 0.6,
+    "Scale": 0.5,
     "Rotation": [
-      22.5,
-      45,
-      22.5
+      335,
+      213,
+      0
     ],
     "Translation": [
-      0,
-      -14
+      -6,
+      -17
     ]
   },
   "Tags": {
@@ -97,5 +101,5 @@
     ]
   },
   "MaxStack": 1,
-  "ItemSoundSetId": "ISS_Blocks_Wood"
+  "ItemSoundSetId": "ISS_Blocks_Stone"
 }

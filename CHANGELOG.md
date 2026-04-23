@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.6.0] - Unreleased
+
+### Added
+
+- **Jewelry System** that adds rings and necklaces which can be equipped through the Hand Mirror, granting stat increases.
+  - Jewelry can be found in loot chests alongside gold coins now.
+  - Found jewelry will need to be identified by the merchant to see its stats.
+  - Befriending the merchant unlocks the Appraisal Bench and Jewelry Crafting bench allowing players 
+  to appraise and craft their own jewelry.
+
 ## [0.5.0] - 4/21/2026
 
 ### Added

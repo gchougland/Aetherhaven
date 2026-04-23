@@ -63,8 +63,25 @@ public final class VillagerReputationEntry {
         }
         // Elder reputation rewards were replaced; drop obsolete pending ids so dialogue does not stall.
         pendingRewardIds.removeIf(id -> id != null && (id.equals("rep_elder_25") || id.equals("rep_elder_75")));
-        pendingRewardIds.removeIf(id -> id != null && (id.equals("rep_merchant_25") || id.equals("rep_merchant_75")));
-        claimedRewardIds.removeIf(id -> id != null && (id.equals("rep_merchant_25") || id.equals("rep_merchant_75")));
+        pendingRewardIds.removeIf(id -> id != null && id.equals("rep_merchant_25"));
+        claimedRewardIds.removeIf(id -> id != null && id.equals("rep_merchant_25"));
+        // Jewelry workbench unlock moved from rep 75 to 100; rewrite stored ids.
+        for (int i = 0; i < claimedRewardIds.size(); i++) {
+            if ("rep_merchant_75".equals(claimedRewardIds.get(i))) {
+                claimedRewardIds.set(i, "rep_merchant_100");
+            }
+        }
+        for (int i = 0; i < pendingRewardIds.size(); i++) {
+            if (!"rep_merchant_75".equals(pendingRewardIds.get(i))) {
+                continue;
+            }
+            if (reputation >= 100) {
+                pendingRewardIds.set(i, "rep_merchant_100");
+            } else {
+                pendingRewardIds.remove(i);
+                i--;
+            }
+        }
     }
 
     @Nonnull

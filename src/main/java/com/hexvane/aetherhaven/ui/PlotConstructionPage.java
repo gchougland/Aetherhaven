@@ -205,7 +205,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 tLine = "Town treasury: " + goldCost + " gold (town not found for this plot.)";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
             } else if (!treasuryPerm) {
-                tLine = "Town treasury: " + goldCost + " gold (have " + treasuryBal + ") — no permission to spend.";
+                tLine = "Town treasury: " + goldCost + " gold (have " + treasuryBal + "). No permission to spend.";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
             } else {
                 tLine = "Town treasury: pay " + goldCost + " gold (have " + treasuryBal + ")";

@@ -103,6 +103,37 @@ public final class JewelryMetadata {
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         AetherhavenPluginConfig cfg = JewelryRolling.config();
         JewelryRarity rarity = JewelryRarity.roll(rnd, cfg);
+        return applyRolledTraits(stack, rarity, false, rnd, cfg);
+    }
+
+    /**
+     * Crafts a new jewelry stack: rolls traits for {@code rarity}, marks appraised so the piece needs no further
+     * appraisal.
+     */
+    @Nonnull
+    public static ItemStack rollCraftedAppraised(
+        @Nonnull String jewelryItemId, @Nonnull JewelryRarity rarity, @Nonnull ThreadLocalRandom rnd
+    ) {
+        if (!JewelryItemIds.isJewelry(jewelryItemId)) {
+            return new ItemStack(jewelryItemId, 1);
+        }
+        ItemStack stack = new ItemStack(jewelryItemId, 1);
+        AetherhavenPluginConfig cfg = JewelryRolling.config();
+        return applyRolledTraits(stack, rarity, true, rnd, cfg);
+    }
+
+    @Nonnull
+    private static ItemStack applyRolledTraits(
+        @Nonnull ItemStack stack,
+        @Nonnull JewelryRarity rarity,
+        boolean appraised,
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull AetherhavenPluginConfig cfg
+    ) {
+        JewelryGem gem = JewelryGem.fromItemId(stack.getItemId());
+        if (gem == null) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
         String[] pool = JewelryGemTraits.statIdsFor(gem);
         int want = rarity.traitCount();
         IntSet picked = new IntOpenHashSet();
@@ -125,7 +156,7 @@ public final class JewelryMetadata {
         }
         BsonDocument next = readOrCreateRoot(stack);
         next.put("rarity", new BsonString(rarity.wireName()));
-        next.put("appraised", BsonBoolean.FALSE);
+        next.put("appraised", BsonBoolean.valueOf(appraised));
         next.put("traits", traits);
         return syncInstanceDescriptionForTooltip(writeRoot(stack, next));
     }

@@ -63,6 +63,16 @@ public final class ReputationRewardCatalog {
             "rep_reward_50",
             AetherhavenConstants.ITEM_APPRAISAL_BENCH
         ),
+        // Merchant — jewelry crafting bench at 100 (crafting knowledge)
+        new ReputationRewardDefinition(
+            "rep_merchant_100",
+            AetherhavenConstants.NPC_MERCHANT,
+            100,
+            "",
+            0,
+            "rep_reward_100",
+            AetherhavenConstants.ITEM_JEWELRY_CRAFTING_BENCH
+        ),
         // Farmer — sprinkler recipe unlocks (crafting knowledge); no item grant
         new ReputationRewardDefinition(
             "rep_farmer_25",

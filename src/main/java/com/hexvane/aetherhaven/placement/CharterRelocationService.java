@@ -71,7 +71,7 @@ public final class CharterRelocationService {
             return false;
         }
         if (!isReplaceableForCharter(world, a.x, a.y, a.z)) {
-            sendError(store, ref, "That spot is blocked — choose an empty or replaceable block for the charter.");
+            sendError(store, ref, "That spot is blocked. Choose an empty or replaceable block for the charter.");
             return false;
         }
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(a.x, a.z));

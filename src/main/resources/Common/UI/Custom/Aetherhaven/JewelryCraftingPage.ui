@@ -1,0 +1,365 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@RingPicStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@NeckPicStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconMinusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconPlusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconDblMinusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #9eb0c2), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #b5c4d2), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #7a8e9c), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../minus_256.png", Border: 0, Color: #5c6a78(0.4)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconDblPlusStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #9eb0c2), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #b5c4d2), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #7a8e9c), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../add_256.png", Border: 0, Color: #5c6a78(0.4)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@ForgeIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@ColTitle = (FontSize: 12, TextColor: #7a8e9c, RenderBold: true, RenderUppercase: true, HorizontalAlignment: Start);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 1040);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.jewelryCrafting.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 14);
+
+      Label #Hint {
+        Anchor: (Bottom: 10);
+        Style: (...$C.@DefaultLabelStyle, TextColor: #6a7a8a, Wrap: true, FontSize: 12);
+        Text: %server.aetherhaven.ui.jewelryCrafting.hint;
+      }
+
+      Group #MainRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        Group #ColShape {
+          LayoutMode: Top;
+          Anchor: (Width: 188, Right: 8);
+          Label #ShapeTitle {
+            Text: %server.aetherhaven.ui.jewelryCrafting.colShape;
+            Style: (...@ColTitle);
+            Anchor: (Bottom: 6);
+          }
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 8);
+            TextButton #RingButton {
+              Style: @RingPicStyle;
+              Anchor: (Width: 56, Height: 52, Right: 6);
+              Text: " ";
+            }
+            TextButton #NecklaceButton {
+              Style: @NeckPicStyle;
+              Anchor: (Width: 56, Height: 52, Right: 0);
+              Text: " ";
+            }
+          }
+          Label #ShapePick {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a09078, FontSize: 12, Wrap: true);
+            Anchor: (Bottom: 8);
+            Text: "";
+          }
+          Label #MetalTitle {
+            Text: %server.aetherhaven.ui.jewelryCrafting.colMetal;
+            Style: (...@ColTitle);
+            Anchor: (Bottom: 6, Top: 4);
+          }
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 6);
+            Group {
+              LayoutMode: Full;
+              Anchor: (Width: 50, Height: 50, Right: 6);
+              Group #GoldHilite {
+                Anchor: (Full: 0);
+                LayoutMode: Full;
+                Background: #d4af37(0.4);
+                Visible: false;
+              }
+              Group {
+                LayoutMode: Full;
+                Background: #1a2530;
+                Padding: 2;
+                Button #GoldIngotButton {
+                  LayoutMode: Full;
+                  Style: (
+                    Default: (Background: #000000(0.0)),
+                    Hovered: (Background: #ffffff(0.08)),
+                    Pressed: (Background: #ffffff(0.14))
+                  );
+                  ItemSlot #GoldIngot {
+                    ShowQualityBackground: true;
+                    ShowQuantity: false;
+                  }
+                }
+              }
+            }
+            Group {
+              LayoutMode: Full;
+              Anchor: (Width: 50, Height: 50, Right: 0);
+              Group #SilverHilite {
+                Anchor: (Full: 0);
+                LayoutMode: Full;
+                Background: #a8b0c0(0.4);
+                Visible: false;
+              }
+              Group {
+                LayoutMode: Full;
+                Background: #1a2530;
+                Padding: 2;
+                Button #SilverIngotButton {
+                  LayoutMode: Full;
+                  Style: (
+                    Default: (Background: #000000(0.0)),
+                    Hovered: (Background: #ffffff(0.08)),
+                    Pressed: (Background: #ffffff(0.14))
+                  );
+                  ItemSlot #SilverIngot {
+                    ShowQualityBackground: true;
+                    ShowQuantity: false;
+                  }
+                }
+              }
+            }
+          }
+          Label #IngotCost {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c8b898, Wrap: true);
+            Anchor: (Bottom: 4);
+            Text: "";
+          }
+        }
+
+        Group #ColGem {
+          LayoutMode: Top;
+          Anchor: (Width: 200, Right: 12);
+          Label #GemTitle {
+            Text: %server.aetherhaven.ui.jewelryCrafting.colGem;
+            Style: (...@ColTitle);
+            Anchor: (Bottom: 6);
+          }
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 6);
+            Group {
+              LayoutMode: Full;
+              Anchor: (Width: 48, Height: 48, Right: 8, Vertical: 2);
+              Background: #1a2530;
+              Padding: 2;
+              ItemSlot #GemIcon {
+                Anchor: (Full: 0);
+                ShowQualityBackground: true;
+                ShowQuantity: false;
+              }
+            }
+            $C.@DropdownBox #GemDropdown {
+              Anchor: (Width: 152, Left: 0, Height: $C.@DropdownBoxHeight);
+            }
+          }
+          Label #InvGem {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #8a9aac, FontSize: 13, Wrap: true);
+            Text: "";
+          }
+        }
+
+        Group #ColEssence {
+          LayoutMode: Top;
+          Anchor: (Width: 280, Right: 6);
+          Label #EssTitle {
+            Text: %server.aetherhaven.ui.jewelryCrafting.colEssence;
+            Style: (...@ColTitle);
+            Anchor: (Bottom: 6);
+          }
+          Group #RowReg {
+            LayoutMode: Left;
+            Anchor: (Bottom: 6);
+            ItemSlot #ErSlot {
+              Anchor: (Width: 40, Height: 40, Right: 4);
+              ShowQualityBackground: true;
+              ShowQuantity: false;
+            }
+            TextButton #ErMinus10 {
+              Style: @IconDblMinusStyle;
+              Anchor: (Width: 28, Height: 28, Right: 2, Vertical: 5);
+              Text: " ";
+            }
+            TextButton #ErMinus {
+              Style: @IconMinusStyle;
+              Anchor: (Width: 30, Height: 30, Right: 2, Vertical: 4);
+              Text: " ";
+            }
+            Label #ErVal {
+              Style: (FontSize: 18, TextColor: #e8dcc8, VerticalAlignment: Center, HorizontalAlignment: Center);
+              Anchor: (Width: 34, Right: 0, Left: 0, Vertical: 0);
+              Text: "0";
+            }
+            TextButton #ErPlus {
+              Style: @IconPlusStyle;
+              Anchor: (Width: 30, Height: 30, Left: 2, Vertical: 4);
+              Text: " ";
+            }
+            TextButton #ErPlus10 {
+              Style: @IconDblPlusStyle;
+              Anchor: (Width: 28, Height: 28, Left: 2, Vertical: 5);
+              Text: " ";
+            }
+          }
+          Group #RowConc {
+            LayoutMode: Left;
+            Anchor: (Bottom: 4);
+            ItemSlot #EcSlot {
+              Anchor: (Width: 40, Height: 40, Right: 4);
+              ShowQualityBackground: true;
+              ShowQuantity: false;
+            }
+            TextButton #EcMinus10 {
+              Style: @IconDblMinusStyle;
+              Anchor: (Width: 28, Height: 28, Right: 2, Vertical: 5);
+              Text: " ";
+            }
+            TextButton #EcMinus {
+              Style: @IconMinusStyle;
+              Anchor: (Width: 30, Height: 30, Right: 2, Vertical: 4);
+              Text: " ";
+            }
+            Label #EcVal {
+              Style: (FontSize: 18, TextColor: #e8dcc8, VerticalAlignment: Center, HorizontalAlignment: Center);
+              Anchor: (Width: 34, Right: 0, Left: 0, Vertical: 0);
+              Text: "0";
+            }
+            TextButton #EcPlus {
+              Style: @IconPlusStyle;
+              Anchor: (Width: 30, Height: 30, Left: 2, Vertical: 4);
+              Text: " ";
+            }
+            TextButton #EcPlus10 {
+              Style: @IconDblPlusStyle;
+              Anchor: (Width: 28, Height: 28, Left: 2, Vertical: 5);
+              Text: " ";
+            }
+          }
+        }
+
+        Group #ColPreview {
+          LayoutMode: Top;
+          FlexWeight: 1;
+          Label #PreviewRarity {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true, FontSize: 15, RenderBold: true);
+            Text: "";
+            Anchor: (Bottom: 6);
+          }
+          Label #PreviewTraits {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #b8a898, Wrap: true, FontSize: 13);
+            Text: "";
+            Anchor: (Bottom: 6);
+          }
+          Group {
+            LayoutMode: Top;
+            Anchor: (Bottom: 6);
+            Group #OutputSlotBox {
+              LayoutMode: Full;
+              Background: #1a2530;
+              Padding: 2;
+              Anchor: (Width: 56, Height: 56, Bottom: 6);
+              Group {
+                LayoutMode: Full;
+                ItemGrid #OutputItem {
+                  SlotsPerRow: 1;
+                  Style: (
+                    SlotSize: 52,
+                    SlotIconSize: 52,
+                    SlotSpacing: 0,
+                    SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                  );
+                }
+              }
+            }
+            $C.@TextButton #TakeButton {
+              Text: %server.aetherhaven.ui.jewelryCrafting.take;
+              TooltipText: %server.aetherhaven.ui.jewelryCrafting.takeHint;
+              Disabled: true;
+              Anchor: (Width: 224, Height: 40, Bottom: 6);
+            }
+            TextButton #CraftButton {
+              Style: @ForgeIconStyle;
+              TooltipText: %server.aetherhaven.ui.jewelryCrafting.craft;
+              Text: " ";
+              Anchor: (Width: 56, Height: 56, Bottom: 0);
+            }
+          }
+        }
+      }
+
+      Group #InvPanel {
+        LayoutMode: Top;
+        Anchor: (Top: 6);
+        Background: #000000(0.2);
+        Padding: (Vertical: 8, Horizontal: 10);
+        Label #InvTitle {
+          Text: %server.aetherhaven.ui.jewelryCrafting.yourBags;
+          Style: (...@ColTitle, FontSize: 11);
+          Anchor: (Bottom: 4);
+        }
+        Label #InvLine {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 14, Wrap: true);
+          Text: "";
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

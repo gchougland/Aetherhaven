@@ -196,6 +196,12 @@
       "text": "server.aetherhaven.reputation.reward.merchant.50",
       "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_50" }],
       "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_100": {
+      "speaker": "Vex Sunderlane",
+      "text": "server.aetherhaven.reputation.reward.merchant.100",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_100" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }
 }
