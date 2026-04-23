@@ -9,11 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bson.BsonDocument;
 
-/**
- * Resolves Hytale rich-text lines and the virtual-id hash; used by
- * {@link AetherhavenJewelryDynamicTooltipProvider} (see
- * <a href="https://github.com/Herolias/DynamicTooltipsLib">DynamicTooltipsLib</a> {@code addLine} / {@code addLineOverride}).
- */
+/** Resolves jewelry tooltip content. */
 public final class JewelryDynamicTooltipContent {
 
     public record Result(

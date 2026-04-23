@@ -36,3 +36,4 @@ build/
 /Docs/
 /.cursor/
 .cursorrules
+/scripts/__pycache__/

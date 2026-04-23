@@ -215,23 +215,15 @@ public final class InnPoolService {
             boolean innLoaded = isInnManagementChunkLoaded(world, innPlot, innDef);
 
             town.migrateInnFieldsIfNeeded();
-            if (dedupeInnPoolIds(town, tm)) {
-                // saved
-            }
+            dedupeInnPoolIds(town, tm);
             if (innLoaded) {
-                if (pruneDeadVisitors(town, store, tm)) {
-                    // saved
-                }
-                if (trimInnPoolListToMax(town, tm, store)) {
-                    // saved
-                }
+                pruneDeadVisitors(town, store, tm);
+                trimInnPoolListToMax(town, tm, store);
                 syncInnPoolWithResidentBindings(town, store, tm);
             }
             if (innLoaded) {
                 morningUnlockedRefreshIfDue(town, tm, store, wtr, morningStart, morningEndEx);
-                if (pruneDeadVisitors(town, store, tm)) {
-                    // after morning removals
-                }
+                pruneDeadVisitors(town, store, tm);
                 fillVisitorsAtDawnIfEligible(
                     world,
                     plugin,

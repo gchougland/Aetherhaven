@@ -5,8 +5,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 
 /**
- * Supplies {@link AetherhavenPluginConfig} to jewelry roll logic. Bound from {@code AetherhavenPlugin#setup} so
- * {@link JewelryMetadata#ensureRolled} and related paths do not need a plugin handle at every call site.
+ * Supplies {@link AetherhavenPluginConfig} to jewelry roll logic.
  */
 public final class JewelryRolling {
     @Nonnull

@@ -7,12 +7,7 @@ import org.herolias.tooltips.api.TooltipData;
 import org.herolias.tooltips.api.TooltipPriority;
 import org.herolias.tooltips.api.TooltipProvider;
 
-/**
- * Per-instance jewelry tooltips via DynamicTooltipsLib; registered from {@link TooltipBridge}. Also applies
- * {@link org.herolias.tooltips.api.ItemVisualOverrides} so each virtual item id uses a {@code qualityIndex} (and a
- * custom label for mythic→epic tier) matching rolled {@link JewelryRarity}, per
- * <a href="https://github.com/Herolias/DynamicTooltipsLib#visual-overrides-reference">DynamicTooltipsLib visual overrides</a>.
- */
+/** Per-instance jewelry tooltips via DynamicTooltipsLib. */
 public final class AetherhavenJewelryDynamicTooltipProvider implements TooltipProvider {
 
     @Override

@@ -179,9 +179,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set("#BuildingTitle.TextSpans", Message.raw(def.getDisplayName()));
         String desc = def.getDescription() != null ? def.getDescription() : "";
         if (completed) {
-            if (hideConstructionDetails) {
-                // Management block: hide the completion line (and leave only prefab text if present).
-            } else {
+            if (!hideConstructionDetails) {
                 desc = desc.isEmpty() ? "Construction complete." : desc + "\n\nConstruction complete.";
             }
         }

@@ -6,9 +6,6 @@ import javax.annotation.Nonnull;
 
 /**
  * Three entity-stat id strings per gem (first-pass table; several gems still share stats).
- *
- * <p>Follow-up: assign disjoint stat triples per gem once more {@link EntityStatType} keys are confirmed — see plan
- * todo {@code jewelry-traits-unique-pool}.
  */
 public final class JewelryGemTraits {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

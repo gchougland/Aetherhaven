@@ -177,7 +177,7 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
                 int bz = Integer.parseInt(xyz[2].trim());
                 pendingOpenDoors.add(new int[] { bx, by, bz });
             } catch (NumberFormatException ignored) {
-                // skip malformed segment
+                // ignore
             }
         }
     }

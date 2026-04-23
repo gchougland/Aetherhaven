@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Runtime helper: pick a random mod jewelry item id, roll instance stats, keep {@link JewelryMetadata} unappraised
+ * Runtime helper: pick a random jewelry item id, roll instance stats, keep {@link JewelryMetadata} unappraised
  * (the rolled bundle is still hidden until appraisal in UI).
  */
 public final class UnidentifiedJewelry {

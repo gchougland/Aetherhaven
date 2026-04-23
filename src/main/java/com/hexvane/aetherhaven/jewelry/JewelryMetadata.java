@@ -20,10 +20,6 @@ import org.bson.BsonValue;
 public final class JewelryMetadata {
     public static final String BSON_KEY = "AetherhavenJewelry";
 
-    /**
-     * Same key as item JSON {@code TranslationProperties}; instance metadata overrides the static
-     * {@code Description} translation key for that stack when the client merges instance data into the item tooltip.
-     */
     public static final String INSTANCE_TRANSLATION_PROPERTIES_KEY = "TranslationProperties";
 
     private JewelryMetadata() {}

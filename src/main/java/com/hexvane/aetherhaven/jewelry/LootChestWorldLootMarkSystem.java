@@ -16,10 +16,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
-/**
- * Marks block entities that still have a droplist, before the built-in {@code StashSystem} clears it. Only mod code;
- * we cannot change vanilla Stash.
- */
+/** Marks block entities that still have a droplist. */
 public final class LootChestWorldLootMarkSystem extends RefSystem<ChunkStore> {
     @Nonnull
     private final Set<Dependency<ChunkStore>> dependencies = RootDependency.firstSet();

@@ -13,15 +13,12 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import javax.annotation.Nonnull;
 
-/**
- * Opens the hand mirror: two ring slots, one necklace slot, and jewelry from hotbar and main
- * storage to equip.
- */
+/** Custom UI: open the hand mirror to equip or unequip jewelry. */
 public final class OpenHandMirrorUiInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final BuilderCodec<OpenHandMirrorUiInteraction> CODEC =
         BuilderCodec.builder(OpenHandMirrorUiInteraction.class, OpenHandMirrorUiInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Open the hand mirror to equip or unequip jewelry (two rings, one necklace).")
+            .documentation("Open the hand mirror to equip or unequip jewelry.")
             .build();
 
     @Override

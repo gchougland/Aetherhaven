@@ -13,10 +13,7 @@ public final class JewelryItemQualityIndex {
 
     private JewelryItemQualityIndex() {}
 
-    /**
-     * Quality index for DynamicTooltipsLib / {@code ItemVisualOverrides#qualityIndex}; virtual items use this to match
-     * rolled jewelry tier instead of the item JSON’s static {@code Quality} (e.g. all rings default to {@code Rare}).
-     */
+    /** Resolve the item-quality index for a jewelry stack. */
     public static int forStack(@Nonnull ItemStack stack) {
         if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
             return stack.getItem().getQualityIndex();

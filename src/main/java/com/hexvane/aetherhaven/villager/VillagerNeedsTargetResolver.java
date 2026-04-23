@@ -60,7 +60,7 @@ public final class VillagerNeedsTargetResolver {
         try {
             return new Result(UUID.fromString(t), ResolveProblem.OK);
         } catch (IllegalArgumentException ignored) {
-            // fall through to handle match
+            // ignore
         }
         UUID[] found = new UUID[1];
         int[] count = new int[1];

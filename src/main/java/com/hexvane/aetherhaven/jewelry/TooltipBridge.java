@@ -4,7 +4,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import org.herolias.tooltips.api.DynamicTooltipsApi;
 import org.herolias.tooltips.api.DynamicTooltipsApiProvider;
 
-/** Registers {@link AetherhavenJewelryDynamicTooltipProvider} at runtime (see <a href="https://github.com/Herolias/DynamicTooltipsLib">DynamicTooltipsLib</a>). */
+/** Registers the jewelry tooltip provider. */
 public final class TooltipBridge {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();

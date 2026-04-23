@@ -15,10 +15,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Objects;
 import javax.annotation.Nonnull;
 
-/**
- * Server-side jewelry loadout equip / unequip for the hand mirror: items leave the bag when equipped
- * and return on unequip, with swap and inventory-full safety.
- */
+/** Custom UI: equip jewelry from inventory to loadout slots. */
 public final class HandMirrorLoadoutActions {
     private HandMirrorLoadoutActions() {}
 
@@ -42,10 +39,7 @@ public final class HandMirrorLoadoutActions {
         return lw;
     }
 
-    /**
-     * Remove one piece from {@code invSlot} and place it in loadout index {@code target0To2} (0 ring1, 1
-     * ring2, 2 neck). Pushes any previous equipped stack into the bag.
-     */
+    /** Equip jewelry from inventory to loadout slot. */
     @Nonnull
     public static EquipFromInventoryResult equipFromInventory(
         @Nonnull Ref<EntityStore> ref,

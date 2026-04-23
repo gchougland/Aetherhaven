@@ -29,11 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Runs after the built-in Stash system. Vanilla Stash clears {@link ItemContainerBlock#getDroplist} on the same add, so
- * {@link LootChestWorldLootMarkSystem} records a {@link LootChestWorldLootPending} tag when a droplist was present
- * before Stash. This system only applies bonus rolls when that tag is present (world loot), then removes the tag.
- */
+/** Runs after the built-in Stash system. */
 public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
     private static final Class<? extends ISystem<ChunkStore>> STASH_SYSTEM_CLASS = loadStashSystemClass();
 

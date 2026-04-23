@@ -9,11 +9,7 @@ import javax.annotation.Nullable;
 
 import static com.hexvane.aetherhaven.jewelry.JewelryStatTuning.formatForDisplay;
 
-/**
- * Hytale rich text for item tooltips (used by {@link AetherhavenJewelryDynamicTooltipProvider}).
- * Markup matches <a href="https://github.com/Herolias/DynamicTooltipsLib">DynamicTooltipsLib</a> README, e.g.
- * {@code <color is="#FFAA00">text</color>}.
- */
+/** Hytale rich text for item tooltips. */
 public final class JewelryTooltipText {
     private static final String C_LABEL = "#B0B0B8";
     private static final String C_DIM = "#8A8F98";
@@ -88,7 +84,7 @@ public final class JewelryTooltipText {
             case "Stamina" -> "Max stamina";
             case "Oxygen" -> "Max oxygen";
             case "Ammo" -> "Max ammo";
-            case "SignatureEnergy" -> "Signature max (smaller bar if negative)";
+            case "SignatureEnergy" -> "Signature max";
             default -> statId;
         };
     }

@@ -16,11 +16,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Shared implementation for world-load {@link LootChestBonusInjectSystem} and operator debug fill.
- * Eligibility: {@link #isEligibleForBlockId(String, AetherhavenPluginConfig)}; blank include list in config means
- * "all" (see {@code LootChest} BlockIdSubstrings in {@code config.json}).
- */
+/** Shared implementation for world-load {@link LootChestBonusInjectSystem} and operator debug fill. */
 public final class LootChestBonusApplier {
     private LootChestBonusApplier() {}
 

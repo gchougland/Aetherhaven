@@ -15,7 +15,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Resolves dialogue conditions from the player's Aetherhaven town in this world. */
+/** Resolves dialogue conditions from the player's town in this world. */
 public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     private final World world;
     private final AetherhavenPlugin plugin;

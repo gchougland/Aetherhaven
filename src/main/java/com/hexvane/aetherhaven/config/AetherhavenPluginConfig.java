@@ -13,10 +13,6 @@ import javax.annotation.Nonnull;
  * On first run, {@code AetherhavenPlugin} writes {@code config.json} with these defaults if the file is absent.
  * When the file already exists, startup merges in any missing keys from the current plugin defaults so new
  * options appear without discarding existing settings.
- *
- * <p>Reference: vanilla base player stats in Hytale {@code Assets/Server/Entity/Stats} use Health 100/100, Stamina
- * 10/10, Oxygen 100/100; {@code Mana.json} and {@code SignatureEnergy.json} are 0/0 in the base data (values are
- * often granted by items or abilities). Tune paths like {@code Jewelry.Stat.Oxygen} in {@code config.json}.
  */
 public final class AetherhavenPluginConfig {
     public static final BuilderCodec<AetherhavenPluginConfig> CODEC = BuilderCodec.builder(AetherhavenPluginConfig.class, AetherhavenPluginConfig::new)

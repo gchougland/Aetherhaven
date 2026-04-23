@@ -29,11 +29,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Equip jewelry from hotbar + main storage; three loadout slots (two rings, one necklace). Uses {@code ItemGrid} +
- * {@code ItemGridSlot} with full {@link ItemStack} data so custom slot frames match rolled jewelry quality (Dynamic
- * Tooltips / visual overrides), not only static item definition quality.
- */
+/** Custom UI: list player's jewelry in inventory, equip to loadout slots. */
 public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage.PageData> {
     private static final String LEFT = "#Content #LeftColumn";
     private static final String ROWS = LEFT + " #JewelryListScroll #Rows";

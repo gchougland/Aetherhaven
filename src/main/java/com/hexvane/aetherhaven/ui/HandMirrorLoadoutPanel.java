@@ -14,10 +14,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Rich text for the hand mirror’s right column: rolled traits on the three loadout pieces, with slot, item, rarity,
- * gem, and facet (1–3 on the gem’s stat pool).
- */
+/** Custom UI: list jewelry in loadout slots. */
 public final class HandMirrorLoadoutPanel {
 
     private static final String C_SUB = "#a89878";
