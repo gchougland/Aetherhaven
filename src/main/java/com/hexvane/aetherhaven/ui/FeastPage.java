@@ -1,8 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.MaterialRequirement;
-import com.hexvane.aetherhaven.feast.FeastCatalog;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;import com.hexvane.aetherhaven.feast.FeastCatalog;
 import com.hexvane.aetherhaven.feast.FeastDefinition;
 import com.hexvane.aetherhaven.feast.FeastEffectKind;
 import com.hexvane.aetherhaven.feast.FeastService;
@@ -94,6 +93,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
         FeastService.pruneExpiredActiveFeast(town, dawn);
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
+        String language = pr.getLanguage();
 
         for (int i = 0; i < ORDERED.size(); i++) {
             FeastDefinition d = ORDERED.get(i);
@@ -168,9 +168,9 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
                     ? Message.join(
                         Message.translation("server.aetherhaven.ui.feast.locked"),
                         Message.raw("\n\n"),
-                        costMessage(inv, selDef)
+                        costMessage(language, inv, selDef)
                     )
-                    : costMessage(inv, selDef)
+                    : costMessage(language, inv, selDef)
             );
             boolean ingredients = inv != null && InventoryMaterials.hasAll(inv, selDef.costs());
             boolean conflict =
@@ -182,21 +182,29 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
     }
 
     @Nonnull
-    private static Message costMessage(@Nullable CombinedItemContainer inv, @Nonnull FeastDefinition def) {
+    private static Message costMessage(
+        @Nullable String language,
+        @Nullable CombinedItemContainer inv,
+        @Nonnull FeastDefinition def
+    ) {
         StringBuilder sb = new StringBuilder();
         for (MaterialRequirement m : def.costs()) {
-            String itemId = m.getItemId();
-            if (itemId == null || itemId.isBlank()) {
+            if (m.getCount() <= 0) {
                 continue;
             }
-            int have = inv != null ? InventoryMaterials.count(inv, itemId) : 0;
-            sb.append(itemId).append(": ").append(have).append(" / ").append(m.getCount()).append("\n");
+            String label = UiMaterialLabels.materialLabelForUi(language, m);
+            int have = inv != null ? InventoryMaterials.count(inv, m) : 0;
+            sb.append(label).append(": ").append(have).append(" / ").append(m.getCount()).append("\n");
         }
         String lines = sb.toString().trim();
         if (lines.isEmpty()) {
-            return Message.translation("server.aetherhaven.ui.feast.costs");
+            return Message.translation("server.aetherhaven.ui.feast.ingredientsLabel");
         }
-        return Message.translation("server.aetherhaven.ui.feast.ingredientList").param("lines", Message.raw(lines));
+        return Message.join(
+            Message.translation("server.aetherhaven.ui.feast.ingredientsLabel"),
+            Message.raw("\n"),
+            Message.raw(lines)
+        );
     }
 
     @Override

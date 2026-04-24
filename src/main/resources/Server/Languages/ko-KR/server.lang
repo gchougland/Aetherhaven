@@ -1,0 +1,1135 @@
+# Aetherhaven server-side language strings
+#
+# Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
+# Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
+# portals, big town/plot UI, charter, reputation miles, plot admin, commands (root),
+# items, NPC names, jewelry & town UIs, geodes, mirror, plot placement, commands (tab),
+# feasts, dialogue trees, blacksmith repair lines, help/footer.
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven이 로드되지 않았습니다.
+aetherhaven.common.noTownInWorld=이 세상에는 마을이 없습니다.
+aetherhaven.common.noQuestPermission=이 마을에는 퀘스트 권한이 없습니다.
+aetherhaven.common.townNotFound=마을을 찾을 수 없습니다.
+aetherhaven.common.invalidTownLink=잘못된 마을 링크입니다.
+aetherhaven.common.treasuryNotLinked=Treasury가 없습니다. linked.
+aetherhaven.common.ownerOnlyTreasury=마을 소유자만이 금고를 사용할 수 있습니다.
+aetherhaven.common.townNotInThisWorld=마을은 이 세상에 없습니다.
+aetherhaven.common.noMoveBuildingsPermission=이 마을의 건물을 이전할 권한이 없습니다.
+aetherhaven.common.buildingCannotMove=이 건물은 이동할 수 없습니다(유실된 부지 여부 완료).
+aetherhaven.common.lookAtBlockPlot=블록을 보고 플롯 기호 위치를 설정하고 미리보기를 시작합니다.
+aetherhaven.common.carryPlotToken=도구에 나열된 건물 유형에 대한 플롯 토큰(예: 여관 플롯 토큰)을 휴대하여 배치를 시작합니다.
+aetherhaven.common.statueNotLinked=동상은 마을에 연결되어 있지 않습니다.
+aetherhaven.common.ownerOnlyStatue=마을만 소유자는 이 상태를 사용할 수 있습니다.
+aetherhaven.common.debugCommandsDisabled=Aetherhaven 디버그 명령은 비활성화됩니다(config.json에서 DebugCommandsEnabled 설정).
+aetherhaven.common.noPlayerId=플레이어 ID 없음.
+aetherhaven.common.playersOnly=Players만 해당.
+aetherhaven.common.invalidVillager=잘못됨 villager.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=당신은 이미 이 세계의 마을에 속해 있습니다. 새로운 것을 창립하기 전에 남겨주세요.
+aetherhaven.charter.townFounded=마을 설립: {name}. 마을 장로님이 오셨습니다. 전세를 사용하여 마을 이름을 바꾸세요.
+aetherhaven.chartertown.info.notLinked=Charter가 아직 마을에 연결되어 있지 않습니다.
+aetherhaven.chartertown.info.invalidTownId=전세에서 잘못된 마을 ID.
+aetherhaven.chartertown.info.townDataMissing=Town 데이터를 찾을 수 없습니다(서버 로그 참조).
+aetherhaven.chartertown.townInfoBlock=마을 이름: {name}\n마을 ID: {id}\n계층: {tier}\n영토(청크 반경): {radius}\n{cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Town 이름은 비워둘 수 없습니다.
+aetherhaven.chartertown.nameDuplicate=해당 이름은 이 세계의 다른 마을에서 이미 사용하고 있습니다.
+aetherhaven.chartertown.nameSaved=저장된 마을 이름: {name}
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=당신은 이 세계에 마을을 소유하고 있지 않습니다.
+aetherhaven.town.resolve.noTownNamed=이 세계에는 "{name}"이라는 이름의 마을이 없습니다.
+aetherhaven.town.resolve.ownerOrOpOnly=마을 소유자만이 이를 할 수 있습니다(또는 허가가 있는 운영자).
+aetherhaven.town.resolve.notInTown=당신은 이 세계의 마을에 있지 않습니다.
+aetherhaven.town.resolve.nameOnlyForOwner=여기에서는 마을 소유자(또는 운영자)만이 마을 이름을 사용할 수 있습니다.
+aetherhaven.town.resolve.specifyTownName=도시 이름을 지정하거나 소유한 마을에서 사용하십시오.
+aetherhaven.town.resolve.specifyTown=도시 지정 name.
+aetherhaven.town.resolve.adminOtherTown=오직 운영자는 다른 플레이어의 마을을 이름으로 타겟팅할 수 있습니다.
+aetherhaven.town.invite.err.emptyName=플레이어 이름을 입력하세요.
+aetherhaven.town.invite.err.targetOffline=Player "{name}"은(는) 이 세계에서 온라인 상태가 아닙니다.
+aetherhaven.town.invite.err.cannotInviteSelf=자신을 초대할 수 없습니다.
+aetherhaven.town.invite.err.alreadyInTown=그 플레이어 님은 이미 이 세계의 마을에 있습니다.
+aetherhaven.town.invite.toTarget={inviter}님이 '{townDisplay}' 마을에 가입하도록 귀하를 초대했습니다. /aetherhaven 도시 수락 {townDisplay} 또는 /aetherhaven 도시 거부 {townDisplay}
+aetherhaven.town.invite.sent=초대를 {name}으로 보냈습니다.
+aetherhaven.town.kick.err.mustBeOnline=이름으로 추방하려면 플레이어가 온라인 상태여야 합니다.
+aetherhaven.town.kick.err.cannotRemoveOwner=도시를 제거할 수 없습니다. owner.
+aetherhaven.town.kick.err.notMember=그 플레이어는 이 마을의 구성원이 아닙니다.
+aetherhaven.town.kick.removed=마을에서 {name}을(를) 제거했습니다.
+aetherhaven.town.kick.removedYou=당신은 "{town}" 마을에서 제거되었습니다.
+aetherhaven.town.kick.removedGeneric=에서 제거된 구성원 town.
+aetherhaven.town.role.err.ownerAlwaysFull=소유자는 항상 모든 권한을 갖습니다.
+aetherhaven.town.role.set={name}의 역할을 {role}로 설정합니다.
+aetherhaven.town.accept.err.noSuchTown=해당 이름을 가진 도시가 없습니다.
+aetherhaven.town.accept.err.noInvite=해당 도시에 대해 보류 중인 초대가 없습니다.
+aetherhaven.town.accept.err.noInvites=보류 중인 도시 초대가 없습니다.
+aetherhaven.town.accept.err.alreadyInTown=귀하는 이미 도시에 있습니다.
+aetherhaven.town.accept.joined="{town}"에 가입했습니다.
+aetherhaven.town.decline.noPending=해당 도시에 대해 보류 중인 초대가 없습니다.
+aetherhaven.town.decline.noInvites=보류 중인 도시가 없습니다. 초대.
+aetherhaven.town.decline.done=초대가 거부되었습니다.
+aetherhaven.town.rolecmd.playerMustBeOnline=Player는 온라인 상태여야 합니다.
+aetherhaven.town.rolecmd.roleInvalid=역할은 BUILD, QUEST 또는 BOTH여야 합니다.
+aetherhaven.town.leave.notInTown=당신은 마을에 없습니다.
+aetherhaven.town.leave.ownerCannotLeave=소유자는 떠날 수 없습니다. 소유권 이전이 아직 구현되지 않았습니다.
+aetherhaven.town.leave.notMember=귀하는 이 도시의 구성원이 아닙니다.
+aetherhaven.town.leave.left="{town}"을(를) 떠났습니다.
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BUILD
+aetherhaven.town.memberRole.QUEST=QUEST
+aetherhaven.town.memberRole.BOTH=BOTH
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=금화 보관됨: {count}
+aetherhaven.ui.treasury.depositNoCoins=입금할 금화가 없습니다.
+aetherhaven.ui.treasury.depositRemoveFailed=인벤토리에서 동전을 제거할 수 없습니다.
+aetherhaven.ui.treasury.deposited=입금된 {count} 금 동전.
+aetherhaven.ui.treasury.makeRoom=인벤토리에 공간을 확보하십시오.
+aetherhaven.ui.treasury.couldNotAddCoins=코인을 추가할 수 없습니다.
+aetherhaven.ui.treasury.withdrew=금화 {count}개를 인출합니다.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=세금 내역(로드된 청크만; 언로드된 주민은 시뮬레이션까지 기여 0):
+aetherhaven.ui.treasury.debug.titheNoHall=Tithe: 이 마을에는 완전한 시청이 없습니다.
+aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 골드(로드된 주민이 없거나 정책 계산에서 0). 언로드/필요/분석: /aetherhaven 세금 분석
+aetherhaven.ui.treasury.debug.titheApplied=Tithe 적용: 금고에 +{amount} 금(아침 수집과 동일한 규칙).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} 새벽EpochDay={c} TreasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b}loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) Comfort={comfort} gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a}founderActive={b}founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a}festPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=퀘스트를 추적하려면 이 세계에 마을이 필요합니다.
+aetherhaven.ui.questJournal.noPermission=마을을 관리할 권한이 없습니다. 퀘스트.
+aetherhaven.ui.questJournal.noActive=활성 퀘스트가 없습니다.
+aetherhaven.ui.questJournal.hint=퀘스트를 탭하여 자세한 내용을 확인하세요. × 로그에서 제거합니다(제공자로부터 다시 가져올 수 있습니다).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=알 수 없는 대화: {id}
+aetherhaven.ui.dialogue.missingNode=누락된 노드: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Building
+aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
+aetherhaven.ui.plotConstruction.noConstruction=이 부지에는 건설이 구성되어 있지 않습니다.
+aetherhaven.ui.plotConstruction.assignResidentHint=여기에 사는 주민을 지정합니다(집 탐색이 완료되면 집 탐색 완료).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=할당되지 않음
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=플레이어 데이터를 로드할 수 없습니다.
+aetherhaven.ui.plotConstruction.townDataMissing=이 블록에 대한 타운 데이터를 찾을 수 없습니다.
+aetherhaven.ui.plotConstruction.clearedHome=집 할당이 삭제되었습니다.
+aetherhaven.ui.plotConstruction.updatedHome=집 할당 업데이트되었습니다.
+aetherhaven.ui.plotConstruction.plotRemoved=플롯이 제거되고 플롯 토큰이 반환되었습니다.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need}({have} 있음)
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=플레이어 데이터를 로드할 수 없습니다.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=생명의 본질이 충분하지 않습니다(필요 {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=인벤토리에서 생명 정수를 제거할 수 없습니다.
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=해당 블록 범위 내에 POI가 없습니다.
+aetherhaven.poi.noPoiSelected=선택된 POI가 없습니다. 먼저 POI를 기본 클릭하세요.
+aetherhaven.poi.selectedPoiGone=선택한 POI가 더 이상 존재하지 않습니다.
+aetherhaven.poi.moved=POI를 {x}, {y}, {z}로 이동했습니다.
+aetherhaven.poi.noPoiBlock=선택된 POI가 없습니다. 먼저 POI 블록을 기본 클릭하세요.
+aetherhaven.poi.clearedInteractionTarget=상호작용 대상이 지워졌습니다. NPC는 POI 블록 센터를 사용합니다.
+aetherhaven.poi.setInteractionTarget=상호작용 대상을 {x}, {y}, {z}로 설정합니다.
+aetherhaven.poi.selected=선택한 POI {id}({x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=대상 블록은 예상과 일치해야 함) 이 POI에 대해 {type}을(를) 입력하세요.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=이동하는 건물…
+aetherhaven.plotSign.placed=플롯 표지판이 배치되었습니다.
+aetherhaven.plotSign.couldNotAdd=플롯 표지판을 추가할 수 없습니다(인벤토리가 가득 찼나요?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=창립 기념물을 마을 안에 배치하세요 Territory.
+aetherhaven.founder.cannotPlace=여기에 창립 기념비를 배치할 수 없습니다.
+aetherhaven.founder.createFailed=시조 동상을 만들 수 없습니다. 블록이 배치되었습니다. 중단하고 다시 시도하세요.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Target은 Aetherhaven 마을 주민이 아닙니다.
+aetherhaven.debug.autonomy.toggledOn=Autonomy 디버그 ON(DisplayCustom + VisPath). 이름표의 AH 오버레이.
+aetherhaven.debug.autonomy.toggledOff=이 주민에 대한 자율 디버그 꺼짐.
+aetherhaven.debug.autonomy.state=이 주민에 대한 자율 디버그: {state}
+aetherhaven.debug.autonomy.cleared=이 주민에 대한 Aetherhaven 자율 디버그가 삭제되었습니다. villager.
+aetherhaven.debug.on=ON
+aetherhaven.debug.off=OFF
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=평판은 변경되지 않았습니다(이미 {value}).
+aetherhaven.debug.rep.set=대화 대기열에 있는 교차 이정표를 사용하여 평판을 {value}로 설정합니다(역할인 경우). 해결됨).
+aetherhaven.debug.rep.milestonesHeader=평판 이정표(보상 ID, 역할, 최소 담당자, 대화 노드):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=보상을 받았습니다 {id}.
+aetherhaven.debug.rep.targetInvalid=잘못된 주민입니다.
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=배고픔, 에너지 또는 재미여야 합니다(값은 0..{max}입니다).
+aetherhaven.debug.needs.elderNoTown=이 세상에는 당신을 위한 마을이 없습니다(Elder에게 필요함).
+aetherhaven.debug.needs.noElderUuid=Town에는 아직 저장된 Elder UUID가 없습니다.
+aetherhaven.debug.needs.noMatch=일치하는 주민이 없습니다(핸들, Elder 또는 전체 uuid를 검사해야 합니다).
+aetherhaven.debug.needs.multipleMatch=여러 NPC가 해당 핸들과 일치합니다. Inspection.
+aetherhaven.debug.needs.entityNotLoaded=엔티티가 로드되지 않았거나 VillagerNeeds가 없습니다. {id}
+aetherhaven.debug.needs.set={label}({id})에 {which}={value} 설정
+aetherhaven.debug.needs.inspectIntro=Villagers에 __PH_0__=__PH_1__을 설정합니다. 다음으로 설정: /aetherhaven need set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | 배고픔={hunger} 에너지={energy} 재미={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(핸들 없음)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown={id}:
+aetherhaven.debug.plots.header={index} 마을에 대한 부지입니다. 줄거리={plotId} 주={state} 유형={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Aetherhaven 도시: {count}
+aetherhaven.towns.entry={name} id={id} 소유자={owner} 헌장={cx},{cy},{cz} 플롯={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.poi.invalidTownUuid=잘못된 도시 UUID: {raw}
+aetherhaven.debug.poi.noTownArg=이 세계에는 도시가 없습니다(도시 UUID 인수 사용).
+aetherhaven.debug.poi.listHeader=도시 {town}({count})에 대한 POI:
+aetherhaven.debug.poi.listEmpty=이 도시에 등록된 사람이 없습니다(건물을 완료하거나 확인하세요). pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tagged={tags} cap={cap}plot={plot}
+aetherhaven.debug.poi.dumpHeader=세계 레지스트리의 모든 POI({count}):
+aetherhaven.debug.poi.dumpLine=타운={town} {x},{y},{z} 종류={kind} blockTypeId={block} 태그={tags} 플롯={plot}
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=퀘스트 시작: {name}
+aetherhaven.quest.completed=퀘스트 완료: {name}
+aetherhaven.quest.abandoned=퀘스트 포기됨: {name}
+aetherhaven.questdebug.granted=부여된 활성 퀘스트: {name}
+aetherhaven.questdebug.completed=완료된 퀘스트: {name}
+aetherhaven.questdebug.cleared=삭제된 활성 퀘스트: {name}
+aetherhaven.questdebug.statusHeader=-- 퀘스트 상태 --
+aetherhaven.questdebug.statusActive=active:
+aetherhaven.questdebug.statusCompleted=completed:
+aetherhaven.questdebug.statusEmpty=(none)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=이 마을에 아직 등록된 주민 개체 ID가 없습니다.
+aetherhaven.villager.listHeader=마을 주민: 개체 UUID, 소스, 로드된 역할(/aetherhaven 평판과 함께 UUID 또는 역할 ID 사용... 주민 찾기):
+aetherhaven.villager.listRow={uuid} | {note} | 역할: {role}
+aetherhaven.villager.locateNotLoaded=그 주민이 로드되지 않았습니다(더 가까이 이동하거나 청크를 로드해 보세요).
+aetherhaven.villager.locateNoTransform=해당 개체에 대한 변환이 없습니다.
+aetherhaven.villager.locatePosition=주민 {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Teleport에는 운영자(OP 그룹)가 필요합니다.
+aetherhaven.villager.teleported=Teleported.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=아니요 해당 블록의 아이템 컨테이너(청크가 로드되지 않음, 필러/베이스 불일치 또는 컨테이너 블록 아님).
+aetherhaven.debug.loot.bonusApplied=Aetherhaven 보너스 전리품 굴림이 이 컨테이너에 적용됩니다(강제).
+aetherhaven.townsCommand.line={id} name="{name}" world={world} 소유자={owner} 청크={cx},{cz} r{radius}
+aetherhaven.list.none=(없음)
+aetherhaven.questdebug.statusActiveLine=활성: {list}
+aetherhaven.questdebug.statusActiveEmpty=활성: (없음)
+aetherhaven.questdebug.statusCompletedLine=완료: {list}
+aetherhaven.questdebug.statusCompletedEmpty=완료: (없음)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Aetherhaven Exit
+items.Aetherhaven_Portal_Exit.description=오버월드로 돌아가는 데 사용됩니다.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven Gateway
+items.Aetherhaven_Portal_Enter.description=Aetherhaven에 들어가는 데 사용됩니다.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=하늘마을
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Construction
+aetherhaven.ui.plotmanagement.title=Town Management
+aetherhaven.ui.plotmanagement.tabPlot=Plot
+aetherhaven.ui.plotmanagement.tabPlayers=Players
+aetherhaven.ui.plotmanagement.playersHint=온라인 플레이어를 이름으로 초대합니다. 아래에서 역할을 바꾸거나 구성원을 제거하세요.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=이 마을의 구성원입니다. 소유자만 초대하거나 역할을 변경할 수 있습니다.
+aetherhaven.ui.plotmanagement.inviteLabel=플레이어 초대
+aetherhaven.ui.plotmanagement.invitePlaceholder=플레이어 이름(온라인)
+aetherhaven.ui.plotmanagement.inviteSend=보내기 Invitation
+aetherhaven.ui.plotmanagement.kick=Remove
+aetherhaven.ui.plotmanagement.roleOwner=Owner
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Plot info
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Villager need
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=마을 구성원
+aetherhaven.ui.plotmanagement.tabMoveTooltip=이동 Building
+aetherhaven.ui.plotconstruction.materials=Materials
+aetherhaven.ui.plotconstruction.build=Build
+aetherhaven.ui.plotconstruction.pickUpPlot=픽업 플롯(반품 토큰)
+aetherhaven.ui.plotconstruction.townNeeds=타운 필요
+aetherhaven.ui.plotconstruction.moveBuilding=이동 Building
+aetherhaven.ui.plotconstruction.houseResident=Resident
+aetherhaven.ui.plotconstruction.assignHouseResident=Set resident
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Move Building?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=플롯 배치를 열어 새 부지를 선택합니다. 이사하면 오래된 건물이 파괴되고 재건됩니다. 귀중품, 애완동물, 발자국 안의 느슨한 물건을 먼저 제거하세요.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Continue
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Cancel
+
+aetherhaven.ui.villagerneeds.title=Town need
+aetherhaven.ui.villagerneeds.hint=계량기를 볼 주민을 선택하고 portrait.
+aetherhaven.ui.villagerneeds.hunger=Hunger
+aetherhaven.ui.villagerneeds.energy=Energy
+aetherhaven.ui.villagerneeds.fun=Fun
+aetherhaven.ui.villagerneeds.villagers=Villagers
+aetherhaven.ui.villagerneeds.noResidentsTracked=아직 마을 주민이 추적되지 않습니다.
+aetherhaven.ui.reputation.label=Reputation
+aetherhaven.reputation.dailyTalkGain=+{amount} 평판(일일 인사말)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=헌장 개정
+aetherhaven.ui.charter.popHint=주민(비방문자): {count}. Tier 1은 3에 잠금 해제됩니다. 2단계: 5.
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=1단계: 십일조 스타일
+aetherhaven.ui.charter.tier2=2단계: 타운 포커스
+aetherhaven.ui.charter.t1.perCapitaShort=Per capita
+aetherhaven.ui.charter.t1.happinessShort=Happiness-weighted
+aetherhaven.ui.charter.t1.perCapitaTooltip=인원 우선 십일조.\n\n모닝 골드는 이곳에 사는 주민 수에 따라 결정됩니다. 일상적인 편안함은 여전히 ​​총계를 조금씩 움직이게 하지만, 바늘을 움직이는 것은 인구입니다.
+aetherhaven.ui.charter.t1.happinessTooltip=우선 십일조가 필요합니다.\n\n모닝 골드는 주민들이 얼마나 잘 먹고, 쉬고, 기분이 좋은지에 더 많이 의존합니다. 소수의 추가 시민이 모든 사람의 건강을 유지하는 것보다 더 중요합니다.
+aetherhaven.ui.charter.t2.miningShort=Mining
+aetherhaven.ui.charter.t2.loggingShort=Logging
+aetherhaven.ui.charter.t2.farmingShort=Farming
+aetherhaven.ui.charter.t2.smithingShort=Smithing
+aetherhaven.ui.charter.t2.miningTooltip=헌장은 광산을 지원합니다.\n\n보너스는 다음과 같습니다. 그들이 도착하면 광산 생산이 이 마을에 유리할 것입니다. 아래에서 광업, 벌목, 농업 또는 대장간 중 하나만 선택하십시오.
+aetherhaven.ui.charter.t2.loggingTooltip=헌장은 숲을 뒷받침합니다.\n\n벌목 및 벌목과 관련된 보너스는 이 마을에 도착할 때 유리할 것입니다. 아래에서 광업, 벌목, 농업 또는 대장간 중 하나만 선택하세요.
+aetherhaven.ui.charter.t2.farmingTooltip=헌장은 밭을 뒷받침합니다.\n\n마을에 농장 부지가 완성되면 여기 스프링클러는 스프레이 가장자리에 추가 타일이 있어 조금 더 멀리 도달합니다. 아래에서 광업, 벌목, 농업 또는 대장간 중 하나만 선택하십시오.
+aetherhaven.ui.charter.t2.smithingTooltip=헌장은 대장간을 뒷받침합니다.\n\n대장 및 금속 세공과 관련된 보너스는 이 마을에 도착할 때 유리할 것입니다. 아래에서 광업, 벌목, 농업, 대장간 중 하나만 선택하세요.
+aetherhaven.ui.charter.hint=계층당 하나의 옵션을 선택하세요. 선택 사항은 나중에 변경할 수 없습니다.
+aetherhaven.ui.charter.allChosen=이 타운에 대해 선택된 모든 개정안입니다.
+aetherhaven.ui.charter.noTown=이 타운을 사용하려면 타운에 속해야 합니다.
+aetherhaven.ui.charter.noPermission=이 타운에 대한 헌장 개정안은 변경할 수 없습니다.
+aetherhaven.ui.charter.err.locked=해당 개정안은 잠겨 있거나 이미 있습니다. 선택됨.
+aetherhaven.ui.charter.err.invalid=잘못된 선택.
+aetherhaven.ui.charter.saved=헌장 개정이 업데이트되었습니다.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Continue
+aetherhaven.reputation.reward.elder.50=헌장은 영원히 새겨지지 않습니다. 다음은 수정 테이블의 패턴입니다. 설계도를 알고 나면 도시 계획 데스크에서 제작하세요. 홀에 앉아 마을의 아침 십일조가 어떻게 기울어지는지 선택하세요.
+aetherhaven.reputation.reward.elder.100=당신은 누군가가 요청한 것보다 더 멀리 이 장소를 운영했습니다. 이 기초석을 가져가십시오: 헌장에서 허용하는 곳에 창립자의 기념비를 세우십시오. 재무부는 기억할 것입니다.
+aetherhaven.reputation.reward.innkeeper.50=당신은 내가 큰 테이블에서 당신을 믿을 만큼 오랫동안 이 홀을 만족스럽고 정직하게 유지해 왔습니다. 연회 패턴은 다음과 같습니다. 설계도가 있으면 마을 계획 데스크에서 제작한 다음 마을에 설치하세요. 테이블이 준비되면 Ledger Supper도 호출할 수 있습니다. 빵, 치즈, 파이, 그리고 일주일 동안 친절하게 기울어지는 십일조입니다. 당신이 봉사하는 동안 나는 홀을 지켜볼 것입니다.
+aetherhaven.reputation.reward.innkeeper.75=당신은 우리와 함께 긴 밤을 충분히 지냈습니다. Hearthglass Vigil을 펼치면 마을은 일주일 동안 더 천천히 그리고 더 친절하게 식사합니다. 생선, 고기, 야채 등 모든 필요에 맞게 부드럽게 페이드합니다. 그것이 우리가 서로를 지켜주는 방법이다.
+aetherhaven.reputation.reward.innkeeper.100=이제 당신과 이 마을은 이름을 공유합니다. Berrycircle Concord는 샐러드, 과일 꼬치, 팝콘, 토스트 등이 포함된 라이트 플레이트 서클입니다. 한 번만 드시면 더 따뜻하게 기억하실 것입니다.
+aetherhaven.reputation.reward.merchant.50=악천후 속에서도 약속을 지키셨습니다. 벤치 패턴은 다음과 같습니다. 설계도가 완성되면 도시 계획 데스크에서 제작하세요. 평가는 벤치에서 무료입니다. 나는 아직도 내 비용을 청구하고 있습니다.
+aetherhaven.reputation.reward.merchant.100=이 장부를 통해 보석상 코너를 얻을 만큼 충분한 금을 모았습니다. 패턴은 당신의 것입니다. 마을계획 데스크에서 제작하세요. 당신의 보석, 당신의 금속, 당신이 쏟아 붓는 생명을 설정하면 그 작품이 진실로 나올 것입니다.
+aetherhaven.reputation.reward.farmer.25=당신은 행에 대한 나의 신뢰를 얻었습니다. 철제 스프링클러를 스케치했습니다. 물 정수와 철이 있으면 농사 작업대에서 제작하세요.
+aetherhaven.reputation.reward.farmer.50=토륨 패턴은 다음과 같습니다. 더 넓은 범위, 동일한 새벽 리듬입니다. 회로도를 알면 벤치의 Farming 탭에 표시됩니다.
+aetherhaven.reputation.reward.farmer.75=Cobalt가 압력을 더 잘 유지합니다. 이 페이지에서는 세 번째 스프링클러 계층의 잠금을 해제합니다. 일출 시 여전히 한 번 담그면 좋습니다.
+aetherhaven.reputation.reward.farmer.100=Adamantite 및 에센스: 세트의 마지막 시트입니다. 조심해서 배치하십시오. 마을의 밭은 새벽에 마실 것입니다.
+aetherhaven.reputation.reward.blacksmith.25=돌은 모르타르로, 돌은 인내로. 당신은 둘 다 가지고 있고, 그것은 보여줍니다.
+aetherhaven.reputation.reward.blacksmith.50=당신은 대장간의 신뢰를 얻었습니다. 다음은 정동석 모루의 개략도입니다. 바와 돌이 있으면 도시 계획 데스크에서 제작하세요.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=플롯 기호(관리자)
+aetherhaven.ui.plotadmin.construction=Construction
+aetherhaven.ui.plotadmin.give=플롯 기호 제공 및 닫기
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven 모드 명령
+commands.aetherhaven.reload.desc=Reload config.json 디스크의 Aetherhaven JSON 카탈로그(크리에이티브 모드)
+commands.aetherhaven.reload.success=Aetherhaven 구성 및 자산 카탈로그가 다시 로드되었습니다.
+commands.aetherhaven.reload.failure=다시 로드 실패: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven 플러그인이 로드되지 않았습니다.
+commands.aetherhaven.plot.desc=플롯 기호 관리 UI 열기(구성 선택, 아이템 받기)
+commands.aetherhaven.starterkit.desc=Aetherhaven 스타터 키트 제공(플롯 직원, 저널, 헌장, 여관 토큰, 도시 계획 데스크, 크리에이티브 모드)
+commands.aetherhaven.starterkit.success=스타터 키트가 인벤토리에 추가되었습니다.
+commands.aetherhaven.starterkit.partial=스타터 키트가 부분적으로 부여됩니다. {failed} 항목이 맞지 않습니다(인벤토리 공간 확보).
+
+commands.aetherhaven.exportskin.desc=아바타 스킨을 모델로 내보내기 JSON(상위: 플레이어)
+commands.aetherhaven.exportskin.other.desc=다른 플레이어의 아바타 스킨을 모델로 내보내기
+commands.aetherhaven.exportskin.arg.path=선택적 출력 파일 경로(기본값: 플러그인 data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=이 플레이어에서는 캐릭터 스킨을 사용할 수 없습니다.
+commands.aetherhaven.exportskin.invalidSkin=스킨 확인 실패: {detail}
+commands.aetherhaven.exportskin.resolveError=스킨을 모델 첨부 파일로 확인할 수 없습니다: {detail}
+commands.aetherhaven.exportskin.ioError=쓰기 실패: {path}: {detail}
+commands.aetherhaven.exportskin.success=모델 JSON을 {path}
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Plot sign
+items.Aetherhaven_Plot_Sign.description=프리팹을 구축할 수 있는 위치로 표시합니다. /aetherhaven 플롯을 사용하여 구성하세요.
+
+items.Aetherhaven_Charter.name=Town Charter
+items.Aetherhaven_Charter.description=마을을 찾을 장소를 지정하세요. 각 플레이어는 세계당 하나의 마을을 가질 수 있습니다. 마을 정보를 여는 데 사용합니다.
+
+items.Aetherhaven_Town_Planning_Desk.name=도시 계획 데스크
+items.Aetherhaven_Town_Planning_Desk.description=마을 헌장, 플롯 배치 직원, 퀘스트 일지, 정동석 모루, 헌장 수정 테이블 및 플롯 토큰을 제작합니다. 작업대에서 하나를 만드세요.
+items.Aetherhaven_Charter_Amendments_Table.name=헌장 개정 table
+items.Aetherhaven_Charter_Amendments_Table.description=마을의 십일조 계산 방법과 헌장에서 선호하는 거래를 기록합니다. 인구가 이를 지지하면 수정안을 여는 데 사용됩니다. 도시 계획 데스크에서 제작하세요. 설계도를 아셔야 합니다.
+items.Aetherhaven_Banquet_Table.name=연회 테이블
+items.Aetherhaven_Banquet_Table.description=마을 잔치를 위한 긴 테이블입니다. 귀하의 영토에 배치하고 시민 잔치를 제공하는 데 사용하십시오. 마을의 누군가가 패턴을 공유하면 마을 계획 데스크에서 제작하세요.
+items.Aetherhaven_Founder_Monument.name=창립자 기념물
+items.Aetherhaven_Founder_Monument.description=창립자의 초상이 담긴 석조 받침대. 그들을 기리기 위해 도시 영토 내에 배치하십시오. 재무부의 아침 몫은 현 상태에서 약간 증가합니다. 마을당 하나만.
+
+benchCategories.aetherhaven.town_planning=도시 계획
+benchCategories.aetherhaven.plot_tokens=플롯 토큰
+
+items.Aetherhaven_Plot_Placement_Tool.name=플롯 배치 직원
+items.Aetherhaven_Plot_Placement_Tool.description=일치하는 플롯 토큰을 가방에 보관하세요. 건물의 유령을 보려면 땅을 겨냥하면서 이 지팡이를 사용하세요. 꼭 맞을 때까지 살짝 밀고 돌린 다음 플롯 측설을 확인합니다. 미리보기를 취소하고 다른 지점을 원할 때 직원을 다시 사용하세요.
+
+items.Aetherhaven_Poi_Tool.name=POI 디버그 도구
+items.Aetherhaven_Poi_Tool.description=홀드하는 동안 마을 POI를 표시합니다(권한: aetherhaven.poi.tool). 기본: 가장 가까운 POI를 선택합니다. 보조: POI 앵커를 해당 블록으로 이동합니다. 사용: 선택한 POI에 대한 자율 경로 대상 설정/삭제(지우려면 POI 블록을 다시 클릭).
+items.Aetherhaven_Poi_Tool.legendTitle=POI 도구
+items.Aetherhaven_Poi_Tool.legendPrimary=기본: 블록 근처에서 가장 가까운 POI 선택
+items.Aetherhaven_Poi_Tool.legendSecondary=보조: 선택한 POI를 블록
+items.Aetherhaven_Poi_Tool.legendUse=사용: NPC 경로 대상 설정 선택한 POI에 대해 (POI 블록 지우기에 사용)
+
+aetherhaven.poiTool.legendTitle=POI 도구
+aetherhaven.poiTool.legendPrimary=기본: 블록 근처에서 가장 가까운 POI 선택
+aetherhaven.poiTool.legendSecondary=보조: 선택한 POI를 블록으로 이동
+aetherhaven.poiTool.legendUse=사용: 선택한 POI에 대한 NPC 경로 대상 설정(POI 블록에 사용 클리어)
+
+items.Aetherhaven_Plot_Token_Inn.name=부두 플롯 토큰
+items.Aetherhaven_Plot_Token_Inn.description=여관 면적에 부지 배치 직원을 사용하려면 재고에 필요합니다.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=시장 매점 플롯 토큰
+items.Aetherhaven_Plot_Token_Market_Stall.description=부지 배치에서 시장 매점 면적을 배치하는 데 필요합니다. Staff.
+
+items.Aetherhaven_Plot_Token_Farm.name=농장 부지 토큰
+items.Aetherhaven_Plot_Token_Farm.description=농지 배치 직원으로부터 농장 부지 면적을 배치하는 데 필요합니다.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=대장간 부지 토큰
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=부지 배치 직원으로부터 대장간 부지 면적을 배치하는 데 필요합니다.
+
+items.Aetherhaven_Plot_Token_Park.name=Park 부지 token
+items.Aetherhaven_Plot_Token_Park.description=부지 배치 직원으로부터 공원 면적을 배치하는 데 필요합니다.
+
+items.Aetherhaven_Plot_Token_House.name=주택 부지 토큰
+items.Aetherhaven_Plot_Token_House.description=부지 배치 직원으로부터 공유 주택 면적을 배치하는 데 필요합니다.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=시청 부지 토큰
+items.Aetherhaven_Plot_Token_Town_Hall.description=시청 배치를 위해 필요합니다. 부지 배치 직원의 발자국.
+
+items.Aetherhaven_Gold_Coin.name=금화
+items.Aetherhaven_Gold_Coin.description=국고에 저장된 마을 통화.
+
+items.Aetherhaven_Geode.name=Geode
+items.Aetherhaven_Geode.description=수정, 보석 또는 광석을 담을 수 있는 속이 빈 돌. 대장장이에게 돈을 주고 열어보세요.
+
+items.Aetherhaven_Geode_Anvil.name=Geode anvil
+items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 정동석을 엽니다. 장소 및 사용; 도시 계획 데스크에서 제작하려면 설계도를 알아야 합니다.
+
+barter.aetherhaven_vex.title=Vex의 일일 재고
+
+items.Aetherhaven_Treasury.name=타운 재무부
+items.Aetherhaven_Treasury.description=마을의 금화를 보관하고 있습니다. 입금 또는 출금에 사용합니다(타운 소유자).
+
+items.Aetherhaven_Quest_Journal.name=타운 퀘스트 저널
+items.Aetherhaven_Quest_Journal.description=2차 사용: 활성화된 타운 퀘스트를 검토합니다. 장로는 여관이 지어진 후에 하나를 줄 수도 있습니다.
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=퀘스트 저널
+aetherhaven.ui.questjournal.hint=자세한 내용은 퀘스트를 선택하세요.
+aetherhaven.ui.questjournal.abandon=Abandon
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Quest 세부사항
+aetherhaven.ui.questjournal.detailPlaceholderBody=위의 퀘스트를 선택하세요.
+
+items.Aetherhaven_Management_Block.name=타운 기록 선반
+items.Aetherhaven_Management_Block.description=완성된 건물에 대한 서기 선반. 해당 부지에 대한 건설 상태를 공개합니다.
+
+items.Aetherhaven_Sprinkler_Iron.name=Iron springler
+items.Aetherhaven_Sprinkler_Iron.description=3×3 지역에서 한 블록 아래 경작된 토양에 물을 공급합니다. 게임 내 아침마다 한 번씩 실행됩니다. 적용 범위가 가장 작습니다.
+items.Aetherhaven_Sprinkler_Thorium.name=토륨 스프링클러
+items.Aetherhaven_Sprinkler_Thorium.description=5×5 면적에서 한 블록 아래 경작된 토양에 물을 공급합니다. 게임 내 아침마다 한 번씩. 철보다 큽니다.
+items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt 스프링클러
+items.Aetherhaven_Sprinkler_Cobalt.description=7×7 면적에서 한 블록 아래 경작된 토양에 물을 공급합니다. 게임 내 아침마다 한 번씩. 넓은 범위.
+items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite 스프링클러
+items.Aetherhaven_Sprinkler_Adamantite.description=9×9 지역에서 한 블록 아래 경작된 토양에 물을 공급합니다. 게임 내 아침마다 한 번씩. 가장 넓은 적용 범위.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia 제단 플롯 token
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Gaia 제단 조립식 건물을 지을 수 있는 위치를 표시합니다. 마을 계획 데스크에서 제작하세요.
+
+items.Aetherhaven_Statue_of_Gaia.name=가이아의 동상
+items.Aetherhaven_Statue_of_Gaia.description=제단의 축복받은 모습입니다. 마을 소유자는 실종된 주민들에게 생명의 정수를 가지고 전화할 수 있습니다.
+
+# === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
+items.Aetherhaven_Ring_Silver_Zephyr.name=실버 반지(Zephyr)
+items.Aetherhaven_Ring_Silver_Topaz.name=실버 반지(Topaz)
+items.Aetherhaven_Ring_Silver_Emerald.name=실버 반지(Emerald)
+items.Aetherhaven_Ring_Silver_Diamond.name=실버 반지 (Diamond)
+items.Aetherhaven_Ring_Silver_Sapphire.name=실버 링(사파이어)
+items.Aetherhaven_Ring_Silver_Ruby.name=실버 링(Ruby)
+items.Aetherhaven_Ring_Silver_Voidstone.name=실버 링(Voidstone)
+items.Aetherhaven_Ring_Gold_Zephyr.name=골드 링(Zephyr)
+items.Aetherhaven_Ring_Gold_Topaz.name=Gold 반지(토파즈)
+items.Aetherhaven_Ring_Gold_Emerald.name=금반지(에메랄드)
+items.Aetherhaven_Ring_Gold_Diamond.name=금반지(다이아몬드)
+items.Aetherhaven_Ring_Gold_Sapphire.name=금반지(사파이어)
+items.Aetherhaven_Ring_Gold_Ruby.name=금반지(루비)
+items.Aetherhaven_Ring_Gold_Voidstone.name=금반지 (Voidstone)
+items.Aetherhaven_Necklace_Silver_Zephyr.name=실버 목걸이(Zephyr)
+items.Aetherhaven_Necklace_Silver_Topaz.name=실버 목걸이(Topaz)
+items.Aetherhaven_Necklace_Silver_Emerald.name=실버 목걸이(Emerald)
+items.Aetherhaven_Necklace_Silver_Diamond.name=실버 목걸이 (Diamond)
+items.Aetherhaven_Necklace_Silver_Sapphire.name=실버 목걸이(사파이어)
+items.Aetherhaven_Necklace_Silver_Ruby.name=실버 목걸이(Ruby)
+items.Aetherhaven_Necklace_Silver_Voidstone.name=실버 목걸이(Voidstone)
+items.Aetherhaven_Necklace_Gold_Zephyr.name=골드 목걸이(Zephyr)
+items.Aetherhaven_Necklace_Gold_Topaz.name=Gold 목걸이(토파즈)
+items.Aetherhaven_Necklace_Gold_Emerald.name=금 목걸이(에메랄드)
+items.Aetherhaven_Necklace_Gold_Diamond.name=금 목걸이(다이아몬드)
+items.Aetherhaven_Necklace_Gold_Sapphire.name=금 목걸이(사파이어)
+items.Aetherhaven_Necklace_Gold_Ruby.name=금 목걸이(루비)
+items.Aetherhaven_Necklace_Gold_Voidstone.name=금 목걸이 (Voidstone)
+items.Aetherhaven_Jewelry.genericDescription=친화력이 숨어있는 주얼리. 손거울로 장비하세요. 그 진정한 품질을 읽어 보십시오.
+items.Aetherhaven_Hand_Mirror.name=손거울
+items.Aetherhaven_Hand_Mirror.description=주얼리 로드아웃을 엽니다. 인벤토리에서 반지 2개와 목걸이 1개.
+items.Aetherhaven_Appraisal_Bench.name=평가 벤치
+items.Aetherhaven_Appraisal_Bench.description=이미 가지고 있는 보석을 식별합니다. 한 번 배치하면 무료로 사용할 수 있습니다.
+items.Aetherhaven_Jewelry_Crafting_Bench.name=Jewelry 작업대
+items.Aetherhaven_Jewelry_Crafting_Bench.description=조각을 마무리하기 위한 철 모루입니다. 설계도를 알고 나면 도시 계획 데스크에서 제작하세요. 귀중한 바와 컷 보석에 생명 정수를 부어 보석을 제작하세요.
+
+# === UI: Statue of Gaia (revival / resident list) ===
+aetherhaven.ui.gaiaStatue.title=가이아 조각상
+aetherhaven.ui.gaiaStatue.hint=각 부활은 {cost} 생명 정수를 소비합니다.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=In town
+aetherhaven.ui.gaiaStatue.status.missing=Away
+aetherhaven.ui.gaiaStatue.reviveSuccess=생명의 실타래가 광장으로 돌아옵니다.
+aetherhaven.ui.gaiaStatue.reviveFailed=축복이 걸리지 않았습니다. 정수가 반환되었습니다.
+aetherhaven.ui.gaiaStatue.footer=이 축복은 마을 주인만이 사용할 수 있습니다. 실종된 마을 사람들은 동상 근처에서 다시 전화할 수 있습니다.
+aetherhaven.ui.gaiaStatue.revive=Revive
+
+aetherhaven.profession.kind.elder=Elder
+aetherhaven.profession.kind.innkeeper=Innkeeper
+aetherhaven.profession.kind.merchant=Merchant
+aetherhaven.profession.kind.farmer=Farmer
+aetherhaven.profession.kind.blacksmith=Blacksmith
+aetherhaven.profession.kind.priestess=Priestess
+aetherhaven.profession.kind.unknown=Resident
+
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=타운 차터
+aetherhaven.ui.chartertown.townNameLabel=타운 디스플레이 name
+aetherhaven.ui.chartertown.namePlaceholder=마을의 고유한 이름을 입력하세요
+aetherhaven.ui.chartertown.ownerOnlyHint=마을 소유자만이 헌장에서 표시 이름을 변경할 수 있습니다.
+aetherhaven.ui.chartertown.saveTownName=이름 저장
+aetherhaven.ui.chartertown.dissolve=마을 해체
+aetherhaven.ui.chartertown.dissolveHint=마을과 모든 건물을 영구적으로 제거합니다. 마을 사람들, 그리고 이 헌장. 취소할 수 없습니다.
+aetherhaven.ui.chartertown.dissolveConfirmText=확실합니까? 이는 마을을 영구적으로 삭제하고 모든 건물과 주민을 제거하며 이 헌장을 파괴합니다. 이 작업은 취소할 수 없습니다.
+aetherhaven.ui.chartertown.dissolveConfirm=예, 마을 해산
+aetherhaven.ui.chartertown.dissolveCancel=Cancel
+aetherhaven.ui.chartertown.dissolved=마을 해산: 건물 정리, 주민 제거, 헌장 파기
+aetherhaven.ui.chartertown.moveCharter=이동 헌장
+aetherhaven.ui.chartertown.moveCharterTooltip=Move Charter
+aetherhaven.ui.chartertown.moveCharterHint=새로운 차터 블록에서 영토의 중심을 다시 지정합니다. 모든 건물이 여전히 도시 경계 내부에 맞는 곳에만 배치할 수 있습니다.
+aetherhaven.ui.chartertown.moveCharterConfirmText=플롯 배치와 같이 새 헌장을 배치합니다(넛지 및 확인). 건물이 영토 외부에 있으면 배치가 차단됩니다.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continue
+aetherhaven.ui.chartertown.moveCharterCancel=Cancel
+aetherhaven.ui.chartertown.charterMoved=Charter가 이동되었습니다. 귀하의 영토는 이제 새로운 헌장에 집중되어 있습니다.
+aetherhaven.ui.chartertown.modalDissolveTitle=Dissolve town?
+aetherhaven.ui.chartertown.modalMoveTitle=Move 헌장?
+aetherhaven.ui.chartertown.modalCancel=Cancel
+
+# === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
+aetherhaven.ui.treasury.title=Town Treasury
+aetherhaven.ui.treasury.deposit=금을 모두 입금하세요 coin
+aetherhaven.ui.treasury.withdraw=금화 인출
+aetherhaven.ui.treasury.hint=매일 아침 근처에 있는 마을 사람들이 환호하며 약간의 금을 추가합니다. 여관 손님은 계산되지 않습니다.
+aetherhaven.ui.treasury.tabCoinsTooltip=Gold: 잔액, 입금, 인출
+aetherhaven.ui.treasury.tabTitheTooltip=누가 지불하고 다음날 아침에 무엇을 기대할지 확인하세요
+aetherhaven.ui.treasury.tax.intro=해가 뜨면 마을 상자는 게임에서 주변에 로드한 마을 사람들로부터 약간의 금을 수집합니다. 현재는 {count}명입니다. (이 목록을 업데이트하려면 마을을 더 많이 둘러볼 수 있도록 걸어보세요.)
+aetherhaven.ui.treasury.tax.policyShort.linear=마을 규칙: 음식, 휴식, 즐거움이 높을 때 1인당 최대 {max} 골드; 그렇지 않은 경우에는 더 적습니다.
+aetherhaven.ui.treasury.tax.policyShort.perCapita=마을 규칙: 모든 사람은 상황이 좋지 않은 날에도 소액의 기본 금액(상한액의 {flatPct}%)을 지불하며, 사람들이 잘 지내면 최대 {max} 골드까지 지불합니다.
+aetherhaven.ui.treasury.tax.policyShort.happiness=마을 규칙: 심술궂은 마을 사람들은 훨씬 적은 금액을 지불합니다. 필요한 경우 각 사람은 최대 {max} 골드({exp}로 조정)까지 지불할 수 있습니다.
+aetherhaven.ui.treasury.tax.hallMissing=먼저 시청을 건설한 다음 아침 골드를 수집할 수 있습니다.
+aetherhaven.ui.treasury.tax.sheetSubLabel=아래 마을 사람들로부터
+aetherhaven.ui.treasury.tax.sheetFounderLabel=창립자 동상 보너스({mult})
+aetherhaven.ui.treasury.tax.sheetFeastLabel=관리인의 장부 잔치 보너스({mult})
+aetherhaven.ui.treasury.tax.sheetTotalLabel=다음날 아침에 받는 것에 대해
+aetherhaven.ui.treasury.tax.residentsHeader=마을 주민들은 이것에 list
+aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.footerMore={total} 주민 중 {shown}만 여기에 적합합니다. 마을을 더 많이 로드하고 다시 열어 나머지 부분을 확인하세요.
+
+# === UI: open geodes (blacksmith) + result / error lines ===
+aetherhaven.ui.geodeopen.title=geodes
+aetherhaven.ui.geodeopen.hint=geode당 5개의 금화를 엽니다. 행을 클릭하여 엽니다. 완료되면 뒤로를 사용하세요.
+aetherhaven.ui.geodeopen.hintAnvil=골드 수수료가 없습니다. 하나의 정동석을 열려면 행을 클릭하세요. 완료되면 뒤로를 사용하세요.
+aetherhaven.ui.geodeopen.empty=핫바, 갑옷 또는 저장소에 정동석이 없습니다.
+
+aetherhaven.geode.row={count} × {itemName}
+aetherhaven.geode.open.insufficientGold=정동석당 5개의 금화가 필요합니다.
+aetherhaven.geode.open.reward=정동석: {amount} × {itemName}
+aetherhaven.geode.open.failed=전리품을 굴릴 수 없습니다. 귀하의 동전과 정동석이 반환되었습니다.
+aetherhaven.geode.open.noRoom=인벤토리 공간이 부족합니다. 동전과 정동석이 반환되었습니다.
+
+# === UI: hand mirror (jewelry loadout) ===
+aetherhaven.ui.handmirror.title=Jewelry
+aetherhaven.ui.handmirror.equipment=Worn
+aetherhaven.ui.handmirror.ring1=Ring I
+aetherhaven.ui.handmirror.ring2=Ring II
+aetherhaven.ui.handmirror.necklace=Necklace
+aetherhaven.ui.handmirror.inventory=Bag
+aetherhaven.ui.handmirror.hotbar=Hotbar
+aetherhaven.ui.handmirror.storage=Storage
+aetherhaven.ui.handmirror.hint=단축바와 메인 창고에 있는 보석은 아래와 같습니다. 행 버튼을 사용하여 조각을 반지나 목걸이 슬롯으로 보냅니다. 낡은 물건은 가방에 맡겨두세요. 슬롯 아래의 꺼내기 아이콘을 탭하면 낡은 조각을 반환할 수 있습니다. 가방이 가득 차면 주얼리를 꺼낼 수 없습니다.
+aetherhaven.ui.handmirror.listRow={itemName} × {qty}
+aetherhaven.ui.handmirror.rowRing1=Ring I
+aetherhaven.ui.handmirror.rowRing2=Ring II
+aetherhaven.ui.handmirror.rowNeck=Wear
+aetherhaven.ui.handmirror.inventoryFull=재고 공간이 부족하여 반품할 수 없습니다. item.
+aetherhaven.ui.handmirror.cannotEquipThere=그 조각은 선택한 슬롯에 들어가지 않습니다.
+aetherhaven.ui.handmirror.equipFailed=항목을 이동할 수 없습니다. 아무것도 변경되지 않았습니다.
+aetherhaven.ui.handmirror.traitHidden=?
+aetherhaven.ui.handmirror.tooltipNotJewelry=이 거울에서는 주얼리만 장착할 수 있습니다.
+aetherhaven.ui.handmirror.tooltipUnattuned=주얼리 친화도는 이 제품을 처음 조정할 때 설정됩니다(여기에서 선택하거나 다른 곳에서 평가).
+aetherhaven.ui.handmirror.tooltipHeader=Rarity: {rarity}
+aetherhaven.ui.handmirror.tooltipUnappraised=감정에서는 원장의 이름만 공개합니다. 마법은 이미 금속에 있습니다.
+aetherhaven.ui.handmirror.traitsColumnHeading=Worn affinities
+aetherhaven.ui.handmirror.traitsRarityLine=Rarity: {rarity}
+aetherhaven.ui.handmirror.traitsEmptySlot=(empty)
+aetherhaven.ui.handmirror.traitsUnattuned=아직 조정되지 않았습니다. 친화력을 설정하기 위해 착용하거나 감정합니다.
+aetherhaven.ui.handmirror.traitFrom=· {gem}(패싯 {facet})
+aetherhaven.jewelry.gem.ZEPHYR=Zephyr
+aetherhaven.jewelry.gem.TOPAZ=Topaz
+aetherhaven.jewelry.gem.EMERALD=Emerald
+aetherhaven.jewelry.gem.DIAMOND=Diam ond
+aetherhaven.jewelry.gem.SAPPHIRE=Sapphire
+aetherhaven.jewelry.gem.RUBY=Ruby
+aetherhaven.jewelry.gem.VOIDSTONE=Voidstone
+
+# === UI: jewelry appraisal & workbench (forging) ===
+aetherhaven.ui.jewelryAppraisal.title=평가 쥬얼리
+aetherhaven.ui.jewelryAppraisal.hintPaid=개당 {cost} 금화가 필요합니다. 행을 선택한 다음 평가하여 희소성과 특성을 드러냅니다.
+aetherhaven.ui.jewelryAppraisal.hintFree=골드 수수료가 없습니다. 행을 선택한 다음 희귀성과 특성을 드러내기 위해 평가합니다.
+aetherhaven.ui.jewelryAppraisal.empty=핫바, 방어구 또는 창고에 보석이 없습니다.
+aetherhaven.ui.jewelryAppraisal.pick=아래에서 항목을 선택하십시오.
+aetherhaven.ui.jewelryAppraisal.select=Select
+aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.statusAppraised=appraised
+aetherhaven.ui.jewelryAppraisal.statusUnidentified=unidentified
+aetherhaven.ui.jewelryAppraisal.selectedHeader=선택됨: {itemName}
+aetherhaven.ui.jewelryAppraisal.unidentified=이 작품은 아직 평가되지 않았습니다. 감정을 하면 금속에 이미 짜여진 것이 무엇인지만 드러날 뿐입니다. 마법 부여는 변경되지 않습니다.
+aetherhaven.ui.jewelryAppraisal.rarityLine=Rarity: {rarity}
+aetherhaven.ui.jewelryAppraisal.appraise=Appraise
+aetherhaven.ui.jewelryAppraisal.insufficientGold=이번 평가에는 금화가 더 필요합니다.
+aetherhaven.ui.jewelryAppraisal.payFailed=결제가 이루어지지 않았습니다. 감정된 것이 없습니다.
+aetherhaven.ui.jewelryAppraisal.done=감정되었습니다. 이제 원장을 읽을 수 있습니다.
+aetherhaven.ui.jewelryCrafting.title=Jewelry workbench
+aetherhaven.ui.jewelryCrafting.hint=왼쪽에서 오른쪽으로 작업하세요. 모양과 금속을 선택하고 보석을 선택한 다음 소비할 생명 정수의 양을 다이얼하세요. 가방 공간이 있을 때 출력물에서 완성된 작품을 가져옵니다. 목걸이는 반지보다 주괴를 더 많이 사용합니다.
+aetherhaven.ui.jewelryCrafting.colShape=Shape
+aetherhaven.ui.jewelryCrafting.colMetal=Metal
+aetherhaven.ui.jewelryCrafting.colGem=Gem
+aetherhaven.ui.jewelryCrafting.colEssence=사용할 에센스
+aetherhaven.ui.jewelryCrafting.shapeRing=링: 적은 주괴
+aetherhaven.ui.jewelryCrafting.shapeNeck=목걸이: 더 많은 주괴
+aetherhaven.ui.jewelryCrafting.ingotCost=레시피 비용: {n}× {metal}
+aetherhaven.ui.jewelryCrafting.metalGold=gold bar
+aetherhaven.ui.jewelryCrafting.metalSilver=silver bar
+aetherhaven.ui.jewelryCrafting.yourBags=당신이 가지고 있는 것
+aetherhaven.ui.jewelryCrafting.invLine=금괴: {gold} · 은: {silver} · 생명 에센스: {ess} · 농축: {conc}
+aetherhaven.ui.jewelryCrafting.invGem=주머니에 담긴 보석: {n}
+aetherhaven.ui.jewelryCrafting.gold=Gold
+aetherhaven.ui.jewelryCrafting.silver=Silver
+aetherhaven.ui.jewelryCrafting.goldActive=Gold (on)
+aetherhaven.ui.jewelryCrafting.silverActive=Silver (on)
+aetherhaven.ui.jewelryCrafting.rarityNone=아직 에센스 "포인트"가 충분하지 않습니다. 미리보기에 티어가 표시될 때까지 +를 사용하여 일반 및/또는 농축 에센스를 추가하세요.
+aetherhaven.ui.jewelryCrafting.rarityLine=에센스 산출량: {rarity}
+aetherhaven.ui.jewelryCrafting.traitsLine=이 보석에 대한 가능한 통계 수치: {stats}
+aetherhaven.ui.jewelryCrafting.craft=Forge
+aetherhaven.ui.jewelryCrafting.take=수집 쥬얼리
+aetherhaven.ui.jewelryCrafting.takeHint=단조 제품을 가방에 보관하세요(빈 슬롯이나 스택 공간이 필요함).
+aetherhaven.ui.jewelryCrafting.cannotResolve=한 단계에 도달할 수 있도록 유효한 에센스 양을 설정한 후 다시 시도하세요.
+aetherhaven.ui.jewelryCrafting.missingMats=가방에 바, 보석 또는 에센스가 없습니다.
+aetherhaven.ui.jewelryCrafting.done=손에서 제품이 식어 준비가 되었습니다. 착용.
+aetherhaven.ui.jewelryCrafting.craftedToSlot=단조 완료. 준비가 되면 가방으로 옮기세요.
+aetherhaven.ui.jewelryCrafting.taken=보석을 가방에 담았습니다.
+aetherhaven.ui.jewelryCrafting.noSpace=가방에 먼저 공간을 확보한 후 보석 수집을 사용하세요.
+aetherhaven.ui.jewelryCrafting.takeFirst=사용 완성된 작품에 보석을 수집한 다음 다시 단조할 수 있습니다.
+aetherhaven.ui.jewelryCrafting.noGemsDropdown=가방에 컷 보석이 없습니다(세계의 암석 보석을 찾으세요) 먼저)
+
+# === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
+aetherhaven.jewelry.traitLine={stat} {amount}
+aetherhaven.jewelry.stat.Health=Max health
+aetherhaven.jewelry.stat.Mana=Max mana
+aetherhaven.jewelry.stat.Stamina=Max stamina
+aetherhaven.jewelry.stat.Oxygen=Max 산소
+aetherhaven.jewelry.stat.Ammo=ammo
+aetherhaven.jewelry.stat.SignatureEnergy=서명 max
+aetherhaven.jewelry.rarity.COMMON=Common
+aetherhaven.jewelry.rarity.UNCOMMON=Uncommon
+aetherhaven.jewelry.rarity.RARE=Rare
+aetherhaven.jewelry.rarity.MYTHIC=Mythic
+aetherhaven.jewelry.rarity.LEGENDARY=Legendary
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Plot 배치
+aetherhaven.ui.plotplacement.summary=배치: {building}
+aetherhaven.ui.plotplacement.positionSection=위치 및 회전
+aetherhaven.ui.plotplacement.tipsSection=Tips
+aetherhaven.ui.plotplacement.heightSection=높이 및 회전
+aetherhaven.ui.plotplacement.detailsBlock=플롯 기호 {sx}, {sy}, {sz} · 조립식 원본 {ox}, {oy}, {oz}\n4단계 {step}(각각 90°)
+aetherhaven.ui.plotplacement.tipsControls=Escape는 이 패널만 닫습니다. 취소는 미리보기를 지웁니다. 마우스 오른쪽 버튼을 클릭하면 공기가 다시 열립니다. 블록을 마우스 오른쪽 버튼으로 클릭해도 활성 미리보기가 이동하지 않습니다.
+aetherhaven.ui.plotplacement.plotType=Building
+aetherhaven.ui.plotplacement.moveLabel=위치 조정
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=90° 회전(사이클 방향)
+aetherhaven.ui.plotplacement.place=플롯 배치 sign
+aetherhaven.ui.plotplacement.placeMove=Move Building
+aetherhaven.ui.plotplacement.moveWarningText=Moving은 기존 사이트를 파괴하고 재구축합니다. 먼저 건물 공간 내부에서 귀중품, 애완동물 및 헐거운 물건을 제거하십시오. 이 마을에 묶인 마을 NPC는 보호됩니다.
+aetherhaven.ui.plotplacement.moveConfirm=확인
+aetherhaven.ui.plotplacement.moveBack=돌아가기
+aetherhaven.ui.plotplacement.cancel=미리보기 취소
+aetherhaven.ui.plotplacement.cameraSection=Camera
+aetherhaven.ui.plotplacement.cameraHint=Bird's-eye 프레임을 켜면(미리보기 위) 프레임이 한 번 표시되고 플롯을 이동하는 동안 그대로 유지됩니다.
+aetherhaven.ui.plotplacement.birdsEye=Bird's-eye view
+aetherhaven.ui.plotplacement.birdsEyeTooltip=하향식 보기: 초기 목표는 미리보기 센터입니다. 1인칭으로 ​​돌아가려면 선택을 취소하세요. 팬을 사용하여 뷰를 슬라이드합니다.
+aetherhaven.ui.plotplacement.viewDistance=Distance
+aetherhaven.ui.plotplacement.zoomOutTooltip=더 먼 카메라(플롯의 더 넓은 개요)
+aetherhaven.ui.plotplacement.zoomInTooltip=가까운 카메라(더 작은 개요, 더 자세한 내용)
+aetherhaven.ui.plotplacement.panLabel=팬 카메라
+aetherhaven.ui.plotplacement.panXmTooltip=Shift 한 단계 보기 -X
+aetherhaven.ui.plotplacement.panXpTooltip=Shift 방향으로 한 단계 보기 +X
+aetherhaven.ui.plotplacement.panZmTooltip=Shift 방향으로 한 단계 보기 -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Shift 방향으로 한 단계 보기 +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=조감도 방향으로 한 단계 보기: 서쪽(-X). 1인칭: 좌측 기총(시야 기준).
+aetherhaven.ui.plotplacement.moveXpTooltip=조감도: 동쪽(+X). 1인칭: 오른쪽 기총(시야 기준).
+aetherhaven.ui.plotplacement.moveZmTooltip=조감도: 북쪽(-Z). 1인칭: 앞으로 이동합니다(시점을 기준으로).
+aetherhaven.ui.plotplacement.moveZpTooltip=조감도: 남쪽(+Z). 1인칭: 뒤로 이동(보기 기준).
+aetherhaven.ui.plotplacement.moveYmTooltip=한 블록 아래로 이동
+aetherhaven.ui.plotplacement.moveYpTooltip=한 블록 위로 이동
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=차터 이동
+aetherhaven.ui.charterrelocation.summary=타운 헌장 재배치
+aetherhaven.ui.charterrelocation.details=대상 블록 {sx}, {sy}, {sz} · {step}/4 단계(90°)
+aetherhaven.ui.charterrelocation.tips=영토는 헌장 주변의 사각형 덩어리입니다. 모든 건물은 확인 후 내부에 있어야 합니다. 고스트를 새로운 지점으로 조금씩 이동시킨 후 배치하세요.
+aetherhaven.ui.charterrelocation.info=Territory는 전세 주변의 사각형 덩어리입니다. 모든 건물은 이동 후에도 해당 구역 내에 있어야 합니다. 고스트 블록을 새로운 차터 위치로 이동시킨 다음 확인하세요.
+aetherhaven.ui.charterrelocation.place=배치 차터
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=현재 세계의 Aetherhaven 도시 나열
+
+commands.aetherhaven.town.desc=타운 멤버십: 초대, 역할, 떠나기
+commands.aetherhaven.town.invite.desc=온라인 플레이어를 초대하세요. town
+commands.aetherhaven.town.invite.player.desc=플레이어 사용자 이름(온라인이어야 함)
+commands.aetherhaven.town.accept.desc=대기 중인 타운 초대 수락
+commands.aetherhaven.town.decline.desc=대기 중인 타운 초대 거부
+commands.aetherhaven.town.kick.desc=마을에서 구성원 제거
+commands.aetherhaven.town.kick.player.desc=회원 사용자 이름(다음이어야 함) 온라인)
+commands.aetherhaven.town.role.desc=회원 역할 설정(BUILD, QUEST 또는 BOTH)
+commands.aetherhaven.town.role.player.desc=회원 사용자 이름(온라인이어야 함)
+commands.aetherhaven.town.role.role.desc=BUILD, QUEST 또는 BOTH
+commands.aetherhaven.town.leave.desc=회원으로 속해 있는 마을에서 탈퇴 owner)
+commands.aetherhaven.town.townName.desc=선택적인 도시 표시 이름(여러 초대 또는 관리자용)
+
+commands.aetherhaven.poi.desc=Debug: POI 명령(DebugCommandsEnabled 필요)
+commands.aetherhaven.poi.list.desc=도시에 대한 POI 나열(선택적인 도시 UUID 또는 \"me\"를 생략/사용 town)
+commands.aetherhaven.poi.town.desc=Town UUID 또는 나 또는 호출자 생략 town
+commands.aetherhaven.poi.dump.desc=이 세계의 메모리 내 레지스트리에 있는 모든 POI 나열(모든 도시)
+
+commands.aetherhaven.plots.desc=Debug: 플롯 인스턴스 나열(DebugCommandsEnabled 필요, 플롯을 사용하여 /aetherhaven과의 충돌 방지) 플롯)
+commands.aetherhaven.plots.list.desc=마을에 대한 플롯 인스턴스 나열
+
+commands.aetherhaven.needs.desc=디버그: 주민 요구 사항(DebugCommandsEnabled 필요)
+commands.aetherhaven.needs.inspect.desc=VillagerNeeds
+commands.aetherhaven.needs.set.desc=필요 측정기를 0..100으로 설정(대상: 검사에서 핸들, 장로 또는 uuid)
+commands.aetherhaven.needs.target.desc=핸들(예: Villager_Elder_xxxxxxxx), 연장자 또는 법인 UUID
+commands.aetherhaven.needs.entity.desc=사용 중단됨; 대상(핸들, Elder 또는 uuid) 사용
+commands.aetherhaven.needs.which.desc=hunger, 에너지 또는 fun
+commands.aetherhaven.needs.value.desc=0에서 100 사이의 값(100 = 완전히 만족)
+
+commands.aetherhaven.tax.desc=디버그: 재무 아침 세금(필요 DebugCommandsEnabled)
+commands.aetherhaven.tax.breakdown.desc=마을에 대한 주민별 세금 라인 및 총액 표시(로드된 청크만 해당)
+commands.aetherhaven.tax.now.desc=지금 아침 십일조를 재무부에 적용(아침 시간과 마지막 수집일을 건너뛰고 DebugCommandsEnabled 필요)
+
+commands.aetherhaven.questdebug.desc=디버그: 마을 퀘스트 우회 (DebugCommandsEnabled 필요)
+commands.aetherhaven.questdebug.grant.desc=마을에서 퀘스트 활성 표시
+commands.aetherhaven.questdebug.complete.desc=마을에서 퀘스트 완료 표시
+commands.aetherhaven.questdebug.clear.desc=마을의 활성 목록에서 퀘스트 제거
+commands.aetherhaven.questdebug.id.desc=퀘스트 ID(기본값) q_build_inn)
+commands.aetherhaven.questdebug.status.desc=마을에 대한 활성 및 완료된 퀘스트 표시(표시 이름 + ID)
+
+commands.aetherhaven.reputation.desc=디버그: 평판(DebugCommandsEnabled 필요)
+commands.aetherhaven.reputation.set.desc=주민의 평판을 설정하고 대화에 대한 대기열 교차 마일스톤 보상
+commands.aetherhaven.reputation.villagerUuid.desc=Villager NPC 엔터티 UUID
+commands.aetherhaven.reputation.villagerTarget.desc=마을의 마을 개체 UUID 또는 NPC 역할 ID(예: Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Reputation 0 ~ 100
+commands.aetherhaven.reputation.reward.desc=이정표 정의를 나열하거나 보상 하나를 직접 부여합니다
+commands.aetherhaven.reputation.reward.list.desc=평판 이정표 나열(선택 사항: 필터 NPC 역할 ID로)
+commands.aetherhaven.reputation.reward.roleFilter.desc=NPC 역할 ID(예: Aetherhaven_Merchant)를 사용하여 목록을 필터링합니다
+commands.aetherhaven.reputation.reward.grant.desc=지금 하나의 마일스톤 보상을 부여합니다(마크 청구). ids
+commands.aetherhaven.reputation.rewardId.desc=Reputation 보상 ID에 대한 담당자 보상 목록 사용(예: rep_merchant_50)
+
+commands.aetherhaven.villager.desc=디버그: 마을 주민 도우미(DebugCommandsEnabled 필요)
+commands.aetherhaven.villager.list.desc=마을 주민 NPC 엔터티 UUID 나열(평판/찾기용) 명령)
+commands.aetherhaven.villager.locate.desc=마을 주민의 위치를 인쇄합니다. 선택적 텔레포트(운영자 전용)
+commands.aetherhaven.villager.uuid.desc=Villager NPC 엔터티 UUID
+commands.aetherhaven.villager.target.desc=Villager 엔터티 UUID 또는 마을의 NPC 역할 ID(예: Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=true로 마을 주민에게 텔레포트합니다(오퍼레이터 전용). 또는 대신 --tp를 사용하십시오
+commands.aetherhaven.villager.tp_flag.desc=주민에게 텔레포트(운영자만 해당, true 전달과 동일)
+
+commands.aetherhaven.debug_autonomy.desc=디버그: 주민 자율성 오버레이(DebugCommandsEnabled 필요)
+commands.aetherhaven.debug_autonomy.toggle.desc=마을 주민에 대한 자율성 디버그 전환(NPC를 보거나 사용 --ray)
+commands.aetherhaven.debug_autonomy.show.desc=이 주민에 대해 자율성 디버그가 활성화되었는지 표시
+commands.aetherhaven.debug_autonomy.clear.desc=이 주민에 대한 Aetherhaven 자율성 디버그 지우기
+
+commands.aetherhaven.debug_lootchest.desc=디버그: 대상 컨테이너에 Aetherhaven 상자 보너스 롤(DebugCommandsEnabled 필요)
+commands.aetherhaven.debug_lootchest.fill.desc=Apply 당신이 보고 있는 아이템 컨테이너에 강제 보석, 금, 음모 토큰 롤
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Town 잔치
+aetherhaven.ui.feast.noTown=당신은 마을에 속해야 합니다.
+aetherhaven.ui.feast.noPermission=당신은 이 마을에 대한 잔치를 열 수 없습니다.
+aetherhaven.ui.feast.outsideTerritory=테이블은 당신의 마을 안에 있어야 합니다. Territory.
+aetherhaven.ui.feast.activeTitle=마을 축제 진행 중
+aetherhaven.ui.feast.noneActive=시간 제한 축제가 활성화되지 않았습니다. 비용과 효과를 읽으려면 왼쪽에서 잔치를 선택하세요.
+aetherhaven.ui.feast.daysLeft=남은 일수(새벽): {days}
+aetherhaven.ui.feast.selectHint=잔치 선택
+aetherhaven.ui.feast.ingredientsLabel=성분
+aetherhaven.ui.feast.confirm=잔치 개최
+aetherhaven.ui.feast.locked=아직 이 잔치를 배우지 않으셨습니다. 누군가가 안내해 줄 때까지 마을 사람들과 함께 시간을 보내세요.
+aetherhaven.ui.feast.tooltipLocked=이웃이 이 잔치를 가르쳐줄 때까지 잠겨 있습니다. 마을을 돕고 홀에서 요리하는 사람들과 계속 대화하세요.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord가 쿨다운 중입니다({days} 새벽일 남음).
+aetherhaven.ui.feast.began=잔치가 시작됩니다. 마을 사람들이 테이블에 모여있습니다.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven이 서버에 로드되지 않았습니다.
+aetherhaven.ui.feast.err.unknownFeast=그 잔치를 이용할 수 없습니다.
+aetherhaven.ui.feast.err.invalidPlayer=캐릭터를 확인할 수 없습니다.
+aetherhaven.ui.feast.err.feastNotUnlocked=아직 이 잔치를 배우지 않았습니다. 마을 주변에서 신뢰를 쌓고 누군가가 그것을 가르치겠다고 제안하면 귀를 기울이십시오.
+aetherhaven.ui.feast.err.timedFeastActive=이 마을에는 이미 또 다른 시간 제한 잔치가 시행 중입니다.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Berrycircle Concord를 제공하기 전에 현재 시간 제한 잔치가 끝날 때까지 기다리십시오.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord는 아직 진행 중입니다. cooldown.
+aetherhaven.ui.feast.err.notEnoughIngredients=필요한 재료가 부족합니다.
+
+aetherhaven.feast.stewards.name=청지기의 원장 만찬
+aetherhaven.feast.stewards.description=아침 십일조가 일주일 동안 넉넉하게 되도록 빵, 치즈, 적당한 호박 파이를 펴십시오.
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=구운 생선, 익힌 부위, 야채를 천천히 타오르는 철야 식사로 차려냅니다. 일주일 동안 주민들의 요구 사항이 점차 완화됩니다.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=빛 접시의 원형: 베리 샐러드, 과일 꼬치, 토스트용 팝콘. 이웃들은 당신을 조금 더 친절하게 기억합니다. 새벽부터 일주일 정도 기다려서 다시 드세요.
+
+# === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
+# Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
+aetherhaven.dialogue.blacksmith.repairGear=장비 수리(금화로 지불)
+aetherhaven.dialogue.blacksmith.openGeodes=열린 정동석 깨기(각각 5골드)
+aetherhaven.dialogue.merchant.appraiseJewelry=보석 평가(각각 10골드)
+
+# -- Tree id: aetherhaven_blacksmith (Garren Vale) --
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=원한을 품지 마세요. 그래도 시내에서 연기를 원하시면 다시 물어보세요.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=괜찮습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=상점이 완성되면 무기 벤치까지 걸어가서 세팅하겠습니다. 저를 찾으면 완료됩니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=퀘스트를 중단해야 합니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=계속 진행하겠습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=견고한 벤치입니다. 일이 끝나면 더위가 찾아올 것이다. 우리는 더 이상 지도를 가로질러 광석을 운송하지 않습니다. 우리는 이 땅이 아직도 주는 것을 사용합니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=Hammer 잘.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=자리가 나면 안쪽 블록에 내 이름을 적고 나를 찾아오세요. 당신이 큰 소리로 말하는 것을 듣고 싶습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=들리게 될 것입니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=좋아요. 남의 스튜 냄새가 나지 않는 지붕.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=즐기세요.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=가게는 나에게 물집을 줍니다. 나는 아직도 빌리지 않는 지붕을 갖고 싶다. 누구와도 똑같은 집. 벽이 진짜일 때 등록해주세요.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=집을 걸겠습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=다음번에.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=Iron은 서두르지 않습니다. 집이 다 완성되면 등록하고 오세요. 그때가 우리가 공평한 때입니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=이해했습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=Corin의 보드는 수면에 좋습니다. 그들은 해머 스윙을 하기에는 형편없습니다. 내가 소유할 수 있는 벽, 카운터, 무기 벤치가 있는 대장간을 건설하세요. 기획 데스크에서 플롯 토큰을 제작하고 직원에게 배치한 후 요금을 지불하세요. 세워지면 벤치에서 만나요.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=만들겠습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=지금은 아닙니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=좋아요. 굴뚝이 진실을 밝힐 때까지 나는 여관에서 야영을 할 것이다. 그런 다음 벤치에서 저를 찾아 장부를 닫겠습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=거기서 뵙겠습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale. 대장간이 움직일 수 있을 만큼 바람이 약합니다. 메탈에는 여기까지 의견이 있습니다. 나는 그것에 대해 논쟁하기 위해 여기에 있습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=집에 대해 이야기하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=당신의 이름이 블록에 있습니다. 들어보셔야 할 것 같았습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=집은 아직 진행 중입니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=철공하는 모습을 보니 반갑습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=가게가 지어졌습니다. 벤치가 준비되었습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=단조 빌드에 대해...
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=여기에 실제 단조가 필요하다고 말씀하셨습니다.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=조심하세요.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
+# -- Tree id: aetherhaven_dialogue_test (QA / harness) --
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=조건 연구실입니다. 숨겨진 선택 항목이 표시되어서는 안 됩니다. 회색으로 표시된 선택 항목이 표시됩니다. 계속하려면 복합 게이트를 사용하십시오.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=이 선택은 숨겨집니다(문자 그대로 false).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=이 항목은 회색으로 표시되어야 합니다.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(문자 그대로 true가 필요함)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=조합 전달: NOT false AND true
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR 분기(참 또는 거짓)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=테스트해 주셔서 감사합니다. 안녕!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=안녕!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=다음 대신 이동 작업을 사용하여 작별 인사로 이동하려면 아래를 선택하세요.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=goto Farewell
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=A 노드 입력 작업으로 조잡한 삽 하나를 얻었습니다(인벤토리 공간이 있는 경우). 더 많은 항목을 보려면 아래 옵션을 선택하세요.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=흙 3개를 주고 계속하세요.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Aetherhaven 대화 도구에 오신 것을 환영합니다. 이 줄은 레이아웃과 스크롤을 확인할 수 있도록 의도적으로 길게 유지됩니다. 선택 사항은 본문 텍스트 아래에 있습니다.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=조건 실험실로 계속 진행합니다.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=나가기(다음 null로 끝).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=나가기(명시적인 닫기 작업)
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=다음을 열 수 있습니다. Kweebec 판매자 물물교환 UI 또는 스텁 작업으로 건너뛰기.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Kweebec_Merchant 물물교환 상점 열기
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=상점 건너뛰기, 스텁
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub 작업으로 이동: 업적 잠금 해제 및 퀘스트 시작은 해당 시스템까지 기록되어야 합니다. 존재합니다.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA 실행
+# -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=저는 라이렌이에요. 저는 우리가 이 도시를 Orbis에 포함시켰을 때 우리가 서명한 헌장에 대해 이야기합니다. 오래된 도시는 사라졌습니다. 우리가 가진 것은 이 땅과 이미 여기에 있는 사람들이며, 더 많은 사람들이 올 것입니다. 새로운 땅을 짓기 전에, Aetherhaven 주변의 땅에 대해 알아두세요. 지을 수 있을 만큼 평평한 곳, 물이 흐르는 곳, 나중에 들판이나 공유지를 놓을 곳이 어디인지 말이죠. 실용적으로 유지하세요. 둘러보신 후 다시 저를 찾아주세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=그 지역을 정찰하고 다시 보고하겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=당신은 우리가 보낸 작업과 누군가가 구매할 때 거래에서 일부를 선택합니다. 마을 지갑은 그 자체입니다. 일단 홀이 지어지면 재무부는 거기에 있습니다. 헌장에 허용된 경우 거기에 있는 블록을 사용하여 동전을 넣거나 꺼냅니다. 그 후 매일 아침 지나가는 방문객이 아닌 이곳에 실제로 살고 있는 사람들로부터 약간의 금이 그 금고로 흘러 들어갑니다. 얼마나 버티느냐에 따라 달라집니다. 먹이를 주고, 휴식을 취하고 기분이 좋으면 냄비의 상태가 더 좋아집니다. 얇게 늘어나면 상황이 더 악화됩니다. 이는 커먼즈를 정직하게 유지합니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=알아두면 좋습니다. 감사합니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=리렌 장로
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=있습니다. 잠을 못 자던 사람들을 위한 진짜 여관. 코린이 열쇠를 갖고 있어요. 가서 난로 옆에서 자기소개를 해보세요. 감사보다 더 많이 벌었지만 감사부터 시작하겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=도움이 되어 기쁘게 생각합니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=벽이 올라가면 관리 블록을 사용하여 저를 레지던트로 설정하세요. 그럼 나를 찾아오세요. 나는 당신이 말하는 것을 듣고 싶습니다. 선반에서 읽는 것이 아니라
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=두 가지를 모두 얻을 것입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=그러면 해결됩니다. 나는 다른 사람들과 같은 규칙에 따라 집이 있습니다. 끝까지 봐주셔서 감사합니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=귀국을 환영합니다, Lyren.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=홀이 올라가고 재무부가 숨을 쉴 수 있습니다. 헌장은 우리에게 도시에 대한 규칙을 제공했습니다. 그것은 나에게 침대를주지 않았다. 나는 다른 사람이 얻는 것과 똑같은 작은 집을 원합니다. 내가 제공하는 토큰을 받고 직원들과 함께 부지를 걸고 재무부에서 자재와 마을 지분을 지불한 다음 건설되면 관리 선반에 내 이름을 올려주세요. 누가 나를 위해 자리를 마련했는지 잊지 않겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=처리하겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=아직 약속할 수 없습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=필요한 시간을 가지십시오. 집이 완성되면 저를 블록에 등록해 주세요. 그러면 저를 찾아와서 우리가 직접 만나서 마무리할 수 있도록 해주세요.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=완료되면 오겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=좋아요. 직원과 함께 여관 부지를 배치하고 표지판에 표시된 자재를 지불한 후 건축을 완료하세요. 지붕이 올라가고 난로가 들어오면 직접 와서 말해 보세요. 기다리겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=최대한 빨리 시작하겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=지붕이 버티고 난로에 불이 들어오면 돌아와서 직접 말씀해 주세요. 서두르지는 않겠지만 이 마을에 침대가 필요한 사람을 위한 적절한 여관이 생길 때까지는 떠나지 않겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=준비가 되면 다시 오겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=라이렌 장로님
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=리렌 장로
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=리렌 장로
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=헌장은 여전히 ​​유효하며, 저는 여전히 그것을 지지합니다. 우리에게는 사람들을 보낼 여분의 피난처가 없기 때문에 여기에서 첫 번째 실제 건물은 여관이어야 합니다. 지붕, 난로, 그리고 길이 멀 때 여행자와 우리 친족에게 열려 있는 문이 있어야 합니다. 스테이크할 준비가 되면 그렇게 말하세요.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=들어갑니다. 여관을 키우자.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=여관은 아직 내 목록에 있습니다. 체크인하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=맡겨 두겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=여관은 끝났습니다. Corin은 필요한 것을 갖고 있을 것입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=시청에 대해.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=당신 이름을 선반에 올려 놓겠습니다. 저한테 먼저 들으셔야 합니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=귀하의 집은 아직 완성되지 않았지만 저는 건축 중입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=귀하께서는 자신만의 집을 갖고 싶다고 말씀하셨습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=시청 건축이 아직 진행 중입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=시청은 up.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=이 주변 사람들은 어떻게 금화를 얻나요?
+aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=직원들과 함께 시청 토큰을 사용하고 재료비를 지불하고 건축하세요. 홀이 끝나면 직접 말씀해주세요. 완성됐다고 하시면 얼굴 한번 뵙고 싶습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=완성되는 대로 말씀드리겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=저기요. Aetherhaven에는 기록, 재무부, 광장 건너편에서 소리 지르지 않고도 만날 수 있는 방 등 적절한 시청이 있습니다. 그게 제가 당신에게 필요했던 것입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=도움이 되어서 다행입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=여관이 서 있습니다. 다음으로 우리 모두의 소유인 시청이 필요합니다. 헌장을 위한 선반, 계획을 위한 책상, 공유 동전을 통해 나머지 건축 자금을 조달할 수 있는 금고가 필요합니다. 줄거리를 이해하고 표지판에서 요구하는 대로 비용을 지불하면 마침내 마을 전체가 만날 수 있는 장소가 생깁니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=홀을 세우겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=아직은 아닙니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Stone과 서류 작업에는 모두 시간이 걸립니다. 홀이 끝나면 말해주세요. 저는 여기 있을게요.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=아직 작업 중입니다.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Elder Lyren
+# -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=알겠습니다. 그래도 여기에 줄을 서고 싶으시면 그렇게 말씀하세요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=그럴게요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=흙이 마루판인 척 하는 것을 멈출 때까지 여관에 머물겠습니다. 그럼 부츠에 진흙이 묻은 벤치 뒤에 있는 나를 찾아주세요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=거기서 뵙겠습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=밭이 완성되면 농사 벤치로 가서 설치하겠습니다. 저를 찾아오시면 완료됩니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=퀘스트를 중단해야 합니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=계속 진행하겠습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=그 음모는 불만보다 더 많은 것을 제공할 것입니다. 마을이 성장하는 동안 계속해서 침대를 돌릴 것입니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=잘 자라세요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=지붕이 안정되면 저를 블록에 등록한 다음 저를 찾아주세요. 나는 두 발을 내 바닥에 놓고 이 일을 끝내고 싶습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=Count on it.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=내 서까래 아래 뿌리를 내리세요. 제가 원하던 크롭이네요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=반갑습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=해당 분야는 정직하게 작업합니다. 나는 아직도 여관의 문이 아닌 문을 원한다. 누구와도 같은 토큰입니다. 만들고 나서 선반에 올려주세요.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=만들겠습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=아직은 아닙니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=나무와 날씨는 시간이 걸립니다. 집 다 완성되면 나한테 배정하고 나머지는 나한테 말해줘.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=찾아갈게.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=나는 코린의 마루판에 균열이 생긴 숫자를 세며 내 이름이 적힌 행을 꿈꾸고 있다. 농장을 세우고, 울타리를 치고, 벤치를 놓으십시오. 기획 데스크에서 플롯 토큰을 제작하고 직원에게 배치한 후 요금을 지불하세요. 땅이 준비되면 농사 작업대에서 만나겠습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=건축하도록 하겠습니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=지금은 아닙니다.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.root.body=Irienne Mossmark. 흙은 어제 누가 소유했는지 상관하지 않습니다. 내일 무엇을 먹일지는 중요합니다. 따뜻한 그릇이 자존심을 이긴다는 것을 알기 위해 코린의 바닥에서 충분한 밤을 잤습니다.
+aetherhaven.dialogue.aetherhaven_farmer.root.c0=당신은 당신의 장소에 대해 이야기하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=당신의 이름이 선반에 있습니다. 듣고 싶으실 거라 생각했어요.
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=집이 아직 올라가고 있어요.
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=농장에서 먹이를 주는 걸 보니 반가워요.
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=농장은 준비가 다 됐어요.
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=밭에 관해서는...
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=할 수 있다고 하더군요. 마을에 있는 농부를 이용하세요.
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=좀 쉬세요.
+aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Irienne Mossmark
+# -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=그럼 그 땅이 당신 것이 될 때까지 주전자를 여기에 보관하겠습니다. 내 이름이 선반에 올라가면 나를 찾아오세요. 합의가 이루어지기 전에 악수를 하고 싶습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=기대해 보세요.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=저기요. 낯선 사람을 위한 난로이자 나에게 속한 걸쇠. 그것은 열쇠 모양보다 더 가치가 있습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=당신은 그것을 얻었습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=나는 마을 전체에 수프를 부어주겠지만, 나 자신이 엉망이 되면 닫히는 문을 원합니다. 다른 사람과 동일한 하우스 토큰입니다. 만들고, 세워지면 블록 위에 올려주세요.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=내가 만들겠습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=다음번에.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=Clay는 자체 속도로 건조됩니다. 집이 완성되면 저를 선반에 앉혀주시고 와서 말씀해 주시면 이 책을 마무리할 수 있습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=알려드리겠습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=사람들이 지나갈 수 있도록 두 자리를 마련해 두었습니다. 상인, 땜장이, 마을의 누구든지 지원할 수 있습니다. 그들을 멀리하면 대부분의 밤에는 하늘 아래서 잠을 잡니다. 그것은 자존심이 아닙니다. 그것은 수학입니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=말이 됩니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=바람을 피해 안으로 들어가세요. 저는 코린이에요. 나는 이 난로를 관리하며, 당신이 우리 지붕 아래 있는 동안 우리가 감당할 수 있는 만큼 음식을 먹여줄 것입니다. 바깥 세상이 그 방법을 잊어버릴 때에도 그것은 여전히 ​​중요합니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=게스트 베드는 어떻게 작동합니까?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=당신은 당신만의 진짜 방을 원했습니다.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=집 선반에 당신을 등록했습니다. 제게서 들으셔야 할 것 같았어요.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=귀하의 집은 아직도 잘 돌아가고 있습니다. 제가 할게요.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=가서 냄비를 저어드릴게요.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
+# -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.root.body=Vex Sunderlane. 나는 폐물을 사고, 희망을 팔고, 동전을 두 번 센다. 제대로 작동하는 난로를 갖춘 여관은 이미 수 마일에 걸쳐 최고의 상점이 되었습니다. 그 밖의 모든 것은 협상입니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=상품(금화)을 찾아보세요.
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=집을 갖고 싶다고 말씀하셨습니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=당신을 원장에 올려 놓았습니다. 종이는 현실과 일치해야 합니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=귀하의 집은 여전히 ​​더미 위에 있습니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c5=여기서 거래하는 것을 보니 반갑습니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=판매가 시작되었습니다. 보러 오세요.
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=스톨 구축에 대해...
+aetherhaven.dialogue.aetherhaven_merchant.root.c8=스톨 공간을 찾아달라고 요청하셨습니다.
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=바람에 지갑을 닫아 두세요.
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=Fair. 마음이 바뀌시면 제안은 그대로 유지됩니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=감사합니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=노점이 세워질 때까지 Corin's에서 캠핑하겠습니다. 도랑보다 안전하고, 국물이 더 맛있습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=일어나면 뵙겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=가게가 지어지면 직접 가서 가게를 열겠습니다. 저를 찾아오시면 마무리하겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=퀘스트를 중단해야 합니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=계속 작업하겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=Stall은 정직해 보입니다. 처음에는 거래가 얇아질 것입니다. 우리는 유지할 가치가 있는 모든 것과 마찬가지로 천천히 성장시킵니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=여기 있습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=문이 흔들리면 블록에 내 이름을 적고 나를 찾으세요. 나는 잉크뿐만 아니라 이야기를 원합니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=둘 다 얻을 수 있습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=저기요. 나의 노크를 알아주는 문. 꽉 찬 금고보다 좋습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=즐기세요.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=Stock은 선반에 속합니다. 내 부츠는 건조한 곳에 속해 있어요. 마을의 나머지 부분과 같은 집 토큰입니다. 지어지면 등록해주세요.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=집을 지을게요.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=다음번에.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=집은 계절에 따라 다릅니다. 완료하고 저에게 할당한 다음 다시 오시면 장부의 균형을 맞추겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=돌아오겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=기댈 수 있는 작은 지붕과 카운터가 필요합니다. 내가 건네주는 토큰을 들고 있는 동안 직원과 함께 놓습니다. 재료가 문제입니다. 못이 잡힐 때 카운터를 운영하겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=만드겠습니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=지금은 아닙니다.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Vex Sunderlane
+# -- Tree id: aetherhaven_priestess (Serah Thornwell) --
+aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. 나는 이 마을을 위한 가이아의 의식을 이끌고 있습니다. 여관은 내 머리 위의 지붕이고 감사하지만 저녁 식사와 카드 게임 사이에 끼어 서비스를 운영할 수는 없습니다. 밖에는 진짜 제단이 필요해요. 길, 의자 몇 개, 그리고 사람들이 부엌 연기 때문에 숨을 멈추지 않고 기도할 수 있는 조각상도 필요해요.
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=당신은 집에 대해 이야기하고 싶었습니다.
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=당신은 지금 선반에 있습니다. 알아두셔야 할 것 같았습니다.
+aetherhaven.dialogue.aetherhaven_priestess.root.c2=집은 아직 완성되지 않았습니다.
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=제단은 어떻게 되어가고 있나요?
+aetherhaven.dialogue.aetherhaven_priestess.root.c4=제단 터는 준비되어 있습니다.
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=축복에 대해서...
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=땅이 필요하다고 하셨습니다. Gaia를 위해.
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=그것에 맡기겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=어려운 감정은 없습니다. 그래도 마을에 제단을 올리고 싶으면 다시 물어보세요.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=알겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=제단이 세워질 때까지 여관에 머물겠습니다. 그럼 동상 앞에서 저를 찾아주시고 축복을 마치겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=거기서 뵙겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=제단이 세워지면 동상 쪽으로 걸어가겠습니다. 저를 찾아오시면 완료라고 하겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=퀘스트를 취소해야 합니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=아직 작업 중입니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=제단이 완료되었습니다. 감사합니다. 마을이 성장함에 따라 이곳에서 땅을 가꾸고 제사를 지내겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=행운을 빕니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=집이 완공되면 안에 있는 관리 구역에 내 이름을 적고 저를 찾아오세요. 목록을 읽는 것이 아니라 직접 말씀하시는 것을 듣고 싶습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=그럴 것입니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=좋아요. 실제로 내 지붕입니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=충분합니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=제단은 모두를 위한 것입니다. 나는 여전히 남들과 마찬가지로 나만의 작은 집을 갖고 싶다. 그래서 영원히 여관 홀에서 살고 있는 것은 아니다. 일반적인 토큰에서 빌드한 다음, 작동되면 관리 블록에 나를 등록하십시오.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=집을 스테이크하겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=다음 시간에.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=이 작업에는 시간이 걸립니다. 집이 다 완성되면 저를 블록에 등록하고 와서 얘기하세요. 그러면 우리는 끝납니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=돌아오겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=가이아 제단을 세우세요. 길, 의자, 내가 서 있고 사람들이 앉을 수 있는 조각상입니다. 기획 데스크에서 토큰을 제작하여 직원에게 맡기고 요금을 지불하세요. 완공되면 동상에서 저를 만나서 제대로 축복해드리겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=우리가 건설하겠습니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=지금은 아닙니다.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# -- Tree id: aetherhaven_visitor_elder (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=통과하시는 것을 환영합니다. 그러나 이 헌장은 귀하의 것이 아닙니다. 도와주실 생각이라면 먼저 이곳에 거주하는 분들의 환영을 받아야 합니다.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=이해합니다.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_visitor_generic (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=좋은 하루 되세요, 여행자님. 만약 당신이 이 정착지에 속하지 않는다면, 이곳에 속한 현지인들과 대화해보세요. 내 손은 우리 자신의 일로 가득 차 있습니다.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Farewell.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Villager
+# -- Tree id: aetherhaven_visitor_inn (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=난로는 따뜻하지만 장부는 마을 사람들과 손님을 위한 것입니다. 초대받으면 다시 오십시오.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=괜찮습니다.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Innkeeper
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=이 수리를 하기에는 지갑이 너무 가벼워졌습니다.
+aetherhaven.blacksmith.repair.success={itemName}이(가) 다시 완전해졌습니다. 새것처럼 좋아요.
+commands.aetherhaven.dialogue.desc=ID로 대화 트리 열기(테스트용)
+commands.aetherhaven.dialogue.treeId.desc=대화 트리 ID(예: aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=선택 항목 노드 ID(기본값: 루트)
+aetherhaven.interaction.dialogue=말하려면 [{key}]을 누르세요
+npcRoles.Aetherhaven_Test_Villager.name=Dialogue Test 주민

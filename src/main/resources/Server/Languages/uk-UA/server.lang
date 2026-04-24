@@ -1,0 +1,1135 @@
+# Aetherhaven server-side language strings
+#
+# Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
+# Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
+# portals, big town/plot UI, charter, reputation miles, plot admin, commands (root),
+# items, NPC names, jewelry & town UIs, geodes, mirror, plot placement, commands (tab),
+# feasts, dialogue trees, blacksmith repair lines, help/footer.
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven не завантажено.
+aetherhaven.common.noTownInWorld=Немає для вас міста в цьому світі.
+aetherhaven.common.noQuestPermission=У вас немає дозволу на квест у цьому місті.
+aetherhaven.common.townNotFound=Місто не знайдено.
+aetherhaven.common.invalidTownLink=Недійсне посилання на місто.
+aetherhaven.common.treasuryNotLinked=Казначейство не пов'язане.
+aetherhaven.common.ownerOnlyTreasury=Користуватися скарбницею може лише власник міста.
+aetherhaven.common.townNotInThisWorld=Міста немає на цьому світі.
+aetherhaven.common.noMoveBuildingsPermission=Ви не маєте дозволу на перенесення будівель для цього міста.
+aetherhaven.common.buildingCannotMove=Цю будівлю не можна перемістити (відсутня ділянка або не завершена).
+aetherhaven.common.lookAtBlockPlot=Подивіться на блок, щоб встановити положення знака на графіку та почати попередній перегляд.
+aetherhaven.common.carryPlotToken=Щоб розпочати розміщення, візьміть із собою жетон ділянки для типу будівлі, зазначеного в інструменті (наприклад, жетон ділянки заїжджого двору).
+aetherhaven.common.statueNotLinked=Статуя не пов'язана з містом.
+aetherhaven.common.ownerOnlyStatue=Тільки власник міста може використовувати цю статую.
+aetherhaven.common.debugCommandsDisabled=Команди налагодження Aetherhaven вимкнено (встановіть DebugCommandsEnabled у config.json).
+aetherhaven.common.noPlayerId=Немає ідентифікатора гравця.
+aetherhaven.common.playersOnly=Тільки гравці.
+aetherhaven.common.invalidVillager=Інвалід с.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Ви вже є частиною міста в цьому світі. Залиште його перед заснуванням нового.
+aetherhaven.charter.townFounded=Місто засновано: {name}. Прибув староста села. Скористайтеся статутом, щоб перейменувати місто.
+aetherhaven.chartertown.info.notLinked=Статут ще не прив'язаний до міста.
+aetherhaven.chartertown.info.invalidTownId=Недійсний ідентифікатор міста в чартері.
+aetherhaven.chartertown.info.townDataMissing=Дані про місто не знайдено (див. журнал сервера).
+aetherhaven.chartertown.townInfoBlock=Назва міста: {name}\nІдентифікатор міста: {id}\nРівень: {tier}\nТериторія (радіус блоку): {radius}\nЧартер у {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Назва міста не може бути пустою.
+aetherhaven.chartertown.nameDuplicate=Цю назву вже використовує інше місто в цьому світі.
+aetherhaven.chartertown.nameSaved=Назва міста збережена: {name}
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=Ви не володієте містом у цьому світі.
+aetherhaven.town.resolve.noTownNamed=У цьому світі немає міста під назвою "{name}".
+aetherhaven.town.resolve.ownerOrOpOnly=Це може зробити тільки власник міста (або оператор з дозволу).
+aetherhaven.town.resolve.notInTown=Ви не в місті в цьому світі.
+aetherhaven.town.resolve.nameOnlyForOwner=Тільки власник міста (або оператор) може використовувати тут назву міста.
+aetherhaven.town.resolve.specifyTownName=Вкажіть назву міста або використовуйте назву міста, яким ви володієте.
+aetherhaven.town.resolve.specifyTown=Вкажіть назву міста.
+aetherhaven.town.resolve.adminOtherTown=Тільки оператори можуть націлюватися на місто іншого гравця за назвою.
+aetherhaven.town.invite.err.emptyName=Введіть ім'я гравця.
+aetherhaven.town.invite.err.targetOffline=Гравець "{name}" не онлайн у цьому світі.
+aetherhaven.town.invite.err.cannotInviteSelf=Ви не можете запросити себе.
+aetherhaven.town.invite.err.alreadyInTown=Цей гравець уже в місті в цьому світі.
+aetherhaven.town.invite.toTarget={inviter} запросив вас приєднатися до міста "{townDisplay}". Введіть /aetherhaven town прийняти {townDisplay} або /aetherhaven town відмовитися {townDisplay}
+aetherhaven.town.invite.sent=Запрошення надіслано до {name}.
+aetherhaven.town.kick.err.mustBeOnline=Гравець має бути онлайн, щоб виконати удар по імені.
+aetherhaven.town.kick.err.cannotRemoveOwner=Неможливо видалити власника міста.
+aetherhaven.town.kick.err.notMember=Цей гравець не є членом цього міста.
+aetherhaven.town.kick.removed=Вилучено {name} з міста.
+aetherhaven.town.kick.removedYou=Вас видалили з міста "{town}".
+aetherhaven.town.kick.removedGeneric=Вилучено учасника з міста.
+aetherhaven.town.role.err.ownerAlwaysFull=Власник завжди має повні дозволи.
+aetherhaven.town.role.set=Установіть для {name} роль {role}.
+aetherhaven.town.accept.err.noSuchTown=Жодного міста з такою назвою.
+aetherhaven.town.accept.err.noInvite=У вас немає незавершених запрошень для цього міста.
+aetherhaven.town.accept.err.noInvites=У вас немає незавершених запрошень до міста.
+aetherhaven.town.accept.err.alreadyInTown=Ви вже в місті.
+aetherhaven.town.accept.joined=Ви приєдналися до "{town}".
+aetherhaven.town.decline.noPending=Немає незавершених запрошень для цього міста.
+aetherhaven.town.decline.noInvites=У вас немає незавершених запрошень до міста.
+aetherhaven.town.decline.done=Запрошення відхилено.
+aetherhaven.town.rolecmd.playerMustBeOnline=Гравець повинен бути онлайн.
+aetherhaven.town.rolecmd.roleInvalid=Роль має бути BUILD, QUEST або BOTH.
+aetherhaven.town.leave.notInTown=Ви не в місті.
+aetherhaven.town.leave.ownerCannotLeave=Власники не можуть піти; передача права власності ще не реалізована.
+aetherhaven.town.leave.notMember=Ви не член цього міста.
+aetherhaven.town.leave.left=Ви залишили "{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=БУДУВАТИ
+aetherhaven.town.memberRole.QUEST=КВЕСТ
+aetherhaven.town.memberRole.BOTH=ОБИДВА
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Зберігаються золоті монети: {count}
+aetherhaven.ui.treasury.depositNoCoins=У вас немає золотих монет для депозиту.
+aetherhaven.ui.treasury.depositRemoveFailed=Не вдалося видалити монети з інвентарю.
+aetherhaven.ui.treasury.deposited=Внесено {count} золотих монет.
+aetherhaven.ui.treasury.makeRoom=Звільніть місце у своєму інвентарі.
+aetherhaven.ui.treasury.couldNotAddCoins=Не вдалося додати монети.
+aetherhaven.ui.treasury.withdrew=Знято {count} золотих монет.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Розподіл податків (лише завантажені блоки; незавантажені резиденти вносять 0 до симуляції):
+aetherhaven.ui.treasury.debug.titheNoHall=Десятина: у цьому місті немає повної ратуші.
+aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (без завантажених резидентів або 0 з математики політики). Unload/needs/breakdown: /aetherhaven tax detail
+aetherhaven.ui.treasury.debug.titheApplied=Застосовується десятина: +{amount} золота до скарбниці (ті самі правила, що й ранковий збір).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) комфорт={comfort} золото={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=Вам потрібне місто в цьому світі, щоб відстежувати квести.
+aetherhaven.ui.questJournal.noPermission=Ви не маєте дозволу керувати міськими квестами.
+aetherhaven.ui.questJournal.noActive=Немає активних квестів.
+aetherhaven.ui.questJournal.hint=Торкніться квесту, щоб переглянути деталі. × видаляє його з вашого журналу (ви можете взяти його знову у дарувальника).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Діалог
+aetherhaven.ui.dialogue.unknown=Невідомий діалог: {id}
+aetherhaven.ui.dialogue.missingNode=Відсутній вузол: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=будівля
+aetherhaven.ui.plotConstruction.plotSignTitle=Знак ділянки
+aetherhaven.ui.plotConstruction.noConstruction=На цій ділянці будівництво не налаштоване.
+aetherhaven.ui.plotConstruction.assignResidentHint=Призначте жителя села, який живе тут (завершує квест свого будинку, коли він збігається).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Непризначений
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Не вдалося завантажити дані гравця.
+aetherhaven.ui.plotConstruction.townDataMissing=Дані про місто для цього кварталу не знайдено.
+aetherhaven.ui.plotConstruction.clearedHome=Очистив домашнє завдання.
+aetherhaven.ui.plotConstruction.updatedHome=Домашнє завдання оновлено.
+aetherhaven.ui.plotConstruction.plotRemoved=Ділянку видалено, а маркер ділянки повернуто.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (мають {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Не вдалося завантажити дані гравця.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Недостатньо життєвої есенції (потрібно {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Не вдалося видалити есенцію життя з інвентарю.
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=Немає POI в радіусі цього блоку.
+aetherhaven.poi.noPoiSelected=POI не вибрано. Спочатку клацніть POI.
+aetherhaven.poi.selectedPoiGone=Вибрані POI більше не існують.
+aetherhaven.poi.moved=POI перенесено до {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=POI не вибрано. Спочатку клацніть блок POI.
+aetherhaven.poi.clearedInteractionTarget=Очищена мета взаємодії; NPC використовують центр блокування POI.
+aetherhaven.poi.setInteractionTarget=Установіть ціль взаємодії {x}, {y}, {z}.
+aetherhaven.poi.selected=Вибрано POI {id} на {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=Цільовий блок має відповідати очікуваному типу {type} для цього POI.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Перенесення будівлі…
+aetherhaven.plotSign.placed=Вивіска на ділянці розміщена.
+aetherhaven.plotSign.couldNotAdd=Не вдалося додати знак ділянки (інвентар повний?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Розмістіть пам'ятник засновнику на території вашого міста.
+aetherhaven.founder.cannotPlace=Пам'ятник засновнику тут поставити не можна.
+aetherhaven.founder.createFailed=Не вдалося створити статую засновника. Блок поставили; зламати його, щоб спробувати ще раз.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Ціль не житель міста Етерхейвен.
+aetherhaven.debug.autonomy.toggledOn=Налагодження автономності УВІМКНЕНО (DisplayCustom + VisPath). Накладка AH на паспортну табличку.
+aetherhaven.debug.autonomy.toggledOff=Налагодження автономії ВИМКНЕНО для цього селянина.
+aetherhaven.debug.autonomy.state=Налагодження автономії для цього селянина: {state}
+aetherhaven.debug.autonomy.cleared=Очищено налагодження автономії Aetherhaven для цього селянина.
+aetherhaven.debug.on=УВІМКНЕНО
+aetherhaven.debug.off=ВИМК
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Репутація без змін (вже {value}).
+aetherhaven.debug.rep.set=Встановити репутацію на {value} з пройденими віхами в черзі для діалогу (якщо роль вирішено).
+aetherhaven.debug.rep.milestonesHeader=Етапи репутації (ідентифікатор винагороди, роль, мінімальна репутація, вузол діалогу):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Отримано винагороду {id}.
+aetherhaven.debug.rep.targetInvalid=Інвалід с.
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=який має бути голодом, енергією чи веселощами (значення 0..{max}).
+aetherhaven.debug.needs.elderNoTown=Немає для вас міста в цьому світі (потрібен для Старійшини).
+aetherhaven.debug.needs.noElderUuid=Місто ще не має збереженого старшого UUID.
+aetherhaven.debug.needs.noMatch=Немає відповідного жителя села (спробуйте перевірити дескриптор, старійшину чи повний uuid).
+aetherhaven.debug.needs.multipleMatch=Кілька NPC відповідали цій ручці; використовувати повний uuid з inspect.
+aetherhaven.debug.needs.entityNotLoaded=Сутність не завантажена або не має VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Установити {which}={value} на {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Селяни з потребами (навантажені шматками). Набір за допомогою: /aetherhaven потребує набору <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | голод={hunger} енергія={energy} задоволення={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(без ручки)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Ділянки для м. {id}:
+aetherhaven.debug.plots.header={index}. ділянка={plotId} стан={state} тип={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Міста Aetherhaven у цьому світі: {count}
+aetherhaven.towns.entry={name} id={id} власник={owner} чартер={cx},{cy},{cz} ділянки={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.poi.invalidTownUuid=Недійсний UUID міста: {raw}
+aetherhaven.debug.poi.noTownArg=У вас немає міста в цьому світі (використовуйте аргумент UUID міста).
+aetherhaven.debug.poi.listHeader=POI для міста {town} ({count}):
+aetherhaven.debug.poi.listEmpty=У цьому місті ніхто не зареєстрований (добудуйте будівлю або перевірте pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} теги={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=Усі POI у світовому реєстрі ({count}):
+aetherhaven.debug.poi.dumpLine=місто={town} {x},{y},{z} kind={kind} blockTypeId={block} теги={tags} ділянка={plot}
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Квест розпочато: {name}
+aetherhaven.quest.completed=Квест виконано: {name}
+aetherhaven.quest.abandoned=Квест припинено: {name}
+aetherhaven.questdebug.granted=Надано активний квест: {name}
+aetherhaven.questdebug.completed=Виконано квест: {name}
+aetherhaven.questdebug.cleared=Видалено активний квест: {name}
+aetherhaven.questdebug.statusHeader=-- статус квесту --
+aetherhaven.questdebug.statusActive=активний:
+aetherhaven.questdebug.statusCompleted=завершено:
+aetherhaven.questdebug.statusEmpty=(жоден)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Для цього міста ще не зареєстровано ідентифікаторів сільських жителів.
+aetherhaven.villager.listHeader=Селяни міста: UUID сутності, джерело, роль, якщо завантажено (використовуйте UUID або ідентифікатор ролі з репутацією /aetherhaven … і місцезнаходження селянина):
+aetherhaven.villager.listRow={uuid} | {note} | роль: {role}
+aetherhaven.villager.locateNotLoaded=Цей селянин не завантажений (спробуйте підійти ближче або завантажити шматки).
+aetherhaven.villager.locateNoTransform=Немає перетворень для цієї сутності.
+aetherhaven.villager.locatePosition=Селянин {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Для телепорту потрібен оператор (група ОП).
+aetherhaven.villager.teleported=Телепортований.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=У цьому блоці немає контейнера елемента (фрагмент не завантажено, невідповідність наповнювача/основи або не блок контейнера).
+aetherhaven.debug.loot.bonusApplied=Бонусний кидок здобичі Aetherhaven застосовується до цього контейнера (примусово).
+aetherhaven.townsCommand.line={id} name="{name}" world={world} owner={owner} chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(жоден)
+aetherhaven.questdebug.statusActiveLine=Активний: {list}
+aetherhaven.questdebug.statusActiveEmpty=Активні: (немає)
+aetherhaven.questdebug.statusCompletedLine=Виконано: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Завершено: (жодного)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Вихід з Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Використовуйте для повернення в надземний світ.
+items.Aetherhaven_Portal_Enter.name=Шлюз Aetherhaven
+items.Aetherhaven_Portal_Enter.description=Використовуйте для входу в Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=Небесне село
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Будівництво
+aetherhaven.ui.plotmanagement.title=Управління міста
+aetherhaven.ui.plotmanagement.tabPlot=Сюжет
+aetherhaven.ui.plotmanagement.tabPlayers=Гравці
+aetherhaven.ui.plotmanagement.playersHint=Запрошуйте онлайн гравців по імені. Змініть ролі або видаліть учасників нижче.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Члени цього міста. Лише власник може запросити або змінити ролі.
+aetherhaven.ui.plotmanagement.inviteLabel=Запросити гравця
+aetherhaven.ui.plotmanagement.invitePlaceholder=Ім'я гравця (онлайн)
+aetherhaven.ui.plotmanagement.inviteSend=Надіслати запрошення
+aetherhaven.ui.plotmanagement.kick=видалити
+aetherhaven.ui.plotmanagement.roleOwner=Власник
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Інформація про ділянку
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Треба селянина
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Члени міста
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Перенесіть цю будівлю
+aetherhaven.ui.plotconstruction.materials=Матеріали
+aetherhaven.ui.plotconstruction.build=Будувати
+aetherhaven.ui.plotconstruction.pickUpPlot=Забрати ділянку (жетон повернення)
+aetherhaven.ui.plotconstruction.townNeeds=Міські потреби
+aetherhaven.ui.plotconstruction.moveBuilding=Перемістити будівлю
+aetherhaven.ui.plotconstruction.houseResident=Резидент
+aetherhaven.ui.plotconstruction.assignHouseResident=Встановити резидента
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Перенести будівлю?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Відкриває розміщення ділянки для вибору нової ділянки. Переїзд руйнує і відбудовує стару будівлю; спочатку приберіть цінні речі, домашніх тварин і незакріплені предмети всередині сліду.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Продовжити
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Скасувати
+
+aetherhaven.ui.villagerneeds.title=Міські потреби
+aetherhaven.ui.villagerneeds.hint=Виберіть жителя села, щоб переглянути метри та портрет.
+aetherhaven.ui.villagerneeds.hunger=Голод
+aetherhaven.ui.villagerneeds.energy=Енергія
+aetherhaven.ui.villagerneeds.fun=Весело
+aetherhaven.ui.villagerneeds.villagers=Селяни
+aetherhaven.ui.villagerneeds.noResidentsTracked=Жителів міста поки не відстежено.
+aetherhaven.ui.reputation.label=Репутація
+aetherhaven.reputation.dailyTalkGain=+{amount} репутація (щоденне привітання)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=Зміни до статуту
+aetherhaven.ui.charter.popHint=Мешканці (не відвідувачі): {count}. Рівень 1 відкривається на рівні 3; рівень 2 на 5.
+aetherhaven.ui.charter.tierMark1=я
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Рівень 1: Десятинний стиль
+aetherhaven.ui.charter.tier2=Рівень 2: фокус міста
+aetherhaven.ui.charter.t1.perCapitaShort=На душу населення
+aetherhaven.ui.charter.t1.happinessShort=Щастя-зважене
+aetherhaven.ui.charter.t1.perCapitaTooltip=Чисельність населення - перша десятина.\n\nРанкове золото залежить від кількості жителів, які проживають тут. Повсякденний комфорт усе ще трохи підштовхує загальну суму, але населення – це те, що рухає голкою.
+aetherhaven.ui.charter.t1.happinessTooltip=Потрібна перша десятина.\n\nРанкове золото більше залежить від того, наскільки добре мешканці нагодовані, відпочили та в гарному настрої. Кілька додаткових громадян важливіше, ніж підтримувати всіх у пристойній формі.
+aetherhaven.ui.charter.t2.miningShort=Майнінг
+aetherhaven.ui.charter.t2.loggingShort=Лісозаготівля
+aetherhaven.ui.charter.t2.farmingShort=Сільське господарство
+aetherhaven.ui.charter.t2.smithingShort=ковальство
+aetherhaven.ui.charter.t2.miningTooltip=Статут підтримує шахти.\n\nБонуси, пов’язані з виробництвом корисних копалин, нададуть перевагу цьому місту, коли вони прибудуть. Виберіть лише один фокус нижче: видобуток корисних копалин, лісозаготівля, землеробство чи ковальство.
+aetherhaven.ui.charter.t2.loggingTooltip=Хартія підтримує ліс.\n\nБонуси, пов’язані з вирубкою лісу та рубкою, нададуть перевагу цьому місту, коли вони прибудуть. Виберіть лише один фокус нижче: видобуток корисних копалин, лісозаготівля, землеробство чи ковальство.
+aetherhaven.ui.charter.t2.farmingTooltip=Хартія підтримує поля.\n\nЯкщо у вашому місті є готова сільськогосподарська ділянка, спринклери тут досягають трохи далі, із додатковими плитками на краю їх бризок. Виберіть лише один фокус нижче: видобуток корисних копалин, лісозаготівля, землеробство чи ковальство.
+aetherhaven.ui.charter.t2.smithingTooltip=Статут підтримує кузню.\n\nБонуси, пов’язані з ковальством і металообробкою, нададуть перевагу цьому місту, коли вони прибудуть. Виберіть лише один фокус нижче: видобуток корисних копалин, лісозаготівля, землеробство чи ковальство.
+aetherhaven.ui.charter.hint=Виберіть один варіант для кожного рівня. Вибір не можна змінити пізніше.
+aetherhaven.ui.charter.allChosen=Усі поправки обрані для цього міста.
+aetherhaven.ui.charter.noTown=Ви повинні належати до міста, щоб використовувати це.
+aetherhaven.ui.charter.noPermission=Ви не можете змінити статут цього міста.
+aetherhaven.ui.charter.err.locked=Ця поправка заблокована або вже вибрана.
+aetherhaven.ui.charter.err.invalid=Невірний вибір.
+aetherhaven.ui.charter.saved=Оновлені зміни до статуту.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Продовжити
+aetherhaven.reputation.reward.elder.50=Хартія не висічена в камені назавжди. Ось шаблон для таблиці поправок. Зробіть його у своєму бюро планування міста, коли дізнаєтеся схему. Розташуйте його в залі та оберіть, як буде виглядати міська ранкова десятина.
+aetherhaven.reputation.reward.elder.100=Ви перенесли це місце далі, ніж хтось просив. Візьміть цей фундаментний камінь: поставте пам’ятник засновнику там, де дозволяє статут. Казна пам'ятатиме.
+aetherhaven.reputation.reward.innkeeper.50=Ви достатньо довго підтримували цей зал у чистому стані, тому я довірю вам великий стіл. Ось шаблон банкету — створіть його в бюро містобудування, коли у вас буде схема, а потім установіть його в місті. Коли стіл буде готовий, можна скликати ще й вечерю: хліб, сир, пиріг і десятина, яка пісна на тиждень. Я буду спостерігати за залом, поки ви його подасте.
+aetherhaven.reputation.reward.innkeeper.75=Ви пройшли з нами досить довгих ночей. Коли ви розкладаєте Hearthglass Vigil, місто їсть повільніше та добріше протягом тижня. Риба, м'ясо, овочі та делікатніші страви для будь-яких потреб. Ось так ми тримаємо один одного на ногах.
+aetherhaven.reputation.reward.innkeeper.100=У вас і у цього міста тепер спільна назва. Berrycircle Concord — це легке коло тарілок: салат, фруктові шпажки, попкорн і тост, який приземляється. Подайте один раз, і вони запам’ятають вас тепліше.
+aetherhaven.reputation.reward.merchant.50=Ви дотримали слова і в негоду, і в хорошу. Ось викрійка лавки. Зробіть її у своєму бюро планування міста, коли схема буде у вас. Оцінки безкоштовні на лавці; Я досі стягую гроші за свій.
+aetherhaven.reputation.reward.merchant.100=Ви вклали в цю книгу достатньо золота, щоб отримати куточок ювеліра. Шаблон ваш. Побудуйте його на столі містобудування. Встановіть свій дорогоцінний камінь, свій метал і життя, яке ви вливаєте, і виріб вийде справжнім.
+aetherhaven.reputation.reward.farmer.25=Ви заслужили мою довіру в рядах. Я намалював залізну бризку. Зробіть його на лавці для ферм, коли у вас є водна есенція та залізо.
+aetherhaven.reputation.reward.farmer.50=Ось модель торію: ширший охоплення, той самий ритм світанку. Вкладка «Сільське господарство» на лавці покаже його, коли ви дізнаєтеся схему.
+aetherhaven.reputation.reward.farmer.75=Кобальт краще тримає тиск. Ця сторінка розблоковує третій рівень спринклерів, ще один хороший замочування на світанку.
+aetherhaven.reputation.reward.farmer.100=Адамантит і есенція: останній аркуш у наборі. Розмістіть їх обережно. Міські поля нап’ються на світанку.
+aetherhaven.reputation.reward.blacksmith.25=Камінь на розчин, камінь на терпіння. У вас є обидва, і це видно.
+aetherhaven.reputation.reward.blacksmith.50=Ви заслужили довіру кузні. Ось схема ковадла для геоди. Зробіть його за столом містобудування, коли у вас є грати та камінь.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Знак ділянки (адмін)
+aetherhaven.ui.plotadmin.construction=Будівництво
+aetherhaven.ui.plotadmin.give=Дати ділянку знак і закрити
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Команди мода Aetherhaven
+commands.aetherhaven.reload.desc=Перезавантажте каталоги config.json і Aetherhaven JSON з диска (творчий режим)
+commands.aetherhaven.reload.success=Перезавантажено конфігурацію та каталоги активів Aetherhaven.
+commands.aetherhaven.reload.failure=Не вдалося перезавантажити: {detail}
+commands.aetherhaven.reload.noPlugin=Плагін Aetherhaven не завантажується.
+commands.aetherhaven.plot.desc=Відкрити інтерфейс адміністратора знака ділянки (вибрати конструкцію, отримати предмет)
+commands.aetherhaven.starterkit.desc=Подаруйте собі стартовий набір Aetherhaven (ділянка, щоденник, статут, жетон трактиру, бюро містобудування; творчий режим)
+commands.aetherhaven.starterkit.success=Стартовий набір додано до вашого інвентарю.
+commands.aetherhaven.starterkit.partial=Частково надано стартовий комплект; {failed} предмет(ів) не підійшло (звільніть місце для інвентарю).
+
+commands.aetherhaven.exportskin.desc=Експортуйте шкіру аватара як модель JSON (батьківський: гравець)
+commands.aetherhaven.exportskin.other.desc=Експортуйте скін аватара іншого гравця як модель JSON
+commands.aetherhaven.exportskin.arg.path=Додатковий вихідний шлях до файлу (за замовчуванням: дані плагіна/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=Для цього гравця не доступний скін персонажа.
+commands.aetherhaven.exportskin.invalidSkin=Помилка перевірки оформлення: {detail}
+commands.aetherhaven.exportskin.resolveError=Не вдалося вирішити вкладення шкіри в модель: {detail}
+commands.aetherhaven.exportskin.ioError=Не вдалося записати {path}: {detail}
+commands.aetherhaven.exportskin.success=Записав модель JSON до {path}
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Знак ділянки
+items.Aetherhaven_Plot_Sign.description=Позначає, де можна побудувати збірний будинок. Використовуйте /aetherhaven plot для налаштування.
+
+items.Aetherhaven_Charter.name=Статут міста
+items.Aetherhaven_Charter.description=Місце заснування міста. Кожен гравець може мати одне місто на світ. Використовуйте для відкриття інформації про місто.
+
+items.Aetherhaven_Town_Planning_Desk.name=Містобудівний стіл
+items.Aetherhaven_Town_Planning_Desk.description=Створіть статути міст, посох розміщення ділянок, журнал квестів, ковадло геоди, таблицю поправок до статуту та жетони ділянок. Побудуйте один на верстаку.
+items.Aetherhaven_Charter_Amendments_Table.name=Таблиця змін до статуту
+items.Aetherhaven_Charter_Amendments_Table.description=Записує, як рахується міська десятина і якій торгівлі надає перевагу статут. Використовуйте для відкриття поправок, якщо їх підтримає ваше населення. Ремесло у вашому бюро планування міста; Ви повинні знати схему.
+items.Aetherhaven_Banquet_Table.name=Банкетний стіл
+items.Aetherhaven_Banquet_Table.description=Довгий стіл для міських застіль. Розмістіть на своїй території та використовуйте для обслуговування громадянського свята. Ремесло в бюро містобудування, коли хтось у місті поділиться шаблоном.
+items.Aetherhaven_Founder_Monument.name=Пам'ятник засновнику
+items.Aetherhaven_Founder_Monument.description=Кам'яний постамент із зображенням засновника. Місце на території міста, щоб вшанувати їх; ранкова частка казначейства трохи зростає, поки вона стоїть. Лише один на місто.
+
+benchCategories.aetherhaven.town_planning=Містобудування
+benchCategories.aetherhaven.plot_tokens=Ділянка жетонів
+
+items.Aetherhaven_Plot_Placement_Tool.name=Персонал розміщення ділянки
+items.Aetherhaven_Plot_Placement_Tool.description=Зберігайте відповідний жетон сюжету у своїх сумках. Використовуйте цей посох, цілячись у землю, щоб побачити привид будівлі. Підштовхніть і поверніть його, доки він не підійде, а потім підтвердьте, щоб розбити ділянку. Скасуйте, щоб очистити попередній перегляд і знову використати посох, коли вам потрібно інше місце.
+
+items.Aetherhaven_Poi_Tool.name=Інструмент налагодження POI
+items.Aetherhaven_Poi_Tool.description=Показує POI міста під час утримання (дозвіл: aetherhaven.poi.tool). Основний: виберіть найближчий POI. Другорядний: перемістіть прив’язку POI до цього блоку. Використовуйте: встановити/очистити цільовий шлях автономії для вибраного POI (ще раз клацніть блок POI, щоб очистити).
+items.Aetherhaven_Poi_Tool.legendTitle=Інструмент POI
+items.Aetherhaven_Poi_Tool.legendPrimary=Основний: виберіть найближчий POI біля кварталу
+items.Aetherhaven_Poi_Tool.legendSecondary=Другорядний: перемістити вибрані POI до блоку
+items.Aetherhaven_Poi_Tool.legendUse=Використовувати: встановити цільовий шлях NPC для вибраного POI (Використовувати для очищення блоку POI)
+
+aetherhaven.poiTool.legendTitle=Інструмент POI
+aetherhaven.poiTool.legendPrimary=Основний: виберіть найближчий POI біля кварталу
+aetherhaven.poiTool.legendSecondary=Другорядний: перемістити вибрані POI до блоку
+aetherhaven.poiTool.legendUse=Використовувати: встановити цільовий шлях NPC для вибраного POI (Використовувати для очищення блоку POI)
+
+items.Aetherhaven_Plot_Token_Inn.name=Ділянка корчми
+items.Aetherhaven_Plot_Token_Inn.description=Необхідно в інвентарі, щоб використовувати посох розміщення ділянки для відбитку корчми.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=Жетона ділянки ринкової лавки
+items.Aetherhaven_Plot_Token_Market_Stall.description=Обов’язковий для розміщення торгового лотка відбиток ділянки від персоналу розміщення ділянки.
+
+items.Aetherhaven_Plot_Token_Farm.name=Фермерська ділянка жетон
+items.Aetherhaven_Plot_Token_Farm.description=Необхідно розмістити відбиток ділянки ферми від персоналу розміщення ділянки.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Жетона ділянки ковальської майстерні
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Необхідно розмістити слід ковальської майстерні від персоналу розміщення ділянки.
+
+items.Aetherhaven_Plot_Token_Park.name=Жетон паркової ділянки
+items.Aetherhaven_Plot_Token_Park.description=Потрібний для розміщення парку слід від персоналу розміщення ділянки.
+
+items.Aetherhaven_Plot_Token_House.name=Жетон прибудинкової ділянки
+items.Aetherhaven_Plot_Token_House.description=Потрібне розміщення площі спільного будинку від робітників з розміщення ділянки.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Жетона ділянки ратуші
+items.Aetherhaven_Plot_Token_Town_Hall.description=Необхідно розмістити відбиток ратуші від персоналу розміщення ділянки.
+
+items.Aetherhaven_Gold_Coin.name=Золота монета
+items.Aetherhaven_Gold_Coin.description=Міська валюта зберігалася в скарбниці.
+
+items.Aetherhaven_Geode.name=Жеода
+items.Aetherhaven_Geode.description=Порожнистий камінь, який може містити кристали, дорогоцінні камені або руду. Заплатіть ковалю, щоб розламати його.
+
+items.Aetherhaven_Geode_Anvil.name=Жеодове ковадло
+items.Aetherhaven_Geode_Anvil.description=Відкриває геоди без ковальської винагороди. Місце і використання; Ви повинні знати схему, щоб створити її у відділі містобудування.
+
+barter.aetherhaven_vex.title=Щоденний запас Vex
+
+items.Aetherhaven_Treasury.name=Міська скарбниця
+items.Aetherhaven_Treasury.description=Тримає золоті монети міста. Використовуйте для внесення або зняття (власник міста).
+
+items.Aetherhaven_Quest_Journal.name=Міський журнал квестів
+items.Aetherhaven_Quest_Journal.description=Вторинне використання: огляд активних квестів міста. Старійшина може дати вам один після того, як заклад буде побудовано.
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Журнал квестів
+aetherhaven.ui.questjournal.hint=Щоб дізнатися деталі, виберіть квест.
+aetherhaven.ui.questjournal.abandon=Відмовитися
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Деталі квесту
+aetherhaven.ui.questjournal.detailPlaceholderBody=Виберіть квест вище.
+
+items.Aetherhaven_Management_Block.name=Полиця для архівів міста
+items.Aetherhaven_Management_Block.description=Службова полиця для готового будинку. Відкриває статус будівництва для своєї ділянки.
+
+items.Aetherhaven_Sprinkler_Iron.name=Залізний спринклер
+items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблений ґрунт на один блок нижче в площі 3×3. Запускається один раз кожного ранку в грі. Найменше покриття.
+items.Aetherhaven_Sprinkler_Thorium.name=Торієвий спринклер
+items.Aetherhaven_Sprinkler_Thorium.description=Поливає оброблений ґрунт на один блок нижче на площі 5×5. Один раз кожного ранку в грі. Більший за залізо.
+items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовий спринклер
+items.Aetherhaven_Sprinkler_Cobalt.description=Поливає оброблений ґрунт на один блок нижче на площі 7×7. Один раз кожного ранку в грі. Широкий охоплення.
+items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовий розпилювач
+items.Aetherhaven_Sprinkler_Adamantite.description=Поливає оброблений ґрунт на один блок нижче в зоні 9×9. Один раз кожного ранку в грі. Найширший охоплення.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Старший Лірен
+npcRoles.Aetherhaven_Innkeeper.name=Корін Москап
+npcRoles.Aetherhaven_Merchant.name=Векс Сандерлейн
+npcRoles.Aetherhaven_Blacksmith.name=Гаррен Вейл
+npcRoles.Aetherhaven_Farmer.name=Ірієнн Моссмарк
+npcRoles.Aetherhaven_Priestess.name=Сера Торнуелл
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Жетона сюжету вівтаря Gaia
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Позначки, де можна побудувати префаб вівтаря Gaia. Ремесло на столі містобудування.
+
+items.Aetherhaven_Statue_of_Gaia.name=Статуя Геї
+items.Aetherhaven_Statue_of_Gaia.description=Благословенний образ для вівтаря. Власники міста можуть передзвонити зниклим мешканцям за допомогою life essence.
+
+# === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
+items.Aetherhaven_Ring_Silver_Zephyr.name=Срібна каблучка (Зефір)
+items.Aetherhaven_Ring_Silver_Topaz.name=Срібна каблучка (топаз)
+items.Aetherhaven_Ring_Silver_Emerald.name=Срібна каблучка (Смарагд)
+items.Aetherhaven_Ring_Silver_Diamond.name=Срібна каблучка (діамант)
+items.Aetherhaven_Ring_Silver_Sapphire.name=Срібна каблучка (сапфір)
+items.Aetherhaven_Ring_Silver_Ruby.name=Срібна каблучка (Рубін)
+items.Aetherhaven_Ring_Silver_Voidstone.name=Срібна каблучка (Voidstone)
+items.Aetherhaven_Ring_Gold_Zephyr.name=Золота каблучка (Зефір)
+items.Aetherhaven_Ring_Gold_Topaz.name=Золота каблучка (топаз)
+items.Aetherhaven_Ring_Gold_Emerald.name=Золота каблучка (Смарагд)
+items.Aetherhaven_Ring_Gold_Diamond.name=Золота каблучка (діамант)
+items.Aetherhaven_Ring_Gold_Sapphire.name=Золота каблучка (сапфір)
+items.Aetherhaven_Ring_Gold_Ruby.name=Золота каблучка (Рубін)
+items.Aetherhaven_Ring_Gold_Voidstone.name=Золота каблучка (Voidstone)
+items.Aetherhaven_Necklace_Silver_Zephyr.name=Срібне намисто (Зефір)
+items.Aetherhaven_Necklace_Silver_Topaz.name=Срібне намисто (топаз)
+items.Aetherhaven_Necklace_Silver_Emerald.name=Срібне намисто (Смарагд)
+items.Aetherhaven_Necklace_Silver_Diamond.name=Срібне намисто (діамант)
+items.Aetherhaven_Necklace_Silver_Sapphire.name=Срібне намисто (сапфір)
+items.Aetherhaven_Necklace_Silver_Ruby.name=Срібне намисто (Рубін)
+items.Aetherhaven_Necklace_Silver_Voidstone.name=Срібне намисто (Voidstone)
+items.Aetherhaven_Necklace_Gold_Zephyr.name=Золоте намисто (Зефір)
+items.Aetherhaven_Necklace_Gold_Topaz.name=Золоте намисто (топаз)
+items.Aetherhaven_Necklace_Gold_Emerald.name=Золоте намисто (Смарагд)
+items.Aetherhaven_Necklace_Gold_Diamond.name=Золоте намисто (діамант)
+items.Aetherhaven_Necklace_Gold_Sapphire.name=Золоте намисто (сапфір)
+items.Aetherhaven_Necklace_Gold_Ruby.name=Золоте намисто (Рубін)
+items.Aetherhaven_Necklace_Gold_Voidstone.name=Золоте намисто (Voidstone)
+items.Aetherhaven_Jewelry.genericDescription=Ювелірні вироби з прихованою спорідненістю. Екіпіруйте з ручного дзеркала; оцініть, щоб прочитати його справжні якості.
+items.Aetherhaven_Hand_Mirror.name=Ручне дзеркало
+items.Aetherhaven_Hand_Mirror.description=Відкриває ваше сховище коштовностей: дві каблучки та одне намисто з інвентарю.
+items.Aetherhaven_Appraisal_Bench.name=Таксаційний стенд
+items.Aetherhaven_Appraisal_Bench.description=Ідентифікує коштовності, які ви вже носите. Безкоштовне використання після розміщення.
+items.Aetherhaven_Jewelry_Crafting_Bench.name=Ювелірний верстак
+items.Aetherhaven_Jewelry_Crafting_Bench.description=Залізне ковадло для обробки деталей. Вивчайте схему в бюро містобудування. Додайте життєву есенцію за допомогою дорогоцінних злитків і гранованого дорогоцінного каменю, щоб виготовити прикраси.
+
+# === UI: Statue of Gaia (revival / resident list) ===
+aetherhaven.ui.gaiaStatue.title=Статуя Геї
+aetherhaven.ui.gaiaStatue.hint=Кожне відродження споживає {cost} життєвої есенції.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=У місті
+aetherhaven.ui.gaiaStatue.status.missing=геть
+aetherhaven.ui.gaiaStatue.reviveSuccess=На площу повертається нитка життя.
+aetherhaven.ui.gaiaStatue.reviveFailed=Благословення не взяла. Есенцію повернули.
+aetherhaven.ui.gaiaStatue.footer=Користуватися цим благословенням може лише власник міста. Біля статуї можна відкликати зниклих селян.
+aetherhaven.ui.gaiaStatue.revive=Оживити
+
+aetherhaven.profession.kind.elder=Старший
+aetherhaven.profession.kind.innkeeper=Корчмар
+aetherhaven.profession.kind.merchant=Торговець
+aetherhaven.profession.kind.farmer=фермер
+aetherhaven.profession.kind.blacksmith=Коваль
+aetherhaven.profession.kind.priestess=Жриця
+aetherhaven.profession.kind.unknown=Резидент
+
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Статут міста
+aetherhaven.ui.chartertown.townNameLabel=Відображувана назва міста
+aetherhaven.ui.chartertown.namePlaceholder=Введіть унікальну назву для свого міста
+aetherhaven.ui.chartertown.ownerOnlyHint=Лише власник міста може змінити відображену назву зі статуту.
+aetherhaven.ui.chartertown.saveTownName=Зберегти назву
+aetherhaven.ui.chartertown.dissolve=Розпустити місто
+aetherhaven.ui.chartertown.dissolveHint=Назавжди видаляє місто, усі будівлі, жителів села та цей статут. Не можна скасувати.
+aetherhaven.ui.chartertown.dissolveConfirmText=Ви впевнені? Це назавжди видаляє місто, видаляє всі будівлі та жителів села, а також знищує цей статут. Це неможливо скасувати.
+aetherhaven.ui.chartertown.dissolveConfirm=Так, розпустити місто
+aetherhaven.ui.chartertown.dissolveCancel=Скасувати
+aetherhaven.ui.chartertown.dissolved=Місто ліквідовано: будівлі розчищено, жителів села виселено, статут знищено.
+aetherhaven.ui.chartertown.moveCharter=Переїзд статут
+aetherhaven.ui.chartertown.moveCharterTooltip=Переїзд статут
+aetherhaven.ui.chartertown.moveCharterHint=Перенаправляє вашу територію на новий чартерний блок. Ви можете розмістити лише там, де кожна будівля все ще вписується в межі міста.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Ви розташуєте новий статут як розміщення ділянки (підштовхнути та підтвердити). Якщо будь-яка будівля опиниться за межами території, розміщення буде заблоковано.
+aetherhaven.ui.chartertown.moveCharterConfirm=Продовжити
+aetherhaven.ui.chartertown.moveCharterCancel=Скасувати
+aetherhaven.ui.chartertown.charterMoved=Статут перенесено. Тепер ваша територія зосереджена на новому статуті.
+aetherhaven.ui.chartertown.modalDissolveTitle=Розпустити місто?
+aetherhaven.ui.chartertown.modalMoveTitle=Перенести статут?
+aetherhaven.ui.chartertown.modalCancel=Скасувати
+
+# === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
+aetherhaven.ui.treasury.title=Міська скарбниця
+aetherhaven.ui.treasury.deposit=Внесіть усі золоті монети
+aetherhaven.ui.treasury.withdraw=Зняти золоті монети
+aetherhaven.ui.treasury.hint=Кожного ранку селяни, які знаходяться поруч і в гарному настрої, додають трохи золота. Гості корчми не враховуються.
+aetherhaven.ui.treasury.tabCoinsTooltip=Золото: баланс, депозит, зняття
+aetherhaven.ui.treasury.tabTitheTooltip=Подивіться, хто платить і чого чекати наступного ранку
+aetherhaven.ui.treasury.tax.intro=На світанку в міській скрині збирається трохи золота жителів села, які гра завантажила навколо вас. Зараз це {count} людей. (Щоб оновити цей список, пройдіться, щоб завантажити більше міста.)
+aetherhaven.ui.treasury.tax.policyShort.linear=Правило вашого міста: до {max} золота на людину, коли їжа, відпочинок і розваги є високими; менше, коли їх немає.
+aetherhaven.ui.treasury.tax.policyShort.perCapita=Правило вашого міста: кожен платить невелику базову суму ({flatPct}% від обмеження) навіть у поганий день, до {max} золота, коли в людей все добре.
+aetherhaven.ui.treasury.tax.policyShort.happiness=Правило вашого міста: сварливі селяни платять набагато менше; при повній потребі кожна особа може заплатити до {max} золота (налаштовано з {exp}).
+aetherhaven.ui.treasury.tax.hallMissing=Спочатку побудуйте ратушу — тоді можна збирати ранкове золото.
+aetherhaven.ui.treasury.tax.sheetSubLabel=Від селян внизу
+aetherhaven.ui.treasury.tax.sheetFounderLabel=Бонус статуї засновника ({mult})
+aetherhaven.ui.treasury.tax.sheetFeastLabel=Бонус від бенкету Steward's Ledger ({mult})
+aetherhaven.ui.treasury.tax.sheetTotalLabel=Про те, що ти отримаєш наступного ранку
+aetherhaven.ui.treasury.tax.residentsHeader=Жителі села в цьому списку
+aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.footerMore=Тут поміщається лише {shown} з {total} жителів. Завантажте більше міста та відкрийте це знову, щоб побачити решту.
+
+# === UI: open geodes (blacksmith) + result / error lines ===
+aetherhaven.ui.geodeopen.title=Відкриті геоди
+aetherhaven.ui.geodeopen.hint=5 золотих монет за геоду. Натисніть рядок, щоб відкрити його. Скористайтеся Назад, коли закінчите.
+aetherhaven.ui.geodeopen.hintAnvil=Без плати за золото. Клацніть рядок, щоб відкрити одну геодезу. Скористайтеся Назад, коли закінчите.
+aetherhaven.ui.geodeopen.empty=Жодних геодів у вашій гарячій панелі, броні чи сховищі.
+
+aetherhaven.geode.row={count} × {itemName}
+aetherhaven.geode.open.insufficientGold=Вам потрібно 5 золотих монет на геоду.
+aetherhaven.geode.open.reward=Geode: {amount} × {itemName}
+aetherhaven.geode.open.failed=Не вдалося катати лут; ваші монети та жеоду повернули.
+aetherhaven.geode.open.noRoom=Недостатньо місця для інвентарю; ваші монети та жеоду повернули.
+
+# === UI: hand mirror (jewelry loadout) ===
+aetherhaven.ui.handmirror.title=Ювелірні вироби
+aetherhaven.ui.handmirror.equipment=Ношені
+aetherhaven.ui.handmirror.ring1=Кільце І
+aetherhaven.ui.handmirror.ring2=Кільце II
+aetherhaven.ui.handmirror.necklace=Кольє
+aetherhaven.ui.handmirror.inventory=Сумка
+aetherhaven.ui.handmirror.hotbar=Hotbar
+aetherhaven.ui.handmirror.storage=Зберігання
+aetherhaven.ui.handmirror.hint=Ювелірні вироби у вашій гарячій панелі та головному сховищі перераховані нижче. Використовуйте кнопки рядків, щоб відправити шматок у слот для каблучки чи намиста; зношені речі залишають вашу сумку. Торкніться піктограми вилучення під слотом, щоб повернути зношений елемент. Якщо сумка повна, прикраси не можна знімати.
+aetherhaven.ui.handmirror.listRow={itemName} × {qty}
+aetherhaven.ui.handmirror.rowRing1=Кільце І
+aetherhaven.ui.handmirror.rowRing2=Кільце II
+aetherhaven.ui.handmirror.rowNeck=Носити
+aetherhaven.ui.handmirror.inventoryFull=У вашому інвентарі недостатньо місця, щоб повернути цей предмет.
+aetherhaven.ui.handmirror.cannotEquipThere=Цей фрагмент не входить у вибраний слот.
+aetherhaven.ui.handmirror.equipFailed=Не вдалося перемістити елементи. Нічого не змінилося.
+aetherhaven.ui.handmirror.traitHidden=?
+aetherhaven.ui.handmirror.tooltipNotJewelry=З цього дзеркала можна споряджати тільки прикраси.
+aetherhaven.ui.handmirror.tooltipUnattuned=Спорідненість ювелірних виробів встановлюється під час першого налаштування цього виробу (виберіть його тут або оцініть в іншому місці).
+aetherhaven.ui.handmirror.tooltipHeader=Рідкість: {rarity}
+aetherhaven.ui.handmirror.tooltipUnappraised=Оцінка розкриває лише імена в бухгалтерських книгах. Чари вже в металі.
+aetherhaven.ui.handmirror.traitsColumnHeading=Зношені спорідненості
+aetherhaven.ui.handmirror.traitsRarityLine=Рідкість: {rarity}
+aetherhaven.ui.handmirror.traitsEmptySlot=(порожній)
+aetherhaven.ui.handmirror.traitsUnattuned=Ще не налаштований. Одягніть або оцініть, щоб визначити спорідненість.
+aetherhaven.ui.handmirror.traitFrom=· {gem} (грань {facet})
+aetherhaven.jewelry.gem.ZEPHYR=Зефір
+aetherhaven.jewelry.gem.TOPAZ=Топаз
+aetherhaven.jewelry.gem.EMERALD=Смарагдовий
+aetherhaven.jewelry.gem.DIAMOND=діамант
+aetherhaven.jewelry.gem.SAPPHIRE=Сапфір
+aetherhaven.jewelry.gem.RUBY=рубін
+aetherhaven.jewelry.gem.VOIDSTONE=Войдстоун
+
+# === UI: jewelry appraisal & workbench (forging) ===
+aetherhaven.ui.jewelryAppraisal.title=Оцініть прикраси
+aetherhaven.ui.jewelryAppraisal.hintPaid=Вартість {cost} золотих монет за штуку. Виберіть рядок, а потім оцініть, щоб виявити рідкість і особливості.
+aetherhaven.ui.jewelryAppraisal.hintFree=Без плати за золото. Виберіть рядок, а потім оцініть, щоб виявити рідкість і особливості.
+aetherhaven.ui.jewelryAppraisal.empty=Ніяких прикрас у вашій гарячій панелі, броні чи сховищі.
+aetherhaven.ui.jewelryAppraisal.pick=Виберіть фрагмент нижче.
+aetherhaven.ui.jewelryAppraisal.select=Виберіть
+aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.statusAppraised=оцінений
+aetherhaven.ui.jewelryAppraisal.statusUnidentified=неідентифікований
+aetherhaven.ui.jewelryAppraisal.selectedHeader=Вибрано: {itemName}
+aetherhaven.ui.jewelryAppraisal.unidentified=Ця частина ще не оцінена. Оцінка лише виявляє те, що вже вплетено в метал; це не змінює зачарування.
+aetherhaven.ui.jewelryAppraisal.rarityLine=Рідкість: {rarity}
+aetherhaven.ui.jewelryAppraisal.appraise=Оцінити
+aetherhaven.ui.jewelryAppraisal.insufficientGold=Для цієї оцінки вам потрібно більше золотих монет.
+aetherhaven.ui.jewelryAppraisal.payFailed=Платіж не пройшов; нічого не оцінили.
+aetherhaven.ui.jewelryAppraisal.done=Оцінено. Тепер бухгалтер може це прочитати.
+aetherhaven.ui.jewelryCrafting.title=Ювелірний верстак
+aetherhaven.ui.jewelryCrafting.hint=Працюйте зліва направо: виберіть форму та метал, виберіть дорогоцінний камінь, а потім наберіть, скільки есенції життя потрібно витратити. Візьміть готовий виріб із виходу, коли у вас буде місце в сумці. Для намиста використовується більше злитків, ніж для кілець.
+aetherhaven.ui.jewelryCrafting.colShape=Форма
+aetherhaven.ui.jewelryCrafting.colMetal=метал
+aetherhaven.ui.jewelryCrafting.colGem=Gem
+aetherhaven.ui.jewelryCrafting.colEssence=Суть провести
+aetherhaven.ui.jewelryCrafting.shapeRing=Кільце: менше злитків
+aetherhaven.ui.jewelryCrafting.shapeNeck=Намисто: більше злитків
+aetherhaven.ui.jewelryCrafting.ingotCost=Вартість рецепта: {n}× {metal}
+aetherhaven.ui.jewelryCrafting.metalGold=золотий злиток
+aetherhaven.ui.jewelryCrafting.metalSilver=срібний злиток
+aetherhaven.ui.jewelryCrafting.yourBags=Що ти несеш
+aetherhaven.ui.jewelryCrafting.invLine=Золоті злитки: {gold} · Срібло: {silver} · Есенція життя: {ess} · Концентрат: {conc}
+aetherhaven.ui.jewelryCrafting.invGem=Цей дорогоцінний камінь у мішках: {n}
+aetherhaven.ui.jewelryCrafting.gold=золото
+aetherhaven.ui.jewelryCrafting.silver=Срібло
+aetherhaven.ui.jewelryCrafting.goldActive=Золото (на)
+aetherhaven.ui.jewelryCrafting.silverActive=Срібло (на)
+aetherhaven.ui.jewelryCrafting.rarityNone=Ще недостатньо «очок» сутності. Додайте звичайну та/або концентровану есенцію за допомогою +, доки в попередньому перегляді не відобразиться рівень.
+aetherhaven.ui.jewelryCrafting.rarityLine=Вихід есенції: {rarity}
+aetherhaven.ui.jewelryCrafting.traitsLine=Можливі кидки статистики для цього дорогоцінного каменю: {stats}
+aetherhaven.ui.jewelryCrafting.craft=Кузня
+aetherhaven.ui.jewelryCrafting.take=Збирайте коштовності
+aetherhaven.ui.jewelryCrafting.takeHint=Покладіть кований шматок у свої сумки (вам потрібен вільний слот або кімната для штабеля).
+aetherhaven.ui.jewelryCrafting.cannotResolve=Встановіть дійсну кількість есенції, щоб досягти рівня, а потім повторіть спробу.
+aetherhaven.ui.jewelryCrafting.missingMats=Вам не вистачає батончика, дорогоцінного каменю чи есенції у ваших сумках.
+aetherhaven.ui.jewelryCrafting.done=Виріб остигає в руці, готовий до носіння.
+aetherhaven.ui.jewelryCrafting.craftedToSlot=Зроблена ковка. Перенесіть його до своїх сумок, коли будете готові.
+aetherhaven.ui.jewelryCrafting.taken=Поклав коштовності у ваші сумки.
+aetherhaven.ui.jewelryCrafting.noSpace=Спочатку звільніть місце у своїх сумках, а потім використовуйте «Збери прикраси».
+aetherhaven.ui.jewelryCrafting.takeFirst=Використовуйте «Зібрати ювелірні вироби» на готовому виробі, а потім знову зможете підробити.
+aetherhaven.ui.jewelryCrafting.noGemsDropdown=Немає гранованих дорогоцінних каменів у ваших сумках (першим знайдіть камені у світі)
+
+# === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
+aetherhaven.jewelry.traitLine={stat} {amount}
+aetherhaven.jewelry.stat.Health=Максимальне здоров'я
+aetherhaven.jewelry.stat.Mana=Макс мани
+aetherhaven.jewelry.stat.Stamina=Максимальна витривалість
+aetherhaven.jewelry.stat.Oxygen=Максимум кисню
+aetherhaven.jewelry.stat.Ammo=Макс патронів
+aetherhaven.jewelry.stat.SignatureEnergy=Підпис макс
+aetherhaven.jewelry.rarity.COMMON=Поширений
+aetherhaven.jewelry.rarity.UNCOMMON=Нечасто
+aetherhaven.jewelry.rarity.RARE=Рідкісний
+aetherhaven.jewelry.rarity.MYTHIC=Міфічний
+aetherhaven.jewelry.rarity.LEGENDARY=Легендарний
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Розміщення ділянки
+aetherhaven.ui.plotplacement.summary=Розміщення: {building}
+aetherhaven.ui.plotplacement.positionSection=Позиція та обертання
+aetherhaven.ui.plotplacement.tipsSection=Поради
+aetherhaven.ui.plotplacement.heightSection=Висота та поворот
+aetherhaven.ui.plotplacement.detailsBlock=Знак ділянки {sx}, {sy}, {sz} · Початок збірних {ox}, {oy}, {oz}\nКрок {step} з 4 (90° кожен)
+aetherhaven.ui.plotplacement.tipsControls=Escape закриває лише цю панель. Скасувати очищає попередній перегляд. Клацання правою кнопкою миші знову відкриває повітря; клацання правою кнопкою миші блоку не переміщує активний попередній перегляд.
+aetherhaven.ui.plotplacement.plotType=будівля
+aetherhaven.ui.plotplacement.moveLabel=Відрегулюйте положення
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Повернути на 90° (циклічна сторона)
+aetherhaven.ui.plotplacement.place=Місце ділянки знак
+aetherhaven.ui.plotplacement.placeMove=Перемістити будівлю
+aetherhaven.ui.plotplacement.moveWarningText=Переїзд руйнує та відбудовує старе місце. Спершу приберіть цінні речі, домашніх тварин і незакріплені предмети всередині будівлі. NPC міста, пов’язані з цим містом, захищені.
+aetherhaven.ui.plotplacement.moveConfirm=Підтвердити
+aetherhaven.ui.plotplacement.moveBack=Іди назад
+aetherhaven.ui.plotplacement.cancel=Скасувати попередній перегляд
+aetherhaven.ui.plotplacement.cameraSection=Камера
+aetherhaven.ui.plotplacement.cameraHint=Кадр з висоти пташиного польоту з’являється один раз, коли ви його вмикаєте (над попереднім переглядом), а потім залишається на місці, поки ви переміщуєте сюжет.
+aetherhaven.ui.plotplacement.birdsEye=Вид з висоти пташиного польоту
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Вигляд зверху вниз: початковою метою є центр попереднього перегляду. Зніміть прапорець, щоб повернутися до від першої особи. Використовуйте Pan, щоб пересунути перегляд.
+aetherhaven.ui.plotplacement.viewDistance=Відстань
+aetherhaven.ui.plotplacement.zoomOutTooltip=Дальша камера (ширший огляд сюжету)
+aetherhaven.ui.plotplacement.zoomInTooltip=Ближча камера (менший огляд, більше деталей)
+aetherhaven.ui.plotplacement.panLabel=Панорамна камера
+aetherhaven.ui.plotplacement.panXmTooltip=Перемістіть вид на один крок у бік -X
+aetherhaven.ui.plotplacement.panXpTooltip=Перемістіть перегляд на один крок у бік +X
+aetherhaven.ui.plotplacement.panZmTooltip=Перемістіть вид на один крок у бік -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Зміщення перегляду на один крок у бік +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=З висоти пташиного польоту: захід (-X). Від першої особи: стрейф ліворуч (відносно виду).
+aetherhaven.ui.plotplacement.moveXpTooltip=З висоти пташиного польоту: схід (+X). Від першої особи: стрейф праворуч (відносно виду).
+aetherhaven.ui.plotplacement.moveZmTooltip=З висоти пташиного польоту: північ (-Z). Від першої особи: рух вперед (відносно огляду).
+aetherhaven.ui.plotplacement.moveZpTooltip=З висоти пташиного польоту: південь (+Z). Від першої особи: переміщення назад (відносно виду).
+aetherhaven.ui.plotplacement.moveYmTooltip=Підштовхніть один блок вниз
+aetherhaven.ui.plotplacement.moveYpTooltip=Підштовхнути один блок вгору
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Переїзд статут
+aetherhaven.ui.charterrelocation.summary=Зміна статуту міста
+aetherhaven.ui.charterrelocation.details=Цільовий блок {sx}, {sy}, {sz} · Крок {step} з 4 (90°)
+aetherhaven.ui.charterrelocation.tips=Територія — це квадрат із шматками навколо статуту; кожна будівля повинна залишатися всередині після вашого підтвердження. Підштовхніть привида до нового місця, а потім помістіть його.
+aetherhaven.ui.charterrelocation.info=Територія - це квадрат із шматками навколо статуту. Усі ваші будівлі повинні залишатися в цій зоні після переїзду. Підштовхніть блок-привид до нової позиції чартеру, а потім підтвердьте.
+aetherhaven.ui.charterrelocation.place=Статут місця
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=Перелічіть міста Етерхавен у сучасному світі
+
+commands.aetherhaven.town.desc=Членство в місті: запрошення, ролі, вихід
+commands.aetherhaven.town.invite.desc=Запросіть онлайн гравця у своє місто
+commands.aetherhaven.town.invite.player.desc=Ім'я користувача гравця (має бути онлайн)
+commands.aetherhaven.town.accept.desc=Прийміть запрошення міста, що очікує на розгляд
+commands.aetherhaven.town.decline.desc=Відхилити запрошення міста, яке очікує на розгляд
+commands.aetherhaven.town.kick.desc=Видалити учасника зі свого міста
+commands.aetherhaven.town.kick.player.desc=Ім'я користувача учасника (має бути онлайн)
+commands.aetherhaven.town.role.desc=Встановити роль учасника (BUILD, QUEST або BOTH)
+commands.aetherhaven.town.role.player.desc=Ім'я користувача учасника (має бути онлайн)
+commands.aetherhaven.town.role.role.desc=БУДУВАЙТЕ, КВЕСТУЙТЕ або ОБИВА
+commands.aetherhaven.town.leave.desc=Покинути місто, членом якого ви є (не як власник)
+commands.aetherhaven.town.townName.desc=Додаткова відображувана назва міста (для кількох запрошень або адміністратора)
+
+commands.aetherhaven.poi.desc=Налагодження: команди POI (потрібно DebugCommandsEnabled)
+commands.aetherhaven.poi.list.desc=Список POI для міста (необов’язковий UUID міста або пропустіть / використовуйте \"я\" для свого міста)
+commands.aetherhaven.poi.town.desc=Місто UUID, або я, або пропустіть для міста абонента
+commands.aetherhaven.poi.dump.desc=Перелік усіх POI у цьому світовому реєстрі в пам’яті (будь-яке місто)
+
+commands.aetherhaven.plots.desc=Налагодження: список екземплярів графіка (потрібно DebugCommandsEnabled; використовуйте графіки, щоб уникнути зіткнення з графіком /aetherhaven)
+commands.aetherhaven.plots.list.desc=Перелічіть екземпляри ділянок для вашого міста
+
+commands.aetherhaven.needs.desc=Налагодження: потреби селян (потрібно DebugCommandsEnabled)
+commands.aetherhaven.needs.inspect.desc=Список сутностей у завантажених фрагментах, які мають VillagerNeeds
+commands.aetherhaven.needs.set.desc=Встановіть вимірювач потреб 0..100 (ціль: дескриптор від inspect, Elder або uuid)
+commands.aetherhaven.needs.target.desc=Ідентифікатор (наприклад, Villager_Elder_xxxxxxxx), Elder або UUID сутності
+commands.aetherhaven.needs.entity.desc=Застаріле; використовувати ціль (дескриптор, старший або uuid)
+commands.aetherhaven.needs.which.desc=голоду, енергії чи веселощів
+commands.aetherhaven.needs.value.desc=Значення від 0 до 100 (100 = повністю задоволений)
+
+commands.aetherhaven.tax.desc=Налагодження: ранковий податок казначейства (потрібно DebugCommandsEnabled)
+commands.aetherhaven.tax.breakdown.desc=Показати податкові рядки для кожного села та загальні суми для вашого міста (лише завантажені фрагменти)
+commands.aetherhaven.tax.now.desc=Застосувати ранкову десятину до скарбниці зараз (обминає ранковий час і день останнього збору; вимагає DebugCommandsEnabled)
+
+commands.aetherhaven.questdebug.desc=Налагодження: обхід квесту міста (потрібно DebugCommandsEnabled)
+commands.aetherhaven.questdebug.grant.desc=Позначте квест активним у вашому місті
+commands.aetherhaven.questdebug.complete.desc=Позначте квест у вашому місті як завершений
+commands.aetherhaven.questdebug.clear.desc=Видаліть квест зі списку активних у вашому місті
+commands.aetherhaven.questdebug.id.desc=Ідентифікатор квесту (за замовчуванням q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Показати активні та завершені квести для вашого міста (відображувана назва + ідентифікатор)
+
+commands.aetherhaven.reputation.desc=Налагодження: репутація (потрібно DebugCommandsEnabled)
+commands.aetherhaven.reputation.set.desc=Встановіть свою репутацію серед мешканців села та отримайте нагороди за діалог із долатими етапами
+commands.aetherhaven.reputation.villagerUuid.desc=UUID сутності NPC жителя села
+commands.aetherhaven.reputation.villagerTarget.desc=UUID жителя села або ідентифікатор ролі NPC у вашому місті (наприклад, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Репутація від 0 до 100
+commands.aetherhaven.reputation.reward.desc=Перелічіть визначення етапів або надайте одну винагороду безпосередньо
+commands.aetherhaven.reputation.reward.list.desc=Список віх репутації (необов’язково: фільтр за ідентифікатором ролі NPC)
+commands.aetherhaven.reputation.reward.roleFilter.desc=Ідентифікатор ролі NPC (наприклад, Aetherhaven_Merchant), щоб фільтрувати список
+commands.aetherhaven.reputation.reward.grant.desc=Надайте одну нагороду за етап (отримані бали); використовуйте список нагород для представників для ідентифікаторів
+commands.aetherhaven.reputation.rewardId.desc=Ідентифікатор винагороди за репутацію (наприклад, rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Налагодження: помічники жителів міста (потрібно DebugCommandsEnabled)
+commands.aetherhaven.villager.list.desc=Список UUID об’єктів NPC жителя міста (для команд репутації/локації)
+commands.aetherhaven.villager.locate.desc=Надрукувати позицію жителя міста; додатковий телепорт (лише для операторів)
+commands.aetherhaven.villager.uuid.desc=UUID сутності NPC жителя села
+commands.aetherhaven.villager.target.desc=UUID жителя села або ідентифікатор ролі NPC у вашому місті (наприклад, Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=правда для телепортації до жителя села (лише для операторів); або замість цього використовуйте --tp
+commands.aetherhaven.villager.tp_flag.desc=Телепорт до жителя села (тільки для операторів; те саме, що передача true)
+
+commands.aetherhaven.debug_autonomy.desc=Налагодження: накладення автономії селян (потрібно DebugCommandsEnabled)
+commands.aetherhaven.debug_autonomy.toggle.desc=Увімкнути налагодження автономії для жителя міста (подивіться на NPC або використовуйте --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Показати, чи ввімкнено налагодження автономії для цього селянина
+commands.aetherhaven.debug_autonomy.clear.desc=Очистити налагодження автономії Aetherhaven для цього селянина
+
+commands.aetherhaven.debug_lootchest.desc=Налагодження: бонусні скрині Aetherhaven кидаються на цільовий контейнер (потрібно DebugCommandsEnabled)
+commands.aetherhaven.debug_lootchest.fill.desc=Застосуйте вимушені коштовності, золото та рулони жетонів сюжету до контейнера предметів, який ви дивитесь
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Міські свята
+aetherhaven.ui.feast.noTown=Ви повинні належати до міста.
+aetherhaven.ui.feast.noPermission=Не можна влаштовувати бенкети для цього міста.
+aetherhaven.ui.feast.outsideTerritory=Стіл повинен стояти на території вашого міста.
+aetherhaven.ui.feast.activeTitle=Міське свято діє
+aetherhaven.ui.feast.noneActive=Жодне заплановане свято не активне. Виберіть свято ліворуч, щоб прочитати витрати та наслідки.
+aetherhaven.ui.feast.daysLeft=Залишилося днів (світанків): {days}
+aetherhaven.ui.feast.selectHint=Виберіть свято
+aetherhaven.ui.feast.ingredientsLabel=Інгредієнти
+aetherhaven.ui.feast.confirm=Влаштувати свято
+aetherhaven.ui.feast.locked=Ви ще не вивчили це свято. Проводьте час з городянами, поки хтось не проведе вас через це.
+aetherhaven.ui.feast.tooltipLocked=Замкнено, поки сусід не навчить вас цього бенкету. Допоможіть місту і продовжуйте спілкуватися з людьми, які готують для залу.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord знаходиться на відновленні (залишилося {days} світанкових днів).
+aetherhaven.ui.feast.began=Починається бенкет. Селяни збираються за столом.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven не завантажується на цьому сервері.
+aetherhaven.ui.feast.err.unknownFeast=Того свята немає.
+aetherhaven.ui.feast.err.invalidPlayer=Не вдалося перевірити ваш персонаж.
+aetherhaven.ui.feast.err.feastNotUnlocked=Ви ще не вивчили це свято. Збудуйте довіру в місті та прислухайтесь, коли хтось пропонує навчити.
+aetherhaven.ui.feast.err.timedFeastActive=Ще одне приурочене свято вже діє для цього міста.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Перш ніж подавати Berrycircle Concord, зачекайте, доки закінчиться поточне застілля.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord все ще на відновленні.
+aetherhaven.ui.feast.err.notEnoughIngredients=Вам не вистачає необхідних інгредієнтів.
+
+aetherhaven.feast.stewards.name=Вечеря стюарда
+aetherhaven.feast.stewards.description=Намажте хлібом, сиром і справжнім гарбузовим пирогом, щоб ранкова десятина була щедрою протягом тижня.
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=Смажена риба, варена нарізка та овочі, викладені як повільно горюча страва. На тиждень потреби селян згасають м'якше.
+aetherhaven.feast.berrycircle.name=Беррісеркл Конкорд
+aetherhaven.feast.berrycircle.description=Круг легких тарілок: ягідний салат, фруктові шашлички, попкорн для тостів. Сусіди запам'ятовують вас трохи добрішими за це. Зачекайте тиждень світанку, перш ніж знову подавати його.
+
+# === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
+# Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
+aetherhaven.dialogue.blacksmith.repairGear=Полагодити моє спорядження (платити золотими монетами)
+aetherhaven.dialogue.blacksmith.openGeodes=Зламати геоди (по 5 золотих)
+aetherhaven.dialogue.merchant.appraiseJewelry=Оцініть ювелірні вироби (по 10 золотих)
+
+# -- Tree id: aetherhaven_blacksmith (Garren Vale) --
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=Жодної образи. Якщо ви все ще хочете курити в місті, запитайте ще раз.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=Справедливо.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=Коли магазин буде побудований, я піду до збройової лави і налаштую. Знайдіть мене там, і ми закінчимо.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=Мені потрібно кинути квест.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=Я продовжу це робити.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=Суцільна лава. Тепло прийде, коли робота закінчиться. Ми більше не транспортуємо руду по карті. Ми використовуємо те, що ще дає ця земля.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=Добре забити.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=Коли місце буде готове, позначте моє ім’я на блоці всередині, а потім прийдіть мене знайти. Я хочу почути, як ти скажеш це вголос.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=Ви це почуєте.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=добре. Дах, що не пахне чужою тушонкою.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=Насолоджуйтесь цим.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=Магазин заробляє мені пухирі. Я ще хочу дах я не позичаю. Така ж прибудинкова ділянка, як у всіх. Зареєструйте мене, коли стіни справжні.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=Я поставлю будинок.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=Іншим разом.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=Залізо не поспішає. Коли будинок буде зроблено, зареєструйте мене, тоді приходьте говорити. Тоді ми квиткові.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=Зрозумів.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=Дошки Corin підходять для сну. Вони паршиві для замаху молотком. Я можу володіти ковальською майстернею зі стінами, прилавком і лавкою для зброї. Зробіть жетон ділянки на своєму столі планування, покладіть його своїм співробітникам і сплатіть знак. Коли він стане, зустрінь мене біля лавки.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=Ми побудуємо його.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=Не зараз.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=добре. Буду табором у корчмі, поки комин не скаже правду. Тоді знайдіть мене на лавці, і ми закриємо бухгалтерську книгу.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=До зустрічі.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Гаррен Вейл
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Гаррен Вейл. Вітер досить слабкий, щоб кузня могла себе поводити. Такий далекий метал має свої думки. Я тут, щоб сперечатися з цим.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=Ви хотіли поговорити про будинок.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=Ваше ім'я в блоці. Я подумав, що ти повинен це почути.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=Будинок ще добудовується.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=Приємно бачити, як ти працюєш зі сталлю.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=Цех побудований. Лавка готова.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=Про будівництво кузні...
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=Ви сказали, що тут потрібна справжня кузня.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=Бережіть пальці.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Гаррен Вейл
+# -- Tree id: aetherhaven_dialogue_test (QA / harness) --
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Умови лаб. Ви не повинні бачити прихований вибір. Ви повинні побачити сірий вибір. Використовуйте складені ворота, щоб продовжити.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Цей вибір прихований (буквально хибний).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Це має бути сірим.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(вимагає буквального значення true)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Передайте складене: НЕ false AND true
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR гілка (true OR false)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Дякуємо за тестування. До побачення!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=До побачення!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Виберіть нижче, щоб перейти до прощання, використовуючи дію переходу замість наступного.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=йти до прощання
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Дія входу в вузол просто дала вам одну грубу лопату (якщо у вас було місце в інвентарі). Виберіть варіант нижче, щоб отримати більше елементів.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Дайте мені 3 бруду, а потім продовжуйте.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Ласкаво просимо до системи діалогу Aetherhaven. Цей рядок спеціально залишається довгим, щоб ви могли перевірити макет і прокручування. Ваш вибір знаходиться під основним текстом.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Перейдіть до лабораторії умов.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Залишити (закінчити наступним нулем).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Залишити (явна близька дія).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Ви можете відкрити інтерфейс торгового бартеру Kweebec або перейти до заглушки.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Відкрити бартерний магазин Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Пропустіть магазин, перейдіть до заглушок
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Дії-заглушки: розблокувати досягнення та розпочати квест мають реєструватися, поки ці системи не існують.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Запустіть заглушки unlock_achievement + start_quest
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
+# -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Я Лірен. Я виступаю за хартію, яку ми підписали, коли помістили це місто на Orbis. Старі міста зникли. У нас є ця земля і люди, які вже тут, і прийде більше. Перш ніж ми почнемо закладати нові ділянки, мені потрібно, щоб ви вивчили землю навколо Етергавена: де вона достатньо рівна для будівництва, де тече вода, де ми можемо розмістити поля чи загальні землі пізніше. Зберігайте його практичним. Коли ви оглянете це місце, приходьте знову шукати мене.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Я огляну місцевість і доповім.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Старший Лірен
+# -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Ви отримуєте деякі з роботи, на яку ми вас відправляємо, і з торгівлі, коли хтось купує. Міський гаманець – це своє. Коли зал побудований, там живе скарбниця. Використовуйте блок, щоб покласти монету або витягнути її, якщо в статуті зазначено, що ви можете. Після цього щоранку трохи золота надходить у цю скарбницю від людей, які тут живуть, а не від відвідувачів. Скільки залежить від того, як вони тримаються. Якщо вони нагодовані, відпочили та в пристойному настрої, горщик почувається краще. Якщо вони тонко розтягнуті, це гірше. Це зберігає громадськість чесною.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Добре знати. дякую
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=Там. Справжній заїзд для людей, які інакше спали б неспокійно. Корін має ключ. Піди познайомся біля вогнища. Ви заробили більше, ніж завдяки подяці, але я почну з подяки.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Раді допомогти.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Коли стіни піднімуться, скористайтеся блоком керування та призначте мене резидентом. Тоді приходь знайти мене. Я хочу почути, як ти це говориш, а не читати це з полиці.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=Ви отримаєте обидва.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Потім це вирішується. Я маю дім за такими ж правилами, як і всі інші. Дякую, що виконали це.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Ласкаво просимо додому, Лірен.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=Зал піднявся і казна дихає. Статут дав нам правила для міста; це не дало мені ліжко. Я хочу, щоб такий же маленький будинок отримав будь-хто інший. Візьміть жетон, який я пропоную, заставте ділянку зі своїм персоналом, сплатіть матеріали та частку міста зі скарбниці, а потім покладіть моє ім’я на полицю управління, коли вона буде побудована. Я не забуду, хто звільнив для мене місце.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=я впораюся
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=Я ще не можу цього взяти на себе.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Приділіть час, який вам потрібен. Коли будинок буде готовий, зареєструйте мене в блоці, а потім приходьте і знайдіть мене, щоб ми закінчили це віч-на-віч.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=Я прийду, коли це буде зроблено.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=добре. Розмістіть ділянку заїзду разом зі своїм персоналом, сплатіть матеріали, вказані на табличці, і закінчіть будівництво. Коли буде дах і вогнище, приходь сам розказуй. Я буду чекати на слово.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=Я почну, як тільки зможу.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Коли дах витримає і вогнище розпалюється, повернись і скажи мені особисто. Я не поспішаю, але я не піду, доки в цьому місті не буде відповідного заїзду для тих, хто потребує ліжка.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=Я повернуся, коли він буде готовий.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=Статут досі діє, і я досі його дотримуюся. У нас немає запасного притулку, куди можна було б відправляти людей, тому першою справжньою будівлею тут має бути корчма: дах, вогнище та двері, які залишаються відчиненими для мандрівників і для наших рідних, коли дорога довга. Коли ви будете готові зробити це, скажіть це.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=Я за. Підіймемо корчму.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=Корчма все ще в моєму списку. Я хотів зареєструватися.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=Я залишу вас.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=Корчма закінчена. Корін повинен мати те, що йому потрібно.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=Про ратушу.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=Я поставив твоє ім'я на полицю. Ви повинні спочатку почути це від мене.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=Ваш будинок ще не зроблений, але я цим займаюся.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=Ви згадали, що хочете мати власний будинок.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=Будівництво ратуші ще триває.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=Ратуша піднялася.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=Як тут люди отримують золоті монети?
+aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Використовуйте жетон ратуші зі своїм персоналом, оплачуйте матеріали та будуйте його. Коли зал закінчиться, скажіть мені в обличчя. Я хочу побачити твоє обличчя, коли ти скажеш, що це зроблено.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=Я скажу тобі, коли все закінчиться.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=Там. У Етергавені є справжня ратуша: записи, скарбниця та кімната, де ми можемо зустрітися, не кричачи на площі. Це те, що мені потрібно від вас.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Радий, що це допомагає.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=Корчма стоїть. Далі нам потрібна ратуша, яка належить усім нам: полиця для статуту, стіл для планів і скарбниця, щоб спільними монетами можна було фінансувати решту того, що ми будуємо. Поставте ділянку, сплатіть матеріали, скільки вимагає табличка, і ми, нарешті, матимемо місце для зустрічей усім містом.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=Я поставлю зал.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=ще ні.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Старший Лірен
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=І камінь, і паперова тяганина потребують часу. Коли зал закінчиться, скажіть. Я буду тут.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Все ще працюємо над цим.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Старший Лірен
+# -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=добре Якщо ви все ще хочете, щоб тут були рядки, скажіть про це.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=Буде робити.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=Я залишатимуся в корчмі, доки ґрунт не перестане прикидатися дошками. Потім знайдіть мене за лавкою з брудом на моїх черевиках.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=До зустрічі.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=Коли ділянка буде побудована, я піду до лавки для ферм і встановлю. Знайдіть мене там, і ми закінчимо.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=Мені потрібно кинути квест.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=Я буду продовжувати.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=Цей сюжет буде годувати більше, ніж скарги. Я буду перевертати ліжка, поки місто росте.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=Добре ростуть.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=Коли дах витримає, зареєструйте мене в блоці, тоді знайдіть мене. Я хочу покінчити з цим обома ногами на власній дошці.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=Розраховуйте на це.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=Коріння під власними кроквами. Це той урожай, який я хотів.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=Радий це чути.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=Поля — чесна праця. Я все ще хочу двері, які не корчми. Такий же знак, як і будь-хто. Побудуйте його, а потім занесіть мене на полицю.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=Я побудую його.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=ще ні.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=Деревина та погода не поспішають. Коли дім буде готовий, признач мені, а потім приходь і розкажи мені решту.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=Я тебе знайду.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=Я рахував тріщини в паркеті Коріна і мріяв про ряди з моїм іменем. Обгородити присадибну ділянку, огородити, поставити лавку. Зробіть жетон ділянки на своєму столі планування, розмістіть його своїм співробітникам, сплатіть знак. Я зустріну вас біля лавки, коли земля буде готова.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=Ми побудуємо його.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=Не зараз.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=Ірієнн Моссмарк
+aetherhaven.dialogue.aetherhaven_farmer.root.body=Ірієнн Моссмарк. Бруду байдуже, хто ним володів учора. Неважливо, чим ти його нагодуєш завтра. Я спав достатньо ночей на підлозі Коріна, щоб знати, що тепла миска перемагає гордість.
+aetherhaven.dialogue.aetherhaven_farmer.root.c0=Ви хотіли поговорити про своє місце.
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=Твоє ім'я на полиці. Я подумав, що ти захочеш це почути.
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=Ваш дім ще росте.
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=Приємно бачити, що ферма вас годує.
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=Ферма готова разом із вами.
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=Про поля...
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=Ви сказали, що можете скористатися фермером у місті.
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=Відпочити трохи.
+aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Ірієнн Моссмарк
+# -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Тоді я триматиму тут чайник, поки ділянка не стане вашою. Як тільки моє ім’я буде на полиці, приходь і шукай мене. Я хочу потиснути вам руку, перш ніж ми вирішимо все.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Розраховуйте на це.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=Там. Вогнище для чужих і клямка, що належить мені. Це коштує більше, ніж зовнішній вигляд ключа.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=Ви це заслужили.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Я наллю супу на все місто, але я хочу двері, які зачиняються на власний безлад. Той же жетон будинку, що й будь-який інший. Побудуйте його, внесіть мене до блоку, коли він стоїть.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=Я побудую його.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=Іншим разом.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=Глина висихає у власному темпі. Коли дім буде готовий, призначте мене на полицю і приходьте, розкажіть мені, щоб ми могли закрити цю книгу.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=Я дам вам знати.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=Ми зберігаємо два місця для проходу людей. Торговці, майстри, будь-хто, за ким може стояти місто. Відверни їх, і більшість ночей вони сплять під небом. Це не гордість. Це математика.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=Має сенс.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Корін Москап
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Крок за вітром. Я Корін. Я зберігаю це вогнище, і поки ви під нашим дахом, вас годують так, як ми можемо. Це все ще має значення, навіть коли зовнішній світ забуває, як це зробити.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=Як працюють гостьові ліжка?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=Ви хотіли справжню власну кімнату.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=Я поставив тебе на домашню полицю. Я подумав, що ти маєш почути це від мене.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Ваш дім все ще збирається. Я на цьому.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=Я піду перемішу каструлю.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Корін Москап
+# -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.root.body=Векс Сандерлейн. Я купую залишки, продаю надію і двічі рахую монети. Ваша корчма з діючим вогнищем уже є найкращою вітриною магазину на багато кілометрів. Все інше - переговори.
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=Перегляньте свої товари (золоті монети).
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=Ви згадали, що хочете будинок.
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=Я поклав тебе в бухгалтерську книгу. Папір повинен відповідати дійсності.
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=Твій будинок все ще стоїть на купі.
+aetherhaven.dialogue.aetherhaven_merchant.root.c5=Приємно бачити, що ви торгуєте тут.
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=Стійка вгору. Приходь подивись.
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=Про будівлю стійла...
+aetherhaven.dialogue.aetherhaven_merchant.root.c8=Ви попросили мене знайти місце для стійла.
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=Тримайте сумочку закритою на вітрі.
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=ярмарок Якщо ви передумаєте, пропозиція залишиться.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=дякую
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=Я буду табором у Коріна, поки стійло стоятиме. Безпечніше канави, а юшка краща.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=Побачимося, коли буде.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=Коли ларьок буде побудований, я піду й відкрию магазин. Знайдіть мене там, і ми закінчимо це.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=Мені потрібно кинути квест.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=Я продовжуватиму над цим працювати.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=Стол виглядає чесним. Торгівля спочатку буде слабкою. Ми вирощуємо його повільно, як і все, що варто зберегти.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=Ось до цього.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=Коли двері відчиняться, напишіть моє ім’я на блоку, а потім знайдіть мене. Мені потрібна історія, а не лише чорнило.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=Ви отримаєте обидва.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=Там. Двері, які знають мій стук. Це перевершує повну касу.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=Насолоджуйтесь цим.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=Запас місце на полицях. Мої черевики десь сухі. Той самий жетон будинку, що й решта міста. Зареєструйте мене, коли він буде побудований.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=Я поставлю будинок.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=Іншим разом.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=Іноді для будинків потрібні сезони. Закінчіть це, доручіть мені, а потім поверніться, і ми збалансуємо бухгалтерську книгу.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=Я повернусь.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=Векс Сандерлейн
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=Мені потрібен маленький дах і стійка, на яку я можу спертися. Ви кладете його разом зі своїм посохом, тримаючи жетон, який я вам передаю. Матеріали - ваша проблема. Запусту лічильник, коли цвяхи витримають.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=Я побудую його.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=Не зараз.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Векс Сандерлейн
+# -- Tree id: aetherhaven_priestess (Serah Thornwell) --
+aetherhaven.dialogue.aetherhaven_priestess.root.body=Сера Торнуелл. Я проводжу обряди Геї для цього міста. Корчма — це дах над моєю головою, і я вдячний, але я не можу проводити служби, затиснувшись між вечерею та грою в карти. Мені потрібен справжній вівтар надворі: доріжки, кілька табуретів і статуя, де люди могли б молитися, не затамувавши подих від кухонного диму.
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=Ви хотіли поговорити про будинок.
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=Ти зараз на полиці. Я думав, ти повинен знати.
+aetherhaven.dialogue.aetherhaven_priestess.root.c2=Будинок ще недобудований.
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=Як у вас вівтар?
+aetherhaven.dialogue.aetherhaven_priestess.root.c4=Вівтарна площадка готова.
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=Про благословення...
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=Ви сказали, що вам потрібна земля для Геї.
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=Я залишу вас.
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=Ніяких образ. Якщо ви все ще хочете вівтар у місті, запитайте ще раз.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=добре
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=Я залишуся в корчмі, поки не збудують вівтар. Тоді знайдіть мене біля статуї, і ми завершимо благословення.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=побачимось там.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=Коли вівтар стане, я піду до статуї. Знайдіть мене там, і ми закінчимо.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=Мені потрібно кинути квест.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=Я все ще над цим працюю.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=Вівтар закінчено. дякую Я буду доглядати за територією та проводитиму тут обряди, коли місто росте.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=Успіхів з цим.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=Коли будинок буде готовий, позначте моє ім’я на блоці управління всередині, а потім приходьте мене шукати. Я хочу почути, як ви говорите це особисто, а не просто читати це зі списку.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=Ви будете.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=добре. Дах, який насправді мій.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=Справедливо.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=Вівтар для всіх. Я все ще хочу мати власний маленький будиночок, як і будь-хто інший, тому я не буду вічно жити поза корчмою. Створіть його зі звичайного токена, а потім зареєструйте мене в блоці керування, коли він запрацює.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=Я поставлю будинок.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=Іншим разом.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=Ці речі потребують часу. Коли будинок буде зроблено, зареєструйте мене в блоці, тоді приходьте говорити. Ось коли ми закінчимо.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=Я повернусь.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=Сера Торнуелл
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Поставте ділянку вівтаря Геї: доріжки, табуретки та статую, де я можу стояти, а люди можуть сидіти. Зробіть жетон на своєму столі планування, покладіть його своїм співробітникам і сплатіть знак. Коли він буде побудований, зустрінь мене біля статуї, і ми освятимо його належним чином.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=Ми побудуємо його.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Не зараз.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Сера Торнуелл
+# -- Tree id: aetherhaven_visitor_elder (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Ви можете пройти, але цей статут не ваш. Якщо ви збираєтеся допомогти, вас повинні прийняти ті, хто живе тут першими.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=я розумію
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Старший Лірен
+# -- Tree id: aetherhaven_visitor_generic (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=Доброго дня, мандрівник. Якщо ви не з цього населеного пункту, поговоріть з місцевими жителями, які тут живуть. У мене набиті руки нашою роботою.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Прощання.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Сільський житель
+# -- Tree id: aetherhaven_visitor_inn (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=У вогнище тепло, але гросбух для городян і їх гостей. Повертайтеся, коли вас запросять.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Справедливо.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Корчмар
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Ваш гаманець занадто легкий для цього ремонту.
+aetherhaven.blacksmith.repair.success={itemName} знову цілий. Як новий.
+commands.aetherhaven.dialogue.desc=Відкрити дерево діалогу за id (для перевірки)
+commands.aetherhaven.dialogue.treeId.desc=Ідентифікатор дерева діалогу (наприклад, aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Додатковий ідентифікатор вузла входу (за замовчуванням: root)
+aetherhaven.interaction.dialogue=Натисніть [{key}], щоб говорити
+npcRoles.Aetherhaven_Test_Villager.name=Діалог Тест Селянин

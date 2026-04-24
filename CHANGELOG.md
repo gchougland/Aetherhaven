@@ -4,6 +4,7 @@
 
 ### Added
 
+- **Server language files** (`server.lang`) for **12 additional locales** alongside `en-US`: Chinese (Simplified `zh-CN` and Traditional `zh-TW`), French (`fr-FR`), German (`de-DE`), Japanese (`ja-JP`), Korean (`ko-KR`), Portuguese Brazil (`pt-BR`), Russian (`ru-RU`), Spanish Spain (`es-ES`) and Latin America (`es-419`), Turkish (`tr-TR`), and Ukrainian (`uk-UA`).
 - **Feast system:** serve feasts from the banquet table (costs, town effects, villager gather); Steward’s Ledger, Hearthglass Vigil, and Berrycircle Concord, with innkeeper-reputation unlocks.
 - **Treasury:** new tab that shows the **tax calculation** (per-villager lines, adjustments, feast multiplier when applicable, totals).
 - **New** `/aetherhaven` subcommands (including starter kit for creative; use `/aetherhaven` help in-game for the list).

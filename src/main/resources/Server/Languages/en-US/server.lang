@@ -1,5 +1,12 @@
 # Aetherhaven server-side language strings
+#
+# Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
+# Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
+# portals, big town/plot UI, charter, reputation miles, plot admin, commands (root),
+# items, NPC names, jewelry & town UIs, geodes, mirror, plot placement, commands (tab),
+# feasts, dialogue trees, blacksmith repair lines, help/footer.
 
+# === Common (server.aetherhaven.common.*) ===
 # Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
 aetherhaven.common.pluginNotLoaded=Aetherhaven not loaded.
 aetherhaven.common.noTownInWorld=No town for you in this world.
@@ -20,6 +27,7 @@ aetherhaven.common.noPlayerId=No player id.
 aetherhaven.common.playersOnly=Players only.
 aetherhaven.common.invalidVillager=Invalid villager.
 
+# === Town & charter (founding, display name, charter item info) ===
 # Town / charter
 aetherhaven.charter.alreadyInTown=You are already part of a town in this world. Leave it before founding a new one.
 aetherhaven.charter.townFounded=Town founded: {name}. The Village Elder has arrived. Use the charter to rename the town.
@@ -31,6 +39,7 @@ aetherhaven.chartertown.nameEmpty=Town name cannot be empty.
 aetherhaven.chartertown.nameDuplicate=That name is already used by another town in this world.
 aetherhaven.chartertown.nameSaved=Town name saved: {name}
 
+# === Town command: resolution & membership (/aetherhaven town) ===
 # Town command resolution
 aetherhaven.town.resolve.notOwnerInWorld=You do not own a town in this world.
 aetherhaven.town.resolve.noTownNamed=No town named "{name}" in this world.
@@ -74,6 +83,7 @@ aetherhaven.town.memberRole.BUILD=BUILD
 aetherhaven.town.memberRole.QUEST=QUEST
 aetherhaven.town.memberRole.BOTH=BOTH
 
+# === UI: town treasury (messages & debug tax) ===
 # UI — treasury
 aetherhaven.ui.treasury.coinsLine=Gold coins stored: {count}
 aetherhaven.ui.treasury.depositNoCoins=You have no gold coins to deposit.
@@ -93,17 +103,20 @@ aetherhaven.ui.treasury.debug.villagerLine=  {name} ({kind}) comfort={comfort} g
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
+# === UI: quest journal (log panel) ===
 # UI — quest journal
 aetherhaven.ui.questJournal.needTown=You need a town in this world to track quests.
 aetherhaven.ui.questJournal.noPermission=You do not have permission to manage town quests.
 aetherhaven.ui.questJournal.noActive=No active quests.
 aetherhaven.ui.questJournal.hint=Tap a quest for details. × removes it from your log (you can take it again from the giver).
 
+# === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
 aetherhaven.ui.dialogue.title=Dialogue
 aetherhaven.ui.dialogue.unknown=Unknown dialogue: {id}
 aetherhaven.ui.dialogue.missingNode=Missing node: {id}
 
+# === UI: plot construction (resident shelf, materials) ===
 # UI — plot construction
 aetherhaven.ui.plotConstruction.buildingTitle=Building
 aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
@@ -118,10 +131,12 @@ aetherhaven.ui.plotConstruction.plotRemoved=Plot removed and plot token returned
 aetherhaven.ui.plotConstruction.materialLine={item} x{need} (have {have})
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=Could not load player data.
 
+# === UI: Gaia statue (small messages) ===
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=Not enough life essence (need {need}).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Could not remove life essence from inventory.
 
+# === POI debug tool (placement & targeting) ===
 # POI tool
 aetherhaven.poi.noPoiInRange=No POI within range of that block.
 aetherhaven.poi.noPoiSelected=No POI selected. Primary-click a POI first.
@@ -133,6 +148,7 @@ aetherhaven.poi.setInteractionTarget=Set interaction target to {x}, {y}, {z}.
 aetherhaven.poi.selected=Selected POI {id} at {x}, {y}, {z}
 aetherhaven.poi.targetBlockMismatch=Target block must match expected type {type} for this POI.
 
+# === Plots, placement, founder monument (world messages) ===
 # Plots & placement
 aetherhaven.placement.movingBuilding=Moving building…
 aetherhaven.plotSign.placed=Plot sign placed.
@@ -143,6 +159,7 @@ aetherhaven.founder.inTerritory=Place the founder monument inside your town terr
 aetherhaven.founder.cannotPlace=You cannot place the founder monument here.
 aetherhaven.founder.createFailed=Could not create the founder statue. The block was placed; break it to try again.
 
+# === Debug: villager autonomy overlay ===
 # Autonomy debug
 aetherhaven.debug.autonomy.notVillager=Target is not an Aetherhaven town villager.
 aetherhaven.debug.autonomy.toggledOn=Autonomy debug ON (DisplayCustom + VisPath). AH overlay on nameplate.
@@ -152,6 +169,7 @@ aetherhaven.debug.autonomy.cleared=Cleared Aetherhaven autonomy debug for this v
 aetherhaven.debug.on=ON
 aetherhaven.debug.off=OFF
 
+# === Debug: reputation & milestone listing ===
 # Reputation debug
 aetherhaven.debug.rep.unchanged=Reputation unchanged (already {value}).
 aetherhaven.debug.rep.set=Set reputation to {value} with crossed milestones queued for dialogue (if role resolved).
@@ -160,6 +178,7 @@ aetherhaven.debug.rep.milestoneLine=  {id} | {role} | {min} | {node}{items}{lear
 aetherhaven.debug.rep.granted=Granted reward {id}.
 aetherhaven.debug.rep.targetInvalid=Invalid villager.
 
+# === Debug: villager needs ===
 # Needs debug
 aetherhaven.debug.needs.whichInvalid=which must be hunger, energy, or fun (values are 0..{max}).
 aetherhaven.debug.needs.elderNoTown=No town for you in this world (needed for Elder).
@@ -172,6 +191,7 @@ aetherhaven.debug.needs.inspectIntro=Villagers with needs (loaded chunks). Set w
 aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
 aetherhaven.debug.needs.noHandle=(no handle)
 
+# === Debug: plots, POI dump, town list (console) ===
 # Plots list debug
 aetherhaven.debug.plots.forTown=Plots for town {id}:
 aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
@@ -188,6 +208,7 @@ aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tag
 aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
 aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
 
+# === Quest lifecycle, quest debug, villager list, misc command output ===
 # Quest / dialogue system messages
 aetherhaven.quest.started=Quest started: {name}
 aetherhaven.quest.completed=Quest completed: {name}
@@ -218,16 +239,18 @@ aetherhaven.questdebug.statusActiveEmpty=Active: (none)
 aetherhaven.questdebug.statusCompletedLine=Completed: {list}
 aetherhaven.questdebug.statusCompletedEmpty=Completed: (none)
 
+# === World portals & instance discovery (loading) ===
 # Portals
 items.Aetherhaven_Portal_Exit.name=Aetherhaven Exit
 items.Aetherhaven_Portal_Exit.description=Use to return to the overworld.
 items.Aetherhaven_Portal_Enter.name=Aetherhaven Gateway
 items.Aetherhaven_Portal_Enter.description=Use to enter Aetherhaven.
 
-# Instance discovery
+# Instance discovery (title / subtitle)
 instances.aetherhaven.title=Aetherhaven
 instances.aetherhaven.subtitle=The sky village
 
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
 # Plot / construction UI (keys use lowercase segments so client lookup matches % references)
 aetherhaven.ui.plotconstruction.title=Construction
 aetherhaven.ui.plotmanagement.title=Town Management
@@ -266,6 +289,7 @@ aetherhaven.ui.villagerneeds.noResidentsTracked=No town residents tracked yet.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 
+# === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Charter amendments
 aetherhaven.ui.charter.popHint=Residents (non-visitors): {count}. Tier 1 unlocks at 3; tier 2 at 5.
 aetherhaven.ui.charter.tierMark1=I
@@ -292,6 +316,7 @@ aetherhaven.ui.charter.err.locked=That amendment is locked or already chosen.
 aetherhaven.ui.charter.err.invalid=Invalid choice.
 aetherhaven.ui.charter.saved=Charter amendments updated.
 
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
 aetherhaven.reputation.reward.continue=Continue
 aetherhaven.reputation.reward.elder.50=The charter is not carved in stone forever. Here is the pattern for an amendments table. Craft it at your town planning desk once you know the schematic. Seat it in the hall and choose how the town's morning tithe leans.
 aetherhaven.reputation.reward.elder.100=You have carried this place farther than anyone asked. Take this foundation stone: set a founder's monument where the charter allows. The treasury will remember.
@@ -306,10 +331,13 @@ aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page 
 aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care. The town's fields will drink at dawn.
 aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You have both, and it shows.
 aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil. Craft it at your town planning desk when you have the bars and stone.
+
+# === UI: plot sign admin (creative / op panel) ===
 aetherhaven.ui.plotadmin.title=Plot sign (admin)
 aetherhaven.ui.plotadmin.construction=Construction
 aetherhaven.ui.plotadmin.give=Give plot sign & close
 
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
 commands.aetherhaven.root.desc=Aetherhaven mod commands
 commands.aetherhaven.reload.desc=Reload config.json and Aetherhaven JSON catalogs from disk (creative mode)
 commands.aetherhaven.reload.success=Aetherhaven config and asset catalogs reloaded.
@@ -329,6 +357,7 @@ commands.aetherhaven.exportskin.resolveError=Could not resolve skin to model att
 commands.aetherhaven.exportskin.ioError=Failed to write {path}: {detail}
 commands.aetherhaven.exportskin.success=Wrote model JSON to {path}
 
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Plot sign
 items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.
 
@@ -400,6 +429,7 @@ items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to depos
 items.Aetherhaven_Quest_Journal.name=Town quest journal
 items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.
 
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
 aetherhaven.ui.questjournal.title=Quest journal
 aetherhaven.ui.questjournal.hint=Select a quest for details.
 aetherhaven.ui.questjournal.abandon=Abandon
@@ -419,6 +449,7 @@ items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block belo
 items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
 items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a 9×9 area. Once each in-game morning. Widest coverage.
 
+# === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
 npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
 npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
@@ -432,6 +463,7 @@ items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar p
 items.Aetherhaven_Statue_of_Gaia.name=Statue of Gaia
 items.Aetherhaven_Statue_of_Gaia.description=A blessed likeness for the altar. Town owners may call missing residents back with life essence.
 
+# === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
 items.Aetherhaven_Ring_Silver_Zephyr.name=Silver ring (Zephyr)
 items.Aetherhaven_Ring_Silver_Topaz.name=Silver ring (Topaz)
 items.Aetherhaven_Ring_Silver_Emerald.name=Silver ring (Emerald)
@@ -468,6 +500,7 @@ items.Aetherhaven_Appraisal_Bench.description=Identifies jewelry you already car
 items.Aetherhaven_Jewelry_Crafting_Bench.name=Jewelry workbench
 items.Aetherhaven_Jewelry_Crafting_Bench.description=An iron anvil for finishing pieces. Craft at the town planning desk once you know the schematic. Pour in life essence with precious bars and a cut gem to forge jewelry.
 
+# === UI: Statue of Gaia (revival / resident list) ===
 aetherhaven.ui.gaiaStatue.title=Statue of Gaia
 aetherhaven.ui.gaiaStatue.hint=Each revival consumes {cost} life essence.
 aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
@@ -486,6 +519,7 @@ aetherhaven.profession.kind.blacksmith=Blacksmith
 aetherhaven.profession.kind.priestess=Priestess
 aetherhaven.profession.kind.unknown=Resident
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=Town charter
 aetherhaven.ui.chartertown.townNameLabel=Town display name
 aetherhaven.ui.chartertown.namePlaceholder=Type a unique name for your town
@@ -508,6 +542,7 @@ aetherhaven.ui.chartertown.modalDissolveTitle=Dissolve town?
 aetherhaven.ui.chartertown.modalMoveTitle=Move charter?
 aetherhaven.ui.chartertown.modalCancel=Cancel
 
+# === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=Town treasury
 aetherhaven.ui.treasury.deposit=Deposit all gold coins
 aetherhaven.ui.treasury.withdraw=Withdraw gold coins
@@ -527,6 +562,7 @@ aetherhaven.ui.treasury.tax.residentsHeader=Villagers in this list
 aetherhaven.ui.treasury.tax.residentLine={name} ({job})
 aetherhaven.ui.treasury.tax.footerMore=Only {shown} of {total} residents fit here. Load more of the town and open this again to see the rest.
 
+# === UI: open geodes (blacksmith) + result / error lines ===
 aetherhaven.ui.geodeopen.title=Open geodes
 aetherhaven.ui.geodeopen.hint=5 gold coins per geode. Click a row to open one. Use Back when you are done.
 aetherhaven.ui.geodeopen.hintAnvil=No gold fee. Click a row to open one geode. Use Back when you are done.
@@ -538,6 +574,7 @@ aetherhaven.geode.open.reward=Geode: {amount} × {itemName}
 aetherhaven.geode.open.failed=Could not roll loot; your coins and geode were returned.
 aetherhaven.geode.open.noRoom=Not enough inventory space; your coins and geode were returned.
 
+# === UI: hand mirror (jewelry loadout) ===
 aetherhaven.ui.handmirror.title=Jewelry
 aetherhaven.ui.handmirror.equipment=Worn
 aetherhaven.ui.handmirror.ring1=Ring I
@@ -572,6 +609,7 @@ aetherhaven.jewelry.gem.SAPPHIRE=Sapphire
 aetherhaven.jewelry.gem.RUBY=Ruby
 aetherhaven.jewelry.gem.VOIDSTONE=Voidstone
 
+# === UI: jewelry appraisal & workbench (forging) ===
 aetherhaven.ui.jewelryAppraisal.title=Appraise jewelry
 aetherhaven.ui.jewelryAppraisal.hintPaid=Costs {cost} gold coins per piece. Select a row, then appraise to reveal rarity and traits.
 aetherhaven.ui.jewelryAppraisal.hintFree=No gold fee. Select a row, then appraise to reveal rarity and traits.
@@ -621,6 +659,7 @@ aetherhaven.ui.jewelryCrafting.noSpace=Make room in your bags first, then use Co
 aetherhaven.ui.jewelryCrafting.takeFirst=Use Collect jewelry on the finished piece, then you can forge again.
 aetherhaven.ui.jewelryCrafting.noGemsDropdown=No cut gems in your bags (find rock gems in the world first)
 
+# === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
 aetherhaven.jewelry.traitLine={stat} {amount}
 aetherhaven.jewelry.stat.Health=Max health
 aetherhaven.jewelry.stat.Mana=Max mana
@@ -634,6 +673,7 @@ aetherhaven.jewelry.rarity.RARE=Rare
 aetherhaven.jewelry.rarity.MYTHIC=Mythic
 aetherhaven.jewelry.rarity.LEGENDARY=Legendary
 
+# === UI: plot placement (ghost) & move building ===
 aetherhaven.ui.plotplacement.title=Plot placement
 aetherhaven.ui.plotplacement.summary=Placing: {building}
 aetherhaven.ui.plotplacement.positionSection=Position & rotation
@@ -669,6 +709,8 @@ aetherhaven.ui.plotplacement.moveZmTooltip=Bird's-eye: north (-Z). First-person:
 aetherhaven.ui.plotplacement.moveZpTooltip=Bird's-eye: south (+Z). First-person: move back (relative to view).
 aetherhaven.ui.plotplacement.moveYmTooltip=Nudge one block down
 aetherhaven.ui.plotplacement.moveYpTooltip=Nudge one block up
+
+# === UI: move town charter (relocate territory center) ===
 aetherhaven.ui.charterrelocation.title=Move charter
 aetherhaven.ui.charterrelocation.summary=Repositioning the town charter
 aetherhaven.ui.charterrelocation.details=Target block {sx}, {sy}, {sz} · Step {step} of 4 (90°)
@@ -676,6 +718,7 @@ aetherhaven.ui.charterrelocation.tips=Territory is a square of chunks around the
 aetherhaven.ui.charterrelocation.info=Territory is a square of chunks around the charter. All your buildings must stay inside that area after the move. Nudge the ghost block to the new charter position, then confirm.
 aetherhaven.ui.charterrelocation.place=Place charter
 
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
 
 commands.aetherhaven.town.desc=Town membership: invite, roles, leave
@@ -745,6 +788,7 @@ commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug 
 commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven chest bonus rolls on targeted container (requires DebugCommandsEnabled)
 commands.aetherhaven.debug_lootchest.fill.desc=Apply forced jewelry, gold, and plot-token rolls to the item container you are looking at
 
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
 aetherhaven.ui.feast.title=Town feasts
 aetherhaven.ui.feast.noTown=You must belong to a town.
 aetherhaven.ui.feast.noPermission=You cannot hold feasts for this town.
@@ -753,12 +797,11 @@ aetherhaven.ui.feast.activeTitle=Town feast in effect
 aetherhaven.ui.feast.noneActive=No timed feast is active. Pick a feast on the left to read costs and effects.
 aetherhaven.ui.feast.daysLeft=Days remaining (dawns): {days}
 aetherhaven.ui.feast.selectHint=Select a feast
-aetherhaven.ui.feast.costs=Ingredients
+aetherhaven.ui.feast.ingredientsLabel=Ingredients
 aetherhaven.ui.feast.confirm=Hold feast
 aetherhaven.ui.feast.locked=You have not learned this feast yet. Spend time with the townsfolk until someone walks you through it.
 aetherhaven.ui.feast.tooltipLocked=Locked until a neighbor teaches you this feast. Help the town and keep talking with people who cook for the hall.
 aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord is on cooldown ({days} dawn-days left).
-aetherhaven.ui.feast.ingredientList=Ingredients:\n{lines}
 aetherhaven.ui.feast.began=The feast begins. Villagers are gathering at the table.
 aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven is not loaded on this server.
 aetherhaven.ui.feast.err.unknownFeast=That feast is not available.
@@ -776,11 +819,13 @@ aetherhaven.feast.hearthglass.description=Grilled fish, cooked cuts, and vegetab
 aetherhaven.feast.berrycircle.name=Berrycircle Concord
 aetherhaven.feast.berrycircle.description=A circle of light plates: berry salad, fruit skewers, and popcorn for toasts. Neighbors remember you a little kinder for it. Wait one week of dawns before you may serve it again.
 
-# Dialogue
+# === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
+# Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
 aetherhaven.dialogue.blacksmith.repairGear=Fix my gear (pay in gold coins)
 aetherhaven.dialogue.blacksmith.openGeodes=Crack open geodes (5 gold each)
 aetherhaven.dialogue.merchant.appraiseJewelry=Appraise jewelry (10 gold each)
 
+# -- Tree id: aetherhaven_blacksmith (Garren Vale) --
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=No grudge. If you still want smoke in town, ask again.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=Fair enough.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
@@ -823,6 +868,7 @@ aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=About the forge build...
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=You said you needed a real forge here.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=Mind your fingers.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
+# -- Tree id: aetherhaven_dialogue_test (QA / harness) --
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Conditions lab. You should not see a hidden choice. You should see a greyed choice. Use the compound gates to continue.
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=This choice is hidden (literal false).
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=This should be greyed out.
@@ -851,9 +897,11 @@ aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub actions: unlock achievement and start quest should log until those systems exist.
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Run unlock_achievement + start_quest stubs
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
+# -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
 aetherhaven.dialogue.aetherhaven_elder_week1.root.body=I'm Lyren. I speak for the charter we signed when we put this town on Orbis. The old cities are gone. What we have is this ground and the people who are already here, and more will come. Before we start laying new plots, I need you to learn the land around Aetherhaven: where it is flat enough to build, where water runs, where we might put fields or a commons later. Keep it practical. When you have looked the place over, come find me again.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=I'll scout the area and report back.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=You pick some up from the work we send you on, and from trading when someone is buying. The town purse is its own thing. Once the hall is built, the treasury lives in there. Use the block there to put coin in or pull it out if the charter says you may. After that, each morning a little gold flows into that treasury from the people who actually live here, not visitors passing through. How much depends on how they are holding up. If they are fed, rested, and in decent spirits, the pot does better. If they are stretched thin, it does worse. That keeps the commons honest.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Good to know. Thanks.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Elder Lyren
@@ -907,6 +955,7 @@ aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Elder Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Stone and paperwork both take time. When the hall is finished, tell me. I will be here.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Still working on it.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Elder Lyren
+# -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=All right. If you still want rows here, say so.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=Will do.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Irienne Mossmark
@@ -951,6 +1000,7 @@ aetherhaven.dialogue.aetherhaven_farmer.root.c5=About the fields...
 aetherhaven.dialogue.aetherhaven_farmer.root.c6=You said you could use a farmer in town.
 aetherhaven.dialogue.aetherhaven_farmer.root.c7=Get some rest.
 aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Irienne Mossmark
+# -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Then I will keep the kettle here until the plot is yours. Once my name is on the shelf, come find me. I want to shake your hand before we call it settled.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Count on it.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
@@ -977,6 +1027,7 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=I listed you on the house s
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Your house is still coming together. I am on it.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=I'll go stir the pot.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
+# -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
 aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.root.body=Vex Sunderlane. I buy salvage, sell hope, and count coins twice. Your inn with a working hearth is already the best shop front for miles. Everything else is negotiation.
@@ -1020,6 +1071,7 @@ aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=I need a little r
 aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=I'll build it.
 aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=Not right now.
 aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Vex Sunderlane
+# -- Tree id: aetherhaven_priestess (Serah Thornwell) --
 aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. I lead Gaia's rites for this town. The inn is a roof over my head, and I am grateful, but I cannot run services wedged between supper and card games. I need a real altar outside: paths, a few stools, and the statue where people can pray without holding their breath from the kitchen smoke.
 aetherhaven.dialogue.aetherhaven_priestess.root.c0=You wanted to speak about a home.
 aetherhaven.dialogue.aetherhaven_priestess.root.c1=You're on the shelf now. I thought you should know.
@@ -1060,15 +1112,20 @@ aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Stake a Gaia a
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=We'll get it built.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Not right now.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# -- Tree id: aetherhaven_visitor_elder (visitors) --
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=I understand.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_visitor_generic (visitors) --
 aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=Good day, traveler. If you are not of this settlement, speak with the locals who belong here. My hands are full with our own work.
 aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Farewell.
 aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Villager
+# -- Tree id: aetherhaven_visitor_inn (visitors) --
 aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=The hearth is warm, but the ledger is for townsfolk and their guests. Come back when you are invited.
 aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Fair enough.
 aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Innkeeper
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
 aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)

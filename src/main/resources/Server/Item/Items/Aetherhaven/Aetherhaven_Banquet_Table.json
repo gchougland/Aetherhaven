@@ -8,7 +8,7 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Planks",
+        "ResourceTypeId": "Wood_Darkwood",
         "Quantity": 10
       },
       {
@@ -16,8 +16,8 @@
         "Quantity": 4
       },
       {
-        "ItemId": "Rock_Stone_Cobble",
-        "Quantity": 6
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 10
       }
     ],
     "BenchRequirement": [

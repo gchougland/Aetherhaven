@@ -1,0 +1,1135 @@
+# Aetherhaven server-side language strings
+#
+# Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
+# Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
+# portals, big town/plot UI, charter, reputation miles, plot admin, commands (root),
+# items, NPC names, jewelry & town UIs, geodes, mirror, plot placement, commands (tab),
+# feasts, dialogue trees, blacksmith repair lines, help/footer.
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven no está cargado.
+aetherhaven.common.noTownInWorld=No hay ciudad para ti en este mundo.
+aetherhaven.common.noQuestPermission=No tienes permiso de misión en esta ciudad.
+aetherhaven.common.townNotFound=Ciudad no encontrada.
+aetherhaven.common.invalidTownLink=Enlace de ciudad no válido.
+aetherhaven.common.treasuryNotLinked=El tesoro no está vinculado.
+aetherhaven.common.ownerOnlyTreasury=Solo el propietario de la ciudad puede usar la tesorería.
+aetherhaven.common.townNotInThisWorld=La ciudad no está en este mundo.
+aetherhaven.common.noMoveBuildingsPermission=No tienes permiso para mover edificios para esta ciudad.
+aetherhaven.common.buildingCannotMove=Este edificio no se puede mover (falta parcela o no completo).
+aetherhaven.common.lookAtBlockPlot=Mire un bloque para establecer la posición del letrero de la parcela e iniciar una vista previa.
+aetherhaven.common.carryPlotToken=Lleve una ficha de parcela para un tipo de edificio enumerado en la herramienta (por ejemplo, ficha de parcela de posada) para comenzar la colocación.
+aetherhaven.common.statueNotLinked=La estatua no está vinculada a una ciudad.
+aetherhaven.common.ownerOnlyStatue=Solo el propietario de la ciudad puede usar esto estatua.
+aetherhaven.common.debugCommandsDisabled=Los comandos de depuración de Aetherhaven están deshabilitados (establezca DebugCommandsEnabled en config.json).
+aetherhaven.common.noPlayerId=No hay identificación de jugador.
+aetherhaven.common.playersOnly=Solo jugadores.
+aetherhaven.common.invalidVillager=Aldeano no válido.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Usted es Ya soy parte de un pueblo en este mundo. Déjalo antes de fundar uno nuevo.
+aetherhaven.charter.townFounded=Pueblo fundado: {name}. Ha llegado el anciano del pueblo. Utilice la carta para cambiar el nombre de la ciudad.
+aetherhaven.chartertown.info.notLinked=La carta aún no está vinculada a una ciudad.
+aetherhaven.chartertown.info.invalidTownId=Identificación de ciudad no válida en la carta.
+aetherhaven.chartertown.info.townDataMissing=Datos de la ciudad no encontrados (consulte el registro del servidor).
+aetherhaven.chartertown.townInfoBlock=Nombre de la ciudad: {name}\nID de la ciudad: {id}\nNivel: {tier}\nTerritorio (radio de fragmento): {radius}\nCarta en {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=El nombre de la ciudad no puede estar vacío.
+aetherhaven.chartertown.nameDuplicate=Ese nombre ya lo utiliza otra ciudad en este world.
+aetherhaven.chartertown.nameSaved=Nombre de la ciudad guardada: {name}
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=No eres dueño de una ciudad en este mundo.
+aetherhaven.town.resolve.noTownNamed=Ninguna ciudad llamada "{name}" en este mundo.
+aetherhaven.town.resolve.ownerOrOpOnly=Solo el propietario de la ciudad puede hacer eso (o un operador con permiso).
+aetherhaven.town.resolve.notInTown=No estás en una ciudad de este mundo.
+aetherhaven.town.resolve.nameOnlyForOwner=Solo el propietario de la ciudad (o un operador) puede usar el nombre de una ciudad aquí.
+aetherhaven.town.resolve.specifyTownName=Especifique un nombre de ciudad, o úselo de la ciudad de su propiedad.
+aetherhaven.town.resolve.specifyTown=Especifique una ciudad nombre.
+aetherhaven.town.resolve.adminOtherTown=Solo los operadores pueden apuntar a la ciudad de otro jugador por su nombre.
+aetherhaven.town.invite.err.emptyName=Ingrese el nombre de un jugador.
+aetherhaven.town.invite.err.targetOffline=El jugador "{name}" no está en línea en este mundo.
+aetherhaven.town.invite.err.cannotInviteSelf=No puedes invitarte a ti mismo.
+aetherhaven.town.invite.err.alreadyInTown=Ese jugador ya está en un ciudad en este mundo.
+aetherhaven.town.invite.toTarget={inviter} te invitó a unirte a la ciudad "{townDisplay}". Escriba /aetherhaven town aceptar {townDisplay} o /aetherhaven town rechazar {townDisplay}
+aetherhaven.town.invite.sent=Invitación enviada a {name}.
+aetherhaven.town.kick.err.mustBeOnline=El jugador debe estar en línea para patear por nombre.
+aetherhaven.town.kick.err.cannotRemoveOwner=No se puede eliminar al propietario de la ciudad.
+aetherhaven.town.kick.err.notMember=Ese jugador no un miembro de esta ciudad.
+aetherhaven.town.kick.removed=Eliminó {name} de la ciudad.
+aetherhaven.town.kick.removedYou=Fuiste eliminado de la ciudad "{town}".
+aetherhaven.town.kick.removedGeneric=Miembro eliminado de la ciudad.
+aetherhaven.town.role.err.ownerAlwaysFull=El propietario siempre tiene pleno derecho permisos.
+aetherhaven.town.role.set=Establezca el rol de {name} en {role}.
+aetherhaven.town.accept.err.noSuchTown=No hay ciudad con ese nombre.
+aetherhaven.town.accept.err.noInvite=No tienes ninguna invitación pendiente para esa ciudad.
+aetherhaven.town.accept.err.noInvites=No tienes invitaciones de ciudad pendientes.
+aetherhaven.town.accept.err.alreadyInTown=Ya estás en una ciudad.
+aetherhaven.town.accept.joined=Te uniste a "{town}".
+aetherhaven.town.decline.noPending=No hay invitación pendiente para esa ciudad.
+aetherhaven.town.decline.noInvites=No tienes invitaciones de ciudad pendientes.
+aetherhaven.town.decline.done=Invitar rechazado.
+aetherhaven.town.rolecmd.playerMustBeOnline=El jugador debe estar en línea.
+aetherhaven.town.rolecmd.roleInvalid=El rol debe ser CONSTRUIR, QUEST o AMBOS.
+aetherhaven.town.leave.notInTown=No estás en una ciudad.
+aetherhaven.town.leave.ownerCannotLeave=Los propietarios no pueden irse; la transferencia de propiedad aún no está implementada.
+aetherhaven.town.leave.notMember=No eres miembro de esta ciudad.
+aetherhaven.town.leave.left=Dejaste "{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BUILD
+aetherhaven.town.memberRole.QUEST=QUEST
+aetherhaven.town.memberRole.BOTH=BOTH
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Gold monedas almacenadas: {count}
+aetherhaven.ui.treasury.depositNoCoins=No tienes monedas de oro para depositar.
+aetherhaven.ui.treasury.depositRemoveFailed=No se pudieron eliminar monedas del inventario.
+aetherhaven.ui.treasury.deposited=Depositó {count} monedas de oro.
+aetherhaven.ui.treasury.makeRoom=Haga espacio en su inventario.
+aetherhaven.ui.treasury.couldNotAddCoins=No se pudo agregar monedas.
+aetherhaven.ui.treasury.withdrew=Retiró {count} monedas de oro.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Desglose de impuestos (solo fragmentos cargados; los residentes descargados contribuyen con 0 hasta que se simula):
+aetherhaven.ui.treasury.debug.titheNoHall=Diezmo: no hay ayuntamiento completo en este town.
+aetherhaven.ui.treasury.debug.titheZero=Diezmo: 0 de oro (sin residentes cargados, o 0 según la política matemática). Descarga/necesidades/desglose: /desglose de impuestos de aetherhaven
+aetherhaven.ui.treasury.debug.titheApplied=Diezmo aplicado: +{amount} oro al tesoro (las mismas reglas que una recolección matutina).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} MorningWindow={b} DawnEpochDay={c} TreasuryLastTaxDay={d} WouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} cargadoResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) comodidad={comfort} gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} fundadorActivo={b} fundadorPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} banquetePermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=Necesitas una ciudad en este mundo para realizar el seguimiento de las misiones.
+aetherhaven.ui.questJournal.noPermission=No tienes permiso para administrar misiones de la ciudad.
+aetherhaven.ui.questJournal.noActive=No hay misiones activas.
+aetherhaven.ui.questJournal.hint=Toca una misión para obtener más detalles. × lo elimina de su registro (puede tomarlo nuevamente del donante).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=Diálogo desconocido: {id}
+aetherhaven.ui.dialogue.missingNode=Nodo faltante: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Edificio
+aetherhaven.ui.plotConstruction.plotSignTitle=Señal de parcela
+aetherhaven.ui.plotConstruction.noConstruction=No hay ninguna construcción configurada para esta parcela.
+aetherhaven.ui.plotConstruction.assignResidentHint=Asigne un aldeano que viva aquí (completa la misión de su casa cuando partidos).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Sin asignar
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=No se pudieron cargar los datos del jugador.
+aetherhaven.ui.plotConstruction.townDataMissing=No se encontraron datos de la ciudad para este bloque.
+aetherhaven.ui.plotConstruction.clearedHome=Asignación de casa borrada.
+aetherhaven.ui.plotConstruction.updatedHome=Asignación de casa actualizada.
+aetherhaven.ui.plotConstruction.plotRemoved=Trama eliminada y se devolvió el token de trama.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (tiene {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=No se pudieron cargar los datos del jugador.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=No hay suficiente esencia vital (necesita {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=No se pudo eliminar la esencia vital de inventario.
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=No hay PDI dentro del alcance de ese bloque.
+aetherhaven.poi.noPoiSelected=No hay PDI seleccionado. Primero haga clic principal en un PDI.
+aetherhaven.poi.selectedPoiGone=El PDI seleccionado ya no existe.
+aetherhaven.poi.moved=Se movió el PDI a {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=No se seleccionó ningún PDI. Primero haga clic principal en un bloque de puntos de interés.
+aetherhaven.poi.clearedInteractionTarget=Objetivo de interacción borrado; Los NPC usan el centro de bloques de puntos de interés.
+aetherhaven.poi.setInteractionTarget=Establezca el objetivo de interacción en {x}, {y}, {z}.
+aetherhaven.poi.selected=PDI seleccionado {id} en {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=El bloque de destino debe coincidir con el tipo esperado {type} para este PDI.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Mover edificio…
+aetherhaven.plotSign.placed=Señal de parcela colocada.
+aetherhaven.plotSign.couldNotAdd=No se pudo agregar la señal de parcela (¿inventario lleno?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Coloque el monumento al fundador dentro del territorio de su ciudad.
+aetherhaven.founder.cannotPlace=No puede colocar al fundador monumento aquí.
+aetherhaven.founder.createFailed=No se pudo crear la estatua del fundador. Se colocó el bloque; rómpalo para volver a intentarlo.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=El objetivo no es un aldeano de la ciudad de Aetherhaven.
+aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía activada (DisplayCustom + VisPath). Superposición de AH en la placa de identificación.
+aetherhaven.debug.autonomy.toggledOff=Depuración de autonomía desactivada para este aldeano.
+aetherhaven.debug.autonomy.state=Depuración de autonomía para este aldeano: {state}
+aetherhaven.debug.autonomy.cleared=Se eliminó la depuración de autonomía de Aetherhaven para este aldeano.
+aetherhaven.debug.on=ON
+aetherhaven.debug.off=OFF
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Reputación sin cambios (ya {value}).
+aetherhaven.debug.rep.set=Establezca la reputación en {value} con hitos cruzados en cola para el diálogo (si el rol se resuelve).
+aetherhaven.debug.rep.milestonesHeader=Reputación hitos (id de recompensa, rol, representante mínimo, nodo de diálogo):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Recompensa otorgada {id}.
+aetherhaven.debug.rep.targetInvalid=Aldeano no válido.
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=que debe ser hambre, energía o diversión (los valores son 0..{max}).
+aetherhaven.debug.needs.elderNoTown=No hay ciudad para ti en esta mundo (necesario para Elder).
+aetherhaven.debug.needs.noElderUuid=La ciudad aún no tiene un UUID de anciano guardado.
+aetherhaven.debug.needs.noMatch=No hay aldeano que coincida (intente inspeccionar el identificador, Anciano o uuid completo).
+aetherhaven.debug.needs.multipleMatch=Múltiples NPC coincidieron con ese identificador; use el uuid completo de inspect.
+aetherhaven.debug.needs.entityNotLoaded=Entidad no cargada o no tiene VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Establezca {which}={value} en {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Villagers con necesidades (fragmentos cargados). Establecer con: /aetherhaven necesita establecer <handle|Elder|uuid> <hambre|energía|diversión> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hambre={hunger} energía={energy} diversión={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(sin identificador)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Parcelas para la ciudad {id}:
+aetherhaven.debug.plots.header={index}. trama={plotId} estado={state} tipo={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Ciudades de Aetherhaven en este mundo: {count}
+aetherhaven.towns.entry={name} id={id} propietario={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.poi.invalidTownUuid=UUID de ciudad no válido: {raw}
+aetherhaven.debug.poi.noTownArg=No tienes ciudad en este mundo (usa un UUID de ciudad argumento).
+aetherhaven.debug.poi.listHeader=PDI para la ciudad {town} ({count}):
+aetherhaven.debug.poi.listEmpty=Ninguno registrado para esta ciudad (completa un edificio o consulta pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=Todos los puntos de interés en el registro mundial ({count}):
+aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Búsqueda iniciada: {name}
+aetherhaven.quest.completed=Búsqueda completada: {name}
+aetherhaven.quest.abandoned=Misión abandonada: {name}
+aetherhaven.questdebug.granted=Misión activa concedida: {name}
+aetherhaven.questdebug.completed=Misión completada: {name}
+aetherhaven.questdebug.cleared=Misión activa completada: {name}
+aetherhaven.questdebug.statusHeader=-- estado de la misión --
+aetherhaven.questdebug.statusActive=activa:
+aetherhaven.questdebug.statusCompleted=completada:
+aetherhaven.questdebug.statusEmpty=(ninguno)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Aún no hay ID de entidad de aldeano registrados para esta ciudad.
+aetherhaven.villager.listHeader=Aldeanos de la ciudad: UUID de entidad, fuente, rol si está cargado (use UUID o ID de rol con reputación de /aetherhaven... y localización de aldeano):
+aetherhaven.villager.listRow={uuid} | {note} | rol: {role}
+aetherhaven.villager.locateNotLoaded=Ese aldeano no está cargado (intente acercarse o cargar fragmentos).
+aetherhaven.villager.locateNoTransform=No hay transformación para esa entidad.
+aetherhaven.villager.locatePosition=Aldeano {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=El teletransporte requiere operador (grupo OP).
+aetherhaven.villager.teleported=Teleported.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=No hay contenedor de artículos en ese bloque (fragmento no cargado, relleno/base no coinciden, o no es un contenedor block).
+aetherhaven.debug.loot.bonusApplied=Botín de bonificación de Aetherhaven aplicado a este contenedor (forzado).
+aetherhaven.townsCommand.line={id} name="{name}" world={world} propietario={owner} trozos={cx},{cz} r{radius}
+aetherhaven.list.none=(ninguno)
+aetherhaven.questdebug.statusActiveLine=Activo: {list}
+aetherhaven.questdebug.statusActiveEmpty=Activo: (ninguno)
+aetherhaven.questdebug.statusCompletedLine=Completado: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Completado: (ninguno)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Salir de Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Usar para regresar al supramundo.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven Gateway
+items.Aetherhaven_Portal_Enter.description=Usar para entrar Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=La aldea del cielo
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Construcción
+aetherhaven.ui.plotmanagement.title=Ciudad Gestión
+aetherhaven.ui.plotmanagement.tabPlot=Trama
+aetherhaven.ui.plotmanagement.tabPlayers=Jugadores
+aetherhaven.ui.plotmanagement.playersHint=Invita a jugadores en línea por su nombre. Cambie los roles o elimine miembros a continuación.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Miembros de esta ciudad. Solo el propietario puede invitar o cambiar roles.
+aetherhaven.ui.plotmanagement.inviteLabel=Invitar jugador
+aetherhaven.ui.plotmanagement.invitePlaceholder=Nombre del jugador (en línea)
+aetherhaven.ui.plotmanagement.inviteSend=Enviar invitación
+aetherhaven.ui.plotmanagement.kick=Eliminar
+aetherhaven.ui.plotmanagement.roleOwner=Propietario
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Trama info
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Necesidades del aldeano
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Miembros de la ciudad
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Mover este edificio
+aetherhaven.ui.plotconstruction.materials=Materiales
+aetherhaven.ui.plotconstruction.build=Construir
+aetherhaven.ui.plotconstruction.pickUpPlot=Recoger la parcela (regresar) token)
+aetherhaven.ui.plotconstruction.townNeeds=Necesidades de la ciudad
+aetherhaven.ui.plotconstruction.moveBuilding=Mover edificio
+aetherhaven.ui.plotconstruction.houseResident=Resident
+aetherhaven.ui.plotconstruction.assignHouseResident=Establecer residente
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=¿Mover edificio?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Abre la ubicación de la parcela para elegir un nuevo sitio. La mudanza destruye y reconstruye el antiguo edificio; primero retire los objetos de valor, las mascotas y los artículos sueltos dentro de la huella.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Continue
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Cancelar
+
+aetherhaven.ui.villagerneeds.title=Necesidades de la ciudad
+aetherhaven.ui.villagerneeds.hint=Seleccione un aldeano para ver los medidores y retrato.
+aetherhaven.ui.villagerneeds.hunger=Hambre
+aetherhaven.ui.villagerneeds.energy=Energía
+aetherhaven.ui.villagerneeds.fun=Diversión
+aetherhaven.ui.villagerneeds.villagers=Villagers
+aetherhaven.ui.villagerneeds.noResidentsTracked=Aún no se ha rastreado a ningún residente de la ciudad.
+aetherhaven.ui.reputation.label=Reputación
+aetherhaven.reputation.dailyTalkGain=+{amount} reputación (saludo diario)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=Enmiendas a los estatutos
+aetherhaven.ui.charter.popHint=Residentes (no visitantes): {count}. El nivel 1 se desbloquea en el nivel 3; nivel 2 en 5.
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Nivel 1: estilo diezmo
+aetherhaven.ui.charter.tier2=Nivel 2: enfoque en la ciudad
+aetherhaven.ui.charter.t1.perCapitaShort=Per capita
+aetherhaven.ui.charter.t1.happinessShort=Happiness-weighted
+aetherhaven.ui.charter.t1.perCapitaTooltip=Headcount-first diezthe.\n\nEl oro de la mañana depende de cuántos residentes viven aquí. La comodidad del día a día todavía influye un poco en el total, pero la población es lo que mueve la aguja.
+aetherhaven.ui.charter.t1.happinessTooltip=Necesita el primer diezmo.\n\nEl oro de la mañana depende más de qué tan bien alimentados, descansados ​​y de buen humor están los residentes. Unos pocos ciudadanos adicionales importan menos que mantener a todos en buena forma.
+aetherhaven.ui.charter.t2.miningShort=Minería
+aetherhaven.ui.charter.t2.loggingShort=Logging
+aetherhaven.ui.charter.t2.farmingShort=Farming
+aetherhaven.ui.charter.t2.smithingShort=Smithing
+aetherhaven.ui.charter.t2.miningTooltip=La carta respalda las minas.\n\nLas bonificaciones vinculadas a la producción minera favorecerán este pueblo cuando lleguen. Elija solo uno de los siguientes enfoques: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.t2.loggingTooltip=La carta respalda el bosque.\n\nLas bonificaciones vinculadas a la tala y la tala favorecerán a esta ciudad cuando lleguen. Elija solo uno de los siguientes enfoques: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.t2.farmingTooltip=La carta respalda los campos.\n\nCuando su ciudad tiene una parcela agrícola completa, los aspersores aquí llegan un poco más lejos, con mosaicos adicionales en el borde de su rociado. Elija solo uno de los siguientes enfoques: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.t2.smithingTooltip=Los estatutos respaldan la forja.\n\nLas bonificaciones vinculadas a la herrería y la metalistería favorecerán a esta ciudad cuando lleguen. Elija solo uno de los siguientes enfoques: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.hint=Elija una opción por nivel. Las opciones no se pueden cambiar más tarde.
+aetherhaven.ui.charter.allChosen=Todas las enmiendas elegidas para esta ciudad.
+aetherhaven.ui.charter.noTown=Debe pertenecer a una ciudad para usar esto.
+aetherhaven.ui.charter.noPermission=No puede cambiar las enmiendas de los estatutos para esta ciudad.
+aetherhaven.ui.charter.err.locked=Esa enmienda está bloqueada o ya elegida.
+aetherhaven.ui.charter.err.invalid=No válida elección.
+aetherhaven.ui.charter.saved=Enmiendas a la Carta actualizada.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Continue
+aetherhaven.reputation.reward.elder.50=La carta no está grabada en piedra para siempre. Aquí está el patrón para una tabla de enmiendas. Elaborelo en su escritorio de urbanismo una vez que conozca el esquema. Siéntalo en el pasillo y elige cómo se inclina el diezmo matutino de la ciudad.
+aetherhaven.reputation.reward.elder.100=Has llevado este lugar más lejos de lo que nadie te pidió. Tomemos como ejemplo esta primera piedra: erigir un monumento al fundador donde lo permita la carta. El tesoro lo recordará.
+aetherhaven.reputation.reward.innkeeper.50=Has mantenido esta sala alimentada y honesta el tiempo suficiente para que te confíe la mesa grande. Aquí está el patrón del banquete: elaborelo en el mostrador de planificación urbana cuando tenga el esquema y luego configúrelo en la ciudad. Cuando la mesa esté lista, también podrás convocar la Cena del Libro Mayor: pan, queso, pastel y un diezmo que se mantendrá durante una semana. Vigilaré el pasillo mientras lo sirves.
+aetherhaven.reputation.reward.innkeeper.75=Ya has pasado suficientes noches largas con nosotros. Cuando organizas la Vigilia Hearthglass, la ciudad come más lento y más amable durante una semana. Pescados, carnes, verduras y un desvanecimiento más suave para cada necesidad. Así es como nos mantenemos unos a otros en pie.
+aetherhaven.reputation.reward.innkeeper.100=Tú y esta ciudad comparten un nombre ahora. Berrycircle Concord es el círculo de platos ligeros: ensalada, brochetas de frutas, palomitas de maíz y una tostada que aterriza. Sírvelo una vez y te recordarán más cálido.
+aetherhaven.reputation.reward.merchant.50=Has cumplido tu palabra en mal y buen tiempo. Aquí está el patrón del banco. Elaborelo en su escritorio de urbanismo una vez que el esquema sea suyo. Las tasaciones son gratuitas en el banquillo; Todavía cobro por el mío.
+aetherhaven.reputation.reward.merchant.100=Has invertido suficiente oro en este libro de contabilidad para ganarte un rincón de joyero. El patrón es tuyo. Constrúyelo en el mostrador de planificación urbana. Coloca tu gema, tu metal y la vida que le viertes, y la pieza se hará realidad.
+aetherhaven.reputation.reward.farmer.25=Te has ganado mi confianza en las filas. Dibujé un aspersor de hierro. Elaboralo en el banco de cultivo cuando tengas esencia de agua y hierro.
+aetherhaven.reputation.reward.farmer.50=Aquí está el patrón de torio: alcance más amplio, mismo ritmo del amanecer. La pestaña Agricultura en el banco lo mostrará una vez que conozca el esquema.
+aetherhaven.reputation.reward.farmer.75=Cobalt mantiene mejor la presión. Esta página desbloquea el tercer nivel de rociadores, todavía un buen remojo al amanecer.
+aetherhaven.reputation.reward.farmer.100=Adamantita y esencia: la última hoja del conjunto. Colócalos con cuidado. Los campos del pueblo beberán al amanecer.
+aetherhaven.reputation.reward.blacksmith.25=Piedra por mortero, piedra por paciencia. Tienes ambos y se nota.
+aetherhaven.reputation.reward.blacksmith.50=Te has ganado la confianza de la forja. Aquí está el esquema de un yunque de geoda. Elaborelo en su escritorio de planificación urbana cuando tenga las barras y la piedra.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Signo de trama (admin)
+aetherhaven.ui.plotadmin.construction=Construcción
+aetherhaven.ui.plotadmin.give=Dar signo de trama y cerrar
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven mod commands
+commands.aetherhaven.reload.desc=Recargar config.json y Catálogos JSON de Aetherhaven desde el disco (modo creativo)
+commands.aetherhaven.reload.success=Configuración de Aetherhaven y catálogos de activos recargados.
+commands.aetherhaven.reload.failure=Error en la recarga: {detail}
+commands.aetherhaven.reload.noPlugin=El complemento de Aetherhaven no está cargado.
+commands.aetherhaven.plot.desc=Abrir interfaz de usuario de administrador de signo de trama (elegir construcción, obtener item)
+commands.aetherhaven.starterkit.desc=Regala el kit inicial de Aetherhaven (personal de la trama, diario, carta, ficha de posada, escritorio de planificación urbana; modo creativo)
+commands.aetherhaven.starterkit.success=Kit inicial agregado a tu inventario.
+commands.aetherhaven.starterkit.partial=Kit inicial parcialmente otorgado; {failed} los elementos no encajan (haga espacio en el inventario).
+
+commands.aetherhaven.exportskin.desc=Exporta el aspecto de tu avatar como modelo JSON (padre: jugador)
+commands.aetherhaven.exportskin.other.desc=Exporta el aspecto de avatar de otro jugador como modelo JSON
+commands.aetherhaven.exportskin.arg.path=Ruta del archivo de salida opcional (predeterminado: complemento data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=No hay ningún aspecto de personaje disponible para este jugador.
+commands.aetherhaven.exportskin.invalidSkin=Error en la validación del aspecto: {detail}
+commands.aetherhaven.exportskin.resolveError=No se pudo resolver el aspecto para los archivos adjuntos del modelo: {detail}
+commands.aetherhaven.exportskin.ioError=Error al escribir {path}: {detail}
+commands.aetherhaven.exportskin.success=Escribió el modelo JSON para {path}
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Signo de parcela
+items.Aetherhaven_Plot_Sign.description=Marcas donde se puede construir una casa prefabricada. Utilice el diagrama /aetherhaven para configurar.
+
+items.Aetherhaven_Charter.name=Estatuto de la ciudad
+items.Aetherhaven_Charter.description=Lugar para fundar una ciudad. Cada jugador puede tener un pueblo por mundo. Úselo para abrir información de la ciudad.
+
+items.Aetherhaven_Town_Planning_Desk.name=Escritorio de planificación urbana
+items.Aetherhaven_Town_Planning_Desk.description=Elabore estatutos de la ciudad, el personal de ubicación de la trama, el diario de misiones, el yunque de geoda, la tabla de enmiendas de los estatutos y fichas de trama. Construya uno en un banco de trabajo.
+items.Aetherhaven_Charter_Amendments_Table.name=Tabla de enmiendas a los estatutos
+items.Aetherhaven_Charter_Amendments_Table.description=Registra cómo se cuenta el diezmo de la ciudad y qué comercio favorece el estatuto. Úselo para abrir enmiendas una vez que su población las apoye. Haga manualidades en su escritorio de planificación urbana; debes conocer el esquema.
+items.Aetherhaven_Banquet_Table.name=Mesa de banquete
+items.Aetherhaven_Banquet_Table.description=Una mesa larga para las fiestas de la ciudad. Colócalo en tu territorio y úsalo para servir un banquete cívico. Crea en el mostrador de planificación urbana una vez que alguien en la ciudad comparta el patrón.
+items.Aetherhaven_Founder_Monument.name=Monumento al fundador
+items.Aetherhaven_Founder_Monument.description=Un pedestal de piedra que sostiene una imagen del fundador. Lugar dentro del territorio del pueblo para honrarlos; La acción matutina del Tesoro crece ligeramente mientras está vigente. Solo uno por ciudad.
+
+benchCategories.aetherhaven.town_planning=Planificación urbana
+benchCategories.aetherhaven.plot_tokens=Fichas de parcela
+
+items.Aetherhaven_Plot_Placement_Tool.name=Personal de colocación de parcelas
+items.Aetherhaven_Plot_Placement_Tool.description=Mantenga la ficha de parcela correspondiente en sus bolsas. Utilice este bastón mientras apunta al suelo para ver un fantasma del edificio. Empuje y gírelo hasta que encaje, luego confirme para replantear la trama. Cancele para borrar la vista previa y usar el bastón nuevamente cuando desee un lugar diferente.
+
+items.Aetherhaven_Poi_Tool.name=Herramienta de depuración de puntos de interés
+items.Aetherhaven_Poi_Tool.description=Muestra los puntos de interés de la ciudad mientras está retenido (permiso: aetherhaven.poi.tool). Principal: seleccione el PDI más cercano. Secundario: mueve el ancla del PDI a ese bloque. Uso: establecer/borrar el objetivo de ruta de autonomía para el PDI seleccionado (haga clic en el bloque de PDI nuevamente para borrarlo).
+items.Aetherhaven_Poi_Tool.legendTitle=Herramienta de PDI
+items.Aetherhaven_Poi_Tool.legendPrimary=Primario: seleccione el PDI más cercano cerca del bloque
+items.Aetherhaven_Poi_Tool.legendSecondary=Secundario: mueva el PDI seleccionado al bloque
+items.Aetherhaven_Poi_Tool.legendUse=Uso: establezca el objetivo de ruta de NPC para el PDI seleccionado (Usar en bloques de PDI borrados)
+
+aetherhaven.poiTool.legendTitle=Herramienta de PDI
+aetherhaven.poiTool.legendPrimary=Primario: seleccione el PDI más cercano cerca del bloque
+aetherhaven.poiTool.legendSecondary=Secundario: mueva el PDI seleccionado al bloque
+aetherhaven.poiTool.legendUse=Uso: establezca el objetivo de la ruta NPC para el PDI seleccionado (Usar en el bloque de PDI) clears)
+
+items.Aetherhaven_Plot_Token_Inn.name=Token de parcela de posada
+items.Aetherhaven_Plot_Token_Inn.description=Requerido en el inventario para usar el personal de colocación de parcelas para la huella de la posada.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=Token de parcela de puesto de mercado
+items.Aetherhaven_Plot_Token_Market_Stall.description=Requerido para colocar la huella del puesto de mercado del personal de colocación de parcelas.
+
+items.Aetherhaven_Plot_Token_Farm.name=Parcela agrícola token
+items.Aetherhaven_Plot_Token_Farm.description=Requerido para colocar la huella de la parcela agrícola del personal de colocación de parcelas.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Token de parcela de herrería
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Requerido para colocar la huella de la herrería del personal de colocación de parcelas.
+
+items.Aetherhaven_Plot_Token_Park.name=Token de parcela de parque
+items.Aetherhaven_Plot_Token_Park.description=Requerido para colocar el parque huella del personal de colocación de parcelas.
+
+items.Aetherhaven_Plot_Token_House.name=Ficha de parcela de casa
+items.Aetherhaven_Plot_Token_House.description=Requerido para colocar la huella de casa compartida del personal de colocación de parcelas.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Ficha de parcela del ayuntamiento
+items.Aetherhaven_Plot_Token_Town_Hall.description=Requerido para colocar la huella del ayuntamiento del personal de colocación de parcelas.
+
+items.Aetherhaven_Gold_Coin.name=Gold moneda
+items.Aetherhaven_Gold_Coin.description=Moneda de la ciudad almacenada en la tesorería.
+
+items.Aetherhaven_Geode.name=Geoda
+items.Aetherhaven_Geode.description=Una piedra hueca que puede contener cristales, gemas u minerales. Pague a un herrero para que la abra.
+
+items.Aetherhaven_Geode_Anvil.name=Yunque de geoda
+items.Aetherhaven_Geode_Anvil.description=Abre geodas sin honorarios de herrero. Lugar y uso; debes conocer el esquema para elaborarlo en tu escritorio de planificación urbana.
+
+barter.aetherhaven_vex.title=Stock diario de Vex
+
+items.Aetherhaven_Treasury.name=Tesorería de la ciudad
+items.Aetherhaven_Treasury.description=Contiene las monedas de oro de la ciudad. Úselo para depositar o retirar (propietario de la ciudad).
+
+items.Aetherhaven_Quest_Journal.name=Diario de misiones de la ciudad
+items.Aetherhaven_Quest_Journal.description=Uso secundario: revisar las misiones activas de la ciudad. El Anciano puede darte una después de que se construya la posada.
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Diario de misiones
+aetherhaven.ui.questjournal.hint=Selecciona una misión para obtener más detalles.
+aetherhaven.ui.questjournal.abandon=Abandon
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Quest detalles
+aetherhaven.ui.questjournal.detailPlaceholderBody=Elija una misión arriba.
+
+items.Aetherhaven_Management_Block.name=Estante de registros de la ciudad
+items.Aetherhaven_Management_Block.description=Estante de empleado para un edificio terminado. Abre estado de construcción para su terreno.
+
+items.Aetherhaven_Sprinkler_Iron.name=Aspersor de hierro
+items.Aetherhaven_Sprinkler_Iron.description=Riega tierra labrada una cuadra más abajo en un área de 3×3. Se ejecuta una vez cada mañana en el juego. Cobertura más pequeña.
+items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de torio
+items.Aetherhaven_Sprinkler_Thorium.description=Riega la tierra labrada una cuadra más abajo en un área de 5×5. Una vez cada mañana en el juego. Más grande que el hierro.
+items.Aetherhaven_Sprinkler_Cobalt.name=Aspersor de cobalto
+items.Aetherhaven_Sprinkler_Cobalt.description=Riega la tierra labrada una cuadra más abajo en un área de 7×7. Una vez cada mañana en el juego. Amplia cobertura.
+items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
+items.Aetherhaven_Sprinkler_Adamantite.description=Riega el suelo labrado una cuadra más abajo en un área de 9×9. Una vez cada mañana en el juego. Cobertura más amplia.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Token de parcela del altar de Gaia
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marcas donde se puede construir la casa prefabricada del altar de Gaia. Artesanía en el mostrador de planificación urbana.
+
+items.Aetherhaven_Statue_of_Gaia.name=Estatua de Gaia
+items.Aetherhaven_Statue_of_Gaia.description=Una imagen bendita para el altar. Los propietarios de la ciudad pueden recuperar a los residentes desaparecidos con esencia de vida.
+
+# === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
+items.Aetherhaven_Ring_Silver_Zephyr.name=Anillo de plata (Zephyr)
+items.Aetherhaven_Ring_Silver_Topaz.name=Anillo de plata (Topacio)
+items.Aetherhaven_Ring_Silver_Emerald.name=Anillo de plata (Esmeralda)
+items.Aetherhaven_Ring_Silver_Diamond.name=Anillo de plata (Diamante)
+items.Aetherhaven_Ring_Silver_Sapphire.name=Anillo de plata (Zafiro)
+items.Aetherhaven_Ring_Silver_Ruby.name=Anillo de plata (Rubí)
+items.Aetherhaven_Ring_Silver_Voidstone.name=Anillo de plata (Voidstone)
+items.Aetherhaven_Ring_Gold_Zephyr.name=Anillo de oro (Zephyr)
+items.Aetherhaven_Ring_Gold_Topaz.name=Anillo de oro (Topacio)
+items.Aetherhaven_Ring_Gold_Emerald.name=Anillo de oro (Esmeralda)
+items.Aetherhaven_Ring_Gold_Diamond.name=Anillo de oro (Diamante)
+items.Aetherhaven_Ring_Gold_Sapphire.name=Anillo de oro (Zafiro)
+items.Aetherhaven_Ring_Gold_Ruby.name=Anillo de oro (Rubí)
+items.Aetherhaven_Ring_Gold_Voidstone.name=Anillo de oro (Voidstone)
+items.Aetherhaven_Necklace_Silver_Zephyr.name=Collar de plata (Zephyr)
+items.Aetherhaven_Necklace_Silver_Topaz.name=Collar de plata (Topacio)
+items.Aetherhaven_Necklace_Silver_Emerald.name=Collar de plata (Esmeralda)
+items.Aetherhaven_Necklace_Silver_Diamond.name=Collar de plata (Diamante)
+items.Aetherhaven_Necklace_Silver_Sapphire.name=Collar de plata (Zafiro)
+items.Aetherhaven_Necklace_Silver_Ruby.name=Collar de plata (Rubí)
+items.Aetherhaven_Necklace_Silver_Voidstone.name=Collar de plata (Voidstone)
+items.Aetherhaven_Necklace_Gold_Zephyr.name=Collar de oro (Zephyr)
+items.Aetherhaven_Necklace_Gold_Topaz.name=Collar de oro (Topacio)
+items.Aetherhaven_Necklace_Gold_Emerald.name=Collar de oro (Esmeralda)
+items.Aetherhaven_Necklace_Gold_Diamond.name=Collar de oro (Diamante)
+items.Aetherhaven_Necklace_Gold_Sapphire.name=Collar de oro (Zafiro)
+items.Aetherhaven_Necklace_Gold_Ruby.name=Collar de oro (Rubí)
+items.Aetherhaven_Necklace_Gold_Voidstone.name=Collar de oro (Voidstone)
+items.Aetherhaven_Jewelry.genericDescription=Joyas con afinidades ocultas. Equipar con un espejo de mano; evalúe para leer sus verdaderas cualidades.
+items.Aetherhaven_Hand_Mirror.name=Espejo de mano
+items.Aetherhaven_Hand_Mirror.description=Abre su carga de joyas: dos anillos y un collar del inventario.
+items.Aetherhaven_Appraisal_Bench.name=Banco de evaluación
+items.Aetherhaven_Appraisal_Bench.description=Identifica las joyas que ya lleva. De uso gratuito una vez colocado.
+items.Aetherhaven_Jewelry_Crafting_Bench.name=Banco de trabajo de joyería
+items.Aetherhaven_Jewelry_Crafting_Bench.description=Yunque de hierro para acabado de piezas. Elabora en el mostrador de planificación urbana una vez que conozcas el esquema. Vierta esencia de vida con barras preciosas y una gema tallada para forjar joyas.
+
+# === UI: Statue of Gaia (revival / resident list) ===
+aetherhaven.ui.gaiaStatue.title=Estatua de Gaia
+aetherhaven.ui.gaiaStatue.hint=Cada avivamiento consume {cost} esencia de vida.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=In pueblo
+aetherhaven.ui.gaiaStatue.status.missing=Away
+aetherhaven.ui.gaiaStatue.reviveSuccess=Un hilo de vida regresa a la plaza.
+aetherhaven.ui.gaiaStatue.reviveFailed=La bendición no tomó. La esencia fue devuelta.
+aetherhaven.ui.gaiaStatue.footer=Solo el dueño de la ciudad puede usar esta bendición. Se puede llamar a los aldeanos desaparecidos cerca de la estatua.
+aetherhaven.ui.gaiaStatue.revive=Revive
+
+aetherhaven.profession.kind.elder=Elder
+aetherhaven.profession.kind.innkeeper=Posero
+aetherhaven.profession.kind.merchant=Comerciante
+aetherhaven.profession.kind.farmer=Granjero
+aetherhaven.profession.kind.blacksmith=Blacksmith
+aetherhaven.profession.kind.priestess=Sacerdotisa
+aetherhaven.profession.kind.unknown=Residente
+
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Carta de la ciudad
+aetherhaven.ui.chartertown.townNameLabel=Exhibición de la ciudad nombre
+aetherhaven.ui.chartertown.namePlaceholder=Escriba un nombre único para su ciudad
+aetherhaven.ui.chartertown.ownerOnlyHint=Solo el propietario de la ciudad puede cambiar el nombre para mostrar de la carta.
+aetherhaven.ui.chartertown.saveTownName=Guardar nombre
+aetherhaven.ui.chartertown.dissolve=Disolver la ciudad
+aetherhaven.ui.chartertown.dissolveHint=Elimina permanentemente la ciudad, todos los edificios, los aldeanos y esta carta. No se puede deshacer.
+aetherhaven.ui.chartertown.dissolveConfirmText=¿Está seguro? Esto elimina permanentemente la ciudad, elimina todos los edificios y aldeanos y destruye esta carta. Esto no se puede deshacer.
+aetherhaven.ui.chartertown.dissolveConfirm=Sí, disolver la ciudad
+aetherhaven.ui.chartertown.dissolveCancel=Cancelar
+aetherhaven.ui.chartertown.dissolved=Ciudad disuelta: edificios despejados, aldeanos eliminados, estatuto destruido.
+aetherhaven.ui.chartertown.moveCharter=Mover estatuto
+aetherhaven.ui.chartertown.moveCharterTooltip=Mover charter
+aetherhaven.ui.chartertown.moveCharterHint=Recentra su territorio en un nuevo bloque de charter. Solo puede ubicar donde cada edificio todavía cabe dentro del límite de la ciudad.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Ubicará la nueva carta como ubicación de parcela (empuje y confirme). Si algún edificio terminara fuera del territorio, se bloqueará la colocación.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continue
+aetherhaven.ui.chartertown.moveCharterCancel=Cancelar
+aetherhaven.ui.chartertown.charterMoved=Carta movida. Su territorio ahora está centrado en la nueva carta.
+aetherhaven.ui.chartertown.modalDissolveTitle=¿Disolver la ciudad?
+aetherhaven.ui.chartertown.modalMoveTitle=¿Mover la carta?
+aetherhaven.ui.chartertown.modalCancel=Cancelar
+
+# === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
+aetherhaven.ui.treasury.title=Tesorería de la ciudad
+aetherhaven.ui.treasury.deposit=Depositar todo el oro. monedas
+aetherhaven.ui.treasury.withdraw=Retirar monedas de oro
+aetherhaven.ui.treasury.hint=Cada mañana, los aldeanos que están cerca y de buen humor añaden un poco de oro. Los huéspedes de la posada no se cuentan.
+aetherhaven.ui.treasury.tabCoinsTooltip=Oro: saldo, depósito, retiro
+aetherhaven.ui.treasury.tabTitheTooltip=Mira quién paga y qué esperar a la mañana siguiente
+aetherhaven.ui.treasury.tax.intro=Al amanecer, el cofre de la ciudad recoge un poco de oro de los aldeanos que el juego ha cargado a tu alrededor. En este momento son {count} personas. (Camine para cargar más lugares de la ciudad para actualizar esta lista).
+aetherhaven.ui.treasury.tax.policyShort.linear=La regla de su ciudad: hasta {max} de oro por persona cuando la comida, el descanso y la diversión son abundantes; menos cuando no lo son.
+aetherhaven.ui.treasury.tax.policyShort.perCapita=La regla de tu ciudad: todos pagan una pequeña cantidad base ({flatPct}% del límite) incluso en un mal día, hasta {max} de oro cuando a la gente le va bien.
+aetherhaven.ui.treasury.tax.policyShort.happiness=La regla de tu ciudad: los aldeanos gruñones pagan mucho menos; cuando las necesidades son plenas, cada persona puede pagar hasta {max} de oro (sintonizado con {exp}).
+aetherhaven.ui.treasury.tax.hallMissing=Primero construye el ayuntamiento; luego, podrás recolectar el oro de la mañana.
+aetherhaven.ui.treasury.tax.sheetSubLabel=De los aldeanos de abajo
+aetherhaven.ui.treasury.tax.sheetFounderLabel=Bono de estatua del fundador ({mult})
+aetherhaven.ui.treasury.tax.sheetFeastLabel=Bono de fiesta del libro mayor del mayordomo ({mult})
+aetherhaven.ui.treasury.tax.sheetTotalLabel=Acerca de lo que obtendrás a la mañana siguiente
+aetherhaven.ui.treasury.tax.residentsHeader=Aldeanos en este list
+aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.footerMore=Solo {shown} de {total} residentes caben aquí. Cargue más de la ciudad y abra esto nuevamente para ver el resto.
+
+# === UI: open geodes (blacksmith) + result / error lines ===
+aetherhaven.ui.geodeopen.title=Abra geodas
+aetherhaven.ui.geodeopen.hint=5 monedas de oro por geoda. Haga clic en una fila para abrir una. Utilice Atrás cuando haya terminado.
+aetherhaven.ui.geodeopen.hintAnvil=Sin tarifa de oro. Haga clic en una fila para abrir una geoda. Usa Atrás cuando hayas terminado.
+aetherhaven.ui.geodeopen.empty=No hay geodas en tu barra de acceso rápido, armadura o almacenamiento.
+
+aetherhaven.geode.row={count} × {itemName}
+aetherhaven.geode.open.insufficientGold=Necesitas 5 monedas de oro por geoda.
+aetherhaven.geode.open.reward=Geoda: {amount} × {itemName}
+aetherhaven.geode.open.failed=No se pudo obtener el botín; sus monedas y geoda fueron devueltas.
+aetherhaven.geode.open.noRoom=No hay suficiente espacio en el inventario; sus monedas y geoda fueron devueltas.
+
+# === UI: hand mirror (jewelry loadout) ===
+aetherhaven.ui.handmirror.title=Jewelry
+aetherhaven.ui.handmirror.equipment=Worn
+aetherhaven.ui.handmirror.ring1=Ring I
+aetherhaven.ui.handmirror.ring2=Ring II
+aetherhaven.ui.handmirror.necklace=Collar
+aetherhaven.ui.handmirror.inventory=Bolsa
+aetherhaven.ui.handmirror.hotbar=Hotbar
+aetherhaven.ui.handmirror.storage=Almacenamiento
+aetherhaven.ui.handmirror.hint=Las joyas en su barra de acceso rápido y el almacenamiento principal se enumeran a continuación. Utilice los botones de fila para enviar una pieza a una ranura para anillo o collar; Los artículos usados ​​salen de tu bolso. Toque el ícono de expulsión debajo de una ranura para devolver una pieza gastada. Si su bolso está lleno, no puede quitarse las joyas.
+aetherhaven.ui.handmirror.listRow={itemName} × {qty}
+aetherhaven.ui.handmirror.rowRing1=Anillo I
+aetherhaven.ui.handmirror.rowRing2=Anillo II
+aetherhaven.ui.handmirror.rowNeck=Wear
+aetherhaven.ui.handmirror.inventoryFull=No hay suficiente espacio en su inventario para devolverlas. item.
+aetherhaven.ui.handmirror.cannotEquipThere=Esa pieza no va en la ranura elegida.
+aetherhaven.ui.handmirror.equipFailed=No se pudieron mover los elementos. No se cambió nada.
+aetherhaven.ui.handmirror.traitHidden=?
+aetherhaven.ui.handmirror.tooltipNotJewelry=Solo se pueden equipar joyas desde este espejo.
+aetherhaven.ui.handmirror.tooltipUnattuned=Las afinidades de las joyas se establecen la primera vez que sintonizas esta pieza (seleccionala aquí o evalúala en otro lugar).
+aetherhaven.ui.handmirror.tooltipHeader=Raridad: {rarity}
+aetherhaven.ui.handmirror.tooltipUnappraised=La evaluación solo revela nombres en los libros de contabilidad. El encantamiento ya está en el metal.
+aetherhaven.ui.handmirror.traitsColumnHeading=Afinidades desgastadas
+aetherhaven.ui.handmirror.traitsRarityLine=Raridad: {rarity}
+aetherhaven.ui.handmirror.traitsEmptySlot=(vacío)
+aetherhaven.ui.handmirror.traitsUnattuned=Aún no estoy en sintonía. Usar o valorar para establecer afinidades.
+aetherhaven.ui.handmirror.traitFrom=· {gem} (faceta {facet})
+aetherhaven.jewelry.gem.ZEPHYR=Zephyr
+aetherhaven.jewelry.gem.TOPAZ=Topaz
+aetherhaven.jewelry.gem.EMERALD=Esmeralda
+aetherhaven.jewelry.gem.DIAMOND=Diam ond
+aetherhaven.jewelry.gem.SAPPHIRE=Zafiro
+aetherhaven.jewelry.gem.RUBY=Ruby
+aetherhaven.jewelry.gem.VOIDSTONE=Voidstone
+
+# === UI: jewelry appraisal & workbench (forging) ===
+aetherhaven.ui.jewelryAppraisal.title=Evaluación joyería
+aetherhaven.ui.jewelryAppraisal.hintPaid=Cuesta {cost} monedas de oro por pieza. Seleccione una fila, luego evalúe para revelar la rareza y los rasgos.
+aetherhaven.ui.jewelryAppraisal.hintFree=Sin tarifa de oro. Seleccione una fila, luego evalúe para revelar rareza y rasgos.
+aetherhaven.ui.jewelryAppraisal.empty=No hay joyas en su barra de acceso rápido, armadura o almacenamiento.
+aetherhaven.ui.jewelryAppraisal.pick=Seleccione una pieza a continuación.
+aetherhaven.ui.jewelryAppraisal.select=Seleccione
+aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.statusAppraised=appraised
+aetherhaven.ui.jewelryAppraisal.statusUnidentified=unidentified
+aetherhaven.ui.jewelryAppraisal.selectedHeader=Seleccionado: {itemName}
+aetherhaven.ui.jewelryAppraisal.unidentified=Esta pieza aún no está tasada. La evaluación sólo revela lo que ya está entretejido en el metal; no cambia el encantamiento.
+aetherhaven.ui.jewelryAppraisal.rarityLine=Raridad: {rarity}
+aetherhaven.ui.jewelryAppraisal.appraise=Evaluación
+aetherhaven.ui.jewelryAppraisal.insufficientGold=Necesita más monedas de oro para esta tasación.
+aetherhaven.ui.jewelryAppraisal.payFailed=El pago no se realizó; no se tasó nada.
+aetherhaven.ui.jewelryAppraisal.done=Tasado. El libro mayor puede leerlo ahora.
+aetherhaven.ui.jewelryCrafting.title=Banco de trabajo de joyería
+aetherhaven.ui.jewelryCrafting.hint=Trabaja de izquierda a derecha: elige una forma y un metal, elige una gema y luego marca cuánta esencia vital gastar. Tome la pieza terminada de la salida cuando tenga espacio en la bolsa. Los collares usan más lingotes que anillos.
+aetherhaven.ui.jewelryCrafting.colShape=Forma
+aetherhaven.ui.jewelryCrafting.colMetal=Metal
+aetherhaven.ui.jewelryCrafting.colGem=Gema
+aetherhaven.ui.jewelryCrafting.colEssence=Esencia para gastar
+aetherhaven.ui.jewelryCrafting.shapeRing=Anillo: menos lingotes
+aetherhaven.ui.jewelryCrafting.shapeNeck=Collar: más lingotes
+aetherhaven.ui.jewelryCrafting.ingotCost=Costo de la receta: {n}× {metal}
+aetherhaven.ui.jewelryCrafting.metalGold=barra de oro
+aetherhaven.ui.jewelryCrafting.metalSilver=barra de plata
+aetherhaven.ui.jewelryCrafting.yourBags=Lo que llevas
+aetherhaven.ui.jewelryCrafting.invLine=Lingotes de oro: {gold} · Plata: {silver} · Esencia de vida: {ess} · Concentrado: {conc}
+aetherhaven.ui.jewelryCrafting.invGem=Esta gema en bolsas: {n}
+aetherhaven.ui.jewelryCrafting.gold=Gold
+aetherhaven.ui.jewelryCrafting.silver=Silver
+aetherhaven.ui.jewelryCrafting.goldActive=Gold (on)
+aetherhaven.ui.jewelryCrafting.silverActive=Silver (on)
+aetherhaven.ui.jewelryCrafting.rarityNone=Aún no hay suficientes “puntos” de esencia. Agregue esencia regular y/o concentrada con + hasta que la vista previa muestre un nivel.
+aetherhaven.ui.jewelryCrafting.rarityLine=La esencia produce: {rarity}
+aetherhaven.ui.jewelryCrafting.traitsLine=Posibles tiradas de estadísticas para esta gema: {stats}
+aetherhaven.ui.jewelryCrafting.craft=Forge
+aetherhaven.ui.jewelryCrafting.take=Collect. joyería
+aetherhaven.ui.jewelryCrafting.takeHint=Guarde la pieza forjada en sus bolsos (necesita un espacio libre o espacio para apilar).
+aetherhaven.ui.jewelryCrafting.cannotResolve=Establezca cantidades válidas de esencia para alcanzar un nivel, luego inténtelo de nuevo.
+aetherhaven.ui.jewelryCrafting.missingMats=Le falta la barra, la gema o la esencia en sus bolsos.
+aetherhaven.ui.jewelryCrafting.done=La pieza se enfría en su mano, lista para wear.
+aetherhaven.ui.jewelryCrafting.craftedToSlot=Hecho de forja. Muévelo a tus bolsos cuando estés listo.
+aetherhaven.ui.jewelryCrafting.taken=Guarda las joyas en tus bolsos.
+aetherhaven.ui.jewelryCrafting.noSpace=Primero haz espacio en tus bolsos, luego usa Recoger joyas.
+aetherhaven.ui.jewelryCrafting.takeFirst=Usa Recoge joyas en la pieza terminada, luego podrás forjarlas nuevamente.
+aetherhaven.ui.jewelryCrafting.noGemsDropdown=No hay gemas talladas en tus bolsos (encuentra gemas de roca en el primero en el mundo)
+
+# === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
+aetherhaven.jewelry.traitLine={stat} {amount}
+aetherhaven.jewelry.stat.Health=Salud máxima
+aetherhaven.jewelry.stat.Mana=Maná máximo
+aetherhaven.jewelry.stat.Stamina=Resistencia máxima
+aetherhaven.jewelry.stat.Oxygen=Oxígeno máximo
+aetherhaven.jewelry.stat.Ammo=Max munición
+aetherhaven.jewelry.stat.SignatureEnergy=Firma max
+aetherhaven.jewelry.rarity.COMMON=Común
+aetherhaven.jewelry.rarity.UNCOMMON=Uncommon
+aetherhaven.jewelry.rarity.RARE=Raro
+aetherhaven.jewelry.rarity.MYTHIC=Mítico
+aetherhaven.jewelry.rarity.LEGENDARY=Legendario
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Trama colocación
+aetherhaven.ui.plotplacement.summary=Colocación: {building}
+aetherhaven.ui.plotplacement.positionSection=Posición y rotación
+aetherhaven.ui.plotplacement.tipsSection=Consejos
+aetherhaven.ui.plotplacement.heightSection=Altura y rotación
+aetherhaven.ui.plotplacement.detailsBlock=Señal de trazado {sx}, {sy}, {sz} · Origen prefabricado {ox}, {oy}, {oz}\nPaso {step} de 4 (90° cada uno)
+aetherhaven.ui.plotplacement.tipsControls=Escape cierra este panel únicamente. Cancelar borra la vista previa. Se vuelve a abrir el aire al hacer clic derecho; al hacer clic con el botón derecho en un bloque no se mueve una vista previa activa.
+aetherhaven.ui.plotplacement.plotType=Construcción
+aetherhaven.ui.plotplacement.moveLabel=Ajustar posición
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Girar 90° (ciclo orientado)
+aetherhaven.ui.plotplacement.place=Colocar trazado sign
+aetherhaven.ui.plotplacement.placeMove=Mover edificio
+aetherhaven.ui.plotplacement.moveWarningText=La mudanza destruye y reconstruye el sitio antiguo. Primero retire los objetos de valor, las mascotas y los artículos sueltos del interior del edificio. Los NPC de la ciudad vinculados a esta ciudad están protegidos.
+aetherhaven.ui.plotplacement.moveConfirm=Confirmar
+aetherhaven.ui.plotplacement.moveBack=Regresar
+aetherhaven.ui.plotplacement.cancel=Cancelar vista previa
+aetherhaven.ui.plotplacement.cameraSection=Cámara
+aetherhaven.ui.plotplacement.cameraHint=Marcos a vista de pájaro una vez cuando lo enciendes (arriba de la vista previa), luego permanece quieto mientras mueves la trama.
+aetherhaven.ui.plotplacement.birdsEye=Vista a vista de pájaro
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Top-down vista: el objetivo inicial es el centro de vista previa. Desmarque para volver a la primera persona. Utilice Pan para deslizar la vista.
+aetherhaven.ui.plotplacement.viewDistance=Distancia
+aetherhaven.ui.plotplacement.zoomOutTooltip=Cámara más alejada (visión más amplia de la trama)
+aetherhaven.ui.plotplacement.zoomInTooltip=Cámara más cercana (visión más pequeña, más detalles)
+aetherhaven.ui.plotplacement.panLabel=Cámara panorámica
+aetherhaven.ui.plotplacement.panXmTooltip=Desplazar la vista un paso hacia -X
+aetherhaven.ui.plotplacement.panXpTooltip=Shift ver un paso hacia +X
+aetherhaven.ui.plotplacement.panZmTooltip=Shift ver un paso hacia -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Shift ver un paso hacia +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=Ojo de pájaro: oeste (-X). Primera persona: ametrallar hacia la izquierda (en relación con la vista).
+aetherhaven.ui.plotplacement.moveXpTooltip=Vista de pájaro: este (+X). Primera persona: ametrallar a la derecha (en relación con la vista).
+aetherhaven.ui.plotplacement.moveZmTooltip=Vista de pájaro: norte (-Z). Primera persona: avanzar (en relación con la vista).
+aetherhaven.ui.plotplacement.moveZpTooltip=Vista de pájaro: sur (+Z). Primera persona: retroceder (en relación con la vista).
+aetherhaven.ui.plotplacement.moveYmTooltip=Empujar una cuadra hacia abajo
+aetherhaven.ui.plotplacement.moveYpTooltip=Empujar una cuadra hacia arriba
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Mover estatuto
+aetherhaven.ui.charterrelocation.summary=Reposicionar los estatutos de la ciudad
+aetherhaven.ui.charterrelocation.details=Bloque objetivo {sx}, {sy}, {sz} · Paso {step} de 4 (90°)
+aetherhaven.ui.charterrelocation.tips=El territorio es un cuadrado de trozos alrededor de la carta; Cada edificio debe permanecer dentro después de que usted confirme. Empuja al fantasma al nuevo lugar y luego colócalo.
+aetherhaven.ui.charterrelocation.info=El territorio es un cuadrado de trozos alrededor de la carta. Todos tus edificios deben permanecer dentro de esa área después de la mudanza. Empuje el bloque fantasma a la nueva posición de estatuto, luego confirme.
+aetherhaven.ui.charterrelocation.place=Coloque el estatuto
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=Enumere las ciudades de Aetherhaven en el mundo actual
+
+commands.aetherhaven.town.desc=Membresía de la ciudad: invitar, roles, salir
+commands.aetherhaven.town.invite.desc=Invita a un jugador en línea a tu ciudad
+commands.aetherhaven.town.invite.player.desc=Nombre de usuario del jugador (debe estar en línea)
+commands.aetherhaven.town.accept.desc=Aceptar una invitación de ciudad pendiente
+commands.aetherhaven.town.decline.desc=Rechazar una invitación de ciudad pendiente
+commands.aetherhaven.town.kick.desc=Eliminar a un miembro de su ciudad
+commands.aetherhaven.town.kick.player.desc=Nombre de usuario del miembro (debe ser en línea)
+commands.aetherhaven.town.role.desc=Establezca el rol de un miembro (BUILD, QUEST o AMBOS)
+commands.aetherhaven.town.role.player.desc=Nombre de usuario del miembro (debe estar en línea)
+commands.aetherhaven.town.role.role.desc=BUILD, QUEST o AMBOS
+commands.aetherhaven.town.leave.desc=Deje una ciudad de la que sea miembro (no como propietario)
+commands.aetherhaven.town.townName.desc=Nombre para mostrar de la ciudad opcional (para múltiples invitaciones o administrador)
+
+commands.aetherhaven.poi.desc=Depuración: comandos de puntos de interés (requiere DebugCommandsEnabled)
+commands.aetherhaven.poi.list.desc=Enumere los puntos de interés de una ciudad (UUID de ciudad opcional, u omita/use \"yo\" para su town)
+commands.aetherhaven.poi.town.desc=UUID de la ciudad, o yo, u omitir para la persona que llama town
+commands.aetherhaven.poi.dump.desc=Enumere todos los puntos de interés en el registro en memoria de este mundo (cualquier ciudad)
+
+commands.aetherhaven.plots.desc=Depuración: enumera instancias de trazado (requiere DebugCommandsEnabled; use trazados para evitar conflictos con /aetherhaven plot)
+commands.aetherhaven.plots.list.desc=Listar instancias de trazado para su ciudad
+
+commands.aetherhaven.needs.desc=Depurar: necesidades de los aldeanos (requiere DebugCommandsEnabled)
+commands.aetherhaven.needs.inspect.desc=Listar entidades en fragmentos cargados que tengan VillagerNeeds
+commands.aetherhaven.needs.set.desc=Establezca un medidor de necesidad 0..100 (objetivo: manejar desde inspeccionar, Anciano o uuid)
+commands.aetherhaven.needs.target.desc=Identificador (por ejemplo, Villager_Elder_xxxxxxxx), anciano o entidad UUID
+commands.aetherhaven.needs.entity.desc=Obsoleto; use target (handle, Elder o uuid)
+commands.aetherhaven.needs.which.desc=hambre, energía o diversión
+commands.aetherhaven.needs.value.desc=Valor de 0 a 100 (100 = completamente satisfecho)
+
+commands.aetherhaven.tax.desc=Depuración: impuesto matutino del tesoro (requiere DebugCommandsEnabled)
+commands.aetherhaven.tax.breakdown.desc=Mostrar líneas de impuestos por aldeano y totales para su ciudad (sólo fragmentos cargados)
+commands.aetherhaven.tax.now.desc=Aplicar el diezmo de la mañana al tesoro ahora (omite el horario de la mañana y el último día de recolección; requiere DebugCommandsEnabled)
+
+commands.aetherhaven.questdebug.desc=Depurar: omitir la misión de la ciudad (requiere DebugCommandsEnabled)
+commands.aetherhaven.questdebug.grant.desc=Marcar la misión como activa en tu ciudad
+commands.aetherhaven.questdebug.complete.desc=Marcar la misión completada en tu ciudad
+commands.aetherhaven.questdebug.clear.desc=Eliminar la misión de la lista activa en tu ciudad
+commands.aetherhaven.questdebug.id.desc=ID de búsqueda (predeterminado q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Mostrar misiones activas y completadas para tu ciudad (nombre para mostrar + ID)
+
+commands.aetherhaven.reputation.desc=Depurar: reputación (requiere DebugCommandsEnabled)
+commands.aetherhaven.reputation.set.desc=Establece tu reputación con un aldeano y pon en cola las recompensas de hitos cruzados para el diálogo
+commands.aetherhaven.reputation.villagerUuid.desc=Villager UUID de entidad NPC
+commands.aetherhaven.reputation.villagerTarget.desc=UUID de entidad aldeana o ID de rol de NPC en su ciudad (por ejemplo, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Reputación 0 a 100
+commands.aetherhaven.reputation.reward.desc=Enumere las definiciones de hitos o otorgue una recompensa directamente
+commands.aetherhaven.reputation.reward.list.desc=Enumere los hitos de reputación (opcional: filtrar por ID de rol de NPC)
+commands.aetherhaven.reputation.reward.roleFilter.desc=ID de rol de NPC (por ejemplo, Aetherhaven_Merchant) para filtrar la lista
+commands.aetherhaven.reputation.reward.grant.desc=Otorgue una recompensa por hito ahora (marcas reclamadas); use la lista de recompensas de representante para ids
+commands.aetherhaven.reputation.rewardId.desc=ID de recompensa de reputación (por ejemplo, rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Depuración: ayudantes de aldeanos de la ciudad (requiere DebugCommandsEnabled)
+commands.aetherhaven.villager.list.desc=Enumere los UUID de entidad NPC de aldeanos de la ciudad (para reputación/localización) comandos)
+commands.aetherhaven.villager.locate.desc=Imprimir la posición de un aldeano de la ciudad; teletransporte opcional (solo operadores)
+commands.aetherhaven.villager.uuid.desc=Entidad NPC aldeano UUID
+commands.aetherhaven.villager.target.desc=UUID de entidad aldeana o ID de rol de NPC en su ciudad (por ejemplo, Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=verdadero para teletransportarse al aldeano (solo operadores); o use --tp en su lugar
+commands.aetherhaven.villager.tp_flag.desc=Teletransportarse al aldeano (solo operadores; lo mismo que pasar verdadero)
+
+commands.aetherhaven.debug_autonomy.desc=Depurar: superposición de autonomía del aldeano (requiere DebugCommandsEnabled)
+commands.aetherhaven.debug_autonomy.toggle.desc=Alternar la depuración de autonomía en un aldeano de la ciudad (ver NPC o usar --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Mostrar si la depuración de autonomía está habilitada para este aldeano
+commands.aetherhaven.debug_autonomy.clear.desc=Borrar la depuración de autonomía de Aetherhaven para este aldeano
+
+commands.aetherhaven.debug_lootchest.desc=Depuración: tiradas de bonificación de cofres de Aetherhaven en el contenedor objetivo (requiere DebugCommandsEnabled)
+commands.aetherhaven.debug_lootchest.fill.desc=Aplicar joyas forzadas, el oro y las fichas de trama se enrollan en el contenedor del artículo que estás mirando
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Fiestas de la ciudad
+aetherhaven.ui.feast.noTown=Debes pertenecer a una ciudad.
+aetherhaven.ui.feast.noPermission=No puedes celebrar fiestas para esta ciudad.
+aetherhaven.ui.feast.outsideTerritory=La mesa debe estar dentro del territorio de tu ciudad.
+aetherhaven.ui.feast.activeTitle=Ciudad banquete en efecto
+aetherhaven.ui.feast.noneActive=No hay ningún banquete cronometrado activo. Elija un festín a la izquierda para leer costos y efectos.
+aetherhaven.ui.feast.daysLeft=Días restantes (amanecer): {days}
+aetherhaven.ui.feast.selectHint=Seleccione un festín
+aetherhaven.ui.feast.ingredientsLabel=Ingredientes
+aetherhaven.ui.feast.confirm=Celebrar fiesta
+aetherhaven.ui.feast.locked=Aún no has aprendido esta fiesta. Pasa tiempo con la gente del pueblo hasta que alguien te guíe.
+aetherhaven.ui.feast.tooltipLocked=Cerrado hasta que un vecino te enseñe este festín. Ayuda a la ciudad y sigue hablando con la gente que cocina para el salón.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord está en enfriamiento ({days} quedan días del amanecer).
+aetherhaven.ui.feast.began=Empieza la fiesta. Los aldeanos se están reuniendo en la mesa.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven no está cargado en este servidor.
+aetherhaven.ui.feast.err.unknownFeast=Ese banquete no está disponible.
+aetherhaven.ui.feast.err.invalidPlayer=No se pudo verificar tu personaje.
+aetherhaven.ui.feast.err.feastNotUnlocked=Aún no has aprendido este banquete. Genere confianza en la ciudad y escuche cuando alguien se ofrezca a enseñarlo.
+aetherhaven.ui.feast.err.timedFeastActive=Otro festín programado ya está en vigor para esta ciudad.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Espere hasta que finalice el festín programado actual antes de servir Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord todavía está en tiempo de reutilización.
+aetherhaven.ui.feast.err.notEnoughIngredients=No tienes suficientes ingredientes requeridos.
+
+aetherhaven.feast.stewards.name=The Steward's Ledger Supper
+aetherhaven.feast.stewards.description=Unte pan, queso y un pastel de calabaza adecuado para que el diezmo de la mañana sea generoso durante una semana.
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=Pescado a la parrilla, cortes cocidos y verduras dispuestas como un comida de vigilia de combustión lenta. Las necesidades de los aldeanos se desvanecen más suavemente durante una semana.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=Un círculo de platos ligeros: ensalada de bayas, brochetas de frutas y palomitas de maíz para tostadas. Los vecinos te recuerdan un poco más amablemente por eso. Espere una semana de amaneceres antes de poder servirlo nuevamente.
+
+# === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
+# Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
+aetherhaven.dialogue.blacksmith.repairGear=Reparar mi equipo (pagar en monedas de oro)
+aetherhaven.dialogue.blacksmith.openGeodes=Romper geodas abiertas (5 de oro cada una)
+aetherhaven.dialogue.merchant.appraiseJewelry=Evaluar joyas (10 de oro cada una)
+
+# -- Tree id: aetherhaven_blacksmith (Garren Vale) --
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=Sin rencor. Si todavía quieres fumar en la ciudad, vuelve a preguntar.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=Es justo.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=Cuando el taller esté construido, caminaré hasta el banco de armas y lo instalaré. Ven a buscarme allí y lo daremos por hecho.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=Necesito abandonar la misión.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=Seguiré así.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=Banco sólido. El calor llegará cuando termine el trabajo. Ya no enviamos mineral a través del mapa. Usamos lo que todavía nos da este terreno.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=Hammer bien.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=Cuando el lugar esté listo, pon mi nombre en el bloque de adentro y luego ven a buscarme. Quiero oírte decirlo en voz alta.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=Lo oirás.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=Bien. Un techo que no huele a guiso ajeno.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=Disfrútalo.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=La tienda me hace ganar ampollas. Todavía quiero un techo que no tomo prestado. La misma parcela que cualquiera. Regístreme cuando las paredes sean reales.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=Apostaré una casa.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=En otra ocasión.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=El hierro no se apresura. Cuando la casa esté terminada, regístrate y luego ven a hablar. Ahí es cuando estamos empatados.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=Entendido.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=Las tablas de Corin están bien para dormir. Son pésimos para un golpe de martillo. Estaca una herrería con paredes, un mostrador y un banco de armas que pueda tener. Elabore la ficha de trama en su escritorio de planificación, colóquela con su personal y pague el cartel. Cuando esté en pie, nos vemos en el banco.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=Lo haremos construir.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=Ahora no.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=Bien. Acamparé en la posada hasta que la chimenea diga la verdad. Entonces encuéntrame en el banco y cerraremos el libro mayor.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=Nos vemos allí.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale. El viento es lo suficientemente bajo como para que la fragua pueda comportarse. El metal hasta aquí tiene opiniones. Estoy aquí para discutirlo.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=Querías hablar de una casa.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=Tu nombre está en la cuadra. Pensé que deberías oírlo.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=La casa todavía está en progreso.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=Qué bueno verte trabajando el acero.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=El taller está construido. El banco está listo.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=Acerca de la construcción de la forja...
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=Dijiste que necesitabas una forja real aquí.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=Cuidado con los dedos.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
+# -- Tree id: aetherhaven_dialogue_test (QA / harness) --
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Laboratorio de condiciones. No deberías ver una opción oculta. Deberías ver una opción en gris. Utilice las puertas compuestas para continuar.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Esta opción está oculta (literalmente falsa).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Esto debe estar atenuado.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(requiere literal verdadero)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pase compuesto: NO falso Y verdadero
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR rama (verdadero O falso)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Gracias por probar. ¡Adiós!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=¡Adiós!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Elija a continuación para saltar a la despedida usando una acción de ir a en lugar de siguiente.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=goto farewell
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Una acción de entrada a un nodo solo te dio una pala tosca (si tenías espacio en el inventario). Elija la opción a continuación para obtener más elementos.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Dame 3 tierra, luego continúa.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Bienvenido al arnés de diálogo de Aetherhaven. Esta línea es larga a propósito para que puedas comprobar el diseño y el desplazamiento. Sus opciones se encuentran debajo del texto del cuerpo.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Continuar con el laboratorio de condiciones.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Salir (terminar con el siguiente nulo).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Salir (acción de cierre explícita).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Puede abrir el comerciante de Kweebec. intercambie la interfaz de usuario o salte a las acciones de código auxiliar.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Abra la tienda de trueque de Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Omita la compra, vaya a stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Acciones de código auxiliar: desbloquear logros y comenzar la misión debe iniciar sesión hasta que esos sistemas existe.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Ejecutar unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
+# -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Soy Lyren. Hablo en nombre de los estatutos que firmamos cuando pusimos esta ciudad en Orbis. Las viejas ciudades han desaparecido. Lo que tenemos es este terreno y la gente que ya está aquí, y vendrán más. Antes de empezar a construir nuevas parcelas, necesito que conozcas el terreno alrededor de Aetherhaven: dónde es lo suficientemente plano para construir, dónde corre el agua, dónde podríamos poner campos o zonas comunes más adelante. Mantenlo práctico. Cuando hayas examinado el lugar, ven a buscarme de nuevo.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Exploraré el área y te informaré.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Tú recoges algo del trabajo que te enviamos y del comercio cuando alguien está comprando. La bolsa de la ciudad es cosa suya. Una vez construida la sala, el tesoro reside allí. Utilice el bloque que se encuentra allí para introducir monedas o sacarlas si los estatutos así lo indican. Después de eso, cada mañana fluye hacia ese tesoro un poco de oro procedente de las personas que realmente viven aquí, no de los visitantes que pasan por allí. Cuánto depende de cómo se estén comportando. Si están alimentados, descansados ​​y con buen humor, la olla funciona mejor. Si se estiran demasiado, empeora. Eso mantiene la honestidad de los bienes comunes.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Es bueno saberlo. Gracias.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=Ahí. Un auténtico albergue para personas que, de otro modo, dormirían a la intemperie. Corin tiene la llave. Ve a presentarte junto a la chimenea. Obtuviste más que gracias, pero gracias es donde comenzaré.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Feliz de ayudar.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Cuando las paredes estén levantadas, usa el bloque de administración y configúrame como residente. Entonces ven a buscarme. Quiero oírte decirlo, no leerlo en un estante.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=Obtendrás ambos.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Entonces está arreglado. Tengo un hogar bajo las mismas reglas que todos los demás. Gracias por acompañarlo.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Bienvenido a casa, Lyren.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=El salón está levantado y el tesoro puede respirar. Los estatutos nos dieron reglas para la ciudad; no me dio una cama. Quiero la misma casa pequeña que todos los demás tienen. Toma la ficha que te ofrezco, apuesta la parcela con tu personal, paga los materiales y la parte de la ciudad del tesoro, luego pon mi nombre en el estante de administración cuando esté construido. No olvidaré quién me hizo espacio.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=Yo me encargaré.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=No puedo comprometerme con eso todavía.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Tómate el tiempo que necesites. Cuando la casa esté terminada, regístreme en el bloque, luego venga a buscarme para que podamos terminar esto cara a cara.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=Iré cuando esté hecho.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Bien. Coloque el terreno de la posada con su personal, pague los materiales que enumera el letrero y termine la construcción. Cuando el techo esté puesto y la chimenea, ven a decírmelo tú mismo. Estaré esperando noticias.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=Comenzaré tan pronto como pueda.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Cuando el techo aguante y el hogar esté encendido, regresa y dímelo en persona. No los estoy apurando, pero no me iré hasta que esta ciudad tenga una posada adecuada para cualquiera que necesite una cama.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=Regresaré cuando esté lista.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=La carta sigue vigente y yo sigo manteniéndola. No tenemos refugio adicional al que enviar a la gente, por lo que el primer edificio real aquí tiene que ser una posada: un techo, un hogar y una puerta que permanece abierta para los viajeros y para nuestros propios familiares cuando el camino es largo. Cuando estés listo para apostarlo, dilo.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=Estoy dentro. Levantemos la posada.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=La posada todavía está en mi lista. Quería registrarme.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=Te dejo con eso.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=La posada está terminada. Corin debería tener lo que necesita.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=Sobre el ayuntamiento.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=Puse tu nombre en el estante. Deberías saberlo primero por mí.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=Tu casa aún no está terminada, pero ya estoy en ello.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=Mencionaste que querías una casa propia.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=La construcción del ayuntamiento todavía está en marcha.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=El ayuntamiento está arriba.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=¿Cómo consigue la gente monedas de oro por aquí?
+aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Usa la ficha del ayuntamiento con tu personal, paga los materiales y constrúyelo. Cuando el salón esté terminado, dímelo en persona. Quiero ver tu cara cuando digas que está terminado.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=Te diré el momento en que esté terminado.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=Allí. Aetherhaven tiene un ayuntamiento como es debido: registros, tesorería y una sala donde podemos reunirnos sin gritar al otro lado de la plaza. Eso es lo que necesitaba de ti.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Me alegra que ayude.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=La posada está en pie. Lo siguiente que necesitamos es un ayuntamiento que nos pertenezca a todos: un estante para los estatutos, un escritorio para los planos y un tesoro para que la moneda compartida pueda financiar el resto de lo que construyamos. Replantee la parcela, pague lo que pide el letrero en materiales y finalmente tendremos un lugar para reunirnos como toda la ciudad.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=Instalaré el salón.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=Todavía no.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=La piedra y el papeleo toman tiempo. Cuando el pasillo esté terminado, dímelo. Estaré aquí.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Todavía estoy trabajando en ello.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Elder Lyren
+# -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=Muy bien. Si todavía quieres filas aquí, dilo.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=Lo haré.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=Me quedaré en la posada hasta que la tierra deje de fingir que son tablas del piso. Entonces encuéntrame detrás del banco con barro en mis botas.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=Nos vemos allí.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=Cuando la parcela esté construida, caminaré hasta el banco de cultivo y lo instalaré. Ven a buscarme allí y lo daremos por hecho.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=Necesito abandonar la misión.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=Continuaré.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=Ese complot alimentará más que quejas. Mantendré las camas girando mientras la ciudad crece.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=Crece bien.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=Cuando el techo aguante, regístrame en el bloque y luego encuéntrame. Quiero terminar esto con ambos pies en mis propias tablas del piso.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=Cuenta con ello.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=Raíces debajo de mis propias vigas. Esa es la cosecha que quería.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=Me alegra escucharlo.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=Los campos son un trabajo honesto. Todavía quiero una puerta que no sea la de la posada. Lo mismo que cualquiera. Constrúyalo, luego inclúyame en el estante.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=Yo lo construiré.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=Todavía no.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=La madera y el clima se toman su tiempo. Cuando la casa esté terminada, asígname y luego ven a contarme el resto.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=Te encontraré.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=He estado contando grietas en las tablas del piso de Corin y soñando con filas con mi nombre en ellas. Estacar un terreno agrícola, cercarlo, colocar el banco. Elabore la ficha de trama en su escritorio de planificación, colóquela con su personal y pague el cartel. Nos reuniremos con usted en el banco de cultivo cuando el terreno esté listo.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=Lo construiremos.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=Ahora no.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.root.body=Irienne Mossmark. A la suciedad no le importa quién la poseía ayer. Le importa lo que le des de comer mañana. Dormí suficientes noches en el piso de Corin para saber que un plato caliente vence al orgullo.
+aetherhaven.dialogue.aetherhaven_farmer.root.c0=Querías hablar sobre tu propio lugar.
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=Tu nombre está en el estante. Supuse que querrías escucharlo.
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=Tu casa todavía está creciendo.
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=Es bueno ver cómo la granja te alimenta.
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=La granja estará lista cuando tú lo estés.
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=Acerca de los campos...
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=Dijiste que te vendría bien un granjero en ciudad.
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=Descansa un poco.
+aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Irienne Mossmark
+# -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Entonces guardaré la tetera aquí hasta que la trama sea tuya. Una vez que mi nombre esté en el estante, ven a buscarme. Quiero estrecharle la mano antes de que lo demos por resuelto.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Cuente con ello.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=Ahí. Un hogar para extraños y un pestillo que me pertenece. Eso vale más de lo que parece la llave.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=Te lo ganaste.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Serviré sopa para toda la ciudad, pero me gustaría una puerta que se cierre sobre mi propio desastre. La misma ficha de casa que cualquier otra persona. Constrúyalo, inclúyame en el bloque cuando esté en pie.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=Lo haré construir.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=En otra ocasión.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=La arcilla se seca a su propio ritmo. Cuando la casa esté terminada, asígname en el estante y ven a decirme para que podamos cerrar el libro sobre esto.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=Te lo haré saber.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=Mantenemos dos lugares para la gente de paso. Comerciantes, caldereros, cualquiera que la ciudad pueda respaldar. Aléjalos y la mayoría de las noches duermen bajo el cielo. Eso no es orgullo. Eso es matemática.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=Tiene sentido.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Sal de el viento. Soy Corín. Mantengo este hogar, y mientras estés bajo nuestro techo serás alimentado lo mejor que podamos. Eso sigue siendo importante, incluso cuando el mundo exterior olvida cómo.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=¿Cómo funcionan las camas de invitados?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=Querías una habitación propia.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=Te incluí en el estante de la casa. Pensé que deberías saberlo de mí.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Tu casa todavía se está uniendo. Estoy en ello.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=Iré a revolver la olla.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
+# -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.root.body=Vex Sunderlane. Compro salvamento, vendo esperanza y cuento monedas dos veces. Su posada con chimenea ya es el mejor escaparate en kilómetros a la redonda. Todo lo demás es negociación.
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=Busca tus mercancías (monedas de oro).
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=Mencionaste que querías una casa.
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=Te puse en el libro mayor. El papel debe coincidir con la realidad.
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=Tu casa todavía está en la pila.
+aetherhaven.dialogue.aetherhaven_merchant.root.c5=Qué bueno verte comerciar aquí.
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=El puesto ha terminado. Ven a ver.
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=Acerca de la construcción del puesto...
+aetherhaven.dialogue.aetherhaven_merchant.root.c8=Me pediste que encontrara espacio para un puesto.
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=Mantén tu bolso cerrado contra el viento.
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=Fair. Si cambia de opinión, la oferta permanece.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=Gracias.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=Acamparé en Corin's hasta que el puesto esté en pie. Más seguro que una zanja, y la sopa es mejor.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=Nos vemos cuando esté listo.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=Cuando el puesto esté construido, iré y abriré la tienda. Ven a buscarme allí y terminaremos esto.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=Necesito abandonar la misión.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=Seguiré trabajando en ello.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=Stall parece honesto. El comercio será escaso al principio. Lo cultivamos lentamente, al igual que todo lo que vale la pena conservar.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=Por eso.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=Cuando la puerta se abra, pon mi nombre en el bloque y luego encuéntrame. Quiero la historia, no solo la tinta.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=Obtendrás ambos.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=Allí. Una puerta que conoce mi llamada. Eso es mejor que una caja fuerte llena.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=Disfrútalo.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=El stock debe estar en los estantes. Mis botas deben estar en algún lugar seco. La misma ficha de casa que el resto de la ciudad. Regístreme cuando esté construido.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=Voy a apostar una casa.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=En otra ocasión.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=Las casas a veces toman temporadas. Termínelo, asígneme, luego regrese y equilibraremos el libro mayor.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=Volveré.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=Necesito un pequeño techo y un mostrador en el que pueda apoyarme. Lo colocas con tu bastón mientras sostienes la ficha que te entrego. Los materiales son tu problema. Ejecutaré el contador cuando los clavos aguanten.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=Lo construiré.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=Ahora no.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Vex Sunderlane
+# -- Tree id: aetherhaven_priestess (Serah Thornwell) --
+aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. Dirijo los ritos de Gaia para este pueblo. La posada es un techo sobre mi cabeza y lo agradezco, pero no puedo ofrecer servicios entre la cena y los juegos de cartas. Necesito un verdadero altar afuera: senderos, algunos taburetes y una estatua donde la gente pueda orar sin contener la respiración por el humo de la cocina.
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=Querías hablar sobre una casa.
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=Ya estás en el estante. Pensé que deberías saberlo.
+aetherhaven.dialogue.aetherhaven_priestess.root.c2=La casa aún está sin terminar.
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=¿Cómo te está yendo el altar?
+aetherhaven.dialogue.aetherhaven_priestess.root.c4=Los terrenos del altar están listos.
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=Acerca de la bendición...
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=Dijiste que necesitabas terreno para Gaia.
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=Te dejo con eso.
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=Sin resentimientos. Si todavía quieres un altar en la ciudad, vuelve a preguntar.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=Muy bien.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=Me quedaré en la posada hasta que se construya el altar. Entonces encuéntrame en la estatua y terminaremos la bendición.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=Te veré allí.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=Cuando el altar esté en pie, caminaré hacia la estatua. Ven a buscarme allí y lo daremos por terminado.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=Necesito abandonar la misión.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=Todavía estoy trabajando en ello.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=El altar está terminado. Gracias. Mantendré los terrenos cuidados y celebraré ritos aquí a medida que la ciudad crezca.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=Buena suerte con ello.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=Cuando la casa esté levantada, pon mi nombre en el bloque de administración del interior y luego ven a buscarme. Quiero oírte decirlo en persona, no simplemente leerlo de una lista.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=Lo harás.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=Bien. Un techo que en realidad es mío.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=Es justo.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=El altar es para todos. Todavía quiero una pequeña casa propia, como cualquier otra persona, así que no viviré fuera de la posada para siempre. Constrúyalo a partir del token habitual, luego regístreme en el bloque de administración cuando esté activo.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=Apostaré una casa.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=En otra ocasión.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=Estas cosas toman tiempo. Cuando la casa esté terminada, regístrame en el bloque y luego ven a hablar. Entonces es cuando terminamos.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=Volveré.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Estaca un lugar para el altar de Gaia: caminos, taburetes y la estatua donde puedo pararme y la gente puede sentarse. Elabore la ficha en su escritorio de planificación, colóquela con su personal y pague el cartel. Cuando esté construido, reúnete conmigo en la estatua y la bendeciremos adecuadamente.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=Lo haremos construir.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Ahora no.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# -- Tree id: aetherhaven_visitor_elder (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Puedes pasar, pero esta carta no es tuya. Si quieres ayudar, primero debes ser bienvenido por aquellos que viven aquí.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Entiendo.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_visitor_generic (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=Buen día, viajero. Si no eres de este asentamiento, habla con los lugareños que pertenecen aquí. Tengo las manos ocupadas con nuestro propio trabajo.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Despedida.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Villager
+# -- Tree id: aetherhaven_visitor_inn (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=El hogar es cálido, pero el libro de contabilidad es para la gente del pueblo y sus invitados. Vuelve cuando te inviten.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Es justo.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Innkeeper
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Tu bolso es demasiado liviano para esta reparación.
+aetherhaven.blacksmith.repair.success={itemName} está completo nuevamente. Bueno como nuevo.
+commands.aetherhaven.dialogue.desc=Abra un árbol de diálogo por ID (para probar)
+commands.aetherhaven.dialogue.treeId.desc=ID del árbol de diálogo (por ejemplo, aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=ID de nodo de entrada opcional (predeterminado: raíz)
+aetherhaven.interaction.dialogue=Presione [{key}] para hablar
+npcRoles.Aetherhaven_Test_Villager.name=Aldeano de prueba de diálogo

@@ -1,0 +1,1135 @@
+# Aetherhaven server-side language strings
+#
+# Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
+# Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
+# portals, big town/plot UI, charter, reputation miles, plot admin, commands (root),
+# items, NPC names, jewelry & town UIs, geodes, mirror, plot placement, commands (tab),
+# feasts, dialogue trees, blacksmith repair lines, help/footer.
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=エーテルヘブンが読み込まれていません。
+aetherhaven.common.noTownInWorld=この世界にはあなたのための町がありません。
+aetherhaven.common.noQuestPermission=この町にはクエスト許可がありません。
+aetherhaven.common.townNotFound=町が見つかりません。
+aetherhaven.common.invalidTownLink=町のリンクが無効です。
+aetherhaven.common.treasuryNotLinked=宝物がありませんリンクされました。
+aetherhaven.common.ownerOnlyTreasury=この国庫を使用できるのは町の所有者だけです。
+aetherhaven.common.townNotInThisWorld=町はこの世界にありません。
+aetherhaven.common.noMoveBuildingsPermission=この町の建物を移動する権限がありません。
+aetherhaven.common.buildingCannotMove=この建物は移動できません（敷地がないかどうかにかかわらず）完了)。
+aetherhaven.common.lookAtBlockPlot=ブロックを見て区画標識の位置を設定し、プレビューを開始します。
+aetherhaven.common.carryPlotToken=ツールにリストされている建物タイプの区画トークン (例: 旅館の区画トークン) を持ち込んで配置を開始します。
+aetherhaven.common.statueNotLinked=像は町にリンクされていません。
+aetherhaven.common.ownerOnlyStatue=町の所有者のみが使用できますこの像。
+aetherhaven.common.debugCommandsDisabled=エーテルヘブンのデバッグ コマンドは無効になっています (config.json で DebugCommandsEnabled を設定します)。
+aetherhaven.common.noPlayerId=プレイヤー ID なし。
+aetherhaven.common.playersOnly=プレイヤーのみ。
+aetherhaven.common.invalidVillager=無効な村人です。
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=あなたはすでにこの世界の街の一部。新しいものを設立する前にそのままにしておいてください。
+aetherhaven.charter.townFounded=町が設立されました: {name}。村の長老が到着しました。憲章を使用して町の名前を変更してください。
+aetherhaven.chartertown.info.notLinked=憲章はまだ町にリンクされていません。
+aetherhaven.chartertown.info.invalidTownId=憲章の町 ID が無効です。
+aetherhaven.chartertown.info.townDataMissing=町のデータが見つかりません (サーバー ログを参照)。
+aetherhaven.chartertown.townInfoBlock=町の名前: {name}\n町 ID: {id}\n階層: {tier}\n地域 (チャンク半径): {radius}\n{cx}、{cy}、{cz}
+aetherhaven.chartertown.nameEmpty=町名を空にすることはできません。
+aetherhaven.chartertown.nameDuplicate=その名前は、この中の別の町ですでに使用されていますworld.
+aetherhaven.chartertown.nameSaved=街の名前が保存されました: {name}
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=この世界には街を所有していません。
+aetherhaven.town.resolve.noTownNamed=この世界には「{name}」という名前の街はありません。
+aetherhaven.town.resolve.ownerOrOpOnly=それを実行できるのは街の所有者 (または
+aetherhaven.town.resolve.notInTown=あなたはこの世界の町にいません。
+aetherhaven.town.resolve.nameOnlyForOwner=ここで町の名前を使用できるのは町の所有者 (またはオペレーター) だけです。
+aetherhaven.town.resolve.specifyTownName=町の名前を指定するか、所有する町の名前を使用してください。
+aetherhaven.town.resolve.specifyTown=町を指定してください名前。
+aetherhaven.town.resolve.adminOtherTown=名前で別のプレイヤーの町をターゲットにできるのはオペレーターだけです。
+aetherhaven.town.invite.err.emptyName=プレイヤー名を入力してください。
+aetherhaven.town.invite.err.targetOffline=プレイヤー「{name}」はこの世界ではオンラインではありません。
+aetherhaven.town.invite.err.cannotInviteSelf=自分自身を招待することはできません。
+aetherhaven.town.invite.err.alreadyInTown=そのプレイヤーはすでに次の町にいます。この世界。
+aetherhaven.town.invite.toTarget={inviter} が街「{townDisplay}」に招待されました。 /aetherhaven town accept {townDisplay} または /aetherhaven town拒否 {townDisplay}
+aetherhaven.town.invite.sent={name} に招待を送信します。
+aetherhaven.town.kick.err.mustBeOnline=名前でキックするにはプレイヤーがオンラインである必要があります。
+aetherhaven.town.kick.err.cannotRemoveOwner=町の所有者を削除できません。
+aetherhaven.town.kick.err.notMember=そのプレイヤーはこの町のメンバーです。
+aetherhaven.town.kick.removed=町から {name} を削除しました。
+aetherhaven.town.kick.removedYou=町「{town}」から削除されました。
+aetherhaven.town.kick.removedGeneric=町からメンバーを削除しました。
+aetherhaven.town.role.err.ownerAlwaysFull=所有者は常に満員です権限。
+aetherhaven.town.role.set={name} の役割を {role} に設定します。
+aetherhaven.town.accept.err.noSuchTown=その名前の町はありません。
+aetherhaven.town.accept.err.noInvite=その町には保留中の招待がありません。
+aetherhaven.town.accept.err.noInvites=保留中の街への招待はありません。
+aetherhaven.town.accept.err.alreadyInTown=すでに街にいます。
+aetherhaven.town.accept.joined=「{town}」に参加しました。
+aetherhaven.town.decline.noPending=その街への保留中の招待はありません。
+aetherhaven.town.decline.noInvites=保留中の街への招待はありません。
+aetherhaven.town.decline.done=招待拒否しました。
+aetherhaven.town.rolecmd.playerMustBeOnline=プレイヤーはオンラインである必要があります。
+aetherhaven.town.rolecmd.roleInvalid=役割はビルド、クエスト、または両方である必要があります。
+aetherhaven.town.leave.notInTown=あなたは町にいません。
+aetherhaven.town.leave.ownerCannotLeave=所有者は離れることができません。所有権の譲渡はまだ実装されていません。
+aetherhaven.town.leave.notMember=あなたはこの町のメンバーではありません。
+aetherhaven.town.leave.left=退会しました"{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BUILD
+aetherhaven.town.memberRole.QUEST=QUEST
+aetherhaven.town.memberRole.BOTH=BOTH
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=保管されている金貨: {count}
+aetherhaven.ui.treasury.depositNoCoins=使用できる金貨がありません入金。
+aetherhaven.ui.treasury.depositRemoveFailed=在庫からコインを削除できませんでした。
+aetherhaven.ui.treasury.deposited=金貨 {count} を入金しました。
+aetherhaven.ui.treasury.makeRoom=在庫に空きを作ります。
+aetherhaven.ui.treasury.couldNotAddCoins=コインを追加できませんでした。
+aetherhaven.ui.treasury.withdrew=金 {count} を引き出しましたコイン。
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=税金の内訳 (ロードされたチャンクのみ。ロードされていない住民はシミュレーションされるまで 0 を寄付します):
+aetherhaven.ui.treasury.debug.titheNoHall=Tithe: この町には完全な市庁舎がありません。
+aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 ゴールド (ロードされた住民がいない、または政策計算から 0)。荷降ろし/ニーズ/内訳: /aetherhaven 税の内訳
+aetherhaven.ui.treasury.debug.titheApplied=十分の一税が適用されました: +{amount} ゴールドを国庫に (朝の徴収と同じルール)。
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} モーニングウィンドウ={b} 暁エポックデイ={c} 国庫LastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} ロード済み居住者={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 快適さ={comfort} gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a}founderActive={b}founderPermille={c}afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} FinalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=クエストを追跡するには、この世界に町が必要です。
+aetherhaven.ui.questJournal.noPermission=町のクエストを管理する権限がありません。
+aetherhaven.ui.questJournal.noActive=アクティブなクエストがありません。
+aetherhaven.ui.questJournal.hint=クエストをタップすると詳細が表示されます。 × はログから削除します (提供者から再度取得できます)。
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=不明なダイアログ: {id}
+aetherhaven.ui.dialogue.missingNode=欠落ノード: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Building
+aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
+aetherhaven.ui.plotConstruction.noConstruction=この区画には建設が設定されていません。
+aetherhaven.ui.plotConstruction.assignResidentHint=ここに住む村人を割り当てます（一致すると家のクエストを完了します）。
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=未割り当て
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=プレイヤー データをロードできませんでした。
+aetherhaven.ui.plotConstruction.townDataMissing=この町のデータが見つかりません。ブロック。
+aetherhaven.ui.plotConstruction.clearedHome=ホーム割り当てをクリアしました。
+aetherhaven.ui.plotConstruction.updatedHome=ホーム割り当てを更新しました。
+aetherhaven.ui.plotConstruction.plotRemoved=プロットが削除され、プロット トークンが返されました。
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} ({have} があります)
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=プレーヤーをロードできませんでしたデータ。
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=ライフ エッセンスが足りません ({need} が必要です)。
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=インベントリからライフ エッセンスを削除できませんでした。
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=そのブロックの範囲内に POI がありません。
+aetherhaven.poi.noPoiSelected=POI が選択されていません。最初に POI をプライマリクリックしてください。
+aetherhaven.poi.selectedPoiGone=選択した POI はもう存在しません。
+aetherhaven.poi.moved=POI を {x}、{y}、{z} に移動しました。
+aetherhaven.poi.noPoiBlock=POI が選択されていません。まず最初に POI ブロックをクリックします。
+aetherhaven.poi.clearedInteractionTarget=インタラクション ターゲットをクリアしました。 NPC は POI ブロック センターを使用します。
+aetherhaven.poi.setInteractionTarget=インタラクション ターゲットを {x}、{y}、{z} に設定します。
+aetherhaven.poi.selected={x}、{y}、{z} で選択された POI {id}
+aetherhaven.poi.targetBlockMismatch=ターゲット ブロックは予想されるものと一致する必要がありますこの POI には {type} と入力してください。
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=建物を移動中…
+aetherhaven.plotSign.placed=敷地標識を設置しました。
+aetherhaven.plotSign.couldNotAdd=敷地標識を追加できませんでした (在庫がいっぱいですか?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=あなたの町の領土内に創立記念碑を設置してください。
+aetherhaven.founder.cannotPlace=Youここに創設者の記念碑を配置できません。
+aetherhaven.founder.createFailed=創設者の像を作成できませんでした。ブロックが配置されました。もう一度試してください。
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=ターゲットはエーテルヘブンの町の村人ではありません。
+aetherhaven.debug.autonomy.toggledOn=Autonomy デバッグ オン (DisplayCustom + VisPath)。ネームプレートの AH オーバーレイ。
+aetherhaven.debug.autonomy.toggledOff=この村人の自治デバッグはオフです。
+aetherhaven.debug.autonomy.state=この村人の自治デバッグ: {state}
+aetherhaven.debug.autonomy.cleared=この村人のエーテルヘイブンの自治デバッグをクリアしました村人。
+aetherhaven.debug.on=ON
+aetherhaven.debug.off=OFF
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=評判は変更されていません (すでに {value})。
+aetherhaven.debug.rep.set=対話のキューにあるマイルストーンを越えて評判を {value} に設定します (役割の場合)解決済み)。
+aetherhaven.debug.rep.milestonesHeader=評判マイルストーン (報酬 ID、役割、最小担当者、ダイアログ ノード):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=付与された報酬 {id}.
+aetherhaven.debug.rep.targetInvalid=無効な村人です。
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=空腹、エネルギー、または楽しみである必要があります (値は 0..{max})。
+aetherhaven.debug.needs.elderNoTown=あなたには町がありませんこの世界では (長老に必要)。
+aetherhaven.debug.needs.noElderUuid=タウンにはまだ保存された長老 UUID がありません。
+aetherhaven.debug.needs.noMatch=一致する村人がありません (ハンドル、長老、または完全な UUID を検査する必要があります)。
+aetherhaven.debug.needs.multipleMatch=複数の NPC がそのハンドルと一致しました。 Inspection.
+aetherhaven.debug.needs.entityNotLoaded=エンティティがロードされていないか、村人ニーズがありません: {id}
+aetherhaven.debug.needs.set={label} ({id}) に ​​{which}={value} を設定します
+aetherhaven.debug.needs.inspectIntro=ニーズのある村人 (ロードされたチャンク)。次のように設定します。 /aetherhaven には、<handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} を設定する必要があります。 uuid={uuid} |空腹={hunger} エネルギー={energy} 楽しみ={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(ハンドルなし)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=街の区画 {id}:
+aetherhaven.debug.plots.header={index}。プロット={plotId} 状態={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=この世界のエーテルヘブンの町: {count}
+aetherhaven.towns.entry={name} id={id} 所有者={owner} 憲章={cx},{cy},{cz}プロット={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state}sign@{x},{y},{z}
+aetherhaven.debug.poi.invalidTownUuid=無効な町の UUID: {raw}
+aetherhaven.debug.poi.noTownArg=この世界には町がありません (町の UUID を使用してください)引数).
+aetherhaven.debug.poi.listHeader=街のPOI {town} ({count}):
+aetherhaven.debug.poi.listEmpty=この街には登録されていません (建物を完成させるか、pois.json を確認してください)。
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block}タグ={tags} キャップ={cap} プロット={plot}
+aetherhaven.debug.poi.dumpHeader=世界登録内のすべての POI ({count}):
+aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plan={plot}
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=クエスト開始: {name}
+aetherhaven.quest.completed=クエスト完了: {name}
+aetherhaven.quest.abandoned=クエスト放棄: {name}
+aetherhaven.questdebug.granted=許可されたアクティブなクエスト: {name}
+aetherhaven.questdebug.completed=完了したクエスト: {name}
+aetherhaven.questdebug.cleared=クリアされたアクティブなクエスト: {name}
+aetherhaven.questdebug.statusHeader=-- クエスト ステータス --
+aetherhaven.questdebug.statusActive=アクティブ:
+aetherhaven.questdebug.statusCompleted=完了:
+aetherhaven.questdebug.statusEmpty=(なし)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=いいえこの町には村人のエンティティ ID がまだ登録されています。
+aetherhaven.villager.listHeader=町の村人: エンティティ UUID、ソース、ロードされている場合はロール (/aetherhaven の評判で UUID またはロール ID を使用し、村人を見つけます):
+aetherhaven.villager.listRow={uuid} | {note} |役割: {role}
+aetherhaven.villager.locateNotLoaded=その村人は読み込まれていません (近くに移動するか、チャンクを読み込んでみてください)。
+aetherhaven.villager.locateNoTransform=そのエンティティの変換はありません。
+aetherhaven.villager.locatePosition=村人 {uuid} ({role}): {x}、{y}、 {z}
+aetherhaven.villager.locateOpRequired=テレポートにはオペレーター (OP グループ) が必要です。
+aetherhaven.villager.teleported=テレポートされました。
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=そのブロックにアイテム コンテナがありません (チャンクがロードされていない、フィラーとベースが一致していない、またはコンテナではありません)ブロック)。
+aetherhaven.debug.loot.bonusApplied=エーテルヘイブンのボーナス戦利品ロールがこのコンテナに適用されました (強制)。
+aetherhaven.townsCommand.line={id} name="{name}" world={world} owner={owner} chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(なし)
+aetherhaven.questdebug.statusActiveLine=アクティブ: {list}
+aetherhaven.questdebug.statusActiveEmpty=アクティブ: (なし)
+aetherhaven.questdebug.statusCompletedLine=完了: {list}
+aetherhaven.questdebug.statusCompletedEmpty=完了: (なし)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=エーテルヘブン出口
+items.Aetherhaven_Portal_Exit.description=オーバーワールドに戻るために使用します。
+items.Aetherhaven_Portal_Enter.name=エーテルヘブンゲートウェイ
+items.Aetherhaven_Portal_Enter.description=入るために使用しますエーテルヘブン.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=エーテルヘブン
+instances.aetherhaven.subtitle=天空の村
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=建設
+aetherhaven.ui.plotmanagement.title=街Management
+aetherhaven.ui.plotmanagement.tabPlot=Plot
+aetherhaven.ui.plotmanagement.tabPlayers=プレイヤー
+aetherhaven.ui.plotmanagement.playersHint=オンライン プレイヤーを名前で招待します。役割を変更するか、以下のメンバーを削除してください。
+aetherhaven.ui.plotmanagement.playersHintReadOnly=この町のメンバー。ロールを招待または変更できるのはオーナーだけです。
+aetherhaven.ui.plotmanagement.inviteLabel=プレーヤーを招待
+aetherhaven.ui.plotmanagement.invitePlaceholder=プレーヤー名 (オンライン)
+aetherhaven.ui.plotmanagement.inviteSend=招待を送信
+aetherhaven.ui.plotmanagement.kick=削除
+aetherhaven.ui.plotmanagement.roleOwner=Owner
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Plot info
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=村民のニーズ
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=町民
+aetherhaven.ui.plotmanagement.tabMoveTooltip=この建物を移動
+aetherhaven.ui.plotconstruction.materials=材料
+aetherhaven.ui.plotconstruction.build=建築
+aetherhaven.ui.plotconstruction.pickUpPlot=区画を拾う(戻る)トークン)
+aetherhaven.ui.plotconstruction.townNeeds=町のニーズ
+aetherhaven.ui.plotconstruction.moveBuilding=建物を移動
+aetherhaven.ui.plotconstruction.houseResident=居住者
+aetherhaven.ui.plotconstruction.assignHouseResident=居住者を設定
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=建物を移動しますか?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=区画配置を開いて新しい敷地を選択します。移転すると古い建物が破壊され、再建されます。まず、敷地内にある貴重品、ペット、およびゆるいアイテムを取り除いてください。
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=続行
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=キャンセル
+
+aetherhaven.ui.villagerneeds.title=町のニーズ
+aetherhaven.ui.villagerneeds.hint=メーターを表示する村人を選択し、肖像画。
+aetherhaven.ui.villagerneeds.hunger=飢餓
+aetherhaven.ui.villagerneeds.energy=エネルギー
+aetherhaven.ui.villagerneeds.fun=楽しい
+aetherhaven.ui.villagerneeds.villagers=村人
+aetherhaven.ui.villagerneeds.noResidentsTracked=町の住民はまだ追跡されていません。
+aetherhaven.ui.reputation.label=評判
+aetherhaven.reputation.dailyTalkGain=+{amount} 評判 (毎日の挨拶)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=憲章修正
+aetherhaven.ui.charter.popHint=居住者 (非訪問者): {count}。 Tier 1は3でロック解除されます。ティア 2 5 時。
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=ティア 1: 十分の一税スタイル
+aetherhaven.ui.charter.tier2=ティア 2: タウン フォーカス
+aetherhaven.ui.charter.t1.perCapitaShort=Per capita
+aetherhaven.ui.charter.t1.happinessShort=幸福度加重
+aetherhaven.ui.charter.t1.perCapitaTooltip=頭数優先の十分の一。\n\n朝の金は、ここに住んでいる住民の数に依存します。日々の快適さが依然として全体をわずかに押し上げていますが、変化を変えるのは人口です。
+aetherhaven.ui.charter.t1.happinessTooltip=最初の十分の一献金が必要です。\n\n朝の金は、住民がどれだけ十分に食事を摂り、休息し、元気であるかに大きく左右されます。全員をまともな状態に保つことよりも、少数の追加住民の方が重要です。
+aetherhaven.ui.charter.t2.miningShort=採掘
+aetherhaven.ui.charter.t2.loggingShort=伐採
+aetherhaven.ui.charter.t2.farmingShort=農業
+aetherhaven.ui.charter.t2.smithingShort=鍛冶
+aetherhaven.ui.charter.t2.miningTooltip=認可は鉱山を支援しています。\n\n鉱山生産に伴うボーナスは彼らが到着したら、この町を気に入ってください。以下から焦点を 1 つだけ選択してください: 採掘、伐採、農業、または鍛冶です。
+aetherhaven.ui.charter.t2.loggingTooltip=憲章は森林を支援しています。\n\n伐採と木伐採に関連したボーナスは、到着時にこの町に有利になります。以下から焦点を 1 つだけ選択してください: 採掘、伐採、農業、または鍛冶です。
+aetherhaven.ui.charter.t2.farmingTooltip=憲章は畑を裏付けています。\n\nあなたの町に完成した農場がある場合、ここのスプリンクラーは少し遠くまで届き、スプレーの端に余分なタイルが付きます。以下から焦点を 1 つだけ選択してください: 採掘、伐採、農業、または鍛冶です。
+aetherhaven.ui.charter.t2.smithingTooltip=憲章は鍛冶場を裏付けています。\n\n鍛冶と金属加工に関連付けられたボーナスは、到着時にこの町に有利になります。以下から焦点を 1 つだけ選択してください: 採掘、伐採、農業、または鍛冶。
+aetherhaven.ui.charter.hint=レベルごとに 1 つのオプションを選択してください。選択内容は後で変更できません。
+aetherhaven.ui.charter.allChosen=この町に対して選択されたすべての修正。
+aetherhaven.ui.charter.noTown=これを使用するには、町に所属している必要があります。
+aetherhaven.ui.charter.noPermission=この町の憲章修正は変更できません。
+aetherhaven.ui.charter.err.locked=その修正はロックされているか、すでにロックされています選択されました。
+aetherhaven.ui.charter.err.invalid=無効な選択です。
+aetherhaven.ui.charter.saved=憲章の修正が更新されました。
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=続行
+aetherhaven.reputation.reward.elder.50=憲章は永遠に石に刻まれているわけではありません。修正表のパターンは次のとおりです。概略図がわかったら、都市計画デスクでそれを作成します。ホールに座って、町の朝の十分の一の傾きを選択してください。
+aetherhaven.reputation.reward.elder.100=あなたは、誰が尋ねたよりも遠くまでこの場所を運びました。この礎石を取り上げてください。憲章が許可する場所に創設者の記念碑を設置してください。財務省は覚えているでしょう。
+aetherhaven.reputation.reward.innkeeper.50=あなたは長い間このホールを養い、誠実に保ってくれたので、私はあなたに大きなテーブルを任せます。これが宴会のパターンです。設計図を入手したら都市計画デスクで作成し、それを街に設置します。テーブルの準備ができたら、「台帳の晩餐」を呼び出すこともできます。パン、チーズ、パイ、そして一週間分の十分の一を用意します。あなたが料理を提供している間、私はホールを見守ります。
+aetherhaven.reputation.reward.innkeeper.75=あなたは私たちと一緒に十分な長い夜を過ごしてきました。 Hearthglass Vigil を展開すると、1 週間にわたって町の食事がよりゆっくりと優しくなります。魚、肉、野菜、あらゆるニーズに応える穏やかなフェード。それが私たちがお互いを立たせる方法です。
+aetherhaven.reputation.reward.innkeeper.100=あなたとこの町には名前が付けられました。 Berrycircle Concord は、サラダ、フルーツ串、ポップコーン、そして着地するトーストなどのライト プレート サークルです。一度お召し上がりいただければ、お客様はあなたのことを温かく覚えてくださるでしょう。
+aetherhaven.reputation.reward.merchant.50=あなたは悪天候の時も良い時も約束を守ってくれました。こちらがベンチの模様です。概略図を手に入れたら、都市計画デスクで作成します。ベンチでの評価は無料です。私はまだ私のものを請求しています。
+aetherhaven.reputation.reward.merchant.100=宝石商のコーナーを獲得するのに十分なゴールドをこの台帳に投入しました。パターンはあなたのものです。まちづくり窓口で構築します。あなたの宝石、金属、そしてあなたが注ぐ人生を設定すれば、その作品が現実のものになります。
+aetherhaven.reputation.reward.farmer.25=あなたは列で私の信頼を獲得しました。鉄製スプリンクラーをスケッチしました。水のエッセンスと鉄があれば、農業ベンチで作成してください。
+aetherhaven.reputation.reward.farmer.50=これはトリウム パターンです。範囲が広く、夜明けのリズムは同じです。概略図を理解すると、ベンチの「ファーミング」タブにそれが表示されます。
+aetherhaven.reputation.reward.farmer.75=コバルトは圧力をよりよく保持します。このページでは、3 番目のスプリンクラー層のロックを解除します。日の出のときにまだ 1 回ほど良い浴び方をします。
+aetherhaven.reputation.reward.farmer.100=アダマンタイトとエッセンス: セットの最後のシートです。慎重に配置してください。町の野原は夜明けに水を飲む。
+aetherhaven.reputation.reward.blacksmith.25=モルタルには石、忍耐には石。あなたはその両方を持っており、それが示しています。
+aetherhaven.reputation.reward.blacksmith.50=あなたは鍛冶屋の信頼を獲得しました。これはジオード アンビルの概略図です。鉄筋と石が揃ったら、都市計画デスクで作成してください。
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=プロット サイン (管理者)
+aetherhaven.ui.plotadmin.construction=建設
+aetherhaven.ui.plotadmin.give=プロット サインを与えて閉じる
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven mod コマンド
+commands.aetherhaven.reload.desc=config.json をリロードし、ディスクからの Aetherhaven JSON カタログ (クリエイティブ モード)
+commands.aetherhaven.reload.success=Aetherhaven 設定およびアセット カタログがリロードされました。
+commands.aetherhaven.reload.failure=リロードに失敗しました: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven プラグインがロードされていません。
+commands.aetherhaven.plot.desc=プロット サイン管理 UI を開く (構築を選択、取得item)
+commands.aetherhaven.starterkit.desc=エーテルヘブン スターター キットを手に入れましょう (プロット スタッフ、ジャーナル、チャーター、宿屋トークン、都市計画デスク、クリエイティブ モード)
+commands.aetherhaven.starterkit.success=スターター キットがインベントリに追加されました。
+commands.aetherhaven.starterkit.partial=スターター キットの一部が付与されます。 {failed} アイテムが適合しませんでした (インベントリ スペースを作ります)。
+
+commands.aetherhaven.exportskin.desc=アバター スキンをモデル JSON としてエクスポート (親: プレーヤー)
+commands.aetherhaven.exportskin.other.desc=別のプレーヤーのアバター スキンをモデル JSON としてエクスポート
+commands.aetherhaven.exportskin.arg.path=オプションの出力ファイル パス (デフォルト: プラグイン) data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=このプレーヤーでは使用できるキャラクター スキンがありません。
+commands.aetherhaven.exportskin.invalidSkin=スキンの検証に失敗しました: {detail}
+commands.aetherhaven.exportskin.resolveError=スキンをモデルの添付ファイルに解決できませんでした: {detail}
+commands.aetherhaven.exportskin.ioError={path} の書き込みに失敗しました: {detail}
+commands.aetherhaven.exportskin.success=モデル JSON を {path}
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=プロット記号
+items.Aetherhaven_Plot_Sign.description=プレハブを構築できる場所をマークします。 /aetherhaven プロットを使用して設定します。
+
+items.Aetherhaven_Charter.name=町憲章
+items.Aetherhaven_Charter.description=町を見つける場所。各プレイヤーはワールドごとに 1 つの町を持つことができます。町の情報を開くために使用します。
+
+items.Aetherhaven_Town_Planning_Desk.name=町計画デスク
+items.Aetherhaven_Town_Planning_Desk.description=町憲章、区画配置スタッフ、クエストジャーナル、ジオード金床、憲章修正表、区画トークンを作成します。作業台で作成します。
+items.Aetherhaven_Charter_Amendments_Table.name=憲章修正表
+items.Aetherhaven_Charter_Amendments_Table.description=町の十分の一税がどのように数えられるか、および憲章がどのような取引に有利かを記録します。国民が支持したら修正案を公開するために使用します。都市計画デスクで作成します。回路図を知っておく必要があります。
+items.Aetherhaven_Banquet_Table.name=宴会テーブル
+items.Aetherhaven_Banquet_Table.description=町の宴会のための長いテーブル。自分の領土に設置し、市民の宴会に使用してください。町の誰かがパターンを共有したら、都市計画デスクで作成します。
+items.Aetherhaven_Founder_Monument.name=創設者の記念碑
+items.Aetherhaven_Founder_Monument.description=創設者の肖像を収めた石の台座。彼らを称えるために町の領土内に置きます。財務省の朝のシェアは、存続している間わずかに増加します。町ごとに 1 つだけです。
+
+benchCategories.aetherhaven.town_planning=都市計画
+benchCategories.aetherhaven.plot_tokens=区画トークン
+
+items.Aetherhaven_Plot_Placement_Tool.name=区画配置スタッフ
+items.Aetherhaven_Plot_Placement_Tool.description=対応する区画トークンをバッグの中に入れておいてください。この杖を地面に向けながら使用すると、建物の幽霊が見えます。ぴったりと収まるまで少しずつ動かして回し、プロットを固定することを確認します。キャンセルしてプレビューをクリアし、別のスポットが必要なときに再度スタッフを使用します。
+
+items.Aetherhaven_Poi_Tool.name=POI デバッグ ツール
+items.Aetherhaven_Poi_Tool.description=保持している間、町の POI を表示します (許可: aetherhaven.poi.tool)。プライマリ: 最も近いPOIを選択します。セカンダリ: POI アンカーをそのブロックに移動します。使用: 選択した POI の自律パス ターゲットを設定/クリアします (クリアするには、POI ブロックを再度クリックします)。
+items.Aetherhaven_Poi_Tool.legendTitle=POI ツール
+items.Aetherhaven_Poi_Tool.legendPrimary=プライマリ: ブロックに近い最も近い POI を選択
+items.Aetherhaven_Poi_Tool.legendSecondary=セカンダリ: 選択した POI をブロックに移動
+items.Aetherhaven_Poi_Tool.legendUse=使用: 設定選択した POI の NPC パス ターゲット (POI ブロックのクリア時に使用)
+
+aetherhaven.poiTool.legendTitle=POI ツール
+aetherhaven.poiTool.legendPrimary=プライマリ: ブロックに近い最も近い POI を選択
+aetherhaven.poiTool.legendSecondary=セカンダリ: 選択した POI をブロックに移動
+aetherhaven.poiTool.legendUse=使用: 選択した POI の NPC パス ターゲットを設定 (使用POI ブロックはクリアされます)
+
+items.Aetherhaven_Plot_Token_Inn.name=旅館の敷地トークン
+items.Aetherhaven_Plot_Token_Inn.description=旅館のフットプリントに区画配置スタッフを使用するにはインベントリで必要です。
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=市場の露店の区画トークン
+items.Aetherhaven_Plot_Token_Market_Stall.description=区画の配置から市場の露店のフットプリントを配置するのに必要ですスタッフ。
+
+items.Aetherhaven_Plot_Token_Farm.name=農場の区画トークン
+items.Aetherhaven_Plot_Token_Farm.description=区画配置スタッフから農場の敷地面積を配置するために必要です。
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=鍛冶屋の区画トークン
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=区画配置スタッフから鍛冶屋の敷地面積を配置するのに必要です。
+
+items.Aetherhaven_Plot_Token_Park.name=公園区画トークン
+items.Aetherhaven_Plot_Token_Park.description=敷地配置スタッフから公園の敷地を配置する必要があります。
+
+items.Aetherhaven_Plot_Token_House.name=住宅敷地のトークン
+items.Aetherhaven_Plot_Token_House.description=敷地配置スタッフからシェアハウスの敷地を配置する必要があります。
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=市庁舎の敷地トークン
+items.Aetherhaven_Plot_Token_Town_Hall.description=市庁舎を配置するのに必要敷地配置スタッフの足跡。
+
+items.Aetherhaven_Gold_Coin.name=金貨
+items.Aetherhaven_Gold_Coin.description=国庫に保管されている町の通貨。
+
+items.Aetherhaven_Geode.name=ジオード
+items.Aetherhaven_Geode.description=結晶、宝石、または鉱石が入っている可能性がある中空の石。鍛冶屋にお金を払って割ってもらいます。
+
+items.Aetherhaven_Geode_Anvil.name=ジオード金床
+items.Aetherhaven_Geode_Anvil.description=鍛冶代なしでジオードを開けます。設置して使用します。都市計画デスクで作成するには、回路図を知っている必要があります。
+
+barter.aetherhaven_vex.title=Vex の毎日の在庫
+
+items.Aetherhaven_Treasury.name=町の財務
+items.Aetherhaven_Treasury.description=町の金貨を保管しています。入金または出金に使用します (タウン オーナー)。
+
+items.Aetherhaven_Quest_Journal.name=タウン クエスト ジャーナル
+items.Aetherhaven_Quest_Journal.description=二次使用: アクティブなタウン クエストを確認します。宿屋が建てられた後、長老から与えられる場合があります。
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=クエスト日記
+aetherhaven.ui.questjournal.hint=詳細についてはクエストを選択してください。
+aetherhaven.ui.questjournal.abandon=放棄
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=クエスト詳細
+aetherhaven.ui.questjournal.detailPlaceholderBody=選択してください
+
+items.Aetherhaven_Management_Block.name=町の記録棚
+items.Aetherhaven_Management_Block.description=完成した建物の書記棚。敷地の建設状況を開きます。
+
+items.Aetherhaven_Sprinkler_Iron.name=鉄製スプリンクラー
+items.Aetherhaven_Sprinkler_Iron.description=3×3 のエリアの 1 ブロック下の耕した土に水をまきます。ゲーム内で毎朝 1 回実行されます。最小適用範囲。
+items.Aetherhaven_Sprinkler_Thorium.name=トリウム スプリンクラー
+items.Aetherhaven_Sprinkler_Thorium.description=5×5 のエリアの 1 ブロック下の耕した土壌に水をまきます。ゲーム内で毎朝 1 回。鉄より大きい。
+items.Aetherhaven_Sprinkler_Cobalt.name=コバルトスプリンクラー
+items.Aetherhaven_Sprinkler_Cobalt.description=7×7のエリアの1ブロック下の耕した土に水をまきます。ゲーム内で毎朝 1 回。広範囲に適用。
+items.Aetherhaven_Sprinkler_Adamantite.name=アダマンタイト スプリンクラー
+items.Aetherhaven_Sprinkler_Adamantite.description=9×9 のエリアの 1 ブロック下の耕した土壌に水をまきます。ゲーム内で毎朝 1 回。最も広い範囲をカバーします。
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=エルダー・ライレン
+npcRoles.Aetherhaven_Innkeeper.name=コリン・モスカップ
+npcRoles.Aetherhaven_Merchant.name=ベックス・サンダーレーン
+npcRoles.Aetherhaven_Blacksmith.name=ギャレン・ベール
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=ガイア祭壇区画トークン
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=ガイア祭壇プレハブを建設できる場所をマークします。都市計画デスクでクラフトします。
+
+items.Aetherhaven_Statue_of_Gaia.name=ガイアの像
+items.Aetherhaven_Statue_of_Gaia.description=祭壇の祝福された似顔絵。町の所有者は、命のエッセンスを持って行方不明の住民を呼び戻すことができます。
+
+# === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
+items.Aetherhaven_Ring_Silver_Zephyr.name=シルバー リング (ゼファー)
+items.Aetherhaven_Ring_Silver_Topaz.name=シルバー リング (トパーズ)
+items.Aetherhaven_Ring_Silver_Emerald.name=シルバー リング (エメラルド)
+items.Aetherhaven_Ring_Silver_Diamond.name=シルバー リング (ダイヤモンド)
+items.Aetherhaven_Ring_Silver_Sapphire.name=シルバー リング(サファイア)
+items.Aetherhaven_Ring_Silver_Ruby.name=シルバーリング(ルビー)
+items.Aetherhaven_Ring_Silver_Voidstone.name=シルバーリング(ボイドストーン)
+items.Aetherhaven_Ring_Gold_Zephyr.name=ゴールドリング(ゼファー)
+items.Aetherhaven_Ring_Gold_Topaz.name=ゴールドリング(トパーズ)
+items.Aetherhaven_Ring_Gold_Emerald.name=ゴールドリング(エメラルド)
+items.Aetherhaven_Ring_Gold_Diamond.name=ゴールドリング(ダイヤモンド)
+items.Aetherhaven_Ring_Gold_Sapphire.name=ゴールドリング(サファイア)
+items.Aetherhaven_Ring_Gold_Ruby.name=ゴールドリング(ルビー)
+items.Aetherhaven_Ring_Gold_Voidstone.name=ゴールドリング(ボイドストーン)
+items.Aetherhaven_Necklace_Silver_Zephyr.name=シルバーネックレス(ゼファー)
+items.Aetherhaven_Necklace_Silver_Topaz.name=シルバーネックレス(トパーズ)
+items.Aetherhaven_Necklace_Silver_Emerald.name=シルバーネックレス(エメラルド)
+items.Aetherhaven_Necklace_Silver_Diamond.name=シルバーネックレス(ダイヤモンド)
+items.Aetherhaven_Necklace_Silver_Sapphire.name=シルバーネックレス(サファイア)
+items.Aetherhaven_Necklace_Silver_Ruby.name=シルバーネックレス(ルビー)
+items.Aetherhaven_Necklace_Silver_Voidstone.name=シルバーネックレス(ボイドストーン)
+items.Aetherhaven_Necklace_Gold_Zephyr.name=ゴールドネックレス(ゼファー)
+items.Aetherhaven_Necklace_Gold_Topaz.name=ゴールドネックレス(トパーズ)
+items.Aetherhaven_Necklace_Gold_Emerald.name=ゴールドネックレス(エメラルド)
+items.Aetherhaven_Necklace_Gold_Diamond.name=ゴールドネックレス(ダイヤモンド)
+items.Aetherhaven_Necklace_Gold_Sapphire.name=ゴールドネックレス(サファイア)
+items.Aetherhaven_Necklace_Gold_Ruby.name=ゴールドネックレス(ルビー)
+items.Aetherhaven_Necklace_Gold_Voidstone.name=ゴールドネックレス(ボイドストーン)
+items.Aetherhaven_Jewelry.genericDescription=相性を秘めたジュエリー。手鏡から装備します。鑑定して、その真の品質を読み取ってください。
+items.Aetherhaven_Hand_Mirror.name=手鏡
+items.Aetherhaven_Hand_Mirror.description=ジュエリーの装備を開きます: 在庫からリング 2 つとネックレス 1 つです。
+items.Aetherhaven_Appraisal_Bench.name=鑑定台
+items.Aetherhaven_Appraisal_Bench.description=既にお持ちのジュエリーを識別します。設置後は自由に使用できます。
+items.Aetherhaven_Jewelry_Crafting_Bench.name=ジュエリー作業台
+items.Aetherhaven_Jewelry_Crafting_Bench.description=仕上げ用の鉄製の金床。概略がわかったら、都市計画デスクで作成します。貴重な延べ棒やカットされた宝石で生命のエッセンスを注ぎ込み、ジュエリーを鍛造します。
+
+# === UI: Statue of Gaia (revival / resident list) ===
+aetherhaven.ui.gaiaStatue.title=ガイアの像
+aetherhaven.ui.gaiaStatue.hint=各復活は{cost}の生命のエッセンスを消費します。
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=In town
+aetherhaven.ui.gaiaStatue.status.missing=Away
+aetherhaven.ui.gaiaStatue.reviveSuccess=命の糸が広場に戻ります。
+aetherhaven.ui.gaiaStatue.reviveFailed=祝福は得られませんでした。エッセンスが返されました。
+aetherhaven.ui.gaiaStatue.footer=この祝福を使用できるのは町の所有者のみです。行方不明の村人は像の近くに呼び戻すことができます。
+aetherhaven.ui.gaiaStatue.revive=復活
+
+aetherhaven.profession.kind.elder=長老
+aetherhaven.profession.kind.innkeeper=宿屋の主人
+aetherhaven.profession.kind.merchant=商人
+aetherhaven.profession.kind.farmer=農家
+aetherhaven.profession.kind.blacksmith=鍛冶屋
+aetherhaven.profession.kind.priestess=巫女
+aetherhaven.profession.kind.unknown=居住者
+
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=町憲章
+aetherhaven.ui.chartertown.townNameLabel=町のディスプレイname
+aetherhaven.ui.chartertown.namePlaceholder=あなたの町の一意の名前を入力してください
+aetherhaven.ui.chartertown.ownerOnlyHint=町の所有者のみが憲章から表示名を変更できます。
+aetherhaven.ui.chartertown.saveTownName=名前を保存
+aetherhaven.ui.chartertown.dissolve=町を解消
+aetherhaven.ui.chartertown.dissolveHint=町、すべての建物、村人、およびこれを永久に削除しますチャーター。元に戻すことはできません。
+aetherhaven.ui.chartertown.dissolveConfirmText=本気ですか？これにより町は永久に削除され、すべての建物と村人が削除され、この憲章は破棄されます。これは元に戻すことはできません。
+aetherhaven.ui.chartertown.dissolveConfirm=はい、町を解散します
+aetherhaven.ui.chartertown.dissolveCancel=キャンセル
+aetherhaven.ui.chartertown.dissolved=町は解散しました: 建物は撤去され、村人は撤去され、憲章は破棄されました。
+aetherhaven.ui.chartertown.moveCharter=憲章を移動
+aetherhaven.ui.chartertown.moveCharterTooltip=移動charter
+aetherhaven.ui.chartertown.moveCharterHint=あなたの領土を新しいチャーターブロックの中心に戻します。すべての建物が町の境界線内に収まる場所にのみ配置できます。
+aetherhaven.ui.chartertown.moveCharterConfirmText=プロットの配置と同じように新しい憲章を配置します (微調整して確認します)。建物が領土の外に出てしまう場合、配置はブロックされます。
+aetherhaven.ui.chartertown.moveCharterConfirm=続行
+aetherhaven.ui.chartertown.moveCharterCancel=キャンセル
+aetherhaven.ui.chartertown.charterMoved=チャーターは移動されました。あなたの領土は現在、新しい憲章に基づいています。
+aetherhaven.ui.chartertown.modalDissolveTitle=町を解散しますか?
+aetherhaven.ui.chartertown.modalMoveTitle=憲章を移動しますか?
+aetherhaven.ui.chartertown.modalCancel=キャンセル
+
+# === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
+aetherhaven.ui.treasury.title=町の財務
+aetherhaven.ui.treasury.deposit=すべての金を預けてくださいコイン
+aetherhaven.ui.treasury.withdraw=金貨を引き出す
+aetherhaven.ui.treasury.hint=毎朝、近くにいて元気な村人たちが少しずつ金を追加してくれます。宿屋の宿泊客はカウントされません。
+aetherhaven.ui.treasury.tabCoinsTooltip=ゴールド: 残高、入金、出金
+aetherhaven.ui.treasury.tabTitheTooltip=誰が支払うのか、翌朝何が期待できるのかを確認してください
+aetherhaven.ui.treasury.tax.intro=日の出とともに、町の宝箱にゲームが周囲の村人からロードしたゴールドが少しずつ集まります。現時点では{count}人です。 (このリストを更新するには、町のさらに多くの情報を読み込むように歩き回ってください。)
+aetherhaven.ui.treasury.tax.policyShort.linear=あなたの町のルール: 食事、休憩、娯楽が充実している場合、1 人あたり最大 {max} ゴールド。
+aetherhaven.ui.treasury.tax.policyShort.perCapita=あなたの町のルール: 悪い日でも全員が少額の基本額 (上限の {flatPct}%) を支払い、調子が良い場合は最大 {max} ゴールドを支払います。
+aetherhaven.ui.treasury.tax.policyShort.happiness=あなたの町のルール: 気難しい村人は支払う額がずっと少なくなります。完全に必要な場合は、各人が最大 {max} ゴールド ({exp} で調整) まで支払うことができます。
+aetherhaven.ui.treasury.tax.hallMissing=最初に市庁舎を建設してから、朝のゴールドを集めることができます。
+aetherhaven.ui.treasury.tax.sheetSubLabel=以下の村人から
+aetherhaven.ui.treasury.tax.sheetFounderLabel=創設者像のボーナス ({mult})
+aetherhaven.ui.treasury.tax.sheetFeastLabel=執政の台帳の祝宴ボーナス ({mult})
+aetherhaven.ui.treasury.tax.sheetTotalLabel=翌朝何がもらえるかについて
+aetherhaven.ui.treasury.tax.residentsHeader=この中の村人list
+aetherhaven.ui.treasury.tax.residentLine={name} ({job})
+aetherhaven.ui.treasury.tax.footerMore=ここに該当するのは {total} 人中 {shown} 人のみです。町をさらにロードし、これを再度開くと残りが表示されます。
+
+# === UI: open geodes (blacksmith) + result / error lines ===
+aetherhaven.ui.geodeopen.title=ジオードを開きます
+aetherhaven.ui.geodeopen.hint=ジオードごとに 5 枚の金貨を開きます。行をクリックして開きます。完了したら「戻る」を使用してください。
+aetherhaven.ui.geodeopen.hintAnvil=ゴールド料金はかかりません。行をクリックして 1 つのジオードを開きます。完了したら「戻る」を使用してください。
+aetherhaven.ui.geodeopen.empty=ホットバー、アーマー、またはストレージにジオードはありません。
+
+aetherhaven.geode.row={count} × {itemName}
+aetherhaven.geode.open.insufficientGold=ジオードごとに 5 つの金貨が必要です。
+aetherhaven.geode.open.reward=ジオード: {amount} × {itemName}
+aetherhaven.geode.open.failed=戦利品をロールできませんでした。コインとジオードは返却されました。
+aetherhaven.geode.open.noRoom=在庫スペースが不足しています。あなたのコインとジオードは返却されました。
+
+# === UI: hand mirror (jewelry loadout) ===
+aetherhaven.ui.handmirror.title=Jewelry
+aetherhaven.ui.handmirror.equipment=着用
+aetherhaven.ui.handmirror.ring1=リング I
+aetherhaven.ui.handmirror.ring2=リングII
+aetherhaven.ui.handmirror.necklace=ネックレス
+aetherhaven.ui.handmirror.inventory=バッグ
+aetherhaven.ui.handmirror.hotbar=ホットバー
+aetherhaven.ui.handmirror.storage=ストレージ
+aetherhaven.ui.handmirror.hint=ホットバーとメインストレージ内のジュエリーは以下にリストされています。列ボタンを使用して、ピースをリングまたはネックレスのスロットに送ります。着用したアイテムはバッグから出ていきます。スロットの下にある取り出しアイコンをタップして、摩耗した部分を戻します。バッグがいっぱいの場合、ジュエリーを外すことはできません。
+aetherhaven.ui.handmirror.listRow={itemName} × {qty}
+aetherhaven.ui.handmirror.rowRing1=リング I
+aetherhaven.ui.handmirror.rowRing2=リング II
+aetherhaven.ui.handmirror.rowNeck=着用
+aetherhaven.ui.handmirror.inventoryFull=在庫にそれを返すのに十分なスペースがありませんitem.
+aetherhaven.ui.handmirror.cannotEquipThere=そのピースは選択したスロットに入りません。
+aetherhaven.ui.handmirror.equipFailed=アイテムを移動できませんでした。何も変更されませんでした。
+aetherhaven.ui.handmirror.traitHidden=?
+aetherhaven.ui.handmirror.tooltipNotJewelry=このミラーからはジュエリーのみを装備できます。
+aetherhaven.ui.handmirror.tooltipUnattuned=ジュエリーの相性は、このピースを初めて調整するときに設定されます (ここで選択するか、他の場所で評価します)。
+aetherhaven.ui.handmirror.tooltipHeader=レア度: {rarity}
+aetherhaven.ui.handmirror.tooltipUnappraised=鑑定では台帳上の名前のみが明らかになります。エンチャントはすでに金属の中にあります。
+aetherhaven.ui.handmirror.traitsColumnHeading=摩耗したアフィニティ
+aetherhaven.ui.handmirror.traitsRarityLine=レア度: {rarity}
+aetherhaven.ui.handmirror.traitsEmptySlot=(空)
+aetherhaven.ui.handmirror.traitsUnattuned=まだ調整されていません。着用または鑑定して親和性を設定します。
+aetherhaven.ui.handmirror.traitFrom=· {gem} (ファセット{facet})
+aetherhaven.jewelry.gem.ZEPHYR=ゼファー
+aetherhaven.jewelry.gem.TOPAZ=トパーズ
+aetherhaven.jewelry.gem.EMERALD=エメラルド
+aetherhaven.jewelry.gem.DIAMOND=Diam ond
+aetherhaven.jewelry.gem.SAPPHIRE=サファイア
+aetherhaven.jewelry.gem.RUBY=ルビー
+aetherhaven.jewelry.gem.VOIDSTONE=ヴォイドストーン
+
+# === UI: jewelry appraisal & workbench (forging) ===
+aetherhaven.ui.jewelryAppraisal.title=鑑定jewelry
+aetherhaven.ui.jewelryAppraisal.hintPaid=1 個あたり金貨 {cost} 枚かかります。行を選択し、評価してレアリティと特性を明らかにします。
+aetherhaven.ui.jewelryAppraisal.hintFree=ゴールド手数料はかかりません。行を選択し、評価して希少性と特性を明らかにします。
+aetherhaven.ui.jewelryAppraisal.empty=ホットバー、防具、ストレージに宝石はありません。
+aetherhaven.ui.jewelryAppraisal.pick=以下からピースを選択してください。
+aetherhaven.ui.jewelryAppraisal.select=選択
+aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
+aetherhaven.ui.jewelryAppraisal.statusAppraised=評価済み
+aetherhaven.ui.jewelryAppraisal.statusUnidentified=未確認
+aetherhaven.ui.jewelryAppraisal.selectedHeader=選択済み: {itemName}
+aetherhaven.ui.jewelryAppraisal.unidentified=この作品はまだ評価されていません。鑑定では、すでに金属に何が織り込まれているかが明らかになるだけです。エンチャントは変わりません。
+aetherhaven.ui.jewelryAppraisal.rarityLine=レア度: {rarity}
+aetherhaven.ui.jewelryAppraisal.appraise=鑑定
+aetherhaven.ui.jewelryAppraisal.insufficientGold=この鑑定にはさらに金貨が必要です。
+aetherhaven.ui.jewelryAppraisal.payFailed=支払いが完了しませんでした。何も評価されませんでした。
+aetherhaven.ui.jewelryAppraisal.done=評価されました。台帳は今すぐ読み取ることができます。
+aetherhaven.ui.jewelryCrafting.title=ジュエリー作業台
+aetherhaven.ui.jewelryCrafting.hint=左から右に作業します。形状と金属を選択し、宝石を選択して、どれだけのライフ エッセンスを費やすかをダイヤルします。バッグのスペースがあるときに、出力から完成品を取り出します。ネックレスはリングよりも多くのインゴットを使用します。
+aetherhaven.ui.jewelryCrafting.colShape=Shape
+aetherhaven.ui.jewelryCrafting.colMetal=Metal
+aetherhaven.ui.jewelryCrafting.colGem=Gem
+aetherhaven.ui.jewelryCrafting.colEssence=必要なエッセンス
+aetherhaven.ui.jewelryCrafting.shapeRing=リング: インゴットが少なくなります
+aetherhaven.ui.jewelryCrafting.shapeNeck=ネックレス: より多くインゴット
+aetherhaven.ui.jewelryCrafting.ingotCost=レシピコスト: {n}× {metal}
+aetherhaven.ui.jewelryCrafting.metalGold=金の延べ棒
+aetherhaven.ui.jewelryCrafting.metalSilver=銀の延べ棒
+aetherhaven.ui.jewelryCrafting.yourBags=持ち物
+aetherhaven.ui.jewelryCrafting.invLine=金のインゴット: {gold} · シルバー: {silver} · ライフ エッセンス: {ess} · 濃縮: {conc}
+aetherhaven.ui.jewelryCrafting.invGem=バッグに入った宝石: {n}
+aetherhaven.ui.jewelryCrafting.gold=ゴールド
+aetherhaven.ui.jewelryCrafting.silver=シルバー
+aetherhaven.ui.jewelryCrafting.goldActive=ゴールド (オン)
+aetherhaven.ui.jewelryCrafting.silverActive=シルバー(on)
+aetherhaven.ui.jewelryCrafting.rarityNone=エッセンスの「ポイント」がまだ足りません。プレビューに段階が表示されるまで、通常のエッセンスや濃縮されたエッセンスを + で追加します。
+aetherhaven.ui.jewelryCrafting.rarityLine=エッセンスの生成: {rarity}
+aetherhaven.ui.jewelryCrafting.traitsLine=このジェムの可能な統計ロール: {stats}
+aetherhaven.ui.jewelryCrafting.craft=Forge
+aetherhaven.ui.jewelryCrafting.take=Collectジュエリー
+aetherhaven.ui.jewelryCrafting.takeHint=鍛造品をバッグに保管してください (空きスロットまたはスタック ルームが必要です)。
+aetherhaven.ui.jewelryCrafting.cannotResolve=レベルに達する有効なエッセンスの量を設定して、もう一度お試しください。
+aetherhaven.ui.jewelryCrafting.missingMats=バッグの中にバー、ジェム、またはエッセンスがありません。
+aetherhaven.ui.jewelryCrafting.done=ピースは手の中で冷やされ、準備完了です。摩耗。
+aetherhaven.ui.jewelryCrafting.craftedToSlot=鍛造完了。準備ができたら、バッグに移してください。
+aetherhaven.ui.jewelryCrafting.taken=ジュエリーをバッグにしまってください。
+aetherhaven.ui.jewelryCrafting.noSpace=最初にバッグの中にスペースを確保してから、「宝石の収集」を使用してください。
+aetherhaven.ui.jewelryCrafting.takeFirst=完成した作品で「宝石の収集」を使用すると、再び鍛造できます。
+aetherhaven.ui.jewelryCrafting.noGemsDropdown=バッグの中にカット宝石を入れてはいけません (岩石の宝石を探してください)世界初）
+
+# === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
+aetherhaven.jewelry.traitLine={stat} {amount}
+aetherhaven.jewelry.stat.Health=最大体力
+aetherhaven.jewelry.stat.Mana=最大マナ
+aetherhaven.jewelry.stat.Stamina=最大スタミナ
+aetherhaven.jewelry.stat.Oxygen=最大酸素
+aetherhaven.jewelry.stat.Ammo=Max弾薬
+aetherhaven.jewelry.stat.SignatureEnergy=署名max
+aetherhaven.jewelry.rarity.COMMON=Common
+aetherhaven.jewelry.rarity.UNCOMMON=Uncommon
+aetherhaven.jewelry.rarity.RARE=Rare
+aetherhaven.jewelry.rarity.MYTHIC=Mythic
+aetherhaven.jewelry.rarity.LEGENDARY=Legendary
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=プロットの配置
+aetherhaven.ui.plotplacement.summary=配置: {building}
+aetherhaven.ui.plotplacement.positionSection=位置と回転
+aetherhaven.ui.plotplacement.tipsSection=ヒント
+aetherhaven.ui.plotplacement.heightSection=高さと回転
+aetherhaven.ui.plotplacement.detailsBlock=プロット記号 {sx}、{sy}、{sz} · プレハブの原点 {ox}、{oy}、 {oz}\nステップ {step}/4 (各 90°)
+aetherhaven.ui.plotplacement.tipsControls=Escape はこのパネルのみを閉じます。キャンセルするとプレビューがクリアされます。右クリックすると空気が再び開きます。ブロックを右クリックしても、アクティブなプレビューは移動しません。
+aetherhaven.ui.plotplacement.plotType=建物
+aetherhaven.ui.plotplacement.moveLabel=位置を調整
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=90°回転 (サイクル向き)
+aetherhaven.ui.plotplacement.place=プロットを配置sign
+aetherhaven.ui.plotplacement.placeMove=建物を移転
+aetherhaven.ui.plotplacement.moveWarningText=移転すると、古いサイトが破壊されて再構築されます。まず、貴重品、ペット、ゆるい物を建物敷地内から取り除いてください。この町に関係する町 NPC は保護されています。
+aetherhaven.ui.plotplacement.moveConfirm=確認
+aetherhaven.ui.plotplacement.moveBack=戻る
+aetherhaven.ui.plotplacement.cancel=プレビューをキャンセル
+aetherhaven.ui.plotplacement.cameraSection=カメラ
+aetherhaven.ui.plotplacement.cameraHint=鳥瞰図フレームをオンにすると (プレビューの上)、プロットを移動する間そのフレームが維持されます。
+aetherhaven.ui.plotplacement.birdsEye=鳥瞰図
+aetherhaven.ui.plotplacement.birdsEyeTooltip=トップダウンview: 最初の目的はプレビュー センターです。チェックを外すと一人称視点に戻ります。パンを使用してビューをスライドします。
+aetherhaven.ui.plotplacement.viewDistance=距離
+aetherhaven.ui.plotplacement.zoomOutTooltip=遠方のカメラ (プロットのより広い概要)
+aetherhaven.ui.plotplacement.zoomInTooltip=近くのカメラ (より狭い全体像、より詳細)
+aetherhaven.ui.plotplacement.panLabel=パン カメラ
+aetherhaven.ui.plotplacement.panXmTooltip=ビューを 1 段階シフトします-X
+aetherhaven.ui.plotplacement.panXpTooltip=+X
+aetherhaven.ui.plotplacement.panZmTooltip=ビューを 1 ステップ方向にシフトします。 -Z
+aetherhaven.ui.plotplacement.panZpTooltip=ビューを +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=方向に 1 ステップシフトします。鳥瞰図: 西 (-X)。一人称: 機銃掃射は左 (視界に対して)
+aetherhaven.ui.plotplacement.moveXpTooltip=鳥瞰: 東 (+X)。一人称: 右 (視界に対して) 掃射。
+aetherhaven.ui.plotplacement.moveZmTooltip=鳥瞰図: 北 (-Z)。一人称: (ビューに対して) 前に進みます。
+aetherhaven.ui.plotplacement.moveZpTooltip=鳥瞰図: 南 (+Z)。一人称: 後ろに移動します (ビューに対して相対的に)。
+aetherhaven.ui.plotplacement.moveYmTooltip=1 ブロック下に移動
+aetherhaven.ui.plotplacement.moveYpTooltip=1 ブロック上に移動
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=憲章を移動
+aetherhaven.ui.charterrelocation.summary=町憲章の位置を変更
+aetherhaven.ui.charterrelocation.details=ターゲット ブロック {sx}、 {sy}、{sz} · ステップ {step}/4 (90°)
+aetherhaven.ui.charterrelocation.tips=テリトリーはチャーターの周りの四角形のチャンクです。すべての建物は、確認後は屋内にとどまる必要があります。ゴーストを新しい場所に移動させてから、配置します。
+aetherhaven.ui.charterrelocation.info=テリトリーは、チャーターの周囲にある四角形のチャンクです。移動後もすべての建物はそのエリア内に留まらなければなりません。ゴースト ブロックを新しいチャーター位置に移動し、確認します。
+aetherhaven.ui.charterrelocation.place=チャーターを配置
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=現在の世界のエーテルヘブンの町をリストする
+
+commands.aetherhaven.town.desc=タウン メンバーシップ: 招待、役割、退会
+commands.aetherhaven.town.invite.desc=オンライン プレイヤーを自分の場所に招待するtown
+commands.aetherhaven.town.invite.player.desc=プレイヤーのユーザー名 (オンラインである必要があります)
+commands.aetherhaven.town.accept.desc=保留中のタウンへの招待を承諾する
+commands.aetherhaven.town.decline.desc=保留中のタウンへの招待を拒否する
+commands.aetherhaven.town.kick.desc=あなたのタウンからメンバーを削除する
+commands.aetherhaven.town.kick.player.desc=メンバーのユーザー名 (オンライン)
+commands.aetherhaven.town.role.desc=メンバーの役割を設定します (BUILD、QUEST、または BOTH)
+commands.aetherhaven.town.role.player.desc=メンバーのユーザー名 (オンラインである必要があります)
+commands.aetherhaven.town.role.role.desc=BUILD、QUEST、または BOTH
+commands.aetherhaven.town.leave.desc=メンバーである町を離れる (メンバーとしてではない)所有者)
+commands.aetherhaven.town.townName.desc=オプションの町の表示名 (複数の招待または管理者の場合)
+
+commands.aetherhaven.poi.desc=デバッグ: POI コマンド (DebugCommandsEnabled が必要)
+commands.aetherhaven.poi.list.desc=町の POI をリストする (オプションの町の UUID、または省略/「me」を使用) town)
+commands.aetherhaven.poi.town.desc=Town UUID、または私、または発信者を省略 town
+commands.aetherhaven.poi.dump.desc=この世界のメモリ内レジストリ内のすべての POI をリストします (任意の町)
+
+commands.aetherhaven.plots.desc=Debug: プロット インスタンスをリストします (DebugCommandsEnabled が必要です。プロットを使用して衝突を回避します) /aetherhaven プロット)
+commands.aetherhaven.plots.list.desc=あなたの町のプロット インスタンスをリストする
+
+commands.aetherhaven.needs.desc=デバッグ: 村人のニーズ (DebugCommandsEnabled が必要)
+commands.aetherhaven.needs.inspect.desc=村人ニーズを持つロードされたチャンク内のエンティティをリストする
+commands.aetherhaven.needs.set.desc=ニーズ メーターを設定する0..100 (ターゲット: 検査、エルダー、または uuid からのハンドル)
+commands.aetherhaven.needs.target.desc=ハンドル (例: Villager_Elder_xxxxxxxx)、Elder、またはエンティティ UUID
+commands.aetherhaven.needs.entity.desc=非推奨。ターゲット (ハンドル、エルダー、または uuid) を使用してください
+commands.aetherhaven.needs.which.desc=空腹、エネルギー、または楽しみ
+commands.aetherhaven.needs.value.desc=0 から 100 までの値 (100 = 完全に満足)
+
+commands.aetherhaven.tax.desc=デバッグ: 財務省朝税 (必須) DebugCommandsEnabled)
+commands.aetherhaven.tax.breakdown.desc=あなたの町の村民ごとの税額明細と合計を表示します (ロードされたチャンクのみ)
+commands.aetherhaven.tax.now.desc=朝の十分の一税を今すぐ財務省に適用します (朝の時間と最後に徴収された日をバイパスします。DebugCommandsEnabled が必要です)
+
+commands.aetherhaven.questdebug.desc=Debug: townクエストのバイパス (DebugCommandsEnabled が必要)
+commands.aetherhaven.questdebug.grant.desc=あなたの町でクエストがアクティブであるとマークする
+commands.aetherhaven.questdebug.complete.desc=あなたの町でクエストが完了したとマークする
+commands.aetherhaven.questdebug.clear.desc=あなたの町のアクティブなリストからクエストを削除する
+commands.aetherhaven.questdebug.id.desc=クエスト ID (デフォルト) q_build_inn)
+commands.aetherhaven.questdebug.status.desc=あなたの町のアクティブなクエストと完了したクエストを表示します (表示名 + ID)
+
+commands.aetherhaven.reputation.desc=デバッグ: 評判 (DebugCommandsEnabled が必要)
+commands.aetherhaven.reputation.set.desc=村人との評判を設定し、マイルストーンを達成した報酬を待ちますDialog
+commands.aetherhaven.reputation.villagerUuid.desc=村人 NPC エンティティ UUID
+commands.aetherhaven.reputation.villagerTarget.desc=あなたの街の村人エンティティ UUID または NPC ロール ID (例: Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=評判 0 ～ 100
+commands.aetherhaven.reputation.reward.desc=マイルストーン定義をリストするか、1 つの報酬を付与直接
+commands.aetherhaven.reputation.reward.list.desc=評価マイルストーンをリストします (オプション: NPC ロール ID でフィルタリングします)
+commands.aetherhaven.reputation.reward.roleFilter.desc=NPC ロール ID (例: Aetherhaven_Merchant) でリストをフィルタリングします
+commands.aetherhaven.reputation.reward.grant.desc=今すぐ 1 つのマイルストーン報酬を付与します (マークは獲得済み)。 ID の担当者報酬リストを使用
+commands.aetherhaven.reputation.rewardId.desc=評判報酬 ID (例: rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Debug: 町の村人ヘルパー (DebugCommandsEnabled が必要)
+commands.aetherhaven.villager.list.desc=町の村人の NPC エンティティ UUID をリストする (評判 / 検索用)コマンド)
+commands.aetherhaven.villager.locate.desc=町の村人の位置を出力します。オプションのテレポート (オペレーターのみ)
+commands.aetherhaven.villager.uuid.desc=村人 NPC エンティティ UUID
+commands.aetherhaven.villager.target.desc=あなたの街の村人エンティティ UUID または NPC ロール ID (例: Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=村人にテレポートする場合は true (オペレーターのみ)。または、代わりに --tp を使用してください
+commands.aetherhaven.villager.tp_flag.desc=村人にテレポートします (演算子のみ; true を渡すのと同じ)
+
+commands.aetherhaven.debug_autonomy.desc=Debug: 村人の自律性オーバーレイ (DebugCommandsEnabled が必要)
+commands.aetherhaven.debug_autonomy.toggle.desc=町の村人で自律性のデバッグを切り替えます (NPC を確認するか、 --ray)
+commands.aetherhaven.debug_autonomy.show.desc=この村人の自律性デバッグが有効かどうかを表示
+commands.aetherhaven.debug_autonomy.clear.desc=この村人のエーテルヘブンの自律性デバッグをクリア
+
+commands.aetherhaven.debug_lootchest.desc=デバッグ: 対象のコンテナでエーテルヘブンのチェストのボーナスがロールされます (必須) DebugCommandsEnabled)
+commands.aetherhaven.debug_lootchest.fill.desc=強制的にジュエリー、ゴールド、プロット トークン ロールを表示しているアイテム コンテナに適用します
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=町のごちそう
+aetherhaven.ui.feast.noTown=町に所属している必要があります。
+aetherhaven.ui.feast.noPermission=このためにごちそうを開催することはできません町。
+aetherhaven.ui.feast.outsideTerritory=テーブルはあなたの町の領土内に立つ必要があります。
+aetherhaven.ui.feast.activeTitle=町の祝宴が開催中
+aetherhaven.ui.feast.noneActive=時間指定の祝宴はアクティブではありません。左側でごちそうを選択して、コストと効果を確認してください。
+aetherhaven.ui.feast.daysLeft=残り日数 (夜明け): {days}
+aetherhaven.ui.feast.selectHint=ごちそうを選択
+aetherhaven.ui.feast.ingredientsLabel=材料
+aetherhaven.ui.feast.confirm=祝宴を開催してください
+aetherhaven.ui.feast.locked=あなたはまだこの祝宴を学習していません。誰かが案内してくれるまで町の人々と時間を過ごしましょう。
+aetherhaven.ui.feast.tooltipLocked=近所の人がこのごちそうを教えてくれるまでロックされています。町を助け、ホールのために料理を作る人々と話し続けてください。
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle コンコードはクールダウン中です ({days} 夜明けから残り数日)。
+aetherhaven.ui.feast.began=宴が始まります。村人たちがテーブルに集まっています。
+aetherhaven.ui.feast.err.pluginNotLoaded=このサーバーにはエーテルヘブンが読み込まれていません。
+aetherhaven.ui.feast.err.unknownFeast=その宴は利用できません。
+aetherhaven.ui.feast.err.invalidPlayer=キャラクターを確認できませんでした。
+aetherhaven.ui.feast.err.feastNotUnlocked=この宴はまだ学習していません。町の周りで信頼を築き、誰かが教えてくれるかどうかに耳を傾けてください。
+aetherhaven.ui.feast.err.timedFeastActive=別の時限祝祭がすでにこの町で実施されています。
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=現在の時限祝祭が終了するまで待ってからベリーサークル コンコードを提供してください。
+aetherhaven.ui.feast.err.berrycircleCooldown=ベリーサークル コンコードはまだクールダウン中です。
+aetherhaven.ui.feast.err.notEnoughIngredients=あなたはそうします必要な材料が足りません。
+
+aetherhaven.feast.stewards.name=執事の台帳の晩餐
+aetherhaven.feast.stewards.description=パン、チーズ、適切なパンプキンパイを広げて、朝の一週間分の十分の一献金をたっぷりとしましょう。
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=魚のグリル、調理済みの切り身、ゆっくりと燃える徹夜の食事として並べられた野菜。村人のニーズは 1 週間、より緩やかに消えていきます。
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=ライト プレートのサークル: ベリー サラダ、フルーツ串、乾杯用のポップコーン。近所の人たちは、あなたが少し優しくなったのを覚えています。再び提供できるようになるまで、夜明けまで 1 週間待ってください。
+
+# === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
+# Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
+aetherhaven.dialogue.blacksmith.repairGear=ギアを修理してください (金貨で支払います)
+aetherhaven.dialogue.blacksmith.openGeodes=ジオードを割ってください (各 5 ゴールド)
+aetherhaven.dialogue.merchant.appraiseJewelry=ジュエリーを鑑定します (各 10 ゴールド)
+
+# -- Tree id: aetherhaven_blacksmith (Garren Vale) --
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=恨みはありません。それでも街で煙が欲しいなら、もう一度聞いてください。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=十分です。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=店が建てられたら、武器ベンチまで歩いてセットアップします。そこに私を見つけに来てください。それで完了したと判断します。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=クエストをドロップする必要があります。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=続けます。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=しっかりしたベンチ。仕事をしていると暑くなってきます。もうマップ全域に鉱石を輸送することはありません。私たちはこの地面が今でも与えてくれるものを使っています。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=ハンマーで十分です。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=場所が空いたら、中のブロックに私の名前を書いて、私を探しに来てください。あなたが大声で言うのを聞きたいです。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=聞こえます。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=いいです。他人のシチューの匂いがしない屋根。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=楽しんでください。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=この店は私に水ぶくれを与えます。やはり借りない屋根が欲しい。誰とでも同じ家の敷地。壁が本物になったら登録してください。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=家を建てます。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=別の機会に。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=Iron は急ぐ必要はありません。家が完成したら、登録してから話しに来てください。そのときが互角です。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=わかりました。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=コリンのボードは睡眠に最適です。彼らはハンマースイングにはひどいです。私が所有できる壁、カウンター、武器台のある鍛冶屋を賭けてください。計画デスクでプロット トークンを作成し、スタッフと一緒に置き、サインを支払います。立ったら、ベンチで会いましょう。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=組み立てます。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=今は無理です。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=わかりました。煙突が真実を告げるまで、私は宿屋でキャンプをするつもりです。それでは、ベンチで私を見つけてください。台帳を閉じます。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=それでは会いましょう。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale。風は十分に低いため、鍛冶場が動作する可能性があります。これほどまでにメタルには意見がある。私はそれに反論するためにここにいます。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=家のことについて話したいとのことでした。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=あなたの名前はブロックに載っています。聞いてもらえるはずだと思いました。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=家はまだ進行中です。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=鋼鉄の仕事をしているのを見るのは嬉しいです。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=店が建てられました。ベンチの準備ができました。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=鍛冶場の構築について...
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=ここに本物の鍛冶場が必要だと言いましたね。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=指に注意してください。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
+# -- Tree id: aetherhaven_dialogue_test (QA / harness) --
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=コンディションラボ。隠された選択肢は表示されないはずです。灰色の選択肢が表示されるはずです。続行するには複合ゲートを使用してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=この選択は非表示です (リテラル false)。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=これはグレー表示されます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(リテラル true が必要)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=複合ゲートを通過: false かつ true
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR 分岐(true または false)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA 村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=テストしていただきありがとうございます。 Goodbye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Bye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA 村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=次の代わりに goto アクションを使用して別れにジャンプするには、以下をクリックしてください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=goto別れ
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=ノード入力アクションにより、粗雑なシャベルが 1 つ得られます (在庫スペースがあれば)。その他のアイテムについては、以下のオプションを選択してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=土を 3 つ与えてから続行してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA 村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=エーテルヘブンの対話ハーネスへようこそ。この行は、レイアウトとスクロールを確認できるように、意図的に長くなります。選択内容は本文の下に表示されます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=条件ラボに進みます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Leave (次の null で終了)。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Leave (明示的な終了アクション)。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA 村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Kweebec 商人を開くことができます物々交換 UI、またはスタブ アクションにスキップします。
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Kweebec_Merchant 物々交換ショップを開く
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=ショップをスキップしてスタブに移動
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA 村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=スタブ アクション: 実績のロックを解除し、クエストを開始すると、これらのシステムがログに記録されます。存在します。
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=unlock_achievement + start_quest スタブを実行
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA 村人
+# -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=私はライレンです。私はこの町をオルビスに置くときに署名した憲章を代弁します。古い都市は消え去った。私たちが持っているのはこの土地と、すでにここにいる人々であり、これからもさらに多くの人がやってくるでしょう。新しい土地の建設を始める前に、エーテルヘイブンの周囲の土地を学んでいただく必要があります。建物を建てるのに十分な平らな場所、水が流れる場所、後で畑や共有地を置く可能性のある場所です。実用的なものにしておきましょう。辺りを見回したら、また私を探しに来てください。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=その地域を偵察して、また報告します。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+# -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=あなたは、私たちが送った仕事や、誰かが買っているときの取引からいくつか拾います。街の財布はそれ自体です。ホールが建てられると、そこに宝物庫が置かれます。チャーターで許可されている場合は、そこにあるブロックを使用してコインを入れたり、引き出したりします。その後、毎朝、そこを通過する訪問者ではなく、実際にここに住んでいる人々から少しずつ金がその宝庫に流れ込みます。どのくらいの量になるかは、彼らがどのように持ちこたえるかによって決まります。餌を与え、休息をとり、元気であれば、鍋の調子は良くなります。薄く伸ばすとさらに悪化します。これにより、コモンズは正直に保たれます。
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=知っておくと便利です。ありがとう。
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=あります。寝相が悪くなってしまう人のための本格的な宿。コリンは鍵を持っています。囲炉裏のそばで自己紹介をしてください。あなたは感謝以上の収益を上げましたが、感謝の気持ちから始めます。
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=喜んでお手伝いします。
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=壁ができたら、管理ブロックを使用して私を居住者として設定してください。それなら私を探しに来てください。棚から読み出すのではなく、あなたの言うことを聞きたいのです。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=両方入手できます。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=それでは解決です。私には他のみんなと同じルールの下で家があります。最後までご覧いただきありがとうございます。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=おかえり、ライレン。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=ホールは立ち上がり、財務省は一息つける。憲章は私たちに町の規則を与えました。ベッドを与えてくれませんでした。私は他の人が手に入れるのと同じ小さな家が欲しいです。私が提供するトークンを受け取り、スタッフと土地を賭け、資材と国庫から町の取り分を支払い、それが建設されたら管理棚に私の名前を載せてください。私のために場所を作ってくれた人は忘れません。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=私が対応します。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=まだ約束できません。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=必要な時間をとってください。家が完成したら、ブロックに私を登録して、対面で終わらせるために私を探しに来てください。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=それが終わったら行きます。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=わかりました。スタッフと一緒に宿屋の区画を配置し、標識に記載されている材料を支払い、建設を完了します。屋根がついて、囲炉裏が入ったら、私に報告しに来てください。連絡を待っています。
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=できるだけ早く始めます。
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=屋根が無事で、囲炉裏に火が灯ったら、戻ってきて直接教えてください。急かすつもりはありませんが、この町にベッドが必要な人が泊まれる適切な宿ができるまでは出発しません。
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=準備ができたらまた戻ってきます。
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=エルダー・ライレン
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=憲章は今でも有効であり、私もそれを支持します。私たちには人々を送るための予備の避難所がないので、ここでの最初の本当の建物は宿屋でなければなりません。屋根、囲炉裏、そして道が長いときに旅行者や私たちの親族のために開いたままになるドアです。賭ける準備ができたら、そう言ってください。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=入っています。宿屋を上げましょう。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=その宿屋はまだ私のリストにあります。チェックインしたかったのですが。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=任せます。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=宿は完成しました。コリンは必要なものを持っているはずです。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=市庁舎について。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=あなたの名前を棚に載せておきます。まずは私から聞いてください。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=あなたの家はまだ完成していませんが、私は着々と進めています。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=自分の家が欲しいとおっしゃっていました。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=市庁舎の建設はまだ進行中です。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=市庁舎は完成しました。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=人々はどうしていますかこの辺で金貨を手に入れませんか?
+aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Llder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=スタッフと一緒に市庁舎のトークンを使用し、材料を支払い、建設しましょう。ホールが終わったら直接言ってください。終わったって言った時の顔が見たいです。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=終わった瞬間に教えます。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=エルダー・ライレン
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=そこ。エーテルヘブンにはきちんとした市庁舎があり、記録、宝物庫、そして広場を渡って大声を出さずに会うことができる部屋があります。それが私があなたに必要としていたものです。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=役に立ってよかったです。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=宿屋は立っています。次に、私たち全員が所有する市庁舎が必要です。憲章用の棚、計画用のデスク、そして共有コインで残りの建設資金を賄える財務省です。土地を賭けて、標識に要求されている材料費を支払い、ようやく町全体で集まる場所ができました。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=ホールを建てます。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=まだです。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=ライレン長老
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=石材と事務手続きの両方に時間がかかります。ホールが終わったら教えてください。私はここにいます。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=まだ作業中です。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=ライレン長老
+# -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=わかりました。それでもここに列が必要な場合は、そう言ってください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=そうします。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=土が床板のふりをするのをやめるまで、私は宿屋に残ります。それから、ブーツに泥がついたベンチの後ろで私を見つけてください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=また会いましょう。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=区画が建設されたら、農業ベンチまで歩いて準備します。そこに私を見つけに来てください。それで完了したと判断します。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=クエストをドロップする必要があります。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=私は続けます。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=その陰謀は苦情よりも役に立つでしょう。街が成長する間、私はベッドを回転させ続けます。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=よく成長してください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=屋根が維持できたら、街区に登録してから私を見つけてください。私は両足を自分の床板の上に置き、これを終わらせたいと思っています。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=それを頼りにしてください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=自分の垂木の下に根を張ります。それは私が欲しかった作物です。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=それを聞いてうれしいです。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=畑は誠実な仕事です。やはり宿屋ではない扉が欲しい。誰とでも同じトークン。組み立ててから棚に載せてください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=組み立てます。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=まだです。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=木材と天候には時間がかかります。家が完成したら、私を割り当てて、残りのことを教えに来てください。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=必ず見つけます。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=私はコリンの床板のひび割れを数えていて、そこに私の名前が刻まれている列を夢見ていました。農場の敷地を杭で囲い、ベンチを設置します。計画デスクでプロット トークンを作成し、スタッフと一緒に置き、サインを支払います。地面の準備ができたら、農業ベンチでお会いしましょう。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=組み立てます。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=今は無理です。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.root.body=Irienne Mossmark。ダートは昨日誰が所有していたかを気にしません。明日何を食べさせるかは重要です。コリンの床で何晩も寝たので、温かいボウルがプライドに勝るということが分かりました。
+aetherhaven.dialogue.aetherhaven_farmer.root.c0=自分の場所について話したかったのですね。
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=あなたの名前は棚にあります。聞いてみたいと思いました。
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=あなたの家はまだ建っています。
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=農場があなたに餌をあげているのを見るのは嬉しいです。
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=農場の準備はできています。
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=畑について...
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=あなたは、農家を利用できると言いました。町。
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=少し休んでください。
+aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Irienne Mossmark
+# -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=それなら、その土地があなたのものになるまで、やかんをここに保管しておきます。私の名前が棚に載ったら、私を探しに来てください。解決したと言う前に握手をしたいのですが。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=期待してください。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=そこ。見知らぬ人のための囲炉裏と私の所有物である掛け金。それは鍵の見た目よりも価値があります。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=勝ちました。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=町全体にスープを注ぐつもりですが、自分が混乱したときに閉まるドアが欲しいです。他の人と同じハウストークン。組み立てて、ブロックが立ったらその上に私をリストアップしてください。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=組み立てます。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=別の機会に。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=粘土は自分のペースで乾きます。家が完成したら、本棚に私を割り当てて、この本を閉じることができるように教えに来てください。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=お知らせします。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=通行する人のために 2 つのスペースを確保します。トレーダー、修理屋、町が支援できる人なら誰でも。彼らを追い払うと、ほとんどの夜、彼らは空の下で眠ります。それは誇りではありません。それは数学です。
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=意味はわかります。
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Step風から外へ。コリンです。私はこの囲炉裏を管理しており、あなたが私たちの屋根の下にいる間、あなたには私たちが管理できる限りの食べ物が与えられます。外の世界がその仕組みを忘れてしまったとしても、それは依然として重要です。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=ゲスト用ベッドはどのように機能しますか?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=あなたは自分だけの本当の部屋が欲しかったのです。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=あなたのことを家の棚に載せました。私から聞いたほうがいいと思いました。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=あなたの家はまだ組み立て中です。準備中です。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=鍋をかき混ぜに行きます。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
+# -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=ヴェックス・サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=ヴェックス・サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.root.body=ヴェックス・サンダーレーン。私はサルベージを買い、ホープを売り、コインを2回数えます。暖炉のあるあなたの旅館は、すでに何マイルでも最高の店頭です。それ以外はすべて交渉です。
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=商品（金貨）を閲覧してください。
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=家が欲しいとおっしゃっていました。
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=台帳に記録させていただきます。紙は現実と一致する必要があります。
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=あなたの家はまだ山の上にあります。
+aetherhaven.dialogue.aetherhaven_merchant.root.c5=ここで取引しているのを見てうれしいです。
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=屋台が立ち上がりました。見に来てください。
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=屋台の建設について...
+aetherhaven.dialogue.aetherhaven_merchant.root.c8=屋台のスペースを見つけるように頼まれました。
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=風が吹いても財布は閉じたままにしておいてください。
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=ベックス・サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=フェア。気が変わっても、オファーはそのままです。
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=ありがとうございます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=屋台が立つまでコリンの家でキャンプするつもりです。溝よりも安全で、スープは美味しいです。
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=出来上がったらまた会いましょう。
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=ベックスサンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=屋台ができたら、行って店を開きます。そこに私を見つけに来てください。それではこれを終わらせます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=クエストをドロップする必要があります。
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=引き続き作業を続けます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=ベックス・サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=ストールは正直そう。貿易は最初は薄いだろう。私たちはそれを、保存する価値のあるものと同じように、ゆっくりと育てます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=以上です。
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=ドアが揺れたら、ブロックに私の名前を書いて、私を見つけてください。インクだけでなく、ストーリーが欲しいです。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=両方入手できます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=そこ。私のノックを知っているドア。これは完全な金庫よりも優れています。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=楽しんでください。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=ベックス サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=在庫は棚にあります。私のブーツは乾いた場所に属しています。町の他の地域と同じ家のトークン。建てたら登録してください。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=家を建てます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=別の機会に。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=家には時々季節があります。それを終えて、私に割り当てて、戻ってきてください。帳簿のバランスを整えます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=戻ってきます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=ベックス・サンダーレーン
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=小さな屋根と、寄りかかることができるカウンターが必要です。あなたは私があなたに手渡したトークンを持ちながら、それをスタッフと一緒に置きます。材料があなたの問題です。釘が止まったらカウンターを実行します。
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=組み立てます。
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=今は無理です。
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=ベックス・サンダーレーン
+# -- Tree id: aetherhaven_priestess (Serah Thornwell) --
+aetherhaven.dialogue.aetherhaven_priestess.root.body=セラ・ソーンウェル。私はこの町のためにガイアの儀式を指揮します。旅館は私の頭上にあるので感謝していますが、夕食とカードゲームの合間にサービスを運営することはできません。私には屋外に本物の祭壇が必要です。人々が台所の煙で息を止めずに祈ることができる小道、いくつかの椅子、そして像です。
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=あなたは家のことについて話したいと思っていました。
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=あなたは今棚にいます。知っておくべきだと思いました。
+aetherhaven.dialogue.aetherhaven_priestess.root.c2=家はまだ未完成です。
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=祭壇の調子はどうですか？
+aetherhaven.dialogue.aetherhaven_priestess.root.c4=祭壇の敷地は準備ができています。
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=祝福について...
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=あなたは、土地が必要だと言いました。ガイア。
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=任せます。
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=難しい気持ちはありません。それでも街に祭壇が欲しいなら、もう一度聞いてください。
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=わかりました。
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=祭壇が建てられるまで宿屋に滞在します。それから、像のところで私を見つけてください。祝福を終えます。
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=そこで会いましょう。
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=祭壇が立ったら、像まで歩きます。そこに私を見つけに来てください。それで完了したと判断します。
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=クエストをドロップする必要があります。
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=まだ作業中です。
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=祭壇は完成しました。ありがとう。町が成長するにつれて、私はここで敷地の手入れをし、儀式を執り行います。
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=頑張ってください。
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=家が完成したら、中の管理ブロックに私の名前を書いて、探しに来てください。リストから読み上げるだけでなく、直接あなたの意見を聞きたいです。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=そうしてください。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=わかりました。実は私の屋根です。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=十分です。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=祭壇はみんなのものです。私も他の人たちと同じように、自分の小さな家が欲しいと思っています。だから、永遠に旅館の広間から離れて暮らすわけではありません。通常のトークンから構築し、起動したら管理ブロックに登録してください。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=家を建てます。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=別の機会に。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=これらには時間がかかります。家が完成したら、私をブロックに登録して、話しに来てください。それで終わりです。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=戻ってきます。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=ガイアの祭壇の区画を確保します。小道、椅子、そして私が立って人々が座れる彫像です。計画デスクでトークンを作成し、スタッフと一緒に置き、サインを支払います。それが建てられたら、像のところで会いましょう。そうすればきちんと祝福します。
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=建ててもらいます。
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=今はだめです。
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# -- Tree id: aetherhaven_visitor_elder (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=通り抜けても構いませんが、この憲章はあなたのものではありません。手助けするつもりなら、まずここに住んでいる人たちに歓迎してもらう必要があります。
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=わかりました。
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=ライレン長老
+# -- Tree id: aetherhaven_visitor_generic (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=こんにちは、旅人。この居住地に住んでいない場合は、ここに住む地元の人々と話をしてください。自分たちの仕事で手いっぱいです。
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=さようなら。
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=村人
+# -- Tree id: aetherhaven_visitor_inn (visitors) --
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=囲炉裏は暖かいですが、帳簿は町の人々とその客人のためのものです。招待されたらまた来てください。
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=まあまあです。
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=宿屋の主人
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=あなたの財布はこの修理には軽すぎます。
+aetherhaven.blacksmith.repair.success={itemName} は元通りになりました。新品同様です。
+commands.aetherhaven.dialogue.desc=ID でダイアログ ツリーを開く (テスト用)
+commands.aetherhaven.dialogue.treeId.desc=ダイアログ ツリー ID (例: aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=オプションのエントリ ノード ID (デフォルト: ルート)
+aetherhaven.interaction.dialogue=[{key}] を押して会話
+npcRoles.Aetherhaven_Test_Villager.name=ダイアログ テスト村人

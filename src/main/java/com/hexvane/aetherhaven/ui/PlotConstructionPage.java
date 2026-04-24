@@ -37,8 +37,6 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import com.hypixel.hytale.server.core.asset.type.item.config.ResourceType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
@@ -241,7 +239,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 int need = m.getCount();
                 int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
                 boolean ok = completed || plotReqBypassCreative || has >= need;
-                String itemLabel = materialLabelForUi(lang, m);
+                String itemLabel = UiMaterialLabels.materialLabelForUi(lang, m);
                 commandBuilder.set("#Mat" + mi + ".Visible", true);
                 commandBuilder.set(
                     "#Mat" + mi + " #Line.TextSpans",
@@ -1102,44 +1100,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         } catch (IllegalArgumentException e) {
             return PlotInstanceState.BLUEPRINTING;
         }
-    }
-
-    @Nonnull
-    private static String itemLabelForUi(@Nullable String language, @Nonnull String itemId) {
-        Item item = Item.getAssetMap().getAsset(itemId);
-        if (item == null) {
-            return itemId;
-        }
-        String trKey = item.getTranslationKey();
-        String lang = language != null ? language : "en-US";
-        String resolved = I18nModule.get().getMessage(lang, trKey);
-        return resolved != null ? resolved : itemId;
-    }
-
-    @Nonnull
-    private static String materialLabelForUi(@Nullable String language, @Nonnull MaterialRequirement m) {
-        String rt = m.getResourceTypeId();
-        if (rt != null && !rt.isBlank()) {
-            String id = rt.trim();
-            String lang = language != null ? language : "en-US";
-            // Lang files are keyed as <fileBasename>.<entryKey>; vanilla uses Server/Languages/*/server.lang
-            // so entries like resourceType.Wood_Trunk.name become server.resourceType.Wood_Trunk.name
-            String key = "server.resourceType." + id + ".name";
-            String resolved = I18nModule.get().getMessage(lang, key);
-            if (resolved != null) {
-                return resolved;
-            }
-            ResourceType asset = ResourceType.getAssetMap().getAsset(id);
-            if (asset != null) {
-                String n = asset.getName();
-                if (n != null && !n.isBlank()) {
-                    return n;
-                }
-            }
-            return id;
-        }
-        String itemId = m.getItemId();
-        return itemId != null && !itemId.isBlank() ? itemLabelForUi(language, itemId) : "?";
     }
 
     private record HouseResidentRow(@Nonnull String label, @Nonnull UUID entityUuid) {}
