@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.poi;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
@@ -36,6 +37,15 @@ public final class PoiRegistry {
     public void register(@Nonnull PoiEntry entry) {
         registerWithoutPersist(entry);
         persist();
+    }
+
+    /** Runtime-only POI (e.g. feast table); never written to {@code pois.json}. */
+    public void registerEphemeral(@Nonnull PoiEntry entry) {
+        registerWithoutPersist(entry);
+    }
+
+    public void unregisterEphemeral(@Nonnull UUID poiId) {
+        removeInternal(poiId);
     }
 
     /** Add many entries then write {@code pois.json} once. */
@@ -147,6 +157,18 @@ public final class PoiRegistry {
     @Nonnull
     public List<PoiEntry> allEntries() {
         return new ArrayList<>(byId.values());
+    }
+
+    /** Entries persisted to disk (excludes {@link AetherhavenConstants#POI_TAG_FEAST_EPHEMERAL}). */
+    @Nonnull
+    public List<PoiEntry> allPersistentEntries() {
+        List<PoiEntry> out = new ArrayList<>();
+        for (PoiEntry e : byId.values()) {
+            if (!e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
+                out.add(e);
+            }
+        }
+        return out;
     }
 
     @Nonnull

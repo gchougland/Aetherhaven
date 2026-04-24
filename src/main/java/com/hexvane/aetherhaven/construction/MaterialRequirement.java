@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.construction;
 
 import com.google.gson.annotations.SerializedName;
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class MaterialRequirement {
@@ -31,5 +32,13 @@ public final class MaterialRequirement {
 
     public int getCount() {
         return count;
+    }
+
+    @Nonnull
+    public static MaterialRequirement ofItem(@Nonnull String itemId, int count) {
+        MaterialRequirement m = new MaterialRequirement();
+        m.itemId = itemId.trim();
+        m.count = Math.max(0, count);
+        return m;
     }
 }

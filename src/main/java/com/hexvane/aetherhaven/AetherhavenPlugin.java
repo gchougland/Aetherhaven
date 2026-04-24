@@ -62,6 +62,7 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
 import com.hexvane.aetherhaven.ui.CharterAmendmentsPage;
+import com.hexvane.aetherhaven.ui.FeastPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
@@ -460,6 +461,26 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     return null;
                 }
                 return new CharterAmendmentsPage(playerRef);
+            }
+        );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            FeastPage.class,
+            AetherhavenConstants.PAGE_FEASTS,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                BlockPosition base = world.getBaseBlock(targetBlock);
+                BlockType bt = world.getBlockType(base.x, base.y, base.z);
+                if (bt == null || bt == BlockType.EMPTY
+                    || !AetherhavenConstants.ITEM_BANQUET_TABLE.equals(bt.getId())) {
+                    return null;
+                }
+                return new FeastPage(playerRef, base.x, base.y, base.z);
             }
         );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);

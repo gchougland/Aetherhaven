@@ -45,6 +45,15 @@ public final class ReputationRewardCatalog {
             null
         ),
         new ReputationRewardDefinition(
+            "rep_innkeeper_50_table",
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            50,
+            "",
+            0,
+            "rep_reward_50_table",
+            AetherhavenConstants.ITEM_BANQUET_TABLE
+        ),
+        new ReputationRewardDefinition(
             "rep_innkeeper_50",
             AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
             50,

@@ -182,6 +182,28 @@ public final class TownRecord {
     @SerializedName("founderMonumentCount")
     private int founderMonumentCount;
 
+    /** Active timed feast id (see {@link com.hexvane.aetherhaven.feast.FeastCatalog}); null if none. */
+    @Nullable
+    @SerializedName("activeFeastKind")
+    private String activeFeastKind;
+
+    /** Exclusive end dawn epoch day for {@link #activeFeastKind} (tax / decay feasts). */
+    @Nullable
+    @SerializedName("activeFeastEndExclusiveDawnDay")
+    private Long activeFeastEndExclusiveDawnDay;
+
+    /** Exclusive end dawn day for Berrycircle Concord cooldown. */
+    @Nullable
+    @SerializedName("feastBerrycircleCooldownEndExclusiveDawnDay")
+    private Long feastBerrycircleCooldownEndExclusiveDawnDay;
+
+    @Nullable
+    @SerializedName("feastGatherPoiId")
+    private String feastGatherPoiId;
+
+    @SerializedName("feastGatherDeadlineEpochMs")
+    private long feastGatherDeadlineEpochMs;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -259,6 +281,13 @@ public final class TownRecord {
         migrateVillagerReputationIfNeeded();
         migrateTownSocialFieldsIfNeeded();
         migrateFounderMonumentCountIfNeeded();
+        migrateFeastFieldsIfNeeded();
+    }
+
+    private void migrateFeastFieldsIfNeeded() {
+        if (feastGatherDeadlineEpochMs < 0L) {
+            feastGatherDeadlineEpochMs = 0L;
+        }
     }
 
     /** Reconciles {@link #founderMonumentCount} with legacy {@link #founderMonumentActive} from older saves. */
@@ -830,6 +859,50 @@ public final class TownRecord {
             founderMonumentCount--;
         }
         founderMonumentActive = founderMonumentCount > 0;
+    }
+
+    @Nullable
+    public String getActiveFeastKind() {
+        return activeFeastKind != null && !activeFeastKind.isBlank() ? activeFeastKind.trim() : null;
+    }
+
+    public void setActiveFeastKind(@Nullable String activeFeastKind) {
+        this.activeFeastKind = activeFeastKind != null && !activeFeastKind.isBlank() ? activeFeastKind.trim() : null;
+    }
+
+    @Nullable
+    public Long getActiveFeastEndExclusiveDawnDay() {
+        return activeFeastEndExclusiveDawnDay;
+    }
+
+    public void setActiveFeastEndExclusiveDawnDay(@Nullable Long activeFeastEndExclusiveDawnDay) {
+        this.activeFeastEndExclusiveDawnDay = activeFeastEndExclusiveDawnDay;
+    }
+
+    @Nullable
+    public Long getFeastBerrycircleCooldownEndExclusiveDawnDay() {
+        return feastBerrycircleCooldownEndExclusiveDawnDay;
+    }
+
+    public void setFeastBerrycircleCooldownEndExclusiveDawnDay(@Nullable Long feastBerrycircleCooldownEndExclusiveDawnDay) {
+        this.feastBerrycircleCooldownEndExclusiveDawnDay = feastBerrycircleCooldownEndExclusiveDawnDay;
+    }
+
+    @Nullable
+    public String getFeastGatherPoiId() {
+        return feastGatherPoiId != null && !feastGatherPoiId.isBlank() ? feastGatherPoiId.trim() : null;
+    }
+
+    public void setFeastGatherPoiId(@Nullable String feastGatherPoiId) {
+        this.feastGatherPoiId = feastGatherPoiId != null && !feastGatherPoiId.isBlank() ? feastGatherPoiId.trim() : null;
+    }
+
+    public long getFeastGatherDeadlineEpochMs() {
+        return feastGatherDeadlineEpochMs;
+    }
+
+    public void setFeastGatherDeadlineEpochMs(long feastGatherDeadlineEpochMs) {
+        this.feastGatherDeadlineEpochMs = feastGatherDeadlineEpochMs;
     }
 
     @Nonnull

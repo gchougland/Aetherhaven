@@ -221,6 +221,17 @@ public final class AetherhavenConstants {
 
     public static final String PAGE_VILLAGER_NEEDS = "AetherhavenVillagerNeeds";
 
+    /** Banquet table block/item id; recipe learned from innkeeper reputation. */
+    public static final String ITEM_BANQUET_TABLE = "Aetherhaven_Banquet_Table";
+
+    public static final String PAGE_FEASTS = "AetherhavenFeasts";
+
+    /** Ephemeral POI for feast gathering; excluded from {@code pois.json} persistence. */
+    public static final String POI_TAG_FEAST_EPHEMERAL = "FEAST_EPHEMERAL";
+
+    /** Feast table POI: reuse EAT bench visuals; {@link com.hexvane.aetherhaven.feast.FeastService} sets hunger to max on completion. */
+    public static final String POI_TAG_FEAST = "FEAST";
+
     /** {@link com.hypixel.hytale.server.core.inventory.ItemStack.Metadata#BLOCK_HOLDER} key for plot sign items. */
     public static final String ITEM_METADATA_BLOCK_HOLDER = "BlockHolder";
 

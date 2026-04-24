@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.poi;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import javax.annotation.Nonnull;
 
@@ -27,7 +28,9 @@ public final class PoiEffectTable {
             }
             case SIT -> needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));
             case USE_BENCH -> {
-                if (poi.getTags().contains("EAT")) {
+                if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
+                    needs.setHunger(VillagerNeeds.MAX);
+                } else if (poi.getTags().contains("EAT")) {
                     needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 30f));
                 } else {
                     needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));

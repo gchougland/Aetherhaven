@@ -193,6 +193,32 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Jewelry trait rolling: RarityWeights, TraitMultipliers, and Stat (per-stat Common/Legendary Min/Max).")
         .add()
+        .append(
+            new KeyedCodec<>("FeastTaxBonusPermille", Codec.INTEGER),
+            (o, v) -> o.feastTaxBonusPermille = v != null ? v : 1250,
+            o -> o.feastTaxBonusPermille
+        )
+        .documentation(
+            "When the Steward's Ledger feast is active, morning treasury tax sum is multiplied by this permille "
+                + "(1250 = +25% after charter/founder multipliers)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("FeastNeedsDecayScalePermille", Codec.INTEGER),
+            (o, v) -> o.feastNeedsDecayScalePermille = v != null ? v : 650,
+            o -> o.feastNeedsDecayScalePermille
+        )
+        .documentation(
+            "During Hearthglass Vigil feast, villager needs decay rate is multiplied by permille/1000 (650 ≈ 65% speed)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("FeastGatherTimeoutSeconds", Codec.INTEGER),
+            (o, v) -> o.feastGatherTimeoutSeconds = v != null ? v : 120,
+            o -> o.feastGatherTimeoutSeconds
+        )
+        .documentation("Wall-time safety timeout for villagers routing to a feast table POI before the POI is cleared.")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -234,6 +260,10 @@ public final class AetherhavenPluginConfig {
 
     private LootChestConfig lootChest = new LootChestConfig();
     private JewelryConfig jewelry = new JewelryConfig();
+
+    private int feastTaxBonusPermille = 1250;
+    private int feastNeedsDecayScalePermille = 650;
+    private int feastGatherTimeoutSeconds = 120;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -339,6 +369,29 @@ public final class AetherhavenPluginConfig {
     @Nonnull
     public JewelryConfig getJewelry() {
         return jewelry != null ? jewelry : new JewelryConfig();
+    }
+
+    /** Clamped to [1000, 2000]. */
+    public int getFeastTaxBonusPermille() {
+        int v = feastTaxBonusPermille;
+        if (v < 1000) {
+            return 1000;
+        }
+        return Math.min(v, 2000);
+    }
+
+    /** Clamped to [100, 1000]; lower = slower decay during feast. */
+    public int getFeastNeedsDecayScalePermille() {
+        int v = feastNeedsDecayScalePermille;
+        if (v < 100) {
+            return 100;
+        }
+        return Math.min(v, 1000);
+    }
+
+    public int getFeastGatherTimeoutSeconds() {
+        int v = feastGatherTimeoutSeconds;
+        return v >= 30 ? v : 120;
     }
 
     /** Clamped to [0, 1]. Zero disables extra chest jewelry. */

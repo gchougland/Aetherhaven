@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import java.util.ArrayList;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -158,6 +159,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         TownRecord townRecord = tm.getTown(binding.getTownId());
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         List<PoiEntry> pois = reg.listByTown(binding.getTownId());
+        List<PoiEntry> poisForScoring = filterPoisForAutonomyScoring(townRecord, pois);
 
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
@@ -170,7 +172,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     world,
                     npc,
                     reg,
-                    pois,
+                    poisForScoring,
                     needs,
                     binding,
                     autonomy,
@@ -179,6 +181,38 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     townRecord
                 );
         }
+    }
+
+    @Nonnull
+    private static List<PoiEntry> filterPoisForAutonomyScoring(@Nullable TownRecord town, @Nonnull List<PoiEntry> pois) {
+        if (town == null) {
+            List<PoiEntry> out = new ArrayList<>();
+            for (PoiEntry e : pois) {
+                if (!e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
+                    out.add(e);
+                }
+            }
+            return out;
+        }
+        UUID allow = null;
+        String gid = town.getFeastGatherPoiId();
+        if (gid != null && !gid.isBlank()) {
+            try {
+                allow = UUID.fromString(gid.trim());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        List<PoiEntry> out = new ArrayList<>();
+        for (PoiEntry e : pois) {
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)) {
+                if (allow != null && allow.equals(e.getId())) {
+                    out.add(e);
+                }
+            } else {
+                out.add(e);
+            }
+        }
+        return out;
     }
 
     private static void tickIdle(
@@ -199,11 +233,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (SchedulePlotCommute.tryBeginIfOffSchedulePlot(ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin)) {
             return;
         }
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tryBeginFeastGatherTravel(ref, store, commandBuffer, world, npc, reg, binding, autonomy, townRecord, now, plugin, tc)) {
+            return;
+        }
         if (now < autonomy.getNextDecisionEpochMs()) {
             return;
         }
         Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
-        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         double npcX = tc != null ? tc.getPosition().x : Double.NaN;
         double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
         VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
@@ -214,6 +251,67 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return;
         }
+        beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, tc, pick);
+    }
+
+    /**
+     * When a feast is active, residents in {@link VillagerAutonomyState#PHASE_IDLE} path to the ephemeral feast POI
+     * immediately (bypasses {@link VillagerAutonomyState#getNextDecisionEpochMs}).
+     */
+    private static boolean tryBeginFeastGatherTravel(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull PoiRegistry reg,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull VillagerAutonomyState autonomy,
+        @Nullable TownRecord townRecord,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TransformComponent tc
+    ) {
+        if (townRecord == null || TownVillagerBinding.isVisitorKind(binding.getKind())) {
+            return false;
+        }
+        if (autonomy.getPhase() != VillagerAutonomyState.PHASE_IDLE) {
+            return false;
+        }
+        String gid = townRecord.getFeastGatherPoiId();
+        if (gid == null || gid.isBlank()) {
+            return false;
+        }
+        UUID pid;
+        try {
+            pid = UUID.fromString(gid.trim());
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        if (pid.equals(autonomy.getTargetPoiUuid())) {
+            return false;
+        }
+        PoiEntry feastPoi = reg.get(pid);
+        if (feastPoi == null) {
+            return false;
+        }
+        beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, tc, feastPoi);
+        return true;
+    }
+
+    private static void beginTravelToPoi(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull VillagerAutonomyState autonomy,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TownRecord townRecord,
+        @Nullable TransformComponent tc,
+        @Nonnull PoiEntry pick
+    ) {
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
         double tx;
         double tz;

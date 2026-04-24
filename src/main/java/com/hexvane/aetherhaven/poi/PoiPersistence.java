@@ -50,7 +50,7 @@ public final class PoiPersistence {
     public static void save(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull PoiRegistry registry) {
         Path path = poisFile(plugin, world.getName());
         try {
-            PoiWorldFile file = PoiWorldFile.fromEntries(registry.allEntries());
+            PoiWorldFile file = PoiWorldFile.fromEntries(registry.allPersistentEntries());
             file.writeAtomic(path);
         } catch (IOException e) {
             LOGGER.atSevere().withCause(e).log("Failed to save POIs for world %s", world.getName());

@@ -77,6 +77,7 @@ aetherhaven.reputation.reward.continue=Continue
 aetherhaven.reputation.reward.elder.50=The charter is not carved in stone forever. Here is the pattern for an amendments table. Craft it at your town planning desk once you know the schematic. Seat it in the hall and choose how the town's morning tithe leans.
 aetherhaven.reputation.reward.elder.100=You have carried this place farther than anyone asked. Take this foundation stone: set a founder's monument where the charter allows. The treasury will remember.
 aetherhaven.reputation.reward.innkeeper.25=You keep filling bowls without making a fuss about it. Take a few from the kitchen, on the house.
+aetherhaven.reputation.reward.innkeeper.50_table=You have kept this hall fed and honest long enough that I will trust you with the big table. Here is the banquet pattern. Craft it at the town planning desk when you have the schematic, then use it in town to hold a feast.
 aetherhaven.reputation.reward.innkeeper.50=The hearth stays honest because people like you keep the road from turning cruel. Eat well.
 aetherhaven.reputation.reward.merchant.50=You have kept your word in bad weather and good. Here is the bench pattern. Craft it at your town planning desk once the schematic is yours. Appraisals are free on the bench; I still charge for mine.
 aetherhaven.reputation.reward.merchant.100=You have put enough gold through this ledger to earn a jeweler's corner. The pattern is yours. Build it at the town planning desk. Set your gem, your metal, and the life you pour in, and the piece will come out true.
@@ -116,6 +117,8 @@ items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
 items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
 items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
 items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; you must know the schematic.
+items.Aetherhaven_Banquet_Table.name=Banquet table
+items.Aetherhaven_Banquet_Table.description=A long table for town feasts. Place in your territory and use it to serve a civic feast. Craft at the town planning desk once Corin shares the pattern.
 items.Aetherhaven_Founder_Monument.name=Founder monument
 items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a likeness of the founder. Place inside town territory to honor them; the treasury's morning share grows slightly while it stands. Only one per town.
 
@@ -499,6 +502,37 @@ commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug 
 
 commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven chest bonus rolls on targeted container (requires DebugCommandsEnabled)
 commands.aetherhaven.debug_lootchest.fill.desc=Apply forced jewelry, gold, and plot-token rolls to the item container you are looking at
+
+aetherhaven.ui.feast.title=Town feasts
+aetherhaven.ui.feast.noTown=You must belong to a town.
+aetherhaven.ui.feast.noPermission=You cannot hold feasts for this town.
+aetherhaven.ui.feast.outsideTerritory=The table must stand inside your town territory.
+aetherhaven.ui.feast.activeTitle=Town feast in effect
+aetherhaven.ui.feast.noneActive=No timed feast is active. Pick a feast on the left to read costs and effects.
+aetherhaven.ui.feast.daysLeft=Days remaining (dawns): {days}
+aetherhaven.ui.feast.selectHint=Select a feast
+aetherhaven.ui.feast.costs=Ingredients
+aetherhaven.ui.feast.confirm=Hold feast
+aetherhaven.ui.feast.locked=Requires innkeeper reputation {rep}.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord is on cooldown ({days} dawn-days left).
+aetherhaven.ui.feast.ingredientList=Ingredients:\n{lines}
+aetherhaven.ui.feast.began=The feast begins. Villagers are gathering at the table.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven is not loaded on this server.
+aetherhaven.ui.feast.err.unknownFeast=That feast is not available.
+aetherhaven.ui.feast.err.invalidPlayer=Could not verify your character.
+aetherhaven.ui.feast.err.noInnkeeper=The innkeeper is not registered with this town yet.
+aetherhaven.ui.feast.err.lowInnkeeperRep=Your standing with the innkeeper is not high enough for this feast.
+aetherhaven.ui.feast.err.timedFeastActive=Another timed feast is already in effect for this town.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Wait until the current timed feast ends before serving Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord is still on cooldown.
+aetherhaven.ui.feast.err.notEnoughIngredients=You do not have enough of the required ingredients.
+
+aetherhaven.feast.stewards.name=The Steward's Ledger Supper
+aetherhaven.feast.stewards.description=Spread bread, cheese, and a proper pumpkin pie so the morning tithe leans generous for one week.
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=Grilled fish, cooked cuts, and vegetables laid out as a slow-burning vigil meal. Villagers' needs fade more gently for one week.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=A circle of light plates: berry salad, fruit skewers, and popcorn for toasts. Everyone remembers your name a little warmer (+10 reputation each). One week before you may serve it again.
 
 # Dialogue
 aetherhaven.dialogue.blacksmith.repairGear=Fix my gear (pay in gold coins)

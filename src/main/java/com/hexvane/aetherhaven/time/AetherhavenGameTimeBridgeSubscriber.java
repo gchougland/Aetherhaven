@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.time;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
+import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hypixel.hytale.component.Store;
@@ -32,6 +33,8 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         VillagerScheduleService.applyForWorld(world, store, plugin, false);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
+        FeastService.pruneExpiredForWorld(world, plugin, store);
+        FeastService.checkGatherTimeoutsForWorld(world, plugin);
     }
 
     @Override
@@ -51,5 +54,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         VillagerScheduleService.applyForWorld(world, store, plugin, true);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
+        FeastService.pruneExpiredForWorld(world, plugin, store);
+        FeastService.checkGatherTimeoutsForWorld(world, plugin);
     }
 }

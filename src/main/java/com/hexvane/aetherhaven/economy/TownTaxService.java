@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.CharterTaxPolicy;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.feast.FeastService;
+import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -110,6 +112,10 @@ public final class TownTaxService {
         long total = sum[0];
         if (town.isFounderMonumentActive()) {
             total = (long) Math.floor(total * (cfg.getFounderMonumentTaxPermille() / 1000.0));
+        }
+        long dawn = VillagerReputationService.currentGameEpochDay(store);
+        if (FeastService.isStewardsTaxActive(town, dawn)) {
+            total = (long) Math.floor(total * (cfg.getFeastTaxBonusPermille() / 1000.0));
         }
         return total;
     }
