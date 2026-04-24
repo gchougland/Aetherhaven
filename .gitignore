@@ -37,3 +37,5 @@ build/
 /.cursor/
 .cursorrules
 /scripts/__pycache__/
+# Local 1Password op:// env for translation script (see translate.secrets.env.example)
+/scripts/translate.secrets.env
