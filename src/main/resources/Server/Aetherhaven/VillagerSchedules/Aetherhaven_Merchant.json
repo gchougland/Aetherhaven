@@ -225,6 +225,18 @@
     },
     {
       "dayOfWeek": "SUNDAY",
+      "hour": 8,
+      "minute": 0,
+      "location": "gaia_altar"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 9,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
       "hour": 12,
       "minute": 30,
       "location": "inn"

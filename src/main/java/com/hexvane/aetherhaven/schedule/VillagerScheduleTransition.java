@@ -10,7 +10,7 @@ public final class VillagerScheduleTransition {
 
     private int hour;
     private int minute;
-    /** Symbol: home, work, inn, park (case-insensitive). */
+    /** Symbol: home, work, inn, park, gaia_altar (case-insensitive). */
     @Nullable
     private String location;
 

@@ -9,6 +9,8 @@ import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
@@ -51,6 +53,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      * is set.
      */
     private static final double POI_ENTRY_ARRIVE_HORIZONTAL_SQ = 3.5 * 3.5;
+    /**
+     * {@link NavState#BLOCKED} and {@link NavState#DEFER}: DEFER is “delay path recompute” in vanilla Seek — it can
+     * persist while an NPC is wedged against geometry (wall bug), and must not reset stuck ticks like PROGRESSING.
+     */
     private static final int BLOCKED_FAIL_TICKS = 100;
     private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
     static void onUnloadSafetyDismount(
@@ -148,13 +154,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord townRecord = tm.getTown(binding.getTownId());
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         List<PoiEntry> pois = reg.listByTown(binding.getTownId());
 
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
             case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
-            default -> tickIdle(ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, this.plugin);
+            default ->
+                tickIdle(
+                    ref,
+                    store,
+                    commandBuffer,
+                    world,
+                    npc,
+                    reg,
+                    pois,
+                    needs,
+                    binding,
+                    autonomy,
+                    now,
+                    this.plugin,
+                    townRecord
+                );
         }
     }
 
@@ -170,7 +193,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull TownVillagerBinding binding,
         @Nonnull VillagerAutonomyState autonomy,
         long now,
-        @Nonnull AetherhavenPlugin plugin
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TownRecord townRecord
     ) {
         if (SchedulePlotCommute.tryBeginIfOffSchedulePlot(ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin)) {
             return;
@@ -214,7 +238,15 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             tz = bz + 0.5;
             int standY =
                 tc != null
-                    ? VillagerBlockUtil.findStandY(world, bx, bz, (int) Math.floor(tc.getPosition().y) + 3)
+                    ? AutonomyNavBounds.standBlockYForPoiWithoutTarget(
+                        world,
+                        plugin,
+                        townRecord,
+                        pick,
+                        bx,
+                        bz,
+                        (int) Math.floor(tc.getPosition().y)
+                    )
                     : Integer.MIN_VALUE;
             leashY = standY != Integer.MIN_VALUE ? standY + 0.02 : pick.getY();
         }
@@ -305,13 +337,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 failTravel(autonomy, now, "MOUNT_UNREACHABLE", commandBuffer, ref, npc);
                 return;
             }
-        } else if (nav == NavState.BLOCKED) {
+        } else if (nav == NavState.BLOCKED || nav == NavState.DEFER) {
             autonomy.setTravelStuckTicks(autonomy.getTravelStuckTicks() + 1);
             if (autonomy.getTravelStuckTicks() >= BLOCKED_FAIL_TICKS) {
-                failTravel(autonomy, now, "BLOCKED", commandBuffer, ref, npc);
+                failTravel(autonomy, now, nav == NavState.DEFER ? "DEFER" : "BLOCKED", commandBuffer, ref, npc);
                 return;
             }
-        } else if (nav == NavState.PROGRESSING || nav == NavState.INIT || nav == NavState.DEFER) {
+        } else if (nav == NavState.PROGRESSING || nav == NavState.INIT) {
             autonomy.setTravelStuckTicks(0);
         }
 

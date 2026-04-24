@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.npc.movement;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.RotatedMountPointsArray;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -53,11 +54,14 @@ public final class BodyMotionWanderInRectGroundPreference extends BodyMotionWand
         World world = ref.getStore().getExternalData().getWorld();
         double x = this.targetPosition.x;
         double z = this.targetPosition.z;
-        double yHint = this.targetPosition.y;
         int bx = (int) Math.floor(x);
         int bz = (int) Math.floor(z);
-        int topY = Math.min(319, (int) Math.ceil(yHint) + 3);
-        int standY = VillagerBlockUtil.findStandY(world, bx, bz, topY);
+        int npcFeetY = 64;
+        TransformComponent tc = ref.getStore().getComponent(ref, TransformComponent.getComponentType());
+        if (tc != null) {
+            npcFeetY = (int) Math.floor(tc.getPosition().y);
+        }
+        int standY = VillagerBlockUtil.findStandYNearNpcFeetInColumn(world, bx, bz, npcFeetY);
         if (standY == Integer.MIN_VALUE) {
             return clampWeight(1.0);
         }

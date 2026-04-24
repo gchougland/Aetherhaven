@@ -51,6 +51,67 @@ public final class VillagerBlockUtil {
         return Integer.MIN_VALUE;
     }
 
+    /**
+     * Walkable feet Y in {@code (bx, bz)} for POI travel: searches only near {@code poiBlockY} so a multi-height column
+     * (e.g. house with a walkable roof) does not resolve to a roof/attic above the actual POI. Falls back to
+     * {@link #findStandY} when the band has no stand (e.g. column unloaded).
+     */
+    public static int findStandYNearPoiBlockY(@Nonnull World world, int bx, int bz, int poiBlockY, int npcFeetY) {
+        int start = Math.min(319, Math.min(poiBlockY + 3, Math.max(poiBlockY, npcFeetY) + 2));
+        for (int y = start; y >= Math.max(1, poiBlockY - 14); y--) {
+            if (walkableColumn(world, bx, y, bz)) {
+                return y;
+            }
+        }
+        return findStandY(world, bx, bz, (int) Math.min(319, Math.max(1, npcFeetY) + 3));
+    }
+
+    /**
+     * Resolves stand Y for POI / commute: optional plot AABB from {@link AutonomyNavBounds} caps the column so roof
+     * walkables are not chosen; otherwise same band as {@link #findStandYNearPoiBlockY}.
+     */
+    public static int findStandYForNav(
+        @Nonnull World world,
+        int bx,
+        int bz,
+        int poiBlockY,
+        int npcFeetY,
+        @Nullable AutonomyNavBounds.NavVerticalRange range
+    ) {
+        if (range != null && range.isUsable()) {
+            int start =
+                Math.min(
+                    319,
+                    Math.min(
+                        range.maxFeetY(),
+                        Math.min(poiBlockY + 3, Math.max(poiBlockY, npcFeetY) + 2)
+                    )
+                );
+            for (int y = start; y >= Math.max(1, Math.max(poiBlockY - 14, range.minFeetY())); y--) {
+                if (walkableColumn(world, bx, y, bz)) {
+                    return y;
+                }
+            }
+        }
+        return findStandYNearPoiBlockY(world, bx, bz, poiBlockY, npcFeetY);
+    }
+
+    /**
+     * For wander step scoring: the probed XZ may be far from the NPC; do not use the first walkable up a tall air column
+     * (roof). Only search a band around the NPC’s current feet.
+     */
+    public static int findStandYNearNpcFeetInColumn(
+        @Nonnull World world, int bx, int bz, int npcFeetY
+    ) {
+        int start = Math.min(319, Math.max(1, npcFeetY) + 2);
+        for (int y = start; y >= Math.max(1, npcFeetY - 10); y--) {
+            if (walkableColumn(world, bx, y, bz)) {
+                return y;
+            }
+        }
+        return findStandY(world, bx, bz, start);
+    }
+
     @Nullable
     private static BlockType blockTypeNoLoad(@Nonnull World world, int x, int y, int z) {
         if (y < 0 || y >= 320) {

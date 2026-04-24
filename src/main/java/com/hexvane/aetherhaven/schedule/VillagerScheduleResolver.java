@@ -20,6 +20,8 @@ public final class VillagerScheduleResolver {
     public static final String LOC_WORK = "work";
     public static final String LOC_INN = "inn";
     public static final String LOC_PARK = "park";
+    /** Visits a completed {@link AetherhavenConstants#CONSTRUCTION_PLOT_GAIA_ALTAR} (skipped if not built). */
+    public static final String LOC_GAIA_ALTAR = "gaia_altar";
 
     private VillagerScheduleResolver() {}
 
@@ -135,7 +137,8 @@ public final class VillagerScheduleResolver {
             case LOC_WORK -> describeWorkUnresolved(town, binding);
             case LOC_INN -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case LOC_PARK -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
-            default -> "unsupported location '" + loc + "' (not home/work/inn/park)";
+            case LOC_GAIA_ALTAR -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
+            default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar)";
         };
     }
 
@@ -155,6 +158,7 @@ public final class VillagerScheduleResolver {
             case LOC_WORK -> resolveWork(town, binding);
             case LOC_INN -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case LOC_PARK -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
+            case LOC_GAIA_ALTAR -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
             default -> VillagerScheduleResolveOutcome.skip();
         };
     }

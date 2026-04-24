@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -100,6 +102,8 @@ public final class VillagerAutonomyTravelKick {
                     if (pick == null) {
                         return true;
                     }
+                    TownManager tmm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    TownRecord townRow = tmm.getTown(binding.getTownId());
                     autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
                     double tx;
                     double tz;
@@ -124,7 +128,15 @@ public final class VillagerAutonomyTravelKick {
                         tz = bz + 0.5;
                         int standY =
                             tc != null
-                                ? VillagerBlockUtil.findStandY(world, bx, bz, (int) Math.floor(tc.getPosition().y) + 3)
+                                ? AutonomyNavBounds.standBlockYForPoiWithoutTarget(
+                                    world,
+                                    plugin,
+                                    townRow,
+                                    pick,
+                                    bx,
+                                    bz,
+                                    (int) Math.floor(tc.getPosition().y)
+                                )
                                 : Integer.MIN_VALUE;
                         leashY = standY != Integer.MIN_VALUE ? standY + 0.02 : pick.getY();
                     }

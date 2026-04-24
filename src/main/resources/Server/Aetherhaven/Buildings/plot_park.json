@@ -7,6 +7,9 @@
   "plotAnchorOffset": [10, 0, 10],
   "managementBlockLocalPos": [-3, 2, -4],
   "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 38,
   "materials": [],
   "pois": [

@@ -7,6 +7,9 @@
   "plotAnchorOffset": [5, 0, 5],
   "managementBlockLocalPos": [2, 1, 5],
   "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 58,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 200 },

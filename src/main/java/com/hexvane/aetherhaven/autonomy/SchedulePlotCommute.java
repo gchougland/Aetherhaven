@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -78,10 +79,20 @@ public final class SchedulePlotCommute {
         }
         int cx = (fp.getMinX() + fp.getMaxX()) / 2;
         int cz = (fp.getMinZ() + fp.getMaxZ()) / 2;
-        int yScan = (int) Math.floor(tc.getPosition().y) + 8;
-        int standY = VillagerBlockUtil.findStandY(world, cx, cz, yScan);
+        int npcFeetY = (int) Math.floor(tc.getPosition().y);
+        ConstructionDefinition cdef = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        AutonomyNavBounds.NavVerticalRange range = AutonomyNavBounds.rangeForPlotFootprint(fp, cdef);
+        int standY = VillagerBlockUtil.findStandYForNav(world, cx, cz, npcFeetY, npcFeetY, range);
         if (standY == Integer.MIN_VALUE) {
-            standY = VillagerBlockUtil.findStandY(world, plot.getSignX(), plot.getSignZ(), yScan);
+            standY =
+                VillagerBlockUtil.findStandYForNav(
+                    world,
+                    plot.getSignX(),
+                    plot.getSignZ(),
+                    npcFeetY,
+                    npcFeetY,
+                    range
+                );
         }
         if (standY == Integer.MIN_VALUE) {
             return false;

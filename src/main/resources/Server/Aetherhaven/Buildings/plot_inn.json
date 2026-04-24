@@ -9,6 +9,9 @@
   "innkeeperSpawnLocal": [4, 1, 4],
   "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
   "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 200 },
     { "resourceTypeId": "Rock", "count": 100 }

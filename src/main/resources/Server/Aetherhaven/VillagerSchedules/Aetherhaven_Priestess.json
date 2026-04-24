@@ -22,13 +22,13 @@
     {
       "dayOfWeek": "MONDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "MONDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -58,13 +58,13 @@
     {
       "dayOfWeek": "TUESDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "TUESDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -94,13 +94,13 @@
     {
       "dayOfWeek": "WEDNESDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "WEDNESDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -130,13 +130,13 @@
     {
       "dayOfWeek": "THURSDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "THURSDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -166,13 +166,13 @@
     {
       "dayOfWeek": "FRIDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "FRIDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -202,13 +202,13 @@
     {
       "dayOfWeek": "SATURDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "SATURDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {
@@ -220,6 +220,18 @@
     {
       "dayOfWeek": "SUNDAY",
       "hour": 6,
+      "minute": 0,
+      "location": "work"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 8,
+      "minute": 0,
+      "location": "gaia_altar"
+    },
+    {
+      "dayOfWeek": "SUNDAY",
+      "hour": 9,
       "minute": 0,
       "location": "work"
     },
@@ -238,13 +250,13 @@
     {
       "dayOfWeek": "SUNDAY",
       "hour": 17,
-      "minute": 45,
+      "minute": 15,
       "location": "park"
     },
     {
       "dayOfWeek": "SUNDAY",
       "hour": 18,
-      "minute": 30,
+      "minute": 45,
       "location": "work"
     },
     {

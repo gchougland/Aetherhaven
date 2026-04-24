@@ -91,6 +91,28 @@ public final class ConstructionDefinition {
     @SerializedName("pois")
     private List<BuildingPoisDefinition.PoiRow> pois = new ArrayList<>();
 
+    /**
+     * Added to the placed plot footprint’s {@code minY} to get the lower bound for where NPCs may “stand” for
+     * autonomy (feet in air, block below solid). 0 = foundation/footprint min; 1+ when the AABB’s bottom is below the
+     * playable ground floor.
+     */
+    @SerializedName("autonomyNavFloorYAboveMinY")
+    private int autonomyNavFloorYAboveMinY;
+
+    /**
+     * Do not use stand Y above (footprint {@code minY} + this value) when a plot bounds check applies. Tighten for
+     * single-story builds if roof columns still path too high; loosen for very tall multi-floor prefabs.
+     */
+    @SerializedName("autonomyNavMaxStandYSpanAboveMinY")
+    private int autonomyNavMaxStandYSpanAboveMinY;
+
+    /**
+     * Treat the top this many Y layers of the plot AABB (below {@code maxY}) as non-nav (roof/trim). 1 = exclude feet
+     * on the topmost world layer of the building box; increase if flat roofs are still being targeted.
+     */
+    @SerializedName("autonomyNavRoofExclusionYBelowMaxY")
+    private int autonomyNavRoofExclusionYBelowMaxY = 1;
+
     public String getId() {
         return id;
     }
@@ -202,5 +224,20 @@ public final class ConstructionDefinition {
     @Nonnull
     public List<BuildingPoisDefinition.PoiRow> getPois() {
         return pois != null && !pois.isEmpty() ? pois : Collections.emptyList();
+    }
+
+    /** @see #autonomyNavFloorYAboveMinY */
+    public int getAutonomyNavFloorYAboveMinY() {
+        return autonomyNavFloorYAboveMinY;
+    }
+
+    /** Span above footprint minY for stand resolution; 0/negative = use mod default 32. */
+    public int getAutonomyNavMaxStandYSpanAboveMinY() {
+        return autonomyNavMaxStandYSpanAboveMinY > 0 ? autonomyNavMaxStandYSpanAboveMinY : 32;
+    }
+
+    /** 0/negative = use 1. */
+    public int getAutonomyNavRoofExclusionYBelowMaxY() {
+        return autonomyNavRoofExclusionYBelowMaxY > 0 ? autonomyNavRoofExclusionYBelowMaxY : 1;
     }
 }

@@ -8,6 +8,9 @@
   "managementBlockLocalPos": [-7, 2, 3],
   "treasuryLocalPos": [7, 1, 2],
   "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 1,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 300 },
     { "resourceTypeId": "Rock", "count": 100 }

@@ -1,14 +1,20 @@
 # Changelog
 
-## [0.6.0] - Unreleased
+## [0.6.0] - 4/23/2026
 
 ### Added
 
+- Schedule location **`gaia_altar`**: villagers can be sent to a completed Gaia altar plot (same resolution as inn/park; skipped if the altar is not built). All villager schedules include a **Sunday 08:00–09:00** visit.
 - **Jewelry System** that adds rings and necklaces which can be equipped through the Hand Mirror, granting stat increases.
   - Jewelry can be found in loot chests alongside gold coins now.
   - Found jewelry will need to be identified by the merchant to see its stats.
   - Befriending the merchant unlocks the Appraisal Bench and Jewelry Crafting bench allowing players 
   to appraise and craft their own jewelry.
+
+### Changes
+
+- Improved Villager pathfinding to help avoid villagers getting stuck
+- Staggered Villager schedules for the park so they don't all go there at the same time.
 
 ## [0.5.0] - 4/21/2026
 
