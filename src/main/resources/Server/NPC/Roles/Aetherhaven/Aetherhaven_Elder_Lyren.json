@@ -156,7 +156,6 @@
               { "Type": "LockOnInteractionTarget" },
               {
                 "Type": "OpenAetherhavenDialogue",
-                "DialogueId": "aetherhaven_elder_week2",
                 "VillagerKind": "elder_lyren"
               },
               { "Type": "State", "State": "$Interaction" }

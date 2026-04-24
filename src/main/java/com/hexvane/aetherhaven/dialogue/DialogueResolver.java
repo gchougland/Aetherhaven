@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,15 +54,16 @@ public final class DialogueResolver {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
-        if (explicitDialogueId != null && !explicitDialogueId.isBlank()) {
-            return new ResolvedDialogue(explicitDialogueId.trim(), "root");
-        }
         String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : KIND_TEST_VILLAGER;
-        String tree = kindToTree.getOrDefault(kind, TREE_TEST);
+        String tree =
+            explicitDialogueId != null && !explicitDialogueId.isBlank()
+                ? explicitDialogueId.trim()
+                : kindToTree.getOrDefault(kind, TREE_TEST);
         String entry = "root";
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin != null && npcRef != null && npcRef.isValid()) {
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+            World world = store.getExternalData().getWorld();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
             TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             if (pu != null && binding != null) {
@@ -75,7 +77,9 @@ public final class DialogueResolver {
             TownRecord town = VillagerReputationService.findTownForPlayer(playerRef, store, tm);
             UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
             if (town != null && pu != null && nu != null) {
-                String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(town, pu.getUuid(), nu.getUuid());
+                String pendingEntry = VillagerReputationService.peekPendingRewardEntryNode(
+                    world, tm, town, pu.getUuid(), nu.getUuid()
+                );
                 if (pendingEntry != null && !pendingEntry.isBlank()) {
                     entry = pendingEntry.trim();
                 }

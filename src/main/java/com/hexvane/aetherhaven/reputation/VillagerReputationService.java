@@ -4,9 +4,13 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -63,20 +67,84 @@ public final class VillagerReputationService {
         return d.toEpochDay();
     }
 
+    /**
+     * Innkeeper reputation is stored per villager entity UUID. Uses {@link TownRecord#getInnkeeperEntityUuid()} when
+     * present; otherwise the first loaded NPC with {@link TownVillagerBinding} kind innkeeper for this town.
+     */
+    @Nullable
+    public static UUID resolveInnkeeperEntityUuidForReputation(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
+        UUID registered = town.getInnkeeperEntityUuid();
+        if (registered != null) {
+            return registered;
+        }
+        UUID tid = town.getTownId();
+        final UUID[] found = {null};
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), NPCEntity.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                if (found[0] != null) {
+                    return;
+                }
+                for (int i = 0; i < chunk.size(); i++) {
+                    TownVillagerBinding b = chunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId()) || !TownVillagerBinding.KIND_INNKEEPER.equals(b.getKind())) {
+                        continue;
+                    }
+                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc == null) {
+                        continue;
+                    }
+                    found[0] = uc.getUuid();
+                    return;
+                }
+            }
+        );
+        return found[0];
+    }
+
+    /** True if this player has claimed the given milestone reward id with any villager row stored on the town. */
+    public static boolean hasPlayerClaimedRewardId(
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        @Nonnull String rewardId
+    ) {
+        String rid = rewardId.trim();
+        if (rid.isEmpty()) {
+            return false;
+        }
+        Map<String, VillagerReputationEntry> byVillager = town.getPlayerVillagerReputation().get(playerUuid.toString());
+        if (byVillager == null || byVillager.isEmpty()) {
+            return false;
+        }
+        for (VillagerReputationEntry e : byVillager.values()) {
+            if (e != null && e.getClaimedRewardIds().contains(rid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Nonnull
     public static VillagerReputationEntry getOrCreateEntry(
         @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull UUID villagerEntityUuid
     ) {
         String pk = playerUuid.toString();
         String vk = villagerEntityUuid.toString();
-        return town.getPlayerVillagerReputation().computeIfAbsent(pk, k -> new java.util.LinkedHashMap<>()).computeIfAbsent(
-            vk,
-            k -> {
-                VillagerReputationEntry e = new VillagerReputationEntry();
-                e.migrateIfNeeded();
-                return e;
-            }
-        );
+        VillagerReputationEntry e = town
+            .getPlayerVillagerReputation()
+            .computeIfAbsent(pk, k -> new java.util.LinkedHashMap<>())
+            .computeIfAbsent(
+                vk,
+                k -> {
+                    VillagerReputationEntry n = new VillagerReputationEntry();
+                    n.migrateIfNeeded();
+                    return n;
+                }
+            );
+        e.migrateIfNeeded();
+        return e;
     }
 
     /**
@@ -196,7 +264,9 @@ public final class VillagerReputationService {
 
     /**
      * Grants one reputation milestone immediately (items/recipe), marks it claimed, and strips it from the pending queue.
-     * Does not require the reward to be at the front of the queue (unlike dialogue claim flow).
+     * Does not require the reward to be at the front of the queue (unlike dialogue claim flow). Also raises stored
+     * {@link VillagerReputationEntry#getReputation()} to at least this reward's {@code minReputation} so UI (e.g. feasts)
+     * matches the unlocked tier (normal play reaches that rep before the reward is offered).
      *
      * @return null on success, or a short error reason
      */
@@ -225,10 +295,20 @@ public final class VillagerReputationService {
         VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
         String rid = def.rewardId().trim();
         if (e.getClaimedRewardIds().contains(rid)) {
+            int floor = def.minReputation();
+            if (e.getReputation() < floor) {
+                e.setReputation(Math.min(MAX_REPUTATION, floor));
+                tm.updateTown(town);
+                return null;
+            }
             return "That reward was already claimed.";
         }
         e.getPendingRewardIds().removeIf(rid::equals);
         e.getClaimedRewardIds().add(rid);
+        int floor = def.minReputation();
+        if (e.getReputation() < floor) {
+            e.setReputation(Math.min(MAX_REPUTATION, floor));
+        }
         tm.updateTown(town);
 
         Player player = store.getComponent(playerRef, Player.getComponentType());
@@ -265,6 +345,42 @@ public final class VillagerReputationService {
         }
     }
 
+    /**
+     * Rebuilds the pending milestone list from current reputation, claimed set, and role. Fixes saves where rep crossed a
+     * threshold but the queue was never enqueued (e.g. before role could be resolved) or was cleared incorrectly.
+     */
+    private static void reconcilePendingMilestonesForCurrentReputation(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull VillagerReputationEntry e,
+        @Nonnull UUID villagerEntityUuid
+    ) {
+        String roleId = resolveRoleForVillager(town, world, villagerEntityUuid);
+        if (roleId == null) {
+            return;
+        }
+        int rep = e.getReputation();
+        java.util.Set<String> claimed = e.claimedSet();
+        java.util.ArrayList<String> rebuilt = new java.util.ArrayList<>();
+        for (ReputationRewardCatalog.ReputationRewardDefinition def : ReputationRewardCatalog.forRoleSorted(roleId)) {
+            if (rep < def.minReputation()) {
+                continue;
+            }
+            String rid = def.rewardId();
+            if (claimed.contains(rid) || rebuilt.contains(rid)) {
+                continue;
+            }
+            rebuilt.add(rid);
+        }
+        if (rebuilt.equals(e.getPendingRewardIds())) {
+            return;
+        }
+        e.getPendingRewardIds().clear();
+        e.getPendingRewardIds().addAll(rebuilt);
+        tm.updateTown(town);
+    }
+
     @Nullable
     private static String resolveRoleForVillager(@Nonnull TownRecord town, @Nonnull World world, @Nonnull UUID villagerEntityUuid) {
         if (town.getElderEntityUuid() != null && town.getElderEntityUuid().equals(villagerEntityUuid)) {
@@ -289,9 +405,14 @@ public final class VillagerReputationService {
     /** @return dialogue entry node id to override root, or null to keep default */
     @Nullable
     public static String peekPendingRewardEntryNode(
-        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull UUID villagerEntityUuid
+        @Nonnull World world,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull UUID playerUuid,
+        @Nonnull UUID villagerEntityUuid
     ) {
         VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
+        reconcilePendingMilestonesForCurrentReputation(world, town, tm, e, villagerEntityUuid);
         List<String> pending = e.getPendingRewardIds();
         if (pending.isEmpty()) {
             return null;

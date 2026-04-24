@@ -34,32 +34,32 @@ public final class ReputationRewardCatalog {
             "rep_reward_100",
             null
         ),
-        // Innkeeper
-        new ReputationRewardDefinition(
-            "rep_innkeeper_25",
-            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
-            25,
-            AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID,
-            6,
-            "rep_reward_25",
-            null
-        ),
-        new ReputationRewardDefinition(
-            "rep_innkeeper_50_table",
-            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
-            50,
-            "",
-            0,
-            "rep_reward_50_table",
-            AetherhavenConstants.ITEM_BANQUET_TABLE
-        ),
+        // Innkeeper — 50: banquet table recipe + Steward's Ledger feast (one dialogue); 75/100: single feast each
         new ReputationRewardDefinition(
             "rep_innkeeper_50",
             AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
             50,
-            AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID,
-            12,
+            "",
+            0,
             "rep_reward_50",
+            AetherhavenConstants.ITEM_BANQUET_TABLE
+        ),
+        new ReputationRewardDefinition(
+            "rep_innkeeper_75",
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            75,
+            "",
+            0,
+            "rep_reward_75",
+            null
+        ),
+        new ReputationRewardDefinition(
+            "rep_innkeeper_100",
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            100,
+            "",
+            0,
+            "rep_reward_100",
             null
         ),
         // Merchant — appraisal bench recipe at 50 (crafting knowledge)

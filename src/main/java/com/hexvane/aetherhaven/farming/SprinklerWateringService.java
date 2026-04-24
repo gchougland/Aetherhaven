@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.farming;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.CharterSpecializationModifiers;
@@ -28,9 +29,9 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 
 /**
- * Automatic watering uses the same in-game <strong>morning window</strong> and <strong>calendar epoch day</strong> as
- * {@link com.hexvane.aetherhaven.inn.InnPoolService} (see config {@code InnPoolMorningStartHour} /
- * {@code InnPoolMorningEndHour}). Soil updates mirror {@code UseWateringCanInteraction}.
+ * Automatic watering uses the shared in-game <strong>morning window</strong> and <strong>calendar epoch day</strong>
+ * (see {@link com.hexvane.aetherhaven.config.AetherhavenPluginConfig#getGameMorningStartHour()} and inn visitor refresh).
+ * Soil updates mirror {@code UseWateringCanInteraction}.
  */
 public final class SprinklerWateringService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -54,7 +55,7 @@ public final class SprinklerWateringService {
     }
 
     /**
-     * Throttled to once per game-second per world; runs automatic pass when in the inn morning window and the calendar
+     * Throttled to once per game-second per world; runs automatic pass when in the shared morning window and the calendar
      * day has not been watered yet.
      */
     public static void tickThrottled(@Nonnull World world, @Nonnull Store<EntityStore> store, @Nonnull AetherhavenPlugin plugin) {
@@ -89,7 +90,7 @@ public final class SprinklerWateringService {
         @Nonnull Instant from,
         @Nonnull Instant to
     ) {
-        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
+        int morningStart = plugin.getConfig().get().getGameMorningStartHour();
         LinkedHashSet<Long> days = new LinkedHashSet<>();
         com.hexvane.aetherhaven.time.GameTimeEpochs.collectEpochDaysWhereMorningStartOccurred(
             from, to, morningStart, WorldTimeResource.ZONE_OFFSET, days
@@ -126,8 +127,8 @@ public final class SprinklerWateringService {
         if (wtr == null) {
             return;
         }
-        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
-        int morningEndEx = plugin.getConfig().get().getInnPoolMorningEndHourExclusive();
+        int morningStart = plugin.getConfig().get().getGameMorningStartHour();
+        int morningEndEx = plugin.getConfig().get().getGameMorningEndHourExclusive();
         if (!isMorningWindowForSprinkler(wtr, morningStart, morningEndEx)) {
             return;
         }
@@ -137,7 +138,7 @@ public final class SprinklerWateringService {
         if (lastMorningDay != null && lastMorningDay >= calendarEpochDay) {
             return;
         }
-        // Claim this calendar day before queueing — same second /tick ordering as InnPoolService using world.execute.
+        // Claim this calendar day before queueing — same deferred pattern as inn pool tick (world.execute).
         LAST_AUTOMATIC_SPRINKLER_CALENDAR_DAY.put(w, calendarEpochDay);
         world.execute(() -> {
             try {
@@ -152,30 +153,13 @@ public final class SprinklerWateringService {
         });
     }
 
-    /** Same rules as {@link com.hexvane.aetherhaven.inn.InnPoolService} morning checks. */
+    /** Same morning-window rules as {@link com.hexvane.aetherhaven.time.AetherhavenMorningWindow}. */
     private static boolean isMorningWindowForSprinkler(
         @Nonnull WorldTimeResource wtr,
         int morningStartHour,
         int morningEndExclusive
     ) {
-        if (isInMorningHourWindow(wtr, morningStartHour, morningEndExclusive)) {
-            return true;
-        }
-        return wtr.isScaledDayTimeWithinRange(0.18f, 0.42f);
-    }
-
-    private static boolean isInMorningHourWindow(
-        @Nonnull WorldTimeResource wtr,
-        int morningStartHour,
-        int morningEndExclusive
-    ) {
-        int h = wtr.getCurrentHour();
-        int start = Math.max(0, Math.min(23, morningStartHour));
-        int end = morningEndExclusive;
-        if (end <= start) {
-            end = Math.min(start + 6, 24);
-        }
-        return h >= start && h < end;
+        return AetherhavenMorningWindow.isGameMorning(wtr, morningStartHour, morningEndExclusive);
     }
 
     /**

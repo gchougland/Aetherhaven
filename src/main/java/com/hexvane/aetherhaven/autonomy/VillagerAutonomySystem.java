@@ -60,6 +60,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      */
     private static final int BLOCKED_FAIL_TICKS = 100;
     private static final int MOUNT_UNREACHABLE_FAIL_TICKS = 120;
+    /** {@link #beginTravelToPoi} sets {@link VillagerAutonomyState#setNextDecisionEpochMs} to now + this; must be checked in {@link #tickTravel} or NPCs can follow Nav:PROGRESSING forever. */
+    private static final long TRAVEL_PHASE_MAX_MS = 180_000L;
     static void onUnloadSafetyDismount(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -162,7 +164,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         List<PoiEntry> poisForScoring = filterPoisForAutonomyScoring(townRecord, pois);
 
         switch (autonomy.getPhase()) {
-            case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now);
+            case VillagerAutonomyState.PHASE_USE -> tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord);
             case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
             default ->
                 tickIdle(
@@ -291,6 +293,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (pid.equals(autonomy.getTargetPoiUuid())) {
             return false;
         }
+        long gatherDeadline = townRecord.getFeastGatherDeadlineEpochMs();
+        if (gatherDeadline > 0L && gatherDeadline == autonomy.getLastFeastGatherDeadlineAttended()) {
+            return false;
+        }
         PoiEntry feastPoi = reg.get(pid);
         if (feastPoi == null) {
             return false;
@@ -352,7 +358,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setPathFailureReason("");
         autonomy.setTravelStuckTicks(0);
         npc.setLeashPoint(new Vector3d(tx, leashY, tz));
-        autonomy.setNextDecisionEpochMs(now + 120_000L);
+        autonomy.setNextDecisionEpochMs(now + TRAVEL_PHASE_MAX_MS);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -375,6 +381,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             autonomy.setNextDecisionEpochMs(now + 2000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             clearAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
+        if (now >= autonomy.getNextDecisionEpochMs()) {
+            failTravel(autonomy, now, "TRAVEL_TIMEOUT", commandBuffer, ref, npc);
             return;
         }
 
@@ -511,7 +522,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiRegistry reg,
         @Nonnull VillagerNeeds needs,
         @Nonnull VillagerAutonomyState autonomy,
-        long now
+        long now,
+        @Nullable TownRecord townRecord
     ) {
         if (now < autonomy.getPhaseEndEpochMs()) {
             applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -523,6 +535,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
             PoiEffectTable.applyUseComplete(needs, poi);
             commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+            if (townRecord != null
+                && poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)
+                && townRecord.getFeastGatherDeadlineEpochMs() > 0L) {
+                autonomy.setLastFeastGatherDeadlineAttended(townRecord.getFeastGatherDeadlineEpochMs());
+            }
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
         autonomy.setTargetPoiUuid(null);

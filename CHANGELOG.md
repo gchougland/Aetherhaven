@@ -1,6 +1,21 @@
 # Changelog
 
-## [0.7.0] - Unreleased
+## [0.7.0] - 4/24/2026
+
+### Added
+
+- **Feast system:** serve feasts from the banquet table (costs, town effects, villager gather); Steward’s Ledger, Hearthglass Vigil, and Berrycircle Concord, with innkeeper-reputation unlocks.
+- **Treasury:** new tab that shows the **tax calculation** (per-villager lines, adjustments, feast multiplier when applicable, totals).
+- **New** `/aetherhaven` subcommands (including starter kit for creative; use `/aetherhaven` help in-game for the list).
+
+### Changes
+
+- **Improved villager pathfinding** (navigation and feast routing).
+
+### Fixed
+
+- **Daily / morning tax:** tax sometimes did not come in as expected (game-time morning window / tithe application).
+- **Reputation rewards:** rewards were not granted in dialogue (including Elder milestones); fixed resolver + pending-milestone handling so recipe/item rewards apply correctly.
 
 ## [0.6.0] - 4/23/2026
 

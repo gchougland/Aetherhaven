@@ -48,6 +48,12 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
                 v -> v.encodePendingDoors()
             )
             .add()
+            .append(
+                new KeyedCodec<>("LastFeastGatherDeadlineAttended", Codec.LONG),
+                (v, x) -> v.lastFeastGatherDeadlineAttended = x != null ? x : 0L,
+                v -> v.lastFeastGatherDeadlineAttended
+            )
+            .add()
             .build();
 
     @Nullable
@@ -81,6 +87,11 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
     @Nonnull
     private String pathFailureReason = "";
     private int travelStuckTicks;
+    /**
+     * {@link com.hexvane.aetherhaven.town.TownRecord#getFeastGatherDeadlineEpochMs} for the gather session this
+     * villager already finished eating at; another trip is not started until a new feast sets a new deadline.
+     */
+    private long lastFeastGatherDeadlineAttended;
     /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
     @Nonnull
     private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
@@ -231,6 +242,15 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         this.nextDecisionEpochMs = nextDecisionEpochMs;
     }
 
+    /** Wall-time {@link com.hexvane.aetherhaven.town.TownRecord#getFeastGatherDeadlineEpochMs} of the last completed feast table visit. */
+    public long getLastFeastGatherDeadlineAttended() {
+        return lastFeastGatherDeadlineAttended;
+    }
+
+    public void setLastFeastGatherDeadlineAttended(long lastFeastGatherDeadlineAttended) {
+        this.lastFeastGatherDeadlineAttended = lastFeastGatherDeadlineAttended;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
@@ -244,6 +264,7 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         c.nextDecisionEpochMs = nextDecisionEpochMs;
         c.pathFailureReason = pathFailureReason;
         c.travelStuckTicks = travelStuckTicks;
+        c.lastFeastGatherDeadlineAttended = lastFeastGatherDeadlineAttended;
         for (int[] d : pendingOpenDoors) {
             c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });
         }

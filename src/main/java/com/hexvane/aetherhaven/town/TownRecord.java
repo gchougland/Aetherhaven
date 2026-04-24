@@ -122,7 +122,7 @@ public final class TownRecord {
     @SerializedName("treasuryGoldCoinCount")
     private long treasuryGoldCoinCount;
 
-    /** Game calendar epoch day when daily villager tax was last applied. */
+    /** Dawn-aligned game epoch day when daily treasury tithe was last applied ({@link com.hexvane.aetherhaven.reputation.VillagerReputationService#currentGameEpochDay}). */
     @Nullable
     @SerializedName("treasuryLastTaxEpochDay")
     private Long treasuryLastTaxEpochDay;

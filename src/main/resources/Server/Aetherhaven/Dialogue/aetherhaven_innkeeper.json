@@ -95,22 +95,22 @@
       "text": "There. A hearth for strangers and a latch that belongs to me. That is worth more than the key looks.",
       "choices": [{ "text": "You earned it.", "next": null }]
     },
-    "rep_reward_25": {
-      "speaker": "Corin Mosscup",
-      "text": "server.aetherhaven.reputation.reward.innkeeper.25",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_25" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
-    },
-    "rep_reward_50_table": {
-      "speaker": "Corin Mosscup",
-      "text": "server.aetherhaven.reputation.reward.innkeeper.50_table",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_50_table" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
-    },
     "rep_reward_50": {
       "speaker": "Corin Mosscup",
       "text": "server.aetherhaven.reputation.reward.innkeeper.50",
       "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_50" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_75": {
+      "speaker": "Corin Mosscup",
+      "text": "server.aetherhaven.reputation.reward.innkeeper.75",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_75" }],
+      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+    },
+    "rep_reward_100": {
+      "speaker": "Corin Mosscup",
+      "text": "server.aetherhaven.reputation.reward.innkeeper.100",
+      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_100" }],
       "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
     }
   }

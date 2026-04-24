@@ -1,39 +1,224 @@
 $C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@TabIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@TreasuryTabCoinsStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../dollar_coin_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../dollar_coin_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../dollar_coin_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../dollar_coin_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@TreasuryTabTitheStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../crown_coin_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 $C.@PageOverlay {
-  LayoutMode: Middle;
+  LayoutMode: Top;
 
-  $C.@DecoratedContainer {
-    Anchor: (Width: 420);
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
 
-    #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.treasury.title;
-      }
-    }
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
 
-    #Content {
-      LayoutMode: Top;
-      Padding: (Full: 16);
+      $C.@DecoratedContainer {
+        Anchor: (Width: 520);
 
-      Label #Balance {
-        Anchor: (Bottom: 12);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true);
-      }
+        #Title {
+          $C.@Title {
+            @Text = %server.aetherhaven.ui.treasury.title;
+          }
+        }
 
-      $C.@TextButton #DepositButton {
-        Text: %server.aetherhaven.ui.treasury.deposit;
-      }
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
 
-      $C.@TextButton #WithdrawButton {
-        Anchor: (Top: 8);
-        Text: %server.aetherhaven.ui.treasury.withdraw;
-      }
+          Group #TreasuryTabStrip {
+            LayoutMode: Left;
+            Visible: false;
+            Anchor: (Bottom: 16, Left: 0, Right: 0);
+            Padding: (Horizontal: 4, Vertical: 10);
+            Background: #1e2430(0.92);
 
-      Label #Hint {
-        Anchor: (Top: 12);
-        Style: (...$C.@DefaultLabelStyle, TextColor: #888888, Wrap: true);
-        Text: %server.aetherhaven.ui.treasury.hint;
+            Label #TreasuryTabSpacerL {
+              FlexWeight: 1;
+            }
+
+            Group #TreasuryTabRow {
+              LayoutMode: Left;
+
+              TextButton #TabCoinsButton {
+                Style: @TreasuryTabCoinsStyle;
+                Anchor: (Right: 10, Height: 44, Width: 48);
+                Padding: (Full: 0);
+                Text: ".";
+                TooltipText: %server.aetherhaven.ui.treasury.tabCoinsTooltip;
+              }
+
+              TextButton #TabTitheButton {
+                Style: @TreasuryTabTitheStyle;
+                Anchor: (Height: 44, Width: 48);
+                Padding: (Full: 0);
+                Text: ".";
+                TooltipText: %server.aetherhaven.ui.treasury.tabTitheTooltip;
+              }
+            }
+
+            Label #TreasuryTabSpacerR {
+              FlexWeight: 1;
+            }
+          }
+
+          Group #CoinsTabContent {
+            LayoutMode: Top;
+
+            Label #Balance {
+              Anchor: (Bottom: 12);
+              Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            }
+
+            $C.@TextButton #DepositButton {
+              Text: %server.aetherhaven.ui.treasury.deposit;
+            }
+
+            $C.@TextButton #WithdrawButton {
+              Anchor: (Top: 8);
+              Text: %server.aetherhaven.ui.treasury.withdraw;
+            }
+
+            Label #Hint {
+              Anchor: (Top: 12);
+              Style: (...$C.@DefaultLabelStyle, TextColor: #888888, Wrap: true);
+              Text: %server.aetherhaven.ui.treasury.hint;
+            }
+          }
+
+          Group #TaxTabContent {
+            LayoutMode: Top;
+            Visible: false;
+
+            Label #TaxIntro {
+              Anchor: (Bottom: 12);
+              Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8c2b8);
+              Text: %server.aetherhaven.ui.treasury.tax.intro;
+            }
+
+            Label #TaxPolicyShort {
+              Anchor: (Bottom: 10);
+              Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #9aa6b8);
+            }
+
+            Label #TaxHallMissing {
+              Visible: false;
+              Anchor: (Bottom: 10);
+              Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d08070);
+              Text: %server.aetherhaven.ui.treasury.tax.hallMissing;
+            }
+
+            Group #TaxTotalsCard {
+              LayoutMode: Top;
+              Anchor: (Bottom: 14, Left: 0, Right: 0);
+              Padding: (Horizontal: 12, Vertical: 12);
+              Background: #141a24(0.96);
+
+              Group {
+                LayoutMode: Left;
+                Anchor: (Bottom: 8, Left: 0, Right: 0);
+
+                Label #TitheSubLabel {
+                  FlexWeight: 1;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
+                }
+
+                Label #TitheSubGold {
+                  Anchor: (Width: 88);
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                }
+              }
+
+              Group #TitheRowFounder {
+                Visible: false;
+                LayoutMode: Left;
+                Anchor: (Bottom: 8, Left: 0, Right: 0);
+
+                Label #TitheFounderLabel {
+                  FlexWeight: 1;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
+                }
+
+                Label #TitheFounderGold {
+                  Anchor: (Width: 88);
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                }
+              }
+
+              Group #TitheRowFeast {
+                Visible: false;
+                LayoutMode: Left;
+                Anchor: (Bottom: 8, Left: 0, Right: 0);
+
+                Label #TitheFeastLabel {
+                  FlexWeight: 1;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0e0);
+                }
+
+                Label #TitheFeastGold {
+                  Anchor: (Width: 88);
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #f2d9a6);
+                }
+              }
+
+              Group #TitheRowTotal {
+                LayoutMode: Left;
+                Anchor: (Top: 4, Left: 0, Right: 0);
+                Padding: (Top: 8);
+                Background: #0e1218(0.9);
+
+                Label #TitheTotalLabel {
+                  FlexWeight: 1;
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true, Wrap: true, TextColor: #ece6dc);
+                  Text: %server.aetherhaven.ui.treasury.tax.sheetTotalLabel;
+                }
+
+                Label #TitheTotalGold {
+                  Anchor: (Width: 88);
+                  Style: (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 15, TextColor: #ffdca8);
+                }
+              }
+            }
+
+            Label #TaxResidentsHeader {
+              Anchor: (Bottom: 8);
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #b8c8e0);
+              Text: %server.aetherhaven.ui.treasury.tax.residentsHeader;
+            }
+
+            Group #TaxResidentRows {
+              LayoutMode: Top;
+              Anchor: (Bottom: 6);
+            }
+
+            Label #TaxResidentsFooter {
+              Visible: false;
+              Anchor: (Top: 4);
+              Style: (...$C.@DefaultLabelStyle, TextColor: #7a8494, Wrap: true);
+            }
+          }
+        }
       }
     }
   }

@@ -41,7 +41,7 @@ $C.@PageOverlay {
 
             AssetImage #TrayIcon {
               Anchor: (Full: 0);
-              AssetPath: "../food-tray.png";
+              AssetPath: "UI/Custom/food-tray.png";
             }
           }
         }
@@ -57,7 +57,7 @@ $C.@PageOverlay {
 
         Group #LeftPanel {
           LayoutMode: Top;
-          Anchor: (Width: 220, Right: 14);
+          Anchor: (Width: 220, Right: 36);
 
           Label #GridLabel {
             Anchor: (Bottom: 8);
@@ -89,14 +89,14 @@ $C.@PageOverlay {
 
                   AssetImage #Feast0Icon {
                     Anchor: (Full: 0);
-                    AssetPath: "../fast-food.png";
+                    AssetPath: "UI/Custom/fast-food.png";
                   }
 
                   Group #Feast0Dim {
                     LayoutMode: Full;
                     Anchor: (Full: 0);
                     Visible: false;
-                    Background: #000000(0.55);
+                    Background: #5c6a78(0.88);
                   }
                 }
               }
@@ -123,14 +123,14 @@ $C.@PageOverlay {
 
                   AssetImage #Feast1Icon {
                     Anchor: (Full: 0);
-                    AssetPath: "../taco.png";
+                    AssetPath: "UI/Custom/taco.png";
                   }
 
                   Group #Feast1Dim {
                     LayoutMode: Full;
                     Anchor: (Full: 0);
                     Visible: false;
-                    Background: #000000(0.55);
+                    Background: #5c6a78(0.88);
                   }
                 }
               }
@@ -157,14 +157,14 @@ $C.@PageOverlay {
 
                   AssetImage #Feast2Icon {
                     Anchor: (Full: 0);
-                    AssetPath: "../salad.png";
+                    AssetPath: "UI/Custom/salad.png";
                   }
 
                   Group #Feast2Dim {
                     LayoutMode: Full;
                     Anchor: (Full: 0);
                     Visible: false;
-                    Background: #000000(0.55);
+                    Background: #5c6a78(0.88);
                   }
                 }
               }
@@ -175,6 +175,7 @@ $C.@PageOverlay {
         Group #RightPanel {
           LayoutMode: Top;
           FlexWeight: 1;
+          Padding: (Left: 12);
 
           Label #RightTitle {
             Anchor: (Bottom: 8);

@@ -25,6 +25,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hypixel.hytale.protocol.GameMode;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -142,6 +143,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
+        boolean plotReqBypassCreative = player != null && player.getGameMode() == GameMode.Creative;
         CombinedItemContainer inv =
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
 
@@ -196,12 +198,19 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean treasuryPerm =
             treasuryTown != null && playerUuid != null && treasuryTown.playerHasBuildPermission(playerUuid);
         long treasuryBal = treasuryTown != null ? treasuryTown.getTreasuryGoldCoinCount() : 0L;
-        boolean treasuryOk = completed || goldCost <= 0 || (treasuryTown != null && treasuryBal >= goldCost && treasuryPerm);
+        boolean treasuryOk =
+            completed
+                || goldCost <= 0
+                || plotReqBypassCreative
+                || (treasuryTown != null && treasuryBal >= goldCost && treasuryPerm);
         boolean showTreasury = !hideConstructionDetails && goldCost > 0;
         commandBuilder.set("#TreasuryRow.Visible", showTreasury);
         if (showTreasury) {
             String tLine;
-            if (treasuryTown == null) {
+            if (plotReqBypassCreative) {
+                tLine = "Town treasury: " + goldCost + " gold (creative — not deducted)";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#3d913f");
+            } else if (treasuryTown == null) {
                 tLine = "Town treasury: " + goldCost + " gold (town not found for this plot.)";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
             } else if (!treasuryPerm) {
@@ -223,7 +232,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 var m = def.getMaterials().get(mi);
                 int need = m.getCount();
                 int has = inv != null ? InventoryMaterials.count(inv, m) : 0;
-                boolean ok = completed || has >= need;
+                boolean ok = completed || plotReqBypassCreative || has >= need;
                 String itemLabel = materialLabelForUi(lang, m);
                 commandBuilder.set("#Mat" + mi + ".Visible", true);
                 commandBuilder.set("#Mat" + mi + " #Line.TextSpans", Message.raw(itemLabel + " x" + need + " (have " + has + ")"));
@@ -234,7 +243,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set("#Mat" + mi + ".Visible", false);
         }
 
-        boolean matsOk = completed || (inv != null && InventoryMaterials.hasAll(inv, def.getMaterials()));
+        boolean matsOk =
+            completed || plotReqBypassCreative || (inv != null && InventoryMaterials.hasAll(inv, def.getMaterials()));
         boolean canBuild = !managementUi && !completed && matsOk && treasuryOk;
         commandBuilder.set("#BuildButton.Disabled", !canBuild);
 
@@ -862,8 +872,9 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (player == null) {
             return;
         }
+        boolean plotReqBypassCreative = player.getGameMode() == GameMode.Creative;
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (!InventoryMaterials.hasAll(inv, def.getMaterials())) {
+        if (!plotReqBypassCreative && !InventoryMaterials.hasAll(inv, def.getMaterials())) {
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -884,7 +895,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             return;
         }
         long goldCost = def.getTreasuryGoldCoinCost();
-        if (goldCost > 0) {
+        if (goldCost > 0 && !plotReqBypassCreative) {
             AetherhavenPlugin plugPre = AetherhavenPlugin.get();
             World worldPre = store.getExternalData().getWorld();
             if (plugPre == null) {
@@ -908,7 +919,9 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             tmPre.updateTown(tr);
         }
 
-        InventoryMaterials.removeAll(inv, def.getMaterials());
+        if (!plotReqBypassCreative) {
+            InventoryMaterials.removeAll(inv, def.getMaterials());
+        }
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {

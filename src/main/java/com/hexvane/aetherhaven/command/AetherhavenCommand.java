@@ -7,6 +7,7 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         super("aetherhaven", "server.commands.aetherhaven.root.desc");
         this.addAliases("ah");
         this.addSubCommand(new PlotSignAdminCommand());
+        this.addSubCommand(new AetherhavenStarterKitCommand());
         this.addSubCommand(new AetherhavenTownsCommand());
         this.addSubCommand(new AetherhavenTownCommand());
         this.addSubCommand(new AetherhavenReloadCommand());
@@ -15,6 +16,7 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new AetherhavenPoiCommand());
         this.addSubCommand(new AetherhavenPlotsCommand());
         this.addSubCommand(new AetherhavenNeedsCommand());
+        this.addSubCommand(new AetherhavenTaxCommand());
         this.addSubCommand(new AetherhavenQuestDebugCommand());
         this.addSubCommand(new AetherhavenAutonomyDebugCommand());
         this.addSubCommand(new AetherhavenReputationDebugCommand());

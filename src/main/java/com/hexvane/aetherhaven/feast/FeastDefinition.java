@@ -5,15 +5,18 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
- * Static feast metadata (costs, unlock rep, UI icon path relative to {@code Common/UI/Custom/Aetherhaven/}).
+ * Static feast metadata. Unlocked when the matching milestone {@link #unlockRewardId()} is claimed in dialogue with
+ * any town villager, or {@link #unlockReputationThreshold()} is met on the resolved hearth-host row for older saves.
  */
 public record FeastDefinition(
     @Nonnull String id,
     @Nonnull String titleTranslationKey,
     @Nonnull String descriptionTranslationKey,
     @Nonnull List<MaterialRequirement> costs,
-    int minInnkeeperRep,
+    int unlockReputationThreshold,
     @Nonnull FeastEffectKind effectKind,
-    /** e.g. {@code ../fast-food.png} — sibling of {@code Aetherhaven/} under Custom. */
-    @Nonnull String menuIconRelativePath
+    /** e.g. {@code UI/Custom/fast-food.png} (same convention as other mod {@code AssetImage} paths). */
+    @Nonnull String menuIconRelativePath,
+    /** {@link com.hexvane.aetherhaven.reputation.ReputationRewardCatalog} reward id (claimed in NPC dialogue). */
+    @Nonnull String unlockRewardId
 ) {}

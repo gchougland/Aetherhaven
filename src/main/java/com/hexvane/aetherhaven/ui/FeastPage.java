@@ -93,16 +93,24 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
         long dawn = VillagerReputationService.currentGameEpochDay(store);
         FeastService.pruneExpiredActiveFeast(town, dawn);
 
-        UUID innkeeper = town.getInnkeeperEntityUuid();
-        int innRep = innkeeper != null ? VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), innkeeper).getReputation() : 0;
-
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
 
         for (int i = 0; i < ORDERED.size(); i++) {
             FeastDefinition d = ORDERED.get(i);
             String pick = "#FeastPick" + i;
-            commandBuilder.set(pick + ".TooltipTextSpans", Message.translation(d.titleTranslationKey()));
-            boolean locked = innRep < d.minInnkeeperRep();
+            boolean locked = !FeastCatalog.isFeastUnlocked(town, uc.getUuid(), store, d);
+            if (locked) {
+                commandBuilder.set(
+                    pick + ".TooltipTextSpans",
+                    Message.join(
+                        Message.translation(d.titleTranslationKey()),
+                        Message.raw("\n"),
+                        Message.translation("server.aetherhaven.ui.feast.tooltipLocked")
+                    )
+                );
+            } else {
+                commandBuilder.set(pick + ".TooltipTextSpans", Message.translation(d.titleTranslationKey()));
+            }
             commandBuilder.set("#Feast" + i + "Dim.Visible", locked);
             EventData sel = new EventData().append("Action", "Select").append("FeastId", d.id());
             eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, pick, sel, false);
@@ -153,9 +161,17 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
         } else {
             commandBuilder.set("#RightTitle.TextSpans", Message.translation(selDef.titleTranslationKey()));
             commandBuilder.set("#RightBody.TextSpans", Message.translation(selDef.descriptionTranslationKey()));
-            commandBuilder.set("#RightCosts.TextSpans", costMessage(inv, selDef));
-
-            boolean locked = innRep < selDef.minInnkeeperRep();
+            boolean locked = !FeastCatalog.isFeastUnlocked(town, uc.getUuid(), store, selDef);
+            commandBuilder.set(
+                "#RightCosts.TextSpans",
+                locked
+                    ? Message.join(
+                        Message.translation("server.aetherhaven.ui.feast.locked"),
+                        Message.raw("\n\n"),
+                        costMessage(inv, selDef)
+                    )
+                    : costMessage(inv, selDef)
+            );
             boolean ingredients = inv != null && InventoryMaterials.hasAll(inv, selDef.costs());
             boolean conflict =
                 (selDef.effectKind() != FeastEffectKind.BERRYCIRCLE_REP && timedActive)

@@ -67,8 +67,8 @@ public final class AetherhavenPluginConfig {
             o -> o.innPoolMorningStartHour
         )
         .documentation(
-            "In-game hour (0-23) when the morning inn refresh window starts. With InnPoolMorningEndHour, visitors are "
-                + "reshuffled at most once per calendar game day while the hour is in [start, end)."
+            "Shared in-game morning window start hour (0-23): inn visitor refresh, farm sprinklers, treasury tax "
+                + "breakdown 'morning' line. JSON key name is historical; not inn-only."
         )
         .add()
         .append(
@@ -76,7 +76,9 @@ public final class AetherhavenPluginConfig {
             (o, v) -> o.innPoolMorningEndHour = v,
             o -> o.innPoolMorningEndHour
         )
-        .documentation("Exclusive end hour (0-24). Default 6-12 is morning (6:00 up to but not including 12:00).")
+        .documentation(
+            "Shared exclusive end hour (0-24) for the same morning window. Default 6-12: 6:00 up to but not 12:00."
+        )
         .add()
         .append(
             new KeyedCodec<>("VillagerScheduleEnabled", Codec.BOOLEAN),
@@ -285,8 +287,11 @@ public final class AetherhavenPluginConfig {
         return debugCommandsEnabled;
     }
 
-    /** Inclusive start, 0-23. */
-    public int getInnPoolMorningStartHour() {
+    /**
+     * Shared morning window: inn visitor daily refresh, sprinklers, treasury UI “morning” line. Config file keys stay
+     * {@code InnPoolMorningStartHour} / {@code InnPoolMorningEndHour} for existing saves.
+     */
+    public int getGameMorningStartHour() {
         int h = innPoolMorningStartHour;
         if (h < 0) {
             return 0;
@@ -294,14 +299,24 @@ public final class AetherhavenPluginConfig {
         return Math.min(h, 23);
     }
 
-    /** Exclusive end, 1-24; if invalid, defaults to start+6 capped at 24. */
-    public int getInnPoolMorningEndHourExclusive() {
-        int start = getInnPoolMorningStartHour();
+    /** @see #getGameMorningStartHour */
+    public int getGameMorningEndHourExclusive() {
+        int start = getGameMorningStartHour();
         int end = innPoolMorningEndHour;
         if (end <= start || end > 24) {
             end = Math.min(start + 6, 24);
         }
         return Math.max(start + 1, end);
+    }
+
+    /** Alias for {@link #getGameMorningStartHour} (inn uses this window among other features). */
+    public int getInnPoolMorningStartHour() {
+        return getGameMorningStartHour();
+    }
+
+    /** Alias for {@link #getGameMorningEndHourExclusive}. */
+    public int getInnPoolMorningEndHourExclusive() {
+        return getGameMorningEndHourExclusive();
     }
 
     public float getVillagerNeedsDecayPerSecond() {

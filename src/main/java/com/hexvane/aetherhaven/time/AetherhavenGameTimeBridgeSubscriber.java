@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.time;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.TownEconomyTimeService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
@@ -13,7 +14,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
 
-/** Wires {@link AetherhavenGameTimeHub} to inn, sprinklers, and villager schedules. */
+/**
+ * Wires {@link AetherhavenGameTimeHub} to town economy (treasury tithe), inn visitor pool, farm sprinklers, and
+ * villager schedules.
+ */
 public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGameTimeSubscriber {
     @Nonnull
     private final AetherhavenPlugin plugin;
@@ -30,6 +34,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         long prevEpochMinute,
         long newEpochMinute
     ) {
+        TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         VillagerScheduleService.applyForWorld(world, store, plugin, false);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);
         SprinklerWateringService.scheduleFromHub(world, store, plugin);
@@ -50,6 +55,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         if (!backward) {
             InnPoolService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
             SprinklerWateringService.catchUpAfterTimeJump(world, store, plugin, from, to);
+            TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
         }
         VillagerScheduleService.applyForWorld(world, store, plugin, true);
         InnPoolService.scheduleTickFromHub(world, plugin, wtr);

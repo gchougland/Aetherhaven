@@ -275,8 +275,12 @@ public final class DialogueActionExecutor {
             CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
             return;
         }
+        String itemId = def.itemId() != null ? def.itemId().trim() : "";
+        if (itemId.isBlank() || def.itemCount() <= 0) {
+            return;
+        }
         int count = Math.max(1, Math.min(def.itemCount(), 9999));
-        ItemStack stack = new ItemStack(def.itemId().trim(), count);
+        ItemStack stack = new ItemStack(itemId, count);
         player.giveItem(stack, playerRef, store);
     }
 

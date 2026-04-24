@@ -180,13 +180,8 @@ public final class FeastService {
             return "server.aetherhaven.ui.feast.noPermission";
         }
 
-        UUID innkeeper = town.getInnkeeperEntityUuid();
-        if (innkeeper == null) {
-            return "server.aetherhaven.ui.feast.err.noInnkeeper";
-        }
-        int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), innkeeper).getReputation();
-        if (rep < def.minInnkeeperRep()) {
-            return "server.aetherhaven.ui.feast.err.lowInnkeeperRep";
+        if (!FeastCatalog.isFeastUnlocked(town, pu.getUuid(), store, def)) {
+            return "server.aetherhaven.ui.feast.err.feastNotUnlocked";
         }
 
         if (def.effectKind() != FeastEffectKind.BERRYCIRCLE_REP) {

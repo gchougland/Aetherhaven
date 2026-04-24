@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.inn;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.economy.TownTaxService;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -10,6 +9,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -45,8 +45,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Inn visitor pool: up to two NPCs (merchant/blacksmith/farmer). {@link TownRecord#getInnPoolNpcIds()} is the source of
- * truth for which visitors the mod spawned.
+ * Inn visitor pool only: up to two NPCs (merchant/blacksmith/farmer/priestess). {@link TownRecord#getInnPoolNpcIds()} is
+ * the source of truth for which visitors the mod spawned. Treasury tax is handled by {@link com.hexvane.aetherhaven.economy.TownEconomyTimeService}.
  * <p>
  * <b>Spawning</b> happens only during the morning window and only when the inn's management block chunk is loaded —
  * never to "replace" entries whose entities are still unloaded elsewhere. <b>Pruning</b> never drops unlocked list
@@ -117,7 +117,7 @@ public final class InnPoolService {
         @Nonnull Instant from,
         @Nonnull Instant to
     ) {
-        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
+        int morningStart = plugin.getConfig().get().getGameMorningStartHour();
         LinkedHashSet<Long> days = new LinkedHashSet<>();
         com.hexvane.aetherhaven.time.GameTimeEpochs.collectEpochDaysWhereMorningStartOccurred(
             from, to, morningStart, WorldTimeResource.ZONE_OFFSET, days
@@ -183,8 +183,8 @@ public final class InnPoolService {
         if (store == null) {
             return;
         }
-        int morningStart = plugin.getConfig().get().getInnPoolMorningStartHour();
-        int morningEndEx = plugin.getConfig().get().getInnPoolMorningEndHourExclusive();
+        int morningStart = plugin.getConfig().get().getGameMorningStartHour();
+        int morningEndEx = plugin.getConfig().get().getGameMorningEndHourExclusive();
 
         for (TownRecord town : tm.allTowns()) {
             if (!world.getName().equals(town.getWorldName())) {
@@ -239,7 +239,6 @@ public final class InnPoolService {
                 );
             }
         }
-        TownTaxService.tickMorningTax(world, plugin, wtr, store);
     }
 
     /**
@@ -474,33 +473,12 @@ public final class InnPoolService {
         return true;
     }
 
-    /**
-     * Hour window (matches {@code /time} game clock) plus a scaled-day band so {@code /time dawn} still counts as morning
-     * when the hour does not fall in the numeric window.
-     */
     private static boolean isMorningForInnPool(
         @Nonnull WorldTimeResource wtr,
         int morningStartHour,
         int morningEndExclusive
     ) {
-        if (isInMorningHourWindow(wtr, morningStartHour, morningEndExclusive)) {
-            return true;
-        }
-        return wtr.isScaledDayTimeWithinRange(0.18f, 0.42f);
-    }
-
-    private static boolean isInMorningHourWindow(
-        @Nonnull WorldTimeResource wtr,
-        int morningStartHour,
-        int morningEndExclusive
-    ) {
-        int h = wtr.getCurrentHour();
-        int start = Math.max(0, Math.min(23, morningStartHour));
-        int end = morningEndExclusive;
-        if (end <= start) {
-            end = Math.min(start + 6, 24);
-        }
-        return h >= start && h < end;
+        return AetherhavenMorningWindow.isGameMorning(wtr, morningStartHour, morningEndExclusive);
     }
 
     /**

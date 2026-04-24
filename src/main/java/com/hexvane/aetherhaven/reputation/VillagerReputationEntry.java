@@ -22,6 +22,13 @@ public final class VillagerReputationEntry {
     @SerializedName("pendingRewardIds")
     private List<String> pendingRewardIds = new ArrayList<>();
 
+    /**
+     * One-time: innkeeper reward ids were collapsed (one dialogue at 50, new ids for 75/100). When false, legacy
+     * claimed/pending entries are remapped; old {@code rep_innkeeper_50} (meat) is cleared so the new 50 can show.
+     */
+    @SerializedName("migratedInnkeeperRewardsV2")
+    private boolean migratedInnkeeperRewardsV2;
+
     public int getReputation() {
         return reputation;
     }
@@ -82,6 +89,42 @@ public final class VillagerReputationEntry {
                 i--;
             }
         }
+        if (!migratedInnkeeperRewardsV2) {
+            migrateInnkeeperRewardsV2();
+            migratedInnkeeperRewardsV2 = true;
+        }
+    }
+
+    private void migrateInnkeeperRewardsV2() {
+        getPendingRewardIds()
+            .removeIf(
+                id ->
+                    id != null
+                        && (id.equals("rep_innkeeper_25")
+                            || id.equals("rep_innkeeper_50_table")
+                            || id.equals("rep_innkeeper_feast_stewards")
+                            || id.equals("rep_innkeeper_feast_hearthglass")
+                            || id.equals("rep_innkeeper_feast_berrycircle"))
+            );
+        if (getClaimedRewardIds().remove("rep_innkeeper_feast_hearthglass")) {
+            if (!getClaimedRewardIds().contains("rep_innkeeper_75")) {
+                getClaimedRewardIds().add("rep_innkeeper_75");
+            }
+        }
+        if (getClaimedRewardIds().remove("rep_innkeeper_feast_berrycircle")) {
+            if (!getClaimedRewardIds().contains("rep_innkeeper_100")) {
+                getClaimedRewardIds().add("rep_innkeeper_100");
+            }
+        }
+        getClaimedRewardIds()
+            .removeIf(
+                id ->
+                    id != null
+                        && (id.equals("rep_innkeeper_25")
+                            || id.equals("rep_innkeeper_50_table")
+                            || id.equals("rep_innkeeper_feast_stewards")
+                            || id.equals("rep_innkeeper_50"))
+            );
     }
 
     @Nonnull

@@ -1,0 +1,21 @@
+$C = "../Common.ui";
+
+Group #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 5, Left: 0, Right: 0);
+
+  Label #Name {
+    FlexWeight: 1;
+    Style: (...$C.@DefaultLabelStyle, Wrap: true, FontSize: 13, TextColor: #ece6dc);
+  }
+
+  Label #Comfort {
+    Anchor: (Width: 56, Right: 8);
+    Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #a8b4c8);
+  }
+
+  Label #Gold {
+    Anchor: (Width: 72);
+    Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #f2d9a6);
+  }
+}
