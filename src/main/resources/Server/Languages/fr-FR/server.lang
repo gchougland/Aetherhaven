@@ -286,6 +286,9 @@ aetherhaven.ui.villagerneeds.energy=Energy
 aetherhaven.ui.villagerneeds.fun=Fun
 aetherhaven.ui.villagerneeds.villagers=Villageois
 aetherhaven.ui.villagerneeds.noResidentsTracked=Aucun résident de la ville n'a encore été suivi.
+aetherhaven.ui.villagerneeds.rescueTooltip=Téléporte le résident sélectionné près de vous et efface son cheminement et son activité en cours pour qu'il puisse se déplacer et choisir une nouvelle destination. Utile si un villageois est bloqué.
+aetherhaven.ui.villagerneeds.rescueDone=Le résident sélectionné a été rapproché de vous et sa routine a été réinitialisée.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=Ce résident ne fait pas partie de cette ville.
 aetherhaven.ui.reputation.label=Réputation
 aetherhaven.reputation.dailyTalkGain=+{amount} réputation (accueil quotidien)
 

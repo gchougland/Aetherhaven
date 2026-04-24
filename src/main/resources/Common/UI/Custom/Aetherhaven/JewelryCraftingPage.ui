@@ -329,12 +329,14 @@ $C.@PageOverlay {
             }
             $C.@TextButton #TakeButton {
               Text: %server.aetherhaven.ui.jewelryCrafting.take;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               TooltipText: %server.aetherhaven.ui.jewelryCrafting.takeHint;
               Disabled: true;
               Anchor: (Width: 224, Height: 40, Bottom: 6);
             }
             TextButton #CraftButton {
               Style: @ForgeIconStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               TooltipText: %server.aetherhaven.ui.jewelryCrafting.craft;
               Text: " ";
               Anchor: (Width: 56, Height: 56, Bottom: 0);

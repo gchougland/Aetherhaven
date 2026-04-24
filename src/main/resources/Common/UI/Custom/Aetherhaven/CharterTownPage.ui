@@ -59,6 +59,7 @@ $C.@PageOverlay {
 
             TextButton #MoveCharterButton {
               Style: @CharterMoveIconStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";

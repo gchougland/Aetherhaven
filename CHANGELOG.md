@@ -8,6 +8,7 @@
 - **Feast system:** serve feasts from the banquet table (costs, town effects, villager gather); Steward’s Ledger, Hearthglass Vigil, and Berrycircle Concord, with innkeeper-reputation unlocks.
 - **Treasury:** new tab that shows the **tax calculation** (per-villager lines, adjustments, feast multiplier when applicable, totals).
 - **New** `/aetherhaven` subcommands (including starter kit for creative; use `/aetherhaven` help in-game for the list).
+- **Town needs UI:** **Teleport / rescue** control (teleport icon) for the **selected** resident—moves them next to you and resets their autonomy/pathing so they can get unstuck. Tooltip explains the action; uses the standard tooltip style with other mod tooltips.
 
 ### Changes
 

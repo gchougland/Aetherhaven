@@ -129,6 +129,15 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         this.targetPoiId = id != null ? id.toString() : null;
     }
 
+    /** Clears POI id, travel coordinates, and pending door bookkeeping (e.g. after a rescue teleport). */
+    public void clearTravelAndPoiState() {
+        this.targetPoiId = null;
+        this.targetX = 0.0;
+        this.targetY = 0.0;
+        this.targetZ = 0.0;
+        this.clearPendingDoorClose();
+    }
+
     public double getTargetX() {
         return targetX;
     }

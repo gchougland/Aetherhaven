@@ -136,6 +136,7 @@ $C.@PageOverlay {
 
       $C.@CheckBoxWithLabel #BirdsEyeToggle {
         @Text = %server.aetherhaven.ui.plotplacement.birdsEye;
+        TextTooltipStyle: $C.@DefaultTextTooltipStyle;
         TooltipText: %server.aetherhaven.ui.plotplacement.birdsEyeTooltip;
         Anchor: (Bottom: 8);
       }
@@ -147,6 +148,7 @@ $C.@PageOverlay {
 
         TextButton #BtnZoomIn {
           Style: @IconZoomInStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
           Anchor: (Width: 34, Height: 34, Right: 6);
           Padding: (Full: 0);
           Text: ".";
@@ -162,6 +164,7 @@ $C.@PageOverlay {
 
         TextButton #BtnZoomOut {
           Style: @IconZoomOutStyle;
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
           Anchor: (Width: 34, Height: 34, Right: 8);
           Padding: (Full: 0);
           Text: ".";
@@ -190,6 +193,7 @@ $C.@PageOverlay {
             Anchor: (Bottom: 22);
             TextButton #BtnPanZm {
               Style: @IconUpStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -204,6 +208,7 @@ $C.@PageOverlay {
               LayoutMode: Left;
               TextButton #BtnPanXm {
                 Style: @IconBackStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 44, Height: 40);
                 Padding: (Full: 0);
                 Text: ".";
@@ -215,6 +220,7 @@ $C.@PageOverlay {
               }
               TextButton #BtnPanXp {
                 Style: @IconFwdStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 44, Height: 40, Left: 8);
                 Padding: (Full: 0);
                 Text: ".";
@@ -227,6 +233,7 @@ $C.@PageOverlay {
             LayoutMode: Center;
             TextButton #BtnPanZp {
               Style: @IconDownStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -244,6 +251,7 @@ $C.@PageOverlay {
             Anchor: (Bottom: 22);
             TextButton #BtnZm {
               Style: @IconUpStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -258,6 +266,7 @@ $C.@PageOverlay {
               LayoutMode: Left;
               TextButton #BtnXm {
                 Style: @IconBackStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 44, Height: 40);
                 Padding: (Full: 0);
                 Text: ".";
@@ -269,6 +278,7 @@ $C.@PageOverlay {
               }
               TextButton #BtnXp {
                 Style: @IconFwdStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 44, Height: 40, Left: 8);
                 Padding: (Full: 0);
                 Text: ".";
@@ -281,6 +291,7 @@ $C.@PageOverlay {
             LayoutMode: Center;
             TextButton #BtnZp {
               Style: @IconDownStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -303,6 +314,7 @@ $C.@PageOverlay {
           LayoutMode: Left;
           TextButton #BtnYm {
             Style: @IconMinusStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             Anchor: (Width: 40, Height: 40);
             Padding: (Full: 0);
             Text: ".";
@@ -310,6 +322,7 @@ $C.@PageOverlay {
           }
           TextButton #BtnYp {
             Style: @IconPlusStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             Anchor: (Width: 40, Height: 40, Left: 8);
             Padding: (Full: 0);
             Text: ".";
@@ -317,6 +330,7 @@ $C.@PageOverlay {
           }
           TextButton #BtnRotate {
             Style: @IconRotStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             Anchor: (Width: 44, Height: 40, Left: 10);
             Padding: (Full: 0);
             Text: ".";

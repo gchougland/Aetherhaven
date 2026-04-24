@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -18,6 +19,8 @@ import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
@@ -25,6 +28,8 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -88,6 +93,12 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             }
             reputationHeartSlotsAppended = true;
         }
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#RescueTeleportButton",
+            new EventData().append("Action", "RescueTeleport"),
+            false
+        );
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         boolean showMgmtTabs = managementBlockRef != null && managementBlockPos != null;
@@ -101,12 +112,14 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             bindManagementReturnNav(eventBuilder, needsOk);
         }
         if (plugin == null) {
+            commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
         if (town == null) {
+            commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.townNotFound"));
             return;
@@ -115,6 +128,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         Store<EntityStore> entityStore = world.getEntityStore().getStore();
         List<VillagerRow> rows = buildResidentRows(entityStore, town);
         if (rows.isEmpty()) {
+            commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
             commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.villagerneeds.noResidentsTracked"));
             commandBuilder.clear(VILLAGER_ROWS);
@@ -124,6 +138,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             selectedIndex = 0;
         }
 
+        commandBuilder.set("#RescueTeleportButton.Visible", true);
         commandBuilder.set("#Hint.Visible", false);
         commandBuilder.clear(VILLAGER_ROWS);
         int n = Math.min(rows.size(), MAX_ROWS);
@@ -179,6 +194,10 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
                 openPlotManagement(ref, store, 0, true);
                 return;
             }
+            if (data.action.equalsIgnoreCase("RescueTeleport")) {
+                handleRescueTeleport(ref, store);
+                return;
+            }
         }
         if (data.action == null || !data.action.equalsIgnoreCase("Select")) {
             return;
@@ -213,6 +232,75 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
                 false
             );
         }
+    }
+
+    private void handleRescueTeleport(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
+        if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return;
+        }
+        if (!town.playerHasQuestPermission(pu.getUuid())) {
+            playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+            return;
+        }
+        int idx = selectedIndex;
+        world.execute(
+            () -> {
+                AetherhavenPlugin p = AetherhavenPlugin.get();
+                if (p == null) {
+                    return;
+                }
+                Store<EntityStore> es = world.getEntityStore().getStore();
+                Ref<EntityStore> playerEntityRef = playerRef.getReference();
+                if (playerEntityRef == null || !playerEntityRef.isValid()) {
+                    return;
+                }
+                TownRecord tr = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).getTown(townId);
+                if (tr == null) {
+                    return;
+                }
+                List<VillagerRow> rows = buildResidentRows(es, tr);
+                if (rows.isEmpty() || idx < 0 || idx >= rows.size()) {
+                    return;
+                }
+                VillagerRow sel = rows.get(idx);
+                Ref<EntityStore> npcRef = es.getExternalData().getRefFromUUID(sel.entityUuid());
+                if (npcRef == null || !npcRef.isValid()) {
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.villager.locateNotLoaded"));
+                    return;
+                }
+                TownVillagerBinding b = es.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.ui.villagerneeds.rescueNotTownResident"));
+                    return;
+                }
+                TransformComponent pTc = es.getComponent(playerEntityRef, TransformComponent.getComponentType());
+                if (pTc == null) {
+                    return;
+                }
+                Vector3d pPos = pTc.getPosition();
+                float yaw = pTc.getRotation().getYaw();
+                double side = 1.5;
+                double cos = Math.cos(yaw);
+                double sin = Math.sin(yaw);
+                Vector3d target = new Vector3d(pPos.x + cos * side, pPos.y, pPos.z - sin * side);
+                TransformComponent nTc = es.getComponent(npcRef, TransformComponent.getComponentType());
+                Vector3f bodyRot = nTc != null ? nTc.getRotation().clone() : new Vector3f(yaw, 0f, 0f);
+                es.addComponent(npcRef, Teleport.getComponentType(), Teleport.createExact(target, bodyRot));
+                long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
+                VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);
+                playerRef.sendMessage(Message.translation("server.aetherhaven.ui.villagerneeds.rescueDone"));
+            }
+        );
     }
 
     private void openPlotManagement(

@@ -36,6 +36,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@RescueTeleportButtonStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 $C.@PageOverlay {
   LayoutMode: Top;
@@ -70,6 +77,7 @@ $C.@PageOverlay {
 
             TextButton #TabPlotButton {
               Style: @MgmtTabIconStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               FlexWeight: 1;
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
@@ -79,6 +87,7 @@ $C.@PageOverlay {
 
             TextButton #TabNeedsButton {
               Style: @MgmtTabFoodStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               FlexWeight: 1;
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
@@ -88,6 +97,7 @@ $C.@PageOverlay {
 
             TextButton #TabPlayersButton {
               Style: @MgmtTabGroupStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               FlexWeight: 1;
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
@@ -97,6 +107,7 @@ $C.@PageOverlay {
 
             TextButton #TabMoveButton {
               Style: @MgmtTabMoveStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               FlexWeight: 1;
               Anchor: (Height: 40, Width: 44);
               Padding: (Full: 0);
@@ -125,10 +136,26 @@ $C.@PageOverlay {
               LayoutMode: Top;
               FlexWeight: 1;
 
+              Group {
+                LayoutMode: Left;
+                Anchor: (Bottom: 6);
+                Group { FlexWeight: 1; }
+                TextButton #RescueTeleportButton {
+                  Style: @RescueTeleportButtonStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Height: 40, Width: 40);
+                  Padding: (Full: 0);
+                  Text: ".";
+                  Visible: false;
+                  TooltipText: %server.aetherhaven.ui.villagerneeds.rescueTooltip;
+                }
+              }
+
               Group #ReputationBlock {
                 LayoutMode: Top;
                 Anchor: (Bottom: 8);
                 HitTestVisible: true;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Label #ReputationLabel {
                   Text: %server.aetherhaven.ui.reputation.label;
                   Style: (...$C.@DefaultLabelStyle, RenderBold: true);

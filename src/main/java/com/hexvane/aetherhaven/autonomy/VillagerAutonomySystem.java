@@ -605,6 +605,49 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         return System.currentTimeMillis();
     }
 
+    /**
+     * Current world time in ms, aligned with {@link #tick} decision scheduling.
+     * Safe to use from the world thread when mutating {@link VillagerAutonomyState} outside the system tick.
+     */
+    public static long resolveAutonomyNowMs(@Nonnull Store<EntityStore> store) {
+        return resolveNowMs(store);
+    }
+
+    /**
+     * After teleporting a town NPC to the player, drop them to idle pathing, clear travel targets, and end autonomy
+     * role motion (Seek) so pathfinding can start fresh.
+     */
+    public static void resetAutonomyForRescue(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, long nowMs) {
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null) {
+            return;
+        }
+        VillagerAutonomyState aut = store.getComponent(npcRef, VillagerAutonomyState.getComponentType());
+        if (aut == null) {
+            aut = VillagerAutonomyState.fresh(nowMs);
+        } else {
+            aut = (VillagerAutonomyState) aut.clone();
+        }
+        aut.setPhase(VillagerAutonomyState.PHASE_IDLE);
+        aut.clearTravelAndPoiState();
+        aut.setPathFailureReason("");
+        aut.setTravelStuckTicks(0);
+        aut.setPhaseEndEpochMs(0L);
+        aut.setNextDecisionEpochMs(nowMs);
+        store.putComponent(npcRef, VillagerAutonomyState.getComponentType(), aut);
+        if (npc.getRole() == null) {
+            return;
+        }
+        String state = npc.getRole().getStateSupport().getStateName();
+        if (!state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+            return;
+        }
+        npc.getRole().getStateSupport().setState(npcRef, "Idle", null, store);
+        npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
+        npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
+        store.putComponent(npcRef, NPCEntity.getComponentType(), npc);
+    }
+
     static void applyAutonomyRoleState(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,

@@ -72,6 +72,7 @@ $C.@PageOverlay {
 
           TextButton #TabPlotButton {
             Style: @MgmtTabIconStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             FlexWeight: 1;
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
@@ -81,6 +82,7 @@ $C.@PageOverlay {
 
           TextButton #TabNeedsButton {
             Style: @MgmtTabFoodStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             FlexWeight: 1;
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
@@ -90,6 +92,7 @@ $C.@PageOverlay {
 
           TextButton #TabPlayersButton {
             Style: @MgmtTabGroupStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             FlexWeight: 1;
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
@@ -99,6 +102,7 @@ $C.@PageOverlay {
 
           TextButton #TabMoveButton {
             Style: @MgmtTabMoveStyle;
+            TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             FlexWeight: 1;
             Anchor: (Height: 40, Width: 44);
             Padding: (Full: 0);

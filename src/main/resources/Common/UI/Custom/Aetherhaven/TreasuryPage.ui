@@ -63,6 +63,7 @@ $C.@PageOverlay {
 
               TextButton #TabCoinsButton {
                 Style: @TreasuryTabCoinsStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Right: 10, Height: 44, Width: 48);
                 Padding: (Full: 0);
                 Text: ".";
@@ -71,6 +72,7 @@ $C.@PageOverlay {
 
               TextButton #TabTitheButton {
                 Style: @TreasuryTabTitheStyle;
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Height: 44, Width: 48);
                 Padding: (Full: 0);
                 Text: ".";

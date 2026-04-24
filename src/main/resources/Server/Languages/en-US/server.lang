@@ -286,6 +286,9 @@ aetherhaven.ui.villagerneeds.energy=Energy
 aetherhaven.ui.villagerneeds.fun=Fun
 aetherhaven.ui.villagerneeds.villagers=Villagers
 aetherhaven.ui.villagerneeds.noResidentsTracked=No town residents tracked yet.
+aetherhaven.ui.villagerneeds.rescueTooltip=Teleports the selected resident to a spot next to you and clears their current pathing and activity so they can move and choose a new destination. Use this if a villager is stuck.
+aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you and their routine was reset.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 
