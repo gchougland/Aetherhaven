@@ -16,6 +16,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -64,7 +65,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -72,7 +73,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             Store<EntityStore> es = world.getEntityStore().getStore();
@@ -81,69 +82,43 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                     TaxMorningBreakdown b =
                         TownTaxService.computeTaxMorningBreakdown(town, es, plugin.getConfig().get());
                     playerRef.sendMessage(
-                        Message.raw(
-                            "Tax breakdown (loaded chunks only; unloaded residents contribute 0 until simulated):"
-                        )
+                        Message.translation("server.aetherhaven.ui.treasury.debug.taxBreakdownIntro")
                     );
                     playerRef.sendMessage(
-                        Message.raw(
-                            "townHallComplete="
-                                + b.townHallComplete()
-                                + " morningWindow="
-                                + b.morningTaxWindow()
-                                + " dawnEpochDay="
-                                + b.dawnAlignedEpochDay()
-                                + " treasuryLastTaxDay="
-                                + (b.treasuryLastTaxEpochDay() == null ? "null" : b.treasuryLastTaxEpochDay())
-                                + " wouldCollectNextMorningTick="
-                                + b.wouldCollectGoldOnNextMorningTick()
-                        )
+                        Message.translation("server.aetherhaven.ui.treasury.debug.state2")
+                            .param("a", String.valueOf(b.townHallComplete()))
+                            .param("b", String.valueOf(b.morningTaxWindow()))
+                            .param("c", String.valueOf(b.dawnAlignedEpochDay()))
+                            .param("d", b.treasuryLastTaxEpochDay() == null ? "null" : String.valueOf(b.treasuryLastTaxEpochDay()))
+                            .param("e", String.valueOf(b.wouldCollectGoldOnNextMorningTick()))
                     );
                     playerRef.sendMessage(
-                        Message.raw(
-                            "policy="
-                                + (b.taxPolicyId() == null ? "(linear)" : b.taxPolicyId())
-                                + " maxPerResident="
-                                + b.maxGoldPerResidentPerDay()
-                                + " loadedResidents="
-                                + b.loadedResidentCount()
-                        )
+                        Message.translation("server.aetherhaven.ui.treasury.debug.state3")
+                            .param("a", b.taxPolicyId() == null ? "(linear)" : b.taxPolicyId())
+                            .param("b", String.valueOf(b.maxGoldPerResidentPerDay()))
+                            .param("c", String.valueOf(b.loadedResidentCount()))
                     );
                     for (VillagerTaxLine line : b.lines()) {
                         playerRef.sendMessage(
-                            Message.raw(
-                                "  "
-                                    + line.displayName()
-                                    + " ("
-                                    + line.bindingKind()
-                                    + ") comfort="
-                                    + String.format("%.0f%%", line.needsRatio() * 100f)
-                                    + " gold="
-                                    + line.contributionGold()
-                            )
+                            Message.translation("server.aetherhaven.ui.treasury.debug.villagerLine")
+                                .param("name", line.displayName())
+                                .param("kind", line.bindingKind())
+                                .param("comfort", String.format(Locale.US, "%.0f%%", line.needsRatio() * 100f))
+                                .param("gold", String.valueOf(line.contributionGold()))
                         );
                     }
                     playerRef.sendMessage(
-                        Message.raw(
-                            "sumResidents="
-                                + b.sumBeforeTownMultipliers()
-                                + " founderActive="
-                                + b.founderMonumentActive()
-                                + " founderPermille="
-                                + b.founderMonumentPermille()
-                                + " afterFounder="
-                                + b.sumAfterFounderMonument()
-                        )
+                        Message.translation("server.aetherhaven.ui.treasury.debug.state4")
+                            .param("a", String.valueOf(b.sumBeforeTownMultipliers()))
+                            .param("b", String.valueOf(b.founderMonumentActive()))
+                            .param("c", String.valueOf(b.founderMonumentPermille()))
+                            .param("d", String.valueOf(b.sumAfterFounderMonument()))
                     );
                     playerRef.sendMessage(
-                        Message.raw(
-                            "stewardsFeastTax="
-                                + b.stewardsFeastTaxActive()
-                                + " feastPermille="
-                                + b.feastTaxBonusPermille()
-                                + " finalTotal="
-                                + b.finalTotal()
-                        )
+                        Message.translation("server.aetherhaven.ui.treasury.debug.state5")
+                            .param("a", String.valueOf(b.stewardsFeastTaxActive()))
+                            .param("b", String.valueOf(b.feastTaxBonusPermille()))
+                            .param("c", String.valueOf(b.finalTotal()))
                     );
                 }
             );
@@ -173,7 +148,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -181,7 +156,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             Store<EntityStore> es = world.getEntityStore().getStore();
@@ -192,16 +167,17 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                             world, plugin, es, town, true, true
                         );
                     if (r == -1L) {
-                        playerRef.sendMessage(Message.raw("Tithe: no complete town hall in this town."));
+                        playerRef.sendMessage(
+                            Message.translation("server.aetherhaven.ui.treasury.debug.titheNoHall")
+                        );
                     } else if (r == 0L) {
                         playerRef.sendMessage(
-                            Message.raw(
-                                "Tithe: 0 gold (no loaded residents, or 0 from policy math). Unload/needs/breakdown: /aetherhaven tax breakdown"
-                            )
+                            Message.translation("server.aetherhaven.ui.treasury.debug.titheZero")
                         );
                     } else {
                         playerRef.sendMessage(
-                            Message.raw("Tithe applied: +" + r + " gold to treasury (same rules as a morning collection).")
+                            Message.translation("server.aetherhaven.ui.treasury.debug.titheApplied")
+                                .param("amount", String.valueOf(r))
                         );
                     }
                 }

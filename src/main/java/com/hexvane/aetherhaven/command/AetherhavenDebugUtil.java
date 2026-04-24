@@ -11,7 +11,7 @@ final class AetherhavenDebugUtil {
 
     static boolean requireDebug(@Nullable AetherhavenPlugin plugin, @Nonnull PlayerRef playerRef) {
         if (plugin == null || !plugin.getConfig().get().isDebugCommandsEnabled()) {
-            playerRef.sendMessage(Message.raw("Aetherhaven debug commands are disabled (set DebugCommandsEnabled in config.json)."));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.common.debugCommandsDisabled"));
             return false;
         }
         return true;

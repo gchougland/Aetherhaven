@@ -17,7 +17,7 @@ public final class TownMembershipActions {
      * @return {@code null} on success, otherwise an error message for the inviter.
      */
     @Nullable
-    public static String tryInviteMember(
+    public static Message tryInviteMember(
         @Nonnull World world,
         @Nonnull TownManager tm,
         @Nonnull TownRecord town,
@@ -27,32 +27,29 @@ public final class TownMembershipActions {
     ) {
         String targetName = targetUsername.trim();
         if (targetName.isEmpty()) {
-            return "Enter a player name.";
+            return Message.translation("server.aetherhaven.town.invite.err.emptyName");
         }
         PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, targetName);
         if (target == null) {
-            return "Player \"" + targetName + "\" is not online in this world.";
+            return Message.translation("server.aetherhaven.town.invite.err.targetOffline").param("name", targetName);
         }
         if (target.getUuid().equals(inviterUuid)) {
-            return "You cannot invite yourself.";
+            return Message.translation("server.aetherhaven.town.invite.err.cannotInviteSelf");
         }
         if (tm.isPlayerAffiliatedInWorld(target.getUuid())) {
-            return "That player is already in a town in this world.";
+            return Message.translation("server.aetherhaven.town.invite.err.alreadyInTown");
         }
         town.addPendingInvite(new TownPendingInvite(target.getUuid(), System.currentTimeMillis(), inviterUuid));
         tm.updateTown(town);
+        String tname = town.getDisplayName();
         target.sendMessage(
-            Message.raw(
-                inviterRef.getUsername()
-                    + " invited you to join the town \""
-                    + town.getDisplayName()
-                    + "\". Type /aetherhaven town accept "
-                    + town.getDisplayName()
-                    + "  or  /aetherhaven town decline "
-                    + town.getDisplayName()
-            )
+            Message.translation("server.aetherhaven.town.invite.toTarget")
+                .param("inviter", inviterRef.getUsername())
+                .param("townDisplay", tname)
         );
-        inviterRef.sendMessage(Message.raw("Invite sent to " + target.getUsername() + "."));
+        inviterRef.sendMessage(
+            Message.translation("server.aetherhaven.town.invite.sent").param("name", target.getUsername())
+        );
         return null;
     }
 
@@ -62,7 +59,7 @@ public final class TownMembershipActions {
      * @return {@code null} on success, otherwise an error for the actor.
      */
     @Nullable
-    public static String tryKickMember(
+    public static Message tryKickMember(
         @Nonnull World world,
         @Nonnull TownManager tm,
         @Nonnull TownRecord town,
@@ -71,22 +68,25 @@ public final class TownMembershipActions {
     ) {
         String targetName = targetUsername.trim();
         if (targetName.isEmpty()) {
-            return "Enter a player name.";
+            return Message.translation("server.aetherhaven.town.invite.err.emptyName");
         }
         PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, targetName);
         if (target == null) {
-            return "Player must be online to kick by name.";
+            return Message.translation("server.aetherhaven.town.kick.err.mustBeOnline");
         }
         UUID tid = target.getUuid();
         if (tid.equals(town.getOwnerUuid())) {
-            return "Cannot remove the town owner.";
+            return Message.translation("server.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(tid)) {
-            return "That player is not a member of this town.";
+            return Message.translation("server.aetherhaven.town.kick.err.notMember");
         }
         tm.updateTown(town);
-        target.sendMessage(Message.raw("You were removed from the town \"" + town.getDisplayName() + "\"."));
-        actorRef.sendMessage(Message.raw("Removed " + target.getUsername() + " from the town."));
+        String display = town.getDisplayName();
+        target.sendMessage(Message.translation("server.aetherhaven.town.kick.removedYou").param("town", display));
+        actorRef.sendMessage(
+            Message.translation("server.aetherhaven.town.kick.removed").param("name", target.getUsername())
+        );
         return null;
     }
 
@@ -96,7 +96,7 @@ public final class TownMembershipActions {
      * @return {@code null} on success, otherwise an error for the actor.
      */
     @Nullable
-    public static String trySetMemberRole(
+    public static Message trySetMemberRole(
         @Nonnull World world,
         @Nonnull TownManager tm,
         @Nonnull TownRecord town,
@@ -112,15 +112,18 @@ public final class TownMembershipActions {
             }
         }
         if (targetUuid.equals(town.getOwnerUuid())) {
-            return "The owner always has full permissions.";
+            return Message.translation("server.aetherhaven.town.role.err.ownerAlwaysFull");
         }
         if (!town.isMemberPlayer(targetUuid)) {
-            return "That player is not a member of this town.";
+            return Message.translation("server.aetherhaven.town.kick.err.notMember");
         }
         town.putMember(targetUuid, role);
         tm.updateTown(town);
         String who = target != null ? target.getUsername() : targetUuid.toString();
-        actorRef.sendMessage(Message.raw("Set " + who + "'s role to " + role.name() + "."));
+        Message roleMsg = Message.translation("server.aetherhaven.town.memberRole." + role.name());
+        actorRef.sendMessage(
+            Message.translation("server.aetherhaven.town.role.set").param("name", who).param("role", roleMsg)
+        );
         return null;
     }
 
@@ -130,7 +133,7 @@ public final class TownMembershipActions {
      * @return {@code null} on success.
      */
     @Nullable
-    public static String tryKickMemberUuid(
+    public static Message tryKickMemberUuid(
         @Nonnull World world,
         @Nonnull TownManager tm,
         @Nonnull TownRecord town,
@@ -138,10 +141,10 @@ public final class TownMembershipActions {
         @Nonnull UUID memberUuid
     ) {
         if (memberUuid.equals(town.getOwnerUuid())) {
-            return "Cannot remove the town owner.";
+            return Message.translation("server.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(memberUuid)) {
-            return "That player is not a member of this town.";
+            return Message.translation("server.aetherhaven.town.kick.err.notMember");
         }
         tm.updateTown(town);
         PlayerRef online = null;
@@ -152,9 +155,11 @@ public final class TownMembershipActions {
             }
         }
         if (online != null) {
-            online.sendMessage(Message.raw("You were removed from the town \"" + town.getDisplayName() + "\"."));
+            online.sendMessage(
+                Message.translation("server.aetherhaven.town.kick.removedYou").param("town", town.getDisplayName())
+            );
         }
-        actorRef.sendMessage(Message.raw("Removed member from the town."));
+        actorRef.sendMessage(Message.translation("server.aetherhaven.town.kick.removedGeneric"));
         return null;
     }
 }

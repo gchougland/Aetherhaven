@@ -81,17 +81,21 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {
-                playerRef.sendMessage(Message.raw(target.error() != null ? target.error() : "Invalid villager."));
+                if (target.error() != null) {
+                    playerRef.sendMessage(Message.raw(target.error()));
+                } else {
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.common.invalidVillager"));
+                }
                 return;
             }
             UUID villagerUuid = target.villagerUuid();
@@ -100,11 +104,15 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             boolean changed =
                 VillagerReputationService.setReputationCrossingMilestones(world, town, tm, uc.getUuid(), villagerUuid, value);
             if (!changed) {
-                playerRef.sendMessage(Message.raw("Reputation unchanged (already " + value + ")."));
+                playerRef.sendMessage(
+                    Message.translation("server.aetherhaven.debug.rep.unchanged").param("value", String.valueOf(value))
+                );
                 return;
             }
-            playerRef.sendMessage(Message.raw("Set reputation to " + Math.max(0, Math.min(100, value))
-                + " with crossed milestones queued for dialogue (if role resolved)."));
+            int clamped = Math.max(0, Math.min(100, value));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.debug.rep.set").param("value", String.valueOf(clamped))
+            );
         }
     }
 
@@ -139,7 +147,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             String filter = context.provided(roleFilterArg) ? context.get(roleFilterArg).trim() : "";
             List<ReputationRewardCatalog.ReputationRewardDefinition> defs = ReputationRewardCatalog.allDefinitions();
-            playerRef.sendMessage(Message.raw("Reputation milestones (reward id, role, min rep, dialogue node):"));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.rep.milestonesHeader"));
             for (ReputationRewardCatalog.ReputationRewardDefinition d : defs) {
                 if (!filter.isEmpty() && !d.roleId().equalsIgnoreCase(filter)) {
                     continue;
@@ -150,10 +158,15 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 String items = d.itemCount() > 0 && d.itemId() != null && !d.itemId().isBlank()
                     ? " item=" + d.itemId() + " x" + d.itemCount()
                     : "";
-                playerRef.sendMessage(Message.raw(
-                    "  " + d.rewardId() + " | " + d.roleId() + " | " + d.minReputation() + " | " + d.dialogueNodeId()
-                        + items + learn
-                ));
+                playerRef.sendMessage(
+                    Message.translation("server.aetherhaven.debug.rep.milestoneLine")
+                        .param("id", d.rewardId())
+                        .param("role", d.roleId())
+                        .param("min", String.valueOf(d.minReputation()))
+                        .param("node", d.dialogueNodeId())
+                        .param("items", items)
+                        .param("learn", learn)
+                );
             }
         }
     }
@@ -188,17 +201,21 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {
-                playerRef.sendMessage(Message.raw(target.error() != null ? target.error() : "Invalid villager."));
+                if (target.error() != null) {
+                    playerRef.sendMessage(Message.raw(target.error()));
+                } else {
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.common.invalidVillager"));
+                }
                 return;
             }
             UUID villagerUuid = target.villagerUuid();
@@ -211,7 +228,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 playerRef.sendMessage(Message.raw(err));
                 return;
             }
-            playerRef.sendMessage(Message.raw("Granted reward " + rid + "."));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.rep.granted").param("id", rid));
         }
     }
 }

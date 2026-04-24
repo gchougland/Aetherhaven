@@ -3,9 +3,19 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Elder Lyren",
-      "text": "You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.",
-      "choices": [{ "text": "I understand.", "next": null, "actions": [{ "type": "close" }] }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0",
+          "next": null,
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
+        }
+      ]
     }
   }
 }

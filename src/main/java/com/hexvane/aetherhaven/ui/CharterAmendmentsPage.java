@@ -51,7 +51,7 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || uc == null || pr == null) {
-            commandBuilder.set("#PopHint.TextSpans", Message.raw("Aetherhaven not loaded."));
+            commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);

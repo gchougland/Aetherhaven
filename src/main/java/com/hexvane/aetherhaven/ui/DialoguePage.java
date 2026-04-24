@@ -116,8 +116,11 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (tree == null) {
             commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
-            commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
-            commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Unknown dialogue: " + treeId));
+            commandBuilder.set(SPEAKER_SPANS, Message.translation("server.aetherhaven.ui.dialogue.title"));
+            commandBuilder.set(
+                BODY_TEXT_SPANS,
+                Message.translation("server.aetherhaven.ui.dialogue.unknown").param("id", treeId)
+            );
             setChoicesFrameVisible(commandBuilder, false);
             return;
         }
@@ -126,8 +129,11 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (node == null) {
             commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
-            commandBuilder.set(SPEAKER_SPANS, Message.raw("Dialogue"));
-            commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
+            commandBuilder.set(SPEAKER_SPANS, Message.translation("server.aetherhaven.ui.dialogue.title"));
+            commandBuilder.set(
+                BODY_TEXT_SPANS,
+                Message.translation("server.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
+            );
             setChoicesFrameVisible(commandBuilder, false);
             return;
         }
@@ -154,7 +160,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (node == null) {
             commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
-            commandBuilder.set(BODY_TEXT_SPANS, Message.raw("Missing node: " + nodeId));
+            commandBuilder.set(
+                BODY_TEXT_SPANS,
+                Message.translation("server.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
+            );
             setChoicesFrameVisible(commandBuilder, false);
             return;
         }
@@ -248,12 +257,16 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             }
             boolean disabled = !ok && "disabled".equalsIgnoreCase(wf);
             String text = ch.getText() != null ? ch.getText() : "";
-            if (disabled && ch.getDisabledReason() != null && !ch.getDisabledReason().isBlank()) {
-                text = text + "  " + ch.getDisabledReason();
-            }
+            String reason = ch.getDisabledReason();
+            Message choiceLine =
+                disabled && reason != null && !reason.isBlank()
+                    ? dialogueMessage(text)
+                        .insert(Message.raw("  "))
+                        .insert(dialogueMessage(reason))
+                    : dialogueMessage(text);
             commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
             String sel = choiceRowSelector(uiSlot);
-            commandBuilder.set(sel + " #Text.TextSpans", dialogueMessage(text));
+            commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
             commandBuilder.set(sel + ".Disabled", disabled);
             commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
             if (!disabled) {

@@ -18,7 +18,6 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,16 +47,26 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     }
 
     @Nonnull
-    private static String questLine(@Nonnull AetherhavenPlugin plugin, @Nonnull String label, @Nonnull List<String> ids) {
+    private static Message questStatusMessage(
+        @Nonnull AetherhavenPlugin plugin, boolean active, @Nonnull List<String> ids
+    ) {
         if (ids.isEmpty()) {
-            return label + " (none)";
+            return active
+                ? Message.translation("server.aetherhaven.questdebug.statusActiveEmpty")
+                : Message.translation("server.aetherhaven.questdebug.statusCompletedEmpty");
         }
         var quests = plugin.getQuestCatalog();
-        List<String> parts = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
         for (String id : ids) {
-            parts.add(quests.displayName(id) + " [" + id + "]");
+            if (sb.length() > 0) {
+                sb.append(", ");
+            }
+            sb.append(quests.displayName(id)).append(" [").append(id).append("]");
         }
-        return label + ": " + String.join(", ", parts);
+        String list = sb.toString();
+        return active
+            ? Message.translation("server.aetherhaven.questdebug.statusActiveLine").param("list", list)
+            : Message.translation("server.aetherhaven.questdebug.statusCompletedLine").param("list", list);
     }
 
     private static final class StatusCommand extends AbstractPlayerCommand {
@@ -79,11 +88,15 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             }
             TownRecord town = townForPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
-            playerRef.sendMessage(Message.raw(questLine(plugin, "Active", town.getActiveQuestIdsSnapshot())));
-            playerRef.sendMessage(Message.raw(questLine(plugin, "Completed", town.getCompletedQuestIdsSnapshot())));
+            playerRef.sendMessage(
+                questStatusMessage(plugin, true, town.getActiveQuestIdsSnapshot())
+            );
+            playerRef.sendMessage(
+                questStatusMessage(plugin, false, town.getCompletedQuestIdsSnapshot())
+            );
         }
     }
 
@@ -110,7 +123,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             }
             TownRecord town = townForPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
@@ -125,7 +138,10 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
                 QuestPlotTokenOnStart.grantIfConfigured(plugin, def, ref, store);
             }
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Granted active quest: " + plugin.getQuestCatalog().displayName(qid)));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.questdebug.granted")
+                    .param("name", plugin.getQuestCatalog().displayName(qid))
+            );
         }
     }
 
@@ -152,7 +168,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             }
             TownRecord town = townForPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
@@ -162,7 +178,10 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             qid = qid.trim();
             town.completeQuest(qid);
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Completed quest: " + plugin.getQuestCatalog().displayName(qid)));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.questdebug.completed")
+                    .param("name", plugin.getQuestCatalog().displayName(qid))
+            );
         }
     }
 
@@ -189,7 +208,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             }
             TownRecord town = townForPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
@@ -199,7 +218,10 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             qid = qid.trim();
             town.clearActiveQuest(qid);
             AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-            playerRef.sendMessage(Message.raw("Cleared active quest: " + plugin.getQuestCatalog().displayName(qid)));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.questdebug.cleared")
+                    .param("name", plugin.getQuestCatalog().displayName(qid))
+            );
         }
     }
 }

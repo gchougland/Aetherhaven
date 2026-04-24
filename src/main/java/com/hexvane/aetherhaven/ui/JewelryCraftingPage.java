@@ -17,6 +17,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
@@ -113,12 +114,13 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
 
         List<DropdownEntryInfo> gemEntries = new ObjectArrayList<>();
         if (ownedGems.isEmpty()) {
-            gemEntries.add(
-                new DropdownEntryInfo(
-                    LocalizableString.fromString("No cut gems in your bags (find rock gems in the world first)"),
-                    NO_OWNED_GEM
-                )
-            );
+            String lang = pr.getLanguage() != null ? pr.getLanguage() : "en-US";
+            String noGems =
+                I18nModule.get().getMessage(lang, "server.aetherhaven.ui.jewelryCrafting.noGemsDropdown");
+            if (noGems == null || noGems.isEmpty()) {
+                noGems = "No cut gems in your bags (find rock gems in the world first)";
+            }
+            gemEntries.add(new DropdownEntryInfo(LocalizableString.fromString(noGems), NO_OWNED_GEM));
         } else {
             for (String id : ownedGems) {
                 JewelryGem g = JewelryCraftingItems.gemFromRockItemId(id);

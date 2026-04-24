@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -103,23 +104,18 @@ public final class PoiToolInteractions {
         }
         if (nearest == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.raw("No POI within range of that block."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiInRange"));
             return;
         }
         state.setSelectedPoiId(nearest.getId());
         send(
             playerRef,
             commandBuffer,
-            Message.raw(
-                "Selected POI "
-                    + nearest.getId()
-                    + " at "
-                    + nearest.getX()
-                    + ", "
-                    + nearest.getY()
-                    + ", "
-                    + nearest.getZ()
-            )
+            Message.translation("server.aetherhaven.poi.selected")
+                .param("id", nearest.getId().toString())
+                .param("x", String.valueOf(nearest.getX()))
+                .param("y", String.valueOf(nearest.getY()))
+                .param("z", String.valueOf(nearest.getZ()))
         );
     }
 
@@ -142,7 +138,7 @@ public final class PoiToolInteractions {
         }
         UUID id = state.getSelectedPoiId();
         if (id == null) {
-            send(playerRef, commandBuffer, Message.raw("No POI selected. Primary-click a POI first."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiSelected"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -155,7 +151,7 @@ public final class PoiToolInteractions {
         PoiEntry current = reg.get(id);
         if (current == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.raw("Selected POI no longer exists."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.selectedPoiGone"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -166,18 +162,22 @@ public final class PoiToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.raw(
-                    "Target block must match expected type "
-                        + current.getBlockTypeId()
-                        + " for this POI."
-                )
+                Message.translation("server.aetherhaven.poi.targetBlockMismatch")
+                    .param("type", current.getBlockTypeId() != null ? current.getBlockTypeId() : "")
             );
             context.getState().state = InteractionState.Failed;
             return;
         }
         PoiEntry moved = current.copyWithPosition(nx, ny, nz);
         reg.replace(moved);
-        send(playerRef, commandBuffer, Message.raw("Moved POI to " + nx + ", " + ny + ", " + nz + "."));
+        send(
+            playerRef,
+            commandBuffer,
+            Message.translation("server.aetherhaven.poi.moved")
+                .param("x", String.valueOf(nx))
+                .param("y", String.valueOf(ny))
+                .param("z", String.valueOf(nz))
+        );
     }
 
     /**
@@ -203,7 +203,7 @@ public final class PoiToolInteractions {
         }
         UUID id = state.getSelectedPoiId();
         if (id == null) {
-            send(playerRef, commandBuffer, Message.raw("No POI selected. Primary-click a POI block first."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiBlock"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -216,7 +216,7 @@ public final class PoiToolInteractions {
         PoiEntry current = reg.get(id);
         if (current == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.raw("Selected POI no longer exists."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.selectedPoiGone"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -226,7 +226,7 @@ public final class PoiToolInteractions {
         if (nx == current.getX() && ny == current.getY() && nz == current.getZ()) {
             PoiEntry cleared = current.copyWithInteractionTarget(null, null, null);
             reg.replace(cleared);
-            send(playerRef, commandBuffer, Message.raw("Cleared interaction target; NPCs use the POI block center."));
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.clearedInteractionTarget"));
             return;
         }
         int standY = VillagerBlockUtil.findStandY(world, nx, nz, ny + 2);
@@ -238,7 +238,10 @@ public final class PoiToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.raw("Set interaction target to " + String.format("%.2f", wx) + ", " + String.format("%.2f", wy) + ", " + String.format("%.2f", wz) + ".")
+            Message.translation("server.aetherhaven.poi.setInteractionTarget")
+                .param("x", String.format(Locale.US, "%.2f", wx))
+                .param("y", String.format(Locale.US, "%.2f", wy))
+                .param("z", String.format(Locale.US, "%.2f", wz))
         );
     }
 

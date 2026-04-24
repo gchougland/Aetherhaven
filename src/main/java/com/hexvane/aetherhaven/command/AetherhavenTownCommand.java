@@ -71,14 +71,14 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
             if (!res.isOk()) {
-                playerRef.sendMessage(Message.raw(res.errorMessage()));
+                playerRef.sendMessage(res.error());
                 return;
             }
             TownRecord town = res.townOrThrow();
             String targetName = context.get(playerArg).trim();
-            String err = TownMembershipActions.tryInviteMember(world, tm, town, uc.getUuid(), playerRef, targetName);
+            Message err = TownMembershipActions.tryInviteMember(world, tm, town, uc.getUuid(), playerRef, targetName);
             if (err != null) {
-                playerRef.sendMessage(Message.raw(err));
+                playerRef.sendMessage(err);
             }
         }
     }
@@ -114,28 +114,30 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (context.provided(townArg) && !context.get(townArg).trim().isEmpty()) {
                 town = tm.findTownByDisplayName(context.get(townArg).trim());
                 if (town == null) {
-                    playerRef.sendMessage(Message.raw("No town with that name."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noSuchTown"));
                     return;
                 }
                 if (town.findPendingInvite(self) == null) {
-                    playerRef.sendMessage(Message.raw("You have no pending invite for that town."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noInvite"));
                     return;
                 }
             } else {
                 town = tm.findTownWithPendingInviteFor(self);
                 if (town == null) {
-                    playerRef.sendMessage(Message.raw("You have no pending town invites."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noInvites"));
                     return;
                 }
             }
             if (tm.isPlayerAffiliatedInWorld(self)) {
-                playerRef.sendMessage(Message.raw("You are already in a town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.alreadyInTown"));
                 return;
             }
             town.removePendingInviteForInvitee(self);
             town.putMember(self, TownMemberRole.BOTH);
             tm.updateTown(town);
-            playerRef.sendMessage(Message.raw("You joined \"" + town.getDisplayName() + "\"."));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.town.accept.joined").param("town", town.getDisplayName())
+            );
         }
     }
 
@@ -169,24 +171,24 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (context.provided(townArg) && !context.get(townArg).trim().isEmpty()) {
                 TownRecord town = tm.findTownByDisplayName(context.get(townArg).trim());
                 if (town == null) {
-                    playerRef.sendMessage(Message.raw("No town with that name."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noSuchTown"));
                     return;
                 }
                 if (!town.removePendingInviteForInvitee(self)) {
-                    playerRef.sendMessage(Message.raw("No pending invite for that town."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.noPending"));
                     return;
                 }
                 tm.updateTown(town);
             } else {
                 TownRecord town = tm.findTownWithPendingInviteFor(self);
                 if (town == null) {
-                    playerRef.sendMessage(Message.raw("You have no pending town invites."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.noInvites"));
                     return;
                 }
                 town.removePendingInviteForInvitee(self);
                 tm.updateTown(town);
             }
-            playerRef.sendMessage(Message.raw("Invite declined."));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.done"));
         }
     }
 
@@ -224,14 +226,14 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
             if (!res.isOk()) {
-                playerRef.sendMessage(Message.raw(res.errorMessage()));
+                playerRef.sendMessage(res.error());
                 return;
             }
             TownRecord town = res.townOrThrow();
             String targetName = context.get(playerArg).trim();
-            String err = TownMembershipActions.tryKickMember(world, tm, town, playerRef, targetName);
+            Message err = TownMembershipActions.tryKickMember(world, tm, town, playerRef, targetName);
             if (err != null) {
-                playerRef.sendMessage(Message.raw(err));
+                playerRef.sendMessage(err);
             }
         }
     }
@@ -273,25 +275,25 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             String townOpt = context.provided(townArg) ? context.get(townArg) : null;
             TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
             if (!res.isOk()) {
-                playerRef.sendMessage(Message.raw(res.errorMessage()));
+                playerRef.sendMessage(res.error());
                 return;
             }
             TownRecord town = res.townOrThrow();
             PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, context.get(playerArg).trim());
             if (target == null) {
-                playerRef.sendMessage(Message.raw("Player must be online."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.rolecmd.playerMustBeOnline"));
                 return;
             }
             TownMemberRole role;
             try {
                 role = TownMemberRole.valueOf(context.get(roleArg).trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                playerRef.sendMessage(Message.raw("Role must be BUILD, QUEST, or BOTH."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.rolecmd.roleInvalid"));
                 return;
             }
-            String err = TownMembershipActions.trySetMemberRole(world, tm, town, playerRef, target.getUuid(), role);
+            Message err = TownMembershipActions.trySetMemberRole(world, tm, town, playerRef, target.getUuid(), role);
             if (err != null) {
-                playerRef.sendMessage(Message.raw(err));
+                playerRef.sendMessage(err);
             }
         }
     }
@@ -321,19 +323,21 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             UUID self = uc.getUuid();
             TownRecord town = tm.findTownForPlayerInWorld(self);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("You are not in a town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.notInTown"));
                 return;
             }
             if (town.getOwnerUuid().equals(self)) {
-                playerRef.sendMessage(Message.raw("Owners cannot leave; transfer ownership is not implemented yet."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.ownerCannotLeave"));
                 return;
             }
             if (!town.removeMember(self)) {
-                playerRef.sendMessage(Message.raw("You are not a member of this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.notMember"));
                 return;
             }
             tm.updateTown(town);
-            playerRef.sendMessage(Message.raw("You left \"" + town.getDisplayName() + "\"."));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.town.leave.left").param("town", town.getDisplayName())
+            );
         }
     }
 }

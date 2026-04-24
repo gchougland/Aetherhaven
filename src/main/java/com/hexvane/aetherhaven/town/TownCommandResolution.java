@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hypixel.hytale.server.core.Message;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,19 +10,17 @@ public final class TownCommandResolution {
     @Nullable
     private final TownRecord town;
     @Nullable
-    private final String errorMessage;
+    private final Message error;
     private final boolean senderIsOwner;
 
-    private TownCommandResolution(
-        @Nullable TownRecord town, @Nullable String errorMessage, boolean senderIsOwner
-    ) {
+    private TownCommandResolution(@Nullable TownRecord town, @Nullable Message error, boolean senderIsOwner) {
         this.town = town;
-        this.errorMessage = errorMessage;
+        this.error = error;
         this.senderIsOwner = senderIsOwner;
     }
 
     @Nonnull
-    public static TownCommandResolution error(@Nonnull String message) {
+    public static TownCommandResolution error(@Nonnull Message message) {
         return new TownCommandResolution(null, message, false);
     }
 
@@ -31,7 +30,7 @@ public final class TownCommandResolution {
     }
 
     public boolean isOk() {
-        return town != null && errorMessage == null;
+        return town != null && error == null;
     }
 
     @Nullable
@@ -42,14 +41,14 @@ public final class TownCommandResolution {
     @Nonnull
     public TownRecord townOrThrow() {
         if (town == null) {
-            throw new IllegalStateException(errorMessage != null ? errorMessage : "no town");
+            throw new IllegalStateException("no town");
         }
         return town;
     }
 
     @Nullable
-    public String errorMessage() {
-        return errorMessage;
+    public Message error() {
+        return error;
     }
 
     public boolean senderIsOwner() {
@@ -71,19 +70,21 @@ public final class TownCommandResolution {
         if (trimmed.isEmpty()) {
             TownRecord owned = tm.findTownForOwnerInWorld(senderUuid);
             if (owned == null) {
-                return error("You do not own a town in this world.");
+                return error(Message.translation("server.aetherhaven.town.resolve.notOwnerInWorld"));
             }
             return ok(owned, true);
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
-            return error("No town named \"" + trimmed + "\" in this world.");
+            return error(
+                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+            );
         }
         if (isAdmin) {
             return ok(named, named.getOwnerUuid().equals(senderUuid));
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error("Only the town owner can do that (or an operator with permission).");
+            return error(Message.translation("server.aetherhaven.town.resolve.ownerOrOpOnly"));
         }
         return ok(named, true);
     }
@@ -99,21 +100,23 @@ public final class TownCommandResolution {
         if (trimmed.isEmpty()) {
             TownRecord t = tm.findTownForPlayerInWorld(senderUuid);
             if (t == null) {
-                return error("You are not in a town in this world.");
+                return error(Message.translation("server.aetherhaven.town.resolve.notInTown"));
             }
             boolean owner = t.getOwnerUuid().equals(senderUuid);
             return ok(t, owner);
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
-            return error("No town named \"" + trimmed + "\" in this world.");
+            return error(
+                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+            );
         }
         if (isOp) {
             boolean owner = named.getOwnerUuid().equals(senderUuid);
             return ok(named, owner);
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error("Only the town owner (or an operator) can use a town name here.");
+            return error(Message.translation("server.aetherhaven.town.resolve.nameOnlyForOwner"));
         }
         return ok(named, true);
     }
@@ -128,19 +131,21 @@ public final class TownCommandResolution {
         String trimmed = townDisplayName != null ? townDisplayName.trim() : "";
         if (trimmed.isEmpty()) {
             if (!isOp) {
-                return error("Specify a town name, or use this from the town you own.");
+                return error(Message.translation("server.aetherhaven.town.resolve.specifyTownName"));
             }
-            return error("Specify a town name.");
+            return error(Message.translation("server.aetherhaven.town.resolve.specifyTown"));
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
-            return error("No town named \"" + trimmed + "\" in this world.");
+            return error(
+                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+            );
         }
         if (isOp) {
             return ok(named, named.getOwnerUuid().equals(senderUuid));
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error("Only operators may target another player's town by name.");
+            return error(Message.translation("server.aetherhaven.town.resolve.adminOtherTown"));
         }
         return ok(named, true);
     }

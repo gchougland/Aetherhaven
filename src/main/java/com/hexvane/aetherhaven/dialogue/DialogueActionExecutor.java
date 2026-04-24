@@ -141,7 +141,9 @@ public final class DialogueActionExecutor {
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest started: " + quests.displayName(qid)));
+            pr.sendMessage(
+                Message.translation("server.aetherhaven.quest.started").param("name", quests.displayName(qid))
+            );
         }
     }
 
@@ -174,7 +176,10 @@ public final class DialogueActionExecutor {
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest completed: " + plugin.getQuestCatalog().displayName(qid)));
+            pr.sendMessage(
+                Message.translation("server.aetherhaven.quest.completed")
+                    .param("name", plugin.getQuestCatalog().displayName(qid))
+            );
         }
     }
 
@@ -312,7 +317,10 @@ public final class DialogueActionExecutor {
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Quest abandoned: " + plugin.getQuestCatalog().displayName(qid)));
+            pr.sendMessage(
+                Message.translation("server.aetherhaven.quest.abandoned")
+                    .param("name", plugin.getQuestCatalog().displayName(qid))
+            );
         }
     }
 

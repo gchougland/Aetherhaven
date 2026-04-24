@@ -657,7 +657,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Plot sign placed."));
+            pr.sendMessage(Message.translation("server.aetherhaven.plotSign.placed"));
         }
         return true;
     }

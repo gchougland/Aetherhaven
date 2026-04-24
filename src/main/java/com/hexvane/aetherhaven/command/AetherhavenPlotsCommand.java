@@ -50,26 +50,21 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             TownRecord town =
                 AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
-            playerRef.sendMessage(Message.raw("Plots for town " + town.getTownId() + ":"));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.debug.plots.forTown").param("id", town.getTownId().toString())
+            );
             for (PlotInstance p : town.getPlotInstances()) {
                 playerRef.sendMessage(
-                    Message.raw(
-                        "  "
-                            + p.getPlotId()
-                            + " "
-                            + p.getConstructionId()
-                            + " "
-                            + p.getState()
-                            + " sign@"
-                            + p.getSignX()
-                            + ","
-                            + p.getSignY()
-                            + ","
-                            + p.getSignZ()
-                    )
+                    Message.translation("server.aetherhaven.debug.plots.line")
+                        .param("plotId", p.getPlotId().toString())
+                        .param("construction", p.getConstructionId() != null ? p.getConstructionId() : "")
+                        .param("state", p.getState() != null ? p.getState().name() : "")
+                        .param("x", String.valueOf(p.getSignX()))
+                        .param("y", String.valueOf(p.getSignY()))
+                        .param("z", String.valueOf(p.getSignZ()))
                 );
             }
         }

@@ -62,7 +62,7 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         CharterBlock ch = cs.getComponent(charterBlockRef, CharterBlock.getComponentType());
         String townIdStr = ch != null ? ch.getTownId() : "";
         if (townIdStr.isEmpty()) {
-            commandBuilder.set("#TownInfo.TextSpans", Message.raw("Charter is not linked to a town yet."));
+            commandBuilder.set("#TownInfo.TextSpans", Message.translation("server.aetherhaven.chartertown.info.notLinked"));
             commandBuilder.set("#TownNameEditor.Visible", false);
             commandBuilder.set("#OwnerOnlyHint.Visible", false);
             commandBuilder.set("#TownInfoSeparator.Visible", false);
@@ -78,7 +78,7 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         try {
             townId = UUID.fromString(townIdStr);
         } catch (IllegalArgumentException e) {
-            commandBuilder.set("#TownInfo.TextSpans", Message.raw("Invalid town id on charter."));
+            commandBuilder.set("#TownInfo.TextSpans", Message.translation("server.aetherhaven.chartertown.info.invalidTownId"));
             commandBuilder.set("#TownNameEditor.Visible", false);
             commandBuilder.set("#OwnerOnlyHint.Visible", false);
             commandBuilder.set("#TownInfoSeparator.Visible", false);
@@ -93,7 +93,7 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         World world = store.getExternalData().getWorld();
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            commandBuilder.set("#TownInfo.TextSpans", Message.raw("Aetherhaven not loaded."));
+            commandBuilder.set("#TownInfo.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
             commandBuilder.set("#TownNameEditor.Visible", false);
             commandBuilder.set("#OwnerOnlyHint.Visible", false);
             commandBuilder.set("#TownInfoSeparator.Visible", false);
@@ -108,7 +108,7 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord tr = tm.getTown(townId);
         if (tr == null) {
-            commandBuilder.set("#TownInfo.TextSpans", Message.raw("Town data not found (see server log)."));
+            commandBuilder.set("#TownInfo.TextSpans", Message.translation("server.aetherhaven.chartertown.info.townDataMissing"));
             commandBuilder.set("#TownNameEditor.Visible", false);
             commandBuilder.set("#OwnerOnlyHint.Visible", false);
             commandBuilder.set("#TownInfoSeparator.Visible", false);
@@ -132,22 +132,14 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         commandBuilder.set("#NameInput.Value", tr.getDisplayName());
         commandBuilder.set(
             "#TownInfo.TextSpans",
-            Message.raw(
-                "Town name: "
-                    + tr.getDisplayName()
-                    + "\nTown ID: "
-                    + townId
-                    + "\nTier: "
-                    + tr.getTier()
-                    + "\nTerritory (chunk radius): "
-                    + tr.getTerritoryChunkRadius()
-                    + "\nCharter at "
-                    + tr.getCharterX()
-                    + ", "
-                    + tr.getCharterY()
-                    + ", "
-                    + tr.getCharterZ()
-            )
+            Message.translation("server.aetherhaven.chartertown.townInfoBlock")
+                .param("name", tr.getDisplayName())
+                .param("id", townId.toString())
+                .param("tier", String.valueOf(tr.getTier()))
+                .param("radius", String.valueOf(tr.getTerritoryChunkRadius()))
+                .param("cx", String.valueOf(tr.getCharterX()))
+                .param("cy", String.valueOf(tr.getCharterY()))
+                .param("cz", String.valueOf(tr.getCharterZ()))
         );
         boolean relocateFlow = owner && charterRelocateConfirmOpen;
         boolean dissolveFlow = owner && dissolveConfirmOpen;
@@ -362,20 +354,22 @@ public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPa
         if (newName.isEmpty()) {
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                pr.sendMessage(Message.raw("Town name cannot be empty."));
+                pr.sendMessage(Message.translation("server.aetherhaven.chartertown.nameEmpty"));
             }
             return;
         }
         if (!tm.trySetDisplayName(tr, newName)) {
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                pr.sendMessage(Message.raw("That name is already used by another town in this world."));
+                pr.sendMessage(Message.translation("server.aetherhaven.chartertown.nameDuplicate"));
             }
             return;
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Town name saved: " + tr.getDisplayName()));
+            pr.sendMessage(
+                Message.translation("server.aetherhaven.chartertown.nameSaved").param("name", tr.getDisplayName())
+            );
         }
         dissolveConfirmOpen = false;
         UICommandBuilder cmd = new UICommandBuilder();

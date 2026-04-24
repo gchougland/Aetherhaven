@@ -96,7 +96,7 @@ public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdm
         if (!tx.succeeded()) {
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                pr.sendMessage(Message.raw("Could not add plot sign (inventory full?)"));
+                pr.sendMessage(Message.translation("server.aetherhaven.plotSign.couldNotAdd"));
             }
             return;
         }

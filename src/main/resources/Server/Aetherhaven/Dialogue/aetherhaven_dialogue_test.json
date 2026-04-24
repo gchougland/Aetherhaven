@@ -3,113 +3,184 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "QA Villager",
-      "text": "Welcome to the Aetherhaven dialogue harness. This line stays long on purpose so you can check layout and scrolling. Your choices sit below the body text.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.body",
       "choices": [
-        { "text": "Continue to the conditions lab.", "next": "conditions_lab" },
-        { "text": "Leave (end with next null).", "next": null },
         {
-          "text": "Leave (explicit close action).",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0",
+          "next": "conditions_lab"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1",
+          "next": null
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2",
           "next": null,
-          "actions": [{ "type": "close" }]
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
         }
       ]
     },
     "conditions_lab": {
-      "speaker": "QA Villager",
-      "text": "Conditions lab. You should not see a hidden choice. You should see a greyed choice. Use the compound gates to continue.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body",
       "choices": [
         {
-          "text": "This choice is hidden (literal false).",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0",
           "next": "root",
-          "condition": { "type": "literal", "value": false },
+          "condition": {
+            "type": "literal",
+            "value": false
+          },
           "whenFalse": "hide"
         },
         {
-          "text": "This should be greyed out.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1",
           "next": "conditions_lab",
-          "condition": { "type": "literal", "value": false },
+          "condition": {
+            "type": "literal",
+            "value": false
+          },
           "whenFalse": "disabled",
-          "disabledReason": "(requires literal true)"
+          "disabledReason": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled"
         },
         {
-          "text": "Pass compound: NOT false AND true",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2",
           "next": "item_demo",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "not", "condition": { "type": "literal", "value": false } },
-              { "type": "literal", "value": true }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "literal",
+                  "value": false
+                }
+              },
+              {
+                "type": "literal",
+                "value": true
+              }
             ]
           }
         },
         {
-          "text": "OR branch (true OR false)",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3",
           "next": "item_demo",
           "condition": {
             "type": "or",
             "conditions": [
-              { "type": "literal", "value": true },
-              { "type": "literal", "value": false }
+              {
+                "type": "literal",
+                "value": true
+              },
+              {
+                "type": "literal",
+                "value": false
+              }
             ]
           }
         }
       ]
     },
     "item_demo": {
-      "speaker": "QA Villager",
-      "text": "A node enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.",
-      "actions": [{ "type": "give_item", "item": "Tool_Shovel_Crude", "count": 1 }],
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body",
+      "actions": [
+        {
+          "type": "give_item",
+          "item": "Tool_Shovel_Crude",
+          "count": 1
+        }
+      ],
       "choices": [
         {
-          "text": "Give me 3 dirt, then continue.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0",
           "next": "shop_demo",
-          "actions": [{ "type": "give_item", "item": "Soil_Dirt", "count": 3 }]
+          "actions": [
+            {
+              "type": "give_item",
+              "item": "Soil_Dirt",
+              "count": 3
+            }
+          ]
         }
       ]
     },
     "shop_demo": {
-      "speaker": "QA Villager",
-      "text": "You can open the Kweebec merchant barter UI, or skip to stub actions.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body",
       "choices": [
         {
-          "text": "Open Kweebec_Merchant barter shop",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0",
           "actions": [
-            { "type": "close" },
-            { "type": "open_barter_shop", "shop": "Kweebec_Merchant" }
+            {
+              "type": "close"
+            },
+            {
+              "type": "open_barter_shop",
+              "shop": "Kweebec_Merchant"
+            }
           ]
         },
-        { "text": "Skip shop, go to stubs", "next": "stubs_demo" }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1",
+          "next": "stubs_demo"
+        }
       ]
     },
     "stubs_demo": {
-      "speaker": "QA Villager",
-      "text": "Stub actions: unlock achievement and start quest should log until those systems exist.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body",
       "choices": [
         {
-          "text": "Run unlock_achievement + start_quest stubs",
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0",
           "next": "goto_demo",
           "actions": [
-            { "type": "unlock_achievement", "id": "aetherhaven_dialogue_test" },
-            { "type": "start_quest", "id": "aetherhaven_dialogue_test_quest" }
+            {
+              "type": "unlock_achievement",
+              "id": "aetherhaven_dialogue_test"
+            },
+            {
+              "type": "start_quest",
+              "id": "aetherhaven_dialogue_test_quest"
+            }
           ]
         }
       ]
     },
     "goto_demo": {
-      "speaker": "QA Villager",
-      "text": "Pick below to jump to farewell using a goto action instead of next.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body",
       "choices": [
         {
-          "text": "goto farewell",
-          "actions": [{ "type": "goto", "node": "farewell" }]
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0",
+          "actions": [
+            {
+              "type": "goto",
+              "node": "farewell"
+            }
+          ]
         }
       ]
     },
     "farewell": {
-      "speaker": "QA Villager",
-      "text": "Thanks for testing. Goodbye!",
-      "choices": [{ "text": "Bye!", "actions": [{ "type": "close" }] }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0",
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
+        }
+      ]
     }
   }
 }

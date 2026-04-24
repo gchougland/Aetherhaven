@@ -102,13 +102,13 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         }
         if (plugin == null) {
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.raw("Aetherhaven not loaded."));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
         if (town == null) {
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.raw("Town not found."));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.townNotFound"));
             return;
         }
 
@@ -116,7 +116,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
         List<VillagerRow> rows = buildResidentRows(entityStore, town);
         if (rows.isEmpty()) {
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.raw("No town residents tracked yet."));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.villagerneeds.noResidentsTracked"));
             commandBuilder.clear(VILLAGER_ROWS);
             return;
         }
@@ -131,7 +131,10 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             VillagerRow r = rows.get(i);
             commandBuilder.append(VILLAGER_ROWS, "Aetherhaven/VillagerNeedsRow.ui");
             String row = VILLAGER_ROWS + "[" + i + "]";
-            commandBuilder.set(row + " #Pick #Label.TextSpans", Message.raw(r.label()));
+            commandBuilder.set(
+                row + " #Pick #Label.TextSpans",
+                Message.translation("server.npcRoles." + r.roleId() + ".name")
+            );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
                 row + " #Pick",

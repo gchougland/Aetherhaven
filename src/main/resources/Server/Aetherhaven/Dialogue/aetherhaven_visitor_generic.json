@@ -3,9 +3,19 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Villager",
-      "text": "Good day, traveler. If you are not of this settlement, speak with the locals who belong here. My hands are full with our own work.",
-      "choices": [{ "text": "Farewell.", "next": null, "actions": [{ "type": "close" }] }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_visitor_generic.root.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0",
+          "next": null,
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
+        }
+      ]
     }
   }
 }

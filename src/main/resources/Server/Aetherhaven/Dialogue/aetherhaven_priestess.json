@@ -3,53 +3,82 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Serah Thornwell",
-      "text": "Serah Thornwell. I lead Gaia's rites for this town. The inn is a roof over my head, and I am grateful, but I cannot run services wedged between supper and card games. I need a real altar outside: paths, a few stools, and the statue where people can pray without holding their breath from the kitchen smoke.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.body",
       "choices": [
         {
-          "text": "You wanted to speak about a home.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c0",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_gaia_altar" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_gaia_altar"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_priestess" },
-                    { "type": "town_quest_completed", "questId": "q_house_priestess" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_priestess"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_priestess"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "serah_house_offer"
         },
         {
-          "text": "You're on the shelf now. I thought you should know.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_priestess" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_priestess"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_priestess" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_priestess"
+            }
+          ],
           "next": "serah_house_finish"
         },
         {
-          "text": "The house is still unfinished.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_priestess" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_priestess"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -57,7 +86,7 @@
           "next": "serah_house_remind"
         },
         {
-          "text": "How is the altar working out for you?",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c3",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_gaia_altar"
@@ -65,23 +94,37 @@
           "next": "serah_done"
         },
         {
-          "text": "The altar grounds are ready.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_gaia_altar" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_gaia_altar" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_gaia_altar"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_gaia_altar"
+              }
             ]
           },
-          "actions": [{ "type": "complete_quest", "id": "q_gaia_altar" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_gaia_altar"
+            }
+          ],
           "next": "serah_done"
         },
         {
-          "text": "About the blessing...",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c5",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_gaia_altar" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_gaia_altar"
+              },
               {
                 "type": "not",
                 "condition": {
@@ -94,90 +137,153 @@
           "next": "serah_building"
         },
         {
-          "text": "You said you needed ground for Gaia.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_gaia_altar" } },
-              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_gaia_altar" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_gaia_altar"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_gaia_altar"
+                }
+              }
             ]
           },
           "next": "serah_quest_altar"
         },
         {
-          "text": "I'll leave you to it.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c7",
           "next": null
         }
       ]
     },
     "serah_quest_altar": {
-      "speaker": "Serah Thornwell",
-      "text": "Stake a Gaia altar plot: paths, stools, and the statue where I can stand and folk can sit. Craft the token at your planning desk, place it with your staff, and pay the sign. When it is built, meet me at the statue and we will bless it properly.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body",
       "choices": [
         {
-          "text": "We'll get it built.",
-          "actions": [{ "type": "start_quest", "id": "q_gaia_altar" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_gaia_altar"
+            }
+          ],
           "next": "serah_altar_accepted"
         },
         {
-          "text": "Not right now.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1",
           "next": null
         }
       ]
     },
     "serah_altar_accepted": {
-      "speaker": "Serah Thornwell",
-      "text": "I will stay at the inn until the altar is built. Then find me at the statue and we will finish the blessing.",
-      "choices": [{ "text": "I'll see you there.", "next": null }]
-    },
-    "serah_building": {
-      "speaker": "Serah Thornwell",
-      "text": "When the altar stands, I will walk to the statue. Come find me there and we will call it done.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body",
       "choices": [
         {
-          "text": "I need to drop the quest.",
-          "actions": [{ "type": "abandon_quest", "id": "q_gaia_altar" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "serah_building": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_gaia_altar"
+            }
+          ],
           "next": "serah_abandoned"
         },
-        { "text": "I'm still working on it.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1",
+          "next": null
+        }
       ]
     },
     "serah_abandoned": {
-      "speaker": "Serah Thornwell",
-      "text": "No hard feelings. If you still want an altar in town, ask again.",
-      "choices": [{ "text": "All right.", "next": null }]
-    },
-    "serah_done": {
-      "speaker": "Serah Thornwell",
-      "text": "The altar is finished. Thank you. I will keep the grounds tended and hold rites here as the town grows.",
-      "choices": [{ "text": "Good luck with it.", "next": null }]
-    },
-    "serah_house_offer": {
-      "speaker": "Serah Thornwell",
-      "text": "The altar is for everyone. I still want a small house of my own, same as anyone else, so I am not living out of the inn hall forever. Build it from the usual token, then register me on the management block when it is up.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body",
       "choices": [
         {
-          "text": "I'll stake a house.",
-          "actions": [{ "type": "start_quest", "id": "q_house_priestess" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "serah_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "serah_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_priestess"
+            }
+          ],
           "next": "serah_house_accepted"
         },
-        { "text": "Another time.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1",
+          "next": null
+        }
       ]
     },
     "serah_house_accepted": {
-      "speaker": "Serah Thornwell",
-      "text": "When the house is up, put my name on the management block inside, then come find me. I want to hear you say it in person, not just read it off a list.",
-      "choices": [{ "text": "You will.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0",
+          "next": null
+        }
+      ]
     },
     "serah_house_remind": {
-      "speaker": "Serah Thornwell",
-      "text": "These things take time. When the house is done, register me on the block, then come talk. That is when we are finished.",
-      "choices": [{ "text": "I'll come back.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0",
+          "next": null
+        }
+      ]
     },
     "serah_house_finish": {
-      "speaker": "Serah Thornwell",
-      "text": "Good. A roof that is actually mine.",
-      "choices": [{ "text": "Fair enough.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0",
+          "next": null
+        }
+      ]
     }
   }
 }

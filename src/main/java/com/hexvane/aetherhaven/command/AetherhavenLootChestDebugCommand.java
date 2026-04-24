@@ -69,7 +69,7 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             BlockTarget target = resolveItemContainerBlock(world, block);
             if (target == null) {
                 playerRef.sendMessage(
-                    Message.raw("No item container at that block (chunk not loaded, filler/base mismatch, or not a container block).")
+                    Message.translation("server.aetherhaven.debug.loot.noContainer")
                 );
                 return;
             }
@@ -82,7 +82,7 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             BlockModule.BlockStateInfo bsi = target.stateInfo();
             ItemContainerBlock c = target.container();
             LootChestBonusApplier.applyAll(cs, bsi, c, cfg, rnd, true, true, true);
-            playerRef.sendMessage(Message.raw("Aetherhaven bonus loot roll applied to this container (forced)."));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.loot.bonusApplied"));
         }
     }
 

@@ -1,5 +1,223 @@
 # Aetherhaven server-side language strings
 
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven not loaded.
+aetherhaven.common.noTownInWorld=No town for you in this world.
+aetherhaven.common.noQuestPermission=You do not have quest permission in this town.
+aetherhaven.common.townNotFound=Town not found.
+aetherhaven.common.invalidTownLink=Invalid town link.
+aetherhaven.common.treasuryNotLinked=Treasury is not linked.
+aetherhaven.common.ownerOnlyTreasury=Only the town owner may use the treasury.
+aetherhaven.common.townNotInThisWorld=Town is not in this world.
+aetherhaven.common.noMoveBuildingsPermission=You do not have permission to move buildings for this town.
+aetherhaven.common.buildingCannotMove=This building cannot be moved (missing plot or not complete).
+aetherhaven.common.lookAtBlockPlot=Look at a block to set the plot sign position and start a preview.
+aetherhaven.common.carryPlotToken=Carry a plot token for a building type listed in the tool (e.g. inn plot token) to start placement.
+aetherhaven.common.statueNotLinked=Statue is not linked to a town.
+aetherhaven.common.ownerOnlyStatue=Only the town owner may use this statue.
+aetherhaven.common.debugCommandsDisabled=Aetherhaven debug commands are disabled (set DebugCommandsEnabled in config.json).
+aetherhaven.common.noPlayerId=No player id.
+aetherhaven.common.playersOnly=Players only.
+aetherhaven.common.invalidVillager=Invalid villager.
+
+# Town / charter
+aetherhaven.charter.alreadyInTown=You are already part of a town in this world. Leave it before founding a new one.
+aetherhaven.charter.townFounded=Town founded: {name}. The Village Elder has arrived. Use the charter to rename the town.
+aetherhaven.chartertown.info.notLinked=Charter is not linked to a town yet.
+aetherhaven.chartertown.info.invalidTownId=Invalid town id on charter.
+aetherhaven.chartertown.info.townDataMissing=Town data not found (see server log).
+aetherhaven.chartertown.townInfoBlock=Town name: {name}\nTown ID: {id}\nTier: {tier}\nTerritory (chunk radius): {radius}\nCharter at {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Town name cannot be empty.
+aetherhaven.chartertown.nameDuplicate=That name is already used by another town in this world.
+aetherhaven.chartertown.nameSaved=Town name saved: {name}
+
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=You do not own a town in this world.
+aetherhaven.town.resolve.noTownNamed=No town named "{name}" in this world.
+aetherhaven.town.resolve.ownerOrOpOnly=Only the town owner can do that (or an operator with permission).
+aetherhaven.town.resolve.notInTown=You are not in a town in this world.
+aetherhaven.town.resolve.nameOnlyForOwner=Only the town owner (or an operator) can use a town name here.
+aetherhaven.town.resolve.specifyTownName=Specify a town name, or use this from the town you own.
+aetherhaven.town.resolve.specifyTown=Specify a town name.
+aetherhaven.town.resolve.adminOtherTown=Only operators may target another player's town by name.
+aetherhaven.town.invite.err.emptyName=Enter a player name.
+aetherhaven.town.invite.err.targetOffline=Player "{name}" is not online in this world.
+aetherhaven.town.invite.err.cannotInviteSelf=You cannot invite yourself.
+aetherhaven.town.invite.err.alreadyInTown=That player is already in a town in this world.
+aetherhaven.town.invite.toTarget={inviter} invited you to join the town "{townDisplay}". Type /aetherhaven town accept {townDisplay}  or  /aetherhaven town decline {townDisplay}
+aetherhaven.town.invite.sent=Invite sent to {name}.
+aetherhaven.town.kick.err.mustBeOnline=Player must be online to kick by name.
+aetherhaven.town.kick.err.cannotRemoveOwner=Cannot remove the town owner.
+aetherhaven.town.kick.err.notMember=That player is not a member of this town.
+aetherhaven.town.kick.removed=Removed {name} from the town.
+aetherhaven.town.kick.removedYou=You were removed from the town "{town}".
+aetherhaven.town.kick.removedGeneric=Removed member from the town.
+aetherhaven.town.role.err.ownerAlwaysFull=The owner always has full permissions.
+aetherhaven.town.role.set=Set {name}'s role to {role}.
+aetherhaven.town.accept.err.noSuchTown=No town with that name.
+aetherhaven.town.accept.err.noInvite=You have no pending invite for that town.
+aetherhaven.town.accept.err.noInvites=You have no pending town invites.
+aetherhaven.town.accept.err.alreadyInTown=You are already in a town.
+aetherhaven.town.accept.joined=You joined "{town}".
+aetherhaven.town.decline.noPending=No pending invite for that town.
+aetherhaven.town.decline.noInvites=You have no pending town invites.
+aetherhaven.town.decline.done=Invite declined.
+aetherhaven.town.rolecmd.playerMustBeOnline=Player must be online.
+aetherhaven.town.rolecmd.roleInvalid=Role must be BUILD, QUEST, or BOTH.
+aetherhaven.town.leave.notInTown=You are not in a town.
+aetherhaven.town.leave.ownerCannotLeave=Owners cannot leave; transfer ownership is not implemented yet.
+aetherhaven.town.leave.notMember=You are not a member of this town.
+aetherhaven.town.leave.left=You left "{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BUILD
+aetherhaven.town.memberRole.QUEST=QUEST
+aetherhaven.town.memberRole.BOTH=BOTH
+
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Gold coins stored: {count}
+aetherhaven.ui.treasury.depositNoCoins=You have no gold coins to deposit.
+aetherhaven.ui.treasury.depositRemoveFailed=Could not remove coins from inventory.
+aetherhaven.ui.treasury.deposited=Deposited {count} gold coins.
+aetherhaven.ui.treasury.makeRoom=Make room in your inventory.
+aetherhaven.ui.treasury.couldNotAddCoins=Could not add coins.
+aetherhaven.ui.treasury.withdrew=Withdrew {count} gold coins.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Tax breakdown (loaded chunks only; unloaded residents contribute 0 until simulated):
+aetherhaven.ui.treasury.debug.titheNoHall=Tithe: no complete town hall in this town.
+aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 gold (no loaded residents, or 0 from policy math). Unload/needs/breakdown: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheApplied=Tithe applied: +{amount} gold to treasury (same rules as a morning collection).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine=  {name} ({kind}) comfort={comfort} gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=You need a town in this world to track quests.
+aetherhaven.ui.questJournal.noPermission=You do not have permission to manage town quests.
+aetherhaven.ui.questJournal.noActive=No active quests.
+aetherhaven.ui.questJournal.hint=Tap a quest for details. × removes it from your log (you can take it again from the giver).
+
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=Unknown dialogue: {id}
+aetherhaven.ui.dialogue.missingNode=Missing node: {id}
+
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Building
+aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
+aetherhaven.ui.plotConstruction.noConstruction=No construction is configured for this plot.
+aetherhaven.ui.plotConstruction.assignResidentHint=Assign a villager who lives here (completes their house quest when it matches).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Unassigned
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Could not load player data.
+aetherhaven.ui.plotConstruction.townDataMissing=Town data not found for this block.
+aetherhaven.ui.plotConstruction.clearedHome=Cleared home assignment.
+aetherhaven.ui.plotConstruction.updatedHome=Home assignment updated.
+aetherhaven.ui.plotConstruction.plotRemoved=Plot removed and plot token returned.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (have {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Could not load player data.
+
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Not enough life essence (need {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Could not remove life essence from inventory.
+
+# POI tool
+aetherhaven.poi.noPoiInRange=No POI within range of that block.
+aetherhaven.poi.noPoiSelected=No POI selected. Primary-click a POI first.
+aetherhaven.poi.selectedPoiGone=Selected POI no longer exists.
+aetherhaven.poi.moved=Moved POI to {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=No POI selected. Primary-click a POI block first.
+aetherhaven.poi.clearedInteractionTarget=Cleared interaction target; NPCs use the POI block center.
+aetherhaven.poi.setInteractionTarget=Set interaction target to {x}, {y}, {z}.
+aetherhaven.poi.selected=Selected POI {id} at {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=Target block must match expected type {type} for this POI.
+
+# Plots & placement
+aetherhaven.placement.movingBuilding=Moving building…
+aetherhaven.plotSign.placed=Plot sign placed.
+aetherhaven.plotSign.couldNotAdd=Could not add plot sign (inventory full?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Place the founder monument inside your town territory.
+aetherhaven.founder.cannotPlace=You cannot place the founder monument here.
+aetherhaven.founder.createFailed=Could not create the founder statue. The block was placed; break it to try again.
+
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Target is not an Aetherhaven town villager.
+aetherhaven.debug.autonomy.toggledOn=Autonomy debug ON (DisplayCustom + VisPath). AH overlay on nameplate.
+aetherhaven.debug.autonomy.toggledOff=Autonomy debug OFF for this villager.
+aetherhaven.debug.autonomy.state=Autonomy debug for this villager: {state}
+aetherhaven.debug.autonomy.cleared=Cleared Aetherhaven autonomy debug for this villager.
+aetherhaven.debug.on=ON
+aetherhaven.debug.off=OFF
+
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Reputation unchanged (already {value}).
+aetherhaven.debug.rep.set=Set reputation to {value} with crossed milestones queued for dialogue (if role resolved).
+aetherhaven.debug.rep.milestonesHeader=Reputation milestones (reward id, role, min rep, dialogue node):
+aetherhaven.debug.rep.milestoneLine=  {id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Granted reward {id}.
+aetherhaven.debug.rep.targetInvalid=Invalid villager.
+
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=which must be hunger, energy, or fun (values are 0..{max}).
+aetherhaven.debug.needs.elderNoTown=No town for you in this world (needed for Elder).
+aetherhaven.debug.needs.noElderUuid=Town has no saved elder UUID yet.
+aetherhaven.debug.needs.noMatch=No matching villager (try needs inspect for handle, Elder, or full uuid).
+aetherhaven.debug.needs.multipleMatch=Multiple NPCs matched that handle; use full uuid from inspect.
+aetherhaven.debug.needs.entityNotLoaded=Entity not loaded or has no VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Set {which}={value} on {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Villagers with needs (loaded chunks). Set with: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(no handle)
+
+# Plots list debug
+aetherhaven.debug.plots.forTown=Plots for town {id}:
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Aetherhaven towns in this world: {count}
+aetherhaven.towns.entry=  {name}  id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line=  {plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.poi.invalidTownUuid=Invalid town UUID: {raw}
+aetherhaven.debug.poi.noTownArg=You have no town in this world (use a town UUID argument).
+aetherhaven.debug.poi.listHeader=POIs for town {town} ({count}):
+aetherhaven.debug.poi.listEmpty=None registered for this town (complete a building or check pois.json).
+aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
+aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}
+
+# Quest / dialogue system messages
+aetherhaven.quest.started=Quest started: {name}
+aetherhaven.quest.completed=Quest completed: {name}
+aetherhaven.quest.abandoned=Quest abandoned: {name}
+aetherhaven.questdebug.granted=Granted active quest: {name}
+aetherhaven.questdebug.completed=Completed quest: {name}
+aetherhaven.questdebug.cleared=Cleared active quest: {name}
+aetherhaven.questdebug.statusHeader=-- quest status --
+aetherhaven.questdebug.statusActive=active:
+aetherhaven.questdebug.statusCompleted=completed:
+aetherhaven.questdebug.statusEmpty=(none)
+aetherhaven.questdebug.statusLine=  {name} ({id})
+aetherhaven.villager.noEntityIds=No villager entity IDs are registered for this town yet.
+aetherhaven.villager.listHeader=Town villagers: entity UUID, source, role if loaded (use UUID or role id with /aetherhaven reputation … and villager locate):
+aetherhaven.villager.listRow=  {uuid} | {note} | role: {role}
+aetherhaven.villager.locateNotLoaded=That villager is not loaded (try moving closer or loading chunks).
+aetherhaven.villager.locateNoTransform=No transform for that entity.
+aetherhaven.villager.locatePosition=Villager {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Teleport requires operator (OP group).
+aetherhaven.villager.teleported=Teleported.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=No item container at that block (chunk not loaded, filler/base mismatch, or not a container block).
+aetherhaven.debug.loot.bonusApplied=Aetherhaven bonus loot roll applied to this container (forced).
+aetherhaven.townsCommand.line=  {id}  name="{name}"  world={world}  owner={owner}  chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(none)
+aetherhaven.questdebug.statusActiveLine=Active: {list}
+aetherhaven.questdebug.statusActiveEmpty=Active: (none)
+aetherhaven.questdebug.statusCompletedLine=Completed: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Completed: (none)
+
 # Portals
 items.Aetherhaven_Portal_Exit.name=Aetherhaven Exit
 items.Aetherhaven_Portal_Exit.description=Use to return to the overworld.
@@ -44,6 +262,7 @@ aetherhaven.ui.villagerneeds.hunger=Hunger
 aetherhaven.ui.villagerneeds.energy=Energy
 aetherhaven.ui.villagerneeds.fun=Fun
 aetherhaven.ui.villagerneeds.villagers=Villagers
+aetherhaven.ui.villagerneeds.noResidentsTracked=No town residents tracked yet.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
 
@@ -78,7 +297,7 @@ aetherhaven.reputation.reward.elder.50=The charter is not carved in stone foreve
 aetherhaven.reputation.reward.elder.100=You have carried this place farther than anyone asked. Take this foundation stone: set a founder's monument where the charter allows. The treasury will remember.
 aetherhaven.reputation.reward.innkeeper.50=You have kept this hall fed and honest long enough that I will trust you with the big table. Here is the banquet pattern—craft it at the town planning desk when you have the schematic, then set it in town. When the table is ready, you can call the Ledger Supper too: bread, cheese, pie, and a tithe that leans kind for a week. I will watch the hall while you serve it.
 aetherhaven.reputation.reward.innkeeper.75=You have walked through enough long nights with us. When you lay out the Hearthglass Vigil, the town eats slower and kinder for a week. Fish, meat, vegetables, and a gentler fade for every need. That is how we keep each other standing.
-aetherhaven.reputation.reward.innkeeper.100=You and this town share a name now. Berrycircle Concord is the light plate circle: salad, fruit skewers, popcorn, and a toast that lands. Serve it once and they will remember you warmer. Once a week is enough magic for anyone.
+aetherhaven.reputation.reward.innkeeper.100=You and this town share a name now. Berrycircle Concord is the light plate circle: salad, fruit skewers, popcorn, and a toast that lands. Serve it once and they will remember you warmer.
 aetherhaven.reputation.reward.merchant.50=You have kept your word in bad weather and good. Here is the bench pattern. Craft it at your town planning desk once the schematic is yours. Appraisals are free on the bench; I still charge for mine.
 aetherhaven.reputation.reward.merchant.100=You have put enough gold through this ledger to earn a jeweler's corner. The pattern is yours. Build it at the town planning desk. Set your gem, your metal, and the life you pour in, and the piece will come out true.
 aetherhaven.reputation.reward.farmer.25=You have earned my trust in the rows. I sketched an iron sprinkler. Craft it at the farming bench when you have water essence and iron.
@@ -254,6 +473,8 @@ aetherhaven.ui.gaiaStatue.hint=Each revival consumes {cost} life essence.
 aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
 aetherhaven.ui.gaiaStatue.status.present=In town
 aetherhaven.ui.gaiaStatue.status.missing=Away
+aetherhaven.ui.gaiaStatue.reviveSuccess=A thread of life returns to the square.
+aetherhaven.ui.gaiaStatue.reviveFailed=The blessing did not take. Essence was returned.
 aetherhaven.ui.gaiaStatue.footer=Only the town owner may use this blessing. Missing villagers can be called back near the statue.
 aetherhaven.ui.gaiaStatue.revive=Revive
 
@@ -559,6 +780,295 @@ aetherhaven.feast.berrycircle.description=A circle of light plates: berry salad,
 aetherhaven.dialogue.blacksmith.repairGear=Fix my gear (pay in gold coins)
 aetherhaven.dialogue.blacksmith.openGeodes=Crack open geodes (5 gold each)
 aetherhaven.dialogue.merchant.appraiseJewelry=Appraise jewelry (10 gold each)
+
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=No grudge. If you still want smoke in town, ask again.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=Fair enough.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=When the shop is built, I will walk to the weapon bench and set up. Come find me there and we will call it done.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=I need to drop the quest.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=I will keep at it.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=Solid bench. The heat will come when the work does. We are not shipping ore across the map anymore. We use what this ground still gives.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=Hammer well.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=When the place is up, put my name on the block inside, then come find me. I want to hear you say it out loud.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=You'll hear it.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=Good. A roof that does not smell like someone else's stew.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=Enjoy it.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=The shop earns me blisters. I still want a roof I do not borrow. Same house plot as anyone. Register me when the walls are real.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=I'll stake a house.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=Another time.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=Iron does not rush. When the house is done, register me, then come talk. That is when we are even.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=Understood.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=Corin's boards are fine for sleep. They are lousy for a hammer swing. Stake a blacksmith shop with walls, a counter, and a weapon bench I can own. Craft the plot token at your planning desk, place it with your staff, and pay the sign. When it stands, meet me at the bench.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=We'll get it built.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=Not right now.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=Good. I will camp at the inn until the chimney tells the truth. Then find me at the bench and we will close the ledger.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=See you there.
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale. Wind is low enough that the forge might behave. Metal this far out has opinions. I am here to argue with it.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=You wanted to talk about a house.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=Your name is on the block. I figured you should hear it.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=The house is still in progress.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=Good to see you working the steel.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=The shop is built. The bench is ready.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=About the forge build...
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=You said you needed a real forge here.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=Mind your fingers.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Conditions lab. You should not see a hidden choice. You should see a greyed choice. Use the compound gates to continue.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=This choice is hidden (literal false).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=This should be greyed out.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(requires literal true)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pass compound: NOT false AND true
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR branch (true OR false)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Thanks for testing. Goodbye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Bye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Pick below to jump to farewell using a goto action instead of next.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=goto farewell
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=A node enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Give me 3 dirt, then continue.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Welcome to the Aetherhaven dialogue harness. This line stays long on purpose so you can check layout and scrolling. Your choices sit below the body text.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Continue to the conditions lab.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Leave (end with next null).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Leave (explicit close action).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=You can open the Kweebec merchant barter UI, or skip to stub actions.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Open Kweebec_Merchant barter shop
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Skip shop, go to stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub actions: unlock achievement and start quest should log until those systems exist.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Run unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=I'm Lyren. I speak for the charter we signed when we put this town on Orbis. The old cities are gone. What we have is this ground and the people who are already here, and more will come. Before we start laying new plots, I need you to learn the land around Aetherhaven: where it is flat enough to build, where water runs, where we might put fields or a commons later. Keep it practical. When you have looked the place over, come find me again.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=I'll scout the area and report back.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=You pick some up from the work we send you on, and from trading when someone is buying. The town purse is its own thing. Once the hall is built, the treasury lives in there. Use the block there to put coin in or pull it out if the charter says you may. After that, each morning a little gold flows into that treasury from the people who actually live here, not visitors passing through. How much depends on how they are holding up. If they are fed, rested, and in decent spirits, the pot does better. If they are stretched thin, it does worse. That keeps the commons honest.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Good to know. Thanks.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=There. A real inn for people who would otherwise sleep rough. Corin has the key. Go introduce yourself by the hearth. You earned more than thanks, but thanks is where I will start.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Happy to help.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=When the walls are up, use the management block and set me as resident. Then come find me. I want to hear you say it, not read it off a shelf.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=You will get both.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Then it is settled. I have a home under the same rules as everyone else. Thank you for seeing it through.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Welcome home, Lyren.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=The hall is up and the treasury can breathe. The charter gave us rules for the town; it did not give me a bed. I want the same small house anyone else gets. Take the token I offer, stake the plot with your staff, pay materials and the town share from the treasury, then put my name on the management shelf when it is built. I will not forget who made room for me.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=I'll handle it.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=I cannot commit to that yet.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Take the time you need. When the house is done, register me on the block, then come find me so we can finish this face to face.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=I'll come when it is done.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Good. Place the inn plot with your staff, pay the materials the sign lists, and finish the build. When the roof is on and the hearth is in, come tell me yourself. I will be waiting on word.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=I'll start as soon as I can.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=When the roof holds and the hearth is lit, come back and tell me in person. I am not rushing you, but I am not leaving until this town has a proper inn for anyone who needs a bed.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=I'll come back when it is ready.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=The charter still stands, and I still stand by it. We do not have spare shelter to send people to, so the first real building here has to be an inn: a roof, a hearth, and a door that stays open to travelers and to our own kin when the road is long. When you are ready to stake it, say so.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=I'm in. Let's raise the inn.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=The inn is still on my list. I wanted to check in.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=I'll leave you to it.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=The inn is finished. Corin should have what he needs.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=About the town hall.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=I put your name on the shelf. You should hear it from me first.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=Your house is not done yet, but I am on it.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=You mentioned wanting a house of your own.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=The town hall build is still underway.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=The town hall is up.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=How do people get gold coins around here?
+aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Use the town hall token with your staff, pay the materials, and build it out. When the hall is finished, tell me in person. I want to see your face when you say it is done.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=I'll tell you the moment it is finished.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=There. Aetherhaven has a proper town hall: records, treasury, and a room where we can meet without yelling across the square. That is what I needed from you.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Glad it helps.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=The inn is standing. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, and a treasury so shared coin can fund the rest of what we build. Stake the plot, pay what the sign asks in materials, and we finally have a place to meet as a whole town.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=I'll put the hall up.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=Not yet.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Stone and paperwork both take time. When the hall is finished, tell me. I will be here.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Still working on it.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=All right. If you still want rows here, say so.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=Will do.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=I will stay at the inn until the soil stops pretending it is floorboards. Then find me behind the bench with mud on my boots.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=See you there.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=When the plot is built, I will walk over to the farming bench and set up. Come find me there and we will call it done.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=I need to drop the quest.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=I will keep going.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=That plot will feed more than complaints. I will keep the beds turning while the town grows.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=Grow well.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=When the roof holds, register me on the block, then find me. I want to end this with both feet on my own floorboards.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=Count on it.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=Roots under my own rafters. That is the crop I wanted.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=Glad to hear it.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=The fields are honest work. I still want a door that is not the inn's. Same token as anyone. Build it, then list me on the shelf.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=I'll build it.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=Not yet.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=Wood and weather take their time. When the house is done, assign me, then come tell me the rest.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=I'll find you.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=I have been counting cracks in Corin's floorboards and dreaming of rows with my name on them. Stake a farm plot, fence it, set the bench. Craft the plot token at your planning desk, place it with your staff, pay the sign. I will meet you at the farming bench when the ground is ready.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=We'll get it built.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=Not right now.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_farmer.root.body=Irienne Mossmark. Dirt does not care who owned it yesterday. It cares what you feed it tomorrow. I slept enough nights on Corin's floor to know a warm bowl beats pride.
+aetherhaven.dialogue.aetherhaven_farmer.root.c0=You wanted to talk about your own place.
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=Your name is on the shelf. Figured you'd want to hear it.
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=Your house is still rising.
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=Good to see the farm feeding you.
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=The farm is ready when you are.
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=About the fields...
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=You said you could use a farmer in town.
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=Get some rest.
+aetherhaven.dialogue.aetherhaven_farmer.root.speaker=Irienne Mossmark
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=Then I will keep the kettle here until the plot is yours. Once my name is on the shelf, come find me. I want to shake your hand before we call it settled.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=Count on it.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=There. A hearth for strangers and a latch that belongs to me. That is worth more than the key looks.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=You earned it.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=I will pour soup for the whole town, but I would like a door that closes on my own mess. Same house token as anyone else. Build it, list me on the block when it stands.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=I'll get it built.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=Another time.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=Clay dries at its own pace. When the house is done, assign me on the shelf and come tell me so we can close the book on this.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=I'll let you know.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=We keep two spots for folk passing through. Traders, tinkers, anyone the town can stand behind. Turn them away and most nights they sleep under sky. That is not pride. That is math.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=Makes sense.
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=Step in out of the wind. I'm Corin. I keep this hearth, and while you are under our roof you are fed as well as we can manage. That still matters, even when the world outside forgets how.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=How do guest beds work?
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=You wanted a real room of your own.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=I listed you on the house shelf. Thought you should hear it from me.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Your house is still coming together. I am on it.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=I'll go stir the pot.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.root.body=Vex Sunderlane. I buy salvage, sell hope, and count coins twice. Your inn with a working hearth is already the best shop front for miles. Everything else is negotiation.
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=Browse your wares (gold coins).
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=You mentioned wanting a house.
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=I put you on the ledger. Paper should match reality.
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=Your house is still on the pile.
+aetherhaven.dialogue.aetherhaven_merchant.root.c5=Good to see you trading here.
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=The stall is up. Come see.
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=About the stall build...
+aetherhaven.dialogue.aetherhaven_merchant.root.c8=You asked me to find space for a stall.
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=Keep your purse closed in the wind.
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=Fair. If you change your mind, the offer stays.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=Thanks.
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=I will camp at Corin's until the stall is standing. Safer than a ditch, and the soup is better.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=See you when it is up.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=When the stall is built, I will head over and open shop. Come find me there and we will wrap this up.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=I need to drop the quest.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=I will keep working on it.
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=Stall looks honest. Trade will be thin at first. We grow it the slow way, same as everything worth keeping.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=Here's to that.
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=When the door swings, put my name on the block, then find me. I want the story, not just the ink.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=You will get both.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=There. A door that knows my knock. That beats a full strongbox.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=Enjoy it.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=Stock belongs on shelves. My boots belong somewhere dry. Same house token as the rest of town. Register me when it is built.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=I'll stake a house.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=Another time.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=Houses take seasons sometimes. Finish it, assign me, then come back and we will balance the ledger.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=I'll come back.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=I need a little roof and a counter I can lean on. You place it with your staff while you hold the token I hand you. Materials are your problem. I will run the counter when the nails hold.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=I'll build it.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=Not right now.
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Vex Sunderlane
+aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. I lead Gaia's rites for this town. The inn is a roof over my head, and I am grateful, but I cannot run services wedged between supper and card games. I need a real altar outside: paths, a few stools, and the statue where people can pray without holding their breath from the kitchen smoke.
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=You wanted to speak about a home.
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=You're on the shelf now. I thought you should know.
+aetherhaven.dialogue.aetherhaven_priestess.root.c2=The house is still unfinished.
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=How is the altar working out for you?
+aetherhaven.dialogue.aetherhaven_priestess.root.c4=The altar grounds are ready.
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=About the blessing...
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=You said you needed ground for Gaia.
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=I'll leave you to it.
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=No hard feelings. If you still want an altar in town, ask again.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=All right.
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=I will stay at the inn until the altar is built. Then find me at the statue and we will finish the blessing.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=I'll see you there.
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=When the altar stands, I will walk to the statue. Come find me there and we will call it done.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=I need to drop the quest.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=I'm still working on it.
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=The altar is finished. Thank you. I will keep the grounds tended and hold rites here as the town grows.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=Good luck with it.
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=When the house is up, put my name on the management block inside, then come find me. I want to hear you say it in person, not just read it off a list.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=You will.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=Good. A roof that is actually mine.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=Fair enough.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=The altar is for everyone. I still want a small house of my own, same as anyone else, so I am not living out of the inn hall forever. Build it from the usual token, then register me on the management block when it is up.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=I'll stake a house.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=Another time.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=These things take time. When the house is done, register me on the block, then come talk. That is when we are finished.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=I'll come back.
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Stake a Gaia altar plot: paths, stools, and the statue where I can stand and folk can sit. Craft the token at your planning desk, place it with your staff, and pay the sign. When it is built, meet me at the statue and we will bless it properly.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=We'll get it built.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Not right now.
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=I understand.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Elder Lyren
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=Good day, traveler. If you are not of this settlement, speak with the locals who belong here. My hands are full with our own work.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Farewell.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Villager
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=The hearth is warm, but the ledger is for townsfolk and their guests. Come back when you are invited.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Fair enough.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Innkeeper
 aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
 aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
 commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)

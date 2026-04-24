@@ -3,65 +3,108 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Garren Vale",
-      "text": "Garren Vale. Wind is low enough that the forge might behave. Metal this far out has opinions. I am here to argue with it.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.body",
       "choices": [
         {
           "text": "server.aetherhaven.dialogue.blacksmith.repairGear",
-          "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
-          "actions": [{ "type": "open_blacksmith_repair" }],
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_blacksmith_shop"
+          },
+          "actions": [
+            {
+              "type": "open_blacksmith_repair"
+            }
+          ],
           "next": null
         },
         {
           "text": "server.aetherhaven.dialogue.blacksmith.openGeodes",
-          "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
-          "actions": [{ "type": "open_geode_ui" }],
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_blacksmith_shop"
+          },
+          "actions": [
+            {
+              "type": "open_geode_ui"
+            }
+          ],
           "next": null
         },
         {
-          "text": "You wanted to talk about a house.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_blacksmith_shop" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_blacksmith_shop"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_blacksmith" },
-                    { "type": "town_quest_completed", "questId": "q_house_blacksmith" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_blacksmith"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_blacksmith"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "garren_house_offer"
         },
         {
-          "text": "Your name is on the block. I figured you should hear it.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_blacksmith" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_blacksmith"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_blacksmith" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_blacksmith"
+            }
+          ],
           "next": "garren_house_finish"
         },
         {
-          "text": "The house is still in progress.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_blacksmith" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_blacksmith"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -69,7 +112,7 @@
           "next": "garren_house_remind"
         },
         {
-          "text": "Good to see you working the steel.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c5",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_blacksmith_shop"
@@ -77,23 +120,37 @@
           "next": "garren_done"
         },
         {
-          "text": "The shop is built. The bench is ready.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_blacksmith_shop" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_blacksmith_shop" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_blacksmith_shop"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_blacksmith_shop"
+              }
             ]
           },
-          "actions": [{ "type": "complete_quest", "id": "q_blacksmith_shop" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_blacksmith_shop"
+            }
+          ],
           "next": "garren_done"
         },
         {
-          "text": "About the forge build...",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c7",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_blacksmith_shop" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_blacksmith_shop"
+              },
               {
                 "type": "not",
                 "condition": {
@@ -106,102 +163,185 @@
           "next": "garren_building"
         },
         {
-          "text": "You said you needed a real forge here.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c8",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_blacksmith_shop" } },
-              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_blacksmith_shop" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_blacksmith_shop"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_blacksmith_shop"
+                }
+              }
             ]
           },
           "next": "garren_quest_shop"
         },
         {
-          "text": "Mind your fingers.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.root.c9",
           "next": null
         }
       ]
     },
     "garren_quest_shop": {
-      "speaker": "Garren Vale",
-      "text": "Corin's boards are fine for sleep. They are lousy for a hammer swing. Stake a blacksmith shop with walls, a counter, and a weapon bench I can own. Craft the plot token at your planning desk, place it with your staff, and pay the sign. When it stands, meet me at the bench.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body",
       "choices": [
         {
-          "text": "We'll get it built.",
-          "actions": [{ "type": "start_quest", "id": "q_blacksmith_shop" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_blacksmith_shop"
+            }
+          ],
           "next": "garren_shop_accepted"
         },
         {
-          "text": "Not right now.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1",
           "next": null
         }
       ]
     },
     "garren_shop_accepted": {
-      "speaker": "Garren Vale",
-      "text": "Good. I will camp at the inn until the chimney tells the truth. Then find me at the bench and we will close the ledger.",
-      "choices": [{ "text": "See you there.", "next": null }]
-    },
-    "garren_building": {
-      "speaker": "Garren Vale",
-      "text": "When the shop is built, I will walk to the weapon bench and set up. Come find me there and we will call it done.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body",
       "choices": [
         {
-          "text": "I need to drop the quest.",
-          "actions": [{ "type": "abandon_quest", "id": "q_blacksmith_shop" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "garren_building": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_blacksmith_shop"
+            }
+          ],
           "next": "garren_abandoned"
         },
-        { "text": "I will keep at it.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1",
+          "next": null
+        }
       ]
     },
     "garren_abandoned": {
-      "speaker": "Garren Vale",
-      "text": "No grudge. If you still want smoke in town, ask again.",
-      "choices": [{ "text": "Fair enough.", "next": null }]
-    },
-    "garren_done": {
-      "speaker": "Garren Vale",
-      "text": "Solid bench. The heat will come when the work does. We are not shipping ore across the map anymore. We use what this ground still gives.",
-      "choices": [{ "text": "Hammer well.", "next": null }]
-    },
-    "garren_house_offer": {
-      "speaker": "Garren Vale",
-      "text": "The shop earns me blisters. I still want a roof I do not borrow. Same house plot as anyone. Register me when the walls are real.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body",
       "choices": [
         {
-          "text": "I'll stake a house.",
-          "actions": [{ "type": "start_quest", "id": "q_house_blacksmith" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "garren_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "garren_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_blacksmith"
+            }
+          ],
           "next": "garren_house_accepted"
         },
-        { "text": "Another time.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1",
+          "next": null
+        }
       ]
     },
     "garren_house_accepted": {
-      "speaker": "Garren Vale",
-      "text": "When the place is up, put my name on the block inside, then come find me. I want to hear you say it out loud.",
-      "choices": [{ "text": "You'll hear it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0",
+          "next": null
+        }
+      ]
     },
     "garren_house_remind": {
-      "speaker": "Garren Vale",
-      "text": "Iron does not rush. When the house is done, register me, then come talk. That is when we are even.",
-      "choices": [{ "text": "Understood.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0",
+          "next": null
+        }
+      ]
     },
     "garren_house_finish": {
-      "speaker": "Garren Vale",
-      "text": "Good. A roof that does not smell like someone else's stew.",
-      "choices": [{ "text": "Enjoy it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0",
+          "next": null
+        }
+      ]
     },
     "rep_reward_25": {
-      "speaker": "Garren Vale",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker",
       "text": "server.aetherhaven.reputation.reward.blacksmith.25",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_blacksmith_25" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_blacksmith_25"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     },
     "rep_reward_50": {
-      "speaker": "Garren Vale",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker",
       "text": "server.aetherhaven.reputation.reward.blacksmith.50",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_blacksmith_50" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_blacksmith_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     }
   }
 }

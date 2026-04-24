@@ -135,7 +135,7 @@ public final class PlotBuildingRelocation {
 
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.raw("Moving building…"));
+            pr.sendMessage(Message.translation("server.aetherhaven.placement.movingBuilding"));
         }
         return true;
     }

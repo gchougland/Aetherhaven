@@ -3,65 +3,110 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Vex Sunderlane",
-      "text": "Vex Sunderlane. I buy salvage, sell hope, and count coins twice. Your inn with a working hearth is already the best shop front for miles. Everything else is negotiation.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.body",
       "choices": [
         {
-          "text": "Browse your wares (gold coins).",
-          "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" },
-          "actions": [{ "type": "open_barter_shop", "shop": "Aetherhaven_Vex_Merchant" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c0",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_merchant_stall"
+          },
+          "actions": [
+            {
+              "type": "open_barter_shop",
+              "shop": "Aetherhaven_Vex_Merchant"
+            }
+          ],
           "next": null
         },
         {
           "text": "server.aetherhaven.dialogue.merchant.appraiseJewelry",
-          "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" },
-          "actions": [{ "type": "open_jewelry_appraisal", "chargeGold": true }],
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_merchant_stall"
+          },
+          "actions": [
+            {
+              "type": "open_jewelry_appraisal",
+              "chargeGold": true
+            }
+          ],
           "next": null
         },
         {
-          "text": "You mentioned wanting a house.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_merchant_stall" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_merchant_stall"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_merchant" },
-                    { "type": "town_quest_completed", "questId": "q_house_merchant" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_merchant"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_merchant"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "vex_house_offer"
         },
         {
-          "text": "I put you on the ledger. Paper should match reality.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_merchant" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_merchant"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_merchant" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_merchant"
+            }
+          ],
           "next": "vex_house_finish"
         },
         {
-          "text": "Your house is still on the pile.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_merchant" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_merchant"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -69,7 +114,7 @@
           "next": "vex_house_remind"
         },
         {
-          "text": "Good to see you trading here.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c5",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_merchant_stall"
@@ -77,23 +122,37 @@
           "next": "vex_done"
         },
         {
-          "text": "The stall is up. Come see.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_merchant_stall" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_market_stall" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_merchant_stall"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_market_stall"
+              }
             ]
           },
-          "actions": [{ "type": "complete_quest", "id": "q_merchant_stall" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_merchant_stall"
+            }
+          ],
           "next": "vex_done"
         },
         {
-          "text": "About the stall build...",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c7",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_merchant_stall" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_merchant_stall"
+              },
               {
                 "type": "not",
                 "condition": {
@@ -106,102 +165,185 @@
           "next": "vex_building"
         },
         {
-          "text": "You asked me to find space for a stall.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c8",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "not", "condition": { "type": "town_quest_completed", "questId": "q_merchant_stall" } },
-              { "type": "not", "condition": { "type": "town_quest_active", "questId": "q_merchant_stall" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_merchant_stall"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_merchant_stall"
+                }
+              }
             ]
           },
           "next": "vex_quest_stall"
         },
         {
-          "text": "Keep your purse closed in the wind.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c9",
           "next": null
         }
       ]
     },
     "vex_quest_stall": {
-      "speaker": "Vex Sunderlane",
-      "text": "I need a little roof and a counter I can lean on. You place it with your staff while you hold the token I hand you. Materials are your problem. I will run the counter when the nails hold.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body",
       "choices": [
         {
-          "text": "I'll build it.",
-          "actions": [{ "type": "start_quest", "id": "q_merchant_stall" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_merchant_stall"
+            }
+          ],
           "next": "vex_accepted"
         },
         {
-          "text": "Not right now.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1",
           "next": null
         }
       ]
     },
     "vex_accepted": {
-      "speaker": "Vex Sunderlane",
-      "text": "I will camp at Corin's until the stall is standing. Safer than a ditch, and the soup is better.",
-      "choices": [{ "text": "See you when it is up.", "next": null }]
-    },
-    "vex_building": {
-      "speaker": "Vex Sunderlane",
-      "text": "When the stall is built, I will head over and open shop. Come find me there and we will wrap this up.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body",
       "choices": [
         {
-          "text": "I need to drop the quest.",
-          "actions": [{ "type": "abandon_quest", "id": "q_merchant_stall" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_building": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_merchant_stall"
+            }
+          ],
           "next": "vex_abandoned"
         },
-        { "text": "I will keep working on it.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1",
+          "next": null
+        }
       ]
     },
     "vex_abandoned": {
-      "speaker": "Vex Sunderlane",
-      "text": "Fair. If you change your mind, the offer stays.",
-      "choices": [{ "text": "Thanks.", "next": null }]
-    },
-    "vex_done": {
-      "speaker": "Vex Sunderlane",
-      "text": "Stall looks honest. Trade will be thin at first. We grow it the slow way, same as everything worth keeping.",
-      "choices": [{ "text": "Here's to that.", "next": null }]
-    },
-    "vex_house_offer": {
-      "speaker": "Vex Sunderlane",
-      "text": "Stock belongs on shelves. My boots belong somewhere dry. Same house token as the rest of town. Register me when it is built.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body",
       "choices": [
         {
-          "text": "I'll stake a house.",
-          "actions": [{ "type": "start_quest", "id": "q_house_merchant" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "vex_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_merchant"
+            }
+          ],
           "next": "vex_house_accepted"
         },
-        { "text": "Another time.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1",
+          "next": null
+        }
       ]
     },
     "vex_house_accepted": {
-      "speaker": "Vex Sunderlane",
-      "text": "When the door swings, put my name on the block, then find me. I want the story, not just the ink.",
-      "choices": [{ "text": "You will get both.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0",
+          "next": null
+        }
+      ]
     },
     "vex_house_remind": {
-      "speaker": "Vex Sunderlane",
-      "text": "Houses take seasons sometimes. Finish it, assign me, then come back and we will balance the ledger.",
-      "choices": [{ "text": "I'll come back.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0",
+          "next": null
+        }
+      ]
     },
     "vex_house_finish": {
-      "speaker": "Vex Sunderlane",
-      "text": "There. A door that knows my knock. That beats a full strongbox.",
-      "choices": [{ "text": "Enjoy it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0",
+          "next": null
+        }
+      ]
     },
     "rep_reward_50": {
-      "speaker": "Vex Sunderlane",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker",
       "text": "server.aetherhaven.reputation.reward.merchant.50",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_50" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_merchant_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     },
     "rep_reward_100": {
-      "speaker": "Vex Sunderlane",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker",
       "text": "server.aetherhaven.reputation.reward.merchant.100",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_merchant_100" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_merchant_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     }
   }
 }

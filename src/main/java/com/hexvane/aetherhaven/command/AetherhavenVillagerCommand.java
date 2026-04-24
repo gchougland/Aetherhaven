@@ -29,6 +29,7 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -115,11 +116,11 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             Map<UUID, String> notes = new LinkedHashMap<>();
@@ -145,16 +146,19 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 }
             }
             if (notes.isEmpty()) {
-                playerRef.sendMessage(Message.raw("No villager entity IDs are registered for this town yet."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.noEntityIds"));
                 return;
             }
-            playerRef.sendMessage(Message.raw(
-                "Town villagers: entity UUID, source, role if loaded (use UUID or role id with /aetherhaven reputation … and villager locate):"
-            ));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.villager.listHeader"));
             for (Map.Entry<UUID, String> e : notes.entrySet()) {
                 UUID id = e.getKey();
                 String live = npcRoleIfLoaded(store, id);
-                playerRef.sendMessage(Message.raw("  " + id + " | " + e.getValue() + " | role: " + live));
+                playerRef.sendMessage(
+                    Message.translation("server.aetherhaven.villager.listRow")
+                        .param("uuid", id.toString())
+                        .param("note", e.getValue())
+                        .param("role", live)
+                );
             }
         }
     }
@@ -192,37 +196,45 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.raw("No town for you in this world."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.raw("You do not have quest permission in this town."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
                 return;
             }
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {
-                playerRef.sendMessage(Message.raw(target.error() != null ? target.error() : "Invalid villager."));
+                if (target.error() != null) {
+                    playerRef.sendMessage(Message.raw(target.error()));
+                } else {
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.common.invalidVillager"));
+                }
                 return;
             }
             UUID npcUuid = target.villagerUuid();
             Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(npcUuid);
             if (npcRef == null || !npcRef.isValid()) {
-                playerRef.sendMessage(Message.raw("That villager is not loaded (try moving closer or loading chunks)."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.locateNotLoaded"));
                 return;
             }
             TransformComponent npcTc = store.getComponent(npcRef, TransformComponent.getComponentType());
             if (npcTc == null) {
-                playerRef.sendMessage(Message.raw("No transform for that entity."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.locateNoTransform"));
                 return;
             }
             Vector3d p = npcTc.getPosition();
             NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
             String role = npc != null && npc.getRoleName() != null ? npc.getRoleName() : "?";
-            playerRef.sendMessage(Message.raw(
-                "Villager " + npcUuid + " (" + role + "): " + String.format("%.2f", p.x) + ", "
-                    + String.format("%.2f", p.y) + ", " + String.format("%.2f", p.z)
-            ));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.villager.locatePosition")
+                    .param("uuid", npcUuid.toString())
+                    .param("role", role)
+                    .param("x", String.format(Locale.US, "%.2f", p.x))
+                    .param("y", String.format(Locale.US, "%.2f", p.y))
+                    .param("z", String.format(Locale.US, "%.2f", p.z))
+            );
 
             boolean doTp =
                 context.provided(teleportFlag)
@@ -231,7 +243,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 return;
             }
             if (!PermissionsModule.get().getGroupsForUser(uc.getUuid()).contains(HytalePermissionsProvider.OP_GROUP)) {
-                playerRef.sendMessage(Message.raw("Teleport requires operator (OP group)."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.locateOpRequired"));
                 return;
             }
             HeadRotation npcHr = store.getComponent(npcRef, HeadRotation.getComponentType());
@@ -249,7 +261,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                     );
             }
             store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
-            playerRef.sendMessage(Message.raw("Teleported."));
+            playerRef.sendMessage(Message.translation("server.aetherhaven.villager.teleported"));
         }
     }
 }

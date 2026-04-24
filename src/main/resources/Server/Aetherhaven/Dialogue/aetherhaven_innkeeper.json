@@ -3,115 +3,205 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Corin Mosscup",
-      "text": "Step in out of the wind. I'm Corin. I keep this hearth, and while you are under our roof you are fed as well as we can manage. That still matters, even when the world outside forgets how.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.body",
       "choices": [
         {
-          "text": "How do guest beds work?",
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0",
           "next": "inn_explain_pool"
         },
         {
-          "text": "You wanted a real room of your own.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_inn"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_innkeeper" },
-                    { "type": "town_quest_completed", "questId": "q_house_innkeeper" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_innkeeper"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_innkeeper"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "corin_house_offer"
         },
         {
-          "text": "I listed you on the house shelf. Thought you should hear it from me.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_innkeeper" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_innkeeper"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_innkeeper" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_innkeeper"
+            }
+          ],
           "next": "corin_house_finish"
         },
         {
-          "text": "Your house is still coming together. I am on it.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_innkeeper" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_innkeeper"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
           "whenFalse": "hide",
           "next": "corin_house_remind"
         },
-        { "text": "I'll go stir the pot.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4",
+          "next": null
+        }
       ]
     },
     "inn_explain_pool": {
-      "speaker": "Corin Mosscup",
-      "text": "We keep two spots for folk passing through. Traders, tinkers, anyone the town can stand behind. Turn them away and most nights they sleep under sky. That is not pride. That is math.",
-      "choices": [{ "text": "Makes sense.", "next": null }]
-    },
-    "corin_house_offer": {
-      "speaker": "Corin Mosscup",
-      "text": "I will pour soup for the whole town, but I would like a door that closes on my own mess. Same house token as anyone else. Build it, list me on the block when it stands.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body",
       "choices": [
         {
-          "text": "I'll get it built.",
-          "actions": [{ "type": "start_quest", "id": "q_house_innkeeper" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0",
+          "next": null
+        }
+      ]
+    },
+    "corin_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_innkeeper"
+            }
+          ],
           "next": "corin_house_accepted"
         },
-        { "text": "Another time.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1",
+          "next": null
+        }
       ]
     },
     "corin_house_accepted": {
-      "speaker": "Corin Mosscup",
-      "text": "Then I will keep the kettle here until the plot is yours. Once my name is on the shelf, come find me. I want to shake your hand before we call it settled.",
-      "choices": [{ "text": "Count on it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0",
+          "next": null
+        }
+      ]
     },
     "corin_house_remind": {
-      "speaker": "Corin Mosscup",
-      "text": "Clay dries at its own pace. When the house is done, assign me on the shelf and come tell me so we can close the book on this.",
-      "choices": [{ "text": "I'll let you know.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0",
+          "next": null
+        }
+      ]
     },
     "corin_house_finish": {
-      "speaker": "Corin Mosscup",
-      "text": "There. A hearth for strangers and a latch that belongs to me. That is worth more than the key looks.",
-      "choices": [{ "text": "You earned it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0",
+          "next": null
+        }
+      ]
     },
     "rep_reward_50": {
-      "speaker": "Corin Mosscup",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker",
       "text": "server.aetherhaven.reputation.reward.innkeeper.50",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_50" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_innkeeper_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     },
     "rep_reward_75": {
-      "speaker": "Corin Mosscup",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker",
       "text": "server.aetherhaven.reputation.reward.innkeeper.75",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_75" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_innkeeper_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     },
     "rep_reward_100": {
-      "speaker": "Corin Mosscup",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker",
       "text": "server.aetherhaven.reputation.reward.innkeeper.100",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_innkeeper_100" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_innkeeper_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     }
   }
 }

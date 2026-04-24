@@ -30,7 +30,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
     private static boolean requirePlayerDebug(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (!context.isPlayer()) {
-            context.sendMessage(Message.raw("Players only."));
+            context.sendMessage(Message.translation("server.aetherhaven.common.playersOnly"));
             return false;
         }
         Ref<EntityStore> pref = context.senderAsPlayerRef();
@@ -50,7 +50,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
         @Nonnull Ref<EntityStore> ref
     ) {
         if (store.getComponent(ref, TownVillagerBinding.getComponentType()) == null) {
-            context.sendMessage(Message.raw("Target is not an Aetherhaven town villager."));
+            context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.notVillager"));
             return false;
         }
         return true;
@@ -83,11 +83,11 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
                 flags.add(RoleDebugFlags.VisPath);
                 store.tryRemoveComponent(ref, Nameplate.getComponentType());
                 npc.setRoleDebugFlags(flags);
-                context.sendMessage(Message.raw("Autonomy debug ON (DisplayCustom + VisPath). AH overlay on nameplate."));
+                context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.toggledOn"));
             } else {
                 store.tryRemoveComponent(ref, VillagerAutonomyDebugTag.getComponentType());
                 VillagerAutonomyDebug.clearAutonomyDebugForNpc(ref, store, npc);
-                context.sendMessage(Message.raw("Autonomy debug OFF for this villager."));
+                context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.toggledOff"));
             }
             store.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
@@ -113,7 +113,15 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
                 return;
             }
             boolean on = VillagerAutonomyDebug.isEnabled(store, ref);
-            context.sendMessage(Message.raw("Autonomy debug for this villager: " + (on ? "ON" : "OFF")));
+            context.sendMessage(
+                Message.translation("server.aetherhaven.debug.autonomy.state")
+                    .param(
+                        "state",
+                        Message.translation(
+                            on ? "server.aetherhaven.debug.on" : "server.aetherhaven.debug.off"
+                        )
+                    )
+            );
         }
     }
 
@@ -138,7 +146,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
             }
             store.tryRemoveComponent(ref, VillagerAutonomyDebugTag.getComponentType());
             VillagerAutonomyDebug.clearAutonomyDebugForNpc(ref, store, npc);
-            context.sendMessage(Message.raw("Cleared Aetherhaven autonomy debug for this villager."));
+            context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.cleared"));
             store.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
     }

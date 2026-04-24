@@ -3,9 +3,14 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Elder Lyren",
-      "text": "I'm Lyren. I speak for the charter we signed when we put this town on Orbis. The old cities are gone. What we have is this ground and the people who are already here, and more will come. Before we start laying new plots, I need you to learn the land around Aetherhaven: where it is flat enough to build, where water runs, where we might put fields or a commons later. Keep it practical. When you have looked the place over, come find me again.",
-      "choices": [{ "text": "I'll scout the area and report back.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.c0",
+          "next": null
+        }
+      ]
     }
   }
 }

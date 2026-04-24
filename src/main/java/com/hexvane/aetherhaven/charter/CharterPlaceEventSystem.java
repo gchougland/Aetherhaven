@@ -72,7 +72,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         if (tm.findTownForPlayerInWorld(owner) != null) {
             event.setCancelled(true);
-            pr.sendMessage(Message.raw("You are already part of a town in this world. Leave it before founding a new one."));
+            pr.sendMessage(Message.translation("server.aetherhaven.charter.alreadyInTown"));
             return;
         }
 
@@ -133,7 +133,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         playerRef.sendMessage(
-            Message.raw("Town founded: " + record.getDisplayName() + ". The Village Elder has arrived. Use the charter to rename the town.")
+            Message.translation("server.aetherhaven.charter.townFounded").param("name", record.getDisplayName())
         );
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
     }

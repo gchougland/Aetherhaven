@@ -3,9 +3,19 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Innkeeper",
-      "text": "The hearth is warm, but the ledger is for townsfolk and their guests. Come back when you are invited.",
-      "choices": [{ "text": "Fair enough.", "next": null, "actions": [{ "type": "close" }] }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_visitor_inn.root.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0",
+          "next": null,
+          "actions": [
+            {
+              "type": "close"
+            }
+          ]
+        }
+      ]
     }
   }
 }

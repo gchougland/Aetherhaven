@@ -76,12 +76,12 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         TownRecord town = tm.findTownContainingBlock(world.getName(), pos.getX(), pos.getZ());
         if (town == null) {
             event.setCancelled(true);
-            pr.sendMessage(Message.raw("Place the founder monument inside your town territory."));
+            pr.sendMessage(Message.translation("server.aetherhaven.founder.inTerritory"));
             return;
         }
         if (!town.getOwnerUuid().equals(uuidComp.getUuid()) && !town.playerHasBuildPermission(uuidComp.getUuid())) {
             event.setCancelled(true);
-            pr.sendMessage(Message.raw("You cannot place the founder monument here."));
+            pr.sendMessage(Message.translation("server.aetherhaven.founder.cannotPlace"));
             return;
         }
         Ref<EntityStore> placingEntityRef = archetypeChunk.getReferenceTo(index);
@@ -138,7 +138,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
                 statueRotation
             );
         if (statueUuid == null) {
-            pr.sendMessage(Message.raw("Could not create the founder statue. The block was placed; break it to try again."));
+            pr.sendMessage(Message.translation("server.aetherhaven.founder.createFailed"));
             return;
         }
         cs.putComponent(

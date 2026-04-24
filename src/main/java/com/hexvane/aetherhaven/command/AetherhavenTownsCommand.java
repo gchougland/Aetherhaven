@@ -32,25 +32,19 @@ public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         int n = tm.allTowns().size();
-        playerRef.sendMessage(Message.raw("Aetherhaven towns in this world: " + n));
+        playerRef.sendMessage(
+            Message.translation("server.aetherhaven.towns.inWorldCount").param("count", String.valueOf(n))
+        );
         for (TownRecord t : tm.allTowns()) {
             playerRef.sendMessage(
-                Message.raw(
-                    "  "
-                        + t.getDisplayName()
-                        + "  id="
-                        + t.getTownId()
-                        + " owner="
-                        + t.getOwnerUuid()
-                        + " charter="
-                        + t.getCharterX()
-                        + ","
-                        + t.getCharterY()
-                        + ","
-                        + t.getCharterZ()
-                        + " plots="
-                        + t.getPlotInstances().size()
-                )
+                Message.translation("server.aetherhaven.towns.entry")
+                    .param("name", t.getDisplayName())
+                    .param("id", t.getTownId().toString())
+                    .param("owner", t.getOwnerUuid().toString())
+                    .param("cx", String.valueOf(t.getCharterX()))
+                    .param("cy", String.valueOf(t.getCharterY()))
+                    .param("cz", String.valueOf(t.getCharterZ()))
+                    .param("plots", String.valueOf(t.getPlotInstances().size()))
             );
         }
     }

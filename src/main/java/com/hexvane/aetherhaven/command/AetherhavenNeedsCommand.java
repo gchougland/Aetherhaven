@@ -8,6 +8,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
@@ -17,6 +18,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
@@ -48,10 +50,13 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
             Store<EntityStore> es = world.getEntityStore().getStore();
             world.execute(
                 () -> {
+                    String lang = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+                    String resolvedNo =
+                        I18nModule.get().getMessage(lang, "server.aetherhaven.debug.needs.noHandle");
+                    final String noHandle =
+                        resolvedNo != null && !resolvedNo.isEmpty() ? resolvedNo : "(no handle)";
                     playerRef.sendMessage(
-                        Message.raw(
-                            "Villagers with needs (loaded chunks). Set with: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>"
-                        )
+                        Message.translation("server.aetherhaven.debug.needs.inspectIntro")
                     );
                     es.forEachChunk(
                         Query.and(VillagerNeeds.getComponentType(), UUIDComponent.getComponentType()),
@@ -62,23 +67,20 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                                 if (vn == null || id == null) {
                                     continue;
                                 }
-                                AetherhavenVillagerHandle h = archetypeChunk.getComponent(i, AetherhavenVillagerHandle.getComponentType());
-                                String handle = h != null && !h.getHandle().isEmpty() ? h.getHandle() : "(no handle)";
+                                AetherhavenVillagerHandle h = archetypeChunk.getComponent(
+                                    i,
+                                    AetherhavenVillagerHandle.getComponentType()
+                                );
+                                String handleStr =
+                                    h != null && !h.getHandle().isEmpty() ? h.getHandle() : noHandle;
                                 playerRef.sendMessage(
-                                    Message.raw(
-                                        handle
-                                            + " | uuid="
-                                            + id.getUuid()
-                                            + " | hunger="
-                                            + String.format("%.1f", vn.getHunger())
-                                            + " energy="
-                                            + String.format("%.1f", vn.getEnergy())
-                                            + " fun="
-                                            + String.format("%.1f", vn.getFun())
-                                            + " (0.."
-                                            + (int) VillagerNeeds.MAX
-                                            + ")"
-                                    )
+                                    Message.translation("server.aetherhaven.debug.needs.inspectLine")
+                                        .param("handle", handleStr)
+                                        .param("uuid", id.getUuid().toString())
+                                        .param("hunger", String.format(Locale.US, "%.1f", vn.getHunger()))
+                                        .param("energy", String.format(Locale.US, "%.1f", vn.getEnergy()))
+                                        .param("fun", String.format(Locale.US, "%.1f", vn.getFun()))
+                                        .param("max", String.valueOf((int) VillagerNeeds.MAX))
                                 );
                             }
                         }
@@ -119,7 +121,10 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
             String which = context.get(whichArg).trim().toLowerCase();
             float v = Math.max(0f, Math.min(VillagerNeeds.MAX, context.get(valueArg)));
             if (!which.equals("hunger") && !which.equals("energy") && !which.equals("fun")) {
-                playerRef.sendMessage(Message.raw("which must be hunger, energy, or fun (values are 0.." + (int) VillagerNeeds.MAX + ")."));
+                playerRef.sendMessage(
+                    Message.translation("server.aetherhaven.debug.needs.whichInvalid")
+                        .param("max", String.valueOf((int) VillagerNeeds.MAX))
+                );
                 return;
             }
             Store<EntityStore> es = world.getEntityStore().getStore();
@@ -129,19 +134,19 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                         VillagerNeedsTargetResolver.resolve(targetToken, store, ref, world, plugin, es);
                     switch (res.problem()) {
                         case NO_TOWN -> {
-                            playerRef.sendMessage(Message.raw("No town for you in this world (needed for Elder)."));
+                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.elderNoTown"));
                             return;
                         }
                         case NO_ELDER -> {
-                            playerRef.sendMessage(Message.raw("Town has no saved elder UUID yet."));
+                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.noElderUuid"));
                             return;
                         }
                         case NOT_FOUND -> {
-                            playerRef.sendMessage(Message.raw("No matching villager (try needs inspect for handle, Elder, or full uuid)."));
+                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.noMatch"));
                             return;
                         }
                         case AMBIGUOUS -> {
-                            playerRef.sendMessage(Message.raw("Multiple NPCs matched that handle; use full uuid from inspect."));
+                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.multipleMatch"));
                             return;
                         }
                         default -> {
@@ -184,11 +189,20 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                         }
                     );
                     if (foundRef.get() == null || updated.get() == null) {
-                        playerRef.sendMessage(Message.raw("Entity not loaded or has no VillagerNeeds: " + target));
+                        playerRef.sendMessage(
+                            Message.translation("server.aetherhaven.debug.needs.entityNotLoaded")
+                                .param("id", String.valueOf(target))
+                        );
                         return;
                     }
                     es.putComponent(foundRef.get(), VillagerNeeds.getComponentType(), updated.get());
-                    playerRef.sendMessage(Message.raw("Set " + which + "=" + v + " on " + targetToken + " (" + target + ")"));
+                    playerRef.sendMessage(
+                        Message.translation("server.aetherhaven.debug.needs.set")
+                            .param("which", which)
+                            .param("value", String.valueOf(v))
+                            .param("label", targetToken)
+                            .param("id", String.valueOf(target))
+                    );
                 }
             );
         }

@@ -3,104 +3,168 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "Elder Lyren",
-      "text": "The charter still stands, and I still stand by it. We do not have spare shelter to send people to, so the first real building here has to be an inn: a roof, a hearth, and a door that stays open to travelers and to our own kin when the road is long. When you are ready to stake it, say so.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.body",
       "choices": [
         {
-          "text": "I'm in. Let's raise the inn.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c0",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
+              {
+                "type": "aetherhaven_has_town"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_build_inn" },
-                    { "type": "town_quest_completed", "questId": "q_build_inn" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_build_inn"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_build_inn"
+                    }
                   ]
                 }
               }
             ]
           },
-          "actions": [{ "type": "start_quest", "id": "q_build_inn" }],
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_build_inn"
+            }
+          ],
           "next": "quest_accepted"
         },
         {
-          "text": "The inn is still on my list. I wanted to check in.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_active", "questId": "q_build_inn" }
+              {
+                "type": "aetherhaven_has_town"
+              },
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_inn"
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "remind_inn"
         },
         {
-          "text": "The inn is finished. Corin should have what he needs.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_active", "questId": "q_build_inn" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_inn" }
+              {
+                "type": "aetherhaven_has_town"
+              },
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_inn"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_inn"
+              }
             ]
           },
           "whenFalse": "hide",
           "actions": [
-            { "type": "complete_quest", "id": "q_build_inn" },
-            { "type": "give_item", "item": "Aetherhaven_Quest_Journal", "count": 1 }
+            {
+              "type": "complete_quest",
+              "id": "q_build_inn"
+            },
+            {
+              "type": "give_item",
+              "item": "Aetherhaven_Quest_Journal",
+              "count": 1
+            }
           ],
           "next": "inn_done"
         },
         {
-          "text": "About the town hall.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_completed", "questId": "q_build_inn" },
+              {
+                "type": "aetherhaven_has_town"
+              },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_inn"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_build_town_hall" },
-                    { "type": "town_quest_completed", "questId": "q_build_town_hall" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_build_town_hall"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_build_town_hall"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "town_hall_offer"
         },
         {
-          "text": "I put your name on the shelf. You should hear it from me first.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_elder" },
-              { "type": "town_npc_home_resident_house" }
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_elder"
+              },
+              {
+                "type": "town_npc_home_resident_house"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_house_elder" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_house_elder"
+            }
+          ],
           "next": "lyren_house_finish"
         },
         {
-          "text": "Your house is not done yet, but I am on it.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c5",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "town_quest_active", "questId": "q_house_elder" },
+              {
+                "type": "town_quest_active",
+                "questId": "q_house_elder"
+              },
               {
                 "type": "not",
-                "condition": { "type": "town_npc_home_resident_house" }
+                "condition": {
+                  "type": "town_npc_home_resident_house"
+                }
               }
             ]
           },
@@ -108,145 +172,270 @@
           "next": "lyren_house_remind"
         },
         {
-          "text": "You mentioned wanting a house of your own.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_completed", "questId": "q_build_town_hall" },
+              {
+                "type": "aetherhaven_has_town"
+              },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_build_town_hall"
+              },
               {
                 "type": "not",
                 "condition": {
                   "type": "or",
                   "conditions": [
-                    { "type": "town_quest_active", "questId": "q_house_elder" },
-                    { "type": "town_quest_completed", "questId": "q_house_elder" }
+                    {
+                      "type": "town_quest_active",
+                      "questId": "q_house_elder"
+                    },
+                    {
+                      "type": "town_quest_completed",
+                      "questId": "q_house_elder"
+                    }
                   ]
                 }
               },
-              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
             ]
           },
           "whenFalse": "hide",
           "next": "lyren_house_offer"
         },
         {
-          "text": "The town hall build is still underway.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c7",
           "condition": {
             "type": "and",
-            "conditions": [{ "type": "town_quest_active", "questId": "q_build_town_hall" }]
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_town_hall"
+              }
+            ]
           },
           "whenFalse": "hide",
           "next": "town_hall_remind"
         },
         {
-          "text": "The town hall is up.",
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c8",
           "condition": {
             "type": "and",
             "conditions": [
-              { "type": "aetherhaven_has_town" },
-              { "type": "town_quest_active", "questId": "q_build_town_hall" },
-              { "type": "town_has_complete_plot", "constructionId": "plot_town_hall" }
+              {
+                "type": "aetherhaven_has_town"
+              },
+              {
+                "type": "town_quest_active",
+                "questId": "q_build_town_hall"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_town_hall"
+              }
             ]
           },
           "whenFalse": "hide",
-          "actions": [{ "type": "complete_quest", "id": "q_build_town_hall" }],
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_build_town_hall"
+            }
+          ],
           "next": "town_hall_done"
         },
         {
-          "text": "How do people get gold coins around here?",
-          "condition": { "type": "aetherhaven_has_town" },
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c9",
+          "condition": {
+            "type": "aetherhaven_has_town"
+          },
           "whenFalse": "hide",
           "next": "gold_explainer"
         },
-        { "text": "I'll leave you to it.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.root.c10",
+          "next": null
+        }
       ]
     },
     "quest_accepted": {
-      "speaker": "Elder Lyren",
-      "text": "Good. Place the inn plot with your staff, pay the materials the sign lists, and finish the build. When the roof is on and the hearth is in, come tell me yourself. I will be waiting on word.",
-      "choices": [{ "text": "I'll start as soon as I can.", "next": null }]
-    },
-    "remind_inn": {
-      "speaker": "Elder Lyren",
-      "text": "When the roof holds and the hearth is lit, come back and tell me in person. I am not rushing you, but I am not leaving until this town has a proper inn for anyone who needs a bed.",
-      "choices": [{ "text": "I'll come back when it is ready.", "next": null }]
-    },
-    "inn_done": {
-      "speaker": "Elder Lyren",
-      "text": "There. A real inn for people who would otherwise sleep rough. Corin has the key. Go introduce yourself by the hearth. You earned more than thanks, but thanks is where I will start.",
-      "choices": [{ "text": "Happy to help.", "next": null }]
-    },
-    "lyren_house_offer": {
-      "speaker": "Elder Lyren",
-      "text": "The hall is up and the treasury can breathe. The charter gave us rules for the town; it did not give me a bed. I want the same small house anyone else gets. Take the token I offer, stake the plot with your staff, pay materials and the town share from the treasury, then put my name on the management shelf when it is built. I will not forget who made room for me.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body",
       "choices": [
         {
-          "text": "I'll handle it.",
-          "actions": [{ "type": "start_quest", "id": "q_house_elder" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "remind_inn": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0",
+          "next": null
+        }
+      ]
+    },
+    "inn_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "lyren_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_house_elder"
+            }
+          ],
           "next": "lyren_house_accepted"
         },
-        { "text": "I cannot commit to that yet.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1",
+          "next": null
+        }
       ]
     },
     "lyren_house_accepted": {
-      "speaker": "Elder Lyren",
-      "text": "When the walls are up, use the management block and set me as resident. Then come find me. I want to hear you say it, not read it off a shelf.",
-      "choices": [{ "text": "You will get both.", "next": null }]
-    },
-    "lyren_house_remind": {
-      "speaker": "Elder Lyren",
-      "text": "Take the time you need. When the house is done, register me on the block, then come find me so we can finish this face to face.",
-      "choices": [{ "text": "I'll come when it is done.", "next": null }]
-    },
-    "lyren_house_finish": {
-      "speaker": "Elder Lyren",
-      "text": "Then it is settled. I have a home under the same rules as everyone else. Thank you for seeing it through.",
-      "choices": [{ "text": "Welcome home, Lyren.", "next": null }]
-    },
-    "town_hall_offer": {
-      "speaker": "Elder Lyren",
-      "text": "The inn is standing. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, and a treasury so shared coin can fund the rest of what we build. Stake the plot, pay what the sign asks in materials, and we finally have a place to meet as a whole town.",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body",
       "choices": [
         {
-          "text": "I'll put the hall up.",
-          "actions": [{ "type": "start_quest", "id": "q_build_town_hall" }],
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "lyren_house_remind": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0",
+          "next": null
+        }
+      ]
+    },
+    "lyren_house_finish": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0",
+          "next": null
+        }
+      ]
+    },
+    "town_hall_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_build_town_hall"
+            }
+          ],
           "next": "town_hall_accepted"
         },
-        { "text": "Not yet.", "next": null }
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1",
+          "next": null
+        }
       ]
     },
     "town_hall_accepted": {
-      "speaker": "Elder Lyren",
-      "text": "Use the town hall token with your staff, pay the materials, and build it out. When the hall is finished, tell me in person. I want to see your face when you say it is done.",
-      "choices": [{ "text": "I'll tell you the moment it is finished.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0",
+          "next": null
+        }
+      ]
     },
     "town_hall_remind": {
-      "speaker": "Elder Lyren",
-      "text": "Stone and paperwork both take time. When the hall is finished, tell me. I will be here.",
-      "choices": [{ "text": "Still working on it.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0",
+          "next": null
+        }
+      ]
     },
     "town_hall_done": {
-      "speaker": "Elder Lyren",
-      "text": "There. Aetherhaven has a proper town hall: records, treasury, and a room where we can meet without yelling across the square. That is what I needed from you.",
-      "choices": [{ "text": "Glad it helps.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0",
+          "next": null
+        }
+      ]
     },
     "gold_explainer": {
-      "speaker": "Elder Lyren",
-      "text": "You pick some up from the work we send you on, and from trading when someone is buying. The town purse is its own thing. Once the hall is built, the treasury lives in there. Use the block there to put coin in or pull it out if the charter says you may. After that, each morning a little gold flows into that treasury from the people who actually live here, not visitors passing through. How much depends on how they are holding up. If they are fed, rested, and in decent spirits, the pot does better. If they are stretched thin, it does worse. That keeps the commons honest.",
-      "choices": [{ "text": "Good to know. Thanks.", "next": null }]
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0",
+          "next": null
+        }
+      ]
     },
     "rep_reward_50": {
-      "speaker": "Elder Lyren",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker",
       "text": "server.aetherhaven.reputation.reward.elder.50",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_elder_50" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_elder_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     },
     "rep_reward_100": {
-      "speaker": "Elder Lyren",
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker",
       "text": "server.aetherhaven.reputation.reward.elder.100",
-      "actions": [{ "type": "reputation_reward_grant", "rewardId": "rep_elder_100" }],
-      "choices": [{ "text": "server.aetherhaven.reputation.reward.continue", "next": "root" }]
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_elder_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
     }
   }
 }

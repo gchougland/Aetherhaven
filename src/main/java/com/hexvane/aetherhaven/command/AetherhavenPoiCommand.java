@@ -56,7 +56,9 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                     try {
                         townUuid = UUID.fromString(raw.trim());
                     } catch (IllegalArgumentException e) {
-                        playerRef.sendMessage(Message.raw("Invalid town UUID: " + raw));
+                        playerRef.sendMessage(
+                            Message.translation("server.aetherhaven.debug.poi.invalidTownUuid").param("raw", raw)
+                        );
                         return;
                     }
                 }
@@ -69,37 +71,32 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                 TownRecord tr =
                     AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
                 if (tr == null) {
-                    playerRef.sendMessage(Message.raw("You have no town in this world (use a town UUID argument)."));
+                    playerRef.sendMessage(Message.translation("server.aetherhaven.debug.poi.noTownArg"));
                     return;
                 }
                 townUuid = tr.getTownId();
             }
             List<PoiEntry> list = reg.listByTown(townUuid);
-            playerRef.sendMessage(Message.raw("POIs for town " + townUuid + " (" + list.size() + "):"));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.debug.poi.listHeader")
+                    .param("town", townUuid.toString())
+                    .param("count", String.valueOf(list.size()))
+            );
             if (list.isEmpty()) {
-                playerRef.sendMessage(Message.raw("None registered for this town (complete a building or check pois.json)."));
+                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.poi.listEmpty"));
                 return;
             }
             for (PoiEntry e : list) {
                 playerRef.sendMessage(
-                    Message.raw(
-                        "  "
-                            + e.getX()
-                            + ","
-                            + e.getY()
-                            + ","
-                            + e.getZ()
-                            + " kind="
-                            + e.getInteractionKind()
-                            + " blockTypeId="
-                            + e.getBlockTypeId()
-                            + " tags="
-                            + e.getTags()
-                            + " cap="
-                            + e.getCapacity()
-                            + " plot="
-                            + e.getPlotId()
-                    )
+                    Message.translation("server.aetherhaven.debug.poi.listLine")
+                        .param("x", String.valueOf(e.getX()))
+                        .param("y", String.valueOf(e.getY()))
+                        .param("z", String.valueOf(e.getZ()))
+                        .param("kind", String.valueOf(e.getInteractionKind()))
+                        .param("block", e.getBlockTypeId() != null ? e.getBlockTypeId() : "")
+                        .param("tags", e.getTags() != null ? e.getTags().toString() : "")
+                        .param("cap", String.valueOf(e.getCapacity()))
+                        .param("plot", e.getPlotId() != null ? e.getPlotId().toString() : "")
                 );
             }
         }
@@ -123,27 +120,21 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                 return;
             }
             List<PoiEntry> all = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin).allEntries();
-            playerRef.sendMessage(Message.raw("All POIs in world registry (" + all.size() + "):"));
+            playerRef.sendMessage(
+                Message.translation("server.aetherhaven.debug.poi.dumpHeader")
+                    .param("count", String.valueOf(all.size()))
+            );
             for (PoiEntry e : all) {
                 playerRef.sendMessage(
-                    Message.raw(
-                        "  town="
-                            + e.getTownId()
-                            + " "
-                            + e.getX()
-                            + ","
-                            + e.getY()
-                            + ","
-                            + e.getZ()
-                            + " kind="
-                            + e.getInteractionKind()
-                            + " blockTypeId="
-                            + e.getBlockTypeId()
-                            + " tags="
-                            + e.getTags()
-                            + " plot="
-                            + e.getPlotId()
-                    )
+                    Message.translation("server.aetherhaven.debug.poi.dumpLine")
+                        .param("town", e.getTownId() != null ? e.getTownId().toString() : "")
+                        .param("x", String.valueOf(e.getX()))
+                        .param("y", String.valueOf(e.getY()))
+                        .param("z", String.valueOf(e.getZ()))
+                        .param("kind", String.valueOf(e.getInteractionKind()))
+                        .param("block", e.getBlockTypeId() != null ? e.getBlockTypeId() : "")
+                        .param("tags", e.getTags() != null ? e.getTags().toString() : "")
+                        .param("plot", e.getPlotId() != null ? e.getPlotId().toString() : "")
                 );
             }
         }
