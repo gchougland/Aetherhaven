@@ -32,9 +32,11 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
+import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
@@ -121,6 +123,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
+    private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -177,6 +180,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public VillagerScheduleRegistry getVillagerScheduleRegistry() {
         return villagerScheduleRegistry;
+    }
+
+    @Nonnull
+    public VillagerDefinitionCatalog getVillagerDefinitionCatalog() {
+        return villagerDefinitionCatalog;
     }
 
     @Nonnull
@@ -540,15 +548,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.config.get();
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
-        this.dialogueResolver.registerKind("merchant", "aetherhaven_merchant");
-        this.dialogueResolver.registerKind("blacksmith", "aetherhaven_blacksmith");
-        this.dialogueResolver.registerKind("farmer", "aetherhaven_farmer");
-        this.dialogueResolver.registerKind("priestess", "aetherhaven_priestess");
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
     /**
-     * Reloads {@code config.json} from disk and refreshes JSON-backed asset catalogs (constructions, dialogue, quests, villager schedules).
+     * Reloads {@code config.json} from disk and refreshes JSON-backed asset catalogs (constructions, dialogue, quests, villager definitions, villager schedules).
      */
     public void reloadConfigsAndAssetCatalogs() {
         this.config.load().join();
@@ -557,16 +561,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     private void reloadAetherhavenAssetCatalogs() {
         ClassLoader cl = this.getClassLoader();
+        this.villagerDefinitionCatalog = VillagerDefinitionCatalog.loadFromAssetPacksOrClasspath(cl);
+        ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
+        this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         LOGGER.atInfo().log(
-            "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerSchedules=loaded)",
+            "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),
             this.dialogueCatalog.all().keySet(),
-            this.questCatalog.all().keySet()
+            this.questCatalog.all().keySet(),
+            this.villagerDefinitionCatalog.allByNpcRoleId().keySet()
         );
     }
 

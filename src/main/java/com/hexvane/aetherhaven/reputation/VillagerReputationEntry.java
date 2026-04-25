@@ -29,6 +29,17 @@ public final class VillagerReputationEntry {
     @SerializedName("migratedInnkeeperRewardsV2")
     private boolean migratedInnkeeperRewardsV2;
 
+    @Nullable
+    @SerializedName("lastGiftGameEpochDay")
+    private Long lastGiftGameEpochDay;
+
+    @Nullable
+    @SerializedName("giftWeekBlockId")
+    private Long giftWeekBlockId;
+
+    @SerializedName("giftsThisWeekBlock")
+    private int giftsThisWeekBlock;
+
     public int getReputation() {
         return reputation;
     }
@@ -59,6 +70,32 @@ public final class VillagerReputationEntry {
 
     public void setLastTalkGameEpochDay(@Nullable Long lastTalkGameEpochDay) {
         this.lastTalkGameEpochDay = lastTalkGameEpochDay;
+    }
+
+    @Nullable
+    public Long getLastGiftGameEpochDay() {
+        return lastGiftGameEpochDay;
+    }
+
+    public void setLastGiftGameEpochDay(@Nullable Long lastGiftGameEpochDay) {
+        this.lastGiftGameEpochDay = lastGiftGameEpochDay;
+    }
+
+    @Nullable
+    public Long getGiftWeekBlockId() {
+        return giftWeekBlockId;
+    }
+
+    public void setGiftWeekBlockId(@Nullable Long giftWeekBlockId) {
+        this.giftWeekBlockId = giftWeekBlockId;
+    }
+
+    public int getGiftsThisWeekBlock() {
+        return giftsThisWeekBlock;
+    }
+
+    public void setGiftsThisWeekBlock(int giftsThisWeekBlock) {
+        this.giftsThisWeekBlock = Math.max(0, giftsThisWeekBlock);
     }
 
     public void migrateIfNeeded() {
@@ -92,6 +129,9 @@ public final class VillagerReputationEntry {
         if (!migratedInnkeeperRewardsV2) {
             migrateInnkeeperRewardsV2();
             migratedInnkeeperRewardsV2 = true;
+        }
+        if (giftsThisWeekBlock < 0) {
+            giftsThisWeekBlock = 0;
         }
     }
 

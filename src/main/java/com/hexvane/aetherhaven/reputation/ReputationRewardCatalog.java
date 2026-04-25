@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.reputation;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -12,10 +13,12 @@ import javax.annotation.Nullable;
 /**
  * Milestone rewards when reputation crosses thresholds. {@link #rewardId()} is stored in town data;
  * {@link #dialogueNodeId()} must exist in that villager's dialogue JSON.
+ * <p>
+ * Definitions are loaded from {@code Server/Aetherhaven/Villagers/} on catalog reload, with a legacy Java fallback
+ * if no milestones are present in JSON.
  */
 public final class ReputationRewardCatalog {
-    private static final List<ReputationRewardDefinition> ALL = List.of(
-        // Elder — charter amendments table recipe; founder monument item
+    private static final List<ReputationRewardDefinition> LEGACY = List.of(
         new ReputationRewardDefinition(
             "rep_elder_50",
             AetherhavenConstants.ELDER_NPC_ROLE_ID,
@@ -34,7 +37,6 @@ public final class ReputationRewardCatalog {
             "rep_reward_100",
             null
         ),
-        // Innkeeper — 50: banquet table recipe + Steward's Ledger feast (one dialogue); 75/100: single feast each
         new ReputationRewardDefinition(
             "rep_innkeeper_50",
             AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
@@ -62,7 +64,6 @@ public final class ReputationRewardCatalog {
             "rep_reward_100",
             null
         ),
-        // Merchant — appraisal bench recipe at 50 (crafting knowledge)
         new ReputationRewardDefinition(
             "rep_merchant_50",
             AetherhavenConstants.NPC_MERCHANT,
@@ -72,7 +73,6 @@ public final class ReputationRewardCatalog {
             "rep_reward_50",
             AetherhavenConstants.ITEM_APPRAISAL_BENCH
         ),
-        // Merchant — jewelry crafting bench at 100 (crafting knowledge)
         new ReputationRewardDefinition(
             "rep_merchant_100",
             AetherhavenConstants.NPC_MERCHANT,
@@ -82,7 +82,6 @@ public final class ReputationRewardCatalog {
             "rep_reward_100",
             AetherhavenConstants.ITEM_JEWELRY_CRAFTING_BENCH
         ),
-        // Farmer — sprinkler recipe unlocks (crafting knowledge); no item grant
         new ReputationRewardDefinition(
             "rep_farmer_25",
             AetherhavenConstants.NPC_FARMER,
@@ -119,7 +118,6 @@ public final class ReputationRewardCatalog {
             "rep_reward_100",
             "Aetherhaven_Sprinkler_Adamantite"
         ),
-        // Blacksmith
         new ReputationRewardDefinition(
             "rep_blacksmith_25",
             AetherhavenConstants.NPC_BLACKSMITH,
@@ -140,19 +138,45 @@ public final class ReputationRewardCatalog {
         )
     );
 
+    private static volatile List<ReputationRewardDefinition> activeDefinitions = LEGACY;
     private static final Map<String, ReputationRewardDefinition> BY_ID = new ConcurrentHashMap<>();
 
     static {
-        for (ReputationRewardDefinition d : ALL) {
-            BY_ID.put(d.rewardId(), d);
-        }
+        rebuildById(LEGACY);
     }
 
     private ReputationRewardCatalog() {}
 
+    /**
+     * Rebuilds in-memory rep definitions from the villager catalog. Falls back to the legacy list when the merged list
+     * is empty.
+     */
+    public static void refreshFromVillagerCatalog(@Nullable VillagerDefinitionCatalog villagerCatalog) {
+        if (villagerCatalog == null) {
+            activeDefinitions = LEGACY;
+            rebuildById(LEGACY);
+            return;
+        }
+        List<ReputationRewardDefinition> fromData = villagerCatalog.allReputationMilestones();
+        if (fromData.isEmpty()) {
+            activeDefinitions = LEGACY;
+            rebuildById(LEGACY);
+            return;
+        }
+        activeDefinitions = List.copyOf(fromData);
+        rebuildById(fromData);
+    }
+
+    private static void rebuildById(@Nonnull List<ReputationRewardDefinition> list) {
+        BY_ID.clear();
+        for (ReputationRewardDefinition d : list) {
+            BY_ID.put(d.rewardId(), d);
+        }
+    }
+
     @Nonnull
     public static List<ReputationRewardDefinition> allDefinitions() {
-        return ALL;
+        return activeDefinitions;
     }
 
     @Nullable
@@ -164,7 +188,7 @@ public final class ReputationRewardCatalog {
     public static List<ReputationRewardDefinition> forRoleSorted(@Nonnull String npcRoleName) {
         String r = npcRoleName.trim();
         List<ReputationRewardDefinition> out = new ArrayList<>();
-        for (ReputationRewardDefinition d : ALL) {
+        for (ReputationRewardDefinition d : activeDefinitions) {
             if (r.equals(d.roleId())) {
                 out.add(d);
             }

@@ -1,0 +1,21 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Top;
+  Anchor: (Bottom: 10);
+  Label #Section {
+    Anchor: (Top: 4, Bottom: 6);
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, RenderBold: true, FontSize: 12);
+    Text: "";
+  }
+  ItemGrid #IconGrid {
+    Anchor: (Top: 2, Bottom: 0);
+    SlotsPerRow: 6;
+    Style: (
+      SlotSize: 40,
+      SlotIconSize: 40,
+      SlotSpacing: 6,
+      SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+    );
+  }
+}

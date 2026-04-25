@@ -1,0 +1,137 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@GiftHistoryBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@GiftHistoryCycleStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+$C.@PageOverlay {  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 520);
+
+        #Title {
+          $C.@Title {
+            @Text = %server.aetherhaven.ui.giftHistory.title;
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 8);
+            TextButton #GiftHistoryBack {
+              Style: @GiftHistoryBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: 40, Height: 40, Right: 10);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.giftHistory.backTooltip;
+            }
+          }
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 10);
+
+            Group {
+              LayoutMode: Top;
+              Anchor: (Width: 120, Right: 12);
+              AssetImage #Portrait {
+                Anchor: (Width: 96, Height: 96, Bottom: 6);
+                FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+              }
+              Label #VillagerName {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true, RenderBold: true);
+                Text: "";
+              }
+              Label #GiftWeekLine {
+                Visible: false;
+                Anchor: (Top: 2);
+                Style: (...$C.@DefaultLabelStyle, TextColor: #9a8c78, FontSize: 12, Wrap: true);
+                Text: "";
+              }
+            }
+
+            Group {
+              LayoutMode: Top;
+              FlexWeight: 1;
+              Group #GiftListPanel {
+                LayoutMode: Top;
+                Anchor: (Height: 320, Bottom: 0);
+                Label #EmptyHint {
+                  Visible: false;
+                  Anchor: (Top: 0, Left: 0, Right: 0, Height: 320);
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #8a7a60, Wrap: true, VerticalAlignment: Center, HorizontalAlignment: Center);
+                  Text: %server.aetherhaven.ui.giftHistory.empty;
+                }
+                Group #ListScroll {
+                  LayoutMode: TopScrolling;
+                  ScrollbarStyle: $C.@DefaultScrollbarStyle;
+                  Visible: false;
+                  Anchor: (Top: 0, Left: 0, Right: 0, Height: 320, Bottom: 0);
+
+                  Group #Rows {
+                    LayoutMode: Top;
+                  }
+                }
+              }
+            }
+          }
+
+          Group #GiftCycleRow {
+            LayoutMode: Left;
+            Anchor: (Top: 8);
+            Visible: false;
+            TextButton #GiftCyclePrev {
+              Style: @GiftHistoryBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: 40, Height: 40, Right: 6);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.giftHistory.cyclePrevTooltip;
+            }
+            TextButton #GiftCycleNext {
+              Style: @GiftHistoryCycleStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: 40, Height: 40, Right: 0);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.giftHistory.cycleNextTooltip;
+            }
+          }
+        }
+      }
+    }
+  }
+}

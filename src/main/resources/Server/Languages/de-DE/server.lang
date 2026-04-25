@@ -178,6 +178,12 @@ aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
 aetherhaven.debug.rep.granted=Gewährte Belohnung {id}.
 aetherhaven.debug.rep.targetInvalid=Ungültiger Dorfbewohner.
 
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Geschenklimit in {entries} Spieler–Bewohner-Zeilen in {towns} Stadt/Dörfern in dieser Welt zurückgesetzt.
+aetherhaven.debug.gift.unknownRole=Unbekannte Bewohnerrolle: {role}
+aetherhaven.debug.gift.noGiftLists=Rolle {role} hat keine giftLoves, giftLikes oder giftDislikes in den Daten.
+aetherhaven.debug.gift.fillDone={added} Geschenkprotokollzeile(n) für {role} hinzugefügt (übersprungen, wenn bereits eine Zeile für Gegenstand und Reaktionsstufe existiert).
+
 # === Debug: villager needs ===
 # Needs debug
 aetherhaven.debug.needs.whichInvalid=Das muss Hunger, Energie oder Spaß sein (Werte sind 0..{max}).
@@ -287,10 +293,34 @@ aetherhaven.ui.villagerneeds.fun=Spaß
 aetherhaven.ui.villagerneeds.villagers=Dorfbewohner
 aetherhaven.ui.villagerneeds.noResidentsTracked=Es wurden noch keine Stadtbewohner erfasst.
 aetherhaven.ui.villagerneeds.rescueTooltip=Teleportiert den ausgewählten Bewohner an einen Ort neben Ihnen und löscht seinen aktuellen Weg und seine Aktivität, sodass er sich bewegen und ein neues Ziel auswählen kann. Verwenden Sie dies, wenn ein Dorfbewohner nicht weiterkommt.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Gegenstände, die Sie diesem Bewohner gegeben haben, nach Reaktion gruppiert, und Ihr wöchentliches Geschenklimit.
+aetherhaven.ui.giftHistory.title=Gegebene Geschenke
+aetherhaven.ui.giftHistory.backTooltip=Zurück zu Bedarfsübersicht
+aetherhaven.ui.giftHistory.empty=Sie haben diesem Bewohner noch keine Geschenke gegeben; es gibt nichts anzuzeigen.
+aetherhaven.ui.giftHistory.section.love=Geliebt
+aetherhaven.ui.giftHistory.section.like=Gefällt
+aetherhaven.ui.giftHistory.section.neutral=Neutral
+aetherhaven.ui.giftHistory.section.dislike=Abgelehnt
+aetherhaven.ui.giftHistory.giftsThisWeek=Geschenke diese Woche: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Vorheriger Stadtbewohner
+aetherhaven.ui.giftHistory.cycleNextTooltip=Nächster Stadtbewohner
+aetherhaven.dialogue.gift.disabled.daily=Heute schon ein Geschenk gegeben
+aetherhaven.dialogue.gift.disabled.weekly=Diese Woche schon zwei Geschenke gegeben
+aetherhaven.dialogue.gift.offer=Geschenk anbieten
+aetherhaven.dialogue.gift.confirmBody=Den Gegenstand in der aktiven Hotbar (1) als Geschenk abgeben?
+aetherhaven.dialogue.gift.confirmYes=Ja, abgeben
+aetherhaven.dialogue.gift.confirmNo=Lieber nicht
+aetherhaven.dialogue.gift.back=Alles klar
+aetherhaven.dialogue.gift.fail.visitor=Nur Dorfbewohner können solche Geschenke annehmen.
+aetherhaven.dialogue.gift.fail.emptyHand=Halte zuerst einen Gegenstand in der Hotbar.
+aetherhaven.dialogue.gift.fail.dailyLimit=Du hast dieser Person heute schon ein Geschenk gegeben.
+aetherhaven.dialogue.gift.fail.weeklyLimit=Dein wöchentliches Limit für Geschenke an diese Person ist erreicht.
+aetherhaven.dialogue.gift.fail.generic=Das Geschenk geht gerade nicht.
 aetherhaven.ui.villagerneeds.rescueDone=Der ausgewählte Bewohner wurde zu Ihnen verschoben und seine Routine wurde zurückgesetzt.
 aetherhaven.ui.villagerneeds.rescueNotTownResident=Dieser Bewohner gehört nicht zu dieser Stadt.
 aetherhaven.ui.reputation.label=Ruf
 aetherhaven.reputation.dailyTalkGain=+{amount} Ruf (tägliche Begrüßung)
+aetherhaven.reputation.giftRepChange={amount} Ruf (Geschenk)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Satzungsänderungen
@@ -782,6 +812,10 @@ commands.aetherhaven.villager.uuid.desc=UUID der Dorfbewohner-NPC-Entität
 commands.aetherhaven.villager.target.desc=UUID der Dorfbewohner-Entität oder NPC-Rollen-ID in Ihrer Stadt (z. B. Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=wahr, um sich zum Dorfbewohner zu teleportieren (nur Operatoren); oder verwenden Sie stattdessen --tp
 commands.aetherhaven.villager.tp_flag.desc=Zum Dorfbewohner teleportieren (nur Operatoren; dasselbe wie Wahrgeben)
+commands.aetherhaven.gift.desc=Debug: Geschenklimit zurücksetzen oder Geschenkverlauf auffüllen (erfordert DebugCommandsEnabled)
+commands.aetherhaven.gift.resetLimits.desc=Setzt tägliche/wöchentliche Geschenkgrenzen für alle Spieler und alle Dorfbewohner in jeder Stadt in dieser Welt zurück
+commands.aetherhaven.gift.fillHistory.desc=Pro Lieblings/Like/Abneigung-Gegenstand eine Protokollzeile für eine Rolle (Ihre Stadt) hinzufügen, damit der Verlauf Inhalt hat (Debug)
+commands.aetherhaven.gift.roleId.desc=NPC-Rollen-ID (z. B. Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Debug: Dorfbewohner-Autonomie-Overlay (erfordert DebugCommandsEnabled)
 commands.aetherhaven.debug_autonomy.toggle.desc=Schalten Sie das Autonomie-Debugging für einen Stadtbewohner um (schauen Sie sich den NPC an oder verwenden Sie --ray).

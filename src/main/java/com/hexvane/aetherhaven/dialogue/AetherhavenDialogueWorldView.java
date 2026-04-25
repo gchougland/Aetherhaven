@@ -4,10 +4,15 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
+import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -147,6 +152,83 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean playerHoldsItemInActiveHotbar(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String itemId, int minCount
+    ) {
+        if (store.getComponent(playerRef, Player.getComponentType()) == null) {
+            return false;
+        }
+        InventoryComponent.Hotbar hotbar = store.getComponent(
+            playerRef, InventoryComponent.Hotbar.getComponentType()
+        );
+        ItemStack s = hotbar != null ? hotbar.getActiveItem() : null;
+        if (ItemStack.isEmpty(s)) {
+            return false;
+        }
+        int need = Math.max(1, minCount);
+        return itemId.trim().equals(s.getItemId()) && s.getQuantity() >= need;
+    }
+
+    @Override
+    public boolean playerHoldsAnyItemInActiveHotbar(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        if (store.getComponent(playerRef, Player.getComponentType()) == null) {
+            return false;
+        }
+        InventoryComponent.Hotbar hotbar = store.getComponent(
+            playerRef, InventoryComponent.Hotbar.getComponentType()
+        );
+        return hotbar != null && !ItemStack.isEmpty(hotbar.getActiveItem());
+    }
+
+    @Override
+    public boolean villagerGiftAllowed(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (store.getComponent(playerRef, UUIDComponent.getComponentType()) == null) {
+            return false;
+        }
+        TownRecord town = townForVillagerGift(playerRef, store, npcRef);
+        return VillagerGiftService.canGift(playerRef, store, town, npcRef).allowed;
+    }
+
+    @Override
+    @Nullable
+    public Message villagerGiftBlockMessage(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (store.getComponent(playerRef, UUIDComponent.getComponentType()) == null) {
+            return null;
+        }
+        TownRecord town = townForVillagerGift(playerRef, store, npcRef);
+        return VillagerGiftService.giftBlockMessageForDialogue(playerRef, store, town, npcRef);
+    }
+
+    @Nullable
+    private TownRecord townForVillagerGift(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return null;
+        }
+        if (npcRef != null && npcRef.isValid()) {
+            TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (b != null) {
+                TownRecord town = tm.getTown(b.getTownId());
+                if (town == null || !town.hasMemberOrOwner(pu.getUuid())) {
+                    return null;
+                }
+                return town;
+            }
+            return tm.findTownForPlayerInWorld(pu.getUuid());
+        }
+        return tm.findTownForPlayerInWorld(pu.getUuid());
     }
 
     @Override

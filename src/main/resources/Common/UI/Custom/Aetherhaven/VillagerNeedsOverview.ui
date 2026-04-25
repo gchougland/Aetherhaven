@@ -43,6 +43,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@GiftHistoryButtonStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../gift-box.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../gift-box.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../gift-box.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../gift-box.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 $C.@PageOverlay {
   LayoutMode: Top;
@@ -140,6 +147,15 @@ $C.@PageOverlay {
                 LayoutMode: Left;
                 Anchor: (Bottom: 6);
                 Group { FlexWeight: 1; }
+                TextButton #GiftHistoryButton {
+                  Style: @GiftHistoryButtonStyle;
+                  TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                  Anchor: (Right: 12, Height: 40, Width: 40);
+                  Padding: (Full: 0);
+                  Text: ".";
+                  Visible: false;
+                  TooltipText: %server.aetherhaven.ui.villagerneeds.giftHistoryTooltip;
+                }
                 TextButton #RescueTeleportButton {
                   Style: @RescueTeleportButtonStyle;
                   TextTooltipStyle: $C.@DefaultTextTooltipStyle;

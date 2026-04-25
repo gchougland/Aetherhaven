@@ -136,6 +136,14 @@ public final class TownRecord {
     private Map<String, Map<String, VillagerReputationEntry>> playerVillagerReputation;
 
     /**
+     * Key: {@code NPCEntity} role name (e.g. {@code Aetherhaven_Merchant}). Town-wide gift history; use
+     * {@link VillagerGiftLogEntry#getGiverPlayerUuid()} to show the viewing player's entries.
+     */
+    @Nullable
+    @SerializedName("villagerGiftLogByRoleId")
+    private Map<String, List<VillagerGiftLogEntry>> villagerGiftLogByRoleId;
+
+    /**
      * Last known town resident NPCs (role id, binding kind, job plot, entity UUID) for revival UI and saves
      * when entities are unloaded or missing.
      */
@@ -278,6 +286,7 @@ public final class TownRecord {
         if (residentNpcRecords == null) {
             residentNpcRecords = new ArrayList<>();
         }
+        migrateVillagerGiftLogIfNeeded();
         migrateVillagerReputationIfNeeded();
         migrateTownSocialFieldsIfNeeded();
         migrateFounderMonumentCountIfNeeded();
@@ -319,6 +328,12 @@ public final class TownRecord {
         }
     }
 
+    public void migrateVillagerGiftLogIfNeeded() {
+        if (villagerGiftLogByRoleId == null) {
+            villagerGiftLogByRoleId = new LinkedHashMap<>();
+        }
+    }
+
     public void migrateVillagerReputationIfNeeded() {
         if (playerVillagerReputation == null) {
             playerVillagerReputation = new LinkedHashMap<>();
@@ -342,6 +357,27 @@ public final class TownRecord {
             playerVillagerReputation = new LinkedHashMap<>();
         }
         return playerVillagerReputation;
+    }
+
+    @Nonnull
+    public Map<String, List<VillagerGiftLogEntry>> getVillagerGiftLogByRoleId() {
+        migrateVillagerGiftLogIfNeeded();
+        return villagerGiftLogByRoleId;
+    }
+
+    /** @param npcRoleId {@link com.hypixel.hytale.server.npc.entities.NPCEntity#getRoleName} */
+    public void appendVillagerGiftLog(@Nonnull String npcRoleId, @Nonnull VillagerGiftLogEntry entry) {
+        migrateVillagerGiftLogIfNeeded();
+        String k = npcRoleId.trim();
+        if (k.isEmpty() || villagerGiftLogByRoleId == null) {
+            return;
+        }
+        List<VillagerGiftLogEntry> list = villagerGiftLogByRoleId.computeIfAbsent(k, x -> new ArrayList<>());
+        list.add(entry);
+        int cap = 500;
+        while (list.size() > cap) {
+            list.remove(0);
+        }
     }
 
     @Nonnull

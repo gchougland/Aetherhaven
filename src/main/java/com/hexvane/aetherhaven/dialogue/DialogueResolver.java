@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -34,6 +36,12 @@ public final class DialogueResolver {
     private final Map<String, String> kindToVisitorTree = new HashMap<>();
 
     public DialogueResolver() {
+        applyLegacyDefaultKindMaps();
+    }
+
+    private void applyLegacyDefaultKindMaps() {
+        kindToTree.clear();
+        kindToVisitorTree.clear();
         kindToTree.put(KIND_TEST_VILLAGER, TREE_TEST);
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
@@ -44,6 +52,26 @@ public final class DialogueResolver {
         kindToVisitorTree.put("blacksmith", VISITOR_DEFAULT);
         kindToVisitorTree.put("farmer", VISITOR_DEFAULT);
         kindToVisitorTree.put("priestess", VISITOR_DEFAULT);
+    }
+
+    /** Called on asset catalog reload. Falls back to {@link #applyLegacyDefaultKindMaps} when the catalog is empty. */
+    public void reloadFromVillagerCatalog(@Nullable VillagerDefinitionCatalog catalog) {
+        if (catalog == null || catalog.allByNpcRoleId().isEmpty()) {
+            applyLegacyDefaultKindMaps();
+            return;
+        }
+        kindToTree.clear();
+        kindToVisitorTree.clear();
+        for (VillagerDefinition d : catalog.allByNpcRoleId().values()) {
+            String k = d.getDialogueVillagerKind();
+            if (k.isEmpty()) {
+                continue;
+            }
+            String res = d.getResidentTreeId() != null && !d.getResidentTreeId().isBlank() ? d.getResidentTreeId() : TREE_TEST;
+            String vis = d.getVisitorTreeId() != null && !d.getVisitorTreeId().isBlank() ? d.getVisitorTreeId() : VISITOR_DEFAULT;
+            kindToTree.put(k, res);
+            kindToVisitorTree.put(k, vis);
+        }
     }
 
     @Nonnull

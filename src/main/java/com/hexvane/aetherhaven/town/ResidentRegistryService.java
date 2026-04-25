@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -259,6 +261,13 @@ public final class ResidentRegistryService {
     }
 
     private static int revivalRowSortOrder(@Nonnull ResidentNpcRecord r) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            VillagerDefinition d = plugin.getVillagerDefinitionCatalog().byNpcRoleId(r.getNpcRoleId());
+            if (d != null) {
+                return d.getUiSortOrder();
+            }
+        }
         String kind = r.getKind();
         if (TownVillagerBinding.KIND_ELDER.equals(kind)) {
             return 0;

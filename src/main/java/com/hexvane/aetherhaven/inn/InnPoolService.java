@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.villager.data.InnPoolEntry;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -59,19 +60,28 @@ public final class InnPoolService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int MAX_VISITORS = 2;
 
-    private static final List<String> POOL_ROLE_IDS = List.of(
-        AetherhavenConstants.NPC_MERCHANT,
-        AetherhavenConstants.NPC_BLACKSMITH,
-        AetherhavenConstants.NPC_FARMER,
-        AetherhavenConstants.NPC_PRIESTESS
+    private static final List<InnPoolEntry> LEGACY_INN_POOL = List.of(
+        new InnPoolEntry(AetherhavenConstants.NPC_MERCHANT, TownVillagerBinding.KIND_VISITOR_MERCHANT, 0),
+        new InnPoolEntry(AetherhavenConstants.NPC_BLACKSMITH, TownVillagerBinding.KIND_VISITOR_BLACKSMITH, 1),
+        new InnPoolEntry(AetherhavenConstants.NPC_FARMER, TownVillagerBinding.KIND_VISITOR_FARMER, 2),
+        new InnPoolEntry(AetherhavenConstants.NPC_PRIESTESS, TownVillagerBinding.KIND_VISITOR_PRIESTESS, 3)
     );
 
-    private static final List<String> POOL_KINDS = List.of(
-        TownVillagerBinding.KIND_VISITOR_MERCHANT,
-        TownVillagerBinding.KIND_VISITOR_BLACKSMITH,
-        TownVillagerBinding.KIND_VISITOR_FARMER,
-        TownVillagerBinding.KIND_VISITOR_PRIESTESS
-    );
+    @Nonnull
+    private static List<InnPoolEntry> innPoolOrLegacy(@Nonnull AetherhavenPlugin plugin) {
+        var list = plugin.getVillagerDefinitionCatalog().innPoolEntriesSorted();
+        return !list.isEmpty() ? list : LEGACY_INN_POOL;
+    }
+
+    @Nullable
+    private static String visitorKindForRole(@Nonnull List<InnPoolEntry> pool, @Nonnull String roleId) {
+        for (InnPoolEntry e : pool) {
+            if (roleId.equals(e.npcRoleId())) {
+                return e.visitorBindingKind();
+            }
+        }
+        return null;
+    }
 
     private static final Object TICK_LOCK = new Object();
     private static String lastTickWorld;
@@ -582,7 +592,11 @@ public final class InnPoolService {
                 ^ (long) world.getName().hashCode() << 1
                 ^ epochDay * 0x9E3779B97F4A7C15L
                 ^ wtr.getGameTime().toEpochMilli();
-        List<String> order = new ArrayList<>(POOL_ROLE_IDS);
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        List<String> order = new ArrayList<>();
+        for (InnPoolEntry e : pool) {
+            order.add(e.npcRoleId());
+        }
         Collections.shuffle(order, new Random(seed));
 
         for (String roleId : order) {
@@ -598,8 +612,10 @@ public final class InnPoolService {
             if (presentRoles.contains(roleId)) {
                 continue;
             }
-            int kindIndex = POOL_ROLE_IDS.indexOf(roleId);
-            String kind = kindIndex >= 0 ? POOL_KINDS.get(kindIndex) : TownVillagerBinding.KIND_VISITOR_MERCHANT;
+            String kind = visitorKindForRole(pool, roleId);
+            if (kind == null) {
+                kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
+            }
             int slotIndex = town.getInnPoolNpcIds().size();
             int[] local = spawnLocals[Math.min(slotIndex, spawnLocals.length - 1)];
             if (local == null || local.length != 3) {

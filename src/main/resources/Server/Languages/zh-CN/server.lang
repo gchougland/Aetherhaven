@@ -178,6 +178,12 @@ aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
 aetherhaven.debug.rep.granted=授予奖励 {id}。
 aetherhaven.debug.rep.targetInvalid=无效村民。
 
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=已在此世界中为 {entries} 条玩家–村民记录（分布在 {towns} 个城镇）重置赠礼限制。
+aetherhaven.debug.gift.unknownRole=未知村民角色：{role}
+aetherhaven.debug.gift.noGiftLists=角色 {role} 在数据中没有任何 giftLoves、giftLikes 或 giftDislikes。
+aetherhaven.debug.gift.fillDone=已为 {role} 添加 {added} 条赠礼记录（若该物品与反应等级已有记录则跳过）。
+
 # === Debug: villager needs ===
 # Needs debug
 aetherhaven.debug.needs.whichInvalid=必须是饥饿、能量或乐趣（值为 0..{max}）。
@@ -287,10 +293,34 @@ aetherhaven.ui.villagerneeds.fun=乐趣
 aetherhaven.ui.villagerneeds.villagers=村民
 aetherhaven.ui.villagerneeds.noResidentsTracked=目前还没有城镇居民追踪到。
 aetherhaven.ui.villagerneeds.rescueTooltip=将选定的居民传送到您旁边的位置，并清除他们当前的路径和活动，以便他们可以移动并选择新的目的地。如果村民被困住了，可以使用这个。
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=按反应分组查看你送给此村民的物品，以及本周还可赠送的次数。
+aetherhaven.ui.giftHistory.title=已赠礼物
+aetherhaven.ui.giftHistory.backTooltip=返回镇民需求
+aetherhaven.ui.giftHistory.empty=你还没有向此村民送过任何礼物，暂无可显示内容。
+aetherhaven.ui.giftHistory.section.love=喜爱
+aetherhaven.ui.giftHistory.section.like=喜欢
+aetherhaven.ui.giftHistory.section.neutral=一般
+aetherhaven.ui.giftHistory.section.dislike=不喜欢
+aetherhaven.ui.giftHistory.giftsThisWeek=本周礼物：{used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=上一位镇民
+aetherhaven.ui.giftHistory.cycleNextTooltip=下一位镇民
+aetherhaven.dialogue.gift.disabled.daily=今天已送过礼物
+aetherhaven.dialogue.gift.disabled.weekly=本周已送过两件礼物
+aetherhaven.dialogue.gift.offer=赠送礼物
+aetherhaven.dialogue.gift.confirmBody=把快捷栏中拿在手上的物品（1 个）作为礼物送出吗？
+aetherhaven.dialogue.gift.confirmYes=是的，送出去
+aetherhaven.dialogue.gift.confirmNo=算了
+aetherhaven.dialogue.gift.back=好的
+aetherhaven.dialogue.gift.fail.visitor=只有本镇居民才能接受这类赠礼记录。
+aetherhaven.dialogue.gift.fail.emptyHand=请先在快捷栏中拿上物品再赠送。
+aetherhaven.dialogue.gift.fail.dailyLimit=你今天已经给过这位礼物了。
+aetherhaven.dialogue.gift.fail.weeklyLimit=本周给这位的赠礼次数已用完。
+aetherhaven.dialogue.gift.fail.generic=现在无法赠送该礼物。
 aetherhaven.ui.villagerneeds.rescueDone=选定的居民被转移到您身边，他们的日常生活也被重置。
 aetherhaven.ui.villagerneeds.rescueNotTownResident=那个居民不属于这个城镇。
 aetherhaven.ui.reputation.label=名声
 aetherhaven.reputation.dailyTalkGain=+{amount} 声誉（每​​日问候）
+aetherhaven.reputation.giftRepChange={amount} 声誉（赠礼）
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=章程修正案
@@ -782,6 +812,10 @@ commands.aetherhaven.villager.uuid.desc=村民 NPC 实体 UUID
 commands.aetherhaven.villager.target.desc=您城镇中的村民实体 UUID 或 NPC 角色 ID（例如 Aetherhaven_Merchant）
 commands.aetherhaven.villager.teleport.desc=真实传送到村民（仅限运营商）；或使用 --tp 代替
 commands.aetherhaven.villager.tp_flag.desc=传送到村民（仅限操作员；与传递 true 相同）
+commands.aetherhaven.gift.desc=调试：重置赠礼限制或填充赠礼历史预览（需要 DebugCommandsEnabled）
+commands.aetherhaven.gift.resetLimits.desc=重置本世界中所有城镇、所有玩家与所有村民的每日/每周赠礼上限
+commands.aetherhaven.gift.fillHistory.desc=为某角色（你的城镇）的每个喜爱/喜欢/不喜欢物品各添加一条记录，以便赠礼历史有内容可显示（调试）
+commands.aetherhaven.gift.roleId.desc=NPC 角色 id（例如 Aetherhaven_Merchant）
 
 commands.aetherhaven.debug_autonomy.desc=调试：村民自治覆盖（需要 DebugCommandsEnabled）
 commands.aetherhaven.debug_autonomy.toggle.desc=切换城镇村民的自主调试（查看 NPC 或使用 --ray）

@@ -11,6 +11,26 @@
           "next": "inn_explain_pool"
         },
         {
+          "text": "server.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
           "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1",
           "condition": {
             "type": "and",
@@ -199,6 +219,69 @@
       "choices": [
         {
           "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "root"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.gift.confirmNo",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.back",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_like": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.back",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_neutral": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.back",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_dislike": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.back",
           "next": "root"
         }
       ]

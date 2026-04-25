@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,6 +64,36 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /** Active hotbar stack matches {@code itemId} with at least {@code minCount} (1 if not listed). */
+    default boolean playerHoldsItemInActiveHotbar(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String itemId, int minCount
+    ) {
+        return false;
+    }
+
+    default boolean playerHoldsAnyItemInActiveHotbar(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        return false;
+    }
+
+    default boolean villagerGiftAllowed(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    /**
+     * Shown after the choice label when the gift choice is disabled only due to daily/weekly gift limits
+     * (see {@code giftDisableWhenNotAllowed} in dialogue JSON). {@code null} when N/A.
+     */
+    @Nullable
+    default Message villagerGiftBlockMessage(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return null;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {
@@ -89,6 +120,35 @@ public interface DialogueWorldView {
         @Override
         public boolean isVillagerInTown(@Nonnull String villagerId) {
             return false;
+        }
+
+        @Override
+        public boolean playerHoldsItemInActiveHotbar(
+            @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String itemId, int minCount
+        ) {
+            return false;
+        }
+
+        @Override
+        public boolean playerHoldsAnyItemInActiveHotbar(
+            @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+        ) {
+            return false;
+        }
+
+        @Override
+        public boolean villagerGiftAllowed(
+            @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+        ) {
+            return false;
+        }
+
+        @Override
+        @Nullable
+        public Message villagerGiftBlockMessage(
+            @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+        ) {
+            return null;
         }
     }
 }

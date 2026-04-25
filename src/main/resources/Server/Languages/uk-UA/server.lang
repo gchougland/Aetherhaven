@@ -291,6 +291,7 @@ aetherhaven.ui.villagerneeds.rescueDone=Вибраного мешканця бу
 aetherhaven.ui.villagerneeds.rescueNotTownResident=Цей мешканець не є мешканцем цього міста.
 aetherhaven.ui.reputation.label=Репутація
 aetherhaven.reputation.dailyTalkGain=+{amount} репутація (щоденне вітання)
+aetherhaven.reputation.giftRepChange={amount} репутація (подарунок)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Зміни до Статуту

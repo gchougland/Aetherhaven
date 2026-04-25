@@ -1,0 +1,103 @@
+{
+  "npcRoleId": "Aetherhaven_Farmer",
+  "dialogueVillagerKind": "farmer",
+  "residentTreeId": "aetherhaven_farmer",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_farm",
+  "displayName": "Irienne Mossmark",
+  "portraitIcon": "Farmer.png",
+  "uiSortOrder": 4,
+  "innPoolEligible": true,
+  "innPoolOrder": 2,
+  "visitorBindingKind": "visitor_farmer",
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_farmer_25",
+      "minReputation": 25,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_25",
+      "learnRecipeItemId": "Aetherhaven_Sprinkler_Iron"
+    },
+    {
+      "rewardId": "rep_farmer_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Sprinkler_Thorium"
+    },
+    {
+      "rewardId": "rep_farmer_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": "Aetherhaven_Sprinkler_Cobalt"
+    },
+    {
+      "rewardId": "rep_farmer_100",
+      "minReputation": 100,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": "Aetherhaven_Sprinkler_Adamantite"
+    }
+  ],
+  "giftLoves": [
+    "Plant_Seeds_Wheat",
+    "Plant_Seeds_Corn",
+    "Tool_Watering_Can",
+    "Plant_Seeds_Carrot",
+    "Plant_Seeds_Tomato",
+    "Plant_Seeds_Lettuce",
+    "Plant_Seeds_Cotton",
+    "Plant_Seeds_Chilli",
+    "Plant_Seeds_Oak",
+    "Plant_Seeds_Maple"
+  ],
+  "giftLikes": [
+    "Plant_Seeds_Cauliflower",
+    "Plant_Seeds_Mushroom",
+    "Plant_Seeds_Onion",
+    "Plant_Seeds_Apple",
+    "Plant_Seeds_Birch",
+    "Plant_Seeds_Fir",
+    "Plant_Seeds_Pine",
+    "Plant_Seeds_Aubergine",
+    "Plant_Seeds_Bamboo",
+    "Plant_Seeds_Palm",
+    "Tool_Hoe_Iron",
+    "Tool_Sickle_Iron",
+    "Tool_Fertilizer",
+    "Tool_Hoe_Copper",
+    "Food_Salad_Caesar",
+    "Food_Vegetable_Cooked",
+    "Food_Kebab_Vegetable",
+    "Food_Popcorn",
+    "Plant_Seeds_Corn_Eternal",
+    "Plant_Seeds_Lettuce_Eternal"
+  ],
+  "giftDislikes": [
+    "Rock_Stone",
+    "Ingredient_Bar_Iron",
+    "Weapon_Sword_Crude",
+    "Tool_Pickaxe_Crude",
+    "Tool_Pickaxe_Wood",
+    "Ore_Iron_Stone",
+    "Ore_Copper_Stone",
+    "Ingredient_Bar_Cobalt",
+    "Weapon_Longsword_Crude",
+    "Rock_Basalt_Cobble",
+    "Tool_Repair_Kit_Crude",
+    "Tool_Hammer_Crude",
+    "Food_Fish_Raw",
+    "Food_Wildmeat_Raw",
+    "Ingredient_Bone_Fragment",
+    "Tool_Sap_Shunt",
+    "Rock_Volcanic_Cracked_Lava",
+    "Plant_Seeds_Poisoned",
+    "Ore_Iron_Basalt",
+    "Ingredient_Bar_Mithril"
+  ]
+}

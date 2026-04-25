@@ -291,6 +291,7 @@ aetherhaven.ui.villagerneeds.rescueDone=선택한 주민이 귀하에게로 이�
 aetherhaven.ui.villagerneeds.rescueNotTownResident=그 주민은 이 마을 사람이 아닙니다.
 aetherhaven.ui.reputation.label=평판
 aetherhaven.reputation.dailyTalkGain=+{amount} 평판(일일 인사말)
+aetherhaven.reputation.giftRepChange={amount} 평판(선물)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=헌장 개정

@@ -1,0 +1,92 @@
+{
+  "npcRoleId": "Aetherhaven_Innkeeper",
+  "dialogueVillagerKind": "innkeeper",
+  "residentTreeId": "aetherhaven_inn_welcome",
+  "visitorTreeId": "aetherhaven_visitor_inn",
+  "workConstructionId": "plot_inn",
+  "displayName": "Corin Mosscup",
+  "portraitIcon": "Innkeep.png",
+  "uiSortOrder": 1,
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_innkeeper_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Banquet_Table"
+    },
+    {
+      "rewardId": "rep_innkeeper_75",
+      "minReputation": 75,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": null
+    },
+    {
+      "rewardId": "rep_innkeeper_100",
+      "minReputation": 100,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": null
+    }
+  ],
+  "giftLoves": [
+    "Food_Pie_Meat",
+    "Food_Kebab_Meat",
+    "Food_Fish_Grilled",
+    "Food_Kebab_Mushroom",
+    "Food_Vegetable_Cooked",
+    "Food_Pie_Pumpkin",
+    "Food_Wildmeat_Cooked",
+    "Food_Salad_Caesar",
+    "Food_Kebab_Vegetable",
+    "Food_Pie_Apple"
+  ],
+  "giftLikes": [
+    "Food_Bread",
+    "Food_Cheese",
+    "Food_Kebab_Fruit",
+    "Food_Salad_Mushroom",
+    "Food_Salad_Berry",
+    "Food_Popcorn",
+    "Food_Candy_Cane",
+    "Food_Egg",
+    "Rock_Crystal_Yellow_Small",
+    "Tool_Map",
+    "Ingredient_Bar_Copper",
+    "Rock_Crystal_White_Small",
+    "Ingredient_Bar_Bronze",
+    "Food_Fish_Raw",
+    "Food_Fish_Raw_Legendary",
+    "Food_Fish_Raw_Epic",
+    "Food_Fish_Raw_Rare",
+    "Food_Fish_Raw_Uncommon",
+    "Bench_Cooking",
+    "Food_Beef_Raw"
+  ],
+  "giftDislikes": [
+    "Rock_Stone",
+    "Ingredient_Bar_Iron",
+    "Tool_Pickaxe_Crude",
+    "Weapon_Sword_Crude",
+    "Plant_Seeds_Petrified",
+    "Plant_Seeds_Poisoned",
+    "Ore_Iron_Stone",
+    "Rock_Basalt_Cobble",
+    "Ore_Copper_Stone",
+    "Tool_Repair_Kit_Crude",
+    "Weapon_Longsword_Crude",
+    "Tool_Sap_Shunt",
+    "Rock_Volcanic_Cracked_Incandescent",
+    "Ore_Iron_Basalt",
+    "Tool_Fishing_Trap",
+    "Tool_Trap_Bait",
+    "Weapon_Sword_Copper",
+    "Plant_Seeds_Dry",
+    "Tool_Hammer_Crude",
+    "Tool_Pickaxe_Wood"
+  ]
+}

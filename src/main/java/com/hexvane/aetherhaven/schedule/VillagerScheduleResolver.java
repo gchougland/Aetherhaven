@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -128,16 +129,27 @@ public final class VillagerScheduleResolver {
         @Nonnull UUID entityUuid,
         @Nonnull String locationSymbol
     ) {
+        return describeSchedulePlotUnresolvedReason(town, binding, entityUuid, locationSymbol, null);
+    }
+
+    @Nonnull
+    public static String describeSchedulePlotUnresolvedReason(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol,
+        @Nullable VillagerDefinition villagerDef
+    ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
             return "empty or invalid location symbol";
         }
         return switch (loc) {
             case LOC_HOME -> describeHomeUnresolved(town, entityUuid);
-            case LOC_WORK -> describeWorkUnresolved(town, binding);
-            case LOC_INN -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
-            case LOC_PARK -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
-            case LOC_GAIA_ALTAR -> describeSharedUnresolved(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
+            case LOC_WORK -> describeWorkUnresolved(town, binding, villagerDef);
+            case LOC_INN -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
+            case LOC_PARK -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
+            case LOC_GAIA_ALTAR -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
             default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar)";
         };
     }
@@ -149,17 +161,44 @@ public final class VillagerScheduleResolver {
         @Nonnull UUID entityUuid,
         @Nonnull String locationSymbol
     ) {
+        return resolvePlot(town, binding, entityUuid, locationSymbol, null);
+    }
+
+    @Nonnull
+    public static VillagerScheduleResolveOutcome resolvePlot(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull UUID entityUuid,
+        @Nonnull String locationSymbol,
+        @Nullable VillagerDefinition villagerDef
+    ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
             return VillagerScheduleResolveOutcome.skip();
         }
         return switch (loc) {
             case LOC_HOME -> resolveHome(town, entityUuid);
-            case LOC_WORK -> resolveWork(town, binding);
-            case LOC_INN -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
-            case LOC_PARK -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_PARK);
-            case LOC_GAIA_ALTAR -> resolveSharedBuilding(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
+            case LOC_WORK -> resolveWork(town, binding, villagerDef);
+            case LOC_INN -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
+            case LOC_PARK -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
+            case LOC_GAIA_ALTAR -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
             default -> VillagerScheduleResolveOutcome.skip();
+        };
+    }
+
+    @Nonnull
+    private static String sharedConstructionId(@Nonnull String normalizedLoc, @Nullable VillagerDefinition def) {
+        if (def != null) {
+            String fromDef = def.sharedConstructionIdForLocationSymbol(normalizedLoc);
+            if (fromDef != null) {
+                return fromDef;
+            }
+        }
+        return switch (normalizedLoc) {
+            case LOC_INN -> AetherhavenConstants.CONSTRUCTION_PLOT_INN;
+            case LOC_PARK -> AetherhavenConstants.CONSTRUCTION_PLOT_PARK;
+            case LOC_GAIA_ALTAR -> AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
+            default -> AetherhavenConstants.CONSTRUCTION_PLOT_INN;
         };
     }
 
@@ -181,7 +220,11 @@ public final class VillagerScheduleResolver {
     }
 
     @Nonnull
-    private static String describeWorkUnresolved(@Nonnull TownRecord town, @Nonnull TownVillagerBinding binding) {
+    private static String describeWorkUnresolved(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nullable VillagerDefinition def
+    ) {
         UUID job = binding.getJobPlotId();
         if (job != null) {
             PlotInstance pi = town.findPlotById(job);
@@ -193,9 +236,9 @@ public final class VillagerScheduleResolver {
             }
             return "work: JobPlotId resolves but resolvePlot failed elsewhere (report as bug)";
         }
-        UUID inferred = inferJobPlotFromTown(town, binding.getKind());
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def);
         if (inferred == null) {
-            String c = constructionIdForKind(binding.getKind());
+            String c = workConstructionId(binding, def);
             if (c == null) {
                 return "work: cannot infer job plot for binding kind=\"" + binding.getKind() + "\"";
             }
@@ -225,6 +268,17 @@ public final class VillagerScheduleResolver {
             return "shared: plot exists for " + constructionId + " but not COMPLETE";
         }
         return "shared: unexpected (complete plot exists)";
+    }
+
+    @Nullable
+    private static String workConstructionId(@Nonnull TownVillagerBinding binding, @Nullable VillagerDefinition def) {
+        if (def != null) {
+            String w = def.getWorkConstructionId();
+            if (w != null) {
+                return w;
+            }
+        }
+        return constructionIdForKind(binding.getKind());
     }
 
     @Nullable
@@ -258,16 +312,19 @@ public final class VillagerScheduleResolver {
     }
 
     @Nonnull
-    private static VillagerScheduleResolveOutcome resolveWork(@Nonnull TownRecord town, @Nonnull TownVillagerBinding binding) {
+    private static VillagerScheduleResolveOutcome resolveWork(
+        @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
+        @Nullable VillagerDefinition def
+    ) {
         UUID job = binding.getJobPlotId();
         if (job != null) {
             PlotInstance pi = town.findPlotById(job);
             if (pi != null && pi.getState() == PlotInstanceState.COMPLETE) {
                 return new VillagerScheduleResolveOutcome(job, null);
             }
-            // Stale UUID or plot not complete yet: fall back like we do when JobPlotId was never set.
         }
-        UUID inferred = inferJobPlotFromTown(town, binding.getKind());
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def);
         if (inferred == null) {
             return VillagerScheduleResolveOutcome.skip();
         }
@@ -275,7 +332,17 @@ public final class VillagerScheduleResolver {
     }
 
     @Nullable
-    private static UUID inferJobPlotFromTown(@Nonnull TownRecord town, @Nonnull String kind) {
+    private static UUID inferJobPlotFromTown(
+        @Nonnull TownRecord town,
+        @Nonnull String kind,
+        @Nullable VillagerDefinition def
+    ) {
+        if (def != null) {
+            String w = def.getWorkConstructionId();
+            if (w != null) {
+                return plotIdIfComplete(town, w);
+            }
+        }
         return switch (kind) {
             case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM);
             case TownVillagerBinding.KIND_MERCHANT -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL);

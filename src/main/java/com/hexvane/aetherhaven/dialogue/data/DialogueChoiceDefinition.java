@@ -19,6 +19,12 @@ public final class DialogueChoiceDefinition {
     private String whenFalse;
     @Nullable
     private String disabledReason;
+    /**
+     * When true, if the choice is otherwise shown (e.g. resident + item in hand) but villager gifting is not
+     * allowed (daily/weekly limit), the row is shown disabled with a reason from the dialogue world view.
+     */
+    @Nullable
+    private Boolean giftDisableWhenNotAllowed;
     @Nullable
     private List<JsonObject> actions;
 
@@ -45,6 +51,10 @@ public final class DialogueChoiceDefinition {
     @Nullable
     public String getDisabledReason() {
         return disabledReason;
+    }
+
+    public boolean isGiftDisableWhenNotAllowed() {
+        return giftDisableWhenNotAllowed != null && giftDisableWhenNotAllowed;
     }
 
     @Nonnull

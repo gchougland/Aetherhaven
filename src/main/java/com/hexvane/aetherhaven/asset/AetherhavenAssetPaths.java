@@ -19,6 +19,9 @@ public final class AetherhavenAssetPaths {
     /** Relative to pack root: villager weekly schedule JSON per NPC role id (recursive). */
     public static final String VILLAGER_SCHEDULES = "Server/Aetherhaven/VillagerSchedules";
 
+    /** Relative to pack root: villager gameplay metadata JSON (dialogue keys, rep, inn pool, schedule bindings). */
+    public static final String VILLAGERS = "Server/Aetherhaven/Villagers";
+
     private AetherhavenAssetPaths() {}
 
     @Nonnull
@@ -39,5 +42,10 @@ public final class AetherhavenAssetPaths {
     @Nonnull
     public static String villagerSchedulesPrefix() {
         return VILLAGER_SCHEDULES + "/";
+    }
+
+    @Nonnull
+    public static String villagersPrefix() {
+        return VILLAGERS + "/";
     }
 }

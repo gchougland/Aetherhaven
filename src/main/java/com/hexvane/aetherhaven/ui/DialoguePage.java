@@ -60,6 +60,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     }
 
     private final DialogueCatalog catalog;
+    private final DialogueWorldView dialogueWorldView;
     private final DialogueConditionEvaluator conditions;
     private final DialogueActionExecutor actions = new DialogueActionExecutor();
 
@@ -86,6 +87,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     ) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, DialogueEventData.CODEC);
         this.catalog = catalog;
+        this.dialogueWorldView = worldView;
         this.conditions = new DialogueConditionEvaluator(worldView);
         this.treeId = treeId;
         this.npcRef = npcRef;
@@ -250,20 +252,36 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         int uiSlot = 0;
         for (int i = 0; i < node.getChoices().size(); i++) {
             DialogueChoiceDefinition ch = node.getChoices().get(i);
-            boolean ok = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
+            boolean baseOk = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
             String wf = ch.whenFalseOrDefault();
-            if (!ok && "hide".equalsIgnoreCase(wf)) {
+            if (!baseOk && "hide".equalsIgnoreCase(wf)) {
                 continue;
             }
-            boolean disabled = !ok && "disabled".equalsIgnoreCase(wf);
+            boolean disabled = !baseOk && "disabled".equalsIgnoreCase(wf);
+            if (ch.isGiftDisableWhenNotAllowed() && baseOk) {
+                if (!dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
+                    disabled = true;
+                }
+            }
             String text = ch.getText() != null ? ch.getText() : "";
-            String reason = ch.getDisabledReason();
-            Message choiceLine =
-                disabled && reason != null && !reason.isBlank()
-                    ? dialogueMessage(text)
-                        .insert(Message.raw("  "))
-                        .insert(dialogueMessage(reason))
-                    : dialogueMessage(text);
+            Message choiceLine;
+            if (disabled) {
+                Message reasonMsg = ch.isGiftDisableWhenNotAllowed()
+                    ? dialogueWorldView.villagerGiftBlockMessage(ref, store, npcRef)
+                    : null;
+                if (reasonMsg == null) {
+                    String reason = ch.getDisabledReason();
+                    if (reason != null && !reason.isBlank()) {
+                        reasonMsg = dialogueMessage(reason);
+                    }
+                }
+                choiceLine =
+                    reasonMsg != null
+                        ? dialogueMessage(text).insert(Message.raw("  ")).insert(reasonMsg)
+                        : dialogueMessage(text);
+            } else {
+                choiceLine = dialogueMessage(text);
+            }
             commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
             String sel = choiceRowSelector(uiSlot);
             commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
@@ -299,9 +317,11 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         DialogueChoiceDefinition choice = node.getChoices().get(choiceIndex);
         if (!conditions.evaluate(choice.getCondition(), ref, store, npcRef)) {
             String wf = choice.whenFalseOrDefault();
-            if ("disabled".equalsIgnoreCase(wf)) {
+            if ("hide".equalsIgnoreCase(wf) || "disabled".equalsIgnoreCase(wf)) {
                 return;
             }
+        } else if (choice.isGiftDisableWhenNotAllowed() && !dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
+            return;
         }
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
         actions.runBatch(choice.getActions(), ref, store, batch, npcRef);

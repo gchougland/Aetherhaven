@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -112,7 +113,9 @@ public final class VillagerScheduleService {
 
         boolean newCalendarMinute = timeJump || tickState.getLastGameEpochMinute() != epochMinute;
 
-        VillagerScheduleDefinition def = plugin.getVillagerScheduleRegistry().getOrLoad(roleId);
+        VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleId.trim());
+        VillagerScheduleDefinition def = plugin.getVillagerDefinitionCatalog()
+            .effectiveSchedule(roleId.trim(), plugin.getVillagerScheduleRegistry());
         if (def == null) {
             if (newCalendarMinute) {
                 tickState.setLastGameEpochMinute(epochMinute);
@@ -139,13 +142,14 @@ public final class VillagerScheduleService {
             return;
         }
 
-        VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(town, binding, uc.getUuid(), loc);
+        VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(town, binding, uc.getUuid(), loc, vdef);
         UUID targetPlot = out.plotId();
         if (targetPlot == null) {
             if (cfg.isVillagerScheduleDebugLog() && gameEpochHour != tickState.getLastUnresolvedDebugLogGameEpochHour()) {
                 tickState.setLastUnresolvedDebugLogGameEpochHour(gameEpochHour);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
-                String why = VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(town, binding, uc.getUuid(), loc);
+                String why =
+                    VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(town, binding, uc.getUuid(), loc, vdef);
                 LOGGER.at(Level.INFO).log(
                     "[Aetherhaven schedule] unresolved plot — role=%s npc=%s segment=%s time=%s town=%s kind=%s jobPlot=%s preferredPlot=%s reason=%s (retrying)",
                     roleId,

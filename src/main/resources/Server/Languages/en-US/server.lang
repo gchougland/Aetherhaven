@@ -178,6 +178,12 @@ aetherhaven.debug.rep.milestoneLine=  {id} | {role} | {min} | {node}{items}{lear
 aetherhaven.debug.rep.granted=Granted reward {id}.
 aetherhaven.debug.rep.targetInvalid=Invalid villager.
 
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Reset gift limits on {entries} player–villager row(s) across {towns} town(s) in this world.
+aetherhaven.debug.gift.unknownRole=Unknown villager role: {role}
+aetherhaven.debug.gift.noGiftLists=Role {role} has no giftLoves, giftLikes, or giftDislikes in villager data.
+aetherhaven.debug.gift.fillDone=Added {added} gift log line(s) for {role} (skipped when you already have a line for that item and reaction tier).
+
 # === Debug: villager needs ===
 # Needs debug
 aetherhaven.debug.needs.whichInvalid=which must be hunger, energy, or fun (values are 0..{max}).
@@ -287,10 +293,24 @@ aetherhaven.ui.villagerneeds.fun=Fun
 aetherhaven.ui.villagerneeds.villagers=Villagers
 aetherhaven.ui.villagerneeds.noResidentsTracked=No town residents tracked yet.
 aetherhaven.ui.villagerneeds.rescueTooltip=Teleports the selected resident to a spot next to you and clears their current pathing and activity so they can move and choose a new destination. Use this if a villager is stuck.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=View items you have given this villager, grouped by how they reacted, and how many gifts you can still give this week.
+aetherhaven.ui.giftHistory.title=Gifts given
+aetherhaven.ui.giftHistory.backTooltip=Back to town needs
+aetherhaven.ui.giftHistory.empty=You have not given this villager any gifts yet, so there is nothing to show.
+aetherhaven.ui.giftHistory.section.love=Loved
+aetherhaven.ui.giftHistory.section.like=Liked
+aetherhaven.ui.giftHistory.section.neutral=Neutral
+aetherhaven.ui.giftHistory.section.dislike=Disliked
+aetherhaven.ui.giftHistory.giftsThisWeek=Gifts this week: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Previous town villager
+aetherhaven.ui.giftHistory.cycleNextTooltip=Next town villager
+aetherhaven.dialogue.gift.disabled.daily=Gift already given today
+aetherhaven.dialogue.gift.disabled.weekly=Two gifts given this week
 aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you and their routine was reset.
 aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
+aetherhaven.reputation.giftRepChange={amount} reputation (gift)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Charter amendments
@@ -782,6 +802,10 @@ commands.aetherhaven.villager.uuid.desc=Villager NPC entity UUID
 commands.aetherhaven.villager.target.desc=Villager entity UUID or NPC role id in your town (e.g. Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=true to teleport to the villager (operators only); or use --tp instead
 commands.aetherhaven.villager.tp_flag.desc=Teleport to the villager (operators only; same as passing true)
+commands.aetherhaven.gift.desc=Debug: reset gift limits or fill gift history preview (requires DebugCommandsEnabled)
+commands.aetherhaven.gift.resetLimits.desc=Reset daily/weekly gift limits for all players and all villagers in every town in this world
+commands.aetherhaven.gift.fillHistory.desc=Add one log line per love/like/dislike item for a role (your town) so the gift history has something to show (debug)
+commands.aetherhaven.gift.roleId.desc=NPC role id (e.g. Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Debug: villager autonomy overlay (requires DebugCommandsEnabled)
 commands.aetherhaven.debug_autonomy.toggle.desc=Toggle autonomy debug on a town villager (look at NPC or use --ray)
@@ -1115,6 +1139,48 @@ aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Stake a Gaia a
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=We'll get it built.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Not right now.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# === Gifting (dialogue + service) ===
+aetherhaven.dialogue.gift.offer=Offer a gift
+aetherhaven.dialogue.gift.confirmBody=Give the item in your active hotbar (one) as a gift?
+aetherhaven.dialogue.gift.confirmYes=Yes, give it
+aetherhaven.dialogue.gift.confirmNo=Never mind
+aetherhaven.dialogue.gift.back=All right
+aetherhaven.dialogue.gift.fail.visitor=Only residents of the town can receive stored gifts.
+aetherhaven.dialogue.gift.fail.emptyHand=Hold an item in your hotbar to offer it.
+aetherhaven.dialogue.gift.fail.dailyLimit=You already gave this person a gift today.
+aetherhaven.dialogue.gift.fail.weeklyLimit=You have used your weekly gifts to this person.
+aetherhaven.dialogue.gift.fail.generic=You cannot give that gift right now.
+# Blacksmith
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.love=Hah! Now that is a smith's heart made metal. I won't forget it.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=Solid. That goes in the "good day" bin.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral=I'll take it. Storage is honest work too.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=Appreciate the thought, but my forge eats ore, not whatever that is.
+# Merchant
+aetherhaven.dialogue.aetherhaven_merchant.gift.love=Exquisite. You have taste—and timing.
+aetherhaven.dialogue.aetherhaven_merchant.gift.like=I can move that. We will both smile at the margin.
+aetherhaven.dialogue.aetherhaven_merchant.gift.neutral=It trades. I will make it look intentional on the counter.
+aetherhaven.dialogue.aetherhaven_merchant.gift.dislike=I sell goods, not clutter. Find a bin, not a stall.
+# Farmer
+aetherhaven.dialogue.aetherhaven_farmer.gift.love=Look at you. This is the kind of help fields remember.
+aetherhaven.dialogue.aetherhaven_farmer.gift.like=This will do nicely for the next row.
+aetherhaven.dialogue.aetherhaven_farmer.gift.neutral=Could be worse. Rain might even agree with you.
+aetherhaven.dialogue.aetherhaven_farmer.gift.dislike=That is not for soil. I will compost the thought, at least.
+# Inn
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love=The hearth will sing about this one. Thank you.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=We can serve that kind of generosity. Come back hungry.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=I'll find a use between courses.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=I run a kitchen, not a junk drawer.
+# Elder
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=You honor the town with a gift like that. I will see it written in the right spirit.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Thoughtful. A charter grows on trust as much as stone.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=I will not refuse good intent, even in odd packaging.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Your effort is seen—but not every stone belongs on the plinth.
+# Priestess
+aetherhaven.dialogue.aetherhaven_priestess.gift.love=Gaia smiles. This belongs at the altar.
+aetherhaven.dialogue.aetherhaven_priestess.gift.like=A quiet offering, but sincere. That counts.
+aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=I will set it with the other tokens of the day.
+aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=Some things are better left unlifted. Thank you, but no.
+
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=I understand.

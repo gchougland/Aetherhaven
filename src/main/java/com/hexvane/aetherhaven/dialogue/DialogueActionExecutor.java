@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -96,6 +97,7 @@ public final class DialogueActionExecutor {
             case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
             case "abandon_quest" -> abandonQuest(a, playerRef, store);
             case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
+            case "gift_villager" -> giftVillager(a, playerRef, store, out, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -237,6 +239,52 @@ public final class DialogueActionExecutor {
         }
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         return nu != null ? nu.getUuid() : null;
+    }
+
+    private static void giftVillager(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        if (town == null) {
+            return;
+        }
+        VillagerGiftService.GiftApplyResult res = VillagerGiftService.applyGiftFromDialogue(
+            a, playerRef, store, npcRef, plugin, tm, town
+        );
+        if (res.success() && res.gotoNodeId() != null) {
+            out.setGotoNodeId(res.gotoNodeId());
+            return;
+        }
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null || res.failReason() == null) {
+            if (pr != null) {
+                pr.sendMessage(Message.translation("server.aetherhaven.dialogue.gift.fail.generic"));
+            }
+            return;
+        }
+        String msgKey = giftFailKey(res.failReason());
+        pr.sendMessage(Message.translation(msgKey));
+    }
+
+    @Nonnull
+    private static String giftFailKey(@Nonnull VillagerGiftService.GiftEligibility.Reason reason) {
+        return switch (reason) {
+            case VISITOR -> "server.aetherhaven.dialogue.gift.fail.visitor";
+            case EMPTY_HAND -> "server.aetherhaven.dialogue.gift.fail.emptyHand";
+            case DAILY_LIMIT -> "server.aetherhaven.dialogue.gift.fail.dailyLimit";
+            case WEEKLY_LIMIT -> "server.aetherhaven.dialogue.gift.fail.weeklyLimit";
+            case NO_CONTEXT, NO_PLAYER -> "server.aetherhaven.dialogue.gift.fail.generic";
+        };
     }
 
     private static void reputationRewardGrant(

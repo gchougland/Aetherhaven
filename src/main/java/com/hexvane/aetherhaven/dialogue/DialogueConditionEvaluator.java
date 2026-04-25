@@ -97,6 +97,16 @@ public final class DialogueConditionEvaluator {
             case "npc_binding_is_visitor" -> npcBindingIsVisitor(store, npcRef);
             case "npc_inn_pool_role" -> worldView.innPoolHasNpcRole(playerRef, store, stringOrEmpty(o, "roleId"));
             case "town_npc_home_resident_house" -> worldView.townNpcHomeResidentOnHousePlot(playerRef, store, npcRef);
+            case "player_holds_item" -> {
+                String itemId = stringOrEmpty(o, "itemId");
+                if (itemId.isEmpty()) {
+                    itemId = stringOrEmpty(o, "item");
+                }
+                int minCount = o.has("minCount") && o.get("minCount").isJsonPrimitive() ? o.get("minCount").getAsInt() : 1;
+                yield worldView.playerHoldsItemInActiveHotbar(playerRef, store, itemId, Math.max(1, minCount));
+            }
+            case "player_holds_any_item" -> worldView.playerHoldsAnyItemInActiveHotbar(playerRef, store);
+            case "villager_gift_allowed" -> worldView.villagerGiftAllowed(playerRef, store, npcRef);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

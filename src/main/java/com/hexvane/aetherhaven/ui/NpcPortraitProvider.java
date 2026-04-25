@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
@@ -27,7 +29,22 @@ public final class NpcPortraitProvider {
 
     @Nonnull
     public static String portraitPathForRoleId(@Nonnull String roleId) {
-        String file = ROLE_ID_TO_FILE.get(roleId.trim());
+        String r = roleId.trim();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            VillagerDefinition d = plugin.getVillagerDefinitionCatalog().byNpcRoleId(r);
+            if (d != null) {
+                String p = d.getPortraitIcon();
+                if (p != null && !p.isBlank()) {
+                    String t = p.trim();
+                    if (t.startsWith("UI/") || t.startsWith("Icons/")) {
+                        return t;
+                    }
+                    return ICON_DIR + t;
+                }
+            }
+        }
+        String file = ROLE_ID_TO_FILE.get(r);
         return file != null ? ICON_DIR + file : MISSING;
     }
 

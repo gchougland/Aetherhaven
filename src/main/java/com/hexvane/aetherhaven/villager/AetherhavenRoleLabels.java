@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.villager;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,8 +35,19 @@ public final class AetherhavenRoleLabels {
 
     @Nonnull
     public static String displayNameForRoleId(@Nonnull String roleId) {
-        String label = ROLE_ID_TO_LABEL.get(roleId.trim());
-        return label != null ? label : roleId.trim();
+        String r = roleId.trim();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            VillagerDefinition d = plugin.getVillagerDefinitionCatalog().byNpcRoleId(r);
+            if (d != null) {
+                String n = d.getDisplayName();
+                if (n != null && !n.isBlank()) {
+                    return n.trim();
+                }
+            }
+        }
+        String label = ROLE_ID_TO_LABEL.get(r);
+        return label != null ? label : r;
     }
 
     /**

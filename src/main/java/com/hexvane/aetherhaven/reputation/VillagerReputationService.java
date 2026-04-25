@@ -475,6 +475,19 @@ public final class VillagerReputationService {
         if (b != null && (a == null || b > a)) {
             into.setLastTalkGameEpochDay(b);
         }
+        Long gl = into.getLastGiftGameEpochDay();
+        Long gr = from.getLastGiftGameEpochDay();
+        if (gr != null && (gl == null || gr > gl)) {
+            into.setLastGiftGameEpochDay(gr);
+            into.setGiftWeekBlockId(from.getGiftWeekBlockId());
+            into.setGiftsThisWeekBlock(from.getGiftsThisWeekBlock());
+        } else if (gr != null && gr.equals(gl)) {
+            Long wk = into.getGiftWeekBlockId();
+            Long wf = from.getGiftWeekBlockId();
+            if (wk != null && wf != null && wk.equals(wf)) {
+                into.setGiftsThisWeekBlock(Math.min(2, into.getGiftsThisWeekBlock() + from.getGiftsThisWeekBlock()));
+            }
+        }
         for (String id : from.getClaimedRewardIds()) {
             if (id != null && !id.isBlank() && !into.getClaimedRewardIds().contains(id)) {
                 into.getClaimedRewardIds().add(id);

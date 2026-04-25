@@ -291,6 +291,7 @@ aetherhaven.ui.villagerneeds.rescueDone=Le résident sélectionné a été rappr
 aetherhaven.ui.villagerneeds.rescueNotTownResident=Ce résident ne fait pas partie de cette ville.
 aetherhaven.ui.reputation.label=Réputation
 aetherhaven.reputation.dailyTalkGain=+{amount} réputation (accueil quotidien)
+aetherhaven.reputation.giftRepChange={amount} réputation (cadeau)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Modifications de la Charte
