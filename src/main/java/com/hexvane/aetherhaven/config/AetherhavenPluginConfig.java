@@ -456,6 +456,10 @@ public final class AetherhavenPluginConfig {
         return getLootChest().isApplyInCreative();
     }
 
+    public boolean isLootChestLootrPerPlayerCompatibilityEnabled() {
+        return getLootChest().isLootrPerPlayerCompatibilityEnabled();
+    }
+
     @Nonnull
     public String getLootChestPlotTokenItemId() {
         return getLootChest().getPlotToken().getItemId();

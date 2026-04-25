@@ -8,75 +8,75 @@
 
 # === Common (server.aetherhaven.common.*) ===
 # Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
-aetherhaven.common.pluginNotLoaded=以太天堂未載入。
-aetherhaven.common.noTownInWorld=這個世界上沒有適合你的城鎮。
-aetherhaven.common.noQuestPermission=你沒有在這個城鎮的任務許可。
+aetherhaven.common.pluginNotLoaded=以太港未載入。
+aetherhaven.common.noTownInWorld=這世上沒有屬於你的城鎮。
+aetherhaven.common.noQuestPermission=你沒有在這個城鎮執行任務的權限。
 aetherhaven.common.townNotFound=未找到城鎮。
-aetherhaven.common.invalidTownLink=城鎮連結無效。
-aetherhaven.common.treasuryNotLinked=國庫不掛鉤。
-aetherhaven.common.ownerOnlyTreasury=只有鎮主才能使用金庫。
-aetherhaven.common.townNotInThisWorld=城鎮並不在這個世界。
-aetherhaven.common.noMoveBuildingsPermission=您無權為鎮上移動建築物。
-aetherhaven.common.buildingCannotMove=該建築無法移動（缺少地塊或不完整）。
-aetherhaven.common.lookAtBlockPlot=查看一個區塊以設定繪圖符號位置並開始預覽。
-aetherhaven.common.carryPlotToken=攜帶工具中列出的建築類型的地塊標記（例如旅館地塊標記）以開始放置。
-aetherhaven.common.statueNotLinked=雕像與城鎮無關。
-aetherhaven.common.ownerOnlyStatue=只有鎮主可以使用這座雕像。
+aetherhaven.common.invalidTownLink=無效的城鎮連結。
+aetherhaven.common.treasuryNotLinked=財政部不參與此交易。
+aetherhaven.common.ownerOnlyTreasury=只有城鎮所有者才能使用國庫。
+aetherhaven.common.townNotInThisWorld=城鎮不存在於這個世界。
+aetherhaven.common.noMoveBuildingsPermission=你沒有權限搬遷本鎮的建築物。
+aetherhaven.common.buildingCannotMove=該建築物無法搬遷（缺少地塊或未完工）。
+aetherhaven.common.lookAtBlockPlot=查看一個圖塊以設定繪圖符號位置並開始預覽。
+aetherhaven.common.carryPlotToken=攜帶工具中列出的建築類型的地塊標記（例如旅館地塊標記）開始放置。
+aetherhaven.common.statueNotLinked=這座雕像與任何城鎮都沒有關聯。
+aetherhaven.common.ownerOnlyStatue=只有城鎮所有者才能使用這座雕像。
 aetherhaven.common.debugCommandsDisabled=Aetherhaven 偵錯指令已停用（在 config.json 中設定 DebugCommandsEnabled）。
-aetherhaven.common.noPlayerId=沒有玩家 ID。
+aetherhaven.common.noPlayerId=沒有玩家ID。
 aetherhaven.common.playersOnly=僅限玩家。
 aetherhaven.common.invalidVillager=無效村民。
 
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
-aetherhaven.charter.alreadyInTown=你已經是這個世界上某個城鎮的一部分了。在建立新的之前先把它留下。
-aetherhaven.charter.townFounded=城鎮成立：{name}。村長來了。使用憲章重新命名城鎮。
-aetherhaven.chartertown.info.notLinked=憲章尚未與城鎮相關聯。
+aetherhaven.charter.alreadyInTown=你已經身處這個世界的一個城鎮之中。在建立新的城鎮之前，先離開它。
+aetherhaven.charter.townFounded=城鎮已建立：{name}。村長已抵達。請使用憲章重新命名城鎮。
+aetherhaven.chartertown.info.notLinked=該憲章目前尚未與任何城鎮關聯。
 aetherhaven.chartertown.info.invalidTownId=憲章上的城鎮 ID 無效。
 aetherhaven.chartertown.info.townDataMissing=未找到城鎮資料（請參閱伺服器日誌）。
-aetherhaven.chartertown.townInfoBlock=城鎮名稱: {name}\n城鎮 ID: {id}\n層級: {tier}\n區域（區塊半徑）: {radius}\n憲章位於 {cx}、{cy}、{cz}
+aetherhaven.chartertown.townInfoBlock=城鎮名稱：{name}\n城鎮 ID：{id}\n等級：{tier}\n領地（區塊半徑）：{radius}\n特許位於{cx}、{cy}、{cz}
 aetherhaven.chartertown.nameEmpty=城鎮名不能為空。
-aetherhaven.chartertown.nameDuplicate=這個名字已經被這個世界上的另一個城鎮使用了。
-aetherhaven.chartertown.nameSaved=已儲存城鎮名稱：{name}
+aetherhaven.chartertown.nameDuplicate=這個名字已經被世界上另一個城鎮使用了。
+aetherhaven.chartertown.nameSaved=已儲存的城鎮名稱：{name}
 
 # === Town command: resolution & membership (/aetherhaven town) ===
 # Town command resolution
-aetherhaven.town.resolve.notOwnerInWorld=你在這個世界上不擁有一座城鎮。
-aetherhaven.town.resolve.noTownNamed=這世界上沒有名為「{name}」的城鎮。
-aetherhaven.town.resolve.ownerOrOpOnly=只有城鎮所有者（或獲得許可的操作員）才能這樣做。
-aetherhaven.town.resolve.notInTown=你不在這個世界的一個城鎮裡。
-aetherhaven.town.resolve.nameOnlyForOwner=只有城鎮所有者（或經營者）可以在此使用城鎮名稱。
-aetherhaven.town.resolve.specifyTownName=指定城鎮名稱，或使用您擁有的城鎮中的名稱。
-aetherhaven.town.resolve.specifyTown=指定城鎮名稱。
-aetherhaven.town.resolve.adminOtherTown=只有操作員可以透過名稱來定位其他玩家的城鎮。
-aetherhaven.town.invite.err.emptyName=輸入玩家姓名。
-aetherhaven.town.invite.err.targetOffline=玩家「{name}」在這個世界上不在線。
-aetherhaven.town.invite.err.cannotInviteSelf=你不能邀請自己。
-aetherhaven.town.invite.err.alreadyInTown=那個玩家已經在這個世界的一個城鎮裡了。
-aetherhaven.town.invite.toTarget={inviter} 邀請您加入城鎮「{townDisplay}」。輸入 /aetherhaven 城鎮接受 {townDisplay} 或 /aetherhaven 城鎮拒絕 {townDisplay}
-aetherhaven.town.invite.sent=邀請已發送至 {name}。
-aetherhaven.town.kick.err.mustBeOnline=玩家必須在線才能按名字踢球。
+aetherhaven.town.resolve.notOwnerInWorld=在這個世界上，你並不擁有一座城鎮。
+aetherhaven.town.resolve.noTownNamed=世界上沒有一個城鎮叫「{name}」。
+aetherhaven.town.resolve.ownerOrOpOnly=只有城鎮所有者（或獲得許可的經營者）才能這樣做。
+aetherhaven.town.resolve.notInTown=你並不在這個世界的任何一座城鎮裡。
+aetherhaven.town.resolve.nameOnlyForOwner=只有城鎮所有者（或經營者）才能在此使用城鎮名稱。
+aetherhaven.town.resolve.specifyTownName=請指定城鎮名稱，或使用您擁有的城鎮的名稱。
+aetherhaven.town.resolve.specifyTown=請指定城鎮名稱。
+aetherhaven.town.resolve.adminOtherTown=只有運營商才能透過名稱鎖定其他玩家的城鎮。
+aetherhaven.town.invite.err.emptyName=請輸入玩家姓名。
+aetherhaven.town.invite.err.targetOffline=在這個世界中，玩家「{name}」不在線上。
+aetherhaven.town.invite.err.cannotInviteSelf=你不能不請自來。
+aetherhaven.town.invite.err.alreadyInTown=那個玩家已經在這個世界的某個城鎮裡了。
+aetherhaven.town.invite.toTarget={inviter} 邀請您加入城鎮「{townDisplay}」。輸入 /aetherhaven town accept {townDisplay} 或 /aetherhaven town reject {townDisplay}
+aetherhaven.town.invite.sent=已向{name}發送邀請。
+aetherhaven.town.kick.err.mustBeOnline=玩家必須在線才能透過名字踢人。
 aetherhaven.town.kick.err.cannotRemoveOwner=無法移除城鎮所有者。
-aetherhaven.town.kick.err.notMember=該玩家不是該城鎮的成員。
-aetherhaven.town.kick.removed=從城鎮中移除了 {name}。
-aetherhaven.town.kick.removedYou=您已被移出城鎮「{town}」。
-aetherhaven.town.kick.removedGeneric=從城鎮中刪除成員。
-aetherhaven.town.role.err.ownerAlwaysFull=所有者始終擁有完全權限。
+aetherhaven.town.kick.err.notMember=那名球員不是本鎮居民。
+aetherhaven.town.kick.removed=從鎮上移除{name}。
+aetherhaven.town.kick.removedYou=您已被移出「{town}」鎮。
+aetherhaven.town.kick.removedGeneric=已將某成員從鎮上移除。
+aetherhaven.town.role.err.ownerAlwaysFull=所有者始終擁有全部權限。
 aetherhaven.town.role.set=將 {name} 的角色設定為 {role}。
-aetherhaven.town.accept.err.noSuchTown=沒有那個名字的城鎮。
-aetherhaven.town.accept.err.noInvite=您對該城鎮沒有待處理的邀請。
+aetherhaven.town.accept.err.noSuchTown=沒有這個名字的城鎮。
+aetherhaven.town.accept.err.noInvite=您沒有該城鎮的待處理邀請。
 aetherhaven.town.accept.err.noInvites=您沒有待處理的城鎮邀請。
-aetherhaven.town.accept.err.alreadyInTown=你已經在一個城鎮了。
+aetherhaven.town.accept.err.alreadyInTown=你現在已經身處城鎮之中。
 aetherhaven.town.accept.joined=您加入了「{town}」。
-aetherhaven.town.decline.noPending=城鎮沒有待處理的邀請。
+aetherhaven.town.decline.noPending=城鎮目前沒有待處理的邀請函。
 aetherhaven.town.decline.noInvites=您沒有待處理的城鎮邀請。
-aetherhaven.town.decline.done=邀請被拒絕。
+aetherhaven.town.decline.done=已拒絕邀請。
 aetherhaven.town.rolecmd.playerMustBeOnline=玩家必須在線。
-aetherhaven.town.rolecmd.roleInvalid=角色必須是 BUILD、QUEST 或兩者。
-aetherhaven.town.leave.notInTown=你不在一個城鎮。
-aetherhaven.town.leave.ownerCannotLeave=業主不能離開；所有權移轉尚未實施。
-aetherhaven.town.leave.notMember=你不是這個城鎮的成員。
-aetherhaven.town.leave.left=您留下了「{town}」。
+aetherhaven.town.rolecmd.roleInvalid=角色必須是建造者、任務執行者或兩者兼具。
+aetherhaven.town.leave.notInTown=你不在城鎮裡。
+aetherhaven.town.leave.ownerCannotLeave=業主無法離開；所有權轉移尚未實施。
+aetherhaven.town.leave.notMember=你不是本鎮居民。
+aetherhaven.town.leave.left=您離開了「{town}」。
 
 # Town member role labels (dropdowns)
 aetherhaven.town.memberRole.BUILD=建造
@@ -85,30 +85,30 @@ aetherhaven.town.memberRole.BOTH=兩個都
 
 # === UI: town treasury (messages & debug tax) ===
 # UI — treasury
-aetherhaven.ui.treasury.coinsLine=已儲存金幣：{count}
-aetherhaven.ui.treasury.depositNoCoins=您沒有可存入的金幣。
-aetherhaven.ui.treasury.depositRemoveFailed=無法從庫存中移除硬幣。
+aetherhaven.ui.treasury.coinsLine=儲存的金幣：{count}
+aetherhaven.ui.treasury.depositNoCoins=您沒有金幣可以存入。
+aetherhaven.ui.treasury.depositRemoveFailed=無法從庫存中移除金幣。
 aetherhaven.ui.treasury.deposited=存入{count}金幣。
-aetherhaven.ui.treasury.makeRoom=在你的庫存中騰出空間。
+aetherhaven.ui.treasury.makeRoom=騰出庫存空間。
 aetherhaven.ui.treasury.couldNotAddCoins=無法添加硬幣。
-aetherhaven.ui.treasury.withdrew=提取了 {count} 金幣。
+aetherhaven.ui.treasury.withdrew=提取了{count}枚金幣。
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=稅收細目（僅限加載的塊；卸載的居民貢獻 0，直到模擬）：
-aetherhaven.ui.treasury.debug.titheNoHall=什一稅：這個鎮沒有完整的市政廳。
-aetherhaven.ui.treasury.debug.titheZero=什一稅：0 黃金（沒有負擔的居民，或政策數學中的 0）。卸載/需求/細分：/aetherhaven 稅務細分
-aetherhaven.ui.treasury.debug.titheApplied=繳納什一稅：+{amount} 黃金存入國庫（與早上收取的規則相同）。
-aetherhaven.ui.treasury.debug.state2=townHallComplete={a}morningWindow={b}黎明EpochDay={c} treasuryLastTaxDay={d} willCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=策略={a} maxPerResident={b}loadedResidents={c}
-aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 舒適={comfort} 金色={gold}
-aetherhaven.ui.treasury.debug.state4=sumResidents={a}FounderActive={b}FounderPermille={c}afterFounder={d}
-aetherhaven.ui.treasury.debug.state5=StewardsFeastTax={a}festPermille={b} FinalTotal={c}
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=稅收明細（僅包含已加載的區塊；未加載的居民在模擬之前貢獻 0）：
+aetherhaven.ui.treasury.debug.titheNoHall=什一稅：本鎮沒有完整的市政廳。
+aetherhaven.ui.treasury.debug.titheZero=什一稅：0 金幣（無富裕居民，或政策計算得出為 0）。卸載/需求/明細：/aetherhaven 稅明細
+aetherhaven.ui.treasury.debug.titheApplied=什一稅徵收：+{amount}金幣入庫（與早晨徵收的規則相同）。
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 舒適度={comfort} 金裝={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=管家宴稅={a} 宴席千分稅={b} 最終總計={c}
 
 # === UI: quest journal (log panel) ===
 # UI — quest journal
-aetherhaven.ui.questJournal.needTown=你需要在這個世界上有一個城鎮來追蹤任務。
+aetherhaven.ui.questJournal.needTown=在這個世界裡，你需要一個城鎮來追蹤任務。
 aetherhaven.ui.questJournal.noPermission=您沒有管理城鎮任務的權限。
-aetherhaven.ui.questJournal.noActive=沒有活躍的任務。
-aetherhaven.ui.questJournal.hint=點擊任務以獲取詳細資訊。 × 將其從您的日誌中刪除（您可以從提供者再次取得）。
+aetherhaven.ui.questJournal.noActive=沒有正在進行的任務。
+aetherhaven.ui.questJournal.hint=點擊任務查看詳情。 × 會將其從你的日誌中移除（你可以再次從任務發布者那裡領取）。
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue
@@ -120,131 +120,137 @@ aetherhaven.ui.dialogue.missingNode=缺少節點：{id}
 # UI — plot construction
 aetherhaven.ui.plotConstruction.buildingTitle=大樓
 aetherhaven.ui.plotConstruction.plotSignTitle=地塊標誌
-aetherhaven.ui.plotConstruction.noConstruction=該地塊未配置任何施工。
-aetherhaven.ui.plotConstruction.assignResidentHint=分配一個住在這裡的村民（配對時完成他們的房屋任務）。
+aetherhaven.ui.plotConstruction.noConstruction=該地塊未配置任何建築物。
+aetherhaven.ui.plotConstruction.assignResidentHint=指派一名居住在這裡的村民（當配對成功時完成他們的房屋任務）。
 aetherhaven.ui.plotConstruction.houseResidentUnassigned=未分配
 aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=無法載入玩家資料。
 aetherhaven.ui.plotConstruction.townDataMissing=未找到該街區的城鎮資料。
-aetherhaven.ui.plotConstruction.clearedHome=清除了家庭作業。
+aetherhaven.ui.plotConstruction.clearedHome=已完成家庭任務分配。
 aetherhaven.ui.plotConstruction.updatedHome=家庭作業已更新。
-aetherhaven.ui.plotConstruction.plotRemoved=地塊被移除，地塊標記被返回。
+aetherhaven.ui.plotConstruction.plotRemoved=已移除圖塊並返回圖塊標記。
 aetherhaven.ui.plotConstruction.materialLine={item} x{need}（有 {have}）
 aetherhaven.ui.plotConstruction.couldNotLoadMembers=無法載入玩家資料。
 
 # === UI: Gaia statue (small messages) ===
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=生命精華不足（需{need}）。
-aetherhaven.ui.gaiaStatue.essenceRemoveFailed=無法從庫存中移除生命精華。
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=無法從物品欄中移除生命精華。
 
 # === POI debug tool (placement & targeting) ===
 # POI tool
-aetherhaven.poi.noPoiInRange=該區塊範圍內沒有 POI。
-aetherhaven.poi.noPoiSelected=未選擇興趣點。首先點擊 POI。
-aetherhaven.poi.selectedPoiGone=所選 POI 不再存在。
-aetherhaven.poi.moved=興趣點已移至 {x}、{y}、{z}。
-aetherhaven.poi.noPoiBlock=未選擇興趣點。首先點擊 POI 區塊。
-aetherhaven.poi.clearedInteractionTarget=明確的互動目標； NPC 使用 POI 區塊中心。
+aetherhaven.poi.noPoiInRange=該區域範圍內沒有興趣點。
+aetherhaven.poi.noPoiSelected=未選擇興趣點。請先點選一個興趣點。
+aetherhaven.poi.selectedPoiGone=所選興趣點已不存在。
+aetherhaven.poi.moved=已將興趣點移至{x}、{y}、{z}。
+aetherhaven.poi.noPoiBlock=未選擇興趣點。請先點選興趣點區域。
+aetherhaven.poi.clearedInteractionTarget=已清除互動目標；NPC 使用 POI 方塊中心。
 aetherhaven.poi.setInteractionTarget=將交互目標設定為 {x}、{y}、{z}。
-aetherhaven.poi.selected=所選興趣點 {id}（位於 {x}、{y}、{z}）
-aetherhaven.poi.targetBlockMismatch=目標區塊必須與該 POI 的預期類型 {type} 相符。
+aetherhaven.poi.selected=選定的興趣點 {id} 位於 {x}、{y}、{z}
+aetherhaven.poi.targetBlockMismatch=目標區塊必須與此興趣點的預期類型 {type} 相符。
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
-aetherhaven.placement.movingBuilding=搬遷大樓…
-aetherhaven.plotSign.placed=放置地塊標誌。
-aetherhaven.plotSign.couldNotAdd=無法新增情節標誌（庫存已滿？）
+aetherhaven.placement.movingBuilding=搬遷中的建築物…
+aetherhaven.plotSign.placed=已放置地塊標誌。
+aetherhaven.plotSign.couldNotAdd=無法新增地塊標誌（庫存已滿？）
 
 # Founder monument
-aetherhaven.founder.inTerritory=將創始人紀念碑放置在您的城鎮領土內。
+aetherhaven.founder.inTerritory=將創始人紀念碑放置在你的城鎮範圍內。
 aetherhaven.founder.cannotPlace=你不能把創始人紀念碑放在這裡。
-aetherhaven.founder.createFailed=無法創建創始人雕像。方塊已放置；打破它再試一次。
+aetherhaven.founder.createFailed=無法創建創始人雕像。方塊已放置；將其打破後重試。
 
 # === Debug: villager autonomy overlay ===
 # Autonomy debug
-aetherhaven.debug.autonomy.notVillager=目標不是以太港鎮的村民。
-aetherhaven.debug.autonomy.toggledOn=自主調試開啟（DisplayCustom + VisPath）。 AH 覆蓋在銘牌上。
-aetherhaven.debug.autonomy.toggledOff=該村民的自治調試已關閉。
-aetherhaven.debug.autonomy.state=該村民的自治調試：{state}
-aetherhaven.debug.autonomy.cleared=為該村民清除了以太港自治調試。
+aetherhaven.debug.autonomy.notVillager=目標人物並非以太港鎮的村民。
+aetherhaven.debug.autonomy.toggledOn=自主調試已開啟（DisplayCustom + VisPath）。銘牌上顯示 AH 疊加層。
+aetherhaven.debug.autonomy.toggledOff=已關閉該村民的自主調試功能。
+aetherhaven.debug.autonomy.state=該村民的自主性除錯資訊：{state}
+aetherhaven.debug.autonomy.cleared=已清除該村民的以太港自治調試資訊。
 aetherhaven.debug.on=在
 aetherhaven.debug.off=離開
 
 # === Debug: reputation & milestone listing ===
 # Reputation debug
-aetherhaven.debug.rep.unchanged=聲譽不變（已{value}）。
-aetherhaven.debug.rep.set=將聲譽設為 {value} 並排隊等待對話的交叉里程碑（如果角色已解決）。
-aetherhaven.debug.rep.milestonesHeader=聲譽里程碑（獎勵 ID、角色、最低代表、對話節點）：
+aetherhaven.debug.rep.unchanged=聲譽未改變（已為{value}）。
+aetherhaven.debug.rep.set=將聲望設為 {value}，並將已跨越的里程碑排隊等待對話（如果角色已解決）。
+aetherhaven.debug.rep.milestonesHeader=聲望里程碑（獎勵 ID、角色、最低聲望、對話節點）：
 aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
-aetherhaven.debug.rep.granted=授予獎勵 {id}。
+aetherhaven.debug.rep.granted=授予獎勵{id}。
 aetherhaven.debug.rep.targetInvalid=無效村民。
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=重置此世界中 {towns} 城鎮的 {entries} 玩家-村民行的禮物限制。
+aetherhaven.debug.gift.unknownRole=未知村民角色：{role}
+aetherhaven.debug.gift.noGiftLists=角色 {role} 在村民資料中沒有 giftLoves、giftLikes 或 giftDislikes。
+aetherhaven.debug.gift.fillDone=為 {role} 新增 {added} 禮物日誌行（如果已經為該物品和反應等級新增了一行，則跳過）。
 
 # === Debug: villager needs ===
 # Needs debug
-aetherhaven.debug.needs.whichInvalid=必須是飢餓、能量或樂趣（值為 0..{max}）。
-aetherhaven.debug.needs.elderNoTown=這世界上沒有適合你的城鎮（長老需要）。
-aetherhaven.debug.needs.noElderUuid=城鎮尚未保存長者 UUID。
-aetherhaven.debug.needs.noMatch=沒有匹配的村民（嘗試需要檢查句柄、長老或完整的 uuid）。
-aetherhaven.debug.needs.multipleMatch=多個 NPC 匹配該手柄；使用檢查中的完整 uuid。
-aetherhaven.debug.needs.entityNotLoaded=實體未載入或沒有 VillagerNeeds：{id}
-aetherhaven.debug.needs.set=在 {label} ({id}) 上設定 {which}={value}
-aetherhaven.debug.needs.inspectIntro=有需求的村民（載入的區塊）。設定為：/aetherhaven 需要設定 <handle|Elder|uuid> <hunger|energy|fun> <0..100>
-aetherhaven.debug.needs.inspectLine={handle} | uuid = {uuid} |飢餓={hunger} 能量={energy} 樂趣={fun} (0..{max})
-aetherhaven.debug.needs.noHandle=（無手柄）
+aetherhaven.debug.needs.whichInvalid=這一定是飢餓、精力或樂趣（數值為 0..{max}）。
+aetherhaven.debug.needs.elderNoTown=在這個世界上沒有適合你的城鎮（長老需要）。
+aetherhaven.debug.needs.noElderUuid=城鎮目前還沒有保存的長老UUID。
+aetherhaven.debug.needs.noMatch=沒有匹配的村民（嘗試檢查句柄、長老或完整 uuid）。
+aetherhaven.debug.needs.multipleMatch=多個 NPC 與該句柄相符；請使用檢查器中的完整 UUID。
+aetherhaven.debug.needs.entityNotLoaded=實體未載入或缺少村民需求：{id}
+aetherhaven.debug.needs.set=將 {which}={value} 設定在 {label} ({id}) 上
+aetherhaven.debug.needs.inspectIntro=村民需求（已載入區塊）。設定指令：/aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=（無把手）
 
 # === Debug: plots, POI dump, town list (console) ===
 # Plots list debug
-aetherhaven.debug.plots.forTown={id} 鎮地塊：
-aetherhaven.debug.plots.header={index}。情節={plotId} 狀態={state} 類型={type}
+aetherhaven.debug.plots.forTown=城鎮地塊{id}：
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
 
 # Towns list
-aetherhaven.towns.inWorldCount=這個世界的以太港城鎮：{count}
-aetherhaven.towns.entry={name} id={id} 所有者={owner} 章程={cx},{cy},{cz} 地塊={plots}
+aetherhaven.towns.inWorldCount=這世界中的以太港城鎮：{count}
+aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
 aetherhaven.debug.plots.line={plotId} {construction} {state} 符號@{x},{y},{z}
-aetherhaven.debug.poi.invalidTownUuid=城鎮 UUID 無效：{raw}
-aetherhaven.debug.poi.noTownArg=這個世界上沒有城鎮（使用城鎮 UUID 參數）。
+aetherhaven.debug.poi.invalidTownUuid=無效的城鎮 UUID：{raw}
+aetherhaven.debug.poi.noTownArg=你在這個世界上沒有城鎮（使用城鎮 UUID 參數）。
 aetherhaven.debug.poi.listHeader=城鎮 {town} ({count}) 的興趣點：
-aetherhaven.debug.poi.listEmpty=沒有人在這個城鎮註冊（完成建築物或檢查 pois.json）。
-aetherhaven.debug.poi.listLine={x},{y},{z} 種類={kind} blockTypeId={block} 標籤={tags} cap={cap} 情節={plot}
-aetherhaven.debug.poi.dumpHeader=世界註冊表中的所有 POI ({count})：
-aetherhaven.debug.poi.dumpLine=城鎮={town} {x},{y},{z} 種類={kind} blockTypeId={block} 標籤={tags} 情節={plot}
+aetherhaven.debug.poi.listEmpty=該城鎮沒有已登記的建築物（請填寫建築物資訊或查看 pois.json 文件）。
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=世界註冊表中的所有興趣點 ({count}):
+aetherhaven.debug.poi.dumpLine=城鎮={town} {x},{y},{z} 類型={kind} 區塊類型ID={block} 標籤={tags} 地塊={plot}
 
 # === Quest lifecycle, quest debug, villager list, misc command output ===
 # Quest / dialogue system messages
 aetherhaven.quest.started=任務開始：{name}
 aetherhaven.quest.completed=任務完成：{name}
 aetherhaven.quest.abandoned=任務已放棄：{name}
-aetherhaven.questdebug.granted=已授予主動任務：{name}
-aetherhaven.questdebug.completed=已完成的任務：{name}
-aetherhaven.questdebug.cleared=已完成的主動任務：{name}
-aetherhaven.questdebug.statusHeader=-- 任務狀態 --
+aetherhaven.questdebug.granted=已授予的活躍任務：{name}
+aetherhaven.questdebug.completed=任務已完成：{name}
+aetherhaven.questdebug.cleared=已完成目前任務：{name}
+aetherhaven.questdebug.statusHeader=--任務狀態--
 aetherhaven.questdebug.statusActive=積極的：
 aetherhaven.questdebug.statusCompleted=完全的：
 aetherhaven.questdebug.statusEmpty=（沒有任何）
 aetherhaven.questdebug.statusLine={name} ({id})
-aetherhaven.villager.noEntityIds=該鎮尚未登記村民單位身分證。
-aetherhaven.villager.listHeader=城鎮村民：實體 UUID、來源、角色（如果已加載）（使用具有 /aetherhaven 聲譽的 UUID 或角色 id...以及村民定位）：
-aetherhaven.villager.listRow={uuid} | {note} |角色：{role}
-aetherhaven.villager.locateNotLoaded=該村民未加載（嘗試靠近或加載塊）。
-aetherhaven.villager.locateNoTransform=該實體沒有變換。
-aetherhaven.villager.locatePosition=村民 {uuid} ({role})：{x}、{y}、{z}
+aetherhaven.villager.noEntityIds=該鎮尚未註冊任何村民實體ID。
+aetherhaven.villager.listHeader=城鎮村民：實體 UUID、來源、角色（如果已載入）（使用 UUID 或角色 ID 配合 /aetherhaven reputation … 和 villager locate 指令）：
+aetherhaven.villager.listRow={uuid} | {note} | 角色：{role}
+aetherhaven.villager.locateNotLoaded=該村民尚未加載（請嘗試靠近或加載區塊）。
+aetherhaven.villager.locateNoTransform=該實體無需進行任何轉換。
+aetherhaven.villager.locatePosition=村民 {uuid} ({role}): {x}, {y}, {z}
 aetherhaven.villager.locateOpRequired=傳送需要操作員（OP組）。
-aetherhaven.villager.teleported=傳送。
+aetherhaven.villager.teleported=瞬間移動。
 aetherhaven.reputation.setFailed={detail}
-aetherhaven.debug.loot.noContainer=該塊沒有物品容器（塊未加載、填充物/基礎不匹配或不是容器塊）。
-aetherhaven.debug.loot.bonusApplied=以太港獎勵戰利品骰應用於此容器（強制）。
-aetherhaven.townsCommand.line={id} name="{name}" 世界={world} 所有者={owner} 區塊={cx},{cz} r{radius}
+aetherhaven.debug.loot.noContainer=該方塊處沒有物品容器（區塊未加載、填充物/基礎方塊不匹配，或不是容器方塊）。
+aetherhaven.debug.loot.bonusApplied=此容器已套用以太港灣額外掉落物品（強制）。
+aetherhaven.townsCommand.line={id} 名稱="{name}" 世界={world} 所有者={owner} 區塊={cx},{cz} r{radius}
 aetherhaven.list.none=（沒有任何）
-aetherhaven.questdebug.statusActiveLine=活躍：{list}
-aetherhaven.questdebug.statusActiveEmpty=活躍：（無）
+aetherhaven.questdebug.statusActiveLine=活性：{list}
+aetherhaven.questdebug.statusActiveEmpty=目前狀態：（無）
 aetherhaven.questdebug.statusCompletedLine=已完成：{list}
 aetherhaven.questdebug.statusCompletedEmpty=已完成：（無）
 
 # === World portals & instance discovery (loading) ===
 # Portals
-items.Aetherhaven_Portal_Exit.name=以太天堂出口
+items.Aetherhaven_Portal_Exit.name=以太港出口
 items.Aetherhaven_Portal_Exit.description=用於返回主世界。
-items.Aetherhaven_Portal_Enter.name=乙太港網關
-items.Aetherhaven_Portal_Enter.description=用於進入以太天堂。
+items.Aetherhaven_Portal_Enter.name=以太港門戶
+items.Aetherhaven_Portal_Enter.description=用於進入以太港。
 
 # Instance discovery (title / subtitle)
 instances.aetherhaven.title=以太港
@@ -255,264 +261,277 @@ instances.aetherhaven.subtitle=天空村
 aetherhaven.ui.plotconstruction.title=建造
 aetherhaven.ui.plotmanagement.title=城鎮管理
 aetherhaven.ui.plotmanagement.tabPlot=陰謀
-aetherhaven.ui.plotmanagement.tabPlayers=玩家
-aetherhaven.ui.plotmanagement.playersHint=按名字邀請線上玩家。更改角色或刪除下面的成員。
-aetherhaven.ui.plotmanagement.playersHintReadOnly=這個鎮的成員。只有擁有者可以邀請或更改角色。
+aetherhaven.ui.plotmanagement.tabPlayers=球員
+aetherhaven.ui.plotmanagement.playersHint=按姓名邀請線上玩家。在下方更改角色或移除成員。
+aetherhaven.ui.plotmanagement.playersHintReadOnly=本鎮成員。只有鎮長才能邀請成員或更改角色。
 aetherhaven.ui.plotmanagement.inviteLabel=邀請玩家
 aetherhaven.ui.plotmanagement.invitePlaceholder=玩家姓名（線上）
 aetherhaven.ui.plotmanagement.inviteSend=發送邀請
 aetherhaven.ui.plotmanagement.kick=消除
 aetherhaven.ui.plotmanagement.roleOwner=擁有者
-aetherhaven.ui.plotmanagement.tabPlotTooltip=地塊資訊
+aetherhaven.ui.plotmanagement.tabPlotTooltip=劇情資訊
 aetherhaven.ui.plotmanagement.tabNeedsTooltip=村民需求
-aetherhaven.ui.plotmanagement.tabPlayersTooltip=鎮員
-aetherhaven.ui.plotmanagement.tabMoveTooltip=移動這棟大樓
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=鎮民
+aetherhaven.ui.plotmanagement.tabMoveTooltip=搬遷這棟建築物
 aetherhaven.ui.plotconstruction.materials=材料
 aetherhaven.ui.plotconstruction.build=建造
-aetherhaven.ui.plotconstruction.pickUpPlot=拾取情節（返回令牌）
+aetherhaven.ui.plotconstruction.pickUpPlot=領取地塊（歸還代幣）
 aetherhaven.ui.plotconstruction.townNeeds=城鎮需求
-aetherhaven.ui.plotconstruction.moveBuilding=移動建築物
+aetherhaven.ui.plotconstruction.moveBuilding=搬遷大樓
 aetherhaven.ui.plotconstruction.houseResident=居民
-aetherhaven.ui.plotconstruction.assignHouseResident=設定常駐
-aetherhaven.ui.plotconstruction.moveBuildingModalTitle=搬樓？
-aetherhaven.ui.plotconstruction.moveBuildingModalBody=開啟繪圖放置以選擇新地點。搬遷破壞並重建舊建築；先清除足跡內的貴重物品、寵物和鬆散物品。
+aetherhaven.ui.plotconstruction.assignHouseResident=設置居民
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=搬遷建築物？
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=打開地塊放置介面，選擇新地點。移動會拆除並重建舊建築；請先移除地塊內的貴重物品、寵物和零散物品。
 aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=繼續
 aetherhaven.ui.plotconstruction.moveBuildingModalCancel=取消
 
 aetherhaven.ui.villagerneeds.title=城鎮需求
-aetherhaven.ui.villagerneeds.hint=選擇一個村民來查看儀表和肖像。
+aetherhaven.ui.villagerneeds.hint=選擇村民查看身高體重和頭像。
 aetherhaven.ui.villagerneeds.hunger=飢餓
 aetherhaven.ui.villagerneeds.energy=活力
 aetherhaven.ui.villagerneeds.fun=樂趣
 aetherhaven.ui.villagerneeds.villagers=村民
-aetherhaven.ui.villagerneeds.noResidentsTracked=目前還沒有城鎮居民追蹤到。
-aetherhaven.ui.villagerneeds.rescueTooltip=將選定的居民傳送到您旁邊的位置，並清除他們當前的路徑和活動，以便他們可以移動並選擇新的目的地。如果村民被困住了，可以使用這個。
-aetherhaven.ui.villagerneeds.rescueDone=選定的居民被轉移到您身邊，他們的日常生活也被重置。
-aetherhaven.ui.villagerneeds.rescueNotTownResident=那個居民不屬於這個城鎮。
+aetherhaven.ui.villagerneeds.noResidentsTracked=目前尚未追蹤到該鎮居民。
+aetherhaven.ui.villagerneeds.rescueTooltip=將選定的村民傳送到你旁邊的位置，並清除他們目前的路徑和活動，以便他們能夠移動並選擇新的目的地。如果村民卡住了，可以使用此技能。
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=看看你送給這位村民的物品，按他們的反應分組，以及你本週還可以贈送多少禮物。
+aetherhaven.ui.giftHistory.title=贈送的禮物
+aetherhaven.ui.giftHistory.backTooltip=返回城鎮的需求
+aetherhaven.ui.giftHistory.empty=你還沒有送給這位村民任何禮物，所以沒有什麼可以展示的。
+aetherhaven.ui.giftHistory.section.love=喜愛
+aetherhaven.ui.giftHistory.section.like=喜歡
+aetherhaven.ui.giftHistory.section.neutral=中性的
+aetherhaven.ui.giftHistory.section.dislike=不喜歡
+aetherhaven.ui.giftHistory.giftsThisWeek=本週禮物：{used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=前鎮村民
+aetherhaven.ui.giftHistory.cycleNextTooltip=下一個城鎮的村民
+aetherhaven.dialogue.gift.disabled.daily=今天已贈送的禮物
+aetherhaven.dialogue.gift.disabled.weekly=本週收到的兩份禮物
+aetherhaven.ui.villagerneeds.rescueDone=選定的住戶已轉移到您這裡，其日常作息也已重新安排。
+aetherhaven.ui.villagerneeds.rescueNotTownResident=那位居民並非本鎮居民。
 aetherhaven.ui.reputation.label=名聲
-aetherhaven.reputation.dailyTalkGain=+{amount} 聲譽（每天問候）
-aetherhaven.reputation.giftRepChange={amount} 聲譽（贈禮）
+aetherhaven.reputation.dailyTalkGain=+{amount} 聲譽（日常問候）
+aetherhaven.reputation.giftRepChange={amount} 聲譽（禮物）
 
 # === UI: charter amendments (tithe & town focus) ===
-aetherhaven.ui.charter.title=章程修正案
-aetherhaven.ui.charter.popHint=居民（非訪客）：{count}。 1級在3級解鎖；2級5級。
+aetherhaven.ui.charter.title=憲章修正案
+aetherhaven.ui.charter.popHint=居民（非訪客）：{count}。 1 級解鎖時間為 3；2 級解鎖時間為 5。
 aetherhaven.ui.charter.tierMark1=我
 aetherhaven.ui.charter.tierMark2=二
-aetherhaven.ui.charter.tier1=第一級：什一稅風格
+aetherhaven.ui.charter.tier1=第一層級：什一稅式
 aetherhaven.ui.charter.tier2=第二層：城鎮焦點
 aetherhaven.ui.charter.t1.perCapitaShort=人均
 aetherhaven.ui.charter.t1.happinessShort=幸福加權
-aetherhaven.ui.charter.t1.perCapitaTooltip=人數優先，什一稅。 \n\n早晨黃金取決於有多少居民居住在這裡。日常舒適度仍然對整體舒適度產生了一些影響，但人口才是推動因素。
-aetherhaven.ui.charter.t1.happinessTooltip=需求優先。 \n\n早盤黃金更依賴居民的飲食、休息和精神狀態。一些額外的公民比讓每個人保持良好的狀態更重要。
+aetherhaven.ui.charter.t1.perCapitaTooltip=人口數量優先決定收入。 \n\n早晨的收入取決於這裡的居民人數。日常生活的舒適度也會對總收入產生一定影響，但人口才是決定性因素。
+aetherhaven.ui.charter.t1.happinessTooltip=優先滿足需求的什一稅。 \n\n早晨的黃金收入更依賴居民的飲食、休息和精神狀態。比起增加幾個居民，保持所有人的健康狀態更為重要。
 aetherhaven.ui.charter.t2.miningShort=礦業
-aetherhaven.ui.charter.t2.loggingShort=記錄
+aetherhaven.ui.charter.t2.loggingShort=日誌記錄
 aetherhaven.ui.charter.t2.farmingShort=農業
 aetherhaven.ui.charter.t2.smithingShort=鍛造
-aetherhaven.ui.charter.t2.miningTooltip=該憲章支持採礦。 \n\n與採礦生產相關的獎金將在他們到達時有利於這個城鎮。僅選擇以下一個焦點：採礦、伐木、農業或鍛造。
-aetherhaven.ui.charter.t2.loggingTooltip=憲章支持森林。 \n\n與伐木和伐木相關的獎金在他們到達時將有利於這個城鎮。僅選擇以下一個焦點：採礦、伐木、農業或鍛造。
-aetherhaven.ui.charter.t2.farmingTooltip=憲章支持田地。 \n\n當你的城鎮有一塊完整的農場時，這裡的灑水裝置會到達更遠的地方，在噴霧邊緣有額外的瓷磚。僅選擇以下一個焦點：採礦、伐木、農業或鍛造。
-aetherhaven.ui.charter.t2.smithingTooltip=特許狀支持鍛造廠。 \n\n當他們到達這個城鎮時，與鍛造和金屬加工相關的獎金將有利於這個城鎮。僅選擇以下一個焦點：採礦、伐木、農業或鍛造。
-aetherhaven.ui.charter.hint=每層選擇一個選項。以後不能更改選擇。
-aetherhaven.ui.charter.allChosen=為該鎮選擇的所有修正案。
-aetherhaven.ui.charter.noTown=您必須屬於某個城鎮才能使用此功能。
-aetherhaven.ui.charter.noPermission=您不能更改該鎮的憲章修正案。
-aetherhaven.ui.charter.err.locked=該修正案已被鎖定或已被選擇。
-aetherhaven.ui.charter.err.invalid=無效選擇。
-aetherhaven.ui.charter.saved=章程修正案已更新。
+aetherhaven.ui.charter.t2.miningTooltip=該憲章支持礦業發展。 \n\n與採礦生產相關的獎勵將在抵達後惠及該城鎮。請從以下選項中選擇一項發展重點：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.t2.loggingTooltip=該章程支持森林。 \n\n伐木和木材砍伐相關的獎勵將有利於該城鎮的發展。請從以下四個方向中選擇一個：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.t2.farmingTooltip=該章程支持農地建設。 \n\n當你的城鎮擁有完整的農田後，這裡的灑水器噴灑範圍會更廣，邊緣區域也會有額外的灑水覆蓋。請從以下選項中選擇一項發展重點：採礦、伐木、耕作或鍛造。
+aetherhaven.ui.charter.t2.smithingTooltip=該章程支持鐵匠鋪。 \n\n與鍛造和金屬加工相關的加成將在他們抵達時惠及這座城鎮。請從以下選項中選擇一項發展重點：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.hint=每個層級只能選擇一個選項。選擇後無法更改。
+aetherhaven.ui.charter.allChosen=本鎮所有修正案均已選定。
+aetherhaven.ui.charter.noTown=您必須是某個城鎮的居民才能使用此服務。
+aetherhaven.ui.charter.noPermission=該鎮的章程修正案不能更改。
+aetherhaven.ui.charter.err.locked=該修正案已被鎖定或已被選中。
+aetherhaven.ui.charter.err.invalid=選項無效。
+aetherhaven.ui.charter.saved=憲章修正案已更新。
 
 # === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
 aetherhaven.reputation.reward.continue=繼續
-aetherhaven.reputation.reward.elder.50=憲章不會永遠刻在石頭上。這是修正表的模式。一旦您了解了原理圖，您就可以在城市規劃台製作它。把它放在大廳裡，然後選擇鎮上早上什一稅的傾斜方式。
-aetherhaven.reputation.reward.elder.100=你已經把這個地方帶到了比任何人要求的更遠的地方。以這塊基石為例：在章程允許的地方建立創始人的紀念碑。財政部會記得的。
-aetherhaven.reputation.reward.innkeeper.50=你已經讓這個大廳保持充足和誠實足夠長的時間了，我將把大桌子交給你。這是宴會圖案——當你有了原理圖後，在城市規劃櫃檯製作它，然後將其設置在城鎮中。當桌子準備好後，你也可以叫萊傑晚餐：麵包、起司、派和一週的什一稅。當你服務的時候我會看守大廳。
-aetherhaven.reputation.reward.innkeeper.75=你和我們一起走過了足夠多的漫漫長夜。當你佈置爐石守夜活動時，鎮上一週的飲食會變得更慢、更友善。魚、肉、蔬菜，以及滿足各種需求的溫和褪色劑。這就是我們保持彼此立場的方式。
-aetherhaven.reputation.reward.innkeeper.100=你和這個小鎮現在共用一個名字。 Berrycircle Concord 是輕食盤圈：沙拉、水果串、爆米花和落地吐司。服務一次，他們會更溫暖地記住你。
-aetherhaven.reputation.reward.merchant.50=無論天氣好壞，你都信守諾言。這是長凳圖案。拿到示意圖後，請在城市規劃辦公桌上製作它。評估是免費的；我的還是要收費的。
-aetherhaven.reputation.reward.merchant.100=您已經在這個帳本中投入了足夠的黃金來贏得珠寶商的角落。圖案是你的。在城市規劃辦公室建造它。設定您的寶石、金屬和您傾注的生命，這件作品就會成為現實。
-aetherhaven.reputation.reward.farmer.25=你在行中贏得了我的信任。我畫了一個鐵製灑水器。當你有水精華和鐵時，在農場的長凳上製作它。
-aetherhaven.reputation.reward.farmer.50=這是釷圖案：範圍更廣，同樣的黎明節奏。一旦您了解原理圖，工作台上的“農業”標籤就會顯示它。
-aetherhaven.reputation.reward.farmer.75=鈷能更好地保持壓力。此頁面解鎖了第三層灑水器，仍然是日出時的一次很好的浸泡。
-aetherhaven.reputation.reward.farmer.100=精金與精華：套裝中的最後一張。小心放置它們。鎮上的田野將在黎明時分喝水。
-aetherhaven.reputation.reward.blacksmith.25=石為臼，石為忍。你兩者都有，這表明了這一點。
-aetherhaven.reputation.reward.blacksmith.50=你已經贏得了鍛造廠的信任。這是晶洞砧的示意圖。當你有酒吧和石頭時，在你的城市規劃辦公桌上製作它。
+aetherhaven.reputation.reward.elder.50=憲章並非一成不變。這裡提供一份修正案表格的範本。一旦你了解了示意圖，就可以在你的城鎮規劃桌上製作出來。把它放在大廳裡，然後決定城鎮晨間什一稅的傾向。
+aetherhaven.reputation.reward.elder.100=你們為這片土地做出了遠超過任何人預期的貢獻。請收下這塊奠基石：在章程允許的地方，為創辦人樹立紀念碑。國庫將銘記你們的功績。
+aetherhaven.reputation.reward.innkeeper.50=你一直以來都盡力維持著這個大廳的運轉，所以我信任你，願意把宴會的重任交給你。這是宴會的佈置圖——拿到圖紙後，去城鎮規劃處把它佈置好，然後擺放在鎮上。宴會準備好後，你也可以舉辦帳簿晚宴：麵包、起司、餡餅，以及足夠一週享用的什一奉獻。我會照看大廳，你負責招待客人。
+aetherhaven.reputation.reward.innkeeper.75=你已經陪我們走過太多漫漫長夜了。當你擺放好爐邊守夜祭的祭品時，全鎮的人接下來一週都會放慢節奏，更溫和地進食。魚、肉、蔬菜，以及各種較溫和的食物，滿足所有人的需求。這就是我們彼此扶持的方式。
+aetherhaven.reputation.reward.innkeeper.100=你和這座小鎮現在有了共同的名字。康科德莓果圈餐廳（Berrycircle Concord）就像一個輕食拼盤：沙拉、水果串、爆米花，還有一份令人回味無窮的吐司。只要上一次，就能讓他們對你留下深刻的印象。
+aetherhaven.reputation.reward.merchant.50=你無論順境逆境都信守承諾。這是長椅的圖紙。拿到圖紙後，到你的城鎮規劃辦公室製作吧。長椅的評估是免費的；但我自己的評估仍然收費。
+aetherhaven.reputation.reward.merchant.100=你在這筆帳簿上投入的黃金足以讓你贏得一個珠寶商的專屬角落。圖案由你掌控。在城鎮規劃桌上，打造你的專屬珠寶。鑲嵌你的寶石、你的金屬，以及你傾注其中的生命，這件作品終將完美呈現。
+aetherhaven.reputation.reward.farmer.25=你在田間勞動中贏得了我的信任。我畫了一個鐵製灑水器的草圖。當你擁有水之精華和鐵時，就可以在農活台上製作它了。
+aetherhaven.reputation.reward.farmer.50=以下是釷的分佈模式：覆蓋範圍更廣，黎明節奏相同。一旦你了解了原理圖，工作台上的「耕作」標籤就會顯示出來。
+aetherhaven.reputation.reward.farmer.75=鈷合金能更好地保持壓力。此頁面解鎖第三層灑水器，依然能在日出時分帶來一次酣暢淋漓的澆水。
+aetherhaven.reputation.reward.farmer.100=精金與精華：這套牌的最後一張。小心放置。黎明時分，城鎮的田野將飲水。
+aetherhaven.reputation.reward.blacksmith.25=石頭是砂漿，石頭是耐心。你兩者兼備，而且顯而易見。
+aetherhaven.reputation.reward.blacksmith.50=你已經贏得了鐵匠的信任。這是晶洞鐵砧的製作圖。當你收集到所需的錠塊和石頭後，就可以在城鎮規劃桌上製作它了。
 
 # === UI: plot sign admin (creative / op panel) ===
 aetherhaven.ui.plotadmin.title=地塊標誌（管理員）
 aetherhaven.ui.plotadmin.construction=建造
-aetherhaven.ui.plotadmin.give=給出情節標誌並關閉
+aetherhaven.ui.plotadmin.give=給出繪圖訊號並關閉
 
 # === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
-commands.aetherhaven.root.desc=以太天堂 mod 指令
-commands.aetherhaven.reload.desc=從磁碟重新載入 config.json 和 Aetherhaven JSON 目錄（建立模式）
-commands.aetherhaven.reload.success=Aetherhaven 配置和資產目錄已重新載入。
+commands.aetherhaven.root.desc=Aetherhaven mod 指令
+commands.aetherhaven.reload.desc=從磁碟重新載入 config.json 和 Aetherhaven JSON 目錄（創造模式）
+commands.aetherhaven.reload.success=Aetherhaven 設定和資源目錄已重新載入。
 commands.aetherhaven.reload.failure=重新載入失敗：{detail}
-commands.aetherhaven.reload.noPlugin=Aetherhaven 外掛程式未載入。
-commands.aetherhaven.plot.desc=開啟地塊標誌管理 UI（選擇構造，取得項目）
-commands.aetherhaven.starterkit.desc=給自己 Aetherhaven 入門套件（劇情人員、日記、章程、旅館代幣、城市規劃台；創意模式）
+commands.aetherhaven.reload.noPlugin=Aetherhaven插件未載入。
+commands.aetherhaven.plot.desc=打開地塊標誌管理介面（選擇建築，取得物品）
+commands.aetherhaven.starterkit.desc=為自己準備一份以太港新手包（地塊工作人員、日誌、憲章、旅館代幣、城鎮規劃桌；創作模式）
 commands.aetherhaven.starterkit.success=入門套件已新增至您的庫存。
-commands.aetherhaven.starterkit.partial=部分授予入門套件； {failed} 物品不適合（騰出庫存空間）。
+commands.aetherhaven.starterkit.partial=入門套件部分發放；{failed} 物品不合適（騰出庫存空間）。
 
 commands.aetherhaven.exportskin.desc=將您的頭像皮膚匯出為模型 JSON（父級：玩家）
-commands.aetherhaven.exportskin.other.desc=將另一個玩家的頭像皮膚匯出為模型 JSON
-commands.aetherhaven.exportskin.arg.path=可選的輸出檔案路徑（預設：plugin data/avatar_exports/）
+commands.aetherhaven.exportskin.other.desc=將其他玩家的頭像皮膚匯出為模型 JSON
+commands.aetherhaven.exportskin.arg.path=可選的輸出檔案路徑（預設值：plugin data/avatar_exports/）
 commands.aetherhaven.exportskin.noSkin=該玩家沒有可用的角色皮膚。
 commands.aetherhaven.exportskin.invalidSkin=皮膚驗證失敗：{detail}
-commands.aetherhaven.exportskin.resolveError=無法解析皮膚到模型附件：{detail}
-commands.aetherhaven.exportskin.ioError=無法寫入 {path}：{detail}
-commands.aetherhaven.exportskin.success=將模型 JSON 寫入 {path}
+commands.aetherhaven.exportskin.resolveError=無法解析皮膚與模型之間的連結：{detail}
+commands.aetherhaven.exportskin.ioError=寫入 {path} 失敗：{detail}
+commands.aetherhaven.exportskin.success=已將模型 JSON 寫入 {path}
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=地塊標誌
-items.Aetherhaven_Plot_Sign.description=標記可以建構預製件的位置。使用 /aetherhaven 圖進行設定。
+items.Aetherhaven_Plot_Sign.description=標記預製件的建造位置。使用 /aetherhaven plot 進行設定。
 
 items.Aetherhaven_Charter.name=城鎮憲章
-items.Aetherhaven_Charter.description=建立城鎮的地方。每個玩家在每個世界中可以擁有一個城鎮。用於開啟城鎮資訊。
+items.Aetherhaven_Charter.description=建立城鎮的地點。每個玩家在每個世界只能擁有一座城鎮。用於開啟城鎮資訊。
 
-items.Aetherhaven_Town_Planning_Desk.name=都市規劃諮詢台
-items.Aetherhaven_Town_Planning_Desk.description=製作城鎮章程、地塊安置人員、任務日誌、晶洞鐵砧、章程修訂表和地塊代幣。在工作台上建構一個。
-items.Aetherhaven_Charter_Amendments_Table.name=章程修訂表
-items.Aetherhaven_Charter_Amendments_Table.description=記錄該鎮的什一稅如何計算以及憲章青睞哪些貿易。一旦您的民眾支持，即可用於提出修正案。在您的城市規劃辦公桌上進行手工製作；您必須知道原理圖。
+items.Aetherhaven_Town_Planning_Desk.name=城鎮計畫辦公室
+items.Aetherhaven_Town_Planning_Desk.description=製作城鎮憲章、地塊放置杖、任務日誌、晶洞鐵砧、憲章修訂台和地塊標記。在工作台上製作一個。
+items.Aetherhaven_Charter_Amendments_Table.name=憲章修正案表
+items.Aetherhaven_Charter_Amendments_Table.description=記錄城鎮什一稅的計算方式以及特許狀所鼓勵的貿易類型。一旦人口支持，即可用於開啟修正案。在城鎮規劃桌前製作；您必須了解示意圖。
 items.Aetherhaven_Banquet_Table.name=宴會桌
-items.Aetherhaven_Banquet_Table.description=城鎮盛宴的長桌。放置在你的領土上並用它來舉辦公民盛宴。一旦鎮上有人分享了該模式，就可以在城市規劃櫃檯進行手工製作。
-items.Aetherhaven_Founder_Monument.name=創辦人紀念碑
-items.Aetherhaven_Founder_Monument.description=一個石基座，上面有創始人的肖像。放置在城鎮範圍內以紀念他們；財政部的早間份額在目前情況下略有增長。每個鎮只有一個。
+items.Aetherhaven_Banquet_Table.description=一張用於城鎮宴會的長桌。將其放置在您的領地內，用於舉辦市政宴會。待鎮上有人分享了圖紙後，即可在城鎮規劃桌處製作。
+items.Aetherhaven_Founder_Monument.name=奠基人紀念碑
+items.Aetherhaven_Founder_Monument.description=一座石基座，上面刻有創始人的肖像。將其放置在城鎮範圍內以示敬意；基座矗立期間，國庫的晨間收入會略有增長。每個城鎮僅限一座。
 
-benchCategories.aetherhaven.town_planning=都市計畫
-benchCategories.aetherhaven.plot_tokens=地塊代幣
+benchCategories.aetherhaven.town_planning=城鎮計畫
+benchCategories.aetherhaven.plot_tokens=地塊標記
 
-items.Aetherhaven_Plot_Placement_Tool.name=地塊安置人員
-items.Aetherhaven_Plot_Placement_Tool.description=將匹配的劇情令牌放在包包裡。瞄準地面時使用此法杖可以看到建築物的幽靈。輕推並轉動它直到適合，然後確認放樣地塊。取消以清除預覽，並在您想要不同的位置時再次使用五線譜。
+items.Aetherhaven_Plot_Placement_Tool.name=場地佈置人員
+items.Aetherhaven_Plot_Placement_Tool.description=將對應的地塊標記放在背包裡。使用法杖瞄準地面，可以看到建築物的輪廓。調整法杖位置，直到與建築物輪廓吻合，然後確認即可標記地塊。取消操作即可清除預覽，需要標記其他位置時可以再次使用法杖。
 
 items.Aetherhaven_Poi_Tool.name=POI調試工具
-items.Aetherhaven_Poi_Tool.description=持有時顯示城鎮 POI（權限：aetherhaven.poi.tool）。主要：選擇最近的 POI。次要：將 POI 錨點移到該區塊。用途：設定/清除所選 POI 的自治路徑目標（再次按一下 POI 區塊即可清除）。
-items.Aetherhaven_Poi_Tool.legendTitle=興趣點工具
-items.Aetherhaven_Poi_Tool.legendPrimary=主要：選擇街區附近最近的 POI
-items.Aetherhaven_Poi_Tool.legendSecondary=次要：將選定的 POI 移至區塊
-items.Aetherhaven_Poi_Tool.legendUse=使用：為選定的 POI 設定 NPC 路徑目標（用於 POI 方塊清除）
+items.Aetherhaven_Poi_Tool.description=持有工具時顯示城鎮興趣點（權限：aetherhaven.poi.tool）。主要功能：選擇最近的興趣點。次要功能：將興趣點錨點移到該方塊。用途：設定/清除所選興趣點的自主路徑目標（再次點擊興趣點方塊即可清除）。
+items.Aetherhaven_Poi_Tool.legendTitle=POI 工具
+items.Aetherhaven_Poi_Tool.legendPrimary=主要選項：選擇街區附近最近的興趣點。
+items.Aetherhaven_Poi_Tool.legendSecondary=次要操作：將選定的興趣點移至區塊。
+items.Aetherhaven_Poi_Tool.legendUse=用途：為選定的興趣點設定NPC路徑目標（用於興趣點區域清除時）
 
-aetherhaven.poiTool.legendTitle=興趣點工具
-aetherhaven.poiTool.legendPrimary=主要：選擇街區附近最近的 POI
-aetherhaven.poiTool.legendSecondary=次要：將選定的 POI 移至區塊
-aetherhaven.poiTool.legendUse=使用：為選定的 POI 設定 NPC 路徑目標（用於 POI 方塊清除）
+aetherhaven.poiTool.legendTitle=POI 工具
+aetherhaven.poiTool.legendPrimary=主要選項：選擇街區附近最近的興趣點。
+aetherhaven.poiTool.legendSecondary=次要操作：將選定的興趣點移至區塊。
+aetherhaven.poiTool.legendUse=用途：為選定的興趣點設定NPC路徑目標（用於興趣點區域清除時）
 
-items.Aetherhaven_Plot_Token_Inn.name=客棧情節令牌
-items.Aetherhaven_Plot_Token_Inn.description=庫存中需要使用地塊安置人員來進行旅館足跡。
+items.Aetherhaven_Plot_Token_Inn.name=旅館地塊代幣
+items.Aetherhaven_Plot_Token_Inn.description=庫存中需要使用地塊放置人員來規劃旅館的佔地面積。
 
-items.Aetherhaven_Plot_Token_Market_Stall.name=市場攤位圖代幣
-items.Aetherhaven_Plot_Token_Market_Stall.description=需要從地塊安置人員安置市場攤位足跡。
+items.Aetherhaven_Plot_Token_Market_Stall.name=市場攤位地塊代幣
+items.Aetherhaven_Plot_Token_Market_Stall.description=需依照場地佈置人員的指示放置市場攤位輪廓。
 
-items.Aetherhaven_Plot_Token_Farm.name=農場地塊代幣
-items.Aetherhaven_Plot_Token_Farm.description=需要從地塊安置人員安置農場地塊足跡。
+items.Aetherhaven_Plot_Token_Farm.name=農地代幣
+items.Aetherhaven_Plot_Token_Farm.description=需根據地塊放置人員提供的農田地塊輪廓進行放置。
 
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=鐵匠鋪劇情令牌
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=需要從地塊安置人員安置鐵匠鋪足跡。
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=鐵匠鋪地塊代幣
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=需要由地塊放置人員放置鐵匠舖的地基。
 
 items.Aetherhaven_Plot_Token_Park.name=公園地塊代幣
-items.Aetherhaven_Plot_Token_Park.description=需要由地塊安置人員來安置公園足跡。
+items.Aetherhaven_Plot_Token_Park.description=需依照場地規劃人員的指示放置公園用地平面圖。
 
 items.Aetherhaven_Plot_Token_House.name=房屋地塊代幣
-items.Aetherhaven_Plot_Token_House.description=需要從地塊安置人員安置共享房屋足跡。
+items.Aetherhaven_Plot_Token_House.description=需要將共享房屋的佔地面積從地塊放置人員移出。
 
-items.Aetherhaven_Plot_Token_Town_Hall.name=市政廳地塊令牌
-items.Aetherhaven_Plot_Token_Town_Hall.description=需要從地塊安置人員安置市政廳足跡。
+items.Aetherhaven_Plot_Token_Town_Hall.name=市政廳地塊代幣
+items.Aetherhaven_Plot_Token_Town_Hall.description=需要根據場地規劃人員的指示放置市政廳的佔地面積。
 
 items.Aetherhaven_Gold_Coin.name=金幣
-items.Aetherhaven_Gold_Coin.description=城鎮貨幣存放在金庫中。
+items.Aetherhaven_Gold_Coin.description=城鎮貨幣儲存在國庫中。
 
 items.Aetherhaven_Geode.name=晶洞
-items.Aetherhaven_Geode.description=一種空心石頭，可能含有水晶、寶石或礦石。花錢請鐵匠打開。
+items.Aetherhaven_Geode.description=一塊空心石頭，裡面可能藏有水晶、寶石或礦石。付錢請鐵匠把它敲開。
 
 items.Aetherhaven_Geode_Anvil.name=晶洞砧
-items.Aetherhaven_Geode_Anvil.description=無需鐵匠費即可打開晶洞。放置和使用；您必須了解示意圖才能在城市規劃台製作它。
+items.Aetherhaven_Geode_Anvil.description=無需支付鐵匠費用即可開啟晶洞。放置後即可使用；您必須知道圖紙才能在城鎮規劃桌上製作。
 
-barter.aetherhaven_vex.title=Vex的每日庫存
+barter.aetherhaven_vex.title=Vex每日股票
 
-items.Aetherhaven_Treasury.name=鎮金庫
-items.Aetherhaven_Treasury.description=持有鎮上的金幣。用於存款或提款（城鎮所有者）。
+items.Aetherhaven_Treasury.name=鎮財政
+items.Aetherhaven_Treasury.description=存放城鎮金幣。用於訪問（城鎮所有者）。
 
-items.Aetherhaven_Quest_Journal.name=城鎮探索日記
-items.Aetherhaven_Quest_Journal.description=次要用途：查看活躍的城鎮任務。客棧建成後，長老可能會送你一份。
+items.Aetherhaven_Quest_Journal.name=城鎮任務日誌
+items.Aetherhaven_Quest_Journal.description=次要用途：查看城鎮中的活躍任務。旅館建成後，長老可能會給你一個任務。
 
 # === UI: quest journal (detailed view; keys use questjournal lowercase) ===
-aetherhaven.ui.questjournal.title=探索日記
-aetherhaven.ui.questjournal.hint=選擇一個任務以獲取詳細資訊。
+aetherhaven.ui.questjournal.title=任務日誌
+aetherhaven.ui.questjournal.hint=選擇一個任務查看詳情。
 aetherhaven.ui.questjournal.abandon=放棄
 aetherhaven.ui.questjournal.dismissShort=×
 aetherhaven.ui.questjournal.detailPlaceholder=任務詳情
-aetherhaven.ui.questjournal.detailPlaceholderBody=選擇上面的任務。
+aetherhaven.ui.questjournal.detailPlaceholderBody=請選擇以上任務。
 
-items.Aetherhaven_Management_Block.name=鎮檔案架
-items.Aetherhaven_Management_Block.description=已竣工建築的文員架。打開其地塊的施工狀態。
+items.Aetherhaven_Management_Block.name=城鎮檔案架
+items.Aetherhaven_Management_Block.description=已完工建築物的檔案架。打開其地塊的施工狀態。
 
-items.Aetherhaven_Sprinkler_Iron.name=鐵製噴頭
-items.Aetherhaven_Sprinkler_Iron.description=在 3×3 區域內澆灌下方一格的耕地。遊戲中每個早上運行一次。最小的覆蓋範圍。
-items.Aetherhaven_Sprinkler_Thorium.name=釷噴頭
-items.Aetherhaven_Sprinkler_Thorium.description=在 5×5 區域內澆灌下方一格的耕地。每天早上一次。比鐵還大。
-items.Aetherhaven_Sprinkler_Cobalt.name=鈷噴頭
-items.Aetherhaven_Sprinkler_Cobalt.description=在 7×7 區域內澆灌下方一格的耕地。每天早上一次。覆蓋面廣。
-items.Aetherhaven_Sprinkler_Adamantite.name=精金噴頭
-items.Aetherhaven_Sprinkler_Adamantite.description=在 9×9 區域內澆灌下方一格的耕地。每天早上一次。覆蓋範圍最廣。
+items.Aetherhaven_Sprinkler_Iron.name=鐵質灑水器
+items.Aetherhaven_Sprinkler_Iron.description=水流會澆灌下方一格範圍內的3×3區域土壤。遊戲內每天早晨運行一次。覆蓋範圍最小。
+items.Aetherhaven_Sprinkler_Thorium.name=釷噴淋器
+items.Aetherhaven_Sprinkler_Thorium.description=水流翻耕下方 5×5 區域內的土壤。每天遊戲時間早晨一次。比鐵塊大。
+items.Aetherhaven_Sprinkler_Cobalt.name=鈷噴淋器
+items.Aetherhaven_Sprinkler_Cobalt.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 7×7 的區域。每天遊戲時間早晨一次。覆蓋範圍廣。
+items.Aetherhaven_Sprinkler_Adamantite.name=鑽石噴灑器
+items.Aetherhaven_Sprinkler_Adamantite.description=水流翻耕下方一格範圍內的9×9區域土壤。每天遊戲時間早晨一次。覆蓋範圍最廣。
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=萊倫長老
 npcRoles.Aetherhaven_Innkeeper.name=科林·莫斯卡普
-npcRoles.Aetherhaven_Merchant.name=威克斯·桑德蘭
+npcRoles.Aetherhaven_Merchant.name=維克斯·桑德蘭
 npcRoles.Aetherhaven_Blacksmith.name=加倫谷
 npcRoles.Aetherhaven_Farmer.name=艾琳·莫斯馬克
-npcRoles.Aetherhaven_Priestess.name=塞拉·桑韋爾
+npcRoles.Aetherhaven_Priestess.name=獅子山
 
-items.Aetherhaven_Plot_Token_Gaia_Altar.name=蓋亞祭壇陰謀代幣
-items.Aetherhaven_Plot_Token_Gaia_Altar.description=標記可以建造蓋亞祭壇預製件的位置。在城市規劃服務台進行手工製作。
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=蓋亞祭壇地塊代幣
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=標記出可以建造蓋亞祭壇預製件的位置。在城鎮規劃台製作。
 
 items.Aetherhaven_Statue_of_Gaia.name=蓋亞雕像
-items.Aetherhaven_Statue_of_Gaia.description=祭壇的受福肖像。城鎮主人可以用生命精華召喚失蹤的居民。
+items.Aetherhaven_Statue_of_Gaia.description=祭壇上的神聖畫像。城鎮主人可以用生命精華召喚失蹤的居民回歸。
 
 # === Items: jewelry (rings, necklaces, mirror, appraisal & crafting benches) ===
-items.Aetherhaven_Ring_Silver_Zephyr.name=銀戒指（Zephyr）
+items.Aetherhaven_Ring_Silver_Zephyr.name=銀戒指（西風）
 items.Aetherhaven_Ring_Silver_Topaz.name=銀戒指（托帕石）
 items.Aetherhaven_Ring_Silver_Emerald.name=銀戒指（祖母綠）
 items.Aetherhaven_Ring_Silver_Diamond.name=銀戒指（鑽石）
 items.Aetherhaven_Ring_Silver_Sapphire.name=銀戒指（藍寶石）
 items.Aetherhaven_Ring_Silver_Ruby.name=銀戒指（紅寶石）
 items.Aetherhaven_Ring_Silver_Voidstone.name=銀戒指（虛空石）
-items.Aetherhaven_Ring_Gold_Zephyr.name=金戒指（Zephyr）
-items.Aetherhaven_Ring_Gold_Topaz.name=金戒指（黃玉）
+items.Aetherhaven_Ring_Gold_Zephyr.name=金戒指（西風）
+items.Aetherhaven_Ring_Gold_Topaz.name=金戒指（托帕石）
 items.Aetherhaven_Ring_Gold_Emerald.name=金戒指（祖母綠）
 items.Aetherhaven_Ring_Gold_Diamond.name=金戒指（鑽石）
 items.Aetherhaven_Ring_Gold_Sapphire.name=金戒指（藍寶石）
 items.Aetherhaven_Ring_Gold_Ruby.name=金戒指（紅寶石）
 items.Aetherhaven_Ring_Gold_Voidstone.name=金戒指（虛空石）
 items.Aetherhaven_Necklace_Silver_Zephyr.name=銀項鍊（Zephyr）
-items.Aetherhaven_Necklace_Silver_Topaz.name=銀項鍊（黃玉）
+items.Aetherhaven_Necklace_Silver_Topaz.name=銀項鍊（托帕石）
 items.Aetherhaven_Necklace_Silver_Emerald.name=銀項鍊（祖母綠）
 items.Aetherhaven_Necklace_Silver_Diamond.name=銀項鍊（鑽石）
 items.Aetherhaven_Necklace_Silver_Sapphire.name=銀項鍊（藍寶石）
 items.Aetherhaven_Necklace_Silver_Ruby.name=銀項鍊（紅寶石）
 items.Aetherhaven_Necklace_Silver_Voidstone.name=銀項鍊（虛空石）
 items.Aetherhaven_Necklace_Gold_Zephyr.name=金項鍊（Zephyr）
-items.Aetherhaven_Necklace_Gold_Topaz.name=金項鍊（黃玉）
+items.Aetherhaven_Necklace_Gold_Topaz.name=金項鍊（托帕石）
 items.Aetherhaven_Necklace_Gold_Emerald.name=金項鍊（祖母綠）
 items.Aetherhaven_Necklace_Gold_Diamond.name=金項鍊（鑽石）
 items.Aetherhaven_Necklace_Gold_Sapphire.name=金項鍊（藍寶石）
 items.Aetherhaven_Necklace_Gold_Ruby.name=金項鍊（紅寶石）
 items.Aetherhaven_Necklace_Gold_Voidstone.name=金項鍊（虛空石）
-items.Aetherhaven_Jewelry.genericDescription=具有隱藏親和力的珠寶。從手鏡裝備；評估閱讀其真實品質。
+items.Aetherhaven_Jewelry.genericDescription=蘊藏著隱藏力量的珠寶。從手鏡中取出；仔細鑑賞，方能洞悉其真實品質。
 items.Aetherhaven_Hand_Mirror.name=手鏡
-items.Aetherhaven_Hand_Mirror.description=打開您的珠寶裝載：庫存中的兩枚戒指和一條項鍊。
-items.Aetherhaven_Appraisal_Bench.name=鑑定台
-items.Aetherhaven_Appraisal_Bench.description=辨識您已攜帶的珠寶。放置後即可免費使用。
+items.Aetherhaven_Hand_Mirror.description=打開你的珠寶裝備：從物品欄中取出兩枚戒指和一條項鍊。
+items.Aetherhaven_Appraisal_Bench.name=評估台
+items.Aetherhaven_Appraisal_Bench.description=辨識您已配戴的珠寶。放置後即可免費使用。
 items.Aetherhaven_Jewelry_Crafting_Bench.name=珠寶工作台
-items.Aetherhaven_Jewelry_Crafting_Bench.description=用於完成工件的鐵砧。一旦你了解了原理圖，就可以在城市規劃櫃檯進行手工製作。用珍貴的金條和切割寶石注入生命精華，打造珠寶。
+items.Aetherhaven_Jewelry_Crafting_Bench.description=用於打磨部件的鐵砧。在城鎮規劃桌前製作，前提是你已經知道設計圖。將生命精華、珍貴的金條和切割好的寶石倒入其中，即可鍛造珠寶。
 
 # === UI: Statue of Gaia (revival / resident list) ===
 aetherhaven.ui.gaiaStatue.title=蓋亞雕像
-aetherhaven.ui.gaiaStatue.hint=每次復活都會消耗 {cost} 生命精華。
+aetherhaven.ui.gaiaStatue.hint=每次復甦都會消耗{cost}生命精華。
 aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
-aetherhaven.ui.gaiaStatue.status.present=在城裡
+aetherhaven.ui.gaiaStatue.status.present=在鎮上
 aetherhaven.ui.gaiaStatue.status.missing=離開
-aetherhaven.ui.gaiaStatue.reviveSuccess=一條生命線回到了廣場。
-aetherhaven.ui.gaiaStatue.reviveFailed=祝福沒有帶走。精華又回來了。
-aetherhaven.ui.gaiaStatue.footer=只有鎮主才能使用此祝福。失蹤的村民可以在雕像附近被召回。
+aetherhaven.ui.gaiaStatue.reviveSuccess=廣場上又恢復了生機。
+aetherhaven.ui.gaiaStatue.reviveFailed=祝福並未生效。精華歸還。
+aetherhaven.ui.gaiaStatue.footer=只有城鎮的主人才能使用此祝福。失蹤的村民可以在雕像附近被召喚回來。
 aetherhaven.ui.gaiaStatue.revive=復活
 
 aetherhaven.profession.kind.elder=長老
@@ -526,85 +545,85 @@ aetherhaven.profession.kind.unknown=居民
 # === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=城鎮憲章
 aetherhaven.ui.chartertown.townNameLabel=城鎮顯示名稱
-aetherhaven.ui.chartertown.namePlaceholder=為您的城鎮輸入一個獨特的名稱
-aetherhaven.ui.chartertown.ownerOnlyHint=只有城鎮所有者才能更改章程中的顯示名稱。
+aetherhaven.ui.chartertown.namePlaceholder=為您的城鎮輸入一個獨特的名字
+aetherhaven.ui.chartertown.ownerOnlyHint=只有城鎮所有者才能根據章程更改顯示名稱。
 aetherhaven.ui.chartertown.saveTownName=保存名稱
-aetherhaven.ui.chartertown.dissolve=溶解小鎮
-aetherhaven.ui.chartertown.dissolveHint=永久移除城鎮、所有建築物、村民和本憲章。無法撤銷。
-aetherhaven.ui.chartertown.dissolveConfirmText=你確定嗎？這將永久刪除該城鎮，移除所有建築物和村民，並銷毀該憲章。此操作無法撤銷。
+aetherhaven.ui.chartertown.dissolve=解散城鎮
+aetherhaven.ui.chartertown.dissolveHint=永久移除城鎮、所有建築、村民、本章程。無法撤銷。
+aetherhaven.ui.chartertown.dissolveConfirmText=你確定嗎？這樣做會永久刪除城鎮，移除所有建築物和村民，並銷毀這份契約。此操作無法撤銷。
 aetherhaven.ui.chartertown.dissolveConfirm=是的，解散城鎮
 aetherhaven.ui.chartertown.dissolveCancel=取消
-aetherhaven.ui.chartertown.dissolved=城鎮解散：建築物被清除，村民被拆除，章程被毀。
-aetherhaven.ui.chartertown.moveCharter=搬家包機
-aetherhaven.ui.chartertown.moveCharterTooltip=搬家包機
-aetherhaven.ui.chartertown.moveCharterHint=將您的領土置於新的特許區中心。您只能將所有建築物放置在城鎮邊界內。
-aetherhaven.ui.chartertown.moveCharterConfirmText=您將像繪圖位置一樣定位新章程（輕推並確認）。如果任何建築物最終位於領土之外，放置將被阻止。
+aetherhaven.ui.chartertown.dissolved=城鎮解散：建築物被拆除，村民被驅逐，憲章被銷毀。
+aetherhaven.ui.chartertown.moveCharter=搬遷包機
+aetherhaven.ui.chartertown.moveCharterTooltip=搬遷包機
+aetherhaven.ui.chartertown.moveCharterHint=重新規劃你的領地，使其位於新的版圖上。你只能在所有建築物仍位於城鎮邊界內的區域進行建造。
+aetherhaven.ui.chartertown.moveCharterConfirmText=您需要像放置地塊一樣放置新的憲章建築（微調並確認）。如果任何建築物最終位於領地之外，則放置操作將被阻止。
 aetherhaven.ui.chartertown.moveCharterConfirm=繼續
 aetherhaven.ui.chartertown.moveCharterCancel=取消
-aetherhaven.ui.chartertown.charterMoved=憲章移動了。你們的領土現在以新憲章為中心。
-aetherhaven.ui.chartertown.modalDissolveTitle=解散小鎮？
-aetherhaven.ui.chartertown.modalMoveTitle=搬包機？
+aetherhaven.ui.chartertown.charterMoved=章程已變更。您的轄區現在以新章程為中心。
+aetherhaven.ui.chartertown.modalDissolveTitle=解散城鎮？
+aetherhaven.ui.chartertown.modalMoveTitle=搬遷包機？
 aetherhaven.ui.chartertown.modalCancel=取消
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
-aetherhaven.ui.treasury.title=鎮金庫
+aetherhaven.ui.treasury.title=鎮財政
 aetherhaven.ui.treasury.deposit=存入所有金幣
 aetherhaven.ui.treasury.withdraw=提取金幣
-aetherhaven.ui.treasury.hint=每天早上，附近的村民都會興高采烈地添加一點金子。旅館客人不計算在內。
+aetherhaven.ui.treasury.hint=每天早晨，附近心情愉悅的村民都會往客棧添些金幣。客棧的客人不算在內。
 aetherhaven.ui.treasury.tabCoinsTooltip=黃金：餘額、存款、提款
-aetherhaven.ui.treasury.tabTitheTooltip=看看誰付款以及第二天早上會發生什麼
-aetherhaven.ui.treasury.tax.intro=日出時，城鎮寶箱會從遊戲載入到你周圍的村民那裡收集一些黃金。現在有 {count} 人。 （四處走走，以便加載更多城鎮來更新此列表。）
-aetherhaven.ui.treasury.tax.policyShort.linear=您的城鎮規則：當食物、休息和娛樂都很高時，每人最多 {max} 金幣；當他們不存在時就更少。
-aetherhaven.ui.treasury.tax.policyShort.perCapita=您的城鎮規則：即使在糟糕的一天，每個人也支付少量的基本金額（上限的 {flatPct}%），當人們表現良好時，最多支付 {max} 金幣。
-aetherhaven.ui.treasury.tax.policyShort.happiness=你的鎮規矩是：脾氣暴躁的村民付的錢要少得多；在完全需要時，每個人最多可以支付 {max} 金幣（用 {exp} 調整）。
-aetherhaven.ui.treasury.tax.hallMissing=先建造市政廳——然後才能收集晨金。
-aetherhaven.ui.treasury.tax.sheetSubLabel=來自下面的村民
-aetherhaven.ui.treasury.tax.sheetFounderLabel=創辦人雕像獎金 ({mult})
-aetherhaven.ui.treasury.tax.sheetFeastLabel=管家帳本盛宴獎金 ({mult})
+aetherhaven.ui.treasury.tabTitheTooltip=看看誰付錢，以及第二天早上會發生什麼。
+aetherhaven.ui.treasury.tax.intro=日出時分，城鎮寶箱會從你周圍已加載的村民收集一些金幣。目前是{count}人。 （四處走走，讓更多城鎮區域加載，以便更新此列表。）
+aetherhaven.ui.treasury.tax.policyShort.linear=你的城鎮規則：當食物、休息和娛樂充足時，每人最多可獲得 {max} 金幣；當食物、休息和娛樂不足時，每人可獲得的金幣數量會減少。
+aetherhaven.ui.treasury.tax.policyShort.perCapita=你的城鎮規則：即使在經濟不景氣的時候，每個人都要繳納少量基本金額（上限的{flatPct}%），在經濟景氣的時候，最高可達{max}金幣。
+aetherhaven.ui.treasury.tax.policyShort.happiness=你的城鎮規則：脾氣暴躁的村民支付的金額要少得多；在需求完全滿足的情況下，每個人最多可以支付 {max} 金幣（與 {exp} 調節）。
+aetherhaven.ui.treasury.tax.hallMissing=先建造市政廳——然後就可以收集早晨的金幣了。
+aetherhaven.ui.treasury.tax.sheetSubLabel=來自下方的村民
+aetherhaven.ui.treasury.tax.sheetFounderLabel=創辦人雕像獎勵（{mult}）
+aetherhaven.ui.treasury.tax.sheetFeastLabel=管家帳簿盛宴獎勵（{mult}）
 aetherhaven.ui.treasury.tax.sheetTotalLabel=關於你第二天早上會得到什麼
-aetherhaven.ui.treasury.tax.residentsHeader=此名單中的村民
+aetherhaven.ui.treasury.tax.residentsHeader=此列表中的村民
 aetherhaven.ui.treasury.tax.residentLine={name} ({job})
-aetherhaven.ui.treasury.tax.footerMore=只有 {total} 居民中的 {shown} 名適合這裡。加載更多城鎮並再次打開以查看其餘部分。
+aetherhaven.ui.treasury.tax.footerMore=這裡只能顯示{shown}位居民（共{total}位居民）。加載更多城鎮信息，然後再次打開此頁面即可查看其餘部分。
 
 # === UI: open geodes (blacksmith) + result / error lines ===
 aetherhaven.ui.geodeopen.title=開放晶洞
-aetherhaven.ui.geodeopen.hint=每個晶洞 5 金幣。按一下一行可開啟一行。完成後使用“返回”。
-aetherhaven.ui.geodeopen.hintAnvil=無金費。點選一行可開啟一個晶洞。完成後使用“返回”。
-aetherhaven.ui.geodeopen.empty=你的快捷欄、盔甲或儲存中沒有晶洞。
+aetherhaven.ui.geodeopen.hint=每個晶洞價值 5 枚金幣。點擊一行即可打開一個晶洞。完成後使用“返回”按鈕。
+aetherhaven.ui.geodeopen.hintAnvil=無需黃金費用。點擊一行即可打開一個晶洞。完成後使用“返回”按鈕。
+aetherhaven.ui.geodeopen.empty=快捷欄、盔甲或儲物箱中不能有晶石。
 
 aetherhaven.geode.row={count} × {itemName}
-aetherhaven.geode.open.insufficientGold=每個晶洞需要 5 個金幣。
+aetherhaven.geode.open.insufficientGold=每個晶洞需要5枚金幣。
 aetherhaven.geode.open.reward=晶洞：{amount} × {itemName}
-aetherhaven.geode.open.failed=無法滾動戰利品；你的硬幣和晶洞已被歸還。
-aetherhaven.geode.open.noRoom=庫存空間不足；你的硬幣和晶洞已歸還。
+aetherhaven.geode.open.failed=無法擲骰子獲得戰利品；您的金幣和晶洞已退還。
+aetherhaven.geode.open.noRoom=庫存空間不足，您的硬幣和晶洞已被退回。
 
 # === UI: hand mirror (jewelry loadout) ===
 aetherhaven.ui.handmirror.title=珠寶
-aetherhaven.ui.handmirror.equipment=磨損的
-aetherhaven.ui.handmirror.ring1=環一
-aetherhaven.ui.handmirror.ring2=圓環二
+aetherhaven.ui.handmirror.equipment=磨損
+aetherhaven.ui.handmirror.ring1=環 I
+aetherhaven.ui.handmirror.ring2=第二環
 aetherhaven.ui.handmirror.necklace=項鍊
 aetherhaven.ui.handmirror.inventory=包包
-aetherhaven.ui.handmirror.hotbar=熱鍵欄
+aetherhaven.ui.handmirror.hotbar=熱吧
 aetherhaven.ui.handmirror.storage=貯存
-aetherhaven.ui.handmirror.hint=下面列出了快捷欄和主存儲中的珠寶。使用行按鈕將一塊發送到戒指或項鍊槽；磨損的物品離開您的包。點擊插槽下方的彈出圖示即可退回磨損的零件。如果您的包包已滿，則無法取下珠寶。
+aetherhaven.ui.handmirror.hint=快捷欄和主儲物箱中的珠寶如下所示。使用行按鈕將珠寶放入戒指或項鍊槽位；佩戴過的珠寶會從背包中移除。點擊槽位下方的彈出圖示即可取回已佩戴的珠寶。如果背包已滿，則無法取下珠寶。
 aetherhaven.ui.handmirror.listRow={itemName} × {qty}
-aetherhaven.ui.handmirror.rowRing1=環一
-aetherhaven.ui.handmirror.rowRing2=圓環二
+aetherhaven.ui.handmirror.rowRing1=環 I
+aetherhaven.ui.handmirror.rowRing2=第二環
 aetherhaven.ui.handmirror.rowNeck=穿
 aetherhaven.ui.handmirror.inventoryFull=您的庫存空間不足，無法退回該商品。
-aetherhaven.ui.handmirror.cannotEquipThere=該棋子不會進入所選的插槽。
-aetherhaven.ui.handmirror.equipFailed=無法移動物品。一切都沒有改變。
+aetherhaven.ui.handmirror.cannotEquipThere=那塊積木不能放進選定的位置。
+aetherhaven.ui.handmirror.equipFailed=無法移動物品。沒有任何更改。
 aetherhaven.ui.handmirror.traitHidden=？
-aetherhaven.ui.handmirror.tooltipNotJewelry=這面鏡子只能裝備珠寶。
-aetherhaven.ui.handmirror.tooltipUnattuned=珠寶親和力是在您第一次調整這件作品時設定的（在此處選擇它或在其他地方評估它）。
+aetherhaven.ui.handmirror.tooltipNotJewelry=這面鏡子只能裝備首飾。
+aetherhaven.ui.handmirror.tooltipUnattuned=珠寶的屬性會在你第一次為這件首飾進行調和時確定（你可以在這裡選擇，也可以在其他地方進行評估）。
 aetherhaven.ui.handmirror.tooltipHeader=稀有度：{rarity}
-aetherhaven.ui.handmirror.tooltipUnappraised=評估只顯示帳本上的名字。結界已經存在於金屬之中。
+aetherhaven.ui.handmirror.tooltipUnappraised=鑑定只能揭示帳簿上的名字。附魔早已刻在金屬之中。
 aetherhaven.ui.handmirror.traitsColumnHeading=磨損的親和力
 aetherhaven.ui.handmirror.traitsRarityLine=稀有度：{rarity}
 aetherhaven.ui.handmirror.traitsEmptySlot=（空的）
-aetherhaven.ui.handmirror.traitsUnattuned=還沒調好。穿戴或評價以建立親和力。
-aetherhaven.ui.handmirror.traitFrom=· {gem}（面向 {facet}）
+aetherhaven.ui.handmirror.traitsUnattuned=尚未建立默契。配戴或評估以確定親和力。
+aetherhaven.ui.handmirror.traitFrom=· {gem}（面 {facet}）
 aetherhaven.jewelry.gem.ZEPHYR=和風
 aetherhaven.jewelry.gem.TOPAZ=黃玉
 aetherhaven.jewelry.gem.EMERALD=翠
@@ -614,62 +633,62 @@ aetherhaven.jewelry.gem.RUBY=紅寶石
 aetherhaven.jewelry.gem.VOIDSTONE=虛空石
 
 # === UI: jewelry appraisal & workbench (forging) ===
-aetherhaven.ui.jewelryAppraisal.title=鑑定珠寶
-aetherhaven.ui.jewelryAppraisal.hintPaid=每件成本 {cost} 金幣。選擇一行，然後進行評估以揭示稀有性和特徵。
-aetherhaven.ui.jewelryAppraisal.hintFree=無金費。選擇一行，然後進行評估以揭示稀有性和特徵。
-aetherhaven.ui.jewelryAppraisal.empty=您的快捷欄、盔甲或儲存中沒有珠寶。
-aetherhaven.ui.jewelryAppraisal.pick=選擇下面的一塊。
+aetherhaven.ui.jewelryAppraisal.title=珠寶估價
+aetherhaven.ui.jewelryAppraisal.hintPaid=每件售價為{cost}金幣。選擇一行，然後進行估價，即可查看其稀有度和特徵。
+aetherhaven.ui.jewelryAppraisal.hintFree=無需支付金幣費用。選擇一行，然後進行鑑定，即可查看其稀有度和特徵。
+aetherhaven.ui.jewelryAppraisal.empty=快捷欄、盔甲和儲物箱中都不能放置首飾。
+aetherhaven.ui.jewelryAppraisal.pick=請選擇以下一件作品。
 aetherhaven.ui.jewelryAppraisal.select=選擇
 aetherhaven.ui.jewelryAppraisal.row={itemName} ({status})
-aetherhaven.ui.jewelryAppraisal.statusAppraised=評價的
+aetherhaven.ui.jewelryAppraisal.statusAppraised=已評估
 aetherhaven.ui.jewelryAppraisal.statusUnidentified=身份不明
 aetherhaven.ui.jewelryAppraisal.selectedHeader=已選擇：{itemName}
-aetherhaven.ui.jewelryAppraisal.unidentified=此件尚未評估。評估只能揭示金屬中已經編織的東西；它不會改變結界。
+aetherhaven.ui.jewelryAppraisal.unidentified=這件作品尚未估價。估價只能揭示金屬中已蘊含的特質，並不會改變它所蘊含的魅力。
 aetherhaven.ui.jewelryAppraisal.rarityLine=稀有度：{rarity}
 aetherhaven.ui.jewelryAppraisal.appraise=評價
-aetherhaven.ui.jewelryAppraisal.insufficientGold=本次鑑定需要更多金幣。
-aetherhaven.ui.jewelryAppraisal.payFailed=付款未成功；沒有任何評價。
-aetherhaven.ui.jewelryAppraisal.done=已評價。帳本現在可以讀取了。
+aetherhaven.ui.jewelryAppraisal.insufficientGold=這次估價需要更多金幣。
+aetherhaven.ui.jewelryAppraisal.payFailed=付款未成功；未進行任何評估。
+aetherhaven.ui.jewelryAppraisal.done=已估價。現在可以讀取帳簿了。
 aetherhaven.ui.jewelryCrafting.title=珠寶工作台
-aetherhaven.ui.jewelryCrafting.hint=從左到右工作：選擇形狀和金屬，選擇寶石，然後撥打要花多少生命精華。當袋子有空間時，從輸出處取出成品。項鍊比戒指使用更多的錠。
+aetherhaven.ui.jewelryCrafting.hint=從左到右依序操作：選擇形狀和金屬，挑選寶石，然後調整消耗的生命精華數量。背包空間充足時，從輸出欄取出成品。項鍊比戒指消耗更多的錠。
 aetherhaven.ui.jewelryCrafting.colShape=形狀
 aetherhaven.ui.jewelryCrafting.colMetal=金屬
 aetherhaven.ui.jewelryCrafting.colGem=寶石
-aetherhaven.ui.jewelryCrafting.colEssence=精華花
-aetherhaven.ui.jewelryCrafting.shapeRing=戒指：更少的錠
-aetherhaven.ui.jewelryCrafting.shapeNeck=項鍊：多元寶
+aetherhaven.ui.jewelryCrafting.colEssence=精華消磨時間
+aetherhaven.ui.jewelryCrafting.shapeRing=環：錠數較少
+aetherhaven.ui.jewelryCrafting.shapeNeck=項鍊：更多金錠
 aetherhaven.ui.jewelryCrafting.ingotCost=配方成本：{n}× {metal}
 aetherhaven.ui.jewelryCrafting.metalGold=金條
 aetherhaven.ui.jewelryCrafting.metalSilver=銀條
-aetherhaven.ui.jewelryCrafting.yourBags=你攜帶的東西
-aetherhaven.ui.jewelryCrafting.invLine=金錠：{gold} · 白銀：{silver} · 生命精華：{ess} · 濃縮：{conc}
-aetherhaven.ui.jewelryCrafting.invGem=袋子裡的這顆寶石：{n}
+aetherhaven.ui.jewelryCrafting.yourBags=你攜帶的物品
+aetherhaven.ui.jewelryCrafting.invLine=金錠：{gold} · 銀錠：{silver} · 生命精華：{ess} · 濃縮物：{conc}
+aetherhaven.ui.jewelryCrafting.invGem=包包裡的寶貝：{n}
 aetherhaven.ui.jewelryCrafting.gold=金子
 aetherhaven.ui.jewelryCrafting.silver=銀
-aetherhaven.ui.jewelryCrafting.goldActive=黃金（上）
-aetherhaven.ui.jewelryCrafting.silverActive=銀色（上）
-aetherhaven.ui.jewelryCrafting.rarityNone=精華「點」還不夠。使用 + 添加常規和/或濃縮精華液，直到預覽顯示一層。
-aetherhaven.ui.jewelryCrafting.rarityLine=精華產量：{rarity}
-aetherhaven.ui.jewelryCrafting.traitsLine=該寶石可能的統計擲骰：{stats}
+aetherhaven.ui.jewelryCrafting.goldActive=黃金（開啟）
+aetherhaven.ui.jewelryCrafting.silverActive=銀色（開啟）
+aetherhaven.ui.jewelryCrafting.rarityNone=精華「點數」不足。請使用「+」號新增普通精華和/或濃縮精華，直到預覽顯示等級為止。
+aetherhaven.ui.jewelryCrafting.rarityLine=精華液的pH值為0。
+aetherhaven.ui.jewelryCrafting.traitsLine=這顆寶石可能的屬性組合：{stats}
 aetherhaven.ui.jewelryCrafting.craft=鍛造
-aetherhaven.ui.jewelryCrafting.take=收集珠寶
-aetherhaven.ui.jewelryCrafting.takeHint=將鍛造件存放在您的包中（您需要一個空閒的插槽或堆疊室）。
-aetherhaven.ui.jewelryCrafting.cannotResolve=設定有效的精華量以達到某個等級，然後再試一次。
-aetherhaven.ui.jewelryCrafting.missingMats=您遺失了包包裡的金條、寶石或精華。
-aetherhaven.ui.jewelryCrafting.done=這件作品在您手中冷卻，即可佩戴。
-aetherhaven.ui.jewelryCrafting.craftedToSlot=鍛造完畢。準備好後將其放入您的包中。
-aetherhaven.ui.jewelryCrafting.taken=將珠寶存放在包包裡。
-aetherhaven.ui.jewelryCrafting.noSpace=首先在包包裡騰出空間，然後使用收集珠寶。
-aetherhaven.ui.jewelryCrafting.takeFirst=在成品上使用收集珠寶，然後您可以再次鍛造。
-aetherhaven.ui.jewelryCrafting.noGemsDropdown=您的包包裡沒有切割寶石（首先在世界上找到岩石寶石）
+aetherhaven.ui.jewelryCrafting.take=收藏珠寶
+aetherhaven.ui.jewelryCrafting.takeHint=將鍛造好的物品放入你的包包裡（你需要一個空位或堆疊空間）。
+aetherhaven.ui.jewelryCrafting.cannotResolve=設定達到特定等級所需的有效精華數量，然後重試。
+aetherhaven.ui.jewelryCrafting.missingMats=你的包包裡少了那塊香皂、寶石或精華。
+aetherhaven.ui.jewelryCrafting.done=這件飾品在你手中冷卻後，就可以配戴了。
+aetherhaven.ui.jewelryCrafting.craftedToSlot=鍛造完成。準備好後，把它放到你的包包裡。
+aetherhaven.ui.jewelryCrafting.taken=把首飾放進你的包包裡。
+aetherhaven.ui.jewelryCrafting.noSpace=先騰出背包空間，再收集珠寶。
+aetherhaven.ui.jewelryCrafting.takeFirst=對成品使用「收集珠寶」功能，然後就可以再次鍛造了。
+aetherhaven.ui.jewelryCrafting.noGemsDropdown=包包裡不准帶切割好的寶石（先去世界上尋找天然寶石）。
 
 # === Jewelry: affinities, stats, rarity tiers (shared tooltips) ===
 aetherhaven.jewelry.traitLine={stat} {amount}
-aetherhaven.jewelry.stat.Health=最大生命值
+aetherhaven.jewelry.stat.Health=最大健康
 aetherhaven.jewelry.stat.Mana=最大法力值
 aetherhaven.jewelry.stat.Stamina=最大耐力
-aetherhaven.jewelry.stat.Oxygen=最大氧氣含量
-aetherhaven.jewelry.stat.Ammo=最大彈藥量
+aetherhaven.jewelry.stat.Oxygen=最大氧氣
+aetherhaven.jewelry.stat.Ammo=最大彈藥
 aetherhaven.jewelry.stat.SignatureEnergy=簽名最大值
 aetherhaven.jewelry.rarity.COMMON=常見的
 aetherhaven.jewelry.rarity.UNCOMMON=罕見
@@ -679,461 +698,507 @@ aetherhaven.jewelry.rarity.LEGENDARY=傳奇
 
 # === UI: plot placement (ghost) & move building ===
 aetherhaven.ui.plotplacement.title=地塊佈局
-aetherhaven.ui.plotplacement.summary=排名：{building}
+aetherhaven.ui.plotplacement.summary=位置：{building}
 aetherhaven.ui.plotplacement.positionSection=位置和旋轉
 aetherhaven.ui.plotplacement.tipsSection=尖端
 aetherhaven.ui.plotplacement.heightSection=高度和旋轉
-aetherhaven.ui.plotplacement.detailsBlock=繪圖符號 {sx}、{sy}、{sz} · 預製件原點 {ox}、{oy}、{oz}\n步驟 {step}，共 4 個（每個 90°）
-aetherhaven.ui.plotplacement.tipsControls=Escape 僅關閉此面板。取消將清除預覽。右鍵空氣重新打開；右鍵單擊區塊不會移動活動預覽。
+aetherhaven.ui.plotplacement.detailsBlock=繪製標誌 {sx}、{sy}、{sz} · 預製件原點 {ox}、{oy}、{oz}\n步驟 {step}（共 4 個，每個 90°）
+aetherhaven.ui.plotplacement.tipsControls=按 Esc 鍵僅關閉此面板。按下“取消”鍵清除預覽。右鍵點選空白處可重新開啟預覽；右鍵點選某個區塊不會移動目前預覽。
 aetherhaven.ui.plotplacement.plotType=大樓
 aetherhaven.ui.plotplacement.moveLabel=調整位置
 aetherhaven.ui.plotplacement.rotate=90°
-aetherhaven.ui.plotplacement.rotateTooltip=旋轉90°（循環面向）
+aetherhaven.ui.plotplacement.rotateTooltip=旋轉90°（循環朝向）
 aetherhaven.ui.plotplacement.place=放置地塊標誌
-aetherhaven.ui.plotplacement.placeMove=移動建築物
-aetherhaven.ui.plotplacement.moveWarningText=搬遷破壞並重建了舊址。首先清除建築物內的貴重物品、寵物和鬆散物品。與該城鎮相關的城鎮 NPC 受到保護。
+aetherhaven.ui.plotplacement.placeMove=搬遷大樓
+aetherhaven.ui.plotplacement.moveWarningText=搬遷會拆除並重建原址。請先將貴重物品、寵物和零散物品從建築物內移走。與該城鎮相關的城鎮NPC受到保護。
 aetherhaven.ui.plotplacement.moveConfirm=確認
 aetherhaven.ui.plotplacement.moveBack=回去
 aetherhaven.ui.plotplacement.cancel=取消預覽
 aetherhaven.ui.plotplacement.cameraSection=相機
-aetherhaven.ui.plotplacement.cameraHint=當您打開它時（預覽上方）鳥瞰一次，然後在移動繪圖時保持不變。
+aetherhaven.ui.plotplacement.cameraHint=鳥瞰圖會在您打開它時（在預覽上方）出現一次，然後在您移動圖表時保持靜止。
 aetherhaven.ui.plotplacement.birdsEye=鳥瞰圖
-aetherhaven.ui.plotplacement.birdsEyeTooltip=自頂向下視圖：初始目標是預覽中心。取消選取可返回第一人稱。使用平移來滑動視圖。
+aetherhaven.ui.plotplacement.birdsEyeTooltip=俯視視角：初始瞄準點位於預覽中心。取消勾選可回到第一人稱視角。使用“平移”按鈕可滑動視角。
 aetherhaven.ui.plotplacement.viewDistance=距離
-aetherhaven.ui.plotplacement.zoomOutTooltip=更遠的攝影機（更廣泛的情節概述）
-aetherhaven.ui.plotplacement.zoomInTooltip=更近的相機（更小的概覽，更多細節）
-aetherhaven.ui.plotplacement.panLabel=平移相機
-aetherhaven.ui.plotplacement.panXmTooltip=將視圖往 -X 方向移動一步
-aetherhaven.ui.plotplacement.panXpTooltip=將視圖向 +X 方向移動一步
-aetherhaven.ui.plotplacement.panZmTooltip=將視圖往 -Z 方向移動一步
-aetherhaven.ui.plotplacement.panZpTooltip=將視圖向 +Z 方向移動一步
-aetherhaven.ui.plotplacement.moveXmTooltip=鳥瞰：西 (-X)。第一人稱：向左掃射（相對於視野）。
-aetherhaven.ui.plotplacement.moveXpTooltip=鳥瞰：東 (+X)。第一人稱：向右掃射（相對於視野）。
-aetherhaven.ui.plotplacement.moveZmTooltip=鳥瞰：北 (-Z)。第一人稱：向前移動（相對於視圖）。
-aetherhaven.ui.plotplacement.moveZpTooltip=鳥瞰：南 (+Z)。第一人稱：向後移動（相對於視圖）。
-aetherhaven.ui.plotplacement.moveYmTooltip=向下微移一格
-aetherhaven.ui.plotplacement.moveYpTooltip=向上移動一格
+aetherhaven.ui.plotplacement.zoomOutTooltip=更遠的鏡頭（更廣闊的場景概覽）
+aetherhaven.ui.plotplacement.zoomInTooltip=更近的攝影機（更小的視角，更多的細節）
+aetherhaven.ui.plotplacement.panLabel=平移攝影機
+aetherhaven.ui.plotplacement.panXmTooltip=將視角朝 -X 方向移動一步。
+aetherhaven.ui.plotplacement.panXpTooltip=向 +X 方向移動一格視角
+aetherhaven.ui.plotplacement.panZmTooltip=視角朝 -Z 方向移動一步。
+aetherhaven.ui.plotplacement.panZpTooltip=視角向+Z方向移動一步。
+aetherhaven.ui.plotplacement.moveXmTooltip=鳥瞰視角：向西（-X）。第一人稱視角：向左平移（相對於視角）。
+aetherhaven.ui.plotplacement.moveXpTooltip=鳥瞰視角：向東（+X）。第一人稱視角：向右平移（相對於視角）。
+aetherhaven.ui.plotplacement.moveZmTooltip=鳥瞰圖：北（-Z）。第一人稱視角：向前移動（相對於視角）。
+aetherhaven.ui.plotplacement.moveZpTooltip=鳥瞰圖：向南（+Z）。第一人稱視角：向後移動（相對於視圖）。
+aetherhaven.ui.plotplacement.moveYmTooltip=向下挪動一個街區
+aetherhaven.ui.plotplacement.moveYpTooltip=向上挪動一個街區
 
 # === UI: move town charter (relocate territory center) ===
-aetherhaven.ui.charterrelocation.title=搬家包機
+aetherhaven.ui.charterrelocation.title=搬遷包機
 aetherhaven.ui.charterrelocation.summary=重新定位城鎮憲章
-aetherhaven.ui.charterrelocation.details=目標區塊 {sx}、{sy}、{sz} · 步驟 {step}，共 4 個（90°）
-aetherhaven.ui.charterrelocation.tips=領土是憲章周圍的一塊正方形區域；每棟建築在您確認後都必須留在室內。將幽靈輕推到新位置，然後放置。
-aetherhaven.ui.charterrelocation.info=領土是憲章周圍的一塊方形區域。移動後，您的所有建築物都必須留在該區域內。將幽靈塊輕推到新的包機位置，然後確認。
-aetherhaven.ui.charterrelocation.place=地方包機
+aetherhaven.ui.charterrelocation.details=目標區塊 {sx}、{sy}、{sz} · 步驟 {step}（共 4 步，90°）
+aetherhaven.ui.charterrelocation.tips=領地是由圍繞契約的若干小塊區域組成的正方形；確認後，所有建築物都必須位於領地範圍內。將幽靈推到新位置，然後放置。
+aetherhaven.ui.charterrelocation.info=領地是圍繞憲章的方形區域。移動後，所有建築物都必須位於該區域內。將幽靈方塊移動到新的憲章位置，然後確認。
+aetherhaven.ui.charterrelocation.place=地點憲章
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=列出目前世界的以太港城鎮
+commands.aetherhaven.towns.desc=列出目前世界中的以太港城鎮
 
-commands.aetherhaven.town.desc=城鎮會員資格：邀請、角色、離開
-commands.aetherhaven.town.invite.desc=邀請線上玩家到您的城鎮
+commands.aetherhaven.town.desc=鎮民成員資格：邀請、角色、退出
+commands.aetherhaven.town.invite.desc=邀請一位線上玩家到你的城鎮來。
 commands.aetherhaven.town.invite.player.desc=玩家用戶名（必須在線）
-commands.aetherhaven.town.accept.desc=接受待處理的城鎮邀請
-commands.aetherhaven.town.decline.desc=拒絕待處理的城鎮邀請
-commands.aetherhaven.town.kick.desc=從您的城鎮中刪除一名成員
+commands.aetherhaven.town.accept.desc=接受城鎮的邀請
+commands.aetherhaven.town.decline.desc=拒絕即將到來的城鎮邀請
+commands.aetherhaven.town.kick.desc=從你的城鎮移除一名成員
 commands.aetherhaven.town.kick.player.desc=會員使用者名稱（必須在線上）
-commands.aetherhaven.town.role.desc=設定成員的角色（建置、任務或兩者）
+commands.aetherhaven.town.role.desc=設定成員的角色（建造、任務或兩者兼具）
 commands.aetherhaven.town.role.player.desc=會員使用者名稱（必須在線上）
-commands.aetherhaven.town.role.role.desc=建造、探索或兩者兼而有之
-commands.aetherhaven.town.leave.desc=離開您所屬的城鎮（不是作為所有者）
+commands.aetherhaven.town.role.role.desc=建造、任務，或兩者兼有
+commands.aetherhaven.town.leave.desc=離開你所屬的城鎮（而非你作為所有者的身份）
 commands.aetherhaven.town.townName.desc=可選的城鎮顯示名稱（用於多個邀請或管理員）
 
-commands.aetherhaven.poi.desc=調試：POI 指令（需要 DebugCommandsEnabled）
-commands.aetherhaven.poi.list.desc=列出城鎮的 POI（可選城鎮 UUID，或省略/使用“me”代表您的城鎮）
-commands.aetherhaven.poi.town.desc=城鎮 UUID，或我，或省略呼叫者城鎮
-commands.aetherhaven.poi.dump.desc=列出這個世界記憶體註冊表中的每個 POI（任何城鎮）
+commands.aetherhaven.poi.desc=調試：POI 命令（需要啟用 DebugCommandsEnabled）
+commands.aetherhaven.poi.list.desc=列出城鎮的興趣點（城鎮 UUID 可選，或省略/使用“me”代表您的城鎮）
+commands.aetherhaven.poi.town.desc=城鎮 UUID，或者我，或省略以表示呼叫者所在城鎮
+commands.aetherhaven.poi.dump.desc=列出這個世界記憶體註冊表中的所有興趣點（任何城鎮）
 
-commands.aetherhaven.plots.desc=調試：列出繪圖實例（需要 DebugCommandsEnabled；使用繪圖以避免與 /aetherhaven 繪圖發生衝突）
+commands.aetherhaven.plots.desc=調試：列出繪圖實例（需要啟用 DebugCommandsEnabled；使用繪圖以避免與 /aetherhaven 繪圖衝突）
 commands.aetherhaven.plots.list.desc=列出您所在城鎮的地塊實例
 
-commands.aetherhaven.needs.desc=調試：村民需求（需要 DebugCommandsEnabled）
+commands.aetherhaven.needs.desc=調試：村民需要（需要啟用 DebugCommandsEnabled）
 commands.aetherhaven.needs.inspect.desc=列出已載入區塊中具有 VillagerNeeds 的實體
-commands.aetherhaven.needs.set.desc=設定需求計量器 0..100（目標：inspect、Elder 或 uuid 的句柄）
-commands.aetherhaven.needs.target.desc=句柄（例如 Villager_Elder_xxxxxxxx）、Elder 或實體 UUID
-commands.aetherhaven.needs.entity.desc=已棄用；使用目標（句柄、Elder 或 uuid）
-commands.aetherhaven.needs.which.desc=飢餓、能量或樂趣
-commands.aetherhaven.needs.value.desc=值從 0 到 100（100 = 完全滿意）
+commands.aetherhaven.needs.set.desc=設定需求計量表 0..100（目標：來自檢查、長老或 UUID 的句柄）
+commands.aetherhaven.needs.target.desc=句柄（例如 Villager_Elder_xxxxxxxx）、長老或實體 UUID
+commands.aetherhaven.needs.entity.desc=已棄用；請使用 target（handle、Elder 或 uuid）
+commands.aetherhaven.needs.which.desc=飢餓、精力或樂趣
+commands.aetherhaven.needs.value.desc=數值範圍為0到100（100 = 完全滿意）
 
-commands.aetherhaven.tax.desc=調試：國庫早報稅（需 DebugCommandsEnabled）
-commands.aetherhaven.tax.breakdown.desc=顯示您城鎮的每個村民的稅額和總額（僅加載的區塊）
-commands.aetherhaven.tax.now.desc=立即向國庫繳納上午什一稅（繞過上午時間和最後領取日；需啟用 DebugCommands）
+commands.aetherhaven.tax.desc=調試：財政部晨間稅（需啟用 DebugCommandsEnabled）
+commands.aetherhaven.tax.breakdown.desc=顯示城鎮中每個村民的稅收明細和總額（僅限已加載區塊）
+commands.aetherhaven.tax.now.desc=立即將早晨的什一奉獻存入庫庫（忽略早晨時間和上次收取日；需要啟用 DebugCommandsEnabled）
 
-commands.aetherhaven.questdebug.desc=調試：城鎮任務繞過（需要 DebugCommandsEnabled）
-commands.aetherhaven.questdebug.grant.desc=將任務標記為在您的城鎮中處於活動狀態
-commands.aetherhaven.questdebug.complete.desc=在你的城鎮標記任務已完成
-commands.aetherhaven.questdebug.clear.desc=從您所在城鎮的活動清單中刪除任務
-commands.aetherhaven.questdebug.id.desc=任務 ID（預設 q_build_inn）
-commands.aetherhaven.questdebug.status.desc=顯示您所在城鎮的活躍任務和已完成任務（顯示名稱 + ID）
+commands.aetherhaven.questdebug.desc=調試：城鎮任務繞過（需要啟用 DebugCommandsEnabled）
+commands.aetherhaven.questdebug.grant.desc=在你的城鎮標記任務激活
+commands.aetherhaven.questdebug.complete.desc=在你的城鎮標記任務完成
+commands.aetherhaven.questdebug.clear.desc=從城鎮的活躍任務清單中移除任務
+commands.aetherhaven.questdebug.id.desc=任務 ID（預設為 q_build_inn）
+commands.aetherhaven.questdebug.status.desc=顯示您城鎮（顯示名稱 + ID）的進行中和已完成的任務
 
-commands.aetherhaven.reputation.desc=調試：信譽（需要 DebugCommandsEnabled）
-commands.aetherhaven.reputation.set.desc=在村民中建立你的聲譽，並排隊獲得對話的里程碑獎勵
+commands.aetherhaven.reputation.desc=調試：聲譽（需要啟用 DebugCommandsEnabled）
+commands.aetherhaven.reputation.set.desc=與村民建立良好關係，並排隊等待達成里程碑獎勵以進行對話。
 commands.aetherhaven.reputation.villagerUuid.desc=村民 NPC 實體 UUID
-commands.aetherhaven.reputation.villagerTarget.desc=您城鎮中的村民實體 UUID 或 NPC 角色 ID（例如 Aetherhaven_Blacksmith）
-commands.aetherhaven.reputation.value.desc=聲譽 0 到 100
+commands.aetherhaven.reputation.villagerTarget.desc=村民實體 UUID 或城鎮中的 NPC 角色 ID（例如 Aetherhaven_Blacksmith）
+commands.aetherhaven.reputation.value.desc=信譽值 0 到 100
 commands.aetherhaven.reputation.reward.desc=列出里程碑定義或直接授予一項獎勵
-commands.aetherhaven.reputation.reward.list.desc=列出聲譽里程碑（可選：按 NPC 角色 ID 過濾）
-commands.aetherhaven.reputation.reward.roleFilter.desc=用於過濾清單的 NPC 角色 ID（例如 Aetherhaven_Merchant）
-commands.aetherhaven.reputation.reward.grant.desc=立即授予一項里程碑獎勵（標記已領取）；使用 ID 的代表獎勵清單
-commands.aetherhaven.reputation.rewardId.desc=聲譽獎勵 ID（例如rep_merchant_50）
+commands.aetherhaven.reputation.reward.list.desc=列出聲望里程碑（可選：按NPC角色ID篩選）
+commands.aetherhaven.reputation.reward.roleFilter.desc=使用 NPC 角色 ID（例如 Aetherhaven_Merchant）來篩選列表
+commands.aetherhaven.reputation.reward.grant.desc=立即發放一個里程碑獎勵（已領取標記）；使用聲望獎勵清單取得 ID
+commands.aetherhaven.reputation.rewardId.desc=聲譽獎勵 ID（例如 rep_merchant_50）
 
-commands.aetherhaven.villager.desc=調試：城鎮村民助理（需要 DebugCommandsEnabled）
-commands.aetherhaven.villager.list.desc=列出城鎮村民 NPC 實體 UUID（用於聲譽/定位命令）
+commands.aetherhaven.villager.desc=調試：城鎮村民助理（需啟用 DebugCommandsEnabled）
+commands.aetherhaven.villager.list.desc=列出城鎮村民NPC實體UUID（用於聲望/定位指令）
 commands.aetherhaven.villager.locate.desc=列印城鎮村民的位置；可選傳送（僅限操作員）
 commands.aetherhaven.villager.uuid.desc=村民 NPC 實體 UUID
-commands.aetherhaven.villager.target.desc=您城鎮中的村民實體 UUID 或 NPC 角色 ID（例如 Aetherhaven_Merchant）
-commands.aetherhaven.villager.teleport.desc=真實傳送到村民（僅限業者）；或使用 --tp 代替
-commands.aetherhaven.villager.tp_flag.desc=傳送到村民（僅限操作員；與傳遞 true 相同）
+commands.aetherhaven.villager.target.desc=村民實體 UUID 或城鎮中的 NPC 角色 ID（例如 Aetherhaven_Merchant）
+commands.aetherhaven.villager.teleport.desc=設定為 true 可傳送至村民處（僅限操作員）；或使用 --tp 代替
+commands.aetherhaven.villager.tp_flag.desc=傳送至村民處（僅限操作符；效果等同於傳遞 true 參數）
+commands.aetherhaven.gift.desc=調試：重置禮物限額或填充禮物歷史記錄預覽（需要啟用 DebugCommandsEnabled）
+commands.aetherhaven.gift.resetLimits.desc=重置此世界中所有城鎮所有玩家和村民的每日/每週禮物上限
+commands.aetherhaven.gift.fillHistory.desc=為每個角色（你的城鎮）的喜愛/喜歡/不喜歡的物品添加一行日誌，以便禮物歷史記錄能夠顯示一些內容（調試）。
+commands.aetherhaven.gift.roleId.desc=NPC角色ID（例如：Aetherhaven_Merchant）
 
-commands.aetherhaven.debug_autonomy.desc=調試：村民自治覆蓋（需要 DebugCommandsEnabled）
-commands.aetherhaven.debug_autonomy.toggle.desc=切換城鎮村民的自主調試（查看 NPC 或使用 --ray）
-commands.aetherhaven.debug_autonomy.show.desc=顯示是否為該村民啟用了自治調試
-commands.aetherhaven.debug_autonomy.clear.desc=清除該村民的 Aetherhaven 自治調試
+commands.aetherhaven.debug_autonomy.desc=調試：村民自治疊加層（需要啟用 DebugCommandsEnabled）
+commands.aetherhaven.debug_autonomy.toggle.desc=切換城鎮村民的自主性調試模式（查看 NPC 或使用 --ray 參數）
+commands.aetherhaven.debug_autonomy.show.desc=顯示是否已為此村民啟用自主調試模式
+commands.aetherhaven.debug_autonomy.clear.desc=清除此村民的以太港自治調試訊息
 
-commands.aetherhaven.debug_lootchest.desc=調試：Aetherhaven 寶箱獎勵在目標容器上滾動（需要 DebugCommandsEnabled）
-commands.aetherhaven.debug_lootchest.fill.desc=將強制珠寶、黃金和劇情令牌卷應用到您正在查看的物品容器上
+commands.aetherhaven.debug_lootchest.desc=調試：以太港寶箱獎勵擲骰結果對目標容器生效（需啟用調試指令）
+commands.aetherhaven.debug_lootchest.fill.desc=對您正在查看的物品容器應用強制珠寶、黃金和劇情代幣檢定。
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
 aetherhaven.ui.feast.title=城鎮盛宴
-aetherhaven.ui.feast.noTown=你必須屬於一個城鎮。
-aetherhaven.ui.feast.noPermission=你不能為這個城鎮舉辦盛宴。
-aetherhaven.ui.feast.outsideTerritory=桌子必須位於您所在城鎮的領土內。
+aetherhaven.ui.feast.noTown=你必須屬於某個城鎮。
+aetherhaven.ui.feast.noPermission=你不能在這個城鎮舉辦宴會。
+aetherhaven.ui.feast.outsideTerritory=桌子必須放置在你的城鎮範圍內。
 aetherhaven.ui.feast.activeTitle=城鎮盛宴生效
-aetherhaven.ui.feast.noneActive=沒有活動的計時盛宴。選擇左側的盛宴以了解成本和效果。
+aetherhaven.ui.feast.noneActive=目前沒有限時盛宴生效。請在左側選擇盛宴以查看費用和效果。
 aetherhaven.ui.feast.daysLeft=剩餘天數（黎明）：{days}
-aetherhaven.ui.feast.selectHint=選擇一場盛宴
+aetherhaven.ui.feast.selectHint=選擇一頓盛宴
 aetherhaven.ui.feast.ingredientsLabel=原料
-aetherhaven.ui.feast.confirm=舉辦盛宴
-aetherhaven.ui.feast.locked=你還沒學會這個盛宴。與鎮民共度時光，直到有人帶您走過。
-aetherhaven.ui.feast.tooltipLocked=鎖定直到鄰居教你這頓盛宴。幫助小鎮並繼續與為大廳做飯的人交談。
-aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord 正在冷卻（{days} 黎明日剩下）。
-aetherhaven.ui.feast.began=盛宴開始。村民們聚集在餐桌旁。
-aetherhaven.ui.feast.err.pluginNotLoaded=該伺服器上未載入 Aetherhaven。
-aetherhaven.ui.feast.err.unknownFeast=那個盛宴不可用。
-aetherhaven.ui.feast.err.invalidPlayer=無法驗證您的角色。
-aetherhaven.ui.feast.err.feastNotUnlocked=你還沒學會這個盛宴。在城鎮周圍建立信任，並傾聽有人願意教授的內容。
-aetherhaven.ui.feast.err.timedFeastActive=這座小鎮的另一場定時盛宴已經開始。
-aetherhaven.ui.feast.err.waitForTimedFeastEnd=等到目前定時盛宴結束後，再為 Berrycircle Concord 提供服務。
-aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord 仍處於冷卻狀態。
-aetherhaven.ui.feast.err.notEnoughIngredients=您沒有足夠的所需成分。
+aetherhaven.ui.feast.confirm=舉行宴會
+aetherhaven.ui.feast.locked=你還沒學會這頓盛宴的習俗。多花點時間和鎮上的人們待在一起，直到有人教你為止。
+aetherhaven.ui.feast.tooltipLocked=直到鄰居教你這頓盛宴，你才能解鎖。幫助鎮子，並繼續與為宴會廳做飯的人交談。
+aetherhaven.ui.feast.cooldownBerrycircle=莓果圈協約正在冷卻中（{days} 黎明-天數剩餘）。
+aetherhaven.ui.feast.began=宴席開始了。村民們圍坐在桌旁。
+aetherhaven.ui.feast.err.pluginNotLoaded=此伺服器上未載入 Aetherhaven。
+aetherhaven.ui.feast.err.unknownFeast=那場盛宴已經取消了。
+aetherhaven.ui.feast.err.invalidPlayer=無法驗證您的身分。
+aetherhaven.ui.feast.err.feastNotUnlocked=你還沒學會這頓盛宴的習俗。先在鎮上建立起人脈，留意是否有人主動提出教你。
+aetherhaven.ui.feast.err.timedFeastActive=該鎮已開始實施另一場限時盛宴。
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=請等到目前限時饗宴結束後再供應 Berrycircle Concord。
+aetherhaven.ui.feast.err.berrycircleCooldown=漿果圈協約技能仍在冷卻中。
+aetherhaven.ui.feast.err.notEnoughIngredients=您缺少所需的全部材料。
 
-aetherhaven.feast.stewards.name=管家的帳本晚餐
-aetherhaven.feast.stewards.description=鋪上麵包、起司和一塊合適的南瓜派，這樣早上的什一稅就能在一週內保持慷慨。
-aetherhaven.feast.hearthglass.name=爐玻璃守夜
-aetherhaven.feast.hearthglass.description=烤魚、煮熟的肉塊和蔬菜作為緩慢燃燒的守夜餐。村民的需求在一週內會逐漸減弱。
-aetherhaven.feast.berrycircle.name=莓果圈協和飯店
-aetherhaven.feast.berrycircle.description=一圈清淡的盤子：莓果沙拉、水果串和烤麵包用的爆米花。鄰居們因此對你的記憶更加友善。等待一週的黎明，然後才能再次上菜。
+aetherhaven.feast.stewards.name=管家帳簿晚宴
+aetherhaven.feast.stewards.description=準備麵包、起司和一份正宗的南瓜派，這樣一週的早晨奉獻就會比較豐盛。
+aetherhaven.feast.hearthglass.name=爐邊守望
+aetherhaven.feast.hearthglass.description=烤魚、熟肉和蔬菜擺放在一起，作為一頓慢火的守夜餐。村民的需求在一週內逐漸消退。
+aetherhaven.feast.berrycircle.name=漿果圈康科德
+aetherhaven.feast.berrycircle.description=一圈輕盈的餐盤：莓果沙拉、水果串和爆米花，用來搭配吐司。鄰居會因此對你格外友善。下次再端上這道菜之前，請先等待一週的清晨。
 
 # === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
 # Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
-aetherhaven.dialogue.blacksmith.repairGear=修理我的裝備（用金幣支付）
-aetherhaven.dialogue.blacksmith.openGeodes=破解晶洞（每個 5 金幣）
-aetherhaven.dialogue.merchant.appraiseJewelry=鑑定珠寶（每件 10 金幣）
+aetherhaven.dialogue.blacksmith.repairGear=幫我修好裝備（用金幣支付）
+aetherhaven.dialogue.blacksmith.openGeodes=敲開晶洞（每個5金幣）
+aetherhaven.dialogue.merchant.appraiseJewelry=珠寶估價（每件10金）
 
 # -- Tree id: aetherhaven_blacksmith (Garren Vale) --
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=沒有怨恨。如果您仍想在城裡抽煙，請再次詢問。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=我不記仇。如果你還想在城裡抽煙，那就再說一次。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=很公平。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=商店建成後，我會走到武器台前進行設置。到那裡來找我，我們就結束了。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.body=等工坊建好了，我就走到武器工作台前，把東西擺好。到時候來找我，咱們就完事兒了。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c0=我需要放棄這個任務。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.c1=我會堅持下去。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_building.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=堅固的板凳。當工作完成時，熱就會到來。我們不再在地圖上運送礦石。我們利用這片土地仍然提供的東西。
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=好好錘一下。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.body=堅實的檯面。熱氣會在工作開始時到來。我們不再從四面八方運送礦石了。我們利用這片土地仍生產的資源。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.c0=用錘子敲好。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_done.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=等位置到了，把我的名字寫在裡面的牌子上，然後來找我。我想聽你大聲說出來。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.body=等房子建好後，把我的名字寫在裡面的牌子上，然後來找我。我想聽你大聲念出來。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.c0=你會聽到的。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_accepted.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=好的。屋頂聞起來不像別人的燉菜。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.body=很好。屋頂上沒有別人燉菜的味道。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.c0=好好享受。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_finish.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=這家店讓我起水泡。我還想要一個不借來的屋頂。和任何人一樣的房子。當牆真實存在時給我註冊。
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=我會押註一棟房子。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.body=這家店讓我腳底起了水泡。我仍然想要一個屬於自己的屋頂，而不是藉來的。和其他人一樣，我想要一塊普通的地皮。等牆壁真正建好了再來登記吧。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c0=我敢拿房子作抵押。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.c1=下次吧。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_offer.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=鐵不衝。房子建好後，幫我登記一下，然後來談談。那時我們就扯平了。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.body=鐵匠不會著急。等房子蓋好了，給我登記一下，然後再來談。那樣我們才算扯平了。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.c0=明白了。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_house_remind.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=Corin 的木板非常適合睡眠。它們不適合揮動錘子。佔領一家鐵匠鋪，裡面有牆壁、櫃檯和我可以擁有的武器凳。在你的計劃桌上製作情節標記，將其放在你的員工那裡，然後支付標記。當它站起來時，在長凳上見我。
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=我們會把它建成的。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.body=科林的木板適合睡覺，但不適合揮錘。建造一個帶牆壁、櫃檯和武器工作台的鐵匠鋪，我可以擁有它。在你的計畫桌上製作劇情標記，把它放在你的工作人員旁邊，然後支付告示牌的費用。當告示牌豎起時，在工作台那裡等我。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c0=我們會把它建好的。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.c1=現在不行。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_quest_shop.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=好的。我會在客棧紮營，直到煙囪說實話。然後在替補席上找到我，我們將關閉帳本。
-aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=那裡見。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.body=好。我會在客棧待到煙囪說出真相為止。到時候到長椅邊來找我，我們一起結案。
+aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.c0=到時見。
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_shop_accepted.speaker=加倫谷
 aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=加倫谷
 aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=加倫谷
-aetherhaven.dialogue.aetherhaven_blacksmith.root.body=加倫維爾。風力夠小，熔爐可能會運轉。到目前為止，金屬有意見。我是來跟它爭論的。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=你想談談房子。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=你的名字就在街區上。我想你應該聽到它。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.body=加倫谷。風勢微弱，鍛爐或許能安靜一點。這偏遠地區的金屬也有自己的想法。我來這裡就是要跟它辯論一番。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=你想談談房子的事。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=你的名字被列入了候選名單。我覺得你應該知道這件事。
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=房子還在建設中。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=很高興看到你在煉鋼。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=店鋪建成。板凳已經準備好了。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=關於鍛造廠的建造...
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=你說過你需要一個真正的鍛造廠。
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=注意你的手指。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=很高興看到你在從事鋼鐵業。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=店鋪建好了，工作台也準備好了。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c7=關於鍛造過程…
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=你說過你需要一個真正的鍛爐。
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=小心手指。
 aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=加倫谷
 # -- Tree id: aetherhaven_dialogue_test (QA / harness) --
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=條件實驗室。您不應該看到隱藏的選擇。您應該會看到一個灰色的選擇。使用複合門繼續。
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=這個選擇是隱藏的（字面意思是錯誤的）。
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=這應該是灰色的。
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=（要求字面意思為真）
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=透過複合：NOT false AND true
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR 分支（真或假）
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=感謝您的測試。再見！
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=條件實驗室。你不應該看到隱藏選項，而應該看到灰色選項。使用複合門繼續。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=這個選項是隱藏的（字面上的錯誤）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=應該將其顯示為灰色。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=（需要字面上的真）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=通過複合條件：非假且為真
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=或分支（真或假）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=感謝測試。再見！
 aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=再見！
-aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=選擇下面的選項，使用 goto 操作而不是 next 跳到告別。
-aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=轉到告別
-aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=節點輸入操作只會給你一把粗鏟（如果你有庫存空間）。選擇下面的選項以取得更多項目。
-aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=給我 3 塊泥土，然後繼續。
-aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=歡迎來到 Aetherhaven 對話工具。該行故意保持很長，以便您可以檢查佈局和滾動。您的選擇位於正文下方。
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=選擇下方選項，即可使用「跳到」動作而不是「下一步」跳到告別頁面。
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=去告別
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=進入節點後，你會獲得一把簡易鏟子（前提是你的物品欄有足夠的空間）。選擇下方選項可獲得更多物品。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=給我3塊泥土，然後繼續。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=歡迎使用以太港對話系統。此行文字特意留長，以便您檢查佈局和滾動效果。您的選項位於正文下方。
 aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=繼續前往條件實驗室。
-aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=離開（以下一個空值結束）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=離開（以下一個空字符結尾）。
 aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=離開（明確的關閉動作）。
-aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=您可以開啟 Kweebec 商家以物易物 UI，或跳到存根作業。
-aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=開設 Kweebec_Merchant 易貨店
-aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=跳過商店，前往存根
-aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA 村民
-aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=存根操作：解鎖成就和開始任務應該記錄，直到這些系統存在。
-aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=執行unlock_achievement + start_quest 存根
-aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA 村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=您可以開啟 Kweebec 商人物物交換介面，或直接跳到存根作業。
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=打開 Kweebec_Merchant 以物易物商店
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=跳過商店，直接前往存根
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=存根操作：解鎖成就和開始任務應該要記錄，直到這些系統存在為止。
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=執行 unlock_achievement + start_quest 存根
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA村民
 # -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
-aetherhaven.dialogue.aetherhaven_elder_week1.root.body=我是萊倫。我代表我們將這座城鎮列入奧比斯時簽署的憲章。舊城已不存在。我們所擁有的是這片土地和已經在這裡的人們，更多的人將會到來。在我們開始鋪設新地塊之前，我需要你了解以太港周圍的土地：那裡足夠平坦，可以建造，那裡有水流，我們稍後可以在那裡放置田地或公共空間。保持實用。當你把這個地方看完之後，再來找我吧。
-aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=我會偵察該地區並報告回來。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=我是萊倫。我代表我們在奧比斯建立這座城鎮時簽署的憲章發言。舊城已不存在。我們現在擁有的是這片土地和這裡的人民，未來還會有更多的人到來。在我們開始規劃新的地塊之前，我需要你熟悉一下以太港周圍的地形：哪裡地勢平坦適合建造房屋，哪裡有水源，哪裡以後可以開墾田地或公共用地。務必務實。考察完畢後，再來找我。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=我會去實地考察一下，然後向你報告。
 aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=萊倫長老
 # -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
-aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=您可以從我們發送給您的工作以及有人購買時的交易中獲取一些。鎮上的錢包是它自己的東西。大廳建成後，金庫就在裡面。如果章程允許，可以使用那裡的塊放入或取出硬幣。此後，每天早上都會​​有一點黃金從真正居住在這裡的人們而不是路過的遊客流入這個金庫。多少取決於他們的堅持程度。如果它們吃飽了、休息好了、精神狀態好，那麼鍋子的效果會更好。如果它們被拉得很薄，情況會更糟。這使公地保持誠實。
-aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=很高興知道。謝謝。
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=你可以從我們派給你的工作中獲得一些收入，也可以在有人購買時透過交易獲得一些。鎮上的金庫是獨立運作的。一旦大廳建成，金庫就設在那裡。你可以用那裡的方塊投入硬幣，或是依照章程的規定取出硬幣。之後，每天早上，住在這裡的人們（而不是過路的遊客）都會將一些金子存入金庫。具體金額取決於他們的經濟狀況。如果他們吃飽穿暖、休息充足、精神飽滿，金庫就會充盈。如果他們捉襟見肘，金庫就會空虛。這樣才能確保居民的廉潔奉公。
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=知道了，謝謝。
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=那裡。這是一家真正的旅館，適合那些否則會露宿街頭的人。科林有鑰匙。去爐邊介紹一下自己吧。你賺到的不只是感謝，但感謝是我要開始的地方。
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=瞧，那裡有個真正的旅店，專門收留那些原本可能露宿街頭的人。科林有鑰匙。去壁爐旁打個招呼吧。你值得的遠不止一句感謝，但我還是先說謝謝。
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=很高興能幫助你。
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=當圍牆升起後，使用管理塊並將我設定為居民。那就來找我吧。我想聽你說出來，而不是從書架上讀出來。
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=你會得到兩者。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=等牆建好了，用管理模組把我設為住戶。然後來找我。我想聽你親口說，而不是照本宣科。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=你會得到這兩樣東西。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=然後就解決了。我有一個家，遵守與其他人相同的規則。謝謝你看完了。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=那就這麼定了。我和其他人一樣，都住在同一屋簷下。謝謝你們的耐心等待。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=歡迎回家，萊倫。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=大廳起來了，庫房可以喘口氣了。憲章給了我們這個城鎮的規則；它沒有給我一張床。我想要別人得到的同樣的小房子。拿著我提供的代幣，與你的員工一起抵押這塊土地，從國庫中支付材料和城鎮份額，然後在建造時將我的名字放在管理架上。我不會忘記誰為我騰出空間。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=大廳已經建成，國庫也終於可以喘口氣了。憲章規定了城鎮的規章制度，卻沒幫我安排一張床。我想要和其他人一樣的小房子。收下我提供的籌碼，派你的人去圈定地塊，從國庫裡支付建材和城鎮應得的份額，等房子建好後，把我的名字寫在管理名錄上。我不會忘記是誰為我騰出了地方。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=我會處理的。
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=我還不能承諾這一點。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=我現在還無法做出承諾。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=花你需要的時間。房子完工後，在街區登記我，然後來找我，這樣我們就可以面對面地完成這件事。
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=事情完成後我就來。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=慢慢來。房子建好後，在街區登記我的信息，然後來找我，我們當面完成這件事。
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=等做完我就來了。
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=好的。將旅館地塊與您的員工放置在一起，支付標誌上列出的材料，然後完成建造。當屋頂蓋好、壁爐裝好後，你親自來告訴我。我會等待訊息。
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=很好。把旅館地塊安頓好，讓你的員工去採購，支付告示牌上列出的材料費用，然後完成建造。等屋頂蓋好、壁爐建好後，親自來告訴我。我會等著你的消息。
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=我會盡快開始。
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=等屋頂穩固、壁爐點燃時，親自回來告訴我。我並不催促你，但除非這個鎮上有一家適合需要床位的客棧，否則我不會離開。
-aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=準備好後我就回來。
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=等屋頂蓋好了，爐火也燃起來了，你再親自告訴我一聲。我不是催你，但我不會離開，直到這個鎮子有了像樣的旅店，能讓所有需要床位的人都有地方住。
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=等準備好了我會回來。
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=萊倫長老
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=萊倫長老
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.root.body=憲章仍然有效，我仍然堅持它。我們沒有多餘的住所可以送人去，所以這裡的第一個真正的建築必須是一家旅館：一個屋頂，一個壁爐，還有一扇門，當路很長時，門對旅行者和我們自己的親戚敞開。當您準備好抵押時，請說出來。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=我加入了。我們來開旅館吧。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=這家旅館仍然在我的名單上。我想入住。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=我就交給你了。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=客棧已經完工了。科林應該有他需要的東西。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=章程依然有效，我也依然堅持。我們沒有多餘的住所可以安置人，所以這裡第一座真正的建築必須是客棧：有屋頂、有壁爐，還有一扇敞開的門，既能接待過往的旅人，也能在路途遙遠時接待我們自己的親人。如果你準備好了，就告訴我。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=我加入。咱們一起把旅館建起來吧。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=那家旅館還在我的計畫清單上。我想入住一下。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=我就不打擾你了。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c2=旅店已經完工了。科林應該已經擁有他所需要的一切了。
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c3=關於市政廳。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=我把你的名字放在架子上。你應該先聽我說。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=你的房子還沒完工，但我正在做。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=你提到想要一間自己的房子。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=市政廳的建設仍在進行中。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=市政廳已經起來了。
-aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=這裡的人們如何獲得金幣？
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c4=我已經把你的名字寫在名單上了。你應該第一個聽到我的名字。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c5=你的房子還沒完工，但我正在努力。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c6=你曾提到想要一間屬於自己的房子。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=市政廳建設仍在進行中。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=市政廳已經建好了。
+aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=這裡的人是怎麼弄到金幣的？
 aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=與你的員工一起使用市政廳令牌，支付材料，然後建造它。等大廳完工了，親自告訴我。當你說完成時我想看看你的臉。
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=完成後我會告訴你。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=用市政廳代幣指揮你的員工，支付材料費，然後建造它。市政廳建成後，親自告訴我。我想看看你宣布完工時的表情。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=完成後我會立即通知你。
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=那裡。以太港有一個像樣的市政廳：記錄、金庫和一個我們可以見面而不必在廣場上大喊大叫的房間。這就是我需要你做的。
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=很高興有幫助。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=好了。以太港有像樣的市政廳：檔案室、金庫，還有一個房間，我們可以在那裡開會，不用隔著廣場大喊大叫。這就是我需要你提供的。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=很高興對你有幫助。
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=客棧矗立著。接下來，我們需要一個屬於我們所有人的市政廳：一個放章程的架子、一張放計劃的桌子和一個金庫，這樣共享的硬幣就可以為我們建造的其餘部分提供資金。抵押地塊，支付標誌上要求的材料費用，我們終於有了一個作為整個城鎮見面的地方。
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=我會把大廳蓋起來。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=旅店已經建好了。接下來我們需要一座屬於我們所有人的市政廳：一個放憲章的書架，一張放設計圖的桌子，以及一個金庫，這樣大家就可以用公款來資助其他建設項目。圈定地塊，以告示牌上的價格購買材料，我們終於有了一個全鎮居民可以聚會的地方。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=我會把大廳建起來。
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=還沒有。
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=萊倫長老
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=石頭和文書工作都需要時間。等大廳完工了告訴我。我會在這裡。
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=仍在努力。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=石材和文書工作都需要時間。大廳完工後，請告訴我。我會在這裡。
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=還在努力中。
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=萊倫長老
 # -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
-aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=好的。如果您仍然想要在此處排行，請直接說出來。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.body=好的。如果你仍然希望這裡保留行，請說明。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.c0=會做。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_abandoned.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=我會留在旅館裡，直到泥土不再假裝是地板為止。然後在長椅後面找到我，靴子上沾滿了泥巴。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=那裡見。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.body=我會在旅館待到泥土不再偽裝成地板為止。到時候，你會在長凳後面找到我，靴子上沾滿了泥巴。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.c0=到時見。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_accepted.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=當地塊建成後，我會走到耕作台上並進行設置。到那裡來找我，我們就結束了。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.body=地基建好後，我會走到農活台邊支起活來。到時候來找我，我們就完工了。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c0=我需要放棄這個任務。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=我會繼續前進。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_building.c1=我會繼續努力。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_building.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=這個情節將帶來的不僅僅是抱怨。隨著城鎮的發展，我會繼續轉動床鋪。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=長得好。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.body=那塊地不僅會帶來抱怨。我會讓床鋪保持平整，同時小鎮也會發展壯大。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_done.c0=好好成長。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_done.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=當屋頂穩固時，在街區上登記我，然後找到我。我想用雙腳踩在自己的地板上來結束這一切。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=相信它。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.body=等屋頂撐不住了，就把我登記在冊，然後找到我。我想在這一切結束的時候，雙腳都踏在自己的地板上。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.c0=指望吧。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_accepted.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=根在我自己的椽子下。這就是我想要的農作物。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.body=根系紮在我自己屋樑下。這正是我想要的作物。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.c0=很高興聽到這個消息。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_finish.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=田野裡都是誠實的勞動。我還想要一扇不是客棧的門。和任何人一樣的令牌。建造它，然後將我列在架子上。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=我會建造它。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.body=田裡工作是正當的。我仍然想要一扇不是旅館的門。和其他人一樣。建好門，然後把我列入名單。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c0=我來建造它。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.c1=還沒有。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=木材和天氣需要時間。房子完工後，分配給我，然後來告訴我剩下的事情。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=木頭和天氣都需要時間。房子建好後，再指派我，然後告訴我剩下的部分。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=我會找到你的。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=我一直數著科林地板上的裂縫，夢想著一排排寫著我名字的地板。立一塊農田，用柵欄圍起來，設置長椅。在你的計劃桌上製作情節令牌，將其放在你的員工那裡，支付標誌。等土地準備好後，我會在耕作台與您會面。
-aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=我們會把它建成的。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=我一直在數著科林家地板上的裂縫，夢想著一塊塊地上刻著我的名字。圈出一塊農地，圍上柵欄，安置好工作台。在你的規劃台上製作地塊標記，把它交給你的員工，支付告示。土地準備好後，我會在農活台旁與你相會。
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=我們會把它建好的。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=現在不行。
 aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=艾琳·莫斯馬克
 aetherhaven.dialogue.aetherhaven_farmer.rep_reward_100.speaker=艾琳·莫斯馬克
 aetherhaven.dialogue.aetherhaven_farmer.rep_reward_25.speaker=艾琳·莫斯馬克
 aetherhaven.dialogue.aetherhaven_farmer.rep_reward_50.speaker=艾琳·莫斯馬克
 aetherhaven.dialogue.aetherhaven_farmer.rep_reward_75.speaker=艾琳·莫斯馬克
-aetherhaven.dialogue.aetherhaven_farmer.root.body=艾琳·莫斯馬克。污垢並不關心昨天誰擁有它。它關心你明天給牠吃什麼。我在科林的地板上睡了足夠多的夜晚，知道溫暖的碗勝過驕傲。
+aetherhaven.dialogue.aetherhaven_farmer.root.body=艾琳莫斯馬克：泥土不在乎昨天是誰的，它在乎的是你明天餵牠什麼。我在科林家的地板上睡過足夠多的夜晚，我知道一碗熱飯勝過一切驕傲。
 aetherhaven.dialogue.aetherhaven_farmer.root.c0=你想談談你自己的地方。
-aetherhaven.dialogue.aetherhaven_farmer.root.c1=你的名字在架子上。我想你會想​​聽的。
-aetherhaven.dialogue.aetherhaven_farmer.root.c2=你的房子還在漲。
-aetherhaven.dialogue.aetherhaven_farmer.root.c3=很高興看到農場養活你。
-aetherhaven.dialogue.aetherhaven_farmer.root.c4=當你準備好時，農場已經準備好了。
-aetherhaven.dialogue.aetherhaven_farmer.root.c5=關於字段...
-aetherhaven.dialogue.aetherhaven_farmer.root.c6=你說你可以僱用城裡的農民。
-aetherhaven.dialogue.aetherhaven_farmer.root.c7=休息一下吧。
+aetherhaven.dialogue.aetherhaven_farmer.root.c1=你的名字寫在架子上。我想你會想知道的。
+aetherhaven.dialogue.aetherhaven_farmer.root.c2=你的房子還在繼續蓋著。
+aetherhaven.dialogue.aetherhaven_farmer.root.c3=很高興看到農場為你提供食物。
+aetherhaven.dialogue.aetherhaven_farmer.root.c4=農場隨時恭候您的到來。
+aetherhaven.dialogue.aetherhaven_farmer.root.c5=關於這些領域…
+aetherhaven.dialogue.aetherhaven_farmer.root.c6=你說過你需要鎮上的農夫。
+aetherhaven.dialogue.aetherhaven_farmer.root.c7=休息一下。
 aetherhaven.dialogue.aetherhaven_farmer.root.speaker=艾琳·莫斯馬克
 # -- Tree id: aetherhaven_inn_welcome (Corin Mosscup) --
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=然後我會把水壺留在這裡，直到這塊地屬於你為止。一旦我的名字上架，就來找我。在我們解決之前我想和你握手。
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=相信它。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body=那我就把水壺放在這兒，直到這塊地歸你所有。等我的名字寫在地塊上，就來找我。在正式敲定之前，我想跟你握個手。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0=指望吧。
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=科林·莫斯卡普
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=那裡。一個為陌生人準備的壁爐和一個屬於我的門閂。這比關鍵的外觀更有價值。
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=你賺到了。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=瞧，一個陌生人的壁爐，還有一扇屬於我的門閂。這比鑰匙的外表更有價值。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=這是你應得的。
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=科林·莫斯卡普
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=我會為整個城鎮倒湯，但我想要一扇門能關上我自己的爛攤子。和其他人一樣的房子令牌。建造它，當它站起來時，把我列在街區上。
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=我會把它建起來。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=我願意為全鎮的人倒湯，但我想要一扇能把我的爛攤子擋在外面的門。和其他人一樣，我得擁有同樣的房屋所有權。房子蓋好了，等它建成後，把我的名字也列入其中。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=我會把它建好的。
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=下次吧。
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=科林·莫斯卡普
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=黏土以自己的速度乾燥。房子完工後，把我放在架子上，然後過來告訴我，這樣我們就可以結束這本書了。
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=我會讓你知道的。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body=黏土會按照自己的步調乾燥。房子建好後，把我安排在架子上，然後來告訴我，這樣我們就可以結束這個專案了。
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0=我會通知你。
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker=科林·莫斯卡普
-aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=我們為路過的人們保留了兩個位置。商人、修補匠以及鎮上任何可以支持的人。把它們趕走，大多數夜晚它們就會睡在天空下。那不是驕傲。那就是數學。
+aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body=我們留了兩處地方給過路人。商人、修補匠，任何鎮上能支持的人。要是把他們拒之門外，他們大多數晚上都得露宿街頭。這不是驕傲，這是算計。
 aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0=有道理。
 aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker=科林·莫斯卡普
 aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker=科林·莫斯卡普
 aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker=科林·莫斯卡普
 aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker=科林·莫斯卡普
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=踏入避風。我是科林。我保留著這個壁爐，當你在我們的屋簷下時，你會得到我們能照顧到的食物。即使外界忘記瞭如何做到這一點，這一點仍然很重要。
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=客用床位如何使用？
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=您想要一間真正屬於自己的房間。
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=我把你列在家裡的架子上。我想你應該聽我說。
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=你的房子還在組裝。我正在做。
-aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=我去攪鍋。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.body=進來避避風雨吧。我是科林。我守護著這間家宅，只要你待在我們屋簷下，我們就會盡我們所能為你提供最好的食物。即使外面的世界已經忘記了這一點，這仍然很重要。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0=客房床位是如何安排的？
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=你想要一個真正屬於自己的房間。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=我把你列入待辦事項清單了。我覺得你應該親耳聽到我這麼說。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=你的房子還在裝修中，我正在努力。
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=我去攪渾水。
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=科林·莫斯卡普
 # -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
-aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.root.body=威克斯·桑德蘭。我買廢品，賣希望，數硬幣兩次。你的旅館裡有壁爐，已經是方圓數英里內最好的店面了。其他一切都是談判。
-aetherhaven.dialogue.aetherhaven_merchant.root.c0=瀏覽您的商品（金幣）。
-aetherhaven.dialogue.aetherhaven_merchant.root.c2=你提到想要房子。
-aetherhaven.dialogue.aetherhaven_merchant.root.c3=我把你記在帳本上了。紙質內容應該與現實相符。
-aetherhaven.dialogue.aetherhaven_merchant.root.c4=你的房子還在堆上。
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.root.body=維克斯·桑德蘭。我收購廢料，出售希望，而且數錢數兩次。你那間有壁爐的旅館已經是方圓幾裡最好的店面了。其他的一切都得討價還價。
+aetherhaven.dialogue.aetherhaven_merchant.root.c0=瀏覽你的商品（金幣）。
+aetherhaven.dialogue.aetherhaven_merchant.root.c2=你提到過想要一棟房子。
+aetherhaven.dialogue.aetherhaven_merchant.root.c3=我把你記在帳上。帳面記錄應該與實際情況相符。
+aetherhaven.dialogue.aetherhaven_merchant.root.c4=你的房子還在廢墟上。
 aetherhaven.dialogue.aetherhaven_merchant.root.c5=很高興看到你在這裡交易。
-aetherhaven.dialogue.aetherhaven_merchant.root.c6=攤位已經起來了。快來看看。
-aetherhaven.dialogue.aetherhaven_merchant.root.c7=關於攤位搭建...
+aetherhaven.dialogue.aetherhaven_merchant.root.c6=攤位已經搭好了，快來看看。
+aetherhaven.dialogue.aetherhaven_merchant.root.c7=關於攤位搭建…
 aetherhaven.dialogue.aetherhaven_merchant.root.c8=你讓我找地方擺攤。
-aetherhaven.dialogue.aetherhaven_merchant.root.c9=保持你的錢包在風中閉合。
-aetherhaven.dialogue.aetherhaven_merchant.root.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=公平的。如果您改變主意，優惠仍然有效。
+aetherhaven.dialogue.aetherhaven_merchant.root.c9=刮風的時候一定要把錢包拉上。
+aetherhaven.dialogue.aetherhaven_merchant.root.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=公平。如果你改變主意，優惠仍然有效。
 aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=謝謝。
-aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=我會在科林家紮營，直到攤位站起來。比溝裡安全，湯也更好喝。
-aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=到時見。
-aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=攤位建好了，我就去開店。來找我吧，我們會把這件事結束。
+aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=我會一直待在科林的攤位旁，直到它重新站起來為止。這比待在溝裡安全多了，而且那裡的湯也更好喝。
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=等它上線後再見。
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=攤位搭好後，我就過去開張。到時候來找我，咱們把這事兒說完。
 aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0=我需要放棄這個任務。
 aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1=我會繼續努力。
-aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=摊子看上去很诚实。貿易一開始會很清淡。我們以緩慢的方式種植它，就像所有值得保留的東西一樣。
-aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=就到此為止。
-aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=當門打開時，把我的名字寫在街區上，然後找到我。我想要的是故事，而不僅僅是墨水。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=你會得到兩者。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=那裡。一扇知道我敲門的門。這勝過一個完整的保險箱。
+aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=攤位看起來很實在。起初生意可能不會太好。我們會慢慢經營，就像所有值得珍惜的東西一樣。
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=為此乾杯。
+aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=當大門敞開時，把我的名字刻在墓碑上，然後找到我。我想要的是故事，而不僅僅是墨水。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=你會得到這兩樣東西。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=瞧，一扇能辨識我敲門聲的門。這比裝滿東西的保險箱強多了。
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=好好享受。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=庫存屬於貨架。我的靴子應該放在乾燥的地方。與鎮上其他地方相同的房屋標記。建成後註冊我。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=我會押註一棟房子。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body=貨物應該擺在貨架上。我的靴子應該放在乾燥的地方。我和鎮上其他人一樣，都用同樣的房屋代幣。房子建好後，請幫我登記。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0=我敢拿房子作抵押。
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1=下次吧。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=房子有時需要季節。完成它，指派我，然後回來，我們將平衡帳本。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body=房子有時候需要一段時間才能蓋好。先建好，交給我，然後我們再回來結算帳目。
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0=我會回來的。
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=威克斯·桑德蘭
-aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=我需要一個小屋頂和一個可以依靠的櫃檯。當你拿著我遞給你的令牌時，你把它和你的手杖放在一起。材料是你的問題。當釘子固定時我會跑櫃檯。
-aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=我會建造它。
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker=維克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body=我需要一個小棚子和一個可以倚靠的櫃檯。你拿著我遞給你的代幣，和你的員工一起把它放好。材料的事你來辦。等釘子釘牢了，我就來操作櫃檯。
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0=我來建造它。
 aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1=現在不行。
-aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=威克斯·桑德蘭
+aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=維克斯·桑德蘭
 # -- Tree id: aetherhaven_priestess (Serah Thornwell) --
-aetherhaven.dialogue.aetherhaven_priestess.root.body=塞拉·桑韋爾。我主持了這座城鎮的蓋亞儀式。旅館是我頭頂上的屋頂，我很感激，但我不能在晚餐和紙牌遊戲之間提供服務。我需要在外面有一個真正的祭壇：小路、幾張凳子和一座雕像，人們可以在那裡祈禱，而不會因為廚房的煙霧而屏住呼吸。
-aetherhaven.dialogue.aetherhaven_priestess.root.c0=你想談論一個家。
-aetherhaven.dialogue.aetherhaven_priestess.root.c1=你現在在貨架上。我想你應該知道。
+aetherhaven.dialogue.aetherhaven_priestess.root.body=塞拉·索恩威爾。我負責主持這座小鎮的蓋亞儀式。旅館為我遮風擋雨，我心存感激，但我無法在晚餐和紙牌遊戲的間隙主持儀式。我需要一個真正的戶外祭壇：有小路、幾張凳子，還有一尊雕像，這樣人們就可以安心祈禱，不必擔心廚房的油煙熏得喘不過氣來。
+aetherhaven.dialogue.aetherhaven_priestess.root.c0=你想談談房子的事。
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=你現在被雪藏了。我覺得你應該知道。
 aetherhaven.dialogue.aetherhaven_priestess.root.c2=房子還沒完工。
-aetherhaven.dialogue.aetherhaven_priestess.root.c3=祭壇對你來說怎麼樣？
+aetherhaven.dialogue.aetherhaven_priestess.root.c3=你的祭壇使用情況如何？
 aetherhaven.dialogue.aetherhaven_priestess.root.c4=祭壇場地已準備就緒。
-aetherhaven.dialogue.aetherhaven_priestess.root.c5=關於祝福...
-aetherhaven.dialogue.aetherhaven_priestess.root.c6=你說你需要蓋亞的土地。
-aetherhaven.dialogue.aetherhaven_priestess.root.c7=我就交給你了。
-aetherhaven.dialogue.aetherhaven_priestess.root.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=沒有難受的感覺。如果你還想在城裡有祭壇，請再問一次。
+aetherhaven.dialogue.aetherhaven_priestess.root.c5=關於祝福…
+aetherhaven.dialogue.aetherhaven_priestess.root.c6=你說過你需要土地孕育蓋亞。
+aetherhaven.dialogue.aetherhaven_priestess.root.c7=我就不打擾你了。
+aetherhaven.dialogue.aetherhaven_priestess.root.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=別放在心上。如果你仍然想在鎮上設立祭壇，可以再問一次。
 aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=好的。
-aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=我會一直待在客棧裡，直到祭壇建成。然後到雕像處找到我，我們就完成祝福。
-aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=我們在那裡見。
-aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=當祭壇立起來時，我會走到雕像前。到那裡來找我，我們就結束了。
+aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body=我會一直待在客棧裡，直到祭壇建好。然後你們到雕像那裡來找我，我們一起完成祝福儀式。
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0=到時候見。
+aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.body=當祭壇立好，我將走向雕像。來那裡找我，我們便可宣告儀式完成。
 aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0=我需要放棄這個任務。
-aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=我還在努力。
-aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=祭壇完成了。謝謝。隨著城鎮的發展，我將照顧這片土地並在這裡舉行儀式。
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1=我還在研究這個問題。
+aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.body=祭壇已經完工。謝謝。隨著城鎮的發展，我會繼續照顧這片土地，並在這裡舉行儀式。
 aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0=祝你好運。
-aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=房子建好了，把我的名字寫在裡面的管理欄上，然後來找我。我想聽你親自說出來，而不只是從清單上讀出來。
+aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body=房子修好後，在裡面的管理表上寫上我的名字，然後來找我。我想聽你當面說，而不是照清單念。
 aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0=你會。
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=好的。一個實際上是我的屋頂。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body=好。這才是真正屬於我的屋頂。
 aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0=很公平。
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=祭壇是為所有人準備的。我也和其他人一樣，想要一棟屬於自己的小房子，所以我不會永遠住在客棧大廳之外。從常用的令牌建立它，然後在它啟動時在管理區塊上註冊我。
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=我會押註一棟房子。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body=祭壇是為所有人準備的。我和其他人一樣，也想要一間屬於自己的小房子，所以我不會永遠住在旅館大廳。用普通代幣蓋房子，建成後在管理欄登記我的資料。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0=我敢拿房子作抵押。
 aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1=下次吧。
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=這些事情需要時間。房子完工後，在街區登記我，然後來談談。那就是我們完成的時候。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body=這些事都需要時間。等房子蓋好了，把我登記到待售名單上，然後再來談。到那時，我們的交易就結束了。
 aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0=我會回來的。
-aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=塞拉·桑韋爾
-aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=設立一個蓋亞祭壇：小路、凳子和我可以站著、人們可以坐著的雕像。在您的規劃台製作令牌，將其交給您的員工，然後支付標誌。當它建成後，在雕像前與我會面，我們會好好地祝福它。
-aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=我們會把它建成的。
+aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker=獅子山
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=圈定蓋亞祭壇：鋪設小徑，擺放凳子，並放置雕像，好讓我能站立，人們也能落座。在你的規劃桌上製作信物，將其與你的法杖放在一起，並支付相應的費用。祭壇建成後，請到雕像處與我會面，我們將舉行正式的祝福儀式。
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=我們會把它建好的。
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=現在不行。
-aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=塞拉·桑韋爾
+aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=獅子山
+# === Gifting (dialogue + service) ===
+aetherhaven.dialogue.gift.offer=贈送禮物
+aetherhaven.dialogue.gift.confirmBody=將你目前快捷欄中的物品（1）作為禮物？
+aetherhaven.dialogue.gift.confirmYes=是的，給它
+aetherhaven.dialogue.gift.confirmNo=沒關係
+aetherhaven.dialogue.gift.back=好的
+aetherhaven.dialogue.gift.fail.visitor=只有鎮上的居民才能收到儲存的禮物。
+aetherhaven.dialogue.gift.fail.emptyHand=將物品放在快捷欄中即可獻祭。
+aetherhaven.dialogue.gift.fail.dailyLimit=你今天已經送過這個人一份禮物了。
+aetherhaven.dialogue.gift.fail.weeklyLimit=你已經把每週的禮物送給這個人了。
+aetherhaven.dialogue.gift.fail.generic=你現在還不能送那份禮物。
+# Blacksmith
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.love=哈哈！這才是鐵匠用心打造的金屬啊！我永遠不會忘記。
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=不錯。這可以歸入「美好的一天」的範疇。
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral=我接受這份工作。倉儲也是份體面的工作。
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=感謝你的好意，但我的鍛爐燒的是礦石，不是你說的那種東西。
+# Merchant
+aetherhaven.dialogue.aetherhaven_merchant.gift.love=太棒了！你品味不凡，而且時機把握得也很好。
+aetherhaven.dialogue.aetherhaven_merchant.gift.like=我可以挪動它。我們倆都會在邊緣微笑。
+aetherhaven.dialogue.aetherhaven_merchant.gift.neutral=它能交易。我會讓它在櫃檯上看起來像是故意擺放的。
+aetherhaven.dialogue.aetherhaven_merchant.gift.dislike=我賣的是商品，不是雜物。請找垃圾箱，不要擺攤。
+# Farmer
+aetherhaven.dialogue.aetherhaven_farmer.gift.love=瞧你。記住，這就是那種幫助資訊。
+aetherhaven.dialogue.aetherhaven_farmer.gift.like=這樣就非常適合下一行了。
+aetherhaven.dialogue.aetherhaven_farmer.gift.neutral=情況可能更糟。說不定下雨天你也會很開心。
+aetherhaven.dialogue.aetherhaven_farmer.gift.dislike=那不是用來做土壤改良的。至少我會把這個想法變成堆肥。
+# Inn
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love=爐火將歌頌此事。謝謝。
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=我們能滿足您這種慷慨的需求。歡迎您空著肚子再來。
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=我會在課間找點事做。
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=我管理的是廚房，不是雜物抽屜。
+# Elder
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=你以這樣的禮物來表達對小鎮的敬意。我會確保禮物以適當的方式書寫。
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=深思熟慮。憲章的建立，如同磐石一般，離不開信任。
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=我不會拒絕善意，即使它的包裝方式有些奇怪。
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=你的努力有目共睹——但並非每一塊石頭都適合放在基座上。
+# Priestess
+aetherhaven.dialogue.aetherhaven_priestess.gift.love=蓋亞微笑。這件東西應該放在祭壇上。
+aetherhaven.dialogue.aetherhaven_priestess.gift.like=低調卻真誠的禮物。這才是最重要的。
+aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=我會把它和其他當天的代幣放在一起。
+aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=有些東西最好不要搬動。謝謝，但是不行。
+
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=歡迎你過去，但這個憲章不是你的。如果你想幫忙，你必須先受到居住在這裡的人的歡迎。
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=歡迎您過境，但這片土地並非屬於您。如果您有意提供協助，必須先得到這裡居民的接納。
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=我明白。
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=萊倫長老
 # -- Tree id: aetherhaven_visitor_generic (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=美好的一天，旅行者。如果您不是這個定居點的人，請與屬於這裡的當地人交談。我的雙手忙滿了我們自己的工作。
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=旅途愉快。如果您不是本地居民，請與當地人交談。我本人也忙於自己的事情。
 aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=告別。
 aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=村民
 # -- Tree id: aetherhaven_visitor_inn (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=壁爐是溫暖的，但帳本是為鎮民和他們的客人準備的。當你受到邀請時就回來吧。
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=爐火溫暖，但帳簿是為鎮民及其賓客準備的。請您受邀時再來。
 aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=很公平。
 aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=旅館老闆
 
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
-aetherhaven.blacksmith.repair.insufficientGold=你的錢包太輕，無法進行此項維修。
-aetherhaven.blacksmith.repair.success={itemName} 又完整了。完好如新。
-commands.aetherhaven.dialogue.desc=透過id開啟對話樹（用於測試）
-commands.aetherhaven.dialogue.treeId.desc=對話樹 id（例如 aetherhaven_dialogue_test）
-commands.aetherhaven.dialogue.entry.desc=可選入口節點id（預設：root）
+aetherhaven.blacksmith.repair.insufficientGold=你的錢包太輕了，不適合這種維修。
+aetherhaven.blacksmith.repair.success={itemName} 已恢復完整。跟新的一樣。
+commands.aetherhaven.dialogue.desc=透過 ID 開啟對話樹（用於測試）
+commands.aetherhaven.dialogue.treeId.desc=對話樹 ID（例如 aetherhaven_dialogue_test）
+commands.aetherhaven.dialogue.entry.desc=可選的入口節點 ID（預設值：root）
 aetherhaven.interaction.dialogue=按 [{key}] 通話
 npcRoles.Aetherhaven_Test_Villager.name=對話測試村民

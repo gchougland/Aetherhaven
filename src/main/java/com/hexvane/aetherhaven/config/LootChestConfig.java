@@ -50,6 +50,13 @@ public final class LootChestConfig {
             .documentation("When true, world bonus injection also runs in Creative. Default false (same as vanilla stash).")
             .add()
             .append(
+                new KeyedCodec<>("LootrPerPlayerCompatibilityEnabled", Codec.BOOLEAN),
+                (o, v) -> o.lootrPerPlayerCompatibilityEnabled = v == null || v,
+                o -> o.lootrPerPlayerCompatibilityEnabled
+            )
+            .documentation("When true, injects Aetherhaven bonus loot into Lootr per-player containers (once per player per chest).")
+            .add()
+            .append(
                 new KeyedCodec<>("Gold", LootChestGoldConfig.CODEC),
                 (o, v) -> o.gold = v != null ? v : new LootChestGoldConfig(),
                 o -> o.gold
@@ -71,6 +78,7 @@ public final class LootChestConfig {
     @Nonnull
     private String excludeBlockIdSubstrings = "";
     private boolean applyInCreative = false;
+    private boolean lootrPerPlayerCompatibilityEnabled = true;
     @Nonnull
     private LootChestGoldConfig gold = new LootChestGoldConfig();
     @Nonnull
@@ -108,6 +116,10 @@ public final class LootChestConfig {
 
     public boolean isApplyInCreative() {
         return applyInCreative;
+    }
+
+    public boolean isLootrPerPlayerCompatibilityEnabled() {
+        return lootrPerPlayerCompatibilityEnabled;
     }
 
     @Nonnull

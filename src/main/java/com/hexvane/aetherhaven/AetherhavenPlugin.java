@@ -47,6 +47,8 @@ import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryPlayerInitSystem;
 import com.hexvane.aetherhaven.jewelry.JewelryRolling;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusInjectSystem;
+import com.hexvane.aetherhaven.jewelry.LootrPerPlayerLootInjectSystem;
+import com.hexvane.aetherhaven.jewelry.LootrChestProcessedPlayers;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
 import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
@@ -250,8 +252,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
+        LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());
         this.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         this.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(this));
+        LootrPerPlayerLootInjectSystem lootrCompat = LootrPerPlayerLootInjectSystem.createIfAvailable(this);
+        if (lootrCompat != null) {
+            this.getChunkStoreRegistry().registerSystem(lootrCompat);
+        }
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());

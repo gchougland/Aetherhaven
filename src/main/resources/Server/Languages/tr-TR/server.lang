@@ -33,7 +33,7 @@ aetherhaven.charter.alreadyInTown=Bu dünyada zaten bir şehrin parçasısınız
 aetherhaven.charter.townFounded=Kasaba kuruldu: {name}. Köyün ileri geleni geldi. Kasabanın adını değiştirmek için tüzüğü kullanın.
 aetherhaven.chartertown.info.notLinked=Charter henüz bir kasabaya bağlı değil.
 aetherhaven.chartertown.info.invalidTownId=Kiralama sözleşmesinde geçersiz şehir kimliği.
-aetherhaven.chartertown.info.townDataMissing=Şehir verileri bulunamadı (sunucu günlüğüne bakın).
+aetherhaven.chartertown.info.townDataMissing=Kasaba verileri bulunamadı (sunucu günlüğüne bakın).
 aetherhaven.chartertown.townInfoBlock=Kasaba adı: {name}\nKasaba Kimliği: {id}\nSeviye: {tier}\nBölge (parça yarıçapı): {radius}\nŞehir merkezi: {cx}, {cy}, {cz}
 aetherhaven.chartertown.nameEmpty=Şehir adı alanı boş bırakılamaz.
 aetherhaven.chartertown.nameDuplicate=Bu isim, dünyadaki başka bir şehir tarafından zaten kullanılıyor.
@@ -172,11 +172,17 @@ aetherhaven.debug.off=KAPALI
 # === Debug: reputation & milestone listing ===
 # Reputation debug
 aetherhaven.debug.rep.unchanged=İtibar değişmedi (zaten {value}).
-aetherhaven.debug.rep.set=İtibarı, diyalog için sıraya alınmış geçilen kilometre taşlarıyla birlikte {value} olarak ayarlayın (eğer rol çözümlendiyse).
+aetherhaven.debug.rep.set=Rol çözümlendiyse, diyalog için sıraya alınmış geçilen kilometre taşları ile itibarı {value} olarak ayarlayın.
 aetherhaven.debug.rep.milestonesHeader=İtibar kilometre taşları (ödül kimliği, rol, minimum itibar, diyalog düğümü):
 aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
 aetherhaven.debug.rep.granted=Verilen ödül {id}.
 aetherhaven.debug.rep.targetInvalid=Engelli köylü.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Bu dünyadaki {towns} kasabadaki {entries} oyuncu-köylü sırasındaki hediye limitlerini sıfırla.
+aetherhaven.debug.gift.unknownRole=Bilinmeyen köylü rolü: {role}
+aetherhaven.debug.gift.noGiftLists={role} rolünün köylü verilerinde hediyeSevgileri, hediyeBeğenileri veya hediyeBeğenmeme durumları bulunmamaktadır.
+aetherhaven.debug.gift.fillDone={role} için {added} hediye günlüğü satırı/satırları eklendi (o öğe ve tepki seviyesi için zaten bir satırınız varsa atlanır).
 
 # === Debug: villager needs ===
 # Needs debug
@@ -269,13 +275,13 @@ aetherhaven.ui.plotmanagement.tabPlayersTooltip=Kasaba üyeleri
 aetherhaven.ui.plotmanagement.tabMoveTooltip=Bu binayı taşıyın
 aetherhaven.ui.plotconstruction.materials=Malzemeler
 aetherhaven.ui.plotconstruction.build=İnşa etmek
-aetherhaven.ui.plotconstruction.pickUpPlot=Parseli al (jeton iade et)
+aetherhaven.ui.plotconstruction.pickUpPlot=Parseli al (jeton döndür)
 aetherhaven.ui.plotconstruction.townNeeds=Kasabanın ihtiyaçları
 aetherhaven.ui.plotconstruction.moveBuilding=Binayı taşıma
 aetherhaven.ui.plotconstruction.houseResident=İkamet eden kişi
 aetherhaven.ui.plotconstruction.assignHouseResident=Yerleşik
 aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Binayı taşımak mı?
-aetherhaven.ui.plotconstruction.moveBuildingModalBody=Yeni bir yer seçmek için arsa yerleştirme özelliğini açar. Taşıma işlemi eski binayı yıkar ve yeniden inşa eder; öncelikle değerli eşyaları, evcil hayvanları ve mevcut binanın içindeki dağınık eşyaları kaldırın.
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Yeni bir yer seçmek için arsa yerleştirme seçeneğini açar. Taşıma işlemi eski binayı yıkıp yeniden inşa eder; öncelikle değerli eşyaları, evcil hayvanları ve mevcut binanın içindeki dağınık eşyaları kaldırın.
 aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Devam etmek
 aetherhaven.ui.plotconstruction.moveBuildingModalCancel=İptal etmek
 
@@ -287,11 +293,24 @@ aetherhaven.ui.villagerneeds.fun=Eğlence
 aetherhaven.ui.villagerneeds.villagers=Köylüler
 aetherhaven.ui.villagerneeds.noResidentsTracked=Henüz hiçbir kasaba sakini takip edilmiyor.
 aetherhaven.ui.villagerneeds.rescueTooltip=Seçtiğiniz sakini yanınızdaki bir noktaya ışınlar ve mevcut yolunu ve aktivitesini temizleyerek hareket etmelerini ve yeni bir hedef seçmelerini sağlar. Bir köylü sıkışıp kaldığında bunu kullanın.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Bu köylüye verdiğiniz eşyaları, tepkilerine göre gruplandırılmış olarak ve bu hafta kaç hediye daha verebileceğinizi görüntüleyin.
+aetherhaven.ui.giftHistory.title=Verilen hediyeler
+aetherhaven.ui.giftHistory.backTooltip=Şehre dönüş ihtiyaçları
+aetherhaven.ui.giftHistory.empty=Bu köylüye henüz hiçbir hediye vermediniz, bu yüzden gösterecek bir şey yok.
+aetherhaven.ui.giftHistory.section.love=Sevilen
+aetherhaven.ui.giftHistory.section.like=Beğendim
+aetherhaven.ui.giftHistory.section.neutral=Doğal
+aetherhaven.ui.giftHistory.section.dislike=Beğenmedim
+aetherhaven.ui.giftHistory.giftsThisWeek=Bu haftaki hediyeler: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Önceki kasaba sakini
+aetherhaven.ui.giftHistory.cycleNextTooltip=Sonraki kasaba köylüsü
+aetherhaven.dialogue.gift.disabled.daily=Hediye bugün zaten verildi.
+aetherhaven.dialogue.gift.disabled.weekly=Bu hafta verilen iki hediye
 aetherhaven.ui.villagerneeds.rescueDone=Seçilen sakin size getirildi ve günlük rutini yeniden düzenlendi.
 aetherhaven.ui.villagerneeds.rescueNotTownResident=O kişi bu kasabanın sakini değil.
 aetherhaven.ui.reputation.label=İtibar
 aetherhaven.reputation.dailyTalkGain=+{amount} itibarı (günlük selamlama)
-aetherhaven.reputation.giftRepChange={amount} itibarı (hediye)
+aetherhaven.reputation.giftRepChange={amount} itibar (hediye)
 
 # === UI: charter amendments (tithe & town focus) ===
 aetherhaven.ui.charter.title=Anayasa değişiklikleri
@@ -408,7 +427,7 @@ items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Demirci dükkanı arsa jetonu
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Parsel yerleştirme personeli tarafından demirci dükkanının yerinin belirlenmesi gerekmektedir.
 
 items.Aetherhaven_Plot_Token_Park.name=Park yeri jetonu
-items.Aetherhaven_Plot_Token_Park.description=Park alanının yerleşim planının, planlama personeli tarafından belirlenmesi gerekmektedir.
+items.Aetherhaven_Plot_Token_Park.description=Parsel yerleştirme personeli tarafından park alanının yerleşim planının oluşturulması gerekmektedir.
 
 items.Aetherhaven_Plot_Token_House.name=Ev arsası jetonu
 items.Aetherhaven_Plot_Token_House.description=Arsa yerleşim personeli tarafından ortak konutun temel planının yerleştirilmesi gerekmektedir.
@@ -541,7 +560,7 @@ aetherhaven.ui.chartertown.moveCharterHint=Bölgenizi yeni bir imtiyaz bloğu ü
 aetherhaven.ui.chartertown.moveCharterConfirmText=Yeni imtiyaz alanını arsa yerleştirme gibi konumlandıracaksınız (kaydırın ve onaylayın). Herhangi bir bina bölgenin dışında kalırsa, yerleştirme engellenecektir.
 aetherhaven.ui.chartertown.moveCharterConfirm=Devam etmek
 aetherhaven.ui.chartertown.moveCharterCancel=İptal etmek
-aetherhaven.ui.chartertown.charterMoved=Bölgenizin yetki alanı değişti. Bölgeniz artık yeni yetki alanına göre merkezlenmiştir.
+aetherhaven.ui.chartertown.charterMoved=Bölgenizin yetki alanı değişti. Bölgeniz artık yeni yetki alanının merkezinde yer alıyor.
 aetherhaven.ui.chartertown.modalDissolveTitle=Şehri dağıtmak mı?
 aetherhaven.ui.chartertown.modalMoveTitle=Kiralama sözleşmesini mi taşıyacağız?
 aetherhaven.ui.chartertown.modalCancel=İptal etmek
@@ -783,6 +802,10 @@ commands.aetherhaven.villager.uuid.desc=Köylü NPC varlığı UUID'si
 commands.aetherhaven.villager.target.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=Köy sakinine ışınlanmak için true komutunu kullanın (sadece operatörler); veya bunun yerine --tp komutunu kullanın.
 commands.aetherhaven.villager.tp_flag.desc=Köy sakinine ışınlan (sadece operatörler için; doğru geçmekle aynı)
+commands.aetherhaven.gift.desc=Hata ayıklama: Hediye limitlerini sıfırlama veya hediye geçmişi önizlemesini doldurma (DebugCommandsEnabled özelliğini gerektirir)
+commands.aetherhaven.gift.resetLimits.desc=Bu dünyadaki her kasabadaki tüm oyuncular ve tüm köylüler için günlük/haftalık hediye limitlerini sıfırlayın.
+commands.aetherhaven.gift.fillHistory.desc=Rolünüz (kasabanız) için her bir sevgi/beğeni/beğenmeme öğesi için bir günlük kaydı satırı ekleyin, böylece hediye geçmişinde gösterilecek bir şey olsun (hata ayıklama).
+commands.aetherhaven.gift.roleId.desc=NPC rol kimliği (örneğin Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: Köylü özerkliği katmanı (DebugCommandsEnabled gerektirir)
 commands.aetherhaven.debug_autonomy.toggle.desc=Kasaba sakini üzerinde özerklik hata ayıklamasını açıp kapatın (NPC'ye bakın veya --ray kullanın)
@@ -1116,6 +1139,48 @@ aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body=Gaia sunağı 
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0=İnşa ettireceğiz.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1=Şu an değil.
 aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker=Serah Thornwell
+# === Gifting (dialogue + service) ===
+aetherhaven.dialogue.gift.offer=Hediye teklif edin
+aetherhaven.dialogue.gift.confirmBody=Etkin hızlı erişim çubuğunuzdaki (bir) öğeyi hediye olarak verin?
+aetherhaven.dialogue.gift.confirmYes=Evet, verin.
+aetherhaven.dialogue.gift.confirmNo=Boş ver
+aetherhaven.dialogue.gift.back=Elbette
+aetherhaven.dialogue.gift.fail.visitor=Sadece kasaba sakinleri saklanan hediyeleri alabilir.
+aetherhaven.dialogue.gift.fail.emptyHand=Hızlı erişim çubuğunuzda bulunan bir öğeyi basılı tutarak sunabilirsiniz.
+aetherhaven.dialogue.gift.fail.dailyLimit=Bu kişiye bugün zaten bir hediye verdiniz.
+aetherhaven.dialogue.gift.fail.weeklyLimit=Bu kişiye haftalık hediyelerinizi kullandınız.
+aetherhaven.dialogue.gift.fail.generic=Şu anda o hediyeyi veremezsiniz.
+# Blacksmith
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.love=Hah! İşte gerçek bir demircinin yüreği metalden yapılmış. Bunu asla unutmayacağım.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=Harika. Bu da "iyi günler" kategorisine giriyor.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral=Alıyorum. Depo işi de dürüst bir iş.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=Düşüncen için teşekkürler, ama benim demirci ocağım cevher tüketiyor, o her neyse onu değil.
+# Merchant
+aetherhaven.dialogue.aetherhaven_merchant.gift.love=Muhteşem. Zevkiniz ve zamanlamanız harika.
+aetherhaven.dialogue.aetherhaven_merchant.gift.like=Bunu hareket ettirebilirim. İkimiz de kenarda gülümseyeceğiz.
+aetherhaven.dialogue.aetherhaven_merchant.gift.neutral=Alım satım gerçekleşiyor. Tezgahta kasıtlıymış gibi görünmesini sağlayacağım.
+aetherhaven.dialogue.aetherhaven_merchant.gift.dislike=Ben eşya satıyorum, gereksiz eşya değil. Lütfen bir tezgah yerine çöp kutusu bulun.
+# Farmer
+aetherhaven.dialogue.aetherhaven_farmer.gift.love=Sana bak. İşte bu tür yardım alanları, unutma.
+aetherhaven.dialogue.aetherhaven_farmer.gift.like=Bu, bir sonraki sıra için gayet uygun olacak.
+aetherhaven.dialogue.aetherhaven_farmer.gift.neutral=Daha kötü de olabilirdi. Yağmur bile size iyi gelebilirdi.
+aetherhaven.dialogue.aetherhaven_farmer.gift.dislike=Bu toprak için değil. En azından düşünceyi kompost yapacağım.
+# Inn
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love=Şömine bu vesileyle şarkılar söyleyecek. Teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=Bu tür bir cömertliği sunabiliriz. Aç olarak geri gelin.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=Ders aralarında bir şekilde kullanacağım.
+aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=Ben bir mutfak yönetiyorum, ıvır zıvır çekmecesi değil.
+# Elder
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Böyle bir hediye ile kasabayı onurlandırıyorsunuz. Bunu layıkıyla ve doğru bir şekilde yazıya döktüreceğim.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Düşünceli. Bir sözleşme, taş gibi güvene dayanır.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Tuhaf bir şekilde sunulmuş olsa bile, iyi niyeti reddetmem.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Çabalarınız görülüyor, ancak her taş kaideye ait değildir.
+# Priestess
+aetherhaven.dialogue.aetherhaven_priestess.gift.love=Gaia gülümsüyor. Bu, sunağın üzerinde durmalı.
+aetherhaven.dialogue.aetherhaven_priestess.gift.like=Sessiz ama samimi bir sunum. İşte bu önemli.
+aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=Bunu günün diğer jetonlarıyla birlikte yerleştireceğim.
+aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=Bazı şeyler kaldırılmadan bırakılsa daha iyi olur. Teşekkür ederim, ama hayır.
+
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Buradan geçmenize izin veriyoruz, ancak bu sözleşme size ait değil. Yardım etmek istiyorsanız, önce burada yaşayanlar tarafından kabul edilmeniz gerekiyor.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Anladım.

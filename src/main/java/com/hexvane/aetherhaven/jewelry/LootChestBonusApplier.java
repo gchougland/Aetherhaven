@@ -28,30 +28,39 @@ public final class LootChestBonusApplier {
         @Nonnull ThreadLocalRandom rnd,
         boolean force
     ) {
-        if (!force) {
-            if (cfg.getLootChestJewelryChance() <= 0.0) {
-                return;
-            }
-            if (rnd.nextDouble() >= cfg.getLootChestJewelryChance()) {
-                return;
-            }
-        }
         SimpleItemContainer inv = c.getItemContainer();
         if (inv == null) {
             return;
         }
+        if (tryInjectJewelryToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectJewelryToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (!force) {
+            if (cfg.getLootChestJewelryChance() <= 0.0) {
+                return false;
+            }
+            if (rnd.nextDouble() >= cfg.getLootChestJewelryChance()) {
+                return false;
+            }
+        }
         short slot = randomEmptySlot(inv, rnd);
         if (slot < 0) {
-            return;
+            return false;
         }
         ItemStack bonus = UnidentifiedJewelry.rollStack(rnd);
         if (ItemStack.isEmpty(bonus)) {
-            return;
+            return false;
         }
         ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, bonus);
-        if (tx.succeeded()) {
-            state.markNeedsSaving(s);
-        }
+        return tx.succeeded();
     }
 
     public static void tryInjectGoldCoins(
@@ -62,22 +71,37 @@ public final class LootChestBonusApplier {
         @Nonnull ThreadLocalRandom rnd,
         boolean force
     ) {
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return;
+        }
+        if (tryInjectGoldCoinsToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectGoldCoinsToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
         double p = cfg.getLootChestGoldCoinChance();
         if (!force) {
             if (p <= 0.0) {
-                return;
+                return false;
             }
             if (p < 1.0 && rnd.nextDouble() >= p) {
-                return;
+                return false;
             }
         }
         String coinId = cfg.getLootChestGoldCoinItemId();
         if (coinId.isEmpty()) {
-            return;
+            return false;
         }
         Item coin = Item.getAssetMap().getAsset(coinId);
         if (coin == null) {
-            return;
+            return false;
         }
         int min = cfg.getLootChestGoldCoinMin();
         int max = cfg.getLootChestGoldCoinMax();
@@ -87,20 +111,14 @@ public final class LootChestBonusApplier {
             max = t;
         }
         if (max <= 0) {
-            return;
+            return false;
         }
         int q = min + (max > min ? rnd.nextInt(max - min + 1) : 0);
         if (q <= 0) {
-            return;
-        }
-        SimpleItemContainer inv = c.getItemContainer();
-        if (inv == null) {
-            return;
+            return false;
         }
         int itemMax = Math.max(1, coin.getMaxStack());
-        if (addGoldCoinsSplitAcrossRandomSlots(inv, coinId, q, itemMax, rnd)) {
-            state.markNeedsSaving(s);
-        }
+        return addGoldCoinsSplitAcrossRandomSlots(inv, coinId, q, itemMax, rnd);
     }
 
     public static void tryInjectPlotToken(
@@ -111,34 +129,43 @@ public final class LootChestBonusApplier {
         @Nonnull ThreadLocalRandom rnd,
         boolean force
     ) {
-        if (!force) {
-            if (cfg.getLootChestPlotTokenChance() <= 0.0) {
-                return;
-            }
-            if (rnd.nextDouble() >= cfg.getLootChestPlotTokenChance()) {
-                return;
-            }
-        }
-        String tokenId = cfg.getLootChestPlotTokenItemId();
-        if (tokenId == null || tokenId.isBlank()) {
-            return;
-        }
-        if (Item.getAssetMap().getAsset(tokenId.trim()) == null) {
-            return;
-        }
         SimpleItemContainer inv = c.getItemContainer();
         if (inv == null) {
             return;
         }
+        if (tryInjectPlotTokenToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectPlotTokenToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (!force) {
+            if (cfg.getLootChestPlotTokenChance() <= 0.0) {
+                return false;
+            }
+            if (rnd.nextDouble() >= cfg.getLootChestPlotTokenChance()) {
+                return false;
+            }
+        }
+        String tokenId = cfg.getLootChestPlotTokenItemId();
+        if (tokenId == null || tokenId.isBlank()) {
+            return false;
+        }
+        if (Item.getAssetMap().getAsset(tokenId.trim()) == null) {
+            return false;
+        }
         short slot = randomEmptySlot(inv, rnd);
         if (slot < 0) {
-            return;
+            return false;
         }
         ItemStack token = new ItemStack(tokenId.trim(), 1);
         ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, token);
-        if (tx.succeeded()) {
-            state.markNeedsSaving(s);
-        }
+        return tx.succeeded();
     }
 
     public static void applyAll(
@@ -154,6 +181,21 @@ public final class LootChestBonusApplier {
         tryInjectJewelry(s, state, c, cfg, rnd, forceJewelry);
         tryInjectGoldCoins(s, state, c, cfg, rnd, forceGold);
         tryInjectPlotToken(s, state, c, cfg, rnd, forcePlot);
+    }
+
+    public static boolean applyAllToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean forceJewelry,
+        boolean forceGold,
+        boolean forcePlot
+    ) {
+        boolean changed = false;
+        changed |= tryInjectJewelryToContainer(inv, cfg, rnd, forceJewelry);
+        changed |= tryInjectGoldCoinsToContainer(inv, cfg, rnd, forceGold);
+        changed |= tryInjectPlotTokenToContainer(inv, cfg, rnd, forcePlot);
+        return changed;
     }
 
     /**
