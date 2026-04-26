@@ -31,6 +31,20 @@ public final class AetherhavenConstants {
     /** Debug POI visualization / move tool item id. */
     public static final String POI_TOOL_ITEM_ID = "Aetherhaven_Poi_Tool";
 
+    /** Purification powder: highlights mob spawn beacons/markers and can remove them. */
+    public static final String ITEM_PURIFICATION_POWDER = "Aetherhaven_Purification_Powder";
+
+    /**
+     * Vanilla NPC corpse-despawn puff ({@code Template_Predator} / {@code DeathParticles}); used when purification removes a
+     * spawn.
+     */
+    public static final String PURIFICATION_DESPAWN_PARTICLE_SYSTEM_ID = "Effect_Death_Medium";
+
+    /** Vanilla undead despawn sound — generic “poof” close to common enemy death feedback. */
+    public static final String PURIFICATION_DESPAWN_SOUND_EVENT_ID = "SFX_Zombie_Despawn";
+    /** Root interaction id used by preview proxy entities so F/use invokes purification. */
+    public static final String ROOT_INTERACTION_PURIFY_SPAWN_USE = "AetherhavenPurifySpawnUse";
+
     /**
      * Permission for POI tool use, visualization, and edit. Grant to server operators via the permission system.
      */

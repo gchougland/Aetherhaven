@@ -25,9 +25,14 @@ import com.hexvane.aetherhaven.plot.TreasuryBlock;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
+import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
+import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
+import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
+import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
+import com.hexvane.aetherhaven.purification.PurificationPreviewEntity;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
@@ -265,6 +270,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
+        PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
@@ -278,6 +284,19 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     return e;
                 },
                 PoiDebugLabelEntity.CODEC
+            );
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenPurificationPreview",
+                PurificationPreviewEntity.class,
+                world -> {
+                    PurificationPreviewEntity e = new PurificationPreviewEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                PurificationPreviewEntity.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);
@@ -301,6 +320,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 OpenHandMirrorUiInteraction.class,
                 OpenHandMirrorUiInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPurificationPowderUse",
+                PurificationPowderUseInteraction.class,
+                PurificationPowderUseInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
@@ -311,6 +336,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));

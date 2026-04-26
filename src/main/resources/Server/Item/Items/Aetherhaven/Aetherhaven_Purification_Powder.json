@@ -1,0 +1,79 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Purification_Powder.name",
+    "Description": "server.items.Aetherhaven_Purification_Powder.description"
+  },
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Recipe": {
+    "TimeSeconds": 0,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ResourceTypeId": "Crystal_Shards",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      }
+    ],
+    "OutputQuantity": 5,
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.6,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -15
+    ]
+  },
+  "Interactions": {
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPurificationPowderUse"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 64,
+      "Creative": 64
+    },
+    "AllEntities": true
+  },
+  "Model": "Items/Tools/Feedbag/Feedbag.blockymodel",
+  "Texture": "Items/Aetherhaven/Purification_Powder.png",
+  "Scale": 1.2,
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Purification_Powder.png",
+  "MaxStack": 64,
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemLevel": 0,
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

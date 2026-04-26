@@ -10,6 +10,16 @@
   "innPoolEligible": true,
   "innPoolOrder": 3,
   "visitorBindingKind": "visitor_priestess",
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_priestess_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Purification_Powder"
+    }
+  ],
   "giftLoves": [
     "Rock_Crystal_White_Large",
     "Plant_Seeds_Sunflower",

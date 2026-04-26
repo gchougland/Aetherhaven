@@ -1,0 +1,24 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Purification_Motes",
+      "PositionOffset": { "X": 0, "Y": 0.25, "Z": 0 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Purification_Soft",
+      "PositionOffset": { "X": 0, "Y": 0.2, "Z": 0 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Purification_Motes",
+      "PositionOffset": { "X": 0.35, "Y": 0.22, "Z": 0.25 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Purification_Soft",
+      "PositionOffset": { "X": -0.3, "Y": 0.18, "Z": -0.28 },
+      "FixedRotation": false
+    }
+  ]
+}

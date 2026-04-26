@@ -24,6 +24,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -178,6 +179,13 @@ public final class DialogueActionExecutor {
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
+            sendEventTitleBanner(
+                pr,
+                Message.translation("server.aetherhaven.banner.quest.completed.primary"),
+                Message.translation("server.aetherhaven.banner.quest.completed.secondary")
+                    .param("name", plugin.getQuestCatalog().displayName(qid)),
+                true
+            );
             pr.sendMessage(
                 Message.translation("server.aetherhaven.quest.completed")
                     .param("name", plugin.getQuestCatalog().displayName(qid))
@@ -323,9 +331,18 @@ public final class DialogueActionExecutor {
         if (!VillagerReputationService.claimPendingReward(town, tm, pu.getUuid(), nu.getUuid(), def.rewardId())) {
             return;
         }
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         String learnId = def.learnRecipeItemId();
         if (learnId != null && !learnId.isBlank()) {
-            CraftingPlugin.learnRecipe(playerRef, learnId.trim(), store);
+            String learnedItemId = learnId.trim();
+            CraftingPlugin.learnRecipe(playerRef, learnedItemId, store);
+            sendEventTitleBanner(
+                pr,
+                Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
+                Message.translation("server.aetherhaven.banner.reputation.unlock.recipe")
+                    .param("item", learnedItemId),
+                false
+            );
             return;
         }
         String itemId = def.itemId() != null ? def.itemId().trim() : "";
@@ -335,6 +352,14 @@ public final class DialogueActionExecutor {
         int count = Math.max(1, Math.min(def.itemCount(), 9999));
         ItemStack stack = new ItemStack(itemId, count);
         player.giveItem(stack, playerRef, store);
+        sendEventTitleBanner(
+            pr,
+            Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
+            Message.translation("server.aetherhaven.banner.reputation.unlock.item")
+                .param("item", itemId)
+                .param("count", count),
+            false
+        );
     }
 
     private static void abandonQuest(@Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
@@ -448,5 +473,26 @@ public final class DialogueActionExecutor {
             return null;
         }
         return a.get(key).getAsString();
+    }
+
+    private static void sendEventTitleBanner(
+        @Nullable PlayerRef playerRef,
+        @Nonnull Message primary,
+        @Nonnull Message secondary,
+        boolean isMajor
+    ) {
+        if (playerRef == null) {
+            return;
+        }
+        EventTitleUtil.showEventTitleToPlayer(
+            playerRef,
+            primary,
+            secondary,
+            isMajor,
+            null,
+            4.0F,
+            0.7F,
+            0.9F
+        );
     }
 }

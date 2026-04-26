@@ -1,0 +1,54 @@
+{
+  "RenderMode": "BlendAdd",
+  "EmitOffset": {
+    "X": { "Min": -0.6, "Max": 0.6 },
+    "Y": { "Min": 0, "Max": 0.85 },
+    "Z": { "Min": -0.6, "Max": 0.6 }
+  },
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0.6,
+  "TrailSpawnerPositionMultiplier": 0,
+  "TrailSpawnerRotationMultiplier": 0,
+  "ParticleLifeSpan": { "Min": 0.45, "Max": 0.9 },
+  "SpawnRate": { "Min": 48, "Max": 78 },
+  "TotalParticles": { "Min": 6, "Max": 10 },
+  "Attractors": [],
+  "ParticleRotateWithSpawner": false,
+  "MaxConcurrentParticles": 14,
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Star2.png",
+    "FrameSize": { "Width": 32, "Height": 32 },
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 0 },
+        "Scale": { "X": { "Min": 0.8, "Max": 1.1 } },
+        "Rotation": {
+          "X": { "Min": 0, "Max": 0 },
+          "Y": { "Min": 0, "Max": 360 },
+          "Z": { "Min": 0, "Max": 0 }
+        },
+        "Opacity": 0.75
+      },
+      "100": { "Opacity": 0 }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": { "Min": 0, "Max": 0 },
+        "Y": { "Min": 0, "Max": 360 },
+        "Z": { "Min": 0, "Max": 0 }
+      },
+      "Scale": { "X": { "Min": 0.4, "Max": 0.7 } },
+      "Opacity": 0.7,
+      "FrameIndex": { "Min": 0, "Max": 0 }
+    }
+  },
+  "InitialVelocity": {
+    "Speed": { "Min": 0.35, "Max": 0.95 },
+    "Yaw": { "Min": -180, "Max": 180 },
+    "Pitch": { "Min": 55, "Max": 90 }
+  },
+  "CameraOffset": 0.0,
+  "SpawnBurst": false
+}

@@ -305,6 +305,22 @@
         }
       ]
     },
+    "rep_reward_50": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "server.aetherhaven.reputation.reward.priestess.50",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_priestess_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
+    },
     "gift_confirm": {
       "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
       "text": "server.aetherhaven.dialogue.gift.confirmBody",
