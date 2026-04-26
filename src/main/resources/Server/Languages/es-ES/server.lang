@@ -162,7 +162,7 @@ aetherhaven.founder.createFailed=No se pudo crear la estatua del fundador. El bl
 # === Debug: villager autonomy overlay ===
 # Autonomy debug
 aetherhaven.debug.autonomy.notVillager=El objetivo no es un aldeano de Aetherhaven.
-aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía ACTIVADA (DisplayCustom + VisPath). Superposición AH en la placa de identificación.
+aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía ACTIVADA (DisplayCustom + VisPath). Superposición de AH en la placa de identificación.
 aetherhaven.debug.autonomy.toggledOff=Desactivación de la depuración de autonomía para este aldeano.
 aetherhaven.debug.autonomy.state=Depuración de autonomía para este aldeano: {state}
 aetherhaven.debug.autonomy.cleared=Se ha solucionado el problema de autonomía de Aetherhaven para este aldeano.
@@ -190,7 +190,7 @@ aetherhaven.debug.needs.whichInvalid=que debe ser hambre, energía o diversión 
 aetherhaven.debug.needs.elderNoTown=No hay ciudad para ti en este mundo (necesaria para Elder).
 aetherhaven.debug.needs.noElderUuid=El pueblo aún no tiene guardado ningún UUID anciano.
 aetherhaven.debug.needs.noMatch=No se encontró ningún aldeano coincidente (intente inspeccionar para obtener el identificador, el Anciano o el UUID completo).
-aetherhaven.debug.needs.multipleMatch=Varios NPC coincidieron con ese identificador; utilice el uuid completo de la inspección.
+aetherhaven.debug.needs.multipleMatch=Varios PNJ coincidieron con ese identificador; utilice el UUID completo de la inspección.
 aetherhaven.debug.needs.entityNotLoaded=La entidad no está cargada o no tiene VillagerNeeds: {id}
 aetherhaven.debug.needs.set=Establecer {which}={value} en {label} ({id})
 aetherhaven.debug.needs.inspectIntro=Aldeanos con necesidades (fragmentos cargados). Establecer con: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
@@ -348,10 +348,11 @@ aetherhaven.reputation.reward.innkeeper.75=Has pasado suficientes noches largas 
 aetherhaven.reputation.reward.innkeeper.100=Ahora tú y este pueblo comparten nombre. Berrycircle Concord es el círculo de platos ligeros: ensalada, brochetas de fruta, palomitas de maíz y un brindis que cae en la bandeja. Sírvelo una vez y te recordarán con cariño.
 aetherhaven.reputation.reward.merchant.50=Has cumplido tu palabra, tanto en el buen como en el mal tiempo. Aquí tienes el patrón del banco. Diseñalo en tu escritorio de planificación urbana una vez que tengas el esquema. Las tasaciones en el banco son gratuitas; yo sigo cobrando por las mías.
 aetherhaven.reputation.reward.merchant.100=Has invertido suficiente oro en este libro como para merecer un rincón de joyero. El diseño es tuyo. Créalo en la oficina de planificación urbana. Elige tu gema, tu metal y la vida que le dedicas, y la pieza resultará auténtica.
+aetherhaven.reputation.reward.priestess.50=Gaia confía en que camines por la frontera entre el crecimiento y la ruina. Toma esta mezcla: cristal y esencia vital, moldeada en la mesa de planificación urbana. Revela lo que no debe permanecer y te permite deshacer una creación con una sola bocanada de polvo.
 aetherhaven.reputation.reward.farmer.25=Te has ganado mi confianza en las filas. He dibujado un aspersor de hierro. Fabrícalo en el banco de cultivo cuando tengas esencia de agua y hierro.
 aetherhaven.reputation.reward.farmer.50=Aquí está el patrón del torio: mayor alcance, mismo ritmo matutino. La pestaña de Agricultura en el banco lo mostrará una vez que conozca el esquema.
 aetherhaven.reputation.reward.farmer.75=El cobalto mantiene mejor la presión. Esta página desbloquea el tercer nivel de aspersores, que aún permite un buen riego al amanecer.
-aetherhaven.reputation.reward.farmer.100=Adamantita y esencia: la última hoja del juego. Colócalas con cuidado. Los campos del pueblo regarán al amanecer.
+aetherhaven.reputation.reward.farmer.100=Adamantita y esencia: la última hoja del juego. Colócalas con cuidado. Los campos del pueblo beberán al amanecer.
 aetherhaven.reputation.reward.blacksmith.25=Piedra para argamasa, piedra para paciencia. Tienes ambas, y se nota.
 aetherhaven.reputation.reward.blacksmith.50=Te has ganado la confianza de la forja. Aquí tienes el esquema para un yunque de geoda. Fabrícalo en tu mesa de planificación urbana cuando tengas las barras y la piedra.
 
@@ -429,7 +430,7 @@ items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Es necesario colocar la
 items.Aetherhaven_Plot_Token_Park.name=ficha de parcela de parque
 items.Aetherhaven_Plot_Token_Park.description=Se requiere colocar el perímetro del parque por parte del personal de ubicación de parcelas.
 
-items.Aetherhaven_Plot_Token_House.name=Ficha para parcela de vivienda
+items.Aetherhaven_Plot_Token_House.name=ficha de parcela de vivienda
 items.Aetherhaven_Plot_Token_House.description=Se requiere que el personal de asignación de parcelas coloque el plano de la vivienda compartida.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=ficha de parcela del ayuntamiento
@@ -447,7 +448,7 @@ items.Aetherhaven_Geode_Anvil.description=Abre geodas sin coste de herrería. Co
 barter.aetherhaven_vex.title=Stock diario de Vex
 
 items.Aetherhaven_Treasury.name=Tesorería municipal
-items.Aetherhaven_Treasury.description=Guarda las monedas de oro del pueblo. Se utiliza para depositar o retirar (del propietario del pueblo).
+items.Aetherhaven_Treasury.description=Contiene las monedas de oro del pueblo. Se utiliza para depositar o retirar (del propietario del pueblo).
 
 items.Aetherhaven_Quest_Journal.name=Diario de misiones de la ciudad
 items.Aetherhaven_Quest_Journal.description=Uso secundario: revisar las misiones activas de la ciudad. El Anciano podría darte una después de que se construya la posada.
@@ -470,7 +471,7 @@ items.Aetherhaven_Sprinkler_Thorium.description=El agua removía la tierra un bl
 items.Aetherhaven_Sprinkler_Cobalt.name=Aspersor de cobalto
 items.Aetherhaven_Sprinkler_Cobalt.description=El agua removió la tierra un bloque más abajo en un área de 7x7. Una vez cada mañana en el juego. Amplia cobertura.
 items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
-items.Aetherhaven_Sprinkler_Adamantite.description=El agua regaría el suelo un bloque más abajo en un área de 9x9. Una vez cada mañana en el juego. Máxima cobertura.
+items.Aetherhaven_Sprinkler_Adamantite.description=El agua removió la tierra un bloque más abajo en un área de 9x9. Una vez cada mañana en el juego. Máxima cobertura.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Anciano Lyren
@@ -522,6 +523,9 @@ items.Aetherhaven_Appraisal_Bench.name=Banco de tasación
 items.Aetherhaven_Appraisal_Bench.description=Identifica las joyas que ya llevas contigo. Su uso es gratuito una vez instalado.
 items.Aetherhaven_Jewelry_Crafting_Bench.name=banco de trabajo de joyería
 items.Aetherhaven_Jewelry_Crafting_Bench.description=Un yunque de hierro para dar el acabado a las piezas. Una vez que conozcas el esquema, podrás trabajar en la oficina de planificación urbana. Vierte esencia vital con lingotes preciosos y una gema tallada para forjar joyas.
+items.Aetherhaven_Purification_Powder.name=Polvo purificador
+items.Aetherhaven_Purification_Powder.description=Mientras se mantiene pulsado, los puntos de aparición latentes cercanos brillan con motas tocadas por Gaia. Úsalo sobre un punto de aparición resaltado para desterrarlo y gastar una carga.
+interactionHints.purifySpawn=Pulsa [{key}] para purificar la cría
 
 # === UI: Statue of Gaia (revival / resident list) ===
 aetherhaven.ui.gaiaStatue.title=Estatua de Gaia
@@ -849,7 +853,7 @@ aetherhaven.feast.berrycircle.description=Un círculo de platos ligeros: ensalad
 # === NPC dialogue (use server.* keys in JSON; trees under Server/Aetherhaven/Dialogue/) ===
 # Short labels used from multiple root choice lists (not aetherhaven_<tree>.*)
 aetherhaven.dialogue.blacksmith.repairGear=Repara mi equipo (pago en monedas de oro)
-aetherhaven.dialogue.blacksmith.openGeodes=Abre las geodas (5 de oro cada una)
+aetherhaven.dialogue.blacksmith.openGeodes=Rompe las geodas (5 de oro cada una)
 aetherhaven.dialogue.merchant.appraiseJewelry=Tasar joyas (10 de oro cada una)
 
 # -- Tree id: aetherhaven_blacksmith (Garren Vale) --
@@ -919,7 +923,7 @@ aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Salir (acción de cierre 
 aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
 aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Puedes abrir la interfaz de intercambio de comerciantes de Kweebec o saltar a las acciones básicas.
 aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Tienda de trueque abierta Kweebec_Merchant
-aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Sáltate la tienda, ve a los stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Salta la tienda, ve a los stubs
 aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Acciones incompletas: desbloquear logros e iniciar misiones deberían registrarse hasta que existan esos sistemas.
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Ejecuta los stubs unlock_achievement + start_quest
@@ -936,7 +940,7 @@ aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=Ahí está. Una auté
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Encantado de ayudarle.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Anciano Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Cuando las paredes estén levantadas, usa el bloque de administración y ponme como residente. Luego ven a buscarme. Quiero oírte decirlo, no leerlo de un estante.
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=Obtendrás ambos.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=Obtendrás ambas cosas.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Anciano Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Entonces, asunto resuelto. Tengo una vivienda bajo las mismas reglas que todos los demás. Gracias por su comprensión.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Bienvenida a casa, Lyren.
@@ -1009,7 +1013,7 @@ aetherhaven.dialogue.aetherhaven_farmer.irienne_house_offer.speaker=Irienne Moss
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.body=La madera y el clima hacen su trabajo lentamente. Cuando la casa esté terminada, asígname el proyecto y luego ven a contarme el resto.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.c0=Te encontraré.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_house_remind.speaker=Irienne Mossmark
-aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=He estado contando grietas en el suelo de Corin y soñando con hileras con mi nombre. Marca una parcela, cercala, coloca el banco. Crea la ficha de parcela en tu mesa de planificación, colócala con tu personal y paga el letrero. Te veré en el banco de cultivo cuando la tierra esté lista.
+aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.body=He estado contando grietas en las tablas del suelo de Corin y soñando con hileras con mi nombre. Marca una parcela, cercala, coloca el banco. Crea la ficha de parcela en tu mesa de planificación, colócala con tu personal y paga el letrero. Te veré en el banco de cultivo cuando la tierra esté lista.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c0=Lo construiremos.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.c1=Ahora mismo no.
 aetherhaven.dialogue.aetherhaven_farmer.irienne_quest_farm.speaker=Irienne Mossmark
@@ -1082,7 +1086,7 @@ aetherhaven.dialogue.aetherhaven_merchant.vex_done.body=El puesto parece honesto
 aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0=¡Brindemos por eso!
 aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body=Cuando se abra la puerta, pongan mi nombre en la lista y luego búsquenme. Quiero la historia, no solo la tinta.
-aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=Obtendrás ambas cosas.
+aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0=Obtendrás ambos.
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body=Ahí está. Una puerta que reconoce mi llamada. Eso es mejor que una caja fuerte llena.
 aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0=Disfrútala.
@@ -1109,6 +1113,7 @@ aetherhaven.dialogue.aetherhaven_priestess.root.c5=Acerca de la bendición...
 aetherhaven.dialogue.aetherhaven_priestess.root.c6=Dijiste que necesitabas tierra para Gaia.
 aetherhaven.dialogue.aetherhaven_priestess.root.c7=Te dejo con eso.
 aetherhaven.dialogue.aetherhaven_priestess.root.speaker=Serah Thornwell
+aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker=Serah Thornwell
 aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body=Sin rencores. Si aún quieres un altar en la ciudad, vuelve a preguntar.
 aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0=Está bien.
 aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker=Serah Thornwell
@@ -1202,8 +1207,10 @@ commands.aetherhaven.dialogue.treeId.desc=ID del árbol de diálogo (p. ej., aet
 commands.aetherhaven.dialogue.entry.desc=ID de nodo de entrada opcional (predeterminado: raíz)
 aetherhaven.interaction.dialogue=Pulsa [{key}] para hablar
 npcRoles.Aetherhaven_Test_Villager.name=Prueba de diálogo del aldeano
-aetherhaven.banner.quest.completed.primary=Quest Complete
+aetherhaven.banner.quest.completed.primary=Misión completada
 aetherhaven.banner.quest.completed.secondary={name}
-aetherhaven.banner.reputation.unlock.primary=Unlocked
+aetherhaven.banner.quest.started.primary=Misión iniciada
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Desbloqueado
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}

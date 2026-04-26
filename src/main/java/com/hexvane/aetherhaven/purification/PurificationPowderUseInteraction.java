@@ -6,6 +6,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
+import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockPosition;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -19,6 +20,7 @@ import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
@@ -207,10 +209,22 @@ public final class PurificationPowderUseInteraction extends SimpleInstantInterac
         }
         @Nullable
         BlockPosition blockPosition = sync != null ? sync.blockPosition : context.getTargetBlock();
-        if (blockPosition == null) {
-            return null;
+        Vector3d center;
+        if (blockPosition != null) {
+            center = new Vector3d(blockPosition.x + 0.5, blockPosition.y + 0.5, blockPosition.z + 0.5);
+        } else {
+            @Nullable
+            Ref<EntityStore> actor = context.getEntity();
+            if (actor == null) {
+                return null;
+            }
+            @Nullable
+            Vector3i targetBlock = TargetUtil.getTargetBlock(actor, 8.0, store);
+            if (targetBlock == null) {
+                return null;
+            }
+            center = new Vector3d(targetBlock.x + 0.5, targetBlock.y + 0.5, targetBlock.z + 0.5);
         }
-        Vector3d center = new Vector3d(blockPosition.x + 0.5, blockPosition.y + 0.5, blockPosition.z + 0.5);
         PurificationSpawnSupport.collectAllInRange(store, center, MAX_PICK_RANGE, targetScratch);
         return PurificationSpawnSupport.findNearest(targetScratch, center, MAX_PICK_RANGE);
     }

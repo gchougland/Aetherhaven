@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -19,12 +20,15 @@ import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -35,6 +39,7 @@ import javax.annotation.Nullable;
 
 public final class DialogueActionExecutor {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final String BANNER_SOUND_EVENT_ID = "SFX_Discovery_Z1_Short";
 
     public void runBatch(
         @Nonnull List<JsonObject> actions,
@@ -144,9 +149,14 @@ public final class DialogueActionExecutor {
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(
-                Message.translation("server.aetherhaven.quest.started").param("name", quests.displayName(qid))
+            sendEventTitleBanner(
+                pr,
+                Message.translation("server.aetherhaven.banner.quest.started.secondary")
+                    .param("name", quests.displayName(qid)),
+                Message.translation("server.aetherhaven.banner.quest.started.primary"),
+                true
             );
+            playBannerSound(playerRef, store);
         }
     }
 
@@ -181,11 +191,12 @@ public final class DialogueActionExecutor {
         if (pr != null) {
             sendEventTitleBanner(
                 pr,
-                Message.translation("server.aetherhaven.banner.quest.completed.primary"),
                 Message.translation("server.aetherhaven.banner.quest.completed.secondary")
                     .param("name", plugin.getQuestCatalog().displayName(qid)),
+                Message.translation("server.aetherhaven.banner.quest.completed.primary"),
                 true
             );
+            playBannerSound(playerRef, store);
             pr.sendMessage(
                 Message.translation("server.aetherhaven.quest.completed")
                     .param("name", plugin.getQuestCatalog().displayName(qid))
@@ -335,14 +346,16 @@ public final class DialogueActionExecutor {
         String learnId = def.learnRecipeItemId();
         if (learnId != null && !learnId.isBlank()) {
             String learnedItemId = learnId.trim();
+            String learnedLabel = resolveItemLabel(pr, learnedItemId);
             CraftingPlugin.learnRecipe(playerRef, learnedItemId, store);
             sendEventTitleBanner(
                 pr,
-                Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
                 Message.translation("server.aetherhaven.banner.reputation.unlock.recipe")
-                    .param("item", learnedItemId),
+                    .param("item", learnedLabel),
+                Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
                 false
             );
+            playBannerSound(playerRef, store);
             return;
         }
         String itemId = def.itemId() != null ? def.itemId().trim() : "";
@@ -354,12 +367,13 @@ public final class DialogueActionExecutor {
         player.giveItem(stack, playerRef, store);
         sendEventTitleBanner(
             pr,
-            Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
             Message.translation("server.aetherhaven.banner.reputation.unlock.item")
-                .param("item", itemId)
+                .param("item", resolveItemLabel(pr, itemId))
                 .param("count", count),
+            Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
             false
         );
+        playBannerSound(playerRef, store);
     }
 
     private static void abandonQuest(@Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
@@ -494,5 +508,19 @@ public final class DialogueActionExecutor {
             0.7F,
             0.9F
         );
+    }
+
+    @Nonnull
+    private static String resolveItemLabel(@Nullable PlayerRef playerRef, @Nonnull String itemId) {
+        String lang = playerRef != null && playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
+        return UiMaterialLabels.itemLabelForUi(lang, itemId);
+    }
+
+    private static void playBannerSound(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        int index = SoundEvent.getAssetMap().getIndex(BANNER_SOUND_EVENT_ID);
+        if (index == Integer.MIN_VALUE) {
+            return;
+        }
+        SoundUtil.playSoundEvent2d(playerRef, index, SoundCategory.UI, store);
     }
 }

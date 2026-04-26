@@ -1,13 +1,19 @@
 # Changelog
 
-## [0.8.0] - Unreleased
+## [0.8.0] - 4/25/2026
 
 ### Added
 
 - **Villager gifting:** Give items to town residents through dialogue when you are holding something they can accept. Reactions follow each villager’s **gift lists** in their villager JSON (`giftLoves` / `giftLikes` / `giftDislikes`); anything else is **neutral**. Successful gifts apply **reputation**, respect **daily** (one gift per villager per in-game day) and **weekly** caps, play a matching emotion effect, and append an entry to a **per-town gift log** (role + giver), persisted on the town record.
 - **Gift history UI** (from **Town needs** on a selected villager): shows **only items you have already given** that villager, grouped into **Loved / Liked / Neutral / Disliked** with a wrapping **item grid** per tier (one icon per item id; latest gift wins if you repeat an item). Shows **gifts used this week** for that relationship. **Previous / next** arrows at the bottom cycle through town residents in the same order as the needs list (wraps). Layout uses a **fixed-height** list area so the window does not jump between empty and filled states.
 - **Debug** (requires `DebugCommandsEnabled` in plugin `config.json`): `/aetherhaven gift resetLimits` — clears daily/weekly gift-limit state for all players and all villagers in every town in the world; `/aetherhaven gift fillHistory <npcRoleId>` — appends one town log line per listed love/like/dislike item for your town and that role (for testing the log / UI).
+- **Purification Powder:** a new tool that reveals nearby enemy spawn points and lets you cleanse them before they keep sending threats into your town.
 - Lootr compatability
+- **Event banners for quest/reputation flow:** dialogue quest actions now show top-center event-title banners. Quest **start** and **complete** now use banner headlines with quest name as the large title, and villager **reputation reward unlocks** also use banners with the unlocked item’s name.
+
+### Fixed
+
+- Villagers no longer walk around while sleeping.
 
 ## [0.7.0] - 4/24/2026
 

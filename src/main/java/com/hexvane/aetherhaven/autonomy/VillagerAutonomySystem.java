@@ -645,6 +645,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         npc.getRole().getStateSupport().setState(npcRef, "Idle", null, store);
         npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
         npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
+        npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
         store.putComponent(npcRef, NPCEntity.getComponentType(), npc);
     }
 
@@ -675,6 +676,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
         npc.playAnimation(ref, AnimationSlot.Action, null, commandBuffer);
         npc.playAnimation(ref, AnimationSlot.Emote, null, commandBuffer);
+        npc.playAnimation(ref, AnimationSlot.Status, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 }

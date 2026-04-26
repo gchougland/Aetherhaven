@@ -123,6 +123,10 @@ public final class PoiAutonomyVisuals {
             AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
             tryClearCampfireHeldFood(npcRef, store, commandBuffer);
         }
+        if (npc != null) {
+            // Sleep/Sit use Status; explicitly clear in case role transition timing skips it.
+            npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
+        }
     }
 
     private static void tryEquipCampfireHeldFood(

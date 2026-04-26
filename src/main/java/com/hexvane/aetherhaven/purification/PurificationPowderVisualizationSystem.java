@@ -18,10 +18,10 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.modules.entity.component.Interactable;
 import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
-import com.hypixel.hytale.server.core.modules.entity.component.Intangible;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -308,7 +308,7 @@ public final class PurificationPowderVisualizationSystem extends EntityTickingSy
             }
             pstore.putComponent(bref, ModelComponent.getComponentType(), new ModelComponent(model));
             pstore.putComponent(bref, PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
-            pstore.addComponent(bref, Intangible.getComponentType(), Intangible.INSTANCE);
+            pstore.addComponent(bref, Interactable.getComponentType(), Interactable.INSTANCE);
             // Expose a localized interaction hint while aiming at the preview proxy.
             Interactions interactions = new Interactions(
                 java.util.Map.of(InteractionType.Use, AetherhavenConstants.ROOT_INTERACTION_PURIFY_SPAWN_USE)
