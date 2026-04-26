@@ -8,6 +8,7 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -88,6 +89,24 @@ public final class InnPoolService {
     private static long lastTickGameEpochSecond = Long.MIN_VALUE;
 
     private InnPoolService() {}
+
+    public static final class RepairReport {
+        private int lockedQuestVisitors;
+        private int promotedResidents;
+        private int removedPoolEntries;
+
+        public int getLockedQuestVisitors() {
+            return lockedQuestVisitors;
+        }
+
+        public int getPromotedResidents() {
+            return promotedResidents;
+        }
+
+        public int getRemovedPoolEntries() {
+            return removedPoolEntries;
+        }
+    }
 
     /**
      * Legacy throttled entry (at most once per game-second per world); prefer {@link #scheduleTickFromHub}.
@@ -170,6 +189,10 @@ public final class InnPoolService {
             if (town.isInnVisitorLocked(u)) {
                 continue;
             }
+            if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
+                town.addInnLockedEntity(u);
+                continue;
+            }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref == null) {
                 continue;
@@ -227,6 +250,7 @@ public final class InnPoolService {
             town.migrateInnFieldsIfNeeded();
             dedupeInnPoolIds(town, tm);
             if (innLoaded) {
+                autoLockQuestCriticalVisitors(town, tm, store);
                 pruneDeadVisitors(town, store, tm);
                 trimInnPoolListToMax(town, tm, store);
                 syncInnPoolWithResidentBindings(town, store, tm);
@@ -466,6 +490,10 @@ public final class InnPoolService {
             if (town.isInnVisitorLocked(u)) {
                 continue;
             }
+            if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
+                town.addInnLockedEntity(u);
+                continue;
+            }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
             if (ref == null) {
                 continue;
@@ -593,13 +621,29 @@ public final class InnPoolService {
                 ^ epochDay * 0x9E3779B97F4A7C15L
                 ^ wtr.getGameTime().toEpochMilli();
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
-        List<String> order = new ArrayList<>();
+        List<String> order = prioritizedInnRoleOrder(town);
+        List<String> shuffledPoolOrder = new ArrayList<>();
         for (InnPoolEntry e : pool) {
-            order.add(e.npcRoleId());
+            String rid = e.npcRoleId();
+            if (rid != null && !rid.isBlank()) {
+                shuffledPoolOrder.add(rid);
+            }
         }
-        Collections.shuffle(order, new Random(seed));
-
+        Collections.shuffle(shuffledPoolOrder, new Random(seed));
+        Set<String> seen = new LinkedHashSet<>();
+        List<String> mergedOrder = new ArrayList<>();
         for (String roleId : order) {
+            if (roleId != null && !roleId.isBlank() && seen.add(roleId)) {
+                mergedOrder.add(roleId);
+            }
+        }
+        for (String rid : shuffledPoolOrder) {
+            if (seen.add(rid)) {
+                mergedOrder.add(rid);
+            }
+        }
+
+        for (String roleId : mergedOrder) {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
                 break;
             }
@@ -626,6 +670,9 @@ public final class InnPoolService {
                 break;
             }
             town.getInnPoolNpcIds().add(spawned.toString());
+            if (isRoleRequiredByActiveInnQuest(town, roleId)) {
+                town.addInnLockedEntity(spawned);
+            }
             presentRoles.add(roleId);
             tm.updateTown(town);
         }
@@ -726,5 +773,205 @@ public final class InnPoolService {
     private static String shortHex(@Nonnull UUID townId) {
         String hex = townId.toString().replace("-", "");
         return hex.length() >= 8 ? hex.substring(0, 8) : hex;
+    }
+
+    private static boolean isRoleRequiredByActiveInnQuest(@Nonnull TownRecord town, @Nonnull String roleId) {
+        if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP);
+        }
+        if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL);
+        }
+        if (AetherhavenConstants.NPC_FARMER.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT);
+        }
+        if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR);
+        }
+        return false;
+    }
+
+    private static boolean hasAnyActiveInnVisitorQuest(@Nonnull TownRecord town) {
+        return town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR);
+    }
+
+    private static boolean shouldPreserveInnVisitorFromQuestState(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref == null || !ref.isValid()) {
+            return hasAnyActiveInnVisitorQuest(town);
+        }
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        String roleId = npc != null ? npc.getRoleName() : null;
+        if (roleId == null || roleId.isBlank()) {
+            return hasAnyActiveInnVisitorQuest(town);
+        }
+        return isRoleRequiredByActiveInnQuest(town, roleId);
+    }
+
+    private static void autoLockQuestCriticalVisitors(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        boolean changed = false;
+        for (String sid : town.getInnPoolNpcIds()) {
+            UUID u = parseUuid(sid);
+            if (u == null || town.isInnVisitorLocked(u)) {
+                continue;
+            }
+            if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
+                town.addInnLockedEntity(u);
+                changed = true;
+            }
+        }
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    @Nonnull
+    private static List<String> prioritizedInnRoleOrder(@Nonnull TownRecord town) {
+        List<String> out = new ArrayList<>();
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)) {
+            out.add(AetherhavenConstants.NPC_BLACKSMITH);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
+            out.add(AetherhavenConstants.NPC_MERCHANT);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)) {
+            out.add(AetherhavenConstants.NPC_FARMER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
+            out.add(AetherhavenConstants.NPC_PRIESTESS);
+        }
+        return out;
+    }
+
+    @Nonnull
+    public static RepairReport repairInnPoolForTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        RepairReport report = new RepairReport();
+        town.migrateInnFieldsIfNeeded();
+        dedupeInnPoolIds(town, tm);
+        report.lockedQuestVisitors = repairQuestLocksCount(town, store);
+        autoLockQuestCriticalVisitors(town, tm, store);
+        report.promotedResidents = promoteEligibleVisitorsToResidents(world, plugin, town, tm, store);
+        report.removedPoolEntries = removeNonVisitorPoolEntries(town, store, tm);
+        return report;
+    }
+
+    private static int repairQuestLocksCount(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
+        int count = 0;
+        for (String sid : town.getInnPoolNpcIds()) {
+            UUID u = parseUuid(sid);
+            if (u == null || town.isInnVisitorLocked(u)) {
+                continue;
+            }
+            if (shouldPreserveInnVisitorFromQuestState(town, store, u)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int removeNonVisitorPoolEntries(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownManager tm
+    ) {
+        int removed = 0;
+        Iterator<String> it = town.getInnPoolNpcIds().iterator();
+        while (it.hasNext()) {
+            UUID u = parseUuid(it.next());
+            if (u == null) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref == null || !ref.isValid()) {
+                continue;
+            }
+            TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+            if (b != null && b.getTownId().equals(town.getTownId()) && !TownVillagerBinding.isVisitorKind(b.getKind())) {
+                it.remove();
+                removed++;
+            }
+        }
+        if (removed > 0) {
+            tm.updateTown(town);
+        }
+        return removed;
+    }
+
+    private static int promoteEligibleVisitorsToResidents(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        int promoted = 0;
+        for (String sid : new ArrayList<>(town.getInnPoolNpcIds())) {
+            UUID u = parseUuid(sid);
+            if (u == null) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref == null || !ref.isValid()) {
+                continue;
+            }
+            TownVillagerBinding b = store.getComponent(ref, TownVillagerBinding.getComponentType());
+            NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+            UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (b == null || npc == null || uuidComp == null || !b.getTownId().equals(town.getTownId())
+                || !TownVillagerBinding.isVisitorKind(b.getKind()) || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+                continue;
+            }
+            String roleId = npc.getRoleName().trim();
+            String constructionId;
+            String residentKind;
+            if (AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP;
+                residentKind = TownVillagerBinding.KIND_BLACKSMITH;
+            } else if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL;
+                residentKind = TownVillagerBinding.KIND_MERCHANT;
+            } else if (AetherhavenConstants.NPC_FARMER.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_FARM;
+                residentKind = TownVillagerBinding.KIND_FARMER;
+            } else if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
+                residentKind = TownVillagerBinding.KIND_PRIESTESS;
+            } else {
+                continue;
+            }
+            PlotInstance residentPlot = town.findCompletePlotWithConstruction(constructionId);
+            if (residentPlot == null) {
+                continue;
+            }
+            store.putComponent(
+                ref,
+                TownVillagerBinding.getComponentType(),
+                new TownVillagerBinding(town.getTownId(), residentKind, residentPlot.getPlotId(), residentPlot.getPlotId())
+            );
+            town.getInnPoolNpcIds().removeIf(x -> u.toString().equalsIgnoreCase(x));
+            town.removeInnLockedEntity(u);
+            town.addInnVisitorPoolExcludedRoleId(roleId);
+            ResidentRegistryService.upsert(town, tm, roleId, residentKind, residentPlot.getPlotId(), uuidComp.getUuid());
+            tm.updateTown(town);
+            promoted++;
+        }
+        return promoted;
     }
 }

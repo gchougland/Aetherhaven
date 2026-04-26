@@ -1,9 +1,11 @@
 package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -44,6 +46,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         super("villager", "server.commands.aetherhaven.villager.desc");
         this.addSubCommand(new ListSubCommand());
         this.addSubCommand(new LocateSubCommand());
+        this.addSubCommand(new FixInnSubCommand());
     }
 
     @Nullable
@@ -262,6 +265,51 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             }
             store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
             playerRef.sendMessage(Message.translation("server.aetherhaven.villager.teleported"));
+        }
+    }
+
+    private static final class FixInnSubCommand extends AbstractPlayerCommand {
+        FixInnSubCommand() {
+            super("fixinn", "server.commands.aetherhaven.villager.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = townForQuestPlayer(store, ref, world);
+            if (town == null) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                return;
+            }
+            if (!town.playerHasQuestPermission(uc.getUuid())) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            InnPoolService.RepairReport report = InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+            playerRef.sendMessage(
+                Message.raw(
+                    "Inn repair complete: locked quest visitors="
+                        + report.getLockedQuestVisitors()
+                        + ", promoted to residents="
+                        + report.getPromotedResidents()
+                        + ", removed non-visitor entries="
+                        + report.getRemovedPoolEntries()
+                )
+            );
         }
     }
 }

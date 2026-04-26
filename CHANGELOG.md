@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.8.1] - 4/25/2026
+
+### Added
+
+- **Debug command:** `/aetherhaven villager fixinn` (`/ah villager fixinn`) repairs inn-pool consistency for your current town by re-locking quest-critical inn visitors, promoting eligible visitors to residents when their plot is already complete, and removing stale non-visitor entries from the inn pool list.
+
+### Fixed
+
+- **Inn visitor rotation / resident desync:** active inn-quest villagers are now protected from morning rotation even when lock state is stale, and inn spawn/fill now prioritizes active quest roles to keep required quest NPCs available.
+
 ## [0.8.0] - 4/25/2026
 
 ### Added
