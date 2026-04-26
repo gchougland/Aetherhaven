@@ -5,6 +5,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
@@ -221,6 +222,71 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Wall-time safety timeout for villagers routing to a feast table POI before the POI is cleared.")
         .add()
+        .append(
+            new KeyedCodec<>("PathToolNodeBlockYOffset", Codec.DOUBLE),
+            (o, v) -> o.pathToolNodeBlockYOffset = v != null ? v : 1.0,
+            o -> o.pathToolNodeBlockYOffset
+        )
+        .documentation("Placed control node Y offset (blocks) above the clicked block center (e.g. 1.0 or 1.5).")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolSamplesPerBlock", Codec.INTEGER),
+            (o, v) -> o.pathToolSamplesPerBlock = v != null ? v : 2,
+            o -> o.pathToolSamplesPerBlock
+        )
+        .documentation("Spline samples per block along the curve (higher = denser).")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolHalfWidth", Codec.INTEGER),
+            (o, v) -> o.pathToolHalfWidth = v != null ? v : 2,
+            o -> o.pathToolHalfWidth
+        )
+        .documentation("Half-width in cells each side of center. Width = 2 * half + 1 (default 2 => 5 wide).")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolRayStartAboveY", Codec.INTEGER),
+            (o, v) -> o.pathToolRayStartAboveY = v != null ? v : 6,
+            o -> o.pathToolRayStartAboveY
+        )
+        .documentation("Start ground snap ray this many blocks above each lateral sample point.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolMaxRayDown", Codec.INTEGER),
+            (o, v) -> o.pathToolMaxRayDown = v != null ? v : 128,
+            o -> o.pathToolMaxRayDown
+        )
+        .documentation("Max downward search steps for column ray.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolReplaceableBlockIds", Codec.STRING),
+            (o, v) -> o.pathToolReplaceableBlockIds = v != null ? v : "",
+            o -> o.pathToolReplaceableBlockIds
+        )
+        .documentation(
+            "Comma-separated block type ids that may be replaced. When this and PathToolReplaceableResourceTypeIds are "
+                + "both empty, the path tool may replace any block id starting with Soil_ (all vanilla soils, including "
+                + "Soil_Grass_Deep and Aetherhaven path output such as Soil_Pathway) or containing Dirt. Re-placing over a "
+                + "previously committed path is allowed."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolReplaceableResourceTypeIds", Codec.STRING),
+            (o, v) -> o.pathToolReplaceableResourceTypeIds = v != null ? v : "",
+            o -> o.pathToolReplaceableResourceTypeIds
+        )
+        .documentation("Comma-separated item resource type ids (block item materials) for replaceable blocks.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathToolStyles", Codec.STRING),
+            (o, v) -> o.pathToolStyles = v != null && !v.isBlank() ? v : PathToolStyleDefinition.DEFAULT_JSON,
+            o -> o.pathToolStyles != null && !o.pathToolStyles.isBlank() ? o.pathToolStyles : PathToolStyleDefinition.DEFAULT_JSON
+        )
+        .documentation(
+            "JSON array of path styles. Each object: name (label for the player) and centerBlockIds (string array of "
+                + "block type ids for the center path strip, chosen at random per cell). Edge strips always use grass. "
+                + "If invalid or empty, a built-in default (soil + cobble) is used."
+        )
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -266,6 +332,15 @@ public final class AetherhavenPluginConfig {
     private int feastTaxBonusPermille = 1250;
     private int feastNeedsDecayScalePermille = 650;
     private int feastGatherTimeoutSeconds = 120;
+
+    private double pathToolNodeBlockYOffset = 1.0;
+    private int pathToolSamplesPerBlock = 2;
+    private int pathToolHalfWidth = 2;
+    private int pathToolRayStartAboveY = 6;
+    private int pathToolMaxRayDown = 128;
+    private String pathToolReplaceableBlockIds = "";
+    private String pathToolReplaceableResourceTypeIds = "";
+    private String pathToolStyles = PathToolStyleDefinition.DEFAULT_JSON;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -407,6 +482,64 @@ public final class AetherhavenPluginConfig {
     public int getFeastGatherTimeoutSeconds() {
         int v = feastGatherTimeoutSeconds;
         return v >= 30 ? v : 120;
+    }
+
+    public double getPathToolNodeBlockYOffset() {
+        double v = pathToolNodeBlockYOffset;
+        if (Double.isNaN(v) || v < 0.0 || v > 32.0) {
+            return 1.0;
+        }
+        return v;
+    }
+
+    public int getPathToolSamplesPerBlock() {
+        int v = pathToolSamplesPerBlock;
+        return v >= 1 && v <= 32 ? v : 2;
+    }
+
+    public int getPathToolHalfWidth() {
+        int v = pathToolHalfWidth;
+        if (v >= 1 && v <= 6) {
+            return v;
+        }
+        if (v == 0) {
+            return 2;
+        }
+        return 2;
+    }
+
+    public int getPathToolRayStartAboveY() {
+        int v = pathToolRayStartAboveY;
+        return v >= 1 && v <= 64 ? v : 6;
+    }
+
+    public int getPathToolMaxRayDown() {
+        int v = pathToolMaxRayDown;
+        return v >= 8 && v <= 512 ? v : 128;
+    }
+
+    @Nonnull
+    public String getPathToolReplaceableBlockIds() {
+        return pathToolReplaceableBlockIds != null ? pathToolReplaceableBlockIds : "";
+    }
+
+    @Nonnull
+    public String getPathToolReplaceableResourceTypeIds() {
+        return pathToolReplaceableResourceTypeIds != null ? pathToolReplaceableResourceTypeIds : "";
+    }
+
+    @Nonnull
+    public List<PathToolStyleDefinition> getPathToolStyleDefinitions() {
+        return PathToolStyleDefinition.parseList(pathToolStyles);
+    }
+
+    @Nonnull
+    public String getPathToolStyleName(int pathStyleIndex) {
+        List<PathToolStyleDefinition> list = getPathToolStyleDefinitions();
+        if (list.isEmpty()) {
+            return "?";
+        }
+        return list.get(Math.floorMod(pathStyleIndex, list.size())).getName();
     }
 
     /** Clamped to [0, 1]. Zero disables extra chest jewelry. */

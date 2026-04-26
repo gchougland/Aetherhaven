@@ -415,6 +415,67 @@ aetherhaven.poiTool.legendPrimary=Primary: select nearest POI near the block
 aetherhaven.poiTool.legendSecondary=Secondary: move selected POI to the block
 aetherhaven.poiTool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
 
+aetherhaven.pathTool.legendPageTitle=Path tool
+aetherhaven.pathTool.legendBlurb=Build a spline, preview it, then place pathway blocks. A status panel appears in the corner while you hold the tool. With Buuz135 MHUD installed, the panel registers as its own layer so other custom HUDs can stay visible too.
+aetherhaven.pathTool.legendHotkeyAdd=Add a keyframe (gold sphere) above the block you click. New keyframes face the way you are looking.
+aetherhaven.pathTool.legendHotkeyAim=Look at a keyframe to select it. In move mode, primary on ground moves the point. Primary on the same node does nothing.
+aetherhaven.pathTool.legendHotkeyUse=F: in rotate mode, step yaw on the selected node. In move mode, F does nothing. In place mode, F places the path (need two nodes). Q: mode cycle. E: width 1-8. Third tool ability: path style (inner blocks; see PathToolStyles in config).
+aetherhaven.pathTool.legendHotkeyCrouchUse=Optional: crouch is no longer required to change mode; use the tool ability (Q) instead.
+aetherhaven.pathTool.legendVisuals=Preview: white = nodes and spline, brown = path strip, green = edge grass; red = blocked. Slabs sit on the surface. Width: second tool ability (1-8). Style: third tool ability. Commit clears tall plants (Plant_Grass) above the path.
+aetherhaven.pathTool.statusHeader=While holding the tool
+aetherhaven.pathTool.statusLine1=Toasts and chat when you add points, switch mode (Q), or cement in commit mode.
+aetherhaven.pathTool.statusLine2=Selection: aim at a sphere. Miss keeps your current selection. Q cycles mode; second ability cycles width; third ability cycles path style.
+
+aetherhaven.pathTool.hudTitle=Path tool
+aetherhaven.pathTool.hudNameTranslate=Move
+aetherhaven.pathTool.hudNameRotate=Rotate
+aetherhaven.pathTool.hudNameCommit=Place
+aetherhaven.pathTool.hudHelpTranslate=Aim at a node to select, then primary on a block to move it. Secondary adds a node. Q: next mode.
+aetherhaven.pathTool.hudHelpRotate=Aim at a node to select, then F to nudge its direction. Q: next mode.
+aetherhaven.pathTool.hudHelpCommit=F places the path. You need at least 2 nodes. Q: next mode.
+aetherhaven.pathTool.hudStyle=Style: {style}
+aetherhaven.pathTool.hudWidth=Width: {w} blocks (E to cycle)
+aetherhaven.pathTool.hudNodes=Nodes: {n}
+aetherhaven.pathTool.hudHint=Q: mode | E: width | R: style | F: nudge in Rotate, or place in Place
+
+aetherhaven.pathTool.addedNode=Node {n} added.
+aetherhaven.pathTool.modeCycledToTranslate=Mode: move and place keyframes.
+aetherhaven.pathTool.modeCycledToRotate=Mode: rotate — F nudges selected node yaw.
+aetherhaven.pathTool.modeCycledToCommit=Mode: place — F places the path (when you have 2+ nodes).
+aetherhaven.pathTool.widthCycled=Path width: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Path style: {style}
+aetherhaven.pathTool.toastStyleCycled=Path style changed
+aetherhaven.pathTool.useInTranslateMode=F does nothing in move mode. Press Q to switch to place mode, then F to place, or to rotate and F to nudge yaw.
+aetherhaven.pathTool.rotateNoSelection=Select a keyframe (aim at the gold sphere) to rotate, or press Q to change mode.
+aetherhaven.pathTool.modeToggled=Mode: {m}
+aetherhaven.pathTool.selectedNode=Node selected.
+aetherhaven.pathTool.movedNode=Node moved.
+aetherhaven.pathTool.noNodeHit=No control node in range. In translate mode with a node selected, try primary on the ground to move.
+aetherhaven.pathTool.noNodeOnAim=No keyframe on crosshair. Aim at a gold disc to select. Selection unchanged.
+aetherhaven.pathTool.toastAdd=Control point added
+aetherhaven.pathTool.toastModeTranslate=Move: primary on block moves selection; secondary adds keyframe.
+aetherhaven.pathTool.toastModeRotate=Rotate: F nudges yaw for the selected node.
+aetherhaven.pathTool.toastModeCommit=Place: F places the path (2+ nodes). Switch with Q.
+aetherhaven.pathTool.toastMoved=Node position updated
+aetherhaven.pathTool.toastRotated=Yaw nudged
+aetherhaven.pathTool.toastCemented=Path cemented. Check chat for revert id.
+aetherhaven.pathTool.rotated=Rotated {deg}°.
+aetherhaven.pathTool.needTwoNodes=Need at least two keyframes. Add another with secondary, or press Q to leave commit mode and keep editing.
+aetherhaven.pathTool.emptyPlan=No ground found along the path (steep/void/unloaded chunks).
+aetherhaven.pathTool.cementFail=Nothing to place: no replaceable ground found or placement failed.
+aetherhaven.pathTool.cemented=Path placed. Revert id: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=You do not have permission aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Invalid id: {raw}
+aetherhaven.pathTool.unknownId=No saved path with that id.
+aetherhaven.pathTool.reverted=Reverted {cells} block(s) for {id}
+
+commands.aetherhaven.path.root.desc=Path / spline placement helpers
+commands.aetherhaven.path.revert.desc=Restore a cemented path from the undo file (aetherhaven.path.revert)
+commands.aetherhaven.path.revert.id=Path commit id (UUID from cement chat message)
+
+items.Aetherhaven_Path_Tool.name=Path designer shovel
+items.Aetherhaven_Path_Tool.description=Designs spline paths (aetherhaven.path.tool). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
+
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
 items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
 

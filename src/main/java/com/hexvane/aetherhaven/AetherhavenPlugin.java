@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven;
 
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
+import com.hexvane.aetherhaven.command.AetherhavenPathCommand;
 import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
@@ -29,6 +30,14 @@ import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
+import com.hexvane.aetherhaven.pathtool.PathToolAddNodeInteraction;
+import com.hexvane.aetherhaven.pathtool.PathToolModeCycleInteraction;
+import com.hexvane.aetherhaven.pathtool.PathToolPlayerComponent;
+import com.hexvane.aetherhaven.pathtool.PathToolPreviewSystem;
+import com.hexvane.aetherhaven.pathtool.PathToolSelectInteraction;
+import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
+import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
+import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
@@ -231,6 +240,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         JewelryRolling.bind(() -> this.getConfig().get());
         if (!Files.exists(configPath)) {
             this.config.save().join();
+            PluginConfigMerge.rewritePrettyJson(configPath);
             LOGGER.atInfo().log("Created default config at %s", configPath);
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
@@ -270,6 +280,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
+        PathToolPlayerComponent.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
@@ -326,6 +337,30 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PurificationPowderUseInteraction.class,
                 PurificationPowderUseInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPathToolSelect", PathToolSelectInteraction.class, PathToolSelectInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPathToolAddNode", PathToolAddNodeInteraction.class, PathToolAddNodeInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenPathToolUse", PathToolUseInteraction.class, PathToolUseInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPathToolModeCycle",
+                PathToolModeCycleInteraction.class,
+                PathToolModeCycleInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPathToolWidthCycle",
+                PathToolWidthCycleInteraction.class,
+                PathToolWidthCycleInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPathToolStyleCycle",
+                PathToolStyleCycleInteraction.class,
+                PathToolStyleCycleInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
@@ -338,6 +373,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
+        this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));

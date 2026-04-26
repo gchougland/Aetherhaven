@@ -1,0 +1,96 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Path_Tool.name",
+    "Description": "server.items.Aetherhaven_Path_Tool.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Tool_Shovel_Iron.png",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Model": "Items/Tools/Shovel/Iron.blockymodel",
+  "Texture": "Items/Tools/Shovel/Iron_Texture.png",
+  "PlayerAnimationsId": "Item",
+  "MaxStack": 1,
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [22, 0, 0]
+  },
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolSelect"
+        }
+      ]
+    },
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolAddNode"
+        }
+      ]
+    },
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolUse"
+        }
+      ]
+    },
+    "Ability1": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolModeCycle"
+        }
+      ]
+    },
+    "Ability2": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolWidthCycle"
+        }
+      ]
+    },
+    "Ability3": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenPathToolStyleCycle"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "DebugOutlines": true,
+    "UseDistance": {
+      "Adventure": 96,
+      "Creative": 96
+    },
+    "AllEntities": false
+  },
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  }
+}

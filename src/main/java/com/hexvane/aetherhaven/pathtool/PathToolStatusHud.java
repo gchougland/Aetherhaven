@@ -1,0 +1,71 @@
+package com.hexvane.aetherhaven.pathtool;
+
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
+import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import javax.annotation.Nonnull;
+
+/**
+ * In-world HUD overlay (via {@link com.hypixel.hytale.server.core.entity.entities.player.hud.HudManager#setCustomHud}) for
+ * path width and mode; shown while the path tool is held.
+ */
+public final class PathToolStatusHud extends CustomUIHud {
+    public PathToolStatusHud(@Nonnull PlayerRef playerRef) {
+        super(playerRef);
+    }
+
+    @Override
+    protected void build(@Nonnull UICommandBuilder commandBuilder) {
+        commandBuilder.append("Aetherhaven/PathToolStatusHud.ui");
+    }
+
+    public void refresh(@Nonnull PathToolPlayerComponent st, @Nonnull AetherhavenPluginConfig cfg) {
+        UICommandBuilder b = new UICommandBuilder();
+        b.append("Aetherhaven/PathToolStatusHud.ui");
+        b.set(
+            "#ModeName.TextSpans",
+            Message.translation(
+                switch (st.getGizmoMode()) {
+                    case Translate -> "server.aetherhaven.pathTool.hudNameTranslate";
+                    case Rotate -> "server.aetherhaven.pathTool.hudNameRotate";
+                    case Commit -> "server.aetherhaven.pathTool.hudNameCommit";
+                }
+            )
+        );
+        b.set(
+            "#ModeHelp.TextSpans",
+            Message.translation(
+                switch (st.getGizmoMode()) {
+                    case Translate -> "server.aetherhaven.pathTool.hudHelpTranslate";
+                    case Rotate -> "server.aetherhaven.pathTool.hudHelpRotate";
+                    case Commit -> "server.aetherhaven.pathTool.hudHelpCommit";
+                }
+            )
+        );
+        b.set(
+            "#StyleLine.TextSpans",
+            Message
+                .translation("server.aetherhaven.pathTool.hudStyle")
+                .param("style", cfg.getPathToolStyleName(st.getPathStyleIndex()))
+        );
+        b.set(
+            "#WidthLine.TextSpans",
+            Message
+                .translation("server.aetherhaven.pathTool.hudWidth")
+                .param("w", String.valueOf(st.getPathWidthBlocks()))
+        );
+        b.set(
+            "#NodesLine.TextSpans",
+            Message
+                .translation("server.aetherhaven.pathTool.hudNodes")
+                .param("n", String.valueOf(st.getNodes().size()))
+        );
+        b.set(
+            "#HintLine.TextSpans",
+            Message.translation("server.aetherhaven.pathTool.hudHint")
+        );
+        this.update(true, b);
+    }
+}

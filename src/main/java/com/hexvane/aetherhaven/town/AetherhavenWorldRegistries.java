@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
+import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
+import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -14,6 +16,7 @@ import javax.annotation.Nonnull;
 public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, TownManager> TOWN_MANAGERS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PoiRegistry> POI_REGISTRIES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PathToolRegistry> PATH_TOOL_REGISTRIES = new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -31,6 +34,15 @@ public final class AetherhavenWorldRegistries {
         return POI_REGISTRIES.computeIfAbsent(world.getName(), n -> {
             PoiRegistry r = new PoiRegistry(world);
             PoiPersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    @Nonnull
+    public static PathToolRegistry getOrCreatePathToolRegistry(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        return PATH_TOOL_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            PathToolRegistry r = new PathToolRegistry(world);
+            PathToolPersistence.load(world, plugin, r);
             return r;
         });
     }
@@ -66,6 +78,13 @@ public final class AetherhavenWorldRegistries {
                 PoiPersistence.save(world, p, pr);
             }
         }
+        PathToolRegistry pathReg = PATH_TOOL_REGISTRIES.remove(world.getName());
+        if (pathReg != null) {
+            AetherhavenPlugin p2 = AetherhavenPlugin.get();
+            if (p2 != null) {
+                PathToolPersistence.save(world, p2, pathReg);
+            }
+        }
     }
 
     /** Save all town files (e.g. server shutdown). */
@@ -73,11 +92,19 @@ public final class AetherhavenWorldRegistries {
         for (TownManager tm : TOWN_MANAGERS.values()) {
             tm.saveToDisk();
         }
+        AetherhavenPlugin p = AetherhavenPlugin.get();
+        if (p != null) {
+            for (var e : PATH_TOOL_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                PathToolPersistence.save(w, p, e.getValue());
+            }
+        }
     }
 
     public static void bootstrapWorld(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
+        getOrCreatePathToolRegistry(world, plugin);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);

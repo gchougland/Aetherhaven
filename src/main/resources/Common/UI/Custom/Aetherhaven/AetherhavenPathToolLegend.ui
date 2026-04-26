@@ -1,0 +1,46 @@
+$LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
+
+$LegendCommon.@Legend {
+  #Title {
+    Text: %server.aetherhaven.pathTool.legendPageTitle;
+  }
+  #Pages {
+    $LegendCommon.@Page #Page1 {
+      @Title = %server.aetherhaven.pathTool.legendPageTitle;
+
+      $LegendCommon.@RowLabel {
+        Text: %server.aetherhaven.pathTool.legendBlurb;
+        Padding: (Vertical: 6);
+      }
+
+      $LegendCommon.@Separator {}
+
+      $LegendCommon.@HotkeyRow {
+        @InputBindingKey = "SecondaryItemAction";
+        @Description = %server.aetherhaven.pathTool.legendHotkeyAdd;
+      }
+
+      $LegendCommon.@HotkeyRow {
+        @InputBindingKey = "PrimaryItemAction";
+        @Description = %server.aetherhaven.pathTool.legendHotkeyAim;
+      }
+
+      $LegendCommon.@RowLabel {
+        Text: %server.aetherhaven.pathTool.legendHotkeyUse;
+        Padding: (Top: 4);
+      }
+
+      $LegendCommon.@RowLabel {
+        Text: %server.aetherhaven.pathTool.legendHotkeyCrouchUse;
+        Padding: (Top: 6);
+      }
+
+      $LegendCommon.@Separator {}
+
+      $LegendCommon.@RowLabel {
+        Text: %server.aetherhaven.pathTool.legendVisuals;
+        Style: (FontSize: 13, TextColor: #b8c8d8, Wrap: true);
+      }
+    }
+  }
+}

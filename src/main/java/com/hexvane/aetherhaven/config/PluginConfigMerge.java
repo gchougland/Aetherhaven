@@ -82,4 +82,34 @@ public final class PluginConfigMerge {
         }
         return added;
     }
+
+    /**
+     * Rewrites an existing JSON file with pretty formatting (2-space indent), preserving data.
+     *
+     * @return true when rewrite succeeded; false when the file was absent/blank/invalid JSON or could not be read.
+     */
+    public static boolean rewritePrettyJson(Path configJsonPath) {
+        if (!Files.isRegularFile(configJsonPath)) {
+            return false;
+        }
+        String content;
+        try {
+            content = Files.readString(configJsonPath);
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Could not read %s; skipping pretty rewrite", configJsonPath);
+            return false;
+        }
+        if (content.isBlank()) {
+            return false;
+        }
+        BsonDocument doc;
+        try {
+            doc = BsonDocument.parse(content);
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Could not parse %s as JSON; skipping pretty rewrite", configJsonPath);
+            return false;
+        }
+        BsonUtil.writeDocument(configJsonPath, doc, true).join();
+        return true;
+    }
 }

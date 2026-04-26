@@ -50,6 +50,22 @@ public final class AetherhavenConstants {
      */
     public static final String PERMISSION_POI_TOOL = "aetherhaven.poi.tool";
 
+    /** Survival path spline designer item id (shovel visuals; see item JSON). */
+    public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
+
+    public static final String PERMISSION_PATH_TOOL = "aetherhaven.path.tool";
+
+    /** Slot id for Buuz135 MHUD ({@code com.buuz135.mhud.MultipleHUD}) when that mod is present. */
+    public static final String PATH_TOOL_MHUD_SLOT = "AetherhavenPathTool";
+
+    /** Revert a placed path that was registered with an undo snapshot (e.g. operator). */
+    public static final String PERMISSION_PATH_REVERT = "aetherhaven.path.revert";
+
+    public static final String PATH_BLOCK_PATHWAY = "Soil_Pathway";
+    public static final String PATH_BLOCK_MUD_DRY = "Soil_Mud_Dry";
+    public static final String PATH_BLOCK_GRASS = "Soil_Grass";
+    public static final String PATH_BLOCK_GRASS_DEEP = "Soil_Grass_Deep";
+
     /** Bypass town ownership checks for commands (grant to moderators). Creative mode also bypasses. */
     public static final String PERMISSION_TOWN_ADMIN = "aetherhaven.town.admin";
 

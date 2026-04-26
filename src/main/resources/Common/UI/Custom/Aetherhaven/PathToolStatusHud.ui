@@ -1,0 +1,57 @@
+$C = "../Common.ui";
+
+// Same window chrome as other Aetherhaven pages ($C.@DecoratedContainer: ContainerHeader + ContainerPatch).
+// Root is not PageOverlay, so the screen is not dimmed.
+Group #PathToolStatusRoot {
+  LayoutMode: Top;
+
+  $C.@DecoratedContainer {
+    Anchor: (Top: 88, Left: 20, Width: 440);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.pathTool.hudTitle;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
+
+      Group #ModeBlock {
+        LayoutMode: Top;
+        Anchor: (Bottom: 10);
+        Label #ModeName {
+          Text: " ";
+          Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 17, RenderBold: true);
+          Anchor: (Bottom: 6);
+        }
+        Label #ModeHelp {
+          Text: " ";
+          Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
+          Anchor: (Top: 2);
+        }
+      }
+
+      Label #StyleLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
+        Anchor: (Bottom: 6);
+      }
+      Label #WidthLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
+        Anchor: (Bottom: 6);
+      }
+      Label #NodesLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
+        Anchor: (Bottom: 6);
+      }
+      Label #HintLine {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 13, Wrap: true);
+      }
+    }
+  }
+}
