@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -104,7 +106,38 @@ public final class SchedulePlotCommute {
         autonomy.setTravelTarget(tx, ty, tz, AetherhavenConstants.SCHEDULE_ZONE_COMMUTE_POI_ID);
         autonomy.setPathFailureReason("");
         autonomy.setTravelStuckTicks(0);
-        npc.setLeashPoint(new Vector3d(tx, ty, tz));
+        Vector3d finalTarget = new Vector3d(tx, ty, tz);
+        AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+        PathNavGraphService.PathNavFindResult navResult =
+            AetherhavenWorldRegistries
+                .getOrCreatePathNavGraphService(world)
+                .findRouteResult(town.getTownId(), tc.getPosition(), finalTarget, plugin.getConfig().get());
+        PathNavGraphService.logPathfindingSkip(
+            plugin.getConfig().get(),
+            "schedule_commute",
+            town.getTownId(),
+            AetherhavenConstants.SCHEDULE_ZONE_COMMUTE_POI_ID,
+            navResult
+        );
+        var route = navResult.waypoints();
+        if (!route.isEmpty()) {
+            route =
+                PathNavTravelWaypoints.prepareForSeek(
+                    world,
+                    tc.getPosition(),
+                    route,
+                    finalTarget,
+                    (int) Math.floor(tc.getPosition().y)
+                );
+        }
+        if (!route.isEmpty()) {
+            autonomy.setTravelWaypoints(route);
+            Vector3d first = autonomy.getCurrentTravelWaypoint();
+            npc.setLeashPoint(first != null ? first : finalTarget);
+        } else {
+            autonomy.clearTravelWaypoints();
+            npc.setLeashPoint(finalTarget);
+        }
         autonomy.setNextDecisionEpochMs(now + 120_000L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);

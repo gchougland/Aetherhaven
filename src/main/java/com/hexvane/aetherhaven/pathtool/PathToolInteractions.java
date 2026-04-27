@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.pathtool;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Store;
@@ -89,14 +91,37 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        Transform look = TargetUtil.getLook(playerRef, store);
+        Vector3d origin = look.getPosition();
+        Vector3d dir = look.getDirection();
+        @Nullable
+        PathToolNode looked = PathToolRayPick.pickNode(
+            origin,
+            dir,
+            PICK_RAY_MAX,
+            new ArrayList<>(st.getNodes()),
+            NODE_PICK_RADIUS
+        );
+        if (looked != null) {
+            @Nonnull
+            List<PathToolNode> next = new ArrayList<>();
+            for (PathToolNode n : st.getNodes()) {
+                if (!n.getId().equals(looked.getId())) {
+                    next.add(n);
+                }
+            }
+            st.setNodesFromList(next);
+            if (looked.getId().equals(st.getSelectedNodeId())) {
+                st.setSelectedNodeId(next.isEmpty() ? null : next.get(Math.max(0, next.size() - 1)).getId());
+            }
+            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.removedNode").param("n", String.valueOf(next.size())));
+            pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastRemoved");
+            return;
+        }
         double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
         Vector3d pos = blockTopCenter(targetBlock, yo);
         double yaw = 0.0;
-        if (context.getEntity() != null) {
-            Transform look = TargetUtil.getLook(context.getEntity(), store);
-            Vector3d d = look.getDirection();
-            yaw = PathSplineUtil.yawDegFromLookDirection(d);
-        }
+        yaw = PathSplineUtil.yawDegFromLookDirection(dir);
         st.getNodes()
             .add(
                 new PathToolNode(
@@ -398,8 +423,12 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin).addRecord(rec);
-        PathToolPersistence.save(world, plugin, AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin));
+        rec.navNodes = PathNavPolylineUtil.resampleCenterline(samples, plugin.getConfig().get().getPathNavNodeSpacing());
+        rec.townId = resolveTownIdForPath(world, plugin, st, samples);
+        PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+        reg.addRecord(rec);
+        AetherhavenWorldRegistries.getOrCreatePathNavGraphService(world).rebuildAll(reg, plugin.getConfig().get());
+        PathToolPersistence.save(world, plugin, reg);
         st.clearPath();
         send(
             playerRef,
@@ -407,6 +436,45 @@ public final class PathToolInteractions {
             Message.translation("server.aetherhaven.pathTool.cemented").param("id", rec.id)
         );
         pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastCemented");
+    }
+
+    @Nullable
+    private static String resolveTownIdForPath(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PathToolPlayerComponent st,
+        @Nonnull List<PathSplineUtil.PathSample> samples
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        if (!samples.isEmpty()) {
+            int n = samples.size();
+            int[] probeIdx = { 0, n / 2, n - 1 };
+            for (int pi : probeIdx) {
+                if (pi < 0 || pi >= n) {
+                    continue;
+                }
+                Vector3d pick = samples.get(pi).position;
+                TownRecord town = tm.findTownContainingBlock(
+                    world.getName(),
+                    (int) Math.floor(pick.getX()),
+                    (int) Math.floor(pick.getZ())
+                );
+                if (town != null) {
+                    return town.getTownId().toString();
+                }
+            }
+        } else if (!st.getNodes().isEmpty()) {
+            Vector3d pick = st.getNodes().get(0).getPosition();
+            TownRecord town = tm.findTownContainingBlock(
+                world.getName(),
+                (int) Math.floor(pick.getX()),
+                (int) Math.floor(pick.getZ())
+            );
+            if (town != null) {
+                return town.getTownId().toString();
+            }
+        }
+        return null;
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
@@ -17,6 +18,7 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, TownManager> TOWN_MANAGERS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PoiRegistry> POI_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathToolRegistry> PATH_TOOL_REGISTRIES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, PathNavGraphService> PATH_NAV_GRAPH_SERVICES = new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -43,8 +45,14 @@ public final class AetherhavenWorldRegistries {
         return PATH_TOOL_REGISTRIES.computeIfAbsent(world.getName(), n -> {
             PathToolRegistry r = new PathToolRegistry(world);
             PathToolPersistence.load(world, plugin, r);
+            getOrCreatePathNavGraphService(world).rebuildAll(r, plugin.getConfig().get());
             return r;
         });
+    }
+
+    @Nonnull
+    public static PathNavGraphService getOrCreatePathNavGraphService(@Nonnull World world) {
+        return PATH_NAV_GRAPH_SERVICES.computeIfAbsent(world.getName(), n -> new PathNavGraphService());
     }
 
     @Nonnull
@@ -85,6 +93,7 @@ public final class AetherhavenWorldRegistries {
                 PathToolPersistence.save(world, p2, pathReg);
             }
         }
+        PATH_NAV_GRAPH_SERVICES.remove(world.getName());
     }
 
     /** Save all town files (e.g. server shutdown). */
@@ -105,6 +114,7 @@ public final class AetherhavenWorldRegistries {
         getOrCreateTownManager(world, plugin);
         getOrCreatePoiRegistry(world, plugin);
         getOrCreatePathToolRegistry(world, plugin);
+        getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);

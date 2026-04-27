@@ -38,6 +38,7 @@ import com.hexvane.aetherhaven.pathtool.PathToolSelectInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolStyleCycleInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolUseInteraction;
 import com.hexvane.aetherhaven.pathtool.PathToolWidthCycleInteraction;
+import com.hexvane.aetherhaven.pathtool.PathNavViz;
 import com.hexvane.aetherhaven.purification.PurificationPowderUseInteraction;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
 import com.hexvane.aetherhaven.purification.PurificationPowderVisualizationSystem;
@@ -650,6 +651,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void shutdown() {
+        PathNavViz.shutdown();
         instance = null;
         AetherhavenWorldRegistries.saveAll();
         this.constructionScheduler.shutdown();

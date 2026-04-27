@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "0.8.1"
+version = "0.9.0"
 val javaVersion = 25
 
 repositories {

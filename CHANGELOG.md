@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.9.0] - 4/26/2026
+
+### Added
+
+- **Path tool:** build, preview, and place custom paths in town; integrates with town villager pathing for travel between locations.
+
 ## [0.8.1] - 4/25/2026
 
 ### Added

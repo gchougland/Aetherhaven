@@ -287,6 +287,79 @@ public final class AetherhavenPluginConfig {
                 + "If invalid or empty, a built-in default (soil + cobble) is used."
         )
         .add()
+        .append(
+            new KeyedCodec<>("PathNavEnabled", Codec.BOOLEAN),
+            (o, v) -> o.pathNavEnabled = v != null ? v : true,
+            o -> o.pathNavEnabled
+        )
+        .documentation("When true, villagers may route along committed path-tool centerline graphs.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavNodeSpacing", Codec.DOUBLE),
+            (o, v) -> o.pathNavNodeSpacing = v != null ? v : 1.5,
+            o -> o.pathNavNodeSpacing
+        )
+        .documentation("Equidistant centerline spacing in blocks for nav nodes sampled from the spline on commit.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavSnapRadius", Codec.DOUBLE),
+            (o, v) -> o.pathNavSnapRadius = v != null ? v : 8.0,
+            o -> o.pathNavSnapRadius
+        )
+        .documentation(
+            "Legacy / reserved for future doorway or footprint-based snaps. Segment path nav uses PathNavEndpointGateRadius."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavJunctionEps", Codec.DOUBLE),
+            (o, v) -> o.pathNavJunctionEps = v != null ? v : 1.25,
+            o -> o.pathNavJunctionEps
+        )
+        .documentation(
+            "Max horizontal gap in blocks between the **start or end** of one placed path and **any** nav node on "
+                + "another path (T-junction: side road into main road midline). Interior nodes never initiate a jump to "
+                + "another path."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavEndpointGateRadius", Codec.DOUBLE),
+            (o, v) -> o.pathNavEndpointGateRadius = v != null ? v : 32.0,
+            o -> o.pathNavEndpointGateRadius
+        )
+        .documentation(
+            "Max horizontal blocks from the NPC to the committed path (nearest vertex or <b>edge</b> of the centerline "
+                + "in that town) to allow path routing. Values below 32 are raised to 32 at runtime (typical home "
+                + "standpoints are 20–25+ m from a road centerline; a 20 m gate was always borderline). Set 48+ for "
+                + "large plots. See PATHNAV_GATE_NETWORK logs (min= distance, gateR= effective cap)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavMaxNodesPerTown", Codec.INTEGER),
+            (o, v) -> o.pathNavMaxNodesPerTown = v != null ? v : 6000,
+            o -> o.pathNavMaxNodesPerTown
+        )
+        .documentation("Soft cap on generated path-nav nodes per town graph to bound memory and rebuild cost.")
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavPreferIfShorterOnly", Codec.BOOLEAN),
+            (o, v) -> o.pathNavPreferIfShorterOnly = v != null ? v : false,
+            o -> o.pathNavPreferIfShorterOnly
+        )
+        .documentation(
+            "When true, villager path routing is used only if total distance (entry snap + path graph + exit snap) is "
+                + "less than a straight line from NPC to target. When false, any valid snapped route is used (typical for "
+                + "wanting villagers on paths)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("PathNavPathfindingLog", Codec.BOOLEAN),
+            (o, v) -> o.pathNavPathfindingLog = v != null ? v : false,
+            o -> o.pathNavPathfindingLog
+        )
+        .documentation(
+            "If true, logs [PathNav] lines when a villager skips placed-path routing (see PathNav findRoute skip codes)."
+        )
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -341,6 +414,14 @@ public final class AetherhavenPluginConfig {
     private String pathToolReplaceableBlockIds = "";
     private String pathToolReplaceableResourceTypeIds = "";
     private String pathToolStyles = PathToolStyleDefinition.DEFAULT_JSON;
+    private boolean pathNavEnabled = true;
+    private double pathNavNodeSpacing = 1.5;
+    private double pathNavSnapRadius = 8.0;
+    private double pathNavJunctionEps = 1.25;
+    private double pathNavEndpointGateRadius = 32.0;
+    private int pathNavMaxNodesPerTown = 6000;
+    private boolean pathNavPreferIfShorterOnly = false;
+    private boolean pathNavPathfindingLog = false;
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -540,6 +621,58 @@ public final class AetherhavenPluginConfig {
             return "?";
         }
         return list.get(Math.floorMod(pathStyleIndex, list.size())).getName();
+    }
+
+    public boolean isPathNavEnabled() {
+        return pathNavEnabled;
+    }
+
+    public double getPathNavNodeSpacing() {
+        double v = pathNavNodeSpacing;
+        if (Double.isNaN(v) || v < 0.25 || v > 64.0) {
+            return 1.5;
+        }
+        return v;
+    }
+
+    public double getPathNavSnapRadius() {
+        double v = pathNavSnapRadius;
+        if (Double.isNaN(v) || v < 0.5 || v > 64.0) {
+            return 8.0;
+        }
+        return v;
+    }
+
+    public double getPathNavJunctionEps() {
+        double v = pathNavJunctionEps;
+        if (Double.isNaN(v) || v < 0.1 || v > 24.0) {
+            return 1.25;
+        }
+        return v;
+    }
+
+    public double getPathNavEndpointGateRadius() {
+        double v = pathNavEndpointGateRadius;
+        if (Double.isNaN(v) || v < 1.0 || v > 128.0) {
+            return 32.0;
+        }
+        // Small configs (8–20) and the previous 20 m floor still produced PATHNAV_GATE_NETWORK for typical POIs 20+ m
+        // from the path centerline; 32 m matches the schema default and clears normal town layouts without forcing every
+        // server to hand-edit config.
+        return Math.max(32.0, v);
+    }
+
+    public int getPathNavMaxNodesPerTown() {
+        int v = pathNavMaxNodesPerTown;
+        return v >= 256 && v <= 250000 ? v : 6000;
+    }
+
+    public boolean isPathNavPreferIfShorterOnly() {
+        return pathNavPreferIfShorterOnly;
+    }
+
+    public boolean isPathNavPathfindingLog() {
+        return pathNavPathfindingLog;
     }
 
     /** Clamped to [0, 1]. Zero disables extra chest jewelry. */

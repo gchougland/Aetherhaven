@@ -6,8 +6,10 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,6 +56,30 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
                 v -> v.lastFeastGatherDeadlineAttended
             )
             .add()
+            .append(
+                new KeyedCodec<>("TravelWaypoints", Codec.STRING),
+                (v, x) -> v.decodeTravelWaypoints(x),
+                v -> v.encodeTravelWaypoints()
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("TravelWaypointIndex", Codec.INTEGER),
+                (v, x) -> v.travelWaypointIndex = x != null ? Math.max(0, x) : 0,
+                v -> v.travelWaypointIndex
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("TravelWaypointStartedMs", Codec.LONG),
+                (v, x) -> v.travelWaypointStartedMs = x != null ? Math.max(0L, x) : 0L,
+                v -> v.travelWaypointStartedMs
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("TravelWaypointStartedIndex", Codec.INTEGER),
+                (v, x) -> v.travelWaypointStartedIndex = x != null ? Math.max(0, x) : 0,
+                v -> v.travelWaypointStartedIndex
+            )
+            .add()
             .build();
 
     @Nullable
@@ -92,6 +118,10 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
      * villager already finished eating at; another trip is not started until a new feast sets a new deadline.
      */
     private long lastFeastGatherDeadlineAttended;
+    private final ArrayList<Vector3d> travelWaypoints = new ArrayList<>();
+    private int travelWaypointIndex;
+    private long travelWaypointStartedMs;
+    private int travelWaypointStartedIndex;
     /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
     @Nonnull
     private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
@@ -135,6 +165,8 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         this.targetX = 0.0;
         this.targetY = 0.0;
         this.targetZ = 0.0;
+        this.travelWaypoints.clear();
+        this.travelWaypointIndex = 0;
         this.clearPendingDoorClose();
     }
 
@@ -156,6 +188,64 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         this.targetZ = z;
         this.targetPoiId = poiId.toString();
         clearPendingDoorClose();
+    }
+
+    public void setTravelWaypoints(@Nonnull List<Vector3d> points) {
+        travelWaypoints.clear();
+        travelWaypointIndex = 0;
+        travelWaypoints.addAll(points);
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = 0;
+    }
+
+    @Nullable
+    public Vector3d getCurrentTravelWaypoint() {
+        if (travelWaypointIndex < 0 || travelWaypointIndex >= travelWaypoints.size()) {
+            return null;
+        }
+        return travelWaypoints.get(travelWaypointIndex);
+    }
+
+    public boolean advanceTravelWaypoint() {
+        if (travelWaypointIndex + 1 < travelWaypoints.size()) {
+            travelWaypointIndex++;
+            travelWaypointStartedMs = 0L;
+            travelWaypointStartedIndex = travelWaypointIndex;
+            return true;
+        }
+        travelWaypointIndex = travelWaypoints.size();
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = travelWaypointIndex;
+        return false;
+    }
+
+    public void clearTravelWaypoints() {
+        travelWaypoints.clear();
+        travelWaypointIndex = 0;
+        travelWaypointStartedMs = 0L;
+        travelWaypointStartedIndex = 0;
+    }
+
+    /**
+     * Marks progress on current waypoint index for timeout tracking. Call every travel tick while waypoints are active.
+     */
+    public void markTravelWaypointProgress(long nowMs) {
+        if (travelWaypoints.isEmpty()) {
+            travelWaypointStartedMs = 0L;
+            travelWaypointStartedIndex = 0;
+            return;
+        }
+        if (travelWaypointStartedMs <= 0L || travelWaypointStartedIndex != travelWaypointIndex) {
+            travelWaypointStartedMs = Math.max(0L, nowMs);
+            travelWaypointStartedIndex = travelWaypointIndex;
+        }
+    }
+
+    public boolean isCurrentWaypointTimedOut(long nowMs, long timeoutMs) {
+        if (timeoutMs <= 0L || travelWaypoints.isEmpty() || travelWaypointStartedMs <= 0L) {
+            return false;
+        }
+        return nowMs - travelWaypointStartedMs >= timeoutMs;
     }
 
     /** Doors we opened and should close once the NPC is past them (toward the leash). */
@@ -218,6 +308,48 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         return sb.toString();
     }
 
+    private void decodeTravelWaypoints(@Nullable String raw) {
+        travelWaypoints.clear();
+        travelWaypointIndex = 0;
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split(";")) {
+            String p = part.trim();
+            if (p.isEmpty()) {
+                continue;
+            }
+            String[] xyz = p.split(",");
+            if (xyz.length != 3) {
+                continue;
+            }
+            try {
+                double x = Double.parseDouble(xyz[0].trim());
+                double y = Double.parseDouble(xyz[1].trim());
+                double z = Double.parseDouble(xyz[2].trim());
+                travelWaypoints.add(new Vector3d(x, y, z));
+            } catch (NumberFormatException ignored) {
+                // ignore malformed entries
+            }
+        }
+    }
+
+    @Nonnull
+    private String encodeTravelWaypoints() {
+        if (travelWaypoints.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < travelWaypoints.size(); i++) {
+            Vector3d p = travelWaypoints.get(i);
+            if (i > 0) {
+                sb.append(';');
+            }
+            sb.append(p.getX()).append(',').append(p.getY()).append(',').append(p.getZ());
+        }
+        return sb.toString();
+    }
+
     @Nonnull
     public String getPathFailureReason() {
         return pathFailureReason;
@@ -274,6 +406,10 @@ public final class VillagerAutonomyState implements Component<EntityStore> {
         c.pathFailureReason = pathFailureReason;
         c.travelStuckTicks = travelStuckTicks;
         c.lastFeastGatherDeadlineAttended = lastFeastGatherDeadlineAttended;
+        c.travelWaypointIndex = travelWaypointIndex;
+        c.travelWaypointStartedMs = travelWaypointStartedMs;
+        c.travelWaypointStartedIndex = travelWaypointStartedIndex;
+        c.travelWaypoints.addAll(travelWaypoints);
         for (int[] d : pendingOpenDoors) {
             c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });
         }

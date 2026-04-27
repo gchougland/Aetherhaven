@@ -16,6 +16,11 @@ public final class PathCommitRecord {
     @SerializedName("undo")
     @Nonnull
     public List<PathToolUndoCell> undo = new ArrayList<>();
+    @SerializedName("townId")
+    public String townId;
+    @SerializedName("navNodes")
+    @Nonnull
+    public List<PathNavPoint> navNodes = new ArrayList<>();
 
     @Nonnull
     public UUID getIdUuid() {
