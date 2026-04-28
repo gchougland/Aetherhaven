@@ -1,10 +1,6 @@
 # Changelog
 
-## [0.9.1] - Unreleased
-
-### Changed
-
-- Path Tool Keybindings now adhere to player keybinding settings
+## [0.9.1] - 4/27/2026
 
 ### Fixed
 
