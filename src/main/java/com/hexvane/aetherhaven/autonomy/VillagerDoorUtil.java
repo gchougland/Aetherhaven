@@ -30,6 +30,29 @@ public final class VillagerDoorUtil {
     private VillagerDoorUtil() {}
 
     /**
+     * Multi-block doors store secondary segments with non-zero filler pointing at the primary (hinge) cell.
+     * {@link com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction#activateDoor}
+     * applies hitbox offsets from {@code blockPosition}; using a filler segment as origin shifts or misplaces the door.
+     */
+    @Nonnull
+    @SuppressWarnings({ "deprecation", "removal" })
+    private static Vector3i doorPrimaryBlock(@Nonnull World world, int x, int y, int z) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return new Vector3i(x, y, z);
+        }
+        int filler = chunk.getFiller(x, y, z);
+        if (filler == 0) {
+            return new Vector3i(x, y, z);
+        }
+        return new Vector3i(
+            x - FillerBlockUtil.unpackX(filler),
+            y - FillerBlockUtil.unpackY(filler),
+            z - FillerBlockUtil.unpackZ(filler)
+        );
+    }
+
+    /**
      * Min XZ distance (m) past the door block center along the door→leash axis — NPC is on the leash side of the
      * doorway plane.
      */
@@ -108,7 +131,8 @@ public final class VillagerDoorUtil {
                         }
                         if (tryOpenDoorAt(world, npcPos, new Vector3i(bx, by, bz))) {
                             if (onOpened != null) {
-                                onOpened.onOpened(bx, by, bz);
+                                Vector3i primary = doorPrimaryBlock(world, bx, by, bz);
+                                onOpened.onOpened(primary.x, primary.y, primary.z);
                             }
                         }
                     }
@@ -128,18 +152,19 @@ public final class VillagerDoorUtil {
      * then the opposite swing if the first attempt leaves the door closed (covers gates and odd layouts).
      */
     public static boolean tryOpenDoorAt(@Nonnull World world, @Nonnull Vector3d entityPos, @Nonnull Vector3i blockPos) {
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
+        Vector3i primary = doorPrimaryBlock(world, blockPos.x, blockPos.y, blockPos.z);
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
         RotationTuple rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
         );
         DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
             world,
-            blockPos.x,
-            blockPos.y,
-            blockPos.z,
+            primary.x,
+            primary.y,
+            primary.z,
             rotationTuple.yaw()
         );
         if (doorInfo == null) {
@@ -149,19 +174,19 @@ public final class VillagerDoorUtil {
         if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
-        DoorState primary = isInFrontOfDoor(blockPos, rotationTuple.yaw(), entityPos) ? DoorState.OPENED_OUT : DoorState.OPENED_IN;
-        DoorState alternate = primary == DoorState.OPENED_OUT ? DoorState.OPENED_IN : DoorState.OPENED_OUT;
-        if (tryOpenClosedDoor(world, blockPos, primary)) {
+        DoorState primarySwing = isInFrontOfDoor(primary, rotationTuple.yaw(), entityPos) ? DoorState.OPENED_OUT : DoorState.OPENED_IN;
+        DoorState alternate = primarySwing == DoorState.OPENED_OUT ? DoorState.OPENED_IN : DoorState.OPENED_OUT;
+        if (tryOpenClosedDoor(world, primary, primarySwing)) {
             return true;
         }
-        chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPos.x, blockPos.z));
+        chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(primary.x, primary.z));
         if (chunk == null) {
             return false;
         }
         rotationTuple = RotationTuple.get(
-            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPos.x, blockPos.y, blockPos.z)
+            VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, primary.x, primary.y, primary.z)
         );
-        doorInfo = DoorInteraction.getDoorAtPosition(world, blockPos.x, blockPos.y, blockPos.z, rotationTuple.yaw());
+        doorInfo = DoorInteraction.getDoorAtPosition(world, primary.x, primary.y, primary.z, rotationTuple.yaw());
         if (doorInfo == null) {
             return false;
         }
@@ -169,7 +194,7 @@ public final class VillagerDoorUtil {
         if (DoorState.fromBlockState(blockType.getStateForBlock(blockType)) != DoorState.CLOSED) {
             return false;
         }
-        return tryOpenClosedDoor(world, blockPos, alternate);
+        return tryOpenClosedDoor(world, primary, alternate);
     }
 
     private static boolean tryOpenClosedDoor(@Nonnull World world, @Nonnull Vector3i blockPos, @Nonnull DoorState targetOpen) {
@@ -203,14 +228,18 @@ public final class VillagerDoorUtil {
      * the first attempt does not reach {@link DoorState#CLOSED} (some layouts / states are finicky).
      */
     public static boolean tryCloseDoorAt(@Nonnull World world, int x, int y, int z) {
-        Vector3i pos = new Vector3i(x, y, z);
+        Vector3i pos = doorPrimaryBlock(world, x, y, z);
         for (int attempt = 0; attempt < 2; attempt++) {
-            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
             if (chunk == null) {
                 return false;
             }
-            RotationTuple rotationTuple = RotationTuple.get(VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, x, y, z));
-            DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(world, x, y, z, rotationTuple.yaw());
+            RotationTuple rotationTuple = RotationTuple.get(
+                VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, pos.x, pos.y, pos.z)
+            );
+            DoorInteraction.DoorInfo doorInfo = DoorInteraction.getDoorAtPosition(
+                world, pos.x, pos.y, pos.z, rotationTuple.yaw()
+            );
             if (doorInfo == null) {
                 return false;
             }

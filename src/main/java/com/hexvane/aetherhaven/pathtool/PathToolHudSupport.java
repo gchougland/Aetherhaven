@@ -105,7 +105,7 @@ public final class PathToolHudSupport {
                     return existing;
                 }
             }
-            PathToolStatusHud created = new PathToolStatusHud(playerRef);
+            PathToolStatusHud created = new PathToolStatusHud(playerRef, true);
             try {
                 setCustomHudMethod.invoke(multipleHudInstance, player, playerRef, AetherhavenConstants.PATH_TOOL_MHUD_SLOT, created);
             } catch (Throwable ignored) {

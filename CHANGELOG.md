@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.1] - Unreleased
+
+### Changed
+
+- Path Tool Keybindings now adhere to player keybinding settings
+
+### Fixed
+
+- MultipleHUD issues with Path Tool
+- Bug where doors get raised a block when villagers go through them
+
 ## [0.9.0] - 4/26/2026
 
 ### Added
