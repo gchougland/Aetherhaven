@@ -220,6 +220,9 @@ public final class VillagerDoorUtil {
             return false;
         }
         String interactionState = interactionStateForTransition(DoorState.CLOSED, targetOpen);
+        if (!canOpenDoor(world, blockPos, interactionState)) {
+            return false;
+        }
         return activateDoor(world, blockType, blockPos, DoorState.CLOSED, targetOpen, interactionState);
     }
 
@@ -251,6 +254,9 @@ public final class VillagerDoorUtil {
             }
             String primary = interactionStateForTransition(doorState, DoorState.CLOSED);
             String interactionState = attempt == 0 ? primary : alternateCloseInteraction(primary);
+            if (!canOpenDoor(world, pos, interactionState)) {
+                continue;
+            }
             activateDoor(world, blockType, pos, doorState, DoorState.CLOSED, interactionState);
             BlockType afterType = world.getBlockType(pos);
             if (afterType != null && DoorState.fromBlockState(afterType.getStateForBlock(afterType)) == DoorState.CLOSED) {
@@ -263,6 +269,30 @@ public final class VillagerDoorUtil {
     @Nonnull
     private static String alternateCloseInteraction(@Nonnull String primary) {
         return "CloseDoorOut".equals(primary) ? "CloseDoorIn" : "CloseDoorOut";
+    }
+
+    private static boolean canOpenDoor(@Nonnull World world, @Nonnull Vector3i blockPosition, @Nonnull String state) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(blockPosition.x, blockPosition.z));
+        if (chunk == null) {
+            return false;
+        }
+        BlockType originalBlockType = chunk.getBlockType(blockPosition.x, blockPosition.y, blockPosition.z);
+        if (originalBlockType == null) {
+            return false;
+        }
+        BlockType variantBlockType = originalBlockType.getBlockForState(state);
+        if (variantBlockType == null) {
+            return false;
+        }
+        int rotation = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
+        return world.testPlaceBlock(blockPosition.x, blockPosition.y, blockPosition.z, variantBlockType, rotation, (blockX, blockY, blockZ, _blockType, _rotation, filler) -> {
+            if (filler != 0) {
+                blockX -= FillerBlockUtil.unpackX(filler);
+                blockY -= FillerBlockUtil.unpackY(filler);
+                blockZ -= FillerBlockUtil.unpackZ(filler);
+            }
+            return blockX == blockPosition.x && blockY == blockPosition.y && blockZ == blockPosition.z;
+        });
     }
 
     /**
