@@ -11,6 +11,25 @@
           "next": "inn_explain_pool"
         },
         {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "town_inn_visitor_pool_empty"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "visitors_where_reply"
+        },
+        {
           "text": "server.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
@@ -122,6 +141,16 @@
         {
           "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0",
           "next": null
+        }
+      ]
+    },
+    "visitors_where_reply": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0",
+          "next": "root"
         }
       ]
     },

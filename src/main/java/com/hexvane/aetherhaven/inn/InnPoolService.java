@@ -682,7 +682,7 @@ public final class InnPoolService {
      * True if this town already has a non-visitor villager with the given NPC role (e.g. promoted merchant at the stall).
      * Prevents spawning a second inn visitor with the same role.
      */
-    private static boolean townHasResidentWithNpcRole(
+    public static boolean townHasResidentWithNpcRole(
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
         @Nonnull String roleId
@@ -773,6 +773,172 @@ public final class InnPoolService {
     private static String shortHex(@Nonnull UUID townId) {
         String hex = townId.toString().replace("-", "");
         return hex.length() >= 8 ? hex.substring(0, 8) : hex;
+    }
+
+    /**
+     * Spawns an inn visitor at an explicit world position (e.g. debug villager reset). {@code innPlot} supplies the
+     * preferred plot id for {@link TownVillagerBinding} when non-null.
+     */
+    @Nullable
+    public static UUID spawnVisitorAtWorldPosition(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull String roleId,
+        @Nonnull String villagerKind,
+        @Nonnull Vector3d worldPosition,
+        @Nullable PlotInstance innPlot
+    ) {
+        NPCPlugin npc = NPCPlugin.get();
+        if (npc == null) {
+            return null;
+        }
+        var pair = npc.spawnNPC(store, roleId, null, worldPosition, Vector3f.ZERO);
+        if (pair == null) {
+            LOGGER.atWarning().log("Failed to spawn inn visitor %s for town %s at reset position", roleId, town.getTownId());
+            return null;
+        }
+        Ref<EntityStore> ref = pair.first();
+        store.putComponent(ref, VillagerNeeds.getComponentType(), VillagerNeeds.full());
+        String handle = "Villager_" + villagerKind + "_" + shortHex(town.getTownId());
+        store.putComponent(ref, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
+        UUID preferred = innPlot != null ? innPlot.getPlotId() : null;
+        store.putComponent(
+            ref,
+            TownVillagerBinding.getComponentType(),
+            new TownVillagerBinding(town.getTownId(), villagerKind, preferred)
+        );
+        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        return uuidComp != null ? uuidComp.getUuid() : null;
+    }
+
+    /**
+     * Same visitor role ordering as morning inn fill: quest-priority roles first, then shuffled catalog order.
+     */
+    @Nonnull
+    public static List<String> mergedVisitorRoleOrder(
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store
+    ) {
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        if (wtr == null) {
+            return new ArrayList<>();
+        }
+        World world = store.getExternalData().getWorld();
+        long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
+        long seed =
+            town.getTownId().getLeastSignificantBits()
+                ^ (long) world.getName().hashCode() << 1
+                ^ epochDay * 0x9E3779B97F4A7C15L
+                ^ wtr.getGameTime().toEpochMilli();
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        List<String> order = prioritizedInnRoleOrder(town);
+        List<String> shuffledPoolOrder = new ArrayList<>();
+        for (InnPoolEntry e : pool) {
+            String rid = e.npcRoleId();
+            if (rid != null && !rid.isBlank()) {
+                shuffledPoolOrder.add(rid);
+            }
+        }
+        Collections.shuffle(shuffledPoolOrder, new Random(seed));
+        Set<String> seen = new LinkedHashSet<>();
+        List<String> mergedOrder = new ArrayList<>();
+        for (String roleId : order) {
+            if (roleId != null && !roleId.isBlank() && seen.add(roleId)) {
+                mergedOrder.add(roleId);
+            }
+        }
+        for (String rid : shuffledPoolOrder) {
+            if (seen.add(rid)) {
+                mergedOrder.add(rid);
+            }
+        }
+        return mergedOrder;
+    }
+
+    @Nonnull
+    public static String visitorBindingKindForRole(@Nonnull AetherhavenPlugin plugin, @Nonnull String roleId) {
+        String k = visitorKindForRole(innPoolOrLegacy(plugin), roleId.trim());
+        return k != null ? k : TownVillagerBinding.KIND_VISITOR_MERCHANT;
+    }
+
+    /**
+     * Fills inn visitor pool slots up to {@link #MAX_VISITORS} with roles that are not already town residents,
+     * respecting exclusions and active-inn-quest priority (same ordering as morning fill). Spawns near {@code basePos}
+     * with X offsets starting at {@code slotOffsetStart}.
+     */
+    public static void fillRemainingInnVisitorSlotsNear(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nullable PlotInstance innPlot,
+        @Nonnull Vector3d basePos,
+        int slotOffsetStart
+    ) {
+        if (innPlot == null) {
+            return;
+        }
+        WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+        if (wtr == null) {
+            return;
+        }
+        List<String> presentRoles = new ArrayList<>();
+        for (String sid : town.getInnPoolNpcIds()) {
+            try {
+                UUID u = UUID.fromString(sid.trim());
+                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+                if (ref == null || !ref.isValid()) {
+                    continue;
+                }
+                var npcType = NPCEntity.getComponentType();
+                NPCEntity npc = npcType != null ? store.getComponent(ref, npcType) : null;
+                if (npc != null && npc.getRoleName() != null) {
+                    presentRoles.add(npc.getRoleName());
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        List<String> mergedOrder = mergedVisitorRoleOrder(town, plugin, store);
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+
+        int slot = slotOffsetStart;
+        for (String roleId : mergedOrder) {
+            if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
+                break;
+            }
+            if (town.getInnVisitorPoolExcludedRoleIds().contains(roleId)) {
+                continue;
+            }
+            if (townHasResidentWithNpcRole(store, town, roleId)) {
+                continue;
+            }
+            if (presentRoles.contains(roleId)) {
+                continue;
+            }
+            String kind = visitorKindForRole(pool, roleId);
+            if (kind == null) {
+                kind = TownVillagerBinding.KIND_VISITOR_MERCHANT;
+            }
+            Vector3d pos = new Vector3d(basePos.x + slot * 1.25, basePos.y, basePos.z);
+            slot++;
+            UUID spawned = spawnVisitorAtWorldPosition(store, town, roleId, kind, pos, innPlot);
+            if (spawned == null) {
+                break;
+            }
+            town.getInnPoolNpcIds().add(spawned.toString());
+            if (isRoleRequiredByActiveInnQuest(town, roleId)) {
+                town.addInnLockedEntity(spawned);
+            }
+            presentRoles.add(roleId);
+            tm.updateTown(town);
+        }
+    }
+
+    public static boolean innQuestLocksVisitorRole(@Nonnull TownRecord town, @Nonnull String roleId) {
+        return isRoleRequiredByActiveInnQuest(town, roleId.trim());
     }
 
     private static boolean isRoleRequiredByActiveInnQuest(@Nonnull TownRecord town, @Nonnull String roleId) {

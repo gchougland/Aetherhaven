@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.dialogue;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -114,6 +115,21 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     @Override
     public boolean aetherhavenHasTown(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         return townFor(playerRef, store) != null;
+    }
+
+    @Override
+    public boolean townInnVisitorPoolEmpty(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        TownRecord t = townFor(playerRef, store);
+        if (t == null) {
+            return false;
+        }
+        if (!t.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)) {
+            return false;
+        }
+        if (!t.hasCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
+            return false;
+        }
+        return t.getInnPoolNpcIds().isEmpty();
     }
 
     @Override

@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 /**
  * Debug: set reputation with milestone queue, list milestone definitions, grant one reward directly.
- * Requires {@link AetherhavenPlugin#getConfig()}{@code .isDebugCommandsEnabled()}.
+ * Normal command permissions apply.
  */
 public final class AetherhavenReputationDebugCommand extends AbstractCommandCollection {
     public AetherhavenReputationDebugCommand() {

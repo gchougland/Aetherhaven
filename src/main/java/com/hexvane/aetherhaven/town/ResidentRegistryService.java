@@ -124,6 +124,22 @@ public final class ResidentRegistryService {
                 changed = true;
             }
         }
+        String oldS = oldUuid.toString();
+        String newS = newUuid.toString();
+        for (int i = 0; i < town.getInnPoolNpcIds().size(); i++) {
+            String s = town.getInnPoolNpcIds().get(i);
+            if (s != null && oldS.equalsIgnoreCase(s.trim())) {
+                town.getInnPoolNpcIds().set(i, newS);
+                changed = true;
+            }
+        }
+        for (int i = 0; i < town.getInnLockedEntityUuids().size(); i++) {
+            String s = town.getInnLockedEntityUuids().get(i);
+            if (s != null && oldS.equalsIgnoreCase(s.trim())) {
+                town.getInnLockedEntityUuids().set(i, newS);
+                changed = true;
+            }
+        }
         if (changed) {
             tm.updateTown(town);
         }

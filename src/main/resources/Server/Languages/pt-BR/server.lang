@@ -22,7 +22,6 @@ aetherhaven.common.lookAtBlockPlot=Observe um bloco para definir a posição do 
 aetherhaven.common.carryPlotToken=Para começar a colocação de um elemento, carregue um marcador de terreno para um tipo de construção listado na ferramenta (por exemplo, um marcador de terreno para estalagem).
 aetherhaven.common.statueNotLinked=A estátua não está ligada a nenhuma cidade.
 aetherhaven.common.ownerOnlyStatue=Somente o proprietário da cidade pode usar esta estátua.
-aetherhaven.common.debugCommandsDisabled=Os comandos de depuração do Aetherhaven estão desativados (defina DebugCommandsEnabled em config.json).
 aetherhaven.common.noPlayerId=Sem ID de jogador.
 aetherhaven.common.playersOnly=Apenas para jogadores.
 aetherhaven.common.invalidVillager=Aldeão inválido.
@@ -761,15 +760,15 @@ commands.aetherhaven.town.role.role.desc=CONSTRUIR, PARTICIPAR DE MISSÕES OU AM
 commands.aetherhaven.town.leave.desc=Deixe uma cidade da qual você seja membro (não proprietário).
 commands.aetherhaven.town.townName.desc=Nome opcional da cidade para exibição (para vários convites ou para o administrador)
 
-commands.aetherhaven.poi.desc=Depuração: comandos de POI (requer DebugCommandsEnabled)
+commands.aetherhaven.poi.desc=Depuração: comandos de POI
 commands.aetherhaven.poi.list.desc=Liste os Pontos de Interesse (POIs) de uma cidade (UUID opcional da cidade, ou omita / use "eu" para sua cidade)
 commands.aetherhaven.poi.town.desc=UUID da cidade, ou eu, ou omita para a cidade de quem está ligando
 commands.aetherhaven.poi.dump.desc=Liste todos os pontos de interesse (POI) no registro em memória deste mundo (qualquer cidade).
 
-commands.aetherhaven.plots.desc=Depuração: lista as instâncias do gráfico (requer DebugCommandsEnabled; use plots para evitar conflitos com /aetherhaven plot)
+commands.aetherhaven.plots.desc=Depuração: lista as instâncias do gráfico (use plots para evitar conflitos com /aetherhaven plot)
 commands.aetherhaven.plots.list.desc=Liste os locais onde os terrenos estão localizados em sua cidade.
 
-commands.aetherhaven.needs.desc=Depuração: aldeão precisa (requer DebugCommandsEnabled)
+commands.aetherhaven.needs.desc=Depuração: aldeão precisa
 commands.aetherhaven.needs.inspect.desc=Liste as entidades nos blocos carregados que possuem VillagerNeeds.
 commands.aetherhaven.needs.set.desc=Defina um medidor de necessidade de 0 a 100 (alvo: identificador da inspeção, Elder ou UUID)
 commands.aetherhaven.needs.target.desc=Identificador (ex.: Villager_Elder_xxxxxxxx), Ancião ou UUID da entidade
@@ -777,18 +776,18 @@ commands.aetherhaven.needs.entity.desc=Obsoleto; use target (handle, Elder ou uu
 commands.aetherhaven.needs.which.desc=fome, energia ou diversão
 commands.aetherhaven.needs.value.desc=Valor de 0 a 100 (100 = totalmente satisfeito)
 
-commands.aetherhaven.tax.desc=Depuração: imposto matinal do tesouro (requer DebugCommandsEnabled)
+commands.aetherhaven.tax.desc=Depuração: imposto matinal do tesouro
 commands.aetherhaven.tax.breakdown.desc=Exibir as linhas de impostos por aldeão e os totais para sua cidade (somente para os chunks carregados).
-commands.aetherhaven.tax.now.desc=Aplicar o dízimo da manhã ao tesouro agora (ignora o horário da manhã e o último dia de coleta; requer DebugCommandsEnabled)
+commands.aetherhaven.tax.now.desc=Aplicar o dízimo da manhã ao tesouro agora (ignora o horário da manhã e o último dia de coleta)
 
-commands.aetherhaven.questdebug.desc=Depuração: ignorar missão da cidade (requer DebugCommandsEnabled)
+commands.aetherhaven.questdebug.desc=Depuração: ignorar missão da cidade
 commands.aetherhaven.questdebug.grant.desc=Marque a missão como ativa em sua cidade.
 commands.aetherhaven.questdebug.complete.desc=Marque a missão como concluída em sua cidade.
 commands.aetherhaven.questdebug.clear.desc=Remover missão da lista ativa da sua cidade
 commands.aetherhaven.questdebug.id.desc=ID da missão (padrão q_build_inn)
 commands.aetherhaven.questdebug.status.desc=Exibir missões ativas e concluídas da sua cidade (nome e ID de exibição).
 
-commands.aetherhaven.reputation.desc=Depuração: reputação (requer DebugCommandsEnabled)
+commands.aetherhaven.reputation.desc=Depuração: reputação
 commands.aetherhaven.reputation.set.desc=Defina sua reputação com um aldeão e acumule recompensas por marcos alcançados ao dialogar.
 commands.aetherhaven.reputation.villagerUuid.desc=UUID da entidade NPC Aldeão
 commands.aetherhaven.reputation.villagerTarget.desc=UUID da entidade aldeã ou ID da função de NPC na sua cidade (ex.: Aetherhaven_Ferreiro)
@@ -799,24 +798,24 @@ commands.aetherhaven.reputation.reward.roleFilter.desc=ID da função do NPC (po
 commands.aetherhaven.reputation.reward.grant.desc=Conceda agora uma recompensa por marco alcançado (marcas reivindicadas); use a lista de recompensas de reputação para os IDs.
 commands.aetherhaven.reputation.rewardId.desc=ID da recompensa de reputação (ex.: rep_merchant_50)
 
-commands.aetherhaven.villager.desc=Depuração: ajudantes dos aldeões da cidade (requer DebugCommandsEnabled)
+commands.aetherhaven.villager.desc=Depuração: ajudantes dos aldeões da cidade
 commands.aetherhaven.villager.list.desc=Listar UUIDs de entidades NPC dos aldeões da cidade (para comandos de reputação/localização)
 commands.aetherhaven.villager.locate.desc=Imprima a posição de um aldeão da cidade; teletransporte opcional (somente para operadores).
 commands.aetherhaven.villager.uuid.desc=UUID da entidade NPC Aldeão
 commands.aetherhaven.villager.target.desc=UUID da entidade Aldeão ou ID da função de NPC na sua cidade (ex.: Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=verdadeiro para teletransportar-se para o aldeão (somente operadores); ou use --tp em vez disso.
 commands.aetherhaven.villager.tp_flag.desc=Teletransporte para o aldeão (somente operadores; equivalente a passar verdadeiro)
-commands.aetherhaven.gift.desc=Depuração: redefine os limites de presentes ou preenche a pré-visualização do histórico de presentes (requer DebugCommandsEnabled)
+commands.aetherhaven.gift.desc=Depuração: redefine os limites de presentes ou preenche a pré-visualização do histórico de presentes
 commands.aetherhaven.gift.resetLimits.desc=Redefina os limites diários/semanais de presentes para todos os jogadores e todos os moradores de todas as cidades deste mundo.
 commands.aetherhaven.gift.fillHistory.desc=Adicione uma linha de registro para cada item de amor/curtida/descurtida para uma função (sua cidade) para que o histórico de presentes tenha algo para mostrar (depuração).
 commands.aetherhaven.gift.roleId.desc=ID do papel do NPC (ex.: Aetherhaven_Merchant)
 
-commands.aetherhaven.debug_autonomy.desc=Depuração: sobreposição de autonomia do aldeão (requer DebugCommandsEnabled)
+commands.aetherhaven.debug_autonomy.desc=Depuração: sobreposição de autonomia do aldeão
 commands.aetherhaven.debug_autonomy.toggle.desc=Ative ou desative o modo de depuração de autonomia em um aldeão da cidade (olhe para o NPC ou use --ray).
 commands.aetherhaven.debug_autonomy.show.desc=Mostrar se o modo de depuração de autonomia está ativado para este aldeão.
 commands.aetherhaven.debug_autonomy.clear.desc=Limpar o debug de autonomia de Aetherhaven para este aldeão
 
-commands.aetherhaven.debug_lootchest.desc=Depuração: Bônus de baú de Aetherhaven aplicados ao contêiner alvo (requer DebugCommandsEnabled)
+commands.aetherhaven.debug_lootchest.desc=Depuração: Bônus de baú de Aetherhaven aplicados ao contêiner alvo
 commands.aetherhaven.debug_lootchest.fill.desc=Aplique os resultados forçados para joias, ouro e fichas de trama ao contêiner de itens que você está analisando.
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===

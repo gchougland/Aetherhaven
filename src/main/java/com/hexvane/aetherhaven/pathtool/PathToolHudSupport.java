@@ -108,10 +108,13 @@ public final class PathToolHudSupport {
             PathToolStatusHud created = new PathToolStatusHud(playerRef, true);
             try {
                 setCustomHudMethod.invoke(multipleHudInstance, player, playerRef, AetherhavenConstants.PATH_TOOL_MHUD_SLOT, created);
+                return created;
             } catch (Throwable ignored) {
-                player.getHudManager().setCustomHud(playerRef, created);
+                // Vanilla root has no #MultipleHUD wrapper; scoped selectors from mhudLayout=true would never resolve.
+                PathToolStatusHud fallback = new PathToolStatusHud(playerRef, false);
+                player.getHudManager().setCustomHud(playerRef, fallback);
+                return fallback;
             }
-            return created;
         }
         CustomUIHud root = player.getHudManager().getCustomHud();
         if (root instanceof PathToolStatusHud h) {

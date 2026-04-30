@@ -79,12 +79,30 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         if (hand == null
             || hand.isEmpty()
             || !AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
-            PathDebugPreviewUtil.clear(pr);
             PathToolHudSupport.removePathToolHud(p, pr);
             @Nullable
             UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
             if (uuidComp != null) {
-                LAST_DEBUG_SIGNATURE.remove(uuidComp.getUuid());
+                UUID id = uuidComp.getUuid();
+                // Only clear debug when we had path preview state — clearing every tick wipes other DisplayDebug
+                // overlays (e.g. plot placement wireframes) for anyone with path-tool permission.
+                if (LAST_DEBUG_SIGNATURE.remove(id) != null) {
+                    PathDebugPreviewUtil.clear(pr);
+                }
+            }
+            return;
+        }
+        // Custom pages (e.g. plot placement) replace the client's custom HUD; path-tool HUD partial updates then fail
+        // (#ModeName.TextSpans not found) and can disconnect the client.
+        if (p.getPageManager().getCustomPage() != null) {
+            PathToolHudSupport.removePathToolHud(p, pr);
+            @Nullable
+            UUIDComponent uuidBlocked = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uuidBlocked != null) {
+                UUID id = uuidBlocked.getUuid();
+                if (LAST_DEBUG_SIGNATURE.remove(id) != null) {
+                    PathDebugPreviewUtil.clear(pr);
+                }
             }
             return;
         }

@@ -48,6 +48,9 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
     private float birdsEyeDistance = PlotPlacementCameraUtil.DEFAULT_DISTANCE;
     private int smoothPanGeneration;
 
+    /** Coalesces {@link #scheduleRefreshPreview} when {@link #build} runs many times in one frame (avoids debug clear spam). */
+    private int charterWireframeRefreshSerial;
+
     public CharterRelocationPage(@Nonnull PlayerRef playerRef, @Nonnull CharterRelocationSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.session = session;
@@ -379,9 +382,13 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
 
     private void scheduleRefreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         World world = store.getExternalData().getWorld();
+        final int serial = ++charterWireframeRefreshSerial;
         world.execute(
             () -> {
                 if (!ref.isValid()) {
+                    return;
+                }
+                if (serial != charterWireframeRefreshSerial) {
                     return;
                 }
                 refreshPreview(ref, store);

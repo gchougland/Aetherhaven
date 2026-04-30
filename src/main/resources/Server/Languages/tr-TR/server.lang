@@ -22,7 +22,6 @@ aetherhaven.common.lookAtBlockPlot=Parsel işaretinin konumunu ayarlamak ve öni
 aetherhaven.common.carryPlotToken=Yerleştirmeye başlamak için araçta listelenen bir bina türüne ait bir arsa belirteci (örneğin, han arsa belirteci) taşıyın.
 aetherhaven.common.statueNotLinked=Heykelin bir kasabayla bağlantısı yok.
 aetherhaven.common.ownerOnlyStatue=Bu heykeli yalnızca kasaba sahibi kullanabilir.
-aetherhaven.common.debugCommandsDisabled=Aetherhaven hata ayıklama komutları devre dışı bırakılmıştır (config.json dosyasında DebugCommandsEnabled ayarını yapın).
 aetherhaven.common.noPlayerId=Oyuncu kimliği yok.
 aetherhaven.common.playersOnly=Sadece oyuncular için.
 aetherhaven.common.invalidVillager=Engelli köylü.
@@ -761,15 +760,15 @@ commands.aetherhaven.town.role.role.desc=İNŞA ET, GÖREVİ TAMAMLA veya HER İ
 commands.aetherhaven.town.leave.desc=Üyesi olduğunuz (sahibi olmadığınız) bir kasabayı terk edin.
 commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir görüntüleme adı (birden fazla davet veya yönetici için)
 
-commands.aetherhaven.poi.desc=Hata ayıklama: POI komutları (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.poi.desc=Hata ayıklama: POI komutları
 commands.aetherhaven.poi.list.desc=Bir kasaba için ilgi noktalarını listeleyin (isteğe bağlı olarak kasaba UUID'si veya UUID'yi atlayın / kasabanız için "me" kullanın)
 commands.aetherhaven.poi.town.desc=Arayan şehrin UUID'si, veya ben, veya arayanın şehri için belirtme.
 commands.aetherhaven.poi.dump.desc=Bu dünyanın hafızadaki kayıt defterinde yer alan tüm ilgi noktalarını (herhangi bir kasaba) listeleyin.
 
-commands.aetherhaven.plots.desc=Hata ayıklama: Grafik örneklerini listele (DebugCommandsEnabled gerektirir; /aetherhaven plot ile çakışmayı önlemek için plots komutunu kullanın)
+commands.aetherhaven.plots.desc=Hata ayıklama: Grafik örneklerini listele (/aetherhaven plot ile çakışmayı önlemek için plots komutunu kullanın)
 commands.aetherhaven.plots.list.desc=Kasabanızdaki arsa örneklerini listeleyin.
 
-commands.aetherhaven.needs.desc=Hata ayıklama: köylüye ihtiyaç duyuluyor (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.needs.desc=Hata ayıklama: köylüye ihtiyaç duyuluyor
 commands.aetherhaven.needs.inspect.desc=Yüklenen öbeklerdeki VillagerNeeds özelliğine sahip varlıkları listeleyin.
 commands.aetherhaven.needs.set.desc=İhtiyaç ölçerini 0..100 olarak ayarlayın (hedef: incelemeden, Elder'dan veya uuid'den gelen işlem).
 commands.aetherhaven.needs.target.desc=Tanıtıcı (örneğin Villager_Elder_xxxxxxxx), Yaşlı veya varlık UUID'si
@@ -777,18 +776,18 @@ commands.aetherhaven.needs.entity.desc=Kullanımdan kaldırıldı; bunun yerine 
 commands.aetherhaven.needs.which.desc=açlık, enerji veya eğlence
 commands.aetherhaven.needs.value.desc=0 ile 100 arasında bir değer (100 = tamamen memnun)
 
-commands.aetherhaven.tax.desc=Hata ayıklama: Hazine sabah vergisi (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.tax.desc=Hata ayıklama: Hazine sabah vergisi
 commands.aetherhaven.tax.breakdown.desc=Kasabanızdaki köylü başına vergi kalemlerini ve toplamlarını göster (yalnızca yüklenmiş bölümler için)
-commands.aetherhaven.tax.now.desc=Sabah vergisini şimdi hazineye yatır (sabah saatini ve son tahsilat gününü atlar; DebugCommandsEnabled gerektirir)
+commands.aetherhaven.tax.now.desc=Sabah vergisini şimdi hazineye yatır (sabah saatini ve son tahsilat gününü atlar)
 
-commands.aetherhaven.questdebug.desc=Hata ayıklama: kasaba görevi atlama (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.questdebug.desc=Hata ayıklama: kasaba görevi atlama
 commands.aetherhaven.questdebug.grant.desc=Kasabanızda görev işaretini aktif hale getirin.
 commands.aetherhaven.questdebug.complete.desc=Kasabanızda görevi tamamladığınıza göre işaretleyin.
 commands.aetherhaven.questdebug.clear.desc=Kasabanızdaki aktif görevler listesinden görevi kaldırın.
 commands.aetherhaven.questdebug.id.desc=Görev kimliği (varsayılan q_build_inn)
 commands.aetherhaven.questdebug.status.desc=Kasabanız için aktif ve tamamlanmış görevleri göster (görüntüleme adı + kimlik)
 
-commands.aetherhaven.reputation.desc=Hata ayıklama: itibar (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.reputation.desc=Hata ayıklama: itibar
 commands.aetherhaven.reputation.set.desc=Köy sakiniyle aranızdaki itibarı artırın ve diyalog için geçilen aşama ödüllerini sıraya koyun.
 commands.aetherhaven.reputation.villagerUuid.desc=Köylü NPC varlığı UUID'si
 commands.aetherhaven.reputation.villagerTarget.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Blacksmith)
@@ -799,24 +798,24 @@ commands.aetherhaven.reputation.reward.roleFilter.desc=Listeyi filtrelemek için
 commands.aetherhaven.reputation.reward.grant.desc=Şimdi bir dönüm noktası ödülü verin (talep edilen puanlar); kimlikler için itibar ödülü listesini kullanın.
 commands.aetherhaven.reputation.rewardId.desc=İtibar ödülü kimliği (ör. rep_merchant_50)
 
-commands.aetherhaven.villager.desc=Hata ayıklama: kasaba köylü yardımcıları (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.villager.desc=Hata ayıklama: kasaba köylü yardımcıları
 commands.aetherhaven.villager.list.desc=Kasaba sakinlerinin NPC varlıklarının UUID'lerini listeleyin (itibar/konum belirleme komutları için).
 commands.aetherhaven.villager.locate.desc=Kasaba sakininin konumunu yazdır; isteğe bağlı ışınlanma (yalnızca operatörler)
 commands.aetherhaven.villager.uuid.desc=Köylü NPC varlığı UUID'si
 commands.aetherhaven.villager.target.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=Köy sakinine ışınlanmak için true komutunu kullanın (sadece operatörler); veya bunun yerine --tp komutunu kullanın.
 commands.aetherhaven.villager.tp_flag.desc=Köy sakinine ışınlan (sadece operatörler için; doğru geçmekle aynı)
-commands.aetherhaven.gift.desc=Hata ayıklama: Hediye limitlerini sıfırla veya hediye geçmişi önizlemesini doldur (DebugCommandsEnabled özelliğini gerektirir)
+commands.aetherhaven.gift.desc=Hata ayıklama: Hediye limitlerini sıfırla veya hediye geçmişi önizlemesini doldur
 commands.aetherhaven.gift.resetLimits.desc=Bu dünyadaki her kasabadaki tüm oyuncular ve tüm köylüler için günlük/haftalık hediye limitlerini sıfırlayın.
 commands.aetherhaven.gift.fillHistory.desc=Rolünüz (kasabanız) için her bir sevgi/beğeni/beğenmeme öğesi için bir günlük kaydı satırı ekleyin, böylece hediye geçmişinde gösterilecek bir şey olsun (hata ayıklama).
 commands.aetherhaven.gift.roleId.desc=NPC rol kimliği (örneğin Aetherhaven_Merchant)
 
-commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: Köylü özerkliği katmanı (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: Köylü özerkliği katmanı
 commands.aetherhaven.debug_autonomy.toggle.desc=Kasaba sakini üzerinde özerklik hata ayıklamasını açıp kapatın (NPC'ye bakın veya --ray kullanın)
 commands.aetherhaven.debug_autonomy.show.desc=Bu köylü için özerklik hata ayıklamasının etkin olup olmadığını göster.
 commands.aetherhaven.debug_autonomy.clear.desc=Bu köylü için Aetherhaven özerklik hata ayıklamasını temizle.
 
-commands.aetherhaven.debug_lootchest.desc=Hata Ayıklama: Hedeflenen konteynerde Aetherhaven sandık bonusu zarları (DebugCommandsEnabled gerektirir)
+commands.aetherhaven.debug_lootchest.desc=Hata Ayıklama: Hedeflenen konteynerde Aetherhaven sandık bonusu zarları
 commands.aetherhaven.debug_lootchest.fill.desc=İncelediğiniz eşya kabına zorunlu mücevher, altın ve olay belirteci zarlarını uygulayın.
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===

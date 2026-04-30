@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 /**
  * Debug: show dawn-aligned morning tax math for your town (loaded residents only).
- * Requires {@link AetherhavenPlugin#getConfig()}{@code .isDebugCommandsEnabled()}.
+ * Normal command permissions apply.
  */
 public final class AetherhavenTaxCommand extends AbstractCommandCollection {
     public AetherhavenTaxCommand() {

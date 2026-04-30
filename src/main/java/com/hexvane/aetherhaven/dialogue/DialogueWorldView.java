@@ -55,6 +55,14 @@ public interface DialogueWorldView {
     }
 
     /**
+     * True when the inn exists, the build-inn quest is complete, and the town's inn visitor pool list has no entries
+     * (every inn-eligible role is already a resident, so no travelers are assigned beds).
+     */
+    default boolean townInnVisitorPoolEmpty(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return false;
+    }
+
+    /**
      * True if the speaking NPC is registered as home resident on a complete house plot in the player's town
      * (used to finish house quests after the management block assignment).
      */

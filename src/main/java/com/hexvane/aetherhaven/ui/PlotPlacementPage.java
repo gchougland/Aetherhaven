@@ -69,6 +69,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
     /** Move building: first Place click shows warning; confirm commits. */
     private boolean movePlaceConfirmOpen;
 
+    /** Coalesces {@link #scheduleRefreshPreview} when {@link #build} runs many times in one frame (avoids debug clear spam). */
+    private int placementWireframeRefreshSerial;
+
     public PlotPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull PlotPlacementSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
         this.session = session;
@@ -664,9 +667,13 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
     private void scheduleRefreshPreview(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         World world = store.getExternalData().getWorld();
+        final int serial = ++placementWireframeRefreshSerial;
         world.execute(
             () -> {
                 if (!ref.isValid()) {
+                    return;
+                }
+                if (serial != placementWireframeRefreshSerial) {
                     return;
                 }
                 refreshPreview(ref, store);

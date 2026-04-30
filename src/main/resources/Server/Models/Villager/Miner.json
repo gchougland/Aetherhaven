@@ -1,0 +1,85 @@
+{
+  "Parent": "Player",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Underwears/Underwear.blockymodel",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Brown"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Face_Neutral_Freckles.png",
+      "GradientSet": "Skin",
+      "GradientId": "30"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Ears/Elf_Ear_Small.blockymodel",
+      "Texture": "Characters/Body_Attachments/Ears/Elf_Ear_Small_Texture.png",
+      "GradientSet": "Skin",
+      "GradientId": "30"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Mouths/Mouth1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Mouths/Mouth1_Textures/Orc.png",
+      "GradientSet": "Skin",
+      "GradientId": "30"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyes/Eyes.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyes/Eyes_Textures/Almond_Greyscale.png",
+      "GradientSet": "Eyes_Gradient",
+      "GradientId": "BrownDark"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyebrows/Eyebrows_Medium.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyebrows/Square_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "BrownDark"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Beards/Full.blockymodel",
+      "Texture": "Characters/Body_Attachments/Beards/ChinCurtain_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "BrownDark"
+    },
+    {
+      "Model": "Characters/Haircuts/GenericShort.blockymodel",
+      "Texture": "Characters/Haircuts/GenericShort_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "BrownDark"
+    },
+    {
+      "Model": "Cosmetics/Pants/Pants_Straight.blockymodel",
+      "Texture": "Cosmetics/Pants/Pants_Straight_Textures/Wrecked_Greyscale.png",
+      "GradientSet": "Jean_Generic",
+      "GradientId": "Maroon"
+    },
+    {
+      "Model": "Cosmetics/Undertops/Top.blockymodel",
+      "Texture": "Cosmetics/Undertops/Top_Textures/Survivor_Boy.png",
+      "GradientSet": "Fantasy_Cotton",
+      "GradientId": "Brown"
+    },
+    {
+      "Model": "Cosmetics/Overtops/Tunic.blockymodel",
+      "Texture": "Cosmetics/Overtops/Tunic_Textures/Slave_GS.png",
+      "GradientSet": "Fantasy_Cotton",
+      "GradientId": "Brown"
+    },
+    {
+      "Model": "Cosmetics/Shoes/BootsBasic.blockymodel",
+      "Texture": "Cosmetics/Shoes/BootsBasic_Textures/Scavenger_Leather.png"
+    },
+    {
+      "Model": "Cosmetics/Gloves/MiningGloves.blockymodel",
+      "Texture": "Cosmetics/Gloves/MiningGloves_Brown.png"
+    },
+    {
+      "Model": "Cosmetics/Head/Bandana.blockymodel",
+      "Texture": "Cosmetics/Head/Bandana_Textures/Bandana_Skulls_Greyscale_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Brown"
+    }
+  ]
+}

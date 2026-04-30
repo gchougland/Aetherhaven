@@ -10,6 +10,9 @@ import com.hypixel.hytale.protocol.packets.player.ClearDebugShapes;
 import com.hypixel.hytale.protocol.packets.player.DisplayDebug;
 import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -19,7 +22,17 @@ import javax.annotation.Nullable;
  * that dominate the fill at a distance.
  */
 public final class PlotPlacementWireframeOverlay {
-    private static final float WIRE_TIME = 120.0F;
+    /**
+     * {@link DisplayDebug#time} lifetime (seconds in stock tooling). Keep high: the UI calls {@link #clearFor} on
+     * close, and the path tool uses a long hold to avoid visible expiry between refreshes.
+     */
+    private static final float OUTLINE_DISPLAY_SECONDS = 6f * 60f * 60f;
+
+    /**
+     * Each footprint uses 12 line cylinders. The client appears to cap how many debug shapes apply per burst; we draw
+     * the active placement outline first, then at most this many existing plots (nearest AABB centers first).
+     */
+    private static final int MAX_SIBLING_PLOT_OUTLINES = 24;
 
     /** Match vanilla debug lines (thin cylinders). */
     private static final double LINE_THICKNESS = 0.04;
@@ -43,13 +56,32 @@ public final class PlotPlacementWireframeOverlay {
         @Nullable TownRecord town
     ) {
         clearFor(player);
-        if (town != null) {
-            for (PlotInstance p : town.getPlotInstances()) {
-                addBoxEdges(player, p.toFootprint(), DebugUtils.COLOR_SILVER);
-            }
-        }
         Vector3f placeColor = placementValid ? DebugUtils.COLOR_WHITE : DebugUtils.COLOR_RED;
         addBoxEdges(player, placementFootprint, placeColor);
+        if (town == null) {
+            return;
+        }
+        List<PlotInstance> plots = new ArrayList<>(town.getPlotInstances());
+        if (plots.size() > MAX_SIBLING_PLOT_OUTLINES) {
+            plots.sort(Comparator.comparingDouble(p -> aabbCenterDistSq(p.toFootprint(), placementFootprint)));
+            plots = plots.subList(0, MAX_SIBLING_PLOT_OUTLINES);
+        }
+        for (PlotInstance p : plots) {
+            addBoxEdges(player, p.toFootprint(), DebugUtils.COLOR_SILVER);
+        }
+    }
+
+    private static double aabbCenterDistSq(@Nonnull PlotFootprintRecord a, @Nonnull PlotFootprintRecord b) {
+        double ax = (a.getMinX() + a.getMaxX() + 1) * 0.5;
+        double ay = (a.getMinY() + a.getMaxY() + 1) * 0.5;
+        double az = (a.getMinZ() + a.getMaxZ() + 1) * 0.5;
+        double bx = (b.getMinX() + b.getMaxX() + 1) * 0.5;
+        double by = (b.getMinY() + b.getMaxY() + 1) * 0.5;
+        double bz = (b.getMinZ() + b.getMaxZ() + 1) * 0.5;
+        double dx = ax - bx;
+        double dy = ay - by;
+        double dz = az - bz;
+        return dx * dx + dy * dy + dz * dz;
     }
 
     /**
@@ -114,7 +146,7 @@ public final class PlotPlacementWireframeOverlay {
                 DebugShape.Cylinder,
                 matrix.asFloatData(),
                 new com.hypixel.hytale.protocol.Vector3f(color.x, color.y, color.z),
-                WIRE_TIME,
+                OUTLINE_DISPLAY_SECONDS,
                 (byte) LINE_FLAGS,
                 null,
                 DebugUtils.DEFAULT_OPACITY

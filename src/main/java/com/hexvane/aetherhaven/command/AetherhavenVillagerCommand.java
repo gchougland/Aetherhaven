@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.VillagerTownResetService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -39,7 +40,7 @@ import javax.annotation.Nullable;
 
 /**
  * Villager helpers: list entity UUIDs, locate NPCs, optional operator-only teleport.
- * Requires {@link AetherhavenPlugin#getConfig()}{@code .isDebugCommandsEnabled()}.
+ * Debug helpers; normal command permissions apply.
  */
 public final class AetherhavenVillagerCommand extends AbstractCommandCollection {
     public AetherhavenVillagerCommand() {
@@ -47,6 +48,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new ListSubCommand());
         this.addSubCommand(new LocateSubCommand());
         this.addSubCommand(new FixInnSubCommand());
+        this.addSubCommand(new ResetSubCommand());
     }
 
     @Nullable
@@ -265,6 +267,52 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             }
             store.addComponent(ref, Teleport.getComponentType(), teleportComponent);
             playerRef.sendMessage(Message.translation("server.aetherhaven.villager.teleported"));
+        }
+    }
+
+    private static final class ResetSubCommand extends AbstractPlayerCommand {
+        ResetSubCommand() {
+            super("reset", "server.commands.aetherhaven.villager.reset.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = townForQuestPlayer(store, ref, world);
+            if (town == null) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                return;
+            }
+            if (!town.playerHasQuestPermission(uc.getUuid())) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                return;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.resetFailed").param("reason", "No player position."));
+                return;
+            }
+            Vector3d base = tc.getPosition().clone();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String err = VillagerTownResetService.resetAllTownVillagersNearPlayer(world, plugin, town, tm, store, base);
+            if (err != null) {
+                playerRef.sendMessage(Message.translation("server.aetherhaven.villager.resetFailed").param("reason", err));
+                return;
+            }
+            playerRef.sendMessage(Message.translation("server.aetherhaven.villager.resetDone"));
         }
     }
 

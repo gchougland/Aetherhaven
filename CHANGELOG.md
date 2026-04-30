@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.9.2] - 4/30/2026
+
+### Fixed
+
+- **Plot placement & charter move:** the white/red building outline (and gray outlines for other plots) stays on screen instead of flashing once and disappearing. (The path tool was clearing debug overlays in the background for anyone with path-tool permission, even when the tool wasn’t in your hand.)
+- **Villager doors:** villagers opening or closing doors use the same kind of placement checks as the base game, so doors are less likely to shift, clip, or break—especially on wide or multi-piece doors.
+
+### Added
+
+- **Innkeeper:** extra dialogue when the inn has no visitors in rotation, so the conversation still fits the situation.
+- **Debug / staff (town quest access + command permissions):** `/aetherhaven villager reset` — removes broken town-villager tracking, respawns villagers near you, and updates IDs across town data (homes, inn pool, locks, registry) while keeping quests, reputation, and gifts where the mod can carry them forward.
+
+### Changes
+
+- **Plot placement UI:** your building’s outline is always shown first; in very large towns, only the closest other plots get a gray outline so the important box stays easy to see.
+- **Debug commands:** the `DebugCommandsEnabled` config switch is removed. `/aetherhaven` debug subcommands are always available; who can run them is controlled only by the game’s command permissions (same as other commands).
+
 ## [0.9.1] - 4/27/2026
 
 ### Fixed
@@ -105,7 +122,7 @@
 - **Game time hub:** A single per-world coordinator (`AetherhavenGameTimeCoordinatorSystem`) now drives villager schedules, inn pool ticks, and sprinkler morning passes from **smooth in-game minute** advances and **time discontinuities** (e.g. `/time set`). Replaces per-entity schedule ticking and per-player inn/sprinkler tick spam. Time jumps run schedule logic at the **final** game time only; inn and sprinklers **catch up** skipped mornings when the configured morning hour falls inside the skipped interval, then apply normal logic at the new time.
 - Removed crafting time from recipes
 - Corrected cost of building Town Hall
-- **Debug commands** (requires `DebugCommandsEnabled` in plugin `config.json`):
+- **Debug commands** (command permissions apply):
   - `/aetherhaven reputation set` (`/ah rep set`) — set your reputation with a villager (0–100); crossing milestones **queues** reward dialogue as with normal gains, including tiers skipped when jumping straight to a high value.
   - `/aetherhaven reputation reward list` (`/ah rep reward list`) — list reputation milestone definitions; optional filter by NPC role id.
   - `/aetherhaven reputation reward grant` (`/ah rep reward grant`) — grant one milestone reward immediately (items/recipe learn) and mark it claimed.

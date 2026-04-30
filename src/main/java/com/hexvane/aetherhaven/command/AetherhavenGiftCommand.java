@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 
 /**
  * Debug: reset villager gift limits, or seed gift log entries for history UI. Requires
- * {@link AetherhavenPlugin#getConfig()}{@code .isDebugCommandsEnabled()}.
+ * Normal command permissions apply.
  */
 public final class AetherhavenGiftCommand extends AbstractCommandCollection {
     public AetherhavenGiftCommand() {

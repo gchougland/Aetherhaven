@@ -22,7 +22,6 @@ aetherhaven.common.lookAtBlockPlot=Schauen Sie sich einen Block an, um die Posit
 aetherhaven.common.carryPlotToken=Zum Platzieren eines Gebäudes, das in dem Tool aufgeführt ist (z. B. ein Gasthaus-Grundstücksmarker), muss ein Grundstücksmarker für einen Gebäudetyp mitgeführt werden.
 aetherhaven.common.statueNotLinked=Die Statue ist keiner Stadt zugeordnet.
 aetherhaven.common.ownerOnlyStatue=Nur der Stadtbesitzer darf diese Statue benutzen.
-aetherhaven.common.debugCommandsDisabled=Die Debug-Befehle von Aetherhaven sind deaktiviert (setzen Sie DebugCommandsEnabled in config.json).
 aetherhaven.common.noPlayerId=Keine Spieler-ID.
 aetherhaven.common.playersOnly=Nur für Spieler.
 aetherhaven.common.invalidVillager=Ungültiger Dorfbewohner.
@@ -761,15 +760,15 @@ commands.aetherhaven.town.role.role.desc=BAUEN, QUESSEN oder BEIDES
 commands.aetherhaven.town.leave.desc=Verlassen Sie eine Stadt, der Sie angehören (nicht als Eigentümer).
 commands.aetherhaven.town.townName.desc=Optionaler Stadtname (für mehrere Einladungen oder Administratoren)
 
-commands.aetherhaven.poi.desc=Debuggen: POI-Befehle (erfordert DebugCommandsEnabled)
+commands.aetherhaven.poi.desc=Debuggen: POI-Befehle
 commands.aetherhaven.poi.list.desc=POIs für eine Stadt auflisten (optional Stadt-UUID, oder "me" für Ihre Stadt verwenden)
 commands.aetherhaven.poi.town.desc=Stadt-UUID, oder ich, oder weglassen für Anruferstadt
 commands.aetherhaven.poi.dump.desc=Liste alle POIs im In-Memory-Register dieser Welt auf (beliebige Stadt)
 
-commands.aetherhaven.plots.desc=Debuggen: Plotinstanzen auflisten (erfordert DebugCommandsEnabled; verwenden Sie Plots, um Konflikte mit dem Plot /aetherhaven zu vermeiden)
+commands.aetherhaven.plots.desc=Debuggen: Plotinstanzen auflisten (verwenden Sie Plots, um Konflikte mit dem Plot /aetherhaven zu vermeiden)
 commands.aetherhaven.plots.list.desc=Liste der Grundstücksinstanzen für Ihre Stadt
 
-commands.aetherhaven.needs.desc=Debug: Dorfbewohner benötigt (erfordert DebugCommandsEnabled)
+commands.aetherhaven.needs.desc=Debug: Dorfbewohner benötigt
 commands.aetherhaven.needs.inspect.desc=Liste der Entitäten in geladenen Chunks auf, die VillagerNeeds haben
 commands.aetherhaven.needs.set.desc=Bedarfsanzeige 0..100 festlegen (Ziel: Handle aus Inspect, Elder oder UUID)
 commands.aetherhaven.needs.target.desc=Benutzername (z. B. Villager_Elder_xxxxxxxx), Ältester oder Entitäts-UUID
@@ -777,18 +776,18 @@ commands.aetherhaven.needs.entity.desc=Veraltet; verwenden Sie target (handle, E
 commands.aetherhaven.needs.which.desc=Hunger, Energie oder Spaß
 commands.aetherhaven.needs.value.desc=Wert von 0 bis 100 (100 = vollkommen zufrieden)
 
-commands.aetherhaven.tax.desc=Debug: Morgensteuer des Finanzministeriums (erfordert DebugCommandsEnabled)
+commands.aetherhaven.tax.desc=Debug: Morgensteuer des Finanzministeriums
 commands.aetherhaven.tax.breakdown.desc=Zeigt die Steuerzeilen und Gesamtsteuersätze pro Dorfbewohner für Ihre Stadt an (nur geladene Chunks).
-commands.aetherhaven.tax.now.desc=Morgendlichen Zehnten jetzt an die Kasse überweisen (umgeht die Morgenzeit und den Tag der letzten Erhebung; erfordert DebugCommandsEnabled)
+commands.aetherhaven.tax.now.desc=Morgendlichen Zehnten jetzt an die Kasse überweisen (umgeht die Morgenzeit und den Tag der letzten Erhebung)
 
-commands.aetherhaven.questdebug.desc=Debug: Stadtquest umgehen (erfordert DebugCommandsEnabled)
+commands.aetherhaven.questdebug.desc=Debug: Stadtquest umgehen
 commands.aetherhaven.questdebug.grant.desc=Markiere die Quest in deiner Stadt als aktiv.
 commands.aetherhaven.questdebug.complete.desc=Quest in deiner Stadt als abgeschlossen markieren
 commands.aetherhaven.questdebug.clear.desc=Entferne die Quest aus der aktiven Questliste deiner Stadt.
 commands.aetherhaven.questdebug.id.desc=Quest-ID (Standardwert: q_build_inn)
 commands.aetherhaven.questdebug.status.desc=Zeigt aktive und abgeschlossene Quests für deine Stadt an (Anzeigename + ID)
 
-commands.aetherhaven.reputation.desc=Debug: Reputation (erfordert DebugCommandsEnabled)
+commands.aetherhaven.reputation.desc=Debug: Reputation
 commands.aetherhaven.reputation.set.desc=Verbessere deinen Ruf bei einem Dorfbewohner und sichere dir die Belohnungen für abgeschlossene Meilensteine im Dialog.
 commands.aetherhaven.reputation.villagerUuid.desc=Dorfbewohner-NPC-Entitäts-UUID
 commands.aetherhaven.reputation.villagerTarget.desc=Dorfbewohner-Entitäts-UUID oder NPC-Rollen-ID in deiner Stadt (z. B. Aetherhaven_Blacksmith)
@@ -799,24 +798,24 @@ commands.aetherhaven.reputation.reward.roleFilter.desc=NPC-Rollen-ID (z. B. Aeth
 commands.aetherhaven.reputation.reward.grant.desc=Gewähre jetzt eine Meilensteinbelohnung (erworbene Punkte); verwende die Reputationsbelohnungsliste für IDs.
 commands.aetherhaven.reputation.rewardId.desc=Reputationsprämien-ID (z. B. rep_merchant_50)
 
-commands.aetherhaven.villager.desc=Debuggen: Dorfbewohnerhelfer (erfordert DebugCommandsEnabled)
+commands.aetherhaven.villager.desc=Debuggen: Dorfbewohnerhelfer
 commands.aetherhaven.villager.list.desc=Liste der UUIDs der Dorfbewohner-NPCs (für Ruf-/Lokalisierungsbefehle)
 commands.aetherhaven.villager.locate.desc=Position eines Dorfbewohners ausgeben; optionale Teleportation (nur für Bediener)
 commands.aetherhaven.villager.uuid.desc=Dorfbewohner-NPC-Entitäts-UUID
 commands.aetherhaven.villager.target.desc=Dorfbewohner-Entitäts-UUID oder NPC-Rollen-ID in deiner Stadt (z. B. Aetherhaven_Händler)
 commands.aetherhaven.villager.teleport.desc=„true“ bedeutet, sich zum Dorfbewohner zu teleportieren (nur für Operatoren); alternativ kann man „--tp“ verwenden.
 commands.aetherhaven.villager.tp_flag.desc=Teleportiere dich zum Dorfbewohner (nur für Operatoren; entspricht dem Übergeben von „true“)
-commands.aetherhaven.gift.desc=Debuggen: Geschenklimits zurücksetzen oder Geschenkverlaufsvorschau füllen (erfordert DebugCommandsEnabled)
+commands.aetherhaven.gift.desc=Debuggen: Geschenklimits zurücksetzen oder Geschenkverlaufsvorschau füllen
 commands.aetherhaven.gift.resetLimits.desc=Setze die täglichen/wöchentlichen Geschenklimits für alle Spieler und alle Dorfbewohner in jeder Stadt dieser Welt zurück.
 commands.aetherhaven.gift.fillHistory.desc=Füge für jede Rolle (deine Stadt) eine Logzeile pro Lieblings-/Mag-/Abneigungsgegenstand hinzu, damit die Geschenkhistorie etwas anzeigt (Debugging).
 commands.aetherhaven.gift.roleId.desc=NPC-Rollen-ID (z. B. Aetherhaven_Händler)
 
-commands.aetherhaven.debug_autonomy.desc=Debug: Dorfbewohner-Autonomie-Overlay (erfordert DebugCommandsEnabled)
+commands.aetherhaven.debug_autonomy.desc=Debug: Dorfbewohner-Autonomie-Overlay
 commands.aetherhaven.debug_autonomy.toggle.desc=Autonomie-Debugging eines Dorfbewohners aktivieren (NPC ansehen oder --ray verwenden)
 commands.aetherhaven.debug_autonomy.show.desc=Zeigt an, ob der Autonomie-Debug-Modus für diesen Dorfbewohner aktiviert ist.
 commands.aetherhaven.debug_autonomy.clear.desc=Beheben Sie den Autonomie-Debug-Fehler in Aetherhaven für diesen Dorfbewohner
 
-commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven-Truhenbonuswürfe auf den anvisierten Container (erfordert DebugCommandsEnabled)
+commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven-Truhenbonuswürfe auf den anvisierten Container
 commands.aetherhaven.debug_lootchest.fill.desc=Wende erzwungene Schmuck-, Gold- und Handlungsmarkerwürfe auf den Gegenstandsbehälter an, den du gerade ansiehst.
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===

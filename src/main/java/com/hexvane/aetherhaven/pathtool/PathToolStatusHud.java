@@ -41,6 +41,11 @@ public final class PathToolStatusHud extends CustomUIHud {
 
     public void refresh(@Nonnull PathToolPlayerComponent st, @Nonnull AetherhavenPluginConfig cfg) {
         UICommandBuilder b = new UICommandBuilder();
+        // Partial Set commands fail if the client HUD tree was cleared (other UI, reconnect, MHUD edge cases).
+        // Under vanilla CustomHud we own the whole layer: re-append the template then patch in one packet.
+        if (!mhudLayout) {
+            build(b);
+        }
         b.set(
             scoped("#ModeName.TextSpans"),
             Message.translation(
@@ -80,6 +85,6 @@ public final class PathToolStatusHud extends CustomUIHud {
                 .param("n", String.valueOf(st.getNodes().size()))
         );
         b.set(scoped("#HintLine.TextSpans"), Message.translation("server.aetherhaven.pathTool.hudHint"));
-        this.update(false, b);
+        this.update(!mhudLayout, b);
     }
 }
