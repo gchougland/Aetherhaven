@@ -212,6 +212,14 @@ public final class PlotInstance {
         return toFootprint().intersects(candidate);
     }
 
+    /** True when this plot is complete and the block lies inside its inclusive AABB footprint. */
+    public boolean containsWorldBlock(int x, int y, int z) {
+        if (getState() != PlotInstanceState.COMPLETE) {
+            return false;
+        }
+        return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
+    }
+
     @Nullable
     public UUID getHomeResidentEntityUuid() {
         return homeResidentEntityUuid != null && !homeResidentEntityUuid.isBlank()

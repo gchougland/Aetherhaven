@@ -2,6 +2,12 @@
   "Parent": "Player",
   "DefaultAttachments": [
     {
+      "Model": "Characters/Player.blockymodel",
+      "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+      "GradientSet": "Skin",
+      "GradientId": "30"
+    },
+    {
       "Model": "Cosmetics/Underwears/Underwear.blockymodel",
       "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
       "GradientSet": "Colored_Cotton",

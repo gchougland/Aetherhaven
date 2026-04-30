@@ -31,10 +31,12 @@ import javax.annotation.Nullable;
  * <p><b>Important:</b> {@link com.hypixel.hytale.server.core.cosmetics.CosmeticsModule#createModel(com.hypixel.hytale.protocol.PlayerSkin)}
  * does <strong>not</strong> apply the skin — it only validates and returns {@code Model.createScaledModel(Player)}.
  * Clothing and other cosmetics must be resolved from the registry (this class), not from {@code createModel}.
+ *
+ * <p>Body characteristics that use the base {@code Player} mesh still export when they use a skin gradient or
+ * texture tint (e.g. orc tones); they must not be dropped from {@code DefaultAttachments}.
  */
 public final class PlayerSkinModelExporter {
     private static final String PARENT_PLAYER = "Player";
-    private static final String BASE_PLAYER_MODEL = CosmeticRegistry.MODEL;
     private static final String HAIR_GRADIENT_SET_ID = "Hair";
 
     private PlayerSkinModelExporter() {}
@@ -165,10 +167,6 @@ public final class PlayerSkinModelExporter {
 
         if (modelPath == null || modelPath.isEmpty()) {
             throw new IllegalArgumentException(slotLabel + " missing model path for id: " + id);
-        }
-
-        if (slotLabel.equals("bodyCharacteristic") && BASE_PLAYER_MODEL.equals(modelPath)) {
-            return null;
         }
 
         boolean gradientMatch = false;

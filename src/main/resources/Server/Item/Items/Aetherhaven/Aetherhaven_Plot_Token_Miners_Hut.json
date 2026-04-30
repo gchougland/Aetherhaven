@@ -1,0 +1,35 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Plot_Token_Miners_Hut.name",
+    "Description": "server.items.Aetherhaven_Plot_Token_Miners_Hut.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_Planks",
+        "Quantity": 6
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanningPlotTokens"]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",
+  "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+  "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Item",
+  "Categories": ["Items.Utility"],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "Tags": {
+    "Type": ["Tool"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

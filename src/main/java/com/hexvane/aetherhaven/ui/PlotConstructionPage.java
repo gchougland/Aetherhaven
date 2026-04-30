@@ -958,9 +958,16 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             return;
         }
         World world = store.getExternalData().getWorld();
-        Vector3i signPos = blockWorldPos;
-        Rotation yaw = PlotBlockRotationUtil.readBlockYaw(world, signPos);
-        Vector3i anchor = def.resolvePrefabAnchorWorld(signPos, yaw);
+        Vector3i physicalSignPos = blockWorldPos;
+        TownManager tmBuild = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord townBuild = tmBuild.findTownOwningPlot(plotId);
+        PlotInstance buildPlot = townBuild != null ? townBuild.findPlotById(plotId) : null;
+        Vector3i logicalSignPos =
+            buildPlot != null
+                ? new Vector3i(buildPlot.getSignX(), buildPlot.getSignY(), buildPlot.getSignZ())
+                : physicalSignPos;
+        Rotation yaw = buildPlot != null ? buildPlot.resolvePrefabYaw() : PlotBlockRotationUtil.readBlockYaw(world, physicalSignPos);
+        Vector3i anchor = def.resolvePrefabAnchorWorld(logicalSignPos, yaw);
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabPath == null) {
             sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());
@@ -971,7 +978,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         UUID ownerUuid = uc.getUuid();
         Runnable onComplete =
             () -> {
-                world.breakBlock(signPos.x, signPos.y, signPos.z, BREAK_SETTINGS);
+                world.breakBlock(physicalSignPos.x, physicalSignPos.y, physicalSignPos.z, BREAK_SETTINGS);
                 ConstructionCompleter.finishBuild(world, plugin, ownerUuid, plotId, anchor, yaw);
             };
         ConstructionAnimator.start(

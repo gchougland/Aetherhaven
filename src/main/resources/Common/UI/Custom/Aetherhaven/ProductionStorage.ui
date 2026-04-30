@@ -1,0 +1,333 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@IconBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+@IconFwdStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@QtyStyle = (...$C.@DefaultLabelStyle, TextColor: #c8d4e8, HorizontalAlignment: Center);
+@NameStyle = (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8dcc8, HorizontalAlignment: Center);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 780);
+
+    #Title {
+      $C.@Title {
+        @Text = %server.aetherhaven.ui.production.title;
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Full: 16);
+
+      Label #ErrMsg {
+        Visible: false;
+        Anchor: (Bottom: 10);
+        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8a0a0);
+        Text: "";
+      }
+
+      Group #SlotsRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        Group #Slot0 {
+          LayoutMode: Top;
+          Anchor: (Width: 220, Right: 36);
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 8);
+
+            TextButton #Slot0Prev {
+              Style: @IconBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              Anchor: (Width: 40, Height: 40, Right: 6);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+
+            Group #Slot0IconBox {
+              LayoutMode: Full;
+              Background: #1a2530;
+              Padding: 2;
+              Anchor: (Width: 52, Height: 52, Right: 6);
+              Group {
+                LayoutMode: Full;
+                ItemGrid #Slot0Icon {
+                  Anchor: (Full: 0);
+                  SlotsPerRow: 1;
+                  Style: (
+                    SlotSize: 48,
+                    SlotIconSize: 48,
+                    SlotSpacing: 0,
+                    SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                  );
+                }
+              }
+            }
+
+            TextButton #Slot0Next {
+              Style: @IconFwdStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              Anchor: (Width: 40, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+
+          Label #Slot0Name {
+            Style: (...@NameStyle);
+            Anchor: (Bottom: 6, Width: 200);
+            Text: "";
+          }
+
+          Label #Slot0Qty {
+            Style: (...@QtyStyle);
+            Anchor: (Bottom: 8, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Top;
+            Anchor: (Width: 200);
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot0Take1 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take1;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot0Take10 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take10;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              $C.@TextButton #Slot0Take100 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34);
+                Text: %server.aetherhaven.ui.production.take100;
+              }
+            }
+          }
+        }
+
+        Group #Slot1 {
+          LayoutMode: Top;
+          Anchor: (Width: 220, Right: 36);
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 8);
+
+            TextButton #Slot1Prev {
+              Style: @IconBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              Anchor: (Width: 40, Height: 40, Right: 6);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+
+            Group #Slot1IconBox {
+              LayoutMode: Full;
+              Background: #1a2530;
+              Padding: 2;
+              Anchor: (Width: 52, Height: 52, Right: 6);
+              Group {
+                LayoutMode: Full;
+                ItemGrid #Slot1Icon {
+                  Anchor: (Full: 0);
+                  SlotsPerRow: 1;
+                  Style: (
+                    SlotSize: 48,
+                    SlotIconSize: 48,
+                    SlotSpacing: 0,
+                    SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                  );
+                }
+              }
+            }
+
+            TextButton #Slot1Next {
+              Style: @IconFwdStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              Anchor: (Width: 40, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+
+          Label #Slot1Name {
+            Style: (...@NameStyle);
+            Anchor: (Bottom: 6, Width: 200);
+            Text: "";
+          }
+
+          Label #Slot1Qty {
+            Style: (...@QtyStyle);
+            Anchor: (Bottom: 8, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Top;
+            Anchor: (Width: 200);
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot1Take1 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take1;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot1Take10 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take10;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              $C.@TextButton #Slot1Take100 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34);
+                Text: %server.aetherhaven.ui.production.take100;
+              }
+            }
+          }
+        }
+
+        Group #Slot2 {
+          LayoutMode: Top;
+          Anchor: (Width: 220);
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 8);
+
+            TextButton #Slot2Prev {
+              Style: @IconBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              Anchor: (Width: 40, Height: 40, Right: 6);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+
+            Group #Slot2IconBox {
+              LayoutMode: Full;
+              Background: #1a2530;
+              Padding: 2;
+              Anchor: (Width: 52, Height: 52, Right: 6);
+              Group {
+                LayoutMode: Full;
+                ItemGrid #Slot2Icon {
+                  Anchor: (Full: 0);
+                  SlotsPerRow: 1;
+                  Style: (
+                    SlotSize: 48,
+                    SlotIconSize: 48,
+                    SlotSpacing: 0,
+                    SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                  );
+                }
+              }
+            }
+
+            TextButton #Slot2Next {
+              Style: @IconFwdStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              Anchor: (Width: 40, Height: 40);
+              Padding: (Full: 0);
+              Text: ".";
+            }
+          }
+
+          Label #Slot2Name {
+            Style: (...@NameStyle);
+            Anchor: (Bottom: 6, Width: 200);
+            Text: "";
+          }
+
+          Label #Slot2Qty {
+            Style: (...@QtyStyle);
+            Anchor: (Bottom: 8, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Top;
+            Anchor: (Width: 200);
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot2Take1 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take1;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              Anchor: (Bottom: 4);
+              $C.@TextButton #Slot2Take10 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34, Bottom: 4);
+                Text: %server.aetherhaven.ui.production.take10;
+              }
+            }
+            Group {
+              LayoutMode: Center;
+              $C.@TextButton #Slot2Take100 {
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Width: 180, Height: 34);
+                Text: %server.aetherhaven.ui.production.take100;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+$C.@BackButton {}

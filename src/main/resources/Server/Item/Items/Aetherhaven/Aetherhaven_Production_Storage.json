@@ -1,0 +1,65 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Production_Storage.name",
+    "Description": "server.items.Aetherhaven_Production_Storage.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Furniture_Tavern_Wardrobe.png",
+  "Categories": ["Furniture.Furniture"],
+  "Set": "Aetherhaven",
+  "IconProperties": {
+    "Rotation": [22.5, 45, 22.5],
+    "Scale": 0.36,
+    "Translation": [13.8, -22.2]
+  },
+  "BlockType": {
+    "BlockParticleSetId": "Wood",
+    "BlockSoundSetId": "Wood",
+    "CustomModel": "Blocks/Decorative_Sets/Tavern/Wardrobe.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Blocks/Decorative_Sets/Tavern/Wardrobe_Texture.png",
+        "Weight": 1
+      }
+    ],
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Breaking": {
+        "GatherType": "Unbreakable"
+      }
+    },
+    "HitboxType": "Wardrobe",
+    "Material": "Solid",
+    "ParticleColor": "#543022",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "VariantRotation": "NESW",
+    "Opacity": "Transparent",
+    "Interactions": {
+      "Use": {
+        "Interactions": [
+          {
+            "Type": "OpenCustomUI",
+            "Page": {
+              "Id": "AetherhavenProductionStorage"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "PlayerAnimationsId": "Block",
+  "MaxStack": 1,
+  "Tags": {
+    "Type": ["Furniture"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "id": "q_barn",
+  "category": "town",
+  "grantPlotTokenConstructionId": "plot_barn",
+  "title": "Thalen's barn",
+  "description": "Raise a barn so Thalen Meadowrun can tend stock, gather hides and wool, and keep the pantry in meat and eggs.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the barn plot token from Thalen."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the barn prefab."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Thalen at the farming bench and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Rancher",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+    ],
+    "onComplete": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ],
+    "onAbandon": [
+      { "effect": "clear_inn_visitor_locks", "params": {} }
+    ]
+  },
+  "repeat": { "mode": "none" }
+}

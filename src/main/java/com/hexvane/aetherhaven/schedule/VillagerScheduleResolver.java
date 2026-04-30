@@ -288,6 +288,9 @@ public final class VillagerScheduleResolver {
             case TownVillagerBinding.KIND_MERCHANT -> AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL;
             case TownVillagerBinding.KIND_BLACKSMITH -> AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP;
             case TownVillagerBinding.KIND_PRIESTESS -> AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
+            case TownVillagerBinding.KIND_MINER -> AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT;
+            case TownVillagerBinding.KIND_LOGGER -> AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL;
+            case TownVillagerBinding.KIND_RANCHER -> AetherhavenConstants.CONSTRUCTION_PLOT_BARN;
             case TownVillagerBinding.KIND_INNKEEPER -> AetherhavenConstants.CONSTRUCTION_PLOT_INN;
             case TownVillagerBinding.KIND_ELDER -> AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL;
             default -> null;
@@ -348,6 +351,9 @@ public final class VillagerScheduleResolver {
             case TownVillagerBinding.KIND_MERCHANT -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL);
             case TownVillagerBinding.KIND_BLACKSMITH -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP);
             case TownVillagerBinding.KIND_PRIESTESS -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
+            case TownVillagerBinding.KIND_MINER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);
+            case TownVillagerBinding.KIND_LOGGER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL);
+            case TownVillagerBinding.KIND_RANCHER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BARN);
             case TownVillagerBinding.KIND_INNKEEPER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
             case TownVillagerBinding.KIND_ELDER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
             default -> null;

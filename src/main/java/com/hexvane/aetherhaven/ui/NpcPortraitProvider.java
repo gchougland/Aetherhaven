@@ -22,7 +22,10 @@ public final class NpcPortraitProvider {
         Map.entry("Aetherhaven_Merchant", "Merchant.png"),
         Map.entry("Aetherhaven_Blacksmith", "Blacksmith.png"),
         Map.entry("Aetherhaven_Farmer", "Farmer.png"),
-        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Priestess.png")
+        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Priestess.png"),
+        Map.entry(AetherhavenConstants.NPC_MINER, "Miner.png"),
+        Map.entry(AetherhavenConstants.NPC_LOGGER, "Logger.png"),
+        Map.entry(AetherhavenConstants.NPC_RANCHER, "Rancher.png")
     );
 
     private NpcPortraitProvider() {}

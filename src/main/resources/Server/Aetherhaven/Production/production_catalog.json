@@ -1,0 +1,58 @@
+{
+  "entries": {
+    "plot_miners_hut": {
+      "itemIds": [
+        "Ore_Copper",
+        "Rock_Stone_Cobble",
+        "Rock_Stone_Cobble_Mossy",
+        "Rock_Sandstone_Cobble",
+        "Rock_Sandstone_Red_Cobble",
+        "Rock_Sandstone_White_Cobble",
+        "Rock_Marble_Cobble",
+        "Rock_Shale_Cobble",
+        "Rock_Slate_Cobble",
+        "Rock_Basalt_Cobble",
+        "Rock_Calcite_Cobble",
+        "Rock_Chalk_Cobble",
+        "Rock_Lime_Cobble",
+        "Rock_Volcanic_Cobble",
+        "Rock_Magma_Cooled_Cobble",
+        "Rock_Peach_Cobble",
+        "Rock_Aqua_Cobble",
+        "Rock_Quartzite_Cobble",
+        "Rock_Runic_Cobble"
+      ],
+      "ticksPerUnit": 200
+    },
+    "plot_lumbermill": {
+      "itemIds": [
+        "Wood_Beech_Trunk",
+        "Wood_Birch_Trunk",
+        "Wood_Fir_Trunk",
+        "Wood_Apple_Trunk",
+        "Wood_Ash_Trunk",
+        "Wood_Azure_Trunk"
+      ],
+      "ticksPerUnit": 160
+    },
+    "plot_farm": {
+      "itemIds": [
+        "Plant_Crop_Wheat_Item",
+        "Plant_Crop_Lettuce_Item",
+        "Ingredient_Life_Essence"
+      ],
+      "ticksPerUnit": 180
+    },
+    "plot_barn": {
+      "itemIds": [
+        "Ingredient_Hide_Light",
+        "Food_Wildmeat_Raw",
+        "Food_Chicken_Raw",
+        "Food_Beef_Raw",
+        "Food_Egg",
+        "Ingredient_Fabric_Scrap_Wool"
+      ],
+      "ticksPerUnit": 170
+    }
+  }
+}

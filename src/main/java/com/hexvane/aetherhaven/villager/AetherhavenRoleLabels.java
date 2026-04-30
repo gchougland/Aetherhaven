@@ -19,7 +19,10 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_MERCHANT, "Vex Sunderlane"),
         Map.entry(AetherhavenConstants.NPC_BLACKSMITH, "Garren Vale"),
         Map.entry(AetherhavenConstants.NPC_FARMER, "Irienne Mossmark"),
-        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Serah Thornwell")
+        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Serah Thornwell"),
+        Map.entry(AetherhavenConstants.NPC_MINER, "Gorruk Stonevein"),
+        Map.entry(AetherhavenConstants.NPC_LOGGER, "Seren Fairhollow"),
+        Map.entry(AetherhavenConstants.NPC_RANCHER, "Thalen Meadowrun")
     );
 
     private static final Map<String, String> KIND_TO_ENGLISH_PROFESSION = Map.ofEntries(
@@ -28,7 +31,10 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_MERCHANT, "Merchant"),
         Map.entry(TownVillagerBinding.KIND_BLACKSMITH, "Blacksmith"),
         Map.entry(TownVillagerBinding.KIND_FARMER, "Farmer"),
-        Map.entry(TownVillagerBinding.KIND_PRIESTESS, "Priestess")
+        Map.entry(TownVillagerBinding.KIND_PRIESTESS, "Priestess"),
+        Map.entry(TownVillagerBinding.KIND_MINER, "Miner"),
+        Map.entry(TownVillagerBinding.KIND_LOGGER, "Logger"),
+        Map.entry(TownVillagerBinding.KIND_RANCHER, "Rancher")
     );
 
     private AetherhavenRoleLabels() {}
@@ -108,6 +114,9 @@ public final class AetherhavenRoleLabels {
             case TownVillagerBinding.KIND_BLACKSMITH -> "Blacksmith";
             case TownVillagerBinding.KIND_FARMER -> "Farmer";
             case TownVillagerBinding.KIND_PRIESTESS -> "Priestess";
+            case TownVillagerBinding.KIND_MINER -> "Miner";
+            case TownVillagerBinding.KIND_LOGGER -> "Logger";
+            case TownVillagerBinding.KIND_RANCHER -> "Rancher";
             default -> null;
         };
     }
@@ -131,6 +140,15 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
             return TownVillagerBinding.KIND_PRIESTESS;
+        }
+        if (AetherhavenConstants.NPC_MINER.equals(roleId)) {
+            return TownVillagerBinding.KIND_MINER;
+        }
+        if (AetherhavenConstants.NPC_LOGGER.equals(roleId)) {
+            return TownVillagerBinding.KIND_LOGGER;
+        }
+        if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
+            return TownVillagerBinding.KIND_RANCHER;
         }
         return "unknown";
     }

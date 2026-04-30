@@ -294,7 +294,10 @@ public final class ResidentRegistryService {
         if (TownVillagerBinding.KIND_MERCHANT.equals(kind)
             || TownVillagerBinding.KIND_FARMER.equals(kind)
             || TownVillagerBinding.KIND_BLACKSMITH.equals(kind)
-            || TownVillagerBinding.KIND_PRIESTESS.equals(kind)) {
+            || TownVillagerBinding.KIND_PRIESTESS.equals(kind)
+            || TownVillagerBinding.KIND_MINER.equals(kind)
+            || TownVillagerBinding.KIND_LOGGER.equals(kind)
+            || TownVillagerBinding.KIND_RANCHER.equals(kind)) {
             return 2;
         }
         return kindOrderFallbackByRoleId(r.getNpcRoleId());
@@ -310,7 +313,10 @@ public final class ResidentRegistryService {
         if (AetherhavenConstants.NPC_MERCHANT.equals(roleId)
             || AetherhavenConstants.NPC_FARMER.equals(roleId)
             || AetherhavenConstants.NPC_BLACKSMITH.equals(roleId)
-            || AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
+            || AetherhavenConstants.NPC_PRIESTESS.equals(roleId)
+            || AetherhavenConstants.NPC_MINER.equals(roleId)
+            || AetherhavenConstants.NPC_LOGGER.equals(roleId)
+            || AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
             return 2;
         }
         return 3;

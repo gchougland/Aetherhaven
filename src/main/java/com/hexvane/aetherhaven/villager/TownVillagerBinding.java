@@ -27,11 +27,26 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     /** Resident priestess tied to a completed Gaia altar plot. */
     public static final String KIND_PRIESTESS = "priestess";
 
+    /** Resident miner tied to a completed miners hut plot. */
+    public static final String KIND_MINER = "miner";
+
+    /** Resident logger tied to a completed lumbermill plot. */
+    public static final String KIND_LOGGER = "logger";
+
+    /** Resident rancher tied to a completed barn plot. */
+    public static final String KIND_RANCHER = "rancher";
+
     public static final String KIND_VISITOR_MERCHANT = "visitor_merchant";
     public static final String KIND_VISITOR_BLACKSMITH = "visitor_blacksmith";
     public static final String KIND_VISITOR_FARMER = "visitor_farmer";
 
     public static final String KIND_VISITOR_PRIESTESS = "visitor_priestess";
+
+    public static final String KIND_VISITOR_MINER = "visitor_miner";
+
+    public static final String KIND_VISITOR_LOGGER = "visitor_logger";
+
+    public static final String KIND_VISITOR_RANCHER = "visitor_rancher";
 
     /** True for inn pool visitors only; permanent residents use {@link #KIND_MERCHANT}, {@link #KIND_ELDER}, etc. */
     public static boolean isVisitorKind(@Nonnull String kind) {

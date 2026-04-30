@@ -47,7 +47,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Inn visitor pool only: up to two NPCs (merchant/blacksmith/farmer/priestess). {@link TownRecord#getInnPoolNpcIds()} is
+ * Inn visitor pool only: up to two NPCs (merchant/blacksmith/farmer/priestess/miner/logger/rancher).
+ * {@link TownRecord#getInnPoolNpcIds()} is
  * the source of truth for which visitors the mod spawned. Treasury tax is handled by {@link com.hexvane.aetherhaven.economy.TownEconomyTimeService}.
  * <p>
  * <b>Spawning</b> happens only during the morning window and only when the inn's management block chunk is loaded —
@@ -65,7 +66,10 @@ public final class InnPoolService {
         new InnPoolEntry(AetherhavenConstants.NPC_MERCHANT, TownVillagerBinding.KIND_VISITOR_MERCHANT, 0),
         new InnPoolEntry(AetherhavenConstants.NPC_BLACKSMITH, TownVillagerBinding.KIND_VISITOR_BLACKSMITH, 1),
         new InnPoolEntry(AetherhavenConstants.NPC_FARMER, TownVillagerBinding.KIND_VISITOR_FARMER, 2),
-        new InnPoolEntry(AetherhavenConstants.NPC_PRIESTESS, TownVillagerBinding.KIND_VISITOR_PRIESTESS, 3)
+        new InnPoolEntry(AetherhavenConstants.NPC_PRIESTESS, TownVillagerBinding.KIND_VISITOR_PRIESTESS, 3),
+        new InnPoolEntry(AetherhavenConstants.NPC_MINER, TownVillagerBinding.KIND_VISITOR_MINER, 4),
+        new InnPoolEntry(AetherhavenConstants.NPC_LOGGER, TownVillagerBinding.KIND_VISITOR_LOGGER, 5),
+        new InnPoolEntry(AetherhavenConstants.NPC_RANCHER, TownVillagerBinding.KIND_VISITOR_RANCHER, 6)
     );
 
     @Nonnull
@@ -954,6 +958,15 @@ public final class InnPoolService {
         if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
             return town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR);
         }
+        if (AetherhavenConstants.NPC_MINER.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT);
+        }
+        if (AetherhavenConstants.NPC_LOGGER.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL);
+        }
+        if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
+            return town.hasQuestActive(AetherhavenConstants.QUEST_BARN);
+        }
         return false;
     }
 
@@ -961,7 +974,10 @@ public final class InnPoolService {
         return town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)
             || town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)
             || town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)
-            || town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR);
+            || town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)
+            || town.hasQuestActive(AetherhavenConstants.QUEST_BARN);
     }
 
     private static boolean shouldPreserveInnVisitorFromQuestState(
@@ -1016,6 +1032,15 @@ public final class InnPoolService {
         }
         if (town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
             out.add(AetherhavenConstants.NPC_PRIESTESS);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)) {
+            out.add(AetherhavenConstants.NPC_MINER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)) {
+            out.add(AetherhavenConstants.NPC_LOGGER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
+            out.add(AetherhavenConstants.NPC_RANCHER);
         }
         return out;
     }
@@ -1119,6 +1144,15 @@ public final class InnPoolService {
             } else if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
                 constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
                 residentKind = TownVillagerBinding.KIND_PRIESTESS;
+            } else if (AetherhavenConstants.NPC_MINER.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT;
+                residentKind = TownVillagerBinding.KIND_MINER;
+            } else if (AetherhavenConstants.NPC_LOGGER.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL;
+                residentKind = TownVillagerBinding.KIND_LOGGER;
+            } else if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
+                constructionId = AetherhavenConstants.CONSTRUCTION_PLOT_BARN;
+                residentKind = TownVillagerBinding.KIND_RANCHER;
             } else {
                 continue;
             }

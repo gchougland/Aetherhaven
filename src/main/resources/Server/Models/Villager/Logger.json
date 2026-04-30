@@ -75,5 +75,18 @@
       "GradientSet": "Colored_Cotton",
       "GradientId": "Red"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Logger.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      25,
+      0
+    ],
+    "Translation": [
+      0,
+      -108
+    ]
+  }
 }

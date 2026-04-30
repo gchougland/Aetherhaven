@@ -111,6 +111,15 @@ public final class TownVillagerDirectory {
         if (TownVillagerBinding.KIND_PRIESTESS.equals(kind)) {
             return 2;
         }
+        if (TownVillagerBinding.KIND_MINER.equals(kind)) {
+            return 2;
+        }
+        if (TownVillagerBinding.KIND_LOGGER.equals(kind)) {
+            return 2;
+        }
+        if (TownVillagerBinding.KIND_RANCHER.equals(kind)) {
+            return 2;
+        }
         return 3;
     }
 
@@ -131,6 +140,15 @@ public final class TownVillagerDirectory {
             return 2;
         }
         if (AetherhavenConstants.NPC_PRIESTESS.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_MINER.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_LOGGER.equals(roleId)) {
+            return 2;
+        }
+        if (AetherhavenConstants.NPC_RANCHER.equals(roleId)) {
             return 2;
         }
         return 3;

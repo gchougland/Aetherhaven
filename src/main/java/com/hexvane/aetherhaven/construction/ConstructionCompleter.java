@@ -5,7 +5,10 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.inn.BlacksmithShopCompletion;
 import com.hexvane.aetherhaven.inn.FarmerPlotCompletion;
 import com.hexvane.aetherhaven.inn.GaiaAltarCompletion;
+import com.hexvane.aetherhaven.inn.BarnCompletion;
+import com.hexvane.aetherhaven.inn.LumbermillCompletion;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
+import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -91,6 +94,15 @@ public final class ConstructionCompleter {
             }
             if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(def.getId())) {
                 GaiaAltarCompletion.onAltarBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(def.getId())) {
+                MinerHutCompletion.onMinerHutBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(def.getId())) {
+                LumbermillCompletion.onLumbermillBuilt(world, plugin, town, plotId, tm);
+            }
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(def.getId())) {
+                BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
             }
         }
     }

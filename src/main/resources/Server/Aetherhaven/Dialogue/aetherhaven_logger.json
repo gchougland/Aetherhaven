@@ -1,0 +1,180 @@
+{
+  "id": "aetherhaven_logger",
+  "entry": "root",
+  "nodes": {
+    "root": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } },
+              { "type": "player_holds_any_item" }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.c0",
+          "condition": { "type": "town_quest_completed", "questId": "q_lumbermill" },
+          "next": "seren_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.c1",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_lumbermill" },
+              { "type": "town_has_complete_plot", "constructionId": "plot_lumbermill" }
+            ]
+          },
+          "actions": [{ "type": "complete_quest", "id": "q_lumbermill" }],
+          "next": "seren_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.c2",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_lumbermill" },
+              {
+                "type": "not",
+                "condition": { "type": "town_has_complete_plot", "constructionId": "plot_lumbermill" }
+              }
+            ]
+          },
+          "next": "seren_building"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.c3",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": { "type": "town_quest_completed", "questId": "q_lumbermill" }
+              },
+              {
+                "type": "not",
+                "condition": { "type": "town_quest_active", "questId": "q_lumbermill" }
+              }
+            ]
+          },
+          "next": "seren_quest_mill"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.root.c4",
+          "next": null
+        }
+      ]
+    },
+    "seren_quest_mill": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c0",
+          "actions": [{ "type": "start_quest", "id": "q_lumbermill" }],
+          "next": "seren_accepted"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c1",
+          "next": null
+        }
+      ]
+    },
+    "seren_accepted": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.seren_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "seren_building": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.seren_building.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_building.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_building.c0",
+          "actions": [{ "type": "abandon_quest", "id": "q_lumbermill" }],
+          "next": "seren_abandoned"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "seren_abandoned": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "seren_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.seren_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_logger.seren_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
+            }
+          ],
+          "next": "root"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.gift.confirmNo",
+          "next": "root"
+        }
+      ]
+    },
+    "gift_love": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.gift.love",
+      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+    },
+    "gift_like": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.gift.like",
+      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+    },
+    "gift_neutral": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.gift.neutral",
+      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+    },
+    "gift_dislike": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_logger.gift.dislike",
+      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+    }
+  }
+}

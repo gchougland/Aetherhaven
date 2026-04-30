@@ -79,7 +79,11 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.CharterAmendmentsPage;
 import com.hexvane.aetherhaven.ui.FeastPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
@@ -92,8 +96,12 @@ import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
+import com.hexvane.aetherhaven.production.ProductionCatalog;
+import com.hexvane.aetherhaven.production.ProductionTickSystem;
+import com.hexvane.aetherhaven.ui.ProductionStoragePage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.component.Store;
@@ -141,6 +149,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
+    private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -202,6 +211,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public VillagerDefinitionCatalog getVillagerDefinitionCatalog() {
         return villagerDefinitionCatalog;
+    }
+
+    @Nonnull
+    public ProductionCatalog getProductionCatalog() {
+        return productionCatalog;
     }
 
     @Nonnull
@@ -365,6 +379,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
@@ -562,6 +577,56 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 return new FeastPage(playerRef, base.x, base.y, base.z);
             }
         );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            ProductionStoragePage.class,
+            AetherhavenConstants.PAGE_PRODUCTION_STORAGE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                BlockPosition base = world.getBaseBlock(targetBlock);
+                BlockType bt = world.getBlockType(base.x, base.y, base.z);
+                if (bt == null
+                    || bt == BlockType.EMPTY
+                    || !AetherhavenConstants.BLOCK_PRODUCTION_STORAGE.equals(bt.getId())) {
+                    return null;
+                }
+                AetherhavenPlugin p = AetherhavenPlugin.get();
+                if (p == null) {
+                    return null;
+                }
+                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (uc == null) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
+                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+                    return null;
+                }
+                PlotInstance plot = null;
+                for (PlotInstance pi : town.getPlotInstances()) {
+                    if (pi.getState() != PlotInstanceState.COMPLETE) {
+                        continue;
+                    }
+                    if (!ProductionCatalog.isProductionWorkplaceConstruction(pi.getConstructionId())) {
+                        continue;
+                    }
+                    if (pi.containsWorldBlock(base.x, base.y, base.z)) {
+                        plot = pi;
+                        break;
+                    }
+                }
+                if (plot == null) {
+                    return null;
+                }
+                return new ProductionStoragePage(playerRef, town.getTownId(), plot.getPlotId(), base.x, base.y, base.z);
+            }
+        );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
@@ -640,6 +705,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
+        this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),

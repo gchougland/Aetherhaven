@@ -1,0 +1,33 @@
+{
+  "id": "plot_barn",
+  "displayName": "Barn",
+  "description": "A barn with pens, a farming bench, and storage for Thalen to bring hides, meat, eggs, and wool back to town.",
+  "prefabPath": "Barn.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Barn",
+  "plotAnchorOffset": [9, 0, 9],
+  "managementBlockLocalPos": [4, 2, 0],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 3,
+  "autonomyNavRoofExclusionYBelowMaxY": 6,
+  "treasuryGoldCoinCost": 56,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 120 },
+    { "resourceTypeId": "Soils", "count": 40 },
+    { "resourceTypeId": "Rock", "count": 30 }
+  ],
+  "pois": [
+    {
+      "localX": 1,
+      "localY": 1,
+      "localZ": -5,
+      "blockTypeId": "Bench_Farming",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -4
+    }
+  ]
+}

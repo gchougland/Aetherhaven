@@ -546,6 +546,18 @@ npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
 npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
 npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
 npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Gorruk Stonevein
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+
+items.Aetherhaven_Production_Storage.name=Workplace stores
+items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and cannot be picked up.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners hut plot token
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Marks where the miners hut prefab can be built. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill plot token
+items.Aetherhaven_Plot_Token_Lumbermill.description=Marks where the lumbermill prefab can be built. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_Barn.name=Barn plot token
+items.Aetherhaven_Plot_Token_Barn.description=Marks where the barn prefab can be built. Craft at the town planning desk.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.
@@ -610,7 +622,118 @@ aetherhaven.profession.kind.merchant=Merchant
 aetherhaven.profession.kind.farmer=Farmer
 aetherhaven.profession.kind.blacksmith=Blacksmith
 aetherhaven.profession.kind.priestess=Priestess
+aetherhaven.profession.kind.miner=Miner
+aetherhaven.profession.kind.logger=Logger
+aetherhaven.profession.kind.rancher=Rancher
 aetherhaven.profession.kind.unknown=Resident
+
+# === Dialogue: Gorruk (miner) ===
+aetherhaven.dialogue.aetherhaven_miner.root.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.root.body=Stone remembers honest work. I need a roof and a bench that does not wobble when I swing a pick.
+aetherhaven.dialogue.aetherhaven_miner.root.c0=You already raised my hut. Good.
+aetherhaven.dialogue.aetherhaven_miner.root.c1=The hut is up. I am signing this off.
+aetherhaven.dialogue.aetherhaven_miner.root.c2=Still building? Bring timber and stone to the sign. I will wait.
+aetherhaven.dialogue.aetherhaven_miner.root.c3=Stake a plot for me. I will haul ore once I have walls.
+aetherhaven.dialogue.aetherhaven_miner.root.c4=Later.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.body=Give me a token and ground to build on. I will fill your bins with stone and copper if you give me a real bench.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c0=Here is the token. Build it right.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c1=Not yet.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.body=Good. I will be at the workbench when the walls stand.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.body=The sign still lists materials. Finish the hut or say you are walking away.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c0=I am walking away from the build.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c1=I will keep building.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.body=Fine. I will sleep on the floor until someone else stakes ground.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.c0=Farewell.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.body=Now the dust stays outside my bunk. Tell me if you need more cobble.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_miner.gift.love=This is fine ore. I will remember it.
+aetherhaven.dialogue.aetherhaven_miner.gift.like=Useful. Thank you.
+aetherhaven.dialogue.aetherhaven_miner.gift.neutral=I will find a use for it.
+aetherhaven.dialogue.aetherhaven_miner.gift.dislike=Keep your seeds. I work rock.
+
+# === Dialogue: Seren (logger) ===
+aetherhaven.dialogue.aetherhaven_logger.root.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.root.body=I can hear the trees outside town. Put up a mill and I will turn rounds into stacks for you.
+aetherhaven.dialogue.aetherhaven_logger.root.c0=The mill is done. I am settled.
+aetherhaven.dialogue.aetherhaven_logger.root.c1=The mill stands. Let us close the ledger.
+aetherhaven.dialogue.aetherhaven_logger.root.c2=The frame is not finished yet. Check the sign for what is still owed.
+aetherhaven.dialogue.aetherhaven_logger.root.c3=If you have a token, I will mark out a site.
+aetherhaven.dialogue.aetherhaven_logger.root.c4=Goodbye for now.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.body=Give me a token and a footprint. I will keep the racks full of clean cuts.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c0=Take the token. I will build the mill.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c1=Not today.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.body=I will meet you at the desk when the roof is on.
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_building.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_building.body=The list on the sign is not empty yet. Finish the mill or tell me you are stopping.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c0=I am stopping the build.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c1=I will finish it.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.body=All right. I will keep my axe on the rack until another token appears.
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.c0=Farewell.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_done.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_done.body=Listen to that blade sing on the bench. Call me if you need more cordwood.
+aetherhaven.dialogue.aetherhaven_logger.seren_done.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_logger.gift.love=This is beautiful timber. Thank you.
+aetherhaven.dialogue.aetherhaven_logger.gift.like=Thoughtful. I will put it to work.
+aetherhaven.dialogue.aetherhaven_logger.gift.neutral=I will find a place for it.
+aetherhaven.dialogue.aetherhaven_logger.gift.dislike=I work wood, not stone blocks.
+
+# === Dialogue: Thalen (rancher) ===
+aetherhaven.dialogue.aetherhaven_rancher.root.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.root.body=The inn smells like stew, not straw. Give me a barn and a bench and I will keep hides, wool, eggs, and cuts coming in steady.
+aetherhaven.dialogue.aetherhaven_rancher.root.c0=We already raised the barn. I am home.
+aetherhaven.dialogue.aetherhaven_rancher.root.c1=The barn stands. Let us close the ledger.
+aetherhaven.dialogue.aetherhaven_rancher.root.c2=The frame is not finished yet. Check the sign for what is still owed.
+aetherhaven.dialogue.aetherhaven_rancher.root.c3=If you have a token, I will mark out a site.
+aetherhaven.dialogue.aetherhaven_rancher.root.c4=Goodbye for now.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.body=Stake ground and I will fill the racks. Wool in one bin, meat in another, eggs where they will not roll away.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c0=Take the token. I will build the barn.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1=Not today.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.body=I will meet you at the farming bench when the roof is on.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.body=The list on the sign is not empty yet. Finish the barn or tell me you are stopping.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c0=I am stopping the build.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1=I will finish it.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.body=All right. I will keep my crook by the door until another token appears.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.c0=Farewell.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.body=Listen to that quiet when the pens are full. Call me if you need more hides or wool.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0=Good.
+
+aetherhaven.dialogue.aetherhaven_rancher.gift.love=This is exactly what the flock needs. Thank you.
+aetherhaven.dialogue.aetherhaven_rancher.gift.like=Thoughtful. I will put it to use.
+aetherhaven.dialogue.aetherhaven_rancher.gift.neutral=I will find a place for it.
+aetherhaven.dialogue.aetherhaven_rancher.gift.dislike=I tend beasts and fleeces, not ore.
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=Town charter
@@ -911,6 +1034,20 @@ aetherhaven.ui.feast.err.timedFeastActive=Another timed feast is already in effe
 aetherhaven.ui.feast.err.waitForTimedFeastEnd=Wait until the current timed feast ends before serving Berrycircle Concord.
 aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord is still on cooldown.
 aetherhaven.ui.feast.err.notEnoughIngredients=You do not have enough of the required ingredients.
+
+aetherhaven.ui.production.title=Workplace stores
+aetherhaven.ui.production.prev=Prev
+aetherhaven.ui.production.next=Next
+aetherhaven.ui.production.prevTooltip=Previous output in this slot
+aetherhaven.ui.production.nextTooltip=Next output in this slot
+aetherhaven.ui.production.take1=Take 1
+aetherhaven.ui.production.take10=Take 10
+aetherhaven.ui.production.take100=Take 100
+aetherhaven.ui.production.err.plugin=Aetherhaven is not loaded on this server.
+aetherhaven.ui.production.err.permission=You cannot open this storage for this town.
+aetherhaven.ui.production.err.plot=This block is not inside a completed farm, mill, or miners hut plot for your town.
+aetherhaven.ui.production.err.catalog=No production catalog is configured for this building.
+aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take that much.
 
 aetherhaven.feast.stewards.name=The Steward's Ledger Supper
 aetherhaven.feast.stewards.description=Spread bread, cheese, and a proper pumpkin pie so the morning tithe leans generous for one week.

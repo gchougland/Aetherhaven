@@ -1,0 +1,32 @@
+{
+  "id": "plot_miners_hut",
+  "displayName": "Miners hut",
+  "description": "A small hut with a workbench for Gorruk to haul stone and ore back to town.",
+  "prefabPath": "MinersHut.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Miners_Hut",
+  "plotAnchorOffset": [4, 0, 4],
+  "managementBlockLocalPos": [1, 2, -4],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 3,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 55,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 80 },
+    { "resourceTypeId": "Rock", "count": 120 }
+  ],
+  "pois": [
+    {
+      "localX": 1,
+      "localY": 3,
+      "localZ": -3,
+      "blockTypeId": "Bench_WorkBench",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -2
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "npcRoleId": "Aetherhaven_Logger",
+  "dialogueVillagerKind": "logger",
+  "residentTreeId": "aetherhaven_logger",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_lumbermill",
+  "scheduleRoleId": "Aetherhaven_Farmer",
+  "displayName": "Seren Fairhollow",
+  "portraitIcon": "Logger.png",
+  "uiSortOrder": 7,
+  "innPoolEligible": true,
+  "innPoolOrder": 5,
+  "visitorBindingKind": "visitor_logger",
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Wood_Beech_Trunk",
+    "Wood_Ash_Trunk",
+    "Tool_Axe_Iron",
+    "Ingredient_Bar_Iron"
+  ],
+  "giftLikes": [
+    "Wood_Birch_Trunk",
+    "Wood_Fir_Trunk",
+    "Tool_Axe_Copper",
+    "Ingredient_Bar_Copper"
+  ],
+  "giftDislikes": [
+    "Rock_Stone",
+    "Ore_Copper",
+    "Tool_Pickaxe_Crude",
+    "Ingredient_Bar_Cobalt"
+  ]
+}

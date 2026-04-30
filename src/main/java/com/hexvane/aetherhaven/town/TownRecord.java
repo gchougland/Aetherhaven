@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.time.Instant;
@@ -212,6 +213,14 @@ public final class TownRecord {
     @SerializedName("feastGatherDeadlineEpochMs")
     private long feastGatherDeadlineEpochMs;
 
+    /**
+     * Workplace plot production storage: key plot UUID string, value slot cursors + item amounts
+     * (see {@link com.hexvane.aetherhaven.production.ProductionTickSystem}).
+     */
+    @Nullable
+    @SerializedName("plotProductionByPlotId")
+    private Map<String, PlotProductionState> plotProductionByPlotId;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -291,12 +300,31 @@ public final class TownRecord {
         migrateTownSocialFieldsIfNeeded();
         migrateFounderMonumentCountIfNeeded();
         migrateFeastFieldsIfNeeded();
+        migratePlotProductionIfNeeded();
     }
 
     private void migrateFeastFieldsIfNeeded() {
         if (feastGatherDeadlineEpochMs < 0L) {
             feastGatherDeadlineEpochMs = 0L;
         }
+    }
+
+    public void migratePlotProductionIfNeeded() {
+        if (plotProductionByPlotId == null) {
+            plotProductionByPlotId = new LinkedHashMap<>();
+            return;
+        }
+        for (PlotProductionState s : plotProductionByPlotId.values()) {
+            if (s != null) {
+                s.migrateIfNeeded();
+            }
+        }
+    }
+
+    @Nonnull
+    public PlotProductionState getOrCreatePlotProduction(@Nonnull UUID plotId) {
+        migratePlotProductionIfNeeded();
+        return plotProductionByPlotId.computeIfAbsent(plotId.toString(), k -> PlotProductionState.empty());
     }
 
     /** Reconciles {@link #founderMonumentCount} with legacy {@link #founderMonumentActive} from older saves. */

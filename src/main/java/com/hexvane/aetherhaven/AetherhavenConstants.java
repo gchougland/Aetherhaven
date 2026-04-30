@@ -94,6 +94,15 @@ public final class AetherhavenConstants {
     /** Gaia altar workplace; definition in {@code Server/Aetherhaven/Buildings/plot_gaia_altar.json}. */
     public static final String CONSTRUCTION_PLOT_GAIA_ALTAR = "plot_gaia_altar";
 
+    /** Miners hut workplace; definition in {@code Server/Aetherhaven/Buildings/plot_miners_hut.json}. */
+    public static final String CONSTRUCTION_PLOT_MINERS_HUT = "plot_miners_hut";
+
+    /** Lumbermill workplace; definition in {@code Server/Aetherhaven/Buildings/plot_lumbermill.json}. */
+    public static final String CONSTRUCTION_PLOT_LUMBERMILL = "plot_lumbermill";
+
+    /** Barn workplace; definition in {@code Server/Aetherhaven/Buildings/plot_barn.json}. */
+    public static final String CONSTRUCTION_PLOT_BARN = "plot_barn";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";
@@ -118,11 +127,23 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_PRIESTESS = "q_house_priestess";
 
+    public static final String QUEST_MINERS_HUT = "q_miners_hut";
+
+    public static final String QUEST_LUMBERMILL = "q_lumbermill";
+
+    public static final String QUEST_BARN = "q_barn";
+
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
     public static final String NPC_FARMER = "Aetherhaven_Farmer";
 
     public static final String NPC_PRIESTESS = "Aetherhaven_Priestess";
+
+    public static final String NPC_MINER = "Aetherhaven_Miner";
+
+    public static final String NPC_LOGGER = "Aetherhaven_Logger";
+
+    public static final String NPC_RANCHER = "Aetherhaven_Rancher";
 
     public static final String PLOT_TOKEN_MARKET_STALL = "Aetherhaven_Plot_Token_Market_Stall";
 
@@ -137,6 +158,20 @@ public final class AetherhavenConstants {
     public static final String PLOT_TOKEN_TOWN_HALL = "Aetherhaven_Plot_Token_Town_Hall";
 
     public static final String PLOT_TOKEN_GAIA_ALTAR = "Aetherhaven_Plot_Token_Gaia_Altar";
+
+    public static final String PLOT_TOKEN_MINERS_HUT = "Aetherhaven_Plot_Token_Miners_Hut";
+
+    public static final String PLOT_TOKEN_LUMBERMILL = "Aetherhaven_Plot_Token_Lumbermill";
+
+    public static final String PLOT_TOKEN_BARN = "Aetherhaven_Plot_Token_Barn";
+
+    /** Plot production storage (wardrobe visuals); uncraftable, unbreakable by players in survival. */
+    public static final String BLOCK_PRODUCTION_STORAGE = "Aetherhaven_Production_Storage";
+
+    public static final String PAGE_PRODUCTION_STORAGE = "AetherhavenProductionStorage";
+
+    /** Max stored amount per item id in workplace production UI / tick system. */
+    public static final long PRODUCTION_STORAGE_PER_ITEM_MAX = 200L;
 
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 

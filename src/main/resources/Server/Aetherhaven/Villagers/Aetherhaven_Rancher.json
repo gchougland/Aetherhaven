@@ -1,0 +1,33 @@
+{
+  "npcRoleId": "Aetherhaven_Rancher",
+  "dialogueVillagerKind": "rancher",
+  "residentTreeId": "aetherhaven_rancher",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_barn",
+  "scheduleRoleId": "Aetherhaven_Farmer",
+  "displayName": "Thalen Meadowrun",
+  "portraitIcon": "Rancher.png",
+  "uiSortOrder": 8,
+  "innPoolEligible": true,
+  "innPoolOrder": 6,
+  "visitorBindingKind": "visitor_rancher",
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Food_Egg",
+    "Ingredient_Fabric_Scrap_Wool",
+    "Ingredient_Hide_Light",
+    "Food_Wildmeat_Cooked"
+  ],
+  "giftLikes": [
+    "Food_Chicken_Raw",
+    "Food_Beef_Raw",
+    "Food_Wildmeat_Raw",
+    "Plant_Crop_Wheat_Item"
+  ],
+  "giftDislikes": [
+    "Ore_Copper",
+    "Rock_Stone",
+    "Ingredient_Bar_Cobalt",
+    "Tool_Pickaxe_Crude"
+  ]
+}

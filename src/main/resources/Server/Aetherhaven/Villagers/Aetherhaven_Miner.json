@@ -1,0 +1,33 @@
+{
+  "npcRoleId": "Aetherhaven_Miner",
+  "dialogueVillagerKind": "miner",
+  "residentTreeId": "aetherhaven_miner",
+  "visitorTreeId": "aetherhaven_visitor_generic",
+  "workConstructionId": "plot_miners_hut",
+  "scheduleRoleId": "Aetherhaven_Farmer",
+  "displayName": "Gorruk Stonevein",
+  "portraitIcon": "Miner.png",
+  "uiSortOrder": 6,
+  "innPoolEligible": true,
+  "innPoolOrder": 4,
+  "visitorBindingKind": "visitor_miner",
+  "reputationMilestones": [],
+  "giftLoves": [
+    "Ore_Copper",
+    "Rock_Stone",
+    "Tool_Pickaxe_Iron",
+    "Ingredient_Bar_Iron"
+  ],
+  "giftLikes": [
+    "Rock_Sandstone",
+    "Rock_Sandstone_Cobble",
+    "Tool_Pickaxe_Copper",
+    "Ingredient_Bar_Copper"
+  ],
+  "giftDislikes": [
+    "Plant_Seeds_Wheat",
+    "Food_Salad_Caesar",
+    "Ingredient_Life_Essence",
+    "Tool_Hoe_Wood"
+  ]
+}

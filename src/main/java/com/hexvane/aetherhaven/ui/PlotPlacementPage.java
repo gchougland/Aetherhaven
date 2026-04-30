@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
+import com.hexvane.aetherhaven.placement.PlotSignGrounding;
 import com.hexvane.aetherhaven.placement.PlotPlacementSession;
 import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
@@ -585,8 +586,21 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             sendError(store, ref, "You need the plot token for this building in your inventory to place it.");
             return false;
         }
-        Vector3i signPos = session.getAnchor();
-        String err = PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), signPos, session.getPrefabYaw(), def, plugin);
+        Vector3i previewAnchor = session.getAnchor();
+        Path prefabPathEarly = resolvePrefabAssetPath(def.getPrefabPath());
+        Vector3i placedSignPos;
+        if (prefabPathEarly != null) {
+            IPrefabBuffer groundBuf = PrefabBufferUtil.getCached(prefabPathEarly);
+            try {
+                placedSignPos = PlotSignGrounding.resolveSignCell(world, previewAnchor, def, session.getPrefabYaw(), groundBuf);
+            } finally {
+                groundBuf.release();
+            }
+        } else {
+            placedSignPos = previewAnchor;
+        }
+        String err =
+            PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), previewAnchor, session.getPrefabYaw(), def, plugin);
         if (err != null) {
             sendError(store, ref, err);
             return false;
@@ -605,9 +619,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         boolean placed =
             PlotPlacementCommit.placePlotSign(
                 world,
-                signPos.x,
-                signPos.y,
-                signPos.z,
+                placedSignPos.x,
+                placedSignPos.y,
+                placedSignPos.z,
                 session.getPrefabYaw(),
                 session.getConstructionId(),
                 plotId,
@@ -618,11 +632,11 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             sendError(store, ref, "Could not place plot sign (blocked or invalid spot).");
             return false;
         }
-        Path prefabPath = resolvePrefabAssetPath(def.getPrefabPath());
+        Path prefabPath = prefabPathEarly != null ? prefabPathEarly : resolvePrefabAssetPath(def.getPrefabPath());
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPos, session.getPrefabYaw());
+                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getPrefabYaw());
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
@@ -630,9 +644,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                         session.getConstructionId(),
                         PlotInstanceState.BLUEPRINTING,
                         fp,
-                        signPos.x,
-                        signPos.y,
-                        signPos.z,
+                        previewAnchor.x,
+                        previewAnchor.y,
+                        previewAnchor.z,
                         System.currentTimeMillis()
                     );
                 inst.setPlacementPrefabYaw(session.getPrefabYaw());
@@ -642,16 +656,24 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
                 buf.release();
             }
         } else {
-            PlotFootprintRecord mini = new PlotFootprintRecord(signPos.x, signPos.y, signPos.z, signPos.x, signPos.y, signPos.z);
+            PlotFootprintRecord mini =
+                new PlotFootprintRecord(
+                    previewAnchor.x,
+                    previewAnchor.y,
+                    previewAnchor.z,
+                    previewAnchor.x,
+                    previewAnchor.y,
+                    previewAnchor.z
+                );
             PlotInstance miniPlot =
                 new PlotInstance(
                     plotId,
                     session.getConstructionId(),
                     PlotInstanceState.BLUEPRINTING,
                     mini,
-                    signPos.x,
-                    signPos.y,
-                    signPos.z,
+                    previewAnchor.x,
+                    previewAnchor.y,
+                    previewAnchor.z,
                     System.currentTimeMillis()
                 );
             miniPlot.setPlacementPrefabYaw(session.getPrefabYaw());

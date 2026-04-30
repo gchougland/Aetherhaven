@@ -52,6 +52,9 @@ public final class DialogueResolver {
         kindToVisitorTree.put("blacksmith", VISITOR_DEFAULT);
         kindToVisitorTree.put("farmer", VISITOR_DEFAULT);
         kindToVisitorTree.put("priestess", VISITOR_DEFAULT);
+        kindToVisitorTree.put("miner", VISITOR_DEFAULT);
+        kindToVisitorTree.put("logger", VISITOR_DEFAULT);
+        kindToVisitorTree.put("rancher", VISITOR_DEFAULT);
     }
 
     /** Called on asset catalog reload. Falls back to {@link #applyLegacyDefaultKindMaps} when the catalog is empty. */
