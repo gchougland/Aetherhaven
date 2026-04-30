@@ -24,7 +24,20 @@ $Sounds = "../Sounds.ui";
 );
 
 @QtyStyle = (...$C.@DefaultLabelStyle, TextColor: #c8d4e8, HorizontalAlignment: Center);
+@TimeStyle = (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #8fa0b0, HorizontalAlignment: Center);
 @NameStyle = (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #e8dcc8, HorizontalAlignment: Center);
+
+/** Vanilla `$C.@ProgressBar` always appends `Width: 284` after `@Anchor`, so width overrides there are ignored. */
+@NarrowProductionProg = ProgressBar {
+  Anchor: (Width: 88, Height: 5);
+  Background: "../Common/ProgressBar.png";
+  BarTexturePath: "../Common/ProgressBarFill.png";
+  EffectTexturePath: "../Common/ProgressBarEffect.png";
+  EffectWidth: 102;
+  EffectHeight: 58;
+  EffectOffset: 74;
+  Value: 0.0;
+};
 
 $C.@PageOverlay {
   LayoutMode: Middle;
@@ -108,6 +121,18 @@ $C.@PageOverlay {
 
           Label #Slot0Qty {
             Style: (...@QtyStyle);
+            Anchor: (Bottom: 4, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 6, Width: 200);
+            @NarrowProductionProg #Slot0Prog {}
+          }
+
+          Label #Slot0Time {
+            Style: (...@TimeStyle);
             Anchor: (Bottom: 8, Width: 200);
             Text: "";
           }
@@ -199,6 +224,18 @@ $C.@PageOverlay {
 
           Label #Slot1Qty {
             Style: (...@QtyStyle);
+            Anchor: (Bottom: 4, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 6, Width: 200);
+            @NarrowProductionProg #Slot1Prog {}
+          }
+
+          Label #Slot1Time {
+            Style: (...@TimeStyle);
             Anchor: (Bottom: 8, Width: 200);
             Text: "";
           }
@@ -290,6 +327,18 @@ $C.@PageOverlay {
 
           Label #Slot2Qty {
             Style: (...@QtyStyle);
+            Anchor: (Bottom: 4, Width: 200);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Center;
+            Anchor: (Bottom: 6, Width: 200);
+            @NarrowProductionProg #Slot2Prog {}
+          }
+
+          Label #Slot2Time {
+            Style: (...@TimeStyle);
             Anchor: (Bottom: 8, Width: 200);
             Text: "";
           }

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.production.PlotProductionState;
+import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.time.Instant;
@@ -319,6 +320,47 @@ public final class TownRecord {
                 s.migrateIfNeeded();
             }
         }
+    }
+
+    /**
+     * Clamps workplace production amounts to each plot construction's per-output {@code maxStorage} from the catalog.
+     *
+     * @return true if any amount was reduced
+     */
+    public boolean clampPlotProductionToCatalog(@Nonnull ProductionCatalog catalog) {
+        migratePlotProductionIfNeeded();
+        if (plotProductionByPlotId == null || plotProductionByPlotId.isEmpty()) {
+            return false;
+        }
+        boolean changed = false;
+        for (Map.Entry<String, PlotProductionState> row : plotProductionByPlotId.entrySet()) {
+            PlotProductionState s = row.getValue();
+            if (s == null) {
+                continue;
+            }
+            UUID plotId;
+            try {
+                plotId = UUID.fromString(row.getKey());
+            } catch (IllegalArgumentException ignored) {
+                continue;
+            }
+            PlotInstance plot = findPlotById(plotId);
+            if (plot == null) {
+                continue;
+            }
+            String cid = plot.getConstructionId();
+            if (!ProductionCatalog.isProductionWorkplaceConstruction(cid)) {
+                continue;
+            }
+            ProductionCatalog.Entry centry = catalog.get(cid);
+            if (centry == null) {
+                continue;
+            }
+            if (s.clampAmountsToCatalogEntry(centry)) {
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     @Nonnull

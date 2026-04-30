@@ -137,33 +137,32 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
 
         PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
         state.migrateIfNeeded();
-        int ticksPer = entry.ticksPerUnit();
-        int acc = state.getTickAccum() + 1;
-        if (acc < ticksPer) {
-            state.setTickAccum(acc);
-            return;
-        }
-        state.setTickAccum(0);
 
-        boolean changed = false;
+        boolean amountsChanged = false;
+        boolean accumChanged = false;
         for (int slot = 0; slot < 3; slot++) {
-            String selected = entry.itemAtCursor(state.getSlotCursor(slot));
+            int cursor = state.getSlotCursor(slot);
+            String selected = entry.itemAtCursor(cursor);
             if (selected == null || selected.isBlank()) {
+                if (state.getSlotTickAccum(slot) != 0) {
+                    state.setSlotTickAccum(slot, 0);
+                    accumChanged = true;
+                }
                 continue;
             }
-            int mult = 0;
-            for (int j = 0; j < 3; j++) {
-                String other = entry.itemAtCursor(state.getSlotCursor(j));
-                if (selected.equals(other)) {
-                    mult++;
-                }
+            int ticksNeeded = entry.ticksAtCursor(cursor);
+            int acc = state.getSlotTickAccum(slot) + 1;
+            if (acc < ticksNeeded) {
+                state.setSlotTickAccum(slot, acc);
+                accumChanged = true;
+                continue;
             }
-            if (mult > 0) {
-                state.addAmount(selected, mult);
-                changed = true;
-            }
+            state.setSlotTickAccum(slot, 0);
+            accumChanged = true;
+            state.addAmount(selected, 1, entry.maxStorageForItem(selected));
+            amountsChanged = true;
         }
-        if (changed) {
+        if (amountsChanged || accumChanged) {
             maybePersistTown(tm, town, world, now);
         }
     }

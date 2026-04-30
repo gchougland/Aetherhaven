@@ -1043,9 +1043,10 @@ aetherhaven.ui.production.nextTooltip=Next output in this slot
 aetherhaven.ui.production.take1=Take 1
 aetherhaven.ui.production.take10=Take 10
 aetherhaven.ui.production.take100=Take 100
+aetherhaven.ui.production.genInterval={time} to make one
 aetherhaven.ui.production.err.plugin=Aetherhaven is not loaded on this server.
 aetherhaven.ui.production.err.permission=You cannot open this storage for this town.
-aetherhaven.ui.production.err.plot=This block is not inside a completed farm, mill, or miners hut plot for your town.
+aetherhaven.ui.production.err.plot=This block is not inside a completed workplace plot (farm, barn, mill, or miners hut) for your town.
 aetherhaven.ui.production.err.catalog=No production catalog is configured for this building.
 aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take that much.
 

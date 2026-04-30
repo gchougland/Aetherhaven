@@ -83,5 +83,18 @@
       "Model": "Cosmetics/Head/Scavenger_Hat.blockymodel",
       "Texture": "Cosmetics/Head/Scavenger_Hat_Brown.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Rancher.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      25,
+      0
+    ],
+    "Translation": [
+      0,
+      -108
+    ]
+  }
 }

@@ -1,58 +1,54 @@
 {
   "entries": {
     "plot_miners_hut": {
-      "itemIds": [
-        "Ore_Copper",
-        "Rock_Stone_Cobble",
-        "Rock_Stone_Cobble_Mossy",
-        "Rock_Sandstone_Cobble",
-        "Rock_Sandstone_Red_Cobble",
-        "Rock_Sandstone_White_Cobble",
-        "Rock_Marble_Cobble",
-        "Rock_Shale_Cobble",
-        "Rock_Slate_Cobble",
-        "Rock_Basalt_Cobble",
-        "Rock_Calcite_Cobble",
-        "Rock_Chalk_Cobble",
-        "Rock_Lime_Cobble",
-        "Rock_Volcanic_Cobble",
-        "Rock_Magma_Cooled_Cobble",
-        "Rock_Peach_Cobble",
-        "Rock_Aqua_Cobble",
-        "Rock_Quartzite_Cobble",
-        "Rock_Runic_Cobble"
-      ],
-      "ticksPerUnit": 200
+      "outputs": [
+        { "itemId": "Ore_Copper", "ticks": 600, "maxStorage": 25 },
+        { "itemId": "Rock_Stone_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Stone_Cobble_Mossy", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Sandstone_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Sandstone_Red_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Sandstone_White_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Marble_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Shale_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Slate_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Basalt_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Calcite_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Chalk_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Lime_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Volcanic_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Magma_Cooled_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Peach_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Aqua_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Quartzite_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Runic_Cobble", "ticks": 200, "maxStorage": 100 }
+      ]
     },
     "plot_lumbermill": {
-      "itemIds": [
-        "Wood_Beech_Trunk",
-        "Wood_Birch_Trunk",
-        "Wood_Fir_Trunk",
-        "Wood_Apple_Trunk",
-        "Wood_Ash_Trunk",
-        "Wood_Azure_Trunk"
-      ],
-      "ticksPerUnit": 160
+      "outputs": [
+        { "itemId": "Wood_Beech_Trunk", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Wood_Birch_Trunk", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Wood_Fir_Trunk", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Wood_Apple_Trunk", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Wood_Ash_Trunk", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Wood_Azure_Trunk", "ticks": 200, "maxStorage": 100 }
+      ]
     },
     "plot_farm": {
-      "itemIds": [
-        "Plant_Crop_Wheat_Item",
-        "Plant_Crop_Lettuce_Item",
-        "Ingredient_Life_Essence"
-      ],
-      "ticksPerUnit": 180
+      "outputs": [
+        { "itemId": "Plant_Crop_Wheat_Item", "ticks": 1728, "maxStorage": 50 },
+        { "itemId": "Plant_Crop_Lettuce_Item", "ticks": 1728, "maxStorage": 50 },
+        { "itemId": "Ingredient_Life_Essence", "ticks": 1728, "maxStorage": 100 }
+      ]
     },
     "plot_barn": {
-      "itemIds": [
-        "Ingredient_Hide_Light",
-        "Food_Wildmeat_Raw",
-        "Food_Chicken_Raw",
-        "Food_Beef_Raw",
-        "Food_Egg",
-        "Ingredient_Fabric_Scrap_Wool"
-      ],
-      "ticksPerUnit": 170
+      "outputs": [
+        { "itemId": "Ingredient_Hide_Light", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Food_Wildmeat_Raw", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Food_Chicken_Raw", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Food_Beef_Raw", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Food_Egg", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Ingredient_Fabric_Scrap_Wool", "ticks": 1728, "maxStorage": 25 }
+      ]
     }
   }
 }

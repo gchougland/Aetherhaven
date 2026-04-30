@@ -38,12 +38,17 @@ import javax.annotation.Nullable;
 
 /** Withdraw items from per plot workplace production storage (wardrobe block). */
 public final class ProductionStoragePage extends InteractiveCustomUIPage<ProductionStoragePage.PageData> {
+    private static final long LIVE_REFRESH_INTERVAL_MS = 350L;
+
     private final UUID townId;
     private final UUID plotId;
     private final int blockX;
     private final int blockY;
     private final int blockZ;
     private boolean templateAppended;
+    /** Started after first successful full build so we do not stack timers on reopen. */
+    private boolean liveRefreshStarted;
+    private volatile boolean liveRefreshActive;
 
     public ProductionStoragePage(
         @Nonnull PlayerRef playerRef,
@@ -117,7 +122,10 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
                 commandBuilder.set(p + "Icon.Slots", new ItemGridSlot[0]);
                 commandBuilder.set(p + "Name.TextSpans", Message.raw("—"));
                 commandBuilder.set(p + "Qty.TextSpans", Message.raw("0/" + cap));
+                commandBuilder.set(p + "Time.TextSpans", Message.raw(""));
+                commandBuilder.set(p + "Prog.Value", 0f);
             } else {
+                long lineCap = entry.maxStorageForItem(itemId);
                 ItemStack iconStack = new ItemStack(itemId, 1);
                 commandBuilder.set(p + "Icon.Slots", new ItemGridSlot[] {new ItemGridSlot(iconStack)});
                 Item it = iconStack.getItem();
@@ -127,10 +135,66 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
                         : Message.raw(itemId);
                 commandBuilder.set(p + "Name.TextSpans", nameMsg);
                 long have = state.getAmount(itemId);
-                commandBuilder.set(p + "Qty.TextSpans", Message.raw(have + "/" + cap));
+                commandBuilder.set(p + "Qty.TextSpans", Message.raw(have + "/" + lineCap));
+                int ticks = entry.ticksAtCursor(cursor);
+                float progress = ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
+                commandBuilder.set(p + "Prog.Value", progress);
+                commandBuilder.set(
+                    p + "Time.TextSpans",
+                    Message.translation("server.aetherhaven.ui.production.genInterval")
+                        .param("time", ProductionCatalog.Entry.formatSecondsForTicks(ticks))
+                );
             }
             bindColEvents(eventBuilder, col);
         }
+        startLiveRefreshIfNeeded(store);
+    }
+
+    @Override
+    public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        liveRefreshActive = false;
+    }
+
+    private void startLiveRefreshIfNeeded(@Nonnull Store<EntityStore> store) {
+        if (liveRefreshStarted) {
+            return;
+        }
+        liveRefreshStarted = true;
+        liveRefreshActive = true;
+        scheduleLiveRefreshTick(store.getExternalData().getWorld());
+    }
+
+    private void scheduleLiveRefreshTick(@Nonnull World world) {
+        if (!liveRefreshActive) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            liveRefreshActive = false;
+            return;
+        }
+        plugin.scheduleOnWorld(
+            world,
+            () -> {
+                if (!liveRefreshActive) {
+                    return;
+                }
+                Ref<EntityStore> r = playerRef.getReference();
+                if (r == null || !r.isValid()) {
+                    liveRefreshActive = false;
+                    return;
+                }
+                Store<EntityStore> st = r.getStore();
+                Player pl = st.getComponent(r, Player.getComponentType());
+                if (pl == null || pl.getPageManager().getCustomPage() != this) {
+                    liveRefreshActive = false;
+                    return;
+                }
+                refresh(r, st);
+                scheduleLiveRefreshTick(world);
+            },
+            LIVE_REFRESH_INTERVAL_MS
+        );
     }
 
     private static void bindColEvents(@Nonnull UIEventBuilder eventBuilder, int col) {
@@ -243,7 +307,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
         ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
         ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
         if (!giveTx.succeeded()) {
-            state.addAmount(itemId, take);
+            state.addAmount(itemId, take, entry.maxStorageForItem(itemId));
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation("server.aetherhaven.ui.production.err.inventoryFull"),
@@ -255,7 +319,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
         long given = grant.getQuantity();
         long refund = take - given;
         if (refund > 0L) {
-            state.addAmount(itemId, refund);
+            state.addAmount(itemId, refund, entry.maxStorageForItem(itemId));
         }
         tm.updateTown(town);
         refresh(ref, store);

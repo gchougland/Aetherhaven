@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.production;
 
 import com.google.gson.annotations.SerializedName;
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -18,9 +17,22 @@ public final class PlotProductionState {
     @SerializedName("s2")
     private int s2;
 
-    /** Game ticks accumulated toward the next production pulse for this plot. */
+    /**
+     * Legacy single accumulator (pre per-slot timers). Cleared on {@link #migrateIfNeeded()}; production now uses
+     * {@link #a0}..{@link #a2}.
+     */
     @SerializedName("tickAccum")
     private int tickAccum;
+
+    /** Entity ticks accumulated toward the next unit for output column 0..2 (independent timers per slot). */
+    @SerializedName("a0")
+    private int a0;
+
+    @SerializedName("a1")
+    private int a1;
+
+    @SerializedName("a2")
+    private int a2;
 
     @SerializedName("amounts")
     private Map<String, Long> amounts = new LinkedHashMap<>();
@@ -55,12 +67,48 @@ public final class PlotProductionState {
         setSlotCursor(slotIndex, c);
     }
 
+    /**
+     * When a new workplace finishes building, spread the three columns across the first catalog entries (0, 1, 2
+     * modulo size) instead of defaulting every column to index 0.
+     */
+    public void initDefaultSlotCursorsForNewWorkplace(int catalogSize) {
+        migrateIfNeeded();
+        if (catalogSize <= 0) {
+            return;
+        }
+        setSlotCursor(0, Math.floorMod(0, catalogSize));
+        setSlotCursor(1, Math.floorMod(1, catalogSize));
+        setSlotCursor(2, Math.floorMod(2, catalogSize));
+        setSlotTickAccum(0, 0);
+        setSlotTickAccum(1, 0);
+        setSlotTickAccum(2, 0);
+    }
+
     public int getTickAccum() {
         return tickAccum;
     }
 
     public void setTickAccum(int tickAccum) {
         this.tickAccum = Math.max(0, tickAccum);
+    }
+
+    public int getSlotTickAccum(int slotIndex) {
+        return switch (slotIndex) {
+            case 0 -> a0;
+            case 1 -> a1;
+            case 2 -> a2;
+            default -> 0;
+        };
+    }
+
+    public void setSlotTickAccum(int slotIndex, int value) {
+        int v = Math.max(0, value);
+        switch (slotIndex) {
+            case 0 -> a0 = v;
+            case 1 -> a1 = v;
+            case 2 -> a2 = v;
+            default -> {}
+        }
     }
 
     @Nonnull
@@ -72,16 +120,17 @@ public final class PlotProductionState {
         return amounts.getOrDefault(itemId, 0L);
     }
 
-    public void addAmount(@Nonnull String itemId, long delta) {
+    public void addAmount(@Nonnull String itemId, long delta, long maxForItem) {
         if (itemId.isBlank()) {
             return;
         }
+        long cap = Math.max(1L, Math.min(maxForItem, ProductionCatalog.MAX_STORAGE_PER_OUTPUT));
         long v = amounts.getOrDefault(itemId, 0L) + delta;
         if (v < 0L) {
             v = 0L;
         }
-        if (v > AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX) {
-            v = AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX;
+        if (v > cap) {
+            v = cap;
         }
         if (v == 0L) {
             amounts.remove(itemId);
@@ -118,16 +167,32 @@ public final class PlotProductionState {
     public void migrateIfNeeded() {
         if (amounts == null) {
             amounts = new LinkedHashMap<>();
-            return;
         }
-        long cap = AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX;
+        tickAccum = 0;
+    }
+
+    /**
+     * Clamps stored amounts to per-output caps from the workplace catalog. Call after {@link #migrateIfNeeded()} when
+     * the plot's {@link com.hexvane.aetherhaven.town.PlotInstance} construction matches this entry.
+     *
+     * @return true if any stored amount was reduced
+     */
+    public boolean clampAmountsToCatalogEntry(@Nonnull ProductionCatalog.Entry entry) {
+        migrateIfNeeded();
+        boolean changed = false;
         for (var it = amounts.entrySet().iterator(); it.hasNext(); ) {
-            var e = it.next();
-            if (e.getValue() == null || e.getValue() <= 0L) {
+            var row = it.next();
+            if (row.getValue() == null || row.getValue() <= 0L) {
                 it.remove();
-            } else if (e.getValue() > cap) {
-                e.setValue(cap);
+                changed = true;
+                continue;
+            }
+            long cap = entry.maxStorageForItem(row.getKey());
+            if (row.getValue() > cap) {
+                row.setValue(cap);
+                changed = true;
             }
         }
+        return changed;
     }
 }

@@ -170,8 +170,17 @@ public final class AetherhavenConstants {
 
     public static final String PAGE_PRODUCTION_STORAGE = "AetherhavenProductionStorage";
 
-    /** Max stored amount per item id in workplace production UI / tick system. */
+    /**
+     * Default max stored amount per catalog output when {@code production_catalog.json} omits {@code maxStorage} on
+     * that line.
+     */
     public static final long PRODUCTION_STORAGE_PER_ITEM_MAX = 200L;
+
+    /**
+     * Workplace production advances once per {@link com.hypixel.hytale.component.system.tick.EntityTickingSystem} tick
+     * while a worker is at the bench; this matches server tick rate for UI seconds ({@code ticks / this}).
+     */
+    public static final double PRODUCTION_ENTITY_TICKS_PER_SECOND = 20.0;
 
     public static final String PAGE_QUEST_JOURNAL = "AetherhavenQuestJournal";
 

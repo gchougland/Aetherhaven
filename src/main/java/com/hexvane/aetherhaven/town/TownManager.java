@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -63,6 +64,22 @@ public final class TownManager {
             LOGGER.atInfo().log("Aetherhaven loaded %s towns for world %s from %s", byTownId.size(), world.getName(), saveFile);
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to load towns for world %s", world.getName());
+        }
+    }
+
+    /**
+     * After {@link #loadFromDisk()}, applies per-output storage caps from the production catalog and persists if
+     * anything changed.
+     */
+    public void clampAllPlotProductionToCatalog(@Nonnull ProductionCatalog catalog) {
+        boolean any = false;
+        for (TownRecord t : byTownId.values()) {
+            if (t.clampPlotProductionToCatalog(catalog)) {
+                any = true;
+            }
+        }
+        if (any) {
+            saveToDisk();
         }
     }
 
