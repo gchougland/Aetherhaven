@@ -68,6 +68,6 @@
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Rice_Item", "rarityTier": 5, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Onion_Item", "rarityTier": 6, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },
     { "workplace": "plot_farm", "itemId": "Plant_Crop_Potato_Item", "rarityTier": 6, "defaultUnlocked": false, "resourceCost": 25, "ticks": 1728, "maxStorage": 50 },
-    { "workplace": "plot_farm", "itemId": "Ingredient_Life_Essence", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 1728, "maxStorage": 100 }
+    { "workplace": "plot_farm", "itemId": "Ingredient_Life_Essence", "rarityTier": 0, "defaultUnlocked": true, "resourceCost": 25, "ticks": 200, "maxStorage": 100 }
   ]
 }

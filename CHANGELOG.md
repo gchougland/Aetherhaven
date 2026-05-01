@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.0.0] - Unreleased - The Production Update
+## [1.1.0] - Unreleased
+
+### Added
+
+- **HStats** Integrated HStats for player metrics
+
+## [1.0.0] - 4/30/2026 - The Production Update
 
 ### Added
 

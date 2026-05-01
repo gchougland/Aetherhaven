@@ -249,6 +249,19 @@ public final class AetherhavenPlugin extends JavaPlugin {
     protected void setup() {
         instance = this;
 
+        String hstatsModUuid = System.getenv("AETHERHAVEN_HSTATS_MOD_UUID");
+        String modVersion = this.getManifest().getVersion().toString();
+        if (hstatsModUuid != null && !hstatsModUuid.isBlank()) {
+            new HStats(hstatsModUuid.trim(), modVersion);
+            LOGGER.atInfo().log("HStats metrics enabled for Aetherhaven v%s.", modVersion);
+        } else {
+            LOGGER
+                .atInfo()
+                .log(
+                    "HStats metrics disabled: set environment variable AETHERHAVEN_HSTATS_MOD_UUID to your hstats.dev mod UUID to enable."
+                );
+        }
+
         Path configPath = this.getDataDirectory().resolve("config.json");
         if (Files.exists(configPath)) {
             AetherhavenConfigJsonMigration.migrateIfNeeded(configPath);
