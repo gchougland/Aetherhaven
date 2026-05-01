@@ -4,7 +4,7 @@
   "residentTreeId": "aetherhaven_logger",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_lumbermill",
-  "scheduleRoleId": "Aetherhaven_Farmer",
+  "scheduleRoleId": "Aetherhaven_Logger",
   "displayName": "Seren Fairhollow",
   "portraitIcon": "Logger.png",
   "uiSortOrder": 7,

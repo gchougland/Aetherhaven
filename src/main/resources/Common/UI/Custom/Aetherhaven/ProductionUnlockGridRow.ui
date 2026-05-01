@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+
+Group #UnlockGridRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 10);
+
+  Group #Strip {
+    LayoutMode: Left;
+  }
+}

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
+import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
+import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.time.Instant;
@@ -327,7 +329,7 @@ public final class TownRecord {
      *
      * @return true if any amount was reduced
      */
-    public boolean clampPlotProductionToCatalog(@Nonnull ProductionCatalog catalog) {
+    public boolean clampPlotProductionToCatalog(@Nonnull ProductionCatalog catalog, @Nonnull WorkplaceUnlockCatalog unlockCatalog) {
         migratePlotProductionIfNeeded();
         if (plotProductionByPlotId == null || plotProductionByPlotId.isEmpty()) {
             return false;
@@ -352,7 +354,7 @@ public final class TownRecord {
             if (!ProductionCatalog.isProductionWorkplaceConstruction(cid)) {
                 continue;
             }
-            ProductionCatalog.Entry centry = catalog.get(cid);
+            ProductionCatalog.Entry centry = ProductionEffectiveCatalog.effective(catalog, unlockCatalog, cid, s);
             if (centry == null) {
                 continue;
             }

@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.production;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
@@ -36,6 +38,10 @@ public final class PlotProductionState {
 
     @SerializedName("amounts")
     private Map<String, Long> amounts = new LinkedHashMap<>();
+
+    /** Player-purchased workplace output item ids for this plot (see {@link WorkplaceUnlockCatalog}). */
+    @SerializedName("workUnlockIds")
+    private List<String> workplaceUnlockedOutputIds = new ArrayList<>();
 
     public PlotProductionState() {}
 
@@ -168,7 +174,35 @@ public final class PlotProductionState {
         if (amounts == null) {
             amounts = new LinkedHashMap<>();
         }
+        if (workplaceUnlockedOutputIds == null) {
+            workplaceUnlockedOutputIds = new ArrayList<>();
+        }
         tickAccum = 0;
+    }
+
+    public boolean isWorkplaceOutputUnlocked(@Nonnull String itemId) {
+        migrateIfNeeded();
+        String id = itemId.trim();
+        for (String s : workplaceUnlockedOutputIds) {
+            if (id.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addWorkplaceOutputUnlock(@Nonnull String itemId) {
+        migrateIfNeeded();
+        String id = itemId.trim();
+        if (id.isEmpty()) {
+            return;
+        }
+        for (String s : workplaceUnlockedOutputIds) {
+            if (id.equals(s)) {
+                return;
+            }
+        }
+        workplaceUnlockedOutputIds.add(id);
     }
 
     /**

@@ -130,13 +130,13 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         ProductionCatalog catalog = plugin.getProductionCatalog();
-        ProductionCatalog.Entry entry = catalog.get(cid);
+        PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
+        state.migrateIfNeeded();
+        ProductionCatalog.Entry entry =
+            ProductionEffectiveCatalog.effective(catalog, plugin.getWorkplaceUnlockCatalog(), cid, state);
         if (entry == null || entry.catalogSize() <= 0) {
             return;
         }
-
-        PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
-        state.migrateIfNeeded();
 
         boolean amountsChanged = false;
         boolean accumChanged = false;

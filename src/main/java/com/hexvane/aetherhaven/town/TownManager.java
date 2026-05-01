@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
+import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -71,10 +72,10 @@ public final class TownManager {
      * After {@link #loadFromDisk()}, applies per-output storage caps from the production catalog and persists if
      * anything changed.
      */
-    public void clampAllPlotProductionToCatalog(@Nonnull ProductionCatalog catalog) {
+    public void clampAllPlotProductionToCatalog(@Nonnull ProductionCatalog catalog, @Nonnull WorkplaceUnlockCatalog unlockCatalog) {
         boolean any = false;
         for (TownRecord t : byTownId.values()) {
-            if (t.clampPlotProductionToCatalog(catalog)) {
+            if (t.clampPlotProductionToCatalog(catalog, unlockCatalog)) {
                 any = true;
             }
         }

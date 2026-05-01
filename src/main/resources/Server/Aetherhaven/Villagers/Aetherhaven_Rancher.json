@@ -4,7 +4,7 @@
   "residentTreeId": "aetherhaven_rancher",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_barn",
-  "scheduleRoleId": "Aetherhaven_Farmer",
+  "scheduleRoleId": "Aetherhaven_Rancher",
   "displayName": "Thalen Meadowrun",
   "portraitIcon": "Rancher.png",
   "uiSortOrder": 8,

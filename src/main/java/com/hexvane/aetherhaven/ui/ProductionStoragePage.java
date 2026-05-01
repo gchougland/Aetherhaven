@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
+import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -103,15 +104,28 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.plot"));
             return;
         }
-        ProductionCatalog.Entry entry = plugin.getProductionCatalog().get(plot.getConstructionId());
+        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
+        state.migrateIfNeeded();
+
+        ProductionCatalog.Entry entry =
+            ProductionEffectiveCatalog.effective(
+                plugin.getProductionCatalog(),
+                plugin.getWorkplaceUnlockCatalog(),
+                plot.getConstructionId(),
+                state
+            );
         if (entry == null || entry.catalogSize() <= 0) {
             commandBuilder.set("#ErrMsg.Visible", true);
             commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.catalog"));
             return;
         }
 
-        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
-        state.migrateIfNeeded();
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#OpenUnlocks",
+            new EventData().append("Action", "OpenUnlocks"),
+            false
+        );
 
         for (int col = 0; col < 3; col++) {
             String p = "#Slot" + col;
@@ -257,12 +271,24 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             return;
         }
-        ProductionCatalog.Entry entry = plugin.getProductionCatalog().get(plot.getConstructionId());
+        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
+        state.migrateIfNeeded();
+        ProductionCatalog.Entry entry =
+            ProductionEffectiveCatalog.effective(
+                plugin.getProductionCatalog(),
+                plugin.getWorkplaceUnlockCatalog(),
+                plot.getConstructionId(),
+                state
+            );
         if (entry == null || entry.catalogSize() <= 0) {
             return;
         }
-        PlotProductionState state = town.getOrCreatePlotProduction(plotId);
-        state.migrateIfNeeded();
+
+        if (action.equalsIgnoreCase("OpenUnlocks")) {
+            liveRefreshActive = false;
+            player.getPageManager().openCustomPage(ref, store, new ProductionStorageUnlocksPage(playerRef, townId, plotId, blockX, blockY, blockZ));
+            return;
+        }
 
         if (action.equalsIgnoreCase("Left") || action.equalsIgnoreCase("Right")) {
             int slot = parseSlot(data.slot);

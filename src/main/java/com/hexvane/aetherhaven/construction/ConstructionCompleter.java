@@ -18,7 +18,9 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
+import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -106,9 +108,16 @@ public final class ConstructionCompleter {
                 BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
             }
             if (ProductionCatalog.isProductionWorkplaceConstruction(def.getId())) {
-                ProductionCatalog.Entry prodEntry = plugin.getProductionCatalog().get(def.getId());
-                if (prodEntry != null && prodEntry.catalogSize() > 0) {
-                    town.getOrCreatePlotProduction(plotId).initDefaultSlotCursorsForNewWorkplace(prodEntry.catalogSize());
+                PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
+                ProductionCatalog.Entry eff =
+                    ProductionEffectiveCatalog.effective(
+                        plugin.getProductionCatalog(),
+                        plugin.getWorkplaceUnlockCatalog(),
+                        def.getId(),
+                        pps
+                    );
+                if (eff != null && eff.catalogSize() > 0) {
+                    pps.initDefaultSlotCursorsForNewWorkplace(eff.catalogSize());
                     tm.updateTown(town);
                 }
             }

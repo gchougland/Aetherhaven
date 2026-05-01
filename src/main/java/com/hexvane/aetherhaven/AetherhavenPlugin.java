@@ -98,7 +98,9 @@ import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionTickSystem;
+import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
 import com.hexvane.aetherhaven.ui.ProductionStoragePage;
+import com.hexvane.aetherhaven.ui.ProductionStorageUnlocksPage;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hexvane.aetherhaven.ui.VillagerNeedsOverviewPage;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -150,6 +152,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
+    private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
     private final DialogueResolver dialogueResolver = new DialogueResolver();
     private TownNameCatalog townNameCatalog = TownNameCatalog.loadFromClasspath();
     private ScheduledExecutorService constructionScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
@@ -216,6 +219,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public ProductionCatalog getProductionCatalog() {
         return productionCatalog;
+    }
+
+    @Nonnull
+    public WorkplaceUnlockCatalog getWorkplaceUnlockCatalog() {
+        return workplaceUnlockCatalog;
     }
 
     @Nonnull
@@ -627,6 +635,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 return new ProductionStoragePage(playerRef, town.getTownId(), plot.getPlotId(), base.x, base.y, base.z);
             }
         );
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            this,
+            ProductionStorageUnlocksPage.class,
+            AetherhavenConstants.PAGE_PRODUCTION_STORAGE_UNLOCKS,
+            (ref, componentAccessor, playerRef, context) -> null
+        );
         OpenCustomUIInteraction.registerSimple(this, QuestJournalPage.class, AetherhavenConstants.PAGE_QUEST_JOURNAL, QuestJournalPage::new);
         OpenCustomUIInteraction.registerSimple(
             this,
@@ -706,6 +720,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
+        this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),

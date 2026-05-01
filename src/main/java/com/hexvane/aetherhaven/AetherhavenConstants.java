@@ -127,6 +127,12 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_HOUSE_PRIESTESS = "q_house_priestess";
 
+    public static final String QUEST_HOUSE_MINER = "q_house_miner";
+
+    public static final String QUEST_HOUSE_LOGGER = "q_house_logger";
+
+    public static final String QUEST_HOUSE_RANCHER = "q_house_rancher";
+
     public static final String QUEST_MINERS_HUT = "q_miners_hut";
 
     public static final String QUEST_LUMBERMILL = "q_lumbermill";
@@ -169,6 +175,8 @@ public final class AetherhavenConstants {
     public static final String BLOCK_PRODUCTION_STORAGE = "Aetherhaven_Production_Storage";
 
     public static final String PAGE_PRODUCTION_STORAGE = "AetherhavenProductionStorage";
+
+    public static final String PAGE_PRODUCTION_STORAGE_UNLOCKS = "AetherhavenProductionStorageUnlocks";
 
     /**
      * Default max stored amount per catalog output when {@code production_catalog.json} omits {@code maxStorage} on

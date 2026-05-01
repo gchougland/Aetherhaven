@@ -375,6 +375,17 @@ $C.@PageOverlay {
           }
         }
       }
+
+      Group #BottomUnlockRow {
+        LayoutMode: Center;
+        Anchor: (Top: 20);
+        $C.@TextButton #OpenUnlocks {
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          TooltipText: %server.aetherhaven.ui.production.unlockTooltip;
+          Anchor: (Width: 220, Height: 38);
+          Text: %server.aetherhaven.ui.production.unlockButton;
+        }
+      }
     }
   }
 }

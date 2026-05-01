@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_rancher",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "Thalen's home",
+  "description": "Thalen wants a house for boots and sleep, not just straw and feed buckets by the pens.",
+  "assignNpcRoleId": "Aetherhaven_Rancher",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the house plot token from Thalen."
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house prefab."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Rancher",
+      "text": "Assign Thalen as resident on the house management block."
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Thalen and close the quest in dialogue."
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Rancher",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 16,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": { "mode": "none" }
+}

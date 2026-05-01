@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0] - Unreleased - The Production Update
+
+### Added
+
+- **Production Systems** Implemented systems for buildings/villagers producing resources
+- **Logger** Added Logger villager and building. Produces wood products.
+- **Miner** Added Miner villager and building. Produces cobblestones and ore.
+- **Rancher** Added Rancher villager and building. Produces animal products.
+
+### Changes
+
+- **Farmer Production** Farmer now produces crops and life essence.
+- **Updated Gift Preferences** All villagers now have intended gift preferences.
+
 ## [0.9.2] - 4/30/2026
 
 ### Fixed

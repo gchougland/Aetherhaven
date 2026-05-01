@@ -1,0 +1,49 @@
+$C = "../Common.ui";
+
+Group #UnlockCell {
+  Anchor: (Width: 64, Height: 64, Right: 8, Bottom: 4);
+
+  /** AssetImage (not ItemSlot) so hover shows only our TooltipTextSpans — ItemSlot always adds item tooltips. */
+  Button #UnlockHit {
+    LayoutMode: Full;
+    Anchor: (Full: 0);
+    TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+    TextTooltipShowDelay: 0.1;
+    Style: (
+      Default: (Background: #000000(0)),
+      Hovered: (Background: #ffffff(0.06)),
+      Pressed: (Background: #ffffff(0.10)),
+      Disabled: (Background: #000000(0))
+    );
+
+    Group #IconFrame {
+      LayoutMode: Full;
+      Anchor: (Full: 0);
+      Padding: (Full: 2);
+      Background: #5a5468;
+      HitTestVisible: false;
+
+      Group #IconInner {
+        LayoutMode: Full;
+        Anchor: (Full: 0);
+        Padding: (Full: 3);
+        Background: #1c2230;
+        HitTestVisible: false;
+
+        AssetImage #UnlockIcon {
+          Anchor: (Full: 0);
+          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+          HitTestVisible: false;
+        }
+      }
+
+      Group #LockOverlay {
+        Visible: false;
+        LayoutMode: Full;
+        Anchor: (Full: 0);
+        Background: #0a0d12(0.78);
+        HitTestVisible: false;
+      }
+    }
+  }
+}

@@ -126,6 +126,17 @@ public final class ProductionCatalog {
             int t = (int) Math.ceil(ticks);
             return Math.max(1, t);
         }
+
+        /** Package build for workplace merge; arrays are copied defensively. */
+        @Nonnull
+        static Entry create(@Nonnull List<String> itemIds, @Nonnull int[] ticksByIndex, @Nonnull long[] maxStorageByIndex) {
+            return new Entry(List.copyOf(itemIds), ticksByIndex, maxStorageByIndex);
+        }
+
+        /** Whether this catalog lists {@code itemId} (any index). */
+        public boolean containsItemId(@Nonnull String itemId) {
+            return itemIds.contains(itemId);
+        }
     }
 
     private final Map<String, Entry> byConstructionId;

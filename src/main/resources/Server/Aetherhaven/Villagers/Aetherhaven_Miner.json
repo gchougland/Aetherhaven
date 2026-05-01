@@ -4,7 +4,7 @@
   "residentTreeId": "aetherhaven_miner",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_miners_hut",
-  "scheduleRoleId": "Aetherhaven_Farmer",
+  "scheduleRoleId": "Aetherhaven_Miner",
   "displayName": "Gorruk Stonevein",
   "portraitIcon": "Miner.png",
   "uiSortOrder": 6,

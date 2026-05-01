@@ -20,6 +20,53 @@
           "next": "gift_confirm"
         },
         {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc0",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_completed", "questId": "q_barn" },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "or",
+                  "conditions": [
+                    { "type": "town_quest_active", "questId": "q_house_rancher" },
+                    { "type": "town_quest_completed", "questId": "q_house_rancher" }
+                  ]
+                }
+              },
+              { "type": "not", "condition": { "type": "npc_binding_is_visitor" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "thalen_house_offer"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc1",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_rancher" },
+              { "type": "town_npc_home_resident_house" }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [{ "type": "complete_quest", "id": "q_house_rancher" }],
+          "next": "thalen_house_finish"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc2",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_rancher" },
+              { "type": "not", "condition": { "type": "town_npc_home_resident_house" } }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "thalen_house_remind"
+        },
+        {
           "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c0",
           "condition": { "type": "town_quest_completed", "questId": "q_barn" },
           "next": "thalen_done"
@@ -129,6 +176,51 @@
       "choices": [
         {
           "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0",
+          "next": null
+        }
+      ]
+    },
+    "thalen_house_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0",
+          "actions": [{ "type": "start_quest", "id": "q_house_rancher" }],
+          "next": "thalen_house_accepted"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1",
+          "next": null
+        }
+      ]
+    },
+    "thalen_house_accepted": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "thalen_house_remind": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.c0",
+          "next": null
+        }
+      ]
+    },
+    "thalen_house_finish": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.c0",
           "next": null
         }
       ]
