@@ -1,0 +1,24 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_Embers",
+      "PositionOffset": { "X": 0, "Y": 0.12, "Z": 0 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_Halo",
+      "PositionOffset": { "X": 0, "Y": 0.06, "Z": 0 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_Embers",
+      "PositionOffset": { "X": 0.22, "Y": 0.18, "Z": -0.18 },
+      "FixedRotation": false
+    },
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_Embers",
+      "PositionOffset": { "X": -0.2, "Y": 0.16, "Z": 0.2 },
+      "FixedRotation": false
+    }
+  ]
+}

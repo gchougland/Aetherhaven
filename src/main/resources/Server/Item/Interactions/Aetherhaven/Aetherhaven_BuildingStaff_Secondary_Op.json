@@ -1,0 +1,11 @@
+{
+  "Type": "AetherhavenBuildingStaffSecondary",
+  "AllowIndefiniteHold": true,
+  "DisplayProgress": false,
+  "HorizontalSpeedMultiplier": 0.82,
+  "Effects": {
+    "ItemPlayerAnimationsId": "Staff",
+    "ItemAnimationId": "Cast_Magic",
+    "ClearAnimationOnFinish": true
+  }
+}

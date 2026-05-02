@@ -53,6 +53,30 @@ public final class AetherhavenConstants {
     /** Survival path spline designer item id (shovel visuals; see item JSON). */
     public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
 
+    /**
+     * Legacy item id only: older builds placed this block in-world; {@link com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService}
+     * still clears it if present. Preview is drawn with {@code DisplayDebug} like the path tool.
+     */
+    public static final String CONSTRUCTION_PREVIEW_BLOCK_TYPE_ID = "Aetherhaven_Construction_Preview";
+
+    /** Accelerates plot assembly when aimed at the preview cell. */
+    public static final String BUILDING_STAFF_ITEM_ID = "Aetherhaven_Building_Staff";
+
+    /** Root interaction asset id (RequireNewClick false) for staff secondary. */
+    public static final String ROOT_INTERACTION_BUILDING_STAFF_SECONDARY = "Aetherhaven_BuildingStaff_Secondary_Root";
+
+    /**
+     * Custom cyan/blue sparkle burst when the building staff places an assembly step
+     * ({@code Server/Particles/Aetherhaven/Aetherhaven_Building_Staff_Step.particlesystem}).
+     */
+    public static final String BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Step";
+
+    /** Mist along look direction while channeling secondary (server-spawned at staff tip with head rotation). */
+    public static final String BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Stream";
+
+    /** One-shot green sparkle along staff→preview for “material” feedback (no item entities). */
+    public static final String BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_MaterialBead";
+
     public static final String PERMISSION_PATH_TOOL = "aetherhaven.path.tool";
 
     /** Slot id for Buuz135 MHUD ({@code com.buuz135.mhud.MultipleHUD}) when that mod is present. */

@@ -1,0 +1,81 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Building_Staff.name",
+    "Description": "server.items.Aetherhaven_Building_Staff.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bar_Copper",
+        "Quantity": 12
+      },
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 8
+      },
+      {
+        "ItemId": "Ingredient_Bar_Gold",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Bar_Silver",
+        "Quantity": 6
+      },
+      {
+        "ResourceTypeId": "Crystal_Shards",
+        "Quantity": 16
+      },
+      {
+        "ItemId": "Ingredient_Void_Essence",
+        "Quantity": 4
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 6
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
+  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Copper.png",
+  "Categories": ["Items.Tools"],
+  "Model": "Items/Weapons/Staff/Copper.blockymodel",
+  "Texture": "Items/Weapons/Staff/Copper_Texture.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Quality": "Rare",
+  "Set": "Aetherhaven",
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        {
+          "Type": "Simple",
+          "RunTime": 0.15,
+          "Effects": {
+            "ItemPlayerAnimationsId": "Staff",
+            "ItemAnimationId": "Cast_Magic",
+            "ClearAnimationOnFinish": true
+          }
+        }
+      ]
+    },
+    "Secondary": "Aetherhaven_BuildingStaff_Secondary_Root"
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 20,
+      "Creative": 20
+    }
+  },
+  "Tags": {
+    "Type": ["Tool"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

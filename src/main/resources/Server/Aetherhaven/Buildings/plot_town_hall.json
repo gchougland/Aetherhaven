@@ -3,6 +3,7 @@
   "displayName": "Town hall",
   "description": "A civic hall with a town records shelf, planning desk, and treasury.",
   "prefabPath": "Townhall.prefab.json",
+  "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
   "plotAnchorOffset": [9, 0, 7],
   "managementBlockLocalPos": [-7, 2, 3],

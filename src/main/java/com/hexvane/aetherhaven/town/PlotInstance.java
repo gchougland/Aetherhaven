@@ -71,6 +71,25 @@ public final class PlotInstance {
     @SerializedName("homeResidentEntityUuid")
     private String homeResidentEntityUuid;
 
+    /** Next index in the prefab paste sequence while {@link PlotInstanceState#ASSEMBLING}. */
+    @Nullable
+    @SerializedName("assemblyBlockIndex")
+    private Integer assemblyBlockIndex;
+
+    @Nullable
+    @SerializedName("assemblyStartEpochMs")
+    private Long assemblyStartEpochMs;
+
+    /** Matches {@link com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent} id for this assembly. */
+    @Nullable
+    @SerializedName("assemblyPrefabId")
+    private Integer assemblyPrefabId;
+
+    /** Player who pressed Build; used for {@link com.hexvane.aetherhaven.construction.ConstructionCompleter#finishBuild} permission. */
+    @Nullable
+    @SerializedName("assemblyOwnerUuid")
+    private String assemblyOwnerUuid;
+
     public PlotInstance() {}
 
     public PlotInstance(
@@ -229,5 +248,53 @@ public final class PlotInstance {
 
     public void setHomeResidentEntityUuid(@Nullable UUID uuid) {
         this.homeResidentEntityUuid = uuid != null ? uuid.toString() : null;
+    }
+
+    public int getAssemblyBlockIndex() {
+        return assemblyBlockIndex != null ? assemblyBlockIndex : 0;
+    }
+
+    public void setAssemblyBlockIndex(int index) {
+        this.assemblyBlockIndex = index;
+    }
+
+    public long getAssemblyStartEpochMs() {
+        return assemblyStartEpochMs != null ? assemblyStartEpochMs : 0L;
+    }
+
+    public void setAssemblyStartEpochMs(long ms) {
+        this.assemblyStartEpochMs = ms;
+    }
+
+    public int getAssemblyPrefabId() {
+        return assemblyPrefabId != null ? assemblyPrefabId : 0;
+    }
+
+    public void setAssemblyPrefabId(int id) {
+        this.assemblyPrefabId = id;
+    }
+
+    /** Clears persisted assembly fields when leaving ASSEMBLING. */
+    @Nullable
+    public UUID getAssemblyOwnerUuid() {
+        if (assemblyOwnerUuid == null || assemblyOwnerUuid.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(assemblyOwnerUuid.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setAssemblyOwnerUuid(@Nonnull UUID uuid) {
+        this.assemblyOwnerUuid = uuid.toString();
+    }
+
+    public void clearAssemblyPersistence() {
+        this.assemblyBlockIndex = null;
+        this.assemblyStartEpochMs = null;
+        this.assemblyPrefabId = null;
+        this.assemblyOwnerUuid = null;
     }
 }

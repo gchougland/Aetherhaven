@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
@@ -10,7 +9,7 @@ import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
-import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HouseResidentAssignment;
@@ -924,6 +923,27 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             sendBuildError(store, ref, "Invalid plot id on sign.");
             return;
         }
+        AetherhavenPlugin pluginEarly = AetherhavenPlugin.get();
+        if (pluginEarly == null) {
+            return;
+        }
+        World worldEarly = store.getExternalData().getWorld();
+        TownManager tmEarly = AetherhavenWorldRegistries.getOrCreateTownManager(worldEarly, pluginEarly);
+        TownRecord townEarly = tmEarly.findTownOwningPlot(plotId);
+        PlotInstance plotEarly = townEarly != null ? townEarly.findPlotById(plotId) : null;
+        if (townEarly == null || plotEarly == null) {
+            sendBuildError(store, ref, "This plot is not registered in your town.");
+            return;
+        }
+        Vector3i logicalSignEarly =
+            new Vector3i(plotEarly.getSignX(), plotEarly.getSignY(), plotEarly.getSignZ());
+        Rotation yawEarly = plotEarly.resolvePrefabYaw();
+        Vector3i anchorEarly = def.resolvePrefabAnchorWorld(logicalSignEarly, yawEarly);
+        Path prefabPathEarly = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPathEarly == null) {
+            sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());
+            return;
+        }
         long goldCost = def.getTreasuryGoldCoinCost();
         if (goldCost > 0 && !plotReqBypassCreative) {
             AetherhavenPlugin plugPre = AetherhavenPlugin.get();
@@ -959,39 +979,27 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
         World world = store.getExternalData().getWorld();
         Vector3i physicalSignPos = blockWorldPos;
-        TownManager tmBuild = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord townBuild = tmBuild.findTownOwningPlot(plotId);
-        PlotInstance buildPlot = townBuild != null ? townBuild.findPlotById(plotId) : null;
-        Vector3i logicalSignPos =
-            buildPlot != null
-                ? new Vector3i(buildPlot.getSignX(), buildPlot.getSignY(), buildPlot.getSignZ())
-                : physicalSignPos;
-        Rotation yaw = buildPlot != null ? buildPlot.resolvePrefabYaw() : PlotBlockRotationUtil.readBlockYaw(world, physicalSignPos);
-        Vector3i anchor = def.resolvePrefabAnchorWorld(logicalSignPos, yaw);
-        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-        if (prefabPath == null) {
-            sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());
-            return;
-        }
-        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
-        var cfg = plugin.getConfig().get();
+        TownRecord townBuild = townEarly;
+        PlotInstance buildPlot = plotEarly;
+        Rotation yaw = yawEarly;
+        Vector3i anchor = anchorEarly;
+        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPathEarly);
         UUID ownerUuid = uc.getUuid();
-        Runnable onComplete =
-            () -> {
-                world.breakBlock(physicalSignPos.x, physicalSignPos.y, physicalSignPos.z, BREAK_SETTINGS);
-                ConstructionCompleter.finishBuild(world, plugin, ownerUuid, plotId, anchor, yaw);
-            };
-        ConstructionAnimator.start(
-            plugin,
-            world,
-            anchor,
-            yaw,
-            true,
-            buffer,
-            store,
-            cfg.getConstructionBlocksPerTick(),
-            cfg.getConstructionMinIntervalMs(),
-            onComplete
+        world.execute(
+            () ->
+                PlotAssemblyService.startFromBuildClick(
+                    plugin,
+                    world,
+                    store,
+                    townBuild,
+                    buildPlot,
+                    physicalSignPos,
+                    ownerUuid,
+                    anchor,
+                    yaw,
+                    def,
+                    buffer
+                )
         );
         close();
     }

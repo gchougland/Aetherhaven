@@ -3,6 +3,7 @@
   "displayName": "Farm plot",
   "description": "Fenced fields, a farming bench, and a small shelter.",
   "prefabPath": "Farm_Plot.prefab.json",
+  "selfBuildGameDays": 3,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Farm",
   "plotAnchorOffset": [6, 0, 6],
   "managementBlockLocalPos": [-3, 1, -1],

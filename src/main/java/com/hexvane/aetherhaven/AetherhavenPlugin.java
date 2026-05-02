@@ -7,6 +7,9 @@ import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffSecondaryInteraction;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyTickSystem;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -397,6 +400,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PathToolStyleCycleInteraction.class,
                 PathToolStyleCycleInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingStaffSecondary",
+                BuildingStaffSecondaryInteraction.class,
+                BuildingStaffSecondaryInteraction.CODEC
+            );
+        this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));

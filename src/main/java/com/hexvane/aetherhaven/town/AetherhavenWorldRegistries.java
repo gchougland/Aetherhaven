@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
@@ -75,6 +77,7 @@ public final class AetherhavenWorldRegistries {
     }
 
     public static void unloadWorld(@Nonnull World world) {
+        AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
         TownManager tm = TOWN_MANAGERS.remove(world.getName());
         if (tm != null) {
@@ -119,5 +122,6 @@ public final class AetherhavenWorldRegistries {
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
+        PlotAssemblyService.rehydrate(world, plugin);
     }
 }

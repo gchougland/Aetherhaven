@@ -3,6 +3,7 @@
   "displayName": "Gaia altar",
   "description": "A quiet shrine with a Gaia statue for the priestess to tend, and stools to rest by the path.",
   "prefabPath": "Gaia_Altar.prefab.json",
+  "selfBuildGameDays": 2,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Gaia_Altar",
   "plotAnchorOffset": [5, 0, 5],
   "managementBlockLocalPos": [2, 1, 3],

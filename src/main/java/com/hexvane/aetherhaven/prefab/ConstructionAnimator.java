@@ -1,40 +1,21 @@
 package com.hexvane.aetherhaven.prefab;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
+import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
-import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Holder;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.math.util.ChunkUtil;
-import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
-import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
-import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
-import com.hypixel.hytale.server.core.modules.entity.component.FromPrefab;
-import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
-import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
-import com.hypixel.hytale.server.core.prefab.event.PrefabPlaceEntityEvent;
-import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferCall;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
-import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
-import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,37 +27,15 @@ import javax.annotation.Nullable;
  * Batches are spaced using {@link AetherhavenPlugin#scheduleOnWorld(World, Runnable, long)}.
  */
 public final class ConstructionAnimator {
-    /**
-     * Forced block placement: bit 2 only. {@link com.hypixel.hytale.server.core.util.FillerBlockUtil#setFillerBlocksAt}
-     * runs when {@code (settings & 8) == 0} (see {@link WorldChunk#setBlock}); bit 8 suppresses that and breaks
-     * multi-block furniture (beds): sibling cells keep old terrain and overlap the model.
-     */
-    private static final int SET_BLOCK_SETTINGS_PLACE = 2;
-    /** Air clears / {@link WorldChunk#breakBlock}: keep {@code 8|2} tuning from earlier construction fixes. */
-    private static final int SET_BLOCK_SETTINGS_CLEAR = 10;
-    /**
-     * Each {@link IPrefabBuffer#forEach} pass that reads chance blocks must use the same RNG sequence from the
-     * start of the iteration (see {@link com.hypixel.hytale.server.core.prefab.selection.buffer.impl.PrefabBuffer}).
-     * Reusing one {@link Random} across two full passes desyncs chance checks vs. the first pass.
-     */
-    private static final long PREFAB_BUFFER_ITERATION_SEED = 0L;
-
     private final AetherhavenPlugin plugin;
     private final World world;
     private final Vector3i origin;
-    private final Rotation yaw;
     private final boolean force;
     private final ComponentAccessor<EntityStore> entityAccessor;
-    /** All prefab cells to place, sorted by (y, x, z) to match vanilla column stream order. */
     private final List<PendingBlock> pendingBlocks;
-    /**
-     * Entity holders collected during the same {@link IPrefabBuffer#forEach} pass as {@link #pendingBlocks}, in
-     * vanilla column order (see {@link com.hypixel.hytale.server.core.util.PrefabUtil#paste}). Spawned after blocks
-     * finish; cloning happens at spawn time like vanilla paste.
-     */
     private final List<Holder<EntityStore>> prefabEntitiesInOrder;
     private final IPrefabBuffer bufferAccess;
-    private final PrefabRotation prefabRotation;
+    private final com.hypixel.hytale.server.core.prefab.PrefabRotation prefabRotation;
     private final int prefabId;
     private final int blocksPerBatch;
     private final long batchDelayMs;
@@ -89,13 +48,12 @@ public final class ConstructionAnimator {
         AetherhavenPlugin plugin,
         World world,
         Vector3i origin,
-        Rotation yaw,
         boolean force,
         ComponentAccessor<EntityStore> entityAccessor,
         List<PendingBlock> pendingBlocks,
         List<Holder<EntityStore>> prefabEntitiesInOrder,
         IPrefabBuffer bufferAccess,
-        PrefabRotation prefabRotation,
+        com.hypixel.hytale.server.core.prefab.PrefabRotation prefabRotation,
         int prefabId,
         int blocksPerBatch,
         long batchDelayMs,
@@ -104,7 +62,6 @@ public final class ConstructionAnimator {
         this.plugin = plugin;
         this.world = world;
         this.origin = origin;
-        this.yaw = yaw;
         this.force = force;
         this.entityAccessor = entityAccessor;
         this.pendingBlocks = pendingBlocks;
@@ -146,42 +103,7 @@ public final class ConstructionAnimator {
         long batchDelayMs,
         @Nullable Runnable onComplete
     ) {
-        Random bufferIterationRandom = new Random(PREFAB_BUFFER_ITERATION_SEED);
-        PrefabRotation prefabRotation = PrefabRotation.fromRotation(yaw);
-        PrefabBufferCall call = new PrefabBufferCall(bufferIterationRandom, prefabRotation);
-        List<PendingBlock> pending = new ArrayList<>();
-        List<Holder<EntityStore>> prefabEntitiesInOrder = new ArrayList<>();
-        bufferAccess.forEach(
-            IPrefabBuffer.iterateAllColumns(),
-            (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
-                // Do not skip filler != 0: vanilla PrefabUtil.paste applies fluid then setState(holder) for those cells.
-                // Prefab air: only blockId==0 (BlockType.EMPTY_ID) clears terrain. Do NOT use BlockMaterial.Empty —
-                // BlockType defaults material to Empty; plants/vines are Model blocks and keep that default, so
-                // treating "material Empty" as prefab air incorrectly replaced every plant with an air-clear entry.
-                if (blockId == 0 && filler == 0) {
-                    pending.add(new PendingBlock(x, y, z, 0, null, 0, 0, 0, fluidId, fluidLevel));
-                    return;
-                }
-                pending.add(new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel));
-            },
-            (x, z, entityWrappers, tt) -> {
-                if (entityWrappers == null || entityWrappers.length == 0) {
-                    return;
-                }
-                for (Holder<EntityStore> h : entityWrappers) {
-                    if (h != null) {
-                        // Clone immediately: holders in the cached IPrefabBuffer are shared across callers. Paste-time
-                        // math mutates TransformComponent positions; retaining live refs would corrupt the cache
-                        // (worse after rotation). Vanilla PrefabUtil never keeps buffer refs — it clones per entity.
-                        prefabEntitiesInOrder.add(h.clone());
-                    }
-                }
-            },
-            null,
-            call
-        );
-        Comparator<PendingBlock> byColumn = Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z);
-        pending.sort(byColumn);
+        ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(bufferAccess, yaw);
         int prefabId = PrefabUtil.getNextPrefabId();
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityAccessor.invoke(start);
@@ -193,13 +115,12 @@ public final class ConstructionAnimator {
             plugin,
             world,
             origin,
-            yaw,
             force,
             entityAccessor,
-            pending,
-            prefabEntitiesInOrder,
+            seq.pendingBlocks(),
+            seq.prefabEntitiesInOrder(),
             bufferAccess,
-            prefabRotation,
+            seq.prefabRotation(),
             prefabId,
             blocksPerBatch,
             batchDelayMs,
@@ -212,22 +133,27 @@ public final class ConstructionAnimator {
         if (finished.get()) {
             return;
         }
-        double xLength = bufferAccess.getMaxX() - bufferAccess.getMinX();
-        double zLength = bufferAccess.getMaxZ() - bufferAccess.getMinZ();
-        int prefabRadius = (int) Math.floor(0.5 * Math.sqrt(xLength * xLength + zLength * zLength));
-        LocalCachedChunkAccessor chunkAccessor = LocalCachedChunkAccessor.atWorldCoords(world, origin.getX(), origin.getZ(), prefabRadius);
+        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int placed = 0;
         while (index < pendingBlocks.size() && placed < blocksPerBatch) {
             PendingBlock pb = pendingBlocks.get(index++);
-            placeOne(pb, chunkAccessor, blockTypeMap);
+            ConstructionPasteOps.placeOne(world, origin, pb, force, chunkAccessor, blockTypeMap);
             placed++;
         }
         if (index < pendingBlocks.size()) {
             plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
             return;
         }
-        finishFluidsAndEntities(chunkAccessor);
+        ConstructionPasteOps.finishFluidsAndEntities(
+            world,
+            origin,
+            prefabRotation,
+            prefabId,
+            bufferAccess,
+            prefabEntitiesInOrder,
+            entityAccessor
+        );
         PrefabPasteEvent end = new PrefabPasteEvent(prefabId, false);
         entityAccessor.invoke(end);
         if (onComplete != null) {
@@ -236,184 +162,4 @@ public final class ConstructionAnimator {
         bufferAccess.release();
         finished.set(true);
     }
-
-    private void placeOne(
-        PendingBlock pb,
-        LocalCachedChunkAccessor chunkAccessor,
-        BlockTypeAssetMap<String, BlockType> blockTypeMap
-    ) {
-        int bx = origin.x + pb.x;
-        int by = origin.y + pb.y;
-        int bz = origin.z + pb.z;
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-        // Match PrefabUtil.paste: fluid for this cell before any block change (global fluid-after-blocks broke plants).
-        applyPrefabFluidForCell(bx, by, bz, pb.fluidId, pb.fluidLevel, chunkAccessor);
-        BlockType block = blockTypeMap.getAsset(pb.blockId);
-        String blockKey = block.getId();
-        // PrefabUtil.paste: filler != 0 only applies setState when holder is present (no setBlock in that branch).
-        if (pb.filler != 0) {
-            if (pb.holder != null) {
-                setBlockEntityHolder(chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
-            }
-            return;
-        }
-        if (pb.blockId == 0) {
-            if (force) {
-                chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
-            } else {
-                chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
-            }
-            return;
-        }
-        if (!force) {
-            RotationTuple rot = RotationTuple.get(pb.blockRotation);
-            chunk.placeBlock(bx, by, bz, blockKey, rot.yaw(), rot.pitch(), rot.roll(), SET_BLOCK_SETTINGS_PLACE);
-        } else {
-            int indexKey = blockTypeMap.getIndex(blockKey);
-            BlockType type = blockTypeMap.getAsset(indexKey);
-            chunk.setBlock(bx, by, bz, indexKey, type, pb.blockRotation, pb.filler, SET_BLOCK_SETTINGS_PLACE);
-        }
-        if (pb.supportValue != 0) {
-            Ref<ChunkStore> ref = chunk.getReference();
-            Store<ChunkStore> store = ref.getStore();
-            Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
-            if (section != null) {
-                BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue);
-            }
-        }
-        if (pb.holder != null) {
-            setBlockEntityHolder(chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
-        }
-    }
-
-    /**
-     * Preferred over deprecated {@link WorldChunk#setState(int, int, int, BlockType, int, Holder)} — matches
-     * {@link com.hypixel.hytale.server.core.modules.block.BlockEntity#setBlockEntity}.
-     */
-    private void setBlockEntityHolder(
-        WorldChunk chunk,
-        int bx,
-        int by,
-        int bz,
-        BlockType blockType,
-        int rotation,
-        Holder<ChunkStore> holder
-    ) {
-        com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
-            world.getChunkStore().getStore(),
-            chunk.getReference(),
-            chunk.getBlockComponentChunk(),
-            bx,
-            by,
-            bz,
-            blockType,
-            rotation,
-            holder
-        );
-    }
-
-    /** Section ref for block Y; uses legacy {@link ChunkColumn} like {@link WorldChunk#getFluidId(int, int, int)}. */
-    @SuppressWarnings("deprecation")
-    private Ref<ChunkStore> sectionRefForBlockY(@Nonnull WorldChunk chunk, int blockY) {
-        Ref<ChunkStore> columnRef = chunk.getReference();
-        Store<ChunkStore> store = columnRef.getStore();
-        ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
-        return column == null ? null : column.getSection(ChunkUtil.chunkCoordinate(blockY));
-    }
-
-    private void applyPrefabFluidForCell(
-        int bx,
-        int by,
-        int bz,
-        int fluidId,
-        int fluidLevel,
-        LocalCachedChunkAccessor chunkAccessor
-    ) {
-        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-        Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
-        Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
-        if (section == null) {
-            return;
-        }
-        FluidSection fluidSection = fluidStore.ensureAndGetComponent(section, FluidSection.getComponentType());
-        fluidSection.setFluid(bx, by, bz, fluidId, (byte) fluidLevel);
-    }
-
-    private void finishFluidsAndEntities(LocalCachedChunkAccessor chunkAccessor) {
-        // Second full buffer pass: must reset RNG like the first pass so chance masks stay aligned with bytes.
-        PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
-        bufferAccess.forEach(
-            IPrefabBuffer.iterateAllColumns(),
-            (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
-                if (filler == 0) {
-                    return;
-                }
-                int bx = origin.x + x;
-                int by = origin.y + y;
-                int bz = origin.z + z;
-                applyPrefabFluidForCell(bx, by, bz, fluidId, fluidLevel, chunkAccessor);
-            },
-            null,
-            null,
-            secondPassCall
-        );
-        for (int i = 0; i < prefabEntitiesInOrder.size(); i++) {
-            Holder<EntityStore> source = prefabEntitiesInOrder.get(i);
-            spawnPrefabEntityLikePaste(source);
-        }
-    }
-
-    /**
-     * Positions and headings for prefab entities match {@link com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection#rotate}:
-     * transforms are stored in block-center space, so we subtract a voxel-center offset, apply
-     * {@link PrefabRotation#rotate(Vector3d)}, then add the offset back before adding {@link #origin}. Raw
-     * {@link PrefabRotation#rotate} on the saved position (as in {@link PrefabUtil#paste}) skews centers vs. the
-     * integer column rotation used for blocks (e.g. one voxel along Z at 90°). We add {@link PrefabRotation#getYaw()}
-     * to {@link TransformComponent} and {@link HeadRotation}; for {@link PrefabRotation#ROTATION_90} and
-     * {@link PrefabRotation#ROTATION_270} we add an extra π rad so entity facing matches blocks (grid yaw vs. model forward).
-     */
-    private void spawnPrefabEntityLikePaste(Holder<EntityStore> entityToAdd) {
-        Holder<EntityStore> clone = entityToAdd.clone();
-        TransformComponent transformComp = clone.getComponent(TransformComponent.getComponentType());
-        if (transformComp == null) {
-            return;
-        }
-        Vector3d world = transformComp.getPosition().clone();
-        boolean blockEntity = clone.getComponent(BlockEntity.getComponentType()) != null;
-        Vector3d centerOffset = blockEntity ? new Vector3d(0.5, 0.0, 0.5) : new Vector3d(0.5, 0.5, 0.5);
-        world.subtract(centerOffset);
-        prefabRotation.rotate(world);
-        world.add(centerOffset);
-        world.add(origin);
-        Vector3d pos = transformComp.getPosition();
-        pos.x = world.x;
-        pos.y = world.y;
-        pos.z = world.z;
-        float dyaw = prefabRotation.getYaw();
-        if (prefabRotation == PrefabRotation.ROTATION_90 || prefabRotation == PrefabRotation.ROTATION_270) {
-            dyaw += (float) Math.PI;
-        }
-        transformComp.getRotation().setYaw(transformComp.getRotation().getYaw() + dyaw);
-        HeadRotation headRotation = clone.getComponent(HeadRotation.getComponentType());
-        if (headRotation != null) {
-            headRotation.getRotation().setYaw(headRotation.getRotation().getYaw() + dyaw);
-        }
-        PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
-        entityAccessor.invoke(prefabPlaceEntityEvent);
-        clone.ensureComponent(FromPrefab.getComponentType());
-        entityAccessor.addEntity(clone, AddReason.LOAD);
-    }
-
-    private record PendingBlock(
-        int x,
-        int y,
-        int z,
-        int blockId,
-        @Nullable Holder<ChunkStore> holder,
-        int supportValue,
-        int blockRotation,
-        int filler,
-        int fluidId,
-        int fluidLevel
-    ) {}
 }

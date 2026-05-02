@@ -46,8 +46,8 @@ public final class ConstructionCompleter {
     private ConstructionCompleter() {}
 
     /**
-     * Run on the world thread after {@link com.hexvane.aetherhaven.prefab.ConstructionAnimator} finishes
-     * (plot sign already removed).
+     * Run on the world thread after prefab placement finishes: either {@link com.hexvane.aetherhaven.prefab.ConstructionAnimator}
+     * (sign removed in {@code onComplete}) or passive assembly (sign removed at assembly start; do not break again here).
      */
     public static void finishBuild(
         @Nonnull World world,
@@ -78,6 +78,7 @@ public final class ConstructionCompleter {
         }
 
         long now = System.currentTimeMillis();
+        plot.clearAssemblyPersistence();
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
         plot.setPrefabWorldPlacement(prefabAnchorWorld.x, prefabAnchorWorld.y, prefabAnchorWorld.z, prefabYaw);

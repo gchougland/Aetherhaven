@@ -55,6 +55,13 @@ public final class ConstructionDefinition {
     @SerializedName("treasuryGoldCoinCost")
     private long treasuryGoldCoinCost;
 
+    /**
+     * In-game days over which passive assembly would place all prefab cells if the player never uses the building staff.
+     * Larger prefabs with the same value place more slowly per block.
+     */
+    @SerializedName("selfBuildGameDays")
+    private double selfBuildGameDays = 3.0;
+
     @SerializedName("tier")
     @Nullable
     private Integer tier;
@@ -180,6 +187,10 @@ public final class ConstructionDefinition {
 
     public long getTreasuryGoldCoinCost() {
         return Math.max(0L, treasuryGoldCoinCost);
+    }
+
+    public double getSelfBuildGameDays() {
+        return selfBuildGameDays > 0.0 ? selfBuildGameDays : 3.0;
     }
 
     @Nullable

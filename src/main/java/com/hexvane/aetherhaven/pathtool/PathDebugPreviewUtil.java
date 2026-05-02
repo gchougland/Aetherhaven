@@ -132,6 +132,34 @@ public final class PathDebugPreviewUtil {
         add(pr, DebugShape.Cube, m, color, 0.72f, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
+    /**
+     * Next assembly cell: solid cube centered on the block, slightly larger than 1m, with fade so rapid resend reads as
+     * a pulse (path tool uses a flat slab; this is intentionally different).
+     */
+    public static void drawAssemblyNextCellCube(
+        @Nonnull PlayerRef pr,
+        int x,
+        int y,
+        int z,
+        @Nonnull Vector3f color,
+        @Nonnull com.hypixel.hytale.server.core.universe.world.World w,
+        double pulse01
+    ) {
+        if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
+            return;
+        }
+        double half = 0.5 * (1.06 + 0.10 * Math.sin(pulse01 * Math.PI * 2.0));
+        double cx = x + 0.5;
+        double cy = y + 0.5;
+        double cz = z + 0.5;
+        Matrix4d m = new Matrix4d();
+        m.identity();
+        m.translate(cx, cy, cz);
+        m.scale(half, half, half);
+        float opacity = (float) (0.62 + 0.18 * (0.5 + 0.5 * Math.sin(pulse01 * Math.PI * 2.0 + 0.4)));
+        add(pr, DebugShape.Cube, m, color, opacity, FLAG_MACHINIMA, 0.38f);
+    }
+
     public static float previewSeconds() {
         return PREVIEW_SECONDS;
     }

@@ -1213,3 +1213,8 @@ aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Розблоковано
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Building foreman staff
+items.Aetherhaven_Building_Staff.description=Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
+items.Aetherhaven_Construction_Preview.name=Construction marker
+items.Aetherhaven_Construction_Preview.description=Marks the next prefab cell during town building assembly.

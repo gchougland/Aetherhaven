@@ -3,6 +3,7 @@
   "displayName": "Lumbermill",
   "description": "A mill where Seren can cut and stack timber for the town.",
   "prefabPath": "Lumbermill.prefab.json",
+  "selfBuildGameDays": 3,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Lumbermill",
   "plotAnchorOffset": [7, 0, 7],
   "managementBlockLocalPos": [0, 1, -4],

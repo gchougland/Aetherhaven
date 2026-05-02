@@ -3,6 +3,7 @@
   "displayName": "Barn",
   "description": "A barn with pens, a farming bench, and storage for Thalen to bring hides, meat, eggs, and wool back to town.",
   "prefabPath": "Barn.prefab.json",
+  "selfBuildGameDays": 3,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Barn",
   "plotAnchorOffset": [9, 0, 9],
   "managementBlockLocalPos": [4, 2, 0],

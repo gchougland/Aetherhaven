@@ -3,6 +3,7 @@
   "displayName": "Inn",
   "description": "A proper inn for your town: guest rooms, a hearth for meals, and a desk for town records and welcoming travelers.",
   "prefabPath": "Inn.prefab.json",
+  "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
   "plotAnchorOffset": [9, 0, 6],
   "managementBlockLocalPos": [6, 2, 4],

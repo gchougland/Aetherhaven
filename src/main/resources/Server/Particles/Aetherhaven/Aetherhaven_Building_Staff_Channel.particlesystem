@@ -1,0 +1,9 @@
+{
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_AmbientWisps",
+      "PositionOffset": { "X": 0, "Y": 0, "Z": 0 },
+      "FixedRotation": false
+    }
+  ]
+}

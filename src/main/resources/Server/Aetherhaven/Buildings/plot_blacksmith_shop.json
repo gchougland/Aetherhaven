@@ -3,6 +3,7 @@
   "displayName": "Blacksmith shop",
   "description": "A forge and counter for Garren to work metal in town.",
   "prefabPath": "Blacksmith_Shop.prefab.json",
+  "selfBuildGameDays": 4,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Blacksmith_Shop",
   "plotAnchorOffset": [5, 0, 5],
   "managementBlockLocalPos": [2, 1, 5],

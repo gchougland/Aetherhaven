@@ -1,0 +1,40 @@
+{
+  "RenderMode": "BlendAdd",
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0.35,
+  "ParticleRotateWithSpawner": false,
+  "ParticleLifeSpan": { "Min": 0.22, "Max": 0.32 },
+  "SpawnRate": { "Min": 0, "Max": 0 },
+  "TotalParticles": { "Min": 1, "Max": 1 },
+  "SpawnBurst": true,
+  "MaxConcurrentParticles": 1,
+  "InitialVelocity": {
+    "Speed": { "Min": 0, "Max": 0.02 },
+    "Yaw": { "Min": 0, "Max": 0 },
+    "Pitch": { "Min": 0, "Max": 0 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Star2.png",
+    "FrameSize": { "Width": 32, "Height": 32 },
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 0 },
+        "Scale": { "X": { "Min": 0.5, "Max": 0.75 } },
+        "Opacity": 1,
+        "Color": "#aaffee"
+      },
+      "100": {
+        "Opacity": 0,
+        "Color": "#66ffcc"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": { "X": { "Min": 0.45, "Max": 0.65 } },
+      "Opacity": 1,
+      "FrameIndex": { "Min": 0, "Max": 0 },
+      "Color": "#ccffee"
+    }
+  }
+}

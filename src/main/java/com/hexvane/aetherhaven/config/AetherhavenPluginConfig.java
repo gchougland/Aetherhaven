@@ -30,6 +30,24 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("AssemblyGameDayLengthMsOverride", Codec.LONG),
+            (o, v) -> o.assemblyGameDayLengthMsOverride = v,
+            o -> o.assemblyGameDayLengthMsOverride
+        )
+        .documentation("When > 0, passive assembly uses this many ms per in-game day instead of world day+night length.")
+        .add()
+        .append(
+            new KeyedCodec<>("PassivePlotAssembly", Codec.BOOLEAN),
+            (o, v) -> o.passivePlotAssembly = v,
+            o -> o.passivePlotAssembly
+        )
+        .documentation(
+            "When true, assembling plots place prefab cells on the passive world-time schedule (one cell per tick per plot when due). "
+                + "When false (default), only the building staff advances assembly while its interaction chain is active, "
+                + "so blocks do not appear after you release the button."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("IgnoreVillagerRequirement", Codec.BOOLEAN),
             (o, v) -> o.ignoreVillagerRequirement = v,
             o -> o.ignoreVillagerRequirement
@@ -354,6 +372,8 @@ public final class AetherhavenPluginConfig {
 
     private int constructionBlocksPerTick = 8;
     private long constructionMinIntervalMs = 25L;
+    private long assemblyGameDayLengthMsOverride = 0L;
+    private boolean passivePlotAssembly = false;
     private boolean ignoreVillagerRequirement = false;
     private int defaultTerritoryChunkRadius = 8;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
@@ -418,6 +438,15 @@ public final class AetherhavenPluginConfig {
 
     public long getConstructionMinIntervalMs() {
         return constructionMinIntervalMs;
+    }
+
+    /** 0 = derive from world day+night duration. */
+    public long getAssemblyGameDayLengthMsOverride() {
+        return Math.max(0L, assemblyGameDayLengthMsOverride);
+    }
+
+    public boolean isPassivePlotAssemblyEnabled() {
+        return passivePlotAssembly;
     }
 
     public boolean isIgnoreVillagerRequirement() {

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hypixel.hytale.component.Ref;
@@ -51,6 +52,11 @@ public final class TownDissolutionService {
         for (PlotInstance p : plots) {
             if (p.getState() == PlotInstanceState.BLUEPRINTING) {
                 world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+            } else if (p.getState() == PlotInstanceState.ASSEMBLING) {
+                AssemblyWorldRegistry.remove(world, p.getPlotId());
+                world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+                PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
+                PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
             } else if (p.getState() == PlotInstanceState.COMPLETE) {
                 reg.unregisterByPlotId(p.getPlotId());
                 PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
