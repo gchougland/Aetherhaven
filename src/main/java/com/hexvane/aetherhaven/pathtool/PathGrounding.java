@@ -38,18 +38,26 @@ public final class PathGrounding {
             if (here == null || here == BlockType.EMPTY) {
                 continue;
             }
+            // Rubble sits on soil; path should target the ground beneath, not the rubble top.
+            if (PathRubbleUtil.isRubble(here)) {
+                continue;
+            }
             if (here.getMaterial() != BlockMaterial.Solid) {
                 continue;
             }
-            // feet block must be walkable: head space above
             BlockType head = getBlockType(world, blockX, y + 1, blockZ);
             if (head == null) {
                 continue;
             }
-            if (head.getMaterial() == BlockMaterial.Solid) {
-                continue; // not surface
+            if (head == BlockType.EMPTY) {
+                return y;
             }
-            return y;
+            if (PathRubbleUtil.isRubble(head)) {
+                return y;
+            }
+            if (head.getMaterial() != BlockMaterial.Solid) {
+                return y;
+            }
         }
         return null;
     }

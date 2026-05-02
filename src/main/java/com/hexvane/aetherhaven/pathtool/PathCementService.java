@@ -24,7 +24,10 @@ import javax.annotation.Nullable;
 public final class PathCementService {
     private static final int PLACE = 2;
     private static final int SET_BLOCK = 10;
+    /** Same tuning as plot prefab clears: breaks spawn normal drops/particles where applicable. */
+    private static final int BREAK_SETTINGS = 10;
     private static final int MAX_GRASS_CLEAR_ABOVE = 6;
+    private static final int MAX_RUBBLE_CLEAR_ABOVE = 32;
     @Nonnull
     private static final RotationTuple FLAT = RotationTuple.NONE;
 
@@ -55,6 +58,7 @@ public final class PathCementService {
             if (ch == null) {
                 continue;
             }
+            breakRubbleColumnAbove(world, x, y, z);
             int oldIdx = ch.getBlock(x, y, z);
             BlockType oldT = BlockType.getAssetMap().getAsset(oldIdx);
             if (oldT == null) {
@@ -140,6 +144,28 @@ public final class PathCementService {
      * path reads cleanly. Each removal is added to the same undo list as the path.
      */
     @SuppressWarnings({ "deprecation", "removal" })
+    /**
+     * Breaks rubble blocks stacked above the path surface (highest Y first) so {@link World#breakBlock} runs normal
+     * break rules instead of silently clearing with {@link WorldChunk#setBlock}.
+     */
+    private static void breakRubbleColumnAbove(@Nonnull World world, int x, int surfaceY, int z) {
+        int top = Math.min(319, surfaceY + MAX_RUBBLE_CLEAR_ABOVE);
+        for (int cy = top; cy > surfaceY; cy--) {
+            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+            if (ch == null) {
+                break;
+            }
+            int idx = ch.getBlock(x, cy, z);
+            BlockType bt = BlockType.getAssetMap().getAsset(idx);
+            if (bt == null || bt == BlockType.EMPTY) {
+                continue;
+            }
+            if (PathRubbleUtil.isRubble(bt)) {
+                world.breakBlock(x, cy, z, BREAK_SETTINGS);
+            }
+        }
+    }
+
     private static void clearPlantGrassColumnAbove(
         @Nonnull World world,
         int x,

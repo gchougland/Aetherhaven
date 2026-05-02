@@ -51,7 +51,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         .add()
         .append(
             new KeyedCodec<>("PathWidth", Codec.INTEGER),
-            (c, w) -> c.pathWidthBlocks = w != null && w > 0 ? w : 1,
+            (c, w) -> c.pathWidthBlocks = w != null && w > 0 ? Math.max(1, Math.min(8, w)) : 5,
             c -> c.pathWidthBlocks
         )
         .add()
@@ -68,7 +68,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
 
     @Nonnull
     private PathToolGizmoMode gizmoMode = PathToolGizmoMode.Translate;
-    private int pathWidthBlocks = 1;
+    private int pathWidthBlocks = 5;
     private int pathStyleIndex;
     @Nullable
     private UUID selectedNodeId;

@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.0] - 5/2/2026
+
+### Fixed
+
+- **Path tool / world crash:** Preview no longer calls `World.getBlockType` from the path preview tick (that could load chunks and tick the entity store nested inside `Store.tick`, causing `Store is currently processing!` and a world shutdown). Replace checks use in-memory chunks only, same as path grounding.
+
+### Changed
+
+- **Path tool:** New sessions default to **width 5** (was 1). Saved width per player is unchanged.
+- **Path tool:** Paths can be planned and placed **under rubble** (`Rubble_*` block ids): grounding targets the terrain below, and on commit rubble above the surface is **broken** with normal break behavior (drops) before the path block is placed.
+
 ## [1.1.0] - 5/1/2026
 
 ### Added

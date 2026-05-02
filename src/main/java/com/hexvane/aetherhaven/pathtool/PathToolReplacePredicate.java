@@ -1,10 +1,12 @@
 package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.ItemResourceType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -25,7 +27,16 @@ public final class PathToolReplacePredicate {
         int y,
         int z
     ) {
-        return isReplaceable(cfg, world.getBlockType(x, y, z));
+        // Must not use World.getBlockType / getChunk here: they can loadChunkIfInMemory and tick chunk entities while the
+        // entity store is already ticking (e.g. PathToolPreviewSystem), causing "Store is currently processing!".
+        if (y < 0 || y >= 320) {
+            return false;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return false;
+        }
+        return isReplaceable(cfg, BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z)));
     }
 
     public static boolean isReplaceable(@Nonnull AetherhavenPluginConfig cfg, @Nullable BlockType blockType) {
