@@ -1,0 +1,19 @@
+{
+  "$Comment": "Main cyan orb cone + sparse violet star accent cone (same tip; slight Z stagger).",
+  "Spawners": [
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_ConduitStream",
+      "PositionOffset": {
+        "Z": 0.5
+      }
+    },
+    {
+      "SpawnerId": "Aetherhaven_Building_Staff_ConduitAccent",
+      "PositionOffset": {
+        "Z": 0.58
+      }
+    }
+  ],
+  "CullDistance": 100.0,
+  "IsImportant": false
+}

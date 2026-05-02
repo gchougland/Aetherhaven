@@ -136,6 +136,7 @@ public final class PlotAssemblyService {
         }
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         ConstructionPasteOps.prepAssemblySite(world, anchor, seq.pendingBlocks(), true, seq.prefabRotation(), buffer);
+        List<PendingBlock> placementOrder = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
 
         world.breakBlock(physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
 
@@ -150,14 +151,14 @@ public final class PlotAssemblyService {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);
 
-        long slot = computeSlotWallMs(world, plugin, def, seq.pendingBlocks().size());
+        long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         PlotAssemblyJob job =
             new PlotAssemblyJob(
                 plotId,
                 assemblyOwnerUuid,
                 anchor,
                 yaw,
-                seq.pendingBlocks(),
+                placementOrder,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -188,7 +189,8 @@ public final class PlotAssemblyService {
         }
         int prefabId = start.getPrefabId();
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        long slot = computeSlotWallMs(world, plugin, def, seq.pendingBlocks().size());
+        List<PendingBlock> placementOrder = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         plot.setAssemblyPrefabId(prefabId);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);
@@ -198,7 +200,7 @@ public final class PlotAssemblyService {
                 ownerUuid,
                 anchor,
                 yaw,
-                seq.pendingBlocks(),
+                placementOrder,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -329,11 +331,35 @@ public final class PlotAssemblyService {
         plot.setAssemblyBlockIndex(next);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         if (next >= pending.size()) {
-            completeAssembly(world, plugin, entityStore, town, plot, job);
+            scheduleCompleteAssembly(world, plugin, town, plot, job);
             return true;
         }
         refreshPreviewBlock(world, job, next);
         return true;
+    }
+
+    /**
+     * {@link ConstructionPasteOps#finishFluidsAndEntities} spawns prefab entities via {@link Store#addEntity}, which
+     * cannot run while the entity store is mid-tick (e.g. interaction systems). Defer to the next world task.
+     */
+    private static void scheduleCompleteAssembly(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        world.execute(() -> {
+            PlotAssemblyJob registered = AssemblyWorldRegistry.get(world, plot.getPlotId());
+            if (registered != job) {
+                return;
+            }
+            if (plot.getAssemblyBlockIndex() < job.pendingBlocks().size()) {
+                return;
+            }
+            Store<EntityStore> store = world.getEntityStore().getStore();
+            completeAssembly(world, plugin, store, town, plot, job);
+        });
     }
 
     public static void completeAssembly(

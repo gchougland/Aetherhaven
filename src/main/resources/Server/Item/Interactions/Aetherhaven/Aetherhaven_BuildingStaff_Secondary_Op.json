@@ -4,8 +4,25 @@
   "DisplayProgress": false,
   "HorizontalSpeedMultiplier": 0.82,
   "Effects": {
-    "ItemPlayerAnimationsId": "Staff",
+    "ItemPlayerAnimationsId": "Stick",
     "ItemAnimationId": "Cast_Magic",
-    "ClearAnimationOnFinish": true
+    "ClearAnimationOnFinish": true,
+    "Particles": [
+      {
+        "PositionOffset": {
+          "X": 2.8,
+          "Y": 0,
+          "Z": 0
+        },
+        "RotationOffset": {
+          "Pitch": 0,
+          "Roll": 0,
+          "Yaw": -90
+        },
+        "TargetNodeName": "Handle",
+        "SystemId": "Aetherhaven_Building_Staff_Conduit",
+        "Scale": 1.45
+      }
+    ]
   }
 }

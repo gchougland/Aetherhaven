@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -109,6 +110,20 @@ public final class ConstructionPasteOps {
             Comparator.comparingInt(PendingBlock::y).thenComparingInt(PendingBlock::x).thenComparingInt(PendingBlock::z);
         pending.sort(byColumn);
         return new PrefabSequence(pending, prefabEntitiesInOrder, prefabRotation);
+    }
+
+    /**
+     * Prefab air with no fluid ({@code blockId == 0}, {@code filler == 0}, {@code fluidId == 0}). Assembly and batched
+     * placement skip these so players do not spend ticks “building” empty cells; {@link #prepAssemblySite} still uses
+     * the full sequence so interiors are carved.
+     */
+    public static boolean isPureAirPrefabCell(@Nonnull PendingBlock pb) {
+        return pb.blockId == 0 && pb.filler == 0 && pb.fluidId == 0;
+    }
+
+    @Nonnull
+    public static List<PendingBlock> withoutPureAirCells(@Nonnull List<PendingBlock> full) {
+        return full.stream().filter(pb -> !isPureAirPrefabCell(pb)).collect(Collectors.toUnmodifiableList());
     }
 
     @Nonnull

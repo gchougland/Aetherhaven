@@ -117,7 +117,7 @@ public final class ConstructionAnimator {
             origin,
             force,
             entityAccessor,
-            seq.pendingBlocks(),
+            ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks()),
             seq.prefabEntitiesInOrder(),
             bufferAccess,
             seq.prefabRotation(),

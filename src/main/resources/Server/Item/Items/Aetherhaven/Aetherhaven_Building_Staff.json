@@ -58,7 +58,7 @@
           "Type": "Simple",
           "RunTime": 0.15,
           "Effects": {
-            "ItemPlayerAnimationsId": "Staff",
+            "ItemPlayerAnimationsId": "Stick",
             "ItemAnimationId": "Cast_Magic",
             "ClearAnimationOnFinish": true
           }

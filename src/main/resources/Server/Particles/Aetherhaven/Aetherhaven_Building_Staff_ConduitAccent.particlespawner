@@ -1,0 +1,57 @@
+{
+  "$Comment": "Sparse second cone: star sparkles, soft violet/white, slightly wider cone than main Ball3 stream.",
+  "RenderMode": "BlendAdd",
+  "EmitOffset": {
+    "X": { "Min": -0.1, "Max": 0.1 },
+    "Y": { "Min": -0.1, "Max": 0.1 },
+    "Z": { "Min": -0.05, "Max": 0.08 }
+  },
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0.15,
+  "ParticleRotateWithSpawner": true,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "MaxConcurrentParticles": 32,
+  "ParticleLifeSpan": { "Min": 0.35, "Max": 0.55 },
+  "SpawnRate": { "Min": 32, "Max": 52 },
+  "InitialVelocity": {
+    "Speed": { "Min": 1.15, "Max": 1.78 },
+    "Yaw": { "Min": -36, "Max": 36 },
+    "Pitch": { "Min": -40, "Max": 40 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Star2.png",
+    "FrameSize": { "Width": 32, "Height": 32 },
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "FrameIndex": { "Min": 0, "Max": 0 },
+        "Scale": { "X": { "Min": 0.45, "Max": 0.75 } },
+        "Opacity": 0.85,
+        "Color": "#f5e6ff"
+      },
+      "55": {
+        "Scale": { "X": { "Min": 0.9, "Max": 1.15 } },
+        "Opacity": 0.55,
+        "Color": "#d4b8ff"
+      },
+      "100": {
+        "Scale": { "X": { "Min": 1.2, "Max": 0.7 } },
+        "Opacity": 0,
+        "Color": "#b898ff"
+      }
+    },
+    "InitialAnimationFrame": {
+      "Rotation": {
+        "X": { "Min": 0, "Max": 0 },
+        "Y": { "Min": 0, "Max": 0 },
+        "Z": { "Min": 0, "Max": 360 }
+      },
+      "Scale": { "X": { "Min": 0.35, "Max": 0.55 } },
+      "Opacity": 0.95,
+      "Color": "#fff4ff",
+      "FrameIndex": { "Min": 0, "Max": 0 }
+    }
+  }
+}

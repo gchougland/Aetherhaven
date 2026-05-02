@@ -1,0 +1,70 @@
+{
+  "$Comment": "Ice_Charge_Sphere look (Ball3 cyan orbs) launched forward in a cone — no attractors. Velocity matches Flamethrower-style cone (yaw/pitch near 0) because interaction Uses RotationOffset Yaw -90 on Handle like Weapon_Stick_Fire_Secondary.",
+  "RenderMode": "BlendAdd",
+  "EmitOffset": {
+    "X": { "Min": -0.06, "Max": 0.06 },
+    "Y": { "Min": -0.06, "Max": 0.06 },
+    "Z": { "Min": -0.04, "Max": 0.06 }
+  },
+  "ParticleRotationInfluence": "Billboard",
+  "LinearFiltering": true,
+  "LightInfluence": 0,
+  "ParticleRotateWithSpawner": true,
+  "TrailSpawnerPositionMultiplier": 1,
+  "TrailSpawnerRotationMultiplier": 1,
+  "MaxConcurrentParticles": 130,
+  "ParticleLifeSpan": { "Min": 0.42, "Max": 0.62 },
+  "SpawnRate": { "Min": 200, "Max": 280 },
+  "InitialVelocity": {
+    "Speed": { "Min": 1.05, "Max": 1.65 },
+    "Yaw": { "Min": -28, "Max": 28 },
+    "Pitch": { "Min": -34, "Max": 34 }
+  },
+  "Particle": {
+    "Texture": "Particles/Textures/Basic/Ball3.png",
+    "FrameSize": { "Width": 32, "Height": 32 },
+    "ScaleRatioConstraint": "OneToOne",
+    "Animation": {
+      "0": {
+        "Scale": {
+          "X": { "Min": 1, "Max": 1 },
+          "Y": { "Min": 1, "Max": 1 }
+        },
+        "Opacity": 0.55,
+        "Color": "#96f9ff"
+      },
+      "35": {
+        "Scale": {
+          "X": { "Min": 1.6, "Max": 1.2 },
+          "Y": { "Min": 1.6, "Max": 1.2 }
+        },
+        "Opacity": 0.85,
+        "Color": "#7aebff"
+      },
+      "65": {
+        "Scale": {
+          "X": { "Min": 2.2, "Max": 1.4 },
+          "Y": { "Min": 2.2, "Max": 1.4 }
+        },
+        "Opacity": 1,
+        "Color": "#58ffff"
+      },
+      "100": {
+        "Scale": {
+          "X": { "Min": 3.2, "Max": 2 },
+          "Y": { "Min": 3.2, "Max": 2 }
+        },
+        "Color": "#58ffff",
+        "Opacity": 0
+      }
+    },
+    "InitialAnimationFrame": {
+      "Scale": {
+        "X": { "Min": 0.12, "Max": 0.22 },
+        "Y": { "Min": 0.12, "Max": 0.22 }
+      },
+      "Opacity": 1,
+      "Color": "#96f9ff"
+    }
+  }
+}
