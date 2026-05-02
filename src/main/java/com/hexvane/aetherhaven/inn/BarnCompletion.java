@@ -36,7 +36,7 @@ public final class BarnCompletion {
         @Nonnull UUID plotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_BARN)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

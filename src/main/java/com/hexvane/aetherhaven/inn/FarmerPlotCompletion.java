@@ -36,7 +36,7 @@ public final class FarmerPlotCompletion {
         @Nonnull UUID farmPlotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_FARM_PLOT)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.inn.FarmerPlotCompletion;
 import com.hexvane.aetherhaven.inn.GaiaAltarCompletion;
 import com.hexvane.aetherhaven.inn.BarnCompletion;
 import com.hexvane.aetherhaven.inn.LumbermillCompletion;
+import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
@@ -34,6 +35,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -121,6 +123,10 @@ public final class ConstructionCompleter {
                     tm.updateTown(town);
                 }
             }
+            // If onStallBuilt/onFarmBuilt/etc. no-op (e.g. missing WORK POI, NPC ref not resolved), promotion may still
+            // succeed here without requiring a separate fixinn run.
+            Store<EntityStore> entityStore = world.getEntityStore().getStore();
+            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore);
         }
     }
 

@@ -36,7 +36,7 @@ public final class LumbermillCompletion {
         @Nonnull UUID plotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_LUMBERMILL)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

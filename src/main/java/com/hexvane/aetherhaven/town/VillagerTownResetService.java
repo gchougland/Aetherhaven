@@ -63,6 +63,8 @@ public final class VillagerTownResetService {
         @Nonnull Vector3d basePosition
     ) {
         town.migrateInnFieldsIfNeeded();
+        // Sync visitor bindings / resident registry with completed job plots (fixes "quest completed but still visitor").
+        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
         if (captured.isEmpty()) {
             return "No tracked villager NPCs found for this town.";
@@ -128,6 +130,9 @@ public final class VillagerTownResetService {
             InnPoolService.fillRemainingInnVisitorSlotsNear(world, plugin, town, tm, store, innPlot, basePosition, slot);
         }
 
+        tm.updateTown(town);
+        // New spawns can still be visitors while their stall/farm/etc. is already complete; promote after UUID migration.
+        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
         tm.updateTown(town);
         world.execute(
             () -> {

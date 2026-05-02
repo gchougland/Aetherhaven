@@ -36,7 +36,7 @@ public final class GaiaAltarCompletion {
         @Nonnull UUID altarPlotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

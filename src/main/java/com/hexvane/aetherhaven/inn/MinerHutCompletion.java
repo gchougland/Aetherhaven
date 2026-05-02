@@ -36,7 +36,7 @@ public final class MinerHutCompletion {
         @Nonnull UUID plotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_MINERS_HUT)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

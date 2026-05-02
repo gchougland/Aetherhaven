@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.dialogue;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
@@ -233,6 +234,9 @@ public final class DialogueActionExecutor {
             }
         }
         tm.updateTown(town);
+        if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
+            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+        }
         if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {
             UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
             Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(beneficiaryNpcUuid);
@@ -249,6 +253,18 @@ public final class DialogueActionExecutor {
                 );
             }
         }
+    }
+
+    /** Job quests whose completion should sync inn visitors to resident bindings when the matching plot is built. */
+    private static boolean isInnVisitorJobQuestForResidentPromotion(@Nonnull String qid) {
+        String q = qid.trim();
+        return q.equals(AetherhavenConstants.QUEST_MERCHANT_STALL)
+            || q.equals(AetherhavenConstants.QUEST_FARM_PLOT)
+            || q.equals(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)
+            || q.equals(AetherhavenConstants.QUEST_GAIA_ALTAR)
+            || q.equals(AetherhavenConstants.QUEST_MINERS_HUT)
+            || q.equals(AetherhavenConstants.QUEST_LUMBERMILL)
+            || q.equals(AetherhavenConstants.QUEST_BARN);
     }
 
     @Nullable

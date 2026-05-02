@@ -750,6 +750,18 @@ public final class TownRecord {
         return normalizedQuestSet(completedQuestIds).contains(questId);
     }
 
+    /**
+     * True if the quest is active or was completed. Used when job buildings finish so promotion still runs if the
+     * quest was turned in before the construction hook applied (or the hook failed earlier).
+     */
+    public boolean hasQuestActiveOrCompleted(@Nonnull String questId) {
+        String q = questId.trim();
+        if (q.isEmpty()) {
+            return false;
+        }
+        return hasQuestActive(q) || hasQuestCompleted(q);
+    }
+
     public void addActiveQuest(@Nonnull String questId) {
         String q = questId.trim();
         if (q.isEmpty()) {

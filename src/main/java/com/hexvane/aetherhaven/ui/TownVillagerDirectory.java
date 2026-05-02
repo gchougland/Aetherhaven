@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -56,6 +57,7 @@ public final class TownVillagerDirectory {
 
         addFallbackIfMissing(byUuid, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
         addFallbackIfMissing(byUuid, town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
+        addResidentsFromRegistry(byUuid, town);
 
         List<TownVillagerRow> out = new ArrayList<>(byUuid.values());
         out.sort(
@@ -90,6 +92,34 @@ public final class TownVillagerDirectory {
                 kindOrderForRoleId(roleId)
             )
         );
+    }
+
+    /**
+     * Residents whose entities are not in any loaded chunk still appear in town management (same idea as elder /
+     * innkeeper fallbacks).
+     */
+    private static void addResidentsFromRegistry(@Nonnull Map<UUID, TownVillagerRow> byUuid, @Nonnull TownRecord town) {
+        UUID nil = new UUID(0L, 0L);
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (TownVillagerBinding.isVisitorKind(r.getKind())) {
+                continue;
+            }
+            UUID u = r.getLastEntityUuid();
+            if (u.equals(nil)) {
+                continue;
+            }
+            if (byUuid.containsKey(u)) {
+                continue;
+            }
+            String roleId = r.getNpcRoleId().trim();
+            if (roleId.isEmpty()) {
+                continue;
+            }
+            String kind = r.getKind();
+            int ko =
+                kind != null && !kind.isBlank() ? kindOrderForBindingKind(kind) : kindOrderForRoleId(roleId);
+            byUuid.put(u, new TownVillagerRow(NpcPortraitProvider.displayLabelForRoleId(roleId), u, roleId, ko));
+        }
     }
 
     private static int kindOrderForBindingKind(@Nonnull String kind) {

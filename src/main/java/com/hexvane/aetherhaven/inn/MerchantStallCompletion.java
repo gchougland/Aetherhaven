@@ -36,7 +36,7 @@ public final class MerchantStallCompletion {
         @Nonnull UUID stallPlotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

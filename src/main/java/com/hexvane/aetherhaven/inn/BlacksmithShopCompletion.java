@@ -36,7 +36,7 @@ public final class BlacksmithShopCompletion {
         @Nonnull UUID shopPlotId,
         @Nonnull TownManager tm
     ) {
-        if (!town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)) {
+        if (!town.hasQuestActiveOrCompleted(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)) {
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

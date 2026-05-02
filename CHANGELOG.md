@@ -1,10 +1,19 @@
 # Changelog
 
-## [1.1.0] - Unreleased
+## [1.1.0] - 5/1/2026
 
 ### Added
 
 - **HStats** Integrated HStats for player metrics
+
+### Fixed
+
+- **Villagers stuck as visitors:** Job villagers (stall, farm, shop, altar, mine, lumbermill, barn, etc.) are promoted to **town residents** more reliably: when the **build finishes**, when you **turn in the quest in dialogue**, when **`/aetherhaven villager reset`** runs (includes inn-pool repair like **`fixinn`**), and an extra repair pass right after construction completes.
+- **Town needs / management:** All saved residents can show in the list even when their NPC isn’t in a loaded chunk (not only elder/innkeeper).
+
+### Changes
+
+- **Job building completion:** If the matching quest is already marked **complete** but promotion never ran (e.g. the NPC wasn’t loaded when the build finished), finishing or revisiting that building can still apply resident promotion instead of doing nothing.
 
 ## [1.0.0] - 4/30/2026 - The Production Update
 
