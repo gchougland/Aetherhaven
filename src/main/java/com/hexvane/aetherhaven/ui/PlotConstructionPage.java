@@ -476,7 +476,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 eventBuilder.addEventBinding(
                     CustomUIEventBindingType.Activating,
                     rowPath + " #OpenMemberName",
-                    new EventData().append("Action", "OpenMemberPermissions").append("@MemberUuid", pid.toString()),
+                    new EventData().append("Action", "OpenMemberPermissions").append("MemberUuid", pid.toString()),
                     false
                 );
             } else {
@@ -496,7 +496,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                     eventBuilder.addEventBinding(
                         CustomUIEventBindingType.Activating,
                         rowPath + " #KickButton",
-                        new EventData().append("Action", "KickMember").append("@MemberUuid", pid.toString()),
+                        new EventData().append("Action", "KickMember").append("MemberUuid", pid.toString()),
                         false
                     );
                 } else {
@@ -1156,7 +1156,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, a) -> d.action = a, d -> d.action)
             .add()
-            .append(new KeyedCodec<>("@MemberUuid", Codec.STRING), (d, v) -> d.memberUuid = v, d -> d.memberUuid)
+            .append(new KeyedCodec<>("MemberUuid", Codec.STRING), (d, v) -> d.memberUuid = v, d -> d.memberUuid)
             .add()
             .append(new KeyedCodec<>("@InviteName", Codec.STRING), (d, v) -> d.inviteName = v, d -> d.inviteName)
             .add()

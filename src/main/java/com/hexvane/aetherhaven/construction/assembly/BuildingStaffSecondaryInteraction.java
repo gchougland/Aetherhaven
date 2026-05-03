@@ -187,7 +187,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         boolean anyPlaced = false;
         for (int bi = 0; bi < batch.size(); bi++) {
             int idx = batch.getInt(bi);
-            if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid)) {
+            if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid, true)) {
                 continue;
             }
             anyPlaced = true;

@@ -39,10 +39,9 @@ public final class AetherhavenStarterKitCommand extends AbstractPlayerCommand {
         }
         ItemStack[] stacks = {
             new ItemStack(AetherhavenConstants.PLOT_PLACEMENT_TOOL_ITEM_ID, 1),
-            new ItemStack(AetherhavenConstants.ITEM_QUEST_JOURNAL, 1),
             new ItemStack(AetherhavenConstants.CHARTER_ITEM_ID, 1),
-            new ItemStack(AetherhavenConstants.PLOT_TOKEN_INN_PLACEHOLDER, 1),
             new ItemStack(TOWN_PLANNING_DESK_ITEM_ID, 1),
+            new ItemStack(AetherhavenConstants.BUILDING_STAFF_ITEM_ID, 1),
         };
         int failed = 0;
         for (ItemStack stack : stacks) {

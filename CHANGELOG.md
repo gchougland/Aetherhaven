@@ -1,10 +1,11 @@
 # Changelog
 
-## [1.2.0] - Unreleased
+## [1.2.0] - 5/2/2026
 
 ### Added
 
 - **Building Staff:** Implemented a new building mechanic where you use the building staff to paint the buildings into existence. Buildings also slowly build themselves but is much slower.
+- **Plot Command:** Added commands to list and remove plots in case of plot issues.
 
 ### Fixed
 
@@ -15,6 +16,7 @@
 - **Path tool:** New sessions default to **width 5** (was 1). Saved width per player is unchanged.
 - **Path tool:** Paths can be planned and placed **under rubble** (`Rubble_*` block ids): grounding targets the terrain below, and on commit rubble above the surface is **broken** with normal break behavior (drops) before the path block is placed.
 - **Town Permissions:** Each players permissions now has its own window which has many more permissions than before.
+- **Starter Kit command:** Modified starter kit command to give building wand and not give plot token or quest book. (They are given by the villagers anyways)
 
 ## [1.1.0] - 5/1/2026
 

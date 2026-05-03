@@ -50,22 +50,37 @@ public final class TownDissolutionService {
 
         List<PlotInstance> plots = new ArrayList<>(town.getPlotInstances());
         for (PlotInstance p : plots) {
-            if (p.getState() == PlotInstanceState.BLUEPRINTING) {
-                world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
-            } else if (p.getState() == PlotInstanceState.ASSEMBLING) {
-                AssemblyWorldRegistry.remove(world, p.getPlotId());
-                world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
-                PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-                PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
-            } else if (p.getState() == PlotInstanceState.COMPLETE) {
-                reg.unregisterByPlotId(p.getPlotId());
-                PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
-                PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
-            }
+            clearPlotFromWorld(world, plugin, town, p, entityStore, reg);
         }
 
         reg.unregisterAllForTown(townId);
         tm.removeTown(townId);
         world.breakBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ(), BREAK_SETTINGS);
+    }
+
+    /**
+     * Breaks the plot sign when present, clears assembly registry, POIs, entities in the footprint, and blocks in the
+     * footprint. Does not remove the row from {@link TownRecord} (call {@link TownRecord#removePlotInstance} after).
+     */
+    public static void clearPlotFromWorld(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance p,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull PoiRegistry reg
+    ) {
+        if (p.getState() == PlotInstanceState.BLUEPRINTING) {
+            world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+        } else if (p.getState() == PlotInstanceState.ASSEMBLING) {
+            AssemblyWorldRegistry.remove(world, p.getPlotId());
+            world.breakBlock(p.getSignX(), p.getSignY(), p.getSignZ(), BREAK_SETTINGS);
+            PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
+            PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
+        } else if (p.getState() == PlotInstanceState.COMPLETE) {
+            reg.unregisterByPlotId(p.getPlotId());
+            PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
+            PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
+        }
     }
 }

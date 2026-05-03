@@ -8,7 +8,7 @@ $Sounds = "../Sounds.ui";
   VerticalAlignment: Center
 );
 
-@PermBackStyle = TextButtonStyle(
+@MemberPermBackStyle = TextButtonStyle(
   Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
   Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
   Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
@@ -43,67 +43,62 @@ $C.@PageOverlay {
           Group {
             LayoutMode: Left;
             Anchor: (Bottom: 8);
-            TextButton #PermBack {
-              Style: @PermBackStyle;
+            TextButton #MemberPermBack {
+              Style: @MemberPermBackStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
               Anchor: (Width: 40, Height: 40, Right: 10);
               Padding: (Full: 0);
               Text: ".";
               TooltipText: %server.aetherhaven.ui.memberPermissions.backTooltip;
             }
-            Label #TargetName {
+            Label #MemberPermTargetName {
               Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, RenderBold: true, Wrap: true);
               FlexWeight: 1;
             }
           }
 
-          Label #Hint {
+          Label #MemberPermErr {
             Visible: false;
             Anchor: (Bottom: 8);
             Style: (...$C.@DefaultLabelStyle, TextColor: #c45a5a, Wrap: true);
             Text: "";
           }
 
-          Group #PermScroll {
-            LayoutMode: TopScrolling;
-            ScrollbarStyle: $C.@DefaultScrollbarStyle;
-            Anchor: (Height: 340, Bottom: 0);
+          Group #MemberPermToggles {
+            LayoutMode: Top;
+            Anchor: (Bottom: 0);
 
-            Group #PermInner {
-              LayoutMode: Top;
-
-              $C.@CheckBoxWithLabel #PermPlacePlots {
-                @Text = %server.aetherhaven.ui.memberPermissions.placePlots;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermManageConstructions {
-                @Text = %server.aetherhaven.ui.memberPermissions.manageConstructions;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermSpendTreasuryGold {
-                @Text = %server.aetherhaven.ui.memberPermissions.spendTreasuryGold;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermOpenTreasuryPanel {
-                @Text = %server.aetherhaven.ui.memberPermissions.openTreasuryPanel;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermAcceptQuests {
-                @Text = %server.aetherhaven.ui.memberPermissions.acceptQuests;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermCompleteQuests {
-                @Text = %server.aetherhaven.ui.memberPermissions.completeQuests;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermAbandonQuests {
-                @Text = %server.aetherhaven.ui.memberPermissions.abandonQuests;
-                Anchor: (Bottom: 6);
-              }
-              $C.@CheckBoxWithLabel #PermReviveVillagers {
-                @Text = %server.aetherhaven.ui.memberPermissions.reviveVillagers;
-                Anchor: (Bottom: 6);
-              }
+            $C.@CheckBoxWithLabel #MemberPermPlacePlots {
+              @Text = %server.aetherhaven.ui.memberPermissions.placePlots;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermManageConstructions {
+              @Text = %server.aetherhaven.ui.memberPermissions.manageConstructions;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermSpendTreasuryGold {
+              @Text = %server.aetherhaven.ui.memberPermissions.spendTreasuryGold;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermOpenTreasuryPanel {
+              @Text = %server.aetherhaven.ui.memberPermissions.openTreasuryPanel;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermAcceptQuests {
+              @Text = %server.aetherhaven.ui.memberPermissions.acceptQuests;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermCompleteQuests {
+              @Text = %server.aetherhaven.ui.memberPermissions.completeQuests;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermAbandonQuests {
+              @Text = %server.aetherhaven.ui.memberPermissions.abandonQuests;
+              Anchor: (Bottom: 6);
+            }
+            $C.@CheckBoxWithLabel #MemberPermReviveVillagers {
+              @Text = %server.aetherhaven.ui.memberPermissions.reviveVillagers;
+              Anchor: (Bottom: 6);
             }
           }
         }

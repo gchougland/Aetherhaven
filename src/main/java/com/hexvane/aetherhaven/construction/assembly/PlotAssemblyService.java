@@ -288,7 +288,7 @@ public final class PlotAssemblyService {
                 if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(pick))) {
                     break;
                 }
-                if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null)) {
+                if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, true)) {
                     break;
                 }
                 plot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
@@ -312,7 +312,8 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job,
         int placementIndex,
         boolean fromStaff,
-        @Nullable UUID staffActor
+        @Nullable UUID staffActor,
+        boolean deferCompletionWhenFullyPlaced
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
             return false;
@@ -343,7 +344,11 @@ public final class PlotAssemblyService {
         plot.addAssemblyPlacedIndex(placementIndex);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
-            scheduleCompleteAssembly(world, plugin, town, plot, job);
+            if (deferCompletionWhenFullyPlaced) {
+                scheduleCompleteAssembly(world, plugin, town, plot, job);
+            } else {
+                completeAssembly(world, plugin, entityStore, town, plot, job);
+            }
             return true;
         }
         refreshPreviewBlock(world, job, placementIndex);
@@ -567,5 +572,81 @@ public final class PlotAssemblyService {
             }
         }
         return null;
+    }
+
+    /**
+     * Creative/debug: place every remaining assembly block for one job in frontier order, then run
+     * {@link #completeAssembly} on the same thread (no deferred task). Caller must be on the world thread.
+     *
+     * @return true when the job finished (or was already fully placed), false on missing chunk, bad state, or empty
+     *     frontier.
+     */
+    public static boolean instantCompleteJob(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return false;
+        }
+        PlotAssemblyJob registered = AssemblyWorldRegistry.get(world, plot.getPlotId());
+        if (registered != job) {
+            return false;
+        }
+        List<PendingBlock> pending = job.pendingBlocks();
+        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
+            completeAssembly(world, plugin, entityStore, town, plot, job);
+            return true;
+        }
+        while (plot.getAssemblyPlacedBlockCount() < pending.size()) {
+            IntOpenHashSet placedSet = new IntOpenHashSet();
+            plot.fillAssemblyPlacedSet(placedSet, pending.size());
+            IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+            int pick = PlotAssemblyFrontier.smallestPlacementIndex(frontier);
+            if (pick < 0) {
+                LOGGER.atWarning().log("instantCompleteJob: empty frontier plot %s", plot.getPlotId());
+                return false;
+            }
+            if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Completes every in-world assembly job owned by {@code town} (same thread as {@link #instantCompleteJob}).
+     *
+     * @return how many jobs reached completion.
+     */
+    public static int instantCompleteAllAssemblingJobsForTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUID townId = town.getTownId();
+        List<PlotAssemblyJob> jobs = new ArrayList<>();
+        for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
+            TownRecord ownerTown = tm.findTownOwningPlot(job.plotId());
+            if (ownerTown != null && ownerTown.getTownId().equals(townId)) {
+                jobs.add(job);
+            }
+        }
+        int finished = 0;
+        for (PlotAssemblyJob job : jobs) {
+            PlotInstance plot = town.findPlotById(job.plotId());
+            if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+                continue;
+            }
+            if (instantCompleteJob(world, plugin, entityStore, town, plot, job)) {
+                finished++;
+            }
+        }
+        return finished;
     }
 }

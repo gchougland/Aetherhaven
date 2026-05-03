@@ -76,69 +76,71 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         }
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#Content #PermBack",
+            "#MemberPermBack",
             new EventData().append("Action", "BackToPlayers"),
             false
         );
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermPlacePlots", FLAG_PLACE_PLOTS);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermManageConstructions", FLAG_MANAGE_CONSTRUCTIONS);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermSpendTreasuryGold", FLAG_SPEND_TREASURY);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermOpenTreasuryPanel", FLAG_OPEN_TREASURY);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermAcceptQuests", FLAG_ACCEPT_QUESTS);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermCompleteQuests", FLAG_COMPLETE_QUESTS);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermAbandonQuests", FLAG_ABANDON_QUESTS);
-        bindToggle(eventBuilder, "#Content #PermScroll #PermInner #PermReviveVillagers", FLAG_REVIVE);
 
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (plugin == null || uc == null) {
-            commandBuilder.set("#Content #Hint.Visible", true);
-            commandBuilder.set("#Content #Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#MemberPermErr.Visible", true);
+            commandBuilder.set("#MemberPermErr.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townUuid);
         if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
-            commandBuilder.set("#Content #Hint.Visible", true);
+            commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
-                "#Content #Hint.TextSpans",
+                "#MemberPermErr.TextSpans",
                 Message.translation("server.aetherhaven.ui.memberPermissions.err.notOwner")
             );
             return;
         }
         if (!targetPlayerUuid.equals(town.getOwnerUuid()) && !town.isMemberPlayer(targetPlayerUuid)) {
-            commandBuilder.set("#Content #Hint.Visible", true);
+            commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
-                "#Content #Hint.TextSpans",
+                "#MemberPermErr.TextSpans",
                 Message.translation("server.aetherhaven.ui.memberPermissions.err.notInTown")
             );
             return;
         }
-        commandBuilder.set("#Content #Hint.Visible", false);
+        commandBuilder.set("#MemberPermErr.Visible", false);
         String display = TownPlayerLookup.displayNameForUuid(world, targetPlayerUuid);
-        commandBuilder.set("#Content #TargetName.TextSpans", Message.raw(display));
+        commandBuilder.set("#MemberPermTargetName.TextSpans", Message.raw(display));
+
+        bindToggle(eventBuilder, "#MemberPermPlacePlots", "TogglePermPlacePlots");
+        bindToggle(eventBuilder, "#MemberPermManageConstructions", "TogglePermManageConstructions");
+        bindToggle(eventBuilder, "#MemberPermSpendTreasuryGold", "TogglePermSpendTreasuryGold");
+        bindToggle(eventBuilder, "#MemberPermOpenTreasuryPanel", "TogglePermOpenTreasuryPanel");
+        bindToggle(eventBuilder, "#MemberPermAcceptQuests", "TogglePermAcceptQuests");
+        bindToggle(eventBuilder, "#MemberPermCompleteQuests", "TogglePermCompleteQuests");
+        bindToggle(eventBuilder, "#MemberPermAbandonQuests", "TogglePermAbandonQuests");
+        bindToggle(eventBuilder, "#MemberPermReviveVillagers", "TogglePermReviveVillagers");
 
         TownMemberPermissions p = town.getEffectiveMemberPermissions(targetPlayerUuid);
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermPlacePlots", p.placePlots());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermManageConstructions", p.manageConstructions());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermSpendTreasuryGold", p.spendTreasuryGold());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermOpenTreasuryPanel", p.openTreasuryPanel());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermAcceptQuests", p.acceptQuests());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermCompleteQuests", p.completeQuests());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermAbandonQuests", p.abandonQuests());
-        setCheck(commandBuilder, "#Content #PermScroll #PermInner #PermReviveVillagers", p.reviveVillagers());
+        setCheck(commandBuilder, "#MemberPermPlacePlots", p.placePlots());
+        setCheck(commandBuilder, "#MemberPermManageConstructions", p.manageConstructions());
+        setCheck(commandBuilder, "#MemberPermSpendTreasuryGold", p.spendTreasuryGold());
+        setCheck(commandBuilder, "#MemberPermOpenTreasuryPanel", p.openTreasuryPanel());
+        setCheck(commandBuilder, "#MemberPermAcceptQuests", p.acceptQuests());
+        setCheck(commandBuilder, "#MemberPermCompleteQuests", p.completeQuests());
+        setCheck(commandBuilder, "#MemberPermAbandonQuests", p.abandonQuests());
+        setCheck(commandBuilder, "#MemberPermReviveVillagers", p.reviveVillagers());
     }
 
-    private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String path, boolean on) {
-        commandBuilder.set(path + " #CheckBox.Value", on);
+    private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String checkWithLabelPath, boolean on) {
+        commandBuilder.set(checkWithLabelPath + " #CheckBox.Value", on);
     }
 
-    private static void bindToggle(@Nonnull UIEventBuilder eventBuilder, @Nonnull String checkPath, @Nonnull String flag) {
+    private static void bindToggle(@Nonnull UIEventBuilder eventBuilder, @Nonnull String checkWithLabelPath, @Nonnull String action) {
+        String box = checkWithLabelPath + " #CheckBox";
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            checkPath + " #CheckBox",
-            new EventData().append("Action", "TogglePerm").append("@Flag", flag).append("@Checked", checkPath + " #CheckBox.Value"),
+            box,
+            new EventData().append("Action", action).append("@Checked", checkWithLabelPath + " #CheckBox.Value"),
             false
         );
     }
@@ -160,7 +162,12 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
             }
             return;
         }
-        if (!data.action.equalsIgnoreCase("TogglePerm") || data.flag == null || data.checked == null) {
+        if (data.checked == null) {
+            return;
+        }
+        boolean on = data.checked;
+        String flag = flagForToggleAction(data.action);
+        if (flag == null) {
             return;
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -175,7 +182,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
             return;
         }
         TownMemberPermissions next = town.getEffectiveMemberPermissions(targetPlayerUuid).copy();
-        applyFlag(next, data.flag.trim(), parseBool(data.checked));
+        applyFlag(next, flag, on);
         Message err = TownMembershipActions.tryPutMemberPermissions(tm, town, playerRef, uc.getUuid(), targetPlayerUuid, next);
         if (err != null) {
             playerRef.sendMessage(err);
@@ -186,15 +193,37 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         sendUpdate(cmd, ev, false);
     }
 
-    private static boolean parseBool(@Nonnull String raw) {
-        String s = raw.trim();
-        if ("true".equalsIgnoreCase(s) || "1".equals(s)) {
-            return true;
+    @Nullable
+    private static String flagForToggleAction(@Nullable String action) {
+        if (action == null) {
+            return null;
         }
-        if ("false".equalsIgnoreCase(s) || "0".equals(s)) {
-            return false;
+        String a = action.trim();
+        if (a.equalsIgnoreCase("TogglePermPlacePlots")) {
+            return FLAG_PLACE_PLOTS;
         }
-        return Boolean.parseBoolean(s);
+        if (a.equalsIgnoreCase("TogglePermManageConstructions")) {
+            return FLAG_MANAGE_CONSTRUCTIONS;
+        }
+        if (a.equalsIgnoreCase("TogglePermSpendTreasuryGold")) {
+            return FLAG_SPEND_TREASURY;
+        }
+        if (a.equalsIgnoreCase("TogglePermOpenTreasuryPanel")) {
+            return FLAG_OPEN_TREASURY;
+        }
+        if (a.equalsIgnoreCase("TogglePermAcceptQuests")) {
+            return FLAG_ACCEPT_QUESTS;
+        }
+        if (a.equalsIgnoreCase("TogglePermCompleteQuests")) {
+            return FLAG_COMPLETE_QUESTS;
+        }
+        if (a.equalsIgnoreCase("TogglePermAbandonQuests")) {
+            return FLAG_ABANDON_QUESTS;
+        }
+        if (a.equalsIgnoreCase("TogglePermReviveVillagers")) {
+            return FLAG_REVIVE;
+        }
+        return null;
     }
 
     private static void applyFlag(@Nonnull TownMemberPermissions p, @Nonnull String flag, boolean on) {
@@ -216,16 +245,12 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
             .add()
-            .append(new KeyedCodec<>("@Flag", Codec.STRING), (d, v) -> d.flag = v, d -> d.flag)
-            .add()
-            .append(new KeyedCodec<>("@Checked", Codec.STRING), (d, v) -> d.checked = v, d -> d.checked)
+            .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
             .build();
 
         private String action;
         @Nullable
-        private String flag;
-        @Nullable
-        private String checked;
+        private Boolean checked;
     }
 }

@@ -1,4 +1,4 @@
-﻿# Aetherhaven server-side language strings
+# Aetherhaven server-side language strings
 #
 # Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
 # Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
@@ -221,6 +221,12 @@ aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
 aetherhaven.towns.inWorldCount=Aetherhaven towns in this world: {count}
 aetherhaven.towns.entry=  {name}  id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
 aetherhaven.debug.plots.line=  {plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=No assembling plots with an active job for your town (load chunks around builds, or start a build first).
+aetherhaven.debug.plots.finishassemblyDone=Instantly finished {count} in-progress plot build(s).
+aetherhaven.debug.plots.removeBadUuid=Invalid plot UUID. Use the id from /aetherhaven plots list.
+aetherhaven.debug.plots.removeNotFound=No plot {plotId} in your town.
+aetherhaven.debug.plots.removeDataFailed=World was cleared but removing the plot from town data failed (check logs).
+aetherhaven.debug.plots.removedPlot=Removed plot {plotId} from the town and cleared its footprint.
 aetherhaven.debug.poi.invalidTownUuid=Invalid town UUID: {raw}
 aetherhaven.debug.poi.noTownArg=You have no town in this world (use a town UUID argument).
 aetherhaven.debug.poi.listHeader=POIs for town {town} ({count}):
@@ -383,7 +389,7 @@ commands.aetherhaven.reload.success=Aetherhaven config and asset catalogs reload
 commands.aetherhaven.reload.failure=Reload failed: {detail}
 commands.aetherhaven.reload.noPlugin=Aetherhaven plugin is not loaded.
 commands.aetherhaven.plot.desc=Open plot sign admin UI (pick construction, get item)
-commands.aetherhaven.starterkit.desc=Give yourself the Aetherhaven starter kit (plot staff, journal, charter, inn token, town planning desk; creative mode)
+commands.aetherhaven.starterkit.desc=Give yourself the Aetherhaven starter kit (plot placement staff, charter, town planning desk, building staff; creative mode)
 commands.aetherhaven.starterkit.success=Starter kit added to your inventory.
 commands.aetherhaven.starterkit.partial=Starter kit partly granted; {failed} item(s) did not fit (make inventory space).
 
@@ -1031,8 +1037,11 @@ commands.aetherhaven.poi.list.desc=List POIs for a town (optional town UUID, or 
 commands.aetherhaven.poi.town.desc=Town UUID, or me, or omit for caller town
 commands.aetherhaven.poi.dump.desc=List every POI in this world's in-memory registry (any town)
 
-commands.aetherhaven.plots.desc=Debug: list plot instances (use plots to avoid clashing with /aetherhaven plot)
-commands.aetherhaven.plots.list.desc=List plot instances for your town
+commands.aetherhaven.plots.desc=Plot instances: list, finishassembly (creative), remove plotId (creative). Use plots to avoid clashing with /aetherhaven plot.
+commands.aetherhaven.plots.list.desc=List plot instances for your town (plot UUID, construction id, state, sign position)
+commands.aetherhaven.plots.finishassembly.desc=Creative: instantly finish every in-progress assembly in your town (requires loaded chunks / active jobs)
+commands.aetherhaven.plots.remove.desc=Creative: demolish one plot by UUID and remove it from your town data
+commands.aetherhaven.plots.remove.plotId.desc=Plot UUID from /aetherhaven plots list
 
 commands.aetherhaven.needs.desc=Debug: villager needs
 commands.aetherhaven.needs.inspect.desc=List entities in loaded chunks that have VillagerNeeds
