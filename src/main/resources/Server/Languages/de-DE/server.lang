@@ -15,6 +15,7 @@ aetherhaven.common.townNotFound=Ort nicht gefunden.
 aetherhaven.common.invalidTownLink=Ungültiger Stadtlink.
 aetherhaven.common.treasuryNotLinked=Das Finanzministerium ist nicht damit verbunden.
 aetherhaven.common.ownerOnlyTreasury=Ausschließlich der Stadtbesitzer darf auf die Staatskasse zugreifen.
+aetherhaven.common.noTreasuryPanelPermission=Sie haben keine Erlaubnis, die Stadtkasse zu benutzen.
 aetherhaven.common.townNotInThisWorld=Die Stadt existiert nicht in dieser Welt.
 aetherhaven.common.noMoveBuildingsPermission=Sie haben keine Genehmigung, Gebäude in dieser Stadt zu versetzen.
 aetherhaven.common.buildingCannotMove=Dieses Gebäude kann nicht versetzt werden (fehlendes Grundstück oder nicht fertiggestellt).
@@ -22,6 +23,7 @@ aetherhaven.common.lookAtBlockPlot=Schauen Sie sich einen Block an, um die Posit
 aetherhaven.common.carryPlotToken=Zum Platzieren eines Gebäudes, das in dem Tool aufgeführt ist (z. B. ein Gasthaus-Grundstücksmarker), muss ein Grundstücksmarker für einen Gebäudetyp mitgeführt werden.
 aetherhaven.common.statueNotLinked=Die Statue ist keiner Stadt zugeordnet.
 aetherhaven.common.ownerOnlyStatue=Nur der Stadtbesitzer darf diese Statue benutzen.
+aetherhaven.common.noReviveVillagersPermission=Sie haben keine Erlaubnis, an dieser Statue Dorfbewohner wiederzubeleben.
 aetherhaven.common.noPlayerId=Keine Spieler-ID.
 aetherhaven.common.playersOnly=Nur für Spieler.
 aetherhaven.common.invalidVillager=Ungültiger Dorfbewohner.
@@ -52,7 +54,7 @@ aetherhaven.town.invite.err.emptyName=Geben Sie einen Spielernamen ein.
 aetherhaven.town.invite.err.targetOffline=Spieler "{name}" ist in dieser Welt nicht online.
 aetherhaven.town.invite.err.cannotInviteSelf=Man kann sich nicht selbst einladen.
 aetherhaven.town.invite.err.alreadyInTown=Dieser Spieler befindet sich bereits in einer Stadt in dieser Welt.
-aetherhaven.town.invite.toTarget={inviter} hat dich eingeladen, der Stadt "{townDisplay}" beizutreten. Gib /aetherhaven town accept {townDisplay} oder /aetherhaven town decline {townDisplay} ein.
+aetherhaven.town.invite.toTarget={inviter} hat Sie eingeladen, der Stadt "{townDisplay}" beizutreten. Geben Sie /aetherhaven town accept {townDisplay} oder /aetherhaven town decline {townDisplay} ein (verwenden Sie den vollständigen Stadtnamen inklusive Leerzeichen).
 aetherhaven.town.invite.sent=Einladung an {name} gesendet.
 aetherhaven.town.kick.err.mustBeOnline=Der Spieler muss online sein, um namentlich einen Kick ausführen zu können.
 aetherhaven.town.kick.err.cannotRemoveOwner=Der Stadtbesitzer kann nicht entfernt werden.
@@ -70,6 +72,20 @@ aetherhaven.town.accept.joined=Sie sind dem Menüpunkt "{town}" beigetreten.
 aetherhaven.town.decline.noPending=Für diese Stadt liegt keine Einladung vor.
 aetherhaven.town.decline.noInvites=Sie haben keine ausstehenden Einladungen von Städten.
 aetherhaven.town.decline.done=Einladung abgelehnt.
+aetherhaven.town.permissions.updated=Mitgliedsberechtigungen gespeichert.
+
+aetherhaven.ui.memberPermissions.title=Mitgliedsberechtigungen
+aetherhaven.ui.memberPermissions.backTooltip=Zurück zur Spielerliste
+aetherhaven.ui.memberPermissions.placePlots=Parzellen platzieren
+aetherhaven.ui.memberPermissions.manageConstructions=Bau und Verwaltung von Bauwerken (Montage, Produktion, Feste, Satzungsänderungen, Versetzung von Gebäuden)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Das Gold aus der Stadtkasse für Baukosten ausgeben
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Kasse öffnen (Einzahlung / Auszahlung)
+aetherhaven.ui.memberPermissions.acceptQuests=Stadtquests annehmen/starten
+aetherhaven.ui.memberPermissions.completeQuests=Schließe Stadtquests ab und sichere dir Rufbelohnungen.
+aetherhaven.ui.memberPermissions.abandonQuests=Aktive Stadtquests abbrechen
+aetherhaven.ui.memberPermissions.reviveVillagers=Erwecke die Dorfbewohner an der Gaia-Statue wieder zum Leben.
+aetherhaven.ui.memberPermissions.err.notOwner=Nur der Stadtbesitzer kann die Berechtigungen bearbeiten.
+aetherhaven.ui.memberPermissions.err.notInTown=Dieser Spieler befindet sich nicht in dieser Stadt.
 aetherhaven.town.rolecmd.playerMustBeOnline=Der Spieler muss online sein.
 aetherhaven.town.rolecmd.roleInvalid=Die Rolle muss BAUEN, QUEST oder BEIDES sein.
 aetherhaven.town.leave.notInTown=Du bist nicht in einer Stadt.
@@ -162,7 +178,7 @@ aetherhaven.founder.createFailed=Die Gründerstatue konnte nicht erstellt werden
 # Autonomy debug
 aetherhaven.debug.autonomy.notVillager=Target ist kein Dorfbewohner aus Aetherhaven.
 aetherhaven.debug.autonomy.toggledOn=Autonomie-Debug-Modus aktiviert (DisplayCustom + VisPath). AH-Overlay auf dem Typenschild.
-aetherhaven.debug.autonomy.toggledOff=Autonomie-Debugging für diesen Dorfbewohner deaktiviert.
+aetherhaven.debug.autonomy.toggledOff=Autonomie-Debug für diesen Dorfbewohner AUS.
 aetherhaven.debug.autonomy.state=Autonomie-Debug für diesen Dorfbewohner: {state}
 aetherhaven.debug.autonomy.cleared=Autonomie-Debug-Probleme in Aetherhaven für diesen Dorfbewohner behoben.
 aetherhaven.debug.on=AN
@@ -205,6 +221,12 @@ aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
 aetherhaven.towns.inWorldCount=Ätherhafen-Städte in dieser Welt: {count}
 aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
 aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=Keine Bauplätze zusammenstellen, wenn in deiner Stadt gerade gebaut wird (lade Chunks um die Gebäude herum oder beginne zuerst mit dem Bauen).
+aetherhaven.debug.plots.finishassemblyDone=Sofortiger Abschluss des/der laufenden Grundstücksbaus/Grundstücksbauten {count}.
+aetherhaven.debug.plots.removeBadUuid=Ungültige Plot-UUID. Verwenden Sie die ID aus der Plotliste von /aetherhaven.
+aetherhaven.debug.plots.removeNotFound=In Ihrer Stadt gibt es kein Grundstück {plotId}.
+aetherhaven.debug.plots.removeDataFailed=Die Welt wurde gelöscht, aber das Entfernen des Grundstücks aus den Stadtdaten ist fehlgeschlagen (siehe Protokolle).
+aetherhaven.debug.plots.removedPlot=Das Grundstück {plotId} wurde aus dem Stadtgebiet entfernt und seine Fläche beseitigt.
 aetherhaven.debug.poi.invalidTownUuid=Ungültige Stadt-UUID: {raw}
 aetherhaven.debug.poi.noTownArg=In dieser Welt gibt es keine Stadt (verwenden Sie ein Stadt-UUID-Argument).
 aetherhaven.debug.poi.listHeader=POIs für die Stadt {town} ({count}):
@@ -219,7 +241,7 @@ aetherhaven.quest.started=Quest gestartet: {name}
 aetherhaven.quest.completed=Quest abgeschlossen: {name}
 aetherhaven.quest.abandoned=Quest abgebrochen: {name}
 aetherhaven.questdebug.granted=Aktive Quest erhalten: {name}
-aetherhaven.questdebug.completed=Abgeschlossene Quest: {name}
+aetherhaven.questdebug.completed=Quest abgeschlossen: {name}
 aetherhaven.questdebug.cleared=Aktive Quest abgeschlossen: {name}
 aetherhaven.questdebug.statusHeader=-- Queststatus --
 aetherhaven.questdebug.statusActive=aktiv:
@@ -320,7 +342,7 @@ aetherhaven.ui.charter.tier1=Stufe 1: Zehntstil
 aetherhaven.ui.charter.tier2=Stufe 2: Stadtfokus
 aetherhaven.ui.charter.t1.perCapitaShort=Pro Kopf
 aetherhaven.ui.charter.t1.happinessShort=Glücksgewichtung
-aetherhaven.ui.charter.t1.perCapitaTooltip=Zehnt zuerst nach Einwohnerzahl.\n\nDas Morgengold hängt davon ab, wie viele Einwohner hier leben. Der alltägliche Komfort trägt zwar auch ein wenig zur Gesamtzahl bei, aber die Bevölkerungszahl ist der ausschlaggebende Faktor.
+aetherhaven.ui.charter.t1.perCapitaTooltip=Zehnt zuerst nach Einwohnerzahl.\n\nDas Morgengold hängt davon ab, wie viele Einwohner hier leben. Der alltägliche Komfort trägt zwar auch ein wenig zum Gesamtbetrag bei, aber die Bevölkerungszahl ist der entscheidende Faktor.
 aetherhaven.ui.charter.t1.happinessTooltip=Zehnt für die Bedürfnisse zuerst.\n\nDas Morgengold hängt stärker davon ab, wie gut die Bewohner ernährt, ausgeruht und guter Dinge sind. Ein paar zusätzliche Bürger sind weniger wichtig als der allgemeine Gesundheitszustand aller.
 aetherhaven.ui.charter.t2.miningShort=Bergbau
 aetherhaven.ui.charter.t2.loggingShort=Protokollierung
@@ -340,8 +362,8 @@ aetherhaven.ui.charter.saved=Die Satzungsänderungen wurden aktualisiert.
 
 # === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
 aetherhaven.reputation.reward.continue=Weitermachen
-aetherhaven.reputation.reward.elder.50=Die Satzung ist nicht in Stein gemeißelt. Hier ist die Vorlage für eine Änderungstabelle. Erstellen Sie sie an Ihrem Stadtplanungstisch, sobald Sie den Grundriss kennen. Platzieren Sie sie im Flur und legen Sie fest, wie sich der morgendliche Zehnte der Stadt entwickeln soll.
-aetherhaven.reputation.reward.elder.100=Ihr habt diesen Ort über alle Erwartungen hinaus vorangebracht. Nehmt diesen Grundstein: Errichtet ein Gründerdenkmal an der Stelle, die die Satzung erlaubt. Die Schatzkammer wird sich erinnern.
+aetherhaven.reputation.reward.elder.50=Die Satzung kann sich mit dem Wachstum unserer Gemeinde ändern. Hier ist eine Vorlage für eine Änderungstabelle. Erstellen Sie sie an Ihrem Stadtplanungsplatz, sobald Sie den Plan haben. Hängen Sie sie in den Flur, und Sie können selbst entscheiden, wie der Morgenzehnt erhoben wird.
+aetherhaven.reputation.reward.elder.100=Du hast mehr für diese Stadt getan, als irgendjemand verlangt hat. Nimm diesen Grundstein. Errichte ein Gründerdenkmal an der Stelle, die die Satzung erlaubt. Die Menschen hier werden sich erinnern.
 aetherhaven.reputation.reward.innkeeper.50=Du hast diesen Saal lange genug mit Essen versorgt und ehrlich gehalten, dass ich dir die große Tafel anvertraue. Hier ist der Plan für das Festmahl – erstelle ihn am Stadtplanungsbüro, sobald du den Plan hast, und stelle ihn dann im Ort auf. Wenn die Tafel fertig ist, kannst du auch das Festmahl einberufen: Brot, Käse, Kuchen und einen Zehnten, der für eine Woche reicht. Ich werde den Saal im Auge behalten, während du servierst.
 aetherhaven.reputation.reward.innkeeper.75=Du hast genug lange Nächte mit uns durchgestanden. Wenn du die Wache am Herdglas niederlegst, isst die Stadt eine Woche lang langsamer und mitfühlender. Fisch, Fleisch, Gemüse und ein sanfteres Mahl für jeden Bedarf. So halten wir einander aufrecht.
 aetherhaven.reputation.reward.innkeeper.100=Du und diese Stadt teilen nun einen Namen. Berrycircle Concord ist der leichte Tellerkreis: Salat, Obstspieße, Popcorn und ein Toast, der landet. Serviere es einmal, und sie werden dich in guter Erinnerung behalten.
@@ -367,7 +389,7 @@ commands.aetherhaven.reload.success=Aetherhaven-Konfiguration und Asset-Kataloge
 commands.aetherhaven.reload.failure=Neuladen fehlgeschlagen: {detail}
 commands.aetherhaven.reload.noPlugin=Das Aetherhaven-Plugin ist nicht geladen.
 commands.aetherhaven.plot.desc=Grundstücksschild-Verwaltungsoberfläche öffnen (Bauvorhaben auswählen, Element abrufen)
-commands.aetherhaven.starterkit.desc=Gönnen Sie sich das Aetherhaven-Starterkit (Plotstab, Tagebuch, Charta, Gasthausmarke, Stadtplanungstisch; Kreativmodus)
+commands.aetherhaven.starterkit.desc=Sichern Sie sich das Aetherhaven-Starterkit (Grundstücksplatzierungspersonal, Charta, Stadtplanungsbüro, Baupersonal; Kreativmodus)
 commands.aetherhaven.starterkit.success=Starter-Kit wurde Ihrem Inventar hinzugefügt.
 commands.aetherhaven.starterkit.partial=Starterkit teilweise genehmigt; {failed} Artikel passten nicht (Lagerplatz freigeben).
 
@@ -388,7 +410,7 @@ items.Aetherhaven_Charter.name=Stadtverfassung
 items.Aetherhaven_Charter.description=Hier kann man eine Stadt gründen. Jeder Spieler darf pro Welt eine Stadt besitzen. Hier erhält man Stadtinformationen.
 
 items.Aetherhaven_Town_Planning_Desk.name=Stadtplanungsbüro
-items.Aetherhaven_Town_Planning_Desk.description=Stelle Stadturkunden, den Stab zur Grundstücksplatzierung, das Questjournal, den Geodenamboss, die Tabelle für Urkundenänderungen und Grundstücksmarker her. Stelle eines davon an einer Werkbank her.
+items.Aetherhaven_Town_Planning_Desk.description=Stelle Stadturkunden, den Bauplatzierungsstab, den Baustab (beschleunigt den passiven Bau von Grundstücken), das Questjournal, den Geodenamboss, die Urkundenänderungstabelle und Grundstücksmarker her. Stelle eines davon an einer Werkbank her.
 items.Aetherhaven_Charter_Amendments_Table.name=Tabelle der Chartaänderungen
 items.Aetherhaven_Charter_Amendments_Table.description=Dokumentiert, wie der Zehnte der Stadt berechnet wird und welchen Handel die Satzung fördert. Nutzt diese Funktion, um Änderungen zu ermöglichen, sobald die Bevölkerung dies befürwortet. Erstellt sie an eurem Stadtplanungstisch; ihr müsst den Plan kennen.
 items.Aetherhaven_Banquet_Table.name=Banketttisch
@@ -413,6 +435,73 @@ aetherhaven.poiTool.legendTitle=POI-Tool
 aetherhaven.poiTool.legendPrimary=Primär: Wählen Sie den nächstgelegenen POI in der Nähe des Blocks aus.
 aetherhaven.poiTool.legendSecondary=Sekundär: Ausgewählten POI in den Block verschieben
 aetherhaven.poiTool.legendUse=Verwendung: NPC-Pfadziel für ausgewählten POI festlegen (Anwendung bei POI-Blocklöschungen)
+
+aetherhaven.pathTool.legendPageTitle=Pfadwerkzeug
+aetherhaven.pathTool.legendBlurb=Erstellen Sie eine Spline-Linie, sehen Sie sich die Vorschau an und platzieren Sie dann Wegblöcke. Solange Sie das Werkzeug gedrückt halten, erscheint ein Statusfeld in der Ecke. Mit installiertem Buuz135 MHUD wird das Feld als eigene Ebene erkannt, sodass auch andere benutzerdefinierte HUDs sichtbar bleiben.
+aetherhaven.pathTool.legendHotkeyAdd=Ein Sekundärangriff auf dem Boden fügt einen Keyframe (goldene Kugel) hinzu. Ein Sekundärangriff beim Zielen entfernt den vorhandenen Keyframe. Neue Keyframes zeigen in Blickrichtung.
+aetherhaven.pathTool.legendHotkeyAim=Wählen Sie den entsprechenden Keyframe aus. Im Verschieben-Modus verschiebt ein primärer Klick auf dem Boden den Punkt. Ein primärer Klick auf demselben Knoten hat keine Auswirkung.
+aetherhaven.pathTool.legendHotkeyUse=F: Im Drehmodus: Gieren des ausgewählten Knotens. Im Verschieben-Modus: Keine Funktion. Im Platzieren-Modus: Pfad platzieren (zwei Knoten erforderlich). Q: Moduswechsel. E: Breite 1–8. Dritte Werkzeugfunktion: Pfadstil (innere Blöcke; siehe PathToolStyles in der Konfiguration). Sekundär auf einem Keyframe entfernt den Stil.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Optional: Ducken ist nicht mehr erforderlich, um den Modus zu ändern; verwenden Sie stattdessen die Werkzeugfähigkeit (Q).
+aetherhaven.pathTool.legendVisuals=Vorschau: Weiß = Knoten und Spline, Braun = Pfadstreifen, Grün = Randgras; Rot = blockiert. Platten liegen auf der Oberfläche. Breite: Zweite Werkzeugfunktion (1–8). Stil: Dritte Werkzeugfunktion. „Commit“ entfernt hohe Pflanzen (Plant_Grass) über dem Pfad.
+aetherhaven.pathTool.statusHeader=Während er das Werkzeug hält
+aetherhaven.pathTool.statusLine1=Benachrichtigungen und Chats werden angezeigt, wenn Sie Punkte hinzufügen, den Modus wechseln (Q) oder im Commit-Modus bleiben.
+aetherhaven.pathTool.statusLine2=Auswahl: Zielen Sie auf eine Kugel. Bei einem Fehlschuss bleibt Ihre Auswahl erhalten. Q wechselt den Modus; die zweite Fähigkeit wechselt die Breite; die dritte Fähigkeit wechselt den Pfadstil.
+
+aetherhaven.pathTool.hudTitle=Pfadwerkzeug
+aetherhaven.pathTool.hudNameTranslate=Bewegen
+aetherhaven.pathTool.hudNameRotate=Drehen
+aetherhaven.pathTool.hudNameCommit=Ort
+aetherhaven.pathTool.hudHelpTranslate=Primär: Einen Knoten auswählen, dann mit der Primärtaste einen Block verschieben. Sekundär: Knoten durch Anvisieren des Bodens hinzufügen; Knoten durch Anvisieren entfernen. Q: Nächster Modus.
+aetherhaven.pathTool.hudHelpRotate=Primär: Knoten auswählen. Sekundär: Durch Anvisieren eines Knotens wird ein Knoten hinzugefügt; durch Anvisieren eines Knotens wird er entfernt. F: Gierbewegung des ausgewählten Knotens. Q: Nächster Modus.
+aetherhaven.pathTool.hudHelpCommit=Primär: Knoten auswählen. Sekundär: Durch Anvisieren eines Knotens wird ein Knoten hinzugefügt; durch Anvisieren eines Knotens wird er entfernt. F platziert den Pfad (2+ Knoten). Q: Nächster Modus.
+aetherhaven.pathTool.hudStyle=Stil: {style}
+aetherhaven.pathTool.hudWidth=Breite: {w} Blöcke (E zum Durchlaufen)
+aetherhaven.pathTool.hudNodes=Knoten: {n}
+aetherhaven.pathTool.hudHint=Primär = Auswählen/Verschieben | Sekundär = Auf dem Boden hinzufügen, auf dem Knoten entfernen | Q: Modus | E: Breite | R: Stil | F: Drehen/Platzieren
+
+aetherhaven.pathTool.addedNode=Knoten {n} hinzugefügt.
+aetherhaven.pathTool.modeCycledToTranslate=Modus: Keyframes verschieben und platzieren.
+aetherhaven.pathTool.modeCycledToRotate=Modus: Drehen — F verschiebt die Gierachse des ausgewählten Knotens.
+aetherhaven.pathTool.modeCycledToCommit=Modus: Platzieren — F platziert den Pfad (wenn Sie 2 oder mehr Knoten haben).
+aetherhaven.pathTool.widthCycled=Pfadbreite: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Pfadstil: {style}
+aetherhaven.pathTool.toastStyleCycled=Pfadstil geändert
+aetherhaven.pathTool.useInTranslateMode=F hat im Bewegungsmodus keine Funktion. Drücken Sie Q, um in den Platzierungsmodus zu wechseln, dann F zum Platzieren oder zum Drehen und F zum Anpassen der Gierachse.
+aetherhaven.pathTool.rotateNoSelection=Wählen Sie einen Keyframe (zielen Sie auf die Goldkugel), um ihn zu drehen, oder drücken Sie Q, um den Modus zu ändern.
+aetherhaven.pathTool.modeToggled=Modus: {m}
+aetherhaven.pathTool.selectedNode=Knoten ausgewählt.
+aetherhaven.pathTool.movedNode=Knoten verschoben.
+aetherhaven.pathTool.noNodeHit=Kein Steuerknoten in Reichweite. Im Übersetzungsmodus mit ausgewähltem Knoten versuchen Sie, den primären Knoten auf dem Boden zu bewegen.
+aetherhaven.pathTool.noNodeOnAim=Kein Keyframe auf dem Fadenkreuz. Zielen Sie auf eine goldene Scheibe, um sie auszuwählen. Auswahl bleibt unverändert.
+aetherhaven.pathTool.toastAdd=Kontrollpunkt hinzugefügt
+aetherhaven.pathTool.toastModeTranslate=Verschieben: Primäre Aktion: Block verschiebt die Auswahl; sekundäre Aktion: fügt Keyframe hinzu.
+aetherhaven.pathTool.toastModeRotate=Drehen: F steuert die Gierachse des ausgewählten Knotens.
+aetherhaven.pathTool.toastModeCommit=Platzieren: F platziert den Pfad (2+ Knoten). Tausche mit Q.
+aetherhaven.pathTool.toastMoved=Knotenposition aktualisiert
+aetherhaven.pathTool.toastRemoved=Kontrollpunkt entfernt
+aetherhaven.pathTool.toastRotated=Gierbewegung
+aetherhaven.pathTool.toastCemented=Der Weg ist gefestigt. Die Rückruf-ID findest du im Chat.
+aetherhaven.pathTool.rotated=Um {deg}° gedreht.
+aetherhaven.pathTool.removedNode=Knoten entfernt. {n} Knoten verbleiben.
+aetherhaven.pathTool.needTwoNodes=Sie benötigen mindestens zwei Keyframes. Fügen Sie mit „sekundär“ einen weiteren hinzu oder drücken Sie Q, um den Commit-Modus zu verlassen und die Bearbeitung fortzusetzen.
+aetherhaven.pathTool.emptyPlan=Entlang des Pfades wurde kein Boden gefunden (steil/leer/unbeladene Chunks).
+aetherhaven.pathTool.cementFail=Nichts zum Platzieren: Es wurde kein geeigneter Untergrund gefunden oder die Platzierung ist fehlgeschlagen.
+aetherhaven.pathTool.cemented=Pfad platziert. Rückgängigmachungs-ID: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=Sie haben keine Berechtigung für aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Ungültige ID: {raw}
+aetherhaven.pathTool.unknownId=Kein gespeicherter Pfad mit dieser ID.
+aetherhaven.pathTool.reverted={cells}-Blöcke für {id} rückgängig gemacht
+aetherhaven.pathTool.navvizOn=Pfadnavigations-Debugging: aktiviert (Server zeigt festgeschriebene Pfadknoten als Linien an; erneut ausführen, um es zu deaktivieren)
+aetherhaven.pathTool.navvizOff=Pfadnavigations-Debugging: aus
+aetherhaven.pathTool.navvizNoPerm=Für das Debuggen der Pfadnavigation wird aetherhaven.path.tool benötigt.
+
+commands.aetherhaven.path.root.desc=Pfad-/Spline-Platzierungshilfen
+commands.aetherhaven.path.revert.desc=Einen fixierten Pfad aus der Rückgängig-Datei wiederherstellen (aetherhaven.path.revert)
+commands.aetherhaven.path.revert.id=Pfad-Commit-ID (UUID aus der Zement-Chatnachricht)
+commands.aetherhaven.path.navviz.desc=Debug-Zeichnung von Pfadnavigations-Polylinien umschalten (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=Wegplanerschaufel
+items.Aetherhaven_Path_Tool.description=Entwirft Spline-Pfade (aetherhaven.path.tool). Sekundär: Knoten hinzufügen. Primär: Auswählen; im Bewegungsmodus zum Verschieben auf den Boden klicken. Q: Moduswechsel. Zweite Fähigkeit: Pfadbreite 1–8. Dritte Fähigkeit: Pfadstil (innere Blöcke; PathToolStyles in der Konfiguration). F: Gierwinkel im Drehmodus verschieben oder im Platzierungsmodus platzieren (2+ Knoten). Zurücksetzen: Aetherhaven-Pfad zurücksetzen. Konfiguration: PathToolStyles, Raycast und Ersetzungslisten.
 
 items.Aetherhaven_Plot_Token_Inn.name=Gasthaus-Grundstücksmarke
 items.Aetherhaven_Plot_Token_Inn.description=Erforderlich im Inventar, um das Platzierungspersonal für den Gasthofgrundriss zu verwenden.
@@ -479,6 +568,18 @@ npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
 npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
 npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
 npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Gorruk Stonevein
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+
+items.Aetherhaven_Production_Storage.name=Geschäfte am Arbeitsplatz
+items.Aetherhaven_Production_Storage.description=Hier werden die von Ihren Arbeitern eingebrachten Waren aufbewahrt. Die Ausgabe kann eingestellt und Stapel entnommen werden. Das Gerät ist Teil des Gebäudes und kann nicht entfernt werden.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners Hütten-Grundstücksmarke
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Markiert die Stellen, an denen die Fertighütten der Bergleute errichtet werden können. Diese können am Stadtplanungsschalter hergestellt werden.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Grundstücksmarke für Sägewerk
+items.Aetherhaven_Plot_Token_Lumbermill.description=Markiert die Stellen, an denen das Fertigteilgebäude des Sägewerks errichtet werden kann. Handwerker am Stadtplanungstisch.
+items.Aetherhaven_Plot_Token_Barn.name=Grundstücksmarke für Scheune
+items.Aetherhaven_Plot_Token_Barn.description=Markiert die Stellen, an denen die Fertigscheune errichtet werden kann. Arbeiten Sie am Planungsbüro der Stadt.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia-Altar-Plot-Token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Markiert die Stellen, an denen das Gaia-Altar-Fertigteil errichtet werden kann. Hergestellt am Stadtplanungstisch.
@@ -543,7 +644,178 @@ aetherhaven.profession.kind.merchant=Händler
 aetherhaven.profession.kind.farmer=Bauer
 aetherhaven.profession.kind.blacksmith=Schmied
 aetherhaven.profession.kind.priestess=Priesterin
+aetherhaven.profession.kind.miner=Bergmann
+aetherhaven.profession.kind.logger=Logger
+aetherhaven.profession.kind.rancher=Rancher
 aetherhaven.profession.kind.unknown=Einwohner
+
+# === Dialogue: Gorruk (miner) ===
+aetherhaven.dialogue.aetherhaven_miner.root.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.root.body=Ich baue Steine und Erz für die Stadt ab, aber ich brauche eine richtige Bergmannshütte, um richtig loslegen zu können. Ich brauche einen trockenen Schlafplatz und eine Werkbank, die nicht wackelt, wenn ich Gestein abbaue. Meine alte Mannschaft sagte immer: „Folge der Ader“, und daran halte ich mich noch immer. Gebt mir die Hütte, und ich sorge dafür, dass eure Lager gefüllt bleiben.
+aetherhaven.dialogue.aetherhaven_miner.root.hc0=Du wolltest über ein Haus sprechen.
+aetherhaven.dialogue.aetherhaven_miner.root.hc1=Dein Name steht auf dem Hausblock. Ich wollte, dass du es von mir erfährst.
+aetherhaven.dialogue.aetherhaven_miner.root.hc2=Der Hausbau ist noch im Gange.
+aetherhaven.dialogue.aetherhaven_miner.root.c0=Ich wollte mich mal melden, jetzt, wo eure Bergmannshütte fertig ist.
+aetherhaven.dialogue.aetherhaven_miner.root.c1=Eure Bergmannshütte ist fertig. Ich bin hier, um die Quest abzuschließen.
+aetherhaven.dialogue.aetherhaven_miner.root.c2=Eure Hütte ist noch im Bau. Ich wollte fragen, wie der aktuelle Stand ist.
+aetherhaven.dialogue.aetherhaven_miner.root.c3=Ich möchte dir helfen, eine Bergmannshütte zu bekommen. Können wir mit dem Grundstück und dem Spielstein anfangen?
+aetherhaven.dialogue.aetherhaven_miner.root.c4=Das war’s für heute. Wir sehen uns später.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.body=Sichere mir ein Grundstück für die Bergmannshütte und gib mir die Marke, damit das Gebäude offiziell mir gehört. Sobald die Hütte steht und die Werkbank angebracht ist, werde ich, wie vereinbart, die abgebauten Rohstoffe zu Stein und Kupfer für den Stadtspeicher verarbeiten.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c0=Hier ist der Token. Führe den Build durch.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c1=Nicht jetzt, ich brauche noch etwas Zeit.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.body=Das passt mir. Sobald Wände und Dach fertig sind, sitze ich an der Werkbank der Hütte, damit du genau weißt, wo du mich findest.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.c0=Verstanden. Ich werde mich auf die Fertigstellung des Projekts konzentrieren.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.body=Auf dem Baustellenschild steht immer noch, dass Materialien fehlen. Entweder Sie vervollständigen die Lieferliste oder Sie sagen mir direkt, ob Sie das Projekt stornieren wollen, damit ich nicht auf etwas warte, das nicht mehr stattfindet.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c0=Ich möchte diesen Bauauftrag abbrechen und mich zurückziehen.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c1=Ich arbeite noch daran und werde auch weiterhin daran arbeiten.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.body=Na gut, wenn das so ist, dann werde ich wieder überall dort übernachten, wo ich Platz finde, bis mir jemand anderes ein Grundstück sichert und mir eine Marke zusteckt.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.c0=Okay. Wir sehen uns dann.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.body=Eine eigene Tür bedeutet weniger Dreck im Gasthaus, und die Bank ist endlich so festgeschraubt, wie ich es mag. Falls es in der Stadt wieder an Kopfsteinpflaster oder Kupfer mangelt, kommt einfach zur Hütte, dann regeln wir das.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.c0=Danke. Ich werde dich aufsuchen, falls die Stadt mehr Stein oder Kupfer benötigt.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.body=Die Arbeitshütte ist für Erz. Ich lege meinen Umhang immer noch auf ein Gasthausbett, wenn ich frei habe. Ich möchte denselben Haustoken wie alle anderen und dann ein Gebäude mit meinem Namen im Regal.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c0=Ich werde das Haus abstecken und es bauen lassen.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c1=Ein anderes Mal.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.body=Wenn die Mauern stehen, trage mich bitte gemäß der Satzung in den Block ein und komm dann persönlich vorbei. Ich möchte es von dir laut aussprechen hören.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.c0=Das wirst du von mir hören.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.body=Lass dir Zeit mit dem Rahmen. Wenn er steht, schreib meinen Namen auf das Bauleitungsfeld und komm dann wieder. Ich dränge dich nicht, ich möchte es nur schriftlich haben.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.c0=Verstanden.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.speaker=Gorruk Stonevein
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.body=Gut. Ich kann den Sand vor der Tür liegen lassen, anstatt ihn in den Gasthofboden einzureiben. Sag mir Bescheid, ob die Stadt mehr Kopfsteinpflaster oder Kupfer benötigt.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.c0=Schön, dass Sie eine richtige Tür haben.
+
+aetherhaven.dialogue.aetherhaven_miner.gift.love=Das ist genau die Art von Material, die ich gerne auf einer Werkbank sehe, und ich werde mich daran erinnern, dass Sie es mitgebracht haben.
+aetherhaven.dialogue.aetherhaven_miner.gift.like=Das ist wirklich hilfreich für meine Arbeit hier draußen, also vielen Dank, dass Sie an mich gedacht haben.
+aetherhaven.dialogue.aetherhaven_miner.gift.neutral=Ich bin mir noch nicht sicher, wofür ich es verwenden werde, aber ich werde es aufbewahren und mir etwas einfallen lassen.
+aetherhaven.dialogue.aetherhaven_miner.gift.dislike=Ich arbeite im Gesteins- und Erzabbau, daher sind Saatgut und Gartenbedarf nicht wirklich mein Fachgebiet. Vielleicht hätte jemand auf dem Bauernhof Interesse daran.
+
+# === Dialogue: Seren (logger) ===
+aetherhaven.dialogue.aetherhaven_logger.root.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.root.body=Ich fälle Bäume und verarbeite die Stämme zu Bauholz für die Siedlung. Das geht viel einfacher mit einem richtigen Sägewerk, Sägen, Platz zum Stapeln und einer Werkbank. Wenn du mir dieses Gebäude baust, kann ich die Bretterregale füllen, anstatt gutes Holz in unordentlichen Haufen vor der Mauer liegen zu lassen. Scharfes Eisen, gerade Bretter – so mache ich das am liebsten.
+aetherhaven.dialogue.aetherhaven_logger.root.hc0=Du wolltest über ein Haus sprechen.
+aetherhaven.dialogue.aetherhaven_logger.root.hc1=Dein Name steht auf dem Hausblock. Ich wollte, dass du es von mir erfährst.
+aetherhaven.dialogue.aetherhaven_logger.root.hc2=Der Hausbau ist noch im Gange.
+aetherhaven.dialogue.aetherhaven_logger.root.c0=Ich wollte mich jetzt, da Ihr Sägewerk gebaut ist, noch einmal melden.
+aetherhaven.dialogue.aetherhaven_logger.root.c1=Das Sägewerk ist fertiggestellt. Ich bin bereit, die Quest abzuschließen.
+aetherhaven.dialogue.aetherhaven_logger.root.c2=Die Mühle ist bisher nur teilweise gebaut. Ich wollte fragen, wie es damit vorangeht.
+aetherhaven.dialogue.aetherhaven_logger.root.c3=Ich möchte dir helfen, ein Sägewerk zu bekommen. Können wir mit dem Grundstück und dem Spielstein anfangen?
+aetherhaven.dialogue.aetherhaven_logger.root.c4=Das war’s für heute. Wir sprechen später.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.body=Gebt mir die Marke und ein abgestecktes Grundstück für die Mühle, und ich kümmere mich um den Bau. Sobald das Dach drauf und die Werkbank installiert ist, lasse ich die Baumstämme verarbeiten, damit die Stadt saubere Holzstapel direkt aus dem Lager bekommt.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c0=Hier ist das Token. Ich werde die Mühle bauen lassen.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c1=Ich bin noch nicht bereit, mich dazu zu verpflichten.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.body=Perfekt. Sobald die Hülle wetterfest ist, treffe ich Sie am Mühlenpult, damit Sie sehen können, wie Ein- und Auslass angeordnet sind.
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.c0=Klingt gut. Wir sehen uns, wenn die Mühle fertig ist.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_building.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_building.body=Auf dem Baustellenschild stehen immer noch Punkte auf der Liste. Entweder liefern Sie die geforderten Leistungen ab oder teilen Sie mir klar mit, ob Sie die Mühle aufgeben, damit ich mir nicht unnötig Gedanken über ein Projekt mache, das mittendrin abgebrochen wurde.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c0=Ich muss diesen Build stoppen und das Projekt aufgeben.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c1=Ich bin noch am Bauen und werde die Mühle fertigstellen.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.body=Verstanden. Ich werde die ernsthaften Schneidarbeiten verschieben, bis ein weiterer Kunde auftaucht und jemand tatsächlich Interesse an der Fertigstellung der Mühle hat.
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.c0=Okay. Wir sehen uns dann.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_done.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_done.body=Jetzt, wo das Sägewerk läuft, kann ich Brennholz und Bretter produzieren, ohne dafür jede freie Fläche in der Stadt belegen zu müssen. Falls Sie mehr verarbeitetes Holz benötigen, sprechen Sie mich einfach an der Werkbank an, und wir besprechen, was als Nächstes im Lager benötigt wird.
+aetherhaven.dialogue.aetherhaven_logger.seren_done.c0=Danke. Ich melde mich, falls unser Holzvorrat zur Neige geht.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.body=Die Mühle beherbergt Sägen und Lagerbestände. Mein Bett steht dort nicht. Ich möchte ein normales Baugrundstück wie die anderen im Ort und dann ein Dach über dem Kopf, wo ich meine Stiefel neben der Tür abstellen kann.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.c0=Ich werde das Haus abstecken und es bauen lassen.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.c1=Ein anderes Mal.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.body=Wenn die Hülle wetterfest ist, trage mich bitte auf dem Hausgrundstück ein und sag es mir dann persönlich. Ich möchte nicht anhand eines Schildes raten müssen.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.c0=Das wirst du von mir hören.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.body=Stelle den Rahmen fertig, sobald du Zeit hast. Melde dich bei mir an, wenn der Block fertig ist. Ich werde währenddessen weiter an der Fräsmaschine arbeiten.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.c0=Verstanden.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.body=Gut. Dann kann ich die Sägespäne im Büro lassen, anstatt sie im Gasthaus aus meiner Decke zu schütteln. Sag Bescheid, wenn du mehr Bretter brauchst.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.c0=Genießen Sie die Ruhe auf dem Dach.
+
+aetherhaven.dialogue.aetherhaven_logger.gift.love=Das ist hervorragender Bestand für meine Zwecke, und es ist genau die Art von Geschenk, die einem den morgigen Tag tatsächlich erleichtert. Vielen Dank.
+aetherhaven.dialogue.aetherhaven_logger.gift.like=Das ist ein sehr aufmerksamer Beitrag, und ich werde ihn direkt in den Arbeitsablauf hier einbauen.
+aetherhaven.dialogue.aetherhaven_logger.gift.neutral=Ich werde das erst einmal beiseitelegen und einen geeigneten Platz dafür finden, sobald ich sehe, was die Woche bringt.
+aetherhaven.dialogue.aetherhaven_logger.gift.dislike=Ich verbringe meine Tage mit Holzarbeiten, daher kann ich einen Stapel Steinblöcke nicht wirklich gebrauchen. Vielleicht würde der Bergmann das mehr zu schätzen wissen.
+
+# === Dialogue: Thalen (rancher) ===
+aetherhaven.dialogue.aetherhaven_rancher.root.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.root.body=Ich kümmere mich um Tiere und die tierischen Produkte, die die Dorfbewohner essen und verarbeiten, wie Wolle, Felle, Eier und Fleisch. Ohne Stall, saubere Behälter und eine Werkbank wird die Arbeit aber schnell unordentlich. Das Gasthaus ist zwar für eine Mahlzeit gut, aber nicht für Stroh und Hufabdrücke. Deshalb brauche ich von dir einen ordentlichen Stall. Heu auf dem Heuboden, Waren im Lager – das ist alles.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc0=Du wolltest über ein Haus sprechen.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc1=Dein Name steht auf dem Hausblock. Ich wollte, dass du es von mir erfährst.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc2=Der Hausbau ist noch im Gange.
+aetherhaven.dialogue.aetherhaven_rancher.root.c0=Ich wollte mal nachfragen, jetzt, wo Ihre Scheune fertig ist.
+aetherhaven.dialogue.aetherhaven_rancher.root.c1=Die Scheune ist fertig. Ich bin hier, um die Quest abzuschließen.
+aetherhaven.dialogue.aetherhaven_rancher.root.c2=Die Scheune befindet sich noch im Bau. Ich wollte nachfragen, wie der aktuelle Stand ist.
+aetherhaven.dialogue.aetherhaven_rancher.root.c3=Ich möchte dir helfen, eine Scheune zu bekommen. Können wir mit dem Grundstück und dem Spielstein anfangen?
+aetherhaven.dialogue.aetherhaven_rancher.root.c4=Das war’s für heute. Auf Wiedersehen.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.body=Sichere das Grundstück für die Scheune und gib mir die Spielmarke, damit der Bau an mich gebunden ist. Sobald das Gebäude steht und die Werkbank aufgestellt ist, sortiere ich Wolle, Felle, Eier und Schlachtabfälle in die richtigen Behälter im Dorf, damit nichts lose herumliegt oder verdirbt, weil es in der falschen Ecke lag.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c0=Hier ist die Marke. Ich werde die Scheune bauen lassen.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1=Ich bin noch nicht bereit, damit anzufangen.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.body=Großartig. Sobald das Dach drauf ist und das Futter nicht mehr wetterbedingt verdirbt, treffe ich dich an der Werkbank im Haus, damit du sehen kannst, wie ich mir die Futteraufnahme und -lagerung vorstelle.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.c0=Klingt gut. Wir sehen uns, wenn die Scheune fertig ist.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.body=Auf dem Baustellenschild sind immer noch Materialien aufgeführt, die wir der Baustelle schulden. Entweder Sie erledigen die Lieferungen oder Sie sagen mir unmissverständlich, ob Sie die Scheune stornieren, damit ich nicht mit einem Rohbau planen muss, der nur teilweise fertiggestellt ist.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c0=Ich muss diesen Build abbrechen.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1=Ich baue noch und werde die Scheune fertigstellen.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.body=Einverstanden. Ich lasse den Haken an der Tür und warte, bis ein weiteres Token und ein neues Grundstück auftauchen, denn ohne die Scheune muss ich mir einen improvisierten Platz schaffen, der nie für Vieh gedacht war.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.c0=Okay. Vielleicht können wir es ein anderes Mal noch einmal versuchen.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.body=Jetzt haben die Tiere einen trockenen Platz, die Behälter sind so beschriftet, wie ich es mag, und ich kann Wolle und Fleisch direkt weitergeben, ohne alles über die Gasthofküche laufen lassen zu müssen. Falls die Vorräte an Fellen oder Eiern zur Neige gehen, sprecht mich einfach an der Scheunenbank an, dann füllen wir sie wieder auf.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0=Das freut mich. Danke, dass Sie weiterhin Tierprodukte liefern.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body=Die Scheune ist für Vieh und Lagerbehälter. Ich brauche immer noch einen Schlafplatz, der nicht nur nach Heu und Regen riecht. Gebt mir die gleiche Hausmarke wie allen anderen, und ich nehme lieber ein richtiges Bett als eine geliehene Pritsche.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0=Ich werde das Haus abstecken und es bauen lassen.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1=Ein anderes Mal.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body=Wenn das Haus steht, trag mich bitte in die Liste ein und komm dann persönlich vorbei. Ich möchte die Worte hören, nicht von einem Schild ablesen.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0=Das wirst du von mir hören.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body=Bau in deinem Tempo. Wenn das Gerüst fertig ist, schreib meinen Namen durch den Block auf das Regal im Inneren und komm dann wieder. Ich kümmere mich um den Betrieb der Scheune, während du daran arbeitest.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.c0=Verstanden.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.speaker=Thalen Meadowrun
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.body=Gut. Dann kann ich Schlamm und Stroh in der Scheune lassen, anstatt beides ins Gasthaus zu schleppen. Sag mir Bescheid, wenn die Felle oder Eier knapp werden.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.c0=Schön, dass du ein trockenes Bett hast.
+
+aetherhaven.dialogue.aetherhaven_rancher.gift.love=Das war genau das, was die Tiere und ich brauchten, und es erspart mir eine Reise, vor der ich mich sehr gefürchtet hatte. Wirklich vielen Dank.
+aetherhaven.dialogue.aetherhaven_rancher.gift.like=Das ist sehr nett von Ihnen, und ich werde es bei der ersten Gelegenheit nutzen.
+aetherhaven.dialogue.aetherhaven_rancher.gift.neutral=Ich werde das vorerst beiseitelegen und einen Platz dafür finden, sobald ich sehe, wie die Woche auf den Stiften aussieht.
+aetherhaven.dialogue.aetherhaven_rancher.gift.dislike=Ich arbeite mit Vliesstoffen und Viehbedarf, daher kann ich mit Rohmaterial nicht viel anfangen. Jemand aus dem Bergbaubereich könnte daran Interesse haben.
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=Stadtverfassung
@@ -574,7 +846,7 @@ aetherhaven.ui.treasury.deposit=Alle Goldmünzen einzahlen
 aetherhaven.ui.treasury.withdraw=Goldmünzen abheben
 aetherhaven.ui.treasury.hint=Jeden Morgen geben die Dorfbewohner, die sich in der Nähe aufhalten und gut gelaunt sind, etwas Gold dazu. Die Gäste des Gasthauses werden nicht mitgezählt.
 aetherhaven.ui.treasury.tabCoinsTooltip=Gold: Kontostand, Einzahlung, Auszahlung
-aetherhaven.ui.treasury.tabTitheTooltip=Sehen Sie, wer bezahlt und was Sie am nächsten Morgen erwartet.
+aetherhaven.ui.treasury.tabTitheTooltip=Sehen Sie, wer bezahlt und was am nächsten Morgen zu erwarten ist.
 aetherhaven.ui.treasury.tax.intro=Bei Sonnenaufgang sammelt die Stadttruhe etwas Gold von den Dorfbewohnern in deiner Umgebung ein. Momentan sind das {count} Personen. (Laufe herum, damit mehr Dorfbewohner geladen werden und diese Liste aktualisiert wird.)
 aetherhaven.ui.treasury.tax.policyShort.linear=Eure Stadtregel: bis zu {max} Gold pro Person, wenn Essen, Erholung und Vergnügen hoch sind; weniger, wenn sie es nicht sind.
 aetherhaven.ui.treasury.tax.policyShort.perCapita=Eure Stadtregel: Jeder zahlt einen kleinen Grundbetrag ({flatPct}% der Obergrenze), auch an einem schlechten Tag, bis zu {max} Gold, wenn es den Leuten gut geht.
@@ -741,7 +1013,7 @@ aetherhaven.ui.charterrelocation.title=Umzugscharter
 aetherhaven.ui.charterrelocation.summary=Neuausrichtung der Stadtverfassung
 aetherhaven.ui.charterrelocation.details=Zielblock {sx}, {sy}, {sz} · Schritt {step} von 4 (90°)
 aetherhaven.ui.charterrelocation.tips=Das Territorium ist ein quadratischer Bereich um die Charta herum; jedes Gebäude muss nach der Bestätigung innerhalb dieses Bereichs bleiben. Schieben Sie den Geist an die neue Position und platzieren Sie ihn dann.
-aetherhaven.ui.charterrelocation.info=Das Territorium ist ein quadratischer Bereich um die Charta herum. Alle deine Gebäude müssen nach dem Umzug innerhalb dieses Bereichs bleiben. Verschiebe den Geisterblock an die neue Charta-Position und bestätige anschließend.
+aetherhaven.ui.charterrelocation.info=Das Territorium ist ein quadratischer Bereich um die Charta herum. Alle deine Gebäude müssen nach dem Umzug innerhalb dieses Bereichs bleiben. Verschiebe den Geisterblock an die neue Charta-Position und bestätige.
 aetherhaven.ui.charterrelocation.place=Charta des Ortes
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
@@ -754,19 +1026,22 @@ commands.aetherhaven.town.accept.desc=Nehmen Sie eine anstehende Einladung der S
 commands.aetherhaven.town.decline.desc=Eine bevorstehende Einladung der Stadt ablehnen
 commands.aetherhaven.town.kick.desc=Entferne ein Mitglied aus deiner Stadt
 commands.aetherhaven.town.kick.player.desc=Benutzername des Mitglieds (muss online sein)
-commands.aetherhaven.town.role.desc=Rolle eines Mitglieds festlegen (BAUEN, AUFGABEN ODER BEIDES)
+commands.aetherhaven.town.role.desc=Weisen Sie einem Mitglied eine Berechtigungsvorgabe zu (BAUEN, QUESSEN oder BEIDES). Verwenden Sie den Verwaltungsblock „Spieler“ für Berechtigungen pro Flagge.
 commands.aetherhaven.town.role.player.desc=Benutzername des Mitglieds (muss online sein)
-commands.aetherhaven.town.role.role.desc=BAUEN, QUESSEN oder BEIDES
-commands.aetherhaven.town.leave.desc=Verlassen Sie eine Stadt, der Sie angehören (nicht als Eigentümer).
-commands.aetherhaven.town.townName.desc=Optionaler Stadtname (für mehrere Einladungen oder Administratoren)
+commands.aetherhaven.town.role.role.desc=BAUEN, ABENTEUER, ODER BEIDES
+commands.aetherhaven.town.leave.desc=Verlasse eine Stadt, der du angehörst (nicht als Eigentümer).
+commands.aetherhaven.town.townName.desc=Optionaler Ortsname; bitte den vollständigen Namen inklusive Leerzeichen (Rest der Zeile) angeben. Weglassen, wenn nur eine Einladung aussteht.
 
 commands.aetherhaven.poi.desc=Debuggen: POI-Befehle
 commands.aetherhaven.poi.list.desc=POIs für eine Stadt auflisten (optional Stadt-UUID, oder "me" für Ihre Stadt verwenden)
 commands.aetherhaven.poi.town.desc=Stadt-UUID, oder ich, oder weglassen für Anruferstadt
 commands.aetherhaven.poi.dump.desc=Liste alle POIs im In-Memory-Register dieser Welt auf (beliebige Stadt)
 
-commands.aetherhaven.plots.desc=Debuggen: Plotinstanzen auflisten (verwenden Sie Plots, um Konflikte mit dem Plot /aetherhaven zu vermeiden)
-commands.aetherhaven.plots.list.desc=Liste der Grundstücksinstanzen für Ihre Stadt
+commands.aetherhaven.plots.desc=Plotinstanzen: Liste, FinishAssembly (Kreativmodus), Plot-ID entfernen (Kreativmodus). Verwenden Sie Plots, um Konflikte mit dem Plot /aetherhaven zu vermeiden.
+commands.aetherhaven.plots.list.desc=Liste der Grundstücksinstanzen für Ihre Stadt (Grundstücks-UUID, Bau-ID, Bundesland, Schilderposition)
+commands.aetherhaven.plots.finishassembly.desc=Kreativmodus: Schließe sofort alle laufenden Montagearbeiten in deiner Stadt ab (erfordert geladene Chunks / aktive Aufträge).
+commands.aetherhaven.plots.remove.desc=Kreativ: Reiße ein Grundstück anhand seiner UUID ab und entferne es aus deinen Stadtdaten.
+commands.aetherhaven.plots.remove.plotId.desc=Plot UUID from /aetherhaven plots list
 
 commands.aetherhaven.needs.desc=Debug: Dorfbewohner benötigt
 commands.aetherhaven.needs.inspect.desc=Liste der Entitäten in geladenen Chunks auf, die VillagerNeeds haben
@@ -778,7 +1053,7 @@ commands.aetherhaven.needs.value.desc=Wert von 0 bis 100 (100 = vollkommen zufri
 
 commands.aetherhaven.tax.desc=Debug: Morgensteuer des Finanzministeriums
 commands.aetherhaven.tax.breakdown.desc=Zeigt die Steuerzeilen und Gesamtsteuersätze pro Dorfbewohner für Ihre Stadt an (nur geladene Chunks).
-commands.aetherhaven.tax.now.desc=Morgendlichen Zehnten jetzt an die Kasse überweisen (umgeht die Morgenzeit und den Tag der letzten Erhebung)
+commands.aetherhaven.tax.now.desc=Den Morgenzehnten jetzt an die Kasse überweisen (umgeht die Morgenzeit und den letzten Einnahmetag).
 
 commands.aetherhaven.questdebug.desc=Debug: Stadtquest umgehen
 commands.aetherhaven.questdebug.grant.desc=Markiere die Quest in deiner Stadt als aktiv.
@@ -798,14 +1073,17 @@ commands.aetherhaven.reputation.reward.roleFilter.desc=NPC-Rollen-ID (z. B. Aeth
 commands.aetherhaven.reputation.reward.grant.desc=Gewähre jetzt eine Meilensteinbelohnung (erworbene Punkte); verwende die Reputationsbelohnungsliste für IDs.
 commands.aetherhaven.reputation.rewardId.desc=Reputationsprämien-ID (z. B. rep_merchant_50)
 
-commands.aetherhaven.villager.desc=Debuggen: Dorfbewohnerhelfer
+commands.aetherhaven.villager.desc=Debug: Dorfbewohnerhelfer
 commands.aetherhaven.villager.list.desc=Liste der UUIDs der Dorfbewohner-NPCs (für Ruf-/Lokalisierungsbefehle)
 commands.aetherhaven.villager.locate.desc=Position eines Dorfbewohners ausgeben; optionale Teleportation (nur für Bediener)
 commands.aetherhaven.villager.uuid.desc=Dorfbewohner-NPC-Entitäts-UUID
 commands.aetherhaven.villager.target.desc=Dorfbewohner-Entitäts-UUID oder NPC-Rollen-ID in deiner Stadt (z. B. Aetherhaven_Händler)
 commands.aetherhaven.villager.teleport.desc=„true“ bedeutet, sich zum Dorfbewohner zu teleportieren (nur für Operatoren); alternativ kann man „--tp“ verwenden.
 commands.aetherhaven.villager.tp_flag.desc=Teleportiere dich zum Dorfbewohner (nur für Operatoren; entspricht dem Übergeben von „true“)
-commands.aetherhaven.gift.desc=Debuggen: Geschenklimits zurücksetzen oder Geschenkverlaufsvorschau füllen
+commands.aetherhaven.villager.reset.desc=Entferne alle Dorfbewohner-NPCs und lasse sie in deiner Nähe neu erscheinen (Debug-Maßnahme; erhält Quests, Ruf und Geschenke; führt eine Reparatur des Gasthauspools durch, um die Bewohner an die fertiggestellten Gebäude anzupassen; aktualisiert den Gasthausbesucherpool).
+aetherhaven.villager.resetDone=Die Dorfbewohner wurden zurückgesetzt und sind in deiner Nähe wieder erschienen.
+aetherhaven.villager.resetFailed=Dorfbewohner konnten nicht zurückgesetzt werden: {reason}
+commands.aetherhaven.gift.desc=Fehlerbehebung: Geschenklimits zurücksetzen oder Geschenkverlaufsvorschau füllen
 commands.aetherhaven.gift.resetLimits.desc=Setze die täglichen/wöchentlichen Geschenklimits für alle Spieler und alle Dorfbewohner in jeder Stadt dieser Welt zurück.
 commands.aetherhaven.gift.fillHistory.desc=Füge für jede Rolle (deine Stadt) eine Logzeile pro Lieblings-/Mag-/Abneigungsgegenstand hinzu, damit die Geschenkhistorie etwas anzeigt (Debugging).
 commands.aetherhaven.gift.roleId.desc=NPC-Rollen-ID (z. B. Aetherhaven_Händler)
@@ -815,7 +1093,7 @@ commands.aetherhaven.debug_autonomy.toggle.desc=Autonomie-Debugging eines Dorfbe
 commands.aetherhaven.debug_autonomy.show.desc=Zeigt an, ob der Autonomie-Debug-Modus für diesen Dorfbewohner aktiviert ist.
 commands.aetherhaven.debug_autonomy.clear.desc=Beheben Sie den Autonomie-Debug-Fehler in Aetherhaven für diesen Dorfbewohner
 
-commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven-Truhenbonuswürfe auf den anvisierten Container
+commands.aetherhaven.debug_lootchest.desc=Debug: Der Aetherhaven-Truhenbonus wird auf den anvisierten Container angewendet
 commands.aetherhaven.debug_lootchest.fill.desc=Wende erzwungene Schmuck-, Gold- und Handlungsmarkerwürfe auf den Gegenstandsbehälter an, den du gerade ansiehst.
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
@@ -841,6 +1119,39 @@ aetherhaven.ui.feast.err.timedFeastActive=Ein weiteres zeitlich festgelegtes Fes
 aetherhaven.ui.feast.err.waitForTimedFeastEnd=Warten Sie, bis das aktuelle zeitlich begrenzte Festmahl beendet ist, bevor Sie Berrycircle Concord servieren.
 aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord befindet sich noch in der Abklingphase.
 aetherhaven.ui.feast.err.notEnoughIngredients=Sie haben nicht genügend der benötigten Zutaten.
+
+aetherhaven.ui.production.title=Geschäfte am Arbeitsplatz
+aetherhaven.ui.production.prev=Zurück
+aetherhaven.ui.production.next=Nächste
+aetherhaven.ui.production.prevTooltip=Vorherige Ausgabe in diesem Slot
+aetherhaven.ui.production.nextTooltip=Nächster Ausgang in diesem Steckplatz
+aetherhaven.ui.production.take1=Versuch 1
+aetherhaven.ui.production.take10=Nehmen Sie 10
+aetherhaven.ui.production.take100=Nehmen Sie 100
+aetherhaven.ui.production.genInterval={time} um eins herzustellen
+aetherhaven.ui.production.err.plugin=Aetherhaven ist auf diesem Server nicht geladen.
+aetherhaven.ui.production.err.permission=Dieser Lagerraum kann für diese Stadt nicht geöffnet werden.
+aetherhaven.ui.production.err.plot=Dieser Block befindet sich nicht innerhalb eines fertiggestellten Arbeitsplatzgrundstücks (Bauernhof, Scheune, Mühle oder Bergmannshütte) für Ihre Stadt.
+aetherhaven.ui.production.err.catalog=Für dieses Gebäude ist kein Produktionskatalog konfiguriert.
+aetherhaven.ui.production.err.inventoryFull=Ihr Lager ist zu voll, um so viel aufzunehmen.
+aetherhaven.ui.production.unlockButton=Schaltet frei
+aetherhaven.ui.production.unlockTooltip=Zugriff auf gesperrte Arbeitsplatz-Outputs für dieses Gebäude einsehen und erwerben.
+
+aetherhaven.ui.productionUnlocks.title=Arbeitsplatz freischalten
+aetherhaven.ui.productionUnlocks.intro=Wählen Sie unten einen Ausgang aus, um dessen Namen und Anforderungen im Bedienfeld anzuzeigen. Bewegen Sie den Mauszeiger über ein Symbol, um die Anzahl der vorhandenen bzw. benötigten Einheiten anzuzeigen. Sobald Sie die erforderlichen Mengen an Gegenständen und Gold erreicht haben, klicken Sie auf einen gesperrten Ausgang, um ihn zu entsperren.
+aetherhaven.ui.productionUnlocks.navProduction=Produktion
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Zurück zum Arbeitsplatzlager
+aetherhaven.ui.productionUnlocks.detailHint=Klicken Sie auf ein Symbol oben, um dessen Namen und Freischaltbedingungen anzuzeigen.
+aetherhaven.ui.productionUnlocks.err.inventory=Ihre Bestandsliste konnte nicht gelesen werden.
+aetherhaven.ui.productionUnlocks.err.empty=Für diesen Arbeitsplatz ist keine Entsperrliste konfiguriert.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Für diesen Arbeitsplatz bereits freigeschaltet.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Artikel: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Goldmünzen: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Sie benötigen mindestens {need} dieses Artikels in Ihrem Inventar (kombinierte Taschen).
+aetherhaven.ui.productionUnlocks.notify.needGold=Sie benötigen genügend Goldmünzen zwischen der Stadtkasse und Ihrem Inventar ({need} insgesamt).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Die benötigten Artikel konnten nicht aus Ihrem Inventar entfernt werden.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Da der Goldpreis nicht bezahlt werden konnte, wurden Ihre Artikel zurückgeschickt.
+aetherhaven.ui.productionUnlocks.notify.unlocked={item} für diesen Arbeitsplatz freigeschaltet.
 
 aetherhaven.feast.stewards.name=Das Steward's Ledger Abendessen
 aetherhaven.feast.stewards.description=Verteilen Sie Brot, Käse und einen richtigen Kürbiskuchen, damit der morgendliche Zehnte für eine Woche großzügig ausfällt.
@@ -902,7 +1213,7 @@ aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Bedingungen-Labor. Es sollte keine versteckte Auswahlmöglichkeit angezeigt werden. Es sollte eine ausgegraute Auswahlmöglichkeit angezeigt werden. Verwenden Sie die zusammengesetzten Gatter, um fortzufahren.
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Diese Option ist ausgeblendet (wörtlich falsch).
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Dies sollte ausgegraut sein.
-aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(erfordert den Wert „wahr“)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(erfordert den Wert „true“)
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pass zusammengesetzt: NICHT falsch UND wahr
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=ODER Zweig (wahr ODER falsch)
 aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
@@ -928,38 +1239,38 @@ aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub-Aktionen: Er
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Führe unlock_achievement + start_quest Stubs aus
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
 # -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
-aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ich bin Lyren. Ich spreche im Namen der Charta, die wir unterzeichnet haben, als wir diese Stadt auf Orbis gründeten. Die alten Städte sind verschwunden. Was uns bleibt, ist dieses Land und die Menschen, die bereits hier leben, und es werden noch weitere kommen. Bevor wir neue Parzellen anlegen, muss ich, dass ihr das Land um Aetherhaven erkundet: Wo es flach genug zum Bauen ist, wo Wasser fließt, wo wir später Felder oder einen Gemeinschaftsplatz anlegen könnten. Seid pragmatisch. Wenn ihr euch alles angesehen habt, kommt wieder zu mir.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ich bin Lyren. Unsere Stadt richtet sich nach der Charta, die wir bei unserer Ansiedlung unterzeichnet haben. Bevor wir weitere Parzellen abstecken, bitte ich dich, das Gelände um Aetherhaven herum zu erkunden. Verschaffe dir einen Überblick darüber, wo es flach genug zum Bauen ist, wo sich Wasser befindet und wo wir später Felder oder eine Grünfläche anlegen könnten. Nichts Kompliziertes, schau dich einfach um. Wenn du das getan hast, komm zurück und berichte mir.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Ich werde die Gegend erkunden und mich dann wieder melden.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Ältester Lyren
 # -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
-aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Du verdienst etwas durch die Arbeit, die wir dir zuweisen, und durch Tauschgeschäfte, wenn jemand etwas kauft. Die Stadtkasse ist etwas anderes. Sobald die Halle gebaut ist, befindet sich die Schatzkammer dort. Benutze den Block dort, um Münzen einzuwerfen oder herauszunehmen, wenn die Satzung es erlaubt. Danach fließt jeden Morgen etwas Gold von den Einwohnern, nicht von Durchreisenden, in diese Kasse. Wie viel, hängt davon ab, wie es ihnen geht. Wenn sie satt, ausgeruht und guter Dinge sind, füllt sich die Kasse besser. Wenn sie knapp bei Kasse sind, füllt sie sich schlechter. Das sorgt für Ehrlichkeit im Gemeinwesen.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Gold kann auf verschiedene Weise gefunden werden. Man erhält es für abgeschlossene Quests. Wer die Welt erkundet, findet es in Truhen und Verstecken, in Ruinen und anderen alten Orten. Die Stadt verwaltet einen eigenen Goldvorrat in der Schatzkammer. Sobald das Rathaus gebaut ist, befindet sich die Schatzkammer darin. Jeden Morgen fließt eine kleine Steuer der Einwohner in diese Kasse, nicht von Besuchern. Die Höhe der Steuer hängt vom Zustand der Einwohner ab. Sind sie satt, ausgeruht und guter Dinge, erhalten wir mehr. Sind sie hungrig, müde oder angespannt, erhalten wir weniger. Nutze den Block dort, um dein eigenes Gold einzuzahlen oder Stadtgold abzuheben, sofern die Satzung dies erlaubt.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Gut zu wissen. Danke.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=Dort. Ein richtiges Gasthaus für Obdachlose. Corin hat den Schlüssel. Stell dich am Kamin vor. Du hast mehr als nur Dank verdient, aber ich fange mit Dank an.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=Dort. Ein richtiges Gasthaus für Leute, die sonst draußen geschlafen hätten. Corin hat den Schlüssel. Geh und sag hallo am Kamin. Du hättest mehr als nur ein Dankeschön von mir verdient, aber ein Dankeschön ist alles, was ich dir vorerst sagen werde.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Es freut mich, dass ich Ihnen helfen konnte.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Sobald die Wände stehen, nutze den Verwaltungsblock und trage mich als Bewohner ein. Dann komm und such mich auf. Ich möchte es von dir hören, nicht von einem Regal abgelesen bekommen.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Sobald die Wände stehen, benutzen Sie bitte den Verwaltungsblock im Inneren und tragen Sie mich als Bewohner ein. Dann kommen Sie zu mir. Ich möchte es von Ihnen persönlich hören und nicht nur auf dem Schild lesen.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=Du bekommst beides.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Damit ist die Sache erledigt. Ich habe ein Zuhause, das denselben Regeln unterliegt wie alle anderen. Vielen Dank, dass Sie sich darum gekümmert haben.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Dann sind wir fertig. Ich habe jetzt auch ein Dach wie alle anderen hier. Danke, dass Sie durchgehalten haben.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Willkommen zurück, Lyren.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=Die Halle steht, und die Stadtkasse kann wieder aufatmen. Die Charta gab uns Regeln für die Stadt; sie sicherte mir kein Bett zu. Ich will dasselbe kleine Haus wie alle anderen. Nehmt das von mir angebotene Zeichen, sichert das Grundstück mit euren Leuten, bezahlt die Materialien und den Stadtanteil aus der Kasse und tragt meinen Namen dann in die Verwaltung ein, sobald das Haus gebaut ist. Ich werde nicht vergessen, wer mir Platz gemacht hat.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=Das Rathaus ist gebaut und beherbergt die Stadtkasse. Die Stadtordnung enthält die Regeln für die Stadt. Mir wurde kein Bett zugesprochen. Ich möchte dasselbe kleine Haus wie alle anderen. Nimm den Token, den ich dir gebe, sichere das Grundstück mit deinem Platzierungsstab, bezahle die Materialien und den Stadtanteil aus der Kasse. Sobald das Haus fertig ist, trage meinen Namen auf dem Verwaltungsblock ein. Der Bau wird von selbst abgeschlossen, wenn du wartest. Falls es schneller gehen soll, kannst du am Stadtplanungstisch einen Baustab herstellen und ihn auf die grün umrandeten Blöcke anwenden. Ich werde mich daran erinnern, dass du Platz für mich geschaffen hast.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=Ich kümmere mich darum.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=Dazu kann ich noch keine Zusage geben.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Nimm dir die Zeit, die du brauchst. Wenn das Haus fertig ist, trag mich bitte in die Liste ein und komm dann vorbei, damit wir das persönlich klären können.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Nehmen Sie sich die Zeit, die Sie brauchen. Sobald das Haus fertig ist, tragen Sie mich bitte in die Hausverwaltung ein und besuchen Sie mich dann persönlich.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=Ich komme, wenn es fertig ist.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Gut. Weisen Sie Ihren Angestellten das Gasthausgrundstück zu, bezahlen Sie die auf dem Schild aufgeführten Materialien und vollenden Sie den Bau. Sobald das Dach fertig und der Kamin eingebaut ist, kommen Sie bitte persönlich vorbei und geben Sie mir Bescheid. Ich warte auf Ihre Nachricht.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Gut. Platziere das Gasthausgrundstück mit deinen Angestellten, bezahle die auf dem Schild angegebenen Materialkosten und lass den Bauvorgang laufen. Du musst nichts weiter tun, es wird von selbst fertiggestellt, es dauert nur etwas. Wenn du es schneller haben möchtest, stelle am Stadtplanungsschalter einen Baustab her und benutze ihn an den grünen Markierungen. Sobald das Dach drauf und der Kamin drin ist, melde dich bitte persönlich bei mir.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=Ich fange so schnell wie möglich an.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Wenn das Dach hält und der Herd brennt, komm zurück und berichte mir persönlich. Ich will dich nicht drängen, aber ich gehe erst, wenn es in dieser Stadt ein richtiges Gasthaus für alle gibt, die ein Bett brauchen.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Wenn das Gasthaus fertig ist, das Dach drauf und der Kamin funktioniert, komm persönlich vorbei und sag mir Bescheid. Ich gehe erst, wenn es in dieser Stadt Betten für Reisende gibt. Das Gasthaus baut sich von selbst, wenn du es in Ruhe lässt, oder du kannst den Bau mit einem Baustab beschleunigen, falls du einen besitzt.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=Ich komme wieder, wenn es fertig ist.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Ältester Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Ältester Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.root.body=Die Charta bleibt bestehen, und ich stehe weiterhin dazu. Wir haben keine zusätzlichen Unterkünfte, in die wir Leute schicken könnten, daher muss das erste richtige Gebäude hier ein Gasthaus sein: ein Dach über dem Kopf, eine Feuerstelle und eine Tür, die Reisenden und unseren eigenen Verwandten offensteht, wenn der Weg lang ist. Wenn ihr bereit seid, es zu errichten, sagt Bescheid.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=Die Satzung bleibt bestehen, und ich stehe dazu. Wir haben keine andere Unterkunft für Menschen, die ein Dach über dem Kopf brauchen, daher muss unser erstes Gebäude ein Gasthaus sein: ein Dach über dem Kopf, ein Kamin und eine offene Tür. Nachdem ihr das Grundstück abgesteckt und den angegebenen Preis bezahlt habt, geht der Bau automatisch von selbst weiter. Ihr benötigt keinen Baustab. Wenn ihr es schneller haben wollt, könnt ihr einen am Stadtplanungsschalter herstellen. Gebt mir Bescheid, wenn ihr bereit seid anzufangen.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=Ich bin dabei. Lasst uns das Gasthaus rocken!
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=Das Gasthaus steht immer noch auf meiner Liste. Ich wollte dort einchecken.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=Ich überlasse es Ihnen.
@@ -972,17 +1283,17 @@ aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=Der Bau des Rathauses ist n
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=Das Rathaus steht.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=Wie kommen die Leute hier an Goldmünzen?
 aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Nutze den Rathaus-Token mit deinen Mitarbeitern, bezahle die Materialien und baue das Rathaus. Wenn es fertig ist, sag mir persönlich Bescheid. Ich möchte dein Gesicht sehen, wenn du sagst, dass es geschafft ist.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Benutze das Rathaus-Token mit deinen Mitarbeitern, bezahle die Materialien und lass das Gebäude bauen. Es wird automatisch fertiggestellt. Wenn du den Bau beschleunigen möchtest, kannst du am Stadtplanungsschalter einen Baustab herstellen und ihn dann auf den grünen Markierungen verwenden. Sobald das Rathaus fertig ist, komm persönlich vorbei und gib mir Bescheid.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=Ich sage dir Bescheid, sobald es fertig ist.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=So. Aetherhaven hat ein richtiges Rathaus: Archiv, Schatzkammer und einen Raum, in dem wir uns treffen können, ohne uns über den ganzen Platz anschreien zu müssen. Genau das habe ich von dir gebraucht.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=So. Aetherhaven hat jetzt ein Rathaus: Archive, Schatzkammer und einen windgeschützten Raum, wo wir uns treffen können. Genau das habe ich von dir gebraucht.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Freut mich, dass es hilft.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=Das Gasthaus steht. Als Nächstes brauchen wir ein Rathaus, das uns allen gehört: ein Regal für die Gründungsurkunde, einen Schreibtisch für die Pläne und eine Kasse, damit wir mit dem gemeinsamen Geld den Rest des Bauens finanzieren können. Wir sichern uns das Grundstück, bezahlen die auf dem Schild geforderten Materialkosten, und endlich haben wir einen Ort, an dem wir uns als ganze Stadt treffen können.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=Das Gasthaus ist fertig. Als Nächstes brauchen wir ein Rathaus für alle: ein Regal für die Gründungsurkunde, einen Schreibtisch für die Pläne und eine Kasse, damit die Stadtmünzen unsere gemeinsamen Bauprojekte bezahlen können. Sichert das Grundstück mit euren Mitarbeitern und bezahlt die geforderten Materialien. Das Rathaus baut sich mit der Zeit von selbst, wenn ihr wartet. Wenn ihr es schneller haben wollt, stellt am Stadtplanungstisch einen Baustab her und benutzt ihn an den grünen Markierungen.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=Ich werde die Halle aufbauen.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=Noch nicht.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Ältester Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Steinmetzarbeiten und Papierkram brauchen beide Zeit. Sag mir Bescheid, wenn die Halle fertig ist. Ich werde da sein.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Der Bau braucht Zeit. Die Halle wird auch ohne Baustab fertig, wenn du einfach wartest. Sag mir Bescheid, wenn sie fertig ist. Ich werde da sein.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Ich arbeite noch daran.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Ältester Lyren
 # -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
@@ -1037,7 +1348,7 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin 
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=Dort. Ein Kamin für Fremde und ein Riegel, der mir gehört. Das ist mehr wert, als der Schlüssel aussieht.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=Du hast es dir verdient.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Ich koche Suppe für die ganze Stadt, aber ich möchte eine Tür, die meinen eigenen Dreck zurücklässt. Das gleiche Haustoken wie alle anderen. Baut es, und tragt mich in die Liste ein, sobald es steht.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Ich koche Suppe für die ganze Stadt, aber ich möchte eine Tür, die meinen eigenen Dreck zurücklässt. Gleiches Haustoken wie alle anderen. Baut es, und tragt mich in die Liste ein, sobald es steht.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=Ich werde es bauen lassen.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=Ein anderes Mal.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
@@ -1056,6 +1367,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=Du wolltest ein richtiges Z
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=Ich habe dich auf meine Liste gesetzt. Dachte, du solltest es von mir erfahren.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Der Hausbau ist noch im Gange. Ich kümmere mich darum.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=Ich werde mal für Unruhe sorgen.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where=Wo sind denn all die Besucher?
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.body=Die Betten für Reisende sind momentan leer. Alle, die lange genug geblieben sind, haben ihren Mantel als würdige Bürger abgelegt – ich freue mich für sie – und heute ist keine Karawane in der Halle. Wenn neue Reisende kommen, werdet ihr sie hier wiedersehen.
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0=Ich schaue später noch einmal vorbei.
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.speaker=Corin Mosscup
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
 # -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
 aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
@@ -1104,7 +1419,7 @@ aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker=Vex Sunderlane
 # -- Tree id: aetherhaven_priestess (Serah Thornwell) --
 aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. Ich leite die Gaia-Riten für diese Stadt. Das Gasthaus bietet mir ein Dach über dem Kopf, und dafür bin ich dankbar, aber ich kann die Gottesdienste nicht zwischen Abendessen und Kartenspielen abhalten. Ich brauche einen richtigen Altar im Freien: Wege, ein paar Hocker und die Statue, wo die Leute beten können, ohne vom Küchenrauch die Luft anhalten zu müssen.
 aetherhaven.dialogue.aetherhaven_priestess.root.c0=Du wolltest über ein Haus sprechen.
-aetherhaven.dialogue.aetherhaven_priestess.root.c1=Du stehst jetzt im Regal. Ich dachte, du solltest das wissen.
+aetherhaven.dialogue.aetherhaven_priestess.root.c1=Du stehst jetzt im Regal. Ich dachte, du solltest es wissen.
 aetherhaven.dialogue.aetherhaven_priestess.root.c2=Das Haus ist noch nicht fertig.
 aetherhaven.dialogue.aetherhaven_priestess.root.c3=Wie funktioniert der Altar für dich?
 aetherhaven.dialogue.aetherhaven_priestess.root.c4=Der Altarplatz ist vorbereitet.
@@ -1175,10 +1490,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=Wir können diese Art von
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=Ich werde zwischen den Kursen eine Verwendungsmöglichkeit finden.
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=Ich betreibe eine Küche, keine Krimskramsschublade.
 # Elder
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Mit einer solchen Spende ehrt man die Stadt. Ich werde dafür sorgen, dass sie im richtigen Sinne verfasst wird.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Durchdacht. Eine Charta wächst auf Vertrauen genauso wie Stein.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Ich werde gute Absichten nicht ablehnen, selbst wenn sie ungewöhnlich verpackt sind.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Ihr Einsatz ist sichtbar – aber nicht jeder Stein gehört auf den Sockel.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Vielen Dank. Ein solches Geschenk bedeutet hier etwas.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Das war sehr nett von Ihnen. Vielen Dank.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Vielen Dank. Ich werde es so auffassen, wie es gemeint war.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Ich sehe, du hast es versucht. Vielleicht nächstes Mal etwas, das besser zur Stadt passt.
 # Priestess
 aetherhaven.dialogue.aetherhaven_priestess.gift.love=Gaia lächelt. Das gehört auf den Altar.
 aetherhaven.dialogue.aetherhaven_priestess.gift.like=Ein stilles, aber aufrichtiges Angebot. Das zählt.
@@ -1186,7 +1501,7 @@ aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=Ich werde es mit den and
 aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=Manche Dinge lässt man besser unberührt. Danke, aber nein.
 
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Sie dürfen gerne durchreisen, aber diese Charta gilt nicht für Sie. Wenn Sie helfen wollen, müssen Sie zuerst von den hier lebenden Menschen willkommen geheißen werden.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Sie können zwar durchreisen, stehen aber nicht auf dieser Charta. Wenn Sie helfen möchten, müssen Sie vorher von jemandem, der hier wohnt, eingeladen werden.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Ich verstehe.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Ältester Lyren
 # -- Tree id: aetherhaven_visitor_generic (visitors) --
@@ -1208,16 +1523,17 @@ aetherhaven.interaction.dialogue=Drücken Sie [{key}], um zu sprechen.
 npcRoles.Aetherhaven_Test_Villager.name=Dialogtest Dorfbewohner
 aetherhaven.banner.quest.completed.primary=Quest abgeschlossen
 aetherhaven.banner.quest.completed.secondary={name}
-aetherhaven.banner.assembly.complete.primary=Building Complete
+aetherhaven.banner.assembly.complete.primary=Gebäude fertiggestellt
 aetherhaven.banner.assembly.complete.secondary={name}
-aetherhaven.assembly.complete.chat={name} is ready.
+aetherhaven.assembly.complete.chat={name} ist bereit.
+aetherhaven.assembly.tracer.none_in_range=Keine Montagevorschau in Reichweite (näher heranfahren oder Baugenehmigung der Stadt prüfen).
 aetherhaven.banner.quest.started.primary=Quest gestartet
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Entsperrt
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Building Staff
-items.Aetherhaven_Building_Staff.description=Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
-items.Aetherhaven_Construction_Preview.name=Construction marker
-items.Aetherhaven_Construction_Preview.description=Marks the next prefab cell during town building assembly.
+items.Aetherhaven_Building_Staff.name=Gebäudepersonal
+items.Aetherhaven_Building_Staff.description=Die Primärwaffe sendet einen Führungsbolzen durch Blöcke hindurch zur nächstgelegenen Bauvorschau in Reichweite. Halte die Sekundärwaffe gedrückt und ziele durch Blöcke hindurch auf die leuchtend grüne Baumarkierung, um den nächsten Block sofort zu platzieren (Bauberechtigung der Stadt erforderlich). Passive Bauvorgänge schreiten auch in deiner Abwesenheit automatisch voran.
+items.Aetherhaven_Construction_Preview.name=Baustellenmarkierung
+items.Aetherhaven_Construction_Preview.description=Markiert die nächste Fertigteilzelle während der Montage des Stadtgebäudes.

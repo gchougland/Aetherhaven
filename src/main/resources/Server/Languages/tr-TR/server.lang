@@ -15,6 +15,7 @@ aetherhaven.common.townNotFound=Şehir bulunamadı.
 aetherhaven.common.invalidTownLink=Geçersiz şehir bağlantısı.
 aetherhaven.common.treasuryNotLinked=Hazine ile bağlantısı yok.
 aetherhaven.common.ownerOnlyTreasury=Hazineyi yalnızca kasaba sahibi kullanabilir.
+aetherhaven.common.noTreasuryPanelPermission=Belediye hazinesini kullanma izniniz yok.
 aetherhaven.common.townNotInThisWorld=Şehir bu dünyada değil.
 aetherhaven.common.noMoveBuildingsPermission=Bu kasabada binaları taşıma izniniz yok.
 aetherhaven.common.buildingCannotMove=Bu bina taşınamaz (arsa eksik veya tamamlanmamış).
@@ -22,6 +23,7 @@ aetherhaven.common.lookAtBlockPlot=Parsel işaretinin konumunu ayarlamak ve öni
 aetherhaven.common.carryPlotToken=Yerleştirmeye başlamak için araçta listelenen bir bina türüne ait bir arsa belirteci (örneğin, han arsa belirteci) taşıyın.
 aetherhaven.common.statueNotLinked=Heykelin bir kasabayla bağlantısı yok.
 aetherhaven.common.ownerOnlyStatue=Bu heykeli yalnızca kasaba sahibi kullanabilir.
+aetherhaven.common.noReviveVillagersPermission=Bu heykelin bulunduğu yerde köylüleri diriltme izniniz yok.
 aetherhaven.common.noPlayerId=Oyuncu kimliği yok.
 aetherhaven.common.playersOnly=Sadece oyuncular için.
 aetherhaven.common.invalidVillager=Engelli köylü.
@@ -52,7 +54,7 @@ aetherhaven.town.invite.err.emptyName=Oyuncu adı girin.
 aetherhaven.town.invite.err.targetOffline="{name}" adlı oyuncu bu dünyada çevrimiçi değil.
 aetherhaven.town.invite.err.cannotInviteSelf=Kendinizi davet edemezsiniz.
 aetherhaven.town.invite.err.alreadyInTown=O oyuncu zaten bu dünyadaki bir kasabada bulunuyor.
-aetherhaven.town.invite.toTarget={inviter} sizi "{townDisplay}" kasabasına katılmaya davet etti. /aetherhaven town accept {townDisplay} veya /aetherhaven town decline {townDisplay} yazın.
+aetherhaven.town.invite.toTarget={inviter} sizi "{townDisplay}" kasabasına katılmaya davet etti. /aetherhaven town accept {townDisplay} veya /aetherhaven town decline {townDisplay} yazın (boşluklar dahil olmak üzere kasabanın tam adını kullanın).
 aetherhaven.town.invite.sent=Davet {name} adresine gönderildi.
 aetherhaven.town.kick.err.mustBeOnline=Oyuncunun isimle oyundan atılabilmesi için çevrimiçi olması gerekir.
 aetherhaven.town.kick.err.cannotRemoveOwner=Kasaba sahibini kaldıramıyorum.
@@ -70,6 +72,20 @@ aetherhaven.town.accept.joined="{town}"'a katıldınız.
 aetherhaven.town.decline.noPending=O şehir için bekleyen bir davet yok.
 aetherhaven.town.decline.noInvites=Şu anda bekleyen şehir davetiyeniz yok.
 aetherhaven.town.decline.done=Davet reddedildi.
+aetherhaven.town.permissions.updated=Üye izinleri kaydedildi.
+
+aetherhaven.ui.memberPermissions.title=Üye izinleri
+aetherhaven.ui.memberPermissions.backTooltip=Oyuncu listesine geri dön
+aetherhaven.ui.memberPermissions.placePlots=Parselleri yerleştirin
+aetherhaven.ui.memberPermissions.manageConstructions=İnşaat işlerini kurmak ve yönetmek (montaj, üretim, şenlikler, tüzük değişiklikleri, binaların taşınması)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Şehir hazinesindeki altını inşaat maliyetlerine harcayın.
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Hazine hesabı açın (para yatırma / para çekme)
+aetherhaven.ui.memberPermissions.acceptQuests=Kasaba görevlerini kabul et / başlat
+aetherhaven.ui.memberPermissions.completeQuests=Kasaba görevlerini tamamlayın ve itibar ödüllerini kazanın.
+aetherhaven.ui.memberPermissions.abandonQuests=Aktif kasaba görevlerini bırakın.
+aetherhaven.ui.memberPermissions.reviveVillagers=Gaia heykelinin bulunduğu yerde köylülere moral verin.
+aetherhaven.ui.memberPermissions.err.notOwner=İzinleri yalnızca kasaba sahibi düzenleyebilir.
+aetherhaven.ui.memberPermissions.err.notInTown=O oyuncu bu şehirde değil.
 aetherhaven.town.rolecmd.playerMustBeOnline=Oyuncunun çevrimiçi olması gerekir.
 aetherhaven.town.rolecmd.roleInvalid=Rol, İNŞA ET, GÖREV veya HER İKİSİ olmalıdır.
 aetherhaven.town.leave.notInTown=Bir kasabada değilsiniz.
@@ -92,7 +108,7 @@ aetherhaven.ui.treasury.makeRoom=Envanterinizde yer açın.
 aetherhaven.ui.treasury.couldNotAddCoins=Para eklenemedi.
 aetherhaven.ui.treasury.withdrew={count} altın sikke çekildi.
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=Vergi dağılımı (yalnızca yüklenen bölümler; yüklenmemiş sakinler simülasyon yapılana kadar 0 katkıda bulunur):
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Vergi dağılımı (yalnızca yüklenen bölümler; yüklenmemiş sakinler simülasyona kadar 0 katkıda bulunur):
 aetherhaven.ui.treasury.debug.titheNoHall=Onluk vergi: Bu kasabada tam teşekküllü bir belediye binası yok.
 aetherhaven.ui.treasury.debug.titheZero=Onluk vergi: 0 altın (yüklenmiş sakin yok veya politika hesaplamalarından 0). Boşaltma/ihtiyaçlar/ayrıntılar: /aetherhaven vergi dökümü
 aetherhaven.ui.treasury.debug.titheApplied=Onluk vergi uygulandı: Hazineye +{amount} altın (sabahki bağışla aynı kurallar geçerli).
@@ -205,6 +221,12 @@ aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
 aetherhaven.towns.inWorldCount=Bu dünyadaki Aetherhaven kasabaları: {count}
 aetherhaven.towns.entry={name} id={id} sahibi={owner} kiralama={cx},{cy},{cz} arsalar={plots}
 aetherhaven.debug.plots.line={plotId} {construction} {state} işareti@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=Kasabanız için aktif bir işiniz varken arsa birleştirmeyin (yapıların etrafındaki blokları yükleyin veya önce bir yapı inşa etmeye başlayın).
+aetherhaven.debug.plots.finishassemblyDone=Devam eden {count} olay yeri oluşturma işlemi anında tamamlandı.
+aetherhaven.debug.plots.removeBadUuid=Geçersiz harita UUID'si. Lütfen /aetherhaven harita listesindeki kimliği kullanın.
+aetherhaven.debug.plots.removeNotFound=Şehrinizde {plotId} numaralı arsa bulunmamaktadır.
+aetherhaven.debug.plots.removeDataFailed=Dünya temizlendi ancak kasaba verilerinden arsanın kaldırılması başarısız oldu (kayıtları kontrol edin).
+aetherhaven.debug.plots.removedPlot={plotId} numaralı parseli kasabadan çıkardık ve kapladığı alanı temizledik.
 aetherhaven.debug.poi.invalidTownUuid=Geçersiz kasaba UUID'si: {raw}
 aetherhaven.debug.poi.noTownArg=Bu dünyada hiçbir şehriniz yok (şehir UUID'sini argüman olarak kullanın).
 aetherhaven.debug.poi.listHeader={town} ({count}) kasabası için ilgi noktaları:
@@ -280,7 +302,7 @@ aetherhaven.ui.plotconstruction.moveBuilding=Binayı taşıma
 aetherhaven.ui.plotconstruction.houseResident=İkamet eden kişi
 aetherhaven.ui.plotconstruction.assignHouseResident=Yerleşik
 aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Binayı taşımak mı?
-aetherhaven.ui.plotconstruction.moveBuildingModalBody=Yeni bir yer seçmek için arsa yerleştirme özelliğini açar. Taşıma işlemi eski binayı yıkar ve yeniden inşa eder; öncelikle değerli eşyaları, evcil hayvanları ve mevcut binanın içindeki dağınık eşyaları kaldırın.
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Yeni bir yer seçmek için arsa yerleştirme seçeneğini açar. Taşıma işlemi eski binayı yıkıp yeniden inşa eder; öncelikle değerli eşyaları, evcil hayvanları ve mevcut binanın içindeki dağınık eşyaları kaldırın.
 aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Devam etmek
 aetherhaven.ui.plotconstruction.moveBuildingModalCancel=İptal etmek
 
@@ -340,8 +362,8 @@ aetherhaven.ui.charter.saved=Tüzük değişiklikleri güncellendi.
 
 # === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
 aetherhaven.reputation.reward.continue=Devam etmek
-aetherhaven.reputation.reward.elder.50=Şartname sonsuza dek değişmez değildir. İşte değişiklikler tablosu için bir şablon. Şemayı öğrendikten sonra, şehir planlama masanızda bunu tasarlayın. Salona yerleştirin ve şehrin sabah vergi oranının nasıl olacağına karar verin.
-aetherhaven.reputation.reward.elder.100=Bu yeri, kimsenin istemediğinden çok daha ileriye taşıdınız. Bu temel taşını alın: Kurucu anıtını, tüzüğün izin verdiği yere dikin. Hazine bunu hatırlayacaktır.
+aetherhaven.reputation.reward.elder.50=Büyüdükçe tüzük değişebilir. İşte bir değişiklik tablosunun şablonu. Şemayı elde ettiğinizde bunu şehir planlama masanızda oluşturun. Salona koyun ve sabah vergilerinin nasıl işleyeceği konusunda seçim yapabilirsiniz.
+aetherhaven.reputation.reward.elder.100=Bu kasaba için sizden istenenden çok daha fazlasını yaptınız. Bu temel taşını alın. Kurucu anıtını, tüzüğün izin verdiği yere dikin. Buradaki insanlar sizi hatırlayacak.
 aetherhaven.reputation.reward.innkeeper.50=Bu salonu yeterince uzun süre doyurdunuz ve dürüst tuttunuz, bu yüzden büyük sofrayı size emanet edeceğim. İşte ziyafet düzeni—şemayı aldığınızda şehir planlama masasında hazırlayın, sonra da şehre yerleştirin. Masa hazır olduğunda, Defter Akşam Yemeği'ni de çağırabilirsiniz: ekmek, peynir, turta ve bir hafta boyunca cömertliği destekleyen bir zekât. Siz servis yaparken ben de salonu gözetleyeceğim.
 aetherhaven.reputation.reward.innkeeper.75=Bizimle yeterince uzun gece geçirdiniz. Hearthglass Nöbetini kurduğunuzda, kasaba bir hafta boyunca daha yavaş ve daha nazik beslenir. Balık, et, sebze ve her ihtiyaca yönelik daha yumuşak bir yemek sunulur. İşte böylece birbirimizi ayakta tutuyoruz.
 aetherhaven.reputation.reward.innkeeper.100=Artık siz ve bu kasaba aynı ismi paylaşıyorsunuz. Berrycircle Concord, hafif tabak çemberi anlamına geliyor: salata, meyve şişleri, patlamış mısır ve enfes bir tost. Bir kere servis edin, sizi daha sıcak hatırlayacaklar.
@@ -367,7 +389,7 @@ commands.aetherhaven.reload.success=Aetherhaven yapılandırma dosyaları ve var
 commands.aetherhaven.reload.failure=Yeniden yükleme başarısız oldu: {detail}
 commands.aetherhaven.reload.noPlugin=Aetherhaven eklentisi yüklenmedi.
 commands.aetherhaven.plot.desc=Arsa tabelası yönetim arayüzünü açın (yapı seçin, öğeyi alın)
-commands.aetherhaven.starterkit.desc=Kendinize Aetherhaven başlangıç setini verin (hikaye asası, günlük, tüzük, han jetonu, şehir planlama masası; yaratıcı mod).
+commands.aetherhaven.starterkit.desc=Kendinize Aetherhaven başlangıç kiti verin (arsa yerleştirme personeli, tüzük, şehir planlama masası, inşaat personeli; yaratıcı mod).
 commands.aetherhaven.starterkit.success=Başlangıç kiti envanterinize eklendi.
 commands.aetherhaven.starterkit.partial=Başlangıç kiti kısmen onaylandı; {failed} öğe sığmadı (envanterde yer açın).
 
@@ -388,7 +410,7 @@ items.Aetherhaven_Charter.name=Kasaba tüzüğü
 items.Aetherhaven_Charter.description=Kasaba kurmak için yer. Her oyuncu her dünyada bir kasabaya sahip olabilir. Kasaba bilgilerini açmak için kullanılır.
 
 items.Aetherhaven_Town_Planning_Desk.name=Şehir planlama masası
-items.Aetherhaven_Town_Planning_Desk.description=Kasaba tüzüklerini, arsa yerleştirme asasını, görev günlüğünü, jeod örsünü, tüzük değişiklikleri tablosunu ve arsa jetonlarını üretin. Birini çalışma tezgahında inşa edin.
+items.Aetherhaven_Town_Planning_Desk.description=Kasaba tüzükleri, arsa yerleştirme asası, inşaat asası (pasif arsa yapımını hızlandırır), görev günlüğü, jeod örsü, tüzük değişiklikleri tablosu ve arsa jetonları üretin. Birini çalışma tezgahında inşa edin.
 items.Aetherhaven_Charter_Amendments_Table.name=Tüzük değişiklikleri tablosu
 items.Aetherhaven_Charter_Amendments_Table.description=Kasabanın öşürünün nasıl hesaplandığını ve tüzüğün hangi ticareti desteklediğini kaydeder. Nüfusunuz desteklediğinde değişiklikleri açmak için kullanın. Kasaba planlama masanızda üretin; şemayı bilmeniz gerekir.
 items.Aetherhaven_Banquet_Table.name=Ziyafet masası
@@ -414,6 +436,73 @@ aetherhaven.poiTool.legendPrimary=Birincil: Bloğun yakınındaki en yakın ilgi
 aetherhaven.poiTool.legendSecondary=İkincil: Seçilen ilgi noktasını bloğa taşı
 aetherhaven.poiTool.legendUse=Kullanım: Seçilen POI için NPC yol hedefi belirleme (POI blok temizlemelerinde kullanılır)
 
+aetherhaven.pathTool.legendPageTitle=Yol aracı
+aetherhaven.pathTool.legendBlurb=Bir eğri oluşturun, önizleyin ve ardından yol bloklarını yerleştirin. Aracı tutarken köşede bir durum paneli belirir. Buuz135 MHUD yüklü olduğunda, panel kendi katmanı olarak kaydedilir, böylece diğer özel HUD'lar da görünür kalabilir.
+aetherhaven.pathTool.legendHotkeyAdd=Yerdeki ikincil imleç bir anahtar kare (altın küre) ekler. Nişan alırken ikincil imleç bir anahtar kareyi kaldırır. Yeni anahtar kareler baktığınız yöne bakar.
+aetherhaven.pathTool.legendHotkeyAim=Seçmek için bir anahtar kareye bakın. Taşıma modunda, zemindeki birincil nokta hareket eder. Aynı düğümdeki birincil nokta hiçbir şey yapmaz.
+aetherhaven.pathTool.legendHotkeyUse=F: Döndürme modunda, seçili düğümde adım adım sapma hareketi yapar. Taşıma modunda, F hiçbir şey yapmaz. Yerleştirme modunda, F yolu yerleştirir (iki düğüm gerekir). Q: Mod döngüsü. E: Genişlik 1-8. Üçüncü araç özelliği: Yol stili (iç bloklar; yapılandırmadaki PathToolStyles'a bakın). Bir anahtar karede ikincil tuşa basıldığında kaldırılır.
+aetherhaven.pathTool.legendHotkeyCrouchUse=İsteğe bağlı: Mod değiştirmek için artık çömelme gerekmiyor; bunun yerine araç yeteneğini (Q) kullanın.
+aetherhaven.pathTool.legendVisuals=Önizleme: beyaz = düğümler ve eğri, kahverengi = yol şeridi, yeşil = kenar çimi; kırmızı = engellenmiş. Levhalar yüzeyde duruyor. Genişlik: ikinci araç yeteneği (1-8). Stil: üçüncü araç yeteneği. Onay, yolun üzerindeki uzun bitkileri (Plant_Grass) temizler.
+aetherhaven.pathTool.statusHeader=Aleti tutarken
+aetherhaven.pathTool.statusLine1=Puan eklediğinizde, mod değiştirdiğinizde (Q) veya taahhüt modunda işlemi tamamladığınızda bildirimler ve sohbet mesajları görüntülenir.
+aetherhaven.pathTool.statusLine2=Seçim: Bir küreye nişan alın. İsabet ettiremezseniz mevcut seçiminizi korursunuz. Q tuşu modu değiştirir; ikinci yetenek genişliği değiştirir; üçüncü yetenek yol stilini değiştirir.
+
+aetherhaven.pathTool.hudTitle=Yol aracı
+aetherhaven.pathTool.hudNameTranslate=Taşınmak
+aetherhaven.pathTool.hudNameRotate=Döndür
+aetherhaven.pathTool.hudNameCommit=Yer
+aetherhaven.pathTool.hudHelpTranslate=Birincil: Seçmek için bir düğüme nişan alın, ardından taşımak için bir bloğa birincil tuşla dokunun. İkincil: Zemin bir düğüm ekler; bir düğüme nişan almak onu kaldırır. Q: Sonraki mod.
+aetherhaven.pathTool.hudHelpRotate=Birincil: Seçmek için bir düğümü hedefleyin. İkincil: Yere basmak bir düğüm ekler; bir düğümü hedeflemek onu kaldırır. F, seçili düğümün yaw'unu hafifçe değiştirir. Q: Sonraki mod.
+aetherhaven.pathTool.hudHelpCommit=Birincil: Seçmek için bir düğümü hedefleyin. İkincil: Zemin bir düğüm ekler; bir düğümü hedeflemek onu kaldırır. F yolu yerleştirir (2+ düğüm). Q: sonraki mod.
+aetherhaven.pathTool.hudStyle=Stil: {style}
+aetherhaven.pathTool.hudWidth=Genişlik: {w} blok (E tuşuyla döngü)
+aetherhaven.pathTool.hudNodes=Düğümler: {n}
+aetherhaven.pathTool.hudHint=Birincil = seçme/taşıma | İkincil = zemine ekleme, düğümden kaldırma | Q: mod | E: genişlik | R: stil | F: döndürme/yerleştirme
+
+aetherhaven.pathTool.addedNode={n} düğümü eklendi.
+aetherhaven.pathTool.modeCycledToTranslate=Mod: Anahtar kareleri taşı ve yerleştir.
+aetherhaven.pathTool.modeCycledToRotate=Mod: döndürme — F, seçili düğümün yatay hareketini hafifçe değiştirir.
+aetherhaven.pathTool.modeCycledToCommit=Mod: Yerleştir — F tuşu yolu yerleştirir (2 veya daha fazla düğümünüz olduğunda).
+aetherhaven.pathTool.widthCycled=Yol genişliği: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Yol stili: {style}
+aetherhaven.pathTool.toastStyleCycled=Yol stili değiştirildi
+aetherhaven.pathTool.useInTranslateMode=Hareket modunda F tuşu hiçbir işe yaramaz. Yerleştirme moduna geçmek için Q tuşuna, ardından yerleştirmek için F tuşuna basın veya döndürmek için F tuşuna ve ardından yatay hareket için F tuşuna basın.
+aetherhaven.pathTool.rotateNoSelection=Döndürmek için bir ana kare seçin (altın küreyi hedefleyin) veya modu değiştirmek için Q tuşuna basın.
+aetherhaven.pathTool.modeToggled=Mod: {m}
+aetherhaven.pathTool.selectedNode=Düğüm seçildi.
+aetherhaven.pathTool.movedNode=Düğüm taşındı.
+aetherhaven.pathTool.noNodeHit=Menzil içinde kontrol düğümü yok. Bir düğüm seçiliyken çeviri modunda, hareket ettirmek için yerdeki birincil düğümü deneyin.
+aetherhaven.pathTool.noNodeOnAim=Nişan alma imlecinde anahtar kare yok. Seçmek için altın diske nişan alın. Seçim değişmeden kalır.
+aetherhaven.pathTool.toastAdd=Kontrol noktası eklendi.
+aetherhaven.pathTool.toastModeTranslate=Taşıma: Birincil komut blok hareketlerini seçer; ikincil komut ise anahtar kare ekler.
+aetherhaven.pathTool.toastModeRotate=Döndür: F tuşu, seçili düğümün yatay hareketini hafifçe değiştirir.
+aetherhaven.pathTool.toastModeCommit=Yerleştirme: F, yolu (2+ düğüm) yerleştirir. Q ile yer değiştirir.
+aetherhaven.pathTool.toastMoved=Düğüm konumu güncellendi
+aetherhaven.pathTool.toastRemoved=Kontrol noktası kaldırıldı.
+aetherhaven.pathTool.toastRotated=Yaw hafifçe dürttü
+aetherhaven.pathTool.toastCemented=Yol sabitlendi. Geri alma kimliği için sohbete bakın.
+aetherhaven.pathTool.rotated=Döndürüldü {deg}°.
+aetherhaven.pathTool.removedNode=Düğüm kaldırıldı. Geriye {n} düğüm kaldı.
+aetherhaven.pathTool.needTwoNodes=En az iki anahtar kareye ihtiyacınız var. İkincil seçeneği kullanarak bir tane daha ekleyin veya düzenleme modundan çıkmak ve düzenlemeye devam etmek için Q tuşuna basın.
+aetherhaven.pathTool.emptyPlan=Yol boyunca zemin bulunamadı (dik/boş/yüklenmemiş alanlar).
+aetherhaven.pathTool.cementFail=Yerleştirilecek bir şey yok: Değiştirilebilir zemin bulunamadı veya yerleştirme başarısız oldu.
+aetherhaven.pathTool.cemented=Yol yerleştirildi. Geri alma kimliği: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=aetherhaven.path.revert izniniz yok.
+aetherhaven.pathTool.badUuid=Geçersiz kimlik: {raw}
+aetherhaven.pathTool.unknownId=Bu kimlik numarasına sahip kayıtlı bir yol yok.
+aetherhaven.pathTool.reverted={id} için {cells} bloğu/blokları geri alındı.
+aetherhaven.pathTool.navvizOn=Yol navigasyon hata ayıklaması: açık (sunucu, onaylanmış yol düğümlerini çizgiler halinde gösterir; kapatmak için tekrar çalıştırın)
+aetherhaven.pathTool.navvizOff=Yol navigasyon hata ayıklaması: kapalı
+aetherhaven.pathTool.navvizNoPerm=Yol navigasyon hata ayıklaması için aetherhaven.path.tool gereklidir.
+
+commands.aetherhaven.path.root.desc=Yol/eğri yerleştirme yardımcıları
+commands.aetherhaven.path.revert.desc=Geri alma dosyasından (aetherhaven.path.revert) sabitlenmiş bir yolu geri yükle.
+commands.aetherhaven.path.revert.id=Yol taahhüt kimliği (Cement sohbet mesajından alınan UUID)
+commands.aetherhaven.path.navviz.desc=Yol navigasyon çoklu çizgilerinin hata ayıklama çizimini açıp kapat (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=Yol tasarımcısı küreği
+items.Aetherhaven_Path_Tool.description=Eğri yollar tasarlar (aetherhaven.path.tool). İkincil: düğüm ekle. Birincil: seç; taşıma modunda, taşımak için zemine tıklayın. Q: mod döngüsü. 2. yetenek: yol genişliği 1-8. 3. yetenek: yol stili (iç bloklar; yapılandırmada PathToolStyles). F: döndürmede sapmayı hafifçe kaydır veya yerleştirme modunda yerleştir (2+ düğüm). Geri Al: aetherhaven yol geri alma. Yapılandırma: PathToolStyles, ışın izleme ve değiştirme listeleri.
+
 items.Aetherhaven_Plot_Token_Inn.name=Han arsası jetonu
 items.Aetherhaven_Plot_Token_Inn.description=Hanın yerleşim planı için gerekli olan envanter öğesi, arsa yerleştirme personelini kullanabilmek için gereklidir.
 
@@ -427,7 +516,7 @@ items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Demirci dükkanı arsa jetonu
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Parsel yerleştirme personeli tarafından demirci dükkanının yerinin belirlenmesi gerekmektedir.
 
 items.Aetherhaven_Plot_Token_Park.name=Park yeri jetonu
-items.Aetherhaven_Plot_Token_Park.description=Parsel yerleştirme personeli tarafından park alanının yerleşim planının oluşturulması gerekmektedir.
+items.Aetherhaven_Plot_Token_Park.description=Park alanının yerleşim planının, planlama personeli tarafından belirlenmesi gerekmektedir.
 
 items.Aetherhaven_Plot_Token_House.name=Ev arsası jetonu
 items.Aetherhaven_Plot_Token_House.description=Arsa yerleşim personeli tarafından ortak konutun temel planının yerleştirilmesi gerekmektedir.
@@ -479,6 +568,18 @@ npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
 npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
 npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
 npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Gorruk Taş Damarı
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Çayır Koşusu
+
+items.Aetherhaven_Production_Storage.name=İşyeri mağazaları
+items.Aetherhaven_Production_Storage.description=İşçilerinizin getirdiği malzemeleri depolar. Çıkışları ayarlamak ve yığınları almak için açılır. Binanın bir parçasıdır ve kaldırılamaz.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Madenci kulübesi arsa jetonu
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Madenci kulübesi prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında üretilir.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Kereste fabrikası arsa jetonu
+items.Aetherhaven_Plot_Token_Lumbermill.description=Kereste fabrikası prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında yapılan iş.
+items.Aetherhaven_Plot_Token_Barn.name=Ahır arsası belirteci
+items.Aetherhaven_Plot_Token_Barn.description=Hazır ahırın inşa edilebileceği yerleri işaretler. Şehir planlama masasında yapılan iş.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia sunağı arsa jetonu
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Gaia sunağı prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında üretim.
@@ -543,13 +644,184 @@ aetherhaven.profession.kind.merchant=Tüccar
 aetherhaven.profession.kind.farmer=Çiftçi
 aetherhaven.profession.kind.blacksmith=Demirci
 aetherhaven.profession.kind.priestess=Rahibe
+aetherhaven.profession.kind.miner=Madenci
+aetherhaven.profession.kind.logger=Oduncu
+aetherhaven.profession.kind.rancher=Çiftlik sahibi
 aetherhaven.profession.kind.unknown=İkamet eden kişi
+
+# === Dialogue: Gorruk (miner) ===
+aetherhaven.dialogue.aetherhaven_miner.root.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.root.body=Kasaba için taş ve cevher çıkarıyorum, ama bunu düzgün bir şekilde yapabilmem için gerçek bir madenci kulübesine ihtiyacım var. Kuru bir yerde uyumam ve kaya kırarken yerinden oynamayan bir çalışma tezgahına ihtiyacım var. Eski ekibim damarı takip et derdi ve ben hala buna göre yaşıyorum. Bana kulübeyi verin, ben de depolarınızı dolu tutayım.
+aetherhaven.dialogue.aetherhaven_miner.root.hc0=Bir ev hakkında konuşmak istiyordunuz.
+aetherhaven.dialogue.aetherhaven_miner.root.hc1=Adın evin arsasına yazılmış. Bunu benden duymanı istedim.
+aetherhaven.dialogue.aetherhaven_miner.root.hc2=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_miner.root.c0=Madenci kulübeniz bittiğine göre size haber vermek istedim.
+aetherhaven.dialogue.aetherhaven_miner.root.c1=Madenci kulübeniz tamamlandı. Görevi tamamlamak için buradayım.
+aetherhaven.dialogue.aetherhaven_miner.root.c2=Kulübeniz hâlâ inşaat halinde. Durumun ne olduğunu öğrenmek istedim.
+aetherhaven.dialogue.aetherhaven_miner.root.c3=Sana bir madenci kulübesi edinmende yardımcı olmak istiyorum. Arsa ve jetonla başlayabilir miyiz?
+aetherhaven.dialogue.aetherhaven_miner.root.c4=Şimdilik bu kadar. Daha sonra görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.body=Madenci kulübesi için bir arsa belirleyin ve bana jetonu verin ki yapı resmen benim olsun. Kulübe kurulduktan ve tezgah yerleştirildikten sonra, anlaştığımız gibi, kazdığım malzemeleri taş ve bakıra dönüştürüp kasaba deposuna koyacağım.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c0=İşte jeton. Hadi, yapıyı oluştur.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_quest_hut.c1=Şu an olmaz, biraz daha zamana ihtiyacım var.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.body=Bu bana uyar. Duvarlar ve çatı bittiğinde, kulübedeki çalışma tezgahında olacağım, bu yüzden beni nerede bulacağınızı tam olarak bileceksiniz.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_accepted.c0=Anladım. Yapıyı bitirmeye odaklanacağım.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.body=İnşaat tabelasında hala eksik malzemeler olduğu görünüyor, bu yüzden ya teslimat listesini tamamlayın ya da projeyi iptal etmek istiyorsanız bana doğrudan bildirin ki artık gerçekleşmeyecek bir şey için beklemeyeyim.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c0=Bu projeyi iptal edip ayrılmak istiyorum.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_building.c1=Üzerinde çalışmaya devam ediyorum ve devam edeceğim.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.body=Pekala, durum böyleyse, biri bana yer bulup jeton verene kadar, yer bulduğum her yerde kalmaya devam edeceğim.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_abandoned.c0=Pekala. Görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.body=Kendi kapım olması, handa daha az toz ve kirin taşınması anlamına geliyor ve bank da sonunda istediğim gibi sabitlendi. Kasabada tekrar kaldırım taşı veya bakır sıkıntısı çıkarsa, kulübede beni bulun, hallederiz.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_done.c0=Teşekkürler. Kasabanın daha fazla taşa veya bakıra ihtiyacı olursa sizi bulmaya geleceğim.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.body=Çalışma kulübesi maden cevheri için. Vardiyam bittiğinde hâlâ handaki yatakta pelerinimi katlıyorum. Herkesin aldığı ev jetonunu istiyorum, sonra da içerideki rafta adımın yazılı olduğu bir yapı istiyorum.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c0=Evin temelini atacağım ve inşaatını başlatacağım.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.body=Duvarlar gerçek olduğunda, tüzükte belirtildiği gibi beni blokta kaydedin, sonra da gelip bana şahsen söyleyin. Bunu sesli olarak duymak istiyorum.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.c0=Bunu benden duyacaksınız.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.body=Çerçeveyi yaparken acele etmeyin. Dik durduğunda, yönetim bloğuna adımı yazın, sonra geri gelin. Sizi acele ettirmiyorum, sadece yazılı olarak kaydedilmesini istiyorum.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.speaker=Gorruk Taş Damarı
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.body=Güzel. Çakılları hanın zeminine öğütmek yerine kapının önüne bırakabilirim. Kasabanın daha fazla kaldırım taşına veya bakıra ihtiyacı olup olmadığını söyleyin.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.c0=İyi ki düzgün bir kapınız var.
+
+aetherhaven.dialogue.aetherhaven_miner.gift.love=Bu, bir maden tezgahında görmeyi sevdiğim türden bir malzeme ve bunu getirdiğinizi unutmayacağım.
+aetherhaven.dialogue.aetherhaven_miner.gift.like=Bu, burada yaptığım iş için gerçekten çok faydalı, bu yüzden beni düşündüğünüz için teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_miner.gift.neutral=Henüz ne için kullanacağımı bilmiyorum ama bir kenara koyup bir çözüm bulacağım.
+aetherhaven.dialogue.aetherhaven_miner.gift.dislike=Ben taş ve maden işleriyle uğraşıyorum, bu yüzden tohumlar ve bahçe malzemeleri pek bana göre değil. Belki çiftlikteki birileri daha çok ilgilenebilir.
+
+# === Dialogue: Seren (logger) ===
+aetherhaven.dialogue.aetherhaven_logger.root.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.root.body=Ağaç kesip kütükleri yerleşim yeri için keresteye dönüştürüyorum; testereleri, istifleme alanı ve işleme tezgahı olan gerçek bir kereste fabrikası olduğunda bu iş çok daha kolay oluyor. Eğer o binayı benim için inşa ederseniz, duvarın dışında dağınık yığınlar halinde iyi kereste bırakmak yerine, tahta raflarını dolu tutabilirim. Keskin demir, düzgün tahtalar, işte ben böyle çalışmayı seviyorum.
+aetherhaven.dialogue.aetherhaven_logger.root.hc0=Bir ev hakkında konuşmak istiyordunuz.
+aetherhaven.dialogue.aetherhaven_logger.root.hc1=Adın evin arsasına yazılmış. Bunu benden duymanı istedim.
+aetherhaven.dialogue.aetherhaven_logger.root.hc2=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_logger.root.c0=Kereste fabrikanızın inşa edilmesinin ardından sizinle iletişime geçmek istedim.
+aetherhaven.dialogue.aetherhaven_logger.root.c1=Kereste fabrikası tamamlandı. Görevi bitirmeye hazırım.
+aetherhaven.dialogue.aetherhaven_logger.root.c2=Fabrika henüz kısmen inşa edildi. İnşaatın nasıl gittiğini sormak istedim.
+aetherhaven.dialogue.aetherhaven_logger.root.c3=Sana bir kereste fabrikası kurmanda yardımcı olmak istiyorum. Arsa ve jetonla başlayabilir miyiz?
+aetherhaven.dialogue.aetherhaven_logger.root.c4=Şimdilik bu kadar. Daha sonra görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.body=Bana jetonu ve değirmen için ayrılmış bir arsa verin, gerisini ben hallederim. Çatı tamamlanıp tezgah kurulduktan sonra, kasabaya üretim depolarından temiz kereste yığınları sağlamak için kütükleri işleme tabi tutacağım.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c0=İşte jeton. Değirmeni inşa ettireceğim.
+aetherhaven.dialogue.aetherhaven_logger.seren_quest_mill.c1=Henüz buna kesin olarak karar vermeye hazır değilim.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.body=Mükemmel. Gövde hava koşullarına karşı tamamen kapatıldıktan sonra, giriş ve çıkışların nasıl yerleştirildiğini görebilmeniz için sizi değirmen masasında karşılayacağım.
+aetherhaven.dialogue.aetherhaven_logger.seren_accepted.c0=Kulağa hoş geliyor. Değirmen hazır olunca görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_building.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_building.body=İnşaat tabelasında hala listedeki maddeler var, bu yüzden ya istenenleri tamamlayıp teslim edin ya da değirmeni terk ediyorsanız bana açıkça bildirin ki, yarım kalmış bir inşaat için aklımda yer tutmayayım.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c0=Bu derlemeyi durdurmalı ve projeyi terk etmeliyim.
+aetherhaven.dialogue.aetherhaven_logger.seren_building.c1=Hâlâ inşaat halindeyim ve değirmeni bitireceğim.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.body=Anladım. Başka bir talep gelene ve birisi gerçekten değirmenin tamamlanmasını isteyene kadar ciddi kesim işini askıya alacağım.
+aetherhaven.dialogue.aetherhaven_logger.seren_abandoned.c0=Pekala. Görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_done.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_done.body=Artık değirmen çalıştığına göre, kasabadaki her düz yüzeyi ödünç almak zorunda kalmadan odun ve tahta tedarikini sağlayabiliyorum. Daha fazla işlenmiş oduna ihtiyacınız varsa, tezgahta benimle görüşün, depoların bir sonraki ihtiyacını birlikte belirleyelim.
+aetherhaven.dialogue.aetherhaven_logger.seren_done.c0=Teşekkürler. Odunumuz azalırsa size haber vereceğim.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.body=Değirmen testere ve kereste depoluyor. Yatağımı depolamıyor. Kasabanın geri kalanı gibi normal bir ev arsası ve botlarımın kapının yanında kalabileceği bir çatı istiyorum.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.c0=Evin temelini atacağım ve inşaatını başlatacağım.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.body=Bina su geçirmez hale geldiğinde, beni arsaya kaydedin, sonra geri gelip yüzüme söyleyin. Bir tabeladan tahmin etmek istemiyorum.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_accepted.c0=Bunu benden duyacaksınız.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.body=Çerçeveyi müsait olduğunuzda bitirin. Blok hazır olduğunda beni kaydedin. Siz üzerinde çalışırken ben de frezede kesime devam edeceğim.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.speaker=Seren Fairhollow
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.body=Güzel. Talaşları handaki battaniyemin üzerinden silkelemek yerine iş yerinde bırakabilirim. Daha fazla tahta gerekirse haber verin.
+aetherhaven.dialogue.aetherhaven_logger.seren_house_finish.c0=Çatıdaki sessizliğin tadını çıkarın.
+
+aetherhaven.dialogue.aetherhaven_logger.gift.love=Bu, yaptığım iş için mükemmel bir hisse senedi ve gerçekten de yarını kolaylaştıran türden bir hediye. Teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_logger.gift.like=Bu çok düşünceli bir öneri ve bunu doğrudan iş akışına dahil edeceğim.
+aetherhaven.dialogue.aetherhaven_logger.gift.neutral=Şimdilik bunu bir kenara bırakacağım ve haftanın neler getireceğini görünce ona uygun bir yer bulacağım.
+aetherhaven.dialogue.aetherhaven_logger.gift.dislike=Günlerimi kereste işleriyle geçiriyorum, bu yüzden bir yığın taş blok benim için pek kullanışlı bir şey değil. Belki madenci bunu daha çok takdir ederdi.
+
+# === Dialogue: Thalen (rancher) ===
+aetherhaven.dialogue.aetherhaven_rancher.root.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.root.body=Kasaba halkının tükettiği ve el sanatlarında kullandığı yün, deri, yumurta ve et gibi hayvansal ürünlerle ilgileniyorum, ancak ahır, temiz depolar ve işleme tezgahı olmadan bu iş hızla kirleniyor. Han yemek için uygun, ama saman ve hayvan ayak izleri için değil, bu yüzden sizden istediğim şey düzgün bir ahır düzeni. Saman çatı katında, ürünler depoda, anlaşma bu kadar.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc0=Bir ev hakkında konuşmak istiyordunuz.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc1=Adın evin arsasına yazılmış. Bunu benden duymanı istedim.
+aetherhaven.dialogue.aetherhaven_rancher.root.hc2=Ev hala yapım aşamasında.
+aetherhaven.dialogue.aetherhaven_rancher.root.c0=Ahırınızın yapımı bittiğine göre size haber vermek istedim.
+aetherhaven.dialogue.aetherhaven_rancher.root.c1=Ahır tamamlandı. Görevi tamamlamak için buradayım.
+aetherhaven.dialogue.aetherhaven_rancher.root.c2=Ahırın inşaatı hâlâ devam ediyor. Durumun ne olduğunu öğrenmek istedim.
+aetherhaven.dialogue.aetherhaven_rancher.root.c3=Sana bir ahır edinmende yardımcı olmak istiyorum. Arsa ve jetonla başlayabilir miyiz?
+aetherhaven.dialogue.aetherhaven_rancher.root.c4=Şimdilik bu kadar. Şimdilik hoşça kalın.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.body=Ahır için arsayı işaretleyin ve bana jetonu verin, böylece inşaat benimle bağlantılı olsun. Yapı kurulduktan ve tarım tezgahı yerleştirildikten sonra, yünleri, derileri, yumurtaları ve kesim artıklarını doğru kasaba kutularına ayıracağım, böylece hiçbir şey ortalıkta serbestçe dolaşmayacak veya yanlış köşede durduğu için bozulmayacak.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c0=İşte jeton. Ahırı inşa ettireceğim.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1=Henüz buna başlamaya hazır değilim.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.body=Harika. Çatı kapatıldığında ve hava koşulları yemlere zarar vermediğinde, yem alım ve depolama düzenini nasıl istediğimi görmeniz için içerideki tarım tezgahında sizinle buluşacağım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.c0=Kulağa hoş geliyor. Ahır hazır olunca görüşürüz.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.body=İnşaat tabelasında hala şantiyeye teslim etmemiz gereken malzemeler listeleniyor, bu yüzden ya teslimatları tamamlayın ya da ahırı iptal ediyorsanız bana açıkça bildirin ki, sadece kısmen tamamlanmış bir iskelet üzerinde plan yapmayayım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c0=Bu derlemeyi iptal etmem gerekiyor.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1=Hâlâ inşaat halindeyim ve ahırı bitireceğim.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.body=Tamam, anladım. Hırsızı kapının yanında tutacağım ve başka bir işaret ve arsa ortaya çıkana kadar bekleyeceğim, çünkü ahır olmadan, asla hayvancılık için tasarlanmamış bir alanı doğaçlama olarak kullanmak zorundayım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.c0=Tamam. Belki başka bir zaman tekrar deneyebiliriz.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.body=Artık hayvanların kuru bir yeri var, kutular istediğim gibi etiketlendi ve yün ile eti her şeyi hanın mutfağından geçirmeden teslim edebiliyorum. Depodaki deri veya yumurtalar azalırsa, ahırdaki tezgahta benimle konuşmaya gelin, stokları tamamlayalım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0=Bunu duyduğuma sevindim. Hayvanlarla ilgili içerikleri paylaşmaya devam ettiğiniz için teşekkürler.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body=Ahır, hayvanlar ve ambarlar için. Hâlâ sadece saman ve yağmur kokan bir yer dışında uyuyabileceğim bir yere ihtiyacım var. Bana da herkesle aynı ev fişini verin, ödünç alınmış bir karyola yerine gerçek bir yatağı tercih ederim.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0=Evin temelini atacağım ve inşaatını başlatacağım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1=Başka bir zaman.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body=Ev tamamlandığında, beni de listeye kaydedin, sonra gelip kendiniz anlatın. Kelimeleri duymak istiyorum, bir tabeladan okumak değil.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0=Bunu benden duyacaksınız.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body=Kendi hızınızda inşa edin. Çerçeve bittiğinde, içerideki rafa, bloğun üzerinden ismimi yazın, sonra geri gelin. Siz üzerinde çalışırken ben ahırı çalışır durumda tutacağım.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.c0=Anlaşıldı.
+
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.speaker=Thalen Çayır Koşusu
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.body=Güzel. Çamuru ve samanı ahırda bırakabilirim, ikisini de hana taşımak zorunda kalmam. Deri veya yumurtalar azalırsa bana haber verin.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.c0=Yatağınızın kuru olmasına sevindim.
+
+aetherhaven.dialogue.aetherhaven_rancher.gift.love=Bu, hem hayvanlarımın hem de benim tam olarak ihtiyacımız olan şeydi ve beni çok korktuğum bir yolculuktan kurtardı. Gerçekten teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_rancher.gift.like=Getirdiğiniz şey çok nazikçe bir jest, ilk fırsatta kullanacağım.
+aetherhaven.dialogue.aetherhaven_rancher.gift.neutral=Şimdilik bunu bir kenara bırakıyorum ve kalemlerin haftalık durumuna baktıktan sonra bir yer bulacağım.
+aetherhaven.dialogue.aetherhaven_rancher.gift.dislike=Ben yün ve hayvancılık malzemeleriyle çalışıyorum, bu yüzden ham cevherle pek bir şey yapamıyorum. Madencilik sektöründe çalışan biri bunun yerine ham cevher isteyebilir.
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=Kasaba tüzüğü
 aetherhaven.ui.chartertown.townNameLabel=Şehir görüntüleme adı
 aetherhaven.ui.chartertown.namePlaceholder=Kasabanız için benzersiz bir isim yazın.
-aetherhaven.ui.chartertown.ownerOnlyHint=Sadece kasaba sahibi, tüzükte belirtilen isim değişikliğini yapabilir.
+aetherhaven.ui.chartertown.ownerOnlyHint=Sadece kasaba sahibi, tüzükteki isim değişikliğini yapabilir.
 aetherhaven.ui.chartertown.saveTownName=Adı kaydet
 aetherhaven.ui.chartertown.dissolve=Şehri dağıt
 aetherhaven.ui.chartertown.dissolveHint=Kasabayı, tüm binaları, köylüleri ve bu sözleşmeyi kalıcı olarak siler. Geri alınamaz.
@@ -718,7 +990,7 @@ aetherhaven.ui.plotplacement.moveConfirm=Onaylamak
 aetherhaven.ui.plotplacement.moveBack=Geri gitmek
 aetherhaven.ui.plotplacement.cancel=Önizlemeyi iptal et
 aetherhaven.ui.plotplacement.cameraSection=Kamera
-aetherhaven.ui.plotplacement.cameraHint=Ekranı açtığınızda (önizlemenin üstünde) kuşbakışı çerçeveler bir kez belirir, ardından grafiği hareket ettirirken sabit kalır.
+aetherhaven.ui.plotplacement.cameraHint=Ekranı açtığınızda (önizlemenin üstünde) kuşbakışı çerçeveler bir kez belirir, ardından siz grafiği hareket ettirirken sabit kalır.
 aetherhaven.ui.plotplacement.birdsEye=Kuşbakışı görünüm
 aetherhaven.ui.plotplacement.birdsEyeTooltip=Yukarıdan aşağıya görünüm: İlk hedef önizleme merkezidir. Birinci şahıs görünümüne dönmek için işareti kaldırın. Görünümü kaydırmak için Pan'ı kullanın.
 aetherhaven.ui.plotplacement.viewDistance=Mesafe
@@ -754,21 +1026,24 @@ commands.aetherhaven.town.accept.desc=Bekleyen şehir davetini kabul et
 commands.aetherhaven.town.decline.desc=Bekleyen şehir davetini reddedin
 commands.aetherhaven.town.kick.desc=Kasabanızdan bir üyeyi çıkarın
 commands.aetherhaven.town.kick.player.desc=Üye kullanıcı adı (çevrimiçi olmanız gerekir)
-commands.aetherhaven.town.role.desc=Üyenin rolünü belirleyin (İNŞA ET, GÖREV veya HER İKİSİ)
+commands.aetherhaven.town.role.desc=Bir üyeye önceden ayarlanmış bir izin uygulayın (İNŞA ET, GÖREV veya HER İKİSİ). Bayrak başına izinler için Yönetim bloğunun Oyuncular sekmesini kullanın.
 commands.aetherhaven.town.role.player.desc=Üye kullanıcı adı (çevrimiçi olmanız gerekir)
 commands.aetherhaven.town.role.role.desc=İNŞA ET, GÖREVİ TAMAMLA veya HER İKİSİ BİRDEN
 commands.aetherhaven.town.leave.desc=Üyesi olduğunuz (sahibi olmadığınız) bir kasabayı terk edin.
-commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir görüntüleme adı (birden fazla davet veya yönetici için)
+commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir görüntüleme adı; boşluklar dahil tam adı kullanın (satırın geri kalanı). Yalnızca bir bekleyen davetiniz varsa bu alanı atlayın.
 
 commands.aetherhaven.poi.desc=Hata ayıklama: POI komutları
 commands.aetherhaven.poi.list.desc=Bir kasaba için ilgi noktalarını listeleyin (isteğe bağlı olarak kasaba UUID'si veya UUID'yi atlayın / kasabanız için "me" kullanın)
 commands.aetherhaven.poi.town.desc=Arayan şehrin UUID'si, veya ben, veya arayanın şehri için belirtme.
 commands.aetherhaven.poi.dump.desc=Bu dünyanın hafızadaki kayıt defterinde yer alan tüm ilgi noktalarını (herhangi bir kasaba) listeleyin.
 
-commands.aetherhaven.plots.desc=Hata ayıklama: Grafik örneklerini listele (/aetherhaven plot ile çakışmayı önlemek için plots komutunu kullanın)
-commands.aetherhaven.plots.list.desc=Kasabanızdaki arsa örneklerini listeleyin.
+commands.aetherhaven.plots.desc=Grafik örnekleri: liste, montajı tamamla (yaratıcı), grafik kimliğini kaldır (yaratıcı). /aetherhaven grafiğiyle çakışmayı önlemek için grafikler kullanın.
+commands.aetherhaven.plots.list.desc=Şehrinizdeki arsa örneklerini listeleyin (arsa UUID'si, inşaat kimliği, eyalet, tabela konumu)
+commands.aetherhaven.plots.finishassembly.desc=Yaratıcı: Kasabanızdaki devam eden tüm montaj işlemlerini anında tamamlayın (yüklenmiş bloklar / aktif işler gerektirir)
+commands.aetherhaven.plots.remove.desc=Yaratıcı: UUID'ye göre bir arsayı yıkın ve kasaba verilerinizden kaldırın.
+commands.aetherhaven.plots.remove.plotId.desc=/aetherhaven plots listesinden UUID'yi çiz
 
-commands.aetherhaven.needs.desc=Hata ayıklama: köylüye ihtiyaç duyuluyor
+commands.aetherhaven.needs.desc=Hata ayıklama: köylünün ihtiyaçları
 commands.aetherhaven.needs.inspect.desc=Yüklenen öbeklerdeki VillagerNeeds özelliğine sahip varlıkları listeleyin.
 commands.aetherhaven.needs.set.desc=İhtiyaç ölçerini 0..100 olarak ayarlayın (hedef: incelemeden, Elder'dan veya uuid'den gelen işlem).
 commands.aetherhaven.needs.target.desc=Tanıtıcı (örneğin Villager_Elder_xxxxxxxx), Yaşlı veya varlık UUID'si
@@ -776,9 +1051,9 @@ commands.aetherhaven.needs.entity.desc=Kullanımdan kaldırıldı; bunun yerine 
 commands.aetherhaven.needs.which.desc=açlık, enerji veya eğlence
 commands.aetherhaven.needs.value.desc=0 ile 100 arasında bir değer (100 = tamamen memnun)
 
-commands.aetherhaven.tax.desc=Hata ayıklama: Hazine sabah vergisi
+commands.aetherhaven.tax.desc=Hata ayıklama: hazine sabah vergisi
 commands.aetherhaven.tax.breakdown.desc=Kasabanızdaki köylü başına vergi kalemlerini ve toplamlarını göster (yalnızca yüklenmiş bölümler için)
-commands.aetherhaven.tax.now.desc=Sabah vergisini şimdi hazineye yatır (sabah saatini ve son tahsilat gününü atlar)
+commands.aetherhaven.tax.now.desc=Sabah zekâtını şimdi hazineye yatırın (sabah zamanını ve son tahsilat gününü atlar).
 
 commands.aetherhaven.questdebug.desc=Hata ayıklama: kasaba görevi atlama
 commands.aetherhaven.questdebug.grant.desc=Kasabanızda görev işaretini aktif hale getirin.
@@ -805,17 +1080,20 @@ commands.aetherhaven.villager.uuid.desc=Köylü NPC varlığı UUID'si
 commands.aetherhaven.villager.target.desc=Kasabanızdaki köylü varlığının UUID'si veya NPC rol kimliği (örneğin, Aetherhaven_Merchant)
 commands.aetherhaven.villager.teleport.desc=Köy sakinine ışınlanmak için true komutunu kullanın (sadece operatörler); veya bunun yerine --tp komutunu kullanın.
 commands.aetherhaven.villager.tp_flag.desc=Köy sakinine ışınlan (sadece operatörler için; doğru geçmekle aynı)
-commands.aetherhaven.gift.desc=Hata ayıklama: Hediye limitlerini sıfırla veya hediye geçmişi önizlemesini doldur
+commands.aetherhaven.villager.reset.desc=Kasabadaki tüm köylü NPC'leri kaldırın ve onları yakınınızda yeniden oluşturun (hata ayıklama; görevleri, itibarı, hediyeleri korur; sakinleri tamamlanmış binalarla hizalamak için han havuzu onarımını çalıştırır; han ziyaretçi havuzunu yeniler)
+aetherhaven.villager.resetDone=Kasaba sakinleri sıfırlandı ve yakınınızda yeniden ortaya çıktı.
+aetherhaven.villager.resetFailed=Kasaba sakinlerini sıfırlayamadı: {reason}
+commands.aetherhaven.gift.desc=Hata ayıklama: hediye limitlerini sıfırlama veya hediye geçmişi önizlemesini doldurma
 commands.aetherhaven.gift.resetLimits.desc=Bu dünyadaki her kasabadaki tüm oyuncular ve tüm köylüler için günlük/haftalık hediye limitlerini sıfırlayın.
 commands.aetherhaven.gift.fillHistory.desc=Rolünüz (kasabanız) için her bir sevgi/beğeni/beğenmeme öğesi için bir günlük kaydı satırı ekleyin, böylece hediye geçmişinde gösterilecek bir şey olsun (hata ayıklama).
 commands.aetherhaven.gift.roleId.desc=NPC rol kimliği (örneğin Aetherhaven_Merchant)
 
-commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: Köylü özerkliği katmanı
+commands.aetherhaven.debug_autonomy.desc=Hata ayıklama: köylü özerkliği katmanı
 commands.aetherhaven.debug_autonomy.toggle.desc=Kasaba sakini üzerinde özerklik hata ayıklamasını açıp kapatın (NPC'ye bakın veya --ray kullanın)
 commands.aetherhaven.debug_autonomy.show.desc=Bu köylü için özerklik hata ayıklamasının etkin olup olmadığını göster.
 commands.aetherhaven.debug_autonomy.clear.desc=Bu köylü için Aetherhaven özerklik hata ayıklamasını temizle.
 
-commands.aetherhaven.debug_lootchest.desc=Hata Ayıklama: Hedeflenen konteynerde Aetherhaven sandık bonusu zarları
+commands.aetherhaven.debug_lootchest.desc=Hata ayıklama: Aetherhaven sandığı bonusu, hedeflenen konteynerde ortaya çıkıyor.
 commands.aetherhaven.debug_lootchest.fill.desc=İncelediğiniz eşya kabına zorunlu mücevher, altın ve olay belirteci zarlarını uygulayın.
 
 # === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
@@ -842,10 +1120,43 @@ aetherhaven.ui.feast.err.waitForTimedFeastEnd=Berrycircle Concord'u servis etmed
 aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord hala bekleme modunda.
 aetherhaven.ui.feast.err.notEnoughIngredients=Gerekli malzemelerden yeterince yok.
 
+aetherhaven.ui.production.title=İşyeri mağazaları
+aetherhaven.ui.production.prev=Önceki
+aetherhaven.ui.production.next=Sonraki
+aetherhaven.ui.production.prevTooltip=Bu yuvadaki önceki çıktı
+aetherhaven.ui.production.nextTooltip=Bu yuvadaki bir sonraki çıktı
+aetherhaven.ui.production.take1=Birinci deneme
+aetherhaven.ui.production.take10=10. bölümü izleyin
+aetherhaven.ui.production.take100=100 alın
+aetherhaven.ui.production.genInterval={time} bir tane yapmak için
+aetherhaven.ui.production.err.plugin=Aetherhaven bu sunucuda yüklü değil.
+aetherhaven.ui.production.err.permission=Bu kasaba için bu depoyu açamazsınız.
+aetherhaven.ui.production.err.plot=Bu blok, kasabanızdaki tamamlanmış bir iş yeri arsası (çiftlik, ahır, değirmen veya madenci kulübesi) içinde yer almıyor.
+aetherhaven.ui.production.err.catalog=Bu bina için yapılandırılmış bir üretim kataloğu bulunmamaktadır.
+aetherhaven.ui.production.err.inventoryFull=Envanteriniz o kadar miktarı kaldıramayacak kadar dolu.
+aetherhaven.ui.production.unlockButton=Kilidi açar
+aetherhaven.ui.production.unlockTooltip=Bu binaya ait kilitli iş yeri çıktılarını görüntüleyin ve satın alın.
+
+aetherhaven.ui.productionUnlocks.title=İş yeri kilitlerini açar
+aetherhaven.ui.productionUnlocks.intro=Panelde adını ve gereksinimlerini görmek için aşağıdaki çıktılardan birini seçin. Elde tutulan ve gereken miktarları görmek için bir simgenin üzerine gelin. Öğe ve altın toplamlarına ulaştığınızda, kilitli bir çıktıyı kilidini açmak için tıklayın.
+aetherhaven.ui.productionUnlocks.navProduction=Üretme
+aetherhaven.ui.productionUnlocks.navProductionTooltip=İşyeri depolama alanına geri dön
+aetherhaven.ui.productionUnlocks.detailHint=Yukarıdaki simgelerden birine tıklayarak adını ve kilidini açma koşullarını görebilirsiniz.
+aetherhaven.ui.productionUnlocks.err.inventory=Envanterinizi okuyamadım.
+aetherhaven.ui.productionUnlocks.err.empty=Bu iş yeri için herhangi bir kilit açma listesi yapılandırılmamıştır.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Bu iş yeri için zaten kilidi açılmış durumda.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Ürün: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Altın paralar: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Envanterinizde (toplamda) o üründen en az {need} adet bulunmalıdır.
+aetherhaven.ui.productionUnlocks.notify.needGold=Şehir hazinesi ve envanteriniz arasında yeterli miktarda altın paraya ihtiyacınız var (toplam {need}).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Envanterinizden gerekli öğeleri kaldıramadınız.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Altın bedeli ödenemedi; eşyalarınız iade edildi.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Bu iş yeri için {item} kilidi açıldı.
+
 aetherhaven.feast.stewards.name=Vekil'in Defteri Akşam Yemeği
 aetherhaven.feast.stewards.description=Ekmek, peynir ve güzel bir balkabağı turtası sürün ki, sabahları verilen zekât bir hafta boyunca bol olsun.
 aetherhaven.feast.hearthglass.name=Hearthglass Nöbeti
-aetherhaven.feast.hearthglass.description=Izgara balık, pişmiş et ve sebzeler, yavaş yavaş pişen bir nöbet yemeği gibi sergileniyor. Köylülerin ihtiyaçları bir hafta boyunca daha yavaş yavaş azalıyor.
+aetherhaven.feast.hearthglass.description=Izgara balık, pişmiş etler ve sebzeler, yavaş yavaş pişen bir nöbet yemeği gibi sergileniyor. Köylülerin ihtiyaçları bir hafta boyunca daha yavaş yavaş azalıyor.
 aetherhaven.feast.berrycircle.name=Berrycircle Concord
 aetherhaven.feast.berrycircle.description=Hafif tabaklardan oluşan bir çember: meyve salatası, meyve şişleri ve kızarmış mısır. Komşularınız sizi bu sayede biraz daha iyi hatırlayacaklar. Tekrar servis etmeden önce bir hafta beklemeniz gerekiyor.
 
@@ -928,38 +1239,38 @@ aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Önyükleme işle
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Unlock_achievement + start_quest taslaklarını çalıştırın.
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Köylüsü
 # -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
-aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ben Lyren. Orbis'e bu kasabayı kurduğumuzda imzaladığımız tüzük adına konuşuyorum. Eski şehirler yok oldu. Elimizde bu topraklar ve zaten burada yaşayan insanlar var, daha fazlası da gelecek. Yeni arsalar kurmaya başlamadan önce, Aetherhaven çevresindeki araziyi öğrenmenizi istiyorum: nerede inşaat için yeterince düz alan var, su nereden akıyor, daha sonra nereye tarlalar veya ortak alanlar kurabiliriz. Pratik olmasına dikkat edin. Yeri iyice inceledikten sonra, tekrar beni bulun.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ben Lyren. Kasabamız, buraya yerleştiğimizde imzaladığımız sözleşmeye göre yönetiliyor. Daha fazla arsa edinmeden önce, Aetherhaven çevresindeki araziyi gezmenizi istiyorum. Nerelerin inşaat için yeterince düz olduğunu, suyun nerede olduğunu ve daha sonra nereye tarlalar veya ortak bir yeşil alan kurabileceğimizi anlamanız gerekiyor. Çok karmaşık bir şey değil, sadece etrafa bakın. Bunu yaptıktan sonra geri gelip bana bildirin.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Bölgeyi inceleyip size bilgi vereceğim.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Yaşlı Lyren
 # -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
-aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Size gönderdiğimiz işlerden ve biri alım yaptığında takas yoluyla biraz para kazanırsınız. Kasaba hazinesi ayrı bir şeydir. Salon inşa edildikten sonra, hazine orada bulunur. Oradaki bloğu para koymak veya tüzükte izin veriliyorsa para çekmek için kullanın. Bundan sonra, her sabah, burada yaşayan insanlardan, yani geçici ziyaretçilerden değil, az miktarda altın bu hazineye akar. Ne kadar aktığı, durumlarına bağlıdır. Eğer tok, dinlenmiş ve moralleri yerindeyse, hazine daha iyi dolar. Eğer maddi durumları kötüyse, daha kötü olur. Bu, halkın dürüst kalmasını sağlar.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Altın birkaç şekilde ortaya çıkar. Görevleri tamamladığınızda kazanırsınız. Keşif yaparsanız, dünyadaki sandıklarda ve gizli yerlerde, harabelerde ve diğer eski yerlerde bulabilirsiniz. Kasaba kendi hazinesinde altın biriktirir. Belediye binası inşa edildikten sonra, hazine binanın içindedir. Her sabah, ziyaretçilerden değil, sakinlerimizden alınan küçük bir günlük vergi bu hazineye gider. Ne kadar olduğu, durumlarına bağlıdır. Karnları tok, dinlenmiş ve moralleri yerindeyse daha fazla alırız. Aç, yorgun veya gerginlerse daha az alırız. Kendi altınınızı koymak veya tüzük izin veriyorsa kasaba altınını almak için oradaki bloğu kullanın.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Bunu öğrenmek güzel. Teşekkürler.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=İşte burada. Aksi takdirde sokakta kalacak insanlar için gerçek bir han. Corin'de anahtar var. Şöminenin yanında kendini tanıt. Teşekkürden fazlasını hak ettin, ama teşekkürle başlayacağım.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=İşte orada. Dışarıda uyumayı tercih edenler için gerçek bir han. Corin'de anahtar var. Şöminenin yanında selam ver. Benden bir teşekkürden fazlasını hak ettin, ama şimdilik sana sadece teşekkür edeceğim.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Memnuniyetle yardım ettim.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Duvarlar örüldüğünde, yönetim bloğunu kullan ve beni sakin olarak ata. Sonra gel beni bul. Bunu senin ağzından duymak istiyorum, raftan okumak değil.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=Duvarlar örüldüğünde, içerideki yönetim bloğunu kullanarak beni sakin olarak atayın. Sonra gelip beni bulun. Bunu sadece tabelada okumakla kalmayıp, sizden duymak istiyorum.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=İkisini de alacaksınız.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=O halde mesele çözüldü. Herkesle aynı kurallara tabi bir evim var. İşin sonuçlanmasını sağladığınız için teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=O halde işimiz bitti. Buradaki herkes gibi benim de bir çatım var. Sabrettiğiniz için teşekkür ederim.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Lyren, evine hoş geldin.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=Salon tamamlandı ve hazine rahat nefes alabilir. Şartname bize kasaba için kurallar koydu; bana bir yatak vermedi. Herkesin aldığı küçük evden ben de istiyorum. Sunduğum simgeyi alın, arsayı personelinizle birlikte belirleyin, malzemeleri ve kasaba payını hazineden ödeyin, sonra da ev inşa edildiğinde adımı yönetim kuruluna yazın. Bana yer açanları asla unutmayacağım.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=Belediye binası inşa edildi ve içinde bir hazinemiz var. Tüzük bize kasaba için kurallar verdi. Bana bir yatak vermedi. Herkesin aldığı küçük evden ben de istiyorum. Size verdiğim jetonu alın, yerleştirme ekibinizle arsayı işaretleyin, malzemeleri ve kasaba payını hazineden ödeyin, sonra bina inşa edildiğinde yönetim bloğuna adımı yazın. Beklerseniz inşaat kendiliğinden tamamlanacaktır. Daha hızlı olmasını istiyorsanız, kasaba planlama masasında bir İnşaat Asası yapın ve yeşil çerçeveli bloklarda kullanın. Benim için yer açtığınızı hatırlayacağım.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=Ben hallederim.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=Henüz buna kesin bir yanıt veremem.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=İhtiyacınız olan zamanı ayırın. Ev bittiğinde, beni arsaya kaydedin, sonra da beni bulun ki bu işi yüz yüze bitirelim.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=İhtiyacınız olan zamanı ayırın. Ev tamamlandığında, beni yönetim bloğuna kaydedin, sonra da şahsen gelip beni bulun.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=İş bitince geleceğim.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Güzel. Han arsasını personelinizle birlikte yerleştirin, tabelada belirtilen malzemelerin parasını ödeyin ve inşaatı tamamlayın. Çatı tamamlandığında ve ocak yerleştirildiğinde, gelip bana kendiniz haber verin. Haberinizi bekliyor olacağım.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Güzel. Han arsasını personelinizle birlikte yerleştirin, tabelada istenen malzeme bedelini ödeyin ve inşaatın başlamasına izin verin. Başka hiçbir şey yapmanıza gerek yok, kendiliğinden bitiyor, sadece zaman alıyor. Daha hızlı olmasını istiyorsanız, şehir planlama masasında bir İnşaat Asası yapın ve yeşil işaretleyicilerde kullanın. Çatı tamamlandığında ve ocak yerleştirildiğinde, gelip bana kendiniz söyleyin.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=Mümkün olan en kısa sürede başlayacağım.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Çatı sağlamlaştığında ve ocak yakıldığında, geri gelip bana şahsen haber ver. Seni aceleye getirmiyorum, ama bu kasabada yatağa ihtiyacı olan herkes için düzgün bir han olana kadar buradan ayrılmayacağım.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=Han tamamlandığında, çatısı yapılıp ocağı yakıldığında, gelip bana şahsen haber verin. Bu kasabada yolcular için yataklar olana kadar buradan ayrılmayacağım. Hanı kendi kendine inşa eder, isterseniz bir İnşaat Asası ile de hızlandırabilirsiniz.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=Hazır olduğunda geri geleceğim.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Yaşlı Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Yaşlı Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.root.body=Şartname hâlâ geçerli ve ben de hâlâ onun arkasındayım. İnsanları gönderebileceğimiz yedek bir barınağımız yok, bu yüzden buradaki ilk gerçek bina bir han olmalı: bir çatı, bir ocak ve uzun yollarda yolculara ve kendi akrabalarımıza açık kalan bir kapı. Hazır olduğunuzda söyleyin.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=Şartname hâlâ geçerli ve ben de ona bağlıyım. Çatıya ihtiyacı olan insanları gönderebileceğimiz bir yerimiz yok, bu yüzden ilk binamız bir han olmalı: bir çatı, bir ocak ve sürekli açık kalan bir kapı. Arsayı belirledikten ve tabelada belirtilen ücreti ödedikten sonra, inşaat kendiliğinden devam eder. İnşaat Asasına ihtiyacınız yok. İşin daha hızlı ilerlemesini istiyorsanız, şehir planlama masasında bir tane yaptırabilirsiniz. Başlamaya hazır olduğunuzda bana haber verin.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=Ben de varım. Hadi birlikte eğlenelim.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=Otel hala listemde. Giriş işlemlerini yapmak istedim.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=Sizi kendi halinize bırakıyorum.
@@ -972,17 +1283,17 @@ aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=Belediye binasının inşaa
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=Belediye binası açıldı.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=Buralarda insanlar altın paraları nasıl elde ediyorlar?
 aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Belediye binası jetonunu personelinizle birlikte kullanın, malzemelerin parasını ödeyin ve binayı inşa edin. Bina bittiğinde bana şahsen haber verin. Bittiğini söylerken yüzünüzü görmek istiyorum.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Belediye binası jetonunu personelinizle birlikte kullanın, malzemelerin parasını ödeyin ve binanın kendi kendine inşa edilmesini bekleyin. Bina kendiliğinden tamamlanacaktır. İnşaatı hızlandırmak isterseniz, şehir planlama masasında bir Bina Asası üretin ve ardından yeşil işaretleyicilerde kullanın. Bina tamamlandığında, gelip bana şahsen haber verin.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=Bittiği anda size haber vereceğim.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=İşte. Aetherhaven'ın düzgün bir belediye binası var: kayıtlar, hazine ve meydanda bağırmadan buluşabileceğimiz bir oda. Senden istediğim buydu.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=İşte. Aetherhaven'ın artık bir belediye binası var: kayıtlar, hazine ve rüzgardan korunabileceğimiz bir toplantı odası. Senden istediğim buydu.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Yardımcı olduğu için sevindim.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=Han ayakta duruyor. Şimdi de hepimize ait bir belediye binasına ihtiyacımız var: tüzük için bir raf, planlar için bir masa ve ortak parayla inşa edeceğimiz diğer şeyleri finanse edebileceğimiz bir hazine. Arsayı belirleyelim, tabelada istenen malzeme bedelini ödeyelim ve sonunda tüm kasaba olarak buluşabileceğimiz bir yerimiz olsun.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=Han tamamlandı. Şimdi herkes için bir belediye binasına ihtiyacımız var: tüzük için bir raf, planlar için bir masa ve birlikte inşa edeceğimiz şeylerin masraflarını karşılamak için bir hazine. Arsayı personelinizle işaretleyin ve tabelada istenen malzeme bedelini ödeyin. Beklerseniz, bina zamanla kendiliğinden inşa edilecektir. Daha hızlı olmasını istiyorsanız, şehir planlama masasında bir İnşaat Asası üretin ve yeşil işaretleyicilerde kullanın.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=Salonu ben kuracağım.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=Henüz değil.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Yaşlı Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Taş işleri ve evrak işleri zaman alıyor. Salon bittiğinde bana haber verin. Burada olacağım.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=İnşaat zaman alır. Biraz beklerseniz, salon İnşaat Asası'na gerek kalmadan tamamlanacaktır. Bittiğinde bana haber verin. Burada olacağım.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Üzerinde çalışmaya devam ediyorum.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Yaşlı Lyren
 # -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
@@ -1037,7 +1348,7 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker=Corin 
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body=İşte bu. Yabancılar için bir ocak ve bana ait bir kapı kilidi. Bu, anahtarın görünüşünden daha değerli.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0=Bunu hak ettin.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker=Corin Mosscup
-aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Bütün kasabaya çorba dökerim ama kendi yarattığım karmaşanın üzerine kapanan bir kapı istiyorum. Herkesle aynı ev numarası. İnşa edin, dikildiğinde beni de arsaya yazın.
+aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body=Bütün kasabaya çorba dökerim ama kendi yarattığım karmaşanın üzerine kapanan bir kapı istiyorum. Herkesle aynı ev numarası. İnşa edin, tamamlandığında beni de arsaya yazın.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0=Onu yaptıracağım.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1=Başka bir zaman.
 aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker=Corin Mosscup
@@ -1056,6 +1367,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1=Kendinize ait gerçek bir o
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2=Seni ev rafına listeledim. Bunu benden duyman gerektiğini düşündüm.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3=Eviniz hâlâ yapım aşamasında. Ben ilgileniyorum.
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4=Gidip tencereyi karıştıracağım.
+aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where=Ziyaretçilerin hepsi nerede?
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.body=Şu anda yolcu yatakları boş. Yeterince uzun süre kalan herkes, uygun birer vatandaş olarak pelerinini çıkardı -onlar adına sevindim- ve bugün salonda hiçbir kervan yok. Yol yeni birini gönderdiğinde, onları burada tekrar göreceksiniz.
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0=Daha sonra tekrar kontrol edeceğim.
+aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.speaker=Corin Mosscup
 aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker=Corin Mosscup
 # -- Tree id: aetherhaven_merchant (Vex Sunderlane) --
 aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker=Vex Sunderlane
@@ -1074,7 +1389,7 @@ aetherhaven.dialogue.aetherhaven_merchant.root.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body=Tamam. Fikrinizi değiştirirseniz, teklif geçerliliğini korur.
 aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0=Teşekkürler.
 aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker=Vex Sunderlane
-aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=Tezgah tekrar kurulana kadar Corin'in yanında kamp kuracağım. Hendek kazmaktan daha güvenli ve çorbası da daha lezzetli.
+aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body=Tezgah kurulana kadar Corin'in yanında kamp kuracağım. Hendek kazmaktan daha güvenli ve çorbası da daha lezzetli.
 aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0=İş bittiğinde görüşürüz.
 aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker=Vex Sunderlane
 aetherhaven.dialogue.aetherhaven_merchant.vex_building.body=Tezgah kurulduğunda oraya gidip dükkanımı açacağım. Beni orada bulun, bu işi halledelim.
@@ -1175,10 +1490,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=Bu tür bir cömertliği 
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=Ders aralarında bir şekilde kullanacağım.
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=Ben bir mutfak yönetiyorum, ıvır zıvır çekmecesi değil.
 # Elder
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Böyle bir hediye ile kasabayı onurlandırıyorsunuz. Bunu layıkıyla ve doğru bir şekilde yazıya döktüreceğim.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Düşünceli. Bir sözleşme, taş gibi güvene dayanır.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Tuhaf bir şekilde sunulmuş olsa bile, iyi niyeti reddetmem.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Çabalarınız görülüyor, ancak her taş kaideye ait değildir.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Teşekkür ederim. Böyle bir hediye burada çok şey ifade ediyor.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Çok naziksiniz. Teşekkür ederim.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Teşekkür ederim. Mesajı, gönderildiği ruhla kabul edeceğim.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Denemeye çalıştığını görüyorum. Belki bir dahaki sefere şehre daha uygun bir şey yaparsın.
 # Priestess
 aetherhaven.dialogue.aetherhaven_priestess.gift.love=Gaia gülümsüyor. Bu, sunağın üzerinde durmalı.
 aetherhaven.dialogue.aetherhaven_priestess.gift.like=Sessiz ama samimi bir sunum. İşte bu önemli.
@@ -1186,7 +1501,7 @@ aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=Bunu günün diğer jeto
 aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=Bazı şeyler kaldırılmadan bırakılsa daha iyi olur. Teşekkür ederim, ama hayır.
 
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Buradan geçmenize izin veriyoruz, ancak bu sözleşme size ait değil. Yardım etmek istiyorsanız, önce burada yaşayanlar tarafından kabul edilmeniz gerekiyor.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Buradan geçebilirsiniz, ancak bu sözleşmede yer almıyorsunuz. Yardım etmek istiyorsanız, burada yaşayan birinin sizi önce davet etmesi gerekiyor.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Anladım.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Yaşlı Lyren
 # -- Tree id: aetherhaven_visitor_generic (visitors) --
@@ -1208,16 +1523,17 @@ aetherhaven.interaction.dialogue=Konuşmak için [{key}] tuşuna basın.
 npcRoles.Aetherhaven_Test_Villager.name=Diyalog Testi Köylü
 aetherhaven.banner.quest.completed.primary=Görev Tamamlandı
 aetherhaven.banner.quest.completed.secondary={name}
-aetherhaven.banner.assembly.complete.primary=Building Complete
+aetherhaven.banner.assembly.complete.primary=İnşaat Tamamlandı
 aetherhaven.banner.assembly.complete.secondary={name}
-aetherhaven.assembly.complete.chat={name} is ready.
+aetherhaven.assembly.complete.chat={name} hazır.
+aetherhaven.assembly.tracer.none_in_range=Yakın çevrede montaj önizlemesi yok (yaklaşın veya kasaba inşa iznini kontrol edin).
 aetherhaven.banner.quest.started.primary=Görev Başlatıldı
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Kilidi Açıldı
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Building Staff
-items.Aetherhaven_Building_Staff.description=Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
-items.Aetherhaven_Construction_Preview.name=Construction marker
-items.Aetherhaven_Construction_Preview.description=Marks the next prefab cell during town building assembly.
+items.Aetherhaven_Building_Staff.name=Bina Personeli
+items.Aetherhaven_Building_Staff.description=Birincil imleç, blokların arasından en yakın montaj önizleme noktasına yönlendirme oku gönderir. İkincil imleci basılı tutun ve parlayan yeşil inşaat işaretçisine nişan alarak bir sonraki bloğu anında yerleştirin (kasaba inşa izni). Siz uzaktayken pasif yapılar kendi kendine ilerlemeye devam eder.
+items.Aetherhaven_Construction_Preview.name=İnşaat işareti
+items.Aetherhaven_Construction_Preview.description=Şehir inşası montajı sırasında bir sonraki prefabrik hücreyi işaretler.
