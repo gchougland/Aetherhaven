@@ -2,9 +2,11 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
+import com.hexvane.aetherhaven.production.ProductionTimeScaling;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -120,6 +122,8 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             return;
         }
 
+        AetherhavenPluginConfig cfg = plugin.getConfig().get();
+
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#OpenUnlocks",
@@ -163,7 +167,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
                 commandBuilder.set(p + "Name.TextSpans", nameMsg);
                 long have = state.getAmount(itemId);
                 commandBuilder.set(p + "Qty.TextSpans", Message.raw(have + "/" + lineCap));
-                int ticks = entry.ticksAtCursor(cursor);
+                int ticks = ProductionTimeScaling.effectiveTicks(cfg, entry.ticksAtCursor(cursor));
                 float progress = ticks > 0 ? Math.min(1f, state.getSlotTickAccum(col) / (float) ticks) : 0f;
                 commandBuilder.set(p + "Prog.Value", progress);
                 commandBuilder.set(

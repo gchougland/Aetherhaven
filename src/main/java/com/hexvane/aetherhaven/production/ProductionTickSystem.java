@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
@@ -138,6 +139,9 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             return;
         }
 
+        AetherhavenPluginConfig cfg = plugin.getConfig().get();
+        double timeMul = cfg.getProductionTimeMultiplier();
+
         boolean amountsChanged = false;
         boolean accumChanged = false;
         for (int slot = 0; slot < 3; slot++) {
@@ -150,7 +154,7 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
                 }
                 continue;
             }
-            int ticksNeeded = entry.ticksAtCursor(cursor);
+            int ticksNeeded = ProductionTimeScaling.effectiveTicks(entry.ticksAtCursor(cursor), timeMul);
             int acc = state.getSlotTickAccum(slot) + 1;
             if (acc < ticksNeeded) {
                 state.setSlotTickAccum(slot, acc);

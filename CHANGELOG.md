@@ -1,11 +1,16 @@
 # Changelog
 
-## [1.2.1] - Unreleased
+## [1.2.1] - 5/3/2026
+
+### Added
+
+- **ProductionTimeMultiplier:** Added new config option for speeding up or slowing down production speed globally.
 
 ### Fixed
 
 - **Production Page Error:** Fixed bug that was causing crash in the Production/Unlock GUI
 - **Item Range:** Fixed interaction range for most items.
+- **HStats:** Fixed issue with HStats integration.
 
 ### Changed
 

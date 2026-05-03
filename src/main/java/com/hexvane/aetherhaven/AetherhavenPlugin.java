@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven;
 
+import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenPathCommand;
@@ -256,16 +257,16 @@ public final class AetherhavenPlugin extends JavaPlugin {
     protected void setup() {
         instance = this;
 
-        String hstatsModUuid = System.getenv("AETHERHAVEN_HSTATS_MOD_UUID");
+        String hstatsModUuid = HstatsBuildMetadata.HSTATS_MOD_UUID;
         String modVersion = this.getManifest().getVersion().toString();
-        if (hstatsModUuid != null && !hstatsModUuid.isBlank()) {
-            new HStats(hstatsModUuid.trim(), modVersion);
+        if (!hstatsModUuid.isBlank()) {
+            new HStats(hstatsModUuid, modVersion);
             LOGGER.atInfo().log("HStats metrics enabled for Aetherhaven v%s.", modVersion);
         } else {
             LOGGER
                 .atInfo()
                 .log(
-                    "HStats metrics disabled: set environment variable AETHERHAVEN_HSTATS_MOD_UUID to your hstats.dev mod UUID to enable."
+                    "HStats metrics disabled: set AETHERHAVEN_HSTATS_MOD_UUID when building, or Gradle property hstats_mod_uuid (gradle.properties / -Phstats_mod_uuid=...), to your hstats.dev mod UUID at build time to enable."
                 );
         }
 

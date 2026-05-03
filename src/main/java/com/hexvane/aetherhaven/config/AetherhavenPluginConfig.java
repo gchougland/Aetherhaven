@@ -231,6 +231,16 @@ public final class AetherhavenPluginConfig {
         .documentation("Wall-time safety timeout for villagers routing to a feast table POI before the POI is cleared.")
         .add()
         .append(
+            new KeyedCodec<>("ProductionTimeMultiplier", Codec.DOUBLE),
+            (o, v) -> o.productionTimeMultiplier = v != null ? v : 1.0,
+            o -> o.productionTimeMultiplier
+        )
+        .documentation(
+            "Multiplies every workplace production interval (catalog ticks): 1.0 = default, 0.5 = half the time, 2.0 = double. "
+                + "Clamped to a safe positive range."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("PathToolNodeBlockYOffset", Codec.DOUBLE),
             (o, v) -> o.pathToolNodeBlockYOffset = v != null ? v : 1.0,
             o -> o.pathToolNodeBlockYOffset
@@ -415,6 +425,9 @@ public final class AetherhavenPluginConfig {
     private int feastNeedsDecayScalePermille = 650;
     private int feastGatherTimeoutSeconds = 120;
 
+    /** Multiplier on catalog production ticks (workplace outputs). Default 1.0. */
+    private double productionTimeMultiplier = 1.0;
+
     private double pathToolNodeBlockYOffset = 1.0;
     private int pathToolSamplesPerBlock = 2;
     private int pathToolHalfWidth = 2;
@@ -577,6 +590,18 @@ public final class AetherhavenPluginConfig {
     public int getFeastGatherTimeoutSeconds() {
         int v = feastGatherTimeoutSeconds;
         return v >= 30 ? v : 120;
+    }
+
+    /**
+     * Multiplier applied to catalog production tick counts (below 1 = faster, above 1 = slower). Clamped to the range
+     * 0.05–100; NaN and non-positive stored values fall back to 1.0.
+     */
+    public double getProductionTimeMultiplier() {
+        double v = productionTimeMultiplier;
+        if (Double.isNaN(v) || v <= 0.0) {
+            return 1.0;
+        }
+        return Math.max(0.05, Math.min(100.0, v));
     }
 
     public double getPathToolNodeBlockYOffset() {
