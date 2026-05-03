@@ -161,7 +161,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-        if (town == null || !town.playerHasQuestPermission(uc.getUuid())) {
+        if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
             return;
         }
         JsonObject a = new JsonObject();

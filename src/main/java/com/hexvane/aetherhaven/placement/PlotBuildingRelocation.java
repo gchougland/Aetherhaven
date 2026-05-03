@@ -61,7 +61,7 @@ public final class PlotBuildingRelocation {
             sendError(store, ref, "No town owns this plot.");
             return false;
         }
-        if (!town.playerHasBuildPermission(playerUuid)) {
+        if (!town.playerCanManageConstructions(playerUuid)) {
             sendError(store, ref, "You do not have permission to move this building.");
             return false;
         }

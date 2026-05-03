@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,14 +74,36 @@ public final class PlotInstance {
     @SerializedName("homeResidentEntityUuid")
     private String homeResidentEntityUuid;
 
-    /** Next index in the prefab paste sequence while {@link PlotInstanceState#ASSEMBLING}. */
+    /**
+     * Legacy linear assembly: value was the next sequence index to place (equal to count of blocks already placed).
+     * Superseded by {@link #assemblyPlacedIndices} when non-empty.
+     */
     @Nullable
     @SerializedName("assemblyBlockIndex")
     private Integer assemblyBlockIndex;
 
+    /** Explicit indices placed during frontier assembly; sorted unique. When null/empty, {@link #assemblyBlockIndex} applies. */
+    @Nullable
+    @SerializedName("assemblyPlacedIndices")
+    private ArrayList<Integer> assemblyPlacedIndices;
+
+    /**
+     * Millis of {@link com.hypixel.hytale.server.core.modules.time.TimeResource#getNow()} when assembly pacing began
+     * (dilated world clock; scales with time dilation). Not wall-clock epoch.
+     */
     @Nullable
     @SerializedName("assemblyStartEpochMs")
     private Long assemblyStartEpochMs;
+
+    /**
+     * {@link com.hypixel.hytale.server.core.modules.time.TimeResource#getNow()} millis when passive assembly may place
+     * the next block. Cadence is a fixed sim-time interval between passive placements (see assembly slot in
+     * {@code PlotAssemblyService}); staff placements do not push this forward.
+     * staff placements do not push this forward.
+     */
+    @Nullable
+    @SerializedName("assemblyNextPassiveDueSimMs")
+    private Long assemblyNextPassiveDueSimMs;
 
     /** Matches {@link com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent} id for this assembly. */
     @Nullable
@@ -250,12 +275,72 @@ public final class PlotInstance {
         this.homeResidentEntityUuid = uuid != null ? uuid.toString() : null;
     }
 
+    /**
+     * @deprecated Prefer {@link #getAssemblyPlacedBlockCount()}. Historically the next linear index (= placed count).
+     */
+    @Deprecated
     public int getAssemblyBlockIndex() {
+        return getAssemblyPlacedBlockCount();
+    }
+
+    @Deprecated
+    public void setAssemblyBlockIndex(int index) {
+        this.assemblyBlockIndex = index;
+        this.assemblyPlacedIndices = null;
+    }
+
+    /** Blocks already committed during ASSEMBLING (frontier growth). */
+    public int getAssemblyPlacedBlockCount() {
+        if (assemblyPlacedIndices != null && !assemblyPlacedIndices.isEmpty()) {
+            return assemblyPlacedIndices.size();
+        }
         return assemblyBlockIndex != null ? assemblyBlockIndex : 0;
     }
 
-    public void setAssemblyBlockIndex(int index) {
-        this.assemblyBlockIndex = index;
+    public void resetAssemblyPlacementProgress() {
+        this.assemblyPlacedIndices = new ArrayList<>();
+        this.assemblyBlockIndex = null;
+    }
+
+    public void fillAssemblyPlacedSet(@Nonnull IntOpenHashSet out, int pendingSize) {
+        out.clear();
+        if (assemblyPlacedIndices != null && !assemblyPlacedIndices.isEmpty()) {
+            for (Integer i : assemblyPlacedIndices) {
+                if (i != null && i >= 0 && i < pendingSize) {
+                    out.add(i.intValue());
+                }
+            }
+            return;
+        }
+        int nextLinear = assemblyBlockIndex != null ? assemblyBlockIndex : 0;
+        for (int i = 0; i < nextLinear && i < pendingSize; i++) {
+            out.add(i);
+        }
+    }
+
+    public void addAssemblyPlacedIndex(int index) {
+        ArrayList<Integer> list = ensureAssemblyPlacedIndicesMutable();
+        int pos = Collections.binarySearch(list, index);
+        if (pos >= 0) {
+            return;
+        }
+        list.add(-pos - 1, index);
+        this.assemblyBlockIndex = null;
+    }
+
+    @Nonnull
+    private ArrayList<Integer> ensureAssemblyPlacedIndicesMutable() {
+        if (assemblyPlacedIndices == null) {
+            assemblyPlacedIndices = new ArrayList<>();
+        } else if (assemblyPlacedIndices.isEmpty()
+            && assemblyBlockIndex != null
+            && assemblyBlockIndex > 0) {
+            for (int i = 0; i < assemblyBlockIndex; i++) {
+                assemblyPlacedIndices.add(i);
+            }
+            assemblyBlockIndex = null;
+        }
+        return assemblyPlacedIndices;
     }
 
     public long getAssemblyStartEpochMs() {
@@ -264,6 +349,14 @@ public final class PlotInstance {
 
     public void setAssemblyStartEpochMs(long ms) {
         this.assemblyStartEpochMs = ms;
+    }
+
+    public long getAssemblyNextPassiveDueSimMs() {
+        return assemblyNextPassiveDueSimMs != null ? assemblyNextPassiveDueSimMs : 0L;
+    }
+
+    public void setAssemblyNextPassiveDueSimMs(long ms) {
+        this.assemblyNextPassiveDueSimMs = ms;
     }
 
     public int getAssemblyPrefabId() {
@@ -293,7 +386,9 @@ public final class PlotInstance {
 
     public void clearAssemblyPersistence() {
         this.assemblyBlockIndex = null;
+        this.assemblyPlacedIndices = null;
         this.assemblyStartEpochMs = null;
+        this.assemblyNextPassiveDueSimMs = null;
         this.assemblyPrefabId = null;
         this.assemblyOwnerUuid = null;
     }

@@ -1,0 +1,113 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@PermBackStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_back_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 480);
+
+        #Title {
+          $C.@Title {
+            @Text = %server.aetherhaven.ui.memberPermissions.title;
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
+
+          Group {
+            LayoutMode: Left;
+            Anchor: (Bottom: 8);
+            TextButton #PermBack {
+              Style: @PermBackStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: 40, Height: 40, Right: 10);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: %server.aetherhaven.ui.memberPermissions.backTooltip;
+            }
+            Label #TargetName {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, RenderBold: true, Wrap: true);
+              FlexWeight: 1;
+            }
+          }
+
+          Label #Hint {
+            Visible: false;
+            Anchor: (Bottom: 8);
+            Style: (...$C.@DefaultLabelStyle, TextColor: #c45a5a, Wrap: true);
+            Text: "";
+          }
+
+          Group #PermScroll {
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            Anchor: (Height: 340, Bottom: 0);
+
+            Group #PermInner {
+              LayoutMode: Top;
+
+              $C.@CheckBoxWithLabel #PermPlacePlots {
+                @Text = %server.aetherhaven.ui.memberPermissions.placePlots;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermManageConstructions {
+                @Text = %server.aetherhaven.ui.memberPermissions.manageConstructions;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermSpendTreasuryGold {
+                @Text = %server.aetherhaven.ui.memberPermissions.spendTreasuryGold;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermOpenTreasuryPanel {
+                @Text = %server.aetherhaven.ui.memberPermissions.openTreasuryPanel;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermAcceptQuests {
+                @Text = %server.aetherhaven.ui.memberPermissions.acceptQuests;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermCompleteQuests {
+                @Text = %server.aetherhaven.ui.memberPermissions.completeQuests;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermAbandonQuests {
+                @Text = %server.aetherhaven.ui.memberPermissions.abandonQuests;
+                Anchor: (Bottom: 6);
+              }
+              $C.@CheckBoxWithLabel #PermReviveVillagers {
+                @Text = %server.aetherhaven.ui.memberPermissions.reviveVillagers;
+                Anchor: (Bottom: 6);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

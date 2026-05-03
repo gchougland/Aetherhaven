@@ -4,20 +4,25 @@ Group {
   LayoutMode: Left;
   Anchor: (Bottom: 10);
 
-  Label #NameLabel {
+  Button #OpenMemberName {
+    LayoutMode: Left;
     Anchor: (Width: 200, Right: 8, Vertical: 4);
-    Style: $C.@DefaultLabelStyle;
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
+
+    Label #NameLabel {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #c9b8a3, Wrap: true);
+      FlexWeight: 1;
+    }
   }
 
   Label #RoleReadOnly {
     Anchor: (Width: 110, Right: 8, Vertical: 4);
     Visible: false;
     Style: $C.@DefaultLabelStyle;
-  }
-
-  $C.@DropdownBox #RoleDropdown {
-    Anchor: (Width: 120, Height: $C.@DropdownBoxHeight, Right: 8);
-    Visible: false;
   }
 
   $C.@TextButton #KickButton {

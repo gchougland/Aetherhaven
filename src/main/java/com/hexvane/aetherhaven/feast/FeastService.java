@@ -176,7 +176,7 @@ public final class FeastService {
         if (pu == null || player == null) {
             return "server.aetherhaven.ui.feast.err.invalidPlayer";
         }
-        if (!town.hasMemberOrOwner(pu.getUuid()) || !town.playerHasBuildPermission(pu.getUuid())) {
+        if (!town.hasMemberOrOwner(pu.getUuid()) || !town.playerCanManageConstructions(pu.getUuid())) {
             return "server.aetherhaven.ui.feast.noPermission";
         }
 

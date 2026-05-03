@@ -63,7 +63,7 @@ public final class ConstructionCompleter {
             LOGGER.atWarning().log("Construction complete but no town owns plot %s", plotId);
             return;
         }
-        if (!town.playerHasBuildPermission(ownerUuid)) {
+        if (!town.playerCanManageConstructions(ownerUuid)) {
             LOGGER.atWarning().log("Construction complete but player %s cannot build for this town", ownerUuid);
             return;
         }

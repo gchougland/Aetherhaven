@@ -59,8 +59,14 @@ public final class AetherhavenConstants {
      */
     public static final String CONSTRUCTION_PREVIEW_BLOCK_TYPE_ID = "Aetherhaven_Construction_Preview";
 
-    /** Accelerates plot assembly when aimed at the preview cell. */
+    /** Channels frontier placement over half a second per brush when aimed at assembly preview cubes. */
     public static final String BUILDING_STAFF_ITEM_ID = "Aetherhaven_Building_Staff";
+
+    /**
+     * Chebyshev distance (max of dx,dy,dz) from the ray-selected center cell: staff places every frontier block in this
+     * cube (e.g. 1 = 3×3×3) after the channel completes.
+     */
+    public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS = 1;
 
     /** Root interaction asset id (RequireNewClick false) for staff secondary. */
     public static final String ROOT_INTERACTION_BUILDING_STAFF_SECONDARY = "Aetherhaven_BuildingStaff_Secondary_Root";
@@ -74,8 +80,20 @@ public final class AetherhavenConstants {
     /** Mist along look direction while channeling secondary (server-spawned at staff tip with head rotation). */
     public static final String BUILDING_STAFF_STREAM_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_Stream";
 
+    /**
+     * Creative Play {@code Brush_Mode} ({@code CreativePlayDefaults.json}) — short non-looping tick while channeling the
+     * assembly brush so audio stops when RMB is released (unlike {@code Brush_Paint} base loop).
+     */
+    public static final String BUILDING_STAFF_BRUSH_AMBIENT_SOUND_EVENT_ID = "SFX_Creative_Play_Brush_Mode";
+
+    /** Same sting as quest/reputation event titles ({@link com.hexvane.aetherhaven.dialogue.DialogueActionExecutor}). */
+    public static final String EVENT_TITLE_SHORT_SUCCESS_SOUND_ID = "SFX_Discovery_Z1_Short";
+
     /** One-shot green sparkle along staff→preview for “material” feedback (no item entities). */
     public static final String BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_MaterialBead";
+
+    /** Soft beads along the building-staff primary guide bolt (longer dissolve than {@link #BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID}). */
+    public static final String BUILDING_STAFF_GUIDE_TRAIL_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_GuideTrail";
 
     public static final String PERMISSION_PATH_TOOL = "aetherhaven.path.tool";
 

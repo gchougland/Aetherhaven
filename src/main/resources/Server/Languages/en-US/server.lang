@@ -1,4 +1,4 @@
-# Aetherhaven server-side language strings
+﻿# Aetherhaven server-side language strings
 #
 # Quick map: search for lines starting with "# ===" (major) or "# --" (dialogue tree).
 # Rough order: Common, Town, Town command, small UIs, POI, plots, debug blocks, quests,
@@ -15,6 +15,7 @@ aetherhaven.common.townNotFound=Town not found.
 aetherhaven.common.invalidTownLink=Invalid town link.
 aetherhaven.common.treasuryNotLinked=Treasury is not linked.
 aetherhaven.common.ownerOnlyTreasury=Only the town owner may use the treasury.
+aetherhaven.common.noTreasuryPanelPermission=You do not have permission to use the town treasury.
 aetherhaven.common.townNotInThisWorld=Town is not in this world.
 aetherhaven.common.noMoveBuildingsPermission=You do not have permission to move buildings for this town.
 aetherhaven.common.buildingCannotMove=This building cannot be moved (missing plot or not complete).
@@ -22,6 +23,7 @@ aetherhaven.common.lookAtBlockPlot=Look at a block to set the plot sign position
 aetherhaven.common.carryPlotToken=Carry a plot token for a building type listed in the tool (e.g. inn plot token) to start placement.
 aetherhaven.common.statueNotLinked=Statue is not linked to a town.
 aetherhaven.common.ownerOnlyStatue=Only the town owner may use this statue.
+aetherhaven.common.noReviveVillagersPermission=You do not have permission to revive villagers at this statue.
 aetherhaven.common.noPlayerId=No player id.
 aetherhaven.common.playersOnly=Players only.
 aetherhaven.common.invalidVillager=Invalid villager.
@@ -52,7 +54,7 @@ aetherhaven.town.invite.err.emptyName=Enter a player name.
 aetherhaven.town.invite.err.targetOffline=Player "{name}" is not online in this world.
 aetherhaven.town.invite.err.cannotInviteSelf=You cannot invite yourself.
 aetherhaven.town.invite.err.alreadyInTown=That player is already in a town in this world.
-aetherhaven.town.invite.toTarget={inviter} invited you to join the town "{townDisplay}". Type /aetherhaven town accept {townDisplay}  or  /aetherhaven town decline {townDisplay}
+aetherhaven.town.invite.toTarget={inviter} invited you to join the town "{townDisplay}". Type /aetherhaven town accept {townDisplay} or /aetherhaven town decline {townDisplay} (use the full town name, including spaces).
 aetherhaven.town.invite.sent=Invite sent to {name}.
 aetherhaven.town.kick.err.mustBeOnline=Player must be online to kick by name.
 aetherhaven.town.kick.err.cannotRemoveOwner=Cannot remove the town owner.
@@ -70,6 +72,20 @@ aetherhaven.town.accept.joined=You joined "{town}".
 aetherhaven.town.decline.noPending=No pending invite for that town.
 aetherhaven.town.decline.noInvites=You have no pending town invites.
 aetherhaven.town.decline.done=Invite declined.
+aetherhaven.town.permissions.updated=Member permissions saved.
+
+aetherhaven.ui.memberPermissions.title=Member permissions
+aetherhaven.ui.memberPermissions.backTooltip=Back to player list
+aetherhaven.ui.memberPermissions.placePlots=Place plots
+aetherhaven.ui.memberPermissions.manageConstructions=Build and manage constructions (assembly, production, feasts, charter amendments, move buildings)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Spend town treasury gold on construction costs
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Open treasury (deposit / withdraw)
+aetherhaven.ui.memberPermissions.acceptQuests=Accept / start town quests
+aetherhaven.ui.memberPermissions.completeQuests=Complete town quests and claim reputation rewards
+aetherhaven.ui.memberPermissions.abandonQuests=Abandon active town quests
+aetherhaven.ui.memberPermissions.reviveVillagers=Revive villagers at the Gaia statue
+aetherhaven.ui.memberPermissions.err.notOwner=Only the town owner can edit permissions.
+aetherhaven.ui.memberPermissions.err.notInTown=That player is not in this town.
 aetherhaven.town.rolecmd.playerMustBeOnline=Player must be online.
 aetherhaven.town.rolecmd.roleInvalid=Role must be BUILD, QUEST, or BOTH.
 aetherhaven.town.leave.notInTown=You are not in a town.
@@ -340,8 +356,8 @@ aetherhaven.ui.charter.saved=Charter amendments updated.
 
 # === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
 aetherhaven.reputation.reward.continue=Continue
-aetherhaven.reputation.reward.elder.50=The charter is not carved in stone forever. Here is the pattern for an amendments table. Craft it at your town planning desk once you know the schematic. Seat it in the hall and choose how the town's morning tithe leans.
-aetherhaven.reputation.reward.elder.100=You have carried this place farther than anyone asked. Take this foundation stone: set a founder's monument where the charter allows. The treasury will remember.
+aetherhaven.reputation.reward.elder.50=The charter can change as we grow. Here is the pattern for an amendments table. Craft it at your town planning desk when you have the schematic. Put it in the hall and you can choose how the morning tithe works.
+aetherhaven.reputation.reward.elder.100=You have done more for this town than anyone asked. Take this foundation stone. Set a founder's monument where the charter allows. The people here will remember.
 aetherhaven.reputation.reward.innkeeper.50=You have kept this hall fed and honest long enough that I will trust you with the big table. Here is the banquet pattern—craft it at the town planning desk when you have the schematic, then set it in town. When the table is ready, you can call the Ledger Supper too: bread, cheese, pie, and a tithe that leans kind for a week. I will watch the hall while you serve it.
 aetherhaven.reputation.reward.innkeeper.75=You have walked through enough long nights with us. When you lay out the Hearthglass Vigil, the town eats slower and kinder for a week. Fish, meat, vegetables, and a gentler fade for every need. That is how we keep each other standing.
 aetherhaven.reputation.reward.innkeeper.100=You and this town share a name now. Berrycircle Concord is the light plate circle: salad, fruit skewers, popcorn, and a toast that lands. Serve it once and they will remember you warmer.
@@ -388,7 +404,7 @@ items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
 items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
-items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the building foreman staff (speeds passive plot construction), the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
+items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the building staff (speeds passive plot construction), the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
 items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
 items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; you must know the schematic.
 items.Aetherhaven_Banquet_Table.name=Banquet table
@@ -1004,11 +1020,11 @@ commands.aetherhaven.town.accept.desc=Accept a pending town invite
 commands.aetherhaven.town.decline.desc=Decline a pending town invite
 commands.aetherhaven.town.kick.desc=Remove a member from your town
 commands.aetherhaven.town.kick.player.desc=Member username (must be online)
-commands.aetherhaven.town.role.desc=Set a member's role (BUILD, QUEST, or BOTH)
+commands.aetherhaven.town.role.desc=Apply a permission preset to a member (BUILD, QUEST, or BOTH). Use the management block Players tab for per-flag permissions.
 commands.aetherhaven.town.role.player.desc=Member username (must be online)
 commands.aetherhaven.town.role.role.desc=BUILD, QUEST, or BOTH
 commands.aetherhaven.town.leave.desc=Leave a town you are a member of (not as owner)
-commands.aetherhaven.town.townName.desc=Optional town display name (for multiple invites or admin)
+commands.aetherhaven.town.townName.desc=Optional town display name; use the full name including spaces (rest of the line). Omit when you only have one pending invite.
 
 commands.aetherhaven.poi.desc=Debug: POI commands
 commands.aetherhaven.poi.list.desc=List POIs for a town (optional town UUID, or omit / use \"me\" for your town)
@@ -1214,38 +1230,38 @@ aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub actions: unl
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Run unlock_achievement + start_quest stubs
 aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager
 # -- Tree id: aetherhaven_elder_week1 (Elder, intro scout quest) --
-aetherhaven.dialogue.aetherhaven_elder_week1.root.body=I'm Lyren. I speak for the charter we signed when we put this town on Orbis. The old cities are gone. What we have is this ground and the people who are already here, and more will come. Before we start laying new plots, I need you to learn the land around Aetherhaven: where it is flat enough to build, where water runs, where we might put fields or a commons later. Keep it practical. When you have looked the place over, come find me again.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=I'm Lyren. Our town runs on the charter we signed when we settled here. Before we stake more plots, I need you to walk the ground around Aetherhaven. Get a feel for where it is flat enough to build, where the water is, and where we might put fields or a common green later. Nothing fancy, just look around. When you have done that, come back and tell me.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=I'll scout the area and report back.
 aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
 # -- Tree id: aetherhaven_elder_week2 (Elder, inn / hall / house & gold) --
-aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=You pick some up from the work we send you on, and from trading when someone is buying. The town purse is its own thing. Once the hall is built, the treasury lives in there. Use the block there to put coin in or pull it out if the charter says you may. After that, each morning a little gold flows into that treasury from the people who actually live here, not visitors passing through. How much depends on how they are holding up. If they are fed, rested, and in decent spirits, the pot does better. If they are stretched thin, it does worse. That keeps the commons honest.
+aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.body=Gold shows up a few ways. You earn it when you finish quests. If you explore, you can find it in chests and caches out in the world, in ruins and other old places. The town keeps its own pile in the treasury. Once the town hall is built, the treasury is inside it. Every morning a small daily tax from our residents goes into that treasury, not from visitors passing through. How much depends on how they are doing. If they are fed, rested, and in decent spirits, we get more. If they are hungry, tired, or on edge, we get less. Use the block there to put your own gold in or take town gold out if the charter allows it.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.c0=Good to know. Thanks.
 aetherhaven.dialogue.aetherhaven_elder_week2.gold_explainer.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=There. A real inn for people who would otherwise sleep rough. Corin has the key. Go introduce yourself by the hearth. You earned more than thanks, but thanks is where I will start.
+aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.body=There. A real inn for folk who would have slept outside. Corin has the key. Go say hello by the hearth. You earned more than a thank you from me, but thank you is what I will give you for now.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.c0=Happy to help.
 aetherhaven.dialogue.aetherhaven_elder_week2.inn_done.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=When the walls are up, use the management block and set me as resident. Then come find me. I want to hear you say it, not read it off a shelf.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.body=When the walls are up, use the management block inside and set me as the resident. Then come find me. I want to hear it from you, not only read it on the sign.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.c0=You will get both.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_accepted.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Then it is settled. I have a home under the same rules as everyone else. Thank you for seeing it through.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.body=Then we are done. I have a roof same as anyone else here. Thank you for sticking with it.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.c0=Welcome home, Lyren.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_finish.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=The hall is up and the treasury can breathe. The charter gave us rules for the town; it did not give me a bed. I want the same small house anyone else gets. Take the token I offer, stake the plot with your staff, pay materials and the town share from the treasury, then put my name on the management shelf when it is built. I will not forget who made room for me.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.body=The town hall is built and we have a treasury inside it. The charter gave us rules for the town. It did not give me a bed. I want the same small house anyone else gets. Take the token I give you, stake the plot with your placement staff, pay the materials and the town share from the treasury, then when it is built put my name on the management block. The build will finish on its own if you wait. If you want it to go faster, craft a Building Wand at the town planning desk and use it on the green outline blocks. I will remember you made room for me.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c0=I'll handle it.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.c1=I cannot commit to that yet.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_offer.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Take the time you need. When the house is done, register me on the block, then come find me so we can finish this face to face.
+aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.body=Take the time you need. When the house is finished, register me on the management block, then come find me in person.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.c0=I'll come when it is done.
 aetherhaven.dialogue.aetherhaven_elder_week2.lyren_house_remind.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Good. Place the inn plot with your staff, pay the materials the sign lists, and finish the build. When the roof is on and the hearth is in, come tell me yourself. I will be waiting on word.
+aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.body=Good. Place the inn plot with your staff, pay what the sign asks for in materials, and let the build run. You do not have to do anything else, it finishes by itself, it just takes time. If you want it faster, craft a Building Wand at the town planning desk and use it on the green markers. When the roof is on and the hearth is in, come tell me yourself.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.c0=I'll start as soon as I can.
 aetherhaven.dialogue.aetherhaven_elder_week2.quest_accepted.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=When the roof holds and the hearth is lit, come back and tell me in person. I am not rushing you, but I am not leaving until this town has a proper inn for anyone who needs a bed.
+aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.body=When the inn is finished, with the roof on and the hearth working, come tell me in person. I am not leaving until this town has beds for travelers. The inn will build itself if you leave it, or you can speed it up with a Building Wand if you have one.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.c0=I'll come back when it is ready.
 aetherhaven.dialogue.aetherhaven_elder_week2.remind_inn.speaker=Elder Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_100.speaker=Elder Lyren
 aetherhaven.dialogue.aetherhaven_elder_week2.rep_reward_50.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.root.body=The charter still stands, and I still stand by it. We do not have spare shelter to send people to, so the first real building here has to be an inn: a roof, a hearth, and a door that stays open to travelers and to our own kin when the road is long. When you are ready to stake it, say so.
+aetherhaven.dialogue.aetherhaven_elder_week2.root.body=The charter still stands, and I stand by it. We have nowhere to send people who need a roof, so our first building has to be an inn: a roof, a hearth, and a door that stays open. After you stake the plot and pay what the sign lists, the build carries on by itself. You do not need a Building Wand. If you want the work to go faster, craft one at the town planning desk. When you are ready to start, tell me.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c0=I'm in. Let's raise the inn.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c1=The inn is still on my list. I wanted to check in.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c10=I'll leave you to it.
@@ -1258,17 +1274,17 @@ aetherhaven.dialogue.aetherhaven_elder_week2.root.c7=The town hall build is stil
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c8=The town hall is up.
 aetherhaven.dialogue.aetherhaven_elder_week2.root.c9=How do people get gold coins around here?
 aetherhaven.dialogue.aetherhaven_elder_week2.root.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Use the town hall token with your staff, pay the materials, and build it out. When the hall is finished, tell me in person. I want to see your face when you say it is done.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.body=Use the town hall token with your staff, pay the materials, and let it build out. It will finish on its own. Craft a Building Wand at the town planning desk if you want to speed it up, then use it on the green markers. When the hall is done, come tell me in person.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.c0=I'll tell you the moment it is finished.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_accepted.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=There. Aetherhaven has a proper town hall: records, treasury, and a room where we can meet without yelling across the square. That is what I needed from you.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.body=There. Aetherhaven has a town hall now: records, treasury, and a room where we can meet out of the wind. That is what I needed from you.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.c0=Glad it helps.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_done.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=The inn is standing. Next we need a town hall that belongs to all of us: a shelf for the charter, a desk for plans, and a treasury so shared coin can fund the rest of what we build. Stake the plot, pay what the sign asks in materials, and we finally have a place to meet as a whole town.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.body=The inn is done. Next we need a town hall for everyone: a shelf for the charter, a desk for plans, and a treasury so town coin can pay for what we build together. Stake the plot with your staff and pay what the sign asks in materials. The hall will build itself over time if you wait. If you want it faster, craft a Building Wand at the town planning desk and use it on the green markers.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c0=I'll put the hall up.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.c1=Not yet.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_offer.speaker=Elder Lyren
-aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Stone and paperwork both take time. When the hall is finished, tell me. I will be here.
+aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.body=Building takes time. The hall will finish without a Building Wand if you just wait. When it is done, tell me. I will be here.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.c0=Still working on it.
 aetherhaven.dialogue.aetherhaven_elder_week2.town_hall_remind.speaker=Elder Lyren
 # -- Tree id: aetherhaven_farmer (Irienne Mossmark) --
@@ -1465,10 +1481,10 @@ aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like=We can serve that kind of
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral=I'll find a use between courses.
 aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike=I run a kitchen, not a junk drawer.
 # Elder
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=You honor the town with a gift like that. I will see it written in the right spirit.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=Thoughtful. A charter grows on trust as much as stone.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=I will not refuse good intent, even in odd packaging.
-aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=Your effort is seen—but not every stone belongs on the plinth.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.love=Thank you. A gift like that means something here.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.like=That was kind of you. Thank you.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.neutral=Thank you. I will take it in the spirit it was sent.
+aetherhaven.dialogue.aetherhaven_elder_week2.gift.dislike=I see you tried. Maybe next time something that fits the town a bit better.
 # Priestess
 aetherhaven.dialogue.aetherhaven_priestess.gift.love=Gaia smiles. This belongs at the altar.
 aetherhaven.dialogue.aetherhaven_priestess.gift.like=A quiet offering, but sincere. That counts.
@@ -1476,7 +1492,7 @@ aetherhaven.dialogue.aetherhaven_priestess.gift.neutral=I will set it with the o
 aetherhaven.dialogue.aetherhaven_priestess.gift.dislike=Some things are better left unlifted. Thank you, but no.
 
 # -- Tree id: aetherhaven_visitor_elder (visitors) --
-aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=You are welcome to pass through, but this charter is not yours. If you mean to help, you must be welcomed in by those who dwell here first.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=You can pass through, but you are not on this charter. If you want to help, someone who lives here has to invite you first.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=I understand.
 aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Elder Lyren
 # -- Tree id: aetherhaven_visitor_generic (visitors) --
@@ -1498,13 +1514,17 @@ aetherhaven.interaction.dialogue=Press [{key}] to talk
 npcRoles.Aetherhaven_Test_Villager.name=Dialogue Test Villager
 aetherhaven.banner.quest.completed.primary=Quest Complete
 aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Building Complete
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} is ready.
+aetherhaven.assembly.tracer.none_in_range=No assembly preview in range (move closer or check town build permission).
 aetherhaven.banner.quest.started.primary=Quest Started
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Unlocked
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Building foreman staff
-items.Aetherhaven_Building_Staff.description=Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
+items.Aetherhaven_Building_Staff.name=Building Staff
+items.Aetherhaven_Building_Staff.description=Primary sends a guiding bolt through blocks to the nearest assembly preview in range. Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
 items.Aetherhaven_Construction_Preview.name=Construction marker
 items.Aetherhaven_Construction_Preview.description=Marks the next prefab cell during town building assembly.

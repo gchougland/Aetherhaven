@@ -570,7 +570,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             sendError(store, ref, "You need a town (place a charter) first.");
             return false;
         }
-        if (!town.playerHasBuildPermission(uc.getUuid())) {
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
             sendError(store, ref, "You do not have permission to place buildings for this town.");
             return false;
         }
@@ -787,7 +787,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         String placementErr;
         if (town == null) {
             placementErr = "You need a town (place a charter) first.";
-        } else if (!town.playerHasBuildPermission(uc.getUuid())) {
+        } else if (!town.playerCanPlacePlots(uc.getUuid())) {
             placementErr = "You do not have permission to place buildings for this town.";
         } else {
             placementErr =
@@ -815,6 +815,13 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         } finally {
             buf.release();
         }
+    }
+
+    /**
+     * Re-sends footprint wireframes after {@code ClearDebugShapes} from another subsystem (e.g. assembly frontier cubes).
+     */
+    public void refreshFootprintOverlayAfterDebugClear(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshPreview(ref, store);
     }
 
     private void sendError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull String text) {

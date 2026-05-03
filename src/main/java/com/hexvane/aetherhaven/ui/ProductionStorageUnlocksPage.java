@@ -117,7 +117,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
-        if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+        if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
             commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.permission"));
             commandBuilder.clear(ROWS);
@@ -332,7 +332,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
-        if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+        if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);

@@ -3,10 +3,7 @@ package com.hexvane.aetherhaven.construction.assembly;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.pathtool.PathDebugPreviewUtil;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.PlotInstance;
-import com.hexvane.aetherhaven.town.PlotInstanceState;
-import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -18,6 +15,7 @@ import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -29,15 +27,22 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * Per-player {@link PathDebugPreviewUtil} ghost cubes for the next assembly cell (same approach as the path tool’s
- * planned voxels — no world blocks).
+ * Per-player {@link PathDebugPreviewUtil} ghost cubes for assembly frontier cells (same approach as the path tool’s
+ * planned voxels — no world blocks). Cells being filled with the building staff grow from half to full size over half a second.
  */
 public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityStore> {
-    private static final double VIZ_RANGE = 96.0;
-    private static final double VIZ_RANGE_SQ = VIZ_RANGE * VIZ_RANGE;
+    /**
+     * Last stable geometry signature (frontier cells + brush center). Used to skip redundant redraws, and to redraw growing
+     * cubes without {@link PathDebugPreviewUtil#clear} so brush resize does not flash.
+     */
+    private static final ConcurrentHashMap<UUID, Long> LAST_ASSEMBLY_GEOM_SIG = new ConcurrentHashMap<>();
+
     /** Same family as path-tool “replaceable” tint, shifted green. */
     private static final Vector3f NEXT_CELL_COLOR = new Vector3f(0.22f, 0.92f, 0.48f);
 
@@ -80,11 +85,25 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (pr == null) {
             return;
         }
+        UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID playerUuid = uuidComp != null ? uuidComp.getUuid() : null;
         ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, ref);
         if (hand != null
             && !hand.isEmpty()
             && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
-            PathDebugPreviewUtil.clear(pr);
+            if (playerUuid != null && LAST_ASSEMBLY_GEOM_SIG.remove(playerUuid) != null) {
+                clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
+            }
+            return;
+        }
+        boolean staffInHand =
+            hand != null
+                && !hand.isEmpty()
+                && AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(hand.getItemId());
+        if (!staffInHand) {
+            if (playerUuid != null && LAST_ASSEMBLY_GEOM_SIG.remove(playerUuid) != null) {
+                clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
+            }
             return;
         }
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
@@ -92,51 +111,95 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             return;
         }
         Vector3d ppos = tc.getPosition();
-        List<PlotAssemblyJob> jobs = new ArrayList<>(AssemblyWorldRegistry.jobs(world));
-        jobs.sort(Comparator.comparing(PlotAssemblyJob::plotId));
         List<Vector3i> cellsInRange = new ArrayList<>();
-        for (PlotAssemblyJob job : jobs) {
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, p).findTownOwningPlot(job.plotId());
-            if (town == null) {
-                continue;
-            }
-            PlotInstance plot = town.findPlotById(job.plotId());
-            if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
-                continue;
-            }
-            Vector3i cell = PlotAssemblyService.previewCellWorld(job, plot);
-            if (cell == null) {
-                continue;
-            }
-            double cx = cell.x + 0.5;
-            double cy = cell.y + 0.5;
-            double cz = cell.z + 0.5;
-            double dx = cx - ppos.getX();
-            double dy = cy - ppos.getY();
-            double dz = cz - ppos.getZ();
-            if (dx * dx + dy * dy + dz * dz > VIZ_RANGE_SQ) {
-                continue;
-            }
-            boolean duplicate = false;
-            for (Vector3i c : cellsInRange) {
-                if (c.equals(cell)) {
-                    duplicate = true;
-                    break;
-                }
-            }
-            if (duplicate) {
-                continue;
-            }
-            cellsInRange.add(cell);
-        }
+        AssemblyFrontierWorldCells.collectWithinDefaultRange(world, p, ppos, cellsInRange);
         if (cellsInRange.isEmpty()) {
-            PathDebugPreviewUtil.clear(pr);
+            if (playerUuid != null && LAST_ASSEMBLY_GEOM_SIG.remove(playerUuid) != null) {
+                clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
+            }
             return;
         }
-        double pulse01 = (world.getTick() % 72) / 72.0;
-        PathDebugPreviewUtil.clear(pr);
-        for (Vector3i cell : cellsInRange) {
-            PathDebugPreviewUtil.drawAssemblyNextCellCube(pr, cell.x, cell.y, cell.z, NEXT_CELL_COLOR, world, pulse01);
+        cellsInRange.sort(
+            Comparator
+                .comparingInt((Vector3i v) -> v.x)
+                .thenComparingInt(v -> v.y)
+                .thenComparingInt(v -> v.z)
+        );
+        long nowNs = System.nanoTime();
+        BuildingStaffAssemblyChannelComponent channel = store.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
+        long cellHash = hashAssemblyCellList(cellsInRange);
+        long geomSig = assemblyGeomSignature(cellHash, staffInHand, channel, nowNs);
+        boolean brushVisualActive =
+            staffInHand && channel != null && channel.hasActiveTarget() && channel.isFresh(nowNs);
+        double grow01Active = brushVisualActive ? channel.channelGrow01(nowNs) : 0.0;
+        boolean sizingBrush =
+            brushVisualActive && grow01Active > 1e-9 && grow01Active < 1.0 - 1e-9;
+        if (playerUuid != null) {
+            Long prevGeom = LAST_ASSEMBLY_GEOM_SIG.get(playerUuid);
+            if (!sizingBrush && prevGeom != null && prevGeom == geomSig) {
+                return;
+            }
+            if (sizingBrush && prevGeom != null && prevGeom == geomSig) {
+                redrawAssemblyFrontierCells(pr, world, cellsInRange, staffInHand, channel, nowNs);
+                return;
+            }
+            LAST_ASSEMBLY_GEOM_SIG.put(playerUuid, geomSig);
         }
+        clearDebugShapesThenRestoreFootprintUi(pr, ref, store);
+        redrawAssemblyFrontierCells(pr, world, cellsInRange, staffInHand, channel, nowNs);
+    }
+
+    private static void clearDebugShapesThenRestoreFootprintUi(
+        @Nonnull PlayerRef pr,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PathDebugPreviewUtil.clear(pr);
+        PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, store);
+    }
+
+    private static void redrawAssemblyFrontierCells(
+        @Nonnull PlayerRef pr,
+        @Nonnull World world,
+        @Nonnull List<Vector3i> cellsInRange,
+        boolean staffInHand,
+        @Nullable BuildingStaffAssemblyChannelComponent channel,
+        long nowNs
+    ) {
+        for (Vector3i cell : cellsInRange) {
+            double grow01 =
+                staffInHand
+                    && channel != null
+                    && channel.cellMatchesBrush(cell.x, cell.y, cell.z)
+                    && channel.isFresh(nowNs)
+                    ? channel.channelGrow01(nowNs)
+                    : 0.0;
+            PathDebugPreviewUtil.drawAssemblyFrontierCellCube(pr, cell.x, cell.y, cell.z, NEXT_CELL_COLOR, world, grow01);
+        }
+    }
+
+    private static long hashAssemblyCellList(@Nonnull List<Vector3i> sortedCells) {
+        long h = 0x243F6A8885A308D3L;
+        for (int i = 0; i < sortedCells.size(); i++) {
+            Vector3i c = sortedCells.get(i);
+            h ^= Long.rotateLeft((long) c.x * 0x9E3779B97F4A7C15L + (long) c.y + ((long) c.z << 20), i % 64);
+        }
+        return h;
+    }
+
+    /** Frontier cell set plus brush anchor when channeling; excludes fill progress so growth can redraw without a global clear. */
+    private static long assemblyGeomSignature(
+        long cellHash,
+        boolean staffInHand,
+        @Nullable BuildingStaffAssemblyChannelComponent channel,
+        long nowNs
+    ) {
+        if (!staffInHand || channel == null || !channel.hasActiveTarget() || !channel.isFresh(nowNs)) {
+            return cellHash;
+        }
+        long cx = channel.getBrushCenterX();
+        long cy = channel.getBrushCenterY();
+        long cz = channel.getBrushCenterZ();
+        return cellHash ^ (cx * 0x9E3779B1L) ^ (cy * 0x85EBCA77L) ^ (cz * 0xC2B2AE3DL);
     }
 }

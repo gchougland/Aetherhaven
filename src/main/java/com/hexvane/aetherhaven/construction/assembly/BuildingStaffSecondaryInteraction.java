@@ -18,6 +18,8 @@ import com.hypixel.hytale.protocol.Color;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
+import com.hypixel.hytale.protocol.SoundCategory;
+import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -28,8 +30,10 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.client.ChargingInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
+import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,19 +49,20 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
     private static final float CHARGING_HELD = -1.0F;
 
     private static final double RAY_MAX = 14.0;
-    private static final long MIN_STEP_NS = 140_000_000L;
     private static final long STREAM_INTERVAL_NS = 72_000_000L;
     private static final int TRACER_STEPS = 14;
     private static final Color TRACER_TINT = new Color((byte) 170, (byte) 255, (byte) 230);
-    private static final ConcurrentHashMap<UUID, Long> LAST_STAFF_STEP_NS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Long> LAST_STREAM_NS = new ConcurrentHashMap<>();
+    /** Short creative brush ticks while charging (non-looping — stops when RMB releases). */
+    private static final ConcurrentHashMap<UUID, Long> LAST_BRUSH_AMBIENT_NS = new ConcurrentHashMap<>();
+    private static final long BRUSH_AMBIENT_INTERVAL_NS = 200_000_000L;
 
     @Nonnull
     public static final BuilderCodec<BuildingStaffSecondaryInteraction> CODEC =
         BuilderCodec
             .builder(BuildingStaffSecondaryInteraction.class, BuildingStaffSecondaryInteraction::new, ChargingInteraction.CODEC)
             .documentation(
-                "Hold secondary while aiming through blocks at the green construction preview to place the next prefab cell."
+                "Hold secondary for half a second; aim locks until you release or the target becomes invalid. Preview cubes grow, then frontier blocks in that area are placed."
             )
             .build();
 
@@ -108,39 +113,119 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         long nowNs = System.nanoTime();
         maybeSpawnDirectedStream(playerRef, store, uuid, nowNs);
 
-        Long prevStep = LAST_STAFF_STEP_NS.get(uuid);
-        if (prevStep != null && nowNs - prevStep < MIN_STEP_NS) {
-            return;
-        }
         World world = store.getExternalData().getWorld();
-        Vector3i hit = AssemblyPreviewRay.findPenetratingPreviewCellHit(playerRef, world, plugin, RAY_MAX, store);
-        if (hit == null) {
-            return;
+        BuildingStaffAssemblyChannelComponent channel = commandBuffer.getComponent(playerRef, BuildingStaffAssemblyChannelComponent.getComponentType());
+        if (channel == null) {
+            channel = new BuildingStaffAssemblyChannelComponent();
+            commandBuffer.addComponent(playerRef, BuildingStaffAssemblyChannelComponent.getComponentType(), channel);
         }
-        PlotAssemblyJob job = PlotAssemblyService.findJobContainingPreview(world, plugin, hit);
+        if (firstRun) {
+            channel.resetChargeSession();
+        }
+        if (!channel.hasBrushLock()) {
+            Vector3i rayHit = AssemblyPreviewRay.findPenetratingPreviewCellHit(playerRef, world, plugin, RAY_MAX, store);
+            if (rayHit == null) {
+                return;
+            }
+            PlotAssemblyJob jPick = PlotAssemblyService.findJobContainingPreview(world, plugin, rayHit);
+            if (jPick == null) {
+                return;
+            }
+            TownRecord tPick = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(jPick.plotId());
+            if (tPick == null) {
+                return;
+            }
+            PlotInstance pPick = tPick.findPlotById(jPick.plotId());
+            if (pPick == null || pPick.getState() != PlotInstanceState.ASSEMBLING) {
+                return;
+            }
+            if (!tPick.playerCanManageConstructions(uuid)) {
+                return;
+            }
+            if (PlotAssemblyService.resolveFrontierPlacementIndex(jPick, pPick, rayHit) < 0) {
+                return;
+            }
+            channel.setBrushLock(rayHit);
+        }
+        Vector3i activeCell = channel.getBrushLockWorld();
+        PlotAssemblyJob job = PlotAssemblyService.findJobContainingPreview(world, plugin, activeCell);
         if (job == null) {
+            channel.resetChargeSession();
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
         if (town == null) {
+            channel.resetChargeSession();
             return;
         }
         PlotInstance plot = town.findPlotById(job.plotId());
         if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+            channel.resetChargeSession();
             return;
         }
-        if (!town.playerHasBuildPermission(uuid)) {
+        if (!town.playerCanManageConstructions(uuid)) {
+            channel.resetChargeSession();
             return;
         }
-        int idx = plot.getAssemblyBlockIndex();
-        if (idx < 0 || idx >= job.pendingBlocks().size()) {
+        if (PlotAssemblyService.resolveFrontierPlacementIndex(job, plot, activeCell) < 0) {
+            channel.resetChargeSession();
             return;
         }
-        if (PlotAssemblyService.advanceOneBlock(world, plugin, store, town, plot, job, true, uuid)) {
-            LAST_STAFF_STEP_NS.put(uuid, nowNs);
-            spawnTracerBeadsAlongBeam(playerRef, store, hit);
-            Vector3d p = new Vector3d(hit.x + 0.5, hit.y + 0.5, hit.z + 0.5);
+        channel.beginOrContinueChannel(activeCell, nowNs);
+        maybePlayBrushAmbientDuringChannel(uuid, playerRef, store, nowNs, channel);
+        long elapsed = nowNs - channel.getChannelStartNs();
+        if (elapsed < BuildingStaffAssemblyChannelComponent.CHANNEL_DURATION_NS) {
+            return;
+        }
+        IntArrayList batch =
+            PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
+                job,
+                plot,
+                activeCell,
+                AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS
+            );
+        boolean anyPlaced = false;
+        for (int bi = 0; bi < batch.size(); bi++) {
+            int idx = batch.getInt(bi);
+            if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid)) {
+                continue;
+            }
+            anyPlaced = true;
+            if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+                break;
+            }
+        }
+        channel.releaseBrushLockAfterPlacement(nowNs);
+        if (anyPlaced) {
+            spawnTracerBeadsAlongBeam(playerRef, store, activeCell);
+            Vector3d p = new Vector3d(activeCell.x + 0.5, activeCell.y + 0.5, activeCell.z + 0.5);
             ParticleUtil.spawnParticleEffect(AetherhavenConstants.BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID, p, store);
+        }
+    }
+
+    private static void maybePlayBrushAmbientDuringChannel(
+        @Nonnull UUID playerUuid,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        long nowNs,
+        @Nonnull BuildingStaffAssemblyChannelComponent channel
+    ) {
+        long elapsed = nowNs - channel.getChannelStartNs();
+        if (elapsed >= BuildingStaffAssemblyChannelComponent.CHANNEL_DURATION_NS || !channel.hasActiveTarget()) {
+            return;
+        }
+        Long prev = LAST_BRUSH_AMBIENT_NS.get(playerUuid);
+        if (prev != null && nowNs - prev < BRUSH_AMBIENT_INTERVAL_NS) {
+            return;
+        }
+        LAST_BRUSH_AMBIENT_NS.put(playerUuid, nowNs);
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pr == null) {
+            return;
+        }
+        int idx = SoundEvent.getAssetMap().getIndex(AetherhavenConstants.BUILDING_STAFF_BRUSH_AMBIENT_SOUND_EVENT_ID);
+        if (idx != 0 && idx != Integer.MIN_VALUE) {
+            SoundUtil.playSoundEvent2dToPlayer(pr, idx, SoundCategory.UI);
         }
     }
 

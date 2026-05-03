@@ -7,6 +7,10 @@ import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChannelComponent;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffSecondaryInteraction;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyTickSystem;
@@ -321,6 +325,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PoiToolPlayerComponent.register(this.getEntityStoreRegistry());
         PathToolPlayerComponent.register(this.getEntityStoreRegistry());
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
+        BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
+        BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
@@ -406,8 +412,15 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 BuildingStaffSecondaryInteraction.class,
                 BuildingStaffSecondaryInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingStaffFrontierTracer",
+                BuildingStaffFrontierTracerInteraction.class,
+                BuildingStaffFrontierTracerInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerNeedsDecaySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(this));
         this.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(this));
@@ -637,7 +650,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 }
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
                 TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-                if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+                if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
                     return null;
                 }
                 PlotInstance plot = null;

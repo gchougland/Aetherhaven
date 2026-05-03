@@ -43,7 +43,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             this.withRequiredArg("player", "server.commands.aetherhaven.town.invite.player.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.STRING);
+            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         InviteCommand() {
             super("invite", "server.commands.aetherhaven.town.invite.desc");
@@ -86,7 +86,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class AcceptCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.STRING);
+            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         AcceptCommand() {
             super("accept", "server.commands.aetherhaven.town.accept.desc");
@@ -144,7 +144,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class DeclineCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.STRING);
+            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         DeclineCommand() {
             super("decline", "server.commands.aetherhaven.town.decline.desc");
@@ -198,7 +198,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             this.withRequiredArg("player", "server.commands.aetherhaven.town.kick.player.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.STRING);
+            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         KickCommand() {
             super("kick", "server.commands.aetherhaven.town.kick.desc");
@@ -247,7 +247,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             this.withRequiredArg("role", "server.commands.aetherhaven.town.role.role.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.STRING);
+            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         RoleCommand() {
             super("role", "server.commands.aetherhaven.town.role.desc");

@@ -502,6 +502,13 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
         }
     }
 
+    /**
+     * Re-sends footprint wireframes after {@code ClearDebugShapes} from another subsystem (e.g. assembly frontier cubes).
+     */
+    public void refreshFootprintOverlayAfterDebugClear(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        refreshPreview(ref, store);
+    }
+
     private static boolean isReplaceable(@Nonnull World world, int x, int y, int z) {
         BlockType t = world.getBlockType(x, y, z);
         return t == null || t.getMaterial() == BlockMaterial.Empty;

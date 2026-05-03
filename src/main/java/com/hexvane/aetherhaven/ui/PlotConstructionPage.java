@@ -201,7 +201,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         UUIDComponent ucComp = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID playerUuid = ucComp != null ? ucComp.getUuid() : null;
         boolean treasuryPerm =
-            treasuryTown != null && playerUuid != null && treasuryTown.playerHasBuildPermission(playerUuid);
+            treasuryTown != null && playerUuid != null && treasuryTown.playerCanSpendTreasuryGold(playerUuid);
         long treasuryBal = treasuryTown != null ? treasuryTown.getTreasuryGoldCoinCount() : 0L;
         boolean treasuryOk =
             completed
@@ -456,10 +456,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
 
         commandBuilder.clear(MEMBER_ROWS);
-        ObjectArrayList<DropdownEntryInfo> roleEntries = new ObjectArrayList<>();
-        for (TownMemberRole r : TownMemberRole.values()) {
-            roleEntries.add(new DropdownEntryInfo(LocalizableString.fromString(r.name()), r.name()));
-        }
 
         List<UUID> ordered = new ArrayList<>();
         ordered.add(town.getOwnerUuid());
@@ -474,30 +470,29 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             String rowPath = MEMBER_ROWS + "[" + i + "]";
             commandBuilder.append(MEMBER_ROWS, "Aetherhaven/TownMemberRow.ui");
             String display = TownPlayerLookup.displayNameForUuid(world, pid);
-            commandBuilder.set(rowPath + " #NameLabel.TextSpans", Message.raw(display));
+            commandBuilder.set(rowPath + " #OpenMemberName #NameLabel.TextSpans", Message.raw(display));
+            if (viewerOwner) {
+                commandBuilder.set(rowPath + " #OpenMemberName.Disabled", false);
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    rowPath + " #OpenMemberName",
+                    new EventData().append("Action", "OpenMemberPermissions").append("@MemberUuid", pid.toString()),
+                    false
+                );
+            } else {
+                commandBuilder.set(rowPath + " #OpenMemberName.Disabled", true);
+            }
             if (isOwner) {
                 commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
                 commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.translation("server.aetherhaven.ui.plotmanagement.roleOwner"));
-                commandBuilder.set(rowPath + " #RoleDropdown.Visible", false);
                 commandBuilder.set(rowPath + " #KickButton.Visible", false);
             } else {
                 TownMemberRole role = town.getMemberRoleOrNull(pid);
                 String roleName = role != null ? role.name() : TownMemberRole.BOTH.name();
+                commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
+                commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.raw(roleName));
                 if (viewerOwner) {
-                    commandBuilder.set(rowPath + " #RoleReadOnly.Visible", false);
-                    commandBuilder.set(rowPath + " #RoleDropdown.Visible", true);
-                    commandBuilder.set(rowPath + " #RoleDropdown.Entries", roleEntries);
-                    commandBuilder.set(rowPath + " #RoleDropdown.Value", roleName);
                     commandBuilder.set(rowPath + " #KickButton.Visible", true);
-                    eventBuilder.addEventBinding(
-                        CustomUIEventBindingType.ValueChanged,
-                        rowPath + " #RoleDropdown",
-                        new EventData()
-                            .append("Action", "ChangeMemberRole")
-                            .append("@MemberUuid", pid.toString())
-                            .append("@Role", rowPath + " #RoleDropdown.Value"),
-                        false
-                    );
                     eventBuilder.addEventBinding(
                         CustomUIEventBindingType.Activating,
                         rowPath + " #KickButton",
@@ -505,9 +500,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                         false
                     );
                 } else {
-                    commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
-                    commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.raw(roleName));
-                    commandBuilder.set(rowPath + " #RoleDropdown.Visible", false);
                     commandBuilder.set(rowPath + " #KickButton.Visible", false);
                 }
             }
@@ -621,8 +613,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             sendUpdate(cmd, ev, false);
             return;
         }
-        if (data.action != null && data.action.equalsIgnoreCase("ChangeMemberRole")) {
-            if (!managementUi || data.memberUuid == null || data.role == null) {
+        if (data.action != null && data.action.equalsIgnoreCase("OpenMemberPermissions")) {
+            if (!managementUi || data.memberUuid == null) {
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -630,7 +622,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 return;
             }
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            World world = store.getExternalData().getWorld();
             if (plugin == null) {
                 return;
             }
@@ -638,27 +629,21 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
                 return;
             }
-            UUID memberId;
+            UUID targetId;
             try {
-                memberId = UUID.fromString(data.memberUuid.trim());
+                targetId = UUID.fromString(data.memberUuid.trim());
             } catch (IllegalArgumentException e) {
                 return;
             }
-            TownMemberRole role;
-            try {
-                role = TownMemberRole.valueOf(data.role.trim().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                return;
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                player.getPageManager()
+                    .openCustomPage(
+                        ref,
+                        store,
+                        new TownMemberPermissionsPage(playerRef, blockRef, blockWorldPos, town.getTownId(), targetId)
+                    );
             }
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            Message err = TownMembershipActions.trySetMemberRole(world, tm, town, playerRef, memberId, role);
-            if (err != null) {
-                playerRef.sendMessage(err);
-            }
-            UICommandBuilder cmd = new UICommandBuilder();
-            UIEventBuilder ev = new UIEventBuilder();
-            build(ref, cmd, ev, store);
-            sendUpdate(cmd, ev, false);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("KickMember")) {
@@ -957,7 +942,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 sendBuildError(store, ref, "No town owns this plot.");
                 return;
             }
-            if (!tr.playerHasBuildPermission(uc.getUuid())) {
+            if (!tr.playerCanSpendTreasuryGold(uc.getUuid())) {
                 sendBuildError(store, ref, "You cannot spend town treasury for this build.");
                 return;
             }
@@ -1173,8 +1158,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             .add()
             .append(new KeyedCodec<>("@MemberUuid", Codec.STRING), (d, v) -> d.memberUuid = v, d -> d.memberUuid)
             .add()
-            .append(new KeyedCodec<>("@Role", Codec.STRING), (d, v) -> d.role = v, d -> d.role)
-            .add()
             .append(new KeyedCodec<>("@InviteName", Codec.STRING), (d, v) -> d.inviteName = v, d -> d.inviteName)
             .add()
             .append(new KeyedCodec<>("@HouseResidentUuid", Codec.STRING), (d, v) -> d.houseResidentUuid = v, d -> d.houseResidentUuid)
@@ -1184,8 +1167,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         private String action;
         @Nullable
         private String memberUuid;
-        @Nullable
-        private String role;
         @Nullable
         private String inviteName;
         private String houseResidentUuid;

@@ -21,6 +21,8 @@ public final class PathDebugPreviewUtil {
     public static final int FLAG_MACHINIMA = FLAG_FADE | FLAG_NO_WIREFRAME;
     /** Solid overlay without fade (less “pulsing” when shapes are refreshed). */
     public static final int FLAG_SOLID_OVERLAY = FLAG_NO_WIREFRAME;
+    /** Assembly frontier: filled cube tint, no wireframe edges (same basis as {@link #FLAG_SOLID_OVERLAY}). */
+    public static final int FLAG_ASSEMBLY_FRONTIER = FLAG_SOLID_OVERLAY;
     private static final float PREVIEW_SECONDS = 0.35f;
     /**
      * Long lifetime for path-tool spline / gizmo packets so we can skip resending identical geometry every tick (reduces
@@ -132,23 +134,28 @@ public final class PathDebugPreviewUtil {
         add(pr, DebugShape.Cube, m, color, 0.72f, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
+    /** Full-size assembly hint cube (axis half-extent), slightly larger than 1m like vanilla block footprint. */
+    private static final double ASSEMBLY_CUBE_HALF_MAX = 0.5 * 1.06;
+    /** Idle / start size: half block edge (half of full debug cube extent). */
+    private static final double ASSEMBLY_CUBE_HALF_MIN = ASSEMBLY_CUBE_HALF_MAX * 0.5;
+
     /**
-     * Next assembly cell: solid cube centered on the block, slightly larger than 1m, with fade so rapid resend reads as
-     * a pulse (path tool uses a flat slab; this is intentionally different).
+     * Assembly frontier cell: solid cube centered on the block; {@code grow01} 0 = half-block size, 1 = full block.
      */
-    public static void drawAssemblyNextCellCube(
+    public static void drawAssemblyFrontierCellCube(
         @Nonnull PlayerRef pr,
         int x,
         int y,
         int z,
         @Nonnull Vector3f color,
         @Nonnull com.hypixel.hytale.server.core.universe.world.World w,
-        double pulse01
+        double grow01
     ) {
         if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return;
         }
-        double half = 0.5 * (1.06 + 0.10 * Math.sin(pulse01 * Math.PI * 2.0));
+        double g = Math.min(1.0, Math.max(0.0, grow01));
+        double half = ASSEMBLY_CUBE_HALF_MIN + (ASSEMBLY_CUBE_HALF_MAX - ASSEMBLY_CUBE_HALF_MIN) * g;
         double cx = x + 0.5;
         double cy = y + 0.5;
         double cz = z + 0.5;
@@ -156,8 +163,8 @@ public final class PathDebugPreviewUtil {
         m.identity();
         m.translate(cx, cy, cz);
         m.scale(half, half, half);
-        float opacity = (float) (0.62 + 0.18 * (0.5 + 0.5 * Math.sin(pulse01 * Math.PI * 2.0 + 0.4)));
-        add(pr, DebugShape.Cube, m, color, opacity, FLAG_MACHINIMA, 0.38f);
+        float opacity = (float) (0.72 + 0.14 * g);
+        add(pr, DebugShape.Cube, m, color, opacity, FLAG_ASSEMBLY_FRONTIER, PATH_TOOL_DEBUG_HOLD_SECONDS);
     }
 
     public static float previewSeconds() {

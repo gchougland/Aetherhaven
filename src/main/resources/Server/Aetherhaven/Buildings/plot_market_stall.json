@@ -3,7 +3,7 @@
   "displayName": "Market stall",
   "description": "A small stall for a traveling merchant.",
   "prefabPath": "Market_Stall.prefab.json",
-  "selfBuildGameDays": 2.5,
+  "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Market_Stall",
   "plotAnchorOffset": [4, 0, 3],
   "managementBlockLocalPos": [-1, 1, 1],

@@ -14,20 +14,13 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
-import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
-import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
-import com.hypixel.hytale.server.core.entity.InteractionChain;
-import com.hypixel.hytale.server.core.entity.InteractionManager;
-import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.modules.interaction.InteractionModule;
-import com.hypixel.hytale.server.core.modules.interaction.interaction.config.RootInteraction;
+import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -36,24 +29,26 @@ import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAc
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Passive plot assembly: fixed wall-clock schedule from {@code assemblyStartEpochMs + (index+1) * slotWallMs}
- * (see {@link PlotAssemblyJob#slotWallMs()}). Staff advances the same index without shifting future auto slots.
- * Auto-placement runs only while the next cell's chunk is loaded; after long absence, bounded catch-up applies.
+ * Plot assembly: passive ticks and building staff paint cells on a <strong>growth frontier</strong> — any unplaced block
+ * face-adjacent (6-neighbor in prefab space) to an already placed cell, starting from the lowest-Y layer. Passive places
+ * one block every {@link #computeSlotWallMs} of {@link com.hypixel.hytale.server.core.modules.time.TimeResource} time
+ * (dilated), independent of how many blocks the staff placed; staff only speeds completion by reducing remaining work.
  */
 public final class PlotAssemblyService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int BREAK_SIGN_SETTINGS = 10;
-    /**
-     * Passive assembly: at most one prefab cell per plot per world tick. A larger catch-up burst caused blocks to keep
-     * appearing for a moment after releasing building-staff secondary (passive resumes in the same tick window).
-     */
+    /** Passive assembly: at most one prefab cell per plot per {@link #tickPassive} invocation. */
     private static final int PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
 
     private PlotAssemblyService() {}
@@ -140,18 +135,20 @@ public final class PlotAssemblyService {
 
         world.breakBlock(physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
 
-        long now = System.currentTimeMillis();
+        long wallNow = System.currentTimeMillis();
         plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
         plot.setState(PlotInstanceState.ASSEMBLING);
-        plot.setLastStateChangeEpochMs(now);
-        plot.setAssemblyStartEpochMs(now);
-        plot.setAssemblyBlockIndex(0);
+        plot.setLastStateChangeEpochMs(wallNow);
+        Instant assemblySimStart = entityStore.getResource(TimeResource.getResourceType()).getNow();
+        plot.setAssemblyStartEpochMs(assemblySimStart.toEpochMilli());
+        plot.resetAssemblyPlacementProgress();
         plot.setAssemblyPrefabId(prefabId);
         plot.setAssemblyOwnerUuid(assemblyOwnerUuid);
+        long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
+        plot.setAssemblyNextPassiveDueSimMs(assemblySimStart.toEpochMilli() + slot);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         tm.updateTown(town);
 
-        long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         PlotAssemblyJob job =
             new PlotAssemblyJob(
                 plotId,
@@ -167,7 +164,7 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblyWorldRegistry.put(world, plotId, job);
-        refreshPreviewBlock(world, job, plot.getAssemblyBlockIndex());
+        refreshPreviewBlock(world, job, 0);
     }
 
     private static boolean tryRegisterJob(
@@ -209,10 +206,13 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblyWorldRegistry.put(world, plot.getPlotId(), job);
-        refreshPreviewBlock(world, job, plot.getAssemblyBlockIndex());
+        refreshPreviewBlock(world, job, 0);
         return true;
     }
 
+    /**
+     * Milliseconds of {@link TimeResource} (dilated world dt) between passive frontier placements for one block slot.
+     */
     private static long computeSlotWallMs(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull ConstructionDefinition def, int pendingCount) {
         long msDay = msPerGameDay(world, plugin.getConfig().get());
         double days = def.getSelfBuildGameDays();
@@ -221,15 +221,33 @@ public final class PlotAssemblyService {
         return Math.max(1L, total / n);
     }
 
+    /**
+     * {@link PlotInstance#getAssemblyStartEpochMs()} stores {@link TimeResource#getNow()} millis. Legacy saves may
+     * still hold wall-clock ms (always after sim {@code Now}); those are snapped forward once.
+     */
+    @Nonnull
+    private static Instant resolvePassiveAssemblyStart(
+        @Nonnull PlotInstance plot,
+        @Nonnull Instant simNow,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town
+    ) {
+        long raw = plot.getAssemblyStartEpochMs();
+        Instant start = raw == 0L ? simNow : Instant.ofEpochMilli(raw);
+        if (start.isAfter(simNow)) {
+            plot.setAssemblyStartEpochMs(simNow.toEpochMilli());
+            tm.updateTown(town);
+            return simNow;
+        }
+        return start;
+    }
+
     public static void tickPassive(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull Store<EntityStore> entityStore) {
         if (!plugin.getConfig().get().isPassivePlotAssemblyEnabled()) {
             return;
         }
-        if (anyPlayerChannelingBuildingStaffSecondary(entityStore)) {
-            return;
-        }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        long now = System.currentTimeMillis();
+        Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
             TownRecord town = tm.findTownOwningPlot(job.plotId());
             if (town == null) {
@@ -241,100 +259,94 @@ public final class PlotAssemblyService {
                 AssemblyWorldRegistry.remove(world, job.plotId());
                 continue;
             }
-            int idx = plot.getAssemblyBlockIndex();
-            if (idx >= job.pendingBlocks().size()) {
+            List<PendingBlock> pending = job.pendingBlocks();
+            int placedCount = plot.getAssemblyPlacedBlockCount();
+            if (placedCount >= pending.size()) {
                 continue;
             }
-            long start = plot.getAssemblyStartEpochMs();
+            Instant assemblyStart = resolvePassiveAssemblyStart(plot, simNow, tm, town);
             long slot = job.slotWallMs();
-            int placed = 0;
-            while (placed < PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB && idx < job.pendingBlocks().size()) {
-                long due = start + (long) (idx + 1) * slot;
-                if (now < due) {
+            long simNowMs = simNow.toEpochMilli();
+            long nextDue = plot.getAssemblyNextPassiveDueSimMs();
+            if (nextDue == 0L) {
+                nextDue = assemblyStart.toEpochMilli() + slot;
+                plot.setAssemblyNextPassiveDueSimMs(nextDue);
+                tm.updateTown(town);
+            }
+            if (simNowMs < nextDue) {
+                continue;
+            }
+            int burst = 0;
+            while (burst < PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB && placedCount < pending.size()) {
+                IntOpenHashSet placedSet = new IntOpenHashSet();
+                plot.fillAssemblyPlacedSet(placedSet, pending.size());
+                IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+                int pick = PlotAssemblyFrontier.smallestPlacementIndex(frontier);
+                if (pick < 0) {
                     break;
                 }
-                if (!isChunkLoadedForBlock(world, job.anchor(), job.pendingBlocks().get(idx))) {
+                if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(pick))) {
                     break;
                 }
-                if (!advanceOneBlock(world, plugin, entityStore, town, plot, job, false, null)) {
+                if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null)) {
                     break;
                 }
-                placed++;
-                idx = plot.getAssemblyBlockIndex();
+                plot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
+                tm.updateTown(town);
+                burst++;
+                placedCount = plot.getAssemblyPlacedBlockCount();
             }
         }
     }
 
     /**
-     * While any player holds secondary on the building staff (active interaction chain), passive assembly must not
-     * advance the same job in parallel — otherwise blocks keep appearing after release.
-     */
-    private static boolean anyPlayerChannelingBuildingStaffSecondary(@Nonnull Store<EntityStore> store) {
-        ComponentType<EntityStore, InteractionManager> imType = InteractionModule.get().getInteractionManagerComponent();
-        Query<EntityStore> query = Query.and(Player.getComponentType(), imType);
-        return store.forEachChunk(
-            query,
-            (chunk, commandBuffer) -> {
-                for (int i = 0; i < chunk.size(); i++) {
-                    InteractionManager im = chunk.getComponent(i, imType);
-                    if (im == null) {
-                        continue;
-                    }
-                    for (InteractionChain chain : im.getChains().values()) {
-                        if (chain.getServerState() != InteractionState.NotFinished) {
-                            continue;
-                        }
-                        RootInteraction root = chain.getInitialRootInteraction();
-                        if (root != null && AetherhavenConstants.ROOT_INTERACTION_BUILDING_STAFF_SECONDARY.equals(root.getId())) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-        );
-    }
-
-    /**
      * @param staffActor when non-null, permission is checked against this player for the plot's town.
-     * @return true if one block was committed (or finish ran).
+     * @return true if one block was committed (or finish was scheduled).
      */
-    public static boolean advanceOneBlock(
+    public static boolean advancePlacementAtIndex(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
         @Nonnull PlotAssemblyJob job,
+        int placementIndex,
         boolean fromStaff,
         @Nullable UUID staffActor
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
             return false;
         }
-        if (fromStaff && staffActor != null && !town.playerHasBuildPermission(staffActor)) {
+        if (fromStaff && staffActor != null && !town.playerCanManageConstructions(staffActor)) {
             return false;
         }
-        int idx = plot.getAssemblyBlockIndex();
         List<PendingBlock> pending = job.pendingBlocks();
-        if (idx >= pending.size()) {
+        if (placementIndex < 0 || placementIndex >= pending.size()) {
             return false;
         }
-        if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(idx))) {
+        IntOpenHashSet placedSet = new IntOpenHashSet();
+        plot.fillAssemblyPlacedSet(placedSet, pending.size());
+        if (placedSet.contains(placementIndex)) {
             return false;
         }
-        clearPreviewAtIndex(world, job.anchor(), pending, idx);
+        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        if (!PlotAssemblyFrontier.frontierContains(frontier, placementIndex)) {
+            return false;
+        }
+        if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(placementIndex))) {
+            return false;
+        }
+        clearPreviewAtIndex(world, job.anchor(), pending, placementIndex);
         LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(idx), true, chunkAccessor, blockTypeMap);
-        int next = idx + 1;
-        plot.setAssemblyBlockIndex(next);
+        ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap);
+        plot.addAssemblyPlacedIndex(placementIndex);
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-        if (next >= pending.size()) {
+        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
             scheduleCompleteAssembly(world, plugin, town, plot, job);
             return true;
         }
-        refreshPreviewBlock(world, job, next);
+        refreshPreviewBlock(world, job, placementIndex);
         return true;
     }
 
@@ -354,7 +366,7 @@ public final class PlotAssemblyService {
             if (registered != job) {
                 return;
             }
-            if (plot.getAssemblyBlockIndex() < job.pendingBlocks().size()) {
+            if (plot.getAssemblyPlacedBlockCount() < job.pendingBlocks().size()) {
                 return;
             }
             Store<EntityStore> store = world.getEntityStore().getStore();
@@ -384,6 +396,7 @@ public final class PlotAssemblyService {
         entityStore.invoke(end);
         AssemblyWorldRegistry.remove(world, plotId);
         UUID finisher = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
+        AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, finisher, plot);
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
     }
 
@@ -399,18 +412,114 @@ public final class PlotAssemblyService {
      */
     private static void refreshPreviewBlock(@Nonnull World world, @Nonnull PlotAssemblyJob job, int index) {}
 
-    /**
-     * World integer cell for the next prefab block to place during assembly.
-     */
-    @Nullable
-    public static Vector3i previewCellWorld(@Nonnull PlotAssemblyJob job, @Nonnull PlotInstance plot) {
-        int idx = plot.getAssemblyBlockIndex();
+    /** Appends world-space integer cells for every frontier placement (for previews / ray tests). */
+    public static void appendFrontierWorldCells(
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotInstance plot,
+        @Nonnull List<Vector3i> out
+    ) {
         List<PendingBlock> pending = job.pendingBlocks();
-        if (idx < 0 || idx >= pending.size()) {
-            return null;
+        IntOpenHashSet placedSet = new IntOpenHashSet();
+        plot.fillAssemblyPlacedSet(placedSet, pending.size());
+        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        for (int k = 0; k < frontier.size(); k++) {
+            PendingBlock pb = pending.get(frontier.getInt(k));
+            out.add(new Vector3i(job.anchor().x + pb.x(), job.anchor().y + pb.y(), job.anchor().z + pb.z()));
         }
-        PendingBlock pb = pending.get(idx);
-        return new Vector3i(job.anchor().x + pb.x(), job.anchor().y + pb.y(), job.anchor().z + pb.z());
+    }
+
+    /**
+     * @return pending sequence index if {@code cellWorld} matches a frontier cell for this plot, else {@code -1}.
+     */
+    public static int resolveFrontierPlacementIndex(
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotInstance plot,
+        @Nonnull Vector3i cellWorld
+    ) {
+        List<PendingBlock> pending = job.pendingBlocks();
+        IntOpenHashSet placedSet = new IntOpenHashSet();
+        plot.fillAssemblyPlacedSet(placedSet, pending.size());
+        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        for (int k = 0; k < frontier.size(); k++) {
+            int pi = frontier.getInt(k);
+            PendingBlock pb = pending.get(pi);
+            int bx = job.anchor().x + pb.x();
+            int by = job.anchor().y + pb.y();
+            int bz = job.anchor().z + pb.z();
+            if (bx == cellWorld.x && by == cellWorld.y && bz == cellWorld.z) {
+                return pi;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Frontier indices whose world block lies within Chebyshev {@code radius} of {@code centerWorld}, ordered by
+     * distance from the center ascending then by prefab sequence index (deterministic batch for the staff brush).
+     */
+    @Nonnull
+    public static IntArrayList frontierPlacementIndicesNearChebyshev(
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotInstance plot,
+        @Nonnull Vector3i centerWorld,
+        int radius
+    ) {
+        List<PendingBlock> pending = job.pendingBlocks();
+        IntOpenHashSet placedSet = new IntOpenHashSet();
+        plot.fillAssemblyPlacedSet(placedSet, pending.size());
+        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        IntArrayList matches = new IntArrayList();
+        int cx = centerWorld.x;
+        int cy = centerWorld.y;
+        int cz = centerWorld.z;
+        Vector3i anchor = job.anchor();
+        for (int k = 0; k < frontier.size(); k++) {
+            int pi = frontier.getInt(k);
+            PendingBlock pb = pending.get(pi);
+            int bx = anchor.x + pb.x();
+            int by = anchor.y + pb.y();
+            int bz = anchor.z + pb.z();
+            int dx = Math.abs(bx - cx);
+            int dy = Math.abs(by - cy);
+            int dz = Math.abs(bz - cz);
+            if (Math.max(Math.max(dx, dy), dz) <= radius) {
+                matches.add(pi);
+            }
+        }
+        if (matches.size() <= 1) {
+            return matches;
+        }
+        for (int i = 0; i + 1 < matches.size(); i++) {
+            int best = i;
+            for (int j = i + 1; j < matches.size(); j++) {
+                int idxBest = matches.getInt(best);
+                int idxJ = matches.getInt(j);
+                int dBest = chebyshevDistTo(anchor, pending.get(idxBest), cx, cy, cz);
+                int dJ = chebyshevDistTo(anchor, pending.get(idxJ), cx, cy, cz);
+                if (dJ < dBest || (dJ == dBest && idxJ < idxBest)) {
+                    best = j;
+                }
+            }
+            if (best != i) {
+                int tmp = matches.getInt(i);
+                matches.set(i, matches.getInt(best));
+                matches.set(best, tmp);
+            }
+        }
+        return matches;
+    }
+
+    private static int chebyshevDistTo(
+        @Nonnull Vector3i anchor,
+        @Nonnull PendingBlock pb,
+        int cx,
+        int cy,
+        int cz
+    ) {
+        int bx = anchor.x + pb.x();
+        int by = anchor.y + pb.y();
+        int bz = anchor.z + pb.z();
+        return Math.max(Math.max(Math.abs(bx - cx), Math.abs(by - cy)), Math.abs(bz - cz));
     }
 
     private static void clearPreviewAtIndex(
@@ -453,15 +562,7 @@ public final class PlotAssemblyService {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            int idx = plot.getAssemblyBlockIndex();
-            if (idx < 0 || idx >= job.pendingBlocks().size()) {
-                continue;
-            }
-            PendingBlock pb = job.pendingBlocks().get(idx);
-            int bx = job.anchor().x + pb.x();
-            int by = job.anchor().y + pb.y();
-            int bz = job.anchor().z + pb.z();
-            if (bx == cellWorld.x && by == cellWorld.y && bz == cellWorld.z) {
+            if (resolveFrontierPlacementIndex(job, plot, cellWorld) >= 0) {
                 return job;
             }
         }

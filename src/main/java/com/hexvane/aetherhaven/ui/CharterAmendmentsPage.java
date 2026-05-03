@@ -60,7 +60,7 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
             commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.ui.charter.noTown"));
             return;
         }
-        if (!town.playerHasBuildPermission(uc.getUuid())) {
+        if (!town.playerCanManageConstructions(uc.getUuid())) {
             commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.ui.charter.noPermission"));
             return;
         }
@@ -231,7 +231,7 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-        if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+            if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             return;
         }
         int pop = TownCharterService.countResidents(town, store);

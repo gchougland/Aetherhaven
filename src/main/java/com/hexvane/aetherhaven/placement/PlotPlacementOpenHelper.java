@@ -62,7 +62,7 @@ public final class PlotPlacementOpenHelper {
             playerRef.sendMessage(Message.translation("server.aetherhaven.common.townNotInThisWorld"));
             return null;
         }
-        if (!town.playerHasBuildPermission(uc.getUuid())) {
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
             playerRef.sendMessage(Message.translation("server.aetherhaven.common.noMoveBuildingsPermission"));
             return null;
         }

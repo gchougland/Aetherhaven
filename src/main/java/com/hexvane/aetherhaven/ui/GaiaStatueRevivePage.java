@@ -98,8 +98,8 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null || !town.getOwnerUuid().equals(uc.getUuid())) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.ownerOnlyStatue"));
+        if (uc == null || !town.playerCanReviveVillagers(uc.getUuid())) {
+            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.noReviveVillagersPermission"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -173,7 +173,7 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (uc == null || player == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (uc == null || player == null || !town.playerCanReviveVillagers(uc.getUuid())) {
             return;
         }
         String role = data.npcRoleId.trim();

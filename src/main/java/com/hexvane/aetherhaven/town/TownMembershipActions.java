@@ -128,6 +128,32 @@ public final class TownMembershipActions {
     }
 
     /**
+     * Sets granular permissions for a town member or the owner (owner entry is for testing overrides).
+     *
+     * @return {@code null} on success, otherwise an error for the actor.
+     */
+    @Nullable
+    public static Message tryPutMemberPermissions(
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlayerRef actorRef,
+        @Nonnull UUID actorUuid,
+        @Nonnull UUID targetUuid,
+        @Nonnull TownMemberPermissions permissions
+    ) {
+        if (!town.getOwnerUuid().equals(actorUuid)) {
+            return Message.translation("server.aetherhaven.town.resolve.ownerOrOpOnly");
+        }
+        if (!targetUuid.equals(town.getOwnerUuid()) && !town.isMemberPlayer(targetUuid)) {
+            return Message.translation("server.aetherhaven.town.kick.err.notMember");
+        }
+        town.putMemberPermissions(targetUuid, permissions);
+        tm.updateTown(town);
+        actorRef.sendMessage(Message.translation("server.aetherhaven.town.permissions.updated"));
+        return null;
+    }
+
+    /**
      * Kick by UUID (member must exist). Used when the target may be offline — still only works for members in data.
      *
      * @return {@code null} on success.

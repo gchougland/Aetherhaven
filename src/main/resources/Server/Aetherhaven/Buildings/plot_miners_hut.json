@@ -3,7 +3,7 @@
   "displayName": "Miners hut",
   "description": "A small hut with a workbench for Gorruk to haul stone and ore back to town.",
   "prefabPath": "MinersHut.prefab.json",
-  "selfBuildGameDays": 2.5,
+  "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Miners_Hut",
   "plotAnchorOffset": [4, 0, 4],
   "managementBlockLocalPos": [1, 2, -4],

@@ -130,7 +130,7 @@ public final class DialogueActionExecutor {
             return;
         }
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (pu == null || !town.playerHasQuestPermission(pu.getUuid())) {
+        if (pu == null || !town.playerCanAcceptQuests(pu.getUuid())) {
             return;
         }
         String qid = id.trim();
@@ -182,7 +182,7 @@ public final class DialogueActionExecutor {
             return;
         }
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (pu == null || !town.playerHasQuestPermission(pu.getUuid())) {
+        if (pu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return;
         }
         String qid = id.trim();
@@ -348,7 +348,7 @@ public final class DialogueActionExecutor {
         }
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
-        if (pu == null || nu == null || !town.playerHasQuestPermission(pu.getUuid())) {
+        if (pu == null || nu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());
@@ -408,7 +408,7 @@ public final class DialogueActionExecutor {
             return;
         }
         TownRecord town = tm.findTownForPlayerInWorld(puAb.getUuid());
-        if (town == null || !town.playerHasQuestPermission(puAb.getUuid())) {
+        if (town == null || !town.playerCanAbandonQuests(puAb.getUuid())) {
             return;
         }
         String qid = id.trim();

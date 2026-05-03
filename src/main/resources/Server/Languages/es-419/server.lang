@@ -1209,13 +1209,16 @@ aetherhaven.interaction.dialogue=Pulsa [{key}] para hablar
 npcRoles.Aetherhaven_Test_Villager.name=Prueba de diálogo del aldeano
 aetherhaven.banner.quest.completed.primary=Misión completada
 aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Building Complete
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} is ready.
 aetherhaven.banner.quest.started.primary=Misión iniciada
 aetherhaven.banner.quest.started.secondary={name}
 aetherhaven.banner.reputation.unlock.primary=Desbloqueado
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Building foreman staff
+items.Aetherhaven_Building_Staff.name=Building Staff
 items.Aetherhaven_Building_Staff.description=Hold secondary and aim through blocks at the glowing green construction marker to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
 items.Aetherhaven_Construction_Preview.name=Construction marker
 items.Aetherhaven_Construction_Preview.description=Marks the next prefab cell during town building assembly.

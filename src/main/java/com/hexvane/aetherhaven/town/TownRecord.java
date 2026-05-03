@@ -166,6 +166,11 @@ public final class TownRecord {
     @SerializedName("memberRoles")
     private Map<String, String> memberRoles;
 
+    /** Owner and members: player UUID string -> granular permissions (migrated from {@link #memberRoles}). */
+    @Nullable
+    @SerializedName("memberPermissions")
+    private Map<String, TownMemberPermissions> memberPermissions;
+
     @SerializedName("pendingInvites")
     private List<TownPendingInvite> pendingInvites = new ArrayList<>();
 
@@ -395,9 +400,31 @@ public final class TownRecord {
         if (memberRoles == null) {
             memberRoles = new LinkedHashMap<>();
         }
+        if (memberPermissions == null) {
+            memberPermissions = new LinkedHashMap<>();
+        }
+        migrateMemberPermissionsFromLegacyRolesIfNeeded();
         if (pendingInvites == null) {
             pendingInvites = new ArrayList<>();
         }
+    }
+
+    /** Seeds {@link #memberPermissions} from legacy {@link #memberRoles} once per member. */
+    private void migrateMemberPermissionsFromLegacyRolesIfNeeded() {
+        if (memberPermissions == null) {
+            memberPermissions = new LinkedHashMap<>();
+        }
+        for (Map.Entry<String, String> e : memberRoles.entrySet()) {
+            if (!memberPermissions.containsKey(e.getKey())) {
+                memberPermissions.put(e.getKey(), TownMemberPermissions.fromRole(TownMemberRole.fromSerialized(e.getValue())));
+            }
+        }
+    }
+
+    @Nonnull
+    private Map<String, TownMemberPermissions> getMemberPermissionsMap() {
+        migrateTownSocialFieldsIfNeeded();
+        return memberPermissions;
     }
 
     public void migrateVillagerGiftLogIfNeeded() {
@@ -1071,22 +1098,66 @@ public final class TownRecord {
         return TownMemberRole.fromSerialized(s);
     }
 
-    /** Owner always true for both; members use {@link TownMemberRole}. */
-    public boolean playerHasBuildPermission(@Nonnull UUID playerUuid) {
+    @Nonnull
+    public TownMemberPermissions getEffectiveMemberPermissions(@Nonnull UUID playerUuid) {
+        migrateTownSocialFieldsIfNeeded();
+        String key = playerUuid.toString();
         if (getOwnerUuid().equals(playerUuid)) {
-            return true;
+            TownMemberPermissions o = getMemberPermissionsMap().get(key);
+            return o != null ? o.copy() : TownMemberPermissions.fullMember();
         }
-        TownMemberRole r = getMemberRoleOrNull(playerUuid);
-        return r != null && r.allowsBuild();
+        TownMemberPermissions m = getMemberPermissionsMap().get(key);
+        if (m != null) {
+            return m.copy();
+        }
+        if (getMemberRolesRaw().containsKey(key)) {
+            return TownMemberPermissions.fromRole(TownMemberRole.fromSerialized(getMemberRolesRaw().get(key))).copy();
+        }
+        return TownMemberPermissions.fullMember();
     }
 
-    /** Owner always true for both; members use {@link TownMemberRole}. */
+    public boolean playerCanPlacePlots(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).placePlots();
+    }
+
+    public boolean playerCanManageConstructions(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).manageConstructions();
+    }
+
+    public boolean playerCanSpendTreasuryGold(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).spendTreasuryGold();
+    }
+
+    public boolean playerCanOpenTreasuryPanel(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).openTreasuryPanel();
+    }
+
+    public boolean playerCanAcceptQuests(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).acceptQuests();
+    }
+
+    public boolean playerCanCompleteQuests(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).completeQuests();
+    }
+
+    public boolean playerCanAbandonQuests(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).abandonQuests();
+    }
+
+    public boolean playerCanReviveVillagers(@Nonnull UUID playerUuid) {
+        return getEffectiveMemberPermissions(playerUuid).reviveVillagers();
+    }
+
+    /** Legacy: true if the player may place plots or manage constructions (any former "build" capability). */
+    public boolean playerHasBuildPermission(@Nonnull UUID playerUuid) {
+        return playerCanPlacePlots(playerUuid) || playerCanManageConstructions(playerUuid);
+    }
+
+    /** Legacy: true if the player may accept, complete, or abandon quests. */
     public boolean playerHasQuestPermission(@Nonnull UUID playerUuid) {
-        if (getOwnerUuid().equals(playerUuid)) {
-            return true;
-        }
-        TownMemberRole r = getMemberRoleOrNull(playerUuid);
-        return r != null && r.allowsQuest();
+        return playerCanAcceptQuests(playerUuid)
+            || playerCanCompleteQuests(playerUuid)
+            || playerCanAbandonQuests(playerUuid);
     }
 
     public void putMember(@Nonnull UUID playerUuid, @Nonnull TownMemberRole role) {
@@ -1094,9 +1165,22 @@ public final class TownRecord {
             return;
         }
         getMemberRolesRaw().put(playerUuid.toString(), role.name());
+        getMemberPermissionsMap().put(playerUuid.toString(), TownMemberPermissions.fromRole(role));
+    }
+
+    /**
+     * Sets granular permissions for a member or the owner (owner overrides are for testing; management UI remains
+     * owner-only in code).
+     */
+    public void putMemberPermissions(@Nonnull UUID playerUuid, @Nonnull TownMemberPermissions permissions) {
+        getMemberPermissionsMap().put(playerUuid.toString(), permissions.copy());
+        if (!getOwnerUuid().equals(playerUuid)) {
+            getMemberRolesRaw().put(playerUuid.toString(), permissions.toCoarseRole().name());
+        }
     }
 
     public boolean removeMember(@Nonnull UUID playerUuid) {
+        getMemberPermissionsMap().remove(playerUuid.toString());
         return getMemberRolesRaw().remove(playerUuid.toString()) != null;
     }
 

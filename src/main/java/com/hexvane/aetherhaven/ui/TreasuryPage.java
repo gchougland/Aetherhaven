@@ -98,9 +98,12 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (uc == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("server.aetherhaven.common.ownerOnlyTreasury"));
+            commandBuilder.set(
+                "#Balance.TextSpans",
+                Message.translation("server.aetherhaven.common.noTreasuryPanelPermission")
+            );
             return;
         }
 
@@ -337,7 +340,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-        if (uc == null || player == null || !town.getOwnerUuid().equals(uc.getUuid())) {
+        if (uc == null || player == null || !town.playerCanOpenTreasuryPanel(uc.getUuid())) {
             return;
         }
 

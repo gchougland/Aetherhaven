@@ -8,31 +8,19 @@
     "Input": [
       {
         "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 12
-      },
-      {
-        "ItemId": "Ingredient_Bar_Iron",
         "Quantity": 8
       },
       {
-        "ItemId": "Ingredient_Bar_Gold",
-        "Quantity": 6
-      },
-      {
-        "ItemId": "Ingredient_Bar_Silver",
-        "Quantity": 6
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 4
       },
       {
         "ResourceTypeId": "Crystal_Shards",
-        "Quantity": 16
-      },
-      {
-        "ItemId": "Ingredient_Void_Essence",
         "Quantity": 4
       },
       {
         "ItemId": "Ingredient_Life_Essence",
-        "Quantity": 6
+        "Quantity": 4
       }
     ],
     "BenchRequirement": [
@@ -55,7 +43,7 @@
     "Primary": {
       "Interactions": [
         {
-          "Type": "Simple",
+          "Type": "AetherhavenBuildingStaffFrontierTracer",
           "RunTime": 0.15,
           "Effects": {
             "ItemPlayerAnimationsId": "Stick",

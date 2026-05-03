@@ -42,9 +42,9 @@ public final class AetherhavenPluginConfig {
             o -> o.passivePlotAssembly
         )
         .documentation(
-            "When true, assembling plots place prefab cells on the passive world-time schedule (one cell per tick per plot when due). "
-                + "When false (default), only the building staff advances assembly while its interaction chain is active, "
-                + "so blocks do not appear after you release the button."
+            "When true (default), assembling plots place prefab cells on the passive schedule from each building's selfBuildGameDays "
+                + "(see PlotAssemblyTickSystem / computeSlotWallMs). When false, only the building staff advances assembly while its "
+                + "secondary interaction is active — no automatic blocks after release."
         )
         .add()
         .append(
@@ -373,7 +373,7 @@ public final class AetherhavenPluginConfig {
     private int constructionBlocksPerTick = 8;
     private long constructionMinIntervalMs = 25L;
     private long assemblyGameDayLengthMsOverride = 0L;
-    private boolean passivePlotAssembly = false;
+    private boolean passivePlotAssembly = true;
     private boolean ignoreVillagerRequirement = false;
     private int defaultTerritoryChunkRadius = 8;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */

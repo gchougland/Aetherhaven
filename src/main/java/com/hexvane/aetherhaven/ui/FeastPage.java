@@ -78,7 +78,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
             commandBuilder.set("#ConfirmFeast.Disabled", true);
             return;
         }
-        if (!town.playerHasBuildPermission(uc.getUuid())) {
+        if (!town.playerCanManageConstructions(uc.getUuid())) {
             commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.noPermission"));
             commandBuilder.set("#ConfirmFeast.Disabled", true);
             return;
@@ -236,7 +236,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
             return;
         }
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-        if (town == null || !town.playerHasBuildPermission(uc.getUuid())) {
+            if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             return;
         }
         FeastDefinition def = selectedFeastId != null ? FeastCatalog.findById(selectedFeastId) : null;

@@ -114,8 +114,9 @@ public final class ConstructionPasteOps {
 
     /**
      * Prefab air with no fluid ({@code blockId == 0}, {@code filler == 0}, {@code fluidId == 0}). Assembly and batched
-     * placement skip these so players do not spend ticks “building” empty cells; {@link #prepAssemblySite} still uses
-     * the full sequence so interiors are carved.
+     * placement skip these so players do not spend ticks “building” empty cells; {@link #prepAssemblySite} still walks
+     * the full sequence so interiors are carved. Prefab fluids are not applied during prep — only in {@link #placeOne}
+     * when a cell is assembled (and filler fluids at {@link #finishFluidsAndEntities}).
      */
     public static boolean isPureAirPrefabCell(@Nonnull PendingBlock pb) {
         return pb.blockId == 0 && pb.filler == 0 && pb.fluidId == 0;
@@ -140,7 +141,8 @@ public final class ConstructionPasteOps {
 
     /**
      * Before assembly: clear terrain like the animator would (air cells + strip solid cells to air) so previews are visible.
-     * Does not place final prefab solids; does not spawn entities. Filler-only cells get fluid only when applicable.
+     * Does not place final prefab solids, fluids, or entities — prefab fluids are written when each cell is built
+     * ({@link #placeOne}) or at completion ({@link #finishFluidsAndEntities}).
      */
     public static void prepAssemblySite(
         @Nonnull World world,
@@ -157,7 +159,6 @@ public final class ConstructionPasteOps {
             int by = origin.y + pb.y;
             int bz = origin.z + pb.z;
             WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-            applyPrefabFluidForCell(world, bx, by, bz, pb.fluidId, pb.fluidLevel, chunkAccessor);
             if (pb.filler != 0) {
                 continue;
             }

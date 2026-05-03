@@ -3,7 +3,7 @@
   "displayName": "House",
   "description": "A compact home with a bed and a town records shelf. Assign who lives here from the management block.",
   "prefabPath": "House.prefab.json",
-  "selfBuildGameDays": 2.5,
+  "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House",
   "plotAnchorOffset": [4, 0, 4],
   "managementBlockLocalPos": [1, 2, 2],

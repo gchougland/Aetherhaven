@@ -13,18 +13,19 @@ import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.math.vector.Transform;
+import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Penetrating view ray against the next assembly cell (no preview block in the world).
+ * Penetrating view ray against assembly frontier preview cells (no preview block in the world).
  */
 public final class AssemblyPreviewRay {
     private AssemblyPreviewRay() {}
 
     /**
-     * @return world cell of the next prefab block to place, or null if the view ray does not intersect that cell
-     *         within {@code maxDistance} for any assembling plot in this world.
+     * @return world cell of a frontier prefab block whose unit cube the ray hits; when several frontier cells are
+     *         hit, prefers the closest hit along the ray (smallest entry distance {@code t}).
      */
     @Nullable
     public static Vector3i findPenetratingPreviewCellHit(
@@ -49,6 +50,7 @@ public final class AssemblyPreviewRay {
         dz /= len;
         double bestT = Double.POSITIVE_INFINITY;
         Vector3i bestCell = null;
+        ArrayList<Vector3i> frontierCells = new ArrayList<>(128);
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
             if (town == null) {
@@ -58,14 +60,15 @@ public final class AssemblyPreviewRay {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            Vector3i cell = PlotAssemblyService.previewCellWorld(job, plot);
-            if (cell == null) {
-                continue;
-            }
-            Double t = rayEnterUnitCube(o.getX(), o.getY(), o.getZ(), dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
-            if (t != null && t < bestT) {
-                bestT = t;
-                bestCell = cell;
+            frontierCells.clear();
+            PlotAssemblyService.appendFrontierWorldCells(job, plot, frontierCells);
+            for (int i = 0; i < frontierCells.size(); i++) {
+                Vector3i cell = frontierCells.get(i);
+                Double t = rayEnterUnitCube(o.getX(), o.getY(), o.getZ(), dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
+                if (t != null && t < bestT) {
+                    bestT = t;
+                    bestCell = cell;
+                }
             }
         }
         return bestCell;
