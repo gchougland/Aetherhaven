@@ -129,11 +129,24 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
 
         for (int col = 0; col < 3; col++) {
             String p = "#Slot" + col;
+            String c = String.valueOf(col);
+            String iconGrid =
+                "#Slot"
+                    + c
+                    + " #Slot"
+                    + c
+                    + "NavRow #Slot"
+                    + c
+                    + "IconBox #Slot"
+                    + c
+                    + "IconSlot #Slot"
+                    + c
+                    + "Icon";
             int cursor = state.getSlotCursor(col);
             String itemId = entry.itemAtCursor(cursor);
             long cap = AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX;
             if (itemId == null || itemId.isBlank()) {
-                commandBuilder.set(p + "Icon.Slots", new ItemGridSlot[0]);
+                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[0]);
                 commandBuilder.set(p + "Name.TextSpans", Message.raw("—"));
                 commandBuilder.set(p + "Qty.TextSpans", Message.raw("0/" + cap));
                 commandBuilder.set(p + "Time.TextSpans", Message.raw(""));
@@ -141,7 +154,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             } else {
                 long lineCap = entry.maxStorageForItem(itemId);
                 ItemStack iconStack = new ItemStack(itemId, 1);
-                commandBuilder.set(p + "Icon.Slots", new ItemGridSlot[] {new ItemGridSlot(iconStack)});
+                commandBuilder.set(iconGrid + ".Slots", new ItemGridSlot[] {new ItemGridSlot(iconStack)});
                 Item it = iconStack.getItem();
                 Message nameMsg =
                     it != null && it.getTranslationKey() != null && !it.getTranslationKey().isBlank()

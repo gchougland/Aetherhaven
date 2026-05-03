@@ -167,7 +167,7 @@ public final class AetherhavenConfigJsonMigration {
         BsonDocument gold = new BsonDocument();
         gold.put("Chance", bDouble(d, "LootChestGoldCoinChance", 0.06));
         gold.put("Min", bInt(d, "LootChestGoldCoinMin", 5));
-        gold.put("Max", bInt(d, "LootChestGoldCoinMax", 20));
+        gold.put("Max", bInt(d, "LootChestGoldCoinMax", 10));
         gold.put("ItemId", bString(d, "LootChestGoldCoinItemId", "Aetherhaven_Gold_Coin"));
         gold.put("Note", new BsonString("Gold coin drop range and item id."));
 

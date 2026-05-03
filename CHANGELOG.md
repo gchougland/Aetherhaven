@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.1] - Unreleased
+
+### Fixed
+
+- **Production Page Error:** Fixed bug that was causing crash in the Production/Unlock GUI
+- **Item Range:** Fixed interaction range for most items.
+
+### Changed
+
+- **Default Gold Coins in Loot Chests:** Change default gold coins in loot chests to be 5-10 instead of 5-20.
+- **Plot Signs:** Plot signs now use resources from nearby chests.
+
 ## [1.2.0] - 5/2/2026
 
 ### Added

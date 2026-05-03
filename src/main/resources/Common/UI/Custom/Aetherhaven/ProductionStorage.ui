@@ -70,7 +70,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 220, Right: 36);
 
-          Group {
+          Group #Slot0NavRow {
             LayoutMode: Center;
             Anchor: (Bottom: 8);
 
@@ -88,7 +88,7 @@ $C.@PageOverlay {
               Background: #1a2530;
               Padding: 2;
               Anchor: (Width: 52, Height: 52, Right: 6);
-              Group {
+              Group #Slot0IconSlot {
                 LayoutMode: Full;
                 ItemGrid #Slot0Icon {
                   Anchor: (Full: 0);
@@ -173,7 +173,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 220, Right: 36);
 
-          Group {
+          Group #Slot1NavRow {
             LayoutMode: Center;
             Anchor: (Bottom: 8);
 
@@ -191,7 +191,7 @@ $C.@PageOverlay {
               Background: #1a2530;
               Padding: 2;
               Anchor: (Width: 52, Height: 52, Right: 6);
-              Group {
+              Group #Slot1IconSlot {
                 LayoutMode: Full;
                 ItemGrid #Slot1Icon {
                   Anchor: (Full: 0);
@@ -276,7 +276,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 220);
 
-          Group {
+          Group #Slot2NavRow {
             LayoutMode: Center;
             Anchor: (Bottom: 8);
 
@@ -294,7 +294,7 @@ $C.@PageOverlay {
               Background: #1a2530;
               Padding: 2;
               Anchor: (Width: 52, Height: 52, Right: 6);
-              Group {
+              Group #Slot2IconSlot {
                 LayoutMode: Full;
                 ItemGrid #Slot2Icon {
                   Anchor: (Full: 0);

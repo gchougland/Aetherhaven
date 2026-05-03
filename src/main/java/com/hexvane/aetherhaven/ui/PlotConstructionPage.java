@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
@@ -141,8 +142,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
         boolean plotReqBypassCreative = player != null && player.getGameMode() == GameMode.Creative;
-        CombinedItemContainer inv =
-            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
+        CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
 
         if (def == null) {
             commandBuilder.set(
@@ -887,8 +887,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             return;
         }
         boolean plotReqBypassCreative = player.getGameMode() == GameMode.Creative;
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
-        if (!plotReqBypassCreative && !InventoryMaterials.hasAll(inv, def.getMaterials())) {
+        CombinedItemContainer inv = materialCombinedForPlotBlock(store, ref);
+        if (inv == null || (!plotReqBypassCreative && !InventoryMaterials.hasAll(inv, def.getMaterials()))) {
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -987,6 +987,18 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 )
         );
         close();
+    }
+
+    /** Player {@link InventoryComponent#EVERYTHING} plus chests in the same volume vanilla benches search. */
+    @Nullable
+    private CombinedItemContainer materialCombinedForPlotBlock(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+        if (store.getComponent(ref, Player.getComponentType()) == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        return BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
+            world, store, ref, blockWorldPos.x, blockWorldPos.y, blockWorldPos.z
+        );
     }
 
     private void sendBuildError(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull String text) {

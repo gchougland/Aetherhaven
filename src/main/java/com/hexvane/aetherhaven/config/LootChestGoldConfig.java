@@ -27,7 +27,7 @@ public final class LootChestGoldConfig {
             .add()
             .append(
                 new KeyedCodec<>("Max", Codec.INTEGER),
-                (o, v) -> o.max = v != null ? v : 20,
+                (o, v) -> o.max = v != null ? v : 10,
                 o -> o.max
             )
             .add()
@@ -49,7 +49,7 @@ public final class LootChestGoldConfig {
 
     private double chance = 1.0;
     private int min = 5;
-    private int max = 20;
+    private int max = 10;
     @Nonnull
     private String itemId = "Aetherhaven_Gold_Coin";
     @Nullable

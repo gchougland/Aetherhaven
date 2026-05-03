@@ -37,8 +37,8 @@
   "InteractionConfig": {
     "DebugOutlines": true,
     "UseDistance": {
-      "Adventure": 96,
-      "Creative": 96
+      "Adventure": 5,
+      "Creative": 6
     },
     "AllEntities": false
   },
