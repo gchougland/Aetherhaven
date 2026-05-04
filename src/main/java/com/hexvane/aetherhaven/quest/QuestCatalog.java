@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -153,6 +154,18 @@ public final class QuestCatalog {
             if (!isKnownObjectiveKind(kind)) {
                 LOGGER.atWarning().log("Unknown objective kind %s in quest %s", kind, def.idOrEmpty());
             }
+            if ("entity_kills".equalsIgnoreCase(kind)) {
+                if (o.killCount() <= 0) {
+                    LOGGER.atWarning().log("Quest %s entity_kills objective needs killCount > 0 (%s)", def.idOrEmpty(), resourcePath);
+                }
+                if (!o.hasEntityKillFilters()) {
+                    LOGGER.atWarning().log(
+                        "Quest %s entity_kills objective needs entityTagsAny, entityIdsAny, or entityTagsAll (%s)",
+                        def.idOrEmpty(),
+                        resourcePath
+                    );
+                }
+            }
         }
         for (QuestReward r : def.rewardsOrEmpty()) {
             String k = r.kind();
@@ -168,14 +181,14 @@ public final class QuestCatalog {
 
     private static boolean isKnownObjectiveKind(@Nonnull String kind) {
         return switch (kind) {
-            case "journal", "construction_built", "dialogue_turn_in", "assign_house_resident", "custom" -> true;
+            case "journal", "construction_built", "dialogue_turn_in", "assign_house_resident", "custom", "entity_kills" -> true;
             default -> false;
         };
     }
 
     private static boolean isKnownRewardKind(@Nonnull String kind) {
         return switch (kind) {
-            case "reputation", "item", "currency", "unlock" -> true;
+            case "reputation", "item", "currency", "unlock", "learn_recipe" -> true;
             default -> false;
         };
     }
@@ -253,6 +266,11 @@ public final class QuestCatalog {
 
     @Nonnull
     public String objectivesText(@Nonnull String questId) {
+        return objectivesText(questId, null);
+    }
+
+    @Nonnull
+    public String objectivesText(@Nonnull String questId, @Nullable TownRecord town) {
         QuestDefinition def = get(questId);
         if (def == null) {
             return "";
@@ -261,6 +279,7 @@ public final class QuestCatalog {
         if (lines.isEmpty()) {
             return "";
         }
+        String qid = questId.trim();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < lines.size(); i++) {
             if (i > 0) {
@@ -269,14 +288,28 @@ public final class QuestCatalog {
             QuestObjective o = lines.get(i);
             String line = o.text() != null ? o.text().trim() : "";
             sb.append(i + 1).append(". ").append(line);
+            if (town != null
+                && o.kind() != null
+                && "entity_kills".equalsIgnoreCase(o.kind().trim())
+                && o.id() != null
+                && !o.id().isBlank()) {
+                int cur = town.getQuestKillCount(qid, o.id().trim());
+                int need = Math.max(1, o.killCount());
+                sb.append(" (").append(Math.min(cur, need)).append("/").append(need).append(")");
+            }
         }
         return sb.toString();
     }
 
     @Nonnull
     public String detailBody(@Nonnull String questId) {
+        return detailBody(questId, null);
+    }
+
+    @Nonnull
+    public String detailBody(@Nonnull String questId, @Nullable TownRecord town) {
         String d = description(questId);
-        String o = objectivesText(questId);
+        String o = objectivesText(questId, town);
         if (o.isEmpty()) {
             return d;
         }

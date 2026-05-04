@@ -1,0 +1,38 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Verdant_Catalyst.name",
+    "Description": "server.items.Aetherhaven_Verdant_Catalyst.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Verdant_Catalyst.png",
+  "Categories": [
+    "Items.Ingredients"
+  ],
+  "Model": "Resources/Ingredients/Essence.blockymodel",
+  "Texture": "Resources/Ingredients/Essence_Textures/Verdant_Catalyst_Texture.png",
+  "PlayerAnimationsId": "Item",
+  "IconProperties": {
+    "Scale": 0.7,
+    "Rotation": [
+      4,
+      30,
+      0
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Ingredient"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "Scale": 0.85,
+  "MaxStack": 64,
+  "Quality": "Legendary",
+  "Set": "Aetherhaven",
+  "ItemSoundSetId": "ISS_Items_Gems"
+}

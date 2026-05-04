@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
@@ -229,6 +230,20 @@ public final class TownRecord {
     @SerializedName("plotProductionByPlotId")
     private Map<String, PlotProductionState> plotProductionByPlotId;
 
+    /**
+     * Per player Gaia's Draught shared progression (charges, capacity, heal tier). Key: player UUID string.
+     */
+    @Nullable
+    @SerializedName("playerGaiaDraughtByPlayerUuid")
+    private Map<String, GaiaDraughtState> playerGaiaDraughtByPlayerUuid;
+
+    /**
+     * Kill counts for {@code entity_kills} objectives. Outer: quest id, inner: objective id, value: current kills.
+     */
+    @Nullable
+    @SerializedName("questKillProgress")
+    private Map<String, Map<String, Integer>> questKillProgress;
+
     public TownRecord() {}
 
     public TownRecord(
@@ -374,6 +389,78 @@ public final class TownRecord {
     public PlotProductionState getOrCreatePlotProduction(@Nonnull UUID plotId) {
         migratePlotProductionIfNeeded();
         return plotProductionByPlotId.computeIfAbsent(plotId.toString(), k -> PlotProductionState.empty());
+    }
+
+    @Nonnull
+    private Map<String, GaiaDraughtState> gaiaDraughtMap() {
+        if (playerGaiaDraughtByPlayerUuid == null) {
+            playerGaiaDraughtByPlayerUuid = new LinkedHashMap<>();
+        }
+        return playerGaiaDraughtByPlayerUuid;
+    }
+
+    @Nonnull
+    public GaiaDraughtState getOrCreateGaiaDraughtState(@Nonnull UUID playerUuid) {
+        String k = playerUuid.toString();
+        GaiaDraughtState s = gaiaDraughtMap().computeIfAbsent(k, x -> GaiaDraughtState.createFresh());
+        s.ensureLegacyMigrated();
+        return s;
+    }
+
+    @Nullable
+    public GaiaDraughtState findGaiaDraughtState(@Nonnull UUID playerUuid) {
+        if (playerGaiaDraughtByPlayerUuid == null) {
+            return null;
+        }
+        GaiaDraughtState s = playerGaiaDraughtByPlayerUuid.get(playerUuid.toString());
+        if (s != null) {
+            s.ensureLegacyMigrated();
+        }
+        return s;
+    }
+
+    @Nonnull
+    private Map<String, Map<String, Integer>> questKillMap() {
+        if (questKillProgress == null) {
+            questKillProgress = new LinkedHashMap<>();
+        }
+        return questKillProgress;
+    }
+
+    /** Initializes kill counters for {@code entity_kills} objectives to zero. */
+    public void initQuestKillProgress(@Nonnull String questId, @Nonnull List<String> entityKillObjectiveIds) {
+        if (entityKillObjectiveIds.isEmpty()) {
+            return;
+        }
+        Map<String, Integer> m = questKillMap().computeIfAbsent(questId.trim(), k -> new LinkedHashMap<>());
+        for (String oid : entityKillObjectiveIds) {
+            if (oid != null && !oid.isBlank()) {
+                m.putIfAbsent(oid.trim(), 0);
+            }
+        }
+    }
+
+    public int getQuestKillCount(@Nonnull String questId, @Nonnull String objectiveId) {
+        if (questKillProgress == null) {
+            return 0;
+        }
+        Map<String, Integer> m = questKillProgress.get(questId.trim());
+        if (m == null) {
+            return 0;
+        }
+        Integer v = m.get(objectiveId.trim());
+        return v != null ? v : 0;
+    }
+
+    public void setQuestKillCount(@Nonnull String questId, @Nonnull String objectiveId, int count) {
+        Map<String, Integer> m = questKillMap().computeIfAbsent(questId.trim(), k -> new LinkedHashMap<>());
+        m.put(objectiveId.trim(), Math.max(0, count));
+    }
+
+    public void clearQuestKillProgress(@Nonnull String questId) {
+        if (questKillProgress != null) {
+            questKillProgress.remove(questId.trim());
+        }
     }
 
     /** Reconciles {@link #founderMonumentCount} with legacy {@link #founderMonumentActive} from older saves. */
@@ -815,6 +902,7 @@ public final class TownRecord {
         done.add(q);
         completedQuestIds = new ArrayList<>(done);
         clearQuestObjectiveProgress(q);
+        clearQuestKillProgress(q);
     }
 
     public void clearActiveQuest(@Nonnull String questId) {
@@ -826,6 +914,7 @@ public final class TownRecord {
         active.remove(q);
         activeQuestIds = new ArrayList<>(active);
         clearQuestObjectiveProgress(q);
+        clearQuestKillProgress(q);
     }
 
     /** Initializes tracking entries for objectives that are not {@code journal} kind (future hooks). */

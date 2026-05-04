@@ -1,7 +1,12 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.MathUtil;
@@ -9,6 +14,7 @@ import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.PageManager;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.choices.ChoiceInteraction;
@@ -17,9 +23,9 @@ import com.hypixel.hytale.server.core.inventory.ItemContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
-import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
@@ -78,13 +84,23 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
-        if (InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) < cost) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            pageManager.setPage(ref, store, Page.None);
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
             playerRef.sendMessage(Message.translation("server.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
-        ItemStackTransaction pay = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, cost));
-        if (!pay.succeeded()) {
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, cost, allowTreasury);
+        if (paid == null) {
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -92,9 +108,15 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         ItemStackSlotTransaction replace =
             this.itemContext.getContainer().replaceItemStackInSlot(this.itemContext.getSlot(), itemStack, restored);
         if (!replace.succeeded()) {
-            player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, cost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
+            }
             pageManager.setPage(ref, store, Page.None);
             return;
+        }
+        if (town != null && paid.fromTreasury() > 0L) {
+            tm.updateTown(town);
         }
         Message nameMsg = Message.translation(restored.getItem().getTranslationKey());
         playerRef.sendMessage(Message.translation("server.aetherhaven.blacksmith.repair.success").param("itemName", nameMsg));

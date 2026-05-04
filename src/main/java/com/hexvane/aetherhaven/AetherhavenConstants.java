@@ -167,6 +167,9 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_GAIA_ALTAR = "q_gaia_altar";
 
+    /** Priestess follow up: slay undead, earn Gaia's Draught and planning bench recipe. */
+    public static final String QUEST_PRIESTESS_GAIA_DRAUGHT = "q_priestess_gaia_draught";
+
     public static final String QUEST_HOUSE_PRIESTESS = "q_house_priestess";
 
     public static final String QUEST_HOUSE_MINER = "q_house_miner";
@@ -358,6 +361,38 @@ public final class AetherhavenConstants {
 
     /** {@link com.hypixel.hytale.server.core.inventory.ItemStack.Metadata#BLOCK_HOLDER} key for plot sign items. */
     public static final String ITEM_METADATA_BLOCK_HOLDER = "BlockHolder";
+
+    /** Shared progression Estus style flask; quantity mirrors town stored charges. */
+    public static final String ITEM_GAIAS_DRAUGHT = "Aetherhaven_Gaias_Draught";
+
+    public static final String ITEM_SHARD_OF_GAIA = "Aetherhaven_Shard_Of_Gaia";
+
+    public static final String ITEM_VERDANT_CATALYST = "Aetherhaven_Verdant_Catalyst";
+
+    /** Max applications per upgrade path (shard capacity / catalyst heal tier). */
+    public static final int GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE = 5;
+
+    /**
+     * Gold tithe for the next shard upgrade after {@code completedShardUpgrades} successful upgrades (0-based: first
+     * upgrade uses completed count 0).
+     */
+    public static long gaiaDraughtShardUpgradeGoldCost(int completedShardUpgrades) {
+        int n = Math.max(0, Math.min(GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE - 1, completedShardUpgrades));
+        return 100L + 85L * n;
+    }
+
+    /** Gold tithe for the next catalyst upgrade after {@code completedCatalystUpgrades} successful upgrades. */
+    public static long gaiaDraughtCatalystUpgradeGoldCost(int completedCatalystUpgrades) {
+        int n = Math.max(0, Math.min(GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE - 1, completedCatalystUpgrades));
+        return 150L + 100L * n;
+    }
+
+    /** Missing health divided by this, rounded up, is the priestess heal gold cost. */
+    public static final int PRIESTESS_HEAL_HEALTH_PER_GOLD_COIN = 10;
+
+    public static final String REP_PRIESTESS_75 = "rep_priestess_75";
+
+    public static final String REP_PRIESTESS_100 = "rep_priestess_100";
 
     private AetherhavenConstants() {}
 }

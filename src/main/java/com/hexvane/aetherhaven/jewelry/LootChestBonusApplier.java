@@ -138,6 +138,23 @@ public final class LootChestBonusApplier {
         }
     }
 
+    public static void tryInjectGaiaDraughtBonuses(
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return;
+        }
+        if (tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
     public static boolean tryInjectPlotTokenToContainer(
         @Nonnull SimpleItemContainer inv,
         @Nonnull AetherhavenPluginConfig cfg,
@@ -181,6 +198,7 @@ public final class LootChestBonusApplier {
         tryInjectJewelry(s, state, c, cfg, rnd, forceJewelry);
         tryInjectGoldCoins(s, state, c, cfg, rnd, forceGold);
         tryInjectPlotToken(s, state, c, cfg, rnd, forcePlot);
+        tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
     }
 
     public static boolean applyAllToContainer(
@@ -195,7 +213,54 @@ public final class LootChestBonusApplier {
         changed |= tryInjectJewelryToContainer(inv, cfg, rnd, forceJewelry);
         changed |= tryInjectGoldCoinsToContainer(inv, cfg, rnd, forceGold);
         changed |= tryInjectPlotTokenToContainer(inv, cfg, rnd, forcePlot);
+        changed |= tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, false);
         return changed;
+    }
+
+    /**
+     * Optional rolls for priestess upgrade materials. Each line is independent; both can succeed when two empty slots
+     * exist.
+     */
+    public static boolean tryInjectGaiaDraughtBonusesToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        boolean changed = false;
+        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaShardItemId(), cfg.getLootChestGaiaShardChance(), rnd, force);
+        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaCatalystItemId(), cfg.getLootChestGaiaCatalystChance(), rnd, force);
+        return changed;
+    }
+
+    private static boolean tryInjectOptionalItemRoll(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull String itemId,
+        double chance,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (itemId.isBlank()) {
+            return false;
+        }
+        if (!force) {
+            if (chance <= 0.0) {
+                return false;
+            }
+            if (chance < 1.0 && rnd.nextDouble() >= chance) {
+                return false;
+            }
+        }
+        if (Item.getAssetMap().getAsset(itemId) == null) {
+            return false;
+        }
+        short slot = randomEmptySlot(inv, rnd);
+        if (slot < 0) {
+            return false;
+        }
+        ItemStack stack = new ItemStack(itemId, 1);
+        ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack);
+        return tx.succeeded();
     }
 
     /**

@@ -770,6 +770,32 @@ public final class AetherhavenPluginConfig {
         return getLootChest().getPlotToken().getItemId();
     }
 
+    public double getLootChestGaiaShardChance() {
+        double v = getLootChest().getGaiaDraughtBonuses().getShardChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    @Nonnull
+    public String getLootChestGaiaShardItemId() {
+        return getLootChest().getGaiaDraughtBonuses().getShardItemId().trim();
+    }
+
+    public double getLootChestGaiaCatalystChance() {
+        double v = getLootChest().getGaiaDraughtBonuses().getCatalystChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    @Nonnull
+    public String getLootChestGaiaCatalystItemId() {
+        return getLootChest().getGaiaDraughtBonuses().getCatalystItemId().trim();
+    }
+
     public double getJewelryRarityWeightCommon() {
         return Math.max(0.0, getJewelry().getRarityWeights().getCommon());
     }

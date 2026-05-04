@@ -180,6 +180,26 @@
           "next": "serah_quest_altar"
         },
         {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c_draught",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_gaia_altar"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_hub"
+        },
+        {
           "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c7",
           "next": null
         }
@@ -318,6 +338,347 @@
         {
           "text": "server.aetherhaven.reputation.reward.continue",
           "next": "root"
+        }
+      ]
+    },
+    "rep_reward_75": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "server.aetherhaven.reputation.reward.priestess.75",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_priestess_75"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
+    },
+    "rep_reward_100": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "server.aetherhaven.reputation.reward.priestess.100",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_priestess_100"
+        }
+      ],
+      "choices": [
+        {
+          "text": "server.aetherhaven.reputation.reward.continue",
+          "next": "root"
+        }
+      ]
+    },
+    "draught_hub": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_quest",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_gaia_altar"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_priestess_gaia_draught"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_priestess_gaia_draught"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_quest_offer"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_progress",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_priestess_gaia_draught"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_entity_kills_met",
+                  "questId": "q_priestess_gaia_draught"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_quest_active"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_turnin",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_priestess_gaia_draught"
+              },
+              {
+                "type": "town_quest_entity_kills_met",
+                "questId": "q_priestess_gaia_draught"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_quest_turnin"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_refill",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "gaia_draught_unlocked"
+              },
+              {
+                "type": "gaia_draught_charges_below_max"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "gaia_draught_refill"
+            }
+          ],
+          "next": "draught_refill_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard",
+          "visibilityCondition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "gaia_draught_unlocked"
+              },
+              {
+                "type": "gaia_draught_capacity_below_max"
+              }
+            ]
+          },
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "gaia_draught_unlocked"
+              },
+              {
+                "type": "gaia_draught_capacity_below_max"
+              },
+              {
+                "type": "item",
+                "itemId": "Aetherhaven_Shard_Of_Gaia",
+                "count": 1
+              },
+              {
+                "type": "gaia_draught_shard_upgrade_gold_affordable"
+              }
+            ]
+          },
+          "whenFalse": "disabled",
+          "actions": [
+            {
+              "type": "gaia_draught_upgrade_shard"
+            }
+          ],
+          "next": "draught_shard_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst",
+          "visibilityCondition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "gaia_draught_unlocked"
+              },
+              {
+                "type": "gaia_draught_heal_tier_below_max"
+              }
+            ]
+          },
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "gaia_draught_unlocked"
+              },
+              {
+                "type": "gaia_draught_heal_tier_below_max"
+              },
+              {
+                "type": "item",
+                "itemId": "Aetherhaven_Verdant_Catalyst",
+                "count": 1
+              },
+              {
+                "type": "gaia_draught_catalyst_upgrade_gold_affordable"
+              }
+            ]
+          },
+          "whenFalse": "disabled",
+          "actions": [
+            {
+              "type": "gaia_draught_upgrade_catalyst"
+            }
+          ],
+          "next": "draught_catalyst_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_heal",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "player_health_below_max"
+              },
+              {
+                "type": "priestess_heal_affordable"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "priestess_gold_heal"
+            }
+          ],
+          "next": "draught_heal_done"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_back",
+          "next": "root"
+        }
+      ]
+    },
+    "draught_quest_offer": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_priestess_gaia_draught"
+            }
+          ],
+          "next": "draught_quest_accepted"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c1",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_quest_accepted": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "draught_quest_active": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.c0",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_quest_turnin": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c0",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_priestess_gaia_draught"
+            }
+          ],
+          "next": "draught_quest_complete"
+        },
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c1",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_quest_complete": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.c0",
+          "next": null
+        }
+      ]
+    },
+    "draught_refill_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.c0",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_shard_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.c0",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_catalyst_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.c0",
+          "next": "draught_hub"
+        }
+      ]
+    },
+    "draught_heal_done": {
+      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.speaker",
+      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.body",
+      "choices": [
+        {
+          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.c0",
+          "next": "draught_hub"
         }
       ]
     },

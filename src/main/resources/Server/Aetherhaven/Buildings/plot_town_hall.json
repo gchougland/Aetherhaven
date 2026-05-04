@@ -13,8 +13,8 @@
   "autonomyNavMaxStandYSpanAboveMinY": 1,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 300 },
-    { "resourceTypeId": "Rock", "count": 100 }
+    { "resourceTypeId": "Wood_All", "count": 400 },
+    { "resourceTypeId": "Rock", "count": 240 }
   ],
   "pois": [
     {

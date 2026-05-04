@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
@@ -51,6 +52,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     private static final String CHOICES_FRAME = DIALOGUE_COLUMN + " #ChoicesFrame";
     /** Inner list inside {@link #CHOICES_FRAME} scroll; append/clear/indexed selectors need full path. */
     private static final String CHOICES_ROOT = DIALOGUE_COLUMN + " #ChoicesFrame #ChoicesScroll #ChoicesRoot";
+    private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
+        "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
+    private static final String LANG_PRIESTESS_DRAUGHT_CATALYST =
+        "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst";
     private static final String REPUTATION_ROW = DIALOGUE_COLUMN + " #ReputationRow";
     private static final String HEART_SLOTS = REPUTATION_ROW + " #HeartSlots";
 
@@ -223,6 +228,28 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         return Message.raw(s);
     }
 
+    @Nonnull
+    private Message choiceTranslationMessage(
+        @Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nullable String text
+    ) {
+        if (text == null || text.isEmpty()) {
+            return Message.raw("");
+        }
+        if (!text.startsWith("server.")) {
+            return Message.raw(text);
+        }
+        Message m = Message.translation(text);
+        if (LANG_PRIESTESS_DRAUGHT_SHARD.equals(text)) {
+            long gold = dialogueWorldView.nextGaiaDraughtShardUpgradeGoldCost(ref, store, npcRef);
+            return m.param("gold", Long.toString(gold));
+        }
+        if (LANG_PRIESTESS_DRAUGHT_CATALYST.equals(text)) {
+            long gold = dialogueWorldView.nextGaiaDraughtCatalystUpgradeGoldCost(ref, store, npcRef);
+            return m.param("gold", Long.toString(gold));
+        }
+        return m;
+    }
+
     private static void setChoicesFrameVisible(@Nonnull UICommandBuilder cmd, boolean visible) {
         cmd.set(CHOICES_FRAME + ".Visible", visible);
     }
@@ -254,10 +281,16 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             DialogueChoiceDefinition ch = node.getChoices().get(i);
             boolean baseOk = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
             String wf = ch.whenFalseOrDefault();
-            if (!baseOk && "hide".equalsIgnoreCase(wf)) {
+            JsonObject visOnly = ch.getVisibilityCondition();
+            if (visOnly != null) {
+                if (!conditions.evaluate(visOnly, ref, store, npcRef)) {
+                    continue;
+                }
+            } else if (!baseOk && "hide".equalsIgnoreCase(wf)) {
                 continue;
             }
-            boolean disabled = !baseOk && "disabled".equalsIgnoreCase(wf);
+            boolean disabled =
+                visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
             if (ch.isGiftDisableWhenNotAllowed() && baseOk) {
                 if (!dialogueWorldView.villagerGiftAllowed(ref, store, npcRef)) {
                     disabled = true;
@@ -277,10 +310,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                 }
                 choiceLine =
                     reasonMsg != null
-                        ? dialogueMessage(text).insert(Message.raw("  ")).insert(reasonMsg)
-                        : dialogueMessage(text);
+                        ? choiceTranslationMessage(ref, store, text).insert(Message.raw("  ")).insert(reasonMsg)
+                        : choiceTranslationMessage(ref, store, text);
             } else {
-                choiceLine = dialogueMessage(text);
+                choiceLine = choiceTranslationMessage(ref, store, text);
             }
             commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
             String sel = choiceRowSelector(uiSlot);
@@ -315,6 +348,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             return;
         }
         DialogueChoiceDefinition choice = node.getChoices().get(choiceIndex);
+        JsonObject visOnly = choice.getVisibilityCondition();
+        if (visOnly != null && !conditions.evaluate(visOnly, ref, store, npcRef)) {
+            return;
+        }
         if (!conditions.evaluate(choice.getCondition(), ref, store, npcRef)) {
             String wf = choice.whenFalseOrDefault();
             if ("hide".equalsIgnoreCase(wf) || "disabled".equalsIgnoreCase(wf)) {

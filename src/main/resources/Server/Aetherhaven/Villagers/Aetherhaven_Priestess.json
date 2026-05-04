@@ -18,6 +18,22 @@
       "itemCount": 0,
       "dialogueNodeId": "rep_reward_50",
       "learnRecipeItemId": "Aetherhaven_Purification_Powder"
+    },
+    {
+      "rewardId": "rep_priestess_75",
+      "minReputation": 75,
+      "itemId": "Aetherhaven_Shard_Of_Gaia",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_75",
+      "learnRecipeItemId": ""
+    },
+    {
+      "rewardId": "rep_priestess_100",
+      "minReputation": 100,
+      "itemId": "Aetherhaven_Verdant_Catalyst",
+      "itemCount": 1,
+      "dialogueNodeId": "rep_reward_100",
+      "learnRecipeItemId": ""
     }
   ],
   "giftLoves": [

@@ -124,7 +124,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
 
         String sel = selectedQuestId != null ? selectedQuestId : active.get(0);
         commandBuilder.set("#DetailTitle.TextSpans", Message.raw(quests.displayName(sel)));
-        commandBuilder.set("#DetailBody.TextSpans", Message.raw(quests.detailBody(sel)));
+        commandBuilder.set("#DetailBody.TextSpans", Message.raw(quests.detailBody(sel, town)));
     }
 
     @Override

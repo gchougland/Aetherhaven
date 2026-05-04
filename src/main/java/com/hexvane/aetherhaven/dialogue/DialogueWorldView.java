@@ -102,6 +102,84 @@ public interface DialogueWorldView {
         return null;
     }
 
+    /** Gold coins in inventory plus optional treasury debit per town rules. */
+    default boolean goldCoinPaymentCanAfford(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef, long cost
+    ) {
+        return false;
+    }
+
+    default boolean playerHealthBelowMax(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return false;
+    }
+
+    default boolean gaiaDraughtUnlocked(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+        return false;
+    }
+
+    default boolean gaiaDraughtChargesBelowCapacity(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    default boolean gaiaDraughtCapacityBelowMax(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    default boolean gaiaDraughtHealTierBelowMax(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    /** True when the next shard capacity upgrade is affordable at its current scaled gold tithe. */
+    default boolean gaiaDraughtShardUpgradeGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    /** True when the next catalyst heal upgrade is affordable at its current scaled gold tithe. */
+    default boolean gaiaDraughtCatalystUpgradeGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    /** Gold tithe for the player's next shard upgrade (0 when no town/state). */
+    default long nextGaiaDraughtShardUpgradeGoldCost(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return 0L;
+    }
+
+    /** Gold tithe for the player's next catalyst upgrade (0 when no town/state). */
+    default long nextGaiaDraughtCatalystUpgradeGoldCost(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return 0L;
+    }
+
+    /** All {@code entity_kills} objectives for the active town quest meet their kill counts (or one objective if id given). */
+    default boolean townQuestEntityKillsMet(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nullable String objectiveId
+    ) {
+        return false;
+    }
+
+    /** True when the player is hurt and can pay Serah's gold heal (inventory plus allowed treasury). */
+    default boolean priestessHealGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {

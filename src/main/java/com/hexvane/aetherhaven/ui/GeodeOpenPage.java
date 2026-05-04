@@ -2,9 +2,13 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.geode.GeodeLootTable;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -14,6 +18,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
@@ -26,6 +31,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
@@ -155,31 +161,26 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             return;
         }
         int goldCost = chargeGold ? AetherhavenConstants.GEODE_OPEN_GOLD_COST : 0;
-        if (chargeGold) {
-            if (InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) < goldCost) {
-                NotificationUtil.sendNotification(
-                    pr.getPacketHandler(),
-                    Message.translation("server.aetherhaven.geode.open.insufficientGold"),
-                    NotificationStyle.Danger
-                );
-                refresh(ref, store);
-                return;
-            }
-            ItemStackTransaction pay = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost));
-            if (!pay.succeeded()) {
-                NotificationUtil.sendNotification(
-                    pr.getPacketHandler(),
-                    Message.translation("server.aetherhaven.geode.open.failed"),
-                    NotificationStyle.Danger
-                );
-                refresh(ref, store);
-                return;
-            }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
+        if (paid == null) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("server.aetherhaven.geode.open.insufficientGold"),
+                NotificationStyle.Danger
+            );
+            refresh(ref, store);
+            return;
         }
         ItemStackSlotTransaction takeGeode = inv.removeItemStackFromSlot(slot, 1);
         if (!takeGeode.succeeded()) {
-            if (goldCost > 0) {
-                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
             }
             refresh(ref, store);
             return;
@@ -188,8 +189,9 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         GeodeLootTable table = GeodeLootFiles.loadTable(plugin);
         ItemStack reward = table.rollStack();
         if (reward == null) {
-            if (goldCost > 0) {
-                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
             }
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
@@ -203,8 +205,9 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
 
         ItemStackTransaction giveTx = player.giveItem(reward, ref, store);
         if (!giveTx.succeeded()) {
-            if (goldCost > 0) {
-                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null) {
+                tm.updateTown(town);
             }
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
@@ -214,6 +217,10 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             );
             refresh(ref, store);
             return;
+        }
+
+        if (town != null && paid.fromTreasury() > 0L) {
+            tm.updateTown(town);
         }
 
         com.hypixel.hytale.server.core.asset.type.item.config.Item rewardItem = reward.getItem();

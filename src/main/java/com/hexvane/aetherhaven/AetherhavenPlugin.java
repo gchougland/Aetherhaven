@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyTickSystem;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.QuestKillProgressSystem;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.npc.BuilderActionOpenAetherhavenDialogue;
@@ -76,6 +77,8 @@ import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
 import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
+import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
@@ -384,6 +387,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 PurificationPowderUseInteraction.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenGaiasDraughtConsume", GaiasDraughtConsumeInteraction.class, GaiasDraughtConsumeInteraction.CODEC);
+        this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPathToolSelect", PathToolSelectInteraction.class, PathToolSelectInteraction.CODEC);
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPathToolAddNode", PathToolAddNodeInteraction.class, PathToolAddNodeInteraction.CODEC);
@@ -435,6 +440,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
+        this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
 
         this.getEventRegistry()

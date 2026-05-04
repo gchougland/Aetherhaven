@@ -68,6 +68,12 @@ public final class LootChestConfig {
                 o -> o.plotToken
             )
             .add()
+            .append(
+                new KeyedCodec<>("GaiaDraughtBonuses", LootChestGaiaDraughtBonusConfig.CODEC),
+                (o, v) -> o.gaiaDraughtBonuses = v != null ? v : new LootChestGaiaDraughtBonusConfig(),
+                o -> o.gaiaDraughtBonuses
+            )
+            .add()
             .build();
 
     @Nullable
@@ -83,6 +89,8 @@ public final class LootChestConfig {
     private LootChestGoldConfig gold = new LootChestGoldConfig();
     @Nonnull
     private LootChestPlotTokenConfig plotToken = new LootChestPlotTokenConfig();
+    @Nonnull
+    private LootChestGaiaDraughtBonusConfig gaiaDraughtBonuses = new LootChestGaiaDraughtBonusConfig();
 
     public LootChestConfig() {}
 
@@ -130,5 +138,10 @@ public final class LootChestConfig {
     @Nonnull
     public LootChestPlotTokenConfig getPlotToken() {
         return plotToken != null ? plotToken : new LootChestPlotTokenConfig();
+    }
+
+    @Nonnull
+    public LootChestGaiaDraughtBonusConfig getGaiaDraughtBonuses() {
+        return gaiaDraughtBonuses != null ? gaiaDraughtBonuses : new LootChestGaiaDraughtBonusConfig();
     }
 }

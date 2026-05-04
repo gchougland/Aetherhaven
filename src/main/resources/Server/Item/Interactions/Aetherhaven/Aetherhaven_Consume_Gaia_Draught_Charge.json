@@ -1,0 +1,52 @@
+{
+  "Type": "Serial",
+  "Interactions": [
+    {
+      "Type": "Replace",
+      "Var": "ConsumeSFX",
+      "DefaultValue": {
+        "Interactions": [
+          "Consume_SFX"
+        ]
+      }
+    },
+    {
+      "Type": "Charging",
+      "FailOnDamage": true,
+      "Effects": {
+        "ItemAnimationId": "Consume",
+        "ClearAnimationOnFinish": true,
+        "ClearSoundEventOnFinish": true
+      },
+      "HorizontalSpeedMultiplier": 0.4,
+      "Next": {
+        "1.5": {
+          "Type": "Serial",
+          "Interactions": [
+            {
+              "Type": "Replace",
+              "Var": "ConsumedSFX",
+              "DefaultOk": true,
+              "DefaultValue": {
+                "Interactions": [
+                  "Consumed_SFX"
+                ]
+              }
+            },
+            {
+              "Type": "AetherhavenGaiasDraughtConsume"
+            },
+            {
+              "Type": "Simple",
+              "RunTime": 0.2,
+              "$Comment": "Delay before next consume cycle can start to prevent sound overlap"
+            }
+          ]
+        }
+      },
+      "Failed": {
+        "Type": "Simple"
+      }
+    }
+  ]
+}

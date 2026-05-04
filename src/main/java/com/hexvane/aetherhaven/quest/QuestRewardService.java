@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
+import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -45,6 +46,12 @@ public final class QuestRewardService {
                     continue;
                 }
                 player.giveItem(new ItemStack(itemId.trim(), count), playerRef, store);
+            } else if ("learn_recipe".equalsIgnoreCase(kind)) {
+                String rid = r.recipeItemId();
+                if (rid == null || rid.isBlank()) {
+                    continue;
+                }
+                CraftingPlugin.learnRecipe(playerRef, rid.trim(), store);
             } else if ("currency".equalsIgnoreCase(kind) || "unlock".equalsIgnoreCase(kind)) {
                 LOGGER.atInfo().log(
                     "[Quest stub] reward kind %s for quest %s (not implemented)",

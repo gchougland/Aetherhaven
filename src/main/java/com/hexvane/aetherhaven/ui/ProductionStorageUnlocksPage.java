@@ -199,7 +199,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
                 commandBuilder.set(cell + " #UnlockHit.TextTooltipStyle", DEFAULT_TEXT_TOOLTIP_STYLE);
                 commandBuilder.set(
                     cell + " #UnlockHit.TooltipTextSpans",
-                    cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv)
+                    cellTooltipMessage(itemLineDisplayName(line, assetItem), unlocked, line, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()))
                 );
 
                 commandBuilder.set(cell + " #UnlockHit #IconFrame #LockOverlay.Visible", !unlocked);
@@ -213,7 +213,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             }
         }
 
-        applyDetailPanel(commandBuilder, constructionId, ucat, state, town, inv);
+        applyDetailPanel(commandBuilder, constructionId, ucat, state, town, inv, town.playerCanSpendTreasuryGold(uc.getUuid()));
     }
 
     private void applyDetailPanel(
@@ -222,7 +222,8 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         @Nonnull WorkplaceUnlockCatalog ucat,
         @Nonnull PlotProductionState state,
         @Nonnull TownRecord town,
-        @Nonnull CombinedItemContainer inv
+        @Nonnull CombinedItemContainer inv,
+        boolean allowTreasuryGold
     ) {
         commandBuilder.set(DETAIL_PANEL + ".Visible", true);
         if (detailFocusItemId == null || detailFocusItemId.isBlank()) {
@@ -238,7 +239,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         }
         commandBuilder.set(DETAIL_NAME + ".TextSpans", itemLineDisplayName(line));
         boolean unlocked = line.defaultUnlocked() || state.isWorkplaceOutputUnlocked(line.itemId());
-        commandBuilder.set(DETAIL_BODY + ".TextSpans", unlockRequirementBody(unlocked, line, town, inv));
+        commandBuilder.set(DETAIL_BODY + ".TextSpans", unlockRequirementBody(unlocked, line, town, inv, allowTreasuryGold));
     }
 
     @Nonnull
@@ -260,9 +261,10 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         boolean unlocked,
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
         @Nonnull TownRecord town,
-        @Nonnull CombinedItemContainer inv
+        @Nonnull CombinedItemContainer inv,
+        boolean allowTreasuryGold
     ) {
-        return Message.join(itemName, Message.raw("\n\n"), unlockRequirementBody(unlocked, line, town, inv));
+        return Message.join(itemName, Message.raw("\n\n"), unlockRequirementBody(unlocked, line, town, inv, allowTreasuryGold));
     }
 
     /**
@@ -274,7 +276,8 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         boolean unlocked,
         @Nonnull WorkplaceUnlockCatalog.UnlockLine line,
         @Nonnull TownRecord town,
-        @Nonnull CombinedItemContainer inv
+        @Nonnull CombinedItemContainer inv,
+        boolean allowTreasuryGold
     ) {
         if (unlocked) {
             return Message.translation("server.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
@@ -289,7 +292,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
                 .color(itemOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
         long goldNeed = WorkplaceUnlockCatalog.goldCoinsForRarityTier(line.rarityTier());
         if (goldNeed > 0L) {
-            long goldHeld = GoldCoinPayment.totalAvailable(town, inv);
+            long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
             boolean goldOk = goldHeld >= goldNeed;
             Message goldLine =
                 Message.translation("server.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
@@ -368,7 +371,8 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             refresh(ref, store);
             return;
         }
-        if (goldCost > 0L && !GoldCoinPayment.canAfford(town, inv, goldCost)) {
+        boolean allowTreasuryGold = town.playerCanSpendTreasuryGold(uc.getUuid());
+        if (goldCost > 0L && !GoldCoinPayment.canAfford(town, inv, goldCost, allowTreasuryGold)) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation("server.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", goldCost),
@@ -388,7 +392,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             refresh(ref, store);
             return;
         }
-        if (goldCost > 0L && !GoldCoinPayment.trySpend(town, inv, goldCost)) {
+        if (goldCost > 0L && !GoldCoinPayment.trySpend(town, inv, goldCost, allowTreasuryGold)) {
             player.giveItem(new ItemStack(itemId, needRes), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

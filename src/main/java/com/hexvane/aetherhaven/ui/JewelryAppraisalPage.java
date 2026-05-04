@@ -1,7 +1,12 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hexvane.aetherhaven.inventory.InventoryMaterials;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
 import com.hexvane.aetherhaven.jewelry.JewelryRarity;
@@ -14,6 +19,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
@@ -27,6 +33,7 @@ import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -266,32 +273,29 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
             return;
         }
         int goldCost = chargeGold ? AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST : 0;
-        if (goldCost > 0) {
-            if (InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) < goldCost) {
-                NotificationUtil.sendNotification(
-                    pr.getPacketHandler(),
-                    Message.translation("server.aetherhaven.ui.jewelryAppraisal.insufficientGold"),
-                    NotificationStyle.Danger
-                );
-                refresh(ref, store);
-                return;
-            }
-            ItemStackTransaction pay = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost));
-            if (!pay.succeeded()) {
-                NotificationUtil.sendNotification(
-                    pr.getPacketHandler(),
-                    Message.translation("server.aetherhaven.ui.jewelryAppraisal.payFailed"),
-                    NotificationStyle.Danger
-                );
-                refresh(ref, store);
-                return;
-            }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        World world = store.getExternalData().getWorld();
+        TownManager tm =
+            plugin != null ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin) : null;
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        TownRecord town = plugin != null && uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
+        SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
+        if (paid == null) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("server.aetherhaven.ui.jewelryAppraisal.insufficientGold"),
+                NotificationStyle.Danger
+            );
+            refresh(ref, store);
+            return;
         }
         if (rolled != cur) {
             ItemStackSlotTransaction r0 = inv.replaceItemStackInSlot(slot, cur, rolled);
             if (!r0.succeeded()) {
-                if (goldCost > 0) {
-                    player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+                GoldCoinPayment.refund(town, player, ref, store, paid);
+                if (town != null && plugin != null) {
+                    tm.updateTown(town);
                 }
                 refresh(ref, store);
                 return;
@@ -299,8 +303,9 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         }
         ItemStack now = inv.getItemStack(slot);
         if (ItemStack.isEmpty(now)) {
-            if (goldCost > 0) {
-                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null && plugin != null) {
+                tm.updateTown(town);
             }
             refresh(ref, store);
             return;
@@ -308,11 +313,15 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         ItemStack appraised = JewelryMetadata.setAppraised(now, true);
         ItemStackSlotTransaction r1 = inv.replaceItemStackInSlot(slot, now, appraised);
         if (!r1.succeeded()) {
-            if (goldCost > 0) {
-                player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, goldCost), ref, store);
+            GoldCoinPayment.refund(town, player, ref, store, paid);
+            if (town != null && plugin != null) {
+                tm.updateTown(town);
             }
             refresh(ref, store);
             return;
+        }
+        if (town != null && plugin != null && paid.fromTreasury() > 0L) {
+            tm.updateTown(town);
         }
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),

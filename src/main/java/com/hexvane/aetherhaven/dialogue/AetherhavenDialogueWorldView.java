@@ -2,6 +2,12 @@ package com.hexvane.aetherhaven.dialogue;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
+import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
+import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.data.QuestDefinition;
+import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -14,6 +20,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -276,5 +283,213 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
             t = townFor(playerRef, store);
         }
         return t != null && t.isNpcHomeResidentOnHousePlot(npcUuid);
+    }
+
+    @Override
+    public boolean goldCoinPaymentCanAfford(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef, long cost
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return false;
+        }
+        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+    }
+
+    @Override
+    public boolean playerHealthBelowMax(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        return PlayerHealUtil.missingHealth(playerRef, store) > 0f;
+    }
+
+    @Override
+    public boolean gaiaDraughtUnlocked(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        return s != null && s.isUnlocked();
+    }
+
+    @Override
+    public boolean gaiaDraughtChargesBelowCapacity(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        return s != null && s.isUnlocked() && s.getCharges() < s.getCapacity();
+    }
+
+    @Override
+    public boolean gaiaDraughtCapacityBelowMax(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        return s != null && s.isUnlocked() && s.canApplyShardUpgrade();
+    }
+
+    @Override
+    public boolean gaiaDraughtHealTierBelowMax(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        return s != null && s.isUnlocked() && s.canApplyCatalystUpgrade();
+    }
+
+    @Override
+    public boolean gaiaDraughtShardUpgradeGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        if (s == null || !s.isUnlocked() || !s.canApplyShardUpgrade()) {
+            return false;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return false;
+        }
+        long cost = AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
+        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+    }
+
+    @Override
+    public boolean gaiaDraughtCatalystUpgradeGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        if (s == null || !s.isUnlocked() || !s.canApplyCatalystUpgrade()) {
+            return false;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return false;
+        }
+        long cost = AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
+        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
+    }
+
+    @Override
+    public long nextGaiaDraughtShardUpgradeGoldCost(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return 0L;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        if (s == null) {
+            return AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(0);
+        }
+        s.ensureLegacyMigrated();
+        return AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
+    }
+
+    @Override
+    public long nextGaiaDraughtCatalystUpgradeGoldCost(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return 0L;
+        }
+        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
+        if (s == null) {
+            return AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(0);
+        }
+        s.ensureLegacyMigrated();
+        return AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
+    }
+
+    @Override
+    public boolean townQuestEntityKillsMet(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nullable String objectiveId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null || !town.hasQuestActive(questId.trim())) {
+            return false;
+        }
+        QuestCatalog cat = plugin.getQuestCatalog();
+        QuestDefinition def = cat.get(questId.trim());
+        if (def == null) {
+            return false;
+        }
+        String want = objectiveId != null ? objectiveId.trim() : "";
+        boolean anyKillObjective = false;
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (o.kind() == null || !"entity_kills".equalsIgnoreCase(o.kind().trim())) {
+                continue;
+            }
+            if (o.id() == null || o.id().isBlank()) {
+                continue;
+            }
+            if (!want.isEmpty() && !want.equalsIgnoreCase(o.id().trim())) {
+                continue;
+            }
+            anyKillObjective = true;
+            int need = Math.max(1, o.killCount());
+            if (town.getQuestKillCount(questId.trim(), o.id().trim()) < need) {
+                return false;
+            }
+        }
+        return anyKillObjective;
+    }
+
+    @Override
+    public boolean priestessHealGoldAffordable(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return false;
+        }
+        float missing = PlayerHealUtil.missingHealth(playerRef, store);
+        if (missing <= 0f) {
+            return false;
+        }
+        int per = Math.max(1, AetherhavenConstants.PRIESTESS_HEAL_HEALTH_PER_GOLD_COIN);
+        long cost = (long) Math.ceil(missing / (float) per);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return false;
+        }
+        return GoldCoinPayment.canAfford(town, inv, cost, town.playerCanSpendTreasuryGold(pu.getUuid()));
     }
 }

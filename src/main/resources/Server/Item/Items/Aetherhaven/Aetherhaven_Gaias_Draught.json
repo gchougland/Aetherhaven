@@ -1,0 +1,165 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Gaias_Draught.name",
+    "Description": "server.items.Aetherhaven_Gaias_Draught.description"
+  },
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "Consume": {
+        "FirstPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink_FPS.blockyanim",
+        "ThirdPerson": "Characters/Animations/Items/Main_Handed/Item/Attacks/Drink/Drink.blockyanim",
+        "Speed": 1,
+        "Looping": true
+      }
+    }
+  },
+  "Categories": [
+    "Items.Potions"
+  ],
+  "Recipe": {
+    "TimeSeconds": 0,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ResourceTypeId": "Crystal_Shards",
+        "Quantity": 6
+      },
+      {
+        "ItemId": "Ingredient_Bar_Gold",
+        "Quantity": 2
+      },
+      {
+        "ItemId": "Rock_Gem_Topaz",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.8,
+    "Rotation": [
+      6,
+      59,
+      27
+    ],
+    "Translation": [
+      0,
+      -9
+    ]
+  },
+  "Interactions": {
+    "Secondary": "Root_Secondary_Consume_Gaia_Draught"
+  },
+  "InteractionVars": {
+    "RemoveEffect": {
+      "Interactions": [
+        {
+          "Type": "Simple"
+        }
+      ]
+    },
+    "Effect": {
+      "Interactions": [
+        {
+          "Type": "Simple"
+        }
+      ]
+    },
+    "ConsumeSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consume_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Health_Potion_Low_Drink"
+          }
+        }
+      ]
+    },
+    "ConsumedSFX": {
+      "Interactions": [
+        {
+          "Parent": "Consumed_SFX",
+          "Effects": {
+            "LocalSoundEventId": "SFX_Potion_Drink_Success"
+          }
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    },
+    "AllEntities": true
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Gaias_Draught.png",
+  "MaxStack": 1,
+  "MaxDurability": 6,
+  "DurabilityLossOnDeath": false,
+  "Quality": "Legendary",
+  "Set": "Aetherhaven",
+  "Consumable": true,
+  "DisplayEntityStatsHUD": [
+    "Ammo"
+  ],
+  "Tags": {
+    "Type": [
+      "Potion"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "Utility": {
+    "Compatible": false
+  },
+  "BlockType": {
+    "InteractionHint": "server.interactionHints.pickup",
+    "CustomModel": "Items/Consumables/Potions/Potion_Large.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Potions/Potion_Textures/Gaias_Draught.png",
+        "Weight": 1
+      }
+    ],
+    "BlockParticleSetId": "Glass",
+    "ParticleColor": "#ff3730",
+    "Light": {
+      "Color": "#522"
+    },
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "HitboxType": "Potion",
+    "Material": "Empty",
+    "RandomRotation": "YawStep1",
+    "Opacity": "Transparent",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    }
+  },
+  "DropOnDeath": true
+}

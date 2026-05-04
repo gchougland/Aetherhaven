@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "q_priestess_gaia_draught",
+  "category": "town",
+  "title": "Voice of the soil",
+  "description": "Gaia's altar is only the threshold. The restless dead still test the roads. Thin their ranks for the town, then return for a draught that remembers your name.",
+  "prerequisites": {
+    "completedQuestIds": ["q_gaia_altar"],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "journal",
+      "kind": "journal",
+      "text": "Hunt undead that threaten the roads, then report back to Serah."
+    },
+    {
+      "id": "purge_undead",
+      "kind": "entity_kills",
+      "killCount": 12,
+      "entityTagsAny": ["Undead"]
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "learn_recipe",
+      "recipeItemId": "Aetherhaven_Gaias_Draught"
+    },
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Priestess",
+      "amount": 18,
+      "grantTo": "quest_beneficiary_npc"
+    }
+  ],
+  "repeat": { "mode": "none" }
+}

@@ -146,10 +146,18 @@ public final class QuestDefinition {
         return grantPlotTokenConstructionId != null ? grantPlotTokenConstructionId.trim() : null;
     }
 
-    /** @return true if this objective should be tracked in {@link com.hexvane.aetherhaven.town.TownRecord} progress maps */
+    /**
+     * @return true if this objective should be tracked in {@link com.hexvane.aetherhaven.town.TownRecord}
+     *     {@code questObjectiveProgress} boolean maps. {@code entity_kills} uses {@link #entityKillObjectiveIds()}
+     *     instead.
+     */
     public static boolean isTrackableObjective(@Nonnull QuestObjective o) {
         String k = o.kind();
-        return k != null && !k.isBlank() && !"journal".equalsIgnoreCase(k.trim());
+        if (k == null || k.isBlank()) {
+            return false;
+        }
+        String kt = k.trim();
+        return !"journal".equalsIgnoreCase(kt) && !"entity_kills".equalsIgnoreCase(kt);
     }
 
     @Nonnull
@@ -161,6 +169,22 @@ public final class QuestDefinition {
         List<String> ids = new ArrayList<>();
         for (QuestObjective o : obs) {
             if (isTrackableObjective(o) && o.id() != null && !o.id().isBlank()) {
+                ids.add(o.id().trim());
+            }
+        }
+        return ids;
+    }
+
+    @Nonnull
+    public List<String> entityKillObjectiveIds() {
+        List<QuestObjective> obs = objectivesOrEmpty();
+        if (obs.isEmpty()) {
+            return List.of();
+        }
+        List<String> ids = new ArrayList<>();
+        for (QuestObjective o : obs) {
+            String k = o.kind();
+            if (k != null && "entity_kills".equalsIgnoreCase(k.trim()) && o.id() != null && !o.id().isBlank()) {
                 ids.add(o.id().trim());
             }
         }

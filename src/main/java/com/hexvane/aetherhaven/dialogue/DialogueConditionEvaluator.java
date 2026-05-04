@@ -108,6 +108,32 @@ public final class DialogueConditionEvaluator {
             }
             case "player_holds_any_item" -> worldView.playerHoldsAnyItemInActiveHotbar(playerRef, store);
             case "villager_gift_allowed" -> worldView.villagerGiftAllowed(playerRef, store, npcRef);
+            case "gold_coin_payment_can_afford" -> {
+                long cost = o.has("cost") && o.get("cost").isJsonPrimitive() ? o.get("cost").getAsLong() : 0L;
+                yield worldView.goldCoinPaymentCanAfford(playerRef, store, npcRef, cost);
+            }
+            case "player_health_below_max" -> worldView.playerHealthBelowMax(playerRef, store);
+            case "gaia_draught_unlocked" -> worldView.gaiaDraughtUnlocked(playerRef, store, npcRef);
+            case "gaia_draught_charges_below_max" -> worldView.gaiaDraughtChargesBelowCapacity(playerRef, store, npcRef);
+            case "gaia_draught_capacity_below_max" -> worldView.gaiaDraughtCapacityBelowMax(playerRef, store, npcRef);
+            case "gaia_draught_heal_tier_below_max" -> worldView.gaiaDraughtHealTierBelowMax(playerRef, store, npcRef);
+            case "gaia_draught_shard_upgrade_gold_affordable" -> worldView.gaiaDraughtShardUpgradeGoldAffordable(
+                playerRef,
+                store,
+                npcRef
+            );
+            case "gaia_draught_catalyst_upgrade_gold_affordable" -> worldView.gaiaDraughtCatalystUpgradeGoldAffordable(
+                playerRef,
+                store,
+                npcRef
+            );
+            case "town_quest_entity_kills_met" -> worldView.townQuestEntityKillsMet(
+                playerRef,
+                store,
+                stringOrEmpty(o, "questId"),
+                getString(o, "objectiveId")
+            );
+            case "priestess_heal_affordable" -> worldView.priestessHealGoldAffordable(playerRef, store, npcRef);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;

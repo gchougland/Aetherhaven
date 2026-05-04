@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0] - Unreleased
+
+### Added
+
+- **Gaia's Draught:** Implemented new upgradeable, reusable healing Draught unlocked from the first mob killing quest from the Priestess. This draught can be upgraded by finding two new resources (Shard of Gaia, Verdant Catalyst) rarely in loot chests.
+- **Priestess Healing:** Priestess can now heal the player for gold coins.
+
+### Changed
+
+- **Building Resource Costs:** Changed resource costs for buildings to be closer to actual block counts.
+- **Treasury Remote Usage:** Most things that require gold coins can now take from both the treasury and player inventory.
+
 ## [1.2.1] - 5/3/2026
 
 ### Added

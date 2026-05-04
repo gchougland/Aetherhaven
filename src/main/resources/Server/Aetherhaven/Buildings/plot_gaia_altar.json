@@ -13,7 +13,7 @@
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 50,
   "materials": [
-    { "resourceTypeId": "Rock", "count": 50 },
+    { "resourceTypeId": "Rock", "count": 80 },
     { "itemId": "Ingredient_Life_Essence", "count": 10 }
   ],
   "pois": [

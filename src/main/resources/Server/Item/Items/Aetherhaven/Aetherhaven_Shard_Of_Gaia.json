@@ -1,0 +1,38 @@
+{
+  "TranslationProperties": {
+    "Name": "server.items.Aetherhaven_Shard_Of_Gaia.name",
+    "Description": "server.items.Aetherhaven_Shard_Of_Gaia.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Shard_Of_Gaia.png",
+  "Categories": [
+    "Items.Ingredients"
+  ],
+  "Model": "Resources/Crystals/Crystal_Fragment.blockymodel",
+  "Texture": "Resources/Crystals/Crystal_Fragment_Textures/Shard_of_Gaia.png",
+  "PlayerAnimationsId": "Item",
+  "IconProperties": {
+    "Scale": 0.75,
+    "Rotation": [
+      34.315,
+      29.815,
+      22.5
+    ],
+    "Translation": [
+      -0.3,
+      0.3
+    ]
+  },
+  "Tags": {
+    "Type": [
+      "Ingredient"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "Scale": 0.9,
+  "MaxStack": 64,
+  "Quality": "Legendary",
+  "Set": "Aetherhaven",
+  "ItemSoundSetId": "ISS_Items_Gems"
+}

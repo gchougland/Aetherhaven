@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven.dialogue;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
+import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -26,7 +30,9 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.util.EventTitleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
@@ -105,6 +111,10 @@ public final class DialogueActionExecutor {
             case "abandon_quest" -> abandonQuest(a, playerRef, store);
             case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
             case "gift_villager" -> giftVillager(a, playerRef, store, out, npcRef);
+            case "gaia_draught_refill" -> gaiaDraughtRefill(playerRef, store, npcRef);
+            case "gaia_draught_upgrade_shard" -> gaiaDraughtUpgradeShard(playerRef, store, npcRef);
+            case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
+            case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -140,6 +150,7 @@ public final class DialogueActionExecutor {
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         if (qdef != null) {
             town.initQuestObjectiveProgress(qid, qdef.trackableObjectiveIds());
+            town.initQuestKillProgress(qid, qdef.entityKillObjectiveIds());
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
             QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
         }
@@ -231,6 +242,15 @@ public final class DialogueActionExecutor {
             QuestLifecycleEffects.runOnComplete(world, plugin, town, tm, def, null);
             if (rewardPlayerRef != null && store != null) {
                 QuestRewardService.grantNonReputationRewards(def, rewardPlayerRef, store);
+            }
+        }
+        if (rewardPlayerRef != null
+            && store != null
+            && qid.trim().equals(AetherhavenConstants.QUEST_PRIESTESS_GAIA_DRAUGHT)) {
+            UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
+            if (pu != null) {
+                GaiaDraughtService.unlockAndFill(town, pu.getUuid());
+                GaiaDraughtService.ensureDraughtStacksOrGrantFirst(rewardPlayerRef, store, town, pu.getUuid());
             }
         }
         tm.updateTown(town);
@@ -450,6 +470,152 @@ public final class DialogueActionExecutor {
             }
         }
         return tm.findTownForPlayerInWorld(playerUuid);
+    }
+
+    private static void gaiaDraughtRefill(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return;
+        }
+        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
+        if (!s.isUnlocked()) {
+            return;
+        }
+        GaiaDraughtService.refillToCapacity(town, pu.getUuid());
+        tm.updateTown(town);
+        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+    }
+
+    private static void gaiaDraughtUpgradeShard(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return;
+        }
+        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
+        if (!s.canApplyShardUpgrade()) {
+            return;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null || !GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_SHARD_OF_GAIA, 1)) {
+            return;
+        }
+        boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
+        long cost = AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
+        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        if (!GaiaDraughtService.removeOneItemFromInventory(playerRef, store, AetherhavenConstants.ITEM_SHARD_OF_GAIA)) {
+            return;
+        }
+        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        if (!GaiaDraughtService.tryApplyShardCapacityUpgrade(s)) {
+            return;
+        }
+        tm.updateTown(town);
+        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+    }
+
+    private static void gaiaDraughtUpgradeCatalyst(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return;
+        }
+        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
+        if (!s.canApplyCatalystUpgrade()) {
+            return;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null || !GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_VERDANT_CATALYST, 1)) {
+            return;
+        }
+        boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
+        long cost = AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
+        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        if (!GaiaDraughtService.removeOneItemFromInventory(playerRef, store, AetherhavenConstants.ITEM_VERDANT_CATALYST)) {
+            return;
+        }
+        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        if (!GaiaDraughtService.tryApplyCatalystHealTierUpgrade(s)) {
+            return;
+        }
+        tm.updateTown(town);
+        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+    }
+
+    private static void priestessGoldHeal(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (town == null || pu == null) {
+            return;
+        }
+        float missing = PlayerHealUtil.missingHealth(playerRef, store);
+        if (missing <= 0f) {
+            return;
+        }
+        int per = Math.max(1, AetherhavenConstants.PRIESTESS_HEAL_HEALTH_PER_GOLD_COIN);
+        long cost = (long) Math.ceil(missing / (float) per);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        if (inv == null) {
+            return;
+        }
+        boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
+        if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
+            return;
+        }
+        PlayerHealUtil.healToFull(playerRef, store);
+        tm.updateTown(town);
     }
 
     private static void giveItem(

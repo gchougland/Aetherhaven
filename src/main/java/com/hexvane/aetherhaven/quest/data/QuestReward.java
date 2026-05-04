@@ -38,6 +38,11 @@ public final class QuestReward {
     @Nullable
     private String unlockId;
 
+    /** Output item id whose crafting recipe is learned ({@code kind: learn_recipe}). */
+    @SerializedName("recipeItemId")
+    @Nullable
+    private String recipeItemId;
+
     @Nullable
     public String kind() {
         return kind;
@@ -79,5 +84,10 @@ public final class QuestReward {
     @Nullable
     public String unlockId() {
         return unlockId;
+    }
+
+    @Nullable
+    public String recipeItemId() {
+        return recipeItemId;
     }
 }

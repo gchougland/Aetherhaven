@@ -12,7 +12,9 @@
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 38,
-  "materials": [],
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 80 },
+    { "resourceTypeId": "Rock", "count": 40 }],
   "pois": [
     {
       "localX": -6,

@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
@@ -203,27 +204,50 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean treasuryPerm =
             treasuryTown != null && playerUuid != null && treasuryTown.playerCanSpendTreasuryGold(playerUuid);
         long treasuryBal = treasuryTown != null ? treasuryTown.getTreasuryGoldCoinCount() : 0L;
+        long invGold = inv != null ? InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN) : 0L;
+        long spendableGold =
+            treasuryTown != null && inv != null
+                ? GoldCoinPayment.totalAvailable(treasuryTown, inv, treasuryPerm)
+                : invGold;
         boolean treasuryOk =
             completed
                 || goldCost <= 0
                 || plotReqBypassCreative
-                || (treasuryTown != null && treasuryBal >= goldCost && treasuryPerm);
+                || (treasuryTown != null
+                    && inv != null
+                    && GoldCoinPayment.canAfford(treasuryTown, inv, goldCost, treasuryPerm));
         boolean showTreasury = !hideConstructionDetails && goldCost > 0;
         commandBuilder.set("#TreasuryRow.Visible", showTreasury);
         if (showTreasury) {
             String tLine;
             if (plotReqBypassCreative) {
-                tLine = "Town treasury: " + goldCost + " gold (creative — not deducted)";
+                tLine = "Construction gold: " + goldCost + " (creative — not deducted)";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", "#3d913f");
             } else if (treasuryTown == null) {
-                tLine = "Town treasury: " + goldCost + " gold (town not found for this plot.)";
+                tLine = "Construction gold: " + goldCost + " (town not found for this plot.)";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
             } else if (!treasuryPerm) {
-                tLine = "Town treasury: " + goldCost + " gold (have " + treasuryBal + "). No permission to spend.";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", "#962f2f");
+                tLine =
+                    "Construction gold: pay "
+                        + goldCost
+                        + " from inventory (treasury "
+                        + treasuryBal
+                        + " — no spend permission). You have "
+                        + invGold
+                        + " on hand.";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", spendableGold >= goldCost ? "#3d913f" : "#962f2f");
             } else {
-                tLine = "Town treasury: pay " + goldCost + " gold (have " + treasuryBal + ")";
-                commandBuilder.set("#TreasuryLabel.Style.TextColor", treasuryBal >= goldCost ? "#3d913f" : "#962f2f");
+                tLine =
+                    "Construction gold: pay "
+                        + goldCost
+                        + " (treasury "
+                        + treasuryBal
+                        + " + inventory "
+                        + invGold
+                        + " = "
+                        + spendableGold
+                        + " spendable)";
+                commandBuilder.set("#TreasuryLabel.Style.TextColor", spendableGold >= goldCost ? "#3d913f" : "#962f2f");
             }
             commandBuilder.set("#TreasuryLabel.TextSpans", Message.raw(tLine));
         }
@@ -942,15 +966,15 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 sendBuildError(store, ref, "No town owns this plot.");
                 return;
             }
-            if (!tr.playerCanSpendTreasuryGold(uc.getUuid())) {
-                sendBuildError(store, ref, "You cannot spend town treasury for this build.");
+            boolean allowTreasury = tr.playerCanSpendTreasuryGold(uc.getUuid());
+            if (!GoldCoinPayment.canAfford(tr, inv, goldCost, allowTreasury)) {
+                sendBuildError(store, ref, "Not enough gold (inventory + town treasury).");
                 return;
             }
-            if (tr.getTreasuryGoldCoinCount() < goldCost) {
-                sendBuildError(store, ref, "Not enough gold in the town treasury.");
+            if (!GoldCoinPayment.trySpend(tr, inv, goldCost, allowTreasury)) {
+                sendBuildError(store, ref, "Could not deduct construction gold.");
                 return;
             }
-            tr.addTreasuryGoldCoins(-goldCost);
             tmPre.updateTown(tr);
         }
 

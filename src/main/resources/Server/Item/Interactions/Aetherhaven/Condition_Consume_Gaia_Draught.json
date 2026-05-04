@@ -1,0 +1,7 @@
+{
+  "Type": "Condition",
+  "RequiredGameMode": "Adventure",
+  "Crouching": false,
+  "Next": "Aetherhaven_Consume_Gaia_Draught_Charge",
+  "Failed": "Block_Secondary"
+}

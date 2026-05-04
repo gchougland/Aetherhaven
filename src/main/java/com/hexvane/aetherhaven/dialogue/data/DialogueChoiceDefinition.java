@@ -14,6 +14,13 @@ public final class DialogueChoiceDefinition {
     private String next;
     @Nullable
     private JsonObject condition;
+    /**
+     * When set, the row is shown only if this evaluates true; {@link #getCondition()} then controls whether the choice
+     * is enabled (all pass) or greyed out (any fail). When not set, visibility follows the legacy {@link #condition} +
+     * {@link #whenFalse} rules.
+     */
+    @Nullable
+    private JsonObject visibilityCondition;
     /** "hide" (default) or "disabled" when condition fails. */
     @Nullable
     private String whenFalse;
@@ -41,6 +48,11 @@ public final class DialogueChoiceDefinition {
     @Nullable
     public JsonObject getCondition() {
         return condition;
+    }
+
+    @Nullable
+    public JsonObject getVisibilityCondition() {
+        return visibilityCondition;
     }
 
     @Nonnull

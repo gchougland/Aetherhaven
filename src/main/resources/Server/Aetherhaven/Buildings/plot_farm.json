@@ -14,7 +14,7 @@
   "treasuryGoldCoinCost": 52,
   "materials": [
     { "resourceTypeId": "Wood_All", "count": 50 },
-    { "resourceTypeId": "Rock", "count": 50 },
+    { "resourceTypeId": "Rock", "count": 100 },
     { "resourceTypeId": "Soils", "count": 50 }
   ],
   "pois": [

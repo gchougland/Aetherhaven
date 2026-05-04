@@ -113,6 +113,7 @@ public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
                 LootChestBonusApplier.tryInjectJewelry(s, state, c, cfg, rnd, false);
                 LootChestBonusApplier.tryInjectGoldCoins(s, state, c, cfg, rnd, false);
                 LootChestBonusApplier.tryInjectPlotToken(s, state, c, cfg, rnd, false);
+                LootChestBonusApplier.tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
                 s.removeComponent(ref, pendingType);
             });
     }

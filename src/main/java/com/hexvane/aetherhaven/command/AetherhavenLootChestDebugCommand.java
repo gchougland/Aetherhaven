@@ -15,6 +15,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
+import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
@@ -82,6 +83,10 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             BlockModule.BlockStateInfo bsi = target.stateInfo();
             ItemContainerBlock c = target.container();
             LootChestBonusApplier.applyAll(cs, bsi, c, cfg, rnd, true, true, true);
+            SimpleItemContainer inv = c.getItemContainer();
+            if (inv != null) {
+                LootChestBonusApplier.tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, true);
+            }
             playerRef.sendMessage(Message.translation("server.aetherhaven.debug.loot.bonusApplied"));
         }
     }
