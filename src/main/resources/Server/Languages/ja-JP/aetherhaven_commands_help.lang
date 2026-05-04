@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=現在の世界におけるエーテルヘイブンの町を一覧表示します。
+
+commands.aetherhaven.town.desc=町のメンバーシップ：招待、役割、退会
+commands.aetherhaven.town.invite.desc=オンラインプレイヤーをあなたの街に招待しましょう
+commands.aetherhaven.town.invite.player.desc=プレイヤーユーザー名（オンラインである必要があります）
+commands.aetherhaven.town.accept.desc=保留中の町からの招待を受け入れる
+commands.aetherhaven.town.decline.desc=保留中の町からの招待を辞退する
+commands.aetherhaven.town.kick.desc=あなたの町からメンバーを削除する
+commands.aetherhaven.town.kick.player.desc=メンバーユーザー名（オンラインである必要があります）
+commands.aetherhaven.town.role.desc=メンバーに権限プリセット（建築、クエスト、または両方）を適用します。フラグごとの権限設定には、管理ブロックの「プレイヤー」タブを使用します。
+commands.aetherhaven.town.role.player.desc=メンバーユーザー名（オンラインである必要があります）
+commands.aetherhaven.town.role.role.desc=建設、クエスト、またはその両方
+commands.aetherhaven.town.leave.desc=（所有者としてではなく）あなたが所属する町を離れる
+commands.aetherhaven.town.townName.desc=町名の表示は任意です。スペースを含めたフルネームを入力してください（行の残りの部分）。招待待ちの相手が1人だけの場合は省略してください。
+
+commands.aetherhaven.poi.desc=デバッグ: POIコマンド
+commands.aetherhaven.poi.list.desc=町のPOI（地点情報）を一覧表示します（町のUUIDは任意です。省略するか、町名として「me」を使用してください）。
+commands.aetherhaven.poi.town.desc=町のUUID、または私、または発信者の町を省略
+commands.aetherhaven.poi.dump.desc=この世界のメモリ上の登録簿に登録されているすべてのPOI（任意の町）を一覧表示します。
+
+commands.aetherhaven.plots.desc=プロットインスタンス: リスト、アセンブリの完了 (クリエイティブ)、プロットIDの削除 (クリエイティブ)。/aetherhaven plot との競合を避けるために、プロットを使用してください。
+commands.aetherhaven.plots.list.desc=あなたの町の区画インスタンス一覧（区画UUID、建設ID、州、標識位置）
+commands.aetherhaven.plots.finishassembly.desc=クリエイティブ：町内の進行中の組み立て作業を即座に完了させる（ロード済みのチャンク／アクティブなジョブが必要）
+commands.aetherhaven.plots.remove.desc=クリエイティブ：UUIDで区画を1つ取り壊し、町のデータから削除します。
+commands.aetherhaven.plots.remove.plotId.desc=/aetherhaven plots list から UUID をプロットします
+
+commands.aetherhaven.needs.desc=デバッグ: 村人が必要とするもの
+commands.aetherhaven.needs.inspect.desc=ロードされたチャンク内の VillagerNeed を持つエンティティを一覧表示します。
+commands.aetherhaven.needs.set.desc=必要度メーターを0～100に設定します（対象：inspect、Elder、またはuuidからのハンドル）。
+commands.aetherhaven.needs.target.desc=ハンドル（例：Villager_Elder_xxxxxxxx）、長老、またはエンティティのUUID
+commands.aetherhaven.needs.entity.desc=非推奨です。ターゲット（ハンドル、Elder、またはUUID）を使用してください。
+commands.aetherhaven.needs.which.desc=空腹、エネルギー、または楽しみ
+commands.aetherhaven.needs.value.desc=0～100の値（100＝完全に満足）
+
+commands.aetherhaven.tax.desc=デバッグ: 財務省の朝の税金
+commands.aetherhaven.tax.breakdown.desc=あなたの町における住民ごとの税額と合計額を表示します（読み込まれたチャンクのみ）。
+commands.aetherhaven.tax.now.desc=朝の十分の一税を今すぐ財務省に納付する（朝の時間帯と前回の徴収日をスキップします）
+
+commands.aetherhaven.questdebug.desc=デバッグ: 町のクエストのバイパス
+commands.aetherhaven.questdebug.grant.desc=あなたの町でクエストをアクティブにする
+commands.aetherhaven.questdebug.complete.desc=あなたの町でクエスト完了をマークする
+commands.aetherhaven.questdebug.clear.desc=あなたの町のクエストをアクティブリストから削除します
+commands.aetherhaven.questdebug.id.desc=クエストID（デフォルト：q_build_inn）
+commands.aetherhaven.questdebug.status.desc=あなたの町（表示名＋ID）の進行中および完了済みのクエストを表示します。
+
+commands.aetherhaven.reputation.desc=デバッグ: 評判
+commands.aetherhaven.reputation.set.desc=村人との評判を設定し、会話のマイルストーン報酬をキューに追加しましょう。
+commands.aetherhaven.reputation.villagerUuid.desc=村人NPCエンティティのUUID
+commands.aetherhaven.reputation.villagerTarget.desc=あなたの町の村人エンティティのUUID、またはNPCの役割ID（例：Aetherhaven_Blacksmith）
+commands.aetherhaven.reputation.value.desc=評判 0～100
+commands.aetherhaven.reputation.reward.desc=マイルストーンの定義をリストアップするか、直接報酬を付与する
+commands.aetherhaven.reputation.reward.list.desc=評判のマイルストーン一覧（オプション：NPCロールIDでフィルタリング）
+commands.aetherhaven.reputation.reward.roleFilter.desc=リストをフィルタリングするためのNPCロールID（例：Aetherhaven_Merchant）
+commands.aetherhaven.reputation.reward.grant.desc=マイルストーン報酬を1つ付与します（獲得したマーク）。IDについては評判報酬リストを使用してください。
+commands.aetherhaven.reputation.rewardId.desc=評判報酬ID（例：rep_merchant_50）
+
+commands.aetherhaven.villager.desc=デバッグ: 町の村人ヘルパー
+commands.aetherhaven.villager.list.desc=町の村人NPCエンティティのUUID一覧（評判／位置特定コマンド用）
+commands.aetherhaven.villager.locate.desc=町民の位置を表示する。オプションでテレポート機能あり（オペレーターのみ）。
+commands.aetherhaven.villager.uuid.desc=村人NPCエンティティのUUID
+commands.aetherhaven.villager.target.desc=あなたの町の村人エンティティのUUID、またはNPCの役割ID（例：Aetherhaven_Merchant）
+commands.aetherhaven.villager.teleport.desc=true を指定すると村人のところへテレポートします (オペレーターのみ)。または、代わりに --tp を使用してください。
+commands.aetherhaven.villager.tp_flag.desc=村人のところへテレポートする（オペレーターのみ；true を通過するのと同じ）
+commands.aetherhaven.villager.reset.desc=町の村人NPCをすべて削除し、あなたの近くに再出現させます（デバッグ用。クエスト、評判、贈り物は保持されます。宿屋のプール修理を実行して、住民を完成した建物に合わせます。宿屋の訪問者プールを更新します）。
+aetherhaven.villager.resetDone=町の住民たちはリセットされ、あなたの近くに再出現しました。
+aetherhaven.villager.resetFailed=町民をリセットできませんでした: {reason}
+commands.aetherhaven.gift.desc=デバッグ: ギフト制限をリセットするか、ギフト履歴のプレビューを埋める
+commands.aetherhaven.gift.resetLimits.desc=この世界のすべての町のすべてのプレイヤーとすべての村人に対する日次/週次のギフト制限をリセットします。
+commands.aetherhaven.gift.fillHistory.desc=役割（あなたの街）ごとに、好き/嫌い/愛しているアイテムごとにログ行を1行追加して、ギフト履歴に何らかの情報が表示されるようにします（デバッグ用）。
+commands.aetherhaven.gift.roleId.desc=NPCの役割ID（例：Aetherhaven_Merchant）
+
+commands.aetherhaven.debug_autonomy.desc=デバッグ: 村人の自律性オーバーレイ
+commands.aetherhaven.debug_autonomy.toggle.desc=町の住民の自律動作デバッグを切り替えます（NPCを参照するか、--rayオプションを使用してください）。
+commands.aetherhaven.debug_autonomy.show.desc=この村人に対して自律デバッグが有効になっているかどうかを表示します。
+commands.aetherhaven.debug_autonomy.clear.desc=この村人のエーテルヘイブン自律性デバッグをクリアする
+
+commands.aetherhaven.debug_lootchest.desc=デバッグ: エーテルヘイブンの宝箱のボーナスが対象のコンテナでロールされます
+commands.aetherhaven.debug_lootchest.fill.desc=対象のアイテムコンテナに、強制的に宝石、金、およびプロットトークンのロールを適用します。

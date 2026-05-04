@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Sua bolsa é muito leve para esse conserto.
+aetherhaven.blacksmith.repair.success={itemName} está inteiro novamente. Como novo.
+commands.aetherhaven.dialogue.desc=Abrir uma árvore de diálogo por ID (para teste)
+commands.aetherhaven.dialogue.treeId.desc=ID da árvore de diálogo (ex.: aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=ID do nó de entrada opcional (padrão: raiz)
+aetherhaven.interaction.dialogue=Pressione [{key}] para falar
+npcRoles.Aetherhaven_Test_Villager.name=Teste de diálogo Aldeão
+aetherhaven.banner.quest.completed.primary=Missão concluída
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Prédio concluído
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} está pronto.
+aetherhaven.assembly.tracer.none_in_range=Não há pré-visualização de montagem ao alcance (aproxime-se ou verifique a permissão de construção da cidade).
+aetherhaven.banner.quest.started.primary=Missão iniciada
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Desbloqueado
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Equipe de Construção
+items.Aetherhaven_Building_Staff.description=O disparo primário envia um projétil guia através dos blocos até a pré-visualização de montagem mais próxima dentro do alcance. Segure o disparo secundário e mire através dos blocos na pré-visualização de montagem para colocar o próximo bloco instantaneamente (permissão de construção na cidade). As construções passivas continuam avançando sozinhas mesmo quando você está ausente.

@@ -1,13 +1,14 @@
 {
   "id": "aetherhaven_merchant",
-  "entry": "root",
+  "entry": "main_hub",
   "nodes": {
-    "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.body",
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.fallback",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c0",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_merchant_stall"
@@ -21,7 +22,7 @@
           "next": null
         },
         {
-          "text": "server.aetherhaven.dialogue.merchant.appraiseJewelry",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.merchant.appraiseJewelry",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_merchant_stall"
@@ -35,7 +36,7 @@
           "next": null
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.offer",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
             "conditions": [
@@ -55,7 +56,7 @@
           "next": "gift_confirm"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c2",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -91,7 +92,7 @@
           "next": "vex_house_offer"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c3",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
@@ -114,7 +115,7 @@
           "next": "vex_house_finish"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c4",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
@@ -134,7 +135,7 @@
           "next": "vex_house_remind"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c5",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c5",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_merchant_stall"
@@ -142,7 +143,7 @@
           "next": "vex_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c6",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
@@ -165,7 +166,7 @@
           "next": "vex_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c7",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c7",
           "condition": {
             "type": "and",
             "conditions": [
@@ -185,7 +186,7 @@
           "next": "vex_building"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c8",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c8",
           "condition": {
             "type": "and",
             "conditions": [
@@ -208,17 +209,17 @@
           "next": "vex_quest_stall"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.root.c9",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.c9",
           "next": null
         }
       ]
     },
     "vex_quest_stall": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -228,27 +229,27 @@
           "next": "vex_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_quest_stall.c1",
           "next": null
         }
       ]
     },
     "vex_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_accepted.c0",
           "next": null
         }
       ]
     },
     "vex_building": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_building.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_building.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c0",
           "actions": [
             {
               "type": "abandon_quest",
@@ -258,37 +259,37 @@
           "next": "vex_abandoned"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_building.c1",
           "next": null
         }
       ]
     },
     "vex_abandoned": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_abandoned.c0",
           "next": null
         }
       ]
     },
     "vex_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_done.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_done.c0",
           "next": null
         }
       ]
     },
     "vex_house_offer": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -298,44 +299,44 @@
           "next": "vex_house_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_offer.c1",
           "next": null
         }
       ]
     },
     "vex_house_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_accepted.c0",
           "next": null
         }
       ]
     },
     "vex_house_remind": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_remind.c0",
           "next": null
         }
       ]
     },
     "vex_house_finish": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0",
+          "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.vex_house_finish.c0",
           "next": null
         }
       ]
     },
     "rep_reward_50": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker",
-      "text": "server.aetherhaven.reputation.reward.merchant.50",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.merchant.50",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -344,14 +345,14 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "rep_reward_100": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker",
-      "text": "server.aetherhaven.reputation.reward.merchant.100",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.rep_reward_100.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.merchant.100",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -360,17 +361,17 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "gift_confirm": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
               "type": "gift_villager",
@@ -380,51 +381,51 @@
               "reactionNodeDislike": "gift_dislike"
             }
           ],
-          "next": "root"
+          "next": "main_hub"
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmNo",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
         }
       ]
     },
     "gift_love": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.gift.love",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.gift.love",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_like": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.gift.like",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.gift.like",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_neutral": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.gift.neutral",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.gift.neutral",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_dislike": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_merchant.gift.dislike",
+      "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
+      "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.gift.dislike",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     }

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Statue_of_Gaia.name",
-    "Description": "server.items.Aetherhaven_Statue_of_Gaia.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Statue_of_Gaia.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Statue_of_Gaia.description"
   },
   "PlayerAnimationsId": "Block",
   "Categories": ["Furniture.Decorative"],

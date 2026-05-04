@@ -46,8 +46,10 @@ $C.@PageOverlay {
     Anchor: (Width: 780);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.production.title;
+      Label #ProductionTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -77,7 +79,7 @@ $C.@PageOverlay {
             TextButton #Slot0Prev {
               Style: @IconBackStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40, Right: 6);
               Padding: (Full: 0);
               Text: ".";
@@ -106,7 +108,7 @@ $C.@PageOverlay {
             TextButton #Slot0Next {
               Style: @IconFwdStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -146,7 +148,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot0Take1 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take1;
+                Text: "";
               }
             }
             Group {
@@ -155,7 +157,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot0Take10 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take10;
+                Text: "";
               }
             }
             Group {
@@ -163,7 +165,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot0Take100 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34);
-                Text: %server.aetherhaven.ui.production.take100;
+                Text: "";
               }
             }
           }
@@ -180,7 +182,7 @@ $C.@PageOverlay {
             TextButton #Slot1Prev {
               Style: @IconBackStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40, Right: 6);
               Padding: (Full: 0);
               Text: ".";
@@ -209,7 +211,7 @@ $C.@PageOverlay {
             TextButton #Slot1Next {
               Style: @IconFwdStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -249,7 +251,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot1Take1 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take1;
+                Text: "";
               }
             }
             Group {
@@ -258,7 +260,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot1Take10 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take10;
+                Text: "";
               }
             }
             Group {
@@ -266,7 +268,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot1Take100 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34);
-                Text: %server.aetherhaven.ui.production.take100;
+                Text: "";
               }
             }
           }
@@ -283,7 +285,7 @@ $C.@PageOverlay {
             TextButton #Slot2Prev {
               Style: @IconBackStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.prevTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40, Right: 6);
               Padding: (Full: 0);
               Text: ".";
@@ -312,7 +314,7 @@ $C.@PageOverlay {
             TextButton #Slot2Next {
               Style: @IconFwdStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.production.nextTooltip;
+              TooltipText: "";
               Anchor: (Width: 40, Height: 40);
               Padding: (Full: 0);
               Text: ".";
@@ -352,7 +354,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot2Take1 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take1;
+                Text: "";
               }
             }
             Group {
@@ -361,7 +363,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot2Take10 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34, Bottom: 4);
-                Text: %server.aetherhaven.ui.production.take10;
+                Text: "";
               }
             }
             Group {
@@ -369,7 +371,7 @@ $C.@PageOverlay {
               $C.@TextButton #Slot2Take100 {
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Anchor: (Width: 180, Height: 34);
-                Text: %server.aetherhaven.ui.production.take100;
+                Text: "";
               }
             }
           }
@@ -381,9 +383,9 @@ $C.@PageOverlay {
         Anchor: (Top: 20);
         $C.@TextButton #OpenUnlocks {
           TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-          TooltipText: %server.aetherhaven.ui.production.unlockTooltip;
+          TooltipText: "";
           Anchor: (Width: 220, Height: 38);
-          Text: %server.aetherhaven.ui.production.unlockButton;
+          Text: "";
         }
       }
     }

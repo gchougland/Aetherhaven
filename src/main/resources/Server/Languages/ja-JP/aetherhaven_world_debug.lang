@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=そのブロックの範囲内にはPOI（関心地点）がありません。
+aetherhaven.poi.noPoiSelected=POIが選択されていません。まずPOIをプライマリークリックしてください。
+aetherhaven.poi.selectedPoiGone=選択されたPOIは既に存在しません。
+aetherhaven.poi.moved=POIを{x}、{y}、{z}に移動しました。
+aetherhaven.poi.noPoiBlock=POIが選択されていません。まずPOIブロックをプライマリークリックしてください。
+aetherhaven.poi.clearedInteractionTarget=インタラクション対象がクリアされました。NPCはPOIブロックの中心を使用します。
+aetherhaven.poi.setInteractionTarget=相互作用のターゲットを{x}、{y}、{z}に設定します。
+aetherhaven.poi.selected=選択されたPOI {id} ({x}、{y}、{z})
+aetherhaven.poi.targetBlockMismatch=対象ブロックは、このPOIの想定されるタイプ{type}と一致する必要があります。
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=建物を移転する…
+aetherhaven.plotSign.placed=区画の看板を設置しました。
+aetherhaven.plotSign.couldNotAdd=区画標識を追加できませんでした（在庫がいっぱいでしょうか？）
+
+# Founder monument
+aetherhaven.founder.inTerritory=町の領土内に創設者の記念碑を設置してください。
+aetherhaven.founder.cannotPlace=創設者の記念碑をここに設置することはできません。
+aetherhaven.founder.createFailed=創始者の像を作成できませんでした。ブロックは既に設置されています。もう一度試すには、ブロックを破壊してください。
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=ターゲットはエーテルヘイブンの町民ではありません。
+aetherhaven.debug.autonomy.toggledOn=自律動作デバッグON（DisplayCustom + VisPath）。ネームプレートにAHオーバーレイを表示。
+aetherhaven.debug.autonomy.toggledOff=この村人については、自律行動のデバッグをオフにしてください。
+aetherhaven.debug.autonomy.state=この村人の自律性デバッグ: {state}
+aetherhaven.debug.autonomy.cleared=この村人に関するエーテルヘイブンの自律性デバッグをクリアしました。
+aetherhaven.debug.on=の上
+aetherhaven.debug.off=オフ
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=評判は変わりません（既に{value}です）。
+aetherhaven.debug.rep.set=役割が解決された場合、マイルストーンをクリアして、評判を{value}に設定し、対話のためにキューに追加します。
+aetherhaven.debug.rep.milestonesHeader=評判マイルストーン（報酬ID、役割、最低評判値、対話ノード）：
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=報酬{id}が付与されました。
+aetherhaven.debug.rep.targetInvalid=無効な村人です。
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=このワールド内の{towns}の町にある{entries}のプレイヤーと村人の列におけるギフトの制限をリセットします。
+aetherhaven.debug.gift.unknownRole=不明な村人の役割: {role}
+aetherhaven.debug.gift.noGiftLists=ロール {role} には、村人データに giftLoves、giftLikes、giftDislikes がありません。
+aetherhaven.debug.gift.fillDone={role} 用の {added} ギフトログ行を追加しました (既にそのアイテムとリアクションティアの行がある場合はスキップされます)。
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=これは空腹、エネルギー、または楽しさのいずれかでなければなりません（値は0～{max}です）。
+aetherhaven.debug.needs.elderNoTown=この世界にはあなたのための町はありません（長老になるために必要な条件です）。
+aetherhaven.debug.needs.noElderUuid=町にはまだ高齢者のUUIDが保存されていません。
+aetherhaven.debug.needs.noMatch=一致する村人が見つかりません（ハンドル、長老、または完全なUUIDを調べる必要があります）。
+aetherhaven.debug.needs.multipleMatch=複数のNPCがそのハンドルに一致しました。inspectから取得した完全なuuidを使用してください。
+aetherhaven.debug.needs.entityNotLoaded=エンティティがロードされていないか、VillagerNeedsがありません: {id}
+aetherhaven.debug.needs.set={label} ({id}) 上で {which}={value} と設定する
+aetherhaven.debug.needs.inspectIntro=ニーズを持つ村人（ロードされたチャンク）。設定方法：/aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=（取っ手なし）
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=町{id}の区画：
+aetherhaven.debug.plots.header={index}. プロット={plotId} 状態={state} タイプ={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=この世界のエーテルヘイブンの町：{count}
+aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} 署名@{x}、{y}、{z}
+aetherhaven.debug.plots.finishassemblyNone=町で作業が進行中の場合は、区画を組み立てないでください（建物の周囲にチャンクを読み込むか、先に建物を建設してください）。
+aetherhaven.debug.plots.finishassemblyDone=進行中の {count} プロット構築が即座に完了しました。
+aetherhaven.debug.plots.removeBadUuid=無効なプロットUUIDです。/aetherhaven plots list のIDを使用してください。
+aetherhaven.debug.plots.removeNotFound=あなたの町には区画 {plotId} がありません。
+aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町のデータから区画を削除するのに失敗しました（ログを確認してください）。
+aetherhaven.debug.plots.removedPlot=区画 {plotId} を町から削除し、その占有範囲をクリアしました。
+aetherhaven.debug.poi.invalidTownUuid=無効な町のUUID: {raw}
+aetherhaven.debug.poi.noTownArg=この世界にはあなたの町がありません（町のUUID引数を使用してください）。
+aetherhaven.debug.poi.listHeader=町 {town} ({count}) のPOI:
+aetherhaven.debug.poi.listEmpty=この町には登録されている建物がありません（建物を完成させるか、pois.jsonを確認してください）。
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tag={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=世界登録簿に登録されているすべてのPOI（{count}）：
+aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tag={tags} plot={plot}

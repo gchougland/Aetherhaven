@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=在这个世界上，你并不拥有一座城镇。
+aetherhaven.town.resolve.noTownNamed=世界上没有一个城镇叫“{name}”。
+aetherhaven.town.resolve.ownerOrOpOnly=只有城镇所有者（或获得许可的经营者）才能这样做。
+aetherhaven.town.resolve.notInTown=你并不在这个世界的任何一座城镇里。
+aetherhaven.town.resolve.nameOnlyForOwner=只有城镇所有者（或经营者）才能在此处使用城镇名称。
+aetherhaven.town.resolve.specifyTownName=请指定城镇名称，或者使用您拥有的城镇的名称。
+aetherhaven.town.resolve.specifyTown=请指定城镇名称。
+aetherhaven.town.resolve.adminOtherTown=只有运营商才能通过名称锁定其他玩家的城镇。
+aetherhaven.town.invite.err.emptyName=请输入玩家姓名。
+aetherhaven.town.invite.err.targetOffline=在这个世界中，玩家“{name}”不在线。
+aetherhaven.town.invite.err.cannotInviteSelf=你不能不请自来。
+aetherhaven.town.invite.err.alreadyInTown=那个玩家已经在这个世界的某个城镇里了。
+aetherhaven.town.invite.toTarget={inviter} 邀请您加入城镇“{townDisplay}”。输入 /aetherhaven town accept {townDisplay} 或 /aetherhaven town decline {townDisplay}（使用完整的城镇名称，包括空格）。
+aetherhaven.town.invite.sent=已向{name}发送邀请。
+aetherhaven.town.kick.err.mustBeOnline=玩家必须在线才能通过名字踢人。
+aetherhaven.town.kick.err.cannotRemoveOwner=无法移除城镇所有者。
+aetherhaven.town.kick.err.notMember=那名球员不是本镇居民。
+aetherhaven.town.kick.removed=从该镇移除{name}。
+aetherhaven.town.kick.removedYou=您已被移出“{town}”镇。
+aetherhaven.town.kick.removedGeneric=已将一名成员从镇上移除。
+aetherhaven.town.role.err.ownerAlwaysFull=所有者始终拥有全部权限。
+aetherhaven.town.role.set=将 {name} 的角色设置为 {role}。
+aetherhaven.town.accept.err.noSuchTown=没有这个名字的城镇。
+aetherhaven.town.accept.err.noInvite=您没有该城镇的待处理邀请。
+aetherhaven.town.accept.err.noInvites=您没有待处理的城镇邀请。
+aetherhaven.town.accept.err.alreadyInTown=你现在已经身处城镇之中。
+aetherhaven.town.accept.joined=您加入了“{town}”。
+aetherhaven.town.decline.noPending=该城镇目前没有待处理的邀请函。
+aetherhaven.town.decline.noInvites=您没有待处理的城镇邀请。
+aetherhaven.town.decline.done=已拒绝邀请。
+aetherhaven.town.permissions.updated=成员权限已保存。
+
+aetherhaven.ui.memberPermissions.title=成员权限
+aetherhaven.ui.memberPermissions.backTooltip=返回球员列表
+aetherhaven.ui.memberPermissions.placePlots=地块
+aetherhaven.ui.memberPermissions.manageConstructions=建造和管理建筑（集会、生产、宴会、宪章修订、建筑物搬迁）
+aetherhaven.ui.memberPermissions.spendTreasuryGold=将城镇金库中的黄金用于建设成本
+aetherhaven.ui.memberPermissions.openTreasuryPanel=开放国库（存款/取款）
+aetherhaven.ui.memberPermissions.acceptQuests=接受/开始城镇任务
+aetherhaven.ui.memberPermissions.completeQuests=完成城镇任务并领取声望奖励
+aetherhaven.ui.memberPermissions.abandonQuests=放弃正在进行的城镇任务
+aetherhaven.ui.memberPermissions.reviveVillagers=在盖亚雕像前复活村民
+aetherhaven.ui.memberPermissions.err.notOwner=只有城镇所有者才能编辑权限。
+aetherhaven.ui.memberPermissions.err.notInTown=那名球员不在这个城市。
+aetherhaven.town.rolecmd.playerMustBeOnline=玩家必须在线。
+aetherhaven.town.rolecmd.roleInvalid=角色必须是建造者、任务执行者或两者兼具。
+aetherhaven.town.leave.notInTown=你不在城镇里。
+aetherhaven.town.leave.ownerCannotLeave=业主无法离开；所有权转移尚未实施。
+aetherhaven.town.leave.notMember=你不是本镇居民。
+aetherhaven.town.leave.left=您离开了“{town}”。
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=建造
+aetherhaven.town.memberRole.QUEST=寻求
+aetherhaven.town.memberRole.BOTH=两个都

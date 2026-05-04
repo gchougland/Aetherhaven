@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ich bin Lyren. Unsere Stadt richtet sich nach der Charta, die wir bei unserer Ansiedlung unterzeichnet haben. Bevor wir weitere Parzellen abstecken, bitte ich dich, das Gelände um Aetherhaven herum zu erkunden. Verschaffe dir einen Überblick darüber, wo es flach genug zum Bauen ist, wo sich Wasser befindet und wo wir später Felder oder eine Grünfläche anlegen könnten. Nichts Kompliziertes, schau dich einfach um. Wenn du das getan hast, komm zurück und berichte mir.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Ich werde die Gegend erkunden und mich dann wieder melden.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Ältester Lyren
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=Wenn du von deinem Spaziergang zurück bist, erzähl mir, was du gesehen hast. Wenn nicht, sag Bescheid, wenn du so weit bist.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Bevor du noch mehr Boden in Besitz nimmst, erzähl mir, was deine Stiefel gesehen haben.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=Ich habe den Charter heute geöffnet gelassen. Fragen Sie nach, wenn Ihnen eine Warteschlange unklar ist.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Berichte über Spaziergänge sind wichtiger als Meinungen. Liefert mir Fakten.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=Wenn das Gelände verdächtig aussieht, sag es offen. Ich verachte ehrliche Augen nicht.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=Wasser ist wichtiger als Drama. Sag mir, wo es sich befindet.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Flaches Gelände täuscht manchmal. Sag mir, wo es dich getäuscht hat.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=Wenn Sie guten Boden sehen, beschreiben Sie ihn so, wie es ein Bauer tun würde.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=Wenn du steile Hänge siehst, beschreibe deren Steilheit ohne Poesie.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=Ich brauche Zeit für eine klare Vorstellung in deinem Kopf. Beschreibe sie in Worten.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Komm wieder, wenn du Norden, Süden, Schlamm, Stein in einfacher Reihenfolge sagen kannst.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=Eine übersichtliche Notizbuchseite mit realen Sehenswürdigkeiten sagt mehr aus als eine Rede.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=Wenn Sie uns eine einfache Mahlzeit mitbringen, während wir über Landkarten sprechen, betrachte ich das als Freundlichkeit.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Saubere Kreide und ein gerades Lineal zeigen mir, dass du es ernst meinst.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=Ich mag kleine Geschenke, die beim Lesen helfen, keine, mit denen man prahlen kann.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Wasserflaschen und trockene Kekse sind langweilige Geschenke, und genau das gefällt mir an Pfadfindertagen.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Bringt mir keine Trophäen von alten Knochen, als ob sie beweisen würden, dass ihr gelebt habt.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=Ich möchte nicht, dass Straßenmüll als Forschungsergebnisse präsentiert wird.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=Wenn es nach Verwesung riecht, ist es kein Kartenzubehör.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Streichspielzeug und Lärmspielzeug sollten vom Chartertisch ferngehalten werden.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=Glitzermüll ist bei der Diskussion um Wasserleitungen völlig fehl am Platz.

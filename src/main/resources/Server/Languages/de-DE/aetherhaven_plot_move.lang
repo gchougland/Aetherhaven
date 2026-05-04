@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Grundstücksplatzierung
+aetherhaven.ui.plotplacement.summary=Platzierung: {building}
+aetherhaven.ui.plotplacement.positionSection=Position und Rotation
+aetherhaven.ui.plotplacement.tipsSection=Tipps
+aetherhaven.ui.plotplacement.heightSection=Höhe & Drehung
+aetherhaven.ui.plotplacement.detailsBlock=Zeichen {sx}, {sy}, {sz} · Vorgefertigter Ursprung {ox}, {oy}, {oz}\nSchritt {step} von 4 (jeweils 90°)
+aetherhaven.ui.plotplacement.tipsControls=Mit Escape wird nur dieses Fenster geschlossen. Abbrechen löscht die Vorschau. Ein Rechtsklick öffnet das Fenster erneut; ein Rechtsklick auf einen Block verschiebt keine aktive Vorschau.
+aetherhaven.ui.plotplacement.plotType=Gebäude
+aetherhaven.ui.plotplacement.moveLabel=Position anpassen
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Um 90° drehen (in Richtung Fahrrad)
+aetherhaven.ui.plotplacement.place=Grundstücksschild aufstellen
+aetherhaven.ui.plotplacement.placeMove=Gebäude versetzen
+aetherhaven.ui.plotplacement.moveWarningText=Beim Umzug wird das alte Gebäude zerstört und neu aufgebaut. Entfernen Sie vorher Wertgegenstände, Haustiere und lose Gegenstände aus dem Gebäudeinneren. Die mit dieser Stadt verbundenen NPCs sind geschützt.
+aetherhaven.ui.plotplacement.moveConfirm=Bestätigen
+aetherhaven.ui.plotplacement.moveBack=Geh zurück
+aetherhaven.ui.plotplacement.cancel=Vorschau abbrechen
+aetherhaven.ui.plotplacement.cameraSection=Kamera
+aetherhaven.ui.plotplacement.cameraHint=Die Vogelperspektive wird einmalig beim Einschalten (über der Vorschau) angezeigt und bleibt dann an Ort und Stelle, während Sie die Handlung bewegen.
+aetherhaven.ui.plotplacement.birdsEye=Vogelperspektive
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Draufsicht: Der anfängliche Zielpunkt ist die Mitte der Vorschau. Deaktivieren Sie die Option, um zur Ego-Perspektive zurückzukehren. Verwenden Sie die Schwenkfunktion, um die Ansicht zu verschieben.
+aetherhaven.ui.plotplacement.viewDistance=Distanz
+aetherhaven.ui.plotplacement.zoomOutTooltip=Weiter entfernte Kamera (weiterer Überblick über die Handlung)
+aetherhaven.ui.plotplacement.zoomInTooltip=Nähere Kamera (kleinere Übersicht, mehr Details)
+aetherhaven.ui.plotplacement.panLabel=Schwenkkamera
+aetherhaven.ui.plotplacement.panXmTooltip=Verschieben Sie die Ansicht einen Schritt in Richtung -X.
+aetherhaven.ui.plotplacement.panXpTooltip=Verschieben Sie die Ansicht einen Schritt in Richtung +X
+aetherhaven.ui.plotplacement.panZmTooltip=Verschieben Sie die Ansicht einen Schritt in Richtung -Z.
+aetherhaven.ui.plotplacement.panZpTooltip=Verschieben Sie die Ansicht einen Schritt in Richtung +Z.
+aetherhaven.ui.plotplacement.moveXmTooltip=Vogelperspektive: Westen (-X). Egoperspektive: Seitwärts nach links (relativ zur Ansicht).
+aetherhaven.ui.plotplacement.moveXpTooltip=Vogelperspektive: Osten (+X). Egoperspektive: Seitwärts nach rechts (relativ zur Ansicht).
+aetherhaven.ui.plotplacement.moveZmTooltip=Vogelperspektive: Norden (-Z). Egoperspektive: Vorwärtsbewegung (relativ zur Ansicht).
+aetherhaven.ui.plotplacement.moveZpTooltip=Vogelperspektive: Süden (+Z). Egoperspektive: Zurückgehen (relativ zur Ansicht).
+aetherhaven.ui.plotplacement.moveYmTooltip=Einen Block nach unten schieben
+aetherhaven.ui.plotplacement.moveYpTooltip=Einen Block nach oben verschieben
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Umzugscharter
+aetherhaven.ui.charterrelocation.summary=Neuausrichtung der Stadtverfassung
+aetherhaven.ui.charterrelocation.details=Zielblock {sx}, {sy}, {sz} · Schritt {step} von 4 (90°)
+aetherhaven.ui.charterrelocation.tips=Das Gebiet ist ein quadratischer Bereich um die Charta herum; jedes Gebäude muss nach der Bestätigung innerhalb dieses Bereichs bleiben. Schieben Sie den Geist an die neue Position und platzieren Sie ihn dann.
+aetherhaven.ui.charterrelocation.info=Das Territorium ist ein quadratischer Bereich um die Charta herum. Alle deine Gebäude müssen nach dem Umzug innerhalb dieses Bereichs bleiben. Verschiebe den Geisterblock an die neue Charta-Position und bestätige.
+aetherhaven.ui.charterrelocation.place=Charta des Ortes

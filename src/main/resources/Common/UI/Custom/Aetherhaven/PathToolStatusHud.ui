@@ -9,8 +9,10 @@ Group #PathToolStatusRoot {
     Anchor: (Top: 88, Left: 20, Width: 440);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.pathTool.hudTitle;
+      Label #PathToolHudTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 12);
+        Text: "";
       }
     }
 

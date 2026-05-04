@@ -46,29 +46,30 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
             commandBuilder.append("Aetherhaven/CharterAmendments.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyCharterAmendmentsChrome(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || uc == null || pr == null) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.ui.charter.noTown"));
+            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.noTown"));
             return;
         }
         if (!town.playerCanManageConstructions(uc.getUuid())) {
-            commandBuilder.set("#PopHint.TextSpans", Message.translation("server.aetherhaven.ui.charter.noPermission"));
+            commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.noPermission"));
             return;
         }
         int pop = TownCharterService.countResidents(town, store);
         int tierUnlock = TownCharterService.unlockedAmendmentTier(pop);
         commandBuilder.set(
             "#PopHint.TextSpans",
-            Message.translation("server.aetherhaven.ui.charter.popHint").param("count", pop)
+            Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.popHint").param("count", pop)
         );
 
         boolean t1Done = town.getCharterTaxPolicyEnum() != null;
@@ -78,9 +79,9 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         bindTier2(commandBuilder, eventBuilder, tierUnlock, t1Done, town);
 
         if (t1Done && t2Done) {
-            commandBuilder.set("#Status.TextSpans", Message.translation("server.aetherhaven.ui.charter.allChosen"));
+            commandBuilder.set("#Status.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.allChosen"));
         } else {
-            commandBuilder.set("#Status.TextSpans", Message.translation("server.aetherhaven.ui.charter.hint"));
+            commandBuilder.set("#Status.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.hint"));
         }
     }
 
@@ -90,10 +91,10 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         int tierUnlock,
         @Nonnull TownRecord town
     ) {
-        commandBuilder.set("#T1PerCapitaText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t1.perCapitaShort"));
-        commandBuilder.set("#T1HappinessText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t1.happinessShort"));
-        commandBuilder.set("#T1PerCapita.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t1.perCapitaTooltip"));
-        commandBuilder.set("#T1Happiness.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t1.happinessTooltip"));
+        commandBuilder.set("#T1PerCapitaText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.perCapitaShort"));
+        commandBuilder.set("#T1HappinessText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.happinessShort"));
+        commandBuilder.set("#T1PerCapita.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.perCapitaTooltip"));
+        commandBuilder.set("#T1Happiness.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t1.happinessTooltip"));
 
         CharterTaxPolicy policy = town.getCharterTaxPolicyEnum();
         boolean tier1Unlocked = tierUnlock >= 1;
@@ -145,14 +146,14 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         boolean t1Done,
         @Nonnull TownRecord town
     ) {
-        commandBuilder.set("#T2MiningText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t2.miningShort"));
-        commandBuilder.set("#T2LoggingText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t2.loggingShort"));
-        commandBuilder.set("#T2FarmingText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t2.farmingShort"));
-        commandBuilder.set("#T2SmithingText.TextSpans", Message.translation("server.aetherhaven.ui.charter.t2.smithingShort"));
-        commandBuilder.set("#T2Mining.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t2.miningTooltip"));
-        commandBuilder.set("#T2Logging.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t2.loggingTooltip"));
-        commandBuilder.set("#T2Farming.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t2.farmingTooltip"));
-        commandBuilder.set("#T2Smithing.TooltipTextSpans", Message.translation("server.aetherhaven.ui.charter.t2.smithingTooltip"));
+        commandBuilder.set("#T2MiningText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningShort"));
+        commandBuilder.set("#T2LoggingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingShort"));
+        commandBuilder.set("#T2FarmingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingShort"));
+        commandBuilder.set("#T2SmithingText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.smithingShort"));
+        commandBuilder.set("#T2Mining.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.miningTooltip"));
+        commandBuilder.set("#T2Logging.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.loggingTooltip"));
+        commandBuilder.set("#T2Farming.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.farmingTooltip"));
+        commandBuilder.set("#T2Smithing.TooltipTextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.t2.smithingTooltip"));
 
         CharterSpecialization spec = town.getCharterSpecializationEnum();
         boolean tier2Unlocked = tierUnlock >= 2 && t1Done;
@@ -241,21 +242,21 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         switch (c) {
             case "t1_per_capita" -> {
                 if (tierUnlock < 1 || town.getCharterTaxPolicyEnum() != null) {
-                    err = "server.aetherhaven.ui.charter.err.locked";
+                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
                 } else {
                     town.setCharterTaxPolicy(CharterTaxPolicy.PER_CAPITA.id());
                 }
             }
             case "t1_happiness" -> {
                 if (tierUnlock < 1 || town.getCharterTaxPolicyEnum() != null) {
-                    err = "server.aetherhaven.ui.charter.err.locked";
+                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
                 } else {
                     town.setCharterTaxPolicy(CharterTaxPolicy.HAPPINESS_WEIGHTED.id());
                 }
             }
             case "t2_mining", "t2_logging", "t2_farming", "t2_smithing" -> {
                 if (tierUnlock < 2 || town.getCharterTaxPolicyEnum() == null || town.getCharterSpecializationEnum() != null) {
-                    err = "server.aetherhaven.ui.charter.err.locked";
+                    err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.locked";
                 } else {
                     CharterSpecialization spec =
                         switch (c) {
@@ -267,7 +268,7 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
                     town.setCharterSpecialization(spec.id());
                 }
             }
-            default -> err = "server.aetherhaven.ui.charter.err.invalid";
+            default -> err = "aetherhaven_ui_town.aetherhaven.ui.charter.err.invalid";
         }
         if (err != null) {
             NotificationUtil.sendNotification(
@@ -281,7 +282,7 @@ public final class CharterAmendmentsPage extends InteractiveCustomUIPage<Charter
         tm.updateTown(town);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.ui.charter.saved"),
+            Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.saved"),
             NotificationStyle.Success
         );
         refresh(ref, store);

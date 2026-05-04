@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Gaias_Draught.name",
-    "Description": "server.items.Aetherhaven_Gaias_Draught.description"
+    "Name": "aetherhaven_jewelry_geode.items.Aetherhaven_Gaias_Draught.name",
+    "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Gaias_Draught.description"
   },
   "PlayerAnimationsId": {
     "Parent": "Item",

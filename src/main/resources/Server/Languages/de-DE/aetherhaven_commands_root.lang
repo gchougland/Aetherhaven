@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven Mod-Befehle
+commands.aetherhaven.reload.desc=config.json und Aetherhaven-JSON-Kataloge von der Festplatte neu laden (Kreativmodus)
+commands.aetherhaven.reload.success=Aetherhaven-Konfiguration und Asset-Kataloge wurden neu geladen.
+commands.aetherhaven.reload.failure=Neuladen fehlgeschlagen: {detail}
+commands.aetherhaven.reload.noPlugin=Das Aetherhaven-Plugin ist nicht geladen.
+commands.aetherhaven.plot.desc=Grundstücksschild-Verwaltungsoberfläche öffnen (Bauvorhaben auswählen, Element abrufen)
+commands.aetherhaven.starterkit.desc=Sichern Sie sich das Aetherhaven-Starterkit (Grundstücksplatzierungspersonal, Charta, Stadtplanungsbüro, Baupersonal; Kreativmodus)
+commands.aetherhaven.starterkit.success=Starter-Kit wurde Ihrem Inventar hinzugefügt.
+commands.aetherhaven.starterkit.partial=Starterkit teilweise genehmigt; {failed} Artikel passten nicht (Lagerplatz freigeben).
+
+commands.aetherhaven.exportskin.desc=Exportiere dein Avatar-Skin als Modell-JSON (Übergeordnetes Element: Spieler)
+commands.aetherhaven.exportskin.other.desc=Exportiere den Avatar-Skin eines anderen Spielers als JSON-Modell.
+commands.aetherhaven.exportskin.arg.path=Optionaler Ausgabedateipfad (Standard: plugin data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=Für diesen Spieler ist kein Charakter-Skin verfügbar.
+commands.aetherhaven.exportskin.invalidSkin=Hautvalidierung fehlgeschlagen: {detail}
+commands.aetherhaven.exportskin.resolveError=Die Zuordnung von Haut zu Modell konnte nicht aufgelöst werden: {detail}
+commands.aetherhaven.exportskin.ioError=Fehler beim Schreiben von {path}: {detail}
+commands.aetherhaven.exportskin.success=Modell-JSON in {path} geschrieben

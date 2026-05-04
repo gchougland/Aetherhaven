@@ -97,8 +97,10 @@ $C.@PageOverlay {
     Anchor: (Width: 480, Top: 0, Bottom: 0);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.plotplacement.title;
+      Label #PlotPlacementTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -125,7 +127,7 @@ $C.@PageOverlay {
       Label #PlotTypeLabel {
         Anchor: (Bottom: 6);
         Style: (...$C.@SubtitleStyle);
-        Text: %server.aetherhaven.ui.plotplacement.plotType;
+        Text: "";
         Visible: false;
       }
 
@@ -134,11 +136,19 @@ $C.@PageOverlay {
         Visible: false;
       }
 
-      $C.@CheckBoxWithLabel #BirdsEyeToggle {
-        @Text = %server.aetherhaven.ui.plotplacement.birdsEye;
-        TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-        TooltipText: %server.aetherhaven.ui.plotplacement.birdsEyeTooltip;
+      Group #BirdsEyeToggle {
+        LayoutMode: Left;
         Anchor: (Bottom: 8);
+
+        $C.@CheckBox #CheckBox {
+        }
+
+        Label #BirdsEyeLabel {
+          Text: "";
+          TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+          Anchor: (Right: 30, Left: 11);
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+        }
       }
 
       Group #BirdsEyeZoomRow {
@@ -152,7 +162,6 @@ $C.@PageOverlay {
           Anchor: (Width: 34, Height: 34, Right: 6);
           Padding: (Full: 0);
           Text: ".";
-          TooltipText: %server.aetherhaven.ui.plotplacement.zoomInTooltip;
         }
 
         $C.@FloatSlider #BirdsEyeDistanceSlider {
@@ -168,7 +177,6 @@ $C.@PageOverlay {
           Anchor: (Width: 34, Height: 34, Right: 8);
           Padding: (Full: 0);
           Text: ".";
-          TooltipText: %server.aetherhaven.ui.plotplacement.zoomOutTooltip;
         }
 
         Label #BirdsEyeDistanceValue {
@@ -197,7 +205,6 @@ $C.@PageOverlay {
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotplacement.panZmTooltip;
             }
           }
 
@@ -212,7 +219,6 @@ $C.@PageOverlay {
                 Anchor: (Width: 44, Height: 40);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.plotplacement.panXmTooltip;
               }
               AssetImage #CameraPadIcon {
                 Anchor: (Width: 36, Height: 36, Left: 8);
@@ -224,7 +230,6 @@ $C.@PageOverlay {
                 Anchor: (Width: 44, Height: 40, Left: 8);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.plotplacement.panXpTooltip;
               }
             }
           }
@@ -237,7 +242,6 @@ $C.@PageOverlay {
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotplacement.panZpTooltip;
             }
           }
         }
@@ -255,7 +259,6 @@ $C.@PageOverlay {
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotplacement.moveZmTooltip;
             }
           }
 
@@ -270,7 +273,6 @@ $C.@PageOverlay {
                 Anchor: (Width: 44, Height: 40);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.plotplacement.moveXmTooltip;
               }
               AssetImage #PlotPadIcon {
                 Anchor: (Width: 36, Height: 36, Left: 8);
@@ -282,7 +284,6 @@ $C.@PageOverlay {
                 Anchor: (Width: 44, Height: 40, Left: 8);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.plotplacement.moveXpTooltip;
               }
             }
           }
@@ -295,7 +296,6 @@ $C.@PageOverlay {
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotplacement.moveZpTooltip;
             }
           }
         }
@@ -304,7 +304,7 @@ $C.@PageOverlay {
       Label #HeightLabel {
         Anchor: (Top: 4, Bottom: 6);
         Style: (...$C.@SubtitleStyle);
-        Text: %server.aetherhaven.ui.plotplacement.heightSection;
+        Text: "";
       }
 
       Group #RowYRot {
@@ -318,7 +318,6 @@ $C.@PageOverlay {
             Anchor: (Width: 40, Height: 40);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotplacement.moveYmTooltip;
           }
           TextButton #BtnYp {
             Style: @IconPlusStyle;
@@ -326,7 +325,6 @@ $C.@PageOverlay {
             Anchor: (Width: 40, Height: 40, Left: 8);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotplacement.moveYpTooltip;
           }
           TextButton #BtnRotate {
             Style: @IconRotStyle;
@@ -334,7 +332,6 @@ $C.@PageOverlay {
             Anchor: (Width: 44, Height: 40, Left: 10);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotplacement.rotateTooltip;
           }
         }
       }
@@ -351,7 +348,7 @@ $C.@PageOverlay {
         Label #MoveConfirmText {
           Anchor: (Bottom: 10, Width: 448);
           Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c49a6c, HorizontalAlignment: Start);
-          Text: %server.aetherhaven.ui.plotplacement.moveWarningText;
+          Text: "";
         }
 
         Group {
@@ -359,13 +356,13 @@ $C.@PageOverlay {
           Anchor: (Top: 4);
 
           $C.@TextButton #MoveConfirmButton {
-            Text: %server.aetherhaven.ui.plotplacement.moveConfirm;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Right: 6);
           }
 
           $C.@TextButton #MoveConfirmBackButton {
-            Text: %server.aetherhaven.ui.plotplacement.moveBack;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Left: 6);
           }
@@ -378,12 +375,12 @@ $C.@PageOverlay {
         Group {
           LayoutMode: Left;
           $C.@TextButton #PlaceButton {
-            Text: %server.aetherhaven.ui.plotplacement.place;
+            Text: "";
             Anchor: (Right: 10, Width: 200, Height: 48);
             Padding: (Horizontal: 10, Vertical: 10);
           }
           $C.@CancelTextButton #CancelButton {
-            Text: %server.aetherhaven.ui.plotplacement.cancel;
+            Text: "";
             Anchor: (Width: 200, Height: 48);
             Padding: (Horizontal: 10, Vertical: 10);
           }

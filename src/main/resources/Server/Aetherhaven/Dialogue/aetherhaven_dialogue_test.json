@@ -3,19 +3,19 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.root.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0",
           "next": "conditions_lab"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1",
           "next": null
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2",
           "next": null,
           "actions": [
             {
@@ -26,11 +26,11 @@
       ]
     },
     "conditions_lab": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0",
           "next": "root",
           "condition": {
             "type": "literal",
@@ -39,17 +39,17 @@
           "whenFalse": "hide"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1",
           "next": "conditions_lab",
           "condition": {
             "type": "literal",
             "value": false
           },
           "whenFalse": "disabled",
-          "disabledReason": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled"
+          "disabledReason": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2",
           "next": "item_demo",
           "condition": {
             "type": "and",
@@ -69,7 +69,7 @@
           }
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3",
           "next": "item_demo",
           "condition": {
             "type": "or",
@@ -88,8 +88,8 @@
       ]
     },
     "item_demo": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body",
       "actions": [
         {
           "type": "give_item",
@@ -99,7 +99,7 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0",
           "next": "shop_demo",
           "actions": [
             {
@@ -112,11 +112,11 @@
       ]
     },
     "shop_demo": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0",
           "actions": [
             {
               "type": "close"
@@ -128,17 +128,17 @@
           ]
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1",
           "next": "stubs_demo"
         }
       ]
     },
     "stubs_demo": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0",
           "next": "goto_demo",
           "actions": [
             {
@@ -154,11 +154,11 @@
       ]
     },
     "goto_demo": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0",
           "actions": [
             {
               "type": "goto",
@@ -169,11 +169,11 @@
       ]
     },
     "farewell": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body",
+      "speaker": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker",
+      "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0",
+          "text": "aetherhaven_dialogue_dialogue_test.aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0",
           "actions": [
             {
               "type": "close"

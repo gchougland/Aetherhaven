@@ -86,6 +86,7 @@ public final class VillagerGiftHistoryPage extends InteractiveCustomUIPage<Villa
             commandBuilder.append("Aetherhaven/VillagerGiftHistory.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyVillagerGiftHistory(commandBuilder);
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#GiftHistoryBack",
@@ -107,7 +108,7 @@ public final class VillagerGiftHistoryPage extends InteractiveCustomUIPage<Villa
         commandBuilder.set("#Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(npcRoleId));
         commandBuilder.set(
             "#VillagerName.TextSpans",
-            Message.translation("server.npcRoles." + npcRoleId + ".name")
+            Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + npcRoleId + ".name")
         );
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
@@ -149,7 +150,7 @@ public final class VillagerGiftHistoryPage extends InteractiveCustomUIPage<Villa
         commandBuilder.set("#GiftWeekLine.Visible", true);
         commandBuilder.set(
             "#GiftWeekLine.TextSpans",
-            Message.translation("server.aetherhaven.ui.giftHistory.giftsThisWeek")
+            Message.translation("aetherhaven_ui_town.aetherhaven.ui.giftHistory.giftsThisWeek")
                 .param("used", String.valueOf(usedThisWeek))
                 .param("max", String.valueOf(VillagerGiftService.MAX_GIFTS_PER_WEEK_BLOCK))
         );
@@ -313,10 +314,10 @@ public final class VillagerGiftHistoryPage extends InteractiveCustomUIPage<Villa
     @Nonnull
     private static String tierSectionKey(@Nonnull GiftPreference p) {
         return switch (p) {
-            case LOVE -> "server.aetherhaven.ui.giftHistory.section.love";
-            case LIKE -> "server.aetherhaven.ui.giftHistory.section.like";
-            case NEUTRAL -> "server.aetherhaven.ui.giftHistory.section.neutral";
-            case DISLIKE -> "server.aetherhaven.ui.giftHistory.section.dislike";
+            case LOVE -> "aetherhaven_ui_town.aetherhaven.ui.giftHistory.section.love";
+            case LIKE -> "aetherhaven_ui_town.aetherhaven.ui.giftHistory.section.like";
+            case NEUTRAL -> "aetherhaven_ui_town.aetherhaven.ui.giftHistory.section.neutral";
+            case DISLIKE -> "aetherhaven_ui_town.aetherhaven.ui.giftHistory.section.dislike";
         };
     }
 

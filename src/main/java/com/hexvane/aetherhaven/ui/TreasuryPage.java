@@ -68,18 +68,19 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             commandBuilder.append("Aetherhaven/TreasuryPage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyTreasuryPage(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         Store<ChunkStore> cs = treasuryBlockRef.getStore();
         TreasuryBlock tb = cs.getComponent(treasuryBlockRef, TreasuryBlock.getComponentType());
         if (tb == null || tb.getTownId().isBlank()) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("server.aetherhaven.common.treasuryNotLinked"));
+            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.treasuryNotLinked"));
             return;
         }
         UUID townUuid;
@@ -87,14 +88,14 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             townUuid = UUID.fromString(tb.getTownId().trim());
         } catch (IllegalArgumentException e) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("server.aetherhaven.common.invalidTownLink"));
+            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.invalidTownLink"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townUuid);
         if (town == null) {
             applyBrokenTreasuryUi(commandBuilder);
-            commandBuilder.set("#Balance.TextSpans", Message.translation("server.aetherhaven.common.townNotFound"));
+            commandBuilder.set("#Balance.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -102,7 +103,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             applyBrokenTreasuryUi(commandBuilder);
             commandBuilder.set(
                 "#Balance.TextSpans",
-                Message.translation("server.aetherhaven.common.noTreasuryPanelPermission")
+                Message.translation("aetherhaven_common.aetherhaven.common.noTreasuryPanelPermission")
             );
             return;
         }
@@ -130,7 +131,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         long bal = town.getTreasuryGoldCoinCount();
         commandBuilder.set(
             "#Balance.TextSpans",
-            Message.translation("server.aetherhaven.ui.treasury.coinsLine").param("count", String.valueOf(bal))
+            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.coinsLine").param("count", String.valueOf(bal))
         );
         commandBuilder.set("#DepositButton.Disabled", false);
         commandBuilder.set("#WithdrawButton.Disabled", bal <= 0L);
@@ -178,7 +179,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
 
         commandBuilder.set(
             "#TaxIntro.TextSpans",
-            Message.translation("server.aetherhaven.ui.treasury.tax.intro").param("count", b.loadedResidentCount())
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.intro").param("count", b.loadedResidentCount())
         );
         commandBuilder.set("#TaxPolicyShort.TextSpans", taxPolicyShortMessage(policyEnum, b.maxGoldPerResidentPerDay(), cfg));
         boolean hall = b.townHallComplete();
@@ -186,7 +187,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
 
         commandBuilder.set(
             "#TitheSubLabel.TextSpans",
-            Message.translation("server.aetherhaven.ui.treasury.tax.sheetSubLabel").param("count", b.loadedResidentCount())
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetSubLabel").param("count", b.loadedResidentCount())
         );
         commandBuilder.set("#TitheSubGold.TextSpans", Message.raw(padGoldColumn(b.sumBeforeTownMultipliers())));
 
@@ -195,7 +196,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         if (founder) {
             commandBuilder.set(
                 "#TitheFounderLabel.TextSpans",
-                Message.translation("server.aetherhaven.ui.treasury.tax.sheetFounderLabel")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetFounderLabel")
                     .param("mult", formatPermilleMultiplier(b.founderMonumentPermille()))
             );
             commandBuilder.set("#TitheFounderGold.TextSpans", Message.raw(padGoldColumn(b.sumAfterFounderMonument())));
@@ -206,7 +207,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         if (feast) {
             commandBuilder.set(
                 "#TitheFeastLabel.TextSpans",
-                Message.translation("server.aetherhaven.ui.treasury.tax.sheetFeastLabel")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetFeastLabel")
                     .param("mult", formatPermilleMultiplier(b.feastTaxBonusPermille()))
             );
             commandBuilder.set("#TitheFeastGold.TextSpans", Message.raw(padGoldColumn(b.finalTotal())));
@@ -234,17 +235,17 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             Message nameLine =
                 roleId.isBlank()
                     ? Message.raw(line.displayName())
-                    : Message.translation("server.npcRoles." + roleId.trim() + ".name");
+                    : Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId.trim() + ".name");
             commandBuilder.set(
                 row + " #Name.TextSpans",
-                Message.translation("server.aetherhaven.ui.treasury.tax.residentLine")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.residentLine")
                     .param("name", nameLine)
                     .param("job", Message.translation(profKey))
             );
             int comfortPct = Math.round(line.needsRatio() * 100f);
             commandBuilder.set(
                 row + " #Comfort.TextSpans",
-                Message.translation("server.aetherhaven.ui.treasury.tax.comfortPercent").param("pct", String.valueOf(comfortPct))
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.tax.comfortPercent").param("pct", String.valueOf(comfortPct))
             );
             commandBuilder.set(row + " #Gold.TextSpans", Message.raw(padGoldColumn(line.contributionGold())));
         }
@@ -252,7 +253,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             commandBuilder.set("#TaxResidentsFooter.Visible", true);
             commandBuilder.set(
                 "#TaxResidentsFooter.TextSpans",
-                Message.translation("server.aetherhaven.ui.treasury.tax.footerMore")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.footerMore")
                     .param("shown", n)
                     .param("total", sorted.size())
             );
@@ -279,15 +280,15 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         @Nonnull AetherhavenPluginConfig cfg
     ) {
         if (policy == null) {
-            return Message.translation("server.aetherhaven.ui.treasury.tax.policyShort.linear").param("max", maxPer);
+            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.linear").param("max", maxPer);
         }
         if (policy == CharterTaxPolicy.PER_CAPITA) {
             int flatPct = (int) Math.round(cfg.getCharterTaxPerCapitaFlatFraction() * 100.0);
-            return Message.translation("server.aetherhaven.ui.treasury.tax.policyShort.perCapita")
+            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.perCapita")
                 .param("max", maxPer)
                 .param("flatPct", flatPct);
         }
-        return Message.translation("server.aetherhaven.ui.treasury.tax.policyShort.happiness")
+        return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.happiness")
             .param("max", maxPer)
             .param("exp", String.format(Locale.US, "%.2f", cfg.getCharterTaxHappinessExponent()));
     }
@@ -349,7 +350,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             int have = InventoryMaterials.count(inv, AetherhavenConstants.ITEM_GOLD_COIN);
             if (have <= 0) {
                 if (pr != null) {
-                    pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.depositNoCoins"));
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositNoCoins"));
                 }
                 refresh(ref, store);
                 return;
@@ -357,7 +358,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             ItemStackTransaction tx = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_GOLD_COIN, have));
             if (!tx.succeeded()) {
                 if (pr != null) {
-                    pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.depositRemoveFailed"));
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.depositRemoveFailed"));
                 }
                 refresh(ref, store);
                 return;
@@ -365,7 +366,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             town.addTreasuryGoldCoins(have);
             tm.updateTown(town);
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.deposited").param("count", have));
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.deposited").param("count", have));
             }
             refresh(ref, store);
             return;
@@ -382,7 +383,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
             if (inv == null || !inv.canAddItemStack(stack)) {
                 if (pr != null) {
-                    pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.makeRoom"));
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.makeRoom"));
                 }
                 refresh(ref, store);
                 return;
@@ -390,7 +391,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             ItemStackTransaction giveTx = player.giveItem(stack, ref, store);
             if (!giveTx.succeeded()) {
                 if (pr != null) {
-                    pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.couldNotAddCoins"));
+                    pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.couldNotAddCoins"));
                 }
                 refresh(ref, store);
                 return;
@@ -398,7 +399,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             town.addTreasuryGoldCoins(-(long) give);
             tm.updateTown(town);
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.treasury.withdrew").param("count", give));
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.withdrew").param("count", give));
             }
             refresh(ref, store);
         }

@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 560);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.questjournal.title;
+      Label #JournalPageTitle {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -19,7 +21,7 @@ $C.@PageOverlay {
       Label #Hint {
         Anchor: (Bottom: 8);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
-        Text: %server.aetherhaven.ui.questjournal.hint;
+        Text: "";
       }
 
       Group #QuestList {
@@ -34,12 +36,12 @@ $C.@PageOverlay {
       Label #DetailTitle {
         Anchor: (Bottom: 6);
         Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2);
-        Text: %server.aetherhaven.ui.questjournal.detailPlaceholder;
+        Text: "";
       }
 
       Label #DetailBody {
         Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8);
-        Text: %server.aetherhaven.ui.questjournal.detailPlaceholderBody;
+        Text: "";
       }
     }
   }

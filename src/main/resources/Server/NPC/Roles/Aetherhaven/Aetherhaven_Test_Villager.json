@@ -10,7 +10,7 @@
       "Description": "Memory name override"
     },
     "NameTranslationKey": {
-      "Value": "server.npcRoles.Aetherhaven_Test_Villager.name",
+      "Value": "aetherhaven_misc.npcRoles.Aetherhaven_Test_Villager.name",
       "Description": "Translation key for NPC name display"
     }
   },
@@ -221,7 +221,7 @@
           {
             "Type": "SetInteractable",
             "Interactable": true,
-            "Hint": "server.aetherhaven.interaction.dialogue"
+            "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue"
           }
         ]
       },

@@ -64,14 +64,19 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
         @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.append("Aetherhaven/PlotPlacementPage.ui");
+        PlotPlacementPage.applySharedPlotPlacementLocalization(commandBuilder);
+        commandBuilder.set(
+            "#PlotPlacementTitle.TextSpans",
+            Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.title")
+        );
         Vector3i a = session.getAnchor();
         commandBuilder.set(
             "#Summary.TextSpans",
-            Message.translation("server.aetherhaven.ui.charterrelocation.summary")
+            Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.summary")
         );
         commandBuilder.set(
             "#Details.TextSpans",
-            Message.translation("server.aetherhaven.ui.charterrelocation.details")
+            Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.details")
                 .param("sx", a.x)
                 .param("sy", a.y)
                 .param("sz", a.z)
@@ -80,9 +85,9 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
         commandBuilder.set(
             "#Tips.TextSpans",
             Message.join(
-                Message.translation("server.aetherhaven.ui.charterrelocation.tips"),
+                Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.tips"),
                 Message.raw("\n\n"),
-                Message.translation("server.aetherhaven.ui.plotplacement.cameraHint")
+                Message.translation("aetherhaven_plot_move.aetherhaven.ui.plotplacement.cameraHint")
             )
         );
 
@@ -103,7 +108,7 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
 
         commandBuilder.set(
             "#PlaceButton.TextSpans",
-            Message.translation("server.aetherhaven.ui.charterrelocation.place")
+            Message.translation("aetherhaven_plot_move.aetherhaven.ui.charterrelocation.place")
         );
 
         bind(eventBuilder, "#BtnXm", "MoveXm");

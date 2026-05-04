@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_elder)
+# Full translation keys are aetherhaven_dialogue_visitor_elder.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=你可以过境，但你不属于这次包机行程。如果你想帮忙，必须先得到这里居民的邀请。
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=我明白。
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=莱伦长老

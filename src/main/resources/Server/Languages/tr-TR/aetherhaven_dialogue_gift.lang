@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=Hediye bugün zaten verildi.
+aetherhaven.dialogue.gift.disabled.weekly=Bu hafta verilen iki hediye
+aetherhaven.dialogue.gift.offer=Hediye teklif edin
+aetherhaven.dialogue.gift.confirmBody=Etkin hızlı erişim çubuğunuzdaki (bir) öğeyi hediye olarak verin?
+aetherhaven.dialogue.gift.confirmYes=Evet, verin.
+aetherhaven.dialogue.gift.confirmNo=Boş ver
+aetherhaven.dialogue.gift.back=Elbette
+aetherhaven.dialogue.gift.fail.visitor=Sadece kasaba sakinleri saklanan hediyeleri alabilir.
+aetherhaven.dialogue.gift.fail.emptyHand=Hızlı erişim çubuğunuzda bulunan bir öğeyi basılı tutarak sunabilirsiniz.
+aetherhaven.dialogue.gift.fail.dailyLimit=Bu kişiye bugün zaten bir hediye verdiniz.
+aetherhaven.dialogue.gift.fail.weeklyLimit=Bu kişiye haftalık hediyelerinizi kullandınız.
+aetherhaven.dialogue.gift.fail.generic=Şu anda o hediyeyi veremezsiniz.

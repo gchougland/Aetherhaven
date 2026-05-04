@@ -1,16 +1,26 @@
 # Changelog
 
-## [1.3.0] - Unreleased
+## [1.3.0] - 5/4/2026
 
 ### Added
 
 - **Gaia's Draught:** Implemented new upgradeable, reusable healing Draught unlocked from the first mob killing quest from the Priestess. This draught can be upgraded by finding two new resources (Shard of Gaia, Verdant Catalyst) rarely in loot chests.
 - **Priestess Healing:** Priestess can now heal the player for gold coins.
+- **Varied Dialogue:** Added a bunch of new dialogue lines for villagers so they say different things each day. Including hint dialogue for gifts.
+- **Various Sound:** Added sound cues to several villager actions, like opening geodes and appraisal.
+- **Memories:** Added icons and lang keys for Aetherhaven memories.
 
 ### Changed
 
 - **Building Resource Costs:** Changed resource costs for buildings to be closer to actual block counts.
 - **Treasury Remote Usage:** Most things that require gold coins can now take from both the treasury and player inventory.
+- **Refactored lang files:** Refactored the monolithic language file into a bunch more organized smaller ones.
+
+### Fixed
+
+- **Floating blocks when building:** Fixed issue where blocks would remain where filler blocks were in the prefab.
+- **Production GUI:** Fixed spamming of ack gate from progress bars, clicks should be more responsive now in menu.
+- **Charter:** Added prevention of building a plot on top of the charter.
 
 ## [1.2.1] - 5/3/2026
 

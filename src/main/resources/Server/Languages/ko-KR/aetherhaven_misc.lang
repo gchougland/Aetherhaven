@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=지갑이 너무 가벼워서 수리가 불가능합니다.
+aetherhaven.blacksmith.repair.success={itemName}는 다시 완전해졌습니다. 새것처럼 좋아졌어요.
+commands.aetherhaven.dialogue.desc=(테스트용으로) ID로 대화 트리 열기
+commands.aetherhaven.dialogue.treeId.desc=대화 트리 ID (예: aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=선택 사항인 진입 노드 ID(기본값: 루트)
+aetherhaven.interaction.dialogue=[{key}]을 눌러 대화하세요
+npcRoles.Aetherhaven_Test_Villager.name=대화 테스트 마을 주민
+aetherhaven.banner.quest.completed.primary=퀘스트 완료
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=건물 완공
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name}가 준비되었습니다.
+aetherhaven.assembly.tracer.none_in_range=범위 내에 조립품 미리보기가 없습니다(가까이 이동하거나 마을 건설 권한을 확인하세요).
+aetherhaven.banner.quest.started.primary=퀘스트 시작됨
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=잠금 해제됨
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=건물 직원
+items.Aetherhaven_Building_Staff.description=주 무기를 사용하면 범위 내에서 가장 가까운 조립체 미리보기 위치로 안내 볼트를 발사할 수 있습니다. 보조 무기를 누른 상태에서 조립체 미리보기를 조준하면 다음 블록을 즉시 배치할 수 있습니다(마을 건설 권한 필요). 자리를 비운 동안에도 자동 건설은 계속 진행됩니다.

@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Этерхейвен не загружен.
+aetherhaven.common.noTownInWorld=В этом мире для тебя нет подходящего города.
+aetherhaven.common.noQuestPermission=У вас нет разрешения на выполнение задания в этом городе.
+aetherhaven.common.townNotFound=Город не найден.
+aetherhaven.common.invalidTownLink=Недействительная ссылка на город.
+aetherhaven.common.treasuryNotLinked=Казначейство не связано.
+aetherhaven.common.ownerOnlyTreasury=Использовать казну может только владелец города.
+aetherhaven.common.noTreasuryPanelPermission=Вам не разрешено пользоваться городской казной.
+aetherhaven.common.townNotInThisWorld=Города нет в этом мире.
+aetherhaven.common.noMoveBuildingsPermission=У вас нет разрешения на перемещение зданий в этом городе.
+aetherhaven.common.buildingCannotMove=Это здание нельзя переместить (отсутствует участок или оно недостроено).
+aetherhaven.common.lookAtBlockPlot=Чтобы задать положение индикатора графика и запустить предварительный просмотр, выберите соответствующий блок.
+aetherhaven.common.carryPlotToken=Для начала размещения здания возьмите с собой жетон участка для указанного в инструменте типа здания (например, жетон участка гостиницы).
+aetherhaven.common.statueNotLinked=Статуя не связана с городом.
+aetherhaven.common.ownerOnlyStatue=Использовать эту статую может только владелец города.
+aetherhaven.common.noReviveVillagersPermission=Вам запрещено оживлять жителей деревни у этой статуи.
+aetherhaven.common.noPlayerId=Идентификатор игрока отсутствует.
+aetherhaven.common.playersOnly=Только для игроков.
+aetherhaven.common.invalidVillager=Житель деревни с ограниченными возможностями здоровья.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Вы уже являетесь частью города в этом мире. Покиньте его, прежде чем основывать новый.
+aetherhaven.charter.townFounded=Город основан: {name}. Прибыл старейшина деревни. Используйте устав, чтобы переименовать город.
+aetherhaven.chartertown.info.notLinked=Чартер пока не связан с каким-либо городом.
+aetherhaven.chartertown.info.invalidTownId=В уставе города указан неверный идентификатор города.
+aetherhaven.chartertown.info.townDataMissing=Данные о городе не найдены (см. журнал сервера).
+aetherhaven.chartertown.townInfoBlock=Название города: {name}\nID города: {id}\nУровень: {tier}\nТерритория (радиус чанка): {radius}\nХартия в {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Название города не может быть пустым.
+aetherhaven.chartertown.nameDuplicate=Это название уже используется другим городом в этом мире.
+aetherhaven.chartertown.nameSaved=Сохранено название города: {name}

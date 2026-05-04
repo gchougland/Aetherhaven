@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Koşullar laboratuvarı. Gizli bir seçenek görmemelisiniz. Gri renkte bir seçenek görmelisiniz. Devam etmek için bileşik kapıları kullanın.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Bu seçenek gizlidir (tam anlamıyla yanlış).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Bu gri renkte gösterilmelidir.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(Kelimenin tam anlamıyla doğru olması gerekir)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Geçme bileşiği: YANLIŞ DEĞİL VE DOĞRU
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=VEYA dalı (doğru VEYA yanlış)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Test ettiğiniz için teşekkürler. Hoşça kalın!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Hoşçakalın!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Sonraki sayfaya geçmek yerine, doğrudan veda sayfasına geçmek için aşağıdaki seçeneklerden birini seçin.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=vedaya git
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Bir düğüme girme eylemi size yalnızca bir adet basit kürek verdi (eğer envanterinizde yer varsa). Daha fazla eşya için aşağıdaki seçeneği seçin.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Bana 3 toprak ver, sonra devam et.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Aetherhaven diyalog arayüzüne hoş geldiniz. Bu satır, düzeni ve kaydırmayı kontrol edebilmeniz için bilerek uzun tutulmuştur. Seçenekleriniz gövde metninin altında yer almaktadır.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Koşullar laboratuvarına devam edin.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Çıkış (sonraki boş değerle bitir).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Ayrıl (açıkça kapatma işlemi).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Kweebec tüccar takas arayüzünü açabilir veya taslak işlemlere geçebilirsiniz.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Kweebec_Merchant takas dükkanını açın.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Dükkanı atla, fişlere git
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Köylüsü
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Önyükleme işlemleri: Başarı kilidini açma ve görevi başlatma, bu sistemler mevcut olana kadar kayıt altına alınmalıdır.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Unlock_achievement + start_quest taslaklarını çalıştırın.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Köylüsü

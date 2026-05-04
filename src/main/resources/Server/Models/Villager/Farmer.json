@@ -71,5 +71,18 @@
       "GradientSet": "Colored_Cotton",
       "GradientId": "Green"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Farmer.png",
+  "IconProperties": {
+    "Scale": 0.2,
+    "Rotation": [
+      0,
+      -45,
+      0
+    ],
+    "Translation": [
+      0,
+      -75
+    ]
+  }
 }

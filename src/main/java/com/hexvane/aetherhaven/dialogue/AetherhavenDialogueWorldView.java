@@ -125,6 +125,15 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     }
 
     @Override
+    public boolean aetherhavenPlayerCanAcceptQuests(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        TownRecord t = townFor(playerRef, store);
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        return t != null && pu != null && t.playerCanAcceptQuests(pu.getUuid());
+    }
+
+    @Override
     public boolean townInnVisitorPoolEmpty(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         TownRecord t = townFor(playerRef, store);
         if (t == null) {

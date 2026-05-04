@@ -10,10 +10,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.MathUtil;
-import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.Message;
-import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.PageManager;
@@ -24,7 +22,6 @@ import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
@@ -32,8 +29,6 @@ import javax.annotation.Nonnull;
 /** Pays gold for a full durability restore to the item definition max (clears repair-kit max-durability loss). */
 public final class BlacksmithRepairInteraction extends ChoiceInteraction {
     private static final double EPS = 1e-6;
-    private static final String SOUND_EVENT_ITEM_REPAIR = "SFX_Item_Repair";
-
     private final ItemContext itemContext;
 
     public BlacksmithRepairInteraction(@Nonnull ItemContext itemContext) {
@@ -95,7 +90,7 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
         if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));
+            playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));
             pageManager.setPage(ref, store, Page.None);
             return;
         }
@@ -119,13 +114,8 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
             tm.updateTown(town);
         }
         Message nameMsg = Message.translation(restored.getItem().getTranslationKey());
-        playerRef.sendMessage(Message.translation("server.aetherhaven.blacksmith.repair.success").param("itemName", nameMsg));
+        playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.success").param("itemName", nameMsg));
         pageManager.setPage(ref, store, Page.None);
-        SoundUtil.playSoundEvent2d(ref, soundEventIndex(SOUND_EVENT_ITEM_REPAIR), SoundCategory.UI, store);
-    }
-
-    private static int soundEventIndex(@Nonnull String soundEventId) {
-        int index = SoundEvent.getAssetMap().getIndex(soundEventId);
-        return index == Integer.MIN_VALUE ? SoundEvent.EMPTY_ID : index;
+        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WEAPON_BENCH_CRAFT);
     }
 }

@@ -313,7 +313,7 @@ public final class PurificationPowderVisualizationSystem extends EntityTickingSy
             Interactions interactions = new Interactions(
                 java.util.Map.of(InteractionType.Use, AetherhavenConstants.ROOT_INTERACTION_PURIFY_SPAWN_USE)
             );
-            interactions.setInteractionHint("server.interactionHints.purifySpawn");
+            interactions.setInteractionHint("aetherhaven_jewelry_geode.interactionHints.purifySpawn");
             pstore.putComponent(bref, Interactions.getComponentType(), interactions);
             Ref<EntityStore> pRef = world.getEntityRef(ownerEntityUuid);
             if (pRef == null || !pRef.isValid()) {

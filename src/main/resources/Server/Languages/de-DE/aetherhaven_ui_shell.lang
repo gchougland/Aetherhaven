@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Gelagerte Goldmünzen: {count}
+aetherhaven.ui.treasury.depositNoCoins=Sie haben keine Goldmünzen zum Einzahlen.
+aetherhaven.ui.treasury.depositRemoveFailed=Münzen konnten nicht aus dem Inventar entfernt werden.
+aetherhaven.ui.treasury.deposited={count} Goldmünzen eingezahlt.
+aetherhaven.ui.treasury.makeRoom=Schaffen Sie Platz in Ihrem Inventar.
+aetherhaven.ui.treasury.couldNotAddCoins=Münzen konnten nicht hinzugefügt werden.
+aetherhaven.ui.treasury.withdrew=Es wurden {count} Goldmünzen abgehoben.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Steueraufschlüsselung (nur geladene Blöcke; nicht geladene Bewohner tragen bis zur Simulation 0 bei):
+aetherhaven.ui.treasury.debug.titheNoHall=Zehnt: In dieser Stadt gibt es kein vollständiges Rathaus.
+aetherhaven.ui.treasury.debug.titheZero=Zehnt: 0 Gold (keine zahlenden Einwohner oder 0 aufgrund der Berechnung der Richtlinien). Entladen/Bedarf/Aufschlüsselung: /aetherhaven Steueraufschlüsselung
+aetherhaven.ui.treasury.debug.titheApplied=Zehnt angewendet: +{amount} Gold an die Kasse (gleiche Regeln wie bei einer Morgensammlung).
+aetherhaven.ui.treasury.debug.state2=Rathaus abgeschlossen={a} Morgenfenster={b} MorgendämmerungEpocheTag={c} SchatzamtLetzterSteuertag={d} WürdeNächstenMorgenEinziehenTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) Komfort={comfort} Gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=StewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=In dieser Welt benötigt man eine Stadt, um Quests verfolgen zu können.
+aetherhaven.ui.questJournal.noPermission=Sie haben keine Berechtigung, Stadtquests zu verwalten.
+aetherhaven.ui.questJournal.noActive=Keine aktiven Quests.
+aetherhaven.ui.questJournal.hint=Tippe auf eine Quest, um Details anzuzeigen. × entfernt sie aus deinem Questlog (du kannst sie vom Auftraggeber erneut annehmen).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialog
+aetherhaven.ui.dialogue.unknown=Unbekannter Dialog: {id}
+aetherhaven.ui.dialogue.missingNode=Fehlender Knoten: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Gebäude
+aetherhaven.ui.plotConstruction.plotSignTitle=Grundstücksschild
+aetherhaven.ui.plotConstruction.noConstruction=Für dieses Grundstück ist keine Bebauung geplant.
+aetherhaven.ui.plotConstruction.assignResidentHint=Weisen Sie einen Dorfbewohner zu, der hier wohnt (schließt seine Hausquest ab, wenn sie übereinstimmt).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Nicht zugewiesen
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Spielerdaten konnten nicht geladen werden.
+aetherhaven.ui.plotConstruction.townDataMissing=Für diesen Block wurden keine Ortsdaten gefunden.
+aetherhaven.ui.plotConstruction.clearedHome=Heimarbeit erledigt.
+aetherhaven.ui.plotConstruction.updatedHome=Hausaufgaben aktualisiert.
+aetherhaven.ui.plotConstruction.plotRemoved=Plot entfernt und Plot-Token zurückgegeben.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (haben {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Spielerdaten konnten nicht geladen werden.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Nicht genügend Lebensessenz (benötigt {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Lebensessenz konnte nicht aus dem Inventar entfernt werden.

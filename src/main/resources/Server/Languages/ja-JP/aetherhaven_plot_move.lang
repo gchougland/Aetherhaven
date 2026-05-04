@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=区画配置
+aetherhaven.ui.plotplacement.summary=配置: {building}
+aetherhaven.ui.plotplacement.positionSection=位置と回転
+aetherhaven.ui.plotplacement.tipsSection=ヒント
+aetherhaven.ui.plotplacement.heightSection=高さと回転
+aetherhaven.ui.plotplacement.detailsBlock=配置記号 {sx}、{sy}、{sz} · プレハブ原点 {ox}、{oy}、{oz}\nステップ {step} / 4 (各 90°)
+aetherhaven.ui.plotplacement.tipsControls=Escキーを押すとこのパネルのみが閉じます。キャンセルキーを押すとプレビューがクリアされます。空中を右クリックすると再び開きます。ブロックを右クリックしてもアクティブなプレビューは移動しません。
+aetherhaven.ui.plotplacement.plotType=建物
+aetherhaven.ui.plotplacement.moveLabel=位置を調整する
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=90度回転（自転車側を向く）
+aetherhaven.ui.plotplacement.place=区画標識を設置する
+aetherhaven.ui.plotplacement.placeMove=建物を移動
+aetherhaven.ui.plotplacement.moveWarningText=引っ越し作業では、古い場所が破壊され、新しい場所が建設されます。建物の敷地内にある貴重品、ペット、その他の小物類は、まず最初に取り除いてください。この町に所属する町のNPCは保護されています。
+aetherhaven.ui.plotplacement.moveConfirm=確認する
+aetherhaven.ui.plotplacement.moveBack=戻る
+aetherhaven.ui.plotplacement.cancel=プレビューをキャンセル
+aetherhaven.ui.plotplacement.cameraSection=カメラ
+aetherhaven.ui.plotplacement.cameraHint=鳥瞰図は、オンにすると（プレビューの上部に）一度表示され、その後はプロットを移動してもその位置に留まります。
+aetherhaven.ui.plotplacement.birdsEye=鳥瞰図
+aetherhaven.ui.plotplacement.birdsEyeTooltip=俯瞰視点：初期照準はプレビュー画面の中央です。チェックを外すと一人称視点に戻ります。パン機能を使って視点を移動できます。
+aetherhaven.ui.plotplacement.viewDistance=距離
+aetherhaven.ui.plotplacement.zoomOutTooltip=遠景カメラ（プロット全体をより広く捉える）
+aetherhaven.ui.plotplacement.zoomInTooltip=より近いカメラ（全体像は小さくなるが、より詳細な画像が得られる）
+aetherhaven.ui.plotplacement.panLabel=パンカメラ
+aetherhaven.ui.plotplacement.panXmTooltip=視点を-X方向に1ステップ移動します。
+aetherhaven.ui.plotplacement.panXpTooltip=視点を+X方向に1ステップ移動します
+aetherhaven.ui.plotplacement.panZmTooltip=視点を-Z方向に1ステップ移動します
+aetherhaven.ui.plotplacement.panZpTooltip=視点を+Z方向に1ステップ移動します。
+aetherhaven.ui.plotplacement.moveXmTooltip=俯瞰視点：西方向（-X）。一人称視点：左方向（視点に対して）に横移動。
+aetherhaven.ui.plotplacement.moveXpTooltip=俯瞰視点：東方向（+X）。一人称視点：右方向（視点に対して）にストレイフ移動。
+aetherhaven.ui.plotplacement.moveZmTooltip=鳥瞰図：北（-Z）。一人称視点：前方へ移動（視点に対して）。
+aetherhaven.ui.plotplacement.moveZpTooltip=俯瞰視点：南方向（+Z）。一人称視点：後方へ移動（視点に対して）。
+aetherhaven.ui.plotplacement.moveYmTooltip=1ブロック下へ
+aetherhaven.ui.plotplacement.moveYpTooltip=1ブロック上にずらす
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=チャーター便を移動
+aetherhaven.ui.charterrelocation.summary=町憲章の再配置
+aetherhaven.ui.charterrelocation.details=対象ブロック {sx}、{sy}、{sz} · ステップ {step} / 4 (90°)
+aetherhaven.ui.charterrelocation.tips=領地は憲章の周囲にある区画の正方形です。建物は確定後、必ずその範囲内に収まるようにしてください。ゴーストを新しい場所に移動させてから、配置します。
+aetherhaven.ui.charterrelocation.info=領地とは、領地を囲む正方形の区画のことです。移動後、すべての建物はその区画内に収まる必要があります。ゴーストブロックを新しい領地の位置まで移動させ、確定してください。
+aetherhaven.ui.charterrelocation.place=チャーター便を手配する

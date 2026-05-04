@@ -140,7 +140,8 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * Before assembly: clear terrain like the animator would (air cells + strip solid cells to air) so previews are visible.
+     * Before assembly: clear the entire prefab footprint to air (including {@code filler != 0} furniture / multi-block
+     * cells) so existing terrain does not float inside the volume until those indices reach the placement frontier.
      * Does not place final prefab solids, fluids, or entities — prefab fluids are written when each cell is built
      * ({@link #placeOne}) or at completion ({@link #finishFluidsAndEntities}).
      */
@@ -153,15 +154,11 @@ public final class ConstructionPasteOps {
         @Nonnull IPrefabBuffer bufferAccess
     ) {
         LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
-        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         for (PendingBlock pb : pending) {
             int bx = origin.x + pb.x;
             int by = origin.y + pb.y;
             int bz = origin.z + pb.z;
             WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
-            if (pb.filler != 0) {
-                continue;
-            }
             if (pb.blockId == 0) {
                 if (force) {
                     chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);

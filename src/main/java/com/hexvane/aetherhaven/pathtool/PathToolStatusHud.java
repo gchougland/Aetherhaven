@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -46,13 +47,14 @@ public final class PathToolStatusHud extends CustomUIHud {
         if (!mhudLayout) {
             build(b);
         }
+        AetherhavenUiLocalization.applyPathToolStatusHudTitle(b, this::scoped);
         b.set(
             scoped("#ModeName.TextSpans"),
             Message.translation(
                 switch (st.getGizmoMode()) {
-                    case Translate -> "server.aetherhaven.pathTool.hudNameTranslate";
-                    case Rotate -> "server.aetherhaven.pathTool.hudNameRotate";
-                    case Commit -> "server.aetherhaven.pathTool.hudNameCommit";
+                    case Translate -> "aetherhaven_items.aetherhaven.pathTool.hudNameTranslate";
+                    case Rotate -> "aetherhaven_items.aetherhaven.pathTool.hudNameRotate";
+                    case Commit -> "aetherhaven_items.aetherhaven.pathTool.hudNameCommit";
                 }
             )
         );
@@ -60,31 +62,31 @@ public final class PathToolStatusHud extends CustomUIHud {
             scoped("#ModeHelp.TextSpans"),
             Message.translation(
                 switch (st.getGizmoMode()) {
-                    case Translate -> "server.aetherhaven.pathTool.hudHelpTranslate";
-                    case Rotate -> "server.aetherhaven.pathTool.hudHelpRotate";
-                    case Commit -> "server.aetherhaven.pathTool.hudHelpCommit";
+                    case Translate -> "aetherhaven_items.aetherhaven.pathTool.hudHelpTranslate";
+                    case Rotate -> "aetherhaven_items.aetherhaven.pathTool.hudHelpRotate";
+                    case Commit -> "aetherhaven_items.aetherhaven.pathTool.hudHelpCommit";
                 }
             )
         );
         b.set(
             scoped("#StyleLine.TextSpans"),
             Message
-                .translation("server.aetherhaven.pathTool.hudStyle")
+                .translation("aetherhaven_items.aetherhaven.pathTool.hudStyle")
                 .param("style", cfg.getPathToolStyleName(st.getPathStyleIndex()))
         );
         b.set(
             scoped("#WidthLine.TextSpans"),
             Message
-                .translation("server.aetherhaven.pathTool.hudWidth")
+                .translation("aetherhaven_items.aetherhaven.pathTool.hudWidth")
                 .param("w", String.valueOf(st.getPathWidthBlocks()))
         );
         b.set(
             scoped("#NodesLine.TextSpans"),
             Message
-                .translation("server.aetherhaven.pathTool.hudNodes")
+                .translation("aetherhaven_items.aetherhaven.pathTool.hudNodes")
                 .param("n", String.valueOf(st.getNodes().size()))
         );
-        b.set(scoped("#HintLine.TextSpans"), Message.translation("server.aetherhaven.pathTool.hudHint"));
+        b.set(scoped("#HintLine.TextSpans"), Message.translation("aetherhaven_items.aetherhaven.pathTool.hudHint"));
         this.update(!mhudLayout, b);
     }
 }

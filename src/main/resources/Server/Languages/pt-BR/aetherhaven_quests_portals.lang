@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Missão iniciada: {name}
+aetherhaven.quest.completed=Missão concluída: {name}
+aetherhaven.quest.abandoned=Missão abandonada: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Missão ativa concedida: {name}
+aetherhaven.questdebug.completed=Missão concluída: {name}
+aetherhaven.questdebug.cleared=Missão ativa concluída: {name}
+aetherhaven.questdebug.statusHeader=-- status da missão --
+aetherhaven.questdebug.statusActive=ativo:
+aetherhaven.questdebug.statusCompleted=concluído:
+aetherhaven.questdebug.statusEmpty=(nenhum)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Ainda não há IDs de entidades de moradores registradas para esta cidade.
+aetherhaven.villager.listHeader=Moradores da cidade: UUID da entidade, origem, função se carregada (use o UUID ou o ID da função com /aetherhaven reputation … e villager locate):
+aetherhaven.villager.listRow={uuid} | {note} | função: {role}
+aetherhaven.villager.locateNotLoaded=Esse aldeão não foi carregado (tente se aproximar ou carregar os chunks).
+aetherhaven.villager.locateNoTransform=Não há transformação para essa entidade.
+aetherhaven.villager.locatePosition=Aldeão {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=O teletransporte requer um operador (grupo OP).
+aetherhaven.villager.teleported=Teletransportado.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=Não há nenhum contêiner de itens nesse bloco (chunk não carregado, bloco de preenchimento/base incompatível ou não é um bloco contêiner).
+aetherhaven.debug.loot.bonusApplied=O bônus de saque de Aetherhaven foi aplicado a este contêiner (forçado).
+aetherhaven.townsCommand.line={id} nome="{name}" mundo={world} proprietário={owner} blocos={cx},{cz} r{radius}
+aetherhaven.list.none=(nenhum)
+aetherhaven.questdebug.statusActiveLine=Ativo: {list}
+aetherhaven.questdebug.statusActiveEmpty=Ativo: (nenhum)
+aetherhaven.questdebug.statusCompletedLine=Concluído: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Concluído: (nenhum)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Saída de Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Use para retornar ao mundo normal.
+items.Aetherhaven_Portal_Enter.name=Portal de Aetherhaven
+items.Aetherhaven_Portal_Enter.description=Use para entrar em Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=A vila no céu

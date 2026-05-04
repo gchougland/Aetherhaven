@@ -4,7 +4,7 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 
 public final class AetherhavenCommand extends AbstractCommandCollection {
     public AetherhavenCommand() {
-        super("aetherhaven", "server.commands.aetherhaven.root.desc");
+        super("aetherhaven", "aetherhaven_commands_root.commands.aetherhaven.root.desc");
         this.addAliases("ah");
         this.addSubCommand(new PlotSignAdminCommand());
         this.addSubCommand(new AetherhavenStarterKitCommand());

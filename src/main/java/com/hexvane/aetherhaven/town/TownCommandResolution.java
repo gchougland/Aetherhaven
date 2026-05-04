@@ -70,21 +70,21 @@ public final class TownCommandResolution {
         if (trimmed.isEmpty()) {
             TownRecord owned = tm.findTownForOwnerInWorld(senderUuid);
             if (owned == null) {
-                return error(Message.translation("server.aetherhaven.town.resolve.notOwnerInWorld"));
+                return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.notOwnerInWorld"));
             }
             return ok(owned, true);
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
             return error(
-                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+                Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
             );
         }
         if (isAdmin) {
             return ok(named, named.getOwnerUuid().equals(senderUuid));
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error(Message.translation("server.aetherhaven.town.resolve.ownerOrOpOnly"));
+            return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.ownerOrOpOnly"));
         }
         return ok(named, true);
     }
@@ -100,7 +100,7 @@ public final class TownCommandResolution {
         if (trimmed.isEmpty()) {
             TownRecord t = tm.findTownForPlayerInWorld(senderUuid);
             if (t == null) {
-                return error(Message.translation("server.aetherhaven.town.resolve.notInTown"));
+                return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.notInTown"));
             }
             boolean owner = t.getOwnerUuid().equals(senderUuid);
             return ok(t, owner);
@@ -108,7 +108,7 @@ public final class TownCommandResolution {
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
             return error(
-                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+                Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
             );
         }
         if (isOp) {
@@ -116,7 +116,7 @@ public final class TownCommandResolution {
             return ok(named, owner);
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error(Message.translation("server.aetherhaven.town.resolve.nameOnlyForOwner"));
+            return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.nameOnlyForOwner"));
         }
         return ok(named, true);
     }
@@ -131,21 +131,21 @@ public final class TownCommandResolution {
         String trimmed = townDisplayName != null ? townDisplayName.trim() : "";
         if (trimmed.isEmpty()) {
             if (!isOp) {
-                return error(Message.translation("server.aetherhaven.town.resolve.specifyTownName"));
+                return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.specifyTownName"));
             }
-            return error(Message.translation("server.aetherhaven.town.resolve.specifyTown"));
+            return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.specifyTown"));
         }
         TownRecord named = tm.findTownByDisplayName(trimmed);
         if (named == null) {
             return error(
-                Message.translation("server.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
+                Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", trimmed)
             );
         }
         if (isOp) {
             return ok(named, named.getOwnerUuid().equals(senderUuid));
         }
         if (!named.getOwnerUuid().equals(senderUuid)) {
-            return error(Message.translation("server.aetherhaven.town.resolve.adminOtherTown"));
+            return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.adminOtherTown"));
         }
         return ok(named, true);
     }

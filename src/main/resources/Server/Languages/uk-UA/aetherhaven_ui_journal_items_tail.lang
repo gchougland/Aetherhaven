@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Журнал квестів
+aetherhaven.ui.questjournal.hint=Виберіть квест для отримання детальної інформації.
+aetherhaven.ui.questjournal.abandon=Відмовитися
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Деталі квесту
+aetherhaven.ui.questjournal.detailPlaceholderBody=Виберіть квест вище.
+
+items.Aetherhaven_Management_Block.name=полиця міських записів
+items.Aetherhaven_Management_Block.description=Полиця клерка для завершеної будівлі. Відкриває статус будівництва для її ділянки.
+
+items.Aetherhaven_Sprinkler_Iron.name=Залізний розбризкувач
+items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблену землю на один блок нижче на ділянці 3×3. Виконується один раз щоранку в грі. Найменше покриття.
+items.Aetherhaven_Sprinkler_Thorium.name=Торієва спринклерна система
+items.Aetherhaven_Sprinkler_Thorium.description=Вотерс обробляв ґрунт на один блок нижче на ділянці 5×5. Один раз щоранку в грі. Більший за залізо.
+items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовий спринклер
+items.Aetherhaven_Sprinkler_Cobalt.description=Поливає обробляв ґрунт на один блок нижче на ділянці 7×7. Один раз щоранку в грі. Широке покриття.
+items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовий розбризкувач
+items.Aetherhaven_Sprinkler_Adamantite.description=Вотерс обробляв ґрунт на один блок нижче на ділянці 9×9. Один раз щоранку в грі. Найширше покриття.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Старійшина Лірен
+npcRoles.Aetherhaven_Innkeeper.name=Корін Мосскап
+npcRoles.Aetherhaven_Merchant.name=Векс Сандерлейн
+npcRoles.Aetherhaven_Blacksmith.name=Гаррен Вейл
+npcRoles.Aetherhaven_Farmer.name=Ірієнн Моссмарк
+npcRoles.Aetherhaven_Priestess.name=Сера Торнвелл
+npcRoles.Aetherhaven_Miner.name=Кам'яна жила Горрука
+npcRoles.Aetherhaven_Logger.name=Серен Фейрхоллоу
+npcRoles.Aetherhaven_Rancher.name=Тален Медоуран
+
+items.Aetherhaven_Production_Storage.name=Магазини для робочих місць
+items.Aetherhaven_Production_Storage.description=Зберігає те, що приносять ваші працівники. Відкривається для встановлення виходів та стопок. Є частиною будівлі, забрати не можна.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Фішка ділянки шахтарської хатини
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Позначки, де можна побудувати збірну хатину шахтарів. Зробіть це за столом містобудування.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Жетон ділянки лісопилки
+items.Aetherhaven_Plot_Token_Lumbermill.description=Позначки, де можна побудувати збірний будинок лісопилки. Зробіть це за столом містобудування.
+items.Aetherhaven_Plot_Token_Barn.name=Жетон ділянки сараю
+items.Aetherhaven_Plot_Token_Barn.description=Позначає, де можна побудувати збірний сарай. Зробіть це за столом містобудування.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Жетон сюжету вівтаря Гаї
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Позначки, де можна побудувати збірний вівтар Геї. Зробіть це за столом містобудування.
+
+items.Aetherhaven_Statue_of_Gaia.name=Статуя Геї
+items.Aetherhaven_Statue_of_Gaia.description=Благословенна подоба для вівтаря. Власники міста можуть повернути зниклих мешканців за допомогою життєвої есенції.

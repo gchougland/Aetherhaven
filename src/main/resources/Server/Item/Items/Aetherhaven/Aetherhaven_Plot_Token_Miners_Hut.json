@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Plot_Token_Miners_Hut.name",
-    "Description": "server.items.Aetherhaven_Plot_Token_Miners_Hut.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Miners_Hut.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Miners_Hut.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

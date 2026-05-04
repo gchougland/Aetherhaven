@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_inn)
+# Full translation keys are aetherhaven_dialogue_visitor_inn.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=벽난로는 따뜻하지만, 장부는 마을 사람들과 그들의 손님들을 위한 것입니다. 초대받으면 다시 오세요.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=알겠습니다.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=여관 주인

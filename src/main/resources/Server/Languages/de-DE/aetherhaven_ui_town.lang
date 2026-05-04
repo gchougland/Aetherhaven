@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Konstruktion
+aetherhaven.ui.plotmanagement.title=Stadtverwaltung
+aetherhaven.ui.plotmanagement.tabPlot=Handlung
+aetherhaven.ui.plotmanagement.tabPlayers=Spieler
+aetherhaven.ui.plotmanagement.playersHint=Lade Online-Spieler namentlich ein. Ändere unten Rollen oder entferne Mitglieder.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Mitglieder dieser Stadt. Nur der Besitzer kann Einladungen aussprechen oder Rollen ändern.
+aetherhaven.ui.plotmanagement.inviteLabel=Spieler einladen
+aetherhaven.ui.plotmanagement.invitePlaceholder=Spielername (online)
+aetherhaven.ui.plotmanagement.inviteSend=Einladung senden
+aetherhaven.ui.plotmanagement.kick=Entfernen
+aetherhaven.ui.plotmanagement.roleOwner=Eigentümer
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Handlungsinformationen
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Dorfbewohner braucht
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Stadtmitglieder
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Verschieben Sie dieses Gebäude
+aetherhaven.ui.plotconstruction.materials=Materialien
+aetherhaven.ui.plotconstruction.build=Bauen
+aetherhaven.ui.plotconstruction.pickUpPlot=Grundstück aufnehmen (Token zurückgeben)
+aetherhaven.ui.plotconstruction.townNeeds=Stadt braucht
+aetherhaven.ui.plotconstruction.moveBuilding=Gebäude versetzen
+aetherhaven.ui.plotconstruction.houseResident=Einwohner
+aetherhaven.ui.plotconstruction.assignHouseResident=Bewohner einstellen
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Gebäude versetzen?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Öffnet die Grundstücksplatzierung, um einen neuen Standort auszuwählen. Beim Verschieben wird das alte Gebäude abgerissen und neu aufgebaut; entfernen Sie vorher Wertgegenstände, Haustiere und lose Gegenstände innerhalb der Grundfläche.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Weitermachen
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Stornieren
+
+aetherhaven.ui.villagerneeds.title=Stadt braucht
+aetherhaven.ui.villagerneeds.hint=Wählen Sie einen Dorfbewohner aus, um Zählerstände und Porträt anzuzeigen.
+aetherhaven.ui.villagerneeds.hunger=Hunger
+aetherhaven.ui.villagerneeds.energy=Energie
+aetherhaven.ui.villagerneeds.fun=Spaß
+aetherhaven.ui.villagerneeds.villagers=Dorfbewohner
+aetherhaven.ui.villagerneeds.noResidentsTracked=Bisher wurden keine Einwohner der Stadt erfasst.
+aetherhaven.ui.villagerneeds.rescueTooltip=Teleportiert den ausgewählten Bewohner an einen Ort neben dir und löscht seinen aktuellen Weg und seine Aktivitäten, damit er sich bewegen und ein neues Ziel wählen kann. Nutze diese Fähigkeit, wenn ein Dorfbewohner feststeckt.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Hier sehen Sie die Geschenke, die Sie diesem Dorfbewohner gemacht haben, gruppiert nach seiner Reaktion, und wie viele Geschenke Sie ihm diese Woche noch machen können.
+aetherhaven.ui.giftHistory.title=Geschenke
+aetherhaven.ui.giftHistory.backTooltip=Zurück in die Stadt
+aetherhaven.ui.giftHistory.empty=Du hast diesem Dorfbewohner noch keine Geschenke gemacht, deshalb gibt es nichts vorzuzeigen.
+aetherhaven.ui.giftHistory.section.love=Geliebt
+aetherhaven.ui.giftHistory.section.like=Gefällt mir
+aetherhaven.ui.giftHistory.section.neutral=Neutral
+aetherhaven.ui.giftHistory.section.dislike=Gefiel mir nicht
+aetherhaven.ui.giftHistory.giftsThisWeek=Geschenke dieser Woche: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Früherer Dorfbewohner
+aetherhaven.ui.giftHistory.cycleNextTooltip=Nachbar im Dorf
+aetherhaven.ui.villagerneeds.rescueDone=Der ausgewählte Bewohner wurde Ihnen zugewiesen und sein Tagesablauf wurde zurückgesetzt.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=Dieser Bewohner gehört nicht zu dieser Stadt.
+aetherhaven.ui.reputation.label=Ruf
+aetherhaven.reputation.dailyTalkGain=+{amount} Reputation (tägliche Begrüßung)
+aetherhaven.reputation.giftRepChange={amount} Reputation (Geschenk)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=Verfassungsänderungen
+aetherhaven.ui.charter.popHint=Bewohner (Nicht-Besucher): {count}. Stufe 1 wird bei 3 freigeschaltet; Stufe 2 bei 5.
+aetherhaven.ui.charter.tierMark1=ICH
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Stufe 1: Zehntstil
+aetherhaven.ui.charter.tier2=Stufe 2: Stadtfokus
+aetherhaven.ui.charter.t1.perCapitaShort=Pro Kopf
+aetherhaven.ui.charter.t1.happinessShort=Glücksgewichtung
+aetherhaven.ui.charter.t1.perCapitaTooltip=Zehnt zuerst nach Einwohnerzahl.\n\nDas Morgengold hängt davon ab, wie viele Einwohner hier leben. Der alltägliche Komfort trägt zwar auch ein wenig zum Gesamtbetrag bei, aber die Bevölkerungszahl ist der entscheidende Faktor.
+aetherhaven.ui.charter.t1.happinessTooltip=Zehnt für die Bedürfnisse zuerst.\n\nDas Morgengold hängt stärker davon ab, wie gut die Bewohner ernährt, ausgeruht und guter Dinge sind. Ein paar zusätzliche Bürger sind weniger wichtig als der allgemeine Gesundheitszustand aller.
+aetherhaven.ui.charter.t2.miningShort=Bergbau
+aetherhaven.ui.charter.t2.loggingShort=Protokollierung
+aetherhaven.ui.charter.t2.farmingShort=Landwirtschaft
+aetherhaven.ui.charter.t2.smithingShort=Schmieden
+aetherhaven.ui.charter.t2.miningTooltip=Die Charta unterstützt die Minen.\n\nBoni, die an die Minenproduktion gekoppelt sind, werden dieser Stadt bei ihrer Ankunft zugutekommen. Wähle nur einen der folgenden Schwerpunkte: Bergbau, Holzfällerei, Landwirtschaft oder Schmiedekunst.
+aetherhaven.ui.charter.t2.loggingTooltip=Die Charta unterstützt den Wald.\n\nBoni, die mit Holzeinschlag und Holzernte verbunden sind, werden dieser Stadt bei ihrer Ankunft zugutekommen. Wähle nur einen der folgenden Schwerpunkte: Bergbau, Holzeinschlag, Landwirtschaft oder Schmiedekunst.
+aetherhaven.ui.charter.t2.farmingTooltip=Die Charta unterstützt die Felder.\n\nWenn deine Stadt über ein vollständig ausgebautes Ackerland verfügt, reichen die Sprinkler hier etwas weiter, mit zusätzlichen Feldern am Rand ihres Sprühbereichs. Wähle unten nur einen Schwerpunkt: Bergbau, Holzfällerei, Landwirtschaft oder Schmiedekunst.
+aetherhaven.ui.charter.t2.smithingTooltip=Die Charta unterstützt die Schmiede.\n\nBoni im Zusammenhang mit Schmiedekunst und Metallverarbeitung werden dieser Stadt bei ihrer Ankunft zugutekommen. Wähle nur einen der folgenden Schwerpunkte: Bergbau, Holzfällerei, Landwirtschaft oder Schmiedekunst.
+aetherhaven.ui.charter.hint=Wählen Sie pro Stufe eine Option. Die Auswahl kann später nicht mehr geändert werden.
+aetherhaven.ui.charter.allChosen=Alle für diese Stadt ausgewählten Änderungen.
+aetherhaven.ui.charter.noTown=Um dies nutzen zu können, müssen Sie einer Stadt angehören.
+aetherhaven.ui.charter.noPermission=Sie können keine Satzungsänderungen für diese Stadt vornehmen.
+aetherhaven.ui.charter.err.locked=Diese Änderung ist gesperrt oder bereits ausgewählt.
+aetherhaven.ui.charter.err.invalid=Ungültige Auswahl.
+aetherhaven.ui.charter.saved=Die Satzungsänderungen wurden aktualisiert.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Weitermachen
+aetherhaven.reputation.reward.elder.50=Die Satzung kann sich mit dem Wachstum unserer Gemeinde ändern. Hier ist eine Vorlage für eine Änderungstabelle. Erstellen Sie sie an Ihrem Stadtplanungsplatz, sobald Sie den Plan haben. Hängen Sie sie in den Flur, und Sie können selbst entscheiden, wie der Morgenzehnt erhoben wird.
+aetherhaven.reputation.reward.elder.100=Du hast mehr für diese Stadt getan, als irgendjemand verlangt hat. Nimm diesen Grundstein. Errichte ein Gründerdenkmal an der Stelle, die die Satzung erlaubt. Die Menschen hier werden sich erinnern.
+aetherhaven.reputation.reward.innkeeper.50=Du hast diesen Saal lange genug mit Essen versorgt und ehrlich gehalten, dass ich dir die große Tafel anvertraue. Hier ist der Plan für das Festmahl – erstelle ihn am Stadtplanungsbüro, sobald du den Plan hast, und stelle ihn dann im Ort auf. Wenn die Tafel fertig ist, kannst du auch das Festmahl einberufen: Brot, Käse, Kuchen und einen Zehnten, der für eine Woche reicht. Ich werde den Saal im Auge behalten, während du servierst.
+aetherhaven.reputation.reward.innkeeper.75=Du hast genug lange Nächte mit uns durchgestanden. Wenn du die Wache am Herdglas niederlegst, isst die Stadt eine Woche lang langsamer und mitfühlender. Fisch, Fleisch, Gemüse und ein sanfteres Mahl für jeden Bedarf. So halten wir einander aufrecht.
+aetherhaven.reputation.reward.innkeeper.100=Du und diese Stadt teilen nun einen Namen. Berrycircle Concord ist der leichte Tellerkreis: Salat, Obstspieße, Popcorn und ein Toast, der landet. Serviere es einmal, und sie werden dich in guter Erinnerung behalten.
+aetherhaven.reputation.reward.merchant.50=Du hast Wort gehalten, in guten wie in schlechten Zeiten. Hier ist die Vorlage für die Bank. Sobald du die Skizze hast, kannst du sie an deinem Stadtplanungsplatz anfertigen. Wertgutachten für die Bank sind kostenlos; ich verlange für meine weiterhin Geld.
+aetherhaven.reputation.reward.merchant.100=Du hast genug Gold durch dieses Buch laufen lassen, um dir eine Juweliersecke zu verdienen. Das Muster gehört dir. Setz es am Stadtplanungstisch um. Setz deinen Edelstein, dein Metall und deine ganze Lebenserfahrung ein, und das Schmuckstück wird gelingen.
+aetherhaven.reputation.reward.priestess.50=Gaia vertraut darauf, dass du die Grenze zwischen Wachstum und Verfall beschreitest. Nimm diese Mischung aus Kristall und Lebensessenz, geformt am Stadtplanungstisch. Sie enthüllt, was nicht bleiben soll, und erlaubt dir, einen Geschöpf mit einem einzigen Hauch Pulver zu vernichten.
+aetherhaven.reputation.reward.priestess.75=Du hältst die Straßen sauber. Nimm diese Scherbe: Bring sie mit dem Zehnten zurück, wenn du willst, dass die Flasche der Stadt mehr als nur ein Flüstern enthält.
+aetherhaven.reputation.reward.priestess.100=Gaia kennzeichnet dich als hartnäckig im besten Sinne. Dieser grüne Katalysator kann die Wirkung des einfließenden Getränks vertiefen, wenn du ihn mit Geld und Fürsorge beim Hüter des Altars verbindest.
+aetherhaven.reputation.reward.farmer.25=Du hast mein Vertrauen in den Reihen gewonnen. Ich habe einen Eisensprenger skizziert. Stelle ihn an der Werkbank her, sobald du Wasseressenz und Eisen hast.
+aetherhaven.reputation.reward.farmer.50=Hier ist das Thorium-Muster: größere Reichweite, gleicher Morgenrhythmus. Die Registerkarte „Landwirtschaft“ auf der Werkbank zeigt es an, sobald Sie das Schema kennen.
+aetherhaven.reputation.reward.farmer.75=Kobalt hält den Druck besser. Diese Seite schaltet die dritte Sprinklerstufe frei, immer noch einmal gründlich bei Sonnenaufgang bewässern.
+aetherhaven.reputation.reward.farmer.100=Adamantit und Essenz: das letzte Blatt im Set. Legt sie mit Bedacht hin. Die Felder der Stadt werden im Morgengrauen trinken.
+aetherhaven.reputation.reward.blacksmith.25=Stein für Mörtel, Stein für Geduld. Du hast beides, und das sieht man.
+aetherhaven.reputation.reward.blacksmith.50=Du hast dir das Vertrauen der Schmiede verdient. Hier ist die Bauanleitung für einen Geodenamboss. Stelle ihn an deinem Stadtplanungstisch her, sobald du die nötigen Barren und Steine hast.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Grundstücksschild (Verwaltung)
+aetherhaven.ui.plotadmin.construction=Konstruktion
+aetherhaven.ui.plotadmin.give=Grundstücksschild geben und schließen

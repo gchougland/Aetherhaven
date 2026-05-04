@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=Geschenk wurde heute bereits überreicht
+aetherhaven.dialogue.gift.disabled.weekly=Zwei Geschenke diese Woche
+aetherhaven.dialogue.gift.offer=Schenken Sie ein Geschenk
+aetherhaven.dialogue.gift.confirmBody=Den Gegenstand in deiner aktiven Schnellzugriffsleiste (einen) verschenken?
+aetherhaven.dialogue.gift.confirmYes=Ja, gib es
+aetherhaven.dialogue.gift.confirmNo=Egal
+aetherhaven.dialogue.gift.back=In Ordnung
+aetherhaven.dialogue.gift.fail.visitor=Nur Einwohner der Stadt können eingelagerte Geschenke entgegennehmen.
+aetherhaven.dialogue.gift.fail.emptyHand=Halten Sie einen Gegenstand in Ihrer Schnellzugriffsleiste gedrückt, um ihn anzubieten.
+aetherhaven.dialogue.gift.fail.dailyLimit=Du hast dieser Person heute bereits ein Geschenk gemacht.
+aetherhaven.dialogue.gift.fail.weeklyLimit=Du hast deine wöchentlichen Spenden dieser Person gewidmet.
+aetherhaven.dialogue.gift.fail.generic=Dieses Geschenk können Sie jetzt nicht überreichen.

@@ -49,8 +49,10 @@ $C.@PageOverlay {
     Anchor: (Width: 660);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.charter.title;
+      Label #CharterAmendmentsTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -61,7 +63,7 @@ $C.@PageOverlay {
       Label #PopHint {
         Anchor: (Bottom: 12);
         Style: (...$C.@DefaultLabelStyle, Wrap: true, HorizontalAlignment: Center);
-        Text: %server.aetherhaven.ui.charter.popHint;
+        Text: "";
       }
 
       Group #SkillTreeRow {
@@ -75,7 +77,7 @@ $C.@PageOverlay {
           Label #TierRailMark1 {
             Anchor: (Bottom: 6);
             Style: (...@TierRailStyle);
-            Text: %server.aetherhaven.ui.charter.tierMark1;
+            Text: "";
           }
 
           Group #TierRailGap {
@@ -85,7 +87,7 @@ $C.@PageOverlay {
           Label #TierRailMark2 {
             Anchor: (Top: 6);
             Style: (...@TierRailStyle);
-            Text: %server.aetherhaven.ui.charter.tierMark2;
+            Text: "";
           }
         }
 

@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=저는 라이렌입니다. 우리 마을은 이곳에 정착할 때 서명한 헌장에 따라 운영됩니다. 더 많은 땅을 확보하기 전에, 에테르헤이븐 주변을 한 바퀴 돌아보셔야 합니다. 건물을 지을 수 있을 만큼 평평한 곳, 물이 있는 곳, 그리고 나중에 밭이나 공동 녹지를 만들 만한 곳 등을 살펴보세요. 거창한 건 아니고, 그냥 둘러보시면 됩니다. 다 둘러보시고 돌아오시면 제게 알려주세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=제가 그 지역을 정찰하고 다시 보고드리겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=엘더 라이렌
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=산책에서 돌아오셨으면 무엇을 보셨는지 말씀해 주세요. 아직 돌아오지 않으셨다면 언제쯤 준비가 되는지 알려주세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=더 이상 영역을 침범하기 전에, 당신의 발이 무엇을 보았는지 말해 주세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=오늘은 전세 항공편을 계속 운영합니다. 이해가 안 되는 부분이 있으면 언제든지 물어보세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=산책 기록이 의견보다 중요합니다. 정확한 정보를 가져오세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=땅이 마음에 들지 않으면 솔직하게 말하세요. 저는 정직한 눈을 부끄럽게 하지 않습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=물은 드라마보다 더 중요해. 물이 어디에 있는지 말해줘.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=평평한 땅은 때때로 거짓말을 합니다. 어디서 당신을 속였는지 말해 보세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=좋은 토양을 발견했다면 농부처럼 묘사해 보세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=경사가 심한 곳을 봤다면, 시적인 표현 없이 얼마나 가파른지 설명하세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=당신 머릿속에 명확한 지도 하나를 그려볼 시간이 있어요. 그걸 말로 표현해 보세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=북쪽, 남쪽, 진흙, 돌을 순서대로 정확하게 말할 수 있게 되면 다시 오세요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=실제 랜드마크가 빼곡히 적힌 노트 한 페이지는 연설보다 더 큰 의미를 지닌다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=지도 이야기를 나누는 동안 간단한 식사를 가져다주시면 감사히 받겠습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=깨끗한 분필과 곧은 자를 보니 당신이 진지하게 임하고 있다는 걸 알 수 있네요.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=저는 과시용 선물보다는 독서에 도움이 되는 소소한 선물을 좋아합니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=물병과 마른 비스킷은 재미없는 선물이고, 스카우트 행사에는 그런 선물이 더 좋습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=낡은 뼈로 만든 트로피를 내게 가져오지 마십시오. 마치 그것이 당신이 걸어왔다는 증거인 것처럼 말입니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=저는 길거리 쓰레기가 연구 결과로 제시되는 것을 원하지 않습니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=썩은 냄새가 나면 지도 부속품이 아닙니다.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=장난 장난감이나 소음이 심한 장난감은 회의 테이블에서 멀리 두십시오.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=수도관에 대해 이야기할 때 반짝이 쓰레기는 전혀 필요 없습니다.

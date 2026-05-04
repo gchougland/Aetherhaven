@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_elder)
+# Full translation keys are aetherhaven_dialogue_visitor_elder.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=지나갈 수는 있지만, 이 모임의 회원은 아닙니다. 도와주고 싶으시다면, 여기 사는 사람이 먼저 초대해야 합니다.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=이해합니다.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=엘더 라이렌

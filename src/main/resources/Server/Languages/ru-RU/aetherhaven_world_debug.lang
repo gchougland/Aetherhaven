@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=В пределах досягаемости этого квартала нет точек интереса (POI).
+aetherhaven.poi.noPoiSelected=Ни одна точка интереса не выбрана. Сначала щелкните по точке интереса.
+aetherhaven.poi.selectedPoiGone=Выбранная точка интереса больше не существует.
+aetherhaven.poi.moved=Перемещены точки интереса в {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=Ни один объект POI не выбран. Сначала щелкните по блоку POI.
+aetherhaven.poi.clearedInteractionTarget=Цель взаимодействия очищена; NPC используют центр блока POI.
+aetherhaven.poi.setInteractionTarget=Установите целевые объекты взаимодействия на {x}, {y}, {z}.
+aetherhaven.poi.selected=Выбранная точка интереса {id} в {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=Целевой блок должен соответствовать ожидаемому типу {type} для данной точки интереса.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Перемещение здания…
+aetherhaven.plotSign.placed=Установлен указатель участка.
+aetherhaven.plotSign.couldNotAdd=Не удалось добавить табличку с названием участка (инвентарь заполнен?).
+
+# Founder monument
+aetherhaven.founder.inTerritory=Разместите памятник основателю на территории вашего города.
+aetherhaven.founder.cannotPlace=Здесь нельзя установить памятник основателю.
+aetherhaven.founder.createFailed=Не удалось создать статую основателя. Блок был установлен; разбейте его, чтобы попробовать снова.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Target не является жителем города Этерхейвен.
+aetherhaven.debug.autonomy.toggledOn=Отладка автономности включена (DisplayCustom + VisPath). Наложение AH на табличку с именем.
+aetherhaven.debug.autonomy.toggledOff=Для этого жителя деревни отключена отладка автономного режима.
+aetherhaven.debug.autonomy.state=Отладка автономности для этого жителя деревни: {state}
+aetherhaven.debug.autonomy.cleared=Для этого жителя деревни завершена отладка автономии Этерхейвена.
+aetherhaven.debug.on=НА
+aetherhaven.debug.off=ВЫКЛЮЧЕННЫЙ
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Репутация не изменилась (уже {value}).
+aetherhaven.debug.rep.set=Установите репутацию на {value} с пройденными этапами, поставленными в очередь на диалог (если роль определена).
+aetherhaven.debug.rep.milestonesHeader=Этапы развития репутации (идентификатор награды, роль, минимальная репутация, узел диалога):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Награда присуждена {id}.
+aetherhaven.debug.rep.targetInvalid=Житель деревни с ограниченными возможностями здоровья.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Сбросить лимиты подарков в рядах игрок-житель {entries} в городах {towns} в этом мире.
+aetherhaven.debug.gift.unknownRole=Роль жителя деревни неизвестна: {role}
+aetherhaven.debug.gift.noGiftLists=У персонажа {role} в данных о жителях деревни отсутствуют поля giftLoves, giftLikes и giftDislikes.
+aetherhaven.debug.gift.fillDone=Добавлены строки в журнал подарков {added} для {role} (пропускаются, если у вас уже есть строка для этого предмета и уровня реакции).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=что должно быть связано с голодом, энергией или удовольствием (значения от 0 до {max}).
+aetherhaven.debug.needs.elderNoTown=В этом мире для тебя не будет города (необходимо для Старейшины).
+aetherhaven.debug.needs.noElderUuid=В городе пока нет сохраненного UUID старейшины.
+aetherhaven.debug.needs.noMatch=Не удалось найти подходящего жителя деревни (попробуйте проверить наличие имени, имени старейшины или полного UUID).
+aetherhaven.debug.needs.multipleMatch=Несколько NPC соответствуют этому идентификатору; используйте полный UUID из инструмента проверки.
+aetherhaven.debug.needs.entityNotLoaded=Объект не загружен или не имеет необходимых жителей: {id}
+aetherhaven.debug.needs.set=Установите {which}={value} на {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Жители деревни с потребностями (загруженные чанки). Задается с помощью: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(без ручки)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Участки для города {id}:
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Города Этерхейвена в этом мире: {count}
+aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} знак@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=Не объединяйте участки под застройку, если в вашем городе уже есть работа (загружайте чанки вокруг построек или начинайте строительство первым).
+aetherhaven.debug.plots.finishassemblyDone=Мгновенно завершено создание (создания) текущего участка {count}.
+aetherhaven.debug.plots.removeBadUuid=Недопустимый UUID графика. Используйте идентификатор из списка графиков /aetherhaven.
+aetherhaven.debug.plots.removeNotFound=В вашем городе нет участка {plotId}.
+aetherhaven.debug.plots.removeDataFailed=Мир был очищен, но удаление участка из данных города не удалось (проверьте логи).
+aetherhaven.debug.plots.removedPlot=Участок {plotId} был вынесен из городской черты и расчищен его территория.
+aetherhaven.debug.poi.invalidTownUuid=Неверный UUID города: {raw}
+aetherhaven.debug.poi.noTownArg=В этом мире у вас нет города (используйте аргумент UUID города).
+aetherhaven.debug.poi.listHeader=Достопримечательности для города {town} ({count}):
+aetherhaven.debug.poi.listEmpty=В этом городе ничего не зарегистрировано (завершите строительство или проверьте файл pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=Все объекты POI в мировом реестре ({count}):
+aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}

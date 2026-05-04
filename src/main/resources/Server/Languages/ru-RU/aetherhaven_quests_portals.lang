@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Задание начато: {name}
+aetherhaven.quest.completed=Задание выполнено: {name}
+aetherhaven.quest.abandoned=Задание отменено: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Активный квест выполнен: {name}
+aetherhaven.questdebug.completed=Задание выполнено: {name}
+aetherhaven.questdebug.cleared=Активный квест выполнен: {name}
+aetherhaven.questdebug.statusHeader=-- статус задания --
+aetherhaven.questdebug.statusActive=активный:
+aetherhaven.questdebug.statusCompleted=завершенный:
+aetherhaven.questdebug.statusEmpty=(никто)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Для этого города пока не зарегистрированы идентификаторы жителей.
+aetherhaven.villager.listHeader=Жители города: UUID сущности, источник, роль (если загружена) (используйте UUID или идентификатор роли с командой /aetherhaven reputation … и местоположение жителя):
+aetherhaven.villager.listRow={uuid} | {note} | роль: {role}
+aetherhaven.villager.locateNotLoaded=Этот житель деревни не загружен (попробуйте подойти ближе или загрузить чанки).
+aetherhaven.villager.locateNoTransform=Для этого объекта преобразование не требуется.
+aetherhaven.villager.locatePosition=Житель деревни {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Для телепортации требуется оператор (группа OP).
+aetherhaven.villager.teleported=Телепортирован.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=В этом блоке отсутствует контейнер для предметов (чанк не загружен, несоответствие заполнителя/основания или это не блок-контейнер).
+aetherhaven.debug.loot.bonusApplied=Бонус от Aetherhaven, полученный в результате розыгрыша добычи, применен к этому контейнеру (принудительно).
+aetherhaven.townsCommand.line={id} name="{name}" world={world} owner={owner} chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(никто)
+aetherhaven.questdebug.statusActiveLine=Активен: {list}
+aetherhaven.questdebug.statusActiveEmpty=Активно: (нет)
+aetherhaven.questdebug.statusCompletedLine=Завершено: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Завершено: (нет)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Выход из Этерхейвена
+items.Aetherhaven_Portal_Exit.description=Используйте эту кнопку, чтобы вернуться в надземный мир.
+items.Aetherhaven_Portal_Enter.name=Врата Этерхейвена
+items.Aetherhaven_Portal_Enter.description=Используйте эту кнопку, чтобы войти в Этерхейвен.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Этерхейвен
+instances.aetherhaven.subtitle=Небесная деревня

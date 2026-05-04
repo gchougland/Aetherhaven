@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=該區域範圍內沒有興趣點。
+aetherhaven.poi.noPoiSelected=未選擇興趣點。請先點選一個興趣點。
+aetherhaven.poi.selectedPoiGone=所選興趣點已不存在。
+aetherhaven.poi.moved=已將興趣點移至{x}、{y}、{z}。
+aetherhaven.poi.noPoiBlock=未選擇興趣點。請先點選興趣點區域。
+aetherhaven.poi.clearedInteractionTarget=已清除互動目標；NPC 使用 POI 方塊中心。
+aetherhaven.poi.setInteractionTarget=將交互目標設定為 {x}、{y}、{z}。
+aetherhaven.poi.selected=選定的興趣點 {id} 位於 {x}、{y}、{z}
+aetherhaven.poi.targetBlockMismatch=目標區塊必須與此興趣點的預期類型 {type} 相符。
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=搬遷中的建築物…
+aetherhaven.plotSign.placed=已放置地塊標誌。
+aetherhaven.plotSign.couldNotAdd=無法新增地塊標誌（庫存已滿？）
+
+# Founder monument
+aetherhaven.founder.inTerritory=將創始人紀念碑放置在你的城鎮範圍內。
+aetherhaven.founder.cannotPlace=你不能把創始人紀念碑放在這裡。
+aetherhaven.founder.createFailed=無法創建創始人雕像。方塊已放置；將其打破後重試。
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=目標人物並非以太港鎮的村民。
+aetherhaven.debug.autonomy.toggledOn=自主調試已開啟（DisplayCustom + VisPath）。銘牌上顯示 AH 疊加層。
+aetherhaven.debug.autonomy.toggledOff=已關閉該村民的自主調試功能。
+aetherhaven.debug.autonomy.state=該村民的自主性除錯資訊：{state}
+aetherhaven.debug.autonomy.cleared=已清除該村民的以太港自治調試資訊。
+aetherhaven.debug.on=在
+aetherhaven.debug.off=離開
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=聲譽未改變（已為{value}）。
+aetherhaven.debug.rep.set=將聲望設為 {value}，並將已跨越的里程碑排隊等待對話（如果角色已解決）。
+aetherhaven.debug.rep.milestonesHeader=聲望里程碑（獎勵 ID、角色、最低聲望、對話節點）：
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=授予獎勵{id}。
+aetherhaven.debug.rep.targetInvalid=無效村民。
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=重置此世界中 {towns} 城鎮的 {entries} 玩家-村民行的禮物限制。
+aetherhaven.debug.gift.unknownRole=未知村民角色：{role}
+aetherhaven.debug.gift.noGiftLists=角色 {role} 在村民資料中沒有 giftLoves、giftLikes 或 giftDislikes。
+aetherhaven.debug.gift.fillDone=為 {role} 新增 {added} 禮物日誌行（如果已經為該物品和反應等級新增了一行，則跳過）。
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=這一定是飢餓、精力或樂趣（數值為 0..{max}）。
+aetherhaven.debug.needs.elderNoTown=在這個世界上沒有適合你的城鎮（長老需要）。
+aetherhaven.debug.needs.noElderUuid=城鎮目前還沒有保存的長老UUID。
+aetherhaven.debug.needs.noMatch=沒有匹配的村民（嘗試檢查句柄、長老或完整 uuid）。
+aetherhaven.debug.needs.multipleMatch=多個 NPC 與該句柄相符；請使用檢查器中的完整 UUID。
+aetherhaven.debug.needs.entityNotLoaded=實體未載入或缺少村民需求：{id}
+aetherhaven.debug.needs.set=將 {which}={value} 設定在 {label} ({id}) 上
+aetherhaven.debug.needs.inspectIntro=村民需求（已載入區塊）。設定指令：/aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=（無把手）
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=城鎮地塊{id}：
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=這世界中的以太港城鎮：{count}
+aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} 符號@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=不要在城鎮有活躍工作的情況下組裝地塊（加載建築物周圍的區塊，或先開始建造）。
+aetherhaven.debug.plots.finishassemblyDone=立即完成 {count} 進行中的地塊建置。
+aetherhaven.debug.plots.removeBadUuid=無效的圖塊 UUID。請使用 /aetherhaven 圖塊清單中的 ID。
+aetherhaven.debug.plots.removeNotFound=您所在的城鎮沒有{plotId}地塊。
+aetherhaven.debug.plots.removeDataFailed=世界已清除，但從城鎮資料中移除地塊失敗（請查看日誌）。
+aetherhaven.debug.plots.removedPlot=從城鎮中移除地塊{plotId}並清理其占地面積。
+aetherhaven.debug.poi.invalidTownUuid=無效的城鎮 UUID：{raw}
+aetherhaven.debug.poi.noTownArg=你在這個世界上沒有城鎮（使用城鎮 UUID 參數）。
+aetherhaven.debug.poi.listHeader=城鎮 {town} ({count}) 的興趣點：
+aetherhaven.debug.poi.listEmpty=該城鎮沒有已登記的建築物（請填寫建築物資訊或查看 pois.json 文件）。
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=世界註冊表中的所有興趣點 ({count}):
+aetherhaven.debug.poi.dumpLine=城鎮={town} {x},{y},{z} 類型={kind} 區塊類型ID={block} 標籤={tags} 地塊={plot}

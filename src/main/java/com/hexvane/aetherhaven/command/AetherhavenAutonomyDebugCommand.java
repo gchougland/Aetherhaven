@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollection {
     public AetherhavenAutonomyDebugCommand() {
-        super("debug-autonomy", "server.commands.aetherhaven.debug_autonomy.desc");
+        super("debug-autonomy", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.desc");
         this.addSubCommand(new ToggleCommand());
         this.addSubCommand(new ShowCommand());
         this.addSubCommand(new ClearCommand());
@@ -30,7 +30,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
     private static boolean requirePlayerDebug(@Nonnull CommandContext context, @Nonnull Store<EntityStore> store) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (!context.isPlayer()) {
-            context.sendMessage(Message.translation("server.aetherhaven.common.playersOnly"));
+            context.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.playersOnly"));
             return false;
         }
         Ref<EntityStore> pref = context.senderAsPlayerRef();
@@ -50,7 +50,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
         @Nonnull Ref<EntityStore> ref
     ) {
         if (store.getComponent(ref, TownVillagerBinding.getComponentType()) == null) {
-            context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.notVillager"));
+            context.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.autonomy.notVillager"));
             return false;
         }
         return true;
@@ -58,7 +58,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
 
     private static final class ToggleCommand extends NPCMultiSelectCommandBase {
         ToggleCommand() {
-            super("toggle", "server.commands.aetherhaven.debug_autonomy.toggle.desc");
+            super("toggle", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.toggle.desc");
         }
 
         @Override
@@ -83,11 +83,11 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
                 flags.add(RoleDebugFlags.VisPath);
                 store.tryRemoveComponent(ref, Nameplate.getComponentType());
                 npc.setRoleDebugFlags(flags);
-                context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.toggledOn"));
+                context.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.autonomy.toggledOn"));
             } else {
                 store.tryRemoveComponent(ref, VillagerAutonomyDebugTag.getComponentType());
                 VillagerAutonomyDebug.clearAutonomyDebugForNpc(ref, store, npc);
-                context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.toggledOff"));
+                context.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.autonomy.toggledOff"));
             }
             store.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
@@ -95,7 +95,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
 
     private static final class ShowCommand extends NPCMultiSelectCommandBase {
         ShowCommand() {
-            super("show", "server.commands.aetherhaven.debug_autonomy.show.desc");
+            super("show", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.show.desc");
         }
 
         @Override
@@ -114,11 +114,11 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
             }
             boolean on = VillagerAutonomyDebug.isEnabled(store, ref);
             context.sendMessage(
-                Message.translation("server.aetherhaven.debug.autonomy.state")
+                Message.translation("aetherhaven_world_debug.aetherhaven.debug.autonomy.state")
                     .param(
                         "state",
                         Message.translation(
-                            on ? "server.aetherhaven.debug.on" : "server.aetherhaven.debug.off"
+                            on ? "aetherhaven_world_debug.aetherhaven.debug.on" : "aetherhaven_world_debug.aetherhaven.debug.off"
                         )
                     )
             );
@@ -127,7 +127,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
 
     private static final class ClearCommand extends NPCMultiSelectCommandBase {
         ClearCommand() {
-            super("clear", "server.commands.aetherhaven.debug_autonomy.clear.desc");
+            super("clear", "aetherhaven_commands_help.commands.aetherhaven.debug_autonomy.clear.desc");
         }
 
         @Override
@@ -146,7 +146,7 @@ public final class AetherhavenAutonomyDebugCommand extends AbstractCommandCollec
             }
             store.tryRemoveComponent(ref, VillagerAutonomyDebugTag.getComponentType());
             VillagerAutonomyDebug.clearAutonomyDebugForNpc(ref, store, npc);
-            context.sendMessage(Message.translation("server.aetherhaven.debug.autonomy.cleared"));
+            context.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.autonomy.cleared"));
             store.putComponent(ref, NPCEntity.getComponentType(), npc);
         }
     }

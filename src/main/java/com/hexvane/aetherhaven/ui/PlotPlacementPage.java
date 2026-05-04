@@ -58,6 +58,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlacementPage.PageData> {
+    /** Shared with {@link CharterRelocationPage} (same .ui document). */
+    static final String MSG_PLOT_UI = "aetherhaven_plot_move.aetherhaven.ui.plotplacement";
+
     @Nonnull
     private final PlotPlacementSession session;
 
@@ -78,11 +81,43 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         this.session = session;
     }
 
+    /**
+     * Pushes plot-placement chrome through {@link Message} so keys resolve on the server. The client often shows raw
+     * message ids for long bundle-prefixed strings in {@code .ui} markup ({@code $C.@Title}, {@code @CheckBoxWithLabel},
+     * {@code TooltipText}, etc.).
+     */
+    public static void applySharedPlotPlacementLocalization(@Nonnull UICommandBuilder commandBuilder) {
+        String p = MSG_PLOT_UI;
+        commandBuilder.set("#PlotPlacementTitle.TextSpans", Message.translation(p + ".title"));
+        commandBuilder.set("#PlotTypeLabel.TextSpans", Message.translation(p + ".plotType"));
+        commandBuilder.set("#HeightLabel.TextSpans", Message.translation(p + ".heightSection"));
+        commandBuilder.set("#MoveConfirmText.TextSpans", Message.translation(p + ".moveWarningText"));
+        commandBuilder.set("#MoveConfirmButton.TextSpans", Message.translation(p + ".moveConfirm"));
+        commandBuilder.set("#MoveConfirmBackButton.TextSpans", Message.translation(p + ".moveBack"));
+        commandBuilder.set("#CancelButton.TextSpans", Message.translation(p + ".cancel"));
+        commandBuilder.set("#BirdsEyeToggle #BirdsEyeLabel.TextSpans", Message.translation(p + ".birdsEye"));
+        commandBuilder.set("#BirdsEyeToggle #BirdsEyeLabel.TooltipTextSpans", Message.translation(p + ".birdsEyeTooltip"));
+        commandBuilder.set("#BtnZoomIn.TooltipTextSpans", Message.translation(p + ".zoomInTooltip"));
+        commandBuilder.set("#BtnZoomOut.TooltipTextSpans", Message.translation(p + ".zoomOutTooltip"));
+        commandBuilder.set("#BtnPanZm.TooltipTextSpans", Message.translation(p + ".panZmTooltip"));
+        commandBuilder.set("#BtnPanXm.TooltipTextSpans", Message.translation(p + ".panXmTooltip"));
+        commandBuilder.set("#BtnPanXp.TooltipTextSpans", Message.translation(p + ".panXpTooltip"));
+        commandBuilder.set("#BtnPanZp.TooltipTextSpans", Message.translation(p + ".panZpTooltip"));
+        commandBuilder.set("#BtnZm.TooltipTextSpans", Message.translation(p + ".moveZmTooltip"));
+        commandBuilder.set("#BtnXm.TooltipTextSpans", Message.translation(p + ".moveXmTooltip"));
+        commandBuilder.set("#BtnXp.TooltipTextSpans", Message.translation(p + ".moveXpTooltip"));
+        commandBuilder.set("#BtnZp.TooltipTextSpans", Message.translation(p + ".moveZpTooltip"));
+        commandBuilder.set("#BtnYm.TooltipTextSpans", Message.translation(p + ".moveYmTooltip"));
+        commandBuilder.set("#BtnYp.TooltipTextSpans", Message.translation(p + ".moveYpTooltip"));
+        commandBuilder.set("#BtnRotate.TooltipTextSpans", Message.translation(p + ".rotateTooltip"));
+    }
+
     @Override
     public void build(
         @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.append("Aetherhaven/PlotPlacementPage.ui");
+        applySharedPlotPlacementLocalization(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
@@ -95,13 +130,10 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             def != null
                 ? def.resolvePrefabAnchorWorld(sign, session.getPrefabYaw())
                 : new Vector3i(sign.x, sign.y, sign.z);
-        commandBuilder.set(
-            "#Summary.TextSpans",
-            Message.translation("server.aetherhaven.ui.plotplacement.summary").param("building", name)
-        );
+        commandBuilder.set("#Summary.TextSpans", Message.translation(MSG_PLOT_UI + ".summary").param("building", name));
         commandBuilder.set(
             "#Details.TextSpans",
-            Message.translation("server.aetherhaven.ui.plotplacement.detailsBlock")
+            Message.translation(MSG_PLOT_UI + ".detailsBlock")
                 .param("sx", sign.x)
                 .param("sy", sign.y)
                 .param("sz", sign.z)
@@ -113,9 +145,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         commandBuilder.set(
             "#Tips.TextSpans",
             Message.join(
-                Message.translation("server.aetherhaven.ui.plotplacement.tipsControls"),
+                Message.translation(MSG_PLOT_UI + ".tipsControls"),
                 Message.raw("\n\n"),
-                Message.translation("server.aetherhaven.ui.plotplacement.cameraHint")
+                Message.translation(MSG_PLOT_UI + ".cameraHint")
             )
         );
 
@@ -135,12 +167,9 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         commandBuilder.set("#MoveConfirmGroup.Visible", moveConfirm);
         commandBuilder.set("#PlaceButton.Visible", !moveConfirm);
         if (moveMode) {
-            commandBuilder.set(
-                "#PlaceButton.TextSpans",
-                Message.translation("server.aetherhaven.ui.plotplacement.placeMove")
-            );
+            commandBuilder.set("#PlaceButton.TextSpans", Message.translation(MSG_PLOT_UI + ".placeMove"));
         } else {
-            commandBuilder.set("#PlaceButton.TextSpans", Message.translation("server.aetherhaven.ui.plotplacement.place"));
+            commandBuilder.set("#PlaceButton.TextSpans", Message.translation(MSG_PLOT_UI + ".place"));
         }
         if (!moveMode && plugin != null && inv != null) {
             List<String> validIds = listConstructionIdsWithPlotTokens(plugin, inv);
@@ -682,7 +711,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
         }
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.translation("server.aetherhaven.plotSign.placed"));
+            pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.plotSign.placed"));
         }
         return true;
     }

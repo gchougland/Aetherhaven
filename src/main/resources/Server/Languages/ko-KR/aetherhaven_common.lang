@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven이 로드되지 않았습니다.
+aetherhaven.common.noTownInWorld=이 세상에 네가 갈 도시는 없어.
+aetherhaven.common.noQuestPermission=당신은 이 마을에서 퀘스트를 수행할 권한이 없습니다.
+aetherhaven.common.townNotFound=마을을 찾을 수 없습니다.
+aetherhaven.common.invalidTownLink=잘못된 도시 링크입니다.
+aetherhaven.common.treasuryNotLinked=재무부는 연동되어 있지 않습니다.
+aetherhaven.common.ownerOnlyTreasury=마을 소유주만이 국고를 이용할 수 있습니다.
+aetherhaven.common.noTreasuryPanelPermission=당신은 시 재정을 사용할 권한이 없습니다.
+aetherhaven.common.townNotInThisWorld=마을은 이 세상에 존재하지 않는다.
+aetherhaven.common.noMoveBuildingsPermission=당신은 이 마을의 건물을 옮길 권한이 없습니다.
+aetherhaven.common.buildingCannotMove=이 건물은 옮길 수 없습니다 (부지가 부족하거나 미완성 상태입니다).
+aetherhaven.common.lookAtBlockPlot=플롯 표시 위치를 설정하고 미리보기를 시작하려면 블록을 살펴보세요.
+aetherhaven.common.carryPlotToken=배치를 시작하려면 도구에 나열된 건물 유형에 해당하는 부지 토큰(예: 여관 부지 토큰)을 소지하십시오.
+aetherhaven.common.statueNotLinked=이 동상은 특정 마을과 연관이 없습니다.
+aetherhaven.common.ownerOnlyStatue=이 조각상은 마을 소유주만 사용할 수 있습니다.
+aetherhaven.common.noReviveVillagersPermission=당신은 이 동상 앞에서 마을 사람들을 되살릴 권한이 없습니다.
+aetherhaven.common.noPlayerId=플레이어 ID가 없습니다.
+aetherhaven.common.playersOnly=플레이어 전용.
+aetherhaven.common.invalidVillager=몸이 불편한 마을 주민.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=당신은 이미 이 세상의 한 마을의 일원입니다. 새로운 마을을 세우기 전에 그곳을 떠나십시오.
+aetherhaven.charter.townFounded=마을 설립일: {name}. 마을 원로가 도착했습니다. 헌장을 사용하여 마을 이름을 변경하세요.
+aetherhaven.chartertown.info.notLinked=차터는 아직 어떤 마을과도 연결되어 있지 않습니다.
+aetherhaven.chartertown.info.invalidTownId=전세에 기재된 도시 ID가 잘못되었습니다.
+aetherhaven.chartertown.info.townDataMissing=마을 데이터를 찾을 수 없습니다(서버 로그를 참조하세요).
+aetherhaven.chartertown.townInfoBlock=마을 이름: {name}\n마을 ID: {id}\n티어: {tier}\n영역(청크 반경): {radius}\n헌장 위치: {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=도시 이름은 비워둘 수 없습니다.
+aetherhaven.chartertown.nameDuplicate=그 이름은 이미 이 세계의 다른 마을에서 사용되고 있습니다.
+aetherhaven.chartertown.nameSaved=저장된 마을 이름: {name}

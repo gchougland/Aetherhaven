@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=我是莱伦。我们镇的运作依据是我们定居于此时签署的宪章。在我们划分更多地块之前，我需要你先在以太港周围走一走。感受一下哪里地势平坦适合建造房屋，哪里有水源，以及我们以后可以在哪里建造田地或公共绿地。不用太讲究，随便看看就行。看完之后，回来告诉我。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=我会去实地考察一下，然后向你汇报。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=莱伦长老
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=如果你散步回来了，告诉我你看到了什么。如果还没回来，告诉我你什么时候准备好了。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=在你进一步扩张势力范围之前，先告诉我你的靴子看到了什么。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=我今天仍然开放包机服务。如果遇到任何疑问，请随时提问。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=徒步报告比个人意见更重要。给我提供事实真相。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=如果这块地看起来不对劲，就直说。我不会羞辱诚实的眼睛。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=水比戏剧更重要。告诉我它在哪里。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=平坦的地面有时也会骗人。告诉我，它骗了你哪一次？
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=如果你看到肥沃的土壤，就用农民的口吻描述它。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=如果你看到陡峭的斜坡，请用简洁的语言描述它的陡峭程度。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=我只有时间在你脑海中勾勒出一幅清晰的地图。用文字把它描绘出来。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=等你能按顺序说出北、南、泥、石这几个词的时候再来吧。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=一张密密麻麻地记录着真实地标的笔记本页面，比一篇演讲更有价值。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=如果你在我们讨论地图的时候带点简单的饭菜来，我会觉得很贴心。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=干净的粉笔和直尺告诉我你是认真的。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=我喜欢有助于阅读的小礼物，而不是用来炫耀的礼物。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=水壶和干饼干是无聊的礼物，我喜欢在童子军活动日收到这样的礼物。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=不要给我带来用老骨头制成的奖杯，好像它们能证明你曾经走过路似的。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=我不想把街头垃圾当作研究成果展示出来。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=如果它闻起来有腐烂的气味，那它就不是地图配件。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=请勿在包厢桌附近放置恶作剧玩具和发出噪音的玩具。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=讨论水管线的时候，我可不想用那些闪闪发光的垃圾。

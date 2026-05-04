@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
  */
 public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     public AetherhavenPlotsCommand() {
-        super("plots", "server.commands.aetherhaven.plots.desc");
+        super("plots", "aetherhaven_commands_help.commands.aetherhaven.plots.desc");
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new FinishAssemblyCommand());
         this.addSubCommand(new RemoveCommand());
@@ -37,7 +37,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
 
     private static final class ListCommand extends AbstractPlayerCommand {
         ListCommand() {
-            super("list", "server.commands.aetherhaven.plots.list.desc");
+            super("list", "aetherhaven_commands_help.commands.aetherhaven.plots.list.desc");
         }
 
         @Override
@@ -59,15 +59,15 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             TownRecord town =
                 AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.debug.plots.forTown").param("id", town.getTownId().toString())
+                Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.forTown").param("id", town.getTownId().toString())
             );
             for (PlotInstance p : town.getPlotInstances()) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.plots.line")
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.line")
                         .param("plotId", p.getPlotId().toString())
                         .param("construction", p.getConstructionId() != null ? p.getConstructionId() : "")
                         .param("state", p.getState() != null ? p.getState().name() : "")
@@ -82,7 +82,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     /** Creative: instantly finish every assembling plot in your town that has an active assembly job (chunks loaded). */
     private static final class FinishAssemblyCommand extends AbstractPlayerCommand {
         FinishAssemblyCommand() {
-            super("finishassembly", "server.commands.aetherhaven.plots.finishassembly.desc");
+            super("finishassembly", "aetherhaven_commands_help.commands.aetherhaven.plots.finishassembly.desc");
             this.setPermissionGroup(GameMode.Creative);
         }
 
@@ -105,14 +105,14 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             TownRecord town =
                 AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             int n = PlotAssemblyService.instantCompleteAllAssemblingJobsForTown(world, plugin, store, town);
             if (n == 0) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.finishassemblyNone"));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.finishassemblyNone"));
             } else {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.finishassemblyDone").param("count", String.valueOf(n)));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.finishassemblyDone").param("count", String.valueOf(n)));
             }
         }
     }
@@ -120,10 +120,10 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     /** Creative: demolish one plot (same footprint/sign cleanup as town dissolve) and remove it from town data. */
     private static final class RemoveCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> plotIdArg =
-            this.withRequiredArg("plotId", "server.commands.aetherhaven.plots.remove.plotId.desc", ArgTypes.STRING);
+            this.withRequiredArg("plotId", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.plotId.desc", ArgTypes.STRING);
 
         RemoveCommand() {
-            super("remove", "server.commands.aetherhaven.plots.remove.desc");
+            super("remove", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.desc");
             this.setPermissionGroup(GameMode.Creative);
         }
 
@@ -146,29 +146,29 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUID plotId;
             try {
                 plotId = UUID.fromString(context.get(plotIdArg).trim());
             } catch (IllegalArgumentException e) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.removeBadUuid"));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.removeBadUuid"));
                 return;
             }
             PlotInstance plot = town.findPlotById(plotId);
             if (plot == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.removeNotFound").param("plotId", plotId.toString()));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.removeNotFound").param("plotId", plotId.toString()));
                 return;
             }
             var reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
             TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, store, reg);
             if (!town.removePlotInstance(plotId)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.removeDataFailed"));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.removeDataFailed"));
                 return;
             }
             tm.updateTown(town);
-            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.plots.removedPlot").param("plotId", plotId.toString()));
+            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.removedPlot").param("plotId", plotId.toString()));
         }
     }
 }

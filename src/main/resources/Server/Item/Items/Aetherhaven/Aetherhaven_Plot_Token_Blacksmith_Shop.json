@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Plot_Token_Blacksmith_Shop.name",
-    "Description": "server.items.Aetherhaven_Plot_Token_Blacksmith_Shop.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Plot_Token_Blacksmith_Shop.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Plot_Token_Blacksmith_Shop.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_generic)
+# Full translation keys are aetherhaven_dialogue_visitor_generic.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=안녕하세요, 여행자님. 만약 이 마을 사람이 아니시라면, 이곳 주민들과 이야기하십시오. 저는 우리 마을 일로 너무 바쁩니다.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=작별.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=마을 사람

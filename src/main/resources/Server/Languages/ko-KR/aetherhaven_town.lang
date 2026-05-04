@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=이 세상에서 당신은 마을을 소유할 수 없습니다.
+aetherhaven.town.resolve.noTownNamed=이 세상에는 "{name}"라는 이름의 마을은 없습니다.
+aetherhaven.town.resolve.ownerOrOpOnly=마을 소유주(또는 허가받은 운영자)만이 그렇게 할 수 있습니다.
+aetherhaven.town.resolve.notInTown=당신은 이 세상의 도시에 있는 것이 아닙니다.
+aetherhaven.town.resolve.nameOnlyForOwner=이곳에서는 마을 소유주(또는 운영자)만 마을 이름을 사용할 수 있습니다.
+aetherhaven.town.resolve.specifyTownName=도시 이름을 지정하거나, 소유하고 있는 도시의 이름을 사용하세요.
+aetherhaven.town.resolve.specifyTown=도시 이름을 지정하세요.
+aetherhaven.town.resolve.adminOtherTown=운영자만 다른 플레이어의 마을을 이름으로 지정하여 공격할 수 있습니다.
+aetherhaven.town.invite.err.emptyName=선수 이름을 입력하세요.
+aetherhaven.town.invite.err.targetOffline=플레이어 "{name}"님은 이 월드에서 온라인 상태가 아닙니다.
+aetherhaven.town.invite.err.cannotInviteSelf=스스로 초대받을 수는 없습니다.
+aetherhaven.town.invite.err.alreadyInTown=해당 플레이어는 이미 이 세계의 한 마을에 있습니다.
+aetherhaven.town.invite.toTarget={inviter}님이 "{townDisplay}" 마을에 당신을 초대했습니다. /aetherhaven town accept {townDisplay} 또는 /aetherhaven town decline {townDisplay} (공백을 포함한 전체 마을 이름을 입력하세요)를 입력하여 마을 가입을 수락하세요.
+aetherhaven.town.invite.sent={name} 님께 초대장을 보냈습니다.
+aetherhaven.town.kick.err.mustBeOnline=플레이어를 이름으로 강퇴시키려면 해당 플레이어가 온라인 상태여야 합니다.
+aetherhaven.town.kick.err.cannotRemoveOwner=마을 소유주를 제거할 수 없습니다.
+aetherhaven.town.kick.err.notMember=저 선수는 이 마을 주민이 아닙니다.
+aetherhaven.town.kick.removed=마을에서 {name}을 제거했습니다.
+aetherhaven.town.kick.removedYou=당신은 "{town}" 마을에서 추방되었습니다.
+aetherhaven.town.kick.removedGeneric=해당 구성원을 마을에서 추방했습니다.
+aetherhaven.town.role.err.ownerAlwaysFull=소유자는 항상 모든 권한을 가지고 있습니다.
+aetherhaven.town.role.set={name}의 역할을 {role}로 설정합니다.
+aetherhaven.town.accept.err.noSuchTown=그런 이름을 가진 마을은 없습니다.
+aetherhaven.town.accept.err.noInvite=해당 도시에 대한 예정된 초대가 없습니다.
+aetherhaven.town.accept.err.noInvites=현재 보류 중인 마을 초대가 없습니다.
+aetherhaven.town.accept.err.alreadyInTown=당신은 이미 마을에 있습니다.
+aetherhaven.town.accept.joined="{town}"에 가입하셨습니다.
+aetherhaven.town.decline.noPending=해당 도시에 대한 초청장이 아직 없습니다.
+aetherhaven.town.decline.noInvites=현재 보류 중인 마을 초대가 없습니다.
+aetherhaven.town.decline.done=초대를 거절했습니다.
+aetherhaven.town.permissions.updated=회원 권한이 저장되었습니다.
+
+aetherhaven.ui.memberPermissions.title=회원 권한
+aetherhaven.ui.memberPermissions.backTooltip=플레이어 목록으로 돌아가기
+aetherhaven.ui.memberPermissions.placePlots=부지를 배치하세요
+aetherhaven.ui.memberPermissions.manageConstructions=건설 및 관리 (조립, 생산, 연회, 헌장 개정, 건물 이동)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=마을 재정에 있는 금을 건설 비용에 사용하십시오.
+aetherhaven.ui.memberPermissions.openTreasuryPanel=계좌이체 (입금/인출)
+aetherhaven.ui.memberPermissions.acceptQuests=마을 퀘스트 수락/시작
+aetherhaven.ui.memberPermissions.completeQuests=마을 퀘스트를 완료하고 평판 보상을 받으세요.
+aetherhaven.ui.memberPermissions.abandonQuests=진행 중인 마을 퀘스트를 포기하세요
+aetherhaven.ui.memberPermissions.reviveVillagers=가이아 동상 앞에서 마을 사람들을 되살리세요
+aetherhaven.ui.memberPermissions.err.notOwner=마을 소유주만 권한을 수정할 수 있습니다.
+aetherhaven.ui.memberPermissions.err.notInTown=그 선수는 이 도시에 없습니다.
+aetherhaven.town.rolecmd.playerMustBeOnline=플레이어는 온라인 상태여야 합니다.
+aetherhaven.town.rolecmd.roleInvalid=역할은 건설, 퀘스트 또는 둘 다여야 합니다.
+aetherhaven.town.leave.notInTown=당신은 도시에 있지 않습니다.
+aetherhaven.town.leave.ownerCannotLeave=소유자는 떠날 수 없으며, 소유권 이전은 아직 구현되지 않았습니다.
+aetherhaven.town.leave.notMember=당신은 이 마을의 주민이 아닙니다.
+aetherhaven.town.leave.left="{town}"를 남기고 가셨습니다.
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=짓다
+aetherhaven.town.memberRole.QUEST=탐구
+aetherhaven.town.memberRole.BOTH=둘 다

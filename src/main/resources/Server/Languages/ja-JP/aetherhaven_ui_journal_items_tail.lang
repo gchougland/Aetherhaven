@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=クエストジャーナル
+aetherhaven.ui.questjournal.hint=詳細を確認するには、クエストを選択してください。
+aetherhaven.ui.questjournal.abandon=放棄する
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=クエストの詳細
+aetherhaven.ui.questjournal.detailPlaceholderBody=上のクエストから一つ選んでください。
+
+items.Aetherhaven_Management_Block.name=町の記録棚
+items.Aetherhaven_Management_Block.description=完成した建物の事務用棚。その区画の建設状況を表示します。
+
+items.Aetherhaven_Sprinkler_Iron.name=鉄製スプリンクラー
+items.Aetherhaven_Sprinkler_Iron.description=3×3の範囲内の、1ブロック下の耕された土壌に水を撒きます。ゲーム内の毎朝1回実行されます。最小範囲です。
+items.Aetherhaven_Sprinkler_Thorium.name=トリウム散水器
+items.Aetherhaven_Sprinkler_Thorium.description=水は5×5の範囲で、1ブロック下の土壌を耕します。ゲーム内の毎朝1回。鉄よりも大きい。
+items.Aetherhaven_Sprinkler_Cobalt.name=コバルト製スプリンクラー
+items.Aetherhaven_Sprinkler_Cobalt.description=7×7の範囲内で、1ブロック下の土壌を水で耕します。ゲーム内の毎朝1回。広範囲をカバーします。
+items.Aetherhaven_Sprinkler_Adamantite.name=アダマンタイト製スプリンクラー
+items.Aetherhaven_Sprinkler_Adamantite.description=9×9の範囲で、1ブロック下の土壌を水で耕します。ゲーム内の毎朝1回。最も広い範囲をカバーします。
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=長老リレン
+npcRoles.Aetherhaven_Innkeeper.name=コリン・モスカップ
+npcRoles.Aetherhaven_Merchant.name=ベックス・サンダーレーン
+npcRoles.Aetherhaven_Blacksmith.name=ギャレン・ヴェイル
+npcRoles.Aetherhaven_Farmer.name=イリエンヌ・モスマーク
+npcRoles.Aetherhaven_Priestess.name=セラ・ソーンウェル
+npcRoles.Aetherhaven_Miner.name=ゴルク・ストーンベイン
+npcRoles.Aetherhaven_Logger.name=セレン・フェアホロー
+npcRoles.Aetherhaven_Rancher.name=ターレン・メドウラン
+
+items.Aetherhaven_Production_Storage.name=職場の売店
+items.Aetherhaven_Production_Storage.description=作業員が持ち込んだものを保管します。出力設定や積み重ねた物の取り出しが可能です。建物の一部であり、持ち上げることはできません。
+items.Aetherhaven_Plot_Token_Miners_Hut.name=鉱夫小屋区画トークン
+items.Aetherhaven_Plot_Token_Miners_Hut.description=鉱夫小屋のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業。
+items.Aetherhaven_Plot_Token_Lumbermill.name=製材所区画トークン
+items.Aetherhaven_Plot_Token_Lumbermill.description=製材所のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業風景。
+items.Aetherhaven_Plot_Token_Barn.name=納屋区画トークン
+items.Aetherhaven_Plot_Token_Barn.description=納屋のプレハブを建設できる場所を示すマーク。都市計画デスクでの作業。
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=ガイア祭壇区画トークン
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=ガイア祭壇のプレハブを設置できる場所を示すマーク。都市計画デスクでの工作。
+
+items.Aetherhaven_Statue_of_Gaia.name=ガイア像
+items.Aetherhaven_Statue_of_Gaia.description=祭壇に飾る、祝福された像。町の所有者は、生命のエッセンスによって行方不明の住民を呼び戻すことができる。

@@ -111,8 +111,8 @@ public final class VillagerGiftService {
             return null;
         }
         return switch (g.reason) {
-            case DAILY_LIMIT -> Message.translation("server.aetherhaven.dialogue.gift.disabled.daily");
-            case WEEKLY_LIMIT -> Message.translation("server.aetherhaven.dialogue.gift.disabled.weekly");
+            case DAILY_LIMIT -> Message.translation("aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.disabled.daily");
+            case WEEKLY_LIMIT -> Message.translation("aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.disabled.weekly");
             default -> null;
         };
     }
@@ -289,7 +289,7 @@ public final class VillagerGiftService {
         String amountStr = repDelta > 0 ? "+" + repDelta : String.valueOf(repDelta);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.reputation.giftRepChange").param("amount", amountStr),
+            Message.translation("aetherhaven_ui_town.aetherhaven.reputation.giftRepChange").param("amount", amountStr),
             repDelta > 0 ? NotificationStyle.Success : NotificationStyle.Warning
         );
     }

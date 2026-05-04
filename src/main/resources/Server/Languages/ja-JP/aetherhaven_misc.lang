@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=あなたの財布は軽すぎるので、この修理には適していません。
+aetherhaven.blacksmith.repair.success={itemName}は完全に元通りになりました。新品同様です。
+commands.aetherhaven.dialogue.desc=IDでダイアログツリーを開く（テスト用）
+commands.aetherhaven.dialogue.treeId.desc=ダイアログツリーID（例：aetherhaven_dialogue_test）
+commands.aetherhaven.dialogue.entry.desc=オプションのエントリノードID（デフォルト：root）
+aetherhaven.interaction.dialogue=[{key}]を押して話す
+npcRoles.Aetherhaven_Test_Villager.name=対話テスト村人
+aetherhaven.banner.quest.completed.primary=クエスト完了
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=建物完成
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} の準備ができました。
+aetherhaven.assembly.tracer.none_in_range=範囲内にアセンブリのプレビューがありません（近づくか、町の建設許可を確認してください）。
+aetherhaven.banner.quest.started.primary=クエスト開始
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=ロック解除済み
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=建物スタッフ
+items.Aetherhaven_Building_Staff.description=プライマリーは、範囲内の最も近いアセンブリプレビューにブロックを通してガイドボルトを発射します。セカンダリーを押しながらブロックを通してアセンブリプレビューを狙うと、次のブロックが即座に配置されます（タウン建設許可が必要です）。パッシブビルドは、あなたが離れていても自動的に進行します。

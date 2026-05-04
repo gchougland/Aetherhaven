@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=퀘스트 시작: {name}
+aetherhaven.quest.completed=퀘스트 완료: {name}
+aetherhaven.quest.abandoned=퀘스트 포기: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=활성화된 퀘스트: {name}
+aetherhaven.questdebug.completed=완료된 퀘스트: {name}
+aetherhaven.questdebug.cleared=진행 중인 퀘스트 완료: {name}
+aetherhaven.questdebug.statusHeader=-- 퀘스트 상태 --
+aetherhaven.questdebug.statusActive=활동적인:
+aetherhaven.questdebug.statusCompleted=완전한:
+aetherhaven.questdebug.statusEmpty=(없음)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=이 마을에는 아직 주민 엔티티 ID가 등록되지 않았습니다.
+aetherhaven.villager.listHeader=마을 주민: 엔티티 UUID, 출처, 역할(로드된 경우) (UUID 또는 역할 ID를 /aetherhaven 평판 및 villager locate 명령과 함께 사용):
+aetherhaven.villager.listRow={uuid} | {note} | 역할: {role}
+aetherhaven.villager.locateNotLoaded=해당 주민이 로드되지 않았습니다. (가까이 이동하거나 청크를 로드해 보세요.)
+aetherhaven.villager.locateNoTransform=해당 엔티티에 대한 변환이 없습니다.
+aetherhaven.villager.locatePosition=마을 주민 {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=순간이동에는 운영자(OP 그룹)가 필요합니다.
+aetherhaven.villager.teleported=순간 이동했습니다.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=해당 블록에 아이템 컨테이너가 없습니다(청크가 로드되지 않았거나, 필러/베이스가 일치하지 않거나, 컨테이너 블록이 아닙니다).
+aetherhaven.debug.loot.bonusApplied=이 컨테이너에 에테르헤이븐 보너스 전리품 확률이 적용되었습니다(강제 적용).
+aetherhaven.townsCommand.line={id} 이름="{name}" 세계={world} 소유자={owner} 청크={cx},{cz} r{radius}
+aetherhaven.list.none=(없음)
+aetherhaven.questdebug.statusActiveLine=활성: {list}
+aetherhaven.questdebug.statusActiveEmpty=활성: (없음)
+aetherhaven.questdebug.statusCompletedLine=완료됨: {list}
+aetherhaven.questdebug.statusCompletedEmpty=완료: (없음)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=에테르헤이븐 출구
+items.Aetherhaven_Portal_Exit.description=지상 세계로 돌아갈 때 사용합니다.
+items.Aetherhaven_Portal_Enter.name=에테르헤이븐 게이트웨이
+items.Aetherhaven_Portal_Enter.description=에테르헤이븐에 입장할 때 사용합니다.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=에테르헤이븐
+instances.aetherhaven.subtitle=하늘 마을

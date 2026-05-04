@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=해당 블록 범위 내에 관심 지점(POI)이 없습니다.
+aetherhaven.poi.noPoiSelected=선택된 관심 지점(POI)이 없습니다. 먼저 관심 지점을 클릭하세요.
+aetherhaven.poi.selectedPoiGone=선택한 관심 지점이 더 이상 존재하지 않습니다.
+aetherhaven.poi.moved=관심 지점(POI)을 {x}, {y}, {z}로 이동했습니다.
+aetherhaven.poi.noPoiBlock=선택된 POI가 없습니다. 먼저 POI 블록을 클릭하세요.
+aetherhaven.poi.clearedInteractionTarget=상호작용 대상이 제거되었습니다. NPC는 POI 블록 센터를 사용합니다.
+aetherhaven.poi.setInteractionTarget=상호 작용 대상을 {x}, {y}, {z}로 설정합니다.
+aetherhaven.poi.selected=선택된 관심 지점(POI) {id} (위치: {x}, {y}, {z})
+aetherhaven.poi.targetBlockMismatch=대상 블록은 이 POI에 대해 예상되는 유형인 {type}과 일치해야 합니다.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=움직이는 건물…
+aetherhaven.plotSign.placed=부지 안내 표지판이 설치되었습니다.
+aetherhaven.plotSign.couldNotAdd=구획 표지판을 추가할 수 없습니다(인벤토리가 가득 찼나요?).
+
+# Founder monument
+aetherhaven.founder.inTerritory=창립자 기념비를 마을 영토 내에 설치하세요.
+aetherhaven.founder.cannotPlace=이곳에는 창립자 기념비를 세울 수 없습니다.
+aetherhaven.founder.createFailed=창시자 동상을 만들 수 없습니다. 블록이 배치되었습니다. 블록을 부수고 다시 시도하세요.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=타겟은 에테르헤이븐 마을 주민이 아닙니다.
+aetherhaven.debug.autonomy.toggledOn=자율성 디버그 켜짐(DisplayCustom + VisPath). 명판에 AH 오버레이 표시.
+aetherhaven.debug.autonomy.toggledOff=이 주민에 대한 자율성 디버그 기능을 끄세요.
+aetherhaven.debug.autonomy.state=이 주민의 자율성 디버그: {state}
+aetherhaven.debug.autonomy.cleared=이 주민의 에테르헤이븐 자율성 디버그를 해결했습니다.
+aetherhaven.debug.on=에
+aetherhaven.debug.off=끄다
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=평판은 변함이 없습니다(이미 {value}).
+aetherhaven.debug.rep.set=(역할이 해결된 경우) 대화 대기 중인 주요 단계를 완료하고 평판을 {value}으로 설정합니다.
+aetherhaven.debug.rep.milestonesHeader=평판 관련 주요 단계(보상 ID, 역할, 최소 평판, 대화 노드):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=보상이 지급되었습니다. {id}.
+aetherhaven.debug.rep.targetInvalid=몸이 불편한 마을 주민.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=이 세계의 {towns} 마을에 있는 {entries} 플레이어-주민 행의 선물 제한을 재설정합니다.
+aetherhaven.debug.gift.unknownRole=알 수 없는 마을 주민 역할: {role}
+aetherhaven.debug.gift.noGiftLists=역할 {role}에는 마을 주민 데이터에 선물로 좋아하는 것, 선물로 좋아하는 것, 선물로 싫어하는 것이 없습니다.
+aetherhaven.debug.gift.fillDone={role}에 대한 {added} 선물 기록 항목이 추가되었습니다(해당 아이템 및 반응 단계에 대한 항목이 이미 있는 경우 건너뜁니다).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=이는 배고픔, 에너지 또는 재미 중 하나여야 합니다(값은 0..{max}입니다).
+aetherhaven.debug.needs.elderNoTown=이 세상에는 네가 살 마을이 없어 (장로에게 필요).
+aetherhaven.debug.needs.noElderUuid=해당 마을에는 아직 저장된 엘더 UUID가 없습니다.
+aetherhaven.debug.needs.noMatch=일치하는 주민이 없습니다(핸들, 장로 또는 전체 UUID를 확인하려면 검사를 시도해 보세요).
+aetherhaven.debug.needs.multipleMatch=해당 핸들과 일치하는 NPC가 여러 개 있습니다. 검사 화면에서 전체 UUID를 사용하세요.
+aetherhaven.debug.needs.entityNotLoaded=엔티티가 로드되지 않았거나 VillagerNeeds: {id}이 없습니다.
+aetherhaven.debug.needs.set={label}({id})에 {which}={value}을 설정합니다.
+aetherhaven.debug.needs.inspectIntro=주민의 요구 사항(로드된 청크). 설정 방법: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | 배고픔={hunger} 에너지={energy} 재미={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(손잡이 없음)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=마을 부지 {id}:
+aetherhaven.debug.plots.header={index}. 플롯={plotId} 상태={state} 유형={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=이 세계의 에테르헤이븐 마을: {count}
+aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=마을에 활성 작업이 있는 상태에서는 부지를 조립할 수 없습니다(건물 주변의 청크를 로드하거나 먼저 건설을 시작하세요).
+aetherhaven.debug.plots.finishassemblyDone=진행 중이던 {count} 플롯 구축이 즉시 완료되었습니다.
+aetherhaven.debug.plots.removeBadUuid=잘못된 플롯 UUID입니다. /aetherhaven 플롯 목록에서 ID를 사용하십시오.
+aetherhaven.debug.plots.removeNotFound=귀하의 지역에는 {plotId}이라는 번호의 부지가 없습니다.
+aetherhaven.debug.plots.removeDataFailed=월드는 정리되었지만 마을 데이터에서 해당 구역을 삭제하는 데 실패했습니다(로그를 확인하세요).
+aetherhaven.debug.plots.removedPlot={plotId} 필지를 마을에서 제외하고 그 자리를 정리했습니다.
+aetherhaven.debug.poi.invalidTownUuid=잘못된 도시 UUID: {raw}
+aetherhaven.debug.poi.noTownArg=이 세계에는 당신이 가진 마을이 없습니다 (마을 UUID 인수를 사용하세요).
+aetherhaven.debug.poi.listHeader={town} ({count}) 마을의 관심 지점(POI):
+aetherhaven.debug.poi.listEmpty=이 마을에는 등록된 사람이 없습니다(건물 정보를 완료하거나 pois.json 파일을 확인하세요).
+aetherhaven.debug.poi.listLine={x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=세계 레지스트리에 등록된 모든 관심 지점({count}):
+aetherhaven.debug.poi.dumpLine=town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}

@@ -19,8 +19,8 @@ public final class FeastCatalog {
     public static final FeastDefinition STEWARDS_LEDGER =
         new FeastDefinition(
             "feast_stewards_ledger",
-            "server.aetherhaven.feast.stewards.name",
-            "server.aetherhaven.feast.stewards.description",
+            "aetherhaven_feasts_production.aetherhaven.feast.stewards.name",
+            "aetherhaven_feasts_production.aetherhaven.feast.stewards.description",
             List.of(
                 MaterialRequirement.ofItem("Food_Bread", 8),
                 MaterialRequirement.ofItem("Food_Cheese", 6),
@@ -35,8 +35,8 @@ public final class FeastCatalog {
     public static final FeastDefinition HEARTHGLASS_VIGIL =
         new FeastDefinition(
             "feast_hearthglass_vigil",
-            "server.aetherhaven.feast.hearthglass.name",
-            "server.aetherhaven.feast.hearthglass.description",
+            "aetherhaven_feasts_production.aetherhaven.feast.hearthglass.name",
+            "aetherhaven_feasts_production.aetherhaven.feast.hearthglass.description",
             List.of(
                 MaterialRequirement.ofItem("Food_Wildmeat_Cooked", 8),
                 MaterialRequirement.ofItem("Food_Fish_Grilled", 6),
@@ -51,8 +51,8 @@ public final class FeastCatalog {
     public static final FeastDefinition BERRYCIRCLE_CONCORD =
         new FeastDefinition(
             "feast_berrycircle_concord",
-            "server.aetherhaven.feast.berrycircle.name",
-            "server.aetherhaven.feast.berrycircle.description",
+            "aetherhaven_feasts_production.aetherhaven.feast.berrycircle.name",
+            "aetherhaven_feasts_production.aetherhaven.feast.berrycircle.description",
             List.of(
                 MaterialRequirement.ofItem("Food_Salad_Berry", 4),
                 MaterialRequirement.ofItem("Food_Kebab_Fruit", 6),

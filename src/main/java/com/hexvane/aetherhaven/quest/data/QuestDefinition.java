@@ -64,6 +64,14 @@ public final class QuestDefinition {
     private String assignNpcRoleId;
 
     /**
+     * When set with {@link #assignNpcRoleId}, residents who talk to that NPC may enter dialogue at this node id when the
+     * quest is offerable (see {@link com.hexvane.aetherhaven.quest.QuestDialogueEntry}).
+     */
+    @SerializedName("dialogueOfferEntryNodeId")
+    @Nullable
+    private String dialogueOfferEntryNodeId;
+
+    /**
      * If set, the plot sign item for this construction (see {@code plotTokenItemId} on the building JSON) is given to the
      * player when the quest starts (dialogue accept or debug grant).
      */
@@ -139,6 +147,11 @@ public final class QuestDefinition {
     @Nullable
     public String assignNpcRoleId() {
         return assignNpcRoleId != null ? assignNpcRoleId.trim() : null;
+    }
+
+    @Nullable
+    public String dialogueOfferEntryNodeId() {
+        return dialogueOfferEntryNodeId != null ? dialogueOfferEntryNodeId.trim() : null;
     }
 
     @Nullable

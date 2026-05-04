@@ -76,12 +76,12 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
         TownRecord town = tm.findTownContainingBlock(world.getName(), pos.getX(), pos.getZ());
         if (town == null) {
             event.setCancelled(true);
-            pr.sendMessage(Message.translation("server.aetherhaven.founder.inTerritory"));
+            pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.inTerritory"));
             return;
         }
         if (!town.getOwnerUuid().equals(uuidComp.getUuid()) && !town.playerCanManageConstructions(uuidComp.getUuid())) {
             event.setCancelled(true);
-            pr.sendMessage(Message.translation("server.aetherhaven.founder.cannotPlace"));
+            pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.cannotPlace"));
             return;
         }
         Ref<EntityStore> placingEntityRef = archetypeChunk.getReferenceTo(index);
@@ -138,7 +138,7 @@ public final class FounderMonumentPlaceSystem extends EntityEventSystem<EntitySt
                 statueRotation
             );
         if (statueUuid == null) {
-            pr.sendMessage(Message.translation("server.aetherhaven.founder.createFailed"));
+            pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.founder.createFailed"));
             return;
         }
         cs.putComponent(

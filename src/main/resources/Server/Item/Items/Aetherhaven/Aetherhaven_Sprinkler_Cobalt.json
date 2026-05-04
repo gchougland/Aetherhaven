@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Sprinkler_Cobalt.name",
-    "Description": "server.items.Aetherhaven_Sprinkler_Cobalt.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Cobalt.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Cobalt.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

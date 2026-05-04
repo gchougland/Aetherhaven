@@ -149,7 +149,7 @@ public final class FeastService {
     }
 
     /**
-     * @return null on success, or a {@code Message.translation} key (e.g. {@code server.aetherhaven.ui.feast.err.*})
+     * @return null on success, or a {@code Message.translation} key (e.g. {@code aetherhaven_feasts_production.aetherhaven.ui.feast.err.*})
      */
     @Nullable
     public static String tryBeginFeast(
@@ -166,7 +166,7 @@ public final class FeastService {
     ) {
         FeastDefinition def = FeastCatalog.findById(feastId);
         if (def == null) {
-            return "server.aetherhaven.ui.feast.err.unknownFeast";
+            return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.unknownFeast";
         }
         long dawn = VillagerReputationService.currentGameEpochDay(store);
         pruneExpiredActiveFeast(town, dawn);
@@ -174,32 +174,32 @@ public final class FeastService {
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (pu == null || player == null) {
-            return "server.aetherhaven.ui.feast.err.invalidPlayer";
+            return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.invalidPlayer";
         }
         if (!town.hasMemberOrOwner(pu.getUuid()) || !town.playerCanManageConstructions(pu.getUuid())) {
-            return "server.aetherhaven.ui.feast.noPermission";
+            return "aetherhaven_feasts_production.aetherhaven.ui.feast.noPermission";
         }
 
         if (!FeastCatalog.isFeastUnlocked(town, pu.getUuid(), store, def)) {
-            return "server.aetherhaven.ui.feast.err.feastNotUnlocked";
+            return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.feastNotUnlocked";
         }
 
         if (def.effectKind() != FeastEffectKind.BERRYCIRCLE_REP) {
             if (hasActiveTimedFeast(town, dawn)) {
-                return "server.aetherhaven.ui.feast.err.timedFeastActive";
+                return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.timedFeastActive";
             }
         } else {
             if (hasActiveTimedFeast(town, dawn)) {
-                return "server.aetherhaven.ui.feast.err.waitForTimedFeastEnd";
+                return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.waitForTimedFeastEnd";
             }
             if (isBerrycircleOnCooldown(town, dawn)) {
-                return "server.aetherhaven.ui.feast.err.berrycircleCooldown";
+                return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.berrycircleCooldown";
             }
         }
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
         if (!InventoryMaterials.hasAll(inv, def.costs())) {
-            return "server.aetherhaven.ui.feast.err.notEnoughIngredients";
+            return "aetherhaven_feasts_production.aetherhaven.ui.feast.err.notEnoughIngredients";
         }
         InventoryMaterials.removeAll(inv, def.costs());
 

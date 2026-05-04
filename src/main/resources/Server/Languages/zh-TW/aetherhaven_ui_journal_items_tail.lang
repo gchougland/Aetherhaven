@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=任務日誌
+aetherhaven.ui.questjournal.hint=選擇一個任務查看詳情。
+aetherhaven.ui.questjournal.abandon=放棄
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=任務詳情
+aetherhaven.ui.questjournal.detailPlaceholderBody=請選擇以上任務。
+
+items.Aetherhaven_Management_Block.name=城鎮檔案架
+items.Aetherhaven_Management_Block.description=已完工建築物的檔案架。打開其地塊的施工狀態。
+
+items.Aetherhaven_Sprinkler_Iron.name=鐵質灑水器
+items.Aetherhaven_Sprinkler_Iron.description=水流會澆灌下方一格範圍內的3×3區域土壤。遊戲內每天早晨運行一次。覆蓋範圍最小。
+items.Aetherhaven_Sprinkler_Thorium.name=釷噴淋器
+items.Aetherhaven_Sprinkler_Thorium.description=水流翻耕下方 5×5 區域內的土壤。每天遊戲時間早晨一次。比鐵塊大。
+items.Aetherhaven_Sprinkler_Cobalt.name=鈷噴淋器
+items.Aetherhaven_Sprinkler_Cobalt.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 7×7 的區域。每天遊戲時間早晨一次。覆蓋範圍廣。
+items.Aetherhaven_Sprinkler_Adamantite.name=鑽石噴灑器
+items.Aetherhaven_Sprinkler_Adamantite.description=水流翻耕下方一格範圍內的9×9區域土壤。每天遊戲時間早晨一次。覆蓋範圍最廣。
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=萊倫長老
+npcRoles.Aetherhaven_Innkeeper.name=科林·莫斯卡普
+npcRoles.Aetherhaven_Merchant.name=維克斯·桑德蘭
+npcRoles.Aetherhaven_Blacksmith.name=加倫谷
+npcRoles.Aetherhaven_Farmer.name=艾琳·莫斯馬克
+npcRoles.Aetherhaven_Priestess.name=獅子山
+npcRoles.Aetherhaven_Miner.name=戈魯克石脈
+npcRoles.Aetherhaven_Logger.name=塞倫費爾霍洛
+npcRoles.Aetherhaven_Rancher.name=薩倫草甸跑
+
+items.Aetherhaven_Production_Storage.name=工作場所商店
+items.Aetherhaven_Production_Storage.description=存放工人帶來的物品。可設定輸出量並取出堆疊的物品。它是建築物的一部分，無法被搬運。
+items.Aetherhaven_Plot_Token_Miners_Hut.name=礦工小屋地塊代幣
+items.Aetherhaven_Plot_Token_Miners_Hut.description=標示出可以建造礦工小屋預製件的位置。在城鎮規劃台製作。
+items.Aetherhaven_Plot_Token_Lumbermill.name=伐木場地塊代幣
+items.Aetherhaven_Plot_Token_Lumbermill.description=標記出木材廠預製件的建造位置。在城鎮規劃處製作。
+items.Aetherhaven_Plot_Token_Barn.name=穀倉地塊代幣
+items.Aetherhaven_Plot_Token_Barn.description=標記出穀倉預製件的建造位置。請在城鎮規劃處辦理相關手續。
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=蓋亞祭壇地塊代幣
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=標記出可以建造蓋亞祭壇預製件的位置。在城鎮規劃台製作。
+
+items.Aetherhaven_Statue_of_Gaia.name=蓋亞雕像
+items.Aetherhaven_Statue_of_Gaia.description=祭壇上的神聖畫像。城鎮主人可以用生命精華召喚失蹤的居民回歸。

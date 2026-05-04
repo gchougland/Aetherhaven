@@ -40,8 +40,8 @@ public final class AssemblyCompletionEffects {
         String buildName = def != null ? def.getDisplayName() : plot.getConstructionId();
         EventTitleUtil.showEventTitleToPlayer(
             pr,
-            Message.translation("server.aetherhaven.banner.assembly.complete.secondary").param("name", buildName),
-            Message.translation("server.aetherhaven.banner.assembly.complete.primary"),
+            Message.translation("aetherhaven_misc.aetherhaven.banner.assembly.complete.secondary").param("name", buildName),
+            Message.translation("aetherhaven_misc.aetherhaven.banner.assembly.complete.primary"),
             true,
             null,
             4.0F,
@@ -52,6 +52,6 @@ public final class AssemblyCompletionEffects {
         if (sfx != Integer.MIN_VALUE) {
             SoundUtil.playSoundEvent2d(playerEntityRef, sfx, SoundCategory.UI, entityStore);
         }
-        pr.sendMessage(Message.translation("server.aetherhaven.assembly.complete.chat").param("name", buildName));
+        pr.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.assembly.complete.chat").param("name", buildName));
     }
 }

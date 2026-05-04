@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_inn)
+# Full translation keys are aetherhaven_dialogue_visitor_inn.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=Вогнище тепле, але бухгалтерська книга призначена для містян та їхніх гостей. Повертайтеся, коли вас запросять.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Досить справедливо.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Корчмар

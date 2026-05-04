@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven mod komutları
+commands.aetherhaven.reload.desc=(Yaratıcı mod) config.json ve Aetherhaven JSON kataloglarını diskten yeniden yükle
+commands.aetherhaven.reload.success=Aetherhaven yapılandırma dosyaları ve varlık katalogları yeniden yüklendi.
+commands.aetherhaven.reload.failure=Yeniden yükleme başarısız oldu: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven eklentisi yüklenmedi.
+commands.aetherhaven.plot.desc=Arsa tabelası yönetim arayüzünü açın (yapı seçin, öğeyi alın)
+commands.aetherhaven.starterkit.desc=Kendinize Aetherhaven başlangıç kiti verin (arsa yerleştirme personeli, tüzük, şehir planlama masası, inşaat personeli; yaratıcı mod).
+commands.aetherhaven.starterkit.success=Başlangıç kiti envanterinize eklendi.
+commands.aetherhaven.starterkit.partial=Başlangıç kiti kısmen onaylandı; {failed} öğe sığmadı (envanterde yer açın).
+
+commands.aetherhaven.exportskin.desc=Avatar görünümünüzü JSON model olarak dışa aktarın (Üst: Oyuncu)
+commands.aetherhaven.exportskin.other.desc=Başka bir oyuncunun avatar görünümünü model JSON olarak dışa aktarın
+commands.aetherhaven.exportskin.arg.path=İsteğe bağlı çıktı dosyası yolu (varsayılan: plugin data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=Bu oyuncu için herhangi bir karakter görünümü mevcut değil.
+commands.aetherhaven.exportskin.invalidSkin=Cilt doğrulama başarısız oldu: {detail}
+commands.aetherhaven.exportskin.resolveError=Cilt ile model arasındaki bağlantılar çözümlenemedi: {detail}
+commands.aetherhaven.exportskin.ioError={path} yazma işlemi başarısız oldu: {detail}
+commands.aetherhaven.exportskin.success=Model JSON'u {path}'a yazdı.

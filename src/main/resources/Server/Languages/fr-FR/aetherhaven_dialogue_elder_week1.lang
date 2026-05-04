@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Je suis Lyren. Notre ville est régie par la charte que nous avons signée lors de notre installation. Avant de lotir davantage de parcelles, j'ai besoin que vous exploriez les environs d'Aetherhaven. Repérez les zones plates constructibles, les points d'eau et les emplacements potentiels pour des champs ou un espace vert commun. Rien de compliqué, juste un coup d'œil. Une fois terminé, revenez me faire part de vos observations.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Je vais repérer les lieux et je vous ferai un rapport.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Lyren aîné
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=Si vous êtes de retour de votre promenade, racontez-moi ce que vous avez vu. Sinon, prévenez-moi quand vous serez prêt(e).
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Avant d'aller plus loin, dites-moi ce que vos bottes ont vu.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=J'ai laissé la réservation ouverte aujourd'hui. N'hésitez pas à poser des questions si quelque chose vous paraît confus.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Les comptes rendus de randonnée sont plus importants que les opinions. Donnez-moi des faits concrets.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=Si le terrain vous paraît inadéquat, dites-le franchement. Je ne fais pas honte aux yeux honnêtes.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=L'eau est plus importante que le drame. Dites-moi où elle se trouve.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Parfois, les terrains plats sont trompeurs. Dis-moi où tu t'es fait avoir.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=Si vous voyez une bonne terre, décrivez-la comme le ferait un agriculteur.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=Si vous voyez des pentes abruptes, décrivez leur inclinaison sans poésie.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=J'ai le temps de vous créer une image claire. Décrivez-la avec des mots.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Reviens quand tu seras capable de dire nord, sud, boue, pierre dans le bon ordre.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=Une page de cahier bien remplie, avec de véritables points de repère, vaut plus qu'un discours.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=Si vous apportez un repas simple pendant que nous parlons cartes, je le prendrai comme un geste de gentillesse.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Une craie propre et une règle droite me disent que vous êtes sérieux.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=J'aime les petits cadeaux qui facilitent la lecture, pas ceux qui sont ostentatoires.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Les gourdes et les biscuits secs sont des cadeaux ennuyeux, et c'est très bien comme ça que je les offre lors des journées scouts.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Ne m'apportez pas de trophées faits de vieux os comme s'ils prouvaient que vous avez marché.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=Je ne veux pas que des déchets de rue soient présentés comme de la recherche.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=Si ça sent la pourriture, ce n'est pas un accessoire de carte.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Gardez les farces et les jouets bruyants loin de la table de la charte.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=Je n'ai que faire des paillettes et autres déchets quand on parle de conduites d'eau.

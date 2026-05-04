@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=列出当前世界中的以太港城镇
+
+commands.aetherhaven.town.desc=镇成员资格：邀请、角色、退出
+commands.aetherhaven.town.invite.desc=邀请一位在线玩家到你的城镇来。
+commands.aetherhaven.town.invite.player.desc=玩家用户名（必须在线）
+commands.aetherhaven.town.accept.desc=接受城镇的邀请
+commands.aetherhaven.town.decline.desc=拒绝即将到来的城镇邀请
+commands.aetherhaven.town.kick.desc=从你的城镇移除一名成员
+commands.aetherhaven.town.kick.player.desc=会员用户名（必须在线）
+commands.aetherhaven.town.role.desc=为成员应用权限预设（建造、任务或两者兼有）。使用管理模块“玩家”选项卡进行按旗帜设置权限。
+commands.aetherhaven.town.role.player.desc=会员用户名（必须在线）
+commands.aetherhaven.town.role.role.desc=建造、任务，或两者兼有
+commands.aetherhaven.town.leave.desc=离开你所属的城镇（而非你作为所有者的身份）
+commands.aetherhaven.town.townName.desc=城镇显示名称（可选）；请使用包含空格的完整名称（占行首）。如果只有一个待处理的邀请，则省略此项。
+
+commands.aetherhaven.poi.desc=调试：POI 命令
+commands.aetherhaven.poi.list.desc=列出城镇的兴趣点（城镇 UUID 可选，或省略/使用“me”代表您的城镇）
+commands.aetherhaven.poi.town.desc=城镇 UUID，或者我，或者省略以表示呼叫者所在城镇
+commands.aetherhaven.poi.dump.desc=列出这个世界内存注册表中的所有兴趣点（任何城镇）
+
+commands.aetherhaven.plots.desc=地块实例：list、finishassembly（创造模式）、remove plotId（创造模式）。使用地块以避免与 /aetherhaven 地块冲突。
+commands.aetherhaven.plots.list.desc=列出您所在城镇的地块实例（地块 UUID、建筑 ID、州/省、标志位置）
+commands.aetherhaven.plots.finishassembly.desc=创造模式：立即完成城镇中所有正在进行的组装工作（需要已加载的区块/正在进行的工作）
+commands.aetherhaven.plots.remove.desc=创意：根据 UUID 拆除一个地块，并将其从城镇数据中删除。
+commands.aetherhaven.plots.remove.plotId.desc=从 /aetherhaven 绘图列表中获取绘图 UUID
+
+commands.aetherhaven.needs.desc=调试：村民需求
+commands.aetherhaven.needs.inspect.desc=列出已加载区块中具有 VillagerNeeds 的实体
+commands.aetherhaven.needs.set.desc=设置需求计量表 0..100（目标：来自检查、长老或 UUID 的句柄）
+commands.aetherhaven.needs.target.desc=句柄（例如 Villager_Elder_xxxxxxxx）、长老或实体 UUID
+commands.aetherhaven.needs.entity.desc=已弃用；请使用 target（handle、Elder 或 uuid）
+commands.aetherhaven.needs.which.desc=饥饿、精力或乐趣
+commands.aetherhaven.needs.value.desc=数值范围为0到100（100 = 完全满意）
+
+commands.aetherhaven.tax.desc=调试：财政部晨税
+commands.aetherhaven.tax.breakdown.desc=显示城镇中每个村民的税收明细和总额（仅限已加载区块）
+commands.aetherhaven.tax.now.desc=现在就将早晨的什一奉献存入库房（跳过早晨时间和上次收取日）
+
+commands.aetherhaven.questdebug.desc=调试：城镇任务绕过
+commands.aetherhaven.questdebug.grant.desc=在你的城镇标记任务激活
+commands.aetherhaven.questdebug.complete.desc=在你的城镇标记任务完成
+commands.aetherhaven.questdebug.clear.desc=从城镇的活跃任务列表中移除任务
+commands.aetherhaven.questdebug.id.desc=任务 ID（默认为 q_build_inn）
+commands.aetherhaven.questdebug.status.desc=显示您城镇（显示名称 + ID）的进行中和已完成的任务
+
+commands.aetherhaven.reputation.desc=调试：声誉
+commands.aetherhaven.reputation.set.desc=与村民建立良好关系，并排队等待达成里程碑奖励以进行对话。
+commands.aetherhaven.reputation.villagerUuid.desc=村民 NPC 实体 UUID
+commands.aetherhaven.reputation.villagerTarget.desc=村民实体 UUID 或城镇中的 NPC 角色 ID（例如 Aetherhaven_Blacksmith）
+commands.aetherhaven.reputation.value.desc=信誉值 0 到 100
+commands.aetherhaven.reputation.reward.desc=列出里程碑定义或直接授予一项奖励
+commands.aetherhaven.reputation.reward.list.desc=列出声望里程碑（可选：按NPC角色ID筛选）
+commands.aetherhaven.reputation.reward.roleFilter.desc=使用 NPC 角色 ID（例如 Aetherhaven_Merchant）来筛选列表
+commands.aetherhaven.reputation.reward.grant.desc=立即发放一个里程碑奖励（已领取标记）；使用声望奖励列表获取 ID
+commands.aetherhaven.reputation.rewardId.desc=声誉奖励 ID（例如 rep_merchant_50）
+
+commands.aetherhaven.villager.desc=调试：城镇村民助手
+commands.aetherhaven.villager.list.desc=列出城镇村民NPC实体UUID（用于声望/定位命令）
+commands.aetherhaven.villager.locate.desc=打印城镇村民的位置；可选传送（仅限操作员）
+commands.aetherhaven.villager.uuid.desc=村民 NPC 实体 UUID
+commands.aetherhaven.villager.target.desc=村民实体 UUID 或城镇中的 NPC 角色 ID（例如 Aetherhaven_Merchant）
+commands.aetherhaven.villager.teleport.desc=设置为 true 可传送至村民处（仅限操作员）；或者使用 --tp 代替
+commands.aetherhaven.villager.tp_flag.desc=传送至村民处（仅限操作符；效果等同于传递 true）
+commands.aetherhaven.villager.reset.desc=移除所有城镇村民 NPC 并让他们在你附近重新生成（调试；保留任务、声望、礼物；运行旅店池修复程序以使居民与已完成的建筑保持一致；刷新旅店访客池）
+aetherhaven.villager.resetDone=城镇村民已重置并重新出现在你附近。
+aetherhaven.villager.resetFailed=无法重置城镇村民：{reason}
+commands.aetherhaven.gift.desc=调试：重置礼物限额或填充礼物历史记录预览
+commands.aetherhaven.gift.resetLimits.desc=重置此世界中所有城镇所有玩家和村民的每日/每周礼物上限
+commands.aetherhaven.gift.fillHistory.desc=为每个角色（你的城镇）的喜爱/喜欢/不喜欢的物品添加一行日志，以便礼物历史记录能够显示一些内容（调试）。
+commands.aetherhaven.gift.roleId.desc=NPC角色ID（例如：Aetherhaven_Merchant）
+
+commands.aetherhaven.debug_autonomy.desc=调试：村民自治覆盖层
+commands.aetherhaven.debug_autonomy.toggle.desc=切换城镇村民的自主性调试模式（查看 NPC 或使用 --ray 参数）
+commands.aetherhaven.debug_autonomy.show.desc=显示是否已为此村民启用自主调试模式
+commands.aetherhaven.debug_autonomy.clear.desc=清除此村民的以太港自治调试信息
+
+commands.aetherhaven.debug_lootchest.desc=调试：目标容器的以太港宝箱奖励掷骰
+commands.aetherhaven.debug_lootchest.fill.desc=对您正在查看的物品容器应用强制珠宝、黄金和剧情代币检定。

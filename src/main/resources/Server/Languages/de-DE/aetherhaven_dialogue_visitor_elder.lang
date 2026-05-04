@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_elder)
+# Full translation keys are aetherhaven_dialogue_visitor_elder.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Sie können zwar durchreisen, stehen aber nicht auf dieser Charta. Wenn Sie helfen möchten, müssen Sie vorher von jemandem, der hier wohnt, eingeladen werden.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Ich verstehe.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Ältester Lyren

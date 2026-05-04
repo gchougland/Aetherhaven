@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
  */
 public final class AetherhavenReputationDebugCommand extends AbstractCommandCollection {
     public AetherhavenReputationDebugCommand() {
-        super("reputation", "server.commands.aetherhaven.reputation.desc");
+        super("reputation", "aetherhaven_commands_help.commands.aetherhaven.reputation.desc");
         this.addAliases("rep");
         this.addSubCommand(new SetSubCommand());
         this.addSubCommand(new RewardSubCommand());
@@ -54,13 +54,13 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class SetSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "server.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
         @Nonnull
         private final RequiredArg<Integer> reputationArg =
-            this.withRequiredArg("value", "server.commands.aetherhaven.reputation.value.desc", ArgTypes.INTEGER);
+            this.withRequiredArg("value", "aetherhaven_commands_help.commands.aetherhaven.reputation.value.desc", ArgTypes.INTEGER);
 
         SetSubCommand() {
-            super("set", "server.commands.aetherhaven.reputation.set.desc");
+            super("set", "aetherhaven_commands_help.commands.aetherhaven.reputation.set.desc");
         }
 
         @Override
@@ -81,11 +81,11 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
                 return;
             }
             TownVillagerTargetResolver.Outcome target =
@@ -94,7 +94,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 if (target.error() != null) {
                     playerRef.sendMessage(Message.raw(target.error()));
                 } else {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.common.invalidVillager"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.invalidVillager"));
                 }
                 return;
             }
@@ -105,20 +105,20 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 VillagerReputationService.setReputationCrossingMilestones(world, town, tm, uc.getUuid(), villagerUuid, value);
             if (!changed) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.rep.unchanged").param("value", String.valueOf(value))
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.rep.unchanged").param("value", String.valueOf(value))
                 );
                 return;
             }
             int clamped = Math.max(0, Math.min(100, value));
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.debug.rep.set").param("value", String.valueOf(clamped))
+                Message.translation("aetherhaven_world_debug.aetherhaven.debug.rep.set").param("value", String.valueOf(clamped))
             );
         }
     }
 
     private static final class RewardSubCommand extends AbstractCommandCollection {
         RewardSubCommand() {
-            super("reward", "server.commands.aetherhaven.reputation.reward.desc");
+            super("reward", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.desc");
             this.addSubCommand(new ListRewardsSubCommand());
             this.addSubCommand(new GrantRewardSubCommand());
         }
@@ -127,10 +127,10 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class ListRewardsSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> roleFilterArg =
-            this.withOptionalArg("roleId", "server.commands.aetherhaven.reputation.reward.roleFilter.desc", ArgTypes.STRING);
+            this.withOptionalArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.roleFilter.desc", ArgTypes.STRING);
 
         ListRewardsSubCommand() {
-            super("list", "server.commands.aetherhaven.reputation.reward.list.desc");
+            super("list", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.list.desc");
         }
 
         @Override
@@ -147,7 +147,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             String filter = context.provided(roleFilterArg) ? context.get(roleFilterArg).trim() : "";
             List<ReputationRewardCatalog.ReputationRewardDefinition> defs = ReputationRewardCatalog.allDefinitions();
-            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.rep.milestonesHeader"));
+            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.rep.milestonesHeader"));
             for (ReputationRewardCatalog.ReputationRewardDefinition d : defs) {
                 if (!filter.isEmpty() && !d.roleId().equalsIgnoreCase(filter)) {
                     continue;
@@ -159,7 +159,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                     ? " item=" + d.itemId() + " x" + d.itemCount()
                     : "";
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.rep.milestoneLine")
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.rep.milestoneLine")
                         .param("id", d.rewardId())
                         .param("role", d.roleId())
                         .param("min", String.valueOf(d.minReputation()))
@@ -174,13 +174,13 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class GrantRewardSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "server.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
         @Nonnull
         private final RequiredArg<String> rewardIdArg =
-            this.withRequiredArg("rewardId", "server.commands.aetherhaven.reputation.rewardId.desc", ArgTypes.STRING);
+            this.withRequiredArg("rewardId", "aetherhaven_commands_help.commands.aetherhaven.reputation.rewardId.desc", ArgTypes.STRING);
 
         GrantRewardSubCommand() {
-            super("grant", "server.commands.aetherhaven.reputation.reward.grant.desc");
+            super("grant", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.grant.desc");
         }
 
         @Override
@@ -201,11 +201,11 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
                 return;
             }
             TownVillagerTargetResolver.Outcome target =
@@ -214,7 +214,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 if (target.error() != null) {
                     playerRef.sendMessage(Message.raw(target.error()));
                 } else {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.common.invalidVillager"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.invalidVillager"));
                 }
                 return;
             }
@@ -228,7 +228,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
                 playerRef.sendMessage(Message.raw(err));
                 return;
             }
-            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.rep.granted").param("id", rid));
+            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.rep.granted").param("id", rid));
         }
     }
 }

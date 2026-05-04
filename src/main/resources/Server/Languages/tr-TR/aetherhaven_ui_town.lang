@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Yapı
+aetherhaven.ui.plotmanagement.title=Şehir Yönetimi
+aetherhaven.ui.plotmanagement.tabPlot=Komplo
+aetherhaven.ui.plotmanagement.tabPlayers=Oyuncular
+aetherhaven.ui.plotmanagement.playersHint=Çevrimiçi oyuncuları isimleriyle davet edin. Aşağıdan rolleri değiştirin veya üyeleri kaldırın.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Bu kasabanın üyeleri. Sadece sahibi davet edebilir veya rolleri değiştirebilir.
+aetherhaven.ui.plotmanagement.inviteLabel=Oyuncuyu davet et
+aetherhaven.ui.plotmanagement.invitePlaceholder=Oyuncu adı (çevrimiçi)
+aetherhaven.ui.plotmanagement.inviteSend=Davetiye gönder
+aetherhaven.ui.plotmanagement.kick=Kaldırmak
+aetherhaven.ui.plotmanagement.roleOwner=Mal sahibi
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Arsa bilgisi
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Köylü ihtiyaçları
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Kasaba üyeleri
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Bu binayı taşıyın
+aetherhaven.ui.plotconstruction.materials=Malzemeler
+aetherhaven.ui.plotconstruction.build=İnşa etmek
+aetherhaven.ui.plotconstruction.pickUpPlot=Parseli al (jeton iade et)
+aetherhaven.ui.plotconstruction.townNeeds=Kasabanın ihtiyaçları
+aetherhaven.ui.plotconstruction.moveBuilding=Binayı taşıma
+aetherhaven.ui.plotconstruction.houseResident=İkamet eden kişi
+aetherhaven.ui.plotconstruction.assignHouseResident=Yerleşik
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Binayı taşımak mı?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Yeni bir yer seçmek için arsa yerleştirme seçeneğini açar. Taşıma işlemi eski binayı yıkıp yeniden inşa eder; öncelikle değerli eşyaları, evcil hayvanları ve mevcut binanın içindeki dağınık eşyaları kaldırın.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Devam etmek
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=İptal etmek
+
+aetherhaven.ui.villagerneeds.title=Kasabanın ihtiyaçları
+aetherhaven.ui.villagerneeds.hint=Sayaçlarını ve portresini görüntülemek için bir köy sakini seçin.
+aetherhaven.ui.villagerneeds.hunger=Açlık
+aetherhaven.ui.villagerneeds.energy=Enerji
+aetherhaven.ui.villagerneeds.fun=Eğlence
+aetherhaven.ui.villagerneeds.villagers=Köylüler
+aetherhaven.ui.villagerneeds.noResidentsTracked=Henüz hiçbir kasaba sakini takip edilmiyor.
+aetherhaven.ui.villagerneeds.rescueTooltip=Seçtiğiniz sakini yanınızdaki bir noktaya ışınlar ve mevcut yolunu ve aktivitesini temizleyerek hareket etmelerini ve yeni bir hedef seçmelerini sağlar. Bir köylü sıkışıp kaldığında bunu kullanın.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Bu köylüye verdiğiniz eşyaları, tepkilerine göre gruplandırılmış olarak ve bu hafta hala kaç hediye verebileceğinizi görüntüleyin.
+aetherhaven.ui.giftHistory.title=Verilen hediyeler
+aetherhaven.ui.giftHistory.backTooltip=Şehre dönüş ihtiyaçları
+aetherhaven.ui.giftHistory.empty=Bu köylüye henüz hiçbir hediye vermediniz, bu yüzden gösterecek bir şey yok.
+aetherhaven.ui.giftHistory.section.love=Sevilen
+aetherhaven.ui.giftHistory.section.like=Beğendim
+aetherhaven.ui.giftHistory.section.neutral=Doğal
+aetherhaven.ui.giftHistory.section.dislike=Beğenmedim
+aetherhaven.ui.giftHistory.giftsThisWeek=Bu haftaki hediyeler: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Önceki kasaba sakini
+aetherhaven.ui.giftHistory.cycleNextTooltip=Sonraki kasaba köylüsü
+aetherhaven.ui.villagerneeds.rescueDone=Seçilen sakin size getirildi ve günlük rutini yeniden düzenlendi.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=O kişi bu kasabanın sakini değil.
+aetherhaven.ui.reputation.label=İtibar
+aetherhaven.reputation.dailyTalkGain=+{amount} itibarı (günlük selamlama)
+aetherhaven.reputation.giftRepChange={amount} itibar (hediye)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=Anayasa değişiklikleri
+aetherhaven.ui.charter.popHint=Yerleşik sakinler (ziyaretçi olmayanlar): {count}. 1. kademe 3. seviyede, 2. kademe ise 5. seviyede açılır.
+aetherhaven.ui.charter.tierMark1=BEN
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=1. Kademe: Zekat usulü
+aetherhaven.ui.charter.tier2=Kademe 2: Kasaba odaklı
+aetherhaven.ui.charter.t1.perCapitaShort=Kişi başına
+aetherhaven.ui.charter.t1.happinessShort=Mutluluk ağırlıklı
+aetherhaven.ui.charter.t1.perCapitaTooltip=Nüfus sayımı önceliklidir.\n\nSabahın altın fiyatı, burada yaşayan sakin sayısına bağlıdır. Günlük konfor toplamı biraz etkilese de, asıl belirleyici faktör nüfustur.
+aetherhaven.ui.charter.t1.happinessTooltip=Öncelik ihtiyaçlara verilir.\n\nSabah altınları, sakinlerin ne kadar iyi beslendiğine, dinlendiğine ve morallerinin ne kadar iyi olduğuna daha çok bağlıdır. Birkaç fazla vatandaş, herkesi iyi durumda tutmaktan daha az önemlidir.
+aetherhaven.ui.charter.t2.miningShort=Madencilik
+aetherhaven.ui.charter.t2.loggingShort=Günlük kaydı
+aetherhaven.ui.charter.t2.farmingShort=Tarım
+aetherhaven.ui.charter.t2.smithingShort=Demircilik
+aetherhaven.ui.charter.t2.miningTooltip=İmar sözleşmesi madenleri destekliyor.\n\nMadencilik üretimine bağlı bonuslar geldiğinde bu kasabaya avantaj sağlayacak. Aşağıdakilerden yalnızca birini seçin: madencilik, ormancılık, çiftçilik veya demircilik.
+aetherhaven.ui.charter.t2.loggingTooltip=Bu sözleşme ormanı destekliyor.\n\nOrman kesimi ve ağaççılıkla ilgili bonuslar, kasabaya vardıklarında avantaj sağlayacak. Aşağıdakilerden yalnızca birini seçin: madencilik, ormancılık, çiftçilik veya demircilik.
+aetherhaven.ui.charter.t2.farmingTooltip=Şartname tarlaları destekliyor.\n\nKasabanızda tamamlanmış bir tarım arazisi olduğunda, buradaki sulama sistemleri biraz daha uzağa ulaşır ve püskürtme alanının kenarında ek karolar bulunur. Aşağıdaki odak noktalarından yalnızca birini seçin: madencilik, ağaç kesme, çiftçilik veya demircilik.
+aetherhaven.ui.charter.t2.smithingTooltip=Şartname demirci atölyesini destekliyor.\n\nDemircilik ve metal işçiliğiyle ilgili bonuslar, kasabaya vardıklarında avantaj sağlayacak. Aşağıdakilerden yalnızca birini seçin: madencilik, ağaç kesimi, çiftçilik veya demircilik.
+aetherhaven.ui.charter.hint=Her kademe için yalnızca bir seçenek belirleyin. Seçimler daha sonra değiştirilemez.
+aetherhaven.ui.charter.allChosen=Bu kasaba için seçilen tüm değişiklikler.
+aetherhaven.ui.charter.noTown=Bunu kullanabilmek için bir kasabaya bağlı olmanız gerekir.
+aetherhaven.ui.charter.noPermission=Bu kasabanın tüzük değişikliklerini değiştiremezsiniz.
+aetherhaven.ui.charter.err.locked=Bu değişiklik önerisi kilitlendi veya zaten seçildi.
+aetherhaven.ui.charter.err.invalid=Geçersiz seçim.
+aetherhaven.ui.charter.saved=Tüzük değişiklikleri güncellendi.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Devam etmek
+aetherhaven.reputation.reward.elder.50=Büyüdükçe tüzük değişebilir. İşte bir değişiklik tablosunun şablonu. Şemayı elde ettiğinizde bunu şehir planlama masanızda oluşturun. Salona koyun ve sabah vergilerinin nasıl işleyeceği konusunda seçim yapabilirsiniz.
+aetherhaven.reputation.reward.elder.100=Bu kasaba için sizden istenenden çok daha fazlasını yaptınız. Bu temel taşını alın. Kurucu anıtını, tüzüğün izin verdiği yere dikin. Buradaki insanlar sizi hatırlayacak.
+aetherhaven.reputation.reward.innkeeper.50=Bu salonu yeterince uzun süre doyurdunuz ve dürüst tuttunuz, bu yüzden büyük sofrayı size emanet edeceğim. İşte ziyafet düzeni—şemayı aldığınızda şehir planlama masasında hazırlayın, sonra da şehre yerleştirin. Masa hazır olduğunda, Defter Akşam Yemeği'ni de çağırabilirsiniz: ekmek, peynir, turta ve bir hafta boyunca cömertliği destekleyen bir zekât. Siz servis yaparken ben de salonu gözetleyeceğim.
+aetherhaven.reputation.reward.innkeeper.75=Bizimle yeterince uzun gece geçirdiniz. Hearthglass Nöbetini kurduğunuzda, kasaba bir hafta boyunca daha yavaş ve daha nazik beslenir. Balık, et, sebze ve her ihtiyaca yönelik daha yumuşak bir yemek sunulur. İşte böylece birbirimizi ayakta tutuyoruz.
+aetherhaven.reputation.reward.innkeeper.100=Artık siz ve bu kasaba aynı ismi paylaşıyorsunuz. Berrycircle Concord, hafif tabak çemberi anlamına geliyor: salata, meyve şişleri, patlamış mısır ve enfes bir tost. Bir kere servis edin, sizi daha sıcak hatırlayacaklar.
+aetherhaven.reputation.reward.merchant.50=Hem iyi hem de kötü havalarda sözünüzü tuttunuz. İşte bankın kalıbı. Şema elinize geçtikten sonra, şehir planlama masanızda bunu üretin. Tezgah üzerindeki değerlendirmeler ücretsizdir; ben yine de kendi değerlendirmem için ücret alıyorum.
+aetherhaven.reputation.reward.merchant.100=Bu deftere yeterince altın yatırdınız, bir kuyumcu köşesi kazanmaya yetecek kadar. Desen sizin. Şehir planlama masasında tasarlayın. Değerli taşınızı, metalinizi ve içine kattığınız hayatı yerleştirin, parça gerçeğe uygun olarak ortaya çıkacaktır.
+aetherhaven.reputation.reward.priestess.50=Gaia, büyüme ve yıkım arasındaki sınırda yürümeniz için size güveniyor. Şu karışımı ele alın: kristal ve yaşam özü, şehir planlama masasında şekillendirilmiş. Bu karışım, kalmaması gerekenleri ortaya çıkarır ve tek bir toz nefesiyle bir yaratığı yok etmenizi sağlar.
+aetherhaven.reputation.reward.priestess.75=Yolların düzgünlüğünü sen sağlıyorsun. Al bu parçayı: Kasabanın matarasında bir fısıltıdan daha fazla içki olmasını istediğinde, bunu ondalık vergiyle geri getir.
+aetherhaven.reputation.reward.priestess.100=Gaia sizi en iyi anlamda inatçı olarak işaretliyor. Bu yemyeşil katalizör, sunağın bekçisine para ve özenle yaklaştığınızda, sunulan içeceğin etkisini derinleştirebilir.
+aetherhaven.reputation.reward.farmer.25=Sıralarda gösterdiğin çabalarla güvenimi kazandın. Demir bir sulama başlığı çizdim. Su özü ve demire sahip olduğunda bunu çiftçilik tezgahında üret.
+aetherhaven.reputation.reward.farmer.50=İşte toryum deseni: daha geniş erişim, aynı şafak ritmi. Şemayı öğrendikten sonra tezgahtaki Tarım sekmesi bunu gösterecektir.
+aetherhaven.reputation.reward.farmer.75=Kobalt basınca daha iyi dayanır. Bu sayfa, üçüncü sulama kademesinin kilidini açar; gün doğumuyla birlikte yine de iyi bir sulama sağlar.
+aetherhaven.reputation.reward.farmer.100=Adamantit ve öz: setin son parçası. Onları özenle yerleştirin. Şehrin tarlaları şafakta su içecektir.
+aetherhaven.reputation.reward.blacksmith.25=Harç için taş, sabır için taş. Sizde ikisi de var ve bu da belli oluyor.
+aetherhaven.reputation.reward.blacksmith.50=Demirci ustasının güvenini kazandınız. İşte jeod örsünün şeması. Çubuklarınız ve taşınız olduğunda, şehir planlama masanızda bunu üretin.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Arsa işareti (yönetici)
+aetherhaven.ui.plotadmin.construction=Yapı
+aetherhaven.ui.plotadmin.give=Parsel işareti verin ve kapatın.

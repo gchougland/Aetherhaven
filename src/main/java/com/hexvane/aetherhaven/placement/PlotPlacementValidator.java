@@ -69,6 +69,9 @@ public final class PlotPlacementValidator {
                     }
                 }
             }
+            if (fp.containsBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ())) {
+                return "This plot would overlap the town charter.";
+            }
             PlotFootprintRecord overlap = town.findOverlappingPlot(fp, excludePlotId);
             if (overlap != null) {
                 return "This plot overlaps another registered plot in your town.";

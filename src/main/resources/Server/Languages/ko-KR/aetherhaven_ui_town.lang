@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=건설
+aetherhaven.ui.plotmanagement.title=도시 관리
+aetherhaven.ui.plotmanagement.tabPlot=구성
+aetherhaven.ui.plotmanagement.tabPlayers=플레이어
+aetherhaven.ui.plotmanagement.playersHint=온라인으로 접속한 플레이어를 이름으로 초대하세요. 아래에서 역할을 변경하거나 멤버를 삭제할 수 있습니다.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=이 마을의 구성원입니다. 소유자만 초대하거나 역할을 변경할 수 있습니다.
+aetherhaven.ui.plotmanagement.inviteLabel=플레이어 초대
+aetherhaven.ui.plotmanagement.invitePlaceholder=플레이어 이름 (온라인)
+aetherhaven.ui.plotmanagement.inviteSend=초대 보내기
+aetherhaven.ui.plotmanagement.kick=제거하다
+aetherhaven.ui.plotmanagement.roleOwner=소유자
+aetherhaven.ui.plotmanagement.tabPlotTooltip=줄거리 정보
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=마을 주민은 필요로 합니다
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=마을 구성원
+aetherhaven.ui.plotmanagement.tabMoveTooltip=이 건물을 옮기세요
+aetherhaven.ui.plotconstruction.materials=재료
+aetherhaven.ui.plotconstruction.build=짓다
+aetherhaven.ui.plotconstruction.pickUpPlot=부지 수령 (반환 토큰)
+aetherhaven.ui.plotconstruction.townNeeds=마을에는 필요한 것이 있습니다
+aetherhaven.ui.plotconstruction.moveBuilding=건물을 옮기세요
+aetherhaven.ui.plotconstruction.houseResident=거주자
+aetherhaven.ui.plotconstruction.assignHouseResident=거주자 설정
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=건물을 옮기시겠습니까?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=새로운 부지를 선택할 수 있도록 부지 배치 화면이 열립니다. 이동을 선택하면 기존 건물이 철거되고 새로 지어집니다. 이동하기 전에 새 부지 내의 귀중품, 애완동물, 흩어지기 쉬운 물건들을 먼저 옮겨주세요.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=계속하다
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=취소
+
+aetherhaven.ui.villagerneeds.title=마을에는 필요한 것이 있습니다
+aetherhaven.ui.villagerneeds.hint=마을 주민을 선택하여 계량기와 초상화를 확인하세요.
+aetherhaven.ui.villagerneeds.hunger=굶주림
+aetherhaven.ui.villagerneeds.energy=에너지
+aetherhaven.ui.villagerneeds.fun=재미있는
+aetherhaven.ui.villagerneeds.villagers=마을 사람들
+aetherhaven.ui.villagerneeds.noResidentsTracked=아직 마을 주민 추적 정보는 없습니다.
+aetherhaven.ui.villagerneeds.rescueTooltip=선택한 주민을 플레이어 옆으로 순간 이동시키고 현재 이동 경로와 활동 내역을 초기화하여 새로운 목적지로 이동할 수 있도록 합니다. 주민이 갇혔을 때 사용하세요.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=이 주민에게 선물한 아이템들을 주민의 반응별로 정리하여 보여주고, 이번 주에 선물할 수 있는 남은 개수도 확인할 수 있습니다.
+aetherhaven.ui.giftHistory.title=선물로 준 것
+aetherhaven.ui.giftHistory.backTooltip=도시로 돌아가기 위한 필요 사항
+aetherhaven.ui.giftHistory.empty=당신은 아직 이 마을 주민에게 선물을 주지 않았기 때문에 보여줄 것이 없습니다.
+aetherhaven.ui.giftHistory.section.love=사랑받는
+aetherhaven.ui.giftHistory.section.like=좋아요
+aetherhaven.ui.giftHistory.section.neutral=중립적
+aetherhaven.ui.giftHistory.section.dislike=싫어함
+aetherhaven.ui.giftHistory.giftsThisWeek=이번 주 선물: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=이전 마을 주민
+aetherhaven.ui.giftHistory.cycleNextTooltip=다음 마을 주민
+aetherhaven.ui.villagerneeds.rescueDone=선택된 입주민이 귀하에게 옮겨졌고, 해당 입주민의 일과는 재설정되었습니다.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=저 주민은 이 마을 주민이 아닙니다.
+aetherhaven.ui.reputation.label=평판
+aetherhaven.reputation.dailyTalkGain=+{amount} 평판 (일상 인사)
+aetherhaven.reputation.giftRepChange={amount} 평판 (선물)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=헌장 개정
+aetherhaven.ui.charter.popHint=거주자(방문객 제외): {count}. 1단계는 3에서, 2단계는 5에서 잠금 해제됩니다.
+aetherhaven.ui.charter.tierMark1=나
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=1단계: 십일조 방식
+aetherhaven.ui.charter.tier2=2단계: 마을 집중
+aetherhaven.ui.charter.t1.perCapitaShort=1인당
+aetherhaven.ui.charter.t1.happinessShort=행복 가중치
+aetherhaven.ui.charter.t1.perCapitaTooltip=인구수를 우선으로 한 십일조.\n\n아침에 받는 돈은 이곳에 얼마나 많은 주민이 사는지에 달려 있습니다. 일상적인 생활 수준이 총액에 약간의 영향을 미치기는 하지만, 결국 인구수가 가장 큰 영향을 줍니다.
+aetherhaven.ui.charter.t1.happinessTooltip=필요 우선주의 십일조.\n\n아침에 들어오는 돈은 주민들이 얼마나 잘 먹고, 쉬고, 좋은 기분을 유지하는지에 더 크게 좌우됩니다. 몇몇 시민을 더 늘리는 것보다 모든 사람이 괜찮은 상태를 유지하는 것이 훨씬 중요합니다.
+aetherhaven.ui.charter.t2.miningShort=채광
+aetherhaven.ui.charter.t2.loggingShort=벌채 반출
+aetherhaven.ui.charter.t2.farmingShort=농업
+aetherhaven.ui.charter.t2.smithingShort=대장장이
+aetherhaven.ui.charter.t2.miningTooltip=이 헌장은 광산을 지원합니다.\n\n광산 생산과 관련된 보너스가 도입되면 이 마을에 유리하게 작용할 것입니다. 아래 중점 분야 중 하나만 선택하십시오: 광업, 벌목, 농업, 제련.
+aetherhaven.ui.charter.t2.loggingTooltip=헌장은 삼림 보호를 뒷받침합니다.\n\n벌목 및 목재 벌채와 관련된 보너스는 이 마을에 유리하게 작용할 것입니다. 아래 중점 분야 중 하나만 선택하십시오: 광업, 벌목, 농업 또는 제련.
+aetherhaven.ui.charter.t2.farmingTooltip=마을의 농지가 완성되면 스프링클러의 분사 범위가 조금 더 넓어지고, 분사되는 타일 가장자리에도 추가 공간이 생깁니다. 아래 중 하나에만 집중하세요: 채광, 벌목, 농업, 제련.
+aetherhaven.ui.charter.t2.smithingTooltip=헌장은 대장간을 지원합니다.\n\n제련 및 금속 세공과 관련된 보너스는 해당 마을에 도착하면 유리하게 작용할 것입니다. 아래 중점 분야 중 하나만 선택하십시오: 채광, 벌목, 농업 또는 제련.
+aetherhaven.ui.charter.hint=각 등급별로 옵션 하나씩 선택하세요. 선택 사항은 나중에 변경할 수 없습니다.
+aetherhaven.ui.charter.allChosen=이 마을에 대해 선택된 모든 수정 사항.
+aetherhaven.ui.charter.noTown=이 기능을 사용하려면 해당 마을에 소속되어 있어야 합니다.
+aetherhaven.ui.charter.noPermission=이 마을의 헌장 개정안은 변경할 수 없습니다.
+aetherhaven.ui.charter.err.locked=해당 수정안은 잠겨 있거나 이미 선택되었습니다.
+aetherhaven.ui.charter.err.invalid=잘못된 선택입니다.
+aetherhaven.ui.charter.saved=정관 개정 사항이 업데이트되었습니다.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=계속하다
+aetherhaven.reputation.reward.elder.50=교회가 성장함에 따라 정관도 변경될 수 있습니다. 다음은 정관 개정표 양식입니다. 설계도를 받으시면 도시 계획 담당 부서에서 이 양식을 작성하세요. 이 양식을 회관에 비치해 두면 아침 십일조 납부 방식을 자유롭게 정할 수 있습니다.
+aetherhaven.reputation.reward.elder.100=당신은 이 마을을 위해 누구도 부탁하지 않았던 일들을 해 주셨습니다. 이 주춧돌을 받아 두십시오. 헌장에 허용된 곳에 설립자 기념비를 세우십시오. 이곳 사람들은 당신을 기억할 것입니다.
+aetherhaven.reputation.reward.innkeeper.50=당신은 오랫동안 이 연회장을 잘 운영해 왔고 정직하게 일해 왔으니, 이제 큰 식탁을 맡기겠습니다. 여기 연회용 식탁 모형이 있습니다. 설계도를 받으면 도시 계획 사무소에서 제작하고, 마을에 차려 놓으십시오. 식탁이 준비되면 장부 만찬도 소집할 수 있습니다. 빵, 치즈, 파이와 일주일 동안 선행을 베푼 사람에게 주는 십일조를 준비하십시오. 당신이 음식을 서빙하는 동안 저는 연회장을 지키겠습니다.
+aetherhaven.reputation.reward.innkeeper.75=당신은 우리와 함께 수많은 긴 밤을 함께 걸어왔습니다. 당신이 화로 유리 제사를 지내면 마을 사람들은 일주일 동안 더 천천히, 더 정겹게 식사를 합니다. 생선, 고기, 채소, 그리고 모든 필요를 충족시켜주는 부드러운 음식들. 그것이 우리가 서로를 지탱하는 방법입니다.
+aetherhaven.reputation.reward.innkeeper.100=이제 당신과 이 마을은 같은 이름을 갖게 되었습니다. 베리서클 콩코드는 샐러드, 과일 꼬치, 팝콘, 그리고 토스트가 함께 나오는 간단한 원형 접시 요리입니다. 한 번만 대접해도 사람들은 당신을 더 따뜻하게 기억할 것입니다.
+aetherhaven.reputation.reward.merchant.50=당신은 날씨가 좋을 때나 나쁠 때나 약속을 잘 지켜주셨습니다. 여기 작업대 도면이 있습니다. 설계도를 받으시면 도시 계획 담당 부서에서 제작하세요. 작업대 감정은 무료입니다. 저는 제 감정에는 여전히 비용을 청구합니다.
+aetherhaven.reputation.reward.merchant.100=이 장부에 충분한 금을 기록했으니 보석상 코너를 차지할 자격이 생겼습니다. 이제 설계도를 받으세요. 도시 계획 데스크에서 설계도를 바탕으로 제작하세요. 보석과 금속, 그리고 당신이 쏟아붓는 열정을 담아 작품을 완성하면, 완벽한 작품이 탄생할 것입니다.
+aetherhaven.reputation.reward.priestess.50=가이아는 당신이 성장과 파멸의 경계를 넘나들 수 있다고 믿습니다. 도시 계획 데스크에서 만들어진 수정과 생명 정수의 혼합물을 사용해 보세요. 이것은 남아서는 안 될 것을 드러내고, 단 한 번의 숨결로 생성된 것을 없앨 수 있게 해줍니다.
+aetherhaven.reputation.reward.priestess.75=당신은 길을 정직하게 유지합니다. 이 조각을 가져가세요. 마을의 술병에 속삭임보다 더 많은 술이 담기길 원할 때 십일조와 함께 가져오세요.
+aetherhaven.reputation.reward.priestess.100=가이아는 당신의 고집스러움을 최고의 의미로 보여줍니다. 이 푸르른 촉매제는 제단지기에게 동전과 정성을 쏟을 때, 그 효과를 더욱 깊게 만들어 줄 수 있습니다.
+aetherhaven.reputation.reward.farmer.25=당신은 작물 재배에서 제 신뢰를 얻었습니다. 제가 철제 스프링클러를 스케치해 놓았으니, 물의 정수와 철이 있으면 재배대에서 제작하세요.
+aetherhaven.reputation.reward.farmer.50=토륨 패턴은 다음과 같습니다. 도달 범위는 넓지만 새벽 시간대는 동일합니다. 설계도를 알게 되면 작업대의 '농업' 탭에서 확인할 수 있습니다.
+aetherhaven.reputation.reward.farmer.75=코발트는 압력을 더 잘 견뎌냅니다. 이 페이지에서는 세 번째 스프링클러 단계를 잠금 해제할 수 있으며, 여전히 해 뜰 때 시원하게 물을 뿌려줍니다.
+aetherhaven.reputation.reward.farmer.100=아다만타이트와 정수: 세트의 마지막 조각입니다. 조심스럽게 놓으십시오. 새벽이 되면 마을의 들판이 물을 마실 것입니다.
+aetherhaven.reputation.reward.blacksmith.25=돌은 접착제 역할을 하고, 돌은 인내심을 상징합니다. 당신은 둘 다 가지고 있고, 그것이 드러납니다.
+aetherhaven.reputation.reward.blacksmith.50=당신은 대장간의 신뢰를 얻었습니다. 여기 수정 모루 제작 도면이 있습니다. 금속 막대와 돌이 준비되면 마을 계획 데스크에서 제작하세요.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=플롯 표시(관리자)
+aetherhaven.ui.plotadmin.construction=건설
+aetherhaven.ui.plotadmin.give=부지에 서명하고 마감하세요.

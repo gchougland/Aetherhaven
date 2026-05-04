@@ -2,8 +2,10 @@
   "schemaVersion": 1,
   "id": "q_priestess_gaia_draught",
   "category": "town",
-  "title": "Voice of the soil",
-  "description": "Gaia's altar is only the threshold. The restless dead still test the roads. Thin their ranks for the town, then return for a draught that remembers your name.",
+  "assignNpcRoleId": "Aetherhaven_Priestess",
+  "dialogueOfferEntryNodeId": "draught_quest_offer",
+  "title": "Roads under the dead",
+  "description": "Clear restless undead from the roads, then return to Serah for Gaia's Draught and the recipe at your planning desk.",
   "prerequisites": {
     "completedQuestIds": ["q_gaia_altar"],
     "anyCompletedQuestIds": []
@@ -12,7 +14,7 @@
     {
       "id": "journal",
       "kind": "journal",
-      "text": "Hunt undead that threaten the roads, then report back to Serah."
+      "text": "Hunt twelve undead on the roads, then report back to Serah."
     },
     {
       "id": "purge_undead",

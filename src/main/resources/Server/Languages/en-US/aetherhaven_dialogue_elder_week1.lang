@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=I'm Lyren. Our town runs on the charter we signed when we settled here. Before we stake more plots, I need you to walk the ground around Aetherhaven. Get a feel for where it is flat enough to build, where the water is, and where we might put fields or a common green later. Nothing fancy, just look around. When you have done that, come back and tell me.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=I'll scout the area and report back.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Elder Lyren
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=If you are back from the walk, tell me what you saw. If not, say when you are ready.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Before you stake more ground, tell me what your boots saw.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=I kept the charter open today. Ask if a line confuses you.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Walk reports matter more than opinions. Bring me dirt facts.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=If the land looked wrong, say it plain. I do not shame honest eyes.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=Water matters more than drama. Tell me where it sits.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Flat ground lies sometimes. Tell me where it fooled you.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=If you saw good soil, describe it like a farmer would.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=If you saw bad slopes, say how steep without poetry.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=I have time for one clear map in your head. Paint it in words.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Come back when you can say north, south, mud, stone in plain order.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=A tight notebook page with real landmarks means more than a speech.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=If you bring a simple meal while we talk maps, I take it as kindness.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Clean chalk and a straight ruler tell me you mean business.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=I like a small gift that helps reading, not showing off.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Water flasks and dry biscuits are boring gifts, and I like them that way on scout days.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Do not bring me trophies from old bones as if they prove you walked.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=I do not want street junk presented as research.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=If it smells like rot, it is not a map accessory.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Keep pranks and noise toys away from the charter table.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=I have no use for glitter trash when we are discussing water lines.

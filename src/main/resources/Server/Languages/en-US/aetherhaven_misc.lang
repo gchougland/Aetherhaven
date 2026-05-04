@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
+aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
+commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)
+commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (e.g. aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Optional entry node id (default: root)
+aetherhaven.interaction.dialogue=Press [{key}] to talk
+npcRoles.Aetherhaven_Test_Villager.name=Dialogue Test Villager
+aetherhaven.banner.quest.completed.primary=Quest Complete
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Building Complete
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} is ready.
+aetherhaven.assembly.tracer.none_in_range=No assembly preview in range (move closer or check town build permission).
+aetherhaven.banner.quest.started.primary=Quest Started
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Unlocked
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Building Staff
+items.Aetherhaven_Building_Staff.description=Primary sends a guiding bolt through blocks to the nearest assembly preview in range. Hold secondary and aim through blocks at the assembly preview to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.

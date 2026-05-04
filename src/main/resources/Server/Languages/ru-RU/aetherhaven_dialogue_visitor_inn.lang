@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_inn)
+# Full translation keys are aetherhaven_dialogue_visitor_inn.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=В камине тепло, но бухгалтерская книга предназначена для горожан и их гостей. Приходите, когда вас пригласят.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Справедливо.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Трактирщик

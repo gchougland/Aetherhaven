@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=플롯 사인
+items.Aetherhaven_Plot_Sign.description=조립식 구조물을 건설할 수 있는 위치를 표시합니다. 설정하려면 /aetherhaven plot 명령어를 사용하세요.
+
+items.Aetherhaven_Charter.name=마을 헌장
+items.Aetherhaven_Charter.description=마을을 건설할 수 있는 장소입니다. 각 플레이어는 월드당 하나의 마을을 가질 수 있습니다. 마을 정보를 보려면 이 버튼을 사용하세요.
+
+items.Aetherhaven_Town_Planning_Desk.name=도시 계획 담당 부서
+items.Aetherhaven_Town_Planning_Desk.description=마을 헌장, 부지 배치 도구, 건설 도구(부지 건설 속도 향상), 퀘스트 일지, 광물 모루, 헌장 수정표, 부지 토큰을 제작하세요. 작업대에서 하나씩 만들 수 있습니다.
+items.Aetherhaven_Charter_Amendments_Table.name=헌장 개정표
+items.Aetherhaven_Charter_Amendments_Table.description=이 문서는 마을의 십일조 계산 방식과 조례에서 장려하는 교역 유형을 기록합니다. 주민들의 동의를 얻으면 이 문서를 사용하여 개정안을 제출할 수 있습니다. 도시 계획 데스크에서 작성해야 하며, 도시 계획 도면을 숙지해야 합니다.
+items.Aetherhaven_Banquet_Table.name=연회 테이블
+items.Aetherhaven_Banquet_Table.description=마을 연회용 긴 테이블입니다. 영토 내에 설치하고 마을 연회에 사용하세요. 마을 주민 중 누군가가 제작 도면을 공유하면 마을 계획 데스크에서 제작할 수 있습니다.
+items.Aetherhaven_Founder_Monument.name=창립자 기념비
+items.Aetherhaven_Founder_Monument.description=설립자의 초상이 새겨진 돌 받침대. 설립자를 기리기 위해 마을 영토 내에 놓아두면, 매일 아침 재정 수입이 조금씩 늘어난다고 한다. 마을당 하나만 존재한다.
+
+benchCategories.aetherhaven.town_planning=도시 계획
+benchCategories.aetherhaven.plot_tokens=플롯 토큰
+
+items.Aetherhaven_Plot_Placement_Tool.name=부지 배치 담당 직원
+items.Aetherhaven_Plot_Placement_Tool.description=해당 부지 토큰을 가방에 보관하세요. 지팡이를 땅에 대고 조준하면 건물의 희미한 모습이 나타납니다. 위치를 정확히 맞추기 위해 살짝 밀고 돌린 다음, 확인을 눌러 부지를 표시하세요. 취소하면 미리보기가 사라지고, 다른 위치를 원할 때 지팡이를 다시 사용하세요.
+
+items.Aetherhaven_Poi_Tool.name=POI 디버그 도구
+items.Aetherhaven_Poi_Tool.description=마우스를 들고 있는 동안 마을의 관심 지점(POI)을 표시합니다(권한: aetherhaven.poi.tool). 기본: 가장 가까운 POI를 선택합니다. 보조: POI 앵커를 해당 블록으로 이동합니다. 사용: 선택한 POI에 대한 자율 경로 목표를 설정/해제합니다(POI 블록을 다시 클릭하면 해제됩니다).
+items.Aetherhaven_Poi_Tool.legendTitle=POI 도구
+items.Aetherhaven_Poi_Tool.legendPrimary=기본: 블록 근처에서 가장 가까운 관심 지점(POI)을 선택하세요
+items.Aetherhaven_Poi_Tool.legendSecondary=보조 기능: 선택한 POI를 블록으로 이동
+items.Aetherhaven_Poi_Tool.legendUse=용도: 선택한 POI에 대한 NPC 경로 대상을 설정합니다. (POI에 사용하면 블록이 초기화됩니다.)
+
+aetherhaven.poiTool.legendTitle=POI 도구
+aetherhaven.poiTool.legendPrimary=기본: 블록 근처에서 가장 가까운 관심 지점(POI)을 선택하세요
+aetherhaven.poiTool.legendSecondary=보조 기능: 선택한 POI를 블록으로 이동
+aetherhaven.poiTool.legendUse=용도: 선택한 POI에 대한 NPC 경로 대상을 설정합니다. (POI에 사용하면 블록이 초기화됩니다.)
+
+aetherhaven.pathTool.legendPageTitle=경로 도구
+aetherhaven.pathTool.legendBlurb=스플라인을 생성하고 미리 보기를 한 다음 경로 블록을 배치합니다. 도구를 들고 있는 동안 화면 모서리에 상태 패널이 나타납니다. Buuz135 MHUD가 설치되어 있으면 이 패널이 별도의 레이어로 등록되어 다른 사용자 지정 HUD도 함께 표시될 수 있습니다.
+aetherhaven.pathTool.legendHotkeyAdd=지면에 보조 무기를 사용하면 키프레임(금색 구체)이 추가됩니다. 조준 중에 보조 무기를 사용하면 키프레임이 제거됩니다. 새 키프레임은 플레이어가 바라보는 방향을 향합니다.
+aetherhaven.pathTool.legendHotkeyAim=키프레임을 살펴보고 선택하세요. 이동 모드에서 지면에 있는 기본 커서는 포인트를 이동시킵니다. 같은 노드에 있는 기본 커서는 아무런 동작도 하지 않습니다.
+aetherhaven.pathTool.legendHotkeyUse=F: 회전 모드에서 선택한 노드를 기준으로 단계적으로 요(yaw) 이동을 합니다. 이동 모드에서 F 키는 아무런 동작도 하지 않습니다. 배치 모드에서 F 키는 경로를 배치합니다(노드 두 개 필요). Q: 모드 전환. E: 너비 1-8. 세 번째 도구 기능: 경로 스타일(내부 블록, 설정 파일의 PathToolStyles 참조). 키프레임에 대한 보조 키는 해당 스타일을 제거합니다.
+aetherhaven.pathTool.legendHotkeyCrouchUse=선택 사항: 더 이상 웅크리기 동작으로 모드를 변경할 필요가 없습니다. 대신 도구 사용 능력(Q)을 사용하십시오.
+aetherhaven.pathTool.legendVisuals=미리보기: 흰색 = 노드 및 스플라인, 갈색 = 경로 스트립, 녹색 = 가장자리 잔디; 빨간색 = 막힘. 슬래브는 표면에 놓입니다. 너비: 두 번째 도구 능력(1-8). 스타일: 세 번째 도구 능력. 확정(Commit)을 누르면 경로 위의 키 큰 식물(Plant_Grass)이 제거됩니다.
+aetherhaven.pathTool.statusHeader=도구를 잡고 있는 동안
+aetherhaven.pathTool.statusLine1=포인트를 추가하거나, 모드를 전환(Q)하거나, 확정 모드를 활성화할 때 건배 및 채팅 메시지가 표시됩니다.
+aetherhaven.pathTool.statusLine2=선택: 구체를 조준하세요. 빗맞으면 현재 선택이 유지됩니다. Q 스킬은 모드를 순환하고, 두 번째 스킬은 순환 폭을, 세 번째 스킬은 순환 경로를 변경합니다.
+
+aetherhaven.pathTool.hudTitle=경로 도구
+aetherhaven.pathTool.hudNameTranslate=이동하다
+aetherhaven.pathTool.hudNameRotate=회전
+aetherhaven.pathTool.hudNameCommit=장소
+aetherhaven.pathTool.hudHelpTranslate=기본 조작: 노드를 선택하려면 노드를 조준하고, 블록을 선택하려면 블록을 조준합니다. 보조 조작: 지면에 노드가 추가되고, 노드를 조준하면 노드가 제거됩니다. Q: 다음 모드.
+aetherhaven.pathTool.hudHelpRotate=기본 키: 노드를 조준하여 선택합니다. 보조 키: 지면을 누르면 노드가 추가되고, 노드를 조준하면 노드가 제거됩니다. F 키는 선택된 노드의 회전 방향을 약간 조정합니다. Q 키: 다음 모드로 이동합니다.
+aetherhaven.pathTool.hudHelpCommit=기본: 노드를 선택하려면 노드를 조준하세요. 보조: 지면을 누르면 노드가 추가되고, 노드를 조준하면 노드가 제거됩니다. F 키는 경로를 배치합니다(2개 이상의 노드). Q 키: 다음 모드.
+aetherhaven.pathTool.hudStyle=스타일: {style}
+aetherhaven.pathTool.hudWidth=너비: {w} 블록 (E를 눌러 순환)
+aetherhaven.pathTool.hudNodes=노드: {n}
+aetherhaven.pathTool.hudHint=기본 이동 = 선택/이동 | 보조 이동 = 지면에 추가, 노드에서 제거 | Q: 모드 | E: 너비 | R: 스타일 | F: 회전/배치
+
+aetherhaven.pathTool.addedNode=노드 {n}이 추가되었습니다.
+aetherhaven.pathTool.modeCycledToTranslate=모드: 키프레임을 이동하고 배치합니다.
+aetherhaven.pathTool.modeCycledToRotate=모드: 회전 — F 키를 누르면 선택한 노드의 요(yaw) 방향으로 미세하게 이동합니다.
+aetherhaven.pathTool.modeCycledToCommit=모드: 배치 — F 키를 누르면 경로가 배치됩니다(노드가 2개 이상일 경우).
+aetherhaven.pathTool.widthCycled=경로 폭: {w} (1-8)
+aetherhaven.pathTool.styleCycled=경로 스타일: {style}
+aetherhaven.pathTool.toastStyleCycled=경로 스타일이 변경되었습니다
+aetherhaven.pathTool.useInTranslateMode=이동 모드에서는 F 키가 아무런 기능도 하지 않습니다. Q 키를 눌러 배치 모드로 전환한 다음, F 키를 눌러 배치하거나, 회전한 다음 F 키를 눌러 좌우로 미세 조정하세요.
+aetherhaven.pathTool.rotateNoSelection=회전할 키프레임을 선택하거나(금색 구체를 조준하세요) Q 키를 눌러 모드를 변경하세요.
+aetherhaven.pathTool.modeToggled=모드: {m}
+aetherhaven.pathTool.selectedNode=노드가 선택되었습니다.
+aetherhaven.pathTool.movedNode=노드가 이동되었습니다.
+aetherhaven.pathTool.noNodeHit=범위 내에 제어 노드가 없습니다. 노드가 선택된 상태에서 이동 모드로 전환한 후, 지면에 있는 기본 노드를 사용하여 이동해 보세요.
+aetherhaven.pathTool.noNodeOnAim=조준선에 키프레임이 없습니다. 금색 원반을 조준하여 선택하세요. 선택은 변경되지 않습니다.
+aetherhaven.pathTool.toastAdd=제어점이 추가되었습니다
+aetherhaven.pathTool.toastModeTranslate=이동: 기본 이동은 블록 시 선택 영역을 이동하고, 보조 이동은 키프레임을 추가합니다.
+aetherhaven.pathTool.toastModeRotate=회전: F 키는 선택한 노드의 좌우 방향을 약간씩 조정합니다.
+aetherhaven.pathTool.toastModeCommit=위치: F는 경로(노드 2개 이상)를 배치합니다. Q와 위치를 바꿉니다.
+aetherhaven.pathTool.toastMoved=노드 위치가 업데이트되었습니다.
+aetherhaven.pathTool.toastRemoved=제어점이 제거되었습니다
+aetherhaven.pathTool.toastRotated=요우가 툭 쳤다.
+aetherhaven.pathTool.toastCemented=경로가 확정되었습니다. 되돌리기 ID는 채팅을 확인하세요.
+aetherhaven.pathTool.rotated={deg}°로 회전됨.
+aetherhaven.pathTool.removedNode=노드가 제거되었습니다. {n}개의 노드가 남아 있습니다.
+aetherhaven.pathTool.needTwoNodes=최소 두 개의 키프레임이 필요합니다. 보조 키프레임을 사용하여 하나 더 추가하거나, Q 키를 눌러 커밋 모드를 종료하고 편집을 계속하세요.
+aetherhaven.pathTool.emptyPlan=경로를 따라 지형을 찾을 수 없습니다(급경사/빈 공간/로딩되지 않은 청크).
+aetherhaven.pathTool.cementFail=설치할 것이 없습니다. 교체 가능한 접지점을 찾을 수 없거나 설치에 실패했습니다.
+aetherhaven.pathTool.cemented=경로가 지정되었습니다. 되돌리기 ID: {id} (aetherhaven.path.revert를 사용한 aetherhaven 경로 되돌리기 <id>)
+aetherhaven.pathTool.revertNoPerm=aetherhaven.path.revert 권한이 없습니다.
+aetherhaven.pathTool.badUuid=잘못된 ID: {raw}
+aetherhaven.pathTool.unknownId=해당 ID로 저장된 경로가 없습니다.
+aetherhaven.pathTool.reverted={id}에 대해 {cells} 블록이 되돌려졌습니다.
+aetherhaven.pathTool.navvizOn=경로 탐색 디버그: 켜짐(서버에서 커밋된 경로 노드를 선으로 표시합니다. 다시 실행하면 꺼집니다.)
+aetherhaven.pathTool.navvizOff=경로 탐색 디버그: 끔
+aetherhaven.pathTool.navvizNoPerm=경로 탐색 디버그에는 aetherhaven.path.tool이 필요합니다.
+
+commands.aetherhaven.path.root.desc=경로/스플라인 배치 도우미
+commands.aetherhaven.path.revert.desc=되돌리기 파일(aetherhaven.path.revert)에서 확정된 경로를 복원합니다.
+commands.aetherhaven.path.revert.id=경로 커밋 ID(시멘트 채팅 메시지의 UUID)
+commands.aetherhaven.path.navviz.desc=경로 탐색 폴리라인의 디버그 그리기를 켜고 끄기(aetherhaven.path.tool; 하위 항목: navviz)
+
+items.Aetherhaven_Path_Tool.name=경로 설계용 삽
+items.Aetherhaven_Path_Tool.description=스플라인 경로를 디자인합니다(aetherhaven.path.tool). 보조 키: 노드 추가. 기본 키: 선택; 이동 모드에서는 지면을 클릭하여 이동합니다. Q: 모드 전환. 두 번째 키: 경로 너비 1-8. 세 번째 키: 경로 스타일(내부 블록; 설정 파일의 PathToolStyles). F: 회전 모드에서 좌우 이동(yaw) 또는 제자리 배치 모드(노드 2개 이상)에서 경로 배치. 되돌리기: aetherhaven 경로 복원. 설정 파일: PathToolStyles, 레이캐스트, 목록 교체.
+
+items.Aetherhaven_Plot_Token_Inn.name=여관 부지 토큰
+items.Aetherhaven_Plot_Token_Inn.description=여관 부지 배치를 위해 필요한 아이템입니다.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=시장 가판대 부지 토큰
+items.Aetherhaven_Plot_Token_Market_Stall.description=시장 가판대 설치 위치는 부지 배치 담당 직원에게 문의하여 지정해야 합니다.
+
+items.Aetherhaven_Plot_Token_Farm.name=농지 토큰
+items.Aetherhaven_Plot_Token_Farm.description=농지 구획 배치 담당자가 제공하는 농지 구획 도면을 작성해야 합니다.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=대장간 부지 토큰
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=대장간 부지 배치는 부지 배치 담당자가 직접 진행해야 합니다.
+
+items.Aetherhaven_Plot_Token_Park.name=공원 부지 토큰
+items.Aetherhaven_Plot_Token_Park.description=공원 부지 배치 담당자가 공원 면적을 지정해야 합니다.
+
+items.Aetherhaven_Plot_Token_House.name=주택 부지 토큰
+items.Aetherhaven_Plot_Token_House.description=공동주택 부지 배치 담당자에게 공동주택 부지 도면을 제출해야 합니다.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=시청 부지 토큰
+items.Aetherhaven_Plot_Token_Town_Hall.description=시청 부지 배치 담당자가 작성한 부지 배치도를 제출해야 합니다.
+
+items.Aetherhaven_Gold_Coin.name=금화
+items.Aetherhaven_Gold_Coin.description=마을 화폐는 금고에 보관되어 있습니다.
+
+items.Aetherhaven_Geode.name=지오드
+items.Aetherhaven_Geode.description=속이 빈 돌에는 수정, 보석 또는 광석이 들어 있을 수 있습니다. 대장장이에게 의뢰하여 깨뜨려 보세요.
+
+items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
+items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 수정 동굴을 엽니다. 설치 후 사용 가능하며, 제작하려면 설계도를 알아야 마을 계획 데스크에서 제작할 수 있습니다.
+
+barter.aetherhaven_vex.title=Vex의 일일 재고
+
+items.Aetherhaven_Treasury.name=시 재정
+items.Aetherhaven_Treasury.description=마을의 금화를 보관합니다. 입금 또는 출금 시 사용합니다(마을 소유주).
+
+items.Aetherhaven_Quest_Journal.name=마을 퀘스트 일지
+items.Aetherhaven_Quest_Journal.description=보조 용도: 진행 중인 마을 퀘스트를 확인합니다. 여관이 지어진 후 장로가 퀘스트를 줄 수도 있습니다.

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Sprinkler_Adamantite.name",
-    "Description": "server.items.Aetherhaven_Sprinkler_Adamantite.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Adamantite.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Adamantite.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Çantanız bu tamir için çok hafif.
+aetherhaven.blacksmith.repair.success={itemName} tekrar eski haline döndü. Yepyeni gibi.
+commands.aetherhaven.dialogue.desc=Test amacıyla, kimliğe göre bir diyalog ağacı açın.
+commands.aetherhaven.dialogue.treeId.desc=Diyalog ağacı kimliği (örneğin aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=İsteğe bağlı giriş düğümü kimliği (varsayılan: root)
+aetherhaven.interaction.dialogue=Konuşmak için [{key}] tuşuna basın.
+npcRoles.Aetherhaven_Test_Villager.name=Diyalog Testi Köylü
+aetherhaven.banner.quest.completed.primary=Görev Tamamlandı
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=İnşaat Tamamlandı
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} hazır.
+aetherhaven.assembly.tracer.none_in_range=Yakın çevrede montaj önizlemesi yok (yaklaşın veya kasaba inşa iznini kontrol edin).
+aetherhaven.banner.quest.started.primary=Görev Başlatıldı
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Kilidi Açıldı
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Bina Personeli
+items.Aetherhaven_Building_Staff.description=Birincil imleç, blokların arasından en yakın montaj önizleme noktasına yönlendirme oku gönderir. İkincil imleci basılı tutun ve montaj önizlemesine nişan alarak bir sonraki bloğu anında yerleştirin (kasaba inşa izni). Siz uzaktayken pasif yapılar kendi kendine ilerlemeye devam eder.

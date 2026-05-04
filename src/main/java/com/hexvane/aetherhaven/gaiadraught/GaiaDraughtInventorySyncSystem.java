@@ -11,7 +11,8 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
-import com.hypixel.hytale.component.dependency.RootDependency;
+import com.hypixel.hytale.component.dependency.Order;
+import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -20,6 +21,7 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatsSystems;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Set;
@@ -27,6 +29,11 @@ import javax.annotation.Nonnull;
 
 /**
  * Re-syncs Gaia's Draught stack durability with town charges and keeps the ammo HUD aligned when the flask is held.
+ *
+ * <p>Vanilla {@code LegacyHotbarChangeStatSystem} clears Ammo when the active slot changes (weapon {@code
+ * EntityStatsToClear}), and {@link EntityStatsSystems.Recalculate} reapplies held-item ammo modifiers every tick. We
+ * run <strong>after</strong> that recalculation and refresh our draught HUD every tick so dots never briefly stack with
+ * a bow/crossbow or stay empty until a slow inventory sync.
  */
 public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<EntityStore> {
     private static final int SYNC_INTERVAL_TICKS = 40;
@@ -34,7 +41,7 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
     @Nonnull
     private final AetherhavenPlugin plugin;
     @Nonnull
-    private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
+    private final Set<Dependency<EntityStore>> dependencies = Set.of(new SystemDependency<>(Order.AFTER, EntityStatsSystems.Recalculate.class));
 
     public GaiaDraughtInventorySyncSystem(@Nonnull AetherhavenPlugin plugin) {
         this.plugin = plugin;
@@ -60,9 +67,6 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        if ((store.getExternalData().getWorld().getTick() + index) % SYNC_INTERVAL_TICKS != 0) {
-            return;
-        }
         Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(index);
         UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (uc == null) {
@@ -72,17 +76,22 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         EntityStatMap statMap = store.getComponent(playerRef, EntityStatMap.getComponentType());
-        if (town == null) {
-            if (statMap != null) {
+        if (statMap != null) {
+            if (town == null) {
                 GaiaDraughtAmmoHudSupport.clearAmmoHudModifier(statMap);
+            } else {
+                GaiaDraughtAmmoHudSupport.syncHeldDraughtAmmoHud(store, playerRef, town, uc.getUuid());
             }
+        }
+
+        if ((world.getTick() + index) % SYNC_INTERVAL_TICKS != 0) {
+            return;
+        }
+        if (town == null) {
             return;
         }
         GaiaDraughtState st = town.findGaiaDraughtState(uc.getUuid());
         if (st == null || !st.isUnlocked()) {
-            if (statMap != null) {
-                GaiaDraughtAmmoHudSupport.clearAmmoHudModifier(statMap);
-            }
             return;
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
@@ -98,16 +107,10 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
             }
         }
         if (InventoryMaterials.count(inv, id) <= 0 && st.getCharges() <= 0) {
-            if (statMap != null) {
-                GaiaDraughtAmmoHudSupport.syncHeldDraughtAmmoHud(commandBuffer, playerRef, town, uc.getUuid());
-            }
             return;
         }
         if (!draughtStacksMatchTown(inv, id, st)) {
             GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, st);
-        }
-        if (statMap != null) {
-            GaiaDraughtAmmoHudSupport.syncHeldDraughtAmmoHud(commandBuffer, playerRef, town, uc.getUuid());
         }
     }
 

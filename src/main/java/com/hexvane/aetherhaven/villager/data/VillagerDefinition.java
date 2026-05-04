@@ -91,6 +91,16 @@ public final class VillagerDefinition {
     @Nullable
     private List<String> giftDislikes;
 
+    /** Translation keys for generic hub greetings (see {@code bodyMode} {@code villager_greeting}). */
+    @SerializedName("dialogueGreetingLangKeys")
+    @Nullable
+    private List<String> dialogueGreetingLangKeys;
+
+    /** Translation keys mixed into greetings as occasional gift hints. */
+    @SerializedName("dialogueGiftHintLangKeys")
+    @Nullable
+    private List<String> dialogueGiftHintLangKeys;
+
     @Nonnull
     public String getNpcRoleId() {
         return npcRoleId != null ? npcRoleId.trim() : "";
@@ -210,6 +220,16 @@ public final class VillagerDefinition {
     @Nonnull
     public List<String> getGiftDislikes() {
         return listOrEmpty(giftDislikes);
+    }
+
+    @Nonnull
+    public List<String> getDialogueGreetingLangKeys() {
+        return listOrEmpty(dialogueGreetingLangKeys);
+    }
+
+    @Nonnull
+    public List<String> getDialogueGiftHintLangKeys() {
+        return listOrEmpty(dialogueGiftHintLangKeys);
     }
 
     @Nonnull

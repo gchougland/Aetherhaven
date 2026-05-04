@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Votre sac est trop léger pour cette réparation.
+aetherhaven.blacksmith.repair.success={itemName} est de nouveau intact. Comme neuf.
+commands.aetherhaven.dialogue.desc=Ouvrir un arbre de dialogue par identifiant (pour les tests)
+commands.aetherhaven.dialogue.treeId.desc=Identifiant de l'arbre de dialogue (par exemple, aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Identifiant du nœud d'entrée facultatif (par défaut : racine)
+aetherhaven.interaction.dialogue=Appuyez sur [{key}] pour parler
+npcRoles.Aetherhaven_Test_Villager.name=Test de dialogue avec le villageois
+aetherhaven.banner.quest.completed.primary=Quête terminée
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Bâtiment terminé
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} est prêt.
+aetherhaven.assembly.tracer.none_in_range=Aucun aperçu d'assemblage à portée (rapprochez-vous ou vérifiez l'autorisation de construction de la ville).
+aetherhaven.banner.quest.started.primary=Quête commencée
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Déverrouillé
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Personnel du bâtiment
+items.Aetherhaven_Building_Staff.description=L'attaque principale envoie un projectile à travers les blocs jusqu'à l'aperçu d'assemblage le plus proche. Maintenez la touche secondaire enfoncée et visez à travers les blocs l'aperçu d'assemblage pour placer instantanément le bloc suivant (autorisation de construction en ville requise). Les constructions passives progressent automatiquement même en votre absence.

@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Plot sign
+items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.
+
+items.Aetherhaven_Charter.name=Town charter
+items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
+
+items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
+items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the building staff (speeds passive plot construction), the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
+items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
+items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; you must know the schematic.
+items.Aetherhaven_Banquet_Table.name=Banquet table
+items.Aetherhaven_Banquet_Table.description=A long table for town feasts. Place in your territory and use it to serve a civic feast. Craft at the town planning desk once someone in town shares the pattern.
+items.Aetherhaven_Founder_Monument.name=Founder monument
+items.Aetherhaven_Founder_Monument.description=A stone pedestal that holds a likeness of the founder. Place inside town territory to honor them; the treasury's morning share grows slightly while it stands. Only one per town.
+
+benchCategories.aetherhaven.town_planning=Town planning
+benchCategories.aetherhaven.plot_tokens=Plot tokens
+
+items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
+items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building. Nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.
+
+items.Aetherhaven_Poi_Tool.name=POI debug tool
+items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
+items.Aetherhaven_Poi_Tool.legendTitle=POI tool
+items.Aetherhaven_Poi_Tool.legendPrimary=Primary: select nearest POI near the block
+items.Aetherhaven_Poi_Tool.legendSecondary=Secondary: move selected POI to the block
+items.Aetherhaven_Poi_Tool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
+
+aetherhaven.poiTool.legendTitle=POI tool
+aetherhaven.poiTool.legendPrimary=Primary: select nearest POI near the block
+aetherhaven.poiTool.legendSecondary=Secondary: move selected POI to the block
+aetherhaven.poiTool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
+
+aetherhaven.pathTool.legendPageTitle=Path tool
+aetherhaven.pathTool.legendBlurb=Build a spline, preview it, then place pathway blocks. A status panel appears in the corner while you hold the tool. With Buuz135 MHUD installed, the panel registers as its own layer so other custom HUDs can stay visible too.
+aetherhaven.pathTool.legendHotkeyAdd=Secondary on ground adds a keyframe (gold sphere). Secondary while aiming a keyframe removes it. New keyframes face the way you are looking.
+aetherhaven.pathTool.legendHotkeyAim=Look at a keyframe to select it. In move mode, primary on ground moves the point. Primary on the same node does nothing.
+aetherhaven.pathTool.legendHotkeyUse=F: in rotate mode, step yaw on the selected node. In move mode, F does nothing. In place mode, F places the path (need two nodes). Q: mode cycle. E: width 1-8. Third tool ability: path style (inner blocks; see PathToolStyles in config). Secondary on a keyframe removes it.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Optional: crouch is no longer required to change mode; use the tool ability (Q) instead.
+aetherhaven.pathTool.legendVisuals=Preview: white = nodes and spline, brown = path strip, green = edge grass; red = blocked. Slabs sit on the surface. Width: second tool ability (1-8). Style: third tool ability. Commit clears tall plants (Plant_Grass) above the path.
+aetherhaven.pathTool.statusHeader=While holding the tool
+aetherhaven.pathTool.statusLine1=Toasts and chat when you add points, switch mode (Q), or cement in commit mode.
+aetherhaven.pathTool.statusLine2=Selection: aim at a sphere. Miss keeps your current selection. Q cycles mode; second ability cycles width; third ability cycles path style.
+
+aetherhaven.pathTool.hudTitle=Path tool
+aetherhaven.pathTool.hudNameTranslate=Move
+aetherhaven.pathTool.hudNameRotate=Rotate
+aetherhaven.pathTool.hudNameCommit=Place
+aetherhaven.pathTool.hudHelpTranslate=Primary: aim a node to select, then primary on a block to move it. Secondary: ground adds a node; aiming a node removes it. Q: next mode.
+aetherhaven.pathTool.hudHelpRotate=Primary: aim a node to select. Secondary: ground adds a node; aiming a node removes it. F nudges selected node yaw. Q: next mode.
+aetherhaven.pathTool.hudHelpCommit=Primary: aim a node to select. Secondary: ground adds a node; aiming a node removes it. F places the path (2+ nodes). Q: next mode.
+aetherhaven.pathTool.hudStyle=Style: {style}
+aetherhaven.pathTool.hudWidth=Width: {w} blocks (E to cycle)
+aetherhaven.pathTool.hudNodes=Nodes: {n}
+aetherhaven.pathTool.hudHint=Primary = select/move | Secondary = add on ground, remove on node | Q: mode | E: width | R: style | F: rotate/place
+
+aetherhaven.pathTool.addedNode=Node {n} added.
+aetherhaven.pathTool.modeCycledToTranslate=Mode: move and place keyframes.
+aetherhaven.pathTool.modeCycledToRotate=Mode: rotate — F nudges selected node yaw.
+aetherhaven.pathTool.modeCycledToCommit=Mode: place — F places the path (when you have 2+ nodes).
+aetherhaven.pathTool.widthCycled=Path width: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Path style: {style}
+aetherhaven.pathTool.toastStyleCycled=Path style changed
+aetherhaven.pathTool.useInTranslateMode=F does nothing in move mode. Press Q to switch to place mode, then F to place, or to rotate and F to nudge yaw.
+aetherhaven.pathTool.rotateNoSelection=Select a keyframe (aim at the gold sphere) to rotate, or press Q to change mode.
+aetherhaven.pathTool.modeToggled=Mode: {m}
+aetherhaven.pathTool.selectedNode=Node selected.
+aetherhaven.pathTool.movedNode=Node moved.
+aetherhaven.pathTool.noNodeHit=No control node in range. In translate mode with a node selected, try primary on the ground to move.
+aetherhaven.pathTool.noNodeOnAim=No keyframe on crosshair. Aim at a gold disc to select. Selection unchanged.
+aetherhaven.pathTool.toastAdd=Control point added
+aetherhaven.pathTool.toastModeTranslate=Move: primary on block moves selection; secondary adds keyframe.
+aetherhaven.pathTool.toastModeRotate=Rotate: F nudges yaw for the selected node.
+aetherhaven.pathTool.toastModeCommit=Place: F places the path (2+ nodes). Switch with Q.
+aetherhaven.pathTool.toastMoved=Node position updated
+aetherhaven.pathTool.toastRemoved=Control point removed
+aetherhaven.pathTool.toastRotated=Yaw nudged
+aetherhaven.pathTool.toastCemented=Path cemented. Check chat for revert id.
+aetherhaven.pathTool.rotated=Rotated {deg}°.
+aetherhaven.pathTool.removedNode=Node removed. {n} node(s) remaining.
+aetherhaven.pathTool.needTwoNodes=Need at least two keyframes. Add another with secondary, or press Q to leave commit mode and keep editing.
+aetherhaven.pathTool.emptyPlan=No ground found along the path (steep/void/unloaded chunks).
+aetherhaven.pathTool.cementFail=Nothing to place: no replaceable ground found or placement failed.
+aetherhaven.pathTool.cemented=Path placed. Revert id: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=You do not have permission aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Invalid id: {raw}
+aetherhaven.pathTool.unknownId=No saved path with that id.
+aetherhaven.pathTool.reverted=Reverted {cells} block(s) for {id}
+aetherhaven.pathTool.navvizOn=Path nav debug: on (server shows committed path nodes as lines; run again to turn off)
+aetherhaven.pathTool.navvizOff=Path nav debug: off
+aetherhaven.pathTool.navvizNoPerm=Path nav debug requires aetherhaven.path.tool
+
+commands.aetherhaven.path.root.desc=Path / spline placement helpers
+commands.aetherhaven.path.revert.desc=Restore a cemented path from the undo file (aetherhaven.path.revert)
+commands.aetherhaven.path.revert.id=Path commit id (UUID from cement chat message)
+commands.aetherhaven.path.navviz.desc=Toggle debug drawing of path-nav polylines (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=Path designer shovel
+items.Aetherhaven_Path_Tool.description=Designs spline paths (aetherhaven.path.tool). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
+
+items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
+items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
+items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
+items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_Park.name=Park plot token
+items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_House.name=House plot token
+items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
+items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
+
+items.Aetherhaven_Gold_Coin.name=Gold coin
+items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
+
+items.Aetherhaven_Geode.name=Geode
+items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems, or ore. Pay a blacksmith to crack it open.
+
+items.Aetherhaven_Geode_Anvil.name=Geode anvil
+items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; you must know the schematic to craft it at your town planning desk.
+
+barter.aetherhaven_vex.title=Vex's daily stock
+
+items.Aetherhaven_Treasury.name=Town treasury
+items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).
+
+items.Aetherhaven_Quest_Journal.name=Town quest journal
+items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.

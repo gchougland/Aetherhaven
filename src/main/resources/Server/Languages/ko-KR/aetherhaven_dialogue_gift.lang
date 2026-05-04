@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=오늘 이미 준 선물
+aetherhaven.dialogue.gift.disabled.weekly=이번 주에 받은 선물 두 개
+aetherhaven.dialogue.gift.offer=선물을 주세요
+aetherhaven.dialogue.gift.confirmBody=현재 활성화된 핫바에 있는 아이템(1개)을 선물로 주시겠습니까?
+aetherhaven.dialogue.gift.confirmYes=네, 주세요.
+aetherhaven.dialogue.gift.confirmNo=괜찮아요
+aetherhaven.dialogue.gift.back=괜찮은
+aetherhaven.dialogue.gift.fail.visitor=보관된 선물은 해당 마을 주민만 받을 수 있습니다.
+aetherhaven.dialogue.gift.fail.emptyHand=핫바에 아이템을 들고 있으면 해당 아이템을 제안할 수 있습니다.
+aetherhaven.dialogue.gift.fail.dailyLimit=당신은 오늘 이미 이 사람에게 선물을 주었습니다.
+aetherhaven.dialogue.gift.fail.weeklyLimit=당신은 이 사람에게 매주 주는 선물을 모두 사용했습니다.
+aetherhaven.dialogue.gift.fail.generic=지금은 그 선물을 줄 수 없어요.

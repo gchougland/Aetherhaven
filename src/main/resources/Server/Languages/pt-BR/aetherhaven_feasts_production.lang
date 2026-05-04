@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=festas da cidade
+aetherhaven.ui.feast.noTown=Você deve pertencer a uma cidade.
+aetherhaven.ui.feast.noPermission=Não se podem fazer festas nesta cidade.
+aetherhaven.ui.feast.outsideTerritory=A mesa deve estar localizada dentro do território da sua cidade.
+aetherhaven.ui.feast.activeTitle=Festa da cidade em vigor
+aetherhaven.ui.feast.noneActive=Nenhum banquete cronometrado está ativo. Selecione um banquete à esquerda para ler os custos e efeitos.
+aetherhaven.ui.feast.daysLeft=Dias restantes (amanheceres): {days}
+aetherhaven.ui.feast.selectHint=Selecione um banquete
+aetherhaven.ui.feast.ingredientsLabel=Ingredientes
+aetherhaven.ui.feast.confirm=Realize o banquete
+aetherhaven.ui.feast.locked=Você ainda não aprendeu sobre este banquete. Passe um tempo com os moradores da cidade até que alguém lhe explique como ele é feito.
+aetherhaven.ui.feast.tooltipLocked=Você ficará trancado até que um vizinho lhe ensine esta receita. Ajude a cidade e continue conversando com as pessoas que cozinham para o salão.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord está em período de espera ({days} dias restantes).
+aetherhaven.ui.feast.began=O banquete começa. Os aldeões estão se reunindo à mesa.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven não está carregado neste servidor.
+aetherhaven.ui.feast.err.unknownFeast=Essa refeição não está disponível.
+aetherhaven.ui.feast.err.invalidPlayer=Não foi possível verificar seu personagem.
+aetherhaven.ui.feast.err.feastNotUnlocked=Você ainda não aprendeu sobre essa festa. Conquiste a confiança das pessoas na cidade e fique atento quando alguém se oferecer para ensiná-la.
+aetherhaven.ui.feast.err.timedFeastActive=Outra festa com data marcada já está em vigor nesta cidade.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Aguarde até que o banquete programado termine antes de servir o Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord ainda está em período de recarga.
+aetherhaven.ui.feast.err.notEnoughIngredients=Você não tem ingredientes suficientes.
+
+aetherhaven.ui.production.title=Lojas no local de trabalho
+aetherhaven.ui.production.prev=Anterior
+aetherhaven.ui.production.next=Próximo
+aetherhaven.ui.production.prevTooltip=Saída anterior neste slot
+aetherhaven.ui.production.nextTooltip=Próxima saída neste slot
+aetherhaven.ui.production.take1=Primeira tentativa
+aetherhaven.ui.production.take10=Tome 10
+aetherhaven.ui.production.take100=Pegue 100
+aetherhaven.ui.production.genInterval={time} para fazer um
+aetherhaven.ui.production.err.plugin=Aetherhaven não está carregado neste servidor.
+aetherhaven.ui.production.err.permission=Você não pode abrir este depósito para esta cidade.
+aetherhaven.ui.production.err.plot=Este quarteirão não está localizado dentro de um terreno de trabalho concluído (fazenda, celeiro, moinho ou cabana de mineiro) para sua cidade.
+aetherhaven.ui.production.err.catalog=Não há catálogo de produção configurado para este edifício.
+aetherhaven.ui.production.err.inventoryFull=Seu estoque está muito cheio para receber essa quantidade.
+aetherhaven.ui.production.unlockButton=Desbloqueia
+aetherhaven.ui.production.unlockTooltip=Veja e compre espaços de trabalho bloqueados para este edifício.
+
+aetherhaven.ui.productionUnlocks.title=Desbloqueios no local de trabalho
+aetherhaven.ui.productionUnlocks.intro=Selecione uma saída abaixo para ver seu nome e requisitos no painel. Passe o cursor sobre um ícone para ver a quantidade de itens disponíveis versus a quantidade necessária. Quando você atingir o total de itens e ouro exigido, clique em uma saída bloqueada para desbloqueá-la.
+aetherhaven.ui.productionUnlocks.navProduction=Produção
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Devolver ao armazenamento do local de trabalho
+aetherhaven.ui.productionUnlocks.detailHint=Clique em um ícone acima para ver o nome e os requisitos de desbloqueio.
+aetherhaven.ui.productionUnlocks.err.inventory=Não foi possível ler seu inventário.
+aetherhaven.ui.productionUnlocks.err.empty=Nenhuma lista de desbloqueio está configurada para este local de trabalho.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Já está desbloqueado para este local de trabalho.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Item: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Moedas de ouro: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Você precisa de pelo menos {need} desse item em seu inventário (sacos combinados).
+aetherhaven.ui.productionUnlocks.notify.needGold=Você precisa de moedas de ouro suficientes entre o tesouro da cidade e seu inventário ({need} total).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Não foi possível remover os itens necessários do seu inventário.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Não foi possível pagar o valor em ouro; seus itens foram devolvidos.
+aetherhaven.ui.productionUnlocks.notify.unlocked={item} desbloqueado para este local de trabalho.
+
+aetherhaven.feast.stewards.name=O Jantar do Livro de Registros do Administrador
+aetherhaven.feast.stewards.description=Espalhe pão, queijo e uma boa torta de abóbora para que o dízimo da manhã seja generoso durante uma semana.
+aetherhaven.feast.hearthglass.name=Vigília de Vidro da Lareira
+aetherhaven.feast.hearthglass.description=Peixe grelhado, cortes de carne cozidos e vegetais dispostos como uma refeição de vigília de cozimento lento. As necessidades dos aldeões diminuem mais gradualmente durante uma semana.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=Uma roda de pratos leves: salada de frutas vermelhas, espetinhos de frutas e pipoca para torradas. Os vizinhos se lembrarão de você com um pouco mais de carinho por isso. Espere uma semana de amanheceres antes de poder servir novamente.

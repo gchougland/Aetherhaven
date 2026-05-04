@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=地块标志
+items.Aetherhaven_Plot_Sign.description=标记预制件的建造位置。使用 /aetherhaven plot 进行配置。
+
+items.Aetherhaven_Charter.name=城镇宪章
+items.Aetherhaven_Charter.description=建立城镇的地点。每个玩家在每个世界中只能拥有一座城镇。用于打开城镇信息。
+
+items.Aetherhaven_Town_Planning_Desk.name=城镇规划办公室
+items.Aetherhaven_Town_Planning_Desk.description=制作城镇宪章、地块放置法杖、建筑法杖（加快被动地块建造速度）、任务日志、晶洞铁砧、宪章修订台和地块标记。在工作台上制作一个。
+items.Aetherhaven_Charter_Amendments_Table.name=宪章修正案表
+items.Aetherhaven_Charter_Amendments_Table.description=记录城镇什一税的计算方式以及特许状所鼓励的贸易类型。一旦人口支持，即可用于开启修正案。在城镇规划桌前制作；您必须了解示意图。
+items.Aetherhaven_Banquet_Table.name=宴会桌
+items.Aetherhaven_Banquet_Table.description=一张用于城镇宴会的长桌。将其放置在您的领地内，用于举办市政宴会。待镇上有人分享了图纸后，即可在城镇规划桌处制作。
+items.Aetherhaven_Founder_Monument.name=奠基人纪念碑
+items.Aetherhaven_Founder_Monument.description=一座石基座，上面刻有创始人的肖像。将其放置在城镇范围内以示敬意；基座矗立期间，国库的晨间收入会略有增长。每个城镇仅限一座。
+
+benchCategories.aetherhaven.town_planning=城镇规划
+benchCategories.aetherhaven.plot_tokens=地块标记
+
+items.Aetherhaven_Plot_Placement_Tool.name=场地布置人员
+items.Aetherhaven_Plot_Placement_Tool.description=将对应的地块标记放在背包里。使用这根法杖瞄准地面，可以看到建筑物的轮廓。轻轻调整法杖的位置，直到它与地块匹配，然后确认即可标记地块。取消操作即可清除预览，想要标记其他位置时可以再次使用法杖。
+
+items.Aetherhaven_Poi_Tool.name=POI调试工具
+items.Aetherhaven_Poi_Tool.description=持有该工具时显示城镇兴趣点（权限：aetherhaven.poi.tool）。主要功能：选择最近的兴趣点。次要功能：将兴趣点锚点移动到该方块。用途：设置/清除所选兴趣点的自主路径目标（再次点击兴趣点方块即可清除）。
+items.Aetherhaven_Poi_Tool.legendTitle=POI 工具
+items.Aetherhaven_Poi_Tool.legendPrimary=主要选项：选择街区附近最近的兴趣点。
+items.Aetherhaven_Poi_Tool.legendSecondary=次要操作：将选定的兴趣点移动到区块。
+items.Aetherhaven_Poi_Tool.legendUse=用途：为选定的兴趣点设置NPC路径目标（用于兴趣点区域清除时）
+
+aetherhaven.poiTool.legendTitle=POI 工具
+aetherhaven.poiTool.legendPrimary=主要选项：选择街区附近最近的兴趣点。
+aetherhaven.poiTool.legendSecondary=次要操作：将选定的兴趣点移动到区块。
+aetherhaven.poiTool.legendUse=用途：为选定的兴趣点设置NPC路径目标（用于兴趣点区域清除时）
+
+aetherhaven.pathTool.legendPageTitle=路径工具
+aetherhaven.pathTool.legendBlurb=构建样条曲线，预览，然后放置路径块。握住工具时，角落会显示一个状态面板。安装 Buuz135 MHUD 后，该面板会注册为一个独立的图层，因此其他自定义 HUD 也能保持可见。
+aetherhaven.pathTool.legendHotkeyAdd=地面上的辅助技能会添加一个关键帧（金色球体）。瞄准时，辅助技能会移除一个关键帧。新添加的关键帧会朝向你的视线方向。
+aetherhaven.pathTool.legendHotkeyAim=查看关键帧即可选中它。在移动模式下，地面上的主要元素会移动该点。同一节点上的主要元素则不会执行任何操作。
+aetherhaven.pathTool.legendHotkeyUse=F：在旋转模式下，对选定节点进行偏航步进。在移动模式下，F 键无作用。在放置模式下，F 键放置路径（需要两个节点）。Q：模式切换。E：宽度 1-8。第三个工具功能：路径样式（内部块；参见配置中的 PathToolStyles）。在关键帧上按辅助键可移除该路径。
+aetherhaven.pathTool.legendHotkeyCrouchUse=可选：不再需要蹲伏来切换模式；改用工具技能（Q）。
+aetherhaven.pathTool.legendVisuals=预览：白色 = 节点和样条线，棕色 = 路径带，绿色 = 边缘草；红色 = 被阻挡。石板位于表面上。宽度：第二个工具能力（1-8）。样式：第三个工具能力。提交操作会清除路径上方的大型植物（Plant_Grass）。
+aetherhaven.pathTool.statusHeader=握住工具
+aetherhaven.pathTool.statusLine1=添加积分、切换模式 (Q) 或在提交模式下进行水泥操作时，会弹出提示和聊天窗口。
+aetherhaven.pathTool.statusLine2=选择：瞄准一个球体。未命中则保持当前选择不变。Q 技能切换模式；二技能切换宽度；三技能切换路径样式。
+
+aetherhaven.pathTool.hudTitle=路径工具
+aetherhaven.pathTool.hudNameTranslate=移动
+aetherhaven.pathTool.hudNameRotate=旋转
+aetherhaven.pathTool.hudNameCommit=地方
+aetherhaven.pathTool.hudHelpTranslate=主光标：瞄准节点进行选择，然后瞄准方块进行移动。次光标：地面光标添加节点；瞄准节点移除节点。Q：进入下一模式。
+aetherhaven.pathTool.hudHelpRotate=主键：瞄准节点进行选择。副键：地面添加节点；瞄准节点移除节点。F 键微调选中节点的偏航角。Q 键：进入下一模式。
+aetherhaven.pathTool.hudHelpCommit=主键：瞄准节点进行选择。副键：地面添加节点；瞄准节点移除节点。F 键放置路径（2 个或更多节点）。Q 键：进入下一模式。
+aetherhaven.pathTool.hudStyle=样式：{style}
+aetherhaven.pathTool.hudWidth=宽度：{w} 块（E 循环）
+aetherhaven.pathTool.hudNodes=节点：{n}
+aetherhaven.pathTool.hudHint=主要功能：选择/移动 | 次要功能：添加到地面，从节点移除 | Q：模式 | E：宽度 | R：样式 | F：旋转/放置
+
+aetherhaven.pathTool.addedNode=已添加节点{n}。
+aetherhaven.pathTool.modeCycledToTranslate=模式：移动和放置关键帧。
+aetherhaven.pathTool.modeCycledToRotate=模式：旋转 — F 键可微调选定节点的偏航角。
+aetherhaven.pathTool.modeCycledToCommit=模式：放置 — F 放置路径（当有 2 个或更多节点时）。
+aetherhaven.pathTool.widthCycled=路径宽度：{w}（1-8）
+aetherhaven.pathTool.styleCycled=路径样式：{style}
+aetherhaven.pathTool.toastStyleCycled=路径样式已更改
+aetherhaven.pathTool.useInTranslateMode=在移动模式下，F键不起作用。按Q键切换到放置模式，然后按F键放置物体，或者按Q键旋转物体，再按F键微调偏航角。
+aetherhaven.pathTool.rotateNoSelection=选择关键帧（瞄准金色球体）进行旋转，或按 Q 键更改模式。
+aetherhaven.pathTool.modeToggled=模式：{m}
+aetherhaven.pathTool.selectedNode=节点已选中。
+aetherhaven.pathTool.movedNode=节点已移动。
+aetherhaven.pathTool.noNodeHit=范围内没有控制节点。在平移模式下，选中一个节点后，尝试将主节点移动到地面上进行移动。
+aetherhaven.pathTool.noNodeOnAim=准星上没有关键帧。瞄准金色圆盘进行选中。选中状态未改变。
+aetherhaven.pathTool.toastAdd=已添加控制点
+aetherhaven.pathTool.toastModeTranslate=移动：主操作移动选区；辅助操作添加关键帧。
+aetherhaven.pathTool.toastModeRotate=旋转：F 键可微调所选节点的偏航角。
+aetherhaven.pathTool.toastModeCommit=放置：F 放置路径（2 个或更多节点）。与 Q 交换位置。
+aetherhaven.pathTool.toastMoved=节点位置已更新
+aetherhaven.pathTool.toastRemoved=控制点已移除
+aetherhaven.pathTool.toastRotated=偏航
+aetherhaven.pathTool.toastCemented=路径已确定。请查看聊天记录以获取回滚 ID。
+aetherhaven.pathTool.rotated=旋转 {deg}°。
+aetherhaven.pathTool.removedNode=节点已移除。剩余 {n} 节点。
+aetherhaven.pathTool.needTwoNodes=至少需要两个关键帧。使用辅助关键帧添加另一个关键帧，或者按 Q 键退出提交模式并继续编辑。
+aetherhaven.pathTool.emptyPlan=沿途未发现地面（陡峭/虚空/未加载区块）。
+aetherhaven.pathTool.cementFail=没有可放置的接地装置：未找到可替换的接地装置或放置失败。
+aetherhaven.pathTool.cemented=路径已放置。还原 ID：{id}（使用 aetherhaven.path.revert 还原 aetherhaven 路径 <id>）
+aetherhaven.pathTool.revertNoPerm=您没有 aetherhaven.path.revert 权限
+aetherhaven.pathTool.badUuid=无效 ID：{raw}
+aetherhaven.pathTool.unknownId=没有具有该 ID 的已保存路径。
+aetherhaven.pathTool.reverted=已将 {cells} 块恢复为 {id}
+aetherhaven.pathTool.navvizOn=路径导航调试：开启（服务器将已提交的路径节点显示为线条；再次运行即可关闭）
+aetherhaven.pathTool.navvizOff=路径导航调试：关闭
+aetherhaven.pathTool.navvizNoPerm=路径导航调试需要 aetherhaven.path.tool
+
+commands.aetherhaven.path.root.desc=路径/样条线放置辅助函数
+commands.aetherhaven.path.revert.desc=从撤销文件 (aetherhaven.path.revert) 恢复已固化的路径
+commands.aetherhaven.path.revert.id=路径提交 ID（来自 Cement 聊天消息的 UUID）
+commands.aetherhaven.path.navviz.desc=切换路径导航折线的调试绘制（aetherhaven.path.tool；子程序：navviz）
+
+items.Aetherhaven_Path_Tool.name=路径设计师铲子
+items.Aetherhaven_Path_Tool.description=设计样条路径（aetherhaven.path.tool）。辅助功能：添加节点。主要功能：选择；在移动模式下，点击地面即可移动。Q：模式切换。第二个功能：路径宽度 1-8。第三个功能：路径样式（内部方块；配置中的 PathToolStyles）。F：在旋转模式下微调偏航角，或在放置模式下放置（2 个或更多节点）。还原：aetherhaven 路径还原。配置：PathToolStyles、raycast 和 replace 列表。
+
+items.Aetherhaven_Plot_Token_Inn.name=旅店地块代币
+items.Aetherhaven_Plot_Token_Inn.description=库存中需要使用地块放置人员来规划旅店的占地面积。
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=市场摊位地块代币
+items.Aetherhaven_Plot_Token_Market_Stall.description=需要根据场地布置人员的指示放置市场摊位轮廓。
+
+items.Aetherhaven_Plot_Token_Farm.name=农地代币
+items.Aetherhaven_Plot_Token_Farm.description=需要根据地块放置人员提供的农田地块轮廓进行放置。
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=铁匠铺地块代币
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=需要由地块放置人员放置铁匠铺的地基。
+
+items.Aetherhaven_Plot_Token_Park.name=公园地块代币
+items.Aetherhaven_Plot_Token_Park.description=需要根据场地规划人员的指示放置公园用地平面图。
+
+items.Aetherhaven_Plot_Token_House.name=房屋地块代币
+items.Aetherhaven_Plot_Token_House.description=需要将共享房屋的占地面积从地块放置人员处移出。
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=市政厅地块代币
+items.Aetherhaven_Plot_Token_Town_Hall.description=需要根据场地规划人员的指示放置市政厅的占地面积。
+
+items.Aetherhaven_Gold_Coin.name=金币
+items.Aetherhaven_Gold_Coin.description=城镇货币储存在国库中。
+
+items.Aetherhaven_Geode.name=晶洞
+items.Aetherhaven_Geode.description=一块空心石头，里面可能藏有水晶、宝石或矿石。付钱请铁匠把它敲开。
+
+items.Aetherhaven_Geode_Anvil.name=晶洞砧
+items.Aetherhaven_Geode_Anvil.description=无需支付铁匠费用即可开启晶洞。放置后即可使用；您必须知道图纸才能在城镇规划桌上制作。
+
+barter.aetherhaven_vex.title=Vex每日股票
+
+items.Aetherhaven_Treasury.name=镇财政
+items.Aetherhaven_Treasury.description=存放城镇金币。用于存取（城镇所有者）。
+
+items.Aetherhaven_Quest_Journal.name=城镇任务日志
+items.Aetherhaven_Quest_Journal.description=次要用途：查看城镇中的活跃任务。旅店建成后，长老可能会给你一个任务。

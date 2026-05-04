@@ -79,5 +79,18 @@
       "GradientSet": "Colored_Cotton",
       "GradientId": "Brown"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Village_Elder.png",
+  "IconProperties": {
+    "Scale": 0.2,
+    "Rotation": [
+      0,
+      -45,
+      0
+    ],
+    "Translation": [
+      0,
+      -75
+    ]
+  }
 }

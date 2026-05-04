@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=퀘스트 저널
+aetherhaven.ui.questjournal.hint=자세한 내용을 보려면 퀘스트를 선택하세요.
+aetherhaven.ui.questjournal.abandon=버리다
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=퀘스트 세부 정보
+aetherhaven.ui.questjournal.detailPlaceholderBody=위에서 퀘스트를 선택하세요.
+
+items.Aetherhaven_Management_Block.name=마을 기록 보관소
+items.Aetherhaven_Management_Block.description=완공된 건물의 관리용 선반입니다. 해당 부지의 건설 상태를 표시합니다.
+
+items.Aetherhaven_Sprinkler_Iron.name=철제 스프링클러
+items.Aetherhaven_Sprinkler_Iron.description=경작된 토양 바로 아래 3x3 영역에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 실행됩니다. 최소 범위입니다.
+items.Aetherhaven_Sprinkler_Thorium.name=토륨 스프링클러
+items.Aetherhaven_Sprinkler_Thorium.description=5x5 영역의 흙을 한 블록 아래로 갈아엎습니다. 게임 내 시간으로 매일 아침 한 번씩 작동합니다. 철보다 큽니다.
+items.Aetherhaven_Sprinkler_Cobalt.name=코발트 스프링클러
+items.Aetherhaven_Sprinkler_Cobalt.description=7x7 영역의 경작된 흙에 한 블록 아래로 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩, 넓은 범위에 걸쳐 적용됩니다.
+items.Aetherhaven_Sprinkler_Adamantite.name=아다만타이트 스프링클러
+items.Aetherhaven_Sprinkler_Adamantite.description=9x9 영역 내에서 한 블록 아래에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 적용됩니다. 가장 넓은 범위에 적용됩니다.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=엘더 라이렌
+npcRoles.Aetherhaven_Innkeeper.name=코린 모스컵
+npcRoles.Aetherhaven_Merchant.name=벡스 선덜레인
+npcRoles.Aetherhaven_Blacksmith.name=개런 베일
+npcRoles.Aetherhaven_Farmer.name=이리엔 모스마크
+npcRoles.Aetherhaven_Priestess.name=세라 손웰
+npcRoles.Aetherhaven_Miner.name=고룩 스톤베인
+npcRoles.Aetherhaven_Logger.name=세렌 페어할로우
+npcRoles.Aetherhaven_Rancher.name=탈렌 메도우런
+
+items.Aetherhaven_Production_Storage.name=직장 매장
+items.Aetherhaven_Production_Storage.description=작업자들이 가져온 물품을 보관합니다. 설정된 출력물을 꺼내고 쌓아둘 수 있습니다. 건물 일부이므로 집어 올릴 수 없습니다.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=광부 오두막 부지 토큰
+items.Aetherhaven_Plot_Token_Miners_Hut.description=광부용 조립식 오두막을 지을 수 있는 위치를 표시해 두었습니다. 도시 계획 데스크에서 제작하세요.
+items.Aetherhaven_Plot_Token_Lumbermill.name=제재소 부지 토큰
+items.Aetherhaven_Plot_Token_Lumbermill.description=제재소 조립식 건물을 지을 수 있는 위치를 표시해 두었습니다. 도시 계획 담당 부서에서 담당자와 상담하세요.
+items.Aetherhaven_Plot_Token_Barn.name=헛간 부지 토큰
+items.Aetherhaven_Plot_Token_Barn.description=헛간 조립식 건물을 지을 수 있는 위치를 표시해 두었습니다. 도시 계획 사무소에서 제작합니다.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=가이아 제단 부지 토큰
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=가이아 제단 조립식 건물을 지을 수 있는 위치를 표시합니다. 도시 계획 데스크에서 제작하세요.
+
+items.Aetherhaven_Statue_of_Gaia.name=가이아 여신상
+items.Aetherhaven_Statue_of_Gaia.description=제단에 바칠 축복받은 형상. 마을 주인들은 생명의 정수를 통해 실종된 주민들을 다시 불러들일 수 있을지도 모릅니다.

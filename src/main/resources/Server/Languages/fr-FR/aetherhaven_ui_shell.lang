@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Pièces d'or stockées : {count}
+aetherhaven.ui.treasury.depositNoCoins=Vous n'avez pas de pièces d'or à déposer.
+aetherhaven.ui.treasury.depositRemoveFailed=Impossible de retirer les pièces de l'inventaire.
+aetherhaven.ui.treasury.deposited=Pièces d'or déposées : {count}.
+aetherhaven.ui.treasury.makeRoom=Faites de la place dans votre stock.
+aetherhaven.ui.treasury.couldNotAddCoins=Impossible d'ajouter des pièces.
+aetherhaven.ui.treasury.withdrew=Retrait de {count} pièces d'or.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Répartition des impôts (uniquement pour les zones chargées ; les résidents non chargés contribuent à hauteur de 0 jusqu'à la simulation) :
+aetherhaven.ui.treasury.debug.titheNoHall=Dîme : cette ville ne dispose pas d'hôtel de ville complet.
+aetherhaven.ui.treasury.debug.titheZero=Dîme : 0 or (pas de résidents fortunés, ou 0 selon les calculs de politique). Déchargement/besoins/décomposition : /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheApplied=Dîme appliquée : +{amount} or au trésor (mêmes règles qu'une collecte du matin).
+aetherhaven.ui.treasury.debug.state2=Hôtel de ville terminé = {a} Fenêtre du matin = {b} Jour de l'aube = {c} Trésorerie Dernier jour d'impôt = {d} Collecterait demain matin = {e}
+aetherhaven.ui.treasury.debug.state3=politique={a} maxParRésident={b} résidentschargés={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) confort={comfort} or={gold}
+aetherhaven.ui.treasury.debug.state4=sommeRésidents={a} fondateurActif={b} fondateurPourmille={c} aprèsFondateur={d}
+aetherhaven.ui.treasury.debug.state5=Taxe des intendants ={a} festinPourmille ={b} Total final ={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=Il vous faut une ville dans ce monde pour suivre les quêtes.
+aetherhaven.ui.questJournal.noPermission=Vous n'êtes pas autorisé à gérer les quêtes de la ville.
+aetherhaven.ui.questJournal.noActive=Aucune quête en cours.
+aetherhaven.ui.questJournal.hint=Touchez une quête pour plus de détails. × la supprime de votre journal (vous pouvez la reprendre auprès du donneur).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=Dialogue inconnu : {id}
+aetherhaven.ui.dialogue.missingNode=Nœud manquant : {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Bâtiment
+aetherhaven.ui.plotConstruction.plotSignTitle=Panneau de l'intrigue
+aetherhaven.ui.plotConstruction.noConstruction=Aucune construction n'est prévue sur cette parcelle.
+aetherhaven.ui.plotConstruction.assignResidentHint=Attribuez un villageois qui vit ici (sa quête de maison sera terminée lorsque la correspondance sera établie).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Non attribué
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Impossible de charger les données du joueur.
+aetherhaven.ui.plotConstruction.townDataMissing=Données municipales introuvables pour ce bloc.
+aetherhaven.ui.plotConstruction.clearedHome=Affectation à domicile validée.
+aetherhaven.ui.plotConstruction.updatedHome=Devoirs à domicile mis à jour.
+aetherhaven.ui.plotConstruction.plotRemoved=Tracé supprimé et jeton de tracé renvoyé.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (ont {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Impossible de charger les données du joueur.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Essence vitale insuffisante (besoin de {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Impossible de retirer l'essence vitale de l'inventaire.

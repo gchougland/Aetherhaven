@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Хранимые золотые монеты: {count}
+aetherhaven.ui.treasury.depositNoCoins=У вас нет золотых монет для внесения на счет.
+aetherhaven.ui.treasury.depositRemoveFailed=Не удалось извлечь монеты из инвентаря.
+aetherhaven.ui.treasury.deposited=Внесено {count} золотых монет.
+aetherhaven.ui.treasury.makeRoom=Освободите место в своем инвентаре.
+aetherhaven.ui.treasury.couldNotAddCoins=Не удалось добавить монеты.
+aetherhaven.ui.treasury.withdrew=Снял золотые монеты {count}.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Распределение налогов (только загруженные участки; незагруженные жители не вносят 0% до момента моделирования):
+aetherhaven.ui.treasury.debug.titheNoHall=Десятина: в этом городе нет полноценной ратуши.
+aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (нет загруженных жителей или 0 по результатам расчетов политики). Разгрузка/потребности/разборка: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheApplied=Десятина: +{amount} золота в казну (те же правила, что и при утреннем сборе).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) комфорт={comfort} золото={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=В этом мире вам нужен город, чтобы отслеживать задания.
+aetherhaven.ui.questJournal.noPermission=У вас нет разрешения на управление городскими заданиями.
+aetherhaven.ui.questJournal.noActive=Активных заданий нет.
+aetherhaven.ui.questJournal.hint=Нажмите на задание, чтобы узнать подробности. × удаляет его из вашего журнала (вы можете взять его снова у того, кто его выдал).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Диалог
+aetherhaven.ui.dialogue.unknown=Неизвестный диалог: {id}
+aetherhaven.ui.dialogue.missingNode=Отсутствующий узел: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Здание
+aetherhaven.ui.plotConstruction.plotSignTitle=Указатель участка
+aetherhaven.ui.plotConstruction.noConstruction=Для данного участка строительство не запланировано.
+aetherhaven.ui.plotConstruction.assignResidentHint=Назначьте жителя деревни, который здесь проживает (квест на получение дома будет завершен, если он совпадает).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Не назначено
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Не удалось загрузить данные игрока.
+aetherhaven.ui.plotConstruction.townDataMissing=Данные о населенном пункте для этого квартала не найдены.
+aetherhaven.ui.plotConstruction.clearedHome=Завершено назначение на родину.
+aetherhaven.ui.plotConstruction.updatedHome=Информация о домашнем задании обновлена.
+aetherhaven.ui.plotConstruction.plotRemoved=Удалён участок, возвращен токен участка.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (имеют {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Не удалось загрузить данные игрока.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Недостаток жизненной энергии (необходим pH 0).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Не удалось извлечь жизненную эссенцию из инвентаря.

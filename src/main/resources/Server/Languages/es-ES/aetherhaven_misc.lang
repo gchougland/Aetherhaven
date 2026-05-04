@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Tu bolso es demasiado ligero para esta reparación.
+aetherhaven.blacksmith.repair.success={itemName} está completo de nuevo. Como nuevo.
+commands.aetherhaven.dialogue.desc=Abrir un árbol de diálogo por ID (para pruebas)
+commands.aetherhaven.dialogue.treeId.desc=ID del árbol de diálogo (p. ej., aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=ID de nodo de entrada opcional (predeterminado: raíz)
+aetherhaven.interaction.dialogue=Pulsa [{key}] para hablar
+npcRoles.Aetherhaven_Test_Villager.name=Prueba de diálogo del aldeano
+aetherhaven.banner.quest.completed.primary=Misión completada
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Edificio terminado
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} está listo.
+aetherhaven.assembly.tracer.none_in_range=No hay vista previa de ensamblaje dentro del alcance (acérquese o verifique el permiso de construcción de la ciudad).
+aetherhaven.banner.quest.started.primary=Misión iniciada
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Desbloqueado
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Personal del edificio
+items.Aetherhaven_Building_Staff.description=El botón principal lanza un rayo guía a través de los bloques hasta la vista previa de ensamblaje más cercana dentro del alcance. Mantén pulsado el botón secundario y apunta a través de los bloques hacia la vista previa de ensamblaje para colocar el siguiente bloque al instante (permiso de construcción de ciudad). Las construcciones pasivas siguen avanzando automáticamente cuando no estás presente.

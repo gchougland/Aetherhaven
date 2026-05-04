@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Команди мода Aetherhaven
+commands.aetherhaven.reload.desc=Перезавантажити каталоги config.json та Aetherhaven JSON з диска (творчий режим)
+commands.aetherhaven.reload.success=Конфігурацію та каталоги ресурсів Aetherhaven перезавантажено.
+commands.aetherhaven.reload.failure=Не вдалося перезавантажити: {detail}
+commands.aetherhaven.reload.noPlugin=Плагін Aetherhaven не завантажено.
+commands.aetherhaven.plot.desc=Відкрити інтерфейс адміністратора вивіски ділянки (вибрати конструкцію, отримати елемент)
+commands.aetherhaven.starterkit.desc=Отримайте стартовий набір Aetherhaven (персонал з розміщення ділянок, статут, відділ містобудування, персонал з будівництва; творчий режим)
+commands.aetherhaven.starterkit.success=Стартовий набір додано до вашого інвентарю.
+commands.aetherhaven.starterkit.partial=Стартовий набір частково надано; {failed} предмет(и) не підійшли (звільніть місце в інвентарі).
+
+commands.aetherhaven.exportskin.desc=Експортуйте скін вашого аватара як модель JSON (Батьківський файл: Гравець)
+commands.aetherhaven.exportskin.other.desc=Експортувати скін аватара іншого гравця як модель JSON
+commands.aetherhaven.exportskin.arg.path=Додатковий шлях до вихідного файлу (за замовчуванням: plugin data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=Для цього гравця немає скінів персонажа.
+commands.aetherhaven.exportskin.invalidSkin=Не вдалося перевірити скін: {detail}
+commands.aetherhaven.exportskin.resolveError=Не вдалося розпізнати скін для вкладень моделі: {detail}
+commands.aetherhaven.exportskin.ioError=Не вдалося записати {path}: {detail}
+commands.aetherhaven.exportskin.success=Записано JSON моделі до {path}

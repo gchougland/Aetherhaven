@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Лаборатория условий. Скрытого выбора быть не должно. Вариант выбора должен быть выделен серым цветом. Используйте составные ворота, чтобы продолжить.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Этот выбор скрыт (буквально неверен).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Эта опция должна быть неактивна (заблокирована).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(требуется буквальное значение true)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Проходной вариант: НЕ ложь И истина
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=Ветвь ИЛИ (истина ИЛИ ложь)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Спасибо за тестирование. До свидания!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Пока!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Выберите ниже кнопку «Перейти», чтобы перейти к прощанию, используя действие «Перейти» вместо кнопки «Далее».
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=идти прощаться
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=При входе в узел вы получали всего одну простую лопату (если у вас было место в инвентаре). Выберите опцию ниже, чтобы получить больше предметов.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Дайте мне 3 кусочка земли, а затем продолжайте.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Добро пожаловать в диалоговый чит Aetherhaven. Эта строка намеренно остаётся длинной, чтобы вы могли проверить расположение текста и прокрутку. Ваши варианты выбора находятся под основным текстом.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Продолжите работу в лаборатории условий.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Уйти (завершить следующим пустым значением).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Уйти (явное действие, завершающее действие).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Вы можете открыть интерфейс бартера торговцев Kweebec или перейти к действиям-заглушкам.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Открыта торговая лавка Kweebec_Merchant.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Пропустите магазин, перейдите к купонам.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Заглушки действий: разблокировка достижения и начало квеста должны регистрироваться до тех пор, пока эти системы не будут существовать.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Запустите заглушки unlock_achievement + start_quest
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager

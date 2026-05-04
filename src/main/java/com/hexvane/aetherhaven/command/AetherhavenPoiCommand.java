@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 public final class AetherhavenPoiCommand extends AbstractCommandCollection {
     public AetherhavenPoiCommand() {
-        super("poi", "server.commands.aetherhaven.poi.desc");
+        super("poi", "aetherhaven_commands_help.commands.aetherhaven.poi.desc");
         this.addSubCommand(new ListCommand());
         this.addSubCommand(new DumpCommand());
     }
@@ -30,10 +30,10 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
     private static final class ListCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> townFilterArg =
-            this.withOptionalArg("town", "server.commands.aetherhaven.poi.town.desc", ArgTypes.STRING);
+            this.withOptionalArg("town", "aetherhaven_commands_help.commands.aetherhaven.poi.town.desc", ArgTypes.STRING);
 
         ListCommand() {
-            super("list", "server.commands.aetherhaven.poi.list.desc");
+            super("list", "aetherhaven_commands_help.commands.aetherhaven.poi.list.desc");
         }
 
         @Override
@@ -57,7 +57,7 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                         townUuid = UUID.fromString(raw.trim());
                     } catch (IllegalArgumentException e) {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.debug.poi.invalidTownUuid").param("raw", raw)
+                            Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.invalidTownUuid").param("raw", raw)
                         );
                         return;
                     }
@@ -71,24 +71,24 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
                 TownRecord tr =
                     AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
                 if (tr == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.debug.poi.noTownArg"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.noTownArg"));
                     return;
                 }
                 townUuid = tr.getTownId();
             }
             List<PoiEntry> list = reg.listByTown(townUuid);
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.debug.poi.listHeader")
+                Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.listHeader")
                     .param("town", townUuid.toString())
                     .param("count", String.valueOf(list.size()))
             );
             if (list.isEmpty()) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.debug.poi.listEmpty"));
+                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.listEmpty"));
                 return;
             }
             for (PoiEntry e : list) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.poi.listLine")
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.listLine")
                         .param("x", String.valueOf(e.getX()))
                         .param("y", String.valueOf(e.getY()))
                         .param("z", String.valueOf(e.getZ()))
@@ -104,7 +104,7 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
 
     private static final class DumpCommand extends AbstractPlayerCommand {
         DumpCommand() {
-            super("dump", "server.commands.aetherhaven.poi.dump.desc");
+            super("dump", "aetherhaven_commands_help.commands.aetherhaven.poi.dump.desc");
         }
 
         @Override
@@ -121,12 +121,12 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
             }
             List<PoiEntry> all = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin).allEntries();
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.debug.poi.dumpHeader")
+                Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.dumpHeader")
                     .param("count", String.valueOf(all.size()))
             );
             for (PoiEntry e : all) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.poi.dumpLine")
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.dumpLine")
                         .param("town", e.getTownId() != null ? e.getTownId().toString() : "")
                         .param("x", String.valueOf(e.getX()))
                         .param("y", String.valueOf(e.getY()))

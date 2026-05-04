@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_elder)
+# Full translation keys are aetherhaven_dialogue_visitor_elder.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Você pode passar, mas não está incluído nesta carta régia. Se quiser ajudar, alguém que more aqui precisa convidá-lo primeiro.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Eu entendo.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Ancião Lyren

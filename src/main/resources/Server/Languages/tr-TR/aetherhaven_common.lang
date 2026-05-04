@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven yüklenmedi.
+aetherhaven.common.noTownInWorld=Bu dünyada senin için hiçbir şehir yok.
+aetherhaven.common.noQuestPermission=Bu kasabada görev izniniz yok.
+aetherhaven.common.townNotFound=Şehir bulunamadı.
+aetherhaven.common.invalidTownLink=Geçersiz şehir bağlantısı.
+aetherhaven.common.treasuryNotLinked=Hazine ile bağlantısı yok.
+aetherhaven.common.ownerOnlyTreasury=Hazineyi yalnızca kasaba sahibi kullanabilir.
+aetherhaven.common.noTreasuryPanelPermission=Belediye hazinesini kullanma izniniz yok.
+aetherhaven.common.townNotInThisWorld=Şehir bu dünyada değil.
+aetherhaven.common.noMoveBuildingsPermission=Bu kasabada binaları taşıma izniniz yok.
+aetherhaven.common.buildingCannotMove=Bu bina taşınamaz (arsa eksik veya tamamlanmamış).
+aetherhaven.common.lookAtBlockPlot=Parsel işaretinin konumunu ayarlamak ve önizlemeyi başlatmak için bir bloğa bakın.
+aetherhaven.common.carryPlotToken=Yerleştirmeye başlamak için araçta listelenen bir bina türüne ait bir arsa belirteci (örneğin, han arsa belirteci) taşıyın.
+aetherhaven.common.statueNotLinked=Heykelin bir kasabayla bağlantısı yok.
+aetherhaven.common.ownerOnlyStatue=Bu heykeli yalnızca kasaba sahibi kullanabilir.
+aetherhaven.common.noReviveVillagersPermission=Bu heykelin bulunduğu yerde köylüleri diriltme izniniz yok.
+aetherhaven.common.noPlayerId=Oyuncu kimliği yok.
+aetherhaven.common.playersOnly=Sadece oyuncular için.
+aetherhaven.common.invalidVillager=Engelli köylü.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Bu dünyada zaten bir şehrin parçasısınız. Yeni bir şehir kurmadan önce bu şehri terk edin.
+aetherhaven.charter.townFounded=Kasaba kuruldu: {name}. Köyün ileri geleni geldi. Kasabanın adını değiştirmek için tüzüğü kullanın.
+aetherhaven.chartertown.info.notLinked=Charter henüz bir kasabaya bağlı değil.
+aetherhaven.chartertown.info.invalidTownId=Kiralama sözleşmesinde geçersiz şehir kimliği.
+aetherhaven.chartertown.info.townDataMissing=Şehir verileri bulunamadı (sunucu günlüğüne bakın).
+aetherhaven.chartertown.townInfoBlock=Kasaba adı: {name}\nKasaba Kimliği: {id}\nSeviye: {tier}\nBölge (parça yarıçapı): {radius}\nŞehir merkezi: {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Şehir adı alanı boş bırakılamaz.
+aetherhaven.chartertown.nameDuplicate=Bu isim, dünyadaki başka bir şehir tarafından zaten kullanılıyor.
+aetherhaven.chartertown.nameSaved=Kaydedilen kasaba adı: {name}

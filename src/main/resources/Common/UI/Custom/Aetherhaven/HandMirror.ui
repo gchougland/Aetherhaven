@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 920);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.handmirror.title;
+      Label #HandMirrorTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -23,7 +25,7 @@ $C.@PageOverlay {
       Label #EquipSection {
         Anchor: (Bottom: 6);
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-        Text: %server.aetherhaven.ui.handmirror.equipment;
+        Text: "";
       }
 
       Group #EquippedRow {
@@ -34,7 +36,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Label #Ring1Label {
             Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: %server.aetherhaven.ui.handmirror.ring1;
+            Text: "";
             Anchor: (Bottom: 4);
           }
           Group #Ring1SlotBox {
@@ -71,7 +73,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Label #Ring2Label {
             Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: %server.aetherhaven.ui.handmirror.ring2;
+            Text: "";
             Anchor: (Bottom: 4);
           }
           Group #Ring2SlotBox {
@@ -108,7 +110,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Label #NeckLabel {
             Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-            Text: %server.aetherhaven.ui.handmirror.necklace;
+            Text: "";
             Anchor: (Bottom: 4);
           }
           Group #NeckSlotBox {
@@ -145,7 +147,7 @@ $C.@PageOverlay {
       Label #ListSection {
         Anchor: (Bottom: 6);
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-        Text: %server.aetherhaven.ui.handmirror.inventory;
+        Text: "";
       }
 
       Group #JewelryListScroll {
@@ -171,7 +173,7 @@ $C.@PageOverlay {
         Padding: (Left: 8);
         Label #TraitTitle {
           Style: (...$C.@DefaultLabelStyle, TextColor: #c8b8a0, Wrap: true);
-          Text: %server.aetherhaven.ui.handmirror.traitsColumnHeading;
+          Text: "";
         }
         Label #TraitBody {
           Anchor: (Top: 6);

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Sprinkler_Thorium.name",
-    "Description": "server.items.Aetherhaven_Sprinkler_Thorium.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Thorium.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Thorium.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

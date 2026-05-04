@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=クエスト開始: {name}
+aetherhaven.quest.completed=クエスト完了: {name}
+aetherhaven.quest.abandoned=クエスト放棄: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=有効なクエストが付与されました: {name}
+aetherhaven.questdebug.completed=クエスト完了: {name}
+aetherhaven.questdebug.cleared=アクティブクエストをクリアしました: {name}
+aetherhaven.questdebug.statusHeader=-- クエスト状況 --
+aetherhaven.questdebug.statusActive=アクティブ：
+aetherhaven.questdebug.statusCompleted=完了:
+aetherhaven.questdebug.statusEmpty=（なし）
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=この町にはまだ村人エンティティIDが登録されていません。
+aetherhaven.villager.listHeader=町の村人: エンティティ UUID、ソース、ロードされている場合はロール (/aetherhaven reputation … および villager locate で UUID またはロール ID を使用):
+aetherhaven.villager.listRow={uuid} | {note} | 役割: {role}
+aetherhaven.villager.locateNotLoaded=その村人はロードされていません（近づいてみるか、チャンクをロードしてみてください）。
+aetherhaven.villager.locateNoTransform=そのエンティティには変換処理は適用されません。
+aetherhaven.villager.locatePosition=村人 {uuid} ({role}): {x}、{y}、{z}
+aetherhaven.villager.locateOpRequired=テレポートにはオペレーター（OPグループ）が必要です。
+aetherhaven.villager.teleported=テレポートした。
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=そのブロックにはアイテムコンテナがありません（チャンクがロードされていない、フィラー/ベースが一致しない、またはコンテナブロックではない）。
+aetherhaven.debug.loot.bonusApplied=このコンテナにエーテルヘイブンのボーナス戦利品ロールが適用されました（強制）。
+aetherhaven.townsCommand.line={id} name="{name}" world={world} owner={owner} chunks={cx},{cz} r{radius}
+aetherhaven.list.none=（なし）
+aetherhaven.questdebug.statusActiveLine=アクティブ: {list}
+aetherhaven.questdebug.statusActiveEmpty=有効: (なし)
+aetherhaven.questdebug.statusCompletedLine=完了: {list}
+aetherhaven.questdebug.statusCompletedEmpty=完了：（なし）
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=エーテルヘイブン出口
+items.Aetherhaven_Portal_Exit.description=オーバーワールドに戻るために使用します。
+items.Aetherhaven_Portal_Enter.name=エーテルヘイブン・ゲートウェイ
+items.Aetherhaven_Portal_Enter.description=エーテルヘイブンに入るために使用します。
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=エーテルヘイブン
+instances.aetherhaven.subtitle=スカイビレッジ

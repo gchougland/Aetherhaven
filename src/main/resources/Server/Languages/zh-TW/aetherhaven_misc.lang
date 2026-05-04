@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=你的錢包太輕了，不適合這次維修。
+aetherhaven.blacksmith.repair.success={itemName} 已恢復完整。跟新的一樣。
+commands.aetherhaven.dialogue.desc=透過 ID 開啟對話樹（用於測試）
+commands.aetherhaven.dialogue.treeId.desc=對話樹 ID（例如 aetherhaven_dialogue_test）
+commands.aetherhaven.dialogue.entry.desc=可選的入口節點 ID（預設值：root）
+aetherhaven.interaction.dialogue=按 [{key}] 通話
+npcRoles.Aetherhaven_Test_Villager.name=對話測試村民
+aetherhaven.banner.quest.completed.primary=任務完成
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=建築竣工
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} 已準備就緒。
+aetherhaven.assembly.tracer.none_in_range=範圍內沒有組裝預覽（請靠近或檢查城鎮建造權限）。
+aetherhaven.banner.quest.started.primary=任務開始
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=已解鎖
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=樓宇工作人員
+items.Aetherhaven_Building_Staff.description=主武器會發射一道引導螺栓穿過方塊，到達範圍內最近的組裝預覽區域。按住副武器，瞄準組裝預覽，即可立即放置下一個方塊（城鎮建造權限）。被動建造區域在你離開時仍會自動推進。

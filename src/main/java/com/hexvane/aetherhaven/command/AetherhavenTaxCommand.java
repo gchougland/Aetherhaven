@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  */
 public final class AetherhavenTaxCommand extends AbstractCommandCollection {
     public AetherhavenTaxCommand() {
-        super("tax", "server.commands.aetherhaven.tax.desc");
+        super("tax", "aetherhaven_commands_help.commands.aetherhaven.tax.desc");
         this.addSubCommand(new BreakdownCommand());
         this.addSubCommand(new NowCommand());
     }
@@ -48,7 +48,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
 
     private static final class BreakdownCommand extends AbstractPlayerCommand {
         BreakdownCommand() {
-            super("breakdown", "server.commands.aetherhaven.tax.breakdown.desc");
+            super("breakdown", "aetherhaven_commands_help.commands.aetherhaven.tax.breakdown.desc");
         }
 
         @Override
@@ -65,7 +65,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -73,7 +73,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
                 return;
             }
             Store<EntityStore> es = world.getEntityStore().getStore();
@@ -82,10 +82,10 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                     TaxMorningBreakdown b =
                         TownTaxService.computeTaxMorningBreakdown(town, es, plugin.getConfig().get());
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.ui.treasury.debug.taxBreakdownIntro")
+                        Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.taxBreakdownIntro")
                     );
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.ui.treasury.debug.state2")
+                        Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.state2")
                             .param("a", String.valueOf(b.townHallComplete()))
                             .param("b", String.valueOf(b.morningTaxWindow()))
                             .param("c", String.valueOf(b.dawnAlignedEpochDay()))
@@ -93,14 +93,14 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                             .param("e", String.valueOf(b.wouldCollectGoldOnNextMorningTick()))
                     );
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.ui.treasury.debug.state3")
+                        Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.state3")
                             .param("a", b.taxPolicyId() == null ? "(linear)" : b.taxPolicyId())
                             .param("b", String.valueOf(b.maxGoldPerResidentPerDay()))
                             .param("c", String.valueOf(b.loadedResidentCount()))
                     );
                     for (VillagerTaxLine line : b.lines()) {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.ui.treasury.debug.villagerLine")
+                            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.villagerLine")
                                 .param("name", line.displayName())
                                 .param("kind", line.bindingKind())
                                 .param("comfort", String.format(Locale.US, "%.0f%%", line.needsRatio() * 100f))
@@ -108,14 +108,14 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                         );
                     }
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.ui.treasury.debug.state4")
+                        Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.state4")
                             .param("a", String.valueOf(b.sumBeforeTownMultipliers()))
                             .param("b", String.valueOf(b.founderMonumentActive()))
                             .param("c", String.valueOf(b.founderMonumentPermille()))
                             .param("d", String.valueOf(b.sumAfterFounderMonument()))
                     );
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.ui.treasury.debug.state5")
+                        Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.state5")
                             .param("a", String.valueOf(b.stewardsFeastTaxActive()))
                             .param("b", String.valueOf(b.feastTaxBonusPermille()))
                             .param("c", String.valueOf(b.finalTotal()))
@@ -131,7 +131,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
      */
     private static final class NowCommand extends AbstractPlayerCommand {
         NowCommand() {
-            super("now", "server.commands.aetherhaven.tax.now.desc");
+            super("now", "aetherhaven_commands_help.commands.aetherhaven.tax.now.desc");
         }
 
         @Override
@@ -148,7 +148,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             }
             TownRecord town = townForQuestPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -156,7 +156,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                 return;
             }
             if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
                 return;
             }
             Store<EntityStore> es = world.getEntityStore().getStore();
@@ -168,15 +168,15 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                         );
                     if (r == -1L) {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.ui.treasury.debug.titheNoHall")
+                            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.titheNoHall")
                         );
                     } else if (r == 0L) {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.ui.treasury.debug.titheZero")
+                            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.titheZero")
                         );
                     } else {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.ui.treasury.debug.titheApplied")
+                            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.titheApplied")
                                 .param("amount", String.valueOf(r))
                         );
                     }

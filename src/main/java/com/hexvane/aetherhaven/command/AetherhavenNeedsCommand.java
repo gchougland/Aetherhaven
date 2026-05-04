@@ -25,14 +25,14 @@ import javax.annotation.Nonnull;
 
 public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
     public AetherhavenNeedsCommand() {
-        super("needs", "server.commands.aetherhaven.needs.desc");
+        super("needs", "aetherhaven_commands_help.commands.aetherhaven.needs.desc");
         this.addSubCommand(new InspectCommand());
         this.addSubCommand(new SetCommand());
     }
 
     private static final class InspectCommand extends AbstractPlayerCommand {
         InspectCommand() {
-            super("inspect", "server.commands.aetherhaven.needs.inspect.desc");
+            super("inspect", "aetherhaven_commands_help.commands.aetherhaven.needs.inspect.desc");
         }
 
         @Override
@@ -52,11 +52,11 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                 () -> {
                     String lang = playerRef.getLanguage() != null ? playerRef.getLanguage() : "en-US";
                     String resolvedNo =
-                        I18nModule.get().getMessage(lang, "server.aetherhaven.debug.needs.noHandle");
+                        I18nModule.get().getMessage(lang, "aetherhaven_world_debug.aetherhaven.debug.needs.noHandle");
                     final String noHandle =
                         resolvedNo != null && !resolvedNo.isEmpty() ? resolvedNo : "(no handle)";
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.debug.needs.inspectIntro")
+                        Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.inspectIntro")
                     );
                     es.forEachChunk(
                         Query.and(VillagerNeeds.getComponentType(), UUIDComponent.getComponentType()),
@@ -74,7 +74,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                                 String handleStr =
                                     h != null && !h.getHandle().isEmpty() ? h.getHandle() : noHandle;
                                 playerRef.sendMessage(
-                                    Message.translation("server.aetherhaven.debug.needs.inspectLine")
+                                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.inspectLine")
                                         .param("handle", handleStr)
                                         .param("uuid", id.getUuid().toString())
                                         .param("hunger", String.format(Locale.US, "%.1f", vn.getHunger()))
@@ -93,16 +93,16 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
     private static final class SetCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> targetArg =
-            this.withRequiredArg("target", "server.commands.aetherhaven.needs.target.desc", ArgTypes.STRING);
+            this.withRequiredArg("target", "aetherhaven_commands_help.commands.aetherhaven.needs.target.desc", ArgTypes.STRING);
         @Nonnull
         private final RequiredArg<String> whichArg =
-            this.withRequiredArg("which", "server.commands.aetherhaven.needs.which.desc", ArgTypes.STRING);
+            this.withRequiredArg("which", "aetherhaven_commands_help.commands.aetherhaven.needs.which.desc", ArgTypes.STRING);
         @Nonnull
         private final RequiredArg<Float> valueArg =
-            this.withRequiredArg("value", "server.commands.aetherhaven.needs.value.desc", ArgTypes.FLOAT);
+            this.withRequiredArg("value", "aetherhaven_commands_help.commands.aetherhaven.needs.value.desc", ArgTypes.FLOAT);
 
         SetCommand() {
-            super("set", "server.commands.aetherhaven.needs.set.desc");
+            super("set", "aetherhaven_commands_help.commands.aetherhaven.needs.set.desc");
         }
 
         @Override
@@ -122,7 +122,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
             float v = Math.max(0f, Math.min(VillagerNeeds.MAX, context.get(valueArg)));
             if (!which.equals("hunger") && !which.equals("energy") && !which.equals("fun")) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.needs.whichInvalid")
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.whichInvalid")
                         .param("max", String.valueOf((int) VillagerNeeds.MAX))
                 );
                 return;
@@ -134,19 +134,19 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                         VillagerNeedsTargetResolver.resolve(targetToken, store, ref, world, plugin, es);
                     switch (res.problem()) {
                         case NO_TOWN -> {
-                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.elderNoTown"));
+                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.elderNoTown"));
                             return;
                         }
                         case NO_ELDER -> {
-                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.noElderUuid"));
+                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noElderUuid"));
                             return;
                         }
                         case NOT_FOUND -> {
-                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.noMatch"));
+                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noMatch"));
                             return;
                         }
                         case AMBIGUOUS -> {
-                            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.needs.multipleMatch"));
+                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.multipleMatch"));
                             return;
                         }
                         default -> {
@@ -190,14 +190,14 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                     );
                     if (foundRef.get() == null || updated.get() == null) {
                         playerRef.sendMessage(
-                            Message.translation("server.aetherhaven.debug.needs.entityNotLoaded")
+                            Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.entityNotLoaded")
                                 .param("id", String.valueOf(target))
                         );
                         return;
                     }
                     es.putComponent(foundRef.get(), VillagerNeeds.getComponentType(), updated.get());
                     playerRef.sendMessage(
-                        Message.translation("server.aetherhaven.debug.needs.set")
+                        Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.set")
                             .param("which", which)
                             .param("value", String.valueOf(v))
                             .param("label", targetToken)

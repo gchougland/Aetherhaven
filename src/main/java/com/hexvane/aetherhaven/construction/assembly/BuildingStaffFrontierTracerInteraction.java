@@ -275,7 +275,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
     private static void failWithHint(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.translation("server.aetherhaven.assembly.tracer.none_in_range"));
+            pr.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.assembly.tracer.none_in_range"));
         }
     }
 

@@ -68,17 +68,18 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
             commandBuilder.append("Aetherhaven/GaiaStatueRevivePage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyGaiaStatueRevivePage(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             commandBuilder.clear(ROWS);
             return;
         }
         Store<ChunkStore> cs = statueBlockRef.getStore();
         GaiaStatueBlock gb = cs.getComponent(statueBlockRef, GaiaStatueBlock.getComponentType());
         if (gb == null || gb.getTownId().isBlank()) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.statueNotLinked"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.statueNotLinked"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -86,27 +87,27 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
         try {
             townUuid = UUID.fromString(gb.getTownId().trim());
         } catch (IllegalArgumentException e) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.invalidTownLink"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.invalidTownLink"));
             commandBuilder.clear(ROWS);
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townUuid);
         if (town == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.townNotFound"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
             commandBuilder.clear(ROWS);
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null || !town.playerCanReviveVillagers(uc.getUuid())) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.noReviveVillagersPermission"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.noReviveVillagersPermission"));
             commandBuilder.clear(ROWS);
             return;
         }
 
         commandBuilder.set(
             "#Hint.TextSpans",
-            Message.translation("server.aetherhaven.ui.gaiaStatue.hint")
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.hint")
                 .param("cost", AetherhavenConstants.GAIA_STATUE_REVIVE_COST_ESSENCE)
         );
         commandBuilder.clear(ROWS);
@@ -120,16 +121,17 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
             boolean present = ent != null && ent.isValid();
             commandBuilder.append(ROWS, "Aetherhaven/GaiaStatueReviveRow.ui");
             String row = ROWS + "[" + i + "]";
+            AetherhavenUiLocalization.applyGaiaStatueReviveRow(commandBuilder, row);
             commandBuilder.set(row + " #Portrait.AssetPath", NpcPortraitProvider.portraitPathForRoleId(roleId));
             String profKey = NpcPortraitProvider.professionTranslationKey(roleId, r.getKind());
             Message statusMsg =
                 present
-                    ? Message.translation("server.aetherhaven.ui.gaiaStatue.status.present")
-                    : Message.translation("server.aetherhaven.ui.gaiaStatue.status.missing");
-            Message nameMsg = Message.translation("server.npcRoles." + roleId + ".name");
+                    ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.status.present")
+                    : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.status.missing");
+            Message nameMsg = Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId + ".name");
             commandBuilder.set(
                 row + " #VillagerLine.TextSpans",
-                Message.translation("server.aetherhaven.ui.gaiaStatue.row")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.row")
                     .param("name", nameMsg)
                     .param("profession", Message.translation(profKey))
                     .param("status", statusMsg)
@@ -201,7 +203,7 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
         if (have < need) {
             if (pr != null) {
                 pr.sendMessage(
-                    Message.translation("server.aetherhaven.ui.gaiaStatue.notEnoughEssence")
+                    Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.notEnoughEssence")
                         .param("need", String.valueOf(need))
                 );
             }
@@ -211,7 +213,7 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
         ItemStackTransaction tx = inv.removeItemStack(new ItemStack(AetherhavenConstants.ITEM_LIFE_ESSENCE, need));
         if (!tx.succeeded()) {
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.gaiaStatue.essenceRemoveFailed"));
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.essenceRemoveFailed"));
             }
             refresh(ref, store);
             return;
@@ -222,18 +224,41 @@ public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStat
                 statueBlockWorldPos.y,
                 statueBlockWorldPos.z + 1.5
             );
-        boolean ok = VillagerRevivalService.reviveResident(world, plugin, town, tm, store, record, spawn);
-        if (pr != null) {
-            pr.sendMessage(
-                ok
-                    ? Message.translation("server.aetherhaven.ui.gaiaStatue.reviveSuccess")
-                    : Message.translation("server.aetherhaven.ui.gaiaStatue.reviveFailed")
-            );
-        }
-        if (!ok) {
-            player.giveItem(new ItemStack(AetherhavenConstants.ITEM_LIFE_ESSENCE, need), ref, store);
-        }
-        refresh(ref, store);
+        ResidentNpcRecord recordFinal = record;
+        int needFinal = need;
+        world.execute(
+            () -> {
+                if (!ref.isValid()) {
+                    return;
+                }
+                Player p = store.getComponent(ref, Player.getComponentType());
+                PlayerRef pr2 = store.getComponent(ref, PlayerRef.getComponentType());
+                if (p == null) {
+                    return;
+                }
+                String err2 = VillagerRevivalService.validateCanRevive(store, recordFinal);
+                if (err2 != null) {
+                    p.giveItem(new ItemStack(AetherhavenConstants.ITEM_LIFE_ESSENCE, needFinal), ref, store);
+                    if (pr2 != null) {
+                        pr2.sendMessage(Message.raw(err2));
+                    }
+                    refresh(ref, store);
+                    return;
+                }
+                boolean ok = VillagerRevivalService.reviveResident(world, plugin, town, tm, store, recordFinal, spawn);
+                if (pr2 != null) {
+                    pr2.sendMessage(
+                        ok
+                            ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.reviveSuccess")
+                            : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.reviveFailed")
+                    );
+                }
+                if (!ok) {
+                    p.giveItem(new ItemStack(AetherhavenConstants.ITEM_LIFE_ESSENCE, needFinal), ref, store);
+                }
+                refresh(ref, store);
+            }
+        );
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

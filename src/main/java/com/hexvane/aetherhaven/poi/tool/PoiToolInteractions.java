@@ -104,14 +104,14 @@ public final class PoiToolInteractions {
         }
         if (nearest == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiInRange"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.noPoiInRange"));
             return;
         }
         state.setSelectedPoiId(nearest.getId());
         send(
             playerRef,
             commandBuffer,
-            Message.translation("server.aetherhaven.poi.selected")
+            Message.translation("aetherhaven_world_debug.aetherhaven.poi.selected")
                 .param("id", nearest.getId().toString())
                 .param("x", String.valueOf(nearest.getX()))
                 .param("y", String.valueOf(nearest.getY()))
@@ -138,7 +138,7 @@ public final class PoiToolInteractions {
         }
         UUID id = state.getSelectedPoiId();
         if (id == null) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiSelected"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.noPoiSelected"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -151,7 +151,7 @@ public final class PoiToolInteractions {
         PoiEntry current = reg.get(id);
         if (current == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.selectedPoiGone"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.selectedPoiGone"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -162,7 +162,7 @@ public final class PoiToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("server.aetherhaven.poi.targetBlockMismatch")
+                Message.translation("aetherhaven_world_debug.aetherhaven.poi.targetBlockMismatch")
                     .param("type", current.getBlockTypeId() != null ? current.getBlockTypeId() : "")
             );
             context.getState().state = InteractionState.Failed;
@@ -173,7 +173,7 @@ public final class PoiToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation("server.aetherhaven.poi.moved")
+            Message.translation("aetherhaven_world_debug.aetherhaven.poi.moved")
                 .param("x", String.valueOf(nx))
                 .param("y", String.valueOf(ny))
                 .param("z", String.valueOf(nz))
@@ -203,7 +203,7 @@ public final class PoiToolInteractions {
         }
         UUID id = state.getSelectedPoiId();
         if (id == null) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.noPoiBlock"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.noPoiBlock"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -216,7 +216,7 @@ public final class PoiToolInteractions {
         PoiEntry current = reg.get(id);
         if (current == null) {
             state.setSelectedPoiId(null);
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.selectedPoiGone"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.selectedPoiGone"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -226,7 +226,7 @@ public final class PoiToolInteractions {
         if (nx == current.getX() && ny == current.getY() && nz == current.getZ()) {
             PoiEntry cleared = current.copyWithInteractionTarget(null, null, null);
             reg.replace(cleared);
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.poi.clearedInteractionTarget"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_world_debug.aetherhaven.poi.clearedInteractionTarget"));
             return;
         }
         int standY = VillagerBlockUtil.findStandY(world, nx, nz, ny + 2);
@@ -238,7 +238,7 @@ public final class PoiToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation("server.aetherhaven.poi.setInteractionTarget")
+            Message.translation("aetherhaven_world_debug.aetherhaven.poi.setInteractionTarget")
                 .param("x", String.format(Locale.US, "%.2f", wx))
                 .param("y", String.format(Locale.US, "%.2f", wy))
                 .param("z", String.format(Locale.US, "%.2f", wz))

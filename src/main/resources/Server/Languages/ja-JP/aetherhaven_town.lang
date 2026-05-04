@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=あなたは、この世界で町を所有しているわけではありません。
+aetherhaven.town.resolve.noTownNamed=この世界には「{name}」という名前の町は存在しない。
+aetherhaven.town.resolve.ownerOrOpOnly=それを行うことができるのは町の所有者（または許可を得た運営者）だけです。
+aetherhaven.town.resolve.notInTown=あなたは、この世界の町にはいません。
+aetherhaven.town.resolve.nameOnlyForOwner=町名を使用できるのは、町の所有者（または運営者）のみです。
+aetherhaven.town.resolve.specifyTownName=町名を指定するか、所有している町名を使用してください。
+aetherhaven.town.resolve.specifyTown=町名を指定してください。
+aetherhaven.town.resolve.adminOtherTown=オペレーターのみが、他のプレイヤーの町を名前で指定して攻撃対象にすることができます。
+aetherhaven.town.invite.err.emptyName=プレイヤー名を入力してください。
+aetherhaven.town.invite.err.targetOffline=プレイヤー「{name}」はこのワールドにオフラインです。
+aetherhaven.town.invite.err.cannotInviteSelf=自分自身を招待することはできません。
+aetherhaven.town.invite.err.alreadyInTown=そのプレイヤーは既にこの世界の町に存在している。
+aetherhaven.town.invite.toTarget={inviter} があなたを町「{townDisplay}」に招待しました。 /aetherhaven town accept {townDisplay} または /aetherhaven town decline {townDisplay} と入力してください（スペースを含めた町名全体を入力してください）。
+aetherhaven.town.invite.sent={name} に招待状が送信されました。
+aetherhaven.town.kick.err.mustBeOnline=名前でキックするには、プレイヤーがオンラインである必要があります。
+aetherhaven.town.kick.err.cannotRemoveOwner=町の所有者を削除することはできません。
+aetherhaven.town.kick.err.notMember=その選手はこの町の住民ではありません。
+aetherhaven.town.kick.removed=町から{name}を削除しました。
+aetherhaven.town.kick.removedYou=あなたは町「{town}」から追放されました。
+aetherhaven.town.kick.removedGeneric=町からメンバーを削除しました。
+aetherhaven.town.role.err.ownerAlwaysFull=所有者は常に完全な権限を持っています。
+aetherhaven.town.role.set={name}の役割を{role}に設定します。
+aetherhaven.town.accept.err.noSuchTown=その名前の町は存在しない。
+aetherhaven.town.accept.err.noInvite=その町への招待はまだ届いていません。
+aetherhaven.town.accept.err.noInvites=保留中の町からの招待状はありません。
+aetherhaven.town.accept.err.alreadyInTown=あなたは既に町の中にいます。
+aetherhaven.town.accept.joined=あなたは「{town}」に参加しました。
+aetherhaven.town.decline.noPending=その町への招待はまだ届いていません。
+aetherhaven.town.decline.noInvites=保留中の町からの招待状はありません。
+aetherhaven.town.decline.done=招待を辞退しました。
+aetherhaven.town.permissions.updated=メンバーの権限が保存されました。
+
+aetherhaven.ui.memberPermissions.title=メンバーの権限
+aetherhaven.ui.memberPermissions.backTooltip=プレイヤー一覧に戻る
+aetherhaven.ui.memberPermissions.placePlots=区画を配置する
+aetherhaven.ui.memberPermissions.manageConstructions=建造物の構築と管理（組み立て、生産、宴会、憲章改正、建物の移動）
+aetherhaven.ui.memberPermissions.spendTreasuryGold=町の財源である金を建設費用に充てる
+aetherhaven.ui.memberPermissions.openTreasuryPanel=資金管理（預け入れ／引き出し）
+aetherhaven.ui.memberPermissions.acceptQuests=町のクエストを受諾／開始する
+aetherhaven.ui.memberPermissions.completeQuests=町のクエストを完了して、評判報酬を獲得しよう
+aetherhaven.ui.memberPermissions.abandonQuests=進行中の町のクエストを放棄する
+aetherhaven.ui.memberPermissions.reviveVillagers=ガイア像で村人を蘇らせよう
+aetherhaven.ui.memberPermissions.err.notOwner=町の所有者のみが権限を編集できます。
+aetherhaven.ui.memberPermissions.err.notInTown=その選手はこの町にはいません。
+aetherhaven.town.rolecmd.playerMustBeOnline=プレイヤーはオンラインである必要があります。
+aetherhaven.town.rolecmd.roleInvalid=役割は「建設」、「クエスト」、またはその両方である必要があります。
+aetherhaven.town.leave.notInTown=あなたは町にいません。
+aetherhaven.town.leave.ownerCannotLeave=所有者は退去できません。所有権の移転はまだ実施されていません。
+aetherhaven.town.leave.notMember=あなたは当町の住民ではありません。
+aetherhaven.town.leave.left=あなたは「{town}」を残しました。
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=建てる
+aetherhaven.town.memberRole.QUEST=クエスト
+aetherhaven.town.memberRole.BOTH=両方

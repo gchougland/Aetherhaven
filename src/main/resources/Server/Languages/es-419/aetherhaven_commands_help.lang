@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=Enumera las ciudades de Aetherhaven en el mundo actual.
+
+commands.aetherhaven.town.desc=Membresía municipal: invitación, funciones, salida
+commands.aetherhaven.town.invite.desc=Invita a un jugador en línea a tu ciudad.
+commands.aetherhaven.town.invite.player.desc=Nombre de usuario del jugador (debe estar en línea)
+commands.aetherhaven.town.accept.desc=Aceptar una invitación pendiente de la ciudad
+commands.aetherhaven.town.decline.desc=Rechazar una invitación pendiente de la ciudad
+commands.aetherhaven.town.kick.desc=Expulsa a un miembro de tu ciudad.
+commands.aetherhaven.town.kick.player.desc=Nombre de usuario del miembro (debe estar en línea)
+commands.aetherhaven.town.role.desc=Aplica un permiso preestablecido a un miembro (CONSTRUCCIÓN, MISIÓN o AMBOS). Usa la pestaña Jugadores del bloque de administración para permisos por bandera.
+commands.aetherhaven.town.role.player.desc=Nombre de usuario del miembro (debe estar en línea)
+commands.aetherhaven.town.role.role.desc=CONSTRUIR, MISIÓN O AMBAS
+commands.aetherhaven.town.leave.desc=Abandona un pueblo del que seas miembro (no propietario).
+commands.aetherhaven.town.townName.desc=Nombre de la ciudad (opcional); utilice el nombre completo, incluidos los espacios (el resto de la línea). Omítalo si solo tiene una invitación pendiente.
+
+commands.aetherhaven.poi.desc=Depuración: Comandos de puntos de interés
+commands.aetherhaven.poi.list.desc=Lista de puntos de interés (POI) para una ciudad (UUID de la ciudad opcional, o omítala / use "me" para su ciudad)
+commands.aetherhaven.poi.town.desc=UUID de la ciudad, o yo, u omitir para la ciudad que llama
+commands.aetherhaven.poi.dump.desc=Enumera todos los puntos de interés (POI) registrados en la memoria de este mundo (de cualquier ciudad).
+
+commands.aetherhaven.plots.desc=Instancias de trazado: lista, finishassembly (creativo), remove plotId (creativo). Utilice trazados para evitar conflictos con el trazado /aetherhaven.
+commands.aetherhaven.plots.list.desc=Lista de instancias de parcelas para tu ciudad (UUID de la parcela, ID de construcción, estado, posición del letrero)
+commands.aetherhaven.plots.finishassembly.desc=Creativo: finaliza al instante cualquier ensamblaje en curso en tu ciudad (requiere fragmentos cargados / trabajos activos).
+commands.aetherhaven.plots.remove.desc=Creativo: demuele una parcela por UUID y elimínala de los datos de tu ciudad.
+commands.aetherhaven.plots.remove.plotId.desc=UUID del gráfico de la lista de gráficos de /aetherhaven
+
+commands.aetherhaven.needs.desc=Depuración: el aldeano necesita
+commands.aetherhaven.needs.inspect.desc=Enumera las entidades en los fragmentos cargados que tienen VillagerNeeds
+commands.aetherhaven.needs.set.desc=Establezca un medidor de necesidades de 0 a 100 (objetivo: identificador de inspección, Elder o uuid).
+commands.aetherhaven.needs.target.desc=Identificador (por ejemplo, Villager_Elder_xxxxxxxx), Anciano o UUID de entidad
+commands.aetherhaven.needs.entity.desc=Obsoleto; utilice target (handle, Elder o uuid).
+commands.aetherhaven.needs.which.desc=hambre, energía o diversión
+commands.aetherhaven.needs.value.desc=Valor de 0 a 100 (100 = totalmente satisfecho)
+
+commands.aetherhaven.tax.desc=Depuración: impuesto matutino del tesoro
+commands.aetherhaven.tax.breakdown.desc=Muestra las líneas impositivas por aldeano y los totales para tu ciudad (solo en los fragmentos cargados).
+commands.aetherhaven.tax.now.desc=Aplique el diezmo matutino al tesoro ahora (evita el horario matutino y el último día de recolección).
+
+commands.aetherhaven.questdebug.desc=Depuración: omisión de la misión de la ciudad
+commands.aetherhaven.questdebug.grant.desc=Marcar misión activa en tu ciudad
+commands.aetherhaven.questdebug.complete.desc=Marca la misión como completada en tu ciudad.
+commands.aetherhaven.questdebug.clear.desc=Elimina la misión de la lista activa en tu ciudad.
+commands.aetherhaven.questdebug.id.desc=ID de la misión (predeterminado q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Muestra las misiones activas y completadas de tu ciudad (nombre + ID).
+
+commands.aetherhaven.reputation.desc=Depuración: reputación
+commands.aetherhaven.reputation.set.desc=Establece tu reputación con un aldeano y pon en cola las recompensas por hitos alcanzados para dialogar.
+commands.aetherhaven.reputation.villagerUuid.desc=UUID de entidad PNJ aldeano
+commands.aetherhaven.reputation.villagerTarget.desc=UUID de entidad de aldeano o ID de rol de PNJ en tu ciudad (por ejemplo, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Reputación de 0 a 100
+commands.aetherhaven.reputation.reward.desc=Enumere las definiciones de hitos o conceda una recompensa directamente.
+commands.aetherhaven.reputation.reward.list.desc=Lista de hitos de reputación (opcional: filtrar por ID de rol de PNJ)
+commands.aetherhaven.reputation.reward.roleFilter.desc=ID de rol de PNJ (por ejemplo, Aetherhaven_Merchant) para filtrar la lista
+commands.aetherhaven.reputation.reward.grant.desc=Otorga ahora una recompensa por hito (marcas reclamadas); usa la lista de recompensas de reputación para los ID.
+commands.aetherhaven.reputation.rewardId.desc=ID de recompensa de reputación (p. ej., rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Depuración: ayudantes de aldeanos del pueblo
+commands.aetherhaven.villager.list.desc=Lista los UUID de las entidades NPC de los aldeanos de la ciudad (para los comandos de reputación/ubicación)
+commands.aetherhaven.villager.locate.desc=Imprimir la posición de un aldeano del pueblo; teletransporte opcional (solo para operadores).
+commands.aetherhaven.villager.uuid.desc=UUID de entidad PNJ aldeano
+commands.aetherhaven.villager.target.desc=UUID de entidad de aldeano o ID de rol de PNJ en tu ciudad (por ejemplo, Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=verdadero para teletransportarse al aldeano (solo operadores); o use --tp en su lugar
+commands.aetherhaven.villager.tp_flag.desc=Teletransportarse al aldeano (solo operadores; es lo mismo que pasar verdadero)
+commands.aetherhaven.villager.reset.desc=Elimina todos los PNJ aldeanos del pueblo y haz que reaparezcan cerca de ti (depuración; conserva misiones, reputación y regalos; ejecuta la reparación de la piscina de la posada para alinear a los residentes con los edificios terminados; actualiza la piscina de visitantes de la posada).
+aetherhaven.villager.resetDone=Los aldeanos del pueblo se reiniciaron y reaparecieron cerca de ti.
+aetherhaven.villager.resetFailed=No se pudieron reiniciar los aldeanos del pueblo: {reason}
+commands.aetherhaven.gift.desc=Depuración: restablecer los límites de regalos o rellenar la vista previa del historial de regalos.
+commands.aetherhaven.gift.resetLimits.desc=Restablecer los límites de regalos diarios/semanales para todos los jugadores y todos los aldeanos en cada pueblo de este mundo.
+commands.aetherhaven.gift.fillHistory.desc=Agrega una línea de registro por cada elemento de amor/gusto/disgusto para un rol (tu ciudad) para que el historial de regalos tenga algo que mostrar (depuración).
+commands.aetherhaven.gift.roleId.desc=ID de rol del PNJ (por ejemplo, Aetherhaven_Merchant)
+
+commands.aetherhaven.debug_autonomy.desc=Depuración: superposición de autonomía del aldeano
+commands.aetherhaven.debug_autonomy.toggle.desc=Activar/desactivar la depuración de autonomía en un aldeano del pueblo (mirar NPC o usar --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Indica si la depuración de autonomía está habilitada para este aldeano.
+commands.aetherhaven.debug_autonomy.clear.desc=Borrar la depuración de autonomía de Aetherhaven para este aldeano.
+
+commands.aetherhaven.debug_lootchest.desc=Depuración: La bonificación del cofre de Aetherhaven se aplica al contenedor seleccionado.
+commands.aetherhaven.debug_lootchest.fill.desc=Aplica tiradas forzadas de joyas, oro y fichas de trama al contenedor de objetos que estás mirando.

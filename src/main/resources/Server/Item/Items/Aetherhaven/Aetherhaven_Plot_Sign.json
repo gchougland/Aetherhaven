@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Plot_Sign.name",
-    "Description": "server.items.Aetherhaven_Plot_Sign.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Plot_Sign.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Plot_Sign.description"
   },
   "PlayerAnimationsId": "Block",
   "Categories": [

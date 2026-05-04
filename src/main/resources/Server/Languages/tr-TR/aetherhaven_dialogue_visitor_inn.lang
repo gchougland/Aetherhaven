@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_inn)
+# Full translation keys are aetherhaven_dialogue_visitor_inn.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=Şömine sıcak, ama hesap defteri kasaba halkı ve misafirleri içindir. Davet edildiğinizde geri gelin.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=Haklısın.
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=Han sahibi

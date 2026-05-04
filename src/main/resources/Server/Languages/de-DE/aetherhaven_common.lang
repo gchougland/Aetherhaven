@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven wurde nicht geladen.
+aetherhaven.common.noTownInWorld=Es gibt keine Stadt für dich in dieser Welt.
+aetherhaven.common.noQuestPermission=Du hast in dieser Stadt keine Questberechtigung.
+aetherhaven.common.townNotFound=Ort nicht gefunden.
+aetherhaven.common.invalidTownLink=Ungültiger Stadtlink.
+aetherhaven.common.treasuryNotLinked=Das Finanzministerium ist nicht damit verbunden.
+aetherhaven.common.ownerOnlyTreasury=Ausschließlich der Stadtbesitzer darf auf die Staatskasse zugreifen.
+aetherhaven.common.noTreasuryPanelPermission=Sie haben keine Erlaubnis, die Stadtkasse zu benutzen.
+aetherhaven.common.townNotInThisWorld=Die Stadt existiert nicht in dieser Welt.
+aetherhaven.common.noMoveBuildingsPermission=Sie haben keine Genehmigung, Gebäude in dieser Stadt zu versetzen.
+aetherhaven.common.buildingCannotMove=Dieses Gebäude kann nicht versetzt werden (fehlendes Grundstück oder nicht fertiggestellt).
+aetherhaven.common.lookAtBlockPlot=Schauen Sie sich einen Block an, um die Position des Plot-Zeichens festzulegen und eine Vorschau zu starten.
+aetherhaven.common.carryPlotToken=Zum Platzieren eines Gebäudes, das in dem Tool aufgeführt ist (z. B. ein Gasthaus-Grundstücksmarker), muss ein Grundstücksmarker für einen Gebäudetyp mitgeführt werden.
+aetherhaven.common.statueNotLinked=Die Statue ist keiner Stadt zugeordnet.
+aetherhaven.common.ownerOnlyStatue=Nur der Stadtbesitzer darf diese Statue benutzen.
+aetherhaven.common.noReviveVillagersPermission=Sie haben keine Erlaubnis, an dieser Statue Dorfbewohner wiederzubeleben.
+aetherhaven.common.noPlayerId=Keine Spieler-ID.
+aetherhaven.common.playersOnly=Nur für Spieler.
+aetherhaven.common.invalidVillager=Ungültiger Dorfbewohner.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Du gehörst bereits einer Stadt in dieser Welt an. Verlasse sie, bevor du eine neue gründest.
+aetherhaven.charter.townFounded=Stadtgründung: {name}. Der Dorfälteste ist eingetroffen. Benutze die Gründungsurkunde, um die Stadt umzubenennen.
+aetherhaven.chartertown.info.notLinked=Charter ist noch keiner Stadt zugeordnet.
+aetherhaven.chartertown.info.invalidTownId=Ungültige Orts-ID in der Charta.
+aetherhaven.chartertown.info.townDataMissing=Stadtdaten nicht gefunden (siehe Serverprotokoll).
+aetherhaven.chartertown.townInfoBlock=Ortsname: {name}\nOrts-ID: {id}\nStufe: {tier}\nGebiet (Radius): {radius}\nCharter bei {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Der Ortsname darf nicht leer sein.
+aetherhaven.chartertown.nameDuplicate=Dieser Name wird bereits von einer anderen Stadt auf der Welt verwendet.
+aetherhaven.chartertown.nameSaved=Ortsname gespeichert: {name}

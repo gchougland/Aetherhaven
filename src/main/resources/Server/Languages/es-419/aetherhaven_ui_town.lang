@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Construcción
+aetherhaven.ui.plotmanagement.title=Administración municipal
+aetherhaven.ui.plotmanagement.tabPlot=Trama
+aetherhaven.ui.plotmanagement.tabPlayers=Jugadores
+aetherhaven.ui.plotmanagement.playersHint=Invita a los jugadores en línea por su nombre. Cambia los roles o elimina a los miembros a continuación.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Miembros de este pueblo. Solo el propietario puede invitar o cambiar los roles.
+aetherhaven.ui.plotmanagement.inviteLabel=Invitar jugador
+aetherhaven.ui.plotmanagement.invitePlaceholder=Nombre del jugador (en línea)
+aetherhaven.ui.plotmanagement.inviteSend=Enviar invitación
+aetherhaven.ui.plotmanagement.kick=Eliminar
+aetherhaven.ui.plotmanagement.roleOwner=Dueño
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Información de la parcela
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=El aldeano necesita
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=miembros del pueblo
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Trasladar este edificio
+aetherhaven.ui.plotconstruction.materials=Materiales
+aetherhaven.ui.plotconstruction.build=Construir
+aetherhaven.ui.plotconstruction.pickUpPlot=Recoger parcela (devolver ficha)
+aetherhaven.ui.plotconstruction.townNeeds=La ciudad necesita
+aetherhaven.ui.plotconstruction.moveBuilding=Trasladar el edificio
+aetherhaven.ui.plotconstruction.houseResident=Residente
+aetherhaven.ui.plotconstruction.assignHouseResident=Establecer residente
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=¿Cambiar de edificio?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Abre la opción de colocación de parcelas para elegir un nuevo sitio. Al moverlo, se destruye y reconstruye el edificio antiguo; primero retira los objetos de valor, las mascotas y los objetos sueltos que se encuentren dentro del área ocupada.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Continuar
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Cancelar
+
+aetherhaven.ui.villagerneeds.title=La ciudad necesita
+aetherhaven.ui.villagerneeds.hint=Seleccione un aldeano para ver los contadores y su retrato.
+aetherhaven.ui.villagerneeds.hunger=Hambre
+aetherhaven.ui.villagerneeds.energy=Energía
+aetherhaven.ui.villagerneeds.fun=Divertido
+aetherhaven.ui.villagerneeds.villagers=aldeanos
+aetherhaven.ui.villagerneeds.noResidentsTracked=Aún no se ha realizado ningún seguimiento a los residentes de la ciudad.
+aetherhaven.ui.villagerneeds.rescueTooltip=Teletransporta al residente seleccionado a un lugar cercano y borra su ruta y actividad actuales para que pueda moverse y elegir un nuevo destino. Úsalo si un aldeano está atascado.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Consulta los objetos que le has dado a este aldeano, agrupados según su reacción, y cuántos regalos aún puedes darle esta semana.
+aetherhaven.ui.giftHistory.title=Regalos entregados
+aetherhaven.ui.giftHistory.backTooltip=Regreso a la ciudad necesita
+aetherhaven.ui.giftHistory.empty=Todavía no le has dado ningún regalo a este aldeano, así que no hay nada que mostrar.
+aetherhaven.ui.giftHistory.section.love=Amado
+aetherhaven.ui.giftHistory.section.like=Apreciado
+aetherhaven.ui.giftHistory.section.neutral=Neutral
+aetherhaven.ui.giftHistory.section.dislike=No me gustó
+aetherhaven.ui.giftHistory.giftsThisWeek=Regalos de esta semana: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Antiguo habitante del pueblo
+aetherhaven.ui.giftHistory.cycleNextTooltip=aldeano del pueblo vecino
+aetherhaven.ui.villagerneeds.rescueDone=El residente seleccionado fue trasladado a su domicilio y su rutina fue restablecida.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=Ese residente no pertenece a este pueblo.
+aetherhaven.ui.reputation.label=Reputación
+aetherhaven.reputation.dailyTalkGain=+{amount} reputación (saludo diario)
+aetherhaven.reputation.giftRepChange={amount} reputación (regalo)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=enmiendas a la carta
+aetherhaven.ui.charter.popHint=Residentes (no visitantes): {count}. El nivel 1 se desbloquea en 3; el nivel 2 en 5.
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Nivel 1: Estilo diezmo
+aetherhaven.ui.charter.tier2=Nivel 2: Enfoque en la ciudad
+aetherhaven.ui.charter.t1.perCapitaShort=Per cápita
+aetherhaven.ui.charter.t1.happinessShort=Ponderado por la felicidad
+aetherhaven.ui.charter.t1.perCapitaTooltip=El recuento de habitantes es el primer diezmo.\n\nEl oro matutino depende de cuántos residentes viven aquí. La comodidad diaria también influye un poco en el total, pero la población es lo que realmente marca la diferencia.
+aetherhaven.ui.charter.t1.happinessTooltip=El diezmo prioriza las necesidades.\n\nEl oro matutino depende más de lo bien alimentados, descansados y de buen ánimo que estén los residentes. Unos pocos ciudadanos adicionales importan menos que mantener a todos en buenas condiciones.
+aetherhaven.ui.charter.t2.miningShort=Minería
+aetherhaven.ui.charter.t2.loggingShort=Explotación florestal
+aetherhaven.ui.charter.t2.farmingShort=Agricultura
+aetherhaven.ui.charter.t2.smithingShort=Herrería
+aetherhaven.ui.charter.t2.miningTooltip=La carta fundacional respalda las minas.\n\nLas bonificaciones vinculadas a la producción minera beneficiarán a este pueblo cuando lleguen. Elija solo una de las siguientes opciones: minería, tala de árboles, agricultura o herrería.
+aetherhaven.ui.charter.t2.loggingTooltip=La carta fundacional respalda el bosque.\n\nLas bonificaciones vinculadas a la tala y el corte de madera beneficiarán a este pueblo cuando lleguen. Elija solo una de las siguientes opciones: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.t2.farmingTooltip=La carta fundacional respalda los campos.\n\nCuando tu pueblo tenga una parcela agrícola completa, los aspersores aquí alcanzarán un poco más lejos, con casillas adicionales en el borde de su rociado. Elige solo una de las siguientes opciones: minería, tala, agricultura o herrería.
+aetherhaven.ui.charter.t2.smithingTooltip=La carta fundacional respalda la forja.\n\nLas bonificaciones relacionadas con la herrería y la metalurgia favorecerán a este pueblo cuando lleguen. Elige solo una de las siguientes opciones: minería, tala de árboles, agricultura o herrería.
+aetherhaven.ui.charter.hint=Seleccione una opción por nivel. Las opciones no se podrán cambiar posteriormente.
+aetherhaven.ui.charter.allChosen=Todas las enmiendas elegidas para esta ciudad.
+aetherhaven.ui.charter.noTown=Para usar esto, debes pertenecer a una ciudad.
+aetherhaven.ui.charter.noPermission=No se pueden modificar las enmiendas a los estatutos de esta ciudad.
+aetherhaven.ui.charter.err.locked=Esa enmienda está bloqueada o ya ha sido elegida.
+aetherhaven.ui.charter.err.invalid=Opción no válida.
+aetherhaven.ui.charter.saved=Se han actualizado las enmiendas a los estatutos.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Continuar
+aetherhaven.reputation.reward.elder.50=Los estatutos pueden cambiar a medida que crecemos. Aquí tienen el modelo para una tabla de enmiendas. Elaborenla en su mesa de planificación urbana cuando tengan el esquema. Colóquenla en el salón y podrán decidir cómo se realiza el diezmo matutino.
+aetherhaven.reputation.reward.elder.100=Has hecho mucho más por este pueblo de lo que nadie te pidió. Acepta esta piedra angular. Erige un monumento al fundador donde lo permita el estatuto. La gente de aquí te recordará.
+aetherhaven.reputation.reward.innkeeper.50=Has mantenido este salón bien alimentado y honesto el tiempo suficiente como para confiarte la mesa principal. Aquí tienes el diseño del banquete: elaboralo en la oficina de planificación urbana cuando tengas el esquema, y luego prepáralo en el pueblo. Cuando la mesa esté lista, también puedes convocar la Cena del Libro Mayor: pan, queso, pastel y un diezmo generoso para una semana. Yo vigilaré el salón mientras lo sirves.
+aetherhaven.reputation.reward.innkeeper.75=Has pasado suficientes noches largas con nosotros. Cuando organizas la Vigilia del Cristal del Hogar, el pueblo come más despacio y con más amabilidad durante una semana. Pescado, carne, verduras y una alimentación más tranquila para satisfacer todas las necesidades. Así es como nos mantenemos unidos.
+aetherhaven.reputation.reward.innkeeper.100=Ahora tú y este pueblo comparten nombre. Berrycircle Concord es el círculo de platos ligeros: ensalada, brochetas de fruta, palomitas de maíz y un brindis que cae en la bandeja. Sírvelo una vez y te recordarán con cariño.
+aetherhaven.reputation.reward.merchant.50=Has cumplido tu palabra, tanto en el buen como en el mal tiempo. Aquí tienes el patrón del banco. Diseñalo en tu escritorio de planificación urbana una vez que tengas el esquema. Las tasaciones en el banco son gratuitas; yo sigo cobrando por las mías.
+aetherhaven.reputation.reward.merchant.100=Has invertido suficiente oro en este libro como para merecer un rincón de joyero. El diseño es tuyo. Créalo en la oficina de planificación urbana. Elige tu gema, tu metal y la vida que le dedicas, y la pieza resultará auténtica.
+aetherhaven.reputation.reward.priestess.50=Gaia confía en que camines por la frontera entre el crecimiento y la ruina. Toma esta mezcla: cristal y esencia vital, moldeada en la mesa de planificación urbana. Revela lo que no debe permanecer y te permite deshacer una creación con una sola bocanada de polvo.
+aetherhaven.reputation.reward.priestess.75=Tú mantienes los caminos limpios. Toma este fragmento: tráelo de vuelta con el diezmo cuando quieras que el frasco del pueblo contenga algo más que un susurro.
+aetherhaven.reputation.reward.priestess.100=Gaia te caracteriza por tu terquedad, en el mejor sentido. Este catalizador verde puede intensificar lo que emana de la bebida cuando lo combinas con dinero y cuidado en el altar.
+aetherhaven.reputation.reward.farmer.25=Te has ganado mi confianza en las filas. He dibujado un aspersor de hierro. Fabrícalo en el banco de cultivo cuando tengas esencia de agua y hierro.
+aetherhaven.reputation.reward.farmer.50=Aquí está el patrón del torio: mayor alcance, mismo ritmo matutino. La pestaña de Agricultura en el banco lo mostrará una vez que conozca el esquema.
+aetherhaven.reputation.reward.farmer.75=El cobalto mantiene mejor la presión. Esta página desbloquea el tercer nivel de aspersores, que aún permite un buen riego al amanecer.
+aetherhaven.reputation.reward.farmer.100=Adamantita y esencia: la última hoja del juego. Colócalas con cuidado. Los campos del pueblo regarán al amanecer.
+aetherhaven.reputation.reward.blacksmith.25=Piedra para argamasa, piedra para paciencia. Tienes ambas, y se nota.
+aetherhaven.reputation.reward.blacksmith.50=Te has ganado la confianza de la forja. Aquí tienes el esquema para un yunque de geoda. Fabrícalo en tu mesa de planificación urbana cuando tengas las barras y la piedra.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Señal de parcela (administración)
+aetherhaven.ui.plotadmin.construction=Construcción
+aetherhaven.ui.plotadmin.give=Dar señal de parcela y cerrar

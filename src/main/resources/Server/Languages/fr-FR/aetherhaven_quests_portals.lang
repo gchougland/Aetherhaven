@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Quête commencée : {name}
+aetherhaven.quest.completed=Quête terminée : {name}
+aetherhaven.quest.abandoned=Quête abandonnée : {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Quête active accordée : {name}
+aetherhaven.questdebug.completed=Quête terminée : {name}
+aetherhaven.questdebug.cleared=Quête active terminée : {name}
+aetherhaven.questdebug.statusHeader=-- statut de la quête --
+aetherhaven.questdebug.statusActive=actif:
+aetherhaven.questdebug.statusCompleted=complété:
+aetherhaven.questdebug.statusEmpty=(aucun)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Aucun identifiant d'entité villageoise n'est encore enregistré pour cette ville.
+aetherhaven.villager.listHeader=villageois de la ville : UUID de l’entité, source, rôle si chargé (utilisez l’UUID ou l’identifiant du rôle avec /aetherhaven reputation … et villager locate) :
+aetherhaven.villager.listRow={uuid} | {note} | rôle : {role}
+aetherhaven.villager.locateNotLoaded=Ce villageois n'est pas chargé (essayez de vous rapprocher ou de charger des chunks).
+aetherhaven.villager.locateNoTransform=Aucune transformation possible pour cette entité.
+aetherhaven.villager.locatePosition=Villageois {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=La téléportation nécessite un opérateur (groupe OP).
+aetherhaven.villager.teleported=Téléporté.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=Aucun conteneur d'objet à cet emplacement (chunk non chargé, incompatibilité entre le remplissage et la base, ou bloc non conteneur).
+aetherhaven.debug.loot.bonusApplied=Bonus de butin d'Aetherhaven appliqué à ce conteneur (forcé).
+aetherhaven.townsCommand.line={id} nom="{name}" monde={world} propriétaire={owner} morceaux={cx},{cz} r{radius}
+aetherhaven.list.none=(aucun)
+aetherhaven.questdebug.statusActiveLine=Actif : {list}
+aetherhaven.questdebug.statusActiveEmpty=Actif : (aucun)
+aetherhaven.questdebug.statusCompletedLine=Terminé : {list}
+aetherhaven.questdebug.statusCompletedEmpty=Terminé : (aucun)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Sortie d'Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Utilisez cette touche pour retourner au monde extérieur.
+items.Aetherhaven_Portal_Enter.name=Passerelle d'Aetherhaven
+items.Aetherhaven_Portal_Enter.description=Utilisez ce bouton pour accéder à Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=Le village céleste

@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=You do not own a town in this world.
+aetherhaven.town.resolve.noTownNamed=No town named "{name}" in this world.
+aetherhaven.town.resolve.ownerOrOpOnly=Only the town owner can do that (or an operator with permission).
+aetherhaven.town.resolve.notInTown=You are not in a town in this world.
+aetherhaven.town.resolve.nameOnlyForOwner=Only the town owner (or an operator) can use a town name here.
+aetherhaven.town.resolve.specifyTownName=Specify a town name, or use this from the town you own.
+aetherhaven.town.resolve.specifyTown=Specify a town name.
+aetherhaven.town.resolve.adminOtherTown=Only operators may target another player's town by name.
+aetherhaven.town.invite.err.emptyName=Enter a player name.
+aetherhaven.town.invite.err.targetOffline=Player "{name}" is not online in this world.
+aetherhaven.town.invite.err.cannotInviteSelf=You cannot invite yourself.
+aetherhaven.town.invite.err.alreadyInTown=That player is already in a town in this world.
+aetherhaven.town.invite.toTarget={inviter} invited you to join the town "{townDisplay}". Type /aetherhaven town accept {townDisplay} or /aetherhaven town decline {townDisplay} (use the full town name, including spaces).
+aetherhaven.town.invite.sent=Invite sent to {name}.
+aetherhaven.town.kick.err.mustBeOnline=Player must be online to kick by name.
+aetherhaven.town.kick.err.cannotRemoveOwner=Cannot remove the town owner.
+aetherhaven.town.kick.err.notMember=That player is not a member of this town.
+aetherhaven.town.kick.removed=Removed {name} from the town.
+aetherhaven.town.kick.removedYou=You were removed from the town "{town}".
+aetherhaven.town.kick.removedGeneric=Removed member from the town.
+aetherhaven.town.role.err.ownerAlwaysFull=The owner always has full permissions.
+aetherhaven.town.role.set=Set {name}'s role to {role}.
+aetherhaven.town.accept.err.noSuchTown=No town with that name.
+aetherhaven.town.accept.err.noInvite=You have no pending invite for that town.
+aetherhaven.town.accept.err.noInvites=You have no pending town invites.
+aetherhaven.town.accept.err.alreadyInTown=You are already in a town.
+aetherhaven.town.accept.joined=You joined "{town}".
+aetherhaven.town.decline.noPending=No pending invite for that town.
+aetherhaven.town.decline.noInvites=You have no pending town invites.
+aetherhaven.town.decline.done=Invite declined.
+aetherhaven.town.permissions.updated=Member permissions saved.
+
+aetherhaven.ui.memberPermissions.title=Member permissions
+aetherhaven.ui.memberPermissions.backTooltip=Back to player list
+aetherhaven.ui.memberPermissions.placePlots=Place plots
+aetherhaven.ui.memberPermissions.manageConstructions=Build and manage constructions (assembly, production, feasts, charter amendments, move buildings)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Spend town treasury gold on construction costs
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Open treasury (deposit / withdraw)
+aetherhaven.ui.memberPermissions.acceptQuests=Accept / start town quests
+aetherhaven.ui.memberPermissions.completeQuests=Complete town quests and claim reputation rewards
+aetherhaven.ui.memberPermissions.abandonQuests=Abandon active town quests
+aetherhaven.ui.memberPermissions.reviveVillagers=Revive villagers at the Gaia statue
+aetherhaven.ui.memberPermissions.err.notOwner=Only the town owner can edit permissions.
+aetherhaven.ui.memberPermissions.err.notInTown=That player is not in this town.
+aetherhaven.town.rolecmd.playerMustBeOnline=Player must be online.
+aetherhaven.town.rolecmd.roleInvalid=Role must be BUILD, QUEST, or BOTH.
+aetherhaven.town.leave.notInTown=You are not in a town.
+aetherhaven.town.leave.ownerCannotLeave=Owners cannot leave; transfer ownership is not implemented yet.
+aetherhaven.town.leave.notMember=You are not a member of this town.
+aetherhaven.town.leave.left=You left "{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BUILD
+aetherhaven.town.memberRole.QUEST=QUEST
+aetherhaven.town.memberRole.BOTH=BOTH

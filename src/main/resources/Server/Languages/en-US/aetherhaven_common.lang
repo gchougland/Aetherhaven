@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven not loaded.
+aetherhaven.common.noTownInWorld=No town for you in this world.
+aetherhaven.common.noQuestPermission=You do not have quest permission in this town.
+aetherhaven.common.townNotFound=Town not found.
+aetherhaven.common.invalidTownLink=Invalid town link.
+aetherhaven.common.treasuryNotLinked=Treasury is not linked.
+aetherhaven.common.ownerOnlyTreasury=Only the town owner may use the treasury.
+aetherhaven.common.noTreasuryPanelPermission=You do not have permission to use the town treasury.
+aetherhaven.common.townNotInThisWorld=Town is not in this world.
+aetherhaven.common.noMoveBuildingsPermission=You do not have permission to move buildings for this town.
+aetherhaven.common.buildingCannotMove=This building cannot be moved (missing plot or not complete).
+aetherhaven.common.lookAtBlockPlot=Look at a block to set the plot sign position and start a preview.
+aetherhaven.common.carryPlotToken=Carry a plot token for a building type listed in the tool (e.g. inn plot token) to start placement.
+aetherhaven.common.statueNotLinked=Statue is not linked to a town.
+aetherhaven.common.ownerOnlyStatue=Only the town owner may use this statue.
+aetherhaven.common.noReviveVillagersPermission=You do not have permission to revive villagers at this statue.
+aetherhaven.common.noPlayerId=No player id.
+aetherhaven.common.playersOnly=Players only.
+aetherhaven.common.invalidVillager=Invalid villager.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=You are already part of a town in this world. Leave it before founding a new one.
+aetherhaven.charter.townFounded=Town founded: {name}. The Village Elder has arrived. Use the charter to rename the town.
+aetherhaven.chartertown.info.notLinked=Charter is not linked to a town yet.
+aetherhaven.chartertown.info.invalidTownId=Invalid town id on charter.
+aetherhaven.chartertown.info.townDataMissing=Town data not found (see server log).
+aetherhaven.chartertown.townInfoBlock=Town name: {name}\nTown ID: {id}\nTier: {tier}\nTerritory (chunk radius): {radius}\nCharter at {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Town name cannot be empty.
+aetherhaven.chartertown.nameDuplicate=That name is already used by another town in this world.
+aetherhaven.chartertown.nameSaved=Town name saved: {name}

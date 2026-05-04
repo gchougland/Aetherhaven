@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=No hay ningún punto de interés dentro del alcance de ese bloque.
+aetherhaven.poi.noPoiSelected=No se ha seleccionado ningún punto de interés. Haga clic primero en un punto de interés.
+aetherhaven.poi.selectedPoiGone=El punto de interés seleccionado ya no existe.
+aetherhaven.poi.moved=Puntos de interés movidos a {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=No se ha seleccionado ningún punto de interés. Haga clic con el botón derecho en un bloque de punto de interés primero.
+aetherhaven.poi.clearedInteractionTarget=Objetivo de interacción despejado; los PNJ utilizan el centro del bloque de puntos de interés.
+aetherhaven.poi.setInteractionTarget=Establezca el objetivo de interacción en {x}, {y}, {z}.
+aetherhaven.poi.selected=Punto de interés seleccionado {id} en {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=El bloque de destino debe coincidir con el tipo esperado {type} para este punto de interés.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Traslado de edificio…
+aetherhaven.plotSign.placed=Se ha colocado el cartel de la parcela.
+aetherhaven.plotSign.couldNotAdd=No se pudo añadir el cartel de la parcela (¿inventario lleno?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Coloca el monumento al fundador dentro del territorio de tu ciudad.
+aetherhaven.founder.cannotPlace=No se puede colocar aquí el monumento al fundador.
+aetherhaven.founder.createFailed=No se pudo crear la estatua del fundador. El bloque fue colocado; rómpalo para intentarlo de nuevo.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=El objetivo no es un aldeano de Aetherhaven.
+aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía ACTIVADA (DisplayCustom + VisPath). Superposición de AH en la placa de identificación.
+aetherhaven.debug.autonomy.toggledOff=Desactivación de la depuración de autonomía para este aldeano.
+aetherhaven.debug.autonomy.state=Depuración de autonomía para este aldeano: {state}
+aetherhaven.debug.autonomy.cleared=Se ha solucionado el problema de autonomía de Aetherhaven para este aldeano.
+aetherhaven.debug.on=EN
+aetherhaven.debug.off=APAGADO
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Reputación sin cambios (ya {value}).
+aetherhaven.debug.rep.set=Establecer la reputación en {value} con los hitos cruzados en cola para diálogo (si el rol está resuelto).
+aetherhaven.debug.rep.milestonesHeader=Hitos de reputación (ID de recompensa, rol, reputación mínima, nodo de diálogo):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Recompensa otorgada {id}.
+aetherhaven.debug.rep.targetInvalid=Aldeano inválido.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Restablecer los límites de regalos en la(s) fila(s) de jugador-aldeano {entries} en la(s) ciudad(es) {towns} de este mundo.
+aetherhaven.debug.gift.unknownRole=Rol de aldeano desconocido: {role}
+aetherhaven.debug.gift.noGiftLists=El rol {role} no tiene regalos que le gusten, regalos que le gusten o regalos que no le gusten en los datos del aldeano.
+aetherhaven.debug.gift.fillDone=Se agregaron líneas de registro de regalos {added} para {role} (se omiten cuando ya tienes una línea para ese artículo y nivel de reacción).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=que debe ser hambre, energía o diversión (los valores son 0..{max}).
+aetherhaven.debug.needs.elderNoTown=No hay ciudad para ti en este mundo (necesaria para Elder).
+aetherhaven.debug.needs.noElderUuid=El pueblo aún no tiene guardado ningún UUID anciano.
+aetherhaven.debug.needs.noMatch=No se encontró ningún aldeano coincidente (intente inspeccionar para obtener el identificador, el Anciano o el UUID completo).
+aetherhaven.debug.needs.multipleMatch=Varios NPC coincidieron con ese identificador; utilice el uuid completo de la inspección.
+aetherhaven.debug.needs.entityNotLoaded=La entidad no está cargada o no tiene VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Establecer {which}={value} en {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Aldeanos con necesidades (fragmentos cargados). Establecer con: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hambre={hunger} energía={energy} diversión={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(sin asa)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Parcelas para la ciudad {id}:
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Ciudades de Aetherhaven en este mundo: {count}
+aetherhaven.towns.entry={name} id={id} propietario={owner} estatuto={cx},{cy},{cz} parcelas={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} signo@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=No se deben ensamblar parcelas con un trabajo activo para tu ciudad (carga los fragmentos alrededor de las construcciones o inicia una construcción primero).
+aetherhaven.debug.plots.finishassemblyDone=Se finalizaron instantáneamente las construcciones de parcelas en curso de {count}.
+aetherhaven.debug.plots.removeBadUuid=UUID de parcela no válido. Utilice el ID de la lista de parcelas de /aetherhaven.
+aetherhaven.debug.plots.removeNotFound=No hay parcela {plotId} en tu ciudad.
+aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verificar los registros).
+aetherhaven.debug.plots.removedPlot=Se eliminó la parcela {plotId} del municipio y se limpió su huella.
+aetherhaven.debug.poi.invalidTownUuid=UUID de ciudad no válido: {raw}
+aetherhaven.debug.poi.noTownArg=No tienes ninguna ciudad en este mundo (usa un argumento UUID de ciudad).
+aetherhaven.debug.poi.listHeader=Puntos de interés para la ciudad {town} ({count}):
+aetherhaven.debug.poi.listEmpty=No hay ninguno registrado para esta ciudad (complete un edificio o revise pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} tipo={kind} blockTypeId={block} etiquetas={tags} tapa={cap} trazado={plot}
+aetherhaven.debug.poi.dumpHeader=Todos los puntos de interés en el registro mundial ({count}):
+aetherhaven.debug.poi.dumpLine=ciudad={town} {x},{y},{z} tipo={kind} blockTypeId={block} etiquetas={tags} parcela={plot}

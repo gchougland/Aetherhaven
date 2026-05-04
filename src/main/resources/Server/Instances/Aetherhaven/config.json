@@ -80,8 +80,8 @@
       },
       "PreventReconnection": false,
       "Discovery": {
-        "TitleKey": "server.instances.aetherhaven.title",
-        "SubtitleKey": "server.instances.aetherhaven.subtitle",
+        "TitleKey": "aetherhaven_quests_portals.instances.aetherhaven.title",
+        "SubtitleKey": "aetherhaven_quests_portals.instances.aetherhaven.subtitle",
         "Display": true,
         "AlwaysDisplay": true,
         "Icon": "Temple_Gateway.png",

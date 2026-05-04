@@ -66,8 +66,10 @@ $C.@PageOverlay {
         Anchor: (Width: 420);
 
         #Title {
-          $C.@Title {
-            @Text = %server.aetherhaven.ui.villagerneeds.title;
+          Label #VillagerNeedsTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
           }
         }
 
@@ -89,7 +91,7 @@ $C.@PageOverlay {
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlotTooltip;
+              TooltipText: "";
             }
 
             TextButton #TabNeedsButton {
@@ -99,7 +101,7 @@ $C.@PageOverlay {
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotmanagement.tabNeedsTooltip;
+              TooltipText: "";
             }
 
             TextButton #TabPlayersButton {
@@ -109,7 +111,7 @@ $C.@PageOverlay {
               Anchor: (Right: 4, Height: 40, Width: 44);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlayersTooltip;
+              TooltipText: "";
             }
 
             TextButton #TabMoveButton {
@@ -119,7 +121,7 @@ $C.@PageOverlay {
               Anchor: (Height: 40, Width: 44);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.plotmanagement.tabMoveTooltip;
+              TooltipText: "";
             }
           }
 
@@ -127,7 +129,7 @@ $C.@PageOverlay {
             Visible: false;
             Anchor: (Bottom: 10);
             Style: (...$C.@DefaultLabelStyle, Wrap: true);
-            Text: %server.aetherhaven.ui.villagerneeds.hint;
+            Text: "";
           }
 
           Group {
@@ -154,7 +156,7 @@ $C.@PageOverlay {
                   Padding: (Full: 0);
                   Text: ".";
                   Visible: false;
-                  TooltipText: %server.aetherhaven.ui.villagerneeds.giftHistoryTooltip;
+                  TooltipText: "";
                 }
                 TextButton #RescueTeleportButton {
                   Style: @RescueTeleportButtonStyle;
@@ -163,7 +165,7 @@ $C.@PageOverlay {
                   Padding: (Full: 0);
                   Text: ".";
                   Visible: false;
-                  TooltipText: %server.aetherhaven.ui.villagerneeds.rescueTooltip;
+                  TooltipText: "";
                 }
               }
 
@@ -173,7 +175,7 @@ $C.@PageOverlay {
                 HitTestVisible: true;
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Label #ReputationLabel {
-                  Text: %server.aetherhaven.ui.reputation.label;
+                  Text: "";
                   Style: (...$C.@DefaultLabelStyle, RenderBold: true);
                   Anchor: (Bottom: 4);
                 }
@@ -183,7 +185,7 @@ $C.@PageOverlay {
               }
 
               Label #NeedHungerLabel {
-                Text: %server.aetherhaven.ui.villagerneeds.hunger;
+                Text: "";
                 Style: (...$C.@DefaultLabelStyle, RenderBold: true);
                 Anchor: (Bottom: 4);
               }
@@ -193,7 +195,7 @@ $C.@PageOverlay {
               }
 
               Label #NeedEnergyLabel {
-                Text: %server.aetherhaven.ui.villagerneeds.energy;
+                Text: "";
                 Style: (...$C.@DefaultLabelStyle, RenderBold: true);
                 Anchor: (Bottom: 4);
               }
@@ -203,7 +205,7 @@ $C.@PageOverlay {
               }
 
               Label #NeedFunLabel {
-                Text: %server.aetherhaven.ui.villagerneeds.fun;
+                Text: "";
                 Style: (...$C.@DefaultLabelStyle, RenderBold: true);
                 Anchor: (Bottom: 4);
               }
@@ -215,7 +217,7 @@ $C.@PageOverlay {
           }
 
           Label #VillagersHeader {
-            Text: %server.aetherhaven.ui.villagerneeds.villagers;
+            Text: "";
             Style: (...$C.@DefaultLabelStyle, RenderBold: true);
             Anchor: (Top: 8, Bottom: 6);
           }

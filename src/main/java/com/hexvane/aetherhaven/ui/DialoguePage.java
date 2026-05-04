@@ -15,6 +15,8 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
+import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
 import com.hypixel.hytale.builtin.adventure.shop.barter.BarterPage;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -53,9 +55,9 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
     /** Inner list inside {@link #CHOICES_FRAME} scroll; append/clear/indexed selectors need full path. */
     private static final String CHOICES_ROOT = DIALOGUE_COLUMN + " #ChoicesFrame #ChoicesScroll #ChoicesRoot";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
-        "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
+        "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard";
     private static final String LANG_PRIESTESS_DRAUGHT_CATALYST =
-        "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst";
+        "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst";
     private static final String REPUTATION_ROW = DIALOGUE_COLUMN + " #ReputationRow";
     private static final String HEART_SLOTS = REPUTATION_ROW + " #HeartSlots";
 
@@ -113,6 +115,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.append("Aetherhaven/DialoguePage.ui");
+        AetherhavenUiLocalization.applyDialoguePage(commandBuilder);
         commandBuilder.clear(HEART_SLOTS);
         for (int h = 0; h < 10; h++) {
             commandBuilder.append(HEART_SLOTS, "Aetherhaven/HeartSlot.ui");
@@ -123,10 +126,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (tree == null) {
             commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
-            commandBuilder.set(SPEAKER_SPANS, Message.translation("server.aetherhaven.ui.dialogue.title"));
+            commandBuilder.set(SPEAKER_SPANS, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.title"));
             commandBuilder.set(
                 BODY_TEXT_SPANS,
-                Message.translation("server.aetherhaven.ui.dialogue.unknown").param("id", treeId)
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.unknown").param("id", treeId)
             );
             setChoicesFrameVisible(commandBuilder, false);
             return;
@@ -136,10 +139,10 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (node == null) {
             commandBuilder.set(REPUTATION_ROW + ".Visible", false);
             applyPortrait(commandBuilder, store);
-            commandBuilder.set(SPEAKER_SPANS, Message.translation("server.aetherhaven.ui.dialogue.title"));
+            commandBuilder.set(SPEAKER_SPANS, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.title"));
             commandBuilder.set(
                 BODY_TEXT_SPANS,
-                Message.translation("server.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
             );
             setChoicesFrameVisible(commandBuilder, false);
             return;
@@ -169,7 +172,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
             applyPortrait(commandBuilder, store);
             commandBuilder.set(
                 BODY_TEXT_SPANS,
-                Message.translation("server.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.dialogue.missingNode").param("id", nodeId)
             );
             setChoicesFrameVisible(commandBuilder, false);
             return;
@@ -192,7 +195,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
                         if (dailyGain > 0) {
                             NotificationUtil.sendNotification(
                                 playerRef.getPacketHandler(),
-                                Message.translation("server.aetherhaven.reputation.dailyTalkGain").param("amount", dailyGain),
+                                Message.translation("aetherhaven_ui_town.aetherhaven.reputation.dailyTalkGain").param("amount", dailyGain),
                                 NotificationStyle.Success
                             );
                         }
@@ -209,12 +212,74 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
         applyPortrait(commandBuilder, store);
         String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
-        String body = node.getText() != null ? node.getText() : "";
+
+        Message bodyMsg = resolveDialogueBody(ref, store, node);
+        if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
+            AetherhavenPlugin openerPlugin = AetherhavenPlugin.get();
+            if (openerPlugin != null) {
+                World hubWorld = store.getExternalData().getWorld();
+                TownManager hubTm = AetherhavenWorldRegistries.getOrCreateTownManager(hubWorld, openerPlugin);
+                TownRecord hubTown = VillagerReputationService.findTownForPlayer(ref, store, hubTm);
+                UUIDComponent hubPu = store.getComponent(ref, UUIDComponent.getComponentType());
+                UUIDComponent hubNu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+                if (hubTown != null && hubPu != null && hubNu != null) {
+                    String openerKey = VillagerReputationService.takeAndClearPendingMainHubBodyLangKey(
+                        hubTown,
+                        hubTm,
+                        hubPu.getUuid(),
+                        hubNu.getUuid()
+                    );
+                    if (openerKey != null && !openerKey.isBlank()) {
+                        bodyMsg = dialogueMessage(openerKey).insert(Message.raw("\n\n")).insert(bodyMsg);
+                    }
+                }
+            }
+        }
 
         commandBuilder.set(SPEAKER_SPANS, dialogueMessage(speaker));
-        commandBuilder.set(BODY_TEXT_SPANS, dialogueMessage(body));
+        commandBuilder.set(BODY_TEXT_SPANS, bodyMsg);
         setChoicesFrameVisible(commandBuilder, true);
         appendChoices(ref, store, commandBuilder, eventBuilder, node);
+    }
+
+    @Nonnull
+    private Message resolveDialogueBody(
+        @Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull DialogueNodeDefinition node
+    ) {
+        String mode = node.getBodyMode();
+        if (mode != null && "villager_greeting".equalsIgnoreCase(mode.trim())) {
+            if (npcRef != null && npcRef.isValid()) {
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+                UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (npc != null && npc.getRoleName() != null && nu != null && pu != null) {
+                    AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                    if (plugin != null) {
+                        VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
+                        if (vdef != null) {
+                            long day = VillagerReputationService.currentGameEpochDay(store);
+                            Message picked = VillagerGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
+                            if (picked != null) {
+                                return picked;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        String body = node.getText() != null ? node.getText() : "";
+        return dialogueMessage(body);
+    }
+
+    private static boolean isTranslationKey(@Nullable String s) {
+        if (s == null || s.isEmpty()) {
+            return false;
+        }
+        if (s.startsWith("aetherhaven_dialogue_")) {
+            return true;
+        }
+        // Bundle-prefixed keys (e.g. aetherhaven_misc.aetherhaven.banner.*)
+        return s.startsWith("aetherhaven_") && s.indexOf('.') >= 0;
     }
 
     @Nonnull
@@ -222,7 +287,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (s == null || s.isEmpty()) {
             return Message.raw("");
         }
-        if (s.startsWith("server.")) {
+        if (isTranslationKey(s)) {
             return Message.translation(s);
         }
         return Message.raw(s);
@@ -235,7 +300,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
         if (text == null || text.isEmpty()) {
             return Message.raw("");
         }
-        if (!text.startsWith("server.")) {
+        if (!isTranslationKey(text)) {
             return Message.raw(text);
         }
         Message m = Message.translation(text);

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Gold_Coin.name",
-    "Description": "server.items.Aetherhaven_Gold_Coin.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Gold_Coin.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Gold_Coin.description"
   },
   "Icon": "Icons/ItemsGenerated/Deco_Scrap_Treasure.png",
   "Model": "Blocks/Dungeons/Treasure_Object.blockymodel",

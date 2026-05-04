@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Comandos del mod Aetherhaven
+commands.aetherhaven.reload.desc=Recargar config.json y los catálogos JSON de Aetherhaven desde el disco (modo creativo).
+commands.aetherhaven.reload.success=Se han recargado los catálogos de configuración y de activos de Aetherhaven.
+commands.aetherhaven.reload.failure=Error al recargar: {detail}
+commands.aetherhaven.reload.noPlugin=El complemento Aetherhaven no se ha cargado.
+commands.aetherhaven.plot.desc=Abrir la interfaz de administración de letreros de parcela (seleccionar construcción, obtener artículo)
+commands.aetherhaven.starterkit.desc=Consigue el kit de inicio de Aetherhaven (personal de colocación de parcelas, estatutos, oficina de planificación urbana, personal de construcción; modo creativo).
+commands.aetherhaven.starterkit.success=Kit de inicio añadido a tu inventario.
+commands.aetherhaven.starterkit.partial=Kit de inicio parcialmente concedido; el/los artículo(s) {failed} no cabían (haga espacio en el inventario).
+
+commands.aetherhaven.exportskin.desc=Exporta la apariencia de tu avatar como un modelo JSON (Parent: Player)
+commands.aetherhaven.exportskin.other.desc=Exportar la apariencia del avatar de otro jugador como modelo JSON
+commands.aetherhaven.exportskin.arg.path=Ruta de archivo de salida opcional (predeterminada: datos del plugin/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=No hay ningún aspecto de personaje disponible para este jugador.
+commands.aetherhaven.exportskin.invalidSkin=Falló la validación de la piel: {detail}
+commands.aetherhaven.exportskin.resolveError=No se pudieron resolver los adjuntos de la piel al modelo: {detail}
+commands.aetherhaven.exportskin.ioError=Error al escribir {path}: {detail}
+commands.aetherhaven.exportskin.success=Se escribió el JSON del modelo en {path}.

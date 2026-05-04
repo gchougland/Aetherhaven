@@ -181,13 +181,36 @@ val syncAssets = tasks.register<Copy>("syncAssets") {
 }
 
 afterEvaluate {
-    // Now Gradle will find it, because the plugin has finished working
-    val targetTask = tasks.findByName("runServer") ?: tasks.findByName("server")
-
-    if (targetTask != null) {
-        targetTask.finalizedBy(syncAssets)
-        logger.lifecycle("✅ specific task '${targetTask.name}' hooked for auto-sync.")
-    } else {
-        logger.warn("⚠️ Could not find 'runServer' or 'server' task to hook auto-sync into.")
+    val runServerTask = tasks.findByName("runServer") ?: tasks.findByName("server")
+    if (runServerTask == null) {
+        logger.warn("⚠️ Could not find 'runServer' or 'server' task (hytale-mod). syncAssets not hooked.")
+        return@afterEvaluate
     }
+    if (runServerTask !is JavaExec) {
+        logger.warn("⚠️ Task '${runServerTask.name}' is not JavaExec; skipping sync hook and runServerNoSync.")
+        return@afterEvaluate
+    }
+    val runServer = runServerTask as JavaExec
+    runServer.finalizedBy(syncAssets)
+    logger.lifecycle("✅ Task '${runServer.name}' finalized by syncAssets (copy build resources back to src on exit).")
+
+    tasks.register<JavaExec>("runServerNoSync") {
+        group = "hytale"
+        description =
+            "Same as runServer but does not run syncAssets afterward — safe when you edit src/main/resources while testing."
+        classpath = runServer.classpath
+        mainClass = runServer.mainClass
+        mainModule = runServer.mainModule
+        modularity.inferModulePath = runServer.modularity.inferModulePath
+        workingDir = runServer.workingDir
+        jvmArgs = runServer.jvmArgs
+        args = runServer.args
+        systemProperties = runServer.systemProperties
+        environment = runServer.environment
+        standardInput = runServer.standardInput
+        isIgnoreExitValue = runServer.isIgnoreExitValue
+        javaLauncher = runServer.javaLauncher
+        enableAssertions = runServer.enableAssertions
+    }
+    logger.lifecycle("✅ Task 'runServerNoSync' registered (no post-exit asset sync).")
 }

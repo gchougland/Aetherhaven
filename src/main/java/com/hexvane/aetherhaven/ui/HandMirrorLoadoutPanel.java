@@ -27,11 +27,11 @@ public final class HandMirrorLoadoutPanel {
         ItemStack r1 = prepare(loadout.getRing1());
         ItemStack r2 = prepare(loadout.getRing2());
         ItemStack n = prepare(loadout.getNecklace());
-        Message m = oneSlot("server.aetherhaven.ui.handmirror.ring1", r1);
+        Message m = oneSlot("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.ring1", r1);
         m = m.insert(Message.raw("\n\n"));
-        m = m.insert(oneSlot("server.aetherhaven.ui.handmirror.ring2", r2));
+        m = m.insert(oneSlot("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.ring2", r2));
         m = m.insert(Message.raw("\n\n"));
-        m = m.insert(oneSlot("server.aetherhaven.ui.handmirror.necklace", n));
+        m = m.insert(oneSlot("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.necklace", n));
         return m;
     }
 
@@ -47,7 +47,7 @@ public final class HandMirrorLoadoutPanel {
     private static Message oneSlot(@Nonnull String slotTitleKey, @Nullable ItemStack stack) {
         Message m = Message.translation(slotTitleKey).color(C_SUB).insert(Message.raw("\n"));
         if (stack == null || ItemStack.isEmpty(stack)) {
-            return m.insert(Message.translation("server.aetherhaven.ui.handmirror.traitsEmptySlot").color(C_DIM));
+            return m.insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitsEmptySlot").color(C_DIM));
         }
         Item it = stack.getItem();
         Message itemLine =
@@ -57,26 +57,26 @@ public final class HandMirrorLoadoutPanel {
         m = m.insert(itemLine.color(C_STAT)).insert(Message.raw("\n"));
         if (!JewelryMetadata.hasJewelryMeta(stack)) {
             return m.insert(
-                Message.translation("server.aetherhaven.ui.handmirror.traitsUnattuned").color(C_DIM));
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitsUnattuned").color(C_DIM));
         }
         JewelryRarity rarity = JewelryMetadata.readRarity(stack);
         String rKey = rarity != null ? rarity.wireName() : "COMMON";
         m = m
-            .insert(Message.translation("server.aetherhaven.ui.handmirror.traitsRarityLine")
+            .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitsRarityLine")
                 .param(
                     "rarity",
-                    Message.translation("server.aetherhaven.jewelry.rarity." + rKey)
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.rarity." + rKey)
                         .color(JewelryTooltipText.rarityColorHex(rKey)))
                 .color(C_DIM))
             .insert(Message.raw("\n"));
         if (!JewelryMetadata.isAppraised(stack)) {
             m = m
-                .insert(Message.translation("server.aetherhaven.ui.handmirror.tooltipUnappraised").color(C_DIM))
+                .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnappraised").color(C_DIM))
                 .insert(Message.raw("\n"));
             List<JewelryMetadata.RolledTrait> traits = JewelryMetadata.readTraits(stack);
             int lines = !traits.isEmpty() ? traits.size() : (rarity != null ? rarity.traitCount() : 1);
             for (int i = 0; i < lines; i++) {
-                m = m.insert(Message.translation("server.aetherhaven.ui.handmirror.traitHidden").color(C_DIM));
+                m = m.insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitHidden").color(C_DIM));
                 if (i + 1 < lines) {
                     m = m.insert(Message.raw("\n"));
                 }
@@ -94,17 +94,17 @@ public final class HandMirrorLoadoutPanel {
     private static Message traitLine(@Nonnull JewelryMetadata.RolledTrait rt, @Nullable JewelryGem gem) {
         String n = JewelryStatTuning.formatForDisplay(rt.statId(), rt.amount());
         String sign = rt.amount() >= 0f ? "+" : "";
-        Message statName = Message.translation("server.aetherhaven.jewelry.stat." + rt.statId()).color(C_STAT);
+        Message statName = Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.stat." + rt.statId()).color(C_STAT);
         Message line = Message.raw(sign + n + " ").insert(statName);
         if (gem != null) {
             int facet = rt.gemTraitIndex() + 1;
             line = line
                 .insert(Message.raw("  "))
                 .insert(
-                    Message.translation("server.aetherhaven.ui.handmirror.traitFrom")
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitFrom")
                         .param(
                             "gem",
-                            Message.translation("server.aetherhaven.jewelry.gem." + gem.name()).color(C_DIM))
+                            Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.gem." + gem.name()).color(C_DIM))
                         .param("facet", Message.raw(String.valueOf(facet)).color(C_DIM))
                         .color(C_DIM));
         }

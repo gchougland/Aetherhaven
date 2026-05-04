@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Arsa yerleşimi
+aetherhaven.ui.plotplacement.summary=Yerleştirme: {building}
+aetherhaven.ui.plotplacement.positionSection=Pozisyon ve rotasyon
+aetherhaven.ui.plotplacement.tipsSection=İpuçları
+aetherhaven.ui.plotplacement.heightSection=Yükseklik ve döndürme
+aetherhaven.ui.plotplacement.detailsBlock=İşaret noktası {sx}, {sy}, {sz} · Prefabrik başlangıç noktası {ox}, {oy}, {oz}\nAdım {step} / 4 (her biri 90°)
+aetherhaven.ui.plotplacement.tipsControls=Escape tuşu yalnızca bu paneli kapatır. İptal tuşu önizlemeyi temizler. Sağ tıklama önizlemeyi yeniden açar; bir bloğa sağ tıklamak etkin önizlemeyi hareket ettirmez.
+aetherhaven.ui.plotplacement.plotType=Bina
+aetherhaven.ui.plotplacement.moveLabel=Konumu ayarlayın
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=90° döndürün (döngüsel olarak)
+aetherhaven.ui.plotplacement.place=Arsa işaretini yerleştirin
+aetherhaven.ui.plotplacement.placeMove=Binayı taşıma
+aetherhaven.ui.plotplacement.moveWarningText=Taşınma işlemi eski yapıyı yıkıp yeniden inşa eder. Öncelikle değerli eşyaları, evcil hayvanları ve binanın içindeki dağınık eşyaları çıkarın. Bu kasabaya bağlı kasaba NPC'leri korunmaktadır.
+aetherhaven.ui.plotplacement.moveConfirm=Onaylamak
+aetherhaven.ui.plotplacement.moveBack=Geri gitmek
+aetherhaven.ui.plotplacement.cancel=Önizlemeyi iptal et
+aetherhaven.ui.plotplacement.cameraSection=Kamera
+aetherhaven.ui.plotplacement.cameraHint=Ekranı açtığınızda (önizlemenin üstünde) kuşbakışı çerçeveler bir kez belirir, ardından grafiği hareket ettirirken sabit kalır.
+aetherhaven.ui.plotplacement.birdsEye=Kuşbakışı görünüm
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Yukarıdan aşağıya görünüm: İlk hedef önizleme merkezidir. Birinci şahıs görünümüne dönmek için işareti kaldırın. Görünümü kaydırmak için Pan'ı kullanın.
+aetherhaven.ui.plotplacement.viewDistance=Mesafe
+aetherhaven.ui.plotplacement.zoomOutTooltip=Daha uzaktaki kamera (konunun daha geniş bir görünümü)
+aetherhaven.ui.plotplacement.zoomInTooltip=Daha yakın kamera (daha küçük genel görünüm, daha fazla detay)
+aetherhaven.ui.plotplacement.panLabel=Pan kamera
+aetherhaven.ui.plotplacement.panXmTooltip=Görünümü -X yönüne doğru bir adım kaydırın
+aetherhaven.ui.plotplacement.panXpTooltip=Görünümü +X yönüne doğru bir adım kaydırın
+aetherhaven.ui.plotplacement.panZmTooltip=Görünümü -Z yönüne doğru bir adım kaydırın
+aetherhaven.ui.plotplacement.panZpTooltip=Görünümü +Z yönüne doğru bir adım kaydırın
+aetherhaven.ui.plotplacement.moveXmTooltip=Kuşbakışı: batı (-X). Birinci şahıs: sola doğru hareket et (görünüşe göre).
+aetherhaven.ui.plotplacement.moveXpTooltip=Kuşbakışı: doğu (+X). Birinci şahıs: sağa doğru hareket et (görünüşe göre).
+aetherhaven.ui.plotplacement.moveZmTooltip=Kuşbakışı: kuzey (-Z). Birinci şahıs: ileriye doğru hareket et (görünüşe göre).
+aetherhaven.ui.plotplacement.moveZpTooltip=Kuşbakışı: güney (+Z). Birinci şahıs: geriye doğru hareket et (görünüşe göre).
+aetherhaven.ui.plotplacement.moveYmTooltip=Bir blok aşağıya doğru kaydırın.
+aetherhaven.ui.plotplacement.moveYpTooltip=Bir blok yukarı kaydırın.
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Taşıma sözleşmesi
+aetherhaven.ui.charterrelocation.summary=Şehir tüzüğünün yeniden konumlandırılması
+aetherhaven.ui.charterrelocation.details=Hedef blok {sx}, {sy}, {sz} · 4 adımdan {step} (90°)
+aetherhaven.ui.charterrelocation.tips=Bölge, sözleşmenin etrafındaki kare şeklindeki parçalardan oluşur; onayladıktan sonra her bina bu alanın içinde kalmalıdır. Hayaleti yeni yerine doğru itin, sonra yerleştirin.
+aetherhaven.ui.charterrelocation.info=Bölge, sözleşmenin etrafındaki kare şeklindeki bloklardan oluşur. Taşınma işleminden sonra tüm binalarınız bu alanın içinde kalmalıdır. Hayalet bloğu yeni sözleşme konumuna kaydırın, ardından onaylayın.
+aetherhaven.ui.charterrelocation.place=Yer sözleşmesi

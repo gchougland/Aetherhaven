@@ -38,8 +38,10 @@ $C.@PageOverlay {  LayoutMode: Top;
         Anchor: (Width: 520);
 
         #Title {
-          $C.@Title {
-            @Text = %server.aetherhaven.ui.giftHistory.title;
+          Label #GiftHistoryTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
           }
         }
 
@@ -56,7 +58,7 @@ $C.@PageOverlay {  LayoutMode: Top;
               Anchor: (Width: 40, Height: 40, Right: 10);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.giftHistory.backTooltip;
+              TooltipText: "";
             }
           }
 
@@ -93,7 +95,7 @@ $C.@PageOverlay {  LayoutMode: Top;
                   Visible: false;
                   Anchor: (Top: 0, Left: 0, Right: 0, Height: 320);
                   Style: (...$C.@DefaultLabelStyle, TextColor: #8a7a60, Wrap: true, VerticalAlignment: Center, HorizontalAlignment: Center);
-                  Text: %server.aetherhaven.ui.giftHistory.empty;
+                  Text: "";
                 }
                 Group #ListScroll {
                   LayoutMode: TopScrolling;
@@ -119,7 +121,7 @@ $C.@PageOverlay {  LayoutMode: Top;
               Anchor: (Width: 40, Height: 40, Right: 6);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.giftHistory.cyclePrevTooltip;
+              TooltipText: "";
             }
             TextButton #GiftCycleNext {
               Style: @GiftHistoryCycleStyle;
@@ -127,7 +129,7 @@ $C.@PageOverlay {  LayoutMode: Top;
               Anchor: (Width: 40, Height: 40, Right: 0);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.giftHistory.cycleNextTooltip;
+              TooltipText: "";
             }
           }
         }

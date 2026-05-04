@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 public final class AetherhavenTownCommand extends AbstractCommandCollection {
     public AetherhavenTownCommand() {
-        super("town", "server.commands.aetherhaven.town.desc");
+        super("town", "aetherhaven_commands_help.commands.aetherhaven.town.desc");
         this.addSubCommand(new InviteCommand());
         this.addSubCommand(new AcceptCommand());
         this.addSubCommand(new DeclineCommand());
@@ -40,13 +40,13 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class InviteCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> playerArg =
-            this.withRequiredArg("player", "server.commands.aetherhaven.town.invite.player.desc", ArgTypes.STRING);
+            this.withRequiredArg("player", "aetherhaven_commands_help.commands.aetherhaven.town.invite.player.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         InviteCommand() {
-            super("invite", "server.commands.aetherhaven.town.invite.desc");
+            super("invite", "aetherhaven_commands_help.commands.aetherhaven.town.invite.desc");
         }
 
         @Override
@@ -86,10 +86,10 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class AcceptCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         AcceptCommand() {
-            super("accept", "server.commands.aetherhaven.town.accept.desc");
+            super("accept", "aetherhaven_commands_help.commands.aetherhaven.town.accept.desc");
         }
 
         @Override
@@ -114,29 +114,29 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (context.provided(townArg) && !context.get(townArg).trim().isEmpty()) {
                 town = tm.findTownByDisplayName(context.get(townArg).trim());
                 if (town == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noSuchTown"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noSuchTown"));
                     return;
                 }
                 if (town.findPendingInvite(self) == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noInvite"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noInvite"));
                     return;
                 }
             } else {
                 town = tm.findTownWithPendingInviteFor(self);
                 if (town == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noInvites"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noInvites"));
                     return;
                 }
             }
             if (tm.isPlayerAffiliatedInWorld(self)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.alreadyInTown"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.alreadyInTown"));
                 return;
             }
             town.removePendingInviteForInvitee(self);
             town.putMember(self, TownMemberRole.BOTH);
             tm.updateTown(town);
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.town.accept.joined").param("town", town.getDisplayName())
+                Message.translation("aetherhaven_town.aetherhaven.town.accept.joined").param("town", town.getDisplayName())
             );
         }
     }
@@ -144,10 +144,10 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class DeclineCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         DeclineCommand() {
-            super("decline", "server.commands.aetherhaven.town.decline.desc");
+            super("decline", "aetherhaven_commands_help.commands.aetherhaven.town.decline.desc");
         }
 
         @Override
@@ -171,37 +171,37 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             if (context.provided(townArg) && !context.get(townArg).trim().isEmpty()) {
                 TownRecord town = tm.findTownByDisplayName(context.get(townArg).trim());
                 if (town == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.accept.err.noSuchTown"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noSuchTown"));
                     return;
                 }
                 if (!town.removePendingInviteForInvitee(self)) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.noPending"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.decline.noPending"));
                     return;
                 }
                 tm.updateTown(town);
             } else {
                 TownRecord town = tm.findTownWithPendingInviteFor(self);
                 if (town == null) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.noInvites"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.decline.noInvites"));
                     return;
                 }
                 town.removePendingInviteForInvitee(self);
                 tm.updateTown(town);
             }
-            playerRef.sendMessage(Message.translation("server.aetherhaven.town.decline.done"));
+            playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.decline.done"));
         }
     }
 
     private static final class KickCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> playerArg =
-            this.withRequiredArg("player", "server.commands.aetherhaven.town.kick.player.desc", ArgTypes.STRING);
+            this.withRequiredArg("player", "aetherhaven_commands_help.commands.aetherhaven.town.kick.player.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         KickCommand() {
-            super("kick", "server.commands.aetherhaven.town.kick.desc");
+            super("kick", "aetherhaven_commands_help.commands.aetherhaven.town.kick.desc");
         }
 
         @Override
@@ -241,16 +241,16 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     private static final class RoleCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> playerArg =
-            this.withRequiredArg("player", "server.commands.aetherhaven.town.role.player.desc", ArgTypes.STRING);
+            this.withRequiredArg("player", "aetherhaven_commands_help.commands.aetherhaven.town.role.player.desc", ArgTypes.STRING);
         @Nonnull
         private final RequiredArg<String> roleArg =
-            this.withRequiredArg("role", "server.commands.aetherhaven.town.role.role.desc", ArgTypes.STRING);
+            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.town.role.role.desc", ArgTypes.STRING);
         @Nonnull
         private final OptionalArg<String> townArg =
-            this.withOptionalArg("townName", "server.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
 
         RoleCommand() {
-            super("role", "server.commands.aetherhaven.town.role.desc");
+            super("role", "aetherhaven_commands_help.commands.aetherhaven.town.role.desc");
         }
 
         @Override
@@ -281,14 +281,14 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             TownRecord town = res.townOrThrow();
             PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, context.get(playerArg).trim());
             if (target == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.rolecmd.playerMustBeOnline"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.rolecmd.playerMustBeOnline"));
                 return;
             }
             TownMemberRole role;
             try {
                 role = TownMemberRole.valueOf(context.get(roleArg).trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.rolecmd.roleInvalid"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.rolecmd.roleInvalid"));
                 return;
             }
             Message err = TownMembershipActions.trySetMemberRole(world, tm, town, playerRef, target.getUuid(), role);
@@ -300,7 +300,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
 
     private static final class LeaveCommand extends AbstractPlayerCommand {
         LeaveCommand() {
-            super("leave", "server.commands.aetherhaven.town.leave.desc");
+            super("leave", "aetherhaven_commands_help.commands.aetherhaven.town.leave.desc");
         }
 
         @Override
@@ -323,20 +323,20 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             UUID self = uc.getUuid();
             TownRecord town = tm.findTownForPlayerInWorld(self);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.notInTown"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.notInTown"));
                 return;
             }
             if (town.getOwnerUuid().equals(self)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.ownerCannotLeave"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.ownerCannotLeave"));
                 return;
             }
             if (!town.removeMember(self)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.town.leave.notMember"));
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.notMember"));
                 return;
             }
             tm.updateTown(town);
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.town.leave.left").param("town", town.getDisplayName())
+                Message.translation("aetherhaven_town.aetherhaven.town.leave.left").param("town", town.getDisplayName())
             );
         }
     }

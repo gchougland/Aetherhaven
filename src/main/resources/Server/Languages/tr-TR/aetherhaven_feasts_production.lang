@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Şehir şölenleri
+aetherhaven.ui.feast.noTown=Bir kasabaya bağlı olmalısınız.
+aetherhaven.ui.feast.noPermission=Bu kasabada şölen düzenleyemezsiniz.
+aetherhaven.ui.feast.outsideTerritory=Masa, şehrinizin sınırları içinde bulunmalıdır.
+aetherhaven.ui.feast.activeTitle=Şehir şöleni devam ediyor.
+aetherhaven.ui.feast.noneActive=Zamanlı bir ziyafet şu anda aktif değil. Maliyetleri ve etkilerini okumak için soldaki ziyafetlerden birini seçin.
+aetherhaven.ui.feast.daysLeft=Kalan gün sayısı (şafak vakti): {days}
+aetherhaven.ui.feast.selectHint=Bir ziyafet seçin
+aetherhaven.ui.feast.ingredientsLabel=İçindekiler
+aetherhaven.ui.feast.confirm=Ziyafet düzenleyin
+aetherhaven.ui.feast.locked=Bu bayramı henüz öğrenmediniz. Birisi size anlatana kadar kasaba halkıyla vakit geçirin.
+aetherhaven.ui.feast.tooltipLocked=Bir komşunuz size bu ziyafeti öğretene kadar kilitli. Kasabaya yardım edin ve salon için yemek pişiren insanlarla iletişim halinde kalın.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord soğuma aşamasında ({days} şafak günü kaldı).
+aetherhaven.ui.feast.began=Ziyafet başlıyor. Köylüler sofranın etrafında toplanıyor.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven bu sunucuda yüklü değil.
+aetherhaven.ui.feast.err.unknownFeast=O ziyafet mevcut değil.
+aetherhaven.ui.feast.err.invalidPlayer=Kimliğiniz doğrulanamadı.
+aetherhaven.ui.feast.err.feastNotUnlocked=Bu bayramı henüz öğrenmediniz. Kasabada güven oluşturun ve biri size bunu öğretmeyi teklif ettiğinde kulak verin.
+aetherhaven.ui.feast.err.timedFeastActive=Bu kasabada bir başka zaman sınırlı şölen de şimdiden yürürlüğe girdi.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Berrycircle Concord'u servis etmeden önce mevcut süreli ziyafetin bitmesini bekleyin.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord hala bekleme modunda.
+aetherhaven.ui.feast.err.notEnoughIngredients=Gerekli malzemelerden yeterince yok.
+
+aetherhaven.ui.production.title=İşyeri mağazaları
+aetherhaven.ui.production.prev=Önceki
+aetherhaven.ui.production.next=Sonraki
+aetherhaven.ui.production.prevTooltip=Bu yuvadaki önceki çıktı
+aetherhaven.ui.production.nextTooltip=Bu yuvadaki bir sonraki çıktı
+aetherhaven.ui.production.take1=Birinci deneme
+aetherhaven.ui.production.take10=10. bölümü izleyin
+aetherhaven.ui.production.take100=100 alın
+aetherhaven.ui.production.genInterval={time} bir tane yapmak için
+aetherhaven.ui.production.err.plugin=Aetherhaven bu sunucuda yüklü değil.
+aetherhaven.ui.production.err.permission=Bu kasaba için bu depoyu açamazsınız.
+aetherhaven.ui.production.err.plot=Bu blok, kasabanızdaki tamamlanmış bir iş yeri arsası (çiftlik, ahır, değirmen veya madenci kulübesi) içinde yer almıyor.
+aetherhaven.ui.production.err.catalog=Bu bina için yapılandırılmış bir üretim kataloğu bulunmamaktadır.
+aetherhaven.ui.production.err.inventoryFull=Envanteriniz o kadar miktarı kaldıramayacak kadar dolu.
+aetherhaven.ui.production.unlockButton=Kilidi açar
+aetherhaven.ui.production.unlockTooltip=Bu binaya ait kilitli iş yeri çıktılarını görüntüleyin ve satın alın.
+
+aetherhaven.ui.productionUnlocks.title=İş yeri kilitlerini açar
+aetherhaven.ui.productionUnlocks.intro=Panelde adını ve gereksinimlerini görmek için aşağıdaki çıktılardan birini seçin. Elde tutulan ve gereken miktarları görmek için bir simgenin üzerine gelin. Öğe ve altın toplamlarına ulaştığınızda, kilitli bir çıktıyı kilidini açmak için tıklayın.
+aetherhaven.ui.productionUnlocks.navProduction=Üretme
+aetherhaven.ui.productionUnlocks.navProductionTooltip=İşyeri depolama alanına geri dön
+aetherhaven.ui.productionUnlocks.detailHint=Yukarıdaki simgelerden birine tıklayarak adını ve kilidini açma koşullarını görebilirsiniz.
+aetherhaven.ui.productionUnlocks.err.inventory=Envanterinizi okuyamadım.
+aetherhaven.ui.productionUnlocks.err.empty=Bu iş yeri için herhangi bir kilit açma listesi yapılandırılmamıştır.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Bu iş yeri için zaten kilidi açılmış durumda.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Ürün: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Altın paralar: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Envanterinizde (toplamda) o üründen en az {need} adet bulunmalıdır.
+aetherhaven.ui.productionUnlocks.notify.needGold=Şehir hazinesi ve envanteriniz arasında yeterli miktarda altın paraya ihtiyacınız var (toplam {need}).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Envanterinizden gerekli öğeleri kaldıramadınız.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Altın bedeli ödenemedi; eşyalarınız iade edildi.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Bu iş yeri için {item} kilidi açıldı.
+
+aetherhaven.feast.stewards.name=Vekil'in Defteri Akşam Yemeği
+aetherhaven.feast.stewards.description=Ekmek, peynir ve güzel bir balkabağı turtası sürün ki, sabahları verilen zekât bir hafta boyunca bol olsun.
+aetherhaven.feast.hearthglass.name=Hearthglass Nöbeti
+aetherhaven.feast.hearthglass.description=Izgara balık, pişmiş etler ve sebzeler, yavaş yavaş pişen bir nöbet yemeği gibi sergileniyor. Köylülerin ihtiyaçları bir hafta boyunca daha yavaş yavaş azalıyor.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=Hafif tabaklardan oluşan bir çember: meyve salatası, meyve şişleri ve kızarmış mısır. Komşularınız sizi bu sayede biraz daha iyi hatırlayacaklar. Tekrar servis etmeden önce bir hafta beklemeniz gerekiyor.

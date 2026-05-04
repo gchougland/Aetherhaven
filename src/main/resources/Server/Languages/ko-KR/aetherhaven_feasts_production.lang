@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=마을 축제
+aetherhaven.ui.feast.noTown=당신은 마을에 소속되어 있어야 합니다.
+aetherhaven.ui.feast.noPermission=이 마을에서는 잔치를 열 수 없습니다.
+aetherhaven.ui.feast.outsideTerritory=테이블은 반드시 해당 도시 구역 내에 설치되어야 합니다.
+aetherhaven.ui.feast.activeTitle=마을 축제가 효력을 발휘합니다
+aetherhaven.ui.feast.noneActive=현재 활성화된 시간 제한 축제가 없습니다. 왼쪽에서 축제를 선택하여 비용과 효과를 확인하세요.
+aetherhaven.ui.feast.daysLeft=남은 일수(새벽): {days}
+aetherhaven.ui.feast.selectHint=잔치를 선택하세요
+aetherhaven.ui.feast.ingredientsLabel=재료
+aetherhaven.ui.feast.confirm=잔치를 열어라
+aetherhaven.ui.feast.locked=너는 아직 이 축제에 대해 배우지 못했구나. 누군가 알려줄 때까지 마을 사람들과 시간을 보내렴.
+aetherhaven.ui.feast.tooltipLocked=이웃이 이 축제를 가르쳐줄 때까지 잠겨 있습니다. 마을을 돕고 연회장에서 음식을 만드는 사람들과 계속 대화하세요.
+aetherhaven.ui.feast.cooldownBerrycircle=베리서클 콩코드가 쿨다운 중입니다(남은 기간: {days}일).
+aetherhaven.ui.feast.began=잔치가 시작되었다. 마을 사람들이 식탁에 둘러앉았다.
+aetherhaven.ui.feast.err.pluginNotLoaded=이 서버에는 Aetherhaven이 로드되어 있지 않습니다.
+aetherhaven.ui.feast.err.unknownFeast=해당 음식은 제공되지 않습니다.
+aetherhaven.ui.feast.err.invalidPlayer=본인 확인이 불가능합니다.
+aetherhaven.ui.feast.err.feastNotUnlocked=당신은 아직 이 축제에 대해 배우지 못했습니다. 마을 사람들과 신뢰를 쌓고, 누군가 이 축제를 가르쳐주겠다고 제안할 때 귀 기울이십시오.
+aetherhaven.ui.feast.err.timedFeastActive=이 마을에서는 또 다른 기간 한정 축제가 이미 시행 중입니다.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=현재 진행 중인 시간 제한 연회가 끝날 때까지 기다렸다가 베리서클 콩코드를 제공하세요.
+aetherhaven.ui.feast.err.berrycircleCooldown=베리서클 콩코드는 아직 쿨다운 중입니다.
+aetherhaven.ui.feast.err.notEnoughIngredients=필요한 재료가 부족합니다.
+
+aetherhaven.ui.production.title=직장 매장
+aetherhaven.ui.production.prev=이전
+aetherhaven.ui.production.next=다음
+aetherhaven.ui.production.prevTooltip=이 슬롯의 이전 출력
+aetherhaven.ui.production.nextTooltip=이 슬롯의 다음 출력
+aetherhaven.ui.production.take1=테이크 1
+aetherhaven.ui.production.take10=10개 가져가세요
+aetherhaven.ui.production.take100=100개를 가져가세요
+aetherhaven.ui.production.genInterval={time} 하나를 만들기 위해
+aetherhaven.ui.production.err.plugin=이 서버에는 Aetherhaven이 로드되어 있지 않습니다.
+aetherhaven.ui.production.err.permission=이 마을에서는 이 저장소를 열 수 없습니다.
+aetherhaven.ui.production.err.plot=이 블록은 마을의 완성된 작업장 부지(농장, 헛간, 제분소 또는 광부 오두막) 내에 있지 않습니다.
+aetherhaven.ui.production.err.catalog=이 건물에 대해 구성된 생산 카탈로그가 없습니다.
+aetherhaven.ui.production.err.inventoryFull=보유 재고가 너무 많아 그만큼 가져갈 수 없습니다.
+aetherhaven.ui.production.unlockButton=잠금 해제
+aetherhaven.ui.production.unlockTooltip=이 건물에 잠금된 작업 공간 출력물을 보고 구매하세요.
+
+aetherhaven.ui.productionUnlocks.title=직장 잠금 해제
+aetherhaven.ui.productionUnlocks.intro=아래에서 원하는 출력을 선택하면 패널에 이름과 요구 사항이 표시됩니다. 아이콘 위에 마우스를 올리면 보유량과 필요량을 확인할 수 있습니다. 필요한 아이템과 골드 총량을 충족하면 잠긴 출력을 클릭하여 잠금을 해제하세요.
+aetherhaven.ui.productionUnlocks.navProduction=생산
+aetherhaven.ui.productionUnlocks.navProductionTooltip=직장 보관 장소로 돌아가기
+aetherhaven.ui.productionUnlocks.detailHint=위의 아이콘을 클릭하면 이름과 잠금 해제 조건을 확인할 수 있습니다.
+aetherhaven.ui.productionUnlocks.err.inventory=인벤토리를 읽을 수 없습니다.
+aetherhaven.ui.productionUnlocks.err.empty=이 작업 공간에는 잠금 해제 목록이 구성되어 있지 않습니다.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=이 직장에서는 이미 잠금 해제되었습니다.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=품목: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=금화: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=인벤토리(가방 합계)에 해당 아이템이 최소 {need}개 있어야 합니다.
+aetherhaven.ui.productionUnlocks.notify.needGold=마을 금고와 소지품 사이에 충분한 금화가 필요합니다({need} 총합).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=인벤토리에서 필요한 아이템을 제거할 수 없습니다.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=금값을 지불할 수 없어서 상품이 반송되었습니다.
+aetherhaven.ui.productionUnlocks.notify.unlocked=이 작업 공간에 대해 {item} 잠금 해제되었습니다.
+
+aetherhaven.feast.stewards.name=집사 장부 만찬
+aetherhaven.feast.stewards.description=빵과 치즈, 그리고 제대로 만든 호박 파이를 펼쳐 놓아서 아침 십일조가 일주일 동안 넉넉하게 느껴지도록 하세요.
+aetherhaven.feast.hearthglass.name=하스글래스 비질
+aetherhaven.feast.hearthglass.description=구운 생선, 익힌 고기, 채소들이 마치 불에 천천히 구워지는 듯한 저녁 식사처럼 차려져 있다. 마을 사람들의 욕구는 일주일 동안 서서히 사라진다.
+aetherhaven.feast.berrycircle.name=베리서클 콩코드
+aetherhaven.feast.berrycircle.description=접시에 담긴 가벼운 음식들: 베리 샐러드, 과일 꼬치, 그리고 토스트용 팝콘. 이웃들은 당신을 조금 더 따뜻하게 기억할 겁니다. 일주일 동안 새벽이 밝아올 때까지 기다렸다가 다시 내놓으세요.

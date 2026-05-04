@@ -59,7 +59,8 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
             commandBuilder.append("Aetherhaven/HandMirror.ui");
             templateAppended = true;
         }
-        commandBuilder.set(LEFT + " #Hint.TextSpans", Message.translation("server.aetherhaven.ui.handmirror.hint"));
+        AetherhavenUiLocalization.applyHandMirror(commandBuilder);
+        commandBuilder.set(LEFT + " #Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.hint"));
 
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
@@ -111,17 +112,17 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
             applyItemGridStack(commandBuilder, iconSlot, forRow);
             commandBuilder.set(
                 row + " #Line.TextSpans",
-                Message.translation("server.aetherhaven.ui.handmirror.listRow").param("itemName", itemName).param("qty", stack.getQuantity()));
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.listRow").param("itemName", itemName).param("qty", stack.getQuantity()));
 
             boolean ring = JewelryItemIds.isRing(stack.getItemId());
             commandBuilder.set(row + " #RingActions.Visible", ring);
             commandBuilder.set(row + " #NeckActions.Visible", !ring);
             commandBuilder.set(
-                row + " #ToRing1.Text", Message.translation("server.aetherhaven.ui.handmirror.rowRing1"));
+                row + " #ToRing1.Text", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.rowRing1"));
             commandBuilder.set(
-                row + " #ToRing2.Text", Message.translation("server.aetherhaven.ui.handmirror.rowRing2"));
+                row + " #ToRing2.Text", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.rowRing2"));
             commandBuilder.set(
-                row + " #ToNeck.Text", Message.translation("server.aetherhaven.ui.handmirror.rowNeck"));
+                row + " #ToNeck.Text", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.rowNeck"));
 
             if (ring) {
                 eventBuilder.addEventBinding(
@@ -201,7 +202,7 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
             if (!HandMirrorLoadoutActions.takeFromLoadout(ref, store, player, t)) {
                 NotificationUtil.sendNotification(
                     pr.getPacketHandler(),
-                    Message.translation("server.aetherhaven.ui.handmirror.inventoryFull"),
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.inventoryFull"),
                     NotificationStyle.Danger);
             }
             refresh(ref, store);
@@ -234,11 +235,11 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
             case SUCCESS -> {}
             case COULD_NOT_RETURN_PREVIOUS, INVENTORY_UPDATE_FAILED -> NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.handmirror.equipFailed"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.equipFailed"),
                 NotificationStyle.Danger);
             case NOT_JEWELRY, INVALID_FOR_SLOT -> NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.handmirror.cannotEquipThere"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.cannotEquipThere"),
                 NotificationStyle.Danger);
             case SLOT_EMPTY -> {}
         }

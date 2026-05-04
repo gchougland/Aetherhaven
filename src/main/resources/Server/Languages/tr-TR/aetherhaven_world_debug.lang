@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=Bu bloğun menzilinde hiçbir ilgi noktası yok.
+aetherhaven.poi.noPoiSelected=Hiçbir ilgi noktası seçilmedi. Önce bir ilgi noktasına birincil tuşla tıklayın.
+aetherhaven.poi.selectedPoiGone=Seçilen ilgi noktası artık mevcut değil.
+aetherhaven.poi.moved=İlgi noktası {x}, {y}, {z}'ye taşındı.
+aetherhaven.poi.noPoiBlock=Hiçbir ilgi noktası seçili değil. Öncelikle bir ilgi noktası bloğuna birincil tuşla tıklayın.
+aetherhaven.poi.clearedInteractionTarget=Etkileşim hedefi temizlendi; NPC'ler ilgi noktası bloğunun merkezini kullanıyor.
+aetherhaven.poi.setInteractionTarget=Etkileşim hedefi olarak {x}, {y}, {z} değerlerini ayarlayın.
+aetherhaven.poi.selected=Seçilen ilgi noktası {id}, {x}, {y}, {z} konumlarındadır.
+aetherhaven.poi.targetBlockMismatch=Hedef blok, bu ilgi noktası (POI) için beklenen {type} türüyle eşleşmelidir.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Bina taşınıyor…
+aetherhaven.plotSign.placed=Arsa levhası yerleştirildi.
+aetherhaven.plotSign.couldNotAdd=Parsel tabelası eklenemedi (envanter dolu mu?).
+
+# Founder monument
+aetherhaven.founder.inTerritory=Kurucu anıtını kasabanızın toprakları içine yerleştirin.
+aetherhaven.founder.cannotPlace=Kurucu anıtını buraya yerleştiremezsiniz.
+aetherhaven.founder.createFailed=Kurucu heykelini oluşturamadım. Blok yerleştirildi; tekrar denemek için kırın.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Hedef, Aetherhaven kasabasının bir sakini değil.
+aetherhaven.debug.autonomy.toggledOn=Otonomi hata ayıklama AÇIK (DisplayCustom + VisPath). İsim plakasında AH yer paylaşımı.
+aetherhaven.debug.autonomy.toggledOff=Bu köylü için özerklik hata ayıklaması KAPALI.
+aetherhaven.debug.autonomy.state=Bu köylü için özerklik hata ayıklaması: {state}
+aetherhaven.debug.autonomy.cleared=Bu köylü için Aetherhaven özerklik hata ayıklama işlemi tamamlandı.
+aetherhaven.debug.on=AÇIK
+aetherhaven.debug.off=KAPALI
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=İtibar değişmedi (zaten {value}).
+aetherhaven.debug.rep.set=İtibarı, diyalog için sıraya alınmış geçilen kilometre taşlarıyla birlikte {value} olarak ayarlayın (eğer rol çözümlendiyse).
+aetherhaven.debug.rep.milestonesHeader=İtibar kilometre taşları (ödül kimliği, rol, minimum itibar, diyalog düğümü):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Verilen ödül {id}.
+aetherhaven.debug.rep.targetInvalid=Engelli köylü.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Bu dünyadaki {towns} kasabadaki {entries} oyuncu-köylü sırasındaki hediye limitlerini sıfırla.
+aetherhaven.debug.gift.unknownRole=Bilinmeyen köylü rolü: {role}
+aetherhaven.debug.gift.noGiftLists={role} rolünün köylü verilerinde hediyeSevgileri, hediyeBeğenileri veya hediyeBeğenmeme durumları bulunmamaktadır.
+aetherhaven.debug.gift.fillDone={role} için {added} hediye günlüğü satırı/satırları eklendi (o öğe ve tepki seviyesi için zaten bir satırınız varsa atlanır).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=Bu, açlık, enerji veya eğlence olmalıdır (değerler 0..{max} arasındadır).
+aetherhaven.debug.needs.elderNoTown=Bu dünyada senin için bir kasaba yok (Elder için gerekli).
+aetherhaven.debug.needs.noElderUuid=Kasabada henüz kayıtlı yaşlı bir UUID bulunmuyor.
+aetherhaven.debug.needs.noMatch=Eşleşen köylü bulunamadı (kullanıcı adı, Yaşlı veya tam UUID için inceleme yapılması gerekiyor).
+aetherhaven.debug.needs.multipleMatch=Birden fazla NPC bu kullanıcı adıyla eşleşti; incelemeden tam UUID'yi kullanın.
+aetherhaven.debug.needs.entityNotLoaded=Varlık yüklenmedi veya VillagerNeeds özelliği yok: {id}
+aetherhaven.debug.needs.set={which}={value} değerini {label} ({id}) üzerinde ayarlayın.
+aetherhaven.debug.needs.inspectIntro=İhtiyaçları olan köylüler (yüklenmiş parçalar). Şu komutla ayarlanır: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | açlık={hunger} enerji={energy} eğlence={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(sapı yok)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown={id} kasabası için arsalar:
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Bu dünyadaki Aetherhaven kasabaları: {count}
+aetherhaven.towns.entry={name} id={id} sahibi={owner} kiralama={cx},{cy},{cz} arsalar={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} işareti@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=Kasabanız için aktif bir işiniz varken arsa birleştirmeyin (yapıların etrafındaki blokları yükleyin veya önce bir yapı inşa etmeye başlayın).
+aetherhaven.debug.plots.finishassemblyDone=Devam eden {count} olay yeri oluşturma işlemi anında tamamlandı.
+aetherhaven.debug.plots.removeBadUuid=Geçersiz harita UUID'si. Lütfen /aetherhaven harita listesindeki kimliği kullanın.
+aetherhaven.debug.plots.removeNotFound=Şehrinizde {plotId} numaralı arsa bulunmamaktadır.
+aetherhaven.debug.plots.removeDataFailed=Dünya temizlendi ancak kasaba verilerinden arsanın kaldırılması başarısız oldu (kayıtları kontrol edin).
+aetherhaven.debug.plots.removedPlot={plotId} numaralı parseli kasabadan çıkardık ve kapladığı alanı temizledik.
+aetherhaven.debug.poi.invalidTownUuid=Geçersiz kasaba UUID'si: {raw}
+aetherhaven.debug.poi.noTownArg=Bu dünyada hiçbir şehriniz yok (şehir UUID'sini argüman olarak kullanın).
+aetherhaven.debug.poi.listHeader={town} ({count}) kasabası için ilgi noktaları:
+aetherhaven.debug.poi.listEmpty=Bu kasaba için kayıtlı kimse yok (bir binayı tamamlayın veya pois.json dosyasını kontrol edin).
+aetherhaven.debug.poi.listLine={x},{y},{z} tür={kind} blokTürüKimliği={block} etiketler={tags} başlık={cap} çizim={plot}
+aetherhaven.debug.poi.dumpHeader=Dünya kayıt defterindeki tüm ilgi noktaları ({count}):
+aetherhaven.debug.poi.dumpLine=kasaba={town} {x},{y},{z} tür={kind} blokTürüKimliği={block} etiketler={tags} arsa={plot}

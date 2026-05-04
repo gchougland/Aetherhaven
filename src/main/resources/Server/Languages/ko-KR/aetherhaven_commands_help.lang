@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=현재 세계에 있는 에테르헤이븐 마을 목록을 나열하세요.
+
+commands.aetherhaven.town.desc=마을 회원 가입: 초대, 역할, 탈퇴
+commands.aetherhaven.town.invite.desc=온라인 플레이어를 당신의 마을로 초대하세요
+commands.aetherhaven.town.invite.player.desc=플레이어 사용자 이름 (온라인 상태여야 함)
+commands.aetherhaven.town.accept.desc=보류 중인 마을 초대 수락
+commands.aetherhaven.town.decline.desc=예정된 마을 초대를 거절하세요
+commands.aetherhaven.town.kick.desc=마을에서 구성원을 제거하세요
+commands.aetherhaven.town.kick.player.desc=회원 사용자 이름 (온라인 상태여야 함)
+commands.aetherhaven.town.role.desc=멤버에게 권한 사전 설정(건설, 퀘스트 또는 둘 다)을 적용하세요. 플래그별 권한 설정은 관리 블록의 플레이어 탭을 이용하세요.
+commands.aetherhaven.town.role.player.desc=회원 사용자 이름 (온라인 상태여야 함)
+commands.aetherhaven.town.role.role.desc=건설, 퀘스트, 또는 둘 다
+commands.aetherhaven.town.leave.desc=(소유주 자격이 아닌) 구성원 자격으로 속한 마을을 떠나십시오.
+commands.aetherhaven.town.townName.desc=선택 사항인 도시 표시 이름입니다. 공백을 포함한 전체 이름을 사용하세요(나머지 줄). 대기 중인 초대가 하나만 있는 경우 생략하세요.
+
+commands.aetherhaven.poi.desc=디버그: POI 명령
+commands.aetherhaven.poi.list.desc=특정 도시의 관심 지점(POI) 목록을 입력하세요(도시 UUID는 선택 사항이며, 생략하거나 도시 이름으로 "me"를 사용할 수도 있습니다).
+commands.aetherhaven.poi.town.desc=발신자 도시를 표시하려면 도시 UUID, 또는 '나', 또는 생략하세요.
+commands.aetherhaven.poi.dump.desc=이 월드의 메모리 내 레지스트리에 있는 모든 관심 지점(POI) 목록을 작성하세요(어떤 도시든 상관없습니다).
+
+commands.aetherhaven.plots.desc=플롯 인스턴스: 목록, 조립 완료(creative), 플롯 ID 제거(creative). /aetherhaven 플롯과의 충돌을 피하려면 plots를 사용하십시오.
+commands.aetherhaven.plots.list.desc=해당 도시의 구획 목록 (구획 UUID, 건설 ID, 주, 표지판 위치)을 제공합니다.
+commands.aetherhaven.plots.finishassembly.desc=크리에이티브 모드: 마을에서 진행 중인 모든 조립 작업을 즉시 완료합니다(로드된 청크/활성화된 작업 필요).
+commands.aetherhaven.plots.remove.desc=창작 모드: UUID를 사용하여 구획 하나를 철거하고 마을 데이터에서 제거합니다.
+commands.aetherhaven.plots.remove.plotId.desc=/aetherhaven 플롯 목록에서 UUID를 플롯합니다.
+
+commands.aetherhaven.needs.desc=디버그: 마을 주민 필요 사항
+commands.aetherhaven.needs.inspect.desc=로드된 청크에서 VillagerNeeds 속성을 가진 엔티티 목록을 표시합니다.
+commands.aetherhaven.needs.set.desc=필요량 측정값을 0~100으로 설정하세요 (대상: inspect, Elder 또는 uuid에서 가져온 핸들).
+commands.aetherhaven.needs.target.desc=핸들(예: Villager_Elder_xxxxxxxx), 장로 또는 엔티티 UUID
+commands.aetherhaven.needs.entity.desc=더 이상 사용되지 않습니다. 대신 target(handle, Elder 또는 uuid)을 사용하십시오.
+commands.aetherhaven.needs.which.desc=배고픔, 에너지 또는 재미
+commands.aetherhaven.needs.value.desc=0에서 100까지의 값 (100은 완전 만족)
+
+commands.aetherhaven.tax.desc=디버그: 재무부 아침 세금
+commands.aetherhaven.tax.breakdown.desc=마을의 주민별 세금 내역과 총액을 표시합니다(로드된 데이터 덩어리만 해당).
+commands.aetherhaven.tax.now.desc=아침 십일조를 지금 바로 헌금함에 넣으세요 (아침 시간 및 마지막 헌금일을 건너뛰세요).
+
+commands.aetherhaven.questdebug.desc=디버그: 마을 퀘스트 우회
+commands.aetherhaven.questdebug.grant.desc=마을에서 활성화된 퀘스트를 표시하세요
+commands.aetherhaven.questdebug.complete.desc=마을에서 퀘스트 완료 표시
+commands.aetherhaven.questdebug.clear.desc=마을의 활성 목록에서 퀘스트를 제거하세요
+commands.aetherhaven.questdebug.id.desc=퀘스트 ID (기본값 q_build_inn)
+commands.aetherhaven.questdebug.status.desc=(표시 이름 + ID) 마을의 진행 중인 퀘스트와 완료된 퀘스트를 표시합니다.
+
+commands.aetherhaven.reputation.desc=디버그: 평판
+commands.aetherhaven.reputation.set.desc=마을 주민과의 평판을 쌓고, 목표 달성 시 대화 보상을 예약하세요.
+commands.aetherhaven.reputation.villagerUuid.desc=마을 주민 NPC 엔티티 UUID
+commands.aetherhaven.reputation.villagerTarget.desc=마을 주민 엔티티 UUID 또는 마을의 NPC 역할 ID(예: Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=평판 0~100
+commands.aetherhaven.reputation.reward.desc=단계별 목표 정의를 나열하거나 보상을 직접 부여하세요.
+commands.aetherhaven.reputation.reward.list.desc=평판 이정표 목록 (선택 사항: NPC 역할 ID로 필터링)
+commands.aetherhaven.reputation.reward.roleFilter.desc=NPC 역할 ID(예: Aetherhaven_Merchant)를 사용하여 목록을 필터링합니다.
+commands.aetherhaven.reputation.reward.grant.desc=지금 마일스톤 보상 하나를 지급하세요(획득한 점수). ID 확인에는 평판 보상 목록을 사용하세요.
+commands.aetherhaven.reputation.rewardId.desc=평판 보상 ID (예: rep_merchant_50)
+
+commands.aetherhaven.villager.desc=디버그: 마을 주민 도우미
+commands.aetherhaven.villager.list.desc=마을 주민 NPC 엔티티 UUID 목록 (평판/위치 찾기 명령어용)
+commands.aetherhaven.villager.locate.desc=마을 주민의 위치를 출력합니다. 순간 이동 기능은 선택적으로 사용할 수 있습니다(운영자만 사용 가능).
+commands.aetherhaven.villager.uuid.desc=마을 주민 NPC 엔티티 UUID
+commands.aetherhaven.villager.target.desc=마을 주민 엔티티 UUID 또는 마을의 NPC 역할 ID(예: Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=마을 주민에게 순간 이동하려면 true로 설정하세요(운영자만 해당). 또는 --tp를 사용하세요.
+commands.aetherhaven.villager.tp_flag.desc=마을 주민에게 순간 이동 (운영자 전용; true를 전달하는 것과 동일)
+commands.aetherhaven.villager.reset.desc=마을 주민 NPC를 모두 제거하고 근처에 다시 생성합니다(디버그 모드; 퀘스트, 평판, 선물은 유지; 여관 풀 수리를 실행하여 주민들을 완공된 건물에 맞춰 배치; 여관 방문객 풀 새로 고침).
+aetherhaven.villager.resetDone=마을 주민들이 초기화되어 당신 근처에 다시 나타났습니다.
+aetherhaven.villager.resetFailed=마을 주민을 초기화할 수 없습니다: {reason}
+commands.aetherhaven.gift.desc=디버그: 선물 한도 재설정 또는 선물 내역 미리보기 채우기
+commands.aetherhaven.gift.resetLimits.desc=이 월드의 모든 플레이어와 모든 마을 주민의 일일/주간 선물 한도를 초기화합니다.
+commands.aetherhaven.gift.fillHistory.desc=역할(마을)에 대한 호감/비호감 항목당 로그 라인을 하나씩 추가하여 선물 내역에 표시될 수 있도록 하세요(디버그).
+commands.aetherhaven.gift.roleId.desc=NPC 역할 ID (예: Aetherhaven_Merchant)
+
+commands.aetherhaven.debug_autonomy.desc=디버그: 마을 주민 자율성 오버레이
+commands.aetherhaven.debug_autonomy.toggle.desc=마을 주민의 자율성 디버그 모드를 켜려면 (NPC를 살펴보거나 --ray 옵션을 사용하세요)
+commands.aetherhaven.debug_autonomy.show.desc=이 주민에 대해 자율성 디버그가 활성화되어 있는지 여부를 표시합니다.
+commands.aetherhaven.debug_autonomy.clear.desc=이 마을 주민의 에테르헤이븐 자율성 디버그를 초기화하세요.
+
+commands.aetherhaven.debug_lootchest.desc=디버그: 에테르헤이븐 상자 보너스가 지정된 컨테이너에 적용됩니다.
+commands.aetherhaven.debug_lootchest.fill.desc=보고 있는 아이템 컨테이너에 강제 보석, 금, 플롯 토큰 굴림을 적용하세요.

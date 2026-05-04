@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=條件實驗室。你不應該看到隱藏選項，而應該看到灰色選項。使用複合門繼續。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=這個選項是隱藏的（字面上的錯誤）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=應該將其顯示為灰色。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=（需要字面上的真）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=通過複合條件：非假且為真
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=或分支（真或假）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=感謝測試。再見！
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=再見！
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=選擇下方選項，即可使用「跳到」動作而不是「下一步」跳到告別頁面。
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=去告別
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=進入節點後，你會獲得一把簡易鏟子（前提是你的物品欄有足夠的空間）。選擇下方選項可獲得更多物品。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=給我3塊泥土，然後繼續。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=歡迎使用以太港對話系統。此行文字特意留長，以便您檢查佈局和滾動效果。您的選項位於正文下方。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=繼續前往條件實驗室。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=離開（以下一個空字符結尾）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=離開（明確的關閉動作）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=您可以開啟 Kweebec 商人物物交換介面，或直接跳到存根作業。
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=打開 Kweebec_Merchant 以物易物商店
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=跳過商店，直接前往存根
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA村民
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=存根操作：解鎖成就和開始任務應該要記錄，直到這些系統存在為止。
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=執行 unlock_achievement + start_quest 存根
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA村民

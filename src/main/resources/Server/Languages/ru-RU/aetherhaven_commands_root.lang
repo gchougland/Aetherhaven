@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Команды мода Aetherhaven
+commands.aetherhaven.reload.desc=Перезагрузка файла config.json и JSON-каталогов Aetherhaven с диска (в творческом режиме)
+commands.aetherhaven.reload.success=Конфигурационные каталоги и каталоги ресурсов Aetherhaven перезагружены.
+commands.aetherhaven.reload.failure=Перезагрузка не удалась: {detail}
+commands.aetherhaven.reload.noPlugin=Плагин Aetherhaven не загружен.
+commands.aetherhaven.plot.desc=Откройте административный интерфейс для установки указателей на участке (выберите строительство, получите предмет).
+commands.aetherhaven.starterkit.desc=Приобретите себе стартовый набор Aetherhaven (персонал для размещения участков, устав, отдел городского планирования, персонал для строительства; творческий режим).
+commands.aetherhaven.starterkit.success=Стартовый набор добавлен в ваш инвентарь.
+commands.aetherhaven.starterkit.partial=Стартовый набор предоставлен частично; предмет(ы) {failed} не поместились (освободите место в инвентаре).
+
+commands.aetherhaven.exportskin.desc=Экспортируйте скин вашего аватара в формате JSON модели (Родитель: Игрок)
+commands.aetherhaven.exportskin.other.desc=Экспорт скина аватара другого игрока в формате JSON модели.
+commands.aetherhaven.exportskin.arg.path=Необязательный путь к выходному файлу (по умолчанию: plugin data/avatar_exports/)
+commands.aetherhaven.exportskin.noSkin=Для этого игрока нет доступного скина персонажа.
+commands.aetherhaven.exportskin.invalidSkin=Проверка кожи не удалась: {detail}
+commands.aetherhaven.exportskin.resolveError=Не удалось сопоставить скин с прикрепленными элементами модели: {detail}
+commands.aetherhaven.exportskin.ioError=Не удалось записать {path}: {detail}
+commands.aetherhaven.exportskin.success=Модель JSON была записана в {path}

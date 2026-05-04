@@ -18,6 +18,6 @@ Group #ReviveRow {
   }
 
   $C.@TextButton #ReviveButton {
-    Text: %server.aetherhaven.ui.gaiaStatue.revive;
+    Text: "";
   }
 }

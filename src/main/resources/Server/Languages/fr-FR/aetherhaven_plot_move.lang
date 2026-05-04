@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Placement de l'intrigue
+aetherhaven.ui.plotplacement.summary=Placement : {building}
+aetherhaven.ui.plotplacement.positionSection=Position et rotation
+aetherhaven.ui.plotplacement.tipsSection=Conseils
+aetherhaven.ui.plotplacement.heightSection=Hauteur et rotation
+aetherhaven.ui.plotplacement.detailsBlock=Signes de tracé {sx}, {sy}, {sz} · Origine du préfabriqué {ox}, {oy}, {oz}\nÉtape {step} sur 4 (90° chacune)
+aetherhaven.ui.plotplacement.tipsControls=La touche Échap ferme uniquement ce panneau. La touche Annuler efface l'aperçu. Un clic droit dans le vide rouvre le panneau ; un clic droit sur un bloc ne déplace pas un aperçu actif.
+aetherhaven.ui.plotplacement.plotType=Bâtiment
+aetherhaven.ui.plotplacement.moveLabel=Ajuster la position
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Rotation de 90° (orientation du cycle)
+aetherhaven.ui.plotplacement.place=Placer le panneau de signalisation
+aetherhaven.ui.plotplacement.placeMove=Déménager le bâtiment
+aetherhaven.ui.plotplacement.moveWarningText=Le déménagement détruit et reconstruit l'ancien site. Veuillez d'abord retirer les objets de valeur, les animaux domestiques et tout objet susceptible d'être emporté par le vent à l'intérieur du bâtiment. Les PNJ liés à cette ville sont protégés.
+aetherhaven.ui.plotplacement.moveConfirm=Confirmer
+aetherhaven.ui.plotplacement.moveBack=Retour
+aetherhaven.ui.plotplacement.cancel=Annuler l'aperçu
+aetherhaven.ui.plotplacement.cameraSection=Caméra
+aetherhaven.ui.plotplacement.cameraHint=L'image en vue aérienne apparaît une seule fois lorsque vous l'allumez (au-dessus de l'aperçu), puis reste fixe pendant que vous déplacez l'intrigue.
+aetherhaven.ui.plotplacement.birdsEye=Vue aérienne
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Vue de dessus : visez initialement le centre de l’aperçu. Décochez cette case pour revenir à la vue à la première personne. Utilisez le panoramique pour déplacer la vue.
+aetherhaven.ui.plotplacement.viewDistance=Distance
+aetherhaven.ui.plotplacement.zoomOutTooltip=Caméra plus éloignée (vue d'ensemble plus large de l'intrigue)
+aetherhaven.ui.plotplacement.zoomInTooltip=Caméra plus rapprochée (vue d'ensemble plus petite, plus de détails)
+aetherhaven.ui.plotplacement.panLabel=Caméra panoramique
+aetherhaven.ui.plotplacement.panXmTooltip=Déplacez la vue d'un pas vers -X
+aetherhaven.ui.plotplacement.panXpTooltip=Déplacez la vue d'un pas vers +X
+aetherhaven.ui.plotplacement.panZmTooltip=Déplacez la vue d'un pas vers -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Déplacez la vue d'un pas vers +Z.
+aetherhaven.ui.plotplacement.moveXmTooltip=Vue aérienne : ouest (-X). Vue à la première personne : déplacement latéral vers la gauche (par rapport à la vue).
+aetherhaven.ui.plotplacement.moveXpTooltip=Vue aérienne : est (+X). Vue à la première personne : déplacement latéral vers la droite (par rapport à la vue).
+aetherhaven.ui.plotplacement.moveZmTooltip=Vue aérienne : nord (-Z). Vue subjective : avancer (par rapport au point de vue).
+aetherhaven.ui.plotplacement.moveZpTooltip=Vue aérienne : sud (+Z). Vue subjective : reculer (par rapport au point de vue).
+aetherhaven.ui.plotplacement.moveYmTooltip=Poussez d'un pâté de maisons vers le bas
+aetherhaven.ui.plotplacement.moveYpTooltip=Avancez d'un pâté de maisons.
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Déplacer la charte
+aetherhaven.ui.charterrelocation.summary=Repositionnement de la charte municipale
+aetherhaven.ui.charterrelocation.details=Bloc cible {sx}, {sy}, {sz} · Étape {step} sur 4 (90°)
+aetherhaven.ui.charterrelocation.tips=Le territoire est un carré de blocs autour de la charte ; chaque bâtiment doit rester à l'intérieur après confirmation. Déplacez le fantôme vers le nouvel emplacement, puis placez-le.
+aetherhaven.ui.charterrelocation.info=Le territoire est un carré de blocs autour de la charte. Tous vos bâtiments doivent rester à l'intérieur de cette zone après le déplacement. Déplacez le bloc fantôme jusqu'à la nouvelle position de la charte, puis confirmez.
+aetherhaven.ui.charterrelocation.place=Charte du lieu

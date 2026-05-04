@@ -74,6 +74,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
             commandBuilder.append("Aetherhaven/TownMemberPermissionsPage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyTownMemberPermissionsPage(commandBuilder);
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#MemberPermBack",
@@ -86,7 +87,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (plugin == null || uc == null) {
             commandBuilder.set("#MemberPermErr.Visible", true);
-            commandBuilder.set("#MemberPermErr.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#MemberPermErr.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -95,7 +96,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
             commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
                 "#MemberPermErr.TextSpans",
-                Message.translation("server.aetherhaven.ui.memberPermissions.err.notOwner")
+                Message.translation("aetherhaven_town.aetherhaven.ui.memberPermissions.err.notOwner")
             );
             return;
         }
@@ -103,7 +104,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
             commandBuilder.set("#MemberPermErr.Visible", true);
             commandBuilder.set(
                 "#MemberPermErr.TextSpans",
-                Message.translation("server.aetherhaven.ui.memberPermissions.err.notInTown")
+                Message.translation("aetherhaven_town.aetherhaven.ui.memberPermissions.err.notInTown")
             );
             return;
         }
@@ -111,36 +112,35 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         String display = TownPlayerLookup.displayNameForUuid(world, targetPlayerUuid);
         commandBuilder.set("#MemberPermTargetName.TextSpans", Message.raw(display));
 
-        bindToggle(eventBuilder, "#MemberPermPlacePlots", "TogglePermPlacePlots");
-        bindToggle(eventBuilder, "#MemberPermManageConstructions", "TogglePermManageConstructions");
-        bindToggle(eventBuilder, "#MemberPermSpendTreasuryGold", "TogglePermSpendTreasuryGold");
-        bindToggle(eventBuilder, "#MemberPermOpenTreasuryPanel", "TogglePermOpenTreasuryPanel");
-        bindToggle(eventBuilder, "#MemberPermAcceptQuests", "TogglePermAcceptQuests");
-        bindToggle(eventBuilder, "#MemberPermCompleteQuests", "TogglePermCompleteQuests");
-        bindToggle(eventBuilder, "#MemberPermAbandonQuests", "TogglePermAbandonQuests");
-        bindToggle(eventBuilder, "#MemberPermReviveVillagers", "TogglePermReviveVillagers");
+        bindToggle(eventBuilder, "#PermCbPlacePlots", "TogglePermPlacePlots");
+        bindToggle(eventBuilder, "#PermCbManageConstructions", "TogglePermManageConstructions");
+        bindToggle(eventBuilder, "#PermCbSpendTreasuryGold", "TogglePermSpendTreasuryGold");
+        bindToggle(eventBuilder, "#PermCbOpenTreasuryPanel", "TogglePermOpenTreasuryPanel");
+        bindToggle(eventBuilder, "#PermCbAcceptQuests", "TogglePermAcceptQuests");
+        bindToggle(eventBuilder, "#PermCbCompleteQuests", "TogglePermCompleteQuests");
+        bindToggle(eventBuilder, "#PermCbAbandonQuests", "TogglePermAbandonQuests");
+        bindToggle(eventBuilder, "#PermCbReviveVillagers", "TogglePermReviveVillagers");
 
         TownMemberPermissions p = town.getEffectiveMemberPermissions(targetPlayerUuid);
-        setCheck(commandBuilder, "#MemberPermPlacePlots", p.placePlots());
-        setCheck(commandBuilder, "#MemberPermManageConstructions", p.manageConstructions());
-        setCheck(commandBuilder, "#MemberPermSpendTreasuryGold", p.spendTreasuryGold());
-        setCheck(commandBuilder, "#MemberPermOpenTreasuryPanel", p.openTreasuryPanel());
-        setCheck(commandBuilder, "#MemberPermAcceptQuests", p.acceptQuests());
-        setCheck(commandBuilder, "#MemberPermCompleteQuests", p.completeQuests());
-        setCheck(commandBuilder, "#MemberPermAbandonQuests", p.abandonQuests());
-        setCheck(commandBuilder, "#MemberPermReviveVillagers", p.reviveVillagers());
+        setCheck(commandBuilder, "#PermCbPlacePlots", p.placePlots());
+        setCheck(commandBuilder, "#PermCbManageConstructions", p.manageConstructions());
+        setCheck(commandBuilder, "#PermCbSpendTreasuryGold", p.spendTreasuryGold());
+        setCheck(commandBuilder, "#PermCbOpenTreasuryPanel", p.openTreasuryPanel());
+        setCheck(commandBuilder, "#PermCbAcceptQuests", p.acceptQuests());
+        setCheck(commandBuilder, "#PermCbCompleteQuests", p.completeQuests());
+        setCheck(commandBuilder, "#PermCbAbandonQuests", p.abandonQuests());
+        setCheck(commandBuilder, "#PermCbReviveVillagers", p.reviveVillagers());
     }
 
-    private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String checkWithLabelPath, boolean on) {
-        commandBuilder.set(checkWithLabelPath + " #CheckBox.Value", on);
+    private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String checkboxSelector, boolean on) {
+        commandBuilder.set(checkboxSelector + ".Value", on);
     }
 
-    private static void bindToggle(@Nonnull UIEventBuilder eventBuilder, @Nonnull String checkWithLabelPath, @Nonnull String action) {
-        String box = checkWithLabelPath + " #CheckBox";
+    private static void bindToggle(@Nonnull UIEventBuilder eventBuilder, @Nonnull String checkboxSelector, @Nonnull String action) {
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            box,
-            new EventData().append("Action", action).append("@Checked", checkWithLabelPath + " #CheckBox.Value"),
+            checkboxSelector,
+            new EventData().append("Action", action).append("@Checked", checkboxSelector + ".Value"),
             false
         );
     }

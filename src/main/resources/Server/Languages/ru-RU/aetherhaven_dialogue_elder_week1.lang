@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Меня зовут Лирен. Наш город управляется на основании устава, который мы подписали, когда поселились здесь. Прежде чем мы наметим новые участки, мне нужно, чтобы ты прогулялся по окрестностям Этерхейвена. Определи, где достаточно ровно для строительства, где находится вода и где мы, возможно, позже разместим поля или общую зеленую зону. Ничего особенного, просто осмотрись. Когда закончишь, вернись и расскажи мне.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Я осмотрю местность и сообщу о результатах.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Старейшина Лирен
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=Если вы вернетесь с прогулки, расскажите, что видели. Если нет, скажите, когда будете готовы.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Прежде чем занимать более прочную позицию, расскажите мне, что видели ваши ботинки.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=Сегодня я оставил чартер открытым. Если какая-то фраза вас смущает, спросите.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Отчеты о прогулках важнее мнений. Расскажите мне факты.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=Если пейзаж выглядел неправильно, скажите об этом прямо. Я не стыжусь честных глаз.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=Вода важнее драмы. Скажите, где она находится.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Ровная земля порой обманывает. Скажите, где вас это обмануло?
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=Если вы увидели плодородную почву, опишите её так, как это сделал бы фермер.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=Если вы увидели крутые склоны, опишите их крутизну без поэтических пояснений.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=У меня есть время, чтобы составить для вас четкую карту. Нарисуйте ее словами.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Вернитесь, когда сможете без ошибок произнести слова «север», «юг», «грязь», «камень».
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=Аккуратно оформленная страница блокнота с указанием реальных достопримечательностей значит больше, чем просто речь.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=Если вы принесете с собой простую еду, пока мы будем обсуждать карты, я восприму это как проявление доброты.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Чистый мел и ровная линейка говорят о том, что вы настроены серьезно.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=Мне нравятся небольшие подарки, которые помогают в чтении, а не просто хвастаются.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Фляги для воды и сухое печенье — скучные подарки, и мне это нравится в дни, когда мы ходим в скауты.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Не приносите мне трофеи из старых костей, как будто они доказывают, что вы ходили.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=Я не хочу, чтобы уличный мусор представляли как результаты исследований.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=Если от него пахнет гнилью, это не аксессуар для карт.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Не допускайте розыгрышей и шумных игрушек на территории, где будет проходить чартерный стол.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=Мне совершенно не нужны блестки и мусор, когда мы обсуждаем водопроводные трубы.

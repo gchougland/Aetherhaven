@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Ben Lyren. Kasabamız, buraya yerleştiğimizde imzaladığımız sözleşmeye göre yönetiliyor. Daha fazla arsa edinmeden önce, Aetherhaven çevresindeki araziyi gezmenizi istiyorum. Nerelerin inşaat için yeterince düz olduğunu, suyun nerede olduğunu ve daha sonra nereye tarlalar veya ortak bir yeşil alan kurabileceğimizi anlamanız gerekiyor. Çok karmaşık bir şey değil, sadece etrafa bakın. Bunu yaptıktan sonra geri gelip bana bildirin.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Bölgeyi inceleyip size bilgi vereceğim.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Yaşlı Lyren
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=Yürüyüşten döndüyseniz, neler gördüğünüzü anlatın. Dönmediyseniz, hazır olduğunuzda söyleyin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Daha fazla yer edinmeden önce, botlarınızın neler gördüğünü bana anlatın.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=Bugün charter seferlerini açık tuttum. Anlamadığınız bir cümle olursa sorun.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Yürüyüş raporları görüşlerden daha önemlidir. Bana somut bilgiler getirin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=Eğer arazi uygunsuz görünüyorsa, açıkça söyleyin. Dürüst gözleri utandırmam.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=Su, dramadan daha önemlidir. Bana nerede olduğunu söyle.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Düz zemin bazen yanıltıcı olabilir. Söyle bana, seni nerede kandırdı?
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=Eğer verimli bir toprak görürseniz, onu bir çiftçi gibi tarif edin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=Eğer kötü yamaçlar gördüyseniz, şiirsel bir üslup kullanmadan eğimlerini belirtin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=Zihninizde net bir harita oluşturmanız için zamanım var. Onu kelimelerle resmedin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Kuzey, güney, çamur, taş kelimelerini doğru sırayla söyleyebildiğinizde geri gelin.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=Gerçek simge yapıların yer aldığı, özenle hazırlanmış bir not defteri sayfası, bir konuşmadan daha fazla anlam ifade eder.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=Haritalar hakkında konuşurken yanımıza basit bir yemek getirirseniz, bunu bir nezaket olarak kabul ederim.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Temiz tebeşir ve düz bir cetvel, işi ciddiye aldığınızı gösteriyor.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=Gösteriş amaçlı değil, okumaya yardımcı olan küçük hediyelerden hoşlanıyorum.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Su termosları ve kuru bisküviler sıkıcı hediyelerdir ve izci günlerinde ben de onları böyle seviyorum.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Bana eski kemiklerden yapılmış ganimetler getirmeyin, sanki bunlar sizin yürüdüğünüzü kanıtlıyormuş gibi.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=Sokaklarda bulunan hurda malzemelerin araştırma materyali olarak sunulmasını istemiyorum.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=Çürük gibi kokuyorsa, harita aksesuarı değildir.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Şaka malzemelerini ve gürültü çıkaran oyuncakları servis masasından uzak tutun.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=Su hatlarından bahsederken simli çöplerle uğraşmak istemiyorum.

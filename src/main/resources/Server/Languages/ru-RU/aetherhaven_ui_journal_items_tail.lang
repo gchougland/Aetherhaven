@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Журнал заданий
+aetherhaven.ui.questjournal.hint=Выберите вопрос для получения подробной информации.
+aetherhaven.ui.questjournal.abandon=Покидать
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Подробности задания
+aetherhaven.ui.questjournal.detailPlaceholderBody=Выберите один из заданий выше.
+
+items.Aetherhaven_Management_Block.name=Полка с городскими записями
+items.Aetherhaven_Management_Block.description=Стеллаж для документов по завершенному зданию. Открывает информацию о ходе строительства на данном участке.
+
+items.Aetherhaven_Sprinkler_Iron.name=Железный спринклер
+items.Aetherhaven_Sprinkler_Iron.description=Вода вспахивает почву на один блок ниже, на участке 3х3. Запускается один раз каждое игровое утро. Минимальная площадь покрытия.
+items.Aetherhaven_Sprinkler_Thorium.name=Ториевый спринклер
+items.Aetherhaven_Sprinkler_Thorium.description=Вода вспахивала почву на один блок ниже, на участке 5х5. Один раз каждое игровое утро. Больше, чем железо.
+items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовый спринклер
+items.Aetherhaven_Sprinkler_Cobalt.description=Вода вспахивала почву на один блок ниже, на участке 7х7. Один раз каждое игровое утро. Широкое покрытие.
+items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовый спринклер
+items.Aetherhaven_Sprinkler_Adamantite.description=Вода вспахивала почву на один блок ниже в области 9х9. Один раз каждое игровое утро. Максимально широкое покрытие.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Старейшина Лирен
+npcRoles.Aetherhaven_Innkeeper.name=Корин Москуп
+npcRoles.Aetherhaven_Merchant.name=Векс Сандерлейн
+npcRoles.Aetherhaven_Blacksmith.name=Гаррен Вейл
+npcRoles.Aetherhaven_Farmer.name=Ириенн Моссмарк
+npcRoles.Aetherhaven_Priestess.name=Сера Торнуэлл
+npcRoles.Aetherhaven_Miner.name=Горрук Стоунвейн
+npcRoles.Aetherhaven_Logger.name=Серен Фэйрхоллоу
+npcRoles.Aetherhaven_Rancher.name=Тален Медоуран
+
+items.Aetherhaven_Production_Storage.name=Магазины на рабочем месте
+items.Aetherhaven_Production_Storage.description=Содержит то, что приносят ваши работники. Открыт для заданных выходов и приема стопок. Является частью здания и не может быть поднят.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Жетон участка хижины шахтера
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Отметки, указывающие место, где можно построить сборную хижину шахтера. Изготовьте её в отделе городского планирования.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Жетон участка лесопилки
+items.Aetherhaven_Plot_Token_Lumbermill.description=Отмечает место, где можно построить сборный лесопильный завод. Занимайтесь ремеслом за столом городского планирования.
+items.Aetherhaven_Plot_Token_Barn.name=Жетон участка под амбар
+items.Aetherhaven_Plot_Token_Barn.description=Отмечает место, где можно построить сборный сарай. Работайте за столом городского планирования.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Жетон для алтаря Гайи
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Отметка места, где можно построить сборный алтарь Гайи. Изготовьте его в отделе городского планирования.
+
+items.Aetherhaven_Statue_of_Gaia.name=Статуя Геи
+items.Aetherhaven_Statue_of_Gaia.description=Освященное изображение для алтаря. Владельцы города могут призвать пропавших жителей обратно, наделив их жизненной энергией.

@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Quest started: {name}
+aetherhaven.quest.completed=Quest completed: {name}
+aetherhaven.quest.abandoned=Quest abandoned: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Granted active quest: {name}
+aetherhaven.questdebug.completed=Completed quest: {name}
+aetherhaven.questdebug.cleared=Cleared active quest: {name}
+aetherhaven.questdebug.statusHeader=-- quest status --
+aetherhaven.questdebug.statusActive=active:
+aetherhaven.questdebug.statusCompleted=completed:
+aetherhaven.questdebug.statusEmpty=(none)
+aetherhaven.questdebug.statusLine=  {name} ({id})
+aetherhaven.villager.noEntityIds=No villager entity IDs are registered for this town yet.
+aetherhaven.villager.listHeader=Town villagers: entity UUID, source, role if loaded (use UUID or role id with /aetherhaven reputation … and villager locate):
+aetherhaven.villager.listRow=  {uuid} | {note} | role: {role}
+aetherhaven.villager.locateNotLoaded=That villager is not loaded (try moving closer or loading chunks).
+aetherhaven.villager.locateNoTransform=No transform for that entity.
+aetherhaven.villager.locatePosition=Villager {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Teleport requires operator (OP group).
+aetherhaven.villager.teleported=Teleported.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=No item container at that block (chunk not loaded, filler/base mismatch, or not a container block).
+aetherhaven.debug.loot.bonusApplied=Aetherhaven bonus loot roll applied to this container (forced).
+aetherhaven.townsCommand.line=  {id}  name="{name}"  world={world}  owner={owner}  chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(none)
+aetherhaven.questdebug.statusActiveLine=Active: {list}
+aetherhaven.questdebug.statusActiveEmpty=Active: (none)
+aetherhaven.questdebug.statusCompletedLine=Completed: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Completed: (none)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Aetherhaven Exit
+items.Aetherhaven_Portal_Exit.description=Use to return to the overworld.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven Gateway
+items.Aetherhaven_Portal_Enter.description=Use to enter Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=The sky village

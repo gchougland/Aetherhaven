@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
  */
 public final class AetherhavenLootChestDebugCommand extends AbstractCommandCollection {
     public AetherhavenLootChestDebugCommand() {
-        super("debug-lootchest", "server.commands.aetherhaven.debug_lootchest.desc");
+        super("debug-lootchest", "aetherhaven_commands_help.commands.aetherhaven.debug_lootchest.desc");
         this.addSubCommand(new FillSubCommand());
     }
 
@@ -43,7 +43,7 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
         private static final int REACH = 10;
 
         FillSubCommand() {
-            super("fill", "server.commands.aetherhaven.debug_lootchest.fill.desc");
+            super("fill", "aetherhaven_commands_help.commands.aetherhaven.debug_lootchest.fill.desc");
         }
 
         @Override
@@ -70,7 +70,7 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             BlockTarget target = resolveItemContainerBlock(world, block);
             if (target == null) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.loot.noContainer")
+                    Message.translation("aetherhaven_quests_portals.aetherhaven.debug.loot.noContainer")
                 );
                 return;
             }
@@ -87,7 +87,7 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
             if (inv != null) {
                 LootChestBonusApplier.tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, true);
             }
-            playerRef.sendMessage(Message.translation("server.aetherhaven.debug.loot.bonusApplied"));
+            playerRef.sendMessage(Message.translation("aetherhaven_quests_portals.aetherhaven.debug.loot.bonusApplied"));
         }
     }
 

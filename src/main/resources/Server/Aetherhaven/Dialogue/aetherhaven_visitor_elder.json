@@ -3,11 +3,11 @@
   "entry": "root",
   "nodes": {
     "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.body",
+      "speaker": "aetherhaven_dialogue_visitor_elder.aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker",
+      "text": "aetherhaven_dialogue_visitor_elder.aetherhaven.dialogue.aetherhaven_visitor_elder.root.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0",
+          "text": "aetherhaven_dialogue_visitor_elder.aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0",
           "next": null,
           "actions": [
             {

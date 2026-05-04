@@ -55,7 +55,7 @@ $C.@PageOverlay {
         Label #ShellTitleText {
           Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
           Padding: (Horizontal: 19);
-          Text: %server.aetherhaven.ui.plotconstruction.title;
+          Text: "";
         }
       }
 
@@ -77,7 +77,7 @@ $C.@PageOverlay {
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlotTooltip;
+            TooltipText: "";
           }
 
           TextButton #TabNeedsButton {
@@ -87,7 +87,7 @@ $C.@PageOverlay {
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotmanagement.tabNeedsTooltip;
+            TooltipText: "";
           }
 
           TextButton #TabPlayersButton {
@@ -97,7 +97,7 @@ $C.@PageOverlay {
             Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotmanagement.tabPlayersTooltip;
+            TooltipText: "";
           }
 
           TextButton #TabMoveButton {
@@ -107,7 +107,7 @@ $C.@PageOverlay {
             Anchor: (Height: 40, Width: 44);
             Padding: (Full: 0);
             Text: ".";
-            TooltipText: %server.aetherhaven.ui.plotmanagement.tabMoveTooltip;
+            TooltipText: "";
           }
         }
 
@@ -145,7 +145,7 @@ $C.@PageOverlay {
           }
 
           Label #MaterialsHeader {
-            Text: %server.aetherhaven.ui.plotconstruction.materials;
+            Text: "";
             Anchor: (Bottom: 6);
             Style: (...$C.@DefaultLabelStyle, RenderBold: true);
           }
@@ -180,8 +180,8 @@ $C.@PageOverlay {
               LayoutMode: Left;
               Anchor: (Bottom: 8);
 
-              Label {
-                Text: %server.aetherhaven.ui.plotconstruction.houseResident;
+              Label #HouseResidentFieldLabel {
+                Text: "";
                 Anchor: (Top: 6, Left: 6, Right: 16);
                 Style: $C.@DefaultLabelStyle;
               }
@@ -192,18 +192,18 @@ $C.@PageOverlay {
             }
 
             $C.@TextButton #AssignHouseResidentButton {
-              Text: %server.aetherhaven.ui.plotconstruction.assignHouseResident;
+              Text: "";
             }
           }
 
           $C.@TextButton #PickUpPlotButton {
-            Text: %server.aetherhaven.ui.plotconstruction.pickUpPlot;
+            Text: "";
             Visible: false;
             Anchor: (Bottom: 8);
           }
 
           $C.@TextButton #BuildButton {
-            Text: %server.aetherhaven.ui.plotconstruction.build;
+            Text: "";
           }
         }
 
@@ -214,7 +214,7 @@ $C.@PageOverlay {
           Label #PlayersHint {
             Anchor: (Bottom: 8);
             Style: (...$C.@DefaultLabelStyle, Wrap: true);
-            Text: %server.aetherhaven.ui.plotmanagement.playersHint;
+            Text: "";
           }
 
           Group #MemberRows {
@@ -222,18 +222,18 @@ $C.@PageOverlay {
           }
 
           Label #InviteLabel {
-            Text: %server.aetherhaven.ui.plotmanagement.inviteLabel;
+            Text: "";
             Anchor: (Top: 12, Bottom: 6);
             Style: (...$C.@DefaultLabelStyle, RenderBold: true);
           }
 
           $C.@TextField #InvitePlayerInput {
             Anchor: (Top: 4, Height: 44, Left: 0, Right: 0);
-            PlaceholderText: %server.aetherhaven.ui.plotmanagement.invitePlaceholder;
+            PlaceholderText: "";
           }
 
           $C.@TextButton #InviteSendButton {
-            Text: %server.aetherhaven.ui.plotmanagement.inviteSend;
+            Text: "";
             Anchor: (Top: 14);
           }
         }
@@ -254,7 +254,7 @@ $C.@PageOverlay {
         Label #MoveBuildingModalTitle {
           Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
           Padding: (Horizontal: 12);
-          Text: %server.aetherhaven.ui.plotconstruction.moveBuildingModalTitle;
+          Text: "";
         }
       }
 
@@ -265,20 +265,20 @@ $C.@PageOverlay {
         Label #MoveBuildingModalText {
           Anchor: (Bottom: 16);
           Style: (...$C.@DefaultLabelStyle, Wrap: true);
-          Text: %server.aetherhaven.ui.plotconstruction.moveBuildingModalBody;
+          Text: "";
         }
 
         Group {
           LayoutMode: Left;
 
           $C.@TextButton #MoveBuildingConfirmButton {
-            Text: %server.aetherhaven.ui.plotconstruction.moveBuildingModalConfirm;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Right: 8);
           }
 
           $C.@CancelTextButton #MoveBuildingCancelButton {
-            Text: %server.aetherhaven.ui.plotconstruction.moveBuildingModalCancel;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Left: 8);
           }

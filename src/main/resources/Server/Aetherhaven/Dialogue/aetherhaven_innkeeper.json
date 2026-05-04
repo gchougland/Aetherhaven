@@ -1,17 +1,18 @@
 {
   "id": "aetherhaven_inn_welcome",
-  "entry": "root",
+  "entry": "main_hub",
   "nodes": {
-    "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.body",
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.main_hub.fallback",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c0",
           "next": "inn_explain_pool"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.visitors_where",
           "condition": {
             "type": "and",
             "conditions": [
@@ -30,7 +31,7 @@
           "next": "visitors_where_reply"
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.offer",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
             "conditions": [
@@ -50,7 +51,7 @@
           "next": "gift_confirm"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
@@ -86,7 +87,7 @@
           "next": "corin_house_offer"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -109,7 +110,7 @@
           "next": "corin_house_finish"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
@@ -129,37 +130,37 @@
           "next": "corin_house_remind"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.c4",
           "next": null
         }
       ]
     },
     "inn_explain_pool": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.inn_explain_pool.c0",
           "next": null
         }
       ]
     },
     "visitors_where_reply": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0",
-          "next": "root"
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.visitors_where_reply.c0",
+          "next": "main_hub"
         }
       ]
     },
     "corin_house_offer": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -169,44 +170,44 @@
           "next": "corin_house_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_offer.c1",
           "next": null
         }
       ]
     },
     "corin_house_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_accepted.c0",
           "next": null
         }
       ]
     },
     "corin_house_remind": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_remind.c0",
           "next": null
         }
       ]
     },
     "corin_house_finish": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0",
+          "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.corin_house_finish.c0",
           "next": null
         }
       ]
     },
     "rep_reward_50": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker",
-      "text": "server.aetherhaven.reputation.reward.innkeeper.50",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.innkeeper.50",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -215,14 +216,14 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "rep_reward_75": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker",
-      "text": "server.aetherhaven.reputation.reward.innkeeper.75",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_75.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.innkeeper.75",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -231,14 +232,14 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "rep_reward_100": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker",
-      "text": "server.aetherhaven.reputation.reward.innkeeper.100",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.rep_reward_100.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.innkeeper.100",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -247,17 +248,17 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "gift_confirm": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
               "type": "gift_villager",
@@ -267,51 +268,51 @@
               "reactionNodeDislike": "gift_dislike"
             }
           ],
-          "next": "root"
+          "next": "main_hub"
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmNo",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
         }
       ]
     },
     "gift_love": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.love",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_like": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.like",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_neutral": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.neutral",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_dislike": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike",
+      "speaker": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.root.speaker",
+      "text": "aetherhaven_dialogue_inn_welcome.aetherhaven.dialogue.aetherhaven_inn_welcome.gift.dislike",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     }

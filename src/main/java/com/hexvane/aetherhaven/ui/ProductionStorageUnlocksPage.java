@@ -96,6 +96,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             commandBuilder.append("Aetherhaven/ProductionStorageUnlocks.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyProductionStorageUnlocks(commandBuilder);
         commandBuilder.set(ERR_MSG + ".Visible", false);
         commandBuilder.set(DETAIL_PANEL + ".Visible", false);
         eventBuilder.addEventBinding(
@@ -111,7 +112,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || uc == null || pr == null) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.plugin"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plugin"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -119,7 +120,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         TownRecord town = tm.getTown(townId);
         if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.permission"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.permission"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -129,7 +130,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.plot"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -137,7 +138,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         ProductionCatalog.Entry base = plugin.getProductionCatalog().get(constructionId);
         if (base == null || base.catalogSize() <= 0) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.catalog"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.catalog"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -153,7 +154,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             );
         if (effective == null || effective.catalogSize() <= 0) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.production.err.catalog"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.catalog"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -163,7 +164,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
         if (inv == null) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.productionUnlocks.err.inventory"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.err.inventory"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -173,7 +174,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         commandBuilder.clear(ROWS);
         if (lines.isEmpty()) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
-            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("server.aetherhaven.ui.productionUnlocks.err.empty"));
+            commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.err.empty"));
             return;
         }
 
@@ -228,13 +229,13 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         commandBuilder.set(DETAIL_PANEL + ".Visible", true);
         if (detailFocusItemId == null || detailFocusItemId.isBlank()) {
             commandBuilder.set(DETAIL_NAME + ".TextSpans", Message.raw(""));
-            commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.translation("server.aetherhaven.ui.productionUnlocks.detailHint"));
+            commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.detailHint"));
             return;
         }
         WorkplaceUnlockCatalog.UnlockLine line = ucat.findLine(constructionId, detailFocusItemId);
         if (line == null) {
             commandBuilder.set(DETAIL_NAME + ".TextSpans", Message.raw(""));
-            commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.translation("server.aetherhaven.ui.productionUnlocks.detailHint"));
+            commandBuilder.set(DETAIL_BODY + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.detailHint"));
             return;
         }
         commandBuilder.set(DETAIL_NAME + ".TextSpans", itemLineDisplayName(line));
@@ -280,13 +281,13 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         boolean allowTreasuryGold
     ) {
         if (unlocked) {
-            return Message.translation("server.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
+            return Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.unlockedSub");
         }
         int need = line.resourceCost();
         int held = InventoryMaterials.count(inv, line.itemId());
         boolean itemOk = held >= need;
         Message body =
-            Message.translation("server.aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed")
+            Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed")
                 .param("held", String.valueOf(held))
                 .param("need", String.valueOf(need))
                 .color(itemOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
@@ -295,7 +296,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             long goldHeld = GoldCoinPayment.totalAvailable(town, inv, allowTreasuryGold);
             boolean goldOk = goldHeld >= goldNeed;
             Message goldLine =
-                Message.translation("server.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed")
                     .param("held", String.valueOf(goldHeld))
                     .param("need", String.valueOf(goldNeed))
                     .color(goldOk ? TOOLTIP_OK_COLOR : TOOLTIP_BAD_COLOR);
@@ -365,7 +366,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         if (InventoryMaterials.count(inv, itemId) < needRes) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.productionUnlocks.notify.needResource").param("need", needRes),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.needResource").param("need", needRes),
                 NotificationStyle.Warning
             );
             refresh(ref, store);
@@ -375,7 +376,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         if (goldCost > 0L && !GoldCoinPayment.canAfford(town, inv, goldCost, allowTreasuryGold)) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", goldCost),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.needGold").param("need", goldCost),
                 NotificationStyle.Warning
             );
             refresh(ref, store);
@@ -386,7 +387,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         if (!takeRes.succeeded()) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.productionUnlocks.notify.takeResourceFailed"),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.takeResourceFailed"),
                 NotificationStyle.Danger
             );
             refresh(ref, store);
@@ -396,7 +397,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             player.giveItem(new ItemStack(itemId, needRes), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.productionUnlocks.notify.payGoldFailed"),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.payGoldFailed"),
                 NotificationStyle.Danger
             );
             refresh(ref, store);
@@ -412,7 +413,7 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
                 : Message.raw(itemId);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.ui.productionUnlocks.notify.unlocked").param("item", unlockedLabel),
+            Message.translation("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.notify.unlocked").param("item", unlockedLabel),
             NotificationStyle.Success
         );
         refresh(ref, store);

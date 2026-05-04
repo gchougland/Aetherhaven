@@ -47,6 +47,13 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /** True when the player may accept new town quests (member permissions), aligned with {@code start_quest}. */
+    default boolean aetherhavenPlayerCanAcceptQuests(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        return false;
+    }
+
     /** True if an NPC with this role id is currently listed in the town's inn visitor pool (loaded entity only). */
     default boolean innPoolHasNpcRole(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String npcRoleId

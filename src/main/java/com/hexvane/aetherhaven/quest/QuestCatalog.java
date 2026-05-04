@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -204,21 +205,32 @@ public final class QuestCatalog {
     }
 
     /**
-     * @return quest id whose {@code assignNpcRoleId} matches, or null
+     * Quest ids whose {@code assignNpcRoleId} matches {@code npcRoleId}, sorted lexicographically for stable ordering.
+     */
+    @Nonnull
+    public List<String> listQuestIdsAssignedToRole(@Nonnull String npcRoleId) {
+        String r = npcRoleId.trim();
+        if (r.isEmpty()) {
+            return List.of();
+        }
+        List<String> out = new ArrayList<>();
+        for (Map.Entry<String, QuestDefinition> e : byId.entrySet()) {
+            String a = e.getValue().assignNpcRoleId();
+            if (a != null && r.equals(a)) {
+                out.add(e.getKey());
+            }
+        }
+        Collections.sort(out);
+        return out;
+    }
+
+    /**
+     * @return first quest id whose {@code assignNpcRoleId} matches catalog order, or null
      */
     @Nullable
     public String findQuestIdByAssignNpcRole(@Nonnull String npcRoleId) {
-        String r = npcRoleId.trim();
-        if (r.isEmpty()) {
-            return null;
-        }
-        for (QuestDefinition def : byId.values()) {
-            String a = def.assignNpcRoleId();
-            if (a != null && r.equals(a)) {
-                return def.idOrEmpty();
-            }
-        }
-        return null;
+        List<String> list = listQuestIdsAssignedToRole(npcRoleId);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     /** First reputation reward with {@code grantTo} {@code quest_beneficiary_npc}, if any. */

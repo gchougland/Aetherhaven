@@ -66,6 +66,7 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
             commandBuilder.append("Aetherhaven/JewelryAppraisal.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyJewelryAppraisal(commandBuilder);
         commandBuilder.set("#DetailPick.Visible", true);
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
@@ -75,17 +76,17 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         if (chargeGold) {
             commandBuilder.set(
                 "#Hint.TextSpans",
-                Message.translation("server.aetherhaven.ui.jewelryAppraisal.hintPaid")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintPaid")
                     .param("cost", AetherhavenConstants.JEWELRY_APPRAISAL_GOLD_COST)
             );
         } else {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.hintFree"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.hintFree"));
         }
 
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
         commandBuilder.clear(ROWS);
         if (inv == null) {
-            commandBuilder.set("#DetailPick.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.empty"));
+            commandBuilder.set("#DetailPick.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.empty"));
             commandBuilder.set("#DetailRarity.Visible", false);
             commandBuilder.set("#DetailTraits.Visible", false);
             commandBuilder.set("#Appraise.Disabled", true);
@@ -104,7 +105,7 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         }
 
         if (slots.isEmpty()) {
-            commandBuilder.set("#DetailPick.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.empty"));
+            commandBuilder.set("#DetailPick.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.empty"));
             commandBuilder.set("#DetailRarity.Visible", false);
             commandBuilder.set("#DetailTraits.Visible", false);
             commandBuilder.set("#Appraise.Disabled", true);
@@ -132,14 +133,14 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
                     : Message.raw(stack.getItemId());
             Message statusMsg =
                 JewelryMetadata.isAppraised(stack)
-                    ? Message.translation("server.aetherhaven.ui.jewelryAppraisal.statusAppraised")
-                    : Message.translation("server.aetherhaven.ui.jewelryAppraisal.statusUnidentified");
+                    ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.statusAppraised")
+                    : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.statusUnidentified");
             ItemStack forRow = JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(stack));
             commandBuilder.set(
                 row + " #Icon.Slots", new ItemGridSlot[] {new ItemGridSlot(forRow)});
             commandBuilder.set(
                 row + " #Line.TextSpans",
-                Message.translation("server.aetherhaven.ui.jewelryAppraisal.row").param("itemName", itemName).param("status", statusMsg)
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.row").param("itemName", itemName).param("status", statusMsg)
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -150,7 +151,7 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         }
 
         if (selectedSlot < 0) {
-            commandBuilder.set("#DetailPick.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.pick"));
+            commandBuilder.set("#DetailPick.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.pick"));
             commandBuilder.set("#DetailRarity.Visible", false);
             commandBuilder.set("#DetailTraits.Visible", false);
             commandBuilder.set("#Appraise.Disabled", true);
@@ -160,7 +161,7 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         ItemStack cur = inv.getItemStack(selectedSlot);
         if (ItemStack.isEmpty(cur) || !JewelryItemIds.isJewelry(cur.getItemId())) {
             selectedSlot = -1;
-            commandBuilder.set("#DetailPick.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.pick"));
+            commandBuilder.set("#DetailPick.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.pick"));
             commandBuilder.set("#DetailRarity.Visible", false);
             commandBuilder.set("#DetailTraits.Visible", false);
             commandBuilder.set("#Appraise.Disabled", true);
@@ -174,13 +175,13 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
                 : Message.raw(cur.getItemId());
         commandBuilder.set(
             "#DetailPick.TextSpans",
-            Message.translation("server.aetherhaven.ui.jewelryAppraisal.selectedHeader").param("itemName", selName)
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.selectedHeader").param("itemName", selName)
         );
 
         boolean appraised = JewelryMetadata.isAppraised(cur);
         if (!appraised) {
             commandBuilder.set("#DetailRarity.Visible", true);
-            commandBuilder.set("#DetailRarity.TextSpans", Message.translation("server.aetherhaven.ui.jewelryAppraisal.unidentified"));
+            commandBuilder.set("#DetailRarity.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.unidentified"));
             commandBuilder.set("#DetailTraits.Visible", false);
             commandBuilder.set("#Appraise.Disabled", false);
             eventBuilder.addEventBinding(
@@ -198,13 +199,13 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         commandBuilder.set("#DetailRarity.Visible", true);
         commandBuilder.set(
             "#DetailRarity.TextSpans",
-            Message.translation("server.aetherhaven.ui.jewelryAppraisal.rarityLine").param("rarity", Message.translation("server.aetherhaven.jewelry.rarity." + rarityKey))
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.rarityLine").param("rarity", Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.rarity." + rarityKey))
         );
         Message traitsMsg = null;
         for (JewelryMetadata.RolledTrait rt : JewelryMetadata.readTraits(rolledView)) {
             Message line =
-                Message.translation("server.aetherhaven.jewelry.traitLine")
-                    .param("stat", Message.translation("server.aetherhaven.jewelry.stat." + rt.statId()))
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.traitLine")
+                    .param("stat", Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.stat." + rt.statId()))
                     .param("amount", (double) rt.amount());
             traitsMsg = traitsMsg == null ? line : traitsMsg.insert(Message.raw("\n")).insert(line);
         }
@@ -284,7 +285,7 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.jewelryAppraisal.insufficientGold"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.insufficientGold"),
                 NotificationStyle.Danger
             );
             refresh(ref, store);
@@ -325,9 +326,10 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
         }
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.ui.jewelryAppraisal.done"),
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.done"),
             NotificationStyle.Success
         );
+        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_ARCANE_WORKBENCH_CRAFT);
         selectedSlot = slot;
         refresh(ref, store);
     }

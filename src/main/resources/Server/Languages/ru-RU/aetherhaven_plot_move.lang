@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Размещение сюжета
+aetherhaven.ui.plotplacement.summary=Место: {building}
+aetherhaven.ui.plotplacement.positionSection=Положение и вращение
+aetherhaven.ui.plotplacement.tipsSection=Советы
+aetherhaven.ui.plotplacement.heightSection=Высота и вращение
+aetherhaven.ui.plotplacement.detailsBlock=Укажите обозначения {sx}, {sy}, {sz} · Начало координат заготовки {ox}, {oy}, {oz}\nШаг {step} из 4 (по 90° каждый)
+aetherhaven.ui.plotplacement.tipsControls=Нажатие клавиши Escape закрывает только эту панель. Нажатие клавиши Cancel очищает предварительный просмотр. Щелчок правой кнопкой мыши по пустому пространству открывает панель снова; щелчок правой кнопкой мыши по блоку не перемещает активный предварительный просмотр.
+aetherhaven.ui.plotplacement.plotType=Здание
+aetherhaven.ui.plotplacement.moveLabel=Отрегулируйте положение
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Поверните на 90° (лицом к велосипеду).
+aetherhaven.ui.plotplacement.place=Разместите табличку с указанием участка.
+aetherhaven.ui.plotplacement.placeMove=Переместить здание
+aetherhaven.ui.plotplacement.moveWarningText=Переезд разрушает и заново отстраивает старое здание. В первую очередь, удалите ценные вещи, домашних животных и незакрепленные предметы из-под фундамента здания. Городские NPC, связанные с этим городом, находятся под защитой.
+aetherhaven.ui.plotplacement.moveConfirm=Подтверждать
+aetherhaven.ui.plotplacement.moveBack=Возвращаться
+aetherhaven.ui.plotplacement.cancel=Отменить предварительный просмотр
+aetherhaven.ui.plotplacement.cameraSection=Камера
+aetherhaven.ui.plotplacement.cameraHint=Кадры с высоты птичьего полета отображаются один раз при включении (над окном предварительного просмотра), а затем остаются на месте, пока вы перемещаете сюжет.
+aetherhaven.ui.plotplacement.birdsEye=Вид с высоты птичьего полета
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Вид сверху: начальная точка прицеливания — центр предварительного просмотра. Снимите флажок, чтобы вернуться к виду от первого лица. Используйте функцию «Панорамирование» для перемещения по экрану.
+aetherhaven.ui.plotplacement.viewDistance=Расстояние
+aetherhaven.ui.plotplacement.zoomOutTooltip=Более дальний план (общий обзор сюжета)
+aetherhaven.ui.plotplacement.zoomInTooltip=Более крупный план (меньший общий вид, больше деталей)
+aetherhaven.ui.plotplacement.panLabel=Панорамная камера
+aetherhaven.ui.plotplacement.panXmTooltip=Сдвинуть изображение на один шаг в сторону -X
+aetherhaven.ui.plotplacement.panXpTooltip=Сдвиньте ракурс на один шаг в сторону +X
+aetherhaven.ui.plotplacement.panZmTooltip=Сдвинуть изображение на один шаг в сторону -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Сдвиньте изображение на один шаг в сторону +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=Вид сверху: запад (-X). Вид от первого лица: движение влево (относительно обзора).
+aetherhaven.ui.plotplacement.moveXpTooltip=Вид сверху: на восток (+X). Вид от первого лица: движение вправо (относительно обзора).
+aetherhaven.ui.plotplacement.moveZmTooltip=Вид сверху: север (-Z). Вид от первого лица: движение вперед (относительно поля зрения).
+aetherhaven.ui.plotplacement.moveZpTooltip=Вид сверху: на юг (+Z). Вид от первого лица: отступить назад (относительно поля зрения).
+aetherhaven.ui.plotplacement.moveYmTooltip=Сдвиньте один квартал вниз
+aetherhaven.ui.plotplacement.moveYpTooltip=Поднимите один квартал вверх
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Перевезти чартер
+aetherhaven.ui.charterrelocation.summary=Пересмотр устава города
+aetherhaven.ui.charterrelocation.details=Целевой блок {sx}, {sy}, {sz} · Шаг {step} из 4 (90°)
+aetherhaven.ui.charterrelocation.tips=Территория — это квадрат из нескольких частей, окружающих карту; все здания должны оставаться внутри после подтверждения. Переместите призрака на новое место, а затем разместите его.
+aetherhaven.ui.charterrelocation.info=Территория — это квадрат из блоков вокруг устава. Все ваши здания должны оставаться внутри этой области после перемещения. Переместите блок-призрак на новую позицию в уставе, затем подтвердите.
+aetherhaven.ui.charterrelocation.place=Хартия места

@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=私はライレンです。私たちの町は、入植時に署名した憲章に基づいて運営されています。区画を増やす前に、エーテルヘイブン周辺を歩いて回ってほしいのです。建設に適した平坦な場所、水源、そして後々畑や共有地を作れそうな場所などを把握してください。大げさなことは何も必要ありません。ただ辺りを見て回るだけでいいのです。それが終わったら、戻ってきて私に報告してください。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=周辺を偵察して、また報告します。
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=エルダー・ライレン
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=散歩から戻ったら、何を見たか教えてください。まだ戻っていない場合は、準備ができたら教えてください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=これ以上踏み込む前に、あなたの足元で何を見たのか教えてください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=今日はチャーター便を運行しました。不明な点があればお気軽にお尋ねください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=意見よりも、現場レポートの方が重要だ。具体的な事実を教えてほしい。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=もしその土地がおかしいと思ったら、はっきり言ってください。私は正直な目を恥じるようなことはしません。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=水はドラマよりも重要だ。それがどこにあるのか教えてくれ。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=平らな地面は時に嘘をつくものだ。どこで騙されたのか教えてくれ。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=良質な土壌を見つけたら、農家の視点で描写してください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=急な斜面を見かけたら、詩的な表現を使わずに、その傾斜の度合いを言葉で言いましょう。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=頭の中に明確な地図を描いてもらう時間があります。それを言葉で表現してください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=北、南、泥、石を正しい順序で言えるようになったら、また来てください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=実際のランドマークがびっしりと書き込まれたノートのページは、スピーチよりもずっと価値がある。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=地図の話をしている間に簡単な食事を持ってきてくれたら、それは親切心だと受け取ります。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=きれいなチョークとまっすぐな定規は、あなたが本気で取り組んでいることを示している。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=私は、見せびらかすようなものではなく、読書に役立つような小さな贈り物が好きです。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=水筒と乾いたビスケットはつまらない贈り物だけど、スカウト活動の日にはそういうのが一番いいと思う。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=まるで自分が歩いた証拠であるかのように、古い骨から作ったトロフィーを持ってこないでください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=私は、街のゴミを研究対象として提示されることを望みません。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=腐敗臭がするなら、それは地図の付属品ではありません。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=いたずらグッズや騒音の出るおもちゃは、チャーターテーブルから遠ざけてください。
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=水道管の話をする際に、キラキラしたガラクタは不要だ。

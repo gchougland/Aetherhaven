@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Journal de quête
+aetherhaven.ui.questjournal.hint=Sélectionnez une quête pour plus de détails.
+aetherhaven.ui.questjournal.abandon=Abandonner
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Détails de la quête
+aetherhaven.ui.questjournal.detailPlaceholderBody=Choisissez une quête ci-dessus.
+
+items.Aetherhaven_Management_Block.name=Rayon des archives municipales
+items.Aetherhaven_Management_Block.description=Rayon du commis pour un bâtiment achevé. Permet de consulter l'état des travaux de sa parcelle.
+
+items.Aetherhaven_Sprinkler_Iron.name=Arroseur en fer
+items.Aetherhaven_Sprinkler_Iron.description=Arrose le sol situé un bloc plus bas dans une zone de 3×3. S'exécute une fois par matinée (en jeu). Zone de couverture minimale.
+items.Aetherhaven_Sprinkler_Thorium.name=Arroseur au thorium
+items.Aetherhaven_Sprinkler_Thorium.description=L'eau laboure le sol un bloc plus bas dans une zone de 5×5. Une fois par matin (en jeu). Plus grande que le fer.
+items.Aetherhaven_Sprinkler_Cobalt.name=Arroseur au cobalt
+items.Aetherhaven_Sprinkler_Cobalt.description=L'eau a labouré le sol un bloc plus bas dans une zone de 7×7. Une fois par matinée (en jeu). Large zone de couverture.
+items.Aetherhaven_Sprinkler_Adamantite.name=Arroseur en adamantite
+items.Aetherhaven_Sprinkler_Adamantite.description=L'eau a labouré le sol un bloc plus bas dans une zone de 9×9. Une fois par matinée (en jeu). Couverture maximale.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Lyren aîné
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Veine de pierre de Gorruk
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+
+items.Aetherhaven_Production_Storage.name=Magasins de bureau
+items.Aetherhaven_Production_Storage.description=Contient les objets apportés par vos ouvriers. Permet de définir les quantités et de prendre des piles. Fait partie intégrante du bâtiment et ne peut pas être ramassé.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=jeton de parcelle de cabane de mineur
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Emplacements indiqués pour la construction de la cabane de mineur préfabriquée. À fabriquer au bureau d'urbanisme.
+items.Aetherhaven_Plot_Token_Lumbermill.name=jeton de parcelle de scierie
+items.Aetherhaven_Plot_Token_Lumbermill.description=Repères indiquant l'emplacement possible pour la scierie préfabriquée. À préciser au service d'urbanisme.
+items.Aetherhaven_Plot_Token_Barn.name=jeton de parcelle de grange
+items.Aetherhaven_Plot_Token_Barn.description=Repères indiquant l'emplacement possible pour la grange préfabriquée. À consulter au service d'urbanisme.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=jeton de parcelle d'autel de Gaïa
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Emplacements indiqués pour l'autel préfabriqué de Gaïa. À fabriquer au bureau d'urbanisme.
+
+items.Aetherhaven_Statue_of_Gaia.name=Statue de Gaïa
+items.Aetherhaven_Statue_of_Gaia.description=Une image bénie pour l'autel. Les habitants de la ville pourront peut-être ramener à la vie les résidents disparus grâce à leur essence vitale.

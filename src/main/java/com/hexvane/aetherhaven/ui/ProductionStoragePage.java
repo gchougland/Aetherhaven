@@ -41,7 +41,8 @@ import javax.annotation.Nullable;
 
 /** Withdraw items from per plot workplace production storage (wardrobe block). */
 public final class ProductionStoragePage extends InteractiveCustomUIPage<ProductionStoragePage.PageData> {
-    private static final long LIVE_REFRESH_INTERVAL_MS = 350L;
+    /** Live refresh for progress/time; keep ≥1s so Custom UI updates do not saturate the client ACK queue and block clicks. */
+    private static final long LIVE_REFRESH_INTERVAL_MS = 1000L;
 
     private final UUID townId;
     private final UUID plotId;
@@ -80,6 +81,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             commandBuilder.append("Aetherhaven/ProductionStorage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyProductionStorage(commandBuilder);
         commandBuilder.set("#ErrMsg.Visible", false);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
@@ -87,14 +89,14 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || uc == null || pr == null) {
             commandBuilder.set("#ErrMsg.Visible", true);
-            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.plugin"));
+            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plugin"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
         if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             commandBuilder.set("#ErrMsg.Visible", true);
-            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.permission"));
+            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.permission"));
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
@@ -103,7 +105,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set("#ErrMsg.Visible", true);
-            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.plot"));
+            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
             return;
         }
         PlotProductionState state = town.getOrCreatePlotProduction(plotId);
@@ -118,7 +120,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             );
         if (entry == null || entry.catalogSize() <= 0) {
             commandBuilder.set("#ErrMsg.Visible", true);
-            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("server.aetherhaven.ui.production.err.catalog"));
+            commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.catalog"));
             return;
         }
 
@@ -134,18 +136,8 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
         for (int col = 0; col < 3; col++) {
             String p = "#Slot" + col;
             String c = String.valueOf(col);
-            String iconGrid =
-                "#Slot"
-                    + c
-                    + " #Slot"
-                    + c
-                    + "NavRow #Slot"
-                    + c
-                    + "IconBox #Slot"
-                    + c
-                    + "IconSlot #Slot"
-                    + c
-                    + "Icon";
+            // ItemGrid id is #Slot{N}Icon — use a single-id path (vanilla uses #ItemMaterialSlot.Slots); deep chains can fail client resolution.
+            String iconGrid = "#Slot" + c + "Icon";
             int cursor = state.getSlotCursor(col);
             String itemId = entry.itemAtCursor(cursor);
             long cap = AetherhavenConstants.PRODUCTION_STORAGE_PER_ITEM_MAX;
@@ -172,7 +164,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
                 commandBuilder.set(p + "Prog.Value", progress);
                 commandBuilder.set(
                     p + "Time.TextSpans",
-                    Message.translation("server.aetherhaven.ui.production.genInterval")
+                    Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.genInterval")
                         .param("time", ProductionCatalog.Entry.formatSecondsForTicks(ticks))
                 );
             }
@@ -353,7 +345,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             state.addAmount(itemId, take, entry.maxStorageForItem(itemId));
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.production.err.inventoryFull"),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"),
                 NotificationStyle.Warning
             );
             refresh(ref, store);

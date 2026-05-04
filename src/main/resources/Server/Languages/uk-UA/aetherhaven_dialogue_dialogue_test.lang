@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Лабораторія умов. Ви не повинні бачити прихованого вибору. Ви повинні бачити сірий вибір. Використовуйте складені ворота, щоб продовжити.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Цей вибір прихований (буквально хибний).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Це має бути сірим.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(потрібне буквальне значення true)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Прохідна складова: НЕ хибна ТА істина
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=АБО гілка (істина АБО хибність)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Дякую за тестування. До побачення!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Бувай!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Виберіть нижче, щоб перейти до прощання, використовуючи дію goto замість дії next.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=прощавай
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Дія входу в вузол щойно дала вам одну грубу лопату (якщо у вас було місце в інвентарі). Виберіть опцію нижче, щоб отримати більше предметів.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Дай мені 3 одиниці бруду, а потім продовжуй.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Ласкаво просимо до діалогового спорядження Aetherhaven. Цей рядок навмисно довгий, щоб ви могли перевірити макет і прокручування. Ваші варіанти розміщені під основним текстом.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Продовжуйте до лабораторії умов.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Залишити (закінчити наступним нулем).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Вийти (явна дія закриття).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Ви можете відкрити інтерфейс торгового бартеру Kweebec або перейти до дій-заглушок.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Відкритий бартерний магазин Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Пропустити магазин, перейти до заглушок
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villageman
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Дії-заглушки: розблокування досягнення та початок квесту повинні реєструватися, доки ці системи не з'являться.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Виконайте unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villageman

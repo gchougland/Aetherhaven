@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
@@ -26,7 +25,6 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
-import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -100,7 +98,7 @@ public final class PlotAssemblyService {
     }
 
     /**
-     * Starts assembly on the world thread: paste begin, prep footprint, break plot sign, persist ASSEMBLING, register job, preview.
+     * Starts assembly on the world thread: paste begin, prep footprint, break plot sign, persist ASSEMBLING, register job.
      * Caller must have consumed materials/treasury already.
      */
     public static void startFromBuildClick(
@@ -164,7 +162,6 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblyWorldRegistry.put(world, plotId, job);
-        refreshPreviewBlock(world, job, 0);
     }
 
     private static boolean tryRegisterJob(
@@ -206,7 +203,6 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblyWorldRegistry.put(world, plot.getPlotId(), job);
-        refreshPreviewBlock(world, job, 0);
         return true;
     }
 
@@ -337,7 +333,6 @@ public final class PlotAssemblyService {
         if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(placementIndex))) {
             return false;
         }
-        clearPreviewAtIndex(world, job.anchor(), pending, placementIndex);
         LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap);
@@ -351,7 +346,6 @@ public final class PlotAssemblyService {
             }
             return true;
         }
-        refreshPreviewBlock(world, job, placementIndex);
         return true;
     }
 
@@ -410,12 +404,6 @@ public final class PlotAssemblyService {
         int bz = origin.z + pb.z();
         return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz)) != null;
     }
-
-    /**
-     * Next assembly cell is shown only via client {@code DisplayDebug} (see {@link PlotAssemblyPreviewSystem}), not
-     * world blocks.
-     */
-    private static void refreshPreviewBlock(@Nonnull World world, @Nonnull PlotAssemblyJob job, int index) {}
 
     /** Appends world-space integer cells for every frontier placement (for previews / ray tests). */
     public static void appendFrontierWorldCells(
@@ -525,30 +513,6 @@ public final class PlotAssemblyService {
         int by = anchor.y + pb.y();
         int bz = anchor.z + pb.z();
         return Math.max(Math.max(Math.abs(bx - cx), Math.abs(by - cy)), Math.abs(bz - cz));
-    }
-
-    private static void clearPreviewAtIndex(
-        @Nonnull World world,
-        @Nonnull Vector3i origin,
-        @Nonnull List<PendingBlock> pending,
-        int index
-    ) {
-        if (index < 0 || index >= pending.size()) {
-            return;
-        }
-        PendingBlock pb = pending.get(index);
-        int bx = origin.x + pb.x();
-        int by = origin.y + pb.y();
-        int bz = origin.z + pb.z();
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(bx, bz));
-        if (chunk == null) {
-            return;
-        }
-        int blockId = chunk.getBlock(bx, by, bz);
-        BlockType bt = BlockType.getAssetMap().getAsset(blockId);
-        if (bt != null && AetherhavenConstants.CONSTRUCTION_PREVIEW_BLOCK_TYPE_ID.equals(bt.getId())) {
-            chunk.breakBlock(bx, by, bz, ConstructionPasteOps.SET_BLOCK_SETTINGS_CLEAR);
-        }
     }
 
     @Nullable

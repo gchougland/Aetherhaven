@@ -57,16 +57,17 @@ public final class AetherhavenRoleLabels {
     }
 
     /**
-     * Translation key (with {@code server.} prefix) for a villager’s job label, e.g. Blacksmith, Elder. Prefer
+     * Translation key (bundle-prefixed, e.g. {@code aetherhaven_jewelry_geode.aetherhaven.profession.kind.miner})
+     * for a villager’s job label, e.g. Blacksmith, Elder. Prefer
      * {@code bindingKind} for residents so inn visitors are not conflated with a permanent job plot.
      */
     @Nonnull
     public static String professionTranslationKey(@Nonnull String roleId, @Nonnull String kind) {
         String k = kind != null ? kind.trim() : "";
         if (!k.isEmpty() && !TownVillagerBinding.isVisitorKind(k)) {
-            return "server.aetherhaven.profession.kind." + k;
+            return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + k;
         }
-        return "server.aetherhaven.profession.kind." + professionKindSlugFromRoleId(roleId.trim());
+        return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + professionKindSlugFromRoleId(roleId.trim());
     }
 
     /**

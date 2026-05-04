@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Ubicación de la parcela
+aetherhaven.ui.plotplacement.summary=Ubicación: {building}
+aetherhaven.ui.plotplacement.positionSection=Posición y rotación
+aetherhaven.ui.plotplacement.tipsSection=Consejos
+aetherhaven.ui.plotplacement.heightSection=Altura y rotación
+aetherhaven.ui.plotplacement.detailsBlock=Trazar signo {sx}, {sy}, {sz} · Origen prefabricado {ox}, {oy}, {oz}\nPaso {step} de 4 (90° cada uno)
+aetherhaven.ui.plotplacement.tipsControls=Escape cierra solo este panel. Cancelar borra la vista previa. Hacer clic con el botón derecho en el aire lo vuelve a abrir; hacer clic con el botón derecho en un bloque no mueve la vista previa activa.
+aetherhaven.ui.plotplacement.plotType=Edificio
+aetherhaven.ui.plotplacement.moveLabel=Ajustar posición
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Girar 90° (orientación del ciclo)
+aetherhaven.ui.plotplacement.place=Coloque el letrero de la parcela
+aetherhaven.ui.plotplacement.placeMove=Trasladar el edificio
+aetherhaven.ui.plotplacement.moveWarningText=Al mudarse, se destruye y reconstruye el sitio anterior. Primero, retire los objetos de valor, las mascotas y los objetos sueltos del área que ocupa el edificio. Los PNJ del pueblo vinculados a este están protegidos.
+aetherhaven.ui.plotplacement.moveConfirm=Confirmar
+aetherhaven.ui.plotplacement.moveBack=Volver
+aetherhaven.ui.plotplacement.cancel=Cancelar vista previa
+aetherhaven.ui.plotplacement.cameraSection=Cámara
+aetherhaven.ui.plotplacement.cameraHint=La vista de pájaro aparece una vez al activarla (encima de la vista previa) y luego permanece fija mientras mueves el gráfico.
+aetherhaven.ui.plotplacement.birdsEye=Vista de pájaro
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Vista cenital: el punto de vista inicial es el centro de la vista previa. Desactive esta opción para volver a la vista en primera persona. Use la función de desplazamiento para mover la vista.
+aetherhaven.ui.plotplacement.viewDistance=Distancia
+aetherhaven.ui.plotplacement.zoomOutTooltip=Cámara más lejana (vista general más amplia de la trama)
+aetherhaven.ui.plotplacement.zoomInTooltip=Cámara más cercana (vista general más pequeña, más detalles)
+aetherhaven.ui.plotplacement.panLabel=Cámara panorámica
+aetherhaven.ui.plotplacement.panXmTooltip=Desplazar la vista un paso hacia -X
+aetherhaven.ui.plotplacement.panXpTooltip=Desplazar la vista un paso hacia +X
+aetherhaven.ui.plotplacement.panZmTooltip=Desplazar la vista un paso hacia -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Desplazar la vista un paso hacia +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=Vista de pájaro: oeste (-X). Primera persona: desplazamiento lateral a la izquierda (en relación con la vista).
+aetherhaven.ui.plotplacement.moveXpTooltip=Vista aérea: este (+X). Vista en primera persona: desplácese lateralmente a la derecha (en relación con la vista).
+aetherhaven.ui.plotplacement.moveZmTooltip=Vista de pájaro: norte (-Z). Primera persona: avanzar (en relación con el punto de vista).
+aetherhaven.ui.plotplacement.moveZpTooltip=Vista de pájaro: sur (+Z). Primera persona: retroceder (en relación con la vista).
+aetherhaven.ui.plotplacement.moveYmTooltip=Empuja una cuadra hacia abajo
+aetherhaven.ui.plotplacement.moveYpTooltip=Empuja una cuadra hacia arriba
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Traslado de fletamento
+aetherhaven.ui.charterrelocation.summary=Reposicionamiento de los estatutos municipales
+aetherhaven.ui.charterrelocation.details=Bloque objetivo {sx}, {sy}, {sz} · Paso {step} de 4 (90°)
+aetherhaven.ui.charterrelocation.tips=El territorio es un cuadrado formado por fragmentos alrededor del mapa; cada edificio debe permanecer dentro después de confirmarlo. Empuja al fantasma al nuevo lugar y luego colócalo.
+aetherhaven.ui.charterrelocation.info=El territorio es un cuadrado formado por fragmentos alrededor de la carta fundacional. Todos tus edificios deben permanecer dentro de esa área después del traslado. Mueve el bloque fantasma a la nueva posición de la carta fundacional y luego confirma.
+aetherhaven.ui.charterrelocation.place=Carta del lugar

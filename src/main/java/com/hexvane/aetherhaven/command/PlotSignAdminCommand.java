@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 
 public final class PlotSignAdminCommand extends AbstractPlayerCommand {
     public PlotSignAdminCommand() {
-        super("plot", "server.commands.aetherhaven.plot.desc");
+        super("plot", "aetherhaven_commands_root.commands.aetherhaven.plot.desc");
         this.addAliases("plotsign");
     }
 

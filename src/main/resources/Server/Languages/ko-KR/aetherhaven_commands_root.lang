@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=에테르헤이븐 모드 명령어
+commands.aetherhaven.reload.desc=디스크에서 config.json 및 Aetherhaven JSON 카탈로그를 다시 로드합니다(크리에이티브 모드).
+commands.aetherhaven.reload.success=Aetherhaven 설정 및 자산 카탈로그가 다시 로드되었습니다.
+commands.aetherhaven.reload.failure=새로고침 실패: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven 플러그인이 로드되지 않았습니다.
+commands.aetherhaven.plot.desc=부지 표지판 관리자 UI 열기 (건설 선택, 아이템 가져오기)
+commands.aetherhaven.starterkit.desc=에테르헤이븐 스타터 키트(부지 배치 담당 직원, 헌장, 도시 계획 데스크, 건설 담당 직원, 크리에이티브 모드)를 사용해 보세요.
+commands.aetherhaven.starterkit.success=스타터 키트가 인벤토리에 추가되었습니다.
+commands.aetherhaven.starterkit.partial=스타터 키트 일부 승인됨; {failed} 품목이 맞지 않아 재고 공간을 확보해야 합니다.
+
+commands.aetherhaven.exportskin.desc=아바타 스킨을 모델 JSON 형식으로 내보내세요 (상위: 플레이어).
+commands.aetherhaven.exportskin.other.desc=다른 플레이어의 아바타 스킨을 모델 JSON 형식으로 내보내기
+commands.aetherhaven.exportskin.arg.path=출력 파일 경로(선택 사항, 기본값: 플러그인 데이터/아바타 내보내기/)
+commands.aetherhaven.exportskin.noSkin=이 플레이어에게는 사용할 수 있는 캐릭터 스킨이 없습니다.
+commands.aetherhaven.exportskin.invalidSkin=스킨 유효성 검사 실패: {detail}
+commands.aetherhaven.exportskin.resolveError=스킨과 모델 첨부 파일을 해결할 수 없습니다: {detail}
+commands.aetherhaven.exportskin.ioError={path} 쓰기 실패: {detail}
+commands.aetherhaven.exportskin.success=모델 JSON을 {path}에 작성했습니다.

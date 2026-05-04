@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=No POI within range of that block.
+aetherhaven.poi.noPoiSelected=No POI selected. Primary-click a POI first.
+aetherhaven.poi.selectedPoiGone=Selected POI no longer exists.
+aetherhaven.poi.moved=Moved POI to {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=No POI selected. Primary-click a POI block first.
+aetherhaven.poi.clearedInteractionTarget=Cleared interaction target; NPCs use the POI block center.
+aetherhaven.poi.setInteractionTarget=Set interaction target to {x}, {y}, {z}.
+aetherhaven.poi.selected=Selected POI {id} at {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=Target block must match expected type {type} for this POI.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Moving building…
+aetherhaven.plotSign.placed=Plot sign placed.
+aetherhaven.plotSign.couldNotAdd=Could not add plot sign (inventory full?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Place the founder monument inside your town territory.
+aetherhaven.founder.cannotPlace=You cannot place the founder monument here.
+aetherhaven.founder.createFailed=Could not create the founder statue. The block was placed; break it to try again.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Target is not an Aetherhaven town villager.
+aetherhaven.debug.autonomy.toggledOn=Autonomy debug ON (DisplayCustom + VisPath). AH overlay on nameplate.
+aetherhaven.debug.autonomy.toggledOff=Autonomy debug OFF for this villager.
+aetherhaven.debug.autonomy.state=Autonomy debug for this villager: {state}
+aetherhaven.debug.autonomy.cleared=Cleared Aetherhaven autonomy debug for this villager.
+aetherhaven.debug.on=ON
+aetherhaven.debug.off=OFF
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Reputation unchanged (already {value}).
+aetherhaven.debug.rep.set=Set reputation to {value} with crossed milestones queued for dialogue (if role resolved).
+aetherhaven.debug.rep.milestonesHeader=Reputation milestones (reward id, role, min rep, dialogue node):
+aetherhaven.debug.rep.milestoneLine=  {id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Granted reward {id}.
+aetherhaven.debug.rep.targetInvalid=Invalid villager.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Reset gift limits on {entries} player–villager row(s) across {towns} town(s) in this world.
+aetherhaven.debug.gift.unknownRole=Unknown villager role: {role}
+aetherhaven.debug.gift.noGiftLists=Role {role} has no giftLoves, giftLikes, or giftDislikes in villager data.
+aetherhaven.debug.gift.fillDone=Added {added} gift log line(s) for {role} (skipped when you already have a line for that item and reaction tier).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=which must be hunger, energy, or fun (values are 0..{max}).
+aetherhaven.debug.needs.elderNoTown=No town for you in this world (needed for Elder).
+aetherhaven.debug.needs.noElderUuid=Town has no saved elder UUID yet.
+aetherhaven.debug.needs.noMatch=No matching villager (try needs inspect for handle, Elder, or full uuid).
+aetherhaven.debug.needs.multipleMatch=Multiple NPCs matched that handle; use full uuid from inspect.
+aetherhaven.debug.needs.entityNotLoaded=Entity not loaded or has no VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Set {which}={value} on {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Villagers with needs (loaded chunks). Set with: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | hunger={hunger} energy={energy} fun={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(no handle)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Plots for town {id}:
+aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Aetherhaven towns in this world: {count}
+aetherhaven.towns.entry=  {name}  id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
+aetherhaven.debug.plots.line=  {plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=No assembling plots with an active job for your town (load chunks around builds, or start a build first).
+aetherhaven.debug.plots.finishassemblyDone=Instantly finished {count} in-progress plot build(s).
+aetherhaven.debug.plots.removeBadUuid=Invalid plot UUID. Use the id from /aetherhaven plots list.
+aetherhaven.debug.plots.removeNotFound=No plot {plotId} in your town.
+aetherhaven.debug.plots.removeDataFailed=World was cleared but removing the plot from town data failed (check logs).
+aetherhaven.debug.plots.removedPlot=Removed plot {plotId} from the town and cleared its footprint.
+aetherhaven.debug.poi.invalidTownUuid=Invalid town UUID: {raw}
+aetherhaven.debug.poi.noTownArg=You have no town in this world (use a town UUID argument).
+aetherhaven.debug.poi.listHeader=POIs for town {town} ({count}):
+aetherhaven.debug.poi.listEmpty=None registered for this town (complete a building or check pois.json).
+aetherhaven.debug.poi.listLine=  {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} cap={cap} plot={plot}
+aetherhaven.debug.poi.dumpHeader=All POIs in world registry ({count}):
+aetherhaven.debug.poi.dumpLine=  town={town} {x},{y},{z} kind={kind} blockTypeId={block} tags={tags} plot={plot}

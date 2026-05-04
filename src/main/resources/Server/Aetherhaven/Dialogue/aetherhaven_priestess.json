@@ -1,13 +1,14 @@
 {
   "id": "aetherhaven_priestess",
-  "entry": "root",
+  "entry": "main_hub",
   "nodes": {
-    "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.body",
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.fallback",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.offer",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
             "conditions": [
@@ -27,7 +28,7 @@
           "next": "gift_confirm"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c0",
           "condition": {
             "type": "and",
             "conditions": [
@@ -63,7 +64,7 @@
           "next": "serah_house_offer"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c1",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
@@ -86,7 +87,7 @@
           "next": "serah_house_finish"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c2",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -106,7 +107,7 @@
           "next": "serah_house_remind"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c3",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c3",
           "condition": {
             "type": "town_quest_completed",
             "questId": "q_gaia_altar"
@@ -114,7 +115,7 @@
           "next": "serah_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c4",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c4",
           "condition": {
             "type": "and",
             "conditions": [
@@ -137,7 +138,7 @@
           "next": "serah_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c5",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c5",
           "condition": {
             "type": "and",
             "conditions": [
@@ -157,7 +158,7 @@
           "next": "serah_building"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c6",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c6",
           "condition": {
             "type": "and",
             "conditions": [
@@ -180,8 +181,59 @@
           "next": "serah_quest_altar"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c_draught",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_draught",
           "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_gaia_altar"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_priestess_gaia_draught"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_services",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_completed",
+                "questId": "q_gaia_altar"
+              },
+              {
+                "type": "town_quest_completed",
+                "questId": "q_priestess_gaia_draught"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "draught_hub"
+        },
+        {
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.c_heal",
+          "visibilityCondition": {
             "type": "and",
             "conditions": [
               {
@@ -196,21 +248,37 @@
               }
             ]
           },
-          "whenFalse": "hide",
-          "next": "draught_hub"
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "player_health_below_max"
+              },
+              {
+                "type": "priestess_heal_affordable"
+              }
+            ]
+          },
+          "whenFalse": "disabled",
+          "actions": [
+            {
+              "type": "priestess_gold_heal"
+            }
+          ],
+          "next": "draught_heal_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.root.c7",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.c7",
           "next": null
         }
       ]
     },
     "serah_quest_altar": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -220,27 +288,27 @@
           "next": "serah_altar_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_quest_altar.c1",
           "next": null
         }
       ]
     },
     "serah_altar_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_altar_accepted.c0",
           "next": null
         }
       ]
     },
     "serah_building": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_building.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_building.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c0",
           "actions": [
             {
               "type": "abandon_quest",
@@ -250,37 +318,37 @@
           "next": "serah_abandoned"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_building.c1",
           "next": null
         }
       ]
     },
     "serah_abandoned": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_abandoned.c0",
           "next": null
         }
       ]
     },
     "serah_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_done.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_done.c0",
           "next": null
         }
       ]
     },
     "serah_house_offer": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c0",
           "actions": [
             {
               "type": "start_quest",
@@ -290,44 +358,44 @@
           "next": "serah_house_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_offer.c1",
           "next": null
         }
       ]
     },
     "serah_house_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_accepted.c0",
           "next": null
         }
       ]
     },
     "serah_house_remind": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_remind.c0",
           "next": null
         }
       ]
     },
     "serah_house_finish": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.serah_house_finish.c0",
           "next": null
         }
       ]
     },
     "rep_reward_50": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
-      "text": "server.aetherhaven.reputation.reward.priestess.50",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.priestess.50",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -336,14 +404,14 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "rep_reward_75": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
-      "text": "server.aetherhaven.reputation.reward.priestess.75",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.priestess.75",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -352,14 +420,14 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "rep_reward_100": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
-      "text": "server.aetherhaven.reputation.reward.priestess.100",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.priestess.100",
       "actions": [
         {
           "type": "reputation_reward_grant",
@@ -368,17 +436,17 @@
       ],
       "choices": [
         {
-          "text": "server.aetherhaven.reputation.reward.continue",
-          "next": "root"
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
         }
       ]
     },
     "draught_hub": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_quest",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_quest",
           "condition": {
             "type": "and",
             "conditions": [
@@ -406,7 +474,7 @@
           "next": "draught_quest_offer"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_progress",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_progress",
           "condition": {
             "type": "and",
             "conditions": [
@@ -427,7 +495,7 @@
           "next": "draught_quest_active"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_turnin",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_turnin",
           "condition": {
             "type": "and",
             "conditions": [
@@ -445,7 +513,7 @@
           "next": "draught_quest_turnin"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_refill",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_refill",
           "condition": {
             "type": "and",
             "conditions": [
@@ -466,7 +534,7 @@
           "next": "draught_refill_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_shard",
           "visibilityCondition": {
             "type": "and",
             "conditions": [
@@ -506,7 +574,7 @@
           "next": "draught_shard_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_catalyst",
           "visibilityCondition": {
             "type": "and",
             "conditions": [
@@ -546,78 +614,57 @@
           "next": "draught_catalyst_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_heal",
-          "condition": {
-            "type": "and",
-            "conditions": [
-              {
-                "type": "player_health_below_max"
-              },
-              {
-                "type": "priestess_heal_affordable"
-              }
-            ]
-          },
-          "whenFalse": "hide",
-          "actions": [
-            {
-              "type": "priestess_gold_heal"
-            }
-          ],
-          "next": "draught_heal_done"
-        },
-        {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_hub.c_back",
+          "next": "main_hub"
         }
       ]
     },
     "draught_quest_offer": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c0",
           "actions": [
             {
               "type": "start_quest",
               "id": "q_priestess_gaia_draught"
+            },
+            {
+              "type": "set_main_hub_opener",
+              "langKey": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.opener.accepted"
             }
           ],
-          "next": "draught_quest_accepted"
+          "next": "main_hub"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c1",
-          "next": "draught_hub"
-        }
-      ]
-    },
-    "draught_quest_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.body",
-      "choices": [
-        {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_accepted.c0",
-          "next": null
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_offer.c1",
+          "actions": [
+            {
+              "type": "set_main_hub_opener",
+              "langKey": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.opener.declined"
+            }
+          ],
+          "next": "main_hub"
         }
       ]
     },
     "draught_quest_active": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_active.c0",
           "next": "draught_hub"
         }
       ]
     },
     "draught_quest_turnin": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c0",
           "actions": [
             {
               "type": "complete_quest",
@@ -627,67 +674,67 @@
           "next": "draught_quest_complete"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c1",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_turnin.c1",
           "next": "draught_hub"
         }
       ]
     },
     "draught_quest_complete": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_quest_complete.c0",
           "next": null
         }
       ]
     },
     "draught_refill_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_refill_done.c0",
           "next": "draught_hub"
         }
       ]
     },
     "draught_shard_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_shard_done.c0",
           "next": "draught_hub"
         }
       ]
     },
     "draught_catalyst_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.c0",
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_catalyst_done.c0",
           "next": "draught_hub"
         }
       ]
     },
     "draught_heal_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.body",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.c0",
-          "next": "draught_hub"
+          "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.draught_heal_done.c0",
+          "next": "main_hub"
         }
       ]
     },
     "gift_confirm": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
               "type": "gift_villager",
@@ -697,51 +744,51 @@
               "reactionNodeDislike": "gift_dislike"
             }
           ],
-          "next": "root"
+          "next": "main_hub"
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmNo",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
         }
       ]
     },
     "gift_love": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.gift.love",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.gift.love",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_like": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.gift.like",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.gift.like",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_neutral": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.gift.neutral",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.gift.neutral",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     },
     "gift_dislike": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_priestess.gift.dislike",
+      "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
+      "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.gift.dislike",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.back",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
         }
       ]
     }

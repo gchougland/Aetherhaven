@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven modコマンド
+commands.aetherhaven.reload.desc=config.jsonとAetherhaven JSONカタログをディスクから再読み込みします（クリエイティブモード）
+commands.aetherhaven.reload.success=Aetherhavenの設定ファイルとアセットカタログが再読み込みされました。
+commands.aetherhaven.reload.failure=再読み込みに失敗しました: {detail}
+commands.aetherhaven.reload.noPlugin=Aetherhavenプラグインがロードされていません。
+commands.aetherhaven.plot.desc=区画サイン管理UIを開く（建設物の選択、アイテムの取得）
+commands.aetherhaven.starterkit.desc=エーテルヘイブンのスターターキット（区画配置スタッフ、憲章、都市計画デスク、建築スタッフ、クリエイティブモード）を自分用に用意しましょう。
+commands.aetherhaven.starterkit.success=スターターキットがお客様の在庫に追加されました。
+commands.aetherhaven.starterkit.partial=スターターキットの一部が付与されました。{failed} アイテムが収まりませんでした（インベントリの空きスペースを確保してください）。
+
+commands.aetherhaven.exportskin.desc=アバターのスキンをモデルJSONとしてエクスポートします（親：プレイヤー）
+commands.aetherhaven.exportskin.other.desc=他のプレイヤーのアバターのスキンをモデルJSONとしてエクスポートする
+commands.aetherhaven.exportskin.arg.path=オプションの出力ファイルパス（デフォルト：plugin data/avatar_exports/）
+commands.aetherhaven.exportskin.noSkin=このプレイヤーにはキャラクター スキンが用意されていません。
+commands.aetherhaven.exportskin.invalidSkin=スキン検証に失敗しました: {detail}
+commands.aetherhaven.exportskin.resolveError=スキンをモデルアタッチメントに解決できませんでした: {detail}
+commands.aetherhaven.exportskin.ioError={path}への書き込みに失敗しました: {detail}
+commands.aetherhaven.exportskin.success=モデルのJSONを{path}に書き込みました

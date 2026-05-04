@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Розміщення ділянки
+aetherhaven.ui.plotplacement.summary=Розміщення: {building}
+aetherhaven.ui.plotplacement.positionSection=Положення та обертання
+aetherhaven.ui.plotplacement.tipsSection=Поради
+aetherhaven.ui.plotplacement.heightSection=Висота та поворот
+aetherhaven.ui.plotplacement.detailsBlock=Знак ділянки {sx}, {sy}, {sz} · Початок префаба {ox}, {oy}, {oz}\nКрок {step} з 4 (по 90°)
+aetherhaven.ui.plotplacement.tipsControls=Escape закриває лише цю панель. Cancel очищає попередній перегляд. Клацання правою кнопкою миші знову відкриває поле попереднього перегляду; клацання правою кнопкою миші на блоці не переміщує активний попередній перегляд.
+aetherhaven.ui.plotplacement.plotType=Будівля
+aetherhaven.ui.plotplacement.moveLabel=Відрегулюйте положення
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Повернути на 90° (циклічна сторона)
+aetherhaven.ui.plotplacement.place=знак місця ділянки
+aetherhaven.ui.plotplacement.placeMove=Перемістити будівлю
+aetherhaven.ui.plotplacement.moveWarningText=Переїзд руйнує та відновлює стару територію. Спочатку видаліть цінні речі, домашніх тварин та окремі предмети зсередини будівлі. Міські NPC, пов'язані з цим містом, знаходяться під захистом.
+aetherhaven.ui.plotplacement.moveConfirm=Підтвердити
+aetherhaven.ui.plotplacement.moveBack=Повернутися назад
+aetherhaven.ui.plotplacement.cancel=Скасувати попередній перегляд
+aetherhaven.ui.plotplacement.cameraSection=Камера
+aetherhaven.ui.plotplacement.cameraHint=Зйомка з висоти пташиного польоту здійснюється один раз при ввімкненні (над попереднім переглядом), а потім залишається на місці, поки ви переміщуєте сюжет.
+aetherhaven.ui.plotplacement.birdsEye=Вид з висоти пташиного польоту
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Вигляд зверху вниз: початкова мета – центр попереднього перегляду. Зніміть позначку, щоб повернутися до вигляду від першої особи. Використовуйте панораму, щоб перемістити зображення.
+aetherhaven.ui.plotplacement.viewDistance=Відстань
+aetherhaven.ui.plotplacement.zoomOutTooltip=Далішня камера (ширший огляд сюжету)
+aetherhaven.ui.plotplacement.zoomInTooltip=Ближчий план камери (менший огляд, більше деталей)
+aetherhaven.ui.plotplacement.panLabel=Панорамна камера
+aetherhaven.ui.plotplacement.panXmTooltip=Зсунути подання на один крок у напрямку -X
+aetherhaven.ui.plotplacement.panXpTooltip=Зсунути перегляд на один крок у напрямку +X
+aetherhaven.ui.plotplacement.panZmTooltip=Зсунути вигляд на один крок у напрямку -Z
+aetherhaven.ui.plotplacement.panZpTooltip=Зсунути перегляд на один крок у напрямку +Z
+aetherhaven.ui.plotplacement.moveXmTooltip=З висоти пташиного польоту: захід (-X). Від першої особи: обстріл ліворуч (відносно ракурсу).
+aetherhaven.ui.plotplacement.moveXpTooltip=З висоти пташиного польоту: схід (+X). Від першої особи: обстріл праворуч (відносно ракурсу).
+aetherhaven.ui.plotplacement.moveZmTooltip=З висоти пташиного польоту: північ (-Z). Від першої особи: рухатися вперед (відносно точки зору).
+aetherhaven.ui.plotplacement.moveZpTooltip=З висоти пташиного польоту: південь (+Z). Від першої особи: рухатися назад (відносно ракурсу).
+aetherhaven.ui.plotplacement.moveYmTooltip=Зсунься на один блок вниз
+aetherhaven.ui.plotplacement.moveYpTooltip=Зсунути на один блок вгору
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Чартер переїзду
+aetherhaven.ui.charterrelocation.summary=Переосмислення статуту міста
+aetherhaven.ui.charterrelocation.details=Цільовий блок {sx}, {sy}, {sz} · Крок {step} з 4 (90°)
+aetherhaven.ui.charterrelocation.tips=Територія — це квадрат із шматків навколо статуту; кожна будівля має залишатися всередині після вашого підтвердження. Підштовхніть привида на нове місце, а потім розмістіть його.
+aetherhaven.ui.charterrelocation.info=Територія — це квадрат із шматків навколо статуту. Усі ваші будівлі повинні залишатися в цій області після переміщення. Перемістіть блок-привид на нове положення статуту, а потім підтвердіть.
+aetherhaven.ui.charterrelocation.place=Статут місця

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Sprinkler_Iron.name",
-    "Description": "server.items.Aetherhaven_Sprinkler_Iron.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Iron.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Sprinkler_Iron.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

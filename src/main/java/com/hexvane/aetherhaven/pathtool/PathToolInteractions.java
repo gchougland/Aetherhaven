@@ -114,8 +114,8 @@ public final class PathToolInteractions {
             if (looked.getId().equals(st.getSelectedNodeId())) {
                 st.setSelectedNodeId(next.isEmpty() ? null : next.get(Math.max(0, next.size() - 1)).getId());
             }
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.removedNode").param("n", String.valueOf(next.size())));
-            pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastRemoved");
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.removedNode").param("n", String.valueOf(next.size())));
+            pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastRemoved");
             return;
         }
         double yo = plugin.getConfig().get().getPathToolNodeBlockYOffset();
@@ -133,9 +133,9 @@ public final class PathToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation("server.aetherhaven.pathTool.addedNode").param("n", String.valueOf(st.getNodes().size()))
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.addedNode").param("n", String.valueOf(st.getNodes().size()))
         );
-        pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastAdd");
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastAdd");
     }
 
     public static void handleSelect(
@@ -182,7 +182,7 @@ public final class PathToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("server.aetherhaven.pathTool.selectedNode")
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.selectedNode")
             );
             pathToast(playerRef, commandBuffer, modeToastId(st.getGizmoMode()));
             return;
@@ -206,8 +206,8 @@ public final class PathToolInteractions {
             }
             if (moved) {
                 st.setNodesFromList(next);
-                send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.movedNode"));
-                pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastMoved");
+                send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.movedNode"));
+                pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastMoved");
             } else {
                 context.getState().state = InteractionState.Failed;
             }
@@ -218,7 +218,7 @@ public final class PathToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("server.aetherhaven.pathTool.noNodeOnAim")
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.noNodeOnAim")
             );
         }
     }
@@ -226,9 +226,9 @@ public final class PathToolInteractions {
     @Nonnull
     private static String modeToastId(@Nonnull PathToolGizmoMode m) {
         return switch (m) {
-            case Translate -> "server.aetherhaven.pathTool.toastModeTranslate";
-            case Rotate -> "server.aetherhaven.pathTool.toastModeRotate";
-            case Commit -> "server.aetherhaven.pathTool.toastModeCommit";
+            case Translate -> "aetherhaven_items.aetherhaven.pathTool.toastModeTranslate";
+            case Rotate -> "aetherhaven_items.aetherhaven.pathTool.toastModeRotate";
+            case Commit -> "aetherhaven_items.aetherhaven.pathTool.toastModeCommit";
         };
     }
 
@@ -258,9 +258,9 @@ public final class PathToolInteractions {
             commandBuffer,
             Message.translation(
                 switch (st.getGizmoMode()) {
-                    case Translate -> "server.aetherhaven.pathTool.modeCycledToTranslate";
-                    case Rotate -> "server.aetherhaven.pathTool.modeCycledToRotate";
-                    case Commit -> "server.aetherhaven.pathTool.modeCycledToCommit";
+                    case Translate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToTranslate";
+                    case Rotate -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToRotate";
+                    case Commit -> "aetherhaven_items.aetherhaven.pathTool.modeCycledToCommit";
                 }
             )
         );
@@ -287,7 +287,7 @@ public final class PathToolInteractions {
             playerRef,
             commandBuffer,
             Message
-                .translation("server.aetherhaven.pathTool.widthCycled")
+                .translation("aetherhaven_items.aetherhaven.pathTool.widthCycled")
                 .param("w", String.valueOf(st.getPathWidthBlocks()))
         );
     }
@@ -323,10 +323,10 @@ public final class PathToolInteractions {
             playerRef,
             commandBuffer,
             Message
-                .translation("server.aetherhaven.pathTool.styleCycled")
+                .translation("aetherhaven_items.aetherhaven.pathTool.styleCycled")
                 .param("style", plugin.getConfig().get().getPathToolStyleName(st.getPathStyleIndex()))
         );
-        pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastStyleCycled");
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastStyleCycled");
     }
 
     public static void handleUse(
@@ -352,7 +352,7 @@ public final class PathToolInteractions {
         }
         st.clampPathStyleIndex(plugin.getConfig().get().getPathToolStyleDefinitions().size());
         if (st.getGizmoMode() == PathToolGizmoMode.Translate) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.useInTranslateMode"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.useInTranslateMode"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -374,13 +374,13 @@ public final class PathToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("server.aetherhaven.pathTool.rotated").param("deg", String.valueOf(ROTATE_STEP_DEG))
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.rotated").param("deg", String.valueOf(ROTATE_STEP_DEG))
             );
-            pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastRotated");
+            pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastRotated");
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.Rotate) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.rotateNoSelection"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.rotateNoSelection"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -388,7 +388,7 @@ public final class PathToolInteractions {
             send(
                 playerRef,
                 commandBuffer,
-                Message.translation("server.aetherhaven.pathTool.needTwoNodes")
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.needTwoNodes")
             );
             context.getState().state = InteractionState.Failed;
             return;
@@ -407,7 +407,7 @@ public final class PathToolInteractions {
                 plugin.getConfig().get().getPathToolMaxRayDown()
             );
         if (plan.isEmpty()) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.emptyPlan"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.emptyPlan"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -419,7 +419,7 @@ public final class PathToolInteractions {
             st.getPathStyleIndex()
         );
         if (rec == null) {
-            send(playerRef, commandBuffer, Message.translation("server.aetherhaven.pathTool.cementFail"));
+            send(playerRef, commandBuffer, Message.translation("aetherhaven_items.aetherhaven.pathTool.cementFail"));
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -433,9 +433,9 @@ public final class PathToolInteractions {
         send(
             playerRef,
             commandBuffer,
-            Message.translation("server.aetherhaven.pathTool.cemented").param("id", rec.id)
+            Message.translation("aetherhaven_items.aetherhaven.pathTool.cemented").param("id", rec.id)
         );
-        pathToast(playerRef, commandBuffer, "server.aetherhaven.pathTool.toastCemented");
+        pathToast(playerRef, commandBuffer, "aetherhaven_items.aetherhaven.pathTool.toastCemented");
     }
 
     @Nullable

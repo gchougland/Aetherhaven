@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.modules.entitystats.EntityStatMap;
+import com.hypixel.hytale.server.core.modules.entitystats.EntityStatValue;
 import com.hypixel.hytale.server.core.modules.entitystats.asset.DefaultEntityStatTypes;
 import com.hypixel.hytale.server.core.modules.entitystats.modifier.Modifier;
 import com.hypixel.hytale.server.core.modules.entitystats.modifier.StaticModifier;
@@ -17,6 +18,11 @@ import javax.annotation.Nonnull;
 /**
  * While Gaia's Draught is active in the main hand, mirrors town charges into the engine {@code Ammo} entity stat so the
  * vanilla ammo HUD can show remaining uses (same pattern as weapon magazine + {@code DisplayEntityStatsHUD}).
+ *
+ * <p>Equipment (e.g. jewelry) may add its own additive {@code Ammo} {@code MAX} modifiers. Those still apply to bows and
+ * other weapons; for the draught only we add a compensating modifier so the <strong>combined</strong> {@code Ammo} max
+ * equals that player's draught {@code GaiaDraughtState#getCapacity()} (per-player data on {@link TownRecord}), not
+ * capacity + gear bonus.
  */
 public final class GaiaDraughtAmmoHudSupport {
     private static final String MOD_KEY = "aetherhaven:gaiadraught:capacity_max";
@@ -29,7 +35,6 @@ public final class GaiaDraughtAmmoHudSupport {
             return;
         }
         map.removeModifier(ai, MOD_KEY);
-        map.getStatModifiersManager().scheduleRecalculate();
     }
 
     public static void applyAmmoHudFromTown(
@@ -43,13 +48,25 @@ public final class GaiaDraughtAmmoHudSupport {
         }
         int cap = Math.max(1, capacity);
         int ch = Math.max(0, Math.min(cap, charges));
-        map.putModifier(
-            ai,
-            MOD_KEY,
-            new StaticModifier(Modifier.ModifierTarget.MAX, StaticModifier.CalculationType.ADDITIVE, cap)
-        );
-        map.setStatValue(ai, (float) ch);
-        map.getStatModifiersManager().scheduleRecalculate();
+        map.removeModifier(ai, MOD_KEY);
+        EntityStatValue ammoStat = map.get(ai);
+        if (ammoStat == null) {
+            return;
+        }
+        int externalMax = Math.round(ammoStat.getMax());
+        int compensation = cap - externalMax;
+        if (compensation != 0) {
+            map.putModifier(
+                ai,
+                MOD_KEY,
+                new StaticModifier(Modifier.ModifierTarget.MAX, StaticModifier.CalculationType.ADDITIVE, (float) compensation)
+            );
+        }
+        float maxAfter = compensation != 0 && map.get(ai) != null ? map.get(ai).getMax() : (float) externalMax;
+        map.setStatValue(ai, Math.min((float) ch, maxAfter));
+        // Do not call StatModifiersManager.scheduleRecalculate() here: vanilla Recalculate runs item-based ammo
+        // modifiers every tick: our GaiaDraughtInventorySyncSystem re-applies this after Recalculate so we stay
+        // authoritative without fighting that pipeline.
     }
 
     /**

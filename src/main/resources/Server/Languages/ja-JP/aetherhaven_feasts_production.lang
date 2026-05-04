@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=町のお祭り
+aetherhaven.ui.feast.noTown=あなたは町に所属していなければなりません。
+aetherhaven.ui.feast.noPermission=この町では宴会を開くことはできません。
+aetherhaven.ui.feast.outsideTerritory=テーブルはあなたの町の領土内に設置しなければなりません。
+aetherhaven.ui.feast.activeTitle=町のお祭り実施中
+aetherhaven.ui.feast.noneActive=現在、期間限定の宴会は開催されていません。左側の宴会を選択して、費用と効果をご確認ください。
+aetherhaven.ui.feast.daysLeft=残り日数（夜明け）：{days}
+aetherhaven.ui.feast.selectHint=ごちそうをお選びください
+aetherhaven.ui.feast.ingredientsLabel=材料
+aetherhaven.ui.feast.confirm=宴会を開く
+aetherhaven.ui.feast.locked=あなたはまだこの祭りの作法を学んでいません。誰かが教えてくれるまで、町の人々と時間を過ごしてください。
+aetherhaven.ui.feast.tooltipLocked=隣人がこの宴会の作り方を教えてくれるまで、鍵がかかっています。町のために、宴会場で料理を作る人たちと話し続けましょう。
+aetherhaven.ui.feast.cooldownBerrycircle=ベリーサークル・コンコードはクールダウン中です（残り{days}日）。
+aetherhaven.ui.feast.began=宴が始まる。村人たちが食卓に集まってくる。
+aetherhaven.ui.feast.err.pluginNotLoaded=このサーバーではAetherhavenはロードされていません。
+aetherhaven.ui.feast.err.unknownFeast=その宴会は開催されていません。
+aetherhaven.ui.feast.err.invalidPlayer=あなたの人物像を確認できませんでした。
+aetherhaven.ui.feast.err.feastNotUnlocked=あなたはまだこの宴の作法を習得していません。町の人々との信頼関係を築き、誰かが教えてくれる機会を待ちましょう。
+aetherhaven.ui.feast.err.timedFeastActive=この町では、すでに別の時間指定の祝祭が始まっている。
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=ベリーサークル・コンコードを出す前に、現在の時間指定の宴会が終了するまでお待ちください。
+aetherhaven.ui.feast.err.berrycircleCooldown=ベリーサークル・コンコードはまだクールダウン中です。
+aetherhaven.ui.feast.err.notEnoughIngredients=必要な材料が足りません。
+
+aetherhaven.ui.production.title=職場の売店
+aetherhaven.ui.production.prev=前へ
+aetherhaven.ui.production.next=次
+aetherhaven.ui.production.prevTooltip=このスロットの以前の出力
+aetherhaven.ui.production.nextTooltip=このスロットの次の出力
+aetherhaven.ui.production.take1=テイク1
+aetherhaven.ui.production.take10=10回テイク
+aetherhaven.ui.production.take100=100個取ろう
+aetherhaven.ui.production.genInterval={time} を 1 つ作成する
+aetherhaven.ui.production.err.plugin=このサーバーではAetherhavenはロードされていません。
+aetherhaven.ui.production.err.permission=この町では、この倉庫を開放することはできません。
+aetherhaven.ui.production.err.plot=この区画は、あなたの町の完成済みの職場区画（農場、納屋、製粉所、鉱夫小屋など）内にはありません。
+aetherhaven.ui.production.err.catalog=この建物には、生産カタログが設定されていません。
+aetherhaven.ui.production.err.inventoryFull=あなたの持ち物は満杯なので、そんなにたくさん持ち込むことはできません。
+aetherhaven.ui.production.unlockButton=アンロック
+aetherhaven.ui.production.unlockTooltip=この建物のロックされた作業スペースの出力内容を表示および購入します。
+
+aetherhaven.ui.productionUnlocks.title=職場のロックを解除
+aetherhaven.ui.productionUnlocks.intro=下記の出力を選択すると、パネルにその名前と要件が表示されます。アイコンにカーソルを合わせると、所持数と必要数が表示されます。アイテムとゴールドの合計数が条件を満たしたら、ロックされている出力をクリックしてロックを解除してください。
+aetherhaven.ui.productionUnlocks.navProduction=生産
+aetherhaven.ui.productionUnlocks.navProductionTooltip=職場の保管場所に戻る
+aetherhaven.ui.productionUnlocks.detailHint=上のアイコンをクリックすると、その名前とロック解除条件が表示されます。
+aetherhaven.ui.productionUnlocks.err.inventory=在庫情報を読み取れませんでした。
+aetherhaven.ui.productionUnlocks.err.empty=この職場にはロック解除リストが設定されていません。
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=この職場では既にロック解除されています。
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=アイテム: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=金貨：{held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=所持品（バッグの合計）に、そのアイテムが少なくとも{need}個必要です。
+aetherhaven.ui.productionUnlocks.notify.needGold=町の金庫とあなたの所持品を合わせて、十分な金貨が必要です（合計{need}）。
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=在庫から必要なアイテムを削除できませんでした。
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=金のお支払いができませんでした。商品は返送されました。
+aetherhaven.ui.productionUnlocks.notify.unlocked=この職場の{item}のロックを解除しました。
+
+aetherhaven.feast.stewards.name=執事の帳簿夕食会
+aetherhaven.feast.stewards.description=パン、チーズ、そして本格的なパンプキンパイを並べて、一週間分の朝の献金がたっぷりになるようにしよう。
+aetherhaven.feast.hearthglass.name=ハースグラス・ヴィジル
+aetherhaven.feast.hearthglass.description=焼き魚、調理済みの肉、野菜などが、ゆっくりと時間をかけて調理される、いわば弔いの食事として並べられる。村人たちの飢えは、一週間ほどの間、より穏やかに和らいでいく。
+aetherhaven.feast.berrycircle.name=ベリーサークル・コンコード
+aetherhaven.feast.berrycircle.description=軽やかな皿に盛られた料理の数々：ベリーサラダ、フルーツ串、そしてトースト用のポップコーン。近所の人たちは、きっとあなたのことを少しだけ優しく覚えていてくれるでしょう。ただし、再びこの料理を出すのは、夜明けが訪れるまで一週間待ってください。

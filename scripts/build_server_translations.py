@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Build server.lang translations from en-US.
+Build locale `*.lang` files from English sources under `Server/Languages/en-US/`.
 
+  • Source: every `*.lang` in `en-US` (e.g. `server.lang`, `aetherhaven_dialogue_*.lang`). Runtime keys match
+    Hytale `I18nModule`: `<basename>.<lineKey>` inside each file.
   • If GOOGLE_TRANSLATE_API_KEY is set: Google Cloud Translation API (v2, REST) — billable, higher quotas.
   • Otherwise: deep_translator (unofficial public endpoint; may rate-limit on large runs).
 
@@ -65,8 +67,15 @@ LANGS: list[tuple[str, str]] = [
 ]
 
 REPO = Path(__file__).resolve().parents[1]
-SRC = REPO / "src/main/resources/Server/Languages/en-US/server.lang"
+SRC_EN_US_DIR = REPO / "src/main/resources/Server/Languages/en-US"
 OUT_BASE = REPO / "src/main/resources/Server/Languages"
+
+
+def list_en_us_lang_sources() -> list[Path]:
+    """All `.lang` fragments in en-US (same names written to each target locale folder)."""
+    if not SRC_EN_US_DIR.is_dir():
+        return []
+    return sorted(SRC_EN_US_DIR.glob("*.lang"), key=lambda p: p.name.lower())
 
 PH = re.compile(r"(\{[a-zA-Z0-9_.]+\})")
 
@@ -282,51 +291,69 @@ def main() -> None:
     else:
         print("Backend: deep_translator (set GOOGLE_TRANSLATE_API_KEY to use Google Cloud).", flush=True)
 
-    if not SRC.is_file():
-        print(f"Missing {SRC}", file=sys.stderr)
+    src_files = list_en_us_lang_sources()
+    if not src_files:
+        print(f"No .lang files under {SRC_EN_US_DIR}", file=sys.stderr)
         sys.exit(1)
-    src_text = SRC.read_text(encoding="utf-8")
-    lines = src_text.splitlines()
-    src_keys = count_key_lines(SRC)
+    src_key_total = sum(count_key_lines(p) for p in src_files)
     only_set = {x.strip() for x in args.only.split(",") if x.strip()}
 
-    nval = sum(
-        1
-        for ln in lines
-        if ln.strip() and not ln.strip().startswith("#") and "=" in ln
+    print(
+        f"Source en-US: {len(src_files)} file(s), {src_key_total} total key lines "
+        f"({', '.join(p.name for p in src_files)})",
+        flush=True,
     )
-    print(f"Source: {SRC}  ({len(lines)} lines, {nval} key lines, {src_keys} key lines counted)")
+
+    def locale_has_all_keys(folder_name: str) -> bool:
+        d = OUT_BASE / folder_name
+        if not d.is_dir():
+            return False
+        acc = 0
+        for src in src_files:
+            dest = d / src.name
+            if not dest.is_file():
+                return False
+            acc += count_key_lines(dest)
+        return acc == src_key_total
 
     did_build_in_run = False
     for folder, gt in LANGS:
         if only_set and folder not in only_set:
             continue
-        p = OUT_BASE / folder / "server.lang"
-        if not args.no_resume and p.is_file():
-            if count_key_lines(p) == src_keys:
-                print(f"--- skip {folder} (already has {src_keys} keys) ---", flush=True)
-                continue
+        if not args.no_resume and locale_has_all_keys(folder):
+            print(f"--- skip {folder} (all {len(src_files)} .lang files match {src_key_total} keys) ---", flush=True)
+            continue
         if did_build_in_run and sleep_between > 0:
             print(f"  cooldown {sleep_between}s before {folder} ...", flush=True)
             time.sleep(sleep_between)
         print(f"--- {folder} ({gt}) ---", flush=True)
-        text = build_for_lang_fixed(
-            lines,
-            gt,
-            workers=workers,
-            serial_sleep_sec=args.serial_sleep if workers <= 1 else 0.0,
-            gcloud_api_key=gcloud_key if gcloud_key else None,
-        )
         out_dir = OUT_BASE / folder
         out_dir.mkdir(parents=True, exist_ok=True)
-        if folder == "es-419":
-            header = (
-                "# Spanish (Latin America) — machine translation; "
-                "regionalize from es-ES as needed.\n"
+        for src_path in src_files:
+            lines = src_path.read_text(encoding="utf-8").splitlines()
+            nval = sum(
+                1
+                for ln in lines
+                if ln.strip() and not ln.strip().startswith("#") and "=" in ln
             )
-            text = header + text
-        p.write_text(text, encoding="utf-8")
-        print(f"Wrote {p} ({p.stat().st_size} bytes)")
+            src_keys = count_key_lines(src_path)
+            print(f"  {src_path.name}: {len(lines)} lines, {nval} key-ish lines, {src_keys} keys", flush=True)
+            text = build_for_lang_fixed(
+                lines,
+                gt,
+                workers=workers,
+                serial_sleep_sec=args.serial_sleep if workers <= 1 else 0.0,
+                gcloud_api_key=gcloud_key if gcloud_key else None,
+            )
+            dest = out_dir / src_path.name
+            if folder == "es-419" and src_path.name == "server.lang":
+                header = (
+                    "# Spanish (Latin America) — machine translation; "
+                    "regionalize from es-ES as needed.\n"
+                )
+                text = header + text
+            dest.write_text(text, encoding="utf-8")
+            print(f"  Wrote {dest} ({dest.stat().st_size} bytes)", flush=True)
         did_build_in_run = True
 
     print("Done.")

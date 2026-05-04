@@ -1,13 +1,14 @@
 {
   "id": "aetherhaven_elder_week1",
-  "entry": "root",
+  "entry": "main_hub",
   "nodes": {
-    "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.body",
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_elder_week1.aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_elder_week1.aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_elder_week1.root.c0",
+          "text": "aetherhaven_dialogue_elder_week1.aetherhaven.dialogue.aetherhaven_elder_week1.root.c0",
           "next": null
         }
       ]

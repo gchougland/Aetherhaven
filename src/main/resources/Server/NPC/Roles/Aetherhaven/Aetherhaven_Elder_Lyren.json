@@ -10,7 +10,7 @@
       "Description": "Memory name override"
     },
     "NameTranslationKey": {
-      "Value": "server.npcRoles.Aetherhaven_Elder_Lyren.name",
+      "Value": "aetherhaven_ui_journal_items_tail.npcRoles.Aetherhaven_Elder_Lyren.name",
       "Description": "Translation key for NPC name display"
     },
     "AetherhavenWanderPhaseTime": {
@@ -140,7 +140,7 @@
           {
             "Type": "SetInteractable",
             "Interactable": true,
-            "Hint": "server.aetherhaven.interaction.dialogue"
+            "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue"
           }
         ]
       },

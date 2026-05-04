@@ -11,6 +11,9 @@ public final class DialogueNodeDefinition {
     private String speaker;
     @Nullable
     private String text;
+    /** When {@code villager_greeting}, {@link com.hexvane.aetherhaven.ui.DialoguePage} builds body from villager data. */
+    @Nullable
+    private String bodyMode;
     @Nullable
     private List<JsonObject> actions;
     @Nullable
@@ -24,6 +27,11 @@ public final class DialogueNodeDefinition {
     @Nullable
     public String getText() {
         return text;
+    }
+
+    @Nullable
+    public String getBodyMode() {
+        return bodyMode;
     }
 
     @Nonnull

@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 720);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.productionUnlocks.title;
+      Label #ProductionUnlocksTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -19,7 +21,7 @@ $C.@PageOverlay {
       Label #UnlockIntro {
         Anchor: (Bottom: 10);
         Style: (...$C.@DefaultLabelStyle, Wrap: true, HorizontalAlignment: Center, TextColor: #c8c0b0, FontSize: 12);
-        Text: %server.aetherhaven.ui.productionUnlocks.intro;
+        Text: "";
       }
 
       Label #ErrMsg {
@@ -65,9 +67,9 @@ $C.@PageOverlay {
 
         $C.@TextButton #NavToProduction {
           TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-          TooltipText: %server.aetherhaven.ui.productionUnlocks.navProductionTooltip;
+          TooltipText: "";
           Anchor: (Width: 220, Height: 38);
-          Text: %server.aetherhaven.ui.productionUnlocks.navProduction;
+          Text: "";
         }
       }
     }

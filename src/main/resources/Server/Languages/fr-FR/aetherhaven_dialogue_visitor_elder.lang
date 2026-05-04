@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_elder)
+# Full translation keys are aetherhaven_dialogue_visitor_elder.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.body=Vous pouvez passer, mais vous ne faites pas partie de cette mission. Si vous souhaitez apporter votre aide, vous devez d'abord être invité par un habitant.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.c0=Je comprends.
+aetherhaven.dialogue.aetherhaven_visitor_elder.root.speaker=Lyren aîné

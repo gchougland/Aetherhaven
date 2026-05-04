@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Laboratório de condições. Você não deve ver uma opção oculta. Você deve ver uma opção acinzentada. Use os portões compostos para continuar.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Essa opção está oculta (literalmente falsa).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Esta opção deve estar desativada (em cinza).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(requer verdadeiro literal)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Composto Pass: NÃO falso E verdadeiro
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=Ramificação OU (verdadeiro OU falso)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Obrigado por testar. Até logo!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Tchau!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Selecione abaixo para ir diretamente para a despedida usando a opção "Ir para" em vez de "Próximo".
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=vá para adeus
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Ao entrar em um nó, você recebeu apenas uma pá rudimentar (se tivesse espaço no inventário). Selecione a opção abaixo para obter mais itens.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Me dê 3 unidades de terra e depois continue.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Bem-vindo ao sistema de diálogo de Aetherhaven. Esta linha é propositalmente longa para que você possa verificar o layout e a rolagem. Suas opções ficam abaixo do texto principal.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Continue para o laboratório de condições.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Sair (terminar com o próximo nulo).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Sair (ação de fechamento explícita).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Você pode abrir a interface de troca do comerciante Kweebec ou pular para as ações básicas.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Loja de trocas Kweebec_Merchant aberta
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Pule a loja, vá direto aos tocos
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=Aldeão de QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Ações provisórias: desbloquear conquista e iniciar missão devem ser registradas até que esses sistemas existam.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Execute unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=Aldeão de QA

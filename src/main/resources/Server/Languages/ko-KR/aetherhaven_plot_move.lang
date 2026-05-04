@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=플롯 배치
+aetherhaven.ui.plotplacement.summary=배치: {building}
+aetherhaven.ui.plotplacement.positionSection=위치 및 회전
+aetherhaven.ui.plotplacement.tipsSection=팁
+aetherhaven.ui.plotplacement.heightSection=높이 및 회전
+aetherhaven.ui.plotplacement.detailsBlock=플롯 표시 {sx}, {sy}, {sz} · 조립식 원점 {ox}, {oy}, {oz}\n4단계 중 {step} (각 90°)
+aetherhaven.ui.plotplacement.tipsControls=Esc 키를 누르면 이 패널만 닫힙니다. Cancel 키를 누르면 미리보기가 지워집니다. 미리보기 화면에서 마우스 오른쪽 버튼을 클릭하면 다시 열립니다. 블록을 마우스 오른쪽 버튼으로 클릭해도 활성화된 미리보기 화면은 이동하지 않습니다.
+aetherhaven.ui.plotplacement.plotType=건물
+aetherhaven.ui.plotplacement.moveLabel=위치를 조정하세요
+aetherhaven.ui.plotplacement.rotate=90도
+aetherhaven.ui.plotplacement.rotateTooltip=90° 회전(사이클 방향)
+aetherhaven.ui.plotplacement.place=부지 표지판을 설치하세요
+aetherhaven.ui.plotplacement.placeMove=건물을 옮기세요
+aetherhaven.ui.plotplacement.moveWarningText=이사를 하면 기존 건물이 파괴되고 새로 지어집니다. 건물 부지 안에서 귀중품, 애완동물, 흩어진 물건들을 먼저 치우세요. 이 마을과 관련된 NPC들은 보호됩니다.
+aetherhaven.ui.plotplacement.moveConfirm=확인하다
+aetherhaven.ui.plotplacement.moveBack=돌아가기
+aetherhaven.ui.plotplacement.cancel=미리보기 취소
+aetherhaven.ui.plotplacement.cameraSection=카메라
+aetherhaven.ui.plotplacement.cameraHint=조감도 프레임은 기능을 켜면 (미리보기 화면 위에) 한 번 표시되고, 플롯을 이동하는 동안 그 자리에 고정됩니다.
+aetherhaven.ui.plotplacement.birdsEye=조감도
+aetherhaven.ui.plotplacement.birdsEyeTooltip=탑다운 뷰: 초기 조준점은 미리보기 중앙입니다. 체크를 해제하면 1인칭 시점으로 돌아갑니다. 패닝 기능을 사용하여 시점을 이동하세요.
+aetherhaven.ui.plotplacement.viewDistance=거리
+aetherhaven.ui.plotplacement.zoomOutTooltip=더 멀리 있는 카메라 (줄거리 전체를 더 넓게 볼 수 있음)
+aetherhaven.ui.plotplacement.zoomInTooltip=카메라 근접 촬영 (전체적인 모습은 축소되고, 세부적인 내용은 더 자세히 볼 수 있습니다)
+aetherhaven.ui.plotplacement.panLabel=팬 카메라
+aetherhaven.ui.plotplacement.panXmTooltip=-X 방향으로 한 단계 이동
+aetherhaven.ui.plotplacement.panXpTooltip=뷰를 +X 방향으로 한 단계 이동합니다.
+aetherhaven.ui.plotplacement.panZmTooltip=시점을 -Z 방향으로 한 단계 이동합니다.
+aetherhaven.ui.plotplacement.panZpTooltip=+Z 방향으로 시점을 한 단계 이동
+aetherhaven.ui.plotplacement.moveXmTooltip=조감도: 서쪽(-X). 1인칭 시점: 좌측으로 이동(시점 기준).
+aetherhaven.ui.plotplacement.moveXpTooltip=조감도: 동쪽(+X). 1인칭 시점: 오른쪽으로 이동(시점 기준).
+aetherhaven.ui.plotplacement.moveZmTooltip=조감도: 북쪽(-Z). 1인칭 시점: (시점을 기준으로) 앞으로 이동.
+aetherhaven.ui.plotplacement.moveZpTooltip=조감도: 남쪽 방향(+Z축). 1인칭 시점: (시점을 기준으로) 뒤로 이동.
+aetherhaven.ui.plotplacement.moveYmTooltip=한 블록 아래로 옮기세요
+aetherhaven.ui.plotplacement.moveYpTooltip=한 블록 위로 살짝 옮기세요
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=이동 헌장
+aetherhaven.ui.charterrelocation.summary=도시 헌장 재정립
+aetherhaven.ui.charterrelocation.details=대상 블록 {sx}, {sy}, {sz} · 4단계 중 {step} (90°)
+aetherhaven.ui.charterrelocation.tips=영토는 헌장을 둘러싼 정사각형 모양의 구역입니다. 모든 건물은 확인 후 반드시 그 안에 있어야 합니다. 유령을 새로운 위치로 옮긴 다음 배치하세요.
+aetherhaven.ui.charterrelocation.info=영토는 헌장 주변의 사각형 영역입니다. 모든 건물은 이동 후 해당 영역 안에 있어야 합니다. 유령 블록을 새 헌장 위치로 옮긴 다음 확인하세요.
+aetherhaven.ui.charterrelocation.place=장소 헌장

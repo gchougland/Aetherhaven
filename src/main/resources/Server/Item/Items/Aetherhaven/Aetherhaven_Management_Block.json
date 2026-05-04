@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Management_Block.name",
-    "Description": "server.items.Aetherhaven_Management_Block.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Management_Block.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Management_Block.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Bookcase.png",
   "Categories": ["Furniture.Shelves"],

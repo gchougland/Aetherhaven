@@ -69,6 +69,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             commandBuilder.append("Aetherhaven/GeodeOpen.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyGeodeOpen(commandBuilder);
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (player == null || pr == null) {
@@ -76,7 +77,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         }
         CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
         if (inv == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.geodeopen.empty"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.geodeopen.empty"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -93,7 +94,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         }
 
         if (slots.isEmpty()) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.geodeopen.empty"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.geodeopen.empty"));
             commandBuilder.clear(ROWS);
             return;
         }
@@ -101,7 +102,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         commandBuilder.set(
             "#Hint.TextSpans",
             Message.translation(
-                chargeGold ? "server.aetherhaven.ui.geodeopen.hint" : "server.aetherhaven.ui.geodeopen.hintAnvil"
+                chargeGold ? "aetherhaven_jewelry_geode.aetherhaven.ui.geodeopen.hint" : "aetherhaven_jewelry_geode.aetherhaven.ui.geodeopen.hintAnvil"
             )
         );
         commandBuilder.clear(ROWS);
@@ -120,7 +121,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             commandBuilder.set(row + " #Open #GeodeIcon.Quantity", stack.getQuantity());
             commandBuilder.set(
                 row + " #Open #Line.TextSpans",
-                Message.translation("server.aetherhaven.geode.row").param("count", stack.getQuantity()).param("itemName", itemName)
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.geode.row").param("count", stack.getQuantity()).param("itemName", itemName)
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -170,7 +171,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
         if (paid == null) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.geode.open.insufficientGold"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.geode.open.insufficientGold"),
                 NotificationStyle.Danger
             );
             refresh(ref, store);
@@ -196,7 +197,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.geode.open.failed"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.geode.open.failed"),
                 NotificationStyle.Danger
             );
             refresh(ref, store);
@@ -212,7 +213,7 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
             player.giveItem(new ItemStack(AetherhavenConstants.ITEM_GEODE, 1), ref, store);
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.geode.open.noRoom"),
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.geode.open.noRoom"),
                 NotificationStyle.Warning
             );
             refresh(ref, store);
@@ -230,11 +231,12 @@ public final class GeodeOpenPage extends InteractiveCustomUIPage<GeodeOpenPage.P
                 : Message.raw(reward.getItemId());
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.geode.open.reward")
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.geode.open.reward")
                 .param("amount", reward.getQuantity())
                 .param("itemName", itemNameMsg),
             NotificationStyle.Success
         );
+        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WEAPON_BENCH_CRAFT);
         refresh(ref, store);
     }
 

@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Міські свята
+aetherhaven.ui.feast.noTown=Ви повинні належати до якогось міста.
+aetherhaven.ui.feast.noPermission=Ви не можете влаштовувати бенкети для цього міста.
+aetherhaven.ui.feast.outsideTerritory=Стіл має стояти в межах території вашого міста.
+aetherhaven.ui.feast.activeTitle=Міське свято розпочалося
+aetherhaven.ui.feast.noneActive=Жодне бенкетне свято з часовим обмеженням не активне. Виберіть бенкет ліворуч, щоб переглянути вартість та ефекти.
+aetherhaven.ui.feast.daysLeft=Залишок днів (світанків): {days}
+aetherhaven.ui.feast.selectHint=Виберіть свято
+aetherhaven.ui.feast.ingredientsLabel=Інгредієнти
+aetherhaven.ui.feast.confirm=Влаштуйте свято
+aetherhaven.ui.feast.locked=Ти ще не вивчив це свято. Проведи час з містянами, поки хтось тобі його не розповість.
+aetherhaven.ui.feast.tooltipLocked=Зачинено, доки сусід не навчить вас цьому святу. Допоможіть місту та продовжуйте спілкуватися з людьми, які готують для зали.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord перезаряджається (залишилося {days} днів на світанку).
+aetherhaven.ui.feast.began=Починається свято. Селяни збираються за столом.
+aetherhaven.ui.feast.err.pluginNotLoaded=Етерхейвен не завантажено на цьому сервері.
+aetherhaven.ui.feast.err.unknownFeast=Цього свята немає.
+aetherhaven.ui.feast.err.invalidPlayer=Не вдалося перевірити вашого персонажа.
+aetherhaven.ui.feast.err.feastNotUnlocked=Ти ще не навчився цього свята. Зміцни довіру в місті та прислухайся, коли хтось запропонує навчити цього.
+aetherhaven.ui.feast.err.timedFeastActive=У цьому місті вже триває ще одне свято за певний час.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Зачекайте, поки закінчиться поточне свято з обмеженим часом, перш ніж подавати Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=«Ягідне коло Конкорд» все ще перезаряджається.
+aetherhaven.ui.feast.err.notEnoughIngredients=У вас недостатньо необхідних інгредієнтів.
+
+aetherhaven.ui.production.title=Магазини для робочих місць
+aetherhaven.ui.production.prev=Попередній
+aetherhaven.ui.production.next=Далі
+aetherhaven.ui.production.prevTooltip=Попередній вихід у цьому слоті
+aetherhaven.ui.production.nextTooltip=Наступний вихід у цьому слоті
+aetherhaven.ui.production.take1=Візьміть 1
+aetherhaven.ui.production.take10=Візьміть 10
+aetherhaven.ui.production.take100=Візьміть 100
+aetherhaven.ui.production.genInterval={time} щоб зробити один
+aetherhaven.ui.production.err.plugin=Етерхейвен не завантажено на цьому сервері.
+aetherhaven.ui.production.err.permission=Ви не можете відкрити це сховище для цього міста.
+aetherhaven.ui.production.err.plot=Цей блок не знаходиться всередині завершеної робочої ділянки (ферми, сараю, млина чи шахтарської хатини) для вашого міста.
+aetherhaven.ui.production.err.catalog=Для цієї будівлі не налаштовано виробничий каталог.
+aetherhaven.ui.production.err.inventoryFull=Ваш інвентар занадто повний, щоб витримати стільки.
+aetherhaven.ui.production.unlockButton=Розблоковує
+aetherhaven.ui.production.unlockTooltip=Перегляньте та придбайте заблоковані виходи на робочому місці для цієї будівлі.
+
+aetherhaven.ui.productionUnlocks.title=Розблокування робочого місця
+aetherhaven.ui.productionUnlocks.intro=Виберіть вихідний елемент нижче, щоб побачити його назву та вимоги на панелі. Наведіть курсор на значок, щоб переглянути кількість затриманих та необхідних елементів. Коли ви досягнете необхідної кількості предметів та золота, натисніть на заблокований вихідний елемент, щоб розблокувати його.
+aetherhaven.ui.productionUnlocks.navProduction=Виробництво
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Повернення до сховища на робочому місці
+aetherhaven.ui.productionUnlocks.detailHint=Натисніть на значок вище, щоб побачити його назву та вимоги до розблокування.
+aetherhaven.ui.productionUnlocks.err.inventory=Не вдалося прочитати ваш інвентар.
+aetherhaven.ui.productionUnlocks.err.empty=Для цього робочого місця не налаштовано список розблокування.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Вже розблоковано для цього робочого місця.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Товар: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Золоті монети: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Вам потрібно щонайменше {need} цього предмета у вашому інвентарі (комбіновані сумки).
+aetherhaven.ui.productionUnlocks.notify.needGold=Вам потрібна достатня кількість золотих монет у міській скарбниці та вашому інвентарі ({need} загалом).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Не вдалося видалити потрібні предмети з вашого інвентарю.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Не зміг сплатити вартість золота; ваші товари повернуто.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Розблоковано {item} для цього робочого місця.
+
+aetherhaven.feast.stewards.name=Вечеря керуючого книгою
+aetherhaven.feast.stewards.description=Намажте хліб, сир і справжній гарбузовий пиріг, щоб ранкова десятина була щедрою протягом тижня.
+aetherhaven.feast.hearthglass.name=Чування Hearthglass
+aetherhaven.feast.hearthglass.description=Риба-гриль, тушковані шматки та овочі, викладені як повільно горюча страва на честь поховання. Потреби селян згасають більш повільно протягом одного тижня.
+aetherhaven.feast.berrycircle.name=Беррісеркл Конкорд
+aetherhaven.feast.berrycircle.description=Коло легких тарілок: ягідний салат, фруктові шашлички та попкорн для тостів. Сусіди пам'ятають вас трохи добрішими за це. Зачекайте тиждень світанків, перш ніж ви зможете подавати це знову.

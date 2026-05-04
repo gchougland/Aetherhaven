@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Quest gestartet: {name}
+aetherhaven.quest.completed=Quest abgeschlossen: {name}
+aetherhaven.quest.abandoned=Quest abgebrochen: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Aktive Quest erhalten: {name}
+aetherhaven.questdebug.completed=Quest abgeschlossen: {name}
+aetherhaven.questdebug.cleared=Aktive Quest abgeschlossen: {name}
+aetherhaven.questdebug.statusHeader=-- Queststatus --
+aetherhaven.questdebug.statusActive=aktiv:
+aetherhaven.questdebug.statusCompleted=vollendet:
+aetherhaven.questdebug.statusEmpty=(keiner)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Für diese Stadt sind noch keine Dorfbewohner-IDs registriert.
+aetherhaven.villager.listHeader=Dorfbewohner: Entitäts-UUID, Quelle, Rolle, falls geladen (verwenden Sie die UUID oder Rollen-ID mit /aetherhaven-Reputation … und Dorfbewohnerstandort):
+aetherhaven.villager.listRow={uuid} | {note} | Rolle: {role}
+aetherhaven.villager.locateNotLoaded=Der Dorfbewohner ist nicht geladen (versuche, dich näher heranzubewegen oder Chunks zu laden).
+aetherhaven.villager.locateNoTransform=Für diese Entität ist keine Transformation erforderlich.
+aetherhaven.villager.locatePosition=Dorfbewohner {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Für die Teleportation wird ein Operator (OP-Gruppe) benötigt.
+aetherhaven.villager.teleported=Teleportiert.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=Kein Item-Container an diesem Block (Chunk nicht geladen, Füller/Basis stimmt nicht überein oder es handelt sich nicht um einen Containerblock).
+aetherhaven.debug.loot.bonusApplied=Der Bonus-Beutewurf von Aetherhaven wurde auf diesen Container angewendet (erzwungen).
+aetherhaven.townsCommand.line={id} name="{name}" world={world} owner={owner} chunks={cx},{cz} r{radius}
+aetherhaven.list.none=(keiner)
+aetherhaven.questdebug.statusActiveLine=Aktiv: {list}
+aetherhaven.questdebug.statusActiveEmpty=Aktiv: (keine)
+aetherhaven.questdebug.statusCompletedLine=Abgeschlossen: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Abgeschlossen: (keine)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Ausgang von Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Benutze diese Funktion, um in die Oberwelt zurückzukehren.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven-Portal
+items.Aetherhaven_Portal_Enter.description=Benutze diesen Dienst, um Aetherhaven zu betreten.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Ätherhafen
+instances.aetherhaven.subtitle=Das Himmelsdorf

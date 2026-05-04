@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 560);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.jewelryAppraisal.title;
+      Label #JewelryAppraisalTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -35,7 +37,7 @@ $C.@PageOverlay {
       Label #DetailPick {
         Anchor: (Bottom: 6);
         Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
-        Text: %server.aetherhaven.ui.jewelryAppraisal.pick;
+        Text: "";
       }
 
       Label #DetailRarity {
@@ -54,7 +56,7 @@ $C.@PageOverlay {
 
       $C.@TextButton #Appraise {
         Anchor: (Bottom: 8);
-        Text: %server.aetherhaven.ui.jewelryAppraisal.appraise;
+        Text: "";
       }
     }
   }

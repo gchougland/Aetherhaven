@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Gold coins stored: {count}
+aetherhaven.ui.treasury.depositNoCoins=You have no gold coins to deposit.
+aetherhaven.ui.treasury.depositRemoveFailed=Could not remove coins from inventory.
+aetherhaven.ui.treasury.deposited=Deposited {count} gold coins.
+aetherhaven.ui.treasury.makeRoom=Make room in your inventory.
+aetherhaven.ui.treasury.couldNotAddCoins=Could not add coins.
+aetherhaven.ui.treasury.withdrew=Withdrew {count} gold coins.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Tax breakdown (loaded chunks only; unloaded residents contribute 0 until simulated):
+aetherhaven.ui.treasury.debug.titheNoHall=Tithe: no complete town hall in this town.
+aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 gold (no loaded residents, or 0 from policy math). Unload/needs/breakdown: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheApplied=Tithe applied: +{amount} gold to treasury (same rules as a morning collection).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine=  {name} ({kind}) comfort={comfort} gold={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=You need a town in this world to track quests.
+aetherhaven.ui.questJournal.noPermission=You do not have permission to manage town quests.
+aetherhaven.ui.questJournal.noActive=No active quests.
+aetherhaven.ui.questJournal.hint=Tap a quest for details. × removes it from your log (you can take it again from the giver).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Dialogue
+aetherhaven.ui.dialogue.unknown=Unknown dialogue: {id}
+aetherhaven.ui.dialogue.missingNode=Missing node: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Building
+aetherhaven.ui.plotConstruction.plotSignTitle=Plot sign
+aetherhaven.ui.plotConstruction.noConstruction=No construction is configured for this plot.
+aetherhaven.ui.plotConstruction.assignResidentHint=Assign a villager who lives here (completes their house quest when it matches).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Unassigned
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Could not load player data.
+aetherhaven.ui.plotConstruction.townDataMissing=Town data not found for this block.
+aetherhaven.ui.plotConstruction.clearedHome=Cleared home assignment.
+aetherhaven.ui.plotConstruction.updatedHome=Home assignment updated.
+aetherhaven.ui.plotConstruction.plotRemoved=Plot removed and plot token returned.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (have {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Could not load player data.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Not enough life essence (need {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Could not remove life essence from inventory.

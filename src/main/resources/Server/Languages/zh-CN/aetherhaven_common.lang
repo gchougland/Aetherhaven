@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=以太港未加载。
+aetherhaven.common.noTownInWorld=这世上没有属于你的城镇。
+aetherhaven.common.noQuestPermission=你没有在这个城镇执行任务的权限。
+aetherhaven.common.townNotFound=未找到城镇。
+aetherhaven.common.invalidTownLink=无效的城镇链接。
+aetherhaven.common.treasuryNotLinked=财政部不参与此次交易。
+aetherhaven.common.ownerOnlyTreasury=只有城镇所有者才能使用国库。
+aetherhaven.common.noTreasuryPanelPermission=你没有权限使用镇财政金库。
+aetherhaven.common.townNotInThisWorld=城镇不存在于这个世界上。
+aetherhaven.common.noMoveBuildingsPermission=你没有权限搬迁本镇的建筑物。
+aetherhaven.common.buildingCannotMove=该建筑物无法搬迁（缺少地块或未完工）。
+aetherhaven.common.lookAtBlockPlot=查看一个图块以设置绘图符号位置并开始预览。
+aetherhaven.common.carryPlotToken=携带工具中列出的建筑类型的地块标记（例如旅店地块标记）开始放置。
+aetherhaven.common.statueNotLinked=这座雕像与任何城镇都没有关联。
+aetherhaven.common.ownerOnlyStatue=只有城镇所有者才能使用这座雕像。
+aetherhaven.common.noReviveVillagersPermission=你没有权限在这座雕像处复活村民。
+aetherhaven.common.noPlayerId=没有玩家ID。
+aetherhaven.common.playersOnly=仅限玩家。
+aetherhaven.common.invalidVillager=无效村民。
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=你已经身处这个世界的一个城镇之中。在建立新的城镇之前，先离开它吧。
+aetherhaven.charter.townFounded=城镇已建立：{name}。村长已抵达。请使用宪章重新命名城镇。
+aetherhaven.chartertown.info.notLinked=该宪章目前尚未与任何城镇关联。
+aetherhaven.chartertown.info.invalidTownId=宪章上的城镇 ID 无效。
+aetherhaven.chartertown.info.townDataMissing=未找到城镇数据（请参阅服务器日志）。
+aetherhaven.chartertown.townInfoBlock=城镇名称：{name}\n城镇 ID：{id}\n等级：{tier}\n领地（区块半径）：{radius}\n特许地位于{cx}、{cy}、{cz}
+aetherhaven.chartertown.nameEmpty=城镇名称不能为空。
+aetherhaven.chartertown.nameDuplicate=这个名字已经被世界上另一个城镇使用了。
+aetherhaven.chartertown.nameSaved=已保存的城镇名称：{name}

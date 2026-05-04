@@ -16,20 +16,20 @@ public final class JewelryTooltipMessages {
             return Message.raw("");
         }
         if (!JewelryMetadata.hasJewelryMeta(stack)) {
-            return Message.translation("server.aetherhaven.ui.handmirror.tooltipUnattuned");
+            return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnattuned");
         }
         JewelryRarity rarity = JewelryMetadata.readRarity(stack);
         String rarityKey = rarity != null ? rarity.wireName() : "COMMON";
         Message header =
-            Message.translation("server.aetherhaven.ui.handmirror.tooltipHeader")
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipHeader")
                 .param(
                     "rarity",
-                    Message.translation("server.aetherhaven.jewelry.rarity." + rarityKey)
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.rarity." + rarityKey)
                         .color(JewelryTooltipText.rarityColorHex(rarityKey)));
         if (!JewelryMetadata.isAppraised(stack)) {
             header = header
                 .insert(Message.raw("\n"))
-                .insert(Message.translation("server.aetherhaven.ui.handmirror.tooltipUnappraised").color("#8A8F98"));
+                .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.tooltipUnappraised").color("#8A8F98"));
         }
         Message body = header;
         var traits = JewelryMetadata.readTraits(stack);
@@ -38,15 +38,15 @@ public final class JewelryTooltipMessages {
             for (int i = 0; i < lines; i++) {
                 body = body
                     .insert(Message.raw("\n"))
-                    .insert(Message.translation("server.aetherhaven.ui.handmirror.traitHidden").color("#6B7080"));
+                    .insert(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.traitHidden").color("#6B7080"));
             }
         } else {
             for (JewelryMetadata.RolledTrait rt : traits) {
                 String n = JewelryStatTuning.formatForDisplay(rt.statId(), rt.amount());
                 String amountParam = (rt.amount() < 0f) ? n : ("+" + n);
                 Message line =
-                    Message.translation("server.aetherhaven.jewelry.traitLine")
-                        .param("stat", Message.translation("server.aetherhaven.jewelry.stat." + rt.statId()).color("#C9B6E8"))
+                    Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.traitLine")
+                        .param("stat", Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.stat." + rt.statId()).color("#C9B6E8"))
                         .param("amount", Message.raw(amountParam).color("#5EFFC8"));
                 body = body.insert(Message.raw("\n")).insert(line);
             }

@@ -78,15 +78,15 @@
   ],
   "Icon": "Icons/ModelsGenerated/Logger.png",
   "IconProperties": {
-    "Scale": 0.5,
+    "Scale": 0.2,
     "Rotation": [
       0,
-      25,
+      -45,
       0
     ],
     "Translation": [
       0,
-      -108
+      -75
     ]
   }
 }

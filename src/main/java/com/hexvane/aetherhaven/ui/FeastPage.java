@@ -1,7 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.MaterialRequirement;import com.hexvane.aetherhaven.feast.FeastCatalog;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.feast.FeastCatalog;
 import com.hexvane.aetherhaven.feast.FeastDefinition;
 import com.hexvane.aetherhaven.feast.FeastEffectKind;
 import com.hexvane.aetherhaven.feast.FeastService;
@@ -63,28 +64,29 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
             commandBuilder.append("Aetherhaven/Feasts.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyFeasts(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (plugin == null || uc == null || pr == null) {
-            commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.err.pluginNotLoaded"));
+            commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.err.pluginNotLoaded"));
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
-            commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.noTown"));
+            commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.noTown"));
             commandBuilder.set("#ConfirmFeast.Disabled", true);
             return;
         }
         if (!town.playerCanManageConstructions(uc.getUuid())) {
-            commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.noPermission"));
+            commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.noPermission"));
             commandBuilder.set("#ConfirmFeast.Disabled", true);
             return;
         }
         if (!tm.isInsideTerritory(town, tableBlockX, tableBlockZ)) {
-            commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.outsideTerritory"));
+            commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.outsideTerritory"));
             commandBuilder.set("#ConfirmFeast.Disabled", true);
             return;
         }
@@ -105,7 +107,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
                     Message.join(
                         Message.translation(d.titleTranslationKey()),
                         Message.raw("\n"),
-                        Message.translation("server.aetherhaven.ui.feast.tooltipLocked")
+                        Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.tooltipLocked")
                     )
                 );
             } else {
@@ -129,7 +131,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
 
         FeastDefinition selDef = selectedFeastId != null ? FeastCatalog.findById(selectedFeastId) : null;
         if (selDef == null) {
-            commandBuilder.set("#RightTitle.TextSpans", Message.translation("server.aetherhaven.ui.feast.activeTitle"));
+            commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.activeTitle"));
             if (timedActive) {
                 String kid = town.getActiveFeastKind();
                 FeastDefinition activeDef = kid != null ? FeastCatalog.findById(kid) : null;
@@ -140,18 +142,18 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
                     );
                     commandBuilder.set(
                         "#RightCosts.TextSpans",
-                        Message.translation("server.aetherhaven.ui.feast.daysLeft").param("days", daysLeft)
+                        Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.daysLeft").param("days", daysLeft)
                     );
                 } else {
-                    commandBuilder.set("#RightBody.TextSpans", Message.translation("server.aetherhaven.ui.feast.noneActive"));
+                    commandBuilder.set("#RightBody.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.noneActive"));
                     commandBuilder.set("#RightCosts.TextSpans", Message.raw(""));
                 }
             } else {
-                commandBuilder.set("#RightBody.TextSpans", Message.translation("server.aetherhaven.ui.feast.noneActive"));
+                commandBuilder.set("#RightBody.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.noneActive"));
                 if (berryCd > 0) {
                     commandBuilder.set(
                         "#RightCosts.TextSpans",
-                        Message.translation("server.aetherhaven.ui.feast.cooldownBerrycircle").param("days", berryCd)
+                        Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.cooldownBerrycircle").param("days", berryCd)
                     );
                 } else {
                     commandBuilder.set("#RightCosts.TextSpans", Message.raw(""));
@@ -166,7 +168,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
                 "#RightCosts.TextSpans",
                 locked
                     ? Message.join(
-                        Message.translation("server.aetherhaven.ui.feast.locked"),
+                        Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.locked"),
                         Message.raw("\n\n"),
                         costMessage(language, inv, selDef)
                     )
@@ -198,10 +200,10 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
         }
         String lines = sb.toString().trim();
         if (lines.isEmpty()) {
-            return Message.translation("server.aetherhaven.ui.feast.ingredientsLabel");
+            return Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.ingredientsLabel");
         }
         return Message.join(
-            Message.translation("server.aetherhaven.ui.feast.ingredientsLabel"),
+            Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.ingredientsLabel"),
             Message.raw("\n"),
             Message.raw(lines)
         );
@@ -250,7 +252,7 @@ public final class FeastPage extends InteractiveCustomUIPage<FeastPage.PageData>
         } else {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation("server.aetherhaven.ui.feast.began"),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.began"),
                 NotificationStyle.Success
             );
             this.selectedFeastId = null;

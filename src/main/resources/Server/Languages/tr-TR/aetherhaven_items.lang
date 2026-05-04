@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Arsa işareti
+items.Aetherhaven_Plot_Sign.description=Önceden hazırlanmış bir yapının inşa edilebileceği yerleri işaretler. Yapılandırmak için /aetherhaven plot komutunu kullanın.
+
+items.Aetherhaven_Charter.name=Kasaba tüzüğü
+items.Aetherhaven_Charter.description=Kasaba kurmak için yer. Her oyuncu her dünyada bir kasabaya sahip olabilir. Kasaba bilgilerini açmak için kullanılır.
+
+items.Aetherhaven_Town_Planning_Desk.name=Şehir planlama masası
+items.Aetherhaven_Town_Planning_Desk.description=Kasaba tüzükleri, arsa yerleştirme asası, inşaat asası (pasif arsa yapımını hızlandırır), görev günlüğü, jeod örsü, tüzük değişiklikleri tablosu ve arsa jetonları üretin. Birini çalışma tezgahında inşa edin.
+items.Aetherhaven_Charter_Amendments_Table.name=Tüzük değişiklikleri tablosu
+items.Aetherhaven_Charter_Amendments_Table.description=Kasabanın öşürünün nasıl hesaplandığını ve tüzüğün hangi ticareti desteklediğini kaydeder. Nüfusunuz desteklediğinde değişiklikleri açmak için kullanın. Kasaba planlama masanızda üretin; şemayı bilmeniz gerekir.
+items.Aetherhaven_Banquet_Table.name=Ziyafet masası
+items.Aetherhaven_Banquet_Table.description=Şehir şölenleri için uzun bir masa. Bölgenize yerleştirin ve şehir şölenlerinde servis yapmak için kullanın. Şehirdeki biri bu deseni paylaştığında, şehir planlama masasında üretin.
+items.Aetherhaven_Founder_Monument.name=Kurucu anıtı
+items.Aetherhaven_Founder_Monument.description=Kurucunun suretini taşıyan taş bir kaide. Kurucuyu onurlandırmak için kasaba toprakları içine yerleştirilir; kaide yerinde durduğu sürece hazinenin sabah hasılatı biraz artar. Her kasabada yalnızca bir tane bulunabilir.
+
+benchCategories.aetherhaven.town_planning=Şehir planlaması
+benchCategories.aetherhaven.plot_tokens=Grafik belirteçleri
+
+items.Aetherhaven_Plot_Placement_Tool.name=Arsa yerleştirme personeli
+items.Aetherhaven_Plot_Placement_Tool.description=Uygun arsa jetonunu çantanızda saklayın. Binanın hayaletini görmek için yere doğru nişan alırken bu asayı kullanın. Uygun hale gelene kadar itip çevirin, ardından arsayı işaretlemek için onaylayın. Önizlemeyi temizlemek için iptal edin ve farklı bir yer istediğinizde asayı tekrar kullanın.
+
+items.Aetherhaven_Poi_Tool.name=POI hata ayıklama aracı
+items.Aetherhaven_Poi_Tool.description=Basılı tutulduğunda kasabadaki ilgi noktalarını gösterir (izin: aetherhaven.poi.tool). Birincil: En yakın ilgi noktasını seçin. İkincil: İlgi noktası çapasını o bloğa taşıyın. Kullanım: Seçilen ilgi noktası için özerklik yolu hedefini ayarlayın/temizleyin (temizlemek için ilgi noktası bloğuna tekrar tıklayın).
+items.Aetherhaven_Poi_Tool.legendTitle=POI aracı
+items.Aetherhaven_Poi_Tool.legendPrimary=Birincil: Bloğun yakınındaki en yakın ilgi noktasını seçin
+items.Aetherhaven_Poi_Tool.legendSecondary=İkincil: Seçilen ilgi noktasını bloğa taşı
+items.Aetherhaven_Poi_Tool.legendUse=Kullanım: Seçilen POI için NPC yol hedefi belirleme (POI blok temizlemelerinde kullanılır)
+
+aetherhaven.poiTool.legendTitle=POI aracı
+aetherhaven.poiTool.legendPrimary=Birincil: Bloğun yakınındaki en yakın ilgi noktasını seçin
+aetherhaven.poiTool.legendSecondary=İkincil: Seçilen ilgi noktasını bloğa taşı
+aetherhaven.poiTool.legendUse=Kullanım: Seçilen POI için NPC yol hedefi belirleme (POI blok temizlemelerinde kullanılır)
+
+aetherhaven.pathTool.legendPageTitle=Yol aracı
+aetherhaven.pathTool.legendBlurb=Bir eğri oluşturun, önizleyin ve ardından yol bloklarını yerleştirin. Aracı tutarken köşede bir durum paneli belirir. Buuz135 MHUD yüklü olduğunda, panel kendi katmanı olarak kaydedilir, böylece diğer özel HUD'lar da görünür kalabilir.
+aetherhaven.pathTool.legendHotkeyAdd=Yerdeki ikincil imleç bir anahtar kare (altın küre) ekler. Nişan alırken ikincil imleç bir anahtar kareyi kaldırır. Yeni anahtar kareler baktığınız yöne bakar.
+aetherhaven.pathTool.legendHotkeyAim=Seçmek için bir anahtar kareye bakın. Taşıma modunda, zemindeki birincil nokta, noktayı hareket ettirir. Aynı düğümdeki birincil nokta hiçbir şey yapmaz.
+aetherhaven.pathTool.legendHotkeyUse=F: Döndürme modunda, seçili düğümde adım adım sapma hareketi yapar. Taşıma modunda, F hiçbir şey yapmaz. Yerleştirme modunda, F yolu yerleştirir (iki düğüm gerekir). Q: Mod döngüsü. E: Genişlik 1-8. Üçüncü araç özelliği: Yol stili (iç bloklar; yapılandırmadaki PathToolStyles'a bakın). Bir anahtar karede ikincil tuşa basıldığında kaldırılır.
+aetherhaven.pathTool.legendHotkeyCrouchUse=İsteğe bağlı: Mod değiştirmek için artık çömelme gerekmiyor; bunun yerine araç yeteneğini (Q) kullanın.
+aetherhaven.pathTool.legendVisuals=Önizleme: beyaz = düğümler ve eğri, kahverengi = yol şeridi, yeşil = kenar çimi; kırmızı = engellenmiş. Levhalar yüzeyde duruyor. Genişlik: ikinci araç yeteneği (1-8). Stil: üçüncü araç yeteneği. Onay, yolun üzerindeki uzun bitkileri (Plant_Grass) temizler.
+aetherhaven.pathTool.statusHeader=Aleti tutarken
+aetherhaven.pathTool.statusLine1=Puan eklediğinizde, mod değiştirdiğinizde (Q) veya taahhüt modunda işlemi tamamladığınızda bildirimler ve sohbet mesajları görüntülenir.
+aetherhaven.pathTool.statusLine2=Seçim: Bir küreye nişan alın. İsabet ettiremezseniz mevcut seçiminizi korursunuz. Q tuşu modu değiştirir; ikinci yetenek genişliği değiştirir; üçüncü yetenek yol stilini değiştirir.
+
+aetherhaven.pathTool.hudTitle=Yol aracı
+aetherhaven.pathTool.hudNameTranslate=Taşınmak
+aetherhaven.pathTool.hudNameRotate=Döndür
+aetherhaven.pathTool.hudNameCommit=Yer
+aetherhaven.pathTool.hudHelpTranslate=Birincil: Seçmek için bir düğüme nişan alın, ardından taşımak için bir bloğa birincil tuşla dokunun. İkincil: Zemin bir düğüm ekler; bir düğüme nişan almak onu kaldırır. Q: Sonraki mod.
+aetherhaven.pathTool.hudHelpRotate=Birincil: Seçmek için bir düğümü hedefleyin. İkincil: Yere basmak bir düğüm ekler; bir düğümü hedeflemek onu kaldırır. F, seçili düğümün yaw'unu hafifçe değiştirir. Q: Sonraki mod.
+aetherhaven.pathTool.hudHelpCommit=Birincil: Seçmek için bir düğümü hedefleyin. İkincil: Zemin bir düğüm ekler; bir düğümü hedeflemek onu kaldırır. F yolu yerleştirir (2+ düğüm). Q: sonraki mod.
+aetherhaven.pathTool.hudStyle=Stil: {style}
+aetherhaven.pathTool.hudWidth=Genişlik: {w} blok (E tuşuyla döngü)
+aetherhaven.pathTool.hudNodes=Düğümler: {n}
+aetherhaven.pathTool.hudHint=Birincil = seçme/taşıma | İkincil = zemine ekleme, düğümden kaldırma | Q: mod | E: genişlik | R: stil | F: döndürme/yerleştirme
+
+aetherhaven.pathTool.addedNode={n} düğümü eklendi.
+aetherhaven.pathTool.modeCycledToTranslate=Mod: Anahtar kareleri taşı ve yerleştir.
+aetherhaven.pathTool.modeCycledToRotate=Mod: döndürme — F, seçili düğümün yatay hareketini hafifçe değiştirir.
+aetherhaven.pathTool.modeCycledToCommit=Mod: Yerleştir — F tuşu yolu yerleştirir (2 veya daha fazla düğümünüz olduğunda).
+aetherhaven.pathTool.widthCycled=Yol genişliği: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Yol stili: {style}
+aetherhaven.pathTool.toastStyleCycled=Yol stili değiştirildi
+aetherhaven.pathTool.useInTranslateMode=Hareket modunda F tuşu hiçbir işe yaramaz. Yerleştirme moduna geçmek için Q tuşuna, ardından yerleştirmek için F tuşuna basın veya döndürmek için F tuşuna ve ardından yatay hareket için F tuşuna basın.
+aetherhaven.pathTool.rotateNoSelection=Döndürmek için bir ana kare seçin (altın küreyi hedefleyin) veya modu değiştirmek için Q tuşuna basın.
+aetherhaven.pathTool.modeToggled=Mod: {m}
+aetherhaven.pathTool.selectedNode=Düğüm seçildi.
+aetherhaven.pathTool.movedNode=Düğüm taşındı.
+aetherhaven.pathTool.noNodeHit=Menzil içinde kontrol düğümü yok. Bir düğüm seçiliyken çeviri modunda, hareket ettirmek için yerdeki birincil düğümü deneyin.
+aetherhaven.pathTool.noNodeOnAim=Nişan alma imlecinde anahtar kare yok. Seçmek için altın diske nişan alın. Seçim değişmeden kalır.
+aetherhaven.pathTool.toastAdd=Kontrol noktası eklendi.
+aetherhaven.pathTool.toastModeTranslate=Taşıma: Birincil komut blok hareketlerini seçer; ikincil komut ise anahtar kare ekler.
+aetherhaven.pathTool.toastModeRotate=Döndür: F tuşu, seçili düğümün yatay hareketini hafifçe değiştirir.
+aetherhaven.pathTool.toastModeCommit=Yerleştirme: F, yolu (2+ düğüm) yerleştirir. Q ile yer değiştirir.
+aetherhaven.pathTool.toastMoved=Düğüm konumu güncellendi
+aetherhaven.pathTool.toastRemoved=Kontrol noktası kaldırıldı.
+aetherhaven.pathTool.toastRotated=Yaw hafifçe dürttü
+aetherhaven.pathTool.toastCemented=Yol sabitlendi. Geri alma kimliği için sohbete bakın.
+aetherhaven.pathTool.rotated=Döndürüldü {deg}°.
+aetherhaven.pathTool.removedNode=Düğüm kaldırıldı. Geriye {n} düğüm kaldı.
+aetherhaven.pathTool.needTwoNodes=En az iki anahtar kareye ihtiyacınız var. İkincil seçeneği kullanarak bir tane daha ekleyin veya düzenleme modundan çıkmak ve düzenlemeye devam etmek için Q tuşuna basın.
+aetherhaven.pathTool.emptyPlan=Yol boyunca zemin bulunamadı (dik/boş/yüklenmemiş alanlar).
+aetherhaven.pathTool.cementFail=Yerleştirilecek bir şey yok: Değiştirilebilir zemin bulunamadı veya yerleştirme başarısız oldu.
+aetherhaven.pathTool.cemented=Yol yerleştirildi. Geri alma kimliği: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=aetherhaven.path.revert izniniz yok.
+aetherhaven.pathTool.badUuid=Geçersiz kimlik: {raw}
+aetherhaven.pathTool.unknownId=Bu kimlik numarasına sahip kayıtlı bir yol yok.
+aetherhaven.pathTool.reverted={id} için {cells} bloğu/blokları geri alındı.
+aetherhaven.pathTool.navvizOn=Yol navigasyon hata ayıklaması: açık (sunucu, onaylanmış yol düğümlerini çizgiler halinde gösterir; kapatmak için tekrar çalıştırın)
+aetherhaven.pathTool.navvizOff=Yol navigasyon hata ayıklaması: kapalı
+aetherhaven.pathTool.navvizNoPerm=Yol navigasyon hata ayıklaması için aetherhaven.path.tool gereklidir.
+
+commands.aetherhaven.path.root.desc=Yol/eğri yerleştirme yardımcıları
+commands.aetherhaven.path.revert.desc=Geri alma dosyasından (aetherhaven.path.revert) sabitlenmiş bir yolu geri yükle.
+commands.aetherhaven.path.revert.id=Yol taahhüt kimliği (Cement sohbet mesajından alınan UUID)
+commands.aetherhaven.path.navviz.desc=Yol navigasyon çoklu çizgilerinin hata ayıklama çizimini açıp kapat (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=Yol tasarımcısı küreği
+items.Aetherhaven_Path_Tool.description=Eğri yollar tasarlar (aetherhaven.path.tool). İkincil: düğüm ekle. Birincil: seç; taşıma modunda, taşımak için zemine tıklayın. Q: mod döngüsü. 2. yetenek: yol genişliği 1-8. 3. yetenek: yol stili (iç bloklar; yapılandırmada PathToolStyles). F: döndürmede sapmayı hafifçe kaydır veya yerleştirme modunda yerleştir (2+ düğüm). Geri Al: aetherhaven yol geri alma. Yapılandırma: PathToolStyles, ışın izleme ve değiştirme listeleri.
+
+items.Aetherhaven_Plot_Token_Inn.name=Han arsası jetonu
+items.Aetherhaven_Plot_Token_Inn.description=Hanın yerleşim planı için gerekli olan envanter öğesi, arsa yerleştirme personelini kullanabilmek için gereklidir.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=Pazar tezgahı arsa jetonu
+items.Aetherhaven_Plot_Token_Market_Stall.description=Pazar tezgahının yerleşim planının, arsa planlama personeli tarafından belirlenmesi gerekmektedir.
+
+items.Aetherhaven_Plot_Token_Farm.name=Çiftlik arazisi jetonu
+items.Aetherhaven_Plot_Token_Farm.description=Arazi yerleştirme personeli tarafından tarım arazisi planının yerleştirilmesi gerekmektedir.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Demirci dükkanı arsa jetonu
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Parsel yerleştirme personeli tarafından demirci dükkanının yerinin belirlenmesi gerekmektedir.
+
+items.Aetherhaven_Plot_Token_Park.name=Park yeri jetonu
+items.Aetherhaven_Plot_Token_Park.description=Park alanının yerleşim planının, planlama personeli tarafından belirlenmesi gerekmektedir.
+
+items.Aetherhaven_Plot_Token_House.name=Ev arsası jetonu
+items.Aetherhaven_Plot_Token_House.description=Arsa yerleşim personeli tarafından ortak konutun temel planının yerleştirilmesi gerekmektedir.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Belediye binası arsa jetonu
+items.Aetherhaven_Plot_Token_Town_Hall.description=Belediye binasının yerleşim planının, arsa yerleştirme personeli tarafından belirlenmesi gerekmektedir.
+
+items.Aetherhaven_Gold_Coin.name=Altın sikke
+items.Aetherhaven_Gold_Coin.description=Şehrin para birimi hazinede saklanıyor.
+
+items.Aetherhaven_Geode.name=Jeot
+items.Aetherhaven_Geode.description=İçinde kristaller, değerli taşlar veya maden cevheri bulunabilen içi boş bir taş. Bir demirciye kırması için ödeme yapın.
+
+items.Aetherhaven_Geode_Anvil.name=Jeod örs
+items.Aetherhaven_Geode_Anvil.description=Jeodları demirci ücreti ödemeden açar. Yerleştirin ve kullanın; şehir planlama masanızda üretmek için şemayı bilmeniz gerekir.
+
+barter.aetherhaven_vex.title=Vex'in günlük stokları
+
+items.Aetherhaven_Treasury.name=Şehir hazinesi
+items.Aetherhaven_Treasury.description=Kasabanın altın paralarını muhafaza eder. Para yatırmak veya çekmek için kullanılır (kasaba sahibi).
+
+items.Aetherhaven_Quest_Journal.name=Kasaba görevi günlüğü
+items.Aetherhaven_Quest_Journal.description=İkincil kullanım: aktif kasaba görevlerini gözden geçirin. Han inşa edildikten sonra Yaşlı size bir görev verebilir.

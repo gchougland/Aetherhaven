@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Conditions lab. You should not see a hidden choice. You should see a greyed choice. Use the compound gates to continue.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=This choice is hidden (literal false).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=This should be greyed out.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(requires literal true)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pass compound: NOT false AND true
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR branch (true OR false)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Thanks for testing. Goodbye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Bye!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Pick below to jump to farewell using a goto action instead of next.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=goto farewell
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=A node enter action just gave you one crude shovel (if you had inventory space). Pick the option below for more items.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Give me 3 dirt, then continue.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Welcome to the Aetherhaven dialogue harness. This line stays long on purpose so you can check layout and scrolling. Your choices sit below the body text.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Continue to the conditions lab.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Leave (end with next null).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Leave (explicit close action).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=You can open the Kweebec merchant barter UI, or skip to stub actions.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Open Kweebec_Merchant barter shop
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Skip shop, go to stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub actions: unlock achievement and start quest should log until those systems exist.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Run unlock_achievement + start_quest stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager

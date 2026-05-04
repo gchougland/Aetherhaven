@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Строительство
+aetherhaven.ui.plotmanagement.title=Управление городом
+aetherhaven.ui.plotmanagement.tabPlot=Сюжет
+aetherhaven.ui.plotmanagement.tabPlayers=Игроки
+aetherhaven.ui.plotmanagement.playersHint=Приглашайте игроков онлайн по имени. Изменяйте роли или удаляйте участников ниже.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Члены этого города. Только владелец может приглашать или изменять роли.
+aetherhaven.ui.plotmanagement.inviteLabel=Пригласить игрока
+aetherhaven.ui.plotmanagement.invitePlaceholder=Имя игрока (в сети)
+aetherhaven.ui.plotmanagement.inviteSend=Отправить приглашение
+aetherhaven.ui.plotmanagement.kick=Удалять
+aetherhaven.ui.plotmanagement.roleOwner=Владелец
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Информация о сюжете
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Потребности жителей деревни
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Члены города
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Переместите это здание
+aetherhaven.ui.plotconstruction.materials=Материалы
+aetherhaven.ui.plotconstruction.build=Строить
+aetherhaven.ui.plotconstruction.pickUpPlot=Возьмите участок (верните жетон)
+aetherhaven.ui.plotconstruction.townNeeds=Город нуждается
+aetherhaven.ui.plotconstruction.moveBuilding=Переместить здание
+aetherhaven.ui.plotconstruction.houseResident=Житель
+aetherhaven.ui.plotconstruction.assignHouseResident=Установил жителя
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Переместить здание?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Открывает окно выбора участка для размещения нового здания. При перемещении здания старое сносится и отстраивается заново; сначала необходимо убрать ценные вещи, домашних животных и незакрепленные предметы с территории старого здания.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Продолжать
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Отмена
+
+aetherhaven.ui.villagerneeds.title=Город нуждается
+aetherhaven.ui.villagerneeds.hint=Выберите жителя деревни, чтобы просмотреть показания счетчиков и его портрет.
+aetherhaven.ui.villagerneeds.hunger=Голод
+aetherhaven.ui.villagerneeds.energy=Энергия
+aetherhaven.ui.villagerneeds.fun=Веселье
+aetherhaven.ui.villagerneeds.villagers=Жители деревни
+aetherhaven.ui.villagerneeds.noResidentsTracked=Пока ни один житель города не отслеживался.
+aetherhaven.ui.villagerneeds.rescueTooltip=Телепортирует выбранного жителя в соседнее место, очищая его текущий маршрут и активность, чтобы он мог переместиться и выбрать новое место назначения. Используйте это, если житель застрял.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=Просмотрите предметы, которые вы подарили этому жителю деревни, сгруппированные по его реакции, и количество подарков, которые вы еще можете подарить на этой неделе.
+aetherhaven.ui.giftHistory.title=Подарки, преподнесенные
+aetherhaven.ui.giftHistory.backTooltip=Возвращение в город нуждается
+aetherhaven.ui.giftHistory.empty=Вы еще не подарили этому жителю деревни ни одного подарка, поэтому ничего не видно.
+aetherhaven.ui.giftHistory.section.love=Любимый
+aetherhaven.ui.giftHistory.section.like=Понравилось
+aetherhaven.ui.giftHistory.section.neutral=Нейтральный
+aetherhaven.ui.giftHistory.section.dislike=Не понравилось
+aetherhaven.ui.giftHistory.giftsThisWeek=Подарки на этой неделе: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Предыдущий житель поселка
+aetherhaven.ui.giftHistory.cycleNextTooltip=Житель соседнего поселка
+aetherhaven.ui.villagerneeds.rescueDone=Выбранный житель был переведен к вам, и его распорядок дня был восстановлен.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=Этот житель не является жителем этого города.
+aetherhaven.ui.reputation.label=Репутация
+aetherhaven.reputation.dailyTalkGain=+{amount} репутация (ежедневное приветствие)
+aetherhaven.reputation.giftRepChange={amount} репутация (подарок)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=поправки к Уставу
+aetherhaven.ui.charter.popHint=Жители (не посетители): {count}. 1-й уровень открывается на 3-м уровне; 2-й уровень — на 5-м.
+aetherhaven.ui.charter.tierMark1=я
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Уровень 1: Десятина
+aetherhaven.ui.charter.tier2=Уровень 2: Фокус на городе
+aetherhaven.ui.charter.t1.perCapitaShort=На душу населения
+aetherhaven.ui.charter.t1.happinessShort=Взвешенный по уровню счастья
+aetherhaven.ui.charter.t1.perCapitaTooltip=Десятина – это, прежде всего, численность населения.\n\nУтреннее золото зависит от количества проживающих здесь жителей. Комфорт повседневной жизни также немного влияет на общую сумму, но именно численность населения определяет итог.
+aetherhaven.ui.charter.t1.happinessTooltip=Десятина – это первоочередная потребность.\n\nУтреннее золото больше зависит от того, насколько хорошо жители накормлены, отдохнули и находятся в хорошем настроении. Несколько дополнительных граждан значат меньше, чем поддержание всех в приличном состоянии.
+aetherhaven.ui.charter.t2.miningShort=Горнодобывающая промышленность
+aetherhaven.ui.charter.t2.loggingShort=Ведение журнала
+aetherhaven.ui.charter.t2.farmingShort=Сельское хозяйство
+aetherhaven.ui.charter.t2.smithingShort=Кузнечное дело
+aetherhaven.ui.charter.t2.miningTooltip=Устав поддерживает разработку шахт.\n\nБонусы, связанные с добычей полезных ископаемых, будут выгодны этому городу после их получения. Выберите только одно направление ниже: добыча полезных ископаемых, лесозаготовка, сельское хозяйство или кузнечное дело.
+aetherhaven.ui.charter.t2.loggingTooltip=Устав поддерживает лес.\n\nБонусы, связанные с лесозаготовками и вырубкой леса, будут выгодны этому городу после их получения. Выберите только одно направление ниже: добыча полезных ископаемых, лесозаготовка, сельское хозяйство или кузнечное дело.
+aetherhaven.ui.charter.t2.farmingTooltip=Устав поддерживает поля.\n\nКогда в вашем городе будет завершена ферма, разбрызгиватели здесь будут орошать немного дальше, с дополнительными клетками по краям зоны орошения. Выберите только одно направление ниже: добыча полезных ископаемых, лесозаготовка, сельское хозяйство или кузнечное дело.
+aetherhaven.ui.charter.t2.smithingTooltip=Устав поддерживает кузницу.\n\nБонусы, связанные с кузнечным делом и металлообработкой, будут выгодны этому городу после их получения. Выберите только одно направление ниже: добыча полезных ископаемых, лесозаготовка, сельское хозяйство или кузнечное дело.
+aetherhaven.ui.charter.hint=Выберите один вариант для каждого уровня. Выбор нельзя будет изменить позже.
+aetherhaven.ui.charter.allChosen=Все поправки были выбраны для этого города.
+aetherhaven.ui.charter.noTown=Для использования этой функции необходимо проживать в каком-либо городе.
+aetherhaven.ui.charter.noPermission=Вносить изменения в устав этого города нельзя.
+aetherhaven.ui.charter.err.locked=Данная поправка либо уже принята, либо утверждена.
+aetherhaven.ui.charter.err.invalid=Неверный выбор.
+aetherhaven.ui.charter.saved=Внесены изменения в Устав.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Продолжать
+aetherhaven.reputation.reward.elder.50=Устав может меняться по мере нашего роста. Вот образец таблицы для внесения поправок. Составьте её за своим столом городского планирования, когда у вас будет схема. Разместите её в коридоре, и вы сможете выбрать, как будет производиться утренняя десятина.
+aetherhaven.reputation.reward.elder.100=Вы сделали для этого города больше, чем кто-либо просил. Возьмите этот закладной камень. Установите памятник основателю там, где это разрешено уставом. Местные жители будут помнить.
+aetherhaven.reputation.reward.innkeeper.50=Вы так долго поддерживали порядок и чистоту в этом зале, что я доверяю вам большой стол. Вот схема банкета — составьте её за столом городского планирования, когда получите чертеж, а затем расставьте в городе. Когда стол будет готов, вы можете также объявить ужин для членов городского совета: хлеб, сыр, пирог и десятина, которая будет направлена на благотворительность в течение недели. Я буду присматривать за залом, пока вы будете подавать еду.
+aetherhaven.reputation.reward.innkeeper.75=Вы уже достаточно долго провели с нами ночи. Когда вы устраиваете бдение в Хартглассе, город ест медленнее и с большей заботой целую неделю. Рыба, мясо, овощи и более мягкий корм для всех нужд. Так мы поддерживаем друг друга.
+aetherhaven.reputation.reward.innkeeper.100=Теперь у вас и этого города общее название. Berrycircle Concord — это круг из лёгких закусок: салат, фруктовые шашлычки, попкорн и тост, который приземляется. Подайте это хотя бы раз, и вас будут помнить с теплотой.
+aetherhaven.reputation.reward.merchant.50=Вы сдержали своё слово и в плохую, и в хорошую погоду. Вот выкройка скамейки. Изготовьте её за своим столом в отделе городского планирования, как только получите чертеж. Оценка скамейки бесплатна; я до сих пор беру за свою.
+aetherhaven.reputation.reward.merchant.100=Вы вложили в эту книгу столько золота, что заслужили место ювелира. Шаблон ваш. Воплотите его за столом городского планирования. Выберите драгоценный камень, металл и вложите в него всю свою душу, и изделие получится идеальным.
+aetherhaven.reputation.reward.priestess.50=Гайя доверяет вам балансировать на грани между ростом и разрушением. Возьмите эту смесь: кристалл и жизненная эссенция, сформированные за столом городского планирования. Она показывает, что не должно оставаться нетронутым, и позволяет уничтожить зародыш одним вздохом порошка.
+aetherhaven.reputation.reward.priestess.75=Вы следите за тем, чтобы дороги были в порядке. Возьмите этот осколок: верните его с десятиной, когда захотите, чтобы в городской колбе хранилось больше, чем просто шепот.
+aetherhaven.reputation.reward.priestess.100=Гея указывает на вашу упрямость в самом лучшем смысле этого слова. Этот зеленый катализатор может усилить эффект от зелья, если вы сочетаете его с деньгами и заботой о хранителе алтаря.
+aetherhaven.reputation.reward.farmer.25=Ты заслужил мое доверие в рядах. Я нарисовал железный разбрызгиватель. Изготовь его на верстаке, когда у тебя будет эссенция воды и железо.
+aetherhaven.reputation.reward.farmer.50=Вот схема тория: более широкий радиус действия, тот же утренний ритм. Схема отобразится во вкладке «Сельское хозяйство» на верстаке, как только вы её узнаете.
+aetherhaven.reputation.reward.farmer.75=Кобальт лучше держит давление. На этой странице открывается третий уровень системы полива, по-прежнему один хороший полив на рассвете.
+aetherhaven.reputation.reward.farmer.100=Адамантит и эссенция: последний лист в наборе. Разложите их осторожно. Поля города будут впитывать воду на рассвете.
+aetherhaven.reputation.reward.blacksmith.25=Камень вместо раствора, камень вместо терпения. У вас есть и то, и другое, и это видно.
+aetherhaven.reputation.reward.blacksmith.50=Вы заслужили доверие кузницы. Вот чертеж наковальни из жеоды. Изготовьте ее за столом городского планирования, когда у вас будут слитки и камень.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Указатель участка (администратор)
+aetherhaven.ui.plotadmin.construction=Строительство
+aetherhaven.ui.plotadmin.give=Поставьте табличку с указанием участка и закройте его.

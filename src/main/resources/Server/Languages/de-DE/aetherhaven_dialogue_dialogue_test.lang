@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Bedingungen-Labor. Es sollte keine versteckte Auswahlmöglichkeit angezeigt werden. Es sollte eine ausgegraute Auswahlmöglichkeit angezeigt werden. Verwenden Sie die zusammengesetzten Gatter, um fortzufahren.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Diese Option ist ausgeblendet (wörtlich falsch).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Dies sollte ausgegraut sein.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(erfordert den Wert „true“)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pass zusammengesetzt: NICHT falsch UND wahr
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=ODER Zweig (wahr ODER falsch)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Danke fürs Testen. Auf Wiedersehen!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Tschüss!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Wählen Sie unten aus, um mit der Aktion „Gehe zu“ anstelle von „Nächstes“ direkt zu „Abschied“ zu springen.
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=Abschied nehmen
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Durch das Betreten eines Knotens erhieltst du lediglich eine einfache Schaufel (sofern du genügend Inventarplatz hattest). Wähle die unten stehende Option, um weitere Gegenstände zu erhalten.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Gib mir 3 Erde, dann mach weiter.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Willkommen im Dialogsystem von Aetherhaven. Diese Zeile ist absichtlich lang, damit Sie Layout und Scrollverhalten überprüfen können. Ihre Auswahlmöglichkeiten befinden sich unterhalb des Fließtextes.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Weiter geht es ins Bedingungenlabor.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Verlassen (endet mit nächstem Nullwert).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Verlassen (explizite Schließungsaktion).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Sie können die Kweebec-Händler-Tausch-Benutzeroberfläche öffnen oder direkt zu den Platzhalteraktionen springen.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Öffne den Tauschhandel Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Lass den Laden aus, geh zu Stubs.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Stub-Aktionen: Erfolge freischalten und Quests starten sollten protokolliert werden, bis diese Systeme existieren.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Führe unlock_achievement + start_quest Stubs aus
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager

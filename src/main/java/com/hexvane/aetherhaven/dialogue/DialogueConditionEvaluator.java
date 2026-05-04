@@ -94,6 +94,7 @@ public final class DialogueConditionEvaluator {
             case "town_quest_completed" -> worldView.townQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
             case "town_has_complete_plot" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
             case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
+            case "aetherhaven_player_can_accept_quests" -> worldView.aetherhavenPlayerCanAcceptQuests(playerRef, store);
             case "npc_binding_is_visitor" -> npcBindingIsVisitor(store, npcRef);
             case "npc_inn_pool_role" -> worldView.innPoolHasNpcRole(playerRef, store, stringOrEmpty(o, "roleId"));
             case "town_inn_visitor_pool_empty" -> worldView.townInnVisitorPoolEmpty(playerRef, store);

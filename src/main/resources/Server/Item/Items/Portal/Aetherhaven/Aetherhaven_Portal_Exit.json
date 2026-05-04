@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Portal_Exit.name",
-    "Description": "server.items.Aetherhaven_Portal_Exit.description"
+    "Name": "aetherhaven_quests_portals.items.Aetherhaven_Portal_Exit.name",
+    "Description": "aetherhaven_quests_portals.items.Aetherhaven_Portal_Exit.description"
   },
   "Icon": "Icons/ItemsGenerated/Portal_Return.png",
   "Categories": [

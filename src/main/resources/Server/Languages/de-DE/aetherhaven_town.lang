@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=In dieser Welt besitzt du keine Stadt.
+aetherhaven.town.resolve.noTownNamed=Es gibt keine Stadt namens "{name}" auf dieser Welt.
+aetherhaven.town.resolve.ownerOrOpOnly=Das kann nur der Stadtbesitzer (oder ein Betreiber mit Genehmigung).
+aetherhaven.town.resolve.notInTown=Du befindest dich nicht in einer Stadt dieser Welt.
+aetherhaven.town.resolve.nameOnlyForOwner=Nur der Ortsbesitzer (oder ein Betreiber) darf hier einen Ortsnamen verwenden.
+aetherhaven.town.resolve.specifyTownName=Geben Sie einen Ortsnamen an oder verwenden Sie den Namen des Ortes, der Ihnen gehört.
+aetherhaven.town.resolve.specifyTown=Geben Sie einen Ortsnamen an.
+aetherhaven.town.resolve.adminOtherTown=Nur Operatoren dürfen die Stadt eines anderen Spielers namentlich anvisieren.
+aetherhaven.town.invite.err.emptyName=Geben Sie einen Spielernamen ein.
+aetherhaven.town.invite.err.targetOffline=Spieler "{name}" ist in dieser Welt nicht online.
+aetherhaven.town.invite.err.cannotInviteSelf=Man kann sich nicht selbst einladen.
+aetherhaven.town.invite.err.alreadyInTown=Dieser Spieler befindet sich bereits in einer Stadt in dieser Welt.
+aetherhaven.town.invite.toTarget={inviter} hat Sie eingeladen, der Stadt "{townDisplay}" beizutreten. Geben Sie /aetherhaven town accept {townDisplay} oder /aetherhaven town decline {townDisplay} ein (verwenden Sie den vollständigen Stadtnamen inklusive Leerzeichen).
+aetherhaven.town.invite.sent=Einladung an {name} gesendet.
+aetherhaven.town.kick.err.mustBeOnline=Der Spieler muss online sein, um namentlich einen Kick ausführen zu können.
+aetherhaven.town.kick.err.cannotRemoveOwner=Der Stadtbesitzer kann nicht entfernt werden.
+aetherhaven.town.kick.err.notMember=Dieser Spieler ist kein Einwohner dieser Stadt.
+aetherhaven.town.kick.removed={name} wurde aus der Stadt entfernt.
+aetherhaven.town.kick.removedYou=Sie wurden aus der Stadt "{town}" entfernt.
+aetherhaven.town.kick.removedGeneric=Aus der Stadt entferntes Mitglied.
+aetherhaven.town.role.err.ownerAlwaysFull=Der Eigentümer hat stets alle Berechtigungen.
+aetherhaven.town.role.set=Weise {name} die Rolle {role} zu.
+aetherhaven.town.accept.err.noSuchTown=Es gibt keine Stadt mit diesem Namen.
+aetherhaven.town.accept.err.noInvite=Sie haben keine ausstehende Einladung für diese Stadt.
+aetherhaven.town.accept.err.noInvites=Sie haben keine ausstehenden Einladungen von Städten.
+aetherhaven.town.accept.err.alreadyInTown=Du bist bereits in einer Stadt.
+aetherhaven.town.accept.joined=Sie sind dem Menüpunkt "{town}" beigetreten.
+aetherhaven.town.decline.noPending=Für diese Stadt liegt keine Einladung vor.
+aetherhaven.town.decline.noInvites=Sie haben keine ausstehenden Einladungen von Städten.
+aetherhaven.town.decline.done=Einladung abgelehnt.
+aetherhaven.town.permissions.updated=Mitgliedsberechtigungen gespeichert.
+
+aetherhaven.ui.memberPermissions.title=Mitgliedsberechtigungen
+aetherhaven.ui.memberPermissions.backTooltip=Zurück zur Spielerliste
+aetherhaven.ui.memberPermissions.placePlots=Parzellen platzieren
+aetherhaven.ui.memberPermissions.manageConstructions=Bau und Verwaltung von Bauwerken (Montage, Produktion, Feste, Satzungsänderungen, Versetzung von Gebäuden)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Das Gold aus der Stadtkasse für Baukosten ausgeben
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Kasse öffnen (Einzahlung / Auszahlung)
+aetherhaven.ui.memberPermissions.acceptQuests=Stadtquests annehmen/starten
+aetherhaven.ui.memberPermissions.completeQuests=Schließe Stadtquests ab und sichere dir Rufbelohnungen.
+aetherhaven.ui.memberPermissions.abandonQuests=Aktive Stadtquests abbrechen
+aetherhaven.ui.memberPermissions.reviveVillagers=Erwecke die Dorfbewohner an der Gaia-Statue wieder zum Leben.
+aetherhaven.ui.memberPermissions.err.notOwner=Nur der Stadtbesitzer kann die Berechtigungen bearbeiten.
+aetherhaven.ui.memberPermissions.err.notInTown=Dieser Spieler befindet sich nicht in dieser Stadt.
+aetherhaven.town.rolecmd.playerMustBeOnline=Der Spieler muss online sein.
+aetherhaven.town.rolecmd.roleInvalid=Die Rolle muss BAUEN, QUEST oder BEIDES sein.
+aetherhaven.town.leave.notInTown=Du bist nicht in einer Stadt.
+aetherhaven.town.leave.ownerCannotLeave=Eigentümer können nicht ausziehen; eine Eigentumsübertragung ist noch nicht möglich.
+aetherhaven.town.leave.notMember=Sie gehören nicht zu dieser Stadt.
+aetherhaven.town.leave.left=Sie haben "{town}" verlassen.
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=BAUEN
+aetherhaven.town.memberRole.QUEST=SUCHE
+aetherhaven.town.memberRole.BOTH=BEIDE

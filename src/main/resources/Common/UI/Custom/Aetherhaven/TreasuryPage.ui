@@ -38,8 +38,10 @@ $C.@PageOverlay {
         Anchor: (Width: 520);
 
         #Title {
-          $C.@Title {
-            @Text = %server.aetherhaven.ui.treasury.title;
+          Label #TreasuryTitleText {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 19);
+            Text: "";
           }
         }
 
@@ -67,7 +69,7 @@ $C.@PageOverlay {
                 Anchor: (Right: 10, Height: 44, Width: 48);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.treasury.tabCoinsTooltip;
+                TooltipText: "";
               }
 
               TextButton #TabTitheButton {
@@ -76,7 +78,7 @@ $C.@PageOverlay {
                 Anchor: (Height: 44, Width: 48);
                 Padding: (Full: 0);
                 Text: ".";
-                TooltipText: %server.aetherhaven.ui.treasury.tabTitheTooltip;
+                TooltipText: "";
               }
             }
 
@@ -94,18 +96,18 @@ $C.@PageOverlay {
             }
 
             $C.@TextButton #DepositButton {
-              Text: %server.aetherhaven.ui.treasury.deposit;
+              Text: "";
             }
 
             $C.@TextButton #WithdrawButton {
               Anchor: (Top: 8);
-              Text: %server.aetherhaven.ui.treasury.withdraw;
+              Text: "";
             }
 
             Label #Hint {
               Anchor: (Top: 12);
               Style: (...$C.@DefaultLabelStyle, TextColor: #888888, Wrap: true);
-              Text: %server.aetherhaven.ui.treasury.hint;
+              Text: "";
             }
           }
 
@@ -116,7 +118,7 @@ $C.@PageOverlay {
             Label #TaxIntro {
               Anchor: (Bottom: 12);
               Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8c2b8);
-              Text: %server.aetherhaven.ui.treasury.tax.intro;
+              Text: "";
             }
 
             Label #TaxPolicyShort {
@@ -128,7 +130,7 @@ $C.@PageOverlay {
               Visible: false;
               Anchor: (Bottom: 10);
               Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d08070);
-              Text: %server.aetherhaven.ui.treasury.tax.hallMissing;
+              Text: "";
             }
 
             Group #TaxTotalsCard {
@@ -193,7 +195,7 @@ $C.@PageOverlay {
                 Label #TitheTotalLabel {
                   FlexWeight: 1;
                   Style: (...$C.@DefaultLabelStyle, RenderBold: true, Wrap: true, TextColor: #ece6dc);
-                  Text: %server.aetherhaven.ui.treasury.tax.sheetTotalLabel;
+                  Text: "";
                 }
 
                 Label #TitheTotalGold {
@@ -206,7 +208,7 @@ $C.@PageOverlay {
             Label #TaxResidentsHeader {
               Anchor: (Bottom: 8);
               Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #b8c8e0);
-              Text: %server.aetherhaven.ui.treasury.tax.residentsHeader;
+              Text: "";
             }
 
             Group #TaxResidentRows {

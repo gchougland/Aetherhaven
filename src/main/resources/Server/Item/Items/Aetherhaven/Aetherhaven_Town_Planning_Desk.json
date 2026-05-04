@@ -1,13 +1,13 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Town_Planning_Desk.name",
-    "Description": "server.items.Aetherhaven_Town_Planning_Desk.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Town_Planning_Desk.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Town_Planning_Desk.description"
   },
   "Recipe": {
     "TimeSeconds": 0,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Planks",
+        "ResourceTypeId": "Wood_All",
         "Quantity": 8
       },
       {
@@ -54,12 +54,12 @@
         {
           "Id": "Aetherhaven_TownPlanning",
           "Icon": "Icons/CraftingCategories/Aetherhaven/Town_Planning.png",
-          "Name": "server.benchCategories.aetherhaven.town_planning"
+          "Name": "aetherhaven_items.benchCategories.aetherhaven.town_planning"
         },
         {
           "Id": "Aetherhaven_TownPlanningPlotTokens",
           "Icon": "Icons/CraftingCategories/Aetherhaven/Plot_Tokens.png",
-          "Name": "server.benchCategories.aetherhaven.plot_tokens"
+          "Name": "aetherhaven_items.benchCategories.aetherhaven.plot_tokens"
         }
       ],
       "LocalOpenSoundEventId": "SFX_Workbench_Open",

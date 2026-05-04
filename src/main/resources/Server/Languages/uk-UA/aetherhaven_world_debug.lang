@@ -1,0 +1,86 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: POI tool, plots/founder, debug autonomy/rep/gifts/needs/plots/POI
+
+# === POI debug tool (placement & targeting) ===
+# POI tool
+aetherhaven.poi.noPoiInRange=У межах цього блоку немає об’єкта інтересу (POI).
+aetherhaven.poi.noPoiSelected=Не вибрано жодної точки інтересу. Спочатку клацніть на точці інтересу.
+aetherhaven.poi.selectedPoiGone=Вибраний об'єкт інтересу більше не існує.
+aetherhaven.poi.moved=Переміщено точку інтересу до {x}, {y}, {z}.
+aetherhaven.poi.noPoiBlock=Не вибрано об’єкта інтересу. Спочатку клацніть блок об’єкта інтересу.
+aetherhaven.poi.clearedInteractionTarget=Очищено ціль взаємодії; NPC використовують центр блоку POI.
+aetherhaven.poi.setInteractionTarget=Встановити ціль взаємодії на {x}, {y}, {z}.
+aetherhaven.poi.selected=Вибраний пункт призначення {id} о {x}, {y}, {z}
+aetherhaven.poi.targetBlockMismatch=Цільовий блок має відповідати очікуваному типу {type} для цієї точки інтересу.
+
+# === Plots, placement, founder monument (world messages) ===
+# Plots & placement
+aetherhaven.placement.movingBuilding=Переміщення будівлі…
+aetherhaven.plotSign.placed=Встановлено знак ділянки.
+aetherhaven.plotSign.couldNotAdd=Не вдалося додати знак сюжету (інвентар повний?)
+
+# Founder monument
+aetherhaven.founder.inTerritory=Розмістіть пам'ятник засновнику на території вашого міста.
+aetherhaven.founder.cannotPlace=Ви не можете розмістити тут пам'ятник засновнику.
+aetherhaven.founder.createFailed=Не вдалося створити статую засновника. Блок розміщено; розбийте його, щоб спробувати ще раз.
+
+# === Debug: villager autonomy overlay ===
+# Autonomy debug
+aetherhaven.debug.autonomy.notVillager=Таргет не є мешканцем села Етерхейвен.
+aetherhaven.debug.autonomy.toggledOn=Налагодження автономії УВІМКНЕНО (DisplayCustom + VisPath). Накладання AH на табличку з іменами.
+aetherhaven.debug.autonomy.toggledOff=Налагодження автономії для цього селянина ВИМКНЕНО.
+aetherhaven.debug.autonomy.state=Налагодження автономії для цього селянина: {state}
+aetherhaven.debug.autonomy.cleared=Очищено налагодження автономії Етерхейвена для цього селянина.
+aetherhaven.debug.on=УВІМК.
+aetherhaven.debug.off=ВИМК.
+
+# === Debug: reputation & milestone listing ===
+# Reputation debug
+aetherhaven.debug.rep.unchanged=Репутація незмінна (вже {value}).
+aetherhaven.debug.rep.set=Встановити репутацію на {value} з перекресленими етапами, поставленими в чергу для діалогу (якщо роль виконано).
+aetherhaven.debug.rep.milestonesHeader=Етапи репутації (ідентифікатор винагороди, роль, мінімальна репутація, вузол діалогу):
+aetherhaven.debug.rep.milestoneLine={id} | {role} | {min} | {node}{items}{learn}
+aetherhaven.debug.rep.granted=Надано винагороду {id}.
+aetherhaven.debug.rep.targetInvalid=Недійсний житель села.
+
+# === Debug: gifts ===
+aetherhaven.debug.gift.resetDone=Скинути обмеження на подарунки для рядків {entries} гравців та селян у {towns} місті(ах) цього світу.
+aetherhaven.debug.gift.unknownRole=Невідома роль селянина: {role}
+aetherhaven.debug.gift.noGiftLists=Роль {role} не має giftLoves, giftLikes або giftDislikes у даних мешканця села.
+aetherhaven.debug.gift.fillDone=Додано рядок(и) журналу подарунків {added} для {role} (пропускається, якщо у вас вже є рядок для цього предмета та рівня реакції).
+
+# === Debug: villager needs ===
+# Needs debug
+aetherhaven.debug.needs.whichInvalid=що має бути голод, енергія або задоволення (значення 0..{max}).
+aetherhaven.debug.needs.elderNoTown=Немає тобі міста в цьому світі (потрібно для Старійшини).
+aetherhaven.debug.needs.noElderUuid=У місті ще немає збереженого UUID старійшини.
+aetherhaven.debug.needs.noMatch=Немає відповідного жителя села (спробуйте, потрібно перевірити наявність нікнейму, старійшини або повного UUID).
+aetherhaven.debug.needs.multipleMatch=Кілька NPC відповідають цьому дескриптору; використовуйте повний UUID з inspect.
+aetherhaven.debug.needs.entityNotLoaded=Сутність не завантажена або не має VillagerNeeds: {id}
+aetherhaven.debug.needs.set=Встановити {which}={value} для {label} ({id})
+aetherhaven.debug.needs.inspectIntro=Селяни з потребами (завантажені фрагменти). Встановлюється за допомогою: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>
+aetherhaven.debug.needs.inspectLine={handle} | uuid={uuid} | голод={hunger} енергія={energy} задоволення={fun} (0..{max})
+aetherhaven.debug.needs.noHandle=(без ручки)
+
+# === Debug: plots, POI dump, town list (console) ===
+# Plots list debug
+aetherhaven.debug.plots.forTown=Ділянки для міста {id}:
+aetherhaven.debug.plots.header={index}. ділянка={plotId} стан={state} тип={type}
+
+# Towns list
+aetherhaven.towns.inWorldCount=Міста Етерхейвена у цьому світі: {count}
+aetherhaven.towns.entry={name} ідентифікатор={id} власник={owner} статут={cx},{cy},{cz} ділянки={plots}
+aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
+aetherhaven.debug.plots.finishassemblyNone=Не збирайте ділянки з активним завданням для вашого міста (завантажуйте фрагменти навколо будівель або спочатку починайте будівництво).
+aetherhaven.debug.plots.finishassemblyDone=Миттєво завершено {count} незавершене(і) створення(ння) сюжету(ів).
+aetherhaven.debug.plots.removeBadUuid=Недійсний UUID графіка. Використайте ідентифікатор зі списку графіків /aetherhaven.
+aetherhaven.debug.plots.removeNotFound=У вашому місті немає ділянки {plotId}.
+aetherhaven.debug.plots.removeDataFailed=Світ очищено, але видалити сюжетну ділянку з даних міста не вдалося (перевірте журнали).
+aetherhaven.debug.plots.removedPlot=Вилучено ділянку {plotId} з міста та розчищено її територію.
+aetherhaven.debug.poi.invalidTownUuid=Недійсний UUID міста: {raw}
+aetherhaven.debug.poi.noTownArg=У вас немає міста у цьому світі (використовуйте аргумент UUID міста).
+aetherhaven.debug.poi.listHeader=Цікаві місця для міста {town} ({count}):
+aetherhaven.debug.poi.listEmpty=У цьому місті немає зареєстрованих (заповніть назву будівлі або перевірте pois.json).
+aetherhaven.debug.poi.listLine={x},{y},{z} вид={kind} ідентифікатор типу блоку={block} теги={tags} кепка={cap} графік={plot}
+aetherhaven.debug.poi.dumpHeader=Усі POI у світовому реєстрі ({count}):
+aetherhaven.debug.poi.dumpLine=місто={town} {x},{y},{z} вид={kind} blockTypeId={block} теги={tags} ділянка={plot}

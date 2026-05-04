@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 520);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.geodeopen.title;
+      Label #GeodeOpenTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -19,7 +21,7 @@ $C.@PageOverlay {
       Label #Hint {
         Anchor: (Bottom: 10);
         Style: (...$C.@DefaultLabelStyle, Wrap: true);
-        Text: %server.aetherhaven.ui.geodeopen.hint;
+        Text: "";
       }
 
       Group #GeodeRows {

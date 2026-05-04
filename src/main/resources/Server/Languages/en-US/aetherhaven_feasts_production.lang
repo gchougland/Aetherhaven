@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Town feasts
+aetherhaven.ui.feast.noTown=You must belong to a town.
+aetherhaven.ui.feast.noPermission=You cannot hold feasts for this town.
+aetherhaven.ui.feast.outsideTerritory=The table must stand inside your town territory.
+aetherhaven.ui.feast.activeTitle=Town feast in effect
+aetherhaven.ui.feast.noneActive=No timed feast is active. Pick a feast on the left to read costs and effects.
+aetherhaven.ui.feast.daysLeft=Days remaining (dawns): {days}
+aetherhaven.ui.feast.selectHint=Select a feast
+aetherhaven.ui.feast.ingredientsLabel=Ingredients
+aetherhaven.ui.feast.confirm=Hold feast
+aetherhaven.ui.feast.locked=You have not learned this feast yet. Spend time with the townsfolk until someone walks you through it.
+aetherhaven.ui.feast.tooltipLocked=Locked until a neighbor teaches you this feast. Help the town and keep talking with people who cook for the hall.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord is on cooldown ({days} dawn-days left).
+aetherhaven.ui.feast.began=The feast begins. Villagers are gathering at the table.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven is not loaded on this server.
+aetherhaven.ui.feast.err.unknownFeast=That feast is not available.
+aetherhaven.ui.feast.err.invalidPlayer=Could not verify your character.
+aetherhaven.ui.feast.err.feastNotUnlocked=You have not learned this feast yet. Build trust around town and listen for when someone offers to teach it.
+aetherhaven.ui.feast.err.timedFeastActive=Another timed feast is already in effect for this town.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Wait until the current timed feast ends before serving Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord is still on cooldown.
+aetherhaven.ui.feast.err.notEnoughIngredients=You do not have enough of the required ingredients.
+
+aetherhaven.ui.production.title=Workplace stores
+aetherhaven.ui.production.prev=Prev
+aetherhaven.ui.production.next=Next
+aetherhaven.ui.production.prevTooltip=Previous output in this slot
+aetherhaven.ui.production.nextTooltip=Next output in this slot
+aetherhaven.ui.production.take1=Take 1
+aetherhaven.ui.production.take10=Take 10
+aetherhaven.ui.production.take100=Take 100
+aetherhaven.ui.production.genInterval={time} to make one
+aetherhaven.ui.production.err.plugin=Aetherhaven is not loaded on this server.
+aetherhaven.ui.production.err.permission=You cannot open this storage for this town.
+aetherhaven.ui.production.err.plot=This block is not inside a completed workplace plot (farm, barn, mill, or miners hut) for your town.
+aetherhaven.ui.production.err.catalog=No production catalog is configured for this building.
+aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take that much.
+aetherhaven.ui.production.unlockButton=Unlocks
+aetherhaven.ui.production.unlockTooltip=View and purchase locked workplace outputs for this building.
+
+aetherhaven.ui.productionUnlocks.title=Workplace unlocks
+aetherhaven.ui.productionUnlocks.intro=Select an output below to see its name and requirements in the panel. Hover an icon for held vs. needed counts. When you meet the item and gold totals, click a locked output to unlock it.
+aetherhaven.ui.productionUnlocks.navProduction=Production
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Return to workplace storage
+aetherhaven.ui.productionUnlocks.detailHint=Click an icon above to see its name and unlock requirements.
+aetherhaven.ui.productionUnlocks.err.inventory=Could not read your inventory.
+aetherhaven.ui.productionUnlocks.err.empty=No unlock list is configured for this workplace.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Already unlocked for this workplace.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Item: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Gold coins: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=You need at least {need} of that item in your inventory (combined bags).
+aetherhaven.ui.productionUnlocks.notify.needGold=You need enough gold coins between the town treasury and your inventory ({need} total).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Could not remove the required items from your inventory.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Could not pay the gold cost; your items were returned.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Unlocked {item} for this workplace.
+
+aetherhaven.feast.stewards.name=The Steward's Ledger Supper
+aetherhaven.feast.stewards.description=Spread bread, cheese, and a proper pumpkin pie so the morning tithe leans generous for one week.
+aetherhaven.feast.hearthglass.name=Hearthglass Vigil
+aetherhaven.feast.hearthglass.description=Grilled fish, cooked cuts, and vegetables laid out as a slow-burning vigil meal. Villagers' needs fade more gently for one week.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=A circle of light plates: berry salad, fruit skewers, and popcorn for toasts. Neighbors remember you a little kinder for it. Wait one week of dawns before you may serve it again.

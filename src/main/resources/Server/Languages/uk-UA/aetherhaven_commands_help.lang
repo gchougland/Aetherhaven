@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=Список міст Етерхейвена у сучасному світі
+
+commands.aetherhaven.town.desc=Членство в місті: запрошення, ролі, вихід
+commands.aetherhaven.town.invite.desc=Запросіть онлайн-гравця до свого міста
+commands.aetherhaven.town.invite.player.desc=Ім'я користувача гравця (має бути онлайн)
+commands.aetherhaven.town.accept.desc=Прийняти запрошення від міста, що очікує на розгляд
+commands.aetherhaven.town.decline.desc=Відхилити запрошення до міста, яке очікує на розгляд
+commands.aetherhaven.town.kick.desc=Видалити учасника зі свого міста
+commands.aetherhaven.town.kick.player.desc=Ім'я користувача учасника (має бути онлайн)
+commands.aetherhaven.town.role.desc=Застосуйте до учасника попередньо налаштований дозвіл (ЗБІРКА, ЗАВДАННЯ або ОБИДВА). Використовуйте вкладку «Гравці» в блоці керування для налаштування дозволів для кожного прапорця.
+commands.aetherhaven.town.role.player.desc=Ім'я користувача учасника (має бути онлайн)
+commands.aetherhaven.town.role.role.desc=БУДІВНИЦТВО, КВЕСТ або ОБИДВА
+commands.aetherhaven.town.leave.desc=Залиште місто, членом якого ви є (не власником)
+commands.aetherhaven.town.townName.desc=Необов’язкова назва міста; використовуйте повну назву, включаючи пробіли (решта рядка). Пропустіть, якщо у вас є лише одне запрошення, що очікує на розгляд.
+
+commands.aetherhaven.poi.desc=Налагодження: команди POI
+commands.aetherhaven.poi.list.desc=Перелічіть цікаві місця для міста (необов'язково, UUID міста або пропустіть / використовуйте \"me\" для вашого міста)
+commands.aetherhaven.poi.town.desc=UUID міста, або мене, або пропустити для міста абонента
+commands.aetherhaven.poi.dump.desc=Перерахувати всі POI у реєстрі пам'яті цього світу (будь-яке місто)
+
+commands.aetherhaven.plots.desc=Екземпляри графіків: list, finishassembly (creative), remove plotId (creative). Використовуйте графіки, щоб уникнути конфліктів з /aetherhaven plot.
+commands.aetherhaven.plots.list.desc=Перелічіть екземпляри ділянок для вашого міста (UUID ділянки, ідентифікатор будівництва, штат, розташування знаку)
+commands.aetherhaven.plots.finishassembly.desc=Креативність: миттєво завершіть кожну незавершену збірку у вашому місті (потрібні завантажені фрагменти / активні завдання)
+commands.aetherhaven.plots.remove.desc=Креатив: знесіть одну ділянку за UUID та видаліть її з даних вашого міста
+commands.aetherhaven.plots.remove.plotId.desc=UUID графіка зі списку графіків /aetherhaven
+
+commands.aetherhaven.needs.desc=Налагодження: потреби селян
+commands.aetherhaven.needs.inspect.desc=Перерахувати сутності у завантажених фрагментах, які мають VillagerNeeds
+commands.aetherhaven.needs.set.desc=Встановити лічильник потреб 0..100 (ціль: дескриптор з inspect, Elder або uuid)
+commands.aetherhaven.needs.target.desc=Ідентифікатор (наприклад, Villager_Elder_xxxxxxxxx), Elder або UUID сутності
+commands.aetherhaven.needs.entity.desc=Застаріло; використовуйте ціль (дескриптор, Elder або uuid)
+commands.aetherhaven.needs.which.desc=голод, енергія чи задоволення
+commands.aetherhaven.needs.value.desc=Значення від 0 до 100 (100 = повністю задоволений)
+
+commands.aetherhaven.tax.desc=Налагодження: ранковий податок казначейства
+commands.aetherhaven.tax.breakdown.desc=Показати податкові рядки та загальні суми для кожного селянина для вашого міста (лише завантажені фрагменти)
+commands.aetherhaven.tax.now.desc=Застосувати ранкову десятину до скарбниці зараз (оминає ранок та день останнього збору)
+
+commands.aetherhaven.questdebug.desc=Налагодження: обхід квестів міста
+commands.aetherhaven.questdebug.grant.desc=Позначте квест активним у вашому місті
+commands.aetherhaven.questdebug.complete.desc=Позначте квест виконаним у вашому місті
+commands.aetherhaven.questdebug.clear.desc=Видалити квест зі списку активних у вашому місті
+commands.aetherhaven.questdebug.id.desc=Ідентифікатор квесту (за замовчуванням q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Показувати активні та виконані завдання для вашого міста (ім'я для відображення + ідентифікатор)
+
+commands.aetherhaven.reputation.desc=Налагодження: репутація
+commands.aetherhaven.reputation.set.desc=Встановіть свою репутацію з селянином та перейдіть чергу, отримавши винагороду за діалог
+commands.aetherhaven.reputation.villagerUuid.desc=UUID сутності NPC селянина
+commands.aetherhaven.reputation.villagerTarget.desc=UUID сутності селянина або ідентифікатор ролі NPC у вашому місті (наприклад, Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Репутація від 0 до 100
+commands.aetherhaven.reputation.reward.desc=Перелічіть визначення етапів або надайте одну винагороду безпосередньо
+commands.aetherhaven.reputation.reward.list.desc=Список досягнень репутації (необов'язково: фільтрувати за ідентифікатором ролі NPC)
+commands.aetherhaven.reputation.reward.roleFilter.desc=Ідентифікатор ролі NPC (наприклад, Aetherhaven_Merchant) для фільтрації списку
+commands.aetherhaven.reputation.reward.grant.desc=Надайте одну нагороду за етап зараз (заявлені бали); використовуйте список нагород за репутацію для ідентифікаторів
+commands.aetherhaven.reputation.rewardId.desc=Ідентифікатор винагороди за репутацію (наприклад, rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Налагодження: помічники селян міста
+commands.aetherhaven.villager.list.desc=Вивести UUID-ідентифікатори NPC-сутностей-мешканців міста (для команд репутації / пошуку)
+commands.aetherhaven.villager.locate.desc=Вивести місцезнаходження селянина; телепортація (за бажанням) (лише для операторів)
+commands.aetherhaven.villager.uuid.desc=UUID сутності NPC селянина
+commands.aetherhaven.villager.target.desc=UUID сутності селянина або ідентифікатор ролі NPC у вашому місті (наприклад, Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=true для телепортації до селянина (лише для операторів); або використовуйте --tp замість цього
+commands.aetherhaven.villager.tp_flag.desc=Телепортація до селянина (лише для операторів; те саме, що й при передачі значення true)
+commands.aetherhaven.villager.reset.desc=Видаліть усіх NPC-мешканців міста та відродіть їх поруч із собою (налагодження; збереження квестів, репутації, подарунків; ремонт басейну таверни, щоб жителі відповідали завершеним будівлям; оновлення басейну відвідувачів таверни)
+aetherhaven.villager.resetDone=Мешканці міста були скинуті та відродилися поруч із вами.
+aetherhaven.villager.resetFailed=Не вдалося скинути кількість жителів міста: {reason}
+commands.aetherhaven.gift.desc=Налагодження: скидання лімітів подарунків або заповнення попереднього перегляду історії подарунків
+commands.aetherhaven.gift.resetLimits.desc=Скинути щоденні/тижневі ліміти подарунків для всіх гравців та всіх жителів села в кожному місті цього світу
+commands.aetherhaven.gift.fillHistory.desc=Додати один рядок журналу для кожного елемента, який подобається/вподобується/не подобається, для ролі (ваше місто), щоб історія подарунків мала що відображати (налагодження)
+commands.aetherhaven.gift.roleId.desc=Ідентифікатор ролі NPC (наприклад, Aetherhaven_Merchant)
+
+commands.aetherhaven.debug_autonomy.desc=Налагодження: накладання автономії селян
+commands.aetherhaven.debug_autonomy.toggle.desc=Увімкнути/вимкнути налагодження автономії для мешканця міста (дивіться на NPC або скористайтеся --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Показати, чи ввімкнено налагодження автономії для цього мешканця села
+commands.aetherhaven.debug_autonomy.clear.desc=Очистити налагодження автономії Етерхейвена для цього селянина
+
+commands.aetherhaven.debug_lootchest.desc=Налагодження: бонусні кидки на скрині Етерхейвена на цільовому контейнері
+commands.aetherhaven.debug_lootchest.fill.desc=Застосуйте примусові кидки коштовностей, золота та жетонів сюжету до контейнера з предметами, на який ви дивитеся.

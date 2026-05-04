@@ -1,0 +1,27 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_elder_week1)
+# Full translation keys are aetherhaven_dialogue_elder_week1.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_elder_week1.root.body=Eu sou Lyren. Nossa cidade funciona de acordo com a carta que assinamos quando nos estabelecemos aqui. Antes de demarcarmos mais lotes, preciso que você explore o terreno ao redor de Aetherhaven. Observe onde o terreno é plano o suficiente para construir, onde há água e onde poderíamos plantar campos ou fazer uma área verde comum mais tarde. Nada muito elaborado, apenas dê uma olhada. Quando terminar, volte e me conte.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.c0=Vou explorar a área e depois volto com novidades.
+aetherhaven.dialogue.aetherhaven_elder_week1.root.speaker=Ancião Lyren
+
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.fallback=Se você já voltou da caminhada, me conte o que viu. Se não, me avise quando estiver pronto.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.0=Antes de avançar mais, diga-me o que suas botas viram.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.1=Mantive o voo fretado aberto hoje. Pergunte se alguma linha lhe causar confusão.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.2=Relatos de caminhadas importam mais do que opiniões. Tragam-me fatos concretos.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.3=Se o terreno parecesse errado, diga isso claramente. Não envergonho olhos honestos.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.4=A água importa mais do que o drama. Diga-me onde ela está localizada.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.5=Às vezes, terrenos planos enganam. Diga-me onde isso te enganou.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.6=Se você vir um solo bom, descreva-o como um agricultor o faria.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.7=Se você viu declives acentuados, descreva-os sem usar poesia.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.8=Tenho tempo para que você visualize um mapa mental claro. Descreva-o com palavras.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.greeting.9=Volte quando você conseguir dizer norte, sul, lama, pedra em ordem clara.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.0=Uma página de caderno bem preenchida com pontos de referência reais vale mais do que um discurso.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.1=Se você trouxer uma refeição simples enquanto conversamos sobre mapas, considerarei isso uma gentileza.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.2=Giz limpo e uma régua reta me dizem que você está falando sério.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.3=Prefiro um presente pequeno que ajude na leitura, não algo para ostentar.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.love.4=Garrafas de água e biscoitos secos são presentes sem graça, e eu gosto que sejam assim nos dias de escoteiros.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.0=Não me tragam troféus de ossos velhos como se eles provassem que vocês caminharam.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.1=Não quero que lixo de rua seja apresentado como pesquisa.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.2=Se cheirar a podre, não é um acessório para mapas.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.3=Mantenha brinquedos barulhentos e que fazem pegadinhas longe da mesa de jogos.
+aetherhaven.dialogue.aetherhaven_elder_week1.main_hub.hint.dislike.4=Não tenho utilidade para lixo com glitter quando estamos falando de tubulações de água.

@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 480);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.gaiaStatue.title;
+      Label #GaiaReviveTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -28,7 +30,7 @@ $C.@PageOverlay {
       Label #Footer {
         Anchor: (Top: 12);
         Style: (...$C.@DefaultLabelStyle, TextColor: #888888, Wrap: true);
-        Text: %server.aetherhaven.ui.gaiaStatue.footer;
+        Text: "";
       }
     }
   }

@@ -1,0 +1,22 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven reload, plot admin, starter kit, export skin
+
+# === Commands: /aetherhaven (reload, plot admin, starter kit, export skin) ===
+commands.aetherhaven.root.desc=Aetherhaven mod 指令
+commands.aetherhaven.reload.desc=從磁碟重新載入 config.json 和 Aetherhaven JSON 目錄（創造模式）
+commands.aetherhaven.reload.success=Aetherhaven 設定和資源目錄已重新載入。
+commands.aetherhaven.reload.failure=重新載入失敗：{detail}
+commands.aetherhaven.reload.noPlugin=Aetherhaven插件未載入。
+commands.aetherhaven.plot.desc=打開地塊標誌管理介面（選擇建築，取得物品）
+commands.aetherhaven.starterkit.desc=為自己準備一套以太港新手包（地塊放置人員、憲章、城鎮規劃桌、建築人員；創造模式）
+commands.aetherhaven.starterkit.success=入門套件已新增至您的庫存。
+commands.aetherhaven.starterkit.partial=入門套件部分發放；{failed} 物品不合適（騰出庫存空間）。
+
+commands.aetherhaven.exportskin.desc=將您的頭像皮膚匯出為模型 JSON（父級：玩家）
+commands.aetherhaven.exportskin.other.desc=將其他玩家的頭像皮膚匯出為模型 JSON
+commands.aetherhaven.exportskin.arg.path=可選的輸出檔案路徑（預設值：plugin data/avatar_exports/）
+commands.aetherhaven.exportskin.noSkin=該玩家沒有可用的角色皮膚。
+commands.aetherhaven.exportskin.invalidSkin=皮膚驗證失敗：{detail}
+commands.aetherhaven.exportskin.resolveError=無法解析皮膚與模型之間的連結：{detail}
+commands.aetherhaven.exportskin.ioError=寫入 {path} 失敗：{detail}
+commands.aetherhaven.exportskin.success=已將模型 JSON 寫入 {path}

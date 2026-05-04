@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Plot_Token_Barn.name",
-    "Description": "server.items.Aetherhaven_Plot_Token_Barn.description"
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Barn.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Barn.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Path_Tool.name",
-    "Description": "server.items.Aetherhaven_Path_Tool.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Path_Tool.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Path_Tool.description"
   },
   "Recipe": {
     "TimeSeconds": 0,

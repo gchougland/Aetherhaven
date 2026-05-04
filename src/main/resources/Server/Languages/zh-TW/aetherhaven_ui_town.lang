@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=建造
+aetherhaven.ui.plotmanagement.title=城鎮管理
+aetherhaven.ui.plotmanagement.tabPlot=陰謀
+aetherhaven.ui.plotmanagement.tabPlayers=球員
+aetherhaven.ui.plotmanagement.playersHint=按姓名邀請線上玩家。在下方更改角色或移除成員。
+aetherhaven.ui.plotmanagement.playersHintReadOnly=本鎮成員。只有鎮長才能邀請成員或更改角色。
+aetherhaven.ui.plotmanagement.inviteLabel=邀請玩家
+aetherhaven.ui.plotmanagement.invitePlaceholder=玩家姓名（線上）
+aetherhaven.ui.plotmanagement.inviteSend=發送邀請
+aetherhaven.ui.plotmanagement.kick=消除
+aetherhaven.ui.plotmanagement.roleOwner=擁有者
+aetherhaven.ui.plotmanagement.tabPlotTooltip=劇情資訊
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=村民需求
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=鎮民
+aetherhaven.ui.plotmanagement.tabMoveTooltip=搬遷這棟建築物
+aetherhaven.ui.plotconstruction.materials=材料
+aetherhaven.ui.plotconstruction.build=建造
+aetherhaven.ui.plotconstruction.pickUpPlot=領取地塊（歸還代幣）
+aetherhaven.ui.plotconstruction.townNeeds=城鎮需求
+aetherhaven.ui.plotconstruction.moveBuilding=搬遷大樓
+aetherhaven.ui.plotconstruction.houseResident=居民
+aetherhaven.ui.plotconstruction.assignHouseResident=設置居民
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=搬遷建築物？
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=打開地塊放置介面，選擇新地點。移動會拆除並重建舊建築；請先移除地塊內的貴重物品、寵物和零散物品。
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=繼續
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=取消
+
+aetherhaven.ui.villagerneeds.title=城鎮需求
+aetherhaven.ui.villagerneeds.hint=選擇村民查看身高體重和頭像。
+aetherhaven.ui.villagerneeds.hunger=飢餓
+aetherhaven.ui.villagerneeds.energy=活力
+aetherhaven.ui.villagerneeds.fun=樂趣
+aetherhaven.ui.villagerneeds.villagers=村民
+aetherhaven.ui.villagerneeds.noResidentsTracked=目前尚未追蹤到該鎮居民。
+aetherhaven.ui.villagerneeds.rescueTooltip=將選定的村民傳送到你旁邊的位置，並清除他們目前的路徑和活動，以便他們能夠移動並選擇新的目的地。如果村民卡住了，可以使用此技能。
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=看看你送給這位村民的物品，按他們的反應分組，以及你本週還可以贈送多少禮物。
+aetherhaven.ui.giftHistory.title=贈送的禮物
+aetherhaven.ui.giftHistory.backTooltip=返回城鎮的需求
+aetherhaven.ui.giftHistory.empty=你還沒有送給這位村民任何禮物，所以沒有什麼可以展示的。
+aetherhaven.ui.giftHistory.section.love=喜愛
+aetherhaven.ui.giftHistory.section.like=喜歡
+aetherhaven.ui.giftHistory.section.neutral=中性的
+aetherhaven.ui.giftHistory.section.dislike=不喜歡
+aetherhaven.ui.giftHistory.giftsThisWeek=本週禮物：{used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=前鎮村民
+aetherhaven.ui.giftHistory.cycleNextTooltip=下一個城鎮的村民
+aetherhaven.ui.villagerneeds.rescueDone=選定的住戶已轉移到您這裡，其日常作息也已重新安排。
+aetherhaven.ui.villagerneeds.rescueNotTownResident=那位居民並非本鎮居民。
+aetherhaven.ui.reputation.label=名聲
+aetherhaven.reputation.dailyTalkGain=+{amount} 聲譽（日常問候）
+aetherhaven.reputation.giftRepChange={amount} 聲譽（禮物）
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=憲章修正案
+aetherhaven.ui.charter.popHint=居民（非訪客）：{count}。 1 級解鎖時間為 3；2 級解鎖時間為 5。
+aetherhaven.ui.charter.tierMark1=我
+aetherhaven.ui.charter.tierMark2=二
+aetherhaven.ui.charter.tier1=第一層級：什一稅式
+aetherhaven.ui.charter.tier2=第二層：城鎮焦點
+aetherhaven.ui.charter.t1.perCapitaShort=人均
+aetherhaven.ui.charter.t1.happinessShort=幸福加權
+aetherhaven.ui.charter.t1.perCapitaTooltip=人口數量優先決定收入。 \n\n早晨的收入取決於這裡的居民人數。日常生活的舒適度也會對總收入產生一定影響，但人口才是決定性因素。
+aetherhaven.ui.charter.t1.happinessTooltip=優先滿足需求的什一稅。 \n\n早晨的黃金收入更依賴居民的飲食、休息和精神狀態。比起增加幾個居民，保持所有人的健康狀態更為重要。
+aetherhaven.ui.charter.t2.miningShort=礦業
+aetherhaven.ui.charter.t2.loggingShort=日誌記錄
+aetherhaven.ui.charter.t2.farmingShort=農業
+aetherhaven.ui.charter.t2.smithingShort=鍛造
+aetherhaven.ui.charter.t2.miningTooltip=該憲章支持礦業發展。 \n\n與採礦生產相關的獎勵將在抵達後惠及該城鎮。請從以下選項中選擇一項發展重點：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.t2.loggingTooltip=該章程支持森林。 \n\n伐木和木材砍伐相關的獎勵將有利於該城鎮的發展。請從以下四個方向中選擇一個：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.t2.farmingTooltip=該章程支持農地建設。 \n\n當你的城鎮擁有完整的農田後，這裡的灑水器噴灑範圍會更廣，邊緣區域也會有額外的灑水覆蓋。請從以下選項中選擇一項發展重點：採礦、伐木、耕作或鍛造。
+aetherhaven.ui.charter.t2.smithingTooltip=該章程支持鐵匠鋪。 \n\n與鍛造和金屬加工相關的加成將在他們抵達時惠及這座城鎮。請從以下選項中選擇一項發展重點：採礦、伐木、農業或鍛造。
+aetherhaven.ui.charter.hint=每個層級只能選擇一個選項。選擇後無法更改。
+aetherhaven.ui.charter.allChosen=本鎮所有修正案均已選定。
+aetherhaven.ui.charter.noTown=您必須是某個城鎮的居民才能使用此服務。
+aetherhaven.ui.charter.noPermission=該鎮的章程修正案不能更改。
+aetherhaven.ui.charter.err.locked=該修正案已被鎖定或已被選中。
+aetherhaven.ui.charter.err.invalid=選項無效。
+aetherhaven.ui.charter.saved=憲章修正案已更新。
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=繼續
+aetherhaven.reputation.reward.elder.50=隨著我們的發展，章程也可以隨之改變。這裡提供一個修正案表格的範本。拿到示意圖後，請在您的城鎮規劃辦公桌上製作它。把它放在大廳裡，您就可以決定晨禱的奉獻方式了。
+aetherhaven.reputation.reward.elder.100=你為這座小鎮所做的一切遠遠超過任何人的預期。請收下這塊奠基石。在符合鎮規的地方，為創始人樹立紀念碑。這裡的人們將永遠記得你。
+aetherhaven.reputation.reward.innkeeper.50=你一直以來都盡力維持著這個大廳的運轉，所以我信任你，願意把宴會的重任交給你。這是宴會的佈置圖——拿到圖紙後，去城鎮規劃處把它佈置好，然後擺放在鎮上。宴會準備好後，你也可以舉辦帳簿晚宴：麵包、起司、餡餅，以及足夠一週享用的什一奉獻。我會照看大廳，你負責招待客人。
+aetherhaven.reputation.reward.innkeeper.75=你們和我們一起走過了太多漫漫長夜。當你們舉行爐邊守夜儀式時，全鎮的人接下來一週都會放慢節奏，更溫和地進食。魚、肉、蔬菜，以及各種食物，都會以更溫和的方式滿足每個人的需求。這就是我們彼此扶持的方式。
+aetherhaven.reputation.reward.innkeeper.100=你和這座小鎮現在有了共同的名字。康科德莓果圈餐廳（Berrycircle Concord）就像一個輕食拼盤：沙拉、水果串、爆米花，還有一份令人回味無窮的吐司。只要上一次，就能讓他們對你留下深刻的印象。
+aetherhaven.reputation.reward.merchant.50=你無論順境逆境都信守承諾。這是長椅的圖紙。拿到圖面後，到你的城鎮規劃辦公室製作吧。長椅的評估是免費的；但我自己的評估仍然收費。
+aetherhaven.reputation.reward.merchant.100=你在這筆帳簿上投入的黃金足以讓你贏得一個珠寶商的專屬角落。圖案由你掌控。在城鎮規劃桌上，打造你的專屬珠寶。鑲嵌你的寶石、你的金屬，以及你傾注其中的生命，這件作品終將完美呈現。
+aetherhaven.reputation.reward.priestess.50=蓋亞信任你，讓你遊走於繁榮與毀滅的邊緣。嚐嚐這混合物：水晶與生命精華，在城鎮規劃桌前精心調配而成。它能揭示不該留存之物，並讓你只需輕輕一吹粉末，便可抹去新生的痕跡。
+aetherhaven.reputation.reward.priestess.75=你負責維護道路的清廉。拿著這塊碎片：當你想讓鎮上的酒壺裝的不僅僅是耳語時，就把它和什一稅一起帶回來。
+aetherhaven.reputation.reward.priestess.100=蓋亞女神以最佳的方式將你視為固執。這片翠綠的催化劑，若與祭壇守護者的金幣和悉心照料相結合，便能加深甘霖的滋味。
+aetherhaven.reputation.reward.farmer.25=你在田間勞動中贏得了我的信任。我畫了一個鐵製灑水器的草圖。當你擁有水之精華和鐵時，就可以在農活台上製作它了。
+aetherhaven.reputation.reward.farmer.50=以下是釷的分佈模式：覆蓋範圍更廣，黎明節奏相同。一旦你了解了原理圖，工作台上的「耕作」標籤就會顯示出來。
+aetherhaven.reputation.reward.farmer.75=鈷合金能更好地保持壓力。此頁面解鎖第三層灑水器，依然能在日出時分帶來一次酣暢淋漓的澆水。
+aetherhaven.reputation.reward.farmer.100=精金與精華：這套牌的最後一張。小心放置。黎明時分，城鎮的田野將飲水。
+aetherhaven.reputation.reward.blacksmith.25=石頭是砂漿，石頭是耐心。你兩者兼備，而且顯而易見。
+aetherhaven.reputation.reward.blacksmith.50=你已經贏得了鐵匠的信任。這是晶洞鐵砧的製作圖。當你收集到所需的錠塊和石頭後，就可以在城鎮規劃桌上製作它了。
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=地塊標誌（管理員）
+aetherhaven.ui.plotadmin.construction=建造
+aetherhaven.ui.plotadmin.give=給出繪圖訊號並關閉

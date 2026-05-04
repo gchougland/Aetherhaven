@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Fêtes de la ville
+aetherhaven.ui.feast.noTown=Vous devez appartenir à une ville.
+aetherhaven.ui.feast.noPermission=Vous ne pouvez pas organiser de festins pour cette ville.
+aetherhaven.ui.feast.outsideTerritory=La table doit être placée à l'intérieur du territoire de votre ville.
+aetherhaven.ui.feast.activeTitle=Fête de la ville en vigueur
+aetherhaven.ui.feast.noneActive=Aucun festin temporaire n'est actif. Sélectionnez un festin à gauche pour consulter son coût et ses effets.
+aetherhaven.ui.feast.daysLeft=Jours restants (aubes) : {days}
+aetherhaven.ui.feast.selectHint=Choisissez un festin
+aetherhaven.ui.feast.ingredientsLabel=Ingrédients
+aetherhaven.ui.feast.confirm=Organiser un festin
+aetherhaven.ui.feast.locked=Vous n'avez pas encore appris les rudiments de cette fête. Passez du temps avec les habitants jusqu'à ce que quelqu'un vous les explique.
+aetherhaven.ui.feast.tooltipLocked=L'accès est bloqué jusqu'à ce qu'un voisin vous apprenne à préparer ce festin. Aidez la ville et continuez à discuter avec les personnes qui cuisinent pour la salle des fêtes.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord est en phase de refroidissement ({days} jours restants).
+aetherhaven.ui.feast.began=Le festin commence. Les villageois se rassemblent autour de la table.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven n'est pas chargé sur ce serveur.
+aetherhaven.ui.feast.err.unknownFeast=Ce festin n'est pas disponible.
+aetherhaven.ui.feast.err.invalidPlayer=Impossible de vérifier votre personnage.
+aetherhaven.ui.feast.err.feastNotUnlocked=Vous n'avez pas encore appris à préparer ce festin. Tissez des liens de confiance avec les gens du village et soyez attentif lorsqu'une personne vous proposera de vous l'enseigner.
+aetherhaven.ui.feast.err.timedFeastActive=Une autre fête à heure fixe est déjà en vigueur dans cette ville.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Attendez la fin du festin en cours avant de servir le Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord est toujours en recharge.
+aetherhaven.ui.feast.err.notEnoughIngredients=Vous ne disposez pas d'une quantité suffisante des ingrédients requis.
+
+aetherhaven.ui.production.title=Magasins de bureau
+aetherhaven.ui.production.prev=Précédent
+aetherhaven.ui.production.next=Suivant
+aetherhaven.ui.production.prevTooltip=Sortie précédente dans cet emplacement
+aetherhaven.ui.production.nextTooltip=Prochaine sortie dans cet emplacement
+aetherhaven.ui.production.take1=Prenez 1
+aetherhaven.ui.production.take10=Prenez 10
+aetherhaven.ui.production.take100=Prenez 100
+aetherhaven.ui.production.genInterval={time} pour en fabriquer un
+aetherhaven.ui.production.err.plugin=Aetherhaven n'est pas chargé sur ce serveur.
+aetherhaven.ui.production.err.permission=Vous ne pouvez pas ouvrir cet entrepôt pour cette ville.
+aetherhaven.ui.production.err.plot=Ce bloc ne se trouve pas à l'intérieur d'un terrain de travail achevé (ferme, grange, moulin ou cabane de mineur) de votre ville.
+aetherhaven.ui.production.err.catalog=Aucun catalogue de production n'est configuré pour ce bâtiment.
+aetherhaven.ui.production.err.inventoryFull=Votre stock est déjà trop plein pour accepter autant.
+aetherhaven.ui.production.unlockButton=Déverrouille
+aetherhaven.ui.production.unlockTooltip=Consultez et achetez les livrables verrouillés de ce bâtiment.
+
+aetherhaven.ui.productionUnlocks.title=Déverrouillage de l'espace de travail
+aetherhaven.ui.productionUnlocks.intro=Sélectionnez une sortie ci-dessous pour afficher son nom et ses exigences dans le panneau. Survolez une icône pour comparer les quantités détenues et requises. Une fois les totaux d'objets et d'or atteints, cliquez sur une sortie verrouillée pour la déverrouiller.
+aetherhaven.ui.productionUnlocks.navProduction=Production
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Retour au rangement du lieu de travail
+aetherhaven.ui.productionUnlocks.detailHint=Cliquez sur une icône ci-dessus pour voir son nom et les conditions de déblocage.
+aetherhaven.ui.productionUnlocks.err.inventory=Impossible de lire votre inventaire.
+aetherhaven.ui.productionUnlocks.err.empty=Aucune liste de déverrouillage n'est configurée pour ce lieu de travail.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Déjà déverrouillé pour ce lieu de travail.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Article : {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Pièces d'or : {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Vous avez besoin d'au moins {need} de cet objet dans votre inventaire (sacs combinés).
+aetherhaven.ui.productionUnlocks.notify.needGold=Vous avez besoin de suffisamment de pièces d'or entre le trésor de la ville et votre inventaire ({need} total).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Impossible de retirer les articles requis de votre inventaire.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Impossible de payer le prix de l'or ; vos articles ont été retournés.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Déverrouillé {item} pour ce lieu de travail.
+
+aetherhaven.feast.stewards.name=Le souper du registre de l'intendant
+aetherhaven.feast.stewards.description=Étalez du pain, du fromage et une bonne tarte à la citrouille pour que la dîme du matin soit généreuse pendant une semaine.
+aetherhaven.feast.hearthglass.name=Veille de verre de foyer
+aetherhaven.feast.hearthglass.description=Poisson grillé, viandes cuites et légumes disposés en un repas de veille mijoté. Les besoins des villageois s'estompent plus doucement pendant une semaine.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=Un cercle d'assiettes légères : salade de baies, brochettes de fruits et pop-corn pour les toasts. Vos voisins se souviendront de vous avec un peu plus de bienveillance. Attendez une semaine avant de pouvoir le servir à nouveau.

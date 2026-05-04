@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Указатель участка
+items.Aetherhaven_Plot_Sign.description=Отмечает место, где можно построить префаб. Используйте команду /aetherhaven plot для настройки.
+
+items.Aetherhaven_Charter.name=Устав города
+items.Aetherhaven_Charter.description=Место для основания города. Каждый игрок может иметь один город на одном мире. Используйте для открытия информации о городе.
+
+items.Aetherhaven_Town_Planning_Desk.name=отдел городского планирования
+items.Aetherhaven_Town_Planning_Desk.description=Уставы ремесленного города, посох для размещения участков, строительный персонал (ускоряет пассивное строительство участков), журнал заданий, геодная наковальня, таблица поправок к уставу и жетоны участков. Создайте один из них на верстаке.
+items.Aetherhaven_Charter_Amendments_Table.name=таблица поправок к Уставу
+items.Aetherhaven_Charter_Amendments_Table.description=Записывает, как подсчитывается десятина в городе и какие виды торговли поддерживает устав. Используйте для внесения поправок, как только население города их поддержит. Создавайте за столом городского планирования; вы должны знать схему.
+items.Aetherhaven_Banquet_Table.name=Банкетный стол
+items.Aetherhaven_Banquet_Table.description=Длинный стол для городских пиршеств. Разместите его на своей территории и используйте для сервировки городского пира. Создайте его за столом городского планирования, как только кто-нибудь в городе поделится с вами шаблоном.
+items.Aetherhaven_Founder_Monument.name=Памятник основателю
+items.Aetherhaven_Founder_Monument.description=Каменный постамент с изображением основателя. Устанавливается на территории города в знак уважения; утренняя доля казны немного увеличивается, пока постамент стоит. Только один на город.
+
+benchCategories.aetherhaven.town_planning=Градостроительство
+benchCategories.aetherhaven.plot_tokens=Токены сюжета
+
+items.Aetherhaven_Plot_Placement_Tool.name=Персонал по размещению участков
+items.Aetherhaven_Plot_Placement_Tool.description=Храните соответствующий жетон участка в сумке. Используйте этот посох, целясь в землю, чтобы увидеть призрак здания. Подталкивайте и поворачивайте его, пока он не подойдет, затем подтвердите, чтобы закрепить участок. Отмените действие, чтобы очистить предварительный просмотр, и используйте посох снова, когда вам понадобится другое место.
+
+items.Aetherhaven_Poi_Tool.name=инструмент отладки POI
+items.Aetherhaven_Poi_Tool.description=Отображает точки интереса (POI) города, пока удерживается (права доступа: aetherhaven.poi.tool). Основной: выбрать ближайшую точку интереса. Дополнительный: переместить якорь точки интереса к этому блоку. Использование: установить/сбросить целевой путь автономного режима для выбранной точки интереса (щелкните по блоку точки интереса еще раз, чтобы сбросить).
+items.Aetherhaven_Poi_Tool.legendTitle=инструмент POI
+items.Aetherhaven_Poi_Tool.legendPrimary=Основной: выберите ближайшую точку интереса (POI) рядом с кварталом.
+items.Aetherhaven_Poi_Tool.legendSecondary=Вторичная функция: переместить выбранную точку интереса в блок.
+items.Aetherhaven_Poi_Tool.legendUse=Применение: установить целевой путь NPC для выбранной точки интереса (используйте при очистке блоков точек интереса).
+
+aetherhaven.poiTool.legendTitle=инструмент POI
+aetherhaven.poiTool.legendPrimary=Основной: выберите ближайшую точку интереса (POI) рядом с кварталом.
+aetherhaven.poiTool.legendSecondary=Вторичная задача: переместить выбранную точку интереса в блок.
+aetherhaven.poiTool.legendUse=Применение: установить целевой путь NPC для выбранной точки интереса (используйте при очистке блоков точек интереса).
+
+aetherhaven.pathTool.legendPageTitle=Инструмент «Путь»
+aetherhaven.pathTool.legendBlurb=Создайте сплайн, просмотрите его, затем разместите блоки пути. Пока вы удерживаете инструмент, в углу появляется панель состояния. При установке Buuz135 MHUD эта панель регистрируется как отдельный слой, поэтому другие пользовательские HUD-интерфейсы также могут оставаться видимыми.
+aetherhaven.pathTool.legendHotkeyAdd=Прицеливание из дополнительного оружия на земле добавляет ключевой кадр (золотую сферу). Прицеливание из дополнительного оружия во время прицеливания убирает его. Новые ключевые кадры отображаются в направлении вашего взгляда.
+aetherhaven.pathTool.legendHotkeyAim=Чтобы выбрать его, посмотрите на ключевой кадр. В режиме перемещения основной узел на земле перемещает точку. Основной узел на том же узле ничего не делает.
+aetherhaven.pathTool.legendHotkeyUse=F: в режиме вращения, шаг поворота по оси рыскания на выбранном узле. В режиме перемещения F ничего не делает. В режиме размещения F размещает путь (требуется два узла). Q: режим переключения. E: ширина 1-8. Третья возможность инструмента: стиль пути (внутренние блоки; см. PathToolStyles в конфигурации). Вторичное применение к ключевому кадру удаляет его.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Дополнительно: для смены режима больше не требуется приседать; вместо этого используйте инструмент (Q).
+aetherhaven.pathTool.legendVisuals=Предварительный просмотр: белый = узлы и сплайн, коричневый = полоса дорожки, зеленый = трава по краю; красный = заблокировано. Плиты лежат на поверхности. Ширина: вторая способность инструмента (1-8). Стиль: третья способность инструмента. Действие «Завершить» удаляет высокие растения (Plant_Grass) над дорожкой.
+aetherhaven.pathTool.statusHeader=Удерживая инструмент
+aetherhaven.pathTool.statusLine1=При добавлении баллов, переключении режима (Q) или закреплении в режиме подтверждения появляются всплывающие уведомления и сообщения в чате.
+aetherhaven.pathTool.statusLine2=Выделение: наведите прицел на сферу. Промах сохраняет текущее выделение. Q переключает режим; вторая способность переключает ширину; третья способность переключает стиль пути.
+
+aetherhaven.pathTool.hudTitle=Инструмент «Путь»
+aetherhaven.pathTool.hudNameTranslate=Двигаться
+aetherhaven.pathTool.hudNameRotate=Повернуть
+aetherhaven.pathTool.hudNameCommit=Место
+aetherhaven.pathTool.hudHelpTranslate=Основной режим: наведите указатель мыши на узел, чтобы выбрать его, затем наведите указатель мыши на блок, чтобы переместить его. Вторичный режим: наведение на землю добавляет узел; наведение указателя мыши удаляет его. Вопрос: следующий режим.
+aetherhaven.pathTool.hudHelpRotate=Основной режим: наведите указатель мыши на узел для выбора. Вторичный режим: наведение на землю добавляет узел; наведение указателя мыши на узел удаляет его. F смещает выбранный узел по оси рыскания. Q: следующий режим.
+aetherhaven.pathTool.hudHelpCommit=Основной: наведите указатель мыши на узел для выбора. Вторичный: наведение на землю добавляет узел; наведение на узел удаляет его. F прокладывает путь (2+ узла). Q: следующий режим.
+aetherhaven.pathTool.hudStyle=Стиль: {style}
+aetherhaven.pathTool.hudWidth=Ширина: {w} блоков (E для цикла)
+aetherhaven.pathTool.hudNodes=Узлы: {n}
+aetherhaven.pathTool.hudHint=Основной = выбрать/переместить | Вторичный = добавить на землю, удалить на узел | Q: режим | E: ширина | R: стиль | F: повернуть/разместить
+
+aetherhaven.pathTool.addedNode=Узел {n} добавлен.
+aetherhaven.pathTool.modeCycledToTranslate=Режим: перемещение и размещение ключевых кадров.
+aetherhaven.pathTool.modeCycledToRotate=Режим: вращение — клавиша F смещает выбранный узел по оси рыскания.
+aetherhaven.pathTool.modeCycledToCommit=Режим: размещение — клавиша F размещает путь (если у вас 2 и более узлов).
+aetherhaven.pathTool.widthCycled=Ширина пути: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Стиль пути: {style}
+aetherhaven.pathTool.toastStyleCycled=Стиль пути изменен
+aetherhaven.pathTool.useInTranslateMode=Нажатие клавиши F в режиме перемещения ничего не делает. Нажмите Q для переключения в режим размещения, затем F для размещения, или для вращения, а F для поворота.
+aetherhaven.pathTool.rotateNoSelection=Выберите ключевой кадр (наведите курсор на золотой шар) для вращения или нажмите Q для смены режима.
+aetherhaven.pathTool.modeToggled=Режим: {m}
+aetherhaven.pathTool.selectedNode=Узел выбран.
+aetherhaven.pathTool.movedNode=Узел перемещен.
+aetherhaven.pathTool.noNodeHit=В зоне действия нет управляющего узла. В режиме перемещения с выбранным узлом попробуйте переместить основной узел на земле.
+aetherhaven.pathTool.noNodeOnAim=Нет ключевого кадра для прицела. Наведите прицел на золотой диск для выделения. Выделение остается без изменений.
+aetherhaven.pathTool.toastAdd=Добавлена контрольная точка
+aetherhaven.pathTool.toastModeTranslate=Перемещение: основное перемещение блока перемещает выделенную область; дополнительное добавление ключевого кадра.
+aetherhaven.pathTool.toastModeRotate=Вращение: клавиша F выполняет поворот выбранного узла.
+aetherhaven.pathTool.toastModeCommit=Размещение: клавиша F размещает путь (2+ узла). Поменяйте местами с помощью клавиши Q.
+aetherhaven.pathTool.toastMoved=Положение узла обновлено
+aetherhaven.pathTool.toastRemoved=Контрольная точка удалена
+aetherhaven.pathTool.toastRotated=Рыскание слегка подтолкнуло
+aetherhaven.pathTool.toastCemented=Дорожка забетонирована. Проверьте чат для получения идентификатора отмены.
+aetherhaven.pathTool.rotated=Повернуто на {deg}°.
+aetherhaven.pathTool.removedNode=Узел удален. Осталось {n} узлов.
+aetherhaven.pathTool.needTwoNodes=Необходимо как минимум два ключевых кадра. Добавьте ещё один с помощью вторичного кадра или нажмите Q, чтобы выйти из режима подтверждения и продолжить редактирование.
+aetherhaven.pathTool.emptyPlan=Вдоль пути не обнаружено никакой земли (крутые/пустые/незагруженные участки).
+aetherhaven.pathTool.cementFail=Нечего разместить: не найдено заменяемого заземления или размещение не удалось.
+aetherhaven.pathTool.cemented=Путь создан. Идентификатор отмены: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=У вас нет разрешения aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Неверный идентификатор: {raw}
+aetherhaven.pathTool.unknownId=Нет сохраненного пути с таким идентификатором.
+aetherhaven.pathTool.reverted=Блок(и) {cells} отменены для {id}
+aetherhaven.pathTool.navvizOn=Отладка навигации по пути: включена (сервер отображает зафиксированные узлы пути в виде строк; запустите снова, чтобы отключить).
+aetherhaven.pathTool.navvizOff=Отладка навигации по пути: выключена
+aetherhaven.pathTool.navvizNoPerm=Для отладки навигации по пути требуется aetherhaven.path.tool
+
+commands.aetherhaven.path.root.desc=Вспомогательные средства для размещения траекторий/сплайнов
+commands.aetherhaven.path.revert.desc=Восстановить зафиксированный путь из файла отмены (aetherhaven.path.revert)
+commands.aetherhaven.path.revert.id=Идентификатор подтверждения пути (UUID из сообщения в чате Cement)
+commands.aetherhaven.path.navviz.desc=Включить/выключить отладочное отображение полилиний навигации по пути (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=проектировщик дорожек лопата
+items.Aetherhaven_Path_Tool.description=Создает сплайновые пути (aetherhaven.path.tool). Второстепенная функция: добавление узлов. Основная функция: выбор; в режиме перемещения щелкните по земле, чтобы переместиться. Q: переключение режимов. Вторая функция: ширина пути 1-8. Третья функция: стиль пути (внутренние блоки; PathToolStyles в конфигурации). F: смещение по оси рыскания в режиме вращения или размещение в режиме размещения (2+ узла). Отмена: отмена пути aetherhaven. Конфигурация: PathToolStyles, трассировка лучей и списки замены.
+
+items.Aetherhaven_Plot_Token_Inn.name=Жетон для участка в гостинице
+items.Aetherhaven_Plot_Token_Inn.description=Необходимо добавить в инвентарь, чтобы использовать персонал для размещения участка под гостиницу.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=жетон для размещения рыночного прилавка
+items.Aetherhaven_Plot_Token_Market_Stall.description=Необходимо, чтобы планировка торгового места была определена сотрудниками, занимающимися размещением торговых площадок.
+
+items.Aetherhaven_Plot_Token_Farm.name=Жетон для фермерского участка
+items.Aetherhaven_Plot_Token_Farm.description=Необходимо, чтобы персонал, занимающийся размещением участков, определил границы земельного участка.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Жетон участка кузницы
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Необходимо разместить контур кузницы, используя данные о размещении участка.
+
+items.Aetherhaven_Plot_Token_Park.name=токен для паркового участка
+items.Aetherhaven_Plot_Token_Park.description=Необходимо, чтобы планировка парка была определена сотрудниками, занимающимися размещением участков.
+
+items.Aetherhaven_Plot_Token_House.name=Жетон земельного участка
+items.Aetherhaven_Plot_Token_House.description=Необходимо, чтобы план застройки общего жилого дома был утвержден сотрудниками, занимающимися размещением участков.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Жетон для участка в ратуше
+items.Aetherhaven_Plot_Token_Town_Hall.description=Необходимо, чтобы сотрудники, занимающиеся размещением участков, определили местоположение здания ратуши.
+
+items.Aetherhaven_Gold_Coin.name=Золотая монета
+items.Aetherhaven_Gold_Coin.description=Городская валюта хранится в казначействе.
+
+items.Aetherhaven_Geode.name=Геода
+items.Aetherhaven_Geode.description=Полый камень, в котором могут находиться кристаллы, драгоценные камни или руда. За его раскалывание обратитесь к кузнецу.
+
+items.Aetherhaven_Geode_Anvil.name=Геодовая наковальня
+items.Aetherhaven_Geode_Anvil.description=Открывает жеоды без платы за услуги кузнеца. Разместите и используйте; для изготовления на столе городского планирования вам необходимо знать схему.
+
+barter.aetherhaven_vex.title=Ежедневные запасы Vex
+
+items.Aetherhaven_Treasury.name=Городская казна
+items.Aetherhaven_Treasury.description=Хранит золотые монеты города. Используется для внесения или снятия средств (владельцем города).
+
+items.Aetherhaven_Quest_Journal.name=Журнал заданий города
+items.Aetherhaven_Quest_Journal.description=Дополнительное назначение: просмотр активных заданий города. Старейшина может дать вам одно из них после постройки гостиницы.

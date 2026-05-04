@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_generic)
+# Full translation keys are aetherhaven_dialogue_visitor_generic.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.body=Good day, traveler. If you are not of this settlement, speak with the locals who belong here. My hands are full with our own work.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.c0=Farewell.
+aetherhaven.dialogue.aetherhaven_visitor_generic.root.speaker=Villager

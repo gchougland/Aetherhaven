@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Purification_Powder.name",
-    "Description": "server.items.Aetherhaven_Purification_Powder.description"
+    "Name": "aetherhaven_jewelry_geode.items.Aetherhaven_Purification_Powder.name",
+    "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Purification_Powder.description"
   },
   "PlayerAnimationsId": "Item",
   "Categories": [

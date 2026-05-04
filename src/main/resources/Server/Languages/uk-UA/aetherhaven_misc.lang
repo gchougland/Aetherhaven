@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Твій гаманець занадто легкий для цього ремонту.
+aetherhaven.blacksmith.repair.success={itemName} знову цілий. Як новий.
+commands.aetherhaven.dialogue.desc=Відкрити дерево діалогів за ідентифікатором (для тестування)
+commands.aetherhaven.dialogue.treeId.desc=Ідентифікатор дерева діалогів (наприклад, aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Додатковий ідентифікатор вузла запису (за замовчуванням: root)
+aetherhaven.interaction.dialogue=Натисніть [{key}], щоб поговорити
+npcRoles.Aetherhaven_Test_Villager.name=Тест на діалоги для селянина
+aetherhaven.banner.quest.completed.primary=Квест виконано
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Будівництво завершено
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} готовий.
+aetherhaven.assembly.tracer.none_in_range=Немає попереднього перегляду збірки в зоні дії (підійдіть ближче або перевірте дозвіл на будівництво міста).
+aetherhaven.banner.quest.started.primary=Квест розпочато
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Розблоковано
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Персонал будівлі
+items.Aetherhaven_Building_Staff.description=Первинний блок надсилає напрямний заряд крізь блоки до найближчого попереднього перегляду збірки в зоні дії. Тримайте вторинний блок і цільтеся крізь блоки на попередній перегляд збірки, щоб миттєво розмістити наступний блок (дозвіл на будівництво міста). Пасивні збірки все ще просуваються самостійно, коли вас немає.

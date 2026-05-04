@@ -18,7 +18,7 @@ public final class AetherhavenReloadCommand extends AbstractPlayerCommand {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     public AetherhavenReloadCommand() {
-        super("reload", "server.commands.aetherhaven.reload.desc");
+        super("reload", "aetherhaven_commands_root.commands.aetherhaven.reload.desc");
         this.setPermissionGroup(GameMode.Creative);
     }
 
@@ -32,20 +32,20 @@ public final class AetherhavenReloadCommand extends AbstractPlayerCommand {
     ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            playerRef.sendMessage(Message.translation("server.commands.aetherhaven.reload.noPlugin"));
+            playerRef.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.reload.noPlugin"));
             return;
         }
         try {
             plugin.reloadConfigsAndAssetCatalogs();
-            playerRef.sendMessage(Message.translation("server.commands.aetherhaven.reload.success"));
+            playerRef.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.reload.success"));
         } catch (CompletionException e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
             String detail = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getSimpleName();
-            playerRef.sendMessage(Message.translation("server.commands.aetherhaven.reload.failure").param("detail", detail));
+            playerRef.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.reload.failure").param("detail", detail));
             LOGGER.atWarning().withCause(cause).log("Aetherhaven reload failed");
         } catch (RuntimeException e) {
             String detail = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
-            playerRef.sendMessage(Message.translation("server.commands.aetherhaven.reload.failure").param("detail", detail));
+            playerRef.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.reload.failure").param("detail", detail));
             LOGGER.atWarning().withCause(e).log("Aetherhaven reload failed");
         }
     }

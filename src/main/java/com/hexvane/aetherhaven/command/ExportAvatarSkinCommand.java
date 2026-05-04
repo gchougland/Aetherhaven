@@ -35,10 +35,10 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
 
     @Nonnull
     private final OptionalArg<String> pathArg =
-        this.withOptionalArg("path", "server.commands.aetherhaven.exportskin.arg.path", ArgTypes.GREEDY_STRING);
+        this.withOptionalArg("path", "aetherhaven_commands_root.commands.aetherhaven.exportskin.arg.path", ArgTypes.GREEDY_STRING);
 
     public ExportAvatarSkinCommand() {
-        super("exportskin", "server.commands.aetherhaven.exportskin.desc");
+        super("exportskin", "aetherhaven_commands_root.commands.aetherhaven.exportskin.desc");
         this.setPermissionGroup(GameMode.Creative);
         this.addUsageVariant(new ExportAvatarSkinOtherCommand());
     }
@@ -63,7 +63,7 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
     ) {
         PlayerSkinComponent skinComponent = store.getComponent(ref, PlayerSkinComponent.getComponentType());
         if (skinComponent == null) {
-            context.sendMessage(Message.translation("server.commands.aetherhaven.exportskin.noSkin"));
+            context.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.noSkin"));
             return;
         }
         PlayerSkin skin = skinComponent.getPlayerSkin();
@@ -72,7 +72,7 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
             cosmetics.validateSkin(skin);
         } catch (CosmeticsModule.InvalidSkinException e) {
             context.sendMessage(
-                Message.translation("server.commands.aetherhaven.exportskin.invalidSkin").param("detail", e.getMessage())
+                Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.invalidSkin").param("detail", e.getMessage())
             );
             return;
         }
@@ -81,7 +81,7 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
             json = PlayerSkinModelExporter.toModelJson(skin, cosmetics.getRegistry());
         } catch (IllegalArgumentException ex) {
             context.sendMessage(
-                Message.translation("server.commands.aetherhaven.exportskin.resolveError").param("detail", ex.getMessage())
+                Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.resolveError").param("detail", ex.getMessage())
             );
             return;
         }
@@ -92,13 +92,13 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
             Files.writeString(out, text, StandardCharsets.UTF_8);
         } catch (Exception io) {
             context.sendMessage(
-                Message.translation("server.commands.aetherhaven.exportskin.ioError")
+                Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.ioError")
                     .param("path", out.toString())
                     .param("detail", io.getMessage())
             );
             return;
         }
-        context.sendMessage(Message.translation("server.commands.aetherhaven.exportskin.success").param("path", out.toString()));
+        context.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.exportskin.success").param("path", out.toString()));
     }
 
     @Nonnull
@@ -126,10 +126,10 @@ public final class ExportAvatarSkinCommand extends AbstractPlayerCommand {
 
         @Nonnull
         private final OptionalArg<String> pathArg =
-            this.withOptionalArg("path", "server.commands.aetherhaven.exportskin.arg.path", ArgTypes.GREEDY_STRING);
+            this.withOptionalArg("path", "aetherhaven_commands_root.commands.aetherhaven.exportskin.arg.path", ArgTypes.GREEDY_STRING);
 
         ExportAvatarSkinOtherCommand() {
-            super("server.commands.aetherhaven.exportskin.other.desc");
+            super("aetherhaven_commands_root.commands.aetherhaven.exportskin.other.desc");
             this.setPermissionGroup(GameMode.Creative);
         }
 

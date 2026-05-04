@@ -2,14 +2,14 @@ $LegendCommon = "../Hud/ToolsLegends/ToolsLegendsCommon.ui";
 
 $LegendCommon.@Legend {
   #Title {
-    Text: %server.aetherhaven.pathTool.legendPageTitle;
+    Text: "%aetherhaven_items.aetherhaven.pathTool.legendPageTitle";
   }
   #Pages {
     $LegendCommon.@Page #Page1 {
-      @Title = %server.aetherhaven.pathTool.legendPageTitle;
+      @Title = "%aetherhaven_items.aetherhaven.pathTool.legendPageTitle";
 
       $LegendCommon.@RowLabel {
-        Text: %server.aetherhaven.pathTool.legendBlurb;
+        Text: "%aetherhaven_items.aetherhaven.pathTool.legendBlurb";
         Padding: (Vertical: 6);
       }
 
@@ -17,28 +17,28 @@ $LegendCommon.@Legend {
 
       $LegendCommon.@HotkeyRow {
         @InputBindingKey = "SecondaryItemAction";
-        @Description = %server.aetherhaven.pathTool.legendHotkeyAdd;
+        @Description = "%aetherhaven_items.aetherhaven.pathTool.legendHotkeyAdd";
       }
 
       $LegendCommon.@HotkeyRow {
         @InputBindingKey = "PrimaryItemAction";
-        @Description = %server.aetherhaven.pathTool.legendHotkeyAim;
+        @Description = "%aetherhaven_items.aetherhaven.pathTool.legendHotkeyAim";
       }
 
       $LegendCommon.@RowLabel {
-        Text: %server.aetherhaven.pathTool.legendHotkeyUse;
+        Text: "%aetherhaven_items.aetherhaven.pathTool.legendHotkeyUse";
         Padding: (Top: 4);
       }
 
       $LegendCommon.@RowLabel {
-        Text: %server.aetherhaven.pathTool.legendHotkeyCrouchUse;
+        Text: "%aetherhaven_items.aetherhaven.pathTool.legendHotkeyCrouchUse";
         Padding: (Top: 6);
       }
 
       $LegendCommon.@Separator {}
 
       $LegendCommon.@RowLabel {
-        Text: %server.aetherhaven.pathTool.legendVisuals;
+        Text: "%aetherhaven_items.aetherhaven.pathTool.legendVisuals";
         Style: (FontSize: 13, TextColor: #b8c8d8, Wrap: true);
       }
     }

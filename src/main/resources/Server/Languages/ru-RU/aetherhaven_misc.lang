@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Ваша сумочка слишком лёгкая для такого ремонта.
+aetherhaven.blacksmith.repair.success={itemName} снова цел. Как новенький.
+commands.aetherhaven.dialogue.desc=Откройте дерево диалогов по идентификатору (для тестирования).
+commands.aetherhaven.dialogue.treeId.desc=Идентификатор дерева диалогов (например, aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Необязательный идентификатор узла записи (по умолчанию: root)
+aetherhaven.interaction.dialogue=Нажмите [{key}], чтобы начать разговор.
+npcRoles.Aetherhaven_Test_Villager.name=Тест диалога Жителя деревни
+aetherhaven.banner.quest.completed.primary=Задание выполнено
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Строительство завершено.
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} готов.
+aetherhaven.assembly.tracer.none_in_range=Предварительный просмотр сборки недоступен (приблизьтесь или проверьте разрешение на строительство в городе).
+aetherhaven.banner.quest.started.primary=Задание начато
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Разблокировано
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Персонал здания
+items.Aetherhaven_Building_Staff.description=Основное оружие посылает направляющий болт сквозь блоки к ближайшей сборочной точке в пределах досягаемости. Удерживайте дополнительное оружие и наведите прицел сквозь блоки на предпросмотр сборки, чтобы мгновенно разместить следующий блок (при наличии разрешения на строительство в городе). Пассивные постройки продолжают продвигаться самостоятельно, даже когда вас нет рядом.

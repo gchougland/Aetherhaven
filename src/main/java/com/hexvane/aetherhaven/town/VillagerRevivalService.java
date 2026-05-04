@@ -52,9 +52,19 @@ public final class VillagerRevivalService {
         if (npc == null) {
             return false;
         }
+        int roleIndex = npc.getIndex(roleId);
+        if (roleIndex < 0) {
+            LOGGER.atWarning().log("Failed to revive NPC: role id not registered (getIndex < 0): %s for town %s", roleId, town.getTownId());
+            return false;
+        }
         var pair = npc.spawnNPC(store, roleId, null, spawnPos, Vector3f.ZERO);
         if (pair == null) {
-            LOGGER.atWarning().log("Failed to revive NPC role %s for town %s", roleId, town.getTownId());
+            LOGGER.atWarning()
+                .log(
+                    "Failed to revive NPC role %s for town %s (spawnNPC returned null; see NPCPlugin/RoleBuilder logs for this role, e.g. model asset missing or failed spawn)",
+                    roleId,
+                    town.getTownId()
+                );
             return false;
         }
         Ref<EntityStore> ref = pair.first();

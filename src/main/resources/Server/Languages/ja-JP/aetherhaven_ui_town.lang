@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=工事
+aetherhaven.ui.plotmanagement.title=町政管理
+aetherhaven.ui.plotmanagement.tabPlot=プロット
+aetherhaven.ui.plotmanagement.tabPlayers=選手たち
+aetherhaven.ui.plotmanagement.playersHint=オンラインプレイヤーを名前で招待してください。役割の変更やメンバーの削除は以下から行えます。
+aetherhaven.ui.plotmanagement.playersHintReadOnly=この町のメンバー。オーナーのみが招待や役割の変更が可能です。
+aetherhaven.ui.plotmanagement.inviteLabel=プレイヤーを招待する
+aetherhaven.ui.plotmanagement.invitePlaceholder=プレイヤー名（オンライン）
+aetherhaven.ui.plotmanagement.inviteSend=招待状を送る
+aetherhaven.ui.plotmanagement.kick=取り除く
+aetherhaven.ui.plotmanagement.roleOwner=所有者
+aetherhaven.ui.plotmanagement.tabPlotTooltip=あらすじ
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=村人は必要としている
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=町民
+aetherhaven.ui.plotmanagement.tabMoveTooltip=この建物を移動させる
+aetherhaven.ui.plotconstruction.materials=材料
+aetherhaven.ui.plotconstruction.build=建てる
+aetherhaven.ui.plotconstruction.pickUpPlot=区画を取得する（トークンを返す）
+aetherhaven.ui.plotconstruction.townNeeds=町が必要とするもの
+aetherhaven.ui.plotconstruction.moveBuilding=建物を移動
+aetherhaven.ui.plotconstruction.houseResident=居住者
+aetherhaven.ui.plotconstruction.assignHouseResident=居住者を設定
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=建物を移転する？
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=区画配置画面を開き、新しい場所を選択します。移動すると古い建物が取り壊され、新しい建物が建てられます。まず、設置場所内の貴重品、ペット、および散乱している物を取り除いてください。
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=続く
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=キャンセル
+
+aetherhaven.ui.villagerneeds.title=町が必要とするもの
+aetherhaven.ui.villagerneeds.hint=メーターと肖像画を表示するには、村人を選択してください。
+aetherhaven.ui.villagerneeds.hunger=飢え
+aetherhaven.ui.villagerneeds.energy=エネルギー
+aetherhaven.ui.villagerneeds.fun=楽しい
+aetherhaven.ui.villagerneeds.villagers=村人たち
+aetherhaven.ui.villagerneeds.noResidentsTracked=町民の追跡調査はまだ行われていません。
+aetherhaven.ui.villagerneeds.rescueTooltip=選択した住民をあなたの隣の場所にテレポートさせ、現在の移動経路と活動状態をリセットして、住民が移動して新しい目的地を選択できるようにします。住民が動けなくなった場合に使用してください。
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=この村人に贈ったアイテムを、村人の反応別に分類して表示します。また、今週まだ贈れるギフトの数も確認できます。
+aetherhaven.ui.giftHistory.title=贈られた贈り物
+aetherhaven.ui.giftHistory.backTooltip=町に戻るには
+aetherhaven.ui.giftHistory.empty=あなたはまだこの村人に贈り物をしていないので、見せるものは何もありません。
+aetherhaven.ui.giftHistory.section.love=愛された
+aetherhaven.ui.giftHistory.section.like=いいね！
+aetherhaven.ui.giftHistory.section.neutral=中性
+aetherhaven.ui.giftHistory.section.dislike=嫌い
+aetherhaven.ui.giftHistory.giftsThisWeek=今週のギフト：{used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=以前の町の村人
+aetherhaven.ui.giftHistory.cycleNextTooltip=次の町の村人
+aetherhaven.ui.villagerneeds.rescueDone=選択された入居者はあなたの担当となり、その入居者の日課はリセットされました。
+aetherhaven.ui.villagerneeds.rescueNotTownResident=その住民はこの町の住民ではありません。
+aetherhaven.ui.reputation.label=評判
+aetherhaven.reputation.dailyTalkGain=+{amount} 評判（毎日の挨拶）
+aetherhaven.reputation.giftRepChange={amount} 評判（ギフト）
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=憲章改正
+aetherhaven.ui.charter.popHint=居住者（非訪問者）：{count}。ティア1は3で、ティア2は5でアンロックされます。
+aetherhaven.ui.charter.tierMark1=私
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=ティア1：十分の一税方式
+aetherhaven.ui.charter.tier2=ティア2：町に焦点を当てる
+aetherhaven.ui.charter.t1.perCapitaShort=一人当たり
+aetherhaven.ui.charter.t1.happinessShort=幸福度加重
+aetherhaven.ui.charter.t1.perCapitaTooltip=人口が第一の十分の一税。\n\nモーニングゴールドは、ここに住む住民の数に左右されます。日々の快適さも合計を少し押し上げますが、人口こそが重要なのです。
+aetherhaven.ui.charter.t1.happinessTooltip=必要を最優先する十分の一税。\n\nモーニングゴールドでは、住民がどれだけ十分に食事をし、休息を取り、精神的に健康であるかがより重要視される。住民が数人増えることよりも、全員が良好な状態を維持することの方が重要だ。
+aetherhaven.ui.charter.t2.miningShort=鉱業
+aetherhaven.ui.charter.t2.loggingShort=ログ記録
+aetherhaven.ui.charter.t2.farmingShort=農業
+aetherhaven.ui.charter.t2.smithingShort=鍛冶
+aetherhaven.ui.charter.t2.miningTooltip=この憲章は鉱山を支援しています。\n\n鉱業生産に関連するボーナスは、到着時にこの町に有利になります。以下のフォーカスを1つだけ選択してください：鉱業、林業、農業、鍛冶業。
+aetherhaven.ui.charter.t2.loggingTooltip=この憲章は森林保護を支持しています。\n\n伐採や木材伐採に関連するボーナスは、到着時にこの町に有利に働きます。以下のフォーカスを1つだけ選択してください：鉱業、伐採、農業、鍛冶。
+aetherhaven.ui.charter.t2.farmingTooltip=憲章は畑を裏付けています。\n\n町に完成した農地があると、スプリンクラーの噴射範囲が少し広がり、噴射範囲の端に余分なタイルが追加されます。以下から1つのフォーカスを選択してください：鉱業、伐採、農業、鍛冶。
+aetherhaven.ui.charter.t2.smithingTooltip=憲章は鍛冶場を支援しています。\n\n鍛冶と金属加工に関連するボーナスは、到着時にこの町に有利になります。以下のフォーカスを1つだけ選択してください：鉱業、伐採、農業、鍛冶。
+aetherhaven.ui.charter.hint=各ティアにつき1つのオプションを選択してください。選択内容は後から変更できません。
+aetherhaven.ui.charter.allChosen=この町のために選ばれたすべての修正案。
+aetherhaven.ui.charter.noTown=これを利用するには、いずれかの町に所属している必要があります。
+aetherhaven.ui.charter.noPermission=この町の憲章改正はできません。
+aetherhaven.ui.charter.err.locked=その修正案はロックされているか、既に選択済みです。
+aetherhaven.ui.charter.err.invalid=無効な選択です。
+aetherhaven.ui.charter.saved=憲章改正案が更新されました。
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=続く
+aetherhaven.reputation.reward.elder.50=憲章は、私たちの成長に合わせて変更することができます。ここに修正表の型紙を示します。設計図ができたら、都市計画デスクで作成してください。それをホールに設置すれば、朝の十分の一税の徴収方法を選択できます。
+aetherhaven.reputation.reward.elder.100=あなたは誰からも求められた以上に、この町のために尽力してくれました。この礎石を受け取ってください。憲章で認められている場所に、創設者の記念碑を建ててください。ここの人々はあなたを忘れないでしょう。
+aetherhaven.reputation.reward.innkeeper.50=あなたは長年この集会所を支え、誠実な運営を続けてきたので、私はあなたに大きな食卓を任せましょう。これが宴会の型紙です。設計図ができたら、都市計画デスクで作成し、町に設置してください。食卓の準備ができたら、帳簿の夕食会も開催できます。パン、チーズ、パイ、そして一週間分の慈善献金を用意してください。あなたが給仕をしている間、私は集会所を見守っています。
+aetherhaven.reputation.reward.innkeeper.75=あなたは私たちと共に、幾夜も長い夜を共に過ごしてきた。あなたが炉辺の灯明を灯すと、町の人々は一週間、ゆっくりと、そして優しく食事をする。魚、肉、野菜、そしてあらゆるニーズを満たす穏やかな食卓。そうやって私たちは互いに支え合っているのだ。
+aetherhaven.reputation.reward.innkeeper.100=あなたとこの町は今や同じ名前を共有しています。ベリーサークル・コンコードとは、サラダ、フルーツ串、ポップコーン、そして素敵なトーストが添えられた、軽やかな円形プレート料理のことです。一度提供すれば、きっとあなたのことを温かく覚えてくれるでしょう。
+aetherhaven.reputation.reward.merchant.50=あなたは悪天候でも好天候でも約束を守ってくれました。これがベンチの型紙です。設計図を入手したら、都市計画デスクで製作してください。ベンチでの鑑定は無料ですが、私は鑑定料を請求します。
+aetherhaven.reputation.reward.merchant.100=あなたは、この帳簿に十分な金を注ぎ込んだので、宝石商の店を開く資格を得ました。設計図はあなたのものです。都市計画デスクでそれを作り上げてください。宝石、金属、そしてあなたが注ぎ込む情熱を注ぎ込めば、作品は必ず完成します。
+aetherhaven.reputation.reward.priestess.50=ガイアは、成長と破滅の境界線を歩むあなたを信頼している。都市計画デスクで形作られた、クリスタルと生命のエッセンスの混合物を受け取ってみよう。それは、残すべきでないものを明らかにし、粉をひと吹きするだけで、生み出されたものを消滅させることができる。
+aetherhaven.reputation.reward.priestess.75=お前は街の秩序を保っている。この破片を受け取れ。町の酒瓶にささやき声以上のものを詰め込みたくなったら、十分の一税と共にこれを持ってこい。
+aetherhaven.reputation.reward.priestess.100=ガイアは、あなたを最良の意味で頑固者と見なしています。この緑豊かな触媒は、祭壇の番人に金銭と愛情を捧げることで、注ぎ込まれる飲み物の効果をさらに深めてくれるでしょう。
+aetherhaven.reputation.reward.farmer.25=あなたは私の信頼を勝ち取った。鉄製の散水器を設計した。水のエッセンスと鉄が手に入ったら、農業作業台で製作してくれ。
+aetherhaven.reputation.reward.farmer.50=これがトリウムのパターンです。より広い範囲をカバーし、夜明けのリズムは同じです。設計図が分かれば、作業台の「農業」タブに表示されます。
+aetherhaven.reputation.reward.farmer.75=コバルトは圧力保持性に優れています。このページでは、スプリンクラーの第3段階がアンロックされます。日の出時にたっぷりと水を浴びることができます。
+aetherhaven.reputation.reward.farmer.100=アダマンタイトとエッセンス：セットの最後のシート。慎重に配置してください。町の畑は夜明けに水を吸い上げるでしょう。
+aetherhaven.reputation.reward.blacksmith.25=モルタルには石が必要、忍耐にも石が必要。あなたは両方持ち合わせている、それがよく表れている。
+aetherhaven.reputation.reward.blacksmith.50=あなたは鍛冶場の信頼を勝ち取りました。ここに晶洞金床の設計図があります。鉄棒と石が揃ったら、街づくりデスクで製作してください。
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=区画標識（管理者）
+aetherhaven.ui.plotadmin.construction=工事
+aetherhaven.ui.plotadmin.give=区画標識を設置して閉じる

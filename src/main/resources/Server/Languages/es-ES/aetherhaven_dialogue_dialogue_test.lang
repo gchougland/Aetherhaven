@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Laboratorio de condiciones. No debería aparecer ninguna opción oculta. Debería aparecer una opción atenuada. Utilice las puertas compuestas para continuar.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Esta opción está oculta (literalmente falsa).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Esto debería aparecer atenuado.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(requiere que sea literalmente verdadero)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Aprobar compuesto: NO es falso Y es verdadero
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=Rama OR (verdadero o falso)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Gracias por la prueba. ¡Adiós!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=¡Adiós!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Seleccione a continuación para ir directamente a la despedida usando la acción "ir a" en lugar de "siguiente".
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=ir a despedida
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=Al entrar en un nodo, solo obtuviste una pala rudimentaria (si tenías espacio en el inventario). Selecciona la opción de abajo para obtener más objetos.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Dame 3 de tierra y luego continúa.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Bienvenido al sistema de diálogos de Aetherhaven. Esta línea es larga a propósito para que puedas comprobar el diseño y el desplazamiento. Tus opciones se encuentran debajo del texto principal.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Continúe hacia el laboratorio de condiciones.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Salir (terminar con el siguiente nulo).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Salir (acción de cierre explícita).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Puedes abrir la interfaz de intercambio de comerciantes de Kweebec o saltar a las acciones básicas.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Tienda de trueque abierta Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Salta la tienda, ve a los stubs
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA Villager
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Acciones incompletas: desbloquear logros e iniciar misiones deberían registrarse hasta que existan esos sistemas.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Ejecuta los stubs unlock_achievement + start_quest
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA Villager

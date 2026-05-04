@@ -227,5 +227,29 @@
     "Furniture_Temple_Dark_Coffin",
     "Furniture_Village_Coffin",
     "Furniture_Village_Tombstone"
+  ],
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.0",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.1",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.2",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.3",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.4",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.5",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.6",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.7",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.8",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.9"
+  ],
+  "dialogueGiftHintLangKeys": [
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.0",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.1",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.2",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.3",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.4",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.0",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.1",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.2",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.3",
+    "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.4"
   ]
 }

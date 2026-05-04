@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=Подарок уже вручен сегодня.
+aetherhaven.dialogue.gift.disabled.weekly=Два подарка были вручены на этой неделе.
+aetherhaven.dialogue.gift.offer=Предложите подарок
+aetherhaven.dialogue.gift.confirmBody=Подарить предмет, находящийся в активной панели быстрого доступа (один)?
+aetherhaven.dialogue.gift.confirmYes=Да, дайте это.
+aetherhaven.dialogue.gift.confirmNo=Неважно
+aetherhaven.dialogue.gift.back=Все в порядке
+aetherhaven.dialogue.gift.fail.visitor=Приобрести подарки, хранящиеся на складе, могут только жители города.
+aetherhaven.dialogue.gift.fail.emptyHand=Чтобы предложить предмет, удерживайте его на панели быстрого доступа.
+aetherhaven.dialogue.gift.fail.dailyLimit=Вы уже сделали этому человеку подарок сегодня.
+aetherhaven.dialogue.gift.fail.weeklyLimit=Вы использовали свои еженедельные подарки этому человеку.
+aetherhaven.dialogue.gift.fail.generic=Вы не можете подарить этот подарок прямо сейчас.

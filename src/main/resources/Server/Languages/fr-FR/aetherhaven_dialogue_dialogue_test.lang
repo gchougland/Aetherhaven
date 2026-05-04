@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=Conditions du laboratoire. Vous ne devriez pas voir d'option cachée. Vous devriez voir une option grisée. Utilisez les portes logiques pour continuer.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=Ce choix est caché (littéralement faux).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=Cette option devrait être grisée.
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=(nécessite une vérité littérale)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=Pass composé : NON faux ET vrai
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=branche OU (vrai OU faux)
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=Villageois QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=Merci d'avoir testé. Au revoir !
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=Au revoir!
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=Villageois de l'assurance qualité
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=Choisissez ci-dessous pour accéder directement à la page d'adieu en utilisant une action « Aller à » au lieu de « Suivant ».
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=aller à adieu
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=Villageois de l'assurance qualité
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=L'action « Entrer dans un nœud » vous a permis d'obtenir une pelle rudimentaire (si vous aviez de la place dans votre inventaire). Choisissez l'option ci-dessous pour obtenir plus d'objets.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=Donnez-moi 3 saletés, puis continuez.
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=Villageois de l'assurance qualité
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=Bienvenue dans l'interface de dialogue d'Aetherhaven. Cette ligne est volontairement longue afin de vous permettre de vérifier la mise en page et le défilement. Vos choix se trouvent sous le corps du texte.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=Passez au laboratoire des conditions.
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=Quitter (terminer par le prochain null).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=Quitter (action de fermeture explicite).
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=Villageois QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Vous pouvez ouvrir l'interface utilisateur de troc du marchand Kweebec, ou passer directement aux actions préliminaires.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Boutique de troc Open Kweebec_Merchant
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=Évitez les magasins, allez chez Stubs.
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=Villageois QA
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=Actions provisoires : débloquer un succès et démarrer une quête devraient être enregistrées jusqu’à ce que ces systèmes existent.
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=Exécuter les stubs unlock_achievement + start_quest
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=Villageois QA

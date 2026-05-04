@@ -98,6 +98,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             commandBuilder.append("Aetherhaven/VillagerNeedsOverview.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyVillagerNeedsOverview(commandBuilder);
         if (templateAppended && !reputationHeartSlotsAppended) {
             for (int h = 0; h < 10; h++) {
                 commandBuilder.append(REPUTATION_HEART_SLOTS, "Aetherhaven/HeartSlot.ui");
@@ -132,7 +133,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#GiftHistoryButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).getTown(townId);
@@ -140,7 +141,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#GiftHistoryButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.townNotFound"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
             return;
         }
 
@@ -150,7 +151,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             commandBuilder.set("#RescueTeleportButton.Visible", false);
             commandBuilder.set("#GiftHistoryButton.Visible", false);
             commandBuilder.set("#Hint.Visible", true);
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.villagerneeds.noResidentsTracked"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.noResidentsTracked"));
             commandBuilder.clear(VILLAGER_ROWS);
             return;
         }
@@ -169,7 +170,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             String row = VILLAGER_ROWS + "[" + i + "]";
             commandBuilder.set(
                 row + " #Pick #Label.TextSpans",
-                Message.translation("server.npcRoles." + r.roleId() + ".name")
+                Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + r.roleId() + ".name")
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -274,7 +275,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
             return;
         }
         if (!town.playerHasQuestPermission(pu.getUuid())) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.noQuestPermission"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
             return;
         }
         int idx = selectedIndex;
@@ -300,12 +301,12 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
                 TownVillagerRow sel = rows.get(idx);
                 Ref<EntityStore> npcRef = es.getExternalData().getRefFromUUID(sel.entityUuid());
                 if (npcRef == null || !npcRef.isValid()) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.villager.locateNotLoaded"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_quests_portals.aetherhaven.villager.locateNotLoaded"));
                     return;
                 }
                 TownVillagerBinding b = es.getComponent(npcRef, TownVillagerBinding.getComponentType());
                 if (b == null || !townId.equals(b.getTownId()) || TownVillagerBinding.isVisitorKind(b.getKind())) {
-                    playerRef.sendMessage(Message.translation("server.aetherhaven.ui.villagerneeds.rescueNotTownResident"));
+                    playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.rescueNotTownResident"));
                     return;
                 }
                 TransformComponent pTc = es.getComponent(playerEntityRef, TransformComponent.getComponentType());
@@ -323,7 +324,7 @@ public final class VillagerNeedsOverviewPage extends InteractiveCustomUIPage<Vil
                 es.addComponent(npcRef, Teleport.getComponentType(), Teleport.createExact(target, bodyRot));
                 long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
                 VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);
-                playerRef.sendMessage(Message.translation("server.aetherhaven.ui.villagerneeds.rescueDone"));
+                playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.rescueDone"));
             }
         );
     }

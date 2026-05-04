@@ -10,19 +10,19 @@ $C.@PageOverlay {
     LayoutMode: Top;
 
     Label #Title {
-      Text: %server.aetherhaven.poiTool.legendTitle;
+      Text: "%aetherhaven_items.aetherhaven.poiTool.legendTitle";
       Style: (...$C.@DefaultLabelStyle, TextColor: #e8e8e8, FontSize: 15);
     }
     Label #Line1 {
-      Text: %server.aetherhaven.poiTool.legendPrimary;
+      Text: "%aetherhaven_items.aetherhaven.poiTool.legendPrimary";
       Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
     }
     Label #Line2 {
-      Text: %server.aetherhaven.poiTool.legendSecondary;
+      Text: "%aetherhaven_items.aetherhaven.poiTool.legendSecondary";
       Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
     }
     Label #Line3 {
-      Text: %server.aetherhaven.poiTool.legendUse;
+      Text: "%aetherhaven_items.aetherhaven.poiTool.legendUse";
       Style: (...$C.@DefaultLabelStyle, TextColor: #c8c8c8, FontSize: 13);
     }
   }

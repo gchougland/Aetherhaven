@@ -40,6 +40,11 @@ public final class VillagerReputationEntry {
     @SerializedName("giftsThisWeekBlock")
     private int giftsThisWeekBlock;
 
+    /** When set, the next render of {@code main_hub} prepends this translation key as body, then clears. */
+    @Nullable
+    @SerializedName("pendingMainHubBodyLangKey")
+    private String pendingMainHubBodyLangKey;
+
     public int getReputation() {
         return reputation;
     }
@@ -96,6 +101,15 @@ public final class VillagerReputationEntry {
 
     public void setGiftsThisWeekBlock(int giftsThisWeekBlock) {
         this.giftsThisWeekBlock = Math.max(0, giftsThisWeekBlock);
+    }
+
+    @Nullable
+    public String getPendingMainHubBodyLangKey() {
+        return pendingMainHubBodyLangKey;
+    }
+
+    public void setPendingMainHubBodyLangKey(@Nullable String pendingMainHubBodyLangKey) {
+        this.pendingMainHubBodyLangKey = pendingMainHubBodyLangKey;
     }
 
     public void migrateIfNeeded() {

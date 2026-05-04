@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=儲存的金幣：{count}
+aetherhaven.ui.treasury.depositNoCoins=您沒有金幣可以存入。
+aetherhaven.ui.treasury.depositRemoveFailed=無法從庫存中移除金幣。
+aetherhaven.ui.treasury.deposited=存入{count}金幣。
+aetherhaven.ui.treasury.makeRoom=騰出庫存空間。
+aetherhaven.ui.treasury.couldNotAddCoins=無法添加硬幣。
+aetherhaven.ui.treasury.withdrew=提取了{count}枚金幣。
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=稅收明細（僅包含已加載的區塊；未加載的居民在模擬之前貢獻 0）：
+aetherhaven.ui.treasury.debug.titheNoHall=什一稅：本鎮沒有完整的市政廳。
+aetherhaven.ui.treasury.debug.titheZero=什一稅：0 金幣（無富裕居民，或政策計算得出為 0）。卸載/需求/明細：/aetherhaven 稅明細
+aetherhaven.ui.treasury.debug.titheApplied=什一稅徵收：+{amount}金幣入庫（與早晨徵收的規則相同）。
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 舒適度={comfort} 金裝={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=管家宴稅={a} 宴席千分稅={b} 最終總計={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=在這個世界裡，你需要一個城鎮來追蹤任務。
+aetherhaven.ui.questJournal.noPermission=您沒有管理城鎮任務的權限。
+aetherhaven.ui.questJournal.noActive=沒有正在進行的任務。
+aetherhaven.ui.questJournal.hint=點擊任務查看詳情。 × 會將其從你的日誌中移除（你可以再次從任務發布者那裡領取）。
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=對話
+aetherhaven.ui.dialogue.unknown=未知對話：{id}
+aetherhaven.ui.dialogue.missingNode=缺少節點：{id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=大樓
+aetherhaven.ui.plotConstruction.plotSignTitle=地塊標誌
+aetherhaven.ui.plotConstruction.noConstruction=該地塊未配置任何建築物。
+aetherhaven.ui.plotConstruction.assignResidentHint=指派一名居住在這裡的村民（當配對成功時完成他們的房屋任務）。
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=未分配
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=無法載入玩家資料。
+aetherhaven.ui.plotConstruction.townDataMissing=未找到該街區的城鎮資料。
+aetherhaven.ui.plotConstruction.clearedHome=已完成家庭任務分配。
+aetherhaven.ui.plotConstruction.updatedHome=家庭作業已更新。
+aetherhaven.ui.plotConstruction.plotRemoved=已移除圖塊並返回圖塊標記。
+aetherhaven.ui.plotConstruction.materialLine={item} x{need}（有 {have}）
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=無法載入玩家資料。
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=生命精華不足（需{need}）。
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=無法從物品欄中移除生命精華。

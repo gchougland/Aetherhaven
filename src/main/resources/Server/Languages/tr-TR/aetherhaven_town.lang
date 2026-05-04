@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=Bu dünyada bir kasabaya sahip değilsiniz.
+aetherhaven.town.resolve.noTownNamed=Bu dünyada "{name}" adında bir şehir yok.
+aetherhaven.town.resolve.ownerOrOpOnly=Bunu yalnızca belediye sahibi (veya izinli bir işletmeci) yapabilir.
+aetherhaven.town.resolve.notInTown=Bu dünyada bir kasabada değilsiniz.
+aetherhaven.town.resolve.nameOnlyForOwner=Burada kasaba adını yalnızca kasaba sahibi (veya işletmecisi) kullanabilir.
+aetherhaven.town.resolve.specifyTownName=Bir kasaba adı belirtin veya sahip olduğunuz kasabanın adını kullanın.
+aetherhaven.town.resolve.specifyTown=Bir şehir adı belirtin.
+aetherhaven.town.resolve.adminOtherTown=Yalnızca operatörler başka bir oyuncunun kasabasını adıyla hedefleyebilir.
+aetherhaven.town.invite.err.emptyName=Oyuncu adı girin.
+aetherhaven.town.invite.err.targetOffline="{name}" adlı oyuncu bu dünyada çevrimiçi değil.
+aetherhaven.town.invite.err.cannotInviteSelf=Kendinizi davet edemezsiniz.
+aetherhaven.town.invite.err.alreadyInTown=O oyuncu zaten bu dünyadaki bir kasabada bulunuyor.
+aetherhaven.town.invite.toTarget={inviter} sizi "{townDisplay}" kasabasına katılmaya davet etti. /aetherhaven town accept {townDisplay} veya /aetherhaven town decline {townDisplay} yazın (boşluklar dahil olmak üzere kasabanın tam adını kullanın).
+aetherhaven.town.invite.sent=Davet {name} adresine gönderildi.
+aetherhaven.town.kick.err.mustBeOnline=Oyuncunun isimle oyundan atılabilmesi için çevrimiçi olması gerekir.
+aetherhaven.town.kick.err.cannotRemoveOwner=Kasaba sahibini kaldıramıyorum.
+aetherhaven.town.kick.err.notMember=O oyuncu bu kasabanın sakini değil.
+aetherhaven.town.kick.removed={name} kasabadan kaldırıldı.
+aetherhaven.town.kick.removedYou="{town}" kasabasından çıkarıldınız.
+aetherhaven.town.kick.removedGeneric=Üye kasabadan uzaklaştırıldı.
+aetherhaven.town.role.err.ownerAlwaysFull=Sahibinin her zaman tam yetkisi vardır.
+aetherhaven.town.role.set={name}'ın rolünü {role} olarak ayarlayın.
+aetherhaven.town.accept.err.noSuchTown=O isimde bir kasaba yok.
+aetherhaven.town.accept.err.noInvite=O şehir için bekleyen bir davetiyeniz yok.
+aetherhaven.town.accept.err.noInvites=Şu anda bekleyen şehir davetiyeniz yok.
+aetherhaven.town.accept.err.alreadyInTown=Zaten bir kasabadasınız.
+aetherhaven.town.accept.joined="{town}"'a katıldınız.
+aetherhaven.town.decline.noPending=O şehir için bekleyen bir davet yok.
+aetherhaven.town.decline.noInvites=Şu anda bekleyen şehir davetiyeniz yok.
+aetherhaven.town.decline.done=Davet reddedildi.
+aetherhaven.town.permissions.updated=Üye izinleri kaydedildi.
+
+aetherhaven.ui.memberPermissions.title=Üye izinleri
+aetherhaven.ui.memberPermissions.backTooltip=Oyuncu listesine geri dön
+aetherhaven.ui.memberPermissions.placePlots=Parselleri yerleştirin
+aetherhaven.ui.memberPermissions.manageConstructions=İnşaat işlerini kurmak ve yönetmek (montaj, üretim, şenlikler, tüzük değişiklikleri, binaların taşınması)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Şehir hazinesindeki altını inşaat maliyetlerine harcayın.
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Hazine hesabı açın (para yatırma / para çekme)
+aetherhaven.ui.memberPermissions.acceptQuests=Kasaba görevlerini kabul et / başlat
+aetherhaven.ui.memberPermissions.completeQuests=Kasaba görevlerini tamamlayın ve itibar ödüllerini kazanın.
+aetherhaven.ui.memberPermissions.abandonQuests=Aktif kasaba görevlerini bırakın.
+aetherhaven.ui.memberPermissions.reviveVillagers=Gaia heykelinin bulunduğu yerde köylülere moral verin.
+aetherhaven.ui.memberPermissions.err.notOwner=İzinleri yalnızca kasaba sahibi düzenleyebilir.
+aetherhaven.ui.memberPermissions.err.notInTown=O oyuncu bu şehirde değil.
+aetherhaven.town.rolecmd.playerMustBeOnline=Oyuncunun çevrimiçi olması gerekir.
+aetherhaven.town.rolecmd.roleInvalid=Rol, İNŞA ET, GÖREV veya HER İKİSİ olmalıdır.
+aetherhaven.town.leave.notInTown=Bir kasabada değilsiniz.
+aetherhaven.town.leave.ownerCannotLeave=Mülk sahipleri ayrılamaz; mülkiyet devri henüz uygulanmamıştır.
+aetherhaven.town.leave.notMember=Siz bu kasabanın sakini değilsiniz.
+aetherhaven.town.leave.left="{town}" adresinden ayrıldınız.
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=İNŞA ETMEK
+aetherhaven.town.memberRole.QUEST=ARAYIŞ
+aetherhaven.town.memberRole.BOTH=İKİSİ BİRDEN

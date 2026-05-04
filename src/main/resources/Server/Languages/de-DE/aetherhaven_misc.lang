@@ -1,0 +1,25 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: blacksmith repair, dialogue command, banners, building staff items
+
+# === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
+aetherhaven.blacksmith.repair.insufficientGold=Ihre Handtasche ist für diese Reparatur zu leicht.
+aetherhaven.blacksmith.repair.success={itemName} ist wieder vollständig. Wie neu.
+commands.aetherhaven.dialogue.desc=Öffnen Sie einen Dialogbaum anhand der ID (zum Testen)
+commands.aetherhaven.dialogue.treeId.desc=Dialogbaum-ID (z. B. aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.entry.desc=Optionale Eintragsknoten-ID (Standard: root)
+aetherhaven.interaction.dialogue=Drücken Sie [{key}], um zu sprechen.
+npcRoles.Aetherhaven_Test_Villager.name=Dialogtest Dorfbewohner
+aetherhaven.banner.quest.completed.primary=Quest abgeschlossen
+aetherhaven.banner.quest.completed.secondary={name}
+aetherhaven.banner.assembly.complete.primary=Gebäude fertiggestellt
+aetherhaven.banner.assembly.complete.secondary={name}
+aetherhaven.assembly.complete.chat={name} ist bereit.
+aetherhaven.assembly.tracer.none_in_range=Keine Montagevorschau in Reichweite (näher heranfahren oder Baugenehmigung der Stadt prüfen).
+aetherhaven.banner.quest.started.primary=Quest gestartet
+aetherhaven.banner.quest.started.secondary={name}
+aetherhaven.banner.reputation.unlock.primary=Entsperrt
+aetherhaven.banner.reputation.unlock.recipe={item}
+aetherhaven.banner.reputation.unlock.item={item} x{count}
+
+items.Aetherhaven_Building_Staff.name=Gebäudepersonal
+items.Aetherhaven_Building_Staff.description=Die Primärwaffe sendet einen Führungsbolzen durch Blöcke hindurch zur nächstgelegenen Bauvorschau in Reichweite. Halte die Sekundärwaffe gedrückt und ziele durch Blöcke hindurch auf die Bauvorschau, um den nächsten Block sofort zu platzieren (Bauberechtigung der Stadt erforderlich). Passive Bauvorgänge schreiten auch in deiner Abwesenheit automatisch voran.

@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 
 public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
     public AetherhavenTownsCommand() {
-        super("towns", "server.commands.aetherhaven.towns.desc");
+        super("towns", "aetherhaven_commands_help.commands.aetherhaven.towns.desc");
     }
 
     @Override
@@ -33,11 +33,11 @@ public final class AetherhavenTownsCommand extends AbstractPlayerCommand {
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         int n = tm.allTowns().size();
         playerRef.sendMessage(
-            Message.translation("server.aetherhaven.towns.inWorldCount").param("count", String.valueOf(n))
+            Message.translation("aetherhaven_world_debug.aetherhaven.towns.inWorldCount").param("count", String.valueOf(n))
         );
         for (TownRecord t : tm.allTowns()) {
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.towns.entry")
+                Message.translation("aetherhaven_world_debug.aetherhaven.towns.entry")
                     .param("name", t.getDisplayName())
                     .param("id", t.getTownId().toString())
                     .param("owner", t.getOwnerUuid().toString())

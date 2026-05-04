@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Founder_Monument.name",
-    "Description": "server.items.Aetherhaven_Founder_Monument.description"
+    "Name": "aetherhaven_items.items.Aetherhaven_Founder_Monument.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Founder_Monument.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Statue.png",
   "Categories": ["Blocks.Rocks"],

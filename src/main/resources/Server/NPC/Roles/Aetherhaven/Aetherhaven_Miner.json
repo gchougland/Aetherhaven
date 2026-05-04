@@ -4,7 +4,7 @@
     "Invulnerable": { "Value": true, "Description": "Whether the NPC is invulnerable." },
     "MemoriesNameOverride": { "Value": "Aetherhaven_Miner", "Description": "Memory name override" },
     "NameTranslationKey": {
-      "Value": "server.npcRoles.Aetherhaven_Miner.name",
+      "Value": "aetherhaven_ui_journal_items_tail.npcRoles.Aetherhaven_Miner.name",
       "Description": "Translation key for NPC name display"
     },
     "AetherhavenWanderPhaseTime": { "Value": [4, 10], "Description": "Rect-wander phase duration bounds (seconds)" },
@@ -99,7 +99,7 @@
         "Continue": true,
         "Sensor": { "Type": "Any" },
         "Actions": [
-          { "Type": "SetInteractable", "Interactable": true, "Hint": "server.aetherhaven.interaction.dialogue" }
+          { "Type": "SetInteractable", "Interactable": true, "Hint": "aetherhaven_misc.aetherhaven.interaction.dialogue" }
         ]
       },
       {

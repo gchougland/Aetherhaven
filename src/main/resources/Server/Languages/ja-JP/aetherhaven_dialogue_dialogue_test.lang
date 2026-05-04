@@ -1,0 +1,30 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_dialogue_test)
+# Full translation keys are aetherhaven_dialogue_dialogue_test.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.body=条件実験室。隠された選択肢は表示されません。グレー表示された選択肢が表示されます。複合ゲートを使用して続行してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c0=この選択肢は隠されています（文字通り偽）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1=これはグレー表示にするべきです。
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c1.disabled=（文字通りの真である必要があります）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c2=複合パス: 偽ではなく真
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.c3=OR分岐（真または偽）
+aetherhaven.dialogue.aetherhaven_dialogue_test.conditions_lab.speaker=QA村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.body=テストにご協力いただきありがとうございました。さようなら！
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.c0=さよなら！
+aetherhaven.dialogue.aetherhaven_dialogue_test.farewell.speaker=QAビレジャー
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.body=次の項目を選択することで、次へではなく移動アクションを使用して別れの挨拶にジャンプできます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.c0=別れへ
+aetherhaven.dialogue.aetherhaven_dialogue_test.goto_demo.speaker=QAビレジャー
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.body=ノードに入ると、（インベントリに空きがあれば）粗末なシャベルが1本手に入ります。さらにアイテムを入手するには、以下のオプションを選択してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.c0=土を３つください。それから続けてください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.item_demo.speaker=QAビレジャー
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.body=エーテルヘイブン対話ハーネスへようこそ。この行はレイアウトとスクロールを確認できるように意図的に長く表示しています。選択肢は本文の下に表示されます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c0=実験室の環境条件を確認してください。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c1=（次のヌルで終了）
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.c2=退出（明確な終了操作）。
+aetherhaven.dialogue.aetherhaven_dialogue_test.root.speaker=QA村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.body=Kweebec商人の物々交換UIを開くか、スタブアクションにスキップできます。
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c0=Kweebec_Merchantの物々交換店を開店
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.c1=店を飛ばして、スタブに行こう
+aetherhaven.dialogue.aetherhaven_dialogue_test.shop_demo.speaker=QA村人
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.body=スタブアクション：実績の解除とクエストの開始は、これらのシステムが存在するまでログに記録されるべきです。
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.c0=unlock_achievement + start_quest スタブを実行します
+aetherhaven.dialogue.aetherhaven_dialogue_test.stubs_demo.speaker=QA村人

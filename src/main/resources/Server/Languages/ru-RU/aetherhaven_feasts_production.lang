@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Городские праздники
+aetherhaven.ui.feast.noTown=Вы должны проживать в каком-либо городе.
+aetherhaven.ui.feast.noPermission=В этом городе нельзя устраивать пиршества.
+aetherhaven.ui.feast.outsideTerritory=Стол должен находиться на территории вашего города.
+aetherhaven.ui.feast.activeTitle=Городской праздник в самом разгаре
+aetherhaven.ui.feast.noneActive=В данный момент нет активных праздничных мероприятий с ограничением по времени. Выберите мероприятие слева, чтобы ознакомиться с его стоимостью и последствиями.
+aetherhaven.ui.feast.daysLeft=Осталось дней (рассветов): {days}
+aetherhaven.ui.feast.selectHint=Выберите праздничный ужин
+aetherhaven.ui.feast.ingredientsLabel=Ингредиенты
+aetherhaven.ui.feast.confirm=Устройте пир
+aetherhaven.ui.feast.locked=Вы ещё не знакомы с этим праздником. Проведите время с горожанами, пока кто-нибудь не расскажет вам о нём.
+aetherhaven.ui.feast.tooltipLocked=Закрыто, пока сосед не научит вас готовить это блюдо. Помогите городу и продолжайте общаться с теми, кто готовит для зала.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord находится в режиме охлаждения (осталось {days} дней рассвета).
+aetherhaven.ui.feast.began=Начинается пир. Жители деревни собираются за столом.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven не загружен на этом сервере.
+aetherhaven.ui.feast.err.unknownFeast=Этот праздничный ужин недоступен.
+aetherhaven.ui.feast.err.invalidPlayer=Не удалось подтвердить личность вашего персонажа.
+aetherhaven.ui.feast.err.feastNotUnlocked=Вы ещё не познали этот праздник. Завоюйте доверие в городе и прислушивайтесь к предложениям тех, кто хочет научить вас его готовить.
+aetherhaven.ui.feast.err.timedFeastActive=В этом городе уже начался очередной праздник, приуроченный к определенному времени.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Дождитесь окончания текущего праздничного застолья, прежде чем подавать коктейль Berrycircle Concord.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord по-прежнему находится на этапе охлаждения.
+aetherhaven.ui.feast.err.notEnoughIngredients=У вас недостаточно необходимых ингредиентов.
+
+aetherhaven.ui.production.title=Магазины на рабочем месте
+aetherhaven.ui.production.prev=Предыдущая
+aetherhaven.ui.production.next=Следующий
+aetherhaven.ui.production.prevTooltip=Предыдущий вывод в этом слоте
+aetherhaven.ui.production.nextTooltip=Следующий выход в этом слоте
+aetherhaven.ui.production.take1=Возьмите 1
+aetherhaven.ui.production.take10=Возьмите 10
+aetherhaven.ui.production.take100=Возьмите 100
+aetherhaven.ui.production.genInterval={time} сделать один
+aetherhaven.ui.production.err.plugin=Aetherhaven не загружен на этом сервере.
+aetherhaven.ui.production.err.permission=Вы не можете открыть это хранилище для этого города.
+aetherhaven.ui.production.err.plot=Этот блок не находится внутри уже построенного участка под рабочее место (ферма, амбар, мельница или хижина шахтера) в вашем городе.
+aetherhaven.ui.production.err.catalog=Для данного здания не настроен производственный каталог.
+aetherhaven.ui.production.err.inventoryFull=Ваш склад переполнен, и вы не можете взять столько товара.
+aetherhaven.ui.production.unlockButton=Разблокирует
+aetherhaven.ui.production.unlockTooltip=Просмотрите и приобретите заблокированные рабочие места в этом здании.
+
+aetherhaven.ui.productionUnlocks.title=Открытие рабочего места
+aetherhaven.ui.productionUnlocks.intro=Выберите нужный вариант ниже, чтобы увидеть его название и требования на панели. Наведите курсор на значок, чтобы увидеть количество заблокированных и необходимых элементов. Когда вы достигнете необходимого количества предметов и золота, щелкните по заблокированному варианту, чтобы разблокировать его.
+aetherhaven.ui.productionUnlocks.navProduction=Производство
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Возврат на складское хранение
+aetherhaven.ui.productionUnlocks.detailHint=Нажмите на значок выше, чтобы увидеть его название и требования для разблокировки.
+aetherhaven.ui.productionUnlocks.err.inventory=Не удалось прочитать ваш инвентарь.
+aetherhaven.ui.productionUnlocks.err.empty=Для этого рабочего места не настроен список разблокируемых объектов.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Для этого рабочего места уже разблокировано.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Товар: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Золотые монеты: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Вам необходимо иметь в инвентаре как минимум {need} этого предмета (в объединенных сумках).
+aetherhaven.ui.productionUnlocks.notify.needGold=Вам необходимо достаточное количество золотых монет в городской казне и вашем инвентаре (всего {need}).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Не удалось удалить необходимые предметы из вашего инвентаря.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Не удалось оплатить стоимость золота; ваши товары были возвращены.
+aetherhaven.ui.productionUnlocks.notify.unlocked=Для этого рабочего места разблокирован {item}.
+
+aetherhaven.feast.stewards.name=Ужин по рецепту управляющего
+aetherhaven.feast.stewards.description=Намазывайте хлеб, сыр и настоящий тыквенный пирог, чтобы утренняя десятина была щедрой в течение недели.
+aetherhaven.feast.hearthglass.name=Поминальная служба в Хартглассе
+aetherhaven.feast.hearthglass.description=Жареная рыба, отварные мясные блюда и овощи, разложенные в качестве неспешной трапезы перед сном. Потребности жителей деревни постепенно угасают на протяжении недели.
+aetherhaven.feast.berrycircle.name=Беррисеркл Конкорд
+aetherhaven.feast.berrycircle.description=Круг из легких закусок: ягодный салат, фруктовые шашлычки и попкорн для тостов. Соседи будут помнить вас немного добрее. Подождите неделю рассветов, прежде чем снова сможете подавать это блюдо.

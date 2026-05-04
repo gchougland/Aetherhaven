@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=城镇盛宴
+aetherhaven.ui.feast.noTown=你必须属于某个城镇。
+aetherhaven.ui.feast.noPermission=你不能在这个城镇举办宴会。
+aetherhaven.ui.feast.outsideTerritory=桌子必须放置在你的城镇范围内。
+aetherhaven.ui.feast.activeTitle=城镇盛宴生效
+aetherhaven.ui.feast.noneActive=目前没有限时盛宴生效。请在左侧选择盛宴以查看费用和效果。
+aetherhaven.ui.feast.daysLeft=剩余天数（黎明）：{days}
+aetherhaven.ui.feast.selectHint=选择一顿盛宴
+aetherhaven.ui.feast.ingredientsLabel=原料
+aetherhaven.ui.feast.confirm=举行宴会
+aetherhaven.ui.feast.locked=你还没学会这顿盛宴的习俗。多花些时间和镇上的人们待在一起，直到有人教你为止。
+aetherhaven.ui.feast.tooltipLocked=直到邻居教你这顿盛宴，你才能解锁。帮助镇子，并继续与为宴会厅做饭的人交谈。
+aetherhaven.ui.feast.cooldownBerrycircle=浆果圈协约正在冷却中（{days} 黎明-天数剩余）。
+aetherhaven.ui.feast.began=宴席开始了。村民们围坐在桌旁。
+aetherhaven.ui.feast.err.pluginNotLoaded=此服务器上未加载 Aetherhaven。
+aetherhaven.ui.feast.err.unknownFeast=那场盛宴已经取消了。
+aetherhaven.ui.feast.err.invalidPlayer=无法验证您的身份。
+aetherhaven.ui.feast.err.feastNotUnlocked=你还没学会这顿盛宴的习俗。先在镇上建立起人脉，留意是否有人主动提出教你。
+aetherhaven.ui.feast.err.timedFeastActive=该镇已开始实施另一项限时盛宴。
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=请等到当前限时盛宴结束后再供应 Berrycircle Concord。
+aetherhaven.ui.feast.err.berrycircleCooldown=浆果圈协约技能仍在冷却中。
+aetherhaven.ui.feast.err.notEnoughIngredients=您缺少所需的全部材料。
+
+aetherhaven.ui.production.title=工作场所商店
+aetherhaven.ui.production.prev=上一页
+aetherhaven.ui.production.next=下一个
+aetherhaven.ui.production.prevTooltip=此插槽中先前的输出
+aetherhaven.ui.production.nextTooltip=此插槽的下一个输出
+aetherhaven.ui.production.take1=拍摄1
+aetherhaven.ui.production.take10=拿10
+aetherhaven.ui.production.take100=取100
+aetherhaven.ui.production.genInterval={time} 制作一个
+aetherhaven.ui.production.err.plugin=此服务器上未加载 Aetherhaven。
+aetherhaven.ui.production.err.permission=您无法为该城镇打开此存储空间。
+aetherhaven.ui.production.err.plot=该地块不在您城镇已建成的工作场所地块（农场、谷仓、磨坊或矿工小屋）内。
+aetherhaven.ui.production.err.catalog=该建筑未配置任何生产目录。
+aetherhaven.ui.production.err.inventoryFull=您的库存已满，无法容纳这么多东西。
+aetherhaven.ui.production.unlockButton=解锁
+aetherhaven.ui.production.unlockTooltip=查看并购买此建筑物的已锁定工作场所输出。
+
+aetherhaven.ui.productionUnlocks.title=工作场所解锁
+aetherhaven.ui.productionUnlocks.intro=选择下方的输出项，即可在面板中查看其名称和要求。将鼠标悬停在图标上，即可查看已持有数量与所需数量。当您达到所需的物品和金币总数后，点击已锁定的输出项即可解锁。
+aetherhaven.ui.productionUnlocks.navProduction=生产
+aetherhaven.ui.productionUnlocks.navProductionTooltip=返回工作场所存储
+aetherhaven.ui.productionUnlocks.detailHint=点击上方图标即可查看其名称和解锁条件。
+aetherhaven.ui.productionUnlocks.err.inventory=无法读取您的库存信息。
+aetherhaven.ui.productionUnlocks.err.empty=此工作场所未配置解锁列表。
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=此工作场所已解锁。
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=项目：{held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=金币：{held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=你的物品栏（合并背包）中至少需要有{need}个该物品。
+aetherhaven.ui.productionUnlocks.notify.needGold=城镇金库和你的库存之间需要有足够的金币（{need} 总计）。
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=无法从您的库存中移除所需物品。
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=无法支付黄金费用；您的物品已被退回。
+aetherhaven.ui.productionUnlocks.notify.unlocked=已解锁此工作场所的{item}。
+
+aetherhaven.feast.stewards.name=管家账簿晚宴
+aetherhaven.feast.stewards.description=准备面包、奶酪和一份正宗的南瓜派，这样一周的早晨奉献就会比较丰盛。
+aetherhaven.feast.hearthglass.name=炉边守夜
+aetherhaven.feast.hearthglass.description=烤鱼、熟肉和蔬菜摆放在一起，作为一顿慢火熬制的守夜餐。村民们的需求在一周内逐渐消退。
+aetherhaven.feast.berrycircle.name=浆果圈康科德
+aetherhaven.feast.berrycircle.description=一圈轻盈的餐盘：浆果沙拉、水果串和爆米花，用来搭配吐司。邻居们会因此对你格外友善。下次再端上这道菜之前，请等待一周的清晨。

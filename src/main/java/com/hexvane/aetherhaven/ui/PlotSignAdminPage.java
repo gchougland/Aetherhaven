@@ -41,6 +41,7 @@ public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdm
         @Nonnull Ref<EntityStore> ref, @Nonnull UICommandBuilder commandBuilder, @Nonnull UIEventBuilder eventBuilder, @Nonnull Store<EntityStore> store
     ) {
         commandBuilder.append("Aetherhaven/PlotSignAdminPage.ui");
+        AetherhavenUiLocalization.applyPlotSignAdmin(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         List<ConstructionDefinition> defs = plugin != null ? plugin.getConstructionCatalog().list() : List.of();
 
@@ -96,7 +97,7 @@ public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdm
         if (!tx.succeeded()) {
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.plotSign.couldNotAdd"));
+                pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.plotSign.couldNotAdd"));
             }
             return;
         }

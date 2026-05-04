@@ -60,4 +60,9 @@ public final class PlotFootprintRecord {
     public boolean intersects(PlotFootprintRecord o) {
         return minX <= o.maxX && maxX >= o.minX && minY <= o.maxY && maxY >= o.minY && minZ <= o.maxZ && maxZ >= o.minZ;
     }
+
+    /** True if this inclusive axis-aligned box contains the given block cell. */
+    public boolean containsBlock(int x, int y, int z) {
+        return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
+    }
 }

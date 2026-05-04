@@ -124,6 +124,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.append("Aetherhaven/PlotConstructionPage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyPlotConstructionPage(commandBuilder);
         if (managementUi && pendingMoveBuildingModal) {
             moveBuildingConfirmOpen = true;
             pendingMoveBuildingModal = false;
@@ -131,8 +132,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set(
             "#ShellTitleText.TextSpans",
             managementUi
-                ? Message.translation("server.aetherhaven.ui.plotmanagement.title")
-                : Message.translation("server.aetherhaven.ui.plotconstruction.title")
+                ? Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.title")
+                : Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.title")
         );
         boolean plotTabActive = !managementUi || managementTab == 0;
         commandBuilder.set("#ManagementTabStrip.Visible", managementUi);
@@ -149,12 +150,12 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set(
                 "#BuildingTitle.TextSpans",
                 managementUi
-                    ? Message.translation("server.aetherhaven.ui.plotConstruction.buildingTitle")
-                    : Message.translation("server.aetherhaven.ui.plotConstruction.plotSignTitle")
+                    ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.buildingTitle")
+                    : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotSignTitle")
             );
             commandBuilder.set(
                 "#Description.TextSpans",
-                Message.translation("server.aetherhaven.ui.plotConstruction.noConstruction")
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.noConstruction")
             );
             commandBuilder.set("#VillagerRow.Visible", false);
             commandBuilder.set("#TreasuryRow.Visible", false);
@@ -266,7 +267,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 commandBuilder.set("#Mat" + mi + ".Visible", true);
                 commandBuilder.set(
                     "#Mat" + mi + " #Line.TextSpans",
-                    Message.translation("server.aetherhaven.ui.plotConstruction.materialLine")
+                    Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.materialLine")
                         .param("item", itemLabel)
                         .param("need", String.valueOf(need))
                         .param("have", String.valueOf(has))
@@ -307,7 +308,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (showHouseResident && plotTabActive) {
             commandBuilder.set(
                 "#HouseResidentHint.TextSpans",
-                Message.translation("server.aetherhaven.ui.plotConstruction.assignResidentHint")
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.assignResidentHint")
             );
             Store<ChunkStore> cs = blockRef.getStore();
             ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
@@ -329,7 +330,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             {
                 String langU = this.playerRef.getLanguage() != null ? this.playerRef.getLanguage() : "en-US";
                 String unLabel =
-                    I18nModule.get().getMessage(langU, "server.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
+                    I18nModule.get().getMessage(langU, "aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
                 if (unLabel == null || unLabel.isEmpty()) {
                     unLabel = "Unassigned";
                 }
@@ -445,7 +446,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (plugin == null || uc == null) {
             commandBuilder.set(
                 "#PlayersHint.TextSpans",
-                Message.translation("server.aetherhaven.ui.plotConstruction.couldNotLoadMembers")
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.couldNotLoadMembers")
             );
             commandBuilder.clear(MEMBER_ROWS);
             return;
@@ -454,7 +455,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         if (town == null) {
             commandBuilder.set(
                 "#PlayersHint.TextSpans",
-                Message.translation("server.aetherhaven.ui.plotConstruction.townDataMissing")
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.townDataMissing")
             );
             commandBuilder.clear(MEMBER_ROWS);
             return;
@@ -464,8 +465,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         commandBuilder.set(
             "#PlayersHint.TextSpans",
             viewerOwner
-                ? Message.translation("server.aetherhaven.ui.plotmanagement.playersHint")
-                : Message.translation("server.aetherhaven.ui.plotmanagement.playersHintReadOnly")
+                ? Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.playersHint")
+                : Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.playersHintReadOnly")
         );
         commandBuilder.set("#InviteLabel.Visible", viewerOwner);
         commandBuilder.set("#InvitePlayerInput.Visible", viewerOwner);
@@ -508,7 +509,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             if (isOwner) {
                 commandBuilder.set(rowPath + " #RoleReadOnly.Visible", true);
-                commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.translation("server.aetherhaven.ui.plotmanagement.roleOwner"));
+                commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.roleOwner"));
                 commandBuilder.set(rowPath + " #KickButton.Visible", false);
             } else {
                 TownMemberRole role = town.getMemberRoleOrNull(pid);
@@ -517,6 +518,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 commandBuilder.set(rowPath + " #RoleReadOnly.TextSpans", Message.raw(roleName));
                 if (viewerOwner) {
                     commandBuilder.set(rowPath + " #KickButton.Visible", true);
+                    commandBuilder.set(
+                        rowPath + " #KickButton.TextSpans",
+                        Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.kick")
+                    );
                     eventBuilder.addEventBinding(
                         CustomUIEventBindingType.Activating,
                         rowPath + " #KickButton",
@@ -782,8 +787,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             if (pr != null) {
                 pr.sendMessage(
                     residentUuid == null
-                        ? Message.translation("server.aetherhaven.ui.plotConstruction.clearedHome")
-                        : Message.translation("server.aetherhaven.ui.plotConstruction.updatedHome")
+                        ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.clearedHome")
+                        : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.updatedHome")
                 );
             }
             return;
@@ -859,7 +864,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             }
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.plotConstruction.plotRemoved"));
+                pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotRemoved"));
             }
             close();
             return;

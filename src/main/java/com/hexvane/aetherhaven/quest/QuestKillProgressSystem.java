@@ -122,7 +122,7 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
         String label = buildKillObjectiveShortLabel(obj);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.quest.entityKillProgress")
+            Message.translation("aetherhaven_quests_portals.aetherhaven.quest.entityKillProgress")
                 .param("current", current)
                 .param("need", need)
                 .param("label", label),

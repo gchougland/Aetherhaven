@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=エーテルヘイブンがロードされませんでした。
+aetherhaven.common.noTownInWorld=この世に、君が住むべき町はない。
+aetherhaven.common.noQuestPermission=この町ではクエストを行う権限がありません。
+aetherhaven.common.townNotFound=町が見つかりませんでした。
+aetherhaven.common.invalidTownLink=無効な町のリンクです。
+aetherhaven.common.treasuryNotLinked=財務省とは関連していません。
+aetherhaven.common.ownerOnlyTreasury=町の所有者のみが金庫を使用できる。
+aetherhaven.common.noTreasuryPanelPermission=あなたは町の金庫を使用する許可を得ていません。
+aetherhaven.common.townNotInThisWorld=その町は、この世界には存在しない。
+aetherhaven.common.noMoveBuildingsPermission=この町では、建物を移動させる許可はあなたにはありません。
+aetherhaven.common.buildingCannotMove=この建物は移設できません（敷地が不足しているか、未完成です）。
+aetherhaven.common.lookAtBlockPlot=ブロックを見て、プロット記号の位置を設定し、プレビューを開始してください。
+aetherhaven.common.carryPlotToken=配置を開始するには、ツールに記載されている建物タイプの区画トークン（例：宿屋の区画トークン）を携帯してください。
+aetherhaven.common.statueNotLinked=その像は特定の町とは関連付けられていない。
+aetherhaven.common.ownerOnlyStatue=この像を使用できるのは、町の所有者のみである。
+aetherhaven.common.noReviveVillagersPermission=この像の前で村人を蘇生させる許可はあなたにはありません。
+aetherhaven.common.noPlayerId=プレイヤーIDがありません。
+aetherhaven.common.playersOnly=プレイヤー限定。
+aetherhaven.common.invalidVillager=無効な村人です。
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=あなたは既にこの世界の町の一員です。新しい町を創設する前に、まずは今の町を離れましょう。
+aetherhaven.charter.townFounded=町が設立されました：{name}。村の長老が到着しました。憲章を使用して町の名前を変更してください。
+aetherhaven.chartertown.info.notLinked=チャーターはまだどの町にも紐づいていません。
+aetherhaven.chartertown.info.invalidTownId=チャーターに記載されている町のIDが無効です。
+aetherhaven.chartertown.info.townDataMissing=町のデータが見つかりませんでした（サーバーログを参照してください）。
+aetherhaven.chartertown.townInfoBlock=町名: {name}\n町ID: {id}\n階層: {tier}\n領土（チャンク半径）: {radius}\nチャーター地: {cx}、{cy}、{cz}
+aetherhaven.chartertown.nameEmpty=町名は空欄にできません。
+aetherhaven.chartertown.nameDuplicate=その名前は既に世界の別の町で使用されています。
+aetherhaven.chartertown.nameSaved=保存された町名: {name}

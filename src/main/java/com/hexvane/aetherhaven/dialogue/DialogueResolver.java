@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.dialogue;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
+import com.hexvane.aetherhaven.quest.QuestDialogueEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -13,6 +15,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -90,8 +93,14 @@ public final class DialogueResolver {
             explicitDialogueId != null && !explicitDialogueId.isBlank()
                 ? explicitDialogueId.trim()
                 : kindToTree.getOrDefault(kind, TREE_TEST);
-        String entry = "root";
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        String entry = "root";
+        if (plugin != null) {
+            DialogueTreeDefinition treeDef = plugin.getDialogueCatalog().get(tree);
+            if (treeDef != null) {
+                entry = treeDef.entryOrDefault();
+            }
+        }
         if (plugin != null && npcRef != null && npcRef.isValid()) {
             World world = store.getExternalData().getWorld();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -113,6 +122,20 @@ public final class DialogueResolver {
                 );
                 if (pendingEntry != null && !pendingEntry.isBlank()) {
                     entry = pendingEntry.trim();
+                } else {
+                    NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                    String npcRole = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+                    if (!npcRole.isEmpty()) {
+                        String qEntry = QuestDialogueEntry.resolveOfferEntryNodeId(
+                            plugin.getQuestCatalog(),
+                            town,
+                            pu.getUuid(),
+                            npcRole
+                        );
+                        if (qEntry != null && !qEntry.isBlank()) {
+                            entry = qEntry.trim();
+                        }
+                    }
                 }
             }
         }

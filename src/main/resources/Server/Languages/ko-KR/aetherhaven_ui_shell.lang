@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=보관된 금화: {count}
+aetherhaven.ui.treasury.depositNoCoins=당신은 입금할 금화가 없습니다.
+aetherhaven.ui.treasury.depositRemoveFailed=인벤토리에서 코인을 제거할 수 없습니다.
+aetherhaven.ui.treasury.deposited={count} 금화를 입금했습니다.
+aetherhaven.ui.treasury.makeRoom=인벤토리에 공간을 확보하세요.
+aetherhaven.ui.treasury.couldNotAddCoins=코인을 추가할 수 없습니다.
+aetherhaven.ui.treasury.withdrew={count} 금화를 인출했습니다.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=세금 내역 (로드된 청크만 해당; 로드되지 않은 거주자는 시뮬레이션 전까지 0의 세금을 납부합니다):
+aetherhaven.ui.treasury.debug.titheNoHall=십일조: 이 마을에는 제대로 된 시청 건물이 없습니다.
+aetherhaven.ui.treasury.debug.titheZero=십일조: 금 0개 (탑승 거주자 없음 또는 정책 계산 결과 0). 하역/필요/세부 내역: /aetherhaven 세금 내역
+aetherhaven.ui.treasury.debug.titheApplied=십일조 적용: +{amount} 금화가 국고에 귀속됨 (아침 헌금과 동일한 규칙 적용).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=정책={a} 최대 거주자 수={b} 로드된 거주자 수={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 편안함={comfort} 금={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=스튜어드피스트세={a} 피스트퍼밀={b} 최종총액={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=퀘스트를 추적하려면 이 세계에 마을이 필요합니다.
+aetherhaven.ui.questJournal.noPermission=당신은 마을 퀘스트를 관리할 권한이 없습니다.
+aetherhaven.ui.questJournal.noActive=진행 중인 퀘스트가 없습니다.
+aetherhaven.ui.questJournal.hint=퀘스트를 탭하면 자세한 내용을 볼 수 있습니다. ×를 누르면 퀘스트 목록에서 삭제됩니다(퀘스트를 준 사람에게서 다시 받을 수 있습니다).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=대화
+aetherhaven.ui.dialogue.unknown=알 수 없는 대화: {id}
+aetherhaven.ui.dialogue.missingNode=누락된 노드: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=건물
+aetherhaven.ui.plotConstruction.plotSignTitle=플롯 사인
+aetherhaven.ui.plotConstruction.noConstruction=이 부지에는 계획된 건축물이 없습니다.
+aetherhaven.ui.plotConstruction.assignResidentHint=이곳에 사는 마을 주민을 배정하세요 (그 주민의 집 퀘스트가 일치하면 퀘스트가 완료됩니다).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=미지정
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=플레이어 데이터를 불러올 수 없습니다.
+aetherhaven.ui.plotConstruction.townDataMissing=이 블록에 대한 도시 데이터를 찾을 수 없습니다.
+aetherhaven.ui.plotConstruction.clearedHome=국내 근무 배정이 완료되었습니다.
+aetherhaven.ui.plotConstruction.updatedHome=가정 학습 배정이 업데이트되었습니다.
+aetherhaven.ui.plotConstruction.plotRemoved=플롯이 제거되었고 플롯 토큰이 반환되었습니다.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} ({have}를 가짐)
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=플레이어 데이터를 불러올 수 없습니다.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=생명 에너지가 부족합니다 (PH_0 필요).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=인벤토리에서 생명 에너지를 제거할 수 없습니다.

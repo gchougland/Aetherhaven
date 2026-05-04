@@ -501,6 +501,45 @@ public final class VillagerReputationService {
         }
         into.getPendingRewardIds().clear();
         into.getPendingRewardIds().addAll(pending);
+        String openerInto = into.getPendingMainHubBodyLangKey();
+        String openerFrom = from.getPendingMainHubBodyLangKey();
+        if ((openerInto == null || openerInto.isBlank()) && openerFrom != null && !openerFrom.isBlank()) {
+            into.setPendingMainHubBodyLangKey(openerFrom);
+        }
+    }
+
+    public static void setPendingMainHubBodyLangKey(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID playerUuid,
+        @Nonnull UUID villagerEntityUuid,
+        @Nullable String langKey
+    ) {
+        VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
+        e.setPendingMainHubBodyLangKey(langKey != null && !langKey.isBlank() ? langKey.trim() : null);
+        tm.updateTown(town);
+    }
+
+    /**
+     * Reads and clears the one-shot hub opener line for this villager row.
+     *
+     * @return trimmed lang key, or null
+     */
+    @Nullable
+    public static String takeAndClearPendingMainHubBodyLangKey(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID playerUuid,
+        @Nonnull UUID villagerEntityUuid
+    ) {
+        VillagerReputationEntry e = getOrCreateEntry(town, playerUuid, villagerEntityUuid);
+        String k = e.getPendingMainHubBodyLangKey();
+        if (k == null || k.isBlank()) {
+            return null;
+        }
+        e.setPendingMainHubBodyLangKey(null);
+        tm.updateTown(town);
+        return k.trim();
     }
 
     public static boolean claimPendingReward(

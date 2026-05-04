@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=保管されている金貨: {count}
+aetherhaven.ui.treasury.depositNoCoins=預け入れる金貨がありません。
+aetherhaven.ui.treasury.depositRemoveFailed=インベントリからコインを削除できませんでした。
+aetherhaven.ui.treasury.deposited=金貨{count}枚を預け入れました。
+aetherhaven.ui.treasury.makeRoom=持ち物に空きを作ってください。
+aetherhaven.ui.treasury.couldNotAddCoins=コインを追加できませんでした。
+aetherhaven.ui.treasury.withdrew=金貨{count}枚を引き出しました。
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=税金の内訳（ロードされたチャンクのみ。ロードされていない住民はシミュレーションされるまで0を負担します）：
+aetherhaven.ui.treasury.debug.titheNoHall=十分の一税：この町には完全な町役場がありません。
+aetherhaven.ui.treasury.debug.titheZero=十分の一税: 0 ゴールド (居住者がいない場合、または政策計算による 0)。 荷降ろし/必要/内訳: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheApplied=十分の一税の適用：+{amount} 金が国庫に納められます（朝の徴収と同じルールです）。
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=ポリシー={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) 快適={comfort} ゴールド={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=この世界では、クエストを追跡するために町が必要です。
+aetherhaven.ui.questJournal.noPermission=あなたは町のクエストを管理する権限を持っていません。
+aetherhaven.ui.questJournal.noActive=進行中のクエストはありません。
+aetherhaven.ui.questJournal.hint=クエストをタップすると詳細が表示されます。×印をタップするとログから削除されます（依頼者から再度依頼を受けることができます）。
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=対話
+aetherhaven.ui.dialogue.unknown=不明なダイアログ: {id}
+aetherhaven.ui.dialogue.missingNode=ノードが見つかりません: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=建物
+aetherhaven.ui.plotConstruction.plotSignTitle=区画標識
+aetherhaven.ui.plotConstruction.noConstruction=この区画には建築物は設定されていません。
+aetherhaven.ui.plotConstruction.assignResidentHint=ここに住んでいる村人を割り当てます（一致すると、その村人の家のクエストが完了します）。
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=未割り当て
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=プレイヤーデータを読み込めませんでした。
+aetherhaven.ui.plotConstruction.townDataMissing=この区画の町データが見つかりませんでした。
+aetherhaven.ui.plotConstruction.clearedHome=自宅待機命令が解除されました。
+aetherhaven.ui.plotConstruction.updatedHome=自宅学習の割り当てが更新されました。
+aetherhaven.ui.plotConstruction.plotRemoved=プロットが削除され、プロットトークンが返されました。
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} ({have}あり)
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=プレイヤーデータを読み込めませんでした。
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=生命エネルギーが不足しています（{need}が必要です）。
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=生命のエッセンスをインベントリから削除できませんでした。

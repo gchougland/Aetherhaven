@@ -1,0 +1,107 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: management block UI, needs, charter amendments, reputation milestones, plot admin
+
+# === UI: town & plot (management block, construction, needs tab, plot staff) ===
+# Plot / construction UI (keys use lowercase segments so client lookup matches % references)
+aetherhaven.ui.plotconstruction.title=Construction
+aetherhaven.ui.plotmanagement.title=Town Management
+aetherhaven.ui.plotmanagement.tabPlot=Plot
+aetherhaven.ui.plotmanagement.tabPlayers=Players
+aetherhaven.ui.plotmanagement.playersHint=Invite online players by name. Change roles or remove members below.
+aetherhaven.ui.plotmanagement.playersHintReadOnly=Members of this town. Only the owner can invite or change roles.
+aetherhaven.ui.plotmanagement.inviteLabel=Invite player
+aetherhaven.ui.plotmanagement.invitePlaceholder=Player name (online)
+aetherhaven.ui.plotmanagement.inviteSend=Send invite
+aetherhaven.ui.plotmanagement.kick=Remove
+aetherhaven.ui.plotmanagement.roleOwner=Owner
+aetherhaven.ui.plotmanagement.tabPlotTooltip=Plot info
+aetherhaven.ui.plotmanagement.tabNeedsTooltip=Villager needs
+aetherhaven.ui.plotmanagement.tabPlayersTooltip=Town members
+aetherhaven.ui.plotmanagement.tabMoveTooltip=Move this building
+aetherhaven.ui.plotconstruction.materials=Materials
+aetherhaven.ui.plotconstruction.build=Build
+aetherhaven.ui.plotconstruction.pickUpPlot=Pick up plot (return token)
+aetherhaven.ui.plotconstruction.townNeeds=Town needs
+aetherhaven.ui.plotconstruction.moveBuilding=Move building
+aetherhaven.ui.plotconstruction.houseResident=Resident
+aetherhaven.ui.plotconstruction.assignHouseResident=Set resident
+aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Move building?
+aetherhaven.ui.plotconstruction.moveBuildingModalBody=Opens plot placement to choose a new site. Moving destroys and rebuilds the old building; remove valuables, pets, and loose items inside the footprint first.
+aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Continue
+aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Cancel
+
+aetherhaven.ui.villagerneeds.title=Town needs
+aetherhaven.ui.villagerneeds.hint=Select a villager to view meters and portrait.
+aetherhaven.ui.villagerneeds.hunger=Hunger
+aetherhaven.ui.villagerneeds.energy=Energy
+aetherhaven.ui.villagerneeds.fun=Fun
+aetherhaven.ui.villagerneeds.villagers=Villagers
+aetherhaven.ui.villagerneeds.noResidentsTracked=No town residents tracked yet.
+aetherhaven.ui.villagerneeds.rescueTooltip=Teleports the selected resident to a spot next to you and clears their current pathing and activity so they can move and choose a new destination. Use this if a villager is stuck.
+aetherhaven.ui.villagerneeds.giftHistoryTooltip=View items you have given this villager, grouped by how they reacted, and how many gifts you can still give this week.
+aetherhaven.ui.giftHistory.title=Gifts given
+aetherhaven.ui.giftHistory.backTooltip=Back to town needs
+aetherhaven.ui.giftHistory.empty=You have not given this villager any gifts yet, so there is nothing to show.
+aetherhaven.ui.giftHistory.section.love=Loved
+aetherhaven.ui.giftHistory.section.like=Liked
+aetherhaven.ui.giftHistory.section.neutral=Neutral
+aetherhaven.ui.giftHistory.section.dislike=Disliked
+aetherhaven.ui.giftHistory.giftsThisWeek=Gifts this week: {used}/{max}
+aetherhaven.ui.giftHistory.cyclePrevTooltip=Previous town villager
+aetherhaven.ui.giftHistory.cycleNextTooltip=Next town villager
+aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you and their routine was reset.
+aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
+aetherhaven.ui.reputation.label=Reputation
+aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)
+aetherhaven.reputation.giftRepChange={amount} reputation (gift)
+
+# === UI: charter amendments (tithe & town focus) ===
+aetherhaven.ui.charter.title=Charter amendments
+aetherhaven.ui.charter.popHint=Residents (non-visitors): {count}. Tier 1 unlocks at 3; tier 2 at 5.
+aetherhaven.ui.charter.tierMark1=I
+aetherhaven.ui.charter.tierMark2=II
+aetherhaven.ui.charter.tier1=Tier 1: Tithe style
+aetherhaven.ui.charter.tier2=Tier 2: Town focus
+aetherhaven.ui.charter.t1.perCapitaShort=Per capita
+aetherhaven.ui.charter.t1.happinessShort=Happiness-weighted
+aetherhaven.ui.charter.t1.perCapitaTooltip=Headcount-first tithe.\n\nMorning gold leans on how many residents live here. Day-to-day comfort still nudges the total a little, but population is what moves the needle.
+aetherhaven.ui.charter.t1.happinessTooltip=Needs-first tithe.\n\nMorning gold leans harder on how well residents are fed, rested, and in good spirits. A few extra citizens matter less than keeping everyone in decent shape.
+aetherhaven.ui.charter.t2.miningShort=Mining
+aetherhaven.ui.charter.t2.loggingShort=Logging
+aetherhaven.ui.charter.t2.farmingShort=Farming
+aetherhaven.ui.charter.t2.smithingShort=Smithing
+aetherhaven.ui.charter.t2.miningTooltip=The charter backs the mines.\n\nBonuses tied to mining production will favor this town when they arrive. Pick only one focus below: mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.loggingTooltip=The charter backs the forest.\n\nBonuses tied to logging and woodcutting will favor this town when they arrive. Pick only one focus below: mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.farmingTooltip=The charter backs the fields.\n\nWhen your town has a completed farm plot, sprinklers here reach a bit farther, with extra tiles at the edge of their spray. Pick only one focus below: mining, logging, farming, or smithing.
+aetherhaven.ui.charter.t2.smithingTooltip=The charter backs the forge.\n\nBonuses tied to smithing and metalwork will favor this town when they arrive. Pick only one focus below: mining, logging, farming, or smithing.
+aetherhaven.ui.charter.hint=Choose one option per tier. Choices cannot be changed later.
+aetherhaven.ui.charter.allChosen=All amendments chosen for this town.
+aetherhaven.ui.charter.noTown=You must belong to a town to use this.
+aetherhaven.ui.charter.noPermission=You cannot change charter amendments for this town.
+aetherhaven.ui.charter.err.locked=That amendment is locked or already chosen.
+aetherhaven.ui.charter.err.invalid=Invalid choice.
+aetherhaven.ui.charter.saved=Charter amendments updated.
+
+# === Reputation: milestone reward dialogue (long in-world lines; also used in NPC nodes) ===
+aetherhaven.reputation.reward.continue=Continue
+aetherhaven.reputation.reward.elder.50=The charter can change as we grow. Here is the pattern for an amendments table. Craft it at your town planning desk when you have the schematic. Put it in the hall and you can choose how the morning tithe works.
+aetherhaven.reputation.reward.elder.100=You have done more for this town than anyone asked. Take this foundation stone. Set a founder's monument where the charter allows. The people here will remember.
+aetherhaven.reputation.reward.innkeeper.50=You have kept this hall fed and honest long enough that I will trust you with the big table. Here is the banquet pattern—craft it at the town planning desk when you have the schematic, then set it in town. When the table is ready, you can call the Ledger Supper too: bread, cheese, pie, and a tithe that leans kind for a week. I will watch the hall while you serve it.
+aetherhaven.reputation.reward.innkeeper.75=You have walked through enough long nights with us. When you lay out the Hearthglass Vigil, the town eats slower and kinder for a week. Fish, meat, vegetables, and a gentler fade for every need. That is how we keep each other standing.
+aetherhaven.reputation.reward.innkeeper.100=You and this town share a name now. Berrycircle Concord is the light plate circle: salad, fruit skewers, popcorn, and a toast that lands. Serve it once and they will remember you warmer.
+aetherhaven.reputation.reward.merchant.50=You have kept your word in bad weather and good. Here is the bench pattern. Craft it at your town planning desk once the schematic is yours. Appraisals are free on the bench; I still charge for mine.
+aetherhaven.reputation.reward.merchant.100=You have put enough gold through this ledger to earn a jeweler's corner. The pattern is yours. Build it at the town planning desk. Set your gem, your metal, and the life you pour in, and the piece will come out true.
+aetherhaven.reputation.reward.priestess.50=Gaia trusts you to walk the border between growth and ruin. Take this mix: crystal and life essence, shaped at the town planning desk. It reveals what should not stay, and lets you unmake a spawn with a single breath of powder.
+aetherhaven.reputation.reward.priestess.75=You keep the roads honest. Take this shard. Bring it back with tithe when you want your draught to hold more than a whisper.
+aetherhaven.reputation.reward.priestess.100=Gaia marks you as stubborn in the best way. This verdant catalyst can deepen what your draught pours when you pair it with coin and care at the Gaia altar.
+aetherhaven.reputation.reward.farmer.25=You have earned my trust in the rows. I sketched an iron sprinkler. Craft it at the farming bench when you have water essence and iron.
+aetherhaven.reputation.reward.farmer.50=Here is the thorium pattern: wider reach, same dawn rhythm. The Farming tab on the bench will show it once you know the schematic.
+aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page unlocks the third sprinkler tier, still one good soak at sunrise.
+aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care. The town's fields will drink at dawn.
+aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You have both, and it shows.
+aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil. Craft it at your town planning desk when you have the bars and stone.
+
+# === UI: plot sign admin (creative / op panel) ===
+aetherhaven.ui.plotadmin.title=Plot sign (admin)
+aetherhaven.ui.plotadmin.construction=Construction
+aetherhaven.ui.plotadmin.give=Give plot sign & close

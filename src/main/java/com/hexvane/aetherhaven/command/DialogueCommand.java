@@ -18,13 +18,13 @@ import javax.annotation.Nonnull;
 public final class DialogueCommand extends AbstractPlayerCommand {
     @Nonnull
     private final RequiredArg<String> treeArg =
-        this.withRequiredArg("treeId", "server.commands.aetherhaven.dialogue.treeId.desc", ArgTypes.STRING);
+        this.withRequiredArg("treeId", "aetherhaven_misc.commands.aetherhaven.dialogue.treeId.desc", ArgTypes.STRING);
     @Nonnull
     private final OptionalArg<String> entryArg =
-        this.withOptionalArg("entryNode", "server.commands.aetherhaven.dialogue.entry.desc", ArgTypes.STRING);
+        this.withOptionalArg("entryNode", "aetherhaven_misc.commands.aetherhaven.dialogue.entry.desc", ArgTypes.STRING);
 
     public DialogueCommand() {
-        super("dialogue", "server.commands.aetherhaven.dialogue.desc");
+        super("dialogue", "aetherhaven_misc.commands.aetherhaven.dialogue.desc");
     }
 
     @Override

@@ -72,7 +72,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         if (tm.findTownForPlayerInWorld(owner) != null) {
             event.setCancelled(true);
-            pr.sendMessage(Message.translation("server.aetherhaven.charter.alreadyInTown"));
+            pr.sendMessage(Message.translation("aetherhaven_common.aetherhaven.charter.alreadyInTown"));
             return;
         }
 
@@ -133,7 +133,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         playerRef.sendMessage(
-            Message.translation("server.aetherhaven.charter.townFounded").param("name", record.getDisplayName())
+            Message.translation("aetherhaven_common.aetherhaven.charter.townFounded").param("name", record.getDisplayName())
         );
         LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
     }

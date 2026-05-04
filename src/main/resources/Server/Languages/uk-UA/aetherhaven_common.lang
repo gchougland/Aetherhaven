@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Етерхейвен не завантажено.
+aetherhaven.common.noTownInWorld=Немає для тебе міста в цьому світі.
+aetherhaven.common.noQuestPermission=У вас немає дозволу на виконання завдань у цьому місті.
+aetherhaven.common.townNotFound=Місто не знайдено.
+aetherhaven.common.invalidTownLink=Недійсне посилання на місто.
+aetherhaven.common.treasuryNotLinked=Казначейство не пов'язане.
+aetherhaven.common.ownerOnlyTreasury=Тільки власник міста може користуватися скарбницею.
+aetherhaven.common.noTreasuryPanelPermission=Ви не маєте дозволу користуватися міською скарбницею.
+aetherhaven.common.townNotInThisWorld=Міста немає в цьому світі.
+aetherhaven.common.noMoveBuildingsPermission=Ви не маєте дозволу на переміщення будівель у цьому місті.
+aetherhaven.common.buildingCannotMove=Цю будівлю неможливо перемістити (відсутня ділянка або вона не завершена).
+aetherhaven.common.lookAtBlockPlot=Подивіться на блок, щоб встановити положення знака графіка та розпочати попередній перегляд.
+aetherhaven.common.carryPlotToken=Візьміть із собою жетон ділянки для типу будівлі, зазначеного в інструменті (наприклад, жетон ділянки заїзду), щоб розпочати розміщення.
+aetherhaven.common.statueNotLinked=Пам'ятник не пов'язаний з містом.
+aetherhaven.common.ownerOnlyStatue=Тільки власник міста може користуватися цією статуєю.
+aetherhaven.common.noReviveVillagersPermission=Ви не маєте дозволу оживляти жителів села біля цієї статуї.
+aetherhaven.common.noPlayerId=Без ідентифікатора гравця.
+aetherhaven.common.playersOnly=Тільки гравці.
+aetherhaven.common.invalidVillager=Недійсний житель села.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Ти вже є частиною міста в цьому світі. Покинь його, перш ніж засновувати нове.
+aetherhaven.charter.townFounded=Місто засновано: {name}. Старійшина села прибув. Використайте статут, щоб перейменувати місто.
+aetherhaven.chartertown.info.notLinked=Хартія ще не прив'язана до міста.
+aetherhaven.chartertown.info.invalidTownId=Недійсний ідентифікатор міста в статуті.
+aetherhaven.chartertown.info.townDataMissing=Дані міста не знайдено (див. журнал сервера).
+aetherhaven.chartertown.townInfoBlock=Назва міста: {name}\nІдентифікатор міста: {id}\nРівень: {tier}\nТериторія (радіус чанку): {radius}\nЧартер за адресою {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Назва міста не може бути порожньою.
+aetherhaven.chartertown.nameDuplicate=Цю назву вже використовує інше місто у цьому світі.
+aetherhaven.chartertown.nameSaved=Збережено назву міста: {name}

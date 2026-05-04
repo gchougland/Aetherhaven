@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=Gift already given today
+aetherhaven.dialogue.gift.disabled.weekly=Two gifts given this week
+aetherhaven.dialogue.gift.offer=Offer a gift
+aetherhaven.dialogue.gift.confirmBody=Give the item in your active hotbar (one) as a gift?
+aetherhaven.dialogue.gift.confirmYes=Yes, give it
+aetherhaven.dialogue.gift.confirmNo=Never mind
+aetherhaven.dialogue.gift.back=All right
+aetherhaven.dialogue.gift.fail.visitor=Only residents of the town can receive stored gifts.
+aetherhaven.dialogue.gift.fail.emptyHand=Hold an item in your hotbar to offer it.
+aetherhaven.dialogue.gift.fail.dailyLimit=You already gave this person a gift today.
+aetherhaven.dialogue.gift.fail.weeklyLimit=You have used your weekly gifts to this person.
+aetherhaven.dialogue.gift.fail.generic=You cannot give that gift right now.

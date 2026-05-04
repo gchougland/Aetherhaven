@@ -1,0 +1,36 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: common + charter item info
+
+# === Common (server.aetherhaven.common.*) ===
+# Common player-facing (no plugin prefix; Java uses server.aetherhaven.common.*)
+aetherhaven.common.pluginNotLoaded=Aetherhaven n'est pas chargé.
+aetherhaven.common.noTownInWorld=Aucune ville au monde ne te conviendra.
+aetherhaven.common.noQuestPermission=Vous n'êtes pas autorisé à effectuer des quêtes dans cette ville.
+aetherhaven.common.townNotFound=Ville introuvable.
+aetherhaven.common.invalidTownLink=Lien vers la ville invalide.
+aetherhaven.common.treasuryNotLinked=Le Trésor n'est pas lié.
+aetherhaven.common.ownerOnlyTreasury=Seul le propriétaire de la ville peut utiliser le trésor.
+aetherhaven.common.noTreasuryPanelPermission=Vous n'êtes pas autorisé à utiliser la trésorerie de la ville.
+aetherhaven.common.townNotInThisWorld=La ville n'est pas de ce monde.
+aetherhaven.common.noMoveBuildingsPermission=Vous n'êtes pas autorisé à déplacer des bâtiments dans cette ville.
+aetherhaven.common.buildingCannotMove=Ce bâtiment ne peut être déplacé (parcelle manquante ou inachevé).
+aetherhaven.common.lookAtBlockPlot=Sélectionnez un bloc pour définir la position du panneau de tracé et démarrer un aperçu.
+aetherhaven.common.carryPlotToken=Munissez-vous d'un jeton de parcelle pour un type de bâtiment répertorié dans l'outil (par exemple, un jeton de parcelle d'auberge) pour commencer le placement.
+aetherhaven.common.statueNotLinked=La statue n'est liée à aucune ville.
+aetherhaven.common.ownerOnlyStatue=Seul le propriétaire de la ville peut utiliser cette statue.
+aetherhaven.common.noReviveVillagersPermission=Vous n'êtes pas autorisé à ranimer les villageois près de cette statue.
+aetherhaven.common.noPlayerId=Aucun identifiant de joueur.
+aetherhaven.common.playersOnly=Joueurs seulement.
+aetherhaven.common.invalidVillager=Villageois invalide.
+
+# === Town & charter (founding, display name, charter item info) ===
+# Town / charter
+aetherhaven.charter.alreadyInTown=Vous faites déjà partie d'une ville dans ce monde. Quittez-la avant d'en fonder une nouvelle.
+aetherhaven.charter.townFounded=Ville fondée : {name}. Le chef du village est arrivé. Utilisez la charte pour renommer la ville.
+aetherhaven.chartertown.info.notLinked=Charter n'est pas encore rattachée à une ville.
+aetherhaven.chartertown.info.invalidTownId=Identifiant de ville invalide sur la charte.
+aetherhaven.chartertown.info.townDataMissing=Données de ville introuvables (voir le journal du serveur).
+aetherhaven.chartertown.townInfoBlock=Nom de la ville : {name}\nID de la ville : {id}\nNiveau : {tier}\nTerritoire (rayon du bloc) : {radius}\nCharte à {cx}, {cy}, {cz}
+aetherhaven.chartertown.nameEmpty=Le nom de la ville ne peut pas être vide.
+aetherhaven.chartertown.nameDuplicate=Ce nom est déjà utilisé par une autre ville dans le monde.
+aetherhaven.chartertown.nameSaved=Nom de la ville enregistré : {name}

@@ -66,6 +66,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             commandBuilder.append("Aetherhaven/JewelryCraftingPage.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyJewelryCraftingPage(commandBuilder);
         Player player = store.getComponent(ref, Player.getComponentType());
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (player == null || pr == null) {
@@ -81,13 +82,13 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         int barsNeed = ingotsRequired();
         commandBuilder.set(
             "#IngotCost.TextSpans",
-            Message.translation("server.aetherhaven.ui.jewelryCrafting.ingotCost")
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.ingotCost")
                 .param("n", Message.raw(String.valueOf(barsNeed)))
                 .param("metal", metalNameMessage())
         );
         commandBuilder.set(
             "#InvLine.TextSpans",
-            Message.translation("server.aetherhaven.ui.jewelryCrafting.invLine")
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.invLine")
                 .param("gold", Message.raw(String.valueOf(nGold)))
                 .param("silver", Message.raw(String.valueOf(nSilver)))
                 .param("ess", Message.raw(String.valueOf(nEss)))
@@ -116,7 +117,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         if (ownedGems.isEmpty()) {
             String lang = pr.getLanguage() != null ? pr.getLanguage() : "en-US";
             String noGems =
-                I18nModule.get().getMessage(lang, "server.aetherhaven.ui.jewelryCrafting.noGemsDropdown");
+                I18nModule.get().getMessage(lang, "aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.noGemsDropdown");
             if (noGems == null || noGems.isEmpty()) {
                 noGems = "No cut gems in your bags (find rock gems in the world first)";
             }
@@ -134,7 +135,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         commandBuilder.set("#GemIcon.ItemId", gemIconId);
         commandBuilder.set("#GemIcon.Quantity", 1);
 
-        commandBuilder.set("#InvGem.TextSpans", Message.translation("server.aetherhaven.ui.jewelryCrafting.invGem").param("n", Message.raw(String.valueOf(nGem))));
+        commandBuilder.set("#InvGem.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.invGem").param("n", Message.raw(String.valueOf(nGem))));
 
         commandBuilder.set("#ErSlot.ItemId", AetherhavenConstants.ITEM_LIFE_ESSENCE);
         commandBuilder.set("#ErSlot.Quantity", 1);
@@ -155,21 +156,21 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         commandBuilder.set(
             "#ShapePick.TextSpans",
             ring
-                ? Message.translation("server.aetherhaven.ui.jewelryCrafting.shapeRing")
-                : Message.translation("server.aetherhaven.ui.jewelryCrafting.shapeNeck")
+                ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.shapeRing")
+                : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.shapeNeck")
         );
 
         JewelryRarity r = JewelryCraftingRarityTable.resolve(essenceReg, essenceConc);
         if (r == null) {
             commandBuilder.set(
                 "#PreviewRarity.TextSpans",
-                Message.translation("server.aetherhaven.ui.jewelryCrafting.rarityNone")
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.rarityNone")
             );
         } else {
             commandBuilder.set(
                 "#PreviewRarity.TextSpans",
-                Message.translation("server.aetherhaven.ui.jewelryCrafting.rarityLine")
-                    .param("rarity", Message.translation("server.aetherhaven.jewelry.rarity." + r.name()))
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.rarityLine")
+                    .param("rarity", Message.translation("aetherhaven_jewelry_geode.aetherhaven.jewelry.rarity." + r.name()))
             );
         }
 
@@ -179,7 +180,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             String joined = String.join(", ", stats);
             commandBuilder.set(
                 "#PreviewTraits.TextSpans",
-                Message.translation("server.aetherhaven.ui.jewelryCrafting.traitsLine").param("stats", Message.raw(joined))
+                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.traitsLine").param("stats", Message.raw(joined))
             );
         } else {
             commandBuilder.set("#PreviewTraits.TextSpans", Message.raw(""));
@@ -256,8 +257,8 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
     @Nonnull
     private Message metalNameMessage() {
         return gold
-            ? Message.translation("server.aetherhaven.ui.jewelryCrafting.metalGold")
-            : Message.translation("server.aetherhaven.ui.jewelryCrafting.metalSilver");
+            ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.metalGold")
+            : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.metalSilver");
     }
 
     private boolean hasMaterials(
@@ -364,20 +365,20 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             return;
         }
         if (!inv.canAddItemStack(pendingCraftOutput)) {
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.noSpace"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.noSpace"));
             return;
         }
         ItemStack stack = pendingCraftOutput;
         pendingCraftOutput = null;
         if (!player.giveItem(stack, ref, store).succeeded()) {
             pendingCraftOutput = stack;
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.noSpace"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.noSpace"));
             return;
         }
-        pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.taken"));
+        pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.taken"));
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.ui.jewelryCrafting.taken"),
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.taken"),
             NotificationStyle.Success
         );
         refresh(ref, store);
@@ -390,7 +391,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             return;
         }
         if (hasPendingOutput()) {
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.takeFirst"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.takeFirst"));
             return;
         }
         int er = essenceReg;
@@ -398,7 +399,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         JewelryRarity rarity = JewelryCraftingRarityTable.resolve(er, ec);
         JewelryGem gem = JewelryCraftingItems.gemFromRockItemId(gemItemId);
         if (rarity == null || gem == null) {
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.cannotResolve"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.cannotResolve"));
             refresh(ref, store);
             return;
         }
@@ -412,20 +413,20 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         int nEss = InventoryMaterials.count(inv, AetherhavenConstants.ITEM_LIFE_ESSENCE);
         int nConc = InventoryMaterials.count(inv, AetherhavenConstants.ITEM_LIFE_ESSENCE_CONCENTRATED);
         if (!hasMaterials(gem, inv, nGold, nSilver, nGem, nEss, nConc)) {
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.missingMats"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.missingMats"));
             refresh(ref, store);
             return;
         }
         int needBar = ingotsRequired();
         String bar = gold ? AetherhavenConstants.INGREDIENT_BAR_GOLD : AetherhavenConstants.INGREDIENT_BAR_SILVER;
         if (!inv.removeItemStack(new ItemStack(bar, needBar)).succeeded()) {
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.missingMats"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.missingMats"));
             refresh(ref, store);
             return;
         }
         if (!inv.removeItemStack(new ItemStack(gemItemId, 1)).succeeded()) {
             player.giveItem(new ItemStack(bar, needBar), ref, store);
-            pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.missingMats"));
+            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.missingMats"));
             refresh(ref, store);
             return;
         }
@@ -434,7 +435,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             if (!tr.succeeded()) {
                 player.giveItem(new ItemStack(gemItemId, 1), ref, store);
                 player.giveItem(new ItemStack(bar, needBar), ref, store);
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.missingMats"));
+                pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.missingMats"));
                 refresh(ref, store);
                 return;
             }
@@ -447,7 +448,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
                 }
                 player.giveItem(new ItemStack(gemItemId, 1), ref, store);
                 player.giveItem(new ItemStack(bar, needBar), ref, store);
-                pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.missingMats"));
+                pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.missingMats"));
                 refresh(ref, store);
                 return;
             }
@@ -455,12 +456,13 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
         String outId = JewelryCraftingItems.outputItemId(!ring, gold, gem);
         ItemStack rolled = JewelryMetadata.rollCraftedAppraised(outId, rarity, ThreadLocalRandom.current());
         pendingCraftOutput = rolled;
-        pr.sendMessage(Message.translation("server.aetherhaven.ui.jewelryCrafting.craftedToSlot"));
+        pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.craftedToSlot"));
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),
-            Message.translation("server.aetherhaven.ui.jewelryCrafting.craftedToSlot"),
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryCrafting.craftedToSlot"),
             NotificationStyle.Success
         );
+        UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_WEAPON_BENCH_CRAFT);
         refresh(ref, store);
     }
 

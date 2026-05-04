@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Квест розпочато: {name}
+aetherhaven.quest.completed=Квест виконано: {name}
+aetherhaven.quest.abandoned=Квест покинутий: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Надано активний квест: {name}
+aetherhaven.questdebug.completed=Виконано завдання: {name}
+aetherhaven.questdebug.cleared=Виконано активне завдання: {name}
+aetherhaven.questdebug.statusHeader=-- статус квесту --
+aetherhaven.questdebug.statusActive=активний:
+aetherhaven.questdebug.statusCompleted=завершено:
+aetherhaven.questdebug.statusEmpty=(немає)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Для цього міста ще не зареєстровано жодних ідентифікаторів організаційно-правових одиниць селян.
+aetherhaven.villager.listHeader=Мешканці міста: UUID сутності, джерело, роль, якщо завантажено (використовуйте UUID або ідентифікатор ролі з репутацією /aetherhaven … та місцезнаходженням мешканця):
+aetherhaven.villager.listRow={uuid} | {note} | роль: {role}
+aetherhaven.villager.locateNotLoaded=Цей селянин не завантажений (спробуйте підійти ближче або завантажити фрагменти).
+aetherhaven.villager.locateNoTransform=Для цієї сутності немає перетворення.
+aetherhaven.villager.locatePosition=Мешканець села {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Для телепортації потрібен оператор (група OP).
+aetherhaven.villager.teleported=Телепортовано.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=У цьому блоці немає контейнера елементів (фрагмент не завантажено, невідповідність заповнювача/бази або блок не є контейнером).
+aetherhaven.debug.loot.bonusApplied=Бонусний кидок здобичі Етерхейвена застосовано до цього контейнера (примусово).
+aetherhaven.townsCommand.line={id} ім'я="{name}" світ={world} власник={owner} фрагменти={cx},{cz} r{radius}
+aetherhaven.list.none=(немає)
+aetherhaven.questdebug.statusActiveLine=Активний: {list}
+aetherhaven.questdebug.statusActiveEmpty=Активний: (немає)
+aetherhaven.questdebug.statusCompletedLine=Завершено: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Завершено: (немає)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Вихід з Етерхейвена
+items.Aetherhaven_Portal_Exit.description=Використовуйте для повернення у верхній світ.
+items.Aetherhaven_Portal_Enter.name=Брама Етерхейвена
+items.Aetherhaven_Portal_Enter.description=Використовуйте для входу в Етерхейвен.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Етерхейвен
+instances.aetherhaven.subtitle=Небесне село

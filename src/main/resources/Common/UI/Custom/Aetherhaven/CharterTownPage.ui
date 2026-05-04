@@ -31,8 +31,10 @@ $C.@PageOverlay {
       Anchor: (Width: 480);
 
       #Title {
-        $C.@Title {
-          @Text = %server.aetherhaven.ui.chartertown.title;
+        Label #CharterTownTitleText {
+          Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+          Padding: (Horizontal: 19);
+          Text: "";
         }
       }
 
@@ -49,7 +51,7 @@ $C.@PageOverlay {
             FlexWeight: 1;
             Anchor: (Right: 12, Vertical: 4);
             Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8a9aac);
-            Text: %server.aetherhaven.ui.chartertown.moveCharterHint;
+            Text: "";
           }
 
           Group {
@@ -63,7 +65,7 @@ $C.@PageOverlay {
               Anchor: (Width: 44, Height: 40);
               Padding: (Full: 0);
               Text: ".";
-              TooltipText: %server.aetherhaven.ui.chartertown.moveCharterTooltip;
+              TooltipText: "";
             }
           }
         }
@@ -73,19 +75,19 @@ $C.@PageOverlay {
           Anchor: (Bottom: 16);
 
           Label #TownNameLabel {
-            Text: %server.aetherhaven.ui.chartertown.townNameLabel;
+            Text: "";
             Anchor: (Bottom: 8);
             Style: (RenderBold: true, RenderUppercase: true, TextColor: #94a7bb, FontSize: 13);
           }
 
           $C.@TextField #NameInput {
             Anchor: (Top: 8, Height: 44);
-            PlaceholderText: %server.aetherhaven.ui.chartertown.namePlaceholder;
+            PlaceholderText: "";
           }
 
           $C.@TextButton #SaveTownNameButton {
             Anchor: (Top: 12);
-            Text: %server.aetherhaven.ui.chartertown.saveTownName;
+            Text: "";
           }
         }
 
@@ -93,7 +95,7 @@ $C.@PageOverlay {
           Visible: false;
           Anchor: (Bottom: 12);
           Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #8899aa);
-          Text: %server.aetherhaven.ui.chartertown.ownerOnlyHint;
+          Text: "";
         }
 
         Group #TownInfoSeparator {
@@ -107,7 +109,7 @@ $C.@PageOverlay {
         }
 
         $C.@TextButton #DissolveButton {
-          Text: %server.aetherhaven.ui.chartertown.dissolve;
+          Text: "";
           Visible: false;
           Anchor: (Top: 4);
         }
@@ -116,7 +118,7 @@ $C.@PageOverlay {
           Visible: false;
           Anchor: (Top: 8, Width: 424);
           Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #6a7a8a);
-          Text: %server.aetherhaven.ui.chartertown.dissolveHint;
+          Text: "";
         }
       }
     }
@@ -153,13 +155,13 @@ $C.@PageOverlay {
           LayoutMode: Left;
 
           $C.@TextButton #CharterModalConfirmButton {
-            Text: %server.aetherhaven.ui.chartertown.modalConfirm;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Right: 8);
           }
 
           $C.@CancelTextButton #CharterModalCancelButton {
-            Text: %server.aetherhaven.ui.chartertown.modalCancel;
+            Text: "";
             FlexWeight: 1;
             Anchor: (Left: 8);
           }

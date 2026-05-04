@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Görev başlatıldı: {name}
+aetherhaven.quest.completed=Görev tamamlandı: {name}
+aetherhaven.quest.abandoned=Görev terk edildi: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Verilen aktif görev: {name}
+aetherhaven.questdebug.completed=Tamamlanan görev: {name}
+aetherhaven.questdebug.cleared=Aktif görev tamamlandı: {name}
+aetherhaven.questdebug.statusHeader=-- görev durumu --
+aetherhaven.questdebug.statusActive=aktif:
+aetherhaven.questdebug.statusCompleted=tamamlanmış:
+aetherhaven.questdebug.statusEmpty=(hiçbiri)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Bu kasaba için henüz hiçbir köy sakini kimlik numarası kaydedilmedi.
+aetherhaven.villager.listHeader=Kasaba sakinleri: varlık UUID'si, kaynak, yüklendiyse rol (UUID veya rol kimliğini /aetherhaven reputation … ve villager locate komutlarıyla kullanın):
+aetherhaven.villager.listRow={uuid} | {note} | rol: {role}
+aetherhaven.villager.locateNotLoaded=O köylü yüklenmemiş (yaklaşmayı veya parçaları yüklemeyi deneyin).
+aetherhaven.villager.locateNoTransform=Bu varlık için herhangi bir dönüşüm yok.
+aetherhaven.villager.locatePosition=Köylü {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=Teleport için operatör (OP grubu) gereklidir.
+aetherhaven.villager.teleported=Işınlandı.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=O blokta eşya kabı yok (parça yüklenmemiş, dolgu/taban uyumsuzluğu var veya kap bloğu değil).
+aetherhaven.debug.loot.bonusApplied=Bu konteynere Aetherhaven bonus ganimet özelliği uygulandı (zorunlu).
+aetherhaven.townsCommand.line={id} adı="{name}" dünya={world} sahibi={owner} parçalar={cx},{cz} r{radius}
+aetherhaven.list.none=(hiçbiri)
+aetherhaven.questdebug.statusActiveLine=Aktif: {list}
+aetherhaven.questdebug.statusActiveEmpty=Aktif: (yok)
+aetherhaven.questdebug.statusCompletedLine=Tamamlandı: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Tamamlandı: (hiçbiri)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Aetherhaven Çıkışı
+items.Aetherhaven_Portal_Exit.description=Ana dünyaya geri dönmek için kullanın.
+items.Aetherhaven_Portal_Enter.name=Aetherhaven Geçidi
+items.Aetherhaven_Portal_Enter.description=Aetherhaven'e girmek için kullanılır.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=Gökyüzü köyü

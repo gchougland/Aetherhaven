@@ -7,8 +7,10 @@ $C.@PageOverlay {
     Anchor: (Width: 480);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.plotadmin.title;
+      Label #PlotSignAdminTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -20,8 +22,8 @@ $C.@PageOverlay {
         LayoutMode: Left;
         Anchor: (Bottom: 16);
 
-        Label {
-          Text: %server.aetherhaven.ui.plotadmin.construction;
+        Label #ConstructionFieldLabel {
+          Text: "";
           Anchor: (Top: 6, Left: 6, Right: 16);
           Style: $C.@DefaultLabelStyle;
         }
@@ -32,7 +34,7 @@ $C.@PageOverlay {
       }
 
       $C.@TextButton #GiveButton {
-        Text: %server.aetherhaven.ui.plotadmin.give;
+        Text: "";
       }
     }
   }

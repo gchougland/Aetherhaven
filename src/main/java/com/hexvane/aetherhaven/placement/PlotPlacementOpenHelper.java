@@ -48,27 +48,27 @@ public final class PlotPlacementOpenHelper {
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return null;
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
         if (town == null) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.townNotFound"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
             return null;
         }
         if (!world.getName().equals(town.getWorldName())) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.townNotInThisWorld"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotInThisWorld"));
             return null;
         }
         if (!town.playerCanPlacePlots(uc.getUuid())) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.noMoveBuildingsPermission"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noMoveBuildingsPermission"));
             return null;
         }
         PlotInstance plot = town.findPlotById(plotId);
         if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.buildingCannotMove"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.buildingCannotMove"));
             return null;
         }
         Vector3i anchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
@@ -105,14 +105,14 @@ public final class PlotPlacementOpenHelper {
             return new PlotPlacementPage(playerRef, existing);
         }
         if (tb == null) {
-            playerRef.sendMessage(Message.translation("server.aetherhaven.common.lookAtBlockPlot"));
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.lookAtBlockPlot"));
             return null;
         }
         Vector3i anchor = pickAnchor(world, tb);
         String cons = PlotPlacementPage.defaultConstructionFromInventory(store, ref);
         if (cons == null) {
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.common.carryPlotToken")
+                Message.translation("aetherhaven_common.aetherhaven.common.carryPlotToken")
             );
             return null;
         }

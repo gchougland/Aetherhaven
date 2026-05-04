@@ -1,0 +1,82 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: /aetherhaven subcommand help (tab completion)
+
+# === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
+
+commands.aetherhaven.town.desc=Town membership: invite, roles, leave
+commands.aetherhaven.town.invite.desc=Invite an online player to your town
+commands.aetherhaven.town.invite.player.desc=Player username (must be online)
+commands.aetherhaven.town.accept.desc=Accept a pending town invite
+commands.aetherhaven.town.decline.desc=Decline a pending town invite
+commands.aetherhaven.town.kick.desc=Remove a member from your town
+commands.aetherhaven.town.kick.player.desc=Member username (must be online)
+commands.aetherhaven.town.role.desc=Apply a permission preset to a member (BUILD, QUEST, or BOTH). Use the management block Players tab for per-flag permissions.
+commands.aetherhaven.town.role.player.desc=Member username (must be online)
+commands.aetherhaven.town.role.role.desc=BUILD, QUEST, or BOTH
+commands.aetherhaven.town.leave.desc=Leave a town you are a member of (not as owner)
+commands.aetherhaven.town.townName.desc=Optional town display name; use the full name including spaces (rest of the line). Omit when you only have one pending invite.
+
+commands.aetherhaven.poi.desc=Debug: POI commands
+commands.aetherhaven.poi.list.desc=List POIs for a town (optional town UUID, or omit / use \"me\" for your town)
+commands.aetherhaven.poi.town.desc=Town UUID, or me, or omit for caller town
+commands.aetherhaven.poi.dump.desc=List every POI in this world's in-memory registry (any town)
+
+commands.aetherhaven.plots.desc=Plot instances: list, finishassembly (creative), remove plotId (creative). Use plots to avoid clashing with /aetherhaven plot.
+commands.aetherhaven.plots.list.desc=List plot instances for your town (plot UUID, construction id, state, sign position)
+commands.aetherhaven.plots.finishassembly.desc=Creative: instantly finish every in-progress assembly in your town (requires loaded chunks / active jobs)
+commands.aetherhaven.plots.remove.desc=Creative: demolish one plot by UUID and remove it from your town data
+commands.aetherhaven.plots.remove.plotId.desc=Plot UUID from /aetherhaven plots list
+
+commands.aetherhaven.needs.desc=Debug: villager needs
+commands.aetherhaven.needs.inspect.desc=List entities in loaded chunks that have VillagerNeeds
+commands.aetherhaven.needs.set.desc=Set a need meter 0..100 (target: handle from inspect, Elder, or uuid)
+commands.aetherhaven.needs.target.desc=Handle (e.g. Villager_Elder_xxxxxxxx), Elder, or entity UUID
+commands.aetherhaven.needs.entity.desc=Deprecated; use target (handle, Elder, or uuid)
+commands.aetherhaven.needs.which.desc=hunger, energy, or fun
+commands.aetherhaven.needs.value.desc=Value from 0 to 100 (100 = fully satisfied)
+
+commands.aetherhaven.tax.desc=Debug: treasury morning tax
+commands.aetherhaven.tax.breakdown.desc=Show per-villager tax lines and totals for your town (loaded chunks only)
+commands.aetherhaven.tax.now.desc=Apply morning tithe to treasury now (bypasses morning time and last-collected day)
+
+commands.aetherhaven.questdebug.desc=Debug: town quest bypass
+commands.aetherhaven.questdebug.grant.desc=Mark quest active on your town
+commands.aetherhaven.questdebug.complete.desc=Mark quest completed on your town
+commands.aetherhaven.questdebug.clear.desc=Remove quest from active list on your town
+commands.aetherhaven.questdebug.id.desc=Quest id (default q_build_inn)
+commands.aetherhaven.questdebug.status.desc=Show active and completed quests for your town (display name + id)
+
+commands.aetherhaven.reputation.desc=Debug: reputation
+commands.aetherhaven.reputation.set.desc=Set your reputation with a villager and queue crossed milestone rewards for dialogue
+commands.aetherhaven.reputation.villagerUuid.desc=Villager NPC entity UUID
+commands.aetherhaven.reputation.villagerTarget.desc=Villager entity UUID or NPC role id in your town (e.g. Aetherhaven_Blacksmith)
+commands.aetherhaven.reputation.value.desc=Reputation 0 to 100
+commands.aetherhaven.reputation.reward.desc=List milestone definitions or grant one reward directly
+commands.aetherhaven.reputation.reward.list.desc=List reputation milestones (optional: filter by NPC role id)
+commands.aetherhaven.reputation.reward.roleFilter.desc=NPC role id (e.g. Aetherhaven_Merchant) to filter the list
+commands.aetherhaven.reputation.reward.grant.desc=Grant one milestone reward now (marks claimed); use rep reward list for ids
+commands.aetherhaven.reputation.rewardId.desc=Reputation reward id (e.g. rep_merchant_50)
+
+commands.aetherhaven.villager.desc=Debug: town villager helpers
+commands.aetherhaven.villager.list.desc=List town villager NPC entity UUIDs (for reputation / locate commands)
+commands.aetherhaven.villager.locate.desc=Print a town villager's position; optional teleport (operators only)
+commands.aetherhaven.villager.uuid.desc=Villager NPC entity UUID
+commands.aetherhaven.villager.target.desc=Villager entity UUID or NPC role id in your town (e.g. Aetherhaven_Merchant)
+commands.aetherhaven.villager.teleport.desc=true to teleport to the villager (operators only); or use --tp instead
+commands.aetherhaven.villager.tp_flag.desc=Teleport to the villager (operators only; same as passing true)
+commands.aetherhaven.villager.reset.desc=Remove all town villager NPCs and respawn them near you (debug; preserves quests, reputation, gifts; runs inn pool repair to align residents with completed buildings; refreshes inn visitor pool)
+aetherhaven.villager.resetDone=Town villagers were reset and respawned near you.
+aetherhaven.villager.resetFailed=Could not reset town villagers: {reason}
+commands.aetherhaven.gift.desc=Debug: reset gift limits or fill gift history preview
+commands.aetherhaven.gift.resetLimits.desc=Reset daily/weekly gift limits for all players and all villagers in every town in this world
+commands.aetherhaven.gift.fillHistory.desc=Add one log line per love/like/dislike item for a role (your town) so the gift history has something to show (debug)
+commands.aetherhaven.gift.roleId.desc=NPC role id (e.g. Aetherhaven_Merchant)
+
+commands.aetherhaven.debug_autonomy.desc=Debug: villager autonomy overlay
+commands.aetherhaven.debug_autonomy.toggle.desc=Toggle autonomy debug on a town villager (look at NPC or use --ray)
+commands.aetherhaven.debug_autonomy.show.desc=Show whether autonomy debug is enabled for this villager
+commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug for this villager
+
+commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven chest bonus rolls on targeted container
+commands.aetherhaven.debug_lootchest.fill.desc=Apply forced jewelry, gold, and plot-token rolls to the item container you are looking at

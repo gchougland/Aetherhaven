@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=Posicionamento do terreno
+aetherhaven.ui.plotplacement.summary=Colocação: {building}
+aetherhaven.ui.plotplacement.positionSection=Posição e rotação
+aetherhaven.ui.plotplacement.tipsSection=Pontas
+aetherhaven.ui.plotplacement.heightSection=Altura e rotação
+aetherhaven.ui.plotplacement.detailsBlock=Sinalização do gráfico {sx}, {sy}, {sz} · Origem do pré-fabricado {ox}, {oy}, {oz}\nEtapa {step} de 4 (90° cada)
+aetherhaven.ui.plotplacement.tipsControls=A tecla Escape fecha apenas este painel. A tecla Cancelar limpa a pré-visualização. Clicar com o botão direito do mouse reabre a pré-visualização; clicar com o botão direito do mouse em um bloco não move a pré-visualização ativa.
+aetherhaven.ui.plotplacement.plotType=Prédio
+aetherhaven.ui.plotplacement.moveLabel=Ajuste a posição
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=Girar 90° (voltar para a posição de pilotagem)
+aetherhaven.ui.plotplacement.place=Placa de localização
+aetherhaven.ui.plotplacement.placeMove=Mudar o edifício
+aetherhaven.ui.plotplacement.moveWarningText=A mudança destrói e reconstrói o local antigo. Remova primeiro objetos de valor, animais de estimação e itens soltos de dentro da área ocupada pelo prédio. Os NPCs da cidade vinculados a esta cidade estão protegidos.
+aetherhaven.ui.plotplacement.moveConfirm=Confirmar
+aetherhaven.ui.plotplacement.moveBack=Volte
+aetherhaven.ui.plotplacement.cancel=Cancelar pré-visualização
+aetherhaven.ui.plotplacement.cameraSection=Câmera
+aetherhaven.ui.plotplacement.cameraHint=A visão aérea é exibida uma vez ao ser ativada (acima da pré-visualização) e permanece fixa enquanto você move o gráfico.
+aetherhaven.ui.plotplacement.birdsEye=Vista aérea
+aetherhaven.ui.plotplacement.birdsEyeTooltip=Visão de cima para baixo: o objetivo inicial é o centro da pré-visualização. Desmarque para retornar à visão em primeira pessoa. Use a ferramenta de panorâmica para deslizar a visão.
+aetherhaven.ui.plotplacement.viewDistance=Distância
+aetherhaven.ui.plotplacement.zoomOutTooltip=Câmera mais distante (visão geral mais ampla da trama)
+aetherhaven.ui.plotplacement.zoomInTooltip=Câmera mais próxima (visão geral menor, mais detalhes)
+aetherhaven.ui.plotplacement.panLabel=Câmera panorâmica
+aetherhaven.ui.plotplacement.panXmTooltip=Desloque a visualização um passo em direção a -X.
+aetherhaven.ui.plotplacement.panXpTooltip=Desloque a visualização um passo em direção a +X.
+aetherhaven.ui.plotplacement.panZmTooltip=Desloque a vista um passo em direção a -Z.
+aetherhaven.ui.plotplacement.panZpTooltip=Desloque a vista um passo em direção a +Z.
+aetherhaven.ui.plotplacement.moveXmTooltip=Visão aérea: oeste (-X). Primeira pessoa: mover-se para a esquerda (em relação à visão).
+aetherhaven.ui.plotplacement.moveXpTooltip=Visão aérea: leste (+X). Primeira pessoa: mover-se para a direita (em relação à visão).
+aetherhaven.ui.plotplacement.moveZmTooltip=Visão aérea: norte (-Z). Primeira pessoa: mover para a frente (em relação à visão).
+aetherhaven.ui.plotplacement.moveZpTooltip=Visão aérea: sul (+Z). Primeira pessoa: mover para trás (em relação à visão).
+aetherhaven.ui.plotplacement.moveYmTooltip=Deslize um quarteirão para baixo.
+aetherhaven.ui.plotplacement.moveYpTooltip=Suba um quarteirão.
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=Transferir carta náutica
+aetherhaven.ui.charterrelocation.summary=Reposicionando a carta municipal
+aetherhaven.ui.charterrelocation.details=Bloco alvo {sx}, {sy}, {sz} · Etapa {step} de 4 (90°)
+aetherhaven.ui.charterrelocation.tips=O território é um quadrado formado por blocos ao redor da área delimitada; todas as construções devem permanecer dentro desse quadrado após a confirmação. Mova o fantasma para o novo local e, em seguida, coloque-o.
+aetherhaven.ui.charterrelocation.info=O território é uma área quadrada delimitada pela carta de fundação. Todas as suas construções devem permanecer dentro dessa área após a mudança. Mova o bloco fantasma para a nova posição da carta de fundação e confirme.
+aetherhaven.ui.charterrelocation.place=Carta de local

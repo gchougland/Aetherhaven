@@ -67,8 +67,10 @@ $C.@PageOverlay {
     Anchor: (Width: 1040);
 
     #Title {
-      $C.@Title {
-        @Text = %server.aetherhaven.ui.jewelryCrafting.title;
+      Label #JewelryCraftTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
       }
     }
 
@@ -79,7 +81,7 @@ $C.@PageOverlay {
       Label #Hint {
         Anchor: (Bottom: 10);
         Style: (...$C.@DefaultLabelStyle, TextColor: #6a7a8a, Wrap: true, FontSize: 12);
-        Text: %server.aetherhaven.ui.jewelryCrafting.hint;
+        Text: "";
       }
 
       Group #MainRow {
@@ -90,7 +92,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 188, Right: 8);
           Label #ShapeTitle {
-            Text: %server.aetherhaven.ui.jewelryCrafting.colShape;
+            Text: "";
             Style: (...@ColTitle);
             Anchor: (Bottom: 6);
           }
@@ -114,7 +116,7 @@ $C.@PageOverlay {
             Text: "";
           }
           Label #MetalTitle {
-            Text: %server.aetherhaven.ui.jewelryCrafting.colMetal;
+            Text: "";
             Style: (...@ColTitle);
             Anchor: (Bottom: 6, Top: 4);
           }
@@ -187,7 +189,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 200, Right: 12);
           Label #GemTitle {
-            Text: %server.aetherhaven.ui.jewelryCrafting.colGem;
+            Text: "";
             Style: (...@ColTitle);
             Anchor: (Bottom: 6);
           }
@@ -219,7 +221,7 @@ $C.@PageOverlay {
           LayoutMode: Top;
           Anchor: (Width: 280, Right: 6);
           Label #EssTitle {
-            Text: %server.aetherhaven.ui.jewelryCrafting.colEssence;
+            Text: "";
             Style: (...@ColTitle);
             Anchor: (Bottom: 6);
           }
@@ -328,16 +330,16 @@ $C.@PageOverlay {
               }
             }
             $C.@TextButton #TakeButton {
-              Text: %server.aetherhaven.ui.jewelryCrafting.take;
+              Text: "";
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.jewelryCrafting.takeHint;
+              TooltipText: "";
               Disabled: true;
               Anchor: (Width: 224, Height: 40, Bottom: 6);
             }
             TextButton #CraftButton {
               Style: @ForgeIconStyle;
               TextTooltipStyle: $C.@DefaultTextTooltipStyle;
-              TooltipText: %server.aetherhaven.ui.jewelryCrafting.craft;
+              TooltipText: "";
               Text: " ";
               Anchor: (Width: 56, Height: 56, Bottom: 0);
             }
@@ -351,7 +353,7 @@ $C.@PageOverlay {
         Background: #000000(0.2);
         Padding: (Vertical: 8, Horizontal: 10);
         Label #InvTitle {
-          Text: %server.aetherhaven.ui.jewelryCrafting.yourBags;
+          Text: "";
           Style: (...@ColTitle, FontSize: 11);
           Anchor: (Bottom: 4);
         }

@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Quest journal
+aetherhaven.ui.questjournal.hint=Select a quest for details.
+aetherhaven.ui.questjournal.abandon=Abandon
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Quest details
+aetherhaven.ui.questjournal.detailPlaceholderBody=Choose a quest above.
+
+items.Aetherhaven_Management_Block.name=Town records shelf
+items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
+
+items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
+items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a 3×3 area. Runs once each in-game morning. Smallest coverage.
+items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
+items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a 5×5 area. Once each in-game morning. Larger than iron.
+items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
+items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a 7×7 area. Once each in-game morning. Wide coverage.
+items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
+items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a 9×9 area. Once each in-game morning. Widest coverage.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Garren Vale
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Gorruk Stonevein
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+
+items.Aetherhaven_Production_Storage.name=Workplace stores
+items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and cannot be picked up.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners hut plot token
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Marks where the miners hut prefab can be built. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill plot token
+items.Aetherhaven_Plot_Token_Lumbermill.description=Marks where the lumbermill prefab can be built. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_Barn.name=Barn plot token
+items.Aetherhaven_Plot_Token_Barn.description=Marks where the barn prefab can be built. Craft at the town planning desk.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.
+
+items.Aetherhaven_Statue_of_Gaia.name=Statue of Gaia
+items.Aetherhaven_Statue_of_Gaia.description=A blessed likeness for the altar. Town owners may call missing residents back with life essence.

@@ -1,7 +1,7 @@
 {
   "TranslationProperties": {
-    "Name": "server.items.Aetherhaven_Necklace_Silver_Sapphire.name",
-    "Description": "server.items.Aetherhaven_Jewelry.genericDescription"
+    "Name": "aetherhaven_jewelry_geode.items.Aetherhaven_Necklace_Silver_Sapphire.name",
+    "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Jewelry.genericDescription"
   },
   "Categories": [
     "Items.Utility"

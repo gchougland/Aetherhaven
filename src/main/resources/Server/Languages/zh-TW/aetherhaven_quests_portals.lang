@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=任務開始：{name}
+aetherhaven.quest.completed=任務完成：{name}
+aetherhaven.quest.abandoned=任務已放棄：{name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=已授予的活躍任務：{name}
+aetherhaven.questdebug.completed=任務已完成：{name}
+aetherhaven.questdebug.cleared=已完成目前任務：{name}
+aetherhaven.questdebug.statusHeader=--任務狀態--
+aetherhaven.questdebug.statusActive=積極的：
+aetherhaven.questdebug.statusCompleted=完全的：
+aetherhaven.questdebug.statusEmpty=（沒有任何）
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=該鎮尚未註冊任何村民實體ID。
+aetherhaven.villager.listHeader=城鎮村民：實體 UUID、來源、角色（如果已載入）（使用 UUID 或角色 ID 配合 /aetherhaven reputation … 和 villager locate 指令）：
+aetherhaven.villager.listRow={uuid} | {note} | 角色：{role}
+aetherhaven.villager.locateNotLoaded=該村民尚未加載（請嘗試靠近或加載區塊）。
+aetherhaven.villager.locateNoTransform=該實體無需進行任何轉換。
+aetherhaven.villager.locatePosition=村民 {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=傳送需要操作員（OP組）。
+aetherhaven.villager.teleported=瞬間移動。
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=該方塊處沒有物品容器（區塊未加載、填充物/基礎方塊不匹配，或不是容器方塊）。
+aetherhaven.debug.loot.bonusApplied=此容器已套用以太港灣額外掉落物品（強制）。
+aetherhaven.townsCommand.line={id} 名稱="{name}" 世界={world} 所有者={owner} 區塊={cx},{cz} r{radius}
+aetherhaven.list.none=（沒有任何）
+aetherhaven.questdebug.statusActiveLine=活性：{list}
+aetherhaven.questdebug.statusActiveEmpty=目前狀態：（無）
+aetherhaven.questdebug.statusCompletedLine=已完成：{list}
+aetherhaven.questdebug.statusCompletedEmpty=已完成：（無）
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=以太港出口
+items.Aetherhaven_Portal_Exit.description=用於返回主世界。
+items.Aetherhaven_Portal_Enter.name=以太港門戶
+items.Aetherhaven_Portal_Enter.description=用於進入以太港。
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=以太港
+instances.aetherhaven.subtitle=天空村

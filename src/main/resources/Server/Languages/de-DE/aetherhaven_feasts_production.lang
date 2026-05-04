@@ -1,0 +1,66 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: feasts UI, production storage unlocks, feast names
+
+# === UI: town feasts (banquet table) + aetherhaven.feast.* names for the UI list ===
+aetherhaven.ui.feast.title=Stadtfeste
+aetherhaven.ui.feast.noTown=Du musst einer Stadt angehören.
+aetherhaven.ui.feast.noPermission=In dieser Stadt können keine Feste gefeiert werden.
+aetherhaven.ui.feast.outsideTerritory=Der Tisch muss innerhalb Ihres Stadtgebiets stehen.
+aetherhaven.ui.feast.activeTitle=Stadtfest im Gange
+aetherhaven.ui.feast.noneActive=Es ist kein zeitlich begrenztes Festmahl aktiv. Wähle links ein Festmahl aus, um Kosten und Effekte anzuzeigen.
+aetherhaven.ui.feast.daysLeft=Verbleibende Tage (Sonnenaufgänge): {days}
+aetherhaven.ui.feast.selectHint=Wählen Sie ein Festmahl.
+aetherhaven.ui.feast.ingredientsLabel=Zutaten
+aetherhaven.ui.feast.confirm=Veranstalte ein Fest!
+aetherhaven.ui.feast.locked=Du hast dieses Festmahl noch nicht kennengelernt. Verbringe Zeit mit den Dorfbewohnern, bis dir jemand alles erklärt.
+aetherhaven.ui.feast.tooltipLocked=Das Spiel ist gesperrt, bis dir ein Nachbar dieses Festmahl beibringt. Hilf der Stadt und sprich weiterhin mit den Leuten, die für die Halle kochen.
+aetherhaven.ui.feast.cooldownBerrycircle=Berrycircle Concord befindet sich in der Abkühlphase ({days} Tage bis zum Morgengrauen verbleibend).
+aetherhaven.ui.feast.began=Das Festmahl beginnt. Die Dorfbewohner versammeln sich um den Tisch.
+aetherhaven.ui.feast.err.pluginNotLoaded=Aetherhaven ist auf diesem Server nicht geladen.
+aetherhaven.ui.feast.err.unknownFeast=Dieses Festmahl findet nicht statt.
+aetherhaven.ui.feast.err.invalidPlayer=Ihre Identität konnte nicht verifiziert werden.
+aetherhaven.ui.feast.err.feastNotUnlocked=Du hast dieses Festmahl noch nicht gelernt. Vertraue den Leuten in der Stadt und achte darauf, wann jemand anbietet, es dir beizubringen.
+aetherhaven.ui.feast.err.timedFeastActive=Ein weiteres zeitlich festgelegtes Fest findet in dieser Stadt bereits statt.
+aetherhaven.ui.feast.err.waitForTimedFeastEnd=Warten Sie, bis das aktuelle zeitlich begrenzte Festmahl beendet ist, bevor Sie Berrycircle Concord servieren.
+aetherhaven.ui.feast.err.berrycircleCooldown=Berrycircle Concord befindet sich noch in der Abklingphase.
+aetherhaven.ui.feast.err.notEnoughIngredients=Sie haben nicht genügend der benötigten Zutaten.
+
+aetherhaven.ui.production.title=Geschäfte am Arbeitsplatz
+aetherhaven.ui.production.prev=Zurück
+aetherhaven.ui.production.next=Nächste
+aetherhaven.ui.production.prevTooltip=Vorherige Ausgabe in diesem Slot
+aetherhaven.ui.production.nextTooltip=Nächster Ausgang in diesem Steckplatz
+aetherhaven.ui.production.take1=Versuch 1
+aetherhaven.ui.production.take10=Nehmen Sie 10
+aetherhaven.ui.production.take100=Nehmen Sie 100
+aetherhaven.ui.production.genInterval={time} um eins herzustellen
+aetherhaven.ui.production.err.plugin=Aetherhaven ist auf diesem Server nicht geladen.
+aetherhaven.ui.production.err.permission=Dieser Lagerraum kann für diese Stadt nicht geöffnet werden.
+aetherhaven.ui.production.err.plot=Dieser Block befindet sich nicht innerhalb eines fertiggestellten Arbeitsplatzgrundstücks (Bauernhof, Scheune, Mühle oder Bergmannshütte) für Ihre Stadt.
+aetherhaven.ui.production.err.catalog=Für dieses Gebäude ist kein Produktionskatalog konfiguriert.
+aetherhaven.ui.production.err.inventoryFull=Ihr Lager ist zu voll, um so viel aufzunehmen.
+aetherhaven.ui.production.unlockButton=Schaltet frei
+aetherhaven.ui.production.unlockTooltip=Zugriff auf gesperrte Arbeitsplatz-Outputs für dieses Gebäude einsehen und erwerben.
+
+aetherhaven.ui.productionUnlocks.title=Arbeitsplatz freischalten
+aetherhaven.ui.productionUnlocks.intro=Wählen Sie unten einen Ausgang aus, um dessen Namen und Anforderungen im Bedienfeld anzuzeigen. Bewegen Sie den Mauszeiger über ein Symbol, um die Anzahl der vorhandenen bzw. benötigten Einheiten anzuzeigen. Sobald Sie die erforderlichen Mengen an Gegenständen und Gold erreicht haben, klicken Sie auf einen gesperrten Ausgang, um ihn zu entsperren.
+aetherhaven.ui.productionUnlocks.navProduction=Produktion
+aetherhaven.ui.productionUnlocks.navProductionTooltip=Zurück zum Arbeitsplatzlager
+aetherhaven.ui.productionUnlocks.detailHint=Klicken Sie auf ein Symbol oben, um dessen Namen und Freischaltbedingungen anzuzeigen.
+aetherhaven.ui.productionUnlocks.err.inventory=Ihre Bestandsliste konnte nicht gelesen werden.
+aetherhaven.ui.productionUnlocks.err.empty=Für diesen Arbeitsplatz ist keine Entsperrliste konfiguriert.
+aetherhaven.ui.productionUnlocks.tooltip.unlockedSub=Für diesen Arbeitsplatz bereits freigeschaltet.
+aetherhaven.ui.productionUnlocks.tooltip.itemHeldNeed=Artikel: {held} / {need}
+aetherhaven.ui.productionUnlocks.tooltip.goldHeldNeed=Goldmünzen: {held} / {need}
+aetherhaven.ui.productionUnlocks.notify.needResource=Sie benötigen mindestens {need} dieses Gegenstands in Ihrem Inventar (kombinierte Taschen).
+aetherhaven.ui.productionUnlocks.notify.needGold=Sie benötigen genügend Goldmünzen zwischen der Stadtkasse und Ihrem Inventar ({need} insgesamt).
+aetherhaven.ui.productionUnlocks.notify.takeResourceFailed=Die benötigten Artikel konnten nicht aus Ihrem Inventar entfernt werden.
+aetherhaven.ui.productionUnlocks.notify.payGoldFailed=Da der Goldpreis nicht bezahlt werden konnte, wurden Ihre Artikel zurückgeschickt.
+aetherhaven.ui.productionUnlocks.notify.unlocked={item} für diesen Arbeitsplatz freigeschaltet.
+
+aetherhaven.feast.stewards.name=Das Steward's Ledger Abendessen
+aetherhaven.feast.stewards.description=Verteilen Sie Brot, Käse und einen richtigen Kürbiskuchen, damit der morgendliche Zehnte für eine Woche großzügig ausfällt.
+aetherhaven.feast.hearthglass.name=Hearthglass-Wache
+aetherhaven.feast.hearthglass.description=Gegrillter Fisch, gegartes Fleisch und Gemüse werden als langsam köchelndes Mahl für die Wache zubereitet. Die Bedürfnisse der Dorfbewohner nehmen für eine Woche allmählich ab.
+aetherhaven.feast.berrycircle.name=Berrycircle Concord
+aetherhaven.feast.berrycircle.description=Ein Kreis aus leichten Tellern: Beerensalat, Fruchtspieße und Popcorn zum Anstoßen. Die Nachbarn werden dich dafür etwas freundlicher in Erinnerung behalten. Warte eine Woche lang, bevor du es wieder servieren darfst.

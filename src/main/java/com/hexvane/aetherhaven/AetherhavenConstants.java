@@ -53,12 +53,6 @@ public final class AetherhavenConstants {
     /** Survival path spline designer item id (shovel visuals; see item JSON). */
     public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
 
-    /**
-     * Legacy item id only: older builds placed this block in-world; {@link com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService}
-     * still clears it if present. Preview is drawn with {@code DisplayDebug} like the path tool.
-     */
-    public static final String CONSTRUCTION_PREVIEW_BLOCK_TYPE_ID = "Aetherhaven_Construction_Preview";
-
     /** Channels frontier placement over half a second per brush when aimed at assembly preview cubes. */
     public static final String BUILDING_STAFF_ITEM_ID = "Aetherhaven_Building_Staff";
 
@@ -88,6 +82,27 @@ public final class AetherhavenConstants {
 
     /** Same sting as quest/reputation event titles ({@link com.hexvane.aetherhaven.dialogue.DialogueActionExecutor}). */
     public static final String EVENT_TITLE_SHORT_SUCCESS_SOUND_ID = "SFX_Discovery_Z1_Short";
+
+    /**
+     * Vanilla weapon bench craft complete ({@code Server/Item/Items/Bench/Bench_Weapon.json} {@code CompletedSoundEventId}):
+     * geode crack, blacksmith repair, jewelry bench craft.
+     */
+    public static final String SFX_WEAPON_BENCH_CRAFT = "SFX_Weapon_Bench_Craft";
+
+    /**
+     * Arcane workbench craft ({@code Server/Item/Items/Bench/Bench_Arcane.json}): jewelry appraisal “reveal” at bench or
+     * merchant UI.
+     */
+    public static final String SFX_ARCANE_WORKBENCH_CRAFT = "SFX_Arcane_Workbench_Craft";
+
+    /**
+     * Priestess gold heal: vanilla {@code Sounds/Magic/Heal.ogg} via
+     * {@code Server/Audio/SoundEvents/Aetherhaven/Aetherhaven_Magic_Heal.json} (not the potion UI wrapper id).
+     */
+    public static final String SFX_PRIESTESS_HEAL = "Aetherhaven_Magic_Heal";
+
+    /** Vanilla bench upgrade complete; Gaia's Draught shard / Verdant catalyst tier upgrades (dialogue). */
+    public static final String SFX_WORKBENCH_UPGRADE_COMPLETE = "SFX_Workbench_Upgrade_Complete_Default";
 
     /** One-shot green sparkle along staff→preview for “material” feedback (no item entities). */
     public static final String BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID = "Aetherhaven_Building_Staff_MaterialBead";

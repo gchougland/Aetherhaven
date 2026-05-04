@@ -1,0 +1,14 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_gift)
+# Full translation keys are aetherhaven_dialogue_gift.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.gift.disabled.daily=今天已赠送的礼物
+aetherhaven.dialogue.gift.disabled.weekly=本周收到的两份礼物
+aetherhaven.dialogue.gift.offer=赠送礼物
+aetherhaven.dialogue.gift.confirmBody=将你当前快捷栏中的物品（1）作为礼物赠送？
+aetherhaven.dialogue.gift.confirmYes=是的，给它
+aetherhaven.dialogue.gift.confirmNo=没关系
+aetherhaven.dialogue.gift.back=好的
+aetherhaven.dialogue.gift.fail.visitor=只有镇上的居民才能收到储存的礼物。
+aetherhaven.dialogue.gift.fail.emptyHand=将物品放在快捷栏中即可提供该物品。
+aetherhaven.dialogue.gift.fail.dailyLimit=你今天已经送过这个人一份礼物了。
+aetherhaven.dialogue.gift.fail.weeklyLimit=你已经把每周的礼物送给这个人了。
+aetherhaven.dialogue.gift.fail.generic=你现在还不能送那份礼物。

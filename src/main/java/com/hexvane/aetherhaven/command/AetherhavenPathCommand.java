@@ -31,7 +31,7 @@ import com.hexvane.aetherhaven.pathtool.PathNavViz;
  */
 public final class AetherhavenPathCommand extends AbstractCommandCollection {
     public AetherhavenPathCommand() {
-        super("path", "server.commands.aetherhaven.path.root.desc");
+        super("path", "aetherhaven_items.commands.aetherhaven.path.root.desc");
         this.addSubCommand(new RevertCommand());
         this.addSubCommand(new NavVizCommand());
     }
@@ -39,10 +39,10 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
     private static final class RevertCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "server.commands.aetherhaven.path.revert.id", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_items.commands.aetherhaven.path.revert.id", ArgTypes.STRING);
 
         RevertCommand() {
-            super("revert", "server.commands.aetherhaven.path.revert.desc");
+            super("revert", "aetherhaven_items.commands.aetherhaven.path.revert.desc");
         }
 
         @Override
@@ -62,7 +62,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
                 return;
             }
             if (!pl.hasPermission(AetherhavenConstants.PERMISSION_PATH_REVERT)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.pathTool.revertNoPerm"));
+                playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.revertNoPerm"));
                 return;
             }
             @Nonnull
@@ -72,7 +72,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
                 u = UUID.fromString(s);
             } catch (IllegalArgumentException e) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.pathTool.badUuid")
+                    Message.translation("aetherhaven_items.aetherhaven.pathTool.badUuid")
                         .param("raw", s)
                 );
                 return;
@@ -80,14 +80,14 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
             PathToolRegistry reg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
             PathCommitRecord r = reg.remove(u);
             if (r == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.pathTool.unknownId"));
+                playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.unknownId"));
                 return;
             }
             int n = PathToolRestoreService.restoreAndRemove(world, r);
             AetherhavenWorldRegistries.getOrCreatePathNavGraphService(world).rebuildAll(reg, plugin.getConfig().get());
             PathToolPersistence.save(world, plugin, reg);
             playerRef.sendMessage(
-                Message.translation("server.aetherhaven.pathTool.reverted")
+                Message.translation("aetherhaven_items.aetherhaven.pathTool.reverted")
                     .param("id", s)
                     .param("cells", String.valueOf(n))
             );
@@ -96,7 +96,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
 
     private static final class NavVizCommand extends AbstractPlayerCommand {
         NavVizCommand() {
-            super("navviz", "server.commands.aetherhaven.path.navviz.desc");
+            super("navviz", "aetherhaven_items.commands.aetherhaven.path.navviz.desc");
         }
 
         @Override
@@ -116,7 +116,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
                 return;
             }
             if (!pl.hasPermission(AetherhavenConstants.PERMISSION_PATH_TOOL)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.pathTool.navvizNoPerm"));
+                playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.navvizNoPerm"));
                 return;
             }
             @Nullable
@@ -127,9 +127,9 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
             UUID id = uc.getUuid();
             PathNavViz.toggle(plugin, world, store, ref, pl, playerRef);
             if (PathNavViz.isOn(id)) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.pathTool.navvizOn"));
+                playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.navvizOn"));
             } else {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.pathTool.navvizOff"));
+                playerRef.sendMessage(Message.translation("aetherhaven_items.aetherhaven.pathTool.navvizOff"));
             }
         }
     }

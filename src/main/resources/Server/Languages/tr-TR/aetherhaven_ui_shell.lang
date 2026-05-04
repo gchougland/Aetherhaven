@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Saklanan altın paralar: {count}
+aetherhaven.ui.treasury.depositNoCoins=Yatırabileceğiniz altın paranız yok.
+aetherhaven.ui.treasury.depositRemoveFailed=Envanterden para çıkarılamadı.
+aetherhaven.ui.treasury.deposited={count} altın sikke yatırıldı.
+aetherhaven.ui.treasury.makeRoom=Envanterinizde yer açın.
+aetherhaven.ui.treasury.couldNotAddCoins=Para eklenemedi.
+aetherhaven.ui.treasury.withdrew={count} altın sikke çekildi.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Vergi dağılımı (yalnızca yüklenen bölümler; yüklenmemiş sakinler simülasyon yapılana kadar 0 katkıda bulunur):
+aetherhaven.ui.treasury.debug.titheNoHall=Onluk vergi: Bu kasabada tam teşekküllü bir belediye binası yok.
+aetherhaven.ui.treasury.debug.titheZero=Onluk vergi: 0 altın (yüklenmiş sakin yok veya politika hesaplamalarından 0). Boşaltma/ihtiyaçlar/ayrıntılar: /aetherhaven vergi dökümü
+aetherhaven.ui.treasury.debug.titheApplied=Onluk vergi uygulandı: Hazineye +{amount} altın (sabahki bağışla aynı kurallar geçerli).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=politika={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) konfor={comfort} altın={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=görevlilerZiyafetVergisi={a} ziyafetBindelik={b} nihaiToplam={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=Bu dünyada görevleri takip etmek için bir kasabaya ihtiyacınız var.
+aetherhaven.ui.questJournal.noPermission=Kasaba görevlerini yönetme izniniz yok.
+aetherhaven.ui.questJournal.noActive=Aktif görev yok.
+aetherhaven.ui.questJournal.hint=Bir görevin ayrıntıları için üzerine dokunun. × işareti görevi görev listenizden kaldırır (görevi verenden tekrar alabilirsiniz).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Diyalog
+aetherhaven.ui.dialogue.unknown=Bilinmeyen diyalog: {id}
+aetherhaven.ui.dialogue.missingNode=Eksik düğüm: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Bina
+aetherhaven.ui.plotConstruction.plotSignTitle=Arsa işareti
+aetherhaven.ui.plotConstruction.noConstruction=Bu arsa için herhangi bir yapı yapılandırılmamıştır.
+aetherhaven.ui.plotConstruction.assignResidentHint=Burada yaşayan bir köylüyü görevlendirin (eşleştiğinde ev görevini tamamlar).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Atanmamış
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Oyuncu verileri yüklenemedi.
+aetherhaven.ui.plotConstruction.townDataMissing=Bu blok için kasaba verisi bulunamadı.
+aetherhaven.ui.plotConstruction.clearedHome=Ev ödevi onaylandı.
+aetherhaven.ui.plotConstruction.updatedHome=Ev ödevi güncellendi.
+aetherhaven.ui.plotConstruction.plotRemoved=Grafik kaldırıldı ve grafik belirteci geri döndürüldü.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} ({have}'ye sahip)
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=Oyuncu verileri yüklenemedi.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=Yeterli yaşam özü yok ({need} gerekiyor).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Envanterden yaşam özü çıkarılamadı.

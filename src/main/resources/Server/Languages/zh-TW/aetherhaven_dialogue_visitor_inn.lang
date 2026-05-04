@@ -1,0 +1,5 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_visitor_inn)
+# Full translation keys are aetherhaven_dialogue_visitor_inn.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.body=爐火溫暖，但帳簿是為鎮民及其賓客準備的。請您受邀時再來。
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.c0=很公平。
+aetherhaven.dialogue.aetherhaven_visitor_inn.root.speaker=旅館老闆

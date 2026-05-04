@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
  */
 public final class AetherhavenGiftCommand extends AbstractCommandCollection {
     public AetherhavenGiftCommand() {
-        super("gift", "server.commands.aetherhaven.gift.desc");
+        super("gift", "aetherhaven_commands_help.commands.aetherhaven.gift.desc");
         this.addSubCommand(new ResetLimitsCommand());
         this.addSubCommand(new FillHistoryCommand());
     }
@@ -79,7 +79,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
 
     private static final class ResetLimitsCommand extends AbstractPlayerCommand {
         ResetLimitsCommand() {
-            super("resetLimits", "server.commands.aetherhaven.gift.resetLimits.desc");
+            super("resetLimits", "aetherhaven_commands_help.commands.aetherhaven.gift.resetLimits.desc");
         }
 
         @Override
@@ -107,7 +107,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             }
             playerRef.sendMessage(
                 Message
-                    .translation("server.aetherhaven.debug.gift.resetDone")
+                    .translation("aetherhaven_world_debug.aetherhaven.debug.gift.resetDone")
                     .param("entries", String.valueOf(totalEntries))
                     .param("towns", String.valueOf(townsChanged))
             );
@@ -117,10 +117,10 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
     private static final class FillHistoryCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> roleArg =
-            this.withRequiredArg("roleId", "server.commands.aetherhaven.gift.roleId.desc", ArgTypes.STRING);
+            this.withRequiredArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.gift.roleId.desc", ArgTypes.STRING);
 
         FillHistoryCommand() {
-            super("fillHistory", "server.commands.aetherhaven.gift.fillHistory.desc");
+            super("fillHistory", "aetherhaven_commands_help.commands.aetherhaven.gift.fillHistory.desc");
         }
 
         @Override
@@ -137,7 +137,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             }
             TownRecord town = townForPlayer(store, ref, world);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("server.aetherhaven.common.noTownInWorld"));
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
                 return;
             }
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -151,7 +151,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             VillagerDefinition def = plugin.getVillagerDefinitionCatalog().byNpcRoleId(role);
             if (def == null) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.gift.unknownRole").param("role", role)
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.gift.unknownRole").param("role", role)
                 );
                 return;
             }
@@ -160,7 +160,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             List<String> dislikes = def.getGiftDislikes();
             if (loves.isEmpty() && likes.isEmpty() && dislikes.isEmpty()) {
                 playerRef.sendMessage(
-                    Message.translation("server.aetherhaven.debug.gift.noGiftLists").param("role", role)
+                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.gift.noGiftLists").param("role", role)
                 );
                 return;
             }
@@ -175,7 +175,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             tm.updateTown(town);
             playerRef.sendMessage(
                 Message
-                    .translation("server.aetherhaven.debug.gift.fillDone")
+                    .translation("aetherhaven_world_debug.aetherhaven.debug.gift.fillDone")
                     .param("role", role)
                     .param("added", String.valueOf(added))
             );

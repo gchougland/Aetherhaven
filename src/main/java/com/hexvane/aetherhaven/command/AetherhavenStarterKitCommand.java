@@ -20,7 +20,7 @@ public final class AetherhavenStarterKitCommand extends AbstractPlayerCommand {
     private static final String TOWN_PLANNING_DESK_ITEM_ID = "Aetherhaven_Town_Planning_Desk";
 
     public AetherhavenStarterKitCommand() {
-        super("starterkit", "server.commands.aetherhaven.starterkit.desc");
+        super("starterkit", "aetherhaven_commands_root.commands.aetherhaven.starterkit.desc");
         this.addAliases("starter");
         this.setPermissionGroup(GameMode.Creative);
     }
@@ -51,10 +51,10 @@ public final class AetherhavenStarterKitCommand extends AbstractPlayerCommand {
             }
         }
         if (failed == 0) {
-            playerRef.sendMessage(Message.translation("server.commands.aetherhaven.starterkit.success"));
+            playerRef.sendMessage(Message.translation("aetherhaven_commands_root.commands.aetherhaven.starterkit.success"));
         } else {
             playerRef.sendMessage(
-                Message.translation("server.commands.aetherhaven.starterkit.partial").param("failed", String.valueOf(failed))
+                Message.translation("aetherhaven_commands_root.commands.aetherhaven.starterkit.partial").param("failed", String.valueOf(failed))
             );
         }
     }

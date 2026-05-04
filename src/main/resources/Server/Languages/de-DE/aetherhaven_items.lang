@@ -1,0 +1,141 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: items, path tool, plot tokens through quest journal item
+
+# === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
+items.Aetherhaven_Plot_Sign.name=Grundstücksschild
+items.Aetherhaven_Plot_Sign.description=Markiert Stellen, an denen ein Fertigteilgebäude errichtet werden kann. Verwenden Sie /aetherhaven plot zur Konfiguration.
+
+items.Aetherhaven_Charter.name=Stadtverfassung
+items.Aetherhaven_Charter.description=Hier kann man eine Stadt gründen. Jeder Spieler darf pro Welt eine Stadt besitzen. Hier erhält man Stadtinformationen.
+
+items.Aetherhaven_Town_Planning_Desk.name=Stadtplanungsbüro
+items.Aetherhaven_Town_Planning_Desk.description=Stelle Stadturkunden, den Baustab (beschleunigt den passiven Bau von Grundstücken), das Questjournal, den Geodenamboss, die Tabelle für Urkundenänderungen und Grundstücksmarker her. Stelle eines davon an einer Werkbank her.
+items.Aetherhaven_Charter_Amendments_Table.name=Tabelle der Chartaänderungen
+items.Aetherhaven_Charter_Amendments_Table.description=Dokumentiert, wie der Zehnte der Stadt berechnet wird und welchen Handel die Satzung fördert. Nutzt diese Funktion, um Änderungen zu ermöglichen, sobald die Bevölkerung dies befürwortet. Erstellt sie an eurem Stadtplanungstisch; ihr müsst den Plan kennen.
+items.Aetherhaven_Banquet_Table.name=Banketttisch
+items.Aetherhaven_Banquet_Table.description=Ein langer Tisch für Stadtfeste. Platziere ihn in deinem Gebiet und nutze ihn, um ein Festmahl auszurichten. Stelle ihn am Stadtplanungstisch her, sobald jemand in der Stadt die Vorlage hat.
+items.Aetherhaven_Founder_Monument.name=Gründerdenkmal
+items.Aetherhaven_Founder_Monument.description=Ein steinerner Sockel mit dem Abbild des Stadtgründers. Er wird innerhalb des Stadtgebiets aufgestellt, um ihn zu ehren; solange er steht, erhöht sich der morgendliche Anteil der Stadtkasse leicht. Nur einer pro Stadt.
+
+benchCategories.aetherhaven.town_planning=Stadtplanung
+benchCategories.aetherhaven.plot_tokens=Plot-Tokens
+
+items.Aetherhaven_Plot_Placement_Tool.name=Mitarbeiter für die Grundstücksvergabe
+items.Aetherhaven_Plot_Placement_Tool.description=Bewahre das passende Grundstückssymbol in deinem Inventar auf. Benutze diesen Stab, während du auf den Boden zielst, um die Geisterform des Gebäudes zu sehen. Drehe und schiebe ihn, bis er passt, und bestätige dann, um das Grundstück zu sichern. Brich ab, um die Vorschau zu löschen, und benutze den Stab erneut, wenn du eine andere Stelle wählen möchtest.
+
+items.Aetherhaven_Poi_Tool.name=POI-Debug-Tool
+items.Aetherhaven_Poi_Tool.description=Zeigt Stadt-POIs an, solange das Objekt gehalten wird (Berechtigung: aetherhaven.poi.tool). Primär: Nächstgelegenen POI auswählen. Sekundär: POI-Anker auf diesen Block verschieben. Verwendung: Autonomiepfadziel für den ausgewählten POI festlegen/löschen (zum Löschen erneut auf den POI-Block klicken).
+items.Aetherhaven_Poi_Tool.legendTitle=POI-Tool
+items.Aetherhaven_Poi_Tool.legendPrimary=Primär: Wählen Sie den nächstgelegenen POI in der Nähe des Blocks aus.
+items.Aetherhaven_Poi_Tool.legendSecondary=Sekundär: Ausgewählten POI in den Block verschieben
+items.Aetherhaven_Poi_Tool.legendUse=Verwendung: NPC-Pfadziel für ausgewählten POI festlegen (Anwendung bei POI-Blocklöschungen)
+
+aetherhaven.poiTool.legendTitle=POI-Tool
+aetherhaven.poiTool.legendPrimary=Primär: Wählen Sie den nächstgelegenen POI in der Nähe des Blocks aus.
+aetherhaven.poiTool.legendSecondary=Sekundär: Ausgewählten POI in den Block verschieben
+aetherhaven.poiTool.legendUse=Verwendung: NPC-Pfadziel für ausgewählten POI festlegen (Anwendung bei POI-Blocklöschungen)
+
+aetherhaven.pathTool.legendPageTitle=Pfadwerkzeug
+aetherhaven.pathTool.legendBlurb=Erstellen Sie eine Spline-Linie, sehen Sie sich die Vorschau an und platzieren Sie dann Wegblöcke. Solange Sie das Werkzeug gedrückt halten, erscheint ein Statusfeld in der Ecke. Mit installiertem Buuz135 MHUD wird das Feld als eigene Ebene erkannt, sodass auch andere benutzerdefinierte HUDs sichtbar bleiben.
+aetherhaven.pathTool.legendHotkeyAdd=Ein Sekundärangriff auf dem Boden fügt einen Keyframe (goldene Kugel) hinzu. Ein Sekundärangriff beim Zielen entfernt den vorhandenen Keyframe. Neue Keyframes zeigen in Blickrichtung.
+aetherhaven.pathTool.legendHotkeyAim=Wählen Sie den entsprechenden Keyframe aus. Im Verschieben-Modus verschiebt ein primärer Klick auf dem Boden den Punkt. Ein primärer Klick auf demselben Knoten hat keine Auswirkung.
+aetherhaven.pathTool.legendHotkeyUse=F: Im Drehmodus: Gieren des ausgewählten Knotens. Im Verschieben-Modus: Keine Funktion. Im Platzieren-Modus: Pfad platzieren (zwei Knoten erforderlich). Q: Moduswechsel. E: Breite 1–8. Dritte Werkzeugfunktion: Pfadstil (innere Blöcke; siehe PathToolStyles in der Konfiguration). Sekundär auf einem Keyframe entfernt den Stil.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Optional: Ducken ist nicht mehr erforderlich, um den Modus zu ändern; verwenden Sie stattdessen die Werkzeugfähigkeit (Q).
+aetherhaven.pathTool.legendVisuals=Vorschau: Weiß = Knoten und Spline, Braun = Pfadstreifen, Grün = Randgras; Rot = blockiert. Platten liegen auf der Oberfläche. Breite: Zweite Werkzeugfunktion (1–8). Stil: Dritte Werkzeugfunktion. „Bestätigen“ entfernt hohe Pflanzen (Pflanze_Gras) über dem Pfad.
+aetherhaven.pathTool.statusHeader=Während er das Werkzeug hält
+aetherhaven.pathTool.statusLine1=Benachrichtigungen und Chats werden angezeigt, wenn Sie Punkte hinzufügen, den Modus wechseln (Q) oder im Commit-Modus bleiben.
+aetherhaven.pathTool.statusLine2=Auswahl: Zielen Sie auf eine Kugel. Bei einem Fehlschuss bleibt Ihre Auswahl erhalten. Q wechselt den Modus; die zweite Fähigkeit wechselt die Breite; die dritte Fähigkeit wechselt den Pfadstil.
+
+aetherhaven.pathTool.hudTitle=Pfadwerkzeug
+aetherhaven.pathTool.hudNameTranslate=Bewegen
+aetherhaven.pathTool.hudNameRotate=Drehen
+aetherhaven.pathTool.hudNameCommit=Ort
+aetherhaven.pathTool.hudHelpTranslate=Primär: Einen Knoten auswählen, dann mit der Primärtaste einen Block verschieben. Sekundär: Knoten durch Anvisieren des Bodens hinzufügen; Knoten durch Anvisieren entfernen. Q: Nächster Modus.
+aetherhaven.pathTool.hudHelpRotate=Primär: Knoten auswählen. Sekundär: Durch Anvisieren eines Knotens wird ein Knoten hinzugefügt; durch Anvisieren eines Knotens wird er entfernt. F: Gierbewegung des ausgewählten Knotens. Q: Nächster Modus.
+aetherhaven.pathTool.hudHelpCommit=Primär: Knoten auswählen. Sekundär: Durch Anvisieren eines Knotens wird ein Knoten hinzugefügt; durch Anvisieren eines Knotens wird er entfernt. F platziert den Pfad (2+ Knoten). Q: Nächster Modus.
+aetherhaven.pathTool.hudStyle=Stil: {style}
+aetherhaven.pathTool.hudWidth=Breite: {w} Blöcke (E zum Durchlaufen)
+aetherhaven.pathTool.hudNodes=Knoten: {n}
+aetherhaven.pathTool.hudHint=Primär = Auswählen/Verschieben | Sekundär = Auf dem Boden hinzufügen, auf dem Knoten entfernen | Q: Modus | E: Breite | R: Stil | F: Drehen/Platzieren
+
+aetherhaven.pathTool.addedNode=Knoten {n} hinzugefügt.
+aetherhaven.pathTool.modeCycledToTranslate=Modus: Keyframes verschieben und platzieren.
+aetherhaven.pathTool.modeCycledToRotate=Modus: Drehen — F verschiebt die Gierachse des ausgewählten Knotens.
+aetherhaven.pathTool.modeCycledToCommit=Modus: Platzieren — F platziert den Pfad (wenn Sie 2 oder mehr Knoten haben).
+aetherhaven.pathTool.widthCycled=Pfadbreite: {w} (1-8)
+aetherhaven.pathTool.styleCycled=Pfadstil: {style}
+aetherhaven.pathTool.toastStyleCycled=Pfadstil geändert
+aetherhaven.pathTool.useInTranslateMode=F hat im Bewegungsmodus keine Funktion. Drücken Sie Q, um in den Platzierungsmodus zu wechseln, dann F zum Platzieren oder zum Drehen und F zum Anpassen der Gierachse.
+aetherhaven.pathTool.rotateNoSelection=Wählen Sie einen Keyframe (zielen Sie auf die Goldkugel), um ihn zu drehen, oder drücken Sie Q, um den Modus zu ändern.
+aetherhaven.pathTool.modeToggled=Modus: {m}
+aetherhaven.pathTool.selectedNode=Knoten ausgewählt.
+aetherhaven.pathTool.movedNode=Knoten verschoben.
+aetherhaven.pathTool.noNodeHit=Kein Steuerknoten in Reichweite. Im Übersetzungsmodus mit ausgewähltem Knoten versuchen Sie, den primären Knoten auf dem Boden zu bewegen.
+aetherhaven.pathTool.noNodeOnAim=Kein Keyframe auf dem Fadenkreuz. Zielen Sie auf eine goldene Scheibe, um sie auszuwählen. Auswahl bleibt unverändert.
+aetherhaven.pathTool.toastAdd=Kontrollpunkt hinzugefügt
+aetherhaven.pathTool.toastModeTranslate=Verschieben: Primäre Aktion: Block verschiebt die Auswahl; sekundäre Aktion: fügt Keyframe hinzu.
+aetherhaven.pathTool.toastModeRotate=Drehen: F steuert die Gierachse des ausgewählten Knotens.
+aetherhaven.pathTool.toastModeCommit=Platzieren: F platziert den Pfad (2+ Knoten). Tausche mit Q.
+aetherhaven.pathTool.toastMoved=Knotenposition aktualisiert
+aetherhaven.pathTool.toastRemoved=Kontrollpunkt entfernt
+aetherhaven.pathTool.toastRotated=Gierbewegung
+aetherhaven.pathTool.toastCemented=Der Weg ist gefestigt. Die Rückruf-ID findest du im Chat.
+aetherhaven.pathTool.rotated=Um {deg}° gedreht.
+aetherhaven.pathTool.removedNode=Knoten entfernt. {n} Knoten verbleiben.
+aetherhaven.pathTool.needTwoNodes=Sie benötigen mindestens zwei Keyframes. Fügen Sie mit „sekundär“ einen weiteren hinzu oder drücken Sie Q, um den Commit-Modus zu verlassen und die Bearbeitung fortzusetzen.
+aetherhaven.pathTool.emptyPlan=Entlang des Pfades wurde kein Boden gefunden (steil/leer/unbeladene Chunks).
+aetherhaven.pathTool.cementFail=Nichts zum Platzieren: Es wurde kein geeigneter Untergrund gefunden oder die Platzierung ist fehlgeschlagen.
+aetherhaven.pathTool.cemented=Pfad platziert. Rückgängigmachungs-ID: {id} (aetherhaven path revert <id> with aetherhaven.path.revert)
+aetherhaven.pathTool.revertNoPerm=Sie haben keine Berechtigung für aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Ungültige ID: {raw}
+aetherhaven.pathTool.unknownId=Kein gespeicherter Pfad mit dieser ID.
+aetherhaven.pathTool.reverted={cells}-Blöcke für {id} rückgängig gemacht
+aetherhaven.pathTool.navvizOn=Pfadnavigations-Debugging: aktiviert (Server zeigt festgeschriebene Pfadknoten als Linien an; erneut ausführen, um es zu deaktivieren)
+aetherhaven.pathTool.navvizOff=Pfadnavigations-Debugging: aus
+aetherhaven.pathTool.navvizNoPerm=Für das Debuggen der Pfadnavigation wird aetherhaven.path.tool benötigt.
+
+commands.aetherhaven.path.root.desc=Pfad-/Spline-Platzierungshilfen
+commands.aetherhaven.path.revert.desc=Einen fixierten Pfad aus der Rückgängig-Datei wiederherstellen (aetherhaven.path.revert)
+commands.aetherhaven.path.revert.id=Pfad-Commit-ID (UUID aus der Zement-Chatnachricht)
+commands.aetherhaven.path.navviz.desc=Debug-Zeichnung von Pfadnavigations-Polylinien umschalten (aetherhaven.path.tool; sub: navviz)
+
+items.Aetherhaven_Path_Tool.name=Wegplanerschaufel
+items.Aetherhaven_Path_Tool.description=Entwirft Spline-Pfade (aetherhaven.path.tool). Sekundär: Knoten hinzufügen. Primär: Auswählen; im Bewegungsmodus zum Verschieben auf den Boden klicken. Q: Moduswechsel. Zweite Fähigkeit: Pfadbreite 1–8. Dritte Fähigkeit: Pfadstil (innere Blöcke; PathToolStyles in der Konfiguration). F: Gierwinkel im Drehmodus verschieben oder im Platzierungsmodus platzieren (2+ Knoten). Zurücksetzen: Aetherhaven-Pfad zurücksetzen. Konfiguration: PathToolStyles, Raycast und Ersetzungslisten.
+
+items.Aetherhaven_Plot_Token_Inn.name=Gasthaus-Grundstücksmarke
+items.Aetherhaven_Plot_Token_Inn.description=Erforderlich im Inventar, um das Platzierungspersonal für den Gasthofgrundriss zu verwenden.
+
+items.Aetherhaven_Plot_Token_Market_Stall.name=Marktstand-Grundstücksmarke
+items.Aetherhaven_Plot_Token_Market_Stall.description=Die Mitarbeiter der Grundstückszuweisung müssen die Grundfläche des Marktstandes festlegen.
+
+items.Aetherhaven_Plot_Token_Farm.name=Farmparzellen-Token
+items.Aetherhaven_Plot_Token_Farm.description=Erforderlich ist die Platzierung des Grundrisses der landwirtschaftlichen Parzelle durch das Parzellenzuweisungspersonal.
+
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Schmiedeladen-Grundstücksmarke
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Erforderlich, um den Grundriss der Schmiede anhand der Vorgaben des Grundstücksplatzierungspersonals zu platzieren.
+
+items.Aetherhaven_Plot_Token_Park.name=Parkplatz-Token
+items.Aetherhaven_Plot_Token_Park.description=Die Zuweisung des Parkgrundrisses durch das Parzellenzuweisungspersonal ist erforderlich.
+
+items.Aetherhaven_Plot_Token_House.name=Hausgrundstücksmarke
+items.Aetherhaven_Plot_Token_House.description=Die Mitarbeiter der Grundstückszuweisung müssen den Grundriss des gemeinsamen Hauses festlegen.
+
+items.Aetherhaven_Plot_Token_Town_Hall.name=Grundstücksmarke für das Rathaus
+items.Aetherhaven_Plot_Token_Town_Hall.description=Erforderlich, um den Grundriss des Rathauses anhand der Angaben des Parzellenzuweisungspersonals zu bestimmen.
+
+items.Aetherhaven_Gold_Coin.name=Goldmünze
+items.Aetherhaven_Gold_Coin.description=Die Stadtwährung wird in der Schatzkammer aufbewahrt.
+
+items.Aetherhaven_Geode.name=Geode
+items.Aetherhaven_Geode.description=Ein hohler Stein, der Kristalle, Edelsteine oder Erz enthalten kann. Bezahle einen Schmied, der ihn aufbricht.
+
+items.Aetherhaven_Geode_Anvil.name=Geodenamboss
+items.Aetherhaven_Geode_Anvil.description=Öffnet Geoden ohne Schmiedegebühr. Platzieren und benutzen; du musst die Bauanleitung kennen, um sie an deinem Stadtplanungstisch herzustellen.
+
+barter.aetherhaven_vex.title=Vex's täglicher Bestand
+
+items.Aetherhaven_Treasury.name=Stadtkasse
+items.Aetherhaven_Treasury.description=Hier werden die Goldmünzen der Stadt aufbewahrt. Dient zum Einzahlen oder Abheben (für den Stadtbesitzer).
+
+items.Aetherhaven_Quest_Journal.name=Stadtquest-Tagebuch
+items.Aetherhaven_Quest_Journal.description=Zweiter Verwendungszweck: Aktuelle Stadtquests einsehen. Der Älteste gibt euch möglicherweise eine, nachdem das Gasthaus gebaut wurde.

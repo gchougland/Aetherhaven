@@ -1,0 +1,47 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: plot placement UI, charter relocation UI
+
+# === UI: plot placement (ghost) & move building ===
+aetherhaven.ui.plotplacement.title=地块布局
+aetherhaven.ui.plotplacement.summary=位置：{building}
+aetherhaven.ui.plotplacement.positionSection=位置和旋转
+aetherhaven.ui.plotplacement.tipsSection=尖端
+aetherhaven.ui.plotplacement.heightSection=高度和旋转
+aetherhaven.ui.plotplacement.detailsBlock=绘制标志 {sx}、{sy}、{sz} · 预制件原点 {ox}、{oy}、{oz}\n步骤 {step}（共 4 个，每个 90°）
+aetherhaven.ui.plotplacement.tipsControls=按 Esc 键仅关闭此面板。按“取消”键清除预览。右键单击空白处可重新打开预览；右键单击某个块不会移动当前预览。
+aetherhaven.ui.plotplacement.plotType=建筑
+aetherhaven.ui.plotplacement.moveLabel=调整位置
+aetherhaven.ui.plotplacement.rotate=90°
+aetherhaven.ui.plotplacement.rotateTooltip=旋转90°（循环朝向）
+aetherhaven.ui.plotplacement.place=放置地块标志
+aetherhaven.ui.plotplacement.placeMove=搬迁大楼
+aetherhaven.ui.plotplacement.moveWarningText=搬迁会拆除并重建原址。请先将贵重物品、宠物和零散物品从建筑物内移走。与该城镇相关的城镇NPC受到保护。
+aetherhaven.ui.plotplacement.moveConfirm=确认
+aetherhaven.ui.plotplacement.moveBack=回去
+aetherhaven.ui.plotplacement.cancel=取消预览
+aetherhaven.ui.plotplacement.cameraSection=相机
+aetherhaven.ui.plotplacement.cameraHint=鸟瞰图会在您打开它时（在预览上方）出现一次，然后在您移动图表时保持静止。
+aetherhaven.ui.plotplacement.birdsEye=鸟瞰图
+aetherhaven.ui.plotplacement.birdsEyeTooltip=俯视视角：初始瞄准点位于预览中心。取消勾选可返回第一人称视角。使用“平移”按钮可滑动视角。
+aetherhaven.ui.plotplacement.viewDistance=距离
+aetherhaven.ui.plotplacement.zoomOutTooltip=更远的镜头（更广阔的场景概览）
+aetherhaven.ui.plotplacement.zoomInTooltip=更近的摄像头（更小的视角，更多的细节）
+aetherhaven.ui.plotplacement.panLabel=平移摄像机
+aetherhaven.ui.plotplacement.panXmTooltip=将视角向 -X 方向移动一步。
+aetherhaven.ui.plotplacement.panXpTooltip=向 +X 方向移动一格视角
+aetherhaven.ui.plotplacement.panZmTooltip=视角向 -Z 方向移动一步。
+aetherhaven.ui.plotplacement.panZpTooltip=视角向+Z方向移动一步。
+aetherhaven.ui.plotplacement.moveXmTooltip=鸟瞰视角：向西（-X）。第一人称视角：向左平移（相对于视角）。
+aetherhaven.ui.plotplacement.moveXpTooltip=鸟瞰视角：向东（+X）。第一人称视角：向右平移（相对于视角）。
+aetherhaven.ui.plotplacement.moveZmTooltip=鸟瞰图：北（-Z）。第一人称视角：向前移动（相对于视角）。
+aetherhaven.ui.plotplacement.moveZpTooltip=鸟瞰图：向南（+Z）。第一人称视角：向后移动（相对于视图）。
+aetherhaven.ui.plotplacement.moveYmTooltip=向下挪动一个街区
+aetherhaven.ui.plotplacement.moveYpTooltip=向上挪动一个街区
+
+# === UI: move town charter (relocate territory center) ===
+aetherhaven.ui.charterrelocation.title=搬迁包机
+aetherhaven.ui.charterrelocation.summary=重新定位城镇宪章
+aetherhaven.ui.charterrelocation.details=目标块 {sx}、{sy}、{sz} · 步骤 {step}（共 4 步，90°）
+aetherhaven.ui.charterrelocation.tips=领地是由围绕契约的若干小块区域组成的正方形；确认后，所有建筑都必须位于领地范围内。将幽灵推到新位置，然后放置。
+aetherhaven.ui.charterrelocation.info=领地是围绕宪章的方形区域。移动后，所有建筑都必须位于该区域内。将幽灵方块移动到新的宪章位置，然后确认。
+aetherhaven.ui.charterrelocation.place=地点宪章

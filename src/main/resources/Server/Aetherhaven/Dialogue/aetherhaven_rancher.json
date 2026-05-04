@@ -1,13 +1,14 @@
 {
   "id": "aetherhaven_rancher",
-  "entry": "root",
+  "entry": "main_hub",
   "nodes": {
-    "root": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.body",
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "bodyMode": "villager_greeting",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.main_hub.fallback",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.offer",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
           "condition": {
             "type": "and",
             "conditions": [
@@ -20,7 +21,7 @@
           "next": "gift_confirm"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.hc0",
           "condition": {
             "type": "and",
             "conditions": [
@@ -42,7 +43,7 @@
           "next": "thalen_house_offer"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc1",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.hc1",
           "condition": {
             "type": "and",
             "conditions": [
@@ -55,7 +56,7 @@
           "next": "thalen_house_finish"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.hc2",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.hc2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -67,12 +68,12 @@
           "next": "thalen_house_remind"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c0",
           "condition": { "type": "town_quest_completed", "questId": "q_barn" },
           "next": "thalen_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c1",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c1",
           "condition": {
             "type": "and",
             "conditions": [
@@ -84,7 +85,7 @@
           "next": "thalen_done"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c2",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c2",
           "condition": {
             "type": "and",
             "conditions": [
@@ -98,7 +99,7 @@
           "next": "thalen_building"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c3",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c3",
           "condition": {
             "type": "and",
             "conditions": [
@@ -115,122 +116,122 @@
           "next": "thalen_quest_barn"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.root.c4",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.c4",
           "next": null
         }
       ]
     },
     "thalen_quest_barn": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c0",
           "actions": [{ "type": "start_quest", "id": "q_barn" }],
           "next": "thalen_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_quest_barn.c1",
           "next": null
         }
       ]
     },
     "thalen_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_accepted.c0",
           "next": null
         }
       ]
     },
     "thalen_building": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c0",
           "actions": [{ "type": "abandon_quest", "id": "q_barn" }],
           "next": "thalen_abandoned"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_building.c1",
           "next": null
         }
       ]
     },
     "thalen_abandoned": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_abandoned.c0",
           "next": null
         }
       ]
     },
     "thalen_done": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_done.c0",
           "next": null
         }
       ]
     },
     "thalen_house_offer": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0",
           "actions": [{ "type": "start_quest", "id": "q_house_rancher" }],
           "next": "thalen_house_accepted"
         },
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1",
           "next": null
         }
       ]
     },
     "thalen_house_accepted": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0",
           "next": null
         }
       ]
     },
     "thalen_house_remind": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.c0",
           "next": null
         }
       ]
     },
     "thalen_house_finish": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.body",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.body",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.c0",
+          "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.thalen_house_finish.c0",
           "next": null
         }
       ]
     },
     "gift_confirm": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.gift.confirmBody",
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmYes",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
               "type": "gift_villager",
@@ -240,33 +241,33 @@
               "reactionNodeDislike": "gift_dislike"
             }
           ],
-          "next": "root"
+          "next": "main_hub"
         },
         {
-          "text": "server.aetherhaven.dialogue.gift.confirmNo",
-          "next": "root"
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
         }
       ]
     },
     "gift_love": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.gift.love",
-      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.gift.love",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
     },
     "gift_like": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.gift.like",
-      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.gift.like",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
     },
     "gift_neutral": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.gift.neutral",
-      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.gift.neutral",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
     },
     "gift_dislike": {
-      "speaker": "server.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
-      "text": "server.aetherhaven.dialogue.aetherhaven_rancher.gift.dislike",
-      "choices": [{ "text": "server.aetherhaven.dialogue.gift.back", "next": "root" }]
+      "speaker": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.root.speaker",
+      "text": "aetherhaven_dialogue_rancher.aetherhaven.dialogue.aetherhaven_rancher.gift.dislike",
+      "choices": [{ "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back", "next": "main_hub" }]
     }
   }
 }

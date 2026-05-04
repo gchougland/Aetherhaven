@@ -50,10 +50,11 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             commandBuilder.append("Aetherhaven/QuestJournal.ui");
             templateAppended = true;
         }
+        AetherhavenUiLocalization.applyQuestJournalStatic(commandBuilder);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();
         if (plugin == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.pluginNotLoaded"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -62,7 +63,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
         var quests = plugin.getQuestCatalog();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.common.noPlayerId"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_common.aetherhaven.common.noPlayerId"));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -70,7 +71,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
         }
         TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
         if (town == null) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.questJournal.needTown"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -78,7 +79,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             return;
         }
         if (!town.playerHasQuestPermission(uc.getUuid())) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.questJournal.noPermission"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noPermission"));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -88,7 +89,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
 
         List<String> active = new ArrayList<>(town.getActiveQuestIdsSnapshot());
         if (active.isEmpty()) {
-            commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.questJournal.noActive"));
+            commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noActive"));
             commandBuilder.set("#DetailTitle.TextSpans", Message.raw(""));
             commandBuilder.set("#DetailBody.TextSpans", Message.raw(""));
             commandBuilder.clear(ROWS);
@@ -100,7 +101,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             selectedQuestId = active.get(0);
         }
 
-        commandBuilder.set("#Hint.TextSpans", Message.translation("server.aetherhaven.ui.questJournal.hint"));
+        commandBuilder.set("#Hint.TextSpans", Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.hint"));
         commandBuilder.clear(ROWS);
         int n = Math.min(active.size(), MAX_ROWS);
         for (int i = 0; i < n; i++) {

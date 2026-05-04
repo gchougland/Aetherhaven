@@ -1,0 +1,60 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: town command, member permissions, roles
+
+# === Town command: resolution & membership (/aetherhaven town) ===
+# Town command resolution
+aetherhaven.town.resolve.notOwnerInWorld=Тобі не належить жодне місто в цьому світі.
+aetherhaven.town.resolve.noTownNamed=У цьому світі немає міста з назвою "{name}".
+aetherhaven.town.resolve.ownerOrOpOnly=Це може зробити лише власник міста (або оператор з дозволом).
+aetherhaven.town.resolve.notInTown=Ти не в місті цього світу.
+aetherhaven.town.resolve.nameOnlyForOwner=Тільки власник міста (або оператор) може використовувати тут назву міста.
+aetherhaven.town.resolve.specifyTownName=Вкажіть назву міста або скористайтеся назвою міста, яке вам належить.
+aetherhaven.town.resolve.specifyTown=Вкажіть назву міста.
+aetherhaven.town.resolve.adminOtherTown=Тільки оператори можуть вибирати місто іншого гравця за його назвою.
+aetherhaven.town.invite.err.emptyName=Введіть ім'я гравця.
+aetherhaven.town.invite.err.targetOffline=Гравець "{name}" не онлайн у цьому світі.
+aetherhaven.town.invite.err.cannotInviteSelf=Ви не можете запросити себе.
+aetherhaven.town.invite.err.alreadyInTown=Цей гравець вже знаходиться в якомусь місті цього світу.
+aetherhaven.town.invite.toTarget={inviter} запросив вас приєднатися до міста "{townDisplay}". Введіть /aetherhaven town прийняти {townDisplay} або /aetherhaven town відхилити {townDisplay} (використовуйте повну назву міста, включаючи пробіли).
+aetherhaven.town.invite.sent=Запрошення надіслано користувачу {name}.
+aetherhaven.town.kick.err.mustBeOnline=Гравець повинен бути онлайн, щоб вибити за іменем.
+aetherhaven.town.kick.err.cannotRemoveOwner=Неможливо видалити власника міста.
+aetherhaven.town.kick.err.notMember=Цей гравець не є мешканцем цього міста.
+aetherhaven.town.kick.removed=Вилучено {name} з міста.
+aetherhaven.town.kick.removedYou=Вас вилучили з міста "{town}".
+aetherhaven.town.kick.removedGeneric=Виключений член з міста.
+aetherhaven.town.role.err.ownerAlwaysFull=Власник завжди має повні дозволи.
+aetherhaven.town.role.set=Встановіть роль {name} на {role}.
+aetherhaven.town.accept.err.noSuchTown=Немає міста з такою назвою.
+aetherhaven.town.accept.err.noInvite=У вас немає запрошень до цього міста, які очікують на розгляд.
+aetherhaven.town.accept.err.noInvites=У вас немає запрошень до міста, що очікують на розгляд.
+aetherhaven.town.accept.err.alreadyInTown=Ви вже в місті.
+aetherhaven.town.accept.joined=Ви приєдналися до групи «{town}».
+aetherhaven.town.decline.noPending=Немає запрошень, що очікують на розгляд для цього міста.
+aetherhaven.town.decline.noInvites=У вас немає запрошень до міста, що очікують на розгляд.
+aetherhaven.town.decline.done=Запрошення відхилено.
+aetherhaven.town.permissions.updated=Дозволи учасників збережено.
+
+aetherhaven.ui.memberPermissions.title=Дозволи учасників
+aetherhaven.ui.memberPermissions.backTooltip=Назад до списку гравців
+aetherhaven.ui.memberPermissions.placePlots=Розмістіть діаграми
+aetherhaven.ui.memberPermissions.manageConstructions=Будувати та керувати спорудами (монтажні роботи, виробництво, свята, внесення змін до статутів, переміщення будівель)
+aetherhaven.ui.memberPermissions.spendTreasuryGold=Витрачайте золото міської скарбниці на витрати на будівництво
+aetherhaven.ui.memberPermissions.openTreasuryPanel=Відкрита казначейська справа (внесення / зняття коштів)
+aetherhaven.ui.memberPermissions.acceptQuests=Приймати / розпочинати містечкові завдання
+aetherhaven.ui.memberPermissions.completeQuests=Виконуйте містечкові завдання та отримуйте нагороди за репутацію
+aetherhaven.ui.memberPermissions.abandonQuests=Покинути активні містечкові завдання
+aetherhaven.ui.memberPermissions.reviveVillagers=Оживіть селян біля статуї Гаї
+aetherhaven.ui.memberPermissions.err.notOwner=Тільки власник міста може редагувати дозволи.
+aetherhaven.ui.memberPermissions.err.notInTown=Цього гравця немає в цьому місті.
+aetherhaven.town.rolecmd.playerMustBeOnline=Гравець повинен бути онлайн.
+aetherhaven.town.rolecmd.roleInvalid=Роль має бути БУДІВНИЦТВО, ВИКОНАННЯ КВЕСТУ або ОБИДВА.
+aetherhaven.town.leave.notInTown=Ви не в місті.
+aetherhaven.town.leave.ownerCannotLeave=Власники не можуть піти; передача права власності ще не реалізована.
+aetherhaven.town.leave.notMember=Ви не є мешканцем цього міста.
+aetherhaven.town.leave.left=Ви залишили "{town}".
+
+# Town member role labels (dropdowns)
+aetherhaven.town.memberRole.BUILD=БУДУВАТИ
+aetherhaven.town.memberRole.QUEST=КВЕСТ
+aetherhaven.town.memberRole.BOTH=ОБИДВА

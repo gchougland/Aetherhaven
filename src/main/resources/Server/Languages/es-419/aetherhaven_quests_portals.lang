@@ -1,0 +1,45 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest lifecycle + portals / instances
+
+# === Quest lifecycle, quest debug, villager list, misc command output ===
+# Quest / dialogue system messages
+aetherhaven.quest.started=Misión iniciada: {name}
+aetherhaven.quest.completed=Misión completada: {name}
+aetherhaven.quest.abandoned=Misión abandonada: {name}
+aetherhaven.quest.entityKillProgress={current}/{need} {label}
+aetherhaven.questdebug.granted=Misión activa concedida: {name}
+aetherhaven.questdebug.completed=Misión completada: {name}
+aetherhaven.questdebug.cleared=Misión activa completada: {name}
+aetherhaven.questdebug.statusHeader=-- estado de la misión --
+aetherhaven.questdebug.statusActive=activo:
+aetherhaven.questdebug.statusCompleted=terminado:
+aetherhaven.questdebug.statusEmpty=(ninguno)
+aetherhaven.questdebug.statusLine={name} ({id})
+aetherhaven.villager.noEntityIds=Aún no se han registrado identificadores de entidades de aldeanos para este pueblo.
+aetherhaven.villager.listHeader=Aldeanos del pueblo: UUID de la entidad, origen, rol si está cargado (use UUID o ID de rol con reputación /aetherhaven … y ubicación del aldeano):
+aetherhaven.villager.listRow={uuid} | {note} | rol: {role}
+aetherhaven.villager.locateNotLoaded=Ese aldeano no está cargado (intenta acercarte o cargar fragmentos).
+aetherhaven.villager.locateNoTransform=No se permite ninguna transformación para esa entidad.
+aetherhaven.villager.locatePosition=Aldeano {uuid} ({role}): {x}, {y}, {z}
+aetherhaven.villager.locateOpRequired=El teletransporte requiere un operador (grupo OP).
+aetherhaven.villager.teleported=Teletransportado.
+aetherhaven.reputation.setFailed={detail}
+aetherhaven.debug.loot.noContainer=No hay ningún contenedor de objetos en ese bloque (el fragmento no está cargado, el relleno/la base no coinciden o no es un bloque contenedor).
+aetherhaven.debug.loot.bonusApplied=Se aplicó la bonificación de botín de Aetherhaven a este contenedor (obligatorio).
+aetherhaven.townsCommand.line={id} nombre="{name}" mundo={world} propietario={owner} fragmentos={cx},{cz} r{radius}
+aetherhaven.list.none=(ninguno)
+aetherhaven.questdebug.statusActiveLine=Activo: {list}
+aetherhaven.questdebug.statusActiveEmpty=Activo: (ninguno)
+aetherhaven.questdebug.statusCompletedLine=Completado: {list}
+aetherhaven.questdebug.statusCompletedEmpty=Completado: (ninguno)
+
+# === World portals & instance discovery (loading) ===
+# Portals
+items.Aetherhaven_Portal_Exit.name=Salida de Aetherhaven
+items.Aetherhaven_Portal_Exit.description=Úsalo para regresar al mundo principal.
+items.Aetherhaven_Portal_Enter.name=Puerta de Aetherhaven
+items.Aetherhaven_Portal_Enter.description=Úsalo para entrar en Aetherhaven.
+
+# Instance discovery (title / subtitle)
+instances.aetherhaven.title=Aetherhaven
+instances.aetherhaven.subtitle=El pueblo del cielo

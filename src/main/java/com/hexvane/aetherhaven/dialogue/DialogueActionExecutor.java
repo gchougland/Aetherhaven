@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.ui.UiMaterialLabels;
+import com.hexvane.aetherhaven.ui.UiSoundEffects;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -106,6 +107,7 @@ public final class DialogueActionExecutor {
                 "[Dialogue stub] unlock_achievement id=%s",
                 stringField(a, "id")
             );
+            case "set_main_hub_opener" -> setMainHubOpener(a, playerRef, store, npcRef);
             case "start_quest" -> startQuest(a, playerRef, store, npcRef);
             case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
             case "abandon_quest" -> abandonQuest(a, playerRef, store);
@@ -117,6 +119,34 @@ public final class DialogueActionExecutor {
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
+    }
+
+    private static void setMainHubOpener(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        String langKey = stringField(a, "langKey");
+        if (langKey == null || langKey.isBlank()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        if (town == null) {
+            return;
+        }
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (pu == null || npcUuid == null) {
+            return;
+        }
+        VillagerReputationService.setPendingMainHubBodyLangKey(town, tm, pu.getUuid(), npcUuid, langKey.trim());
     }
 
     private static void startQuest(
@@ -163,9 +193,9 @@ public final class DialogueActionExecutor {
         if (pr != null) {
             sendEventTitleBanner(
                 pr,
-                Message.translation("server.aetherhaven.banner.quest.started.secondary")
+                Message.translation("aetherhaven_misc.aetherhaven.banner.quest.started.secondary")
                     .param("name", quests.displayName(qid)),
-                Message.translation("server.aetherhaven.banner.quest.started.primary"),
+                Message.translation("aetherhaven_misc.aetherhaven.banner.quest.started.primary"),
                 true
             );
             playBannerSound(playerRef, store);
@@ -203,14 +233,14 @@ public final class DialogueActionExecutor {
         if (pr != null) {
             sendEventTitleBanner(
                 pr,
-                Message.translation("server.aetherhaven.banner.quest.completed.secondary")
+                Message.translation("aetherhaven_misc.aetherhaven.banner.quest.completed.secondary")
                     .param("name", plugin.getQuestCatalog().displayName(qid)),
-                Message.translation("server.aetherhaven.banner.quest.completed.primary"),
+                Message.translation("aetherhaven_misc.aetherhaven.banner.quest.completed.primary"),
                 true
             );
             playBannerSound(playerRef, store);
             pr.sendMessage(
-                Message.translation("server.aetherhaven.quest.completed")
+                Message.translation("aetherhaven_quests_portals.aetherhaven.quest.completed")
                     .param("name", plugin.getQuestCatalog().displayName(qid))
             );
         }
@@ -323,7 +353,7 @@ public final class DialogueActionExecutor {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr == null || res.failReason() == null) {
             if (pr != null) {
-                pr.sendMessage(Message.translation("server.aetherhaven.dialogue.gift.fail.generic"));
+                pr.sendMessage(Message.translation("aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.generic"));
             }
             return;
         }
@@ -334,11 +364,11 @@ public final class DialogueActionExecutor {
     @Nonnull
     private static String giftFailKey(@Nonnull VillagerGiftService.GiftEligibility.Reason reason) {
         return switch (reason) {
-            case VISITOR -> "server.aetherhaven.dialogue.gift.fail.visitor";
-            case EMPTY_HAND -> "server.aetherhaven.dialogue.gift.fail.emptyHand";
-            case DAILY_LIMIT -> "server.aetherhaven.dialogue.gift.fail.dailyLimit";
-            case WEEKLY_LIMIT -> "server.aetherhaven.dialogue.gift.fail.weeklyLimit";
-            case NO_CONTEXT, NO_PLAYER -> "server.aetherhaven.dialogue.gift.fail.generic";
+            case VISITOR -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.visitor";
+            case EMPTY_HAND -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.emptyHand";
+            case DAILY_LIMIT -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.dailyLimit";
+            case WEEKLY_LIMIT -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.weeklyLimit";
+            case NO_CONTEXT, NO_PLAYER -> "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.generic";
         };
     }
 
@@ -386,9 +416,9 @@ public final class DialogueActionExecutor {
             CraftingPlugin.learnRecipe(playerRef, learnedItemId, store);
             sendEventTitleBanner(
                 pr,
-                Message.translation("server.aetherhaven.banner.reputation.unlock.recipe")
+                Message.translation("aetherhaven_misc.aetherhaven.banner.reputation.unlock.recipe")
                     .param("item", learnedLabel),
-                Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
+                Message.translation("aetherhaven_misc.aetherhaven.banner.reputation.unlock.primary"),
                 false
             );
             playBannerSound(playerRef, store);
@@ -403,10 +433,10 @@ public final class DialogueActionExecutor {
         player.giveItem(stack, playerRef, store);
         sendEventTitleBanner(
             pr,
-            Message.translation("server.aetherhaven.banner.reputation.unlock.item")
+            Message.translation("aetherhaven_misc.aetherhaven.banner.reputation.unlock.item")
                 .param("item", resolveItemLabel(pr, itemId))
                 .param("count", count),
-            Message.translation("server.aetherhaven.banner.reputation.unlock.primary"),
+            Message.translation("aetherhaven_misc.aetherhaven.banner.reputation.unlock.primary"),
             false
         );
         playBannerSound(playerRef, store);
@@ -441,7 +471,7 @@ public final class DialogueActionExecutor {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(
-                Message.translation("server.aetherhaven.quest.abandoned")
+                Message.translation("aetherhaven_quests_portals.aetherhaven.quest.abandoned")
                     .param("name", plugin.getQuestCatalog().displayName(qid))
             );
         }
@@ -537,6 +567,7 @@ public final class DialogueActionExecutor {
         }
         tm.updateTown(town);
         GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+        UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_WORKBENCH_UPGRADE_COMPLETE);
     }
 
     private static void gaiaDraughtUpgradeCatalyst(
@@ -579,6 +610,7 @@ public final class DialogueActionExecutor {
         }
         tm.updateTown(town);
         GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+        UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_WORKBENCH_UPGRADE_COMPLETE);
     }
 
     private static void priestessGoldHeal(
@@ -616,6 +648,7 @@ public final class DialogueActionExecutor {
         }
         PlayerHealUtil.healToFull(playerRef, store);
         tm.updateTown(town);
+        UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_PRIESTESS_HEAL);
     }
 
     private static void giveItem(

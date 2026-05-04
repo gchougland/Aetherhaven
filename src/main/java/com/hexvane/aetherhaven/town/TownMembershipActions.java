@@ -27,28 +27,28 @@ public final class TownMembershipActions {
     ) {
         String targetName = targetUsername.trim();
         if (targetName.isEmpty()) {
-            return Message.translation("server.aetherhaven.town.invite.err.emptyName");
+            return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.emptyName");
         }
         PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, targetName);
         if (target == null) {
-            return Message.translation("server.aetherhaven.town.invite.err.targetOffline").param("name", targetName);
+            return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.targetOffline").param("name", targetName);
         }
         if (target.getUuid().equals(inviterUuid)) {
-            return Message.translation("server.aetherhaven.town.invite.err.cannotInviteSelf");
+            return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.cannotInviteSelf");
         }
         if (tm.isPlayerAffiliatedInWorld(target.getUuid())) {
-            return Message.translation("server.aetherhaven.town.invite.err.alreadyInTown");
+            return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.alreadyInTown");
         }
         town.addPendingInvite(new TownPendingInvite(target.getUuid(), System.currentTimeMillis(), inviterUuid));
         tm.updateTown(town);
         String tname = town.getDisplayName();
         target.sendMessage(
-            Message.translation("server.aetherhaven.town.invite.toTarget")
+            Message.translation("aetherhaven_town.aetherhaven.town.invite.toTarget")
                 .param("inviter", inviterRef.getUsername())
                 .param("townDisplay", tname)
         );
         inviterRef.sendMessage(
-            Message.translation("server.aetherhaven.town.invite.sent").param("name", target.getUsername())
+            Message.translation("aetherhaven_town.aetherhaven.town.invite.sent").param("name", target.getUsername())
         );
         return null;
     }
@@ -68,24 +68,24 @@ public final class TownMembershipActions {
     ) {
         String targetName = targetUsername.trim();
         if (targetName.isEmpty()) {
-            return Message.translation("server.aetherhaven.town.invite.err.emptyName");
+            return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.emptyName");
         }
         PlayerRef target = TownPlayerLookup.findOnlinePlayerByUsername(world, targetName);
         if (target == null) {
-            return Message.translation("server.aetherhaven.town.kick.err.mustBeOnline");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.mustBeOnline");
         }
         UUID tid = target.getUuid();
         if (tid.equals(town.getOwnerUuid())) {
-            return Message.translation("server.aetherhaven.town.kick.err.cannotRemoveOwner");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(tid)) {
-            return Message.translation("server.aetherhaven.town.kick.err.notMember");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         tm.updateTown(town);
         String display = town.getDisplayName();
-        target.sendMessage(Message.translation("server.aetherhaven.town.kick.removedYou").param("town", display));
+        target.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.kick.removedYou").param("town", display));
         actorRef.sendMessage(
-            Message.translation("server.aetherhaven.town.kick.removed").param("name", target.getUsername())
+            Message.translation("aetherhaven_town.aetherhaven.town.kick.removed").param("name", target.getUsername())
         );
         return null;
     }
@@ -112,17 +112,17 @@ public final class TownMembershipActions {
             }
         }
         if (targetUuid.equals(town.getOwnerUuid())) {
-            return Message.translation("server.aetherhaven.town.role.err.ownerAlwaysFull");
+            return Message.translation("aetherhaven_town.aetherhaven.town.role.err.ownerAlwaysFull");
         }
         if (!town.isMemberPlayer(targetUuid)) {
-            return Message.translation("server.aetherhaven.town.kick.err.notMember");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         town.putMember(targetUuid, role);
         tm.updateTown(town);
         String who = target != null ? target.getUsername() : targetUuid.toString();
-        Message roleMsg = Message.translation("server.aetherhaven.town.memberRole." + role.name());
+        Message roleMsg = Message.translation("aetherhaven_town.aetherhaven.town.memberRole." + role.name());
         actorRef.sendMessage(
-            Message.translation("server.aetherhaven.town.role.set").param("name", who).param("role", roleMsg)
+            Message.translation("aetherhaven_town.aetherhaven.town.role.set").param("name", who).param("role", roleMsg)
         );
         return null;
     }
@@ -142,14 +142,14 @@ public final class TownMembershipActions {
         @Nonnull TownMemberPermissions permissions
     ) {
         if (!town.getOwnerUuid().equals(actorUuid)) {
-            return Message.translation("server.aetherhaven.town.resolve.ownerOrOpOnly");
+            return Message.translation("aetherhaven_town.aetherhaven.town.resolve.ownerOrOpOnly");
         }
         if (!targetUuid.equals(town.getOwnerUuid()) && !town.isMemberPlayer(targetUuid)) {
-            return Message.translation("server.aetherhaven.town.kick.err.notMember");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         town.putMemberPermissions(targetUuid, permissions);
         tm.updateTown(town);
-        actorRef.sendMessage(Message.translation("server.aetherhaven.town.permissions.updated"));
+        actorRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.permissions.updated"));
         return null;
     }
 
@@ -167,10 +167,10 @@ public final class TownMembershipActions {
         @Nonnull UUID memberUuid
     ) {
         if (memberUuid.equals(town.getOwnerUuid())) {
-            return Message.translation("server.aetherhaven.town.kick.err.cannotRemoveOwner");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.cannotRemoveOwner");
         }
         if (!town.removeMember(memberUuid)) {
-            return Message.translation("server.aetherhaven.town.kick.err.notMember");
+            return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         tm.updateTown(town);
         PlayerRef online = null;
@@ -182,10 +182,10 @@ public final class TownMembershipActions {
         }
         if (online != null) {
             online.sendMessage(
-                Message.translation("server.aetherhaven.town.kick.removedYou").param("town", town.getDisplayName())
+                Message.translation("aetherhaven_town.aetherhaven.town.kick.removedYou").param("town", town.getDisplayName())
             );
         }
-        actorRef.sendMessage(Message.translation("server.aetherhaven.town.kick.removedGeneric"));
+        actorRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.kick.removedGeneric"));
         return null;
     }
 }

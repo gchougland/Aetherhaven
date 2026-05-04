@@ -1,0 +1,55 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: treasury debug lines, quest journal log, dialogue shell, plot construction shelf, Gaia statue small
+
+# === UI: town treasury (messages & debug tax) ===
+# UI — treasury
+aetherhaven.ui.treasury.coinsLine=Monedas de oro almacenadas: {count}
+aetherhaven.ui.treasury.depositNoCoins=No tienes monedas de oro para depositar.
+aetherhaven.ui.treasury.depositRemoveFailed=No se pudieron eliminar las monedas del inventario.
+aetherhaven.ui.treasury.deposited=Monedas de oro {count} depositadas.
+aetherhaven.ui.treasury.makeRoom=Haz espacio en tu inventario.
+aetherhaven.ui.treasury.couldNotAddCoins=No se pudieron añadir monedas.
+aetherhaven.ui.treasury.withdrew=Retiraron monedas de oro {count}.
+aetherhaven.ui.treasury.tax.comfortPercent={pct}%
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Desglose de impuestos (solo secciones cargadas; los residentes no cargados contribuyen con 0 hasta que se simulan):
+aetherhaven.ui.treasury.debug.titheNoHall=Diezmo: en este pueblo no hay un ayuntamiento completo.
+aetherhaven.ui.treasury.debug.titheZero=Diezmo: 0 de oro (sin residentes con recursos suficientes, o 0 por cálculo de políticas). Descargar/necesidades/desglose: /desglose de impuestos de Aetherhaven
+aetherhaven.ui.treasury.debug.titheApplied=Diezmo aplicado: +{amount} oro al tesoro (las mismas reglas que una colecta matutina).
+aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
+aetherhaven.ui.treasury.debug.state3=política={a} máximoPorResidente={b} residentescargados={c}
+aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) confort={comfort} oro={gold}
+aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
+aetherhaven.ui.treasury.debug.state5=mayordomos ImpuestoFestín={a} Permille del festín={b} TotalFinal={c}
+
+# === UI: quest journal (log panel) ===
+# UI — quest journal
+aetherhaven.ui.questJournal.needTown=Necesitas una ciudad en este mundo para hacer un seguimiento de las misiones.
+aetherhaven.ui.questJournal.noPermission=No tienes permiso para gestionar las misiones de la ciudad.
+aetherhaven.ui.questJournal.noActive=No hay misiones activas.
+aetherhaven.ui.questJournal.hint=Pulsa una misión para ver los detalles. × la elimina de tu registro (puedes volver a aceptarla del personaje que te la dio).
+
+# === UI: NPC dialogue page (shell / errors) ===
+# UI — dialogue
+aetherhaven.ui.dialogue.title=Diálogo
+aetherhaven.ui.dialogue.unknown=Diálogo desconocido: {id}
+aetherhaven.ui.dialogue.missingNode=Nodo faltante: {id}
+
+# === UI: plot construction (resident shelf, materials) ===
+# UI — plot construction
+aetherhaven.ui.plotConstruction.buildingTitle=Edificio
+aetherhaven.ui.plotConstruction.plotSignTitle=Señal de parcela
+aetherhaven.ui.plotConstruction.noConstruction=No hay ninguna construcción configurada para esta parcela.
+aetherhaven.ui.plotConstruction.assignResidentHint=Asigna un aldeano que viva aquí (completará su misión de casa cuando coincida).
+aetherhaven.ui.plotConstruction.houseResidentUnassigned=Sin asignar
+aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=No se pudieron cargar los datos del jugador.
+aetherhaven.ui.plotConstruction.townDataMissing=No se encontraron datos del municipio para esta manzana.
+aetherhaven.ui.plotConstruction.clearedHome=Tarea para casa completada.
+aetherhaven.ui.plotConstruction.updatedHome=Tarea para casa actualizada.
+aetherhaven.ui.plotConstruction.plotRemoved=Se eliminó la parcela y se devolvió el token de la parcela.
+aetherhaven.ui.plotConstruction.materialLine={item} x{need} (tienen {have})
+aetherhaven.ui.plotConstruction.couldNotLoadMembers=No se pudieron cargar los datos del jugador.
+
+# === UI: Gaia statue (small messages) ===
+# UI — Gaia statue
+aetherhaven.ui.gaiaStatue.notEnoughEssence=No hay suficiente esencia vital (se necesita {need}).
+aetherhaven.ui.gaiaStatue.essenceRemoveFailed=No se pudo eliminar la esencia vital del inventario.

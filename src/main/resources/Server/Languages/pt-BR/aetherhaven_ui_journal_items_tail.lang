@@ -1,0 +1,48 @@
+# Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
+# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+
+# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+aetherhaven.ui.questjournal.title=Diário de busca
+aetherhaven.ui.questjournal.hint=Selecione uma missão para obter detalhes.
+aetherhaven.ui.questjournal.abandon=Abandonar
+aetherhaven.ui.questjournal.dismissShort=×
+aetherhaven.ui.questjournal.detailPlaceholder=Detalhes da missão
+aetherhaven.ui.questjournal.detailPlaceholderBody=Escolha uma missão acima.
+
+items.Aetherhaven_Management_Block.name=Prateleira de registros da cidade
+items.Aetherhaven_Management_Block.description=Prateleira de informações para um edifício concluído. Exibe o status da construção do respectivo lote.
+
+items.Aetherhaven_Sprinkler_Iron.name=Aspersor de ferro
+items.Aetherhaven_Sprinkler_Iron.description=A irrigação ara o solo um bloco abaixo, em uma área de 3x3. Executa uma vez por manhã no jogo. Menor área de cobertura.
+items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de tório
+items.Aetherhaven_Sprinkler_Thorium.description=Waters revolveu o solo um bloco abaixo, numa área de 5x5. Uma vez por manhã, dentro do jogo. Maior que ferro.
+items.Aetherhaven_Sprinkler_Cobalt.name=Sprinkler de cobalto
+items.Aetherhaven_Sprinkler_Cobalt.description=A água revolveu o solo um bloco abaixo, numa área de 7x7. Uma vez por manhã, dentro do jogo. Ampla cobertura.
+items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
+items.Aetherhaven_Sprinkler_Adamantite.description=A água revolveu o solo um bloco abaixo, numa área de 9x9. Uma vez por manhã, dentro do jogo. Cobertura máxima.
+
+# === NPC role display names (npcRoles.*) ===
+npcRoles.Aetherhaven_Elder_Lyren.name=Ancião Lyren
+npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup
+npcRoles.Aetherhaven_Merchant.name=Vex Sunderlane
+npcRoles.Aetherhaven_Blacksmith.name=Vale Garren
+npcRoles.Aetherhaven_Farmer.name=Irienne Mossmark
+npcRoles.Aetherhaven_Priestess.name=Serah Thornwell
+npcRoles.Aetherhaven_Miner.name=Veia de pedra Gorruk
+npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
+npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
+
+items.Aetherhaven_Production_Storage.name=Lojas no local de trabalho
+items.Aetherhaven_Production_Storage.description=Armazena o que seus trabalhadores trazem. Abra para definir as saídas e pegar pilhas. Faz parte do edifício e não pode ser recolhido.
+items.Aetherhaven_Plot_Token_Miners_Hut.name=Ficha de loteamento da cabana dos mineiros
+items.Aetherhaven_Plot_Token_Miners_Hut.description=Indica onde a cabana pré-fabricada dos mineiros pode ser construída. Fabricada na mesa de planejamento urbano.
+items.Aetherhaven_Plot_Token_Lumbermill.name=Ficha de terreno da serraria
+items.Aetherhaven_Plot_Token_Lumbermill.description=Indica onde a estrutura pré-fabricada da serraria pode ser construída. Faça o pedido na secretaria de planejamento urbano.
+items.Aetherhaven_Plot_Token_Barn.name=Ficha de lote de celeiro
+items.Aetherhaven_Plot_Token_Barn.description=Indica onde o celeiro pré-fabricado pode ser construído. Faça a solicitação na secretaria de planejamento urbano.
+
+items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
+items.Aetherhaven_Plot_Token_Gaia_Altar.description=Indica onde o altar pré-fabricado de Gaia pode ser construído. Fabricado na mesa de planejamento urbano.
+
+items.Aetherhaven_Statue_of_Gaia.name=Estátua de Gaia
+items.Aetherhaven_Statue_of_Gaia.description=Uma imagem abençoada para o altar. Os donos da cidade podem chamar de volta os moradores desaparecidos com a essência da vida.
