@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.0] - Unreleased
+
+### Fixed
+
+- **Villager Duplication Bug** Fixed bugs where multiples of a villager would spawn in the Inn.
+
 ## [1.3.0] - 5/4/2026
 
 ### Added

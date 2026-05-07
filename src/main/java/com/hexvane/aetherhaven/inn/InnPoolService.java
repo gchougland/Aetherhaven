@@ -42,6 +42,7 @@ import java.util.Set;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -601,22 +602,8 @@ public final class InnPoolService {
             return;
         }
 
-        List<String> presentRoles = new ArrayList<>();
-        for (String sid : town.getInnPoolNpcIds()) {
-            try {
-                UUID u = UUID.fromString(sid.trim());
-                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
-                if (ref == null || !ref.isValid()) {
-                    continue;
-                }
-                var npcType = NPCEntity.getComponentType();
-                NPCEntity npc = npcType != null ? store.getComponent(ref, npcType) : null;
-                if (npc != null && npc.getRoleName() != null) {
-                    presentRoles.add(npc.getRoleName());
-                }
-            } catch (Exception ignored) {
-            }
-        }
+        Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
+        mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
 
         long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
         long seed =
@@ -712,6 +699,85 @@ public final class InnPoolService {
             }
         });
         return found.get();
+    }
+
+    /**
+     * Inn visitor roles currently present in the entity store for this town. Uses a parallel archetype walk so we still
+     * see visitors even when UUID-to-ref lookup ({@code getRefFromUUID}) lags registration (same world-thread caveat as
+     * {@link #townHasResidentWithNpcRole}).
+     */
+    @Nonnull
+    private static Set<String> collectTownVisitorNpcRolesFromStore(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        Set<String> roles = ConcurrentHashMap.newKeySet();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.isVisitorKind(b.getKind())) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            String roleName = npc != null ? npc.getRoleName() : null;
+            if (roleName != null && !roleName.isBlank()) {
+                roles.add(roleName.trim());
+            }
+        });
+        return roles;
+    }
+
+    /**
+     * When a quest-locked pool UUID has no valid ref (chunk unloaded or UUID index lag), {@link
+     * #collectTownVisitorNpcRolesFromStore} may miss that visitor. Treat active inn-quest roles as taken so we do not
+     * spawn another copy of the same role.
+     */
+    private static void mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Set<String> presentRoles
+    ) {
+        boolean anyLockedMissingRef = false;
+        for (String sid : town.getInnPoolNpcIds()) {
+            UUID u = parseUuid(sid);
+            if (u == null || !town.isInnVisitorLocked(u)) {
+                continue;
+            }
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            if (ref != null && ref.isValid()) {
+                continue;
+            }
+            anyLockedMissingRef = true;
+            break;
+        }
+        if (!anyLockedMissingRef) {
+            return;
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BLACKSMITH_SHOP)) {
+            presentRoles.add(AetherhavenConstants.NPC_BLACKSMITH);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_MERCHANT_STALL)) {
+            presentRoles.add(AetherhavenConstants.NPC_MERCHANT);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_FARM_PLOT)) {
+            presentRoles.add(AetherhavenConstants.NPC_FARMER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_GAIA_ALTAR)) {
+            presentRoles.add(AetherhavenConstants.NPC_PRIESTESS);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_MINERS_HUT)) {
+            presentRoles.add(AetherhavenConstants.NPC_MINER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_LUMBERMILL)) {
+            presentRoles.add(AetherhavenConstants.NPC_LOGGER);
+        }
+        if (town.hasQuestActive(AetherhavenConstants.QUEST_BARN)) {
+            presentRoles.add(AetherhavenConstants.NPC_RANCHER);
+        }
     }
 
     /** Unlocked pool UUIDs still without a store ref (e.g. still loading after restart). */
@@ -888,22 +954,8 @@ public final class InnPoolService {
         if (wtr == null) {
             return;
         }
-        List<String> presentRoles = new ArrayList<>();
-        for (String sid : town.getInnPoolNpcIds()) {
-            try {
-                UUID u = UUID.fromString(sid.trim());
-                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
-                if (ref == null || !ref.isValid()) {
-                    continue;
-                }
-                var npcType = NPCEntity.getComponentType();
-                NPCEntity npc = npcType != null ? store.getComponent(ref, npcType) : null;
-                if (npc != null && npc.getRoleName() != null) {
-                    presentRoles.add(npc.getRoleName());
-                }
-            } catch (Exception ignored) {
-            }
-        }
+        Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
+        mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
 
         List<String> mergedOrder = mergedVisitorRoleOrder(town, plugin, store);
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
