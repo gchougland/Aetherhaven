@@ -48,6 +48,16 @@ aetherhaven.ui.memberPermissions.reviveVillagers=Revive villagers at the Gaia st
 aetherhaven.ui.memberPermissions.err.notOwner=Only the town owner can edit permissions.
 aetherhaven.ui.memberPermissions.err.notInTown=That player is not in this town.
 aetherhaven.town.rolecmd.playerMustBeOnline=Player must be online.
+
+# === /aetherhaven replace-charter ===
+aetherhaven.town.charterReplace.notOwner=Only the town owner can repair the charter (unless you have town admin permission).
+aetherhaven.town.charterReplace.wrongWorld=That town is not in this world.
+aetherhaven.town.charterReplace.chunkNotLoaded=The charter chunk is not loaded — move closer to your town's charter coordinates and try again.
+aetherhaven.town.charterReplace.clearFirst=The saved charter position still has a solid block — break it until that cell is empty, then run this command again.
+aetherhaven.town.charterReplace.placeFailed=Could not place the charter block (spot blocked?).
+aetherhaven.town.charterReplace.linkFailed=Charter block failed to link (see server log).
+aetherhaven.town.charterReplace.alreadyOk=This charter block is already linked to your town.
+aetherhaven.town.charterReplace.done=Charter block restored for "{town}".
 aetherhaven.town.rolecmd.roleInvalid=Role must be BUILD, QUEST, or BOTH.
 aetherhaven.town.leave.notInTown=You are not in a town.
 aetherhaven.town.leave.ownerCannotLeave=Owners cannot leave; transfer ownership is not implemented yet.

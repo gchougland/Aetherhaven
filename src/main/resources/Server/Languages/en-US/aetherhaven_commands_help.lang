@@ -4,6 +4,9 @@
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
 commands.aetherhaven.towns.desc=List Aetherhaven towns in the current world
 
+commands.aetherhaven.replace_charter.desc=Repair the charter block at your town's saved charter location (same territory center; use the charter UI to move it)
+commands.aetherhaven.replace_charter.townName.desc=Optional town display name for operators fixing another player's town (full name including spaces)
+
 commands.aetherhaven.town.desc=Town membership: invite, roles, leave
 commands.aetherhaven.town.invite.desc=Invite an online player to your town
 commands.aetherhaven.town.invite.player.desc=Player username (must be online)

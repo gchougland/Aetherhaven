@@ -22,6 +22,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class CharterRelocationService {
     private static final int PLACE_SETTINGS = 10;
@@ -105,6 +106,102 @@ public final class CharterRelocationService {
             pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.charterMoved"));
         }
         return true;
+    }
+
+    /**
+     * Restore a missing or unlinked charter block at the {@link TownRecord}'s saved charter coordinates only (owner or
+     * {@link com.hexvane.aetherhaven.AetherhavenConstants#PERMISSION_TOWN_ADMIN} / creative). Does not change charter
+     * position or territory — use the charter UI relocation flow to move the anchor.
+     */
+    public static boolean tryReplaceCharter(
+        @Nonnull World world,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull Rotation horizontalYaw,
+        @Nonnull UUID actorUuid,
+        boolean actorMayBypassOwnership,
+        @Nullable PlayerRef feedback
+    ) {
+        if (!town.getOwnerUuid().equals(actorUuid) && !actorMayBypassOwnership) {
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.notOwner");
+            return false;
+        }
+        if (!world.getName().equals(town.getWorldName())) {
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.wrongWorld");
+            return false;
+        }
+
+        String townIdStr = town.getTownId().toString();
+        int cx = town.getCharterX();
+        int cy = town.getCharterY();
+        int cz = town.getCharterZ();
+
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(cx, cz));
+        if (chunk == null) {
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.chunkNotLoaded");
+            return false;
+        }
+
+        BlockType atType = world.getBlockType(cx, cy, cz);
+        boolean blockIsCharter =
+            atType != null && AetherhavenConstants.CHARTER_BLOCK_TYPE_ID.equals(atType.getId());
+
+        if (blockIsCharter) {
+            Ref<ChunkStore> blockRef = chunk.getBlockComponentEntity(cx, cy, cz);
+            if (blockRef == null || !blockRef.isValid()) {
+                sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.linkFailed");
+                return false;
+            }
+            Store<ChunkStore> cs = blockRef.getStore();
+            CharterBlock existing = cs.getComponent(blockRef, CharterBlock.getComponentType());
+            if (existing != null && townIdStr.equals(existing.getTownId())) {
+                sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.alreadyOk");
+                return true;
+            }
+            cs.putComponent(blockRef, CharterBlock.getComponentType(), new CharterBlock(townIdStr));
+            town.setCharterPosition(cx, cy, cz);
+            tm.updateTown(town);
+            sendReplaceDone(feedback, town);
+            return true;
+        }
+
+        if (!isReplaceableForCharter(world, cx, cy, cz)) {
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.clearFirst");
+            return false;
+        }
+        RotationTuple rt = RotationTuple.of(horizontalYaw, Rotation.None, Rotation.None);
+        boolean placed = chunk.placeBlock(cx, cy, cz, AetherhavenConstants.CHARTER_ITEM_ID, rt, PLACE_SETTINGS, false);
+        if (!placed) {
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.placeFailed");
+            return false;
+        }
+        Ref<ChunkStore> newRef = chunk.getBlockComponentEntity(cx, cy, cz);
+        if (newRef == null || !newRef.isValid()) {
+            world.breakBlock(cx, cy, cz, BREAK_SETTINGS);
+            sendReplaceMsg(feedback, "aetherhaven_town.aetherhaven.town.charterReplace.linkFailed");
+            return false;
+        }
+        Store<ChunkStore> cs = newRef.getStore();
+        cs.putComponent(newRef, CharterBlock.getComponentType(), new CharterBlock(townIdStr));
+        town.setCharterPosition(cx, cy, cz);
+        tm.updateTown(town);
+        sendReplaceDone(feedback, town);
+        return true;
+    }
+
+    private static void sendReplaceDone(@Nullable PlayerRef feedback, @Nonnull TownRecord town) {
+        if (feedback != null) {
+            feedback.sendMessage(
+                Message.translation("aetherhaven_town.aetherhaven.town.charterReplace.done")
+                    .param("town", town.getDisplayName())
+            );
+        }
+    }
+
+    private static void sendReplaceMsg(@Nullable PlayerRef feedback, @Nonnull String translationKey) {
+        if (feedback != null) {
+            feedback.sendMessage(Message.translation(translationKey));
+        }
     }
 
     private static boolean isReplaceableForCharter(@Nonnull World world, int x, int y, int z) {

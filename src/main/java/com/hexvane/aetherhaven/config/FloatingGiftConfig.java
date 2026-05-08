@@ -63,8 +63,8 @@ public final class FloatingGiftConfig {
     private boolean enabled = true;
     private double spawnRadiusBlocks = 100.0;
     private double spawnHeightOffsetBlocks = 15.0;
-    private double spawnIntervalDaysMin = 0.32;
-    private double spawnIntervalDaysMax = 0.48;
+    private double spawnIntervalDaysMin = 0.1;
+    private double spawnIntervalDaysMax = 0.3;
     private double moveSpeedBlocksPerSec = 1.3;
     private double fallSpeedBlocksPerSec = 8.5;
     private double maxLifeSeconds = 240.0;

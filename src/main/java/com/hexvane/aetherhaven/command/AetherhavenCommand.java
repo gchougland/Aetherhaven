@@ -9,6 +9,7 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.addSubCommand(new PlotSignAdminCommand());
         this.addSubCommand(new AetherhavenStarterKitCommand());
         this.addSubCommand(new AetherhavenTownsCommand());
+        this.addSubCommand(new AetherhavenReplaceCharterCommand());
         this.addSubCommand(new AetherhavenTownCommand());
         this.addSubCommand(new AetherhavenReloadCommand());
         this.addSubCommand(new ExportAvatarSkinCommand());
