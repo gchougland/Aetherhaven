@@ -166,6 +166,36 @@ $C.@PageOverlay {
             Background: #5e512c(0.0);
           }
 
+          Group #WorkplaceAssignRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+
+            Label #WorkplaceAssignHint {
+              Style: (...$C.@DefaultLabelStyle, Wrap: true);
+              Anchor: (Bottom: 8);
+            }
+
+            Group #WorkplaceAssignDropdown {
+              LayoutMode: Left;
+              Anchor: (Bottom: 8);
+
+              Label #WorkplaceAssignFieldLabel {
+                Text: "";
+                Anchor: (Top: 6, Left: 6, Right: 16);
+                Style: $C.@DefaultLabelStyle;
+              }
+
+              $C.@DropdownBox #Input {
+                @Anchor = (Left: 0, Right: 16);
+              }
+            }
+
+            $C.@TextButton #AssignWorkplaceButton {
+              Text: "";
+            }
+          }
+
           Group #HouseResidentRow {
             LayoutMode: Top;
             Visible: false;
@@ -174,6 +204,21 @@ $C.@PageOverlay {
             Label #HouseResidentHint {
               Style: (...$C.@DefaultLabelStyle, Wrap: true);
               Anchor: (Bottom: 8);
+            }
+
+            Group #HouseResidentHideElsewhereCheckbox {
+              LayoutMode: Left;
+              Anchor: (Bottom: 8);
+
+              $C.@CheckBox #CheckBox {
+              }
+
+              Label #HouseResidentHideElsewhereLabel {
+                Text: "";
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Anchor: (Right: 30, Left: 11);
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+              }
             }
 
             Group #HouseResidentDropdown {

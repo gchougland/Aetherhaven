@@ -29,6 +29,14 @@ aetherhaven.ui.plotconstruction.moveBuildingModalTitle=Move building?
 aetherhaven.ui.plotconstruction.moveBuildingModalBody=Opens plot placement to choose a new site. Moving destroys and rebuilds the old building; remove valuables, pets, and loose items inside the footprint first.
 aetherhaven.ui.plotconstruction.moveBuildingModalConfirm=Continue
 aetherhaven.ui.plotconstruction.moveBuildingModalCancel=Cancel
+aetherhaven.ui.plotconstruction.workplaceAssignHint=Assign a villager whose job matches this workplace. They will move to the work station here.
+aetherhaven.ui.plotconstruction.workplaceWorker=Worker
+aetherhaven.ui.plotconstruction.assignWorkplace=Assign worker
+aetherhaven.ui.plotconstruction.workplacePickWorker=Choose a villager to assign to this workplace.
+aetherhaven.ui.plotconstruction.workplaceInvalidWorker=Invalid worker selection.
+aetherhaven.ui.plotconstruction.workplaceUpdated=Workplace assignment updated.
+aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Hide villagers housed elsewhere
+aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=When enabled, villagers who already have a home on another house plot are hidden from the list.
 
 aetherhaven.ui.villagerneeds.title=Town needs
 aetherhaven.ui.villagerneeds.hint=Select a villager to view meters and portrait.

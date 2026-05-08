@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.economy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
@@ -95,7 +96,7 @@ public final class TownTaxService {
             if (!world.getName().equals(town.getWorldName())) {
                 continue;
             }
-            PlotInstance hall = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
+            PlotInstance hall = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
             if (hall == null) {
                 continue;
             }
@@ -103,7 +104,7 @@ public final class TownTaxService {
             if (last != null && last >= titheDay) {
                 continue;
             }
-            TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg);
+            TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg, plugin.getConstructionCatalog());
             long added = breakdown.finalTotal();
             // Only stamp the dawn day when gold was credited (never advance last on a dry run).
             if (added > 0L) {
@@ -140,7 +141,7 @@ public final class TownTaxService {
         boolean ignoreAlreadyCollectedThisCalendarDay
     ) {
         if (requireCompleteTownHall
-            && town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) == null) {
+            && town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) == null) {
             return -1L;
         }
         long titheDay = VillagerReputationService.currentGameEpochDay(store);
@@ -152,7 +153,7 @@ public final class TownTaxService {
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
-        TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg);
+        TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg, plugin.getConstructionCatalog());
         long added = breakdown.finalTotal();
         if (added > 0L) {
             town.addTreasuryGoldCoins(added);
@@ -166,7 +167,8 @@ public final class TownTaxService {
     public static TaxMorningBreakdown computeTaxMorningBreakdown(
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
-        @Nonnull AetherhavenPluginConfig cfg
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
         int morningStart = cfg.getGameMorningStartHour();
@@ -174,7 +176,7 @@ public final class TownTaxService {
         boolean morning = wtr != null && AetherhavenMorningWindow.isGameMorning(wtr, morningStart, morningEndEx);
         long dawnDay = VillagerReputationService.currentGameEpochDay(store);
         Long last = town.getTreasuryLastTaxEpochDay();
-        boolean hall = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) != null;
+        boolean hall = town.findCompletePlotWithConstruction(constructionCatalog, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) != null;
         boolean wouldCollect = hall && (last == null || last < dawnDay);
 
         int maxPer = cfg.getTreasuryMaxGoldTaxPerVillagerPerDay();

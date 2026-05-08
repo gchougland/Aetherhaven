@@ -160,6 +160,30 @@ public final class AetherhavenConstants {
     /** Barn workplace; definition in {@code Server/Aetherhaven/Buildings/plot_barn.json}. */
     public static final String CONSTRUCTION_PLOT_BARN = "plot_barn";
 
+    /** Variant footprint; gameplay id resolves to {@link #CONSTRUCTION_PLOT_BARN}. */
+    public static final String CONSTRUCTION_PLOT_BARN_HYTINY = "plot_barn_hytiny";
+
+    /** Non-craftable token for {@link #CONSTRUCTION_PLOT_BARN_HYTINY}. */
+    public static final String PLOT_TOKEN_BARN_HYTINY = "Aetherhaven_Plot_Token_Barn_Hytiny";
+
+    /** House variants; gameplay id resolves to {@link #CONSTRUCTION_PLOT_HOUSE}. */
+    public static final String CONSTRUCTION_PLOT_HOUSE_HYTINY_COZY_COTTAGE = "plot_house_hytiny_cozy_cottage";
+
+    public static final String CONSTRUCTION_PLOT_HOUSE_HYTINY_JAPANESE_TEA_HOUSE = "plot_house_hytiny_japanese_tea_house";
+
+    public static final String CONSTRUCTION_PLOT_HOUSE_HYTINY_COZY_CAMPER = "plot_house_hytiny_cozy_camper";
+
+    /** Decorative plot only (no gameplay archetype match). */
+    public static final String CONSTRUCTION_DECORATION_HYTINY_POTTED_TREEHOUSE = "plot_decoration_hytiny_potted_treehouse";
+
+    public static final String PLOT_TOKEN_HOUSE_HYTINY_COZY_COTTAGE = "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage";
+
+    public static final String PLOT_TOKEN_HOUSE_HYTINY_JAPANESE_TEA_HOUSE = "Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House";
+
+    public static final String PLOT_TOKEN_HOUSE_HYTINY_COZY_CAMPER = "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper";
+
+    public static final String PLOT_TOKEN_DECORATION_HYTINY_POTTED_TREEHOUSE = "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse";
+
     public static final String QUEST_BUILD_INN = "q_build_inn";
 
     public static final String QUEST_BUILD_TOWN_HALL = "q_build_town_hall";

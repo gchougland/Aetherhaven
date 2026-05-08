@@ -15,9 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -59,7 +61,44 @@ public final class ConstructionCatalog {
             }
             LOGGER.atInfo().log("Loaded %s construction(s) from classpath %s", map.size(), AetherhavenAssetPaths.buildingsPrefix());
         }
+        validateCountsAsAliases(map);
         return new ConstructionCatalog(Collections.unmodifiableMap(map));
+    }
+
+    private static void validateCountsAsAliases(@Nonnull Map<String, ConstructionDefinition> map) {
+        for (ConstructionDefinition def : map.values()) {
+            String raw = def.getCountsAsConstructionIdRaw();
+            if (raw == null || raw.isBlank()) {
+                continue;
+            }
+            String target = raw.trim();
+            if (target.equals(def.getId())) {
+                LOGGER.atWarning().log("Construction %s countsAsConstructionId points to itself", def.getId());
+                continue;
+            }
+            if (!map.containsKey(target)) {
+                LOGGER.atWarning().log("Construction %s countsAsConstructionId '%s' missing from catalog", def.getId(), target);
+                continue;
+            }
+            Set<String> chain = new HashSet<>();
+            String walk = def.getId();
+            int guard = 0;
+            while (walk != null && guard++ < 64) {
+                if (!chain.add(walk)) {
+                    LOGGER.atWarning().log("Construction countsAsConstructionId cycle involving %s", def.getId());
+                    break;
+                }
+                ConstructionDefinition step = map.get(walk);
+                if (step == null) {
+                    break;
+                }
+                String next = step.getCountsAsConstructionIdRaw();
+                if (next == null || next.isBlank()) {
+                    break;
+                }
+                walk = next.trim();
+            }
+        }
     }
 
     private static void loadFromStream(
@@ -138,5 +177,43 @@ public final class ConstructionCatalog {
     @Nonnull
     public List<String> ids() {
         return new ArrayList<>(byId.keySet());
+    }
+
+    /**
+     * Resolves {@code plotStoredConstructionId} (variant or canonical) to the gameplay construction id used for
+     * production catalogs, quests, and workplace matching.
+     */
+    @Nonnull
+    public String resolveGameplayConstructionId(@Nullable String plotStoredConstructionId) {
+        if (plotStoredConstructionId == null || plotStoredConstructionId.isBlank()) {
+            return "";
+        }
+        Set<String> visited = new HashSet<>();
+        String current = plotStoredConstructionId.trim();
+        for (int i = 0; i < 64; i++) {
+            if (!visited.add(current)) {
+                return current;
+            }
+            ConstructionDefinition def = byId.get(current);
+            if (def == null) {
+                return current;
+            }
+            String alias = def.getCountsAsConstructionIdRaw();
+            if (alias == null || alias.isBlank()) {
+                return def.getId() != null ? def.getId() : current;
+            }
+            current = alias.trim();
+        }
+        return plotStoredConstructionId.trim();
+    }
+
+    /** True when the canonical definition for {@code gameplayConstructionId} opts into random multi-plot schedule picks. */
+    public boolean isScheduleSharedUtilityGameplay(@Nonnull String gameplayConstructionId) {
+        String g = gameplayConstructionId.trim();
+        if (g.isEmpty()) {
+            return false;
+        }
+        ConstructionDefinition canon = byId.get(g);
+        return canon != null && canon.isScheduleSharedUtilityPick();
     }
 }

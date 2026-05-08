@@ -142,14 +142,30 @@ public final class VillagerScheduleService {
             return;
         }
 
-        VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(town, binding, uc.getUuid(), loc, vdef);
+        VillagerScheduleResolveOutcome out = VillagerScheduleResolver.resolvePlot(
+            town,
+            binding,
+            uc.getUuid(),
+            loc,
+            vdef,
+            plugin.getConstructionCatalog(),
+            tickState,
+            timeJump
+        );
         UUID targetPlot = out.plotId();
         if (targetPlot == null) {
             if (cfg.isVillagerScheduleDebugLog() && gameEpochHour != tickState.getLastUnresolvedDebugLogGameEpochHour()) {
                 tickState.setLastUnresolvedDebugLogGameEpochHour(gameEpochHour);
                 commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
                 String why =
-                    VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(town, binding, uc.getUuid(), loc, vdef);
+                    VillagerScheduleResolver.describeSchedulePlotUnresolvedReason(
+                        town,
+                        binding,
+                        uc.getUuid(),
+                        loc,
+                        vdef,
+                        plugin.getConstructionCatalog()
+                    );
                 LOGGER.at(Level.INFO).log(
                     "[Aetherhaven schedule] unresolved plot — role=%s npc=%s segment=%s time=%s town=%s kind=%s jobPlot=%s preferredPlot=%s reason=%s (retrying)",
                     roleId,
@@ -166,9 +182,21 @@ public final class VillagerScheduleService {
             return;
         }
 
+        if (out.hasUtilityPickPersist()) {
+            tickState.setScheduleUtilityPick(
+                out.utilityPersistGameplayConstructionId(),
+                out.utilityPersistScheduleSegment(),
+                out.utilityPersistPlotId()
+            );
+        } else {
+            tickState.clearScheduleUtilityPick();
+        }
+
         UUID current = binding.getPreferredPlotId();
         boolean needsApply = timeJump || newCalendarMinute || current == null || !targetPlot.equals(current);
         if (!needsApply) {
+            tickState.setLastGameEpochMinute(epochMinute);
+            commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
             return;
         }
 

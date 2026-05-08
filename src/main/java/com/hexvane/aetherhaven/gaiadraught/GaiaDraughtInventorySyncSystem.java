@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -75,6 +76,9 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        if (town != null && town.hasPendingCraftRecipeUnlocks(uc.getUuid())) {
+            TownSharedRecipeUnlockService.tryFlushPendingCraftRecipes(store, playerRef, town, tm, uc.getUuid());
+        }
         EntityStatMap statMap = store.getComponent(playerRef, EntityStatMap.getComponentType());
         if (statMap != null) {
             if (town == null) {

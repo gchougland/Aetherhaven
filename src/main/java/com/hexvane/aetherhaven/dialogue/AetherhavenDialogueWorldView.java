@@ -116,7 +116,7 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String constructionId
     ) {
         TownRecord t = townFor(playerRef, store);
-        return t != null && t.hasCompletePlotWithConstruction(constructionId.trim());
+        return t != null && t.hasCompletePlotWithConstruction(plugin.getConstructionCatalog(), constructionId.trim());
     }
 
     @Override
@@ -142,7 +142,7 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (!t.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)) {
             return false;
         }
-        if (!t.hasCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
+        if (!t.hasCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
             return false;
         }
         return t.getInnPoolNpcIds().isEmpty();

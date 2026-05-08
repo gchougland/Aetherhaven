@@ -239,7 +239,7 @@ public final class SprinklerWateringService {
     private static int extraSprinklerRadiusForPosition(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, int blockX, int blockZ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.findTownContainingBlock(world.getName(), blockX, blockZ);
-        if (town == null || !CharterSpecializationModifiers.farmSprinklerRadiusBonus(town)) {
+        if (town == null || !CharterSpecializationModifiers.farmSprinklerRadiusBonus(town, plugin.getConstructionCatalog())) {
             return 0;
         }
         return CharterSpecializationModifiers.FARM_SPRINKLER_EXTRA_RADIUS;

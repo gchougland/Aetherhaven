@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.production;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.poi.PoiEntry;
@@ -114,8 +115,9 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
         if (plot == null || plot.getState() != PlotInstanceState.COMPLETE) {
             return;
         }
-        String cid = plot.getConstructionId();
-        if (!expectedConstruction.equals(cid)) {
+        ConstructionCatalog ccat = plugin.getConstructionCatalog();
+        String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
+        if (!expectedConstruction.equals(gameplayPlotId)) {
             return;
         }
         String roleId = npc.getRoleName();
@@ -127,14 +129,14 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         String workConstructionId = vdef.getWorkConstructionId();
-        if (workConstructionId == null || !workConstructionId.equals(cid)) {
+        if (workConstructionId == null || !workConstructionId.equals(gameplayPlotId)) {
             return;
         }
         ProductionCatalog catalog = plugin.getProductionCatalog();
         PlotProductionState state = town.getOrCreatePlotProduction(jobPlotId);
         state.migrateIfNeeded();
         ProductionCatalog.Entry entry =
-            ProductionEffectiveCatalog.effective(catalog, plugin.getWorkplaceUnlockCatalog(), cid, state);
+            ProductionEffectiveCatalog.effective(catalog, plugin.getWorkplaceUnlockCatalog(), gameplayPlotId, state);
         if (entry == null || entry.catalogSize() <= 0) {
             return;
         }

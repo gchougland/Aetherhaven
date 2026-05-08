@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -19,13 +20,14 @@ public final class HouseResidentAssignment {
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
         @Nullable UUID residentUuid,
-        @Nonnull TownManager tm
+        @Nonnull TownManager tm,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
-        assignResident(town, plotId, residentUuid, tm, null, null);
+        assignResident(town, plotId, residentUuid, tm, null, null, constructionCatalog);
     }
 
     /**
-     * Same as {@link #assignResident(TownRecord, UUID, UUID, TownManager)}; when {@code world} and {@code store} are
+     * Same as {@link #assignResident(TownRecord, UUID, UUID, TownManager, ConstructionCatalog)}; when {@code world} and {@code store} are
      * non-null, updates the resident NPC registry for revival UI.
      */
     public static void assignResident(
@@ -34,10 +36,12 @@ public final class HouseResidentAssignment {
         @Nullable UUID residentUuid,
         @Nonnull TownManager tm,
         @Nullable World world,
-        @Nullable Store<EntityStore> store
+        @Nullable Store<EntityStore> store,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         PlotInstance pi = town.findPlotById(plotId);
-        if (pi == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(pi.getConstructionId())) {
+        if (pi == null
+            || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(pi.getConstructionId()))) {
             return;
         }
         if (pi.getState() != PlotInstanceState.COMPLETE) {

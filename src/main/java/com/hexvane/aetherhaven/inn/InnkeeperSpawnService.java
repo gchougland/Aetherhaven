@@ -43,7 +43,7 @@ public final class InnkeeperSpawnService {
             if (!town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)) {
                 continue;
             }
-            if (!town.hasCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
+            if (!town.hasCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
                 continue;
             }
             world.execute(() -> spawnInnkeeperIfPossible(world, plugin, tm, town));
@@ -72,7 +72,7 @@ public final class InnkeeperSpawnService {
         if (town.getInnkeeperEntityUuid() != null) {
             return;
         }
-        PlotInstance plot = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        PlotInstance plot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
         if (plot == null) {
             return;
         }

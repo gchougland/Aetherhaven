@@ -2,6 +2,9 @@ package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -19,6 +22,8 @@ public final class QuestRewardService {
 
     public static void grantNonReputationRewards(
         @Nonnull QuestDefinition def,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
@@ -51,7 +56,19 @@ public final class QuestRewardService {
                 if (rid == null || rid.isBlank()) {
                     continue;
                 }
-                CraftingPlugin.learnRecipe(playerRef, rid.trim(), store);
+                String grantTo = r.grantTo();
+                if (grantTo != null && "town_members".equalsIgnoreCase(grantTo.trim())) {
+                    TownSharedRecipeUnlockService.grantTownWideLearnRecipe(town, tm, store, rid.trim());
+                } else {
+                    if (grantTo != null && !grantTo.isBlank() && !"player".equalsIgnoreCase(grantTo.trim())) {
+                        LOGGER.atWarning().log(
+                            "Unknown learn_recipe grantTo=%s for quest %s; granting to completing player only",
+                            grantTo,
+                            def.idOrEmpty()
+                        );
+                    }
+                    CraftingPlugin.learnRecipe(playerRef, rid.trim(), store);
+                }
             } else if ("currency".equalsIgnoreCase(kind) || "unlock".equalsIgnoreCase(kind)) {
                 LOGGER.atInfo().log(
                     "[Quest stub] reward kind %s for quest %s (not implemented)",

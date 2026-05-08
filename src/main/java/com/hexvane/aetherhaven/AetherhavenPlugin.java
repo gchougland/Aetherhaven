@@ -666,7 +666,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     if (pi.getState() != PlotInstanceState.COMPLETE) {
                         continue;
                     }
-                    if (!ProductionCatalog.isProductionWorkplaceConstruction(pi.getConstructionId())) {
+                    String gameplayCid = p.getConstructionCatalog().resolveGameplayConstructionId(pi.getConstructionId());
+                    if (!ProductionCatalog.isProductionWorkplaceConstruction(gameplayCid)) {
                         continue;
                     }
                     if (pi.containsWorldBlock(base.x, base.y, base.z)) {

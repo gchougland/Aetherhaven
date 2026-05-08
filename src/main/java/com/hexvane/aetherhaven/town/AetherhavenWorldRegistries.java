@@ -29,7 +29,11 @@ public final class AetherhavenWorldRegistries {
         return TOWN_MANAGERS.computeIfAbsent(world.getName(), n -> {
             TownManager m = new TownManager(world, TownManager.pluginData(plugin));
             m.loadFromDisk();
-            m.clampAllPlotProductionToCatalog(plugin.getProductionCatalog(), plugin.getWorkplaceUnlockCatalog());
+            m.clampAllPlotProductionToCatalog(
+                plugin.getProductionCatalog(),
+                plugin.getWorkplaceUnlockCatalog(),
+                plugin.getConstructionCatalog()
+            );
             return m;
         });
     }

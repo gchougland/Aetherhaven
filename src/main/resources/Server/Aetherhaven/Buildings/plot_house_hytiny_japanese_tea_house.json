@@ -1,0 +1,33 @@
+{
+  "id": "plot_house_hytiny_japanese_tea_house",
+  "displayName": "Hytiny's Japanese Tea House",
+  "description": "A tranquil tea-house home. Counts as a standard house for resident assignment and quests. Prefab built by HytinyBuilds.",
+  "prefabPath": "Hytinys_Japanese_Tea_House.prefab.json",
+  "countsAsConstructionId": "plot_house",
+  "selfBuildGameDays": 0.5,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House",
+  "plotAnchorOffset": [4, 0, 4],
+  "managementBlockLocalPos": [-2, 3, 5],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 48,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 235 },
+    { "resourceTypeId": "Rock", "count": 75 }
+  ],
+  "pois": [
+    {
+      "localX": 1,
+      "localY": 2,
+      "localZ": 2,
+      "interactionKind": "SLEEP",
+      "tags": ["SLEEP", "ENERGY"],
+      "capacity": 1,
+      "interactionTargetLocalX": 2,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 2
+    }
+  ]
+}

@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -31,6 +32,24 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
                 new KeyedCodec<>("LastUnresolvedDebugLogGameEpochHour", Codec.LONG),
                 (v, x) -> v.lastUnresolvedDebugLogGameEpochHour = x,
                 v -> v.lastUnresolvedDebugLogGameEpochHour
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("ScheduleUtilityPickPlotId", Codec.STRING),
+                (v, x) -> v.scheduleUtilityPickPlotId = x != null ? x : "",
+                v -> v.scheduleUtilityPickPlotId
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("ScheduleUtilityPickGameplayConstructionId", Codec.STRING),
+                (v, x) -> v.scheduleUtilityPickGameplayConstructionId = x != null ? x : "",
+                v -> v.scheduleUtilityPickGameplayConstructionId
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("ScheduleUtilityPickSegment", Codec.STRING),
+                (v, x) -> v.scheduleUtilityPickSegment = x != null ? x : "",
+                v -> v.scheduleUtilityPickSegment
             )
             .add()
             .build();
@@ -62,6 +81,14 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
     /** Game epoch-hour bucket ({@code epochMinute / 60}) when we last logged an unresolved-plot INFO line; {@code -1} = never. */
     private long lastUnresolvedDebugLogGameEpochHour = -1L;
 
+    /** Last stable random choice among multiple complete plots for schedule utility segments (inn/park/Gaia…). */
+    @Nonnull
+    private String scheduleUtilityPickPlotId = "";
+    @Nonnull
+    private String scheduleUtilityPickGameplayConstructionId = "";
+    @Nonnull
+    private String scheduleUtilityPickSegment = "";
+
     public VillagerScheduleTickState() {}
 
     public long getLastGameEpochMinute() {
@@ -89,6 +116,37 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
         this.lastUnresolvedDebugLogGameEpochHour = lastUnresolvedDebugLogGameEpochHour;
     }
 
+    public void clearScheduleUtilityPick() {
+        scheduleUtilityPickPlotId = "";
+        scheduleUtilityPickGameplayConstructionId = "";
+        scheduleUtilityPickSegment = "";
+    }
+
+    public void setScheduleUtilityPick(
+        @Nonnull String gameplayConstructionId,
+        @Nonnull String normalizedScheduleSegment,
+        @Nonnull UUID plotId
+    ) {
+        scheduleUtilityPickGameplayConstructionId = gameplayConstructionId;
+        scheduleUtilityPickSegment = normalizedScheduleSegment;
+        scheduleUtilityPickPlotId = plotId.toString();
+    }
+
+    @Nonnull
+    public String getScheduleUtilityPickPlotId() {
+        return scheduleUtilityPickPlotId;
+    }
+
+    @Nonnull
+    public String getScheduleUtilityPickGameplayConstructionId() {
+        return scheduleUtilityPickGameplayConstructionId;
+    }
+
+    @Nonnull
+    public String getScheduleUtilityPickSegment() {
+        return scheduleUtilityPickSegment;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
@@ -96,6 +154,9 @@ public final class VillagerScheduleTickState implements Component<EntityStore> {
         c.lastGameEpochMinute = lastGameEpochMinute;
         c.lastAppliedScheduleSegment = lastAppliedScheduleSegment;
         c.lastUnresolvedDebugLogGameEpochHour = lastUnresolvedDebugLogGameEpochHour;
+        c.scheduleUtilityPickPlotId = scheduleUtilityPickPlotId;
+        c.scheduleUtilityPickGameplayConstructionId = scheduleUtilityPickGameplayConstructionId;
+        c.scheduleUtilityPickSegment = scheduleUtilityPickSegment;
         return c;
     }
 }

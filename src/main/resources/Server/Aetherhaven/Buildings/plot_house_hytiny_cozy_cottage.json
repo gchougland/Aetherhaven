@@ -1,0 +1,34 @@
+{
+  "id": "plot_house_hytiny_cozy_cottage",
+  "displayName": "Hytiny's Cozy Cottage",
+  "description": "A cozy cottage home. Counts as a standard house for resident assignment and quests. Prefab built by HytinyBuilds.",
+  "prefabPath": "Hytinys_Cozy_Cottage.prefab.json",
+  "countsAsConstructionId": "plot_house",
+  "selfBuildGameDays": 0.5,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage",
+  "plotAnchorOffset": [4, 0, 4],
+  "managementBlockLocalPos": [4, 2, 6],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 48,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 235 },
+    { "resourceTypeId": "Rock", "count": 75 }
+  ],
+  "pois": [
+    {
+      "localX": 3,
+      "localY": 4,
+      "localZ": -4,
+      "blockTypeId": "Furniture_Human_Ruins_Bed",
+      "interactionKind": "SLEEP",
+      "tags": ["SLEEP", "ENERGY"],
+      "capacity": 1,
+      "interactionTargetLocalX": 3,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -3
+    }
+  ]
+}

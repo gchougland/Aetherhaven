@@ -100,9 +100,10 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
+        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
+            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set("#ErrMsg.Visible", true);
             commandBuilder.set("#ErrMsg.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
@@ -115,7 +116,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             ProductionEffectiveCatalog.effective(
                 plugin.getProductionCatalog(),
                 plugin.getWorkplaceUnlockCatalog(),
-                plot.getConstructionId(),
+                gameplayConstructionId,
                 state
             );
         if (entry == null || entry.catalogSize() <= 0) {
@@ -274,9 +275,10 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
+        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
+            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             return;
         }
@@ -286,7 +288,7 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
             ProductionEffectiveCatalog.effective(
                 plugin.getProductionCatalog(),
                 plugin.getWorkplaceUnlockCatalog(),
-                plot.getConstructionId(),
+                gameplayConstructionId,
                 state
             );
         if (entry == null || entry.catalogSize() <= 0) {

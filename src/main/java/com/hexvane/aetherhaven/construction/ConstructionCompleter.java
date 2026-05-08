@@ -85,38 +85,39 @@ public final class ConstructionCompleter {
         tm.updateTown(town);
 
         if (def != null) {
+            String gid = def.getGameplayConstructionId();
             PoiExtractor.registerForCompletedBuild(plugin, world, town, plotId, def.getId(), prefabAnchorWorld, prefabYaw);
             stampManagementBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampTreasuryBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
             stampGaiaStatueBlock(world, town, plotId, def, prefabAnchorWorld, prefabYaw);
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(gid)) {
                 MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gid)) {
                 FarmerPlotCompletion.onFarmBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP.equals(gid)) {
                 BlacksmithShopCompletion.onShopBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gid)) {
                 GaiaAltarCompletion.onAltarBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(gid)) {
                 MinerHutCompletion.onMinerHutBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gid)) {
                 LumbermillCompletion.onLumbermillBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(def.getId())) {
+            if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gid)) {
                 BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
             }
-            if (ProductionCatalog.isProductionWorkplaceConstruction(def.getId())) {
+            if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
                 ProductionCatalog.Entry eff =
                     ProductionEffectiveCatalog.effective(
                         plugin.getProductionCatalog(),
                         plugin.getWorkplaceUnlockCatalog(),
-                        def.getId(),
+                        gid,
                         pps
                     );
                 if (eff != null && eff.catalogSize() > 0) {
@@ -139,7 +140,7 @@ public final class ConstructionCompleter {
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw
     ) {
-        if (!AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(def.getId())) {
+        if (!AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(def.getGameplayConstructionId())) {
             return;
         }
         int[] local = new int[] {0, 2, 0};

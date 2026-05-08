@@ -271,7 +271,7 @@ public final class DialogueActionExecutor {
         if (def != null) {
             QuestLifecycleEffects.runOnComplete(world, plugin, town, tm, def, null);
             if (rewardPlayerRef != null && store != null) {
-                QuestRewardService.grantNonReputationRewards(def, rewardPlayerRef, store);
+                QuestRewardService.grantNonReputationRewards(def, town, tm, rewardPlayerRef, store);
             }
         }
         if (rewardPlayerRef != null

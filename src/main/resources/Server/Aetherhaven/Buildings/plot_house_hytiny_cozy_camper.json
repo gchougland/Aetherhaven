@@ -1,0 +1,34 @@
+{
+  "id": "plot_house_hytiny_cozy_camper",
+  "displayName": "Hytiny's Cozy Camper",
+  "description": "A compact camper home. Counts as a standard house for resident assignment and quests. Prefab built by HytinyBuilds.",
+  "prefabPath": "Hytinys_Cozy_Camper.prefab.json",
+  "countsAsConstructionId": "plot_house",
+  "selfBuildGameDays": 0.5,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper",
+  "plotAnchorOffset": [4, 0, 4],
+  "managementBlockLocalPos": [0, 5, -4],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "treasuryGoldCoinCost": 48,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 235 },
+    { "resourceTypeId": "Rock", "count": 75 }
+  ],
+  "pois": [
+    {
+      "localX": 1,
+      "localY": 3,
+      "localZ": -4,
+      "blockTypeId": "Furniture_Feran_Bed",
+      "interactionKind": "SLEEP",
+      "tags": ["SLEEP", "ENERGY"],
+      "capacity": 1,
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -3
+    }
+  ]
+}

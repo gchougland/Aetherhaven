@@ -1,0 +1,19 @@
+{
+  "id": "plot_decoration_hytiny_potted_treehouse",
+  "displayName": "Hytiny's Potted Treehouse",
+  "description": "A decorative treehouse build for your town. It does not count as a house, workplace, or civic plot for quests or systems. Prefab built by HytinyBuilds.",
+  "prefabPath": "Hytinys_Potted_Treehouse.prefab.json",
+  "selfBuildGameDays": 1,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse",
+  "plotAnchorOffset": [6, 0, 6],
+  "managementBlockLocalPos": [0, 4, -9],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 3,
+  "autonomyNavRoofExclusionYBelowMaxY": 8,
+  "treasuryGoldCoinCost": 28,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 320 },
+    { "resourceTypeId": "Rock", "count": 40 }
+  ]
+}

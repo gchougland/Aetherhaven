@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
@@ -13,8 +14,10 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HouseResidentAssignment;
+import com.hexvane.aetherhaven.town.WorkplacePlotAssignment;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -23,10 +26,12 @@ import com.hexvane.aetherhaven.town.TownMembershipActions;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.protocol.GameMode;
+import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
@@ -35,7 +40,6 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
-import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -90,6 +94,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
      * whole tree and breaks selectors (wrong title, orphan "Materials" label, empty tabs).
      */
     private boolean templateAppended;
+    /** House management: hide villagers who already have a home assigned on another completed house plot. */
+    private boolean hideHouseResidentElsewhereHoused;
 
     public PlotConstructionPage(
         @Nonnull PlayerRef playerRef,
@@ -160,6 +166,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             commandBuilder.set("#VillagerRow.Visible", false);
             commandBuilder.set("#TreasuryRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
+            commandBuilder.set("#WorkplaceAssignRow.Visible", false);
             commandBuilder.set("#MaterialsHeader.Visible", false);
             for (int i = 0; i < MATERIAL_ROW_CAP; i++) {
                 commandBuilder.set("#Mat" + i + ".Visible", false);
@@ -303,29 +310,82 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         boolean showHouseResident =
             managementUi
                 && completed
-                && AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getId());
+                && AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getGameplayConstructionId());
+
+        String gameplayWorkplaceId = "";
+        AetherhavenPlugin plugWork = AetherhavenPlugin.get();
+        if (plugWork != null) {
+            gameplayWorkplaceId = plugWork.getConstructionCatalog().resolveGameplayConstructionId(def.getId());
+        }
+        boolean showWorkplaceAssign =
+            managementUi && completed && ProductionCatalog.isProductionWorkplaceConstruction(gameplayWorkplaceId);
+
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
+        commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign);
+
+        Store<ChunkStore> csMb = blockRef.getStore();
+        ManagementBlock mbHouse = csMb.getComponent(blockRef, ManagementBlock.getComponentType());
+        UUID plotUuidMgmt = null;
+        UUID townUuidMgmt = null;
+        if (mbHouse != null && mbHouse.getPlotId() != null && !mbHouse.getPlotId().isBlank()) {
+            try {
+                plotUuidMgmt = UUID.fromString(mbHouse.getPlotId().trim());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        if (mbHouse != null && mbHouse.getTownId() != null && !mbHouse.getTownId().isBlank()) {
+            try {
+                townUuidMgmt = UUID.fromString(mbHouse.getTownId().trim());
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+
+        if (showWorkplaceAssign && plotTabActive && plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
+            commandBuilder.set(
+                "#WorkplaceAssignHint.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceAssignHint")
+            );
+            World worldW = store.getExternalData().getWorld();
+            TownManager tmw = AetherhavenWorldRegistries.getOrCreateTownManager(worldW, plugWork);
+            TownRecord townW = tmw.getTown(townUuidMgmt);
+            ObjectArrayList<DropdownEntryInfo> workEntries = new ObjectArrayList<>();
+            String langW = this.playerRef.getLanguage() != null ? this.playerRef.getLanguage() : "en-US";
+            String unWork =
+                I18nModule.get().getMessage(langW, "aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.houseResidentUnassigned");
+            if (unWork == null || unWork.isEmpty()) {
+                unWork = "Unassigned";
+            }
+            workEntries.add(new DropdownEntryInfo(LocalizableString.fromString(unWork), ""));
+            String workSelected = "";
+            if (townW != null) {
+                List<WorkplaceAssignRow> wrows = collectWorkplaceAssignRows(store, townW, plugWork, gameplayWorkplaceId);
+                for (WorkplaceAssignRow row : wrows) {
+                    workEntries.add(new DropdownEntryInfo(LocalizableString.fromString(row.label()), row.entityUuid().toString()));
+                }
+                workSelected = findEntityUuidWithJobPlot(store, townW.getTownId(), plotUuidMgmt);
+            }
+            commandBuilder.set("#WorkplaceAssignDropdown #Input.Entries", workEntries);
+            commandBuilder.set("#WorkplaceAssignDropdown #Input.Value", workSelected.isEmpty() ? "" : workSelected);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#AssignWorkplaceButton",
+                new EventData().append("Action", "AssignWorkplace").append("@WorkplaceAssignUuid", "#WorkplaceAssignDropdown #Input.Value"),
+                false
+            );
+        }
+
         if (showHouseResident && plotTabActive) {
             commandBuilder.set(
                 "#HouseResidentHint.TextSpans",
                 Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.assignResidentHint")
             );
-            Store<ChunkStore> cs = blockRef.getStore();
-            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
-            UUID plotUuid = null;
-            UUID townUuid = null;
-            if (mb != null && mb.getPlotId() != null && !mb.getPlotId().isBlank()) {
-                try {
-                    plotUuid = UUID.fromString(mb.getPlotId().trim());
-                } catch (IllegalArgumentException ignored) {
-                }
-            }
-            if (mb != null && mb.getTownId() != null && !mb.getTownId().isBlank()) {
-                try {
-                    townUuid = UUID.fromString(mb.getTownId().trim());
-                } catch (IllegalArgumentException ignored) {
-                }
-            }
+            commandBuilder.set("#HouseResidentHideElsewhereCheckbox #CheckBox.Value", hideHouseResidentElsewhereHoused);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#HouseResidentHideElsewhereCheckbox #CheckBox",
+                EventData.of("@HouseResidentHideElsewhere", "#HouseResidentHideElsewhereCheckbox #CheckBox.Value"),
+                false
+            );
             ObjectArrayList<DropdownEntryInfo> resEntries = new ObjectArrayList<>();
             {
                 String langU = this.playerRef.getLanguage() != null ? this.playerRef.getLanguage() : "en-US";
@@ -337,24 +397,22 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 resEntries.add(new DropdownEntryInfo(LocalizableString.fromString(unLabel), ""));
             }
             String selectedValue = "";
-            if (plotUuid != null && townUuid != null) {
-                AetherhavenPlugin plug = AetherhavenPlugin.get();
-                if (plug != null) {
-                    World world = store.getExternalData().getWorld();
-                    TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plug);
-                    TownRecord town = townManager.getTown(townUuid);
-                    if (town != null) {
-                        PlotInstance pi = town.findPlotById(plotUuid);
-                        UUID cur = pi != null ? pi.getHomeResidentEntityUuid() : null;
-                        if (cur != null) {
-                            selectedValue = cur.toString();
-                        }
-                        List<HouseResidentRow> rows = collectHouseResidentRows(store, town);
-                        for (HouseResidentRow row : rows) {
-                            resEntries.add(
-                                new DropdownEntryInfo(LocalizableString.fromString(row.label()), row.entityUuid().toString())
-                            );
-                        }
+            if (plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
+                World world = store.getExternalData().getWorld();
+                TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugWork);
+                TownRecord town = townManager.getTown(townUuidMgmt);
+                if (town != null) {
+                    PlotInstance pi = town.findPlotById(plotUuidMgmt);
+                    UUID cur = pi != null ? pi.getHomeResidentEntityUuid() : null;
+                    if (cur != null) {
+                        selectedValue = cur.toString();
+                    }
+                    List<HouseResidentRow> rows =
+                        collectHouseResidentRows(store, town, plugWork, plotUuidMgmt, hideHouseResidentElsewhereHoused);
+                    for (HouseResidentRow row : rows) {
+                        resEntries.add(
+                            new DropdownEntryInfo(LocalizableString.fromString(row.label()), row.entityUuid().toString())
+                        );
                     }
                 }
             }
@@ -560,6 +618,14 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.houseResidentHideElsewhere != null) {
+            hideHouseResidentElsewhereHoused = data.houseResidentHideElsewhere;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("BeginMoveBuilding")) {
             if (!managementUi) {
                 return;
@@ -737,6 +803,78 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             sendUpdate(cmd, ev, false);
             return;
         }
+        if (data.action != null && data.action.equalsIgnoreCase("AssignWorkplace")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState stW = resolvePlotState(store, ref);
+            if (stW != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            ConstructionDefinition defW = resolveDefinition(store, ref);
+            AetherhavenPlugin pluginW = AetherhavenPlugin.get();
+            if (defW == null || pluginW == null) {
+                return;
+            }
+            String gw = pluginW.getConstructionCatalog().resolveGameplayConstructionId(defW.getId());
+            if (!ProductionCatalog.isProductionWorkplaceConstruction(gw)) {
+                return;
+            }
+            Store<ChunkStore> csw = blockRef.getStore();
+            ManagementBlock mbw = csw.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mbw == null || mbw.getPlotId().isBlank() || mbw.getTownId().isBlank()) {
+                return;
+            }
+            UUID plotIdW;
+            UUID townIdW;
+            try {
+                plotIdW = UUID.fromString(mbw.getPlotId().trim());
+                townIdW = UUID.fromString(mbw.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            World worldW = store.getExternalData().getWorld();
+            TownManager tmw = AetherhavenWorldRegistries.getOrCreateTownManager(worldW, pluginW);
+            TownRecord townW = tmw.getTown(townIdW);
+            if (townW == null) {
+                return;
+            }
+            String rawW = data.workplaceAssignUuid;
+            if (rawW == null || rawW.isBlank()) {
+                PlayerRef prw = store.getComponent(ref, PlayerRef.getComponentType());
+                if (prw != null) {
+                    prw.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplacePickWorker"));
+                }
+                return;
+            }
+            UUID npcUuid;
+            try {
+                npcUuid = UUID.fromString(rawW.trim());
+            } catch (IllegalArgumentException e) {
+                PlayerRef prw = store.getComponent(ref, PlayerRef.getComponentType());
+                if (prw != null) {
+                    prw.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceInvalidWorker"));
+                }
+                return;
+            }
+            String err =
+                WorkplacePlotAssignment.tryAssignWorker(worldW, pluginW, townW, tmw, plotIdW, npcUuid, worldW.getEntityStore().getStore());
+            PlayerRef prw = store.getComponent(ref, PlayerRef.getComponentType());
+            if (err != null) {
+                if (prw != null) {
+                    prw.sendMessage(Message.raw(err));
+                }
+                return;
+            }
+            if (prw != null) {
+                prw.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceUpdated"));
+            }
+            UICommandBuilder cmdw = new UICommandBuilder();
+            UIEventBuilder evw = new UIEventBuilder();
+            build(ref, cmdw, evw, store);
+            sendUpdate(cmdw, evw, false);
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("AssignHouseResident")) {
             if (!managementUi) {
                 return;
@@ -746,7 +884,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 return;
             }
             ConstructionDefinition def = resolveDefinition(store, ref);
-            if (def == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getId())) {
+            if (def == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getGameplayConstructionId())) {
                 return;
             }
             Store<ChunkStore> cs = blockRef.getStore();
@@ -782,7 +920,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                     return;
                 }
             }
-            HouseResidentAssignment.assignResident(town, plotId, residentUuid, tm, world, store);
+            HouseResidentAssignment.assignResident(town, plotId, residentUuid, tm, world, store, plugin.getConstructionCatalog());
             PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
             if (pr != null) {
                 pr.sendMessage(
@@ -1143,10 +1281,123 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         }
     }
 
+    private record WorkplaceAssignRow(@Nonnull String label, @Nonnull UUID entityUuid) {}
+
+    @Nonnull
+    private static String findEntityUuidWithJobPlot(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
+        @Nonnull UUID jobPlotId
+    ) {
+        final String[] holder = new String[] {""};
+        Query<EntityStore> q = Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                if (!holder[0].isEmpty()) {
+                    return;
+                }
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !townId.equals(b.getTownId())) {
+                        continue;
+                    }
+                    UUID jp = b.getJobPlotId();
+                    if (jp == null || !jp.equals(jobPlotId)) {
+                        continue;
+                    }
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc != null) {
+                        holder[0] = uc.getUuid().toString();
+                        return;
+                    }
+                }
+            }
+        );
+        return holder[0];
+    }
+
+    private static boolean isHomeResidentElsewhereOnCompleteHouse(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID exceptPlotId,
+        @Nonnull UUID villagerUuid
+    ) {
+        for (PlotInstance p : town.getPlotInstances()) {
+            if (p.getPlotId().equals(exceptPlotId)) {
+                continue;
+            }
+            if (p.getState() != PlotInstanceState.COMPLETE) {
+                continue;
+            }
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+                continue;
+            }
+            UUID h = p.getHomeResidentEntityUuid();
+            if (h != null && h.equals(villagerUuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nonnull
+    private static List<WorkplaceAssignRow> collectWorkplaceAssignRows(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String gameplayWorkplaceId
+    ) {
+        ComponentType<EntityStore, NPCEntity> npcType = NPCEntity.getComponentType();
+        if (npcType == null) {
+            return List.of();
+        }
+        UUID tid = town.getTownId();
+        Map<UUID, WorkplaceAssignRow> byUuid = new LinkedHashMap<>();
+        Query<EntityStore> q =
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType(), npcType);
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> archetypeChunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < archetypeChunk.size(); i++) {
+                    TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (b == null || !tid.equals(b.getTownId())) {
+                        continue;
+                    }
+                    UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                    NPCEntity npc = archetypeChunk.getComponent(i, npcType);
+                    if (uc == null || npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+                        continue;
+                    }
+                    VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
+                    if (vdef == null) {
+                        continue;
+                    }
+                    String w = vdef.getWorkConstructionId();
+                    if (w == null || !w.equals(gameplayWorkplaceId)) {
+                        continue;
+                    }
+                    UUID u = uc.getUuid();
+                    String label = NpcPortraitProvider.displayLabelForRoleId(npc.getRoleName());
+                    byUuid.put(u, new WorkplaceAssignRow(label, u));
+                }
+            }
+        );
+        List<WorkplaceAssignRow> out = new ArrayList<>(byUuid.values());
+        out.sort(Comparator.comparing(WorkplaceAssignRow::label, String.CASE_INSENSITIVE_ORDER));
+        return out;
+    }
+
     private record HouseResidentRow(@Nonnull String label, @Nonnull UUID entityUuid) {}
 
     @Nonnull
-    private static List<HouseResidentRow> collectHouseResidentRows(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+    private static List<HouseResidentRow> collectHouseResidentRows(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull UUID currentHousePlotId,
+        boolean hideElsewhereHoused
+    ) {
         ComponentType<EntityStore, NPCEntity> npcType = NPCEntity.getComponentType();
         if (npcType == null) {
             return List.of();
@@ -1169,6 +1420,11 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                         continue;
                     }
                     UUID u = uc.getUuid();
+                    if (hideElsewhereHoused
+                        && plugin != null
+                        && isHomeResidentElsewhereOnCompleteHouse(town, plugin.getConstructionCatalog(), currentHousePlotId, u)) {
+                        continue;
+                    }
                     String label = NpcPortraitProvider.displayLabelForRoleId(npc.getRoleName());
                     byUuid.put(u, new HouseResidentRow(label, u));
                 }
@@ -1203,6 +1459,18 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
             .add()
             .append(new KeyedCodec<>("@HouseResidentUuid", Codec.STRING), (d, v) -> d.houseResidentUuid = v, d -> d.houseResidentUuid)
             .add()
+            .append(
+                new KeyedCodec<>("@HouseResidentHideElsewhere", Codec.BOOLEAN),
+                (d, v) -> d.houseResidentHideElsewhere = v,
+                d -> d.houseResidentHideElsewhere
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("@WorkplaceAssignUuid", Codec.STRING),
+                (d, v) -> d.workplaceAssignUuid = v,
+                d -> d.workplaceAssignUuid
+            )
+            .add()
             .build();
 
         private String action;
@@ -1211,5 +1479,9 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         @Nullable
         private String inviteName;
         private String houseResidentUuid;
+        @Nullable
+        private Boolean houseResidentHideElsewhere;
+        @Nullable
+        private String workplaceAssignUuid;
     }
 }

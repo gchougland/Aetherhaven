@@ -20,7 +20,9 @@
         { "itemId": "Rock_Peach_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Aqua_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Quartzite_Cobble", "ticks": 200, "maxStorage": 100 },
-        { "itemId": "Rock_Runic_Cobble", "ticks": 200, "maxStorage": 100 }
+        { "itemId": "Rock_Runic_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Soil_Dirt", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Soil_Gravel", "ticks": 200, "maxStorage": 100 }
       ]
     },
     "plot_lumbermill": {
@@ -37,7 +39,7 @@
       "outputs": [
         { "itemId": "Plant_Crop_Wheat_Item", "ticks": 1728, "maxStorage": 50 },
         { "itemId": "Plant_Crop_Lettuce_Item", "ticks": 1728, "maxStorage": 50 },
-        { "itemId": "Ingredient_Life_Essence", "ticks": 1728, "maxStorage": 100 }
+        { "itemId": "Ingredient_Life_Essence", "ticks": 600, "maxStorage": 100 }
       ]
     },
     "plot_barn": {

@@ -74,6 +74,21 @@ public final class ConstructionDefinition {
     @Nullable
     private String styleId;
 
+    /**
+     * When set, this variant counts as the canonical construction for quests, production keys, workplace matching, and
+     * schedule resolution ({@code plotInstance.constructionId} stays this definition's {@link #id}).
+     */
+    @SerializedName("countsAsConstructionId")
+    @Nullable
+    private String countsAsConstructionId;
+
+    /**
+     * When true on the <em>canonical</em> gameplay definition (and variants inheriting via {@link #countsAsConstructionId}),
+     * schedule segments that target this construction pick randomly among all complete matching plots (see catalog helper).
+     */
+    @SerializedName("scheduleSharedUtilityPick")
+    private boolean scheduleSharedUtilityPick;
+
     /** Prefab-local position (same space as prefab `blocks[].x/y/z`) of the management block voxel to stamp after build. */
     @SerializedName("managementBlockLocalPos")
     @Nullable
@@ -206,6 +221,28 @@ public final class ConstructionDefinition {
     @Nullable
     public String getStyleId() {
         return styleId;
+    }
+
+    /**
+     * Canonical gameplay construction id: {@link #countsAsConstructionId} if set, otherwise {@link #getId}.
+     */
+    @Nonnull
+    public String getGameplayConstructionId() {
+        String alias = countsAsConstructionId;
+        if (alias != null && !alias.isBlank()) {
+            return alias.trim();
+        }
+        return id != null ? id : "";
+    }
+
+    @Nullable
+    public String getCountsAsConstructionIdRaw() {
+        return countsAsConstructionId;
+    }
+
+    /** True when this definition participates in multi-plot random schedule targeting (inn, park, Gaia altar, …). */
+    public boolean isScheduleSharedUtilityPick() {
+        return scheduleSharedUtilityPick;
     }
 
     /** @return prefab-local x,y,z of management block, or null if not configured */

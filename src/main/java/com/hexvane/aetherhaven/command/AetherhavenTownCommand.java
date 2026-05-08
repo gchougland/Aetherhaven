@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownMemberRole;
+import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hexvane.aetherhaven.town.TownMembershipActions;
 import com.hexvane.aetherhaven.town.TownPendingInvite;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
@@ -135,6 +136,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             town.removePendingInviteForInvitee(self);
             town.putMember(self, TownMemberRole.BOTH);
             tm.updateTown(town);
+            TownSharedRecipeUnlockService.tryFlushPendingCraftRecipes(store, ref, town, tm, self);
             playerRef.sendMessage(
                 Message.translation("aetherhaven_town.aetherhaven.town.accept.joined").param("town", town.getDisplayName())
             );

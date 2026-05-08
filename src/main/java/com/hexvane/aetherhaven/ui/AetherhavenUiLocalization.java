@@ -30,6 +30,10 @@ public final class AetherhavenUiLocalization {
         b.set("#MaterialsHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.materials"));
         b.set("#HouseResidentDropdown #HouseResidentFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResident"));
         b.set("#AssignHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignHouseResident"));
+        b.set("#WorkplaceAssignDropdown #WorkplaceAssignFieldLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.workplaceWorker"));
+        b.set("#AssignWorkplaceButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.assignWorkplace"));
+        b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere"));
+        b.set("#HouseResidentHideElsewhereCheckbox #HouseResidentHideElsewhereLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip"));
         b.set("#PickUpPlotButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlot"));
         b.set("#BuildButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.build"));
         b.set("#InviteLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotmanagement.inviteLabel"));

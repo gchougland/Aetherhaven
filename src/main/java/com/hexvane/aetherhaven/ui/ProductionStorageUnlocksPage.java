@@ -125,16 +125,17 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
+        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
+            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
             commandBuilder.set(ERR_MSG + ".TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.plot"));
             commandBuilder.clear(ROWS);
             return;
         }
-        String constructionId = plot.getConstructionId();
+        String constructionId = gameplayConstructionId;
         ProductionCatalog.Entry base = plugin.getProductionCatalog().get(constructionId);
         if (base == null || base.catalogSize() <= 0) {
             commandBuilder.set(ERR_MSG + ".Visible", true);
@@ -340,13 +341,14 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
             return;
         }
         PlotInstance plot = town.findPlotById(plotId);
+        String gameplayConstructionId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot != null ? plot.getConstructionId() : "");
         if (plot == null
             || plot.getState() != PlotInstanceState.COMPLETE
-            || !ProductionCatalog.isProductionWorkplaceConstruction(plot.getConstructionId())
+            || !ProductionCatalog.isProductionWorkplaceConstruction(gameplayConstructionId)
             || !plot.containsWorldBlock(blockX, blockY, blockZ)) {
             return;
         }
-        String constructionId = plot.getConstructionId();
+        String constructionId = gameplayConstructionId;
         WorkplaceUnlockCatalog.UnlockLine line = plugin.getWorkplaceUnlockCatalog().findLine(constructionId, itemId);
         if (line == null) {
             return;

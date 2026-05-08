@@ -80,7 +80,7 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             world.execute(
                 () -> {
                     TaxMorningBreakdown b =
-                        TownTaxService.computeTaxMorningBreakdown(town, es, plugin.getConfig().get());
+                        TownTaxService.computeTaxMorningBreakdown(town, es, plugin.getConfig().get(), plugin.getConstructionCatalog());
                     playerRef.sendMessage(
                         Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.taxBreakdownIntro")
                     );

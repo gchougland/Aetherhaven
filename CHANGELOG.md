@@ -2,6 +2,14 @@
 
 ## [1.4.0] - Unreleased
 
+### Added
+
+- **Plot Token Icons** Changed plot tokens icons to reflect the building its for.
+
+### Changed
+
+- **Town Quest Rewards** Recipe unlocks from quests should now unlock for all players part of a town.
+
 ### Fixed
 
 - **Villager Duplication Bug** Fixed bugs where multiples of a villager would spawn in the Inn.

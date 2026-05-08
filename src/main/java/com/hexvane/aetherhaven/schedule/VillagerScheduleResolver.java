@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.schedule;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -117,9 +119,6 @@ public final class VillagerScheduleResolver {
     }
 
     /**
-     * Resolves symbolic location to a plot UUID. Skipped segments return {@link VillagerScheduleResolveOutcome#skip()}.
-     */
-    /**
      * Explains why {@link #resolvePlot} returned no plot (for server logs). Not for in-game chat.
      */
     @Nonnull
@@ -127,18 +126,9 @@ public final class VillagerScheduleResolver {
         @Nonnull TownRecord town,
         @Nonnull TownVillagerBinding binding,
         @Nonnull UUID entityUuid,
-        @Nonnull String locationSymbol
-    ) {
-        return describeSchedulePlotUnresolvedReason(town, binding, entityUuid, locationSymbol, null);
-    }
-
-    @Nonnull
-    public static String describeSchedulePlotUnresolvedReason(
-        @Nonnull TownRecord town,
-        @Nonnull TownVillagerBinding binding,
-        @Nonnull UUID entityUuid,
         @Nonnull String locationSymbol,
-        @Nullable VillagerDefinition villagerDef
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
@@ -146,10 +136,13 @@ public final class VillagerScheduleResolver {
         }
         return switch (loc) {
             case LOC_HOME -> describeHomeUnresolved(town, entityUuid);
-            case LOC_WORK -> describeWorkUnresolved(town, binding, villagerDef);
-            case LOC_INN -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
-            case LOC_PARK -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
-            case LOC_GAIA_ALTAR -> describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef));
+            case LOC_WORK -> describeWorkUnresolved(town, binding, villagerDef, constructionCatalog);
+            case LOC_INN ->
+                describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
+            case LOC_PARK ->
+                describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
+            case LOC_GAIA_ALTAR ->
+                describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
             default -> "unsupported location '" + loc + "' (not home/work/inn/park/gaia_altar)";
         };
     }
@@ -159,29 +152,25 @@ public final class VillagerScheduleResolver {
         @Nonnull TownRecord town,
         @Nonnull TownVillagerBinding binding,
         @Nonnull UUID entityUuid,
-        @Nonnull String locationSymbol
-    ) {
-        return resolvePlot(town, binding, entityUuid, locationSymbol, null);
-    }
-
-    @Nonnull
-    public static VillagerScheduleResolveOutcome resolvePlot(
-        @Nonnull TownRecord town,
-        @Nonnull TownVillagerBinding binding,
-        @Nonnull UUID entityUuid,
         @Nonnull String locationSymbol,
-        @Nullable VillagerDefinition villagerDef
+        @Nullable VillagerDefinition villagerDef,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nullable VillagerScheduleTickState tickState,
+        boolean timeJump
     ) {
         String loc = normalizeLocation(locationSymbol);
         if (loc == null) {
             return VillagerScheduleResolveOutcome.skip();
         }
         return switch (loc) {
-            case LOC_HOME -> resolveHome(town, entityUuid);
-            case LOC_WORK -> resolveWork(town, binding, villagerDef);
-            case LOC_INN -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
-            case LOC_PARK -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
-            case LOC_GAIA_ALTAR -> resolveSharedBuilding(town, sharedConstructionId(loc, villagerDef));
+            case LOC_HOME -> resolveHome(town, entityUuid, constructionCatalog);
+            case LOC_WORK -> resolveWork(town, binding, villagerDef, constructionCatalog);
+            case LOC_INN ->
+                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
+            case LOC_PARK ->
+                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
+            case LOC_GAIA_ALTAR ->
+                resolveSharedBuilding(town, constructionCatalog, sharedConstructionId(loc, villagerDef), loc, tickState, timeJump);
             default -> VillagerScheduleResolveOutcome.skip();
         };
     }
@@ -223,7 +212,8 @@ public final class VillagerScheduleResolver {
     private static String describeWorkUnresolved(
         @Nonnull TownRecord town,
         @Nonnull TownVillagerBinding binding,
-        @Nullable VillagerDefinition def
+        @Nullable VillagerDefinition def,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         UUID job = binding.getJobPlotId();
         if (job != null) {
@@ -236,13 +226,13 @@ public final class VillagerScheduleResolver {
             }
             return "work: JobPlotId resolves but resolvePlot failed elsewhere (report as bug)";
         }
-        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def);
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def, constructionCatalog);
         if (inferred == null) {
             String c = workConstructionId(binding, def);
             if (c == null) {
                 return "work: cannot infer job plot for binding kind=\"" + binding.getKind() + "\"";
             }
-            if (!townHasAnyPlotWithConstruction(town, c)) {
+            if (!townHasAnyPlotWithGameplayConstruction(town, constructionCatalog, c)) {
                 return "work: no plot with construction " + c + " in town";
             }
             return "work: no COMPLETE plot for construction " + c + " (building not finished?)";
@@ -250,9 +240,17 @@ public final class VillagerScheduleResolver {
         return "work: unexpected (infer returned " + inferred + ")";
     }
 
-    private static boolean townHasAnyPlotWithConstruction(@Nonnull TownRecord town, @Nonnull String constructionId) {
+    private static boolean townHasAnyPlotWithGameplayConstruction(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId
+    ) {
+        String g = gameplayConstructionId.trim();
+        if (g.isEmpty()) {
+            return false;
+        }
         for (PlotInstance p : town.getPlotInstances()) {
-            if (constructionId.equals(p.getConstructionId())) {
+            if (g.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 return true;
             }
         }
@@ -260,12 +258,16 @@ public final class VillagerScheduleResolver {
     }
 
     @Nonnull
-    private static String describeSharedUnresolved(@Nonnull TownRecord town, @Nonnull String constructionId) {
-        if (town.findCompletePlotWithConstruction(constructionId) == null) {
-            if (!townHasAnyPlotWithConstruction(town, constructionId)) {
-                return "shared: no plot for construction " + constructionId;
+    private static String describeSharedUnresolved(
+        @Nonnull TownRecord town,
+        @Nonnull String gameplayConstructionId,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (town.findCompletePlotWithConstruction(constructionCatalog, gameplayConstructionId) == null) {
+            if (!townHasAnyPlotWithGameplayConstruction(town, constructionCatalog, gameplayConstructionId)) {
+                return "shared: no plot for construction " + gameplayConstructionId;
             }
-            return "shared: plot exists for " + constructionId + " but not COMPLETE";
+            return "shared: plot exists for " + gameplayConstructionId + " but not COMPLETE";
         }
         return "shared: unexpected (complete plot exists)";
     }
@@ -298,12 +300,16 @@ public final class VillagerScheduleResolver {
     }
 
     @Nonnull
-    private static VillagerScheduleResolveOutcome resolveHome(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+    private static VillagerScheduleResolveOutcome resolveHome(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
         for (PlotInstance p : town.getPlotInstances()) {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(p.getConstructionId())) {
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
             UUID resident = p.getHomeResidentEntityUuid();
@@ -318,7 +324,8 @@ public final class VillagerScheduleResolver {
     private static VillagerScheduleResolveOutcome resolveWork(
         @Nonnull TownRecord town,
         @Nonnull TownVillagerBinding binding,
-        @Nullable VillagerDefinition def
+        @Nullable VillagerDefinition def,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         UUID job = binding.getJobPlotId();
         if (job != null) {
@@ -327,7 +334,7 @@ public final class VillagerScheduleResolver {
                 return new VillagerScheduleResolveOutcome(job, null);
             }
         }
-        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def);
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def, constructionCatalog);
         if (inferred == null) {
             return VillagerScheduleResolveOutcome.skip();
         }
@@ -338,41 +345,92 @@ public final class VillagerScheduleResolver {
     private static UUID inferJobPlotFromTown(
         @Nonnull TownRecord town,
         @Nonnull String kind,
-        @Nullable VillagerDefinition def
+        @Nullable VillagerDefinition def,
+        @Nonnull ConstructionCatalog constructionCatalog
     ) {
         if (def != null) {
             String w = def.getWorkConstructionId();
             if (w != null) {
-                return plotIdIfComplete(town, w);
+                return plotIdIfComplete(town, w, constructionCatalog);
             }
         }
         return switch (kind) {
-            case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM);
-            case TownVillagerBinding.KIND_MERCHANT -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL);
-            case TownVillagerBinding.KIND_BLACKSMITH -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP);
-            case TownVillagerBinding.KIND_PRIESTESS -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR);
-            case TownVillagerBinding.KIND_MINER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT);
-            case TownVillagerBinding.KIND_LOGGER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL);
-            case TownVillagerBinding.KIND_RANCHER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BARN);
-            case TownVillagerBinding.KIND_INNKEEPER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN);
-            case TownVillagerBinding.KIND_ELDER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL);
+            case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM, constructionCatalog);
+            case TownVillagerBinding.KIND_MERCHANT ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL, constructionCatalog);
+            case TownVillagerBinding.KIND_BLACKSMITH ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP, constructionCatalog);
+            case TownVillagerBinding.KIND_PRIESTESS ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR, constructionCatalog);
+            case TownVillagerBinding.KIND_MINER ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT, constructionCatalog);
+            case TownVillagerBinding.KIND_LOGGER ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL, constructionCatalog);
+            case TownVillagerBinding.KIND_RANCHER ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BARN, constructionCatalog);
+            case TownVillagerBinding.KIND_INNKEEPER ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN, constructionCatalog);
+            case TownVillagerBinding.KIND_ELDER ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL, constructionCatalog);
             default -> null;
         };
     }
 
     @Nullable
-    private static UUID plotIdIfComplete(@Nonnull TownRecord town, @Nonnull String constructionId) {
-        PlotInstance p = town.findCompletePlotWithConstruction(constructionId);
+    private static UUID plotIdIfComplete(
+        @Nonnull TownRecord town,
+        @Nonnull String gameplayConstructionId,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        PlotInstance p = town.findCompletePlotWithConstruction(constructionCatalog, gameplayConstructionId);
         return p != null ? p.getPlotId() : null;
     }
 
     @Nonnull
-    private static VillagerScheduleResolveOutcome resolveSharedBuilding(@Nonnull TownRecord town, @Nonnull String constructionId) {
-        PlotInstance p = town.findCompletePlotWithConstruction(constructionId);
-        if (p == null) {
+    private static VillagerScheduleResolveOutcome resolveSharedBuilding(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId,
+        @Nonnull String normalizedScheduleSegment,
+        @Nullable VillagerScheduleTickState tickState,
+        boolean timeJump
+    ) {
+        String g = gameplayConstructionId.trim();
+        if (g.isEmpty()) {
             return VillagerScheduleResolveOutcome.skip();
         }
-        return new VillagerScheduleResolveOutcome(p.getPlotId(), null);
+        List<PlotInstance> complete =
+            town.listCompletePlotsWithGameplayConstruction(constructionCatalog, g);
+        if (complete.isEmpty()) {
+            return VillagerScheduleResolveOutcome.skip();
+        }
+        if (!constructionCatalog.isScheduleSharedUtilityGameplay(g)) {
+            return new VillagerScheduleResolveOutcome(complete.get(0).getPlotId(), null);
+        }
+        UUID picked = null;
+        if (!timeJump && tickState != null) {
+            if (normalizedScheduleSegment.equals(tickState.getScheduleUtilityPickSegment())
+                && g.equals(tickState.getScheduleUtilityPickGameplayConstructionId())) {
+                String pid = tickState.getScheduleUtilityPickPlotId();
+                if (pid != null && !pid.isBlank()) {
+                    try {
+                        UUID prev = UUID.fromString(pid.trim());
+                        for (PlotInstance pi : complete) {
+                            if (prev.equals(pi.getPlotId())) {
+                                picked = prev;
+                                break;
+                            }
+                        }
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            }
+        }
+        if (picked == null) {
+            int idx = ThreadLocalRandom.current().nextInt(complete.size());
+            picked = complete.get(idx).getPlotId();
+        }
+        return new VillagerScheduleResolveOutcome(picked, null, g, normalizedScheduleSegment, picked);
     }
 
     private record Segment(int weekMinute, @Nonnull String location) {}

@@ -88,7 +88,7 @@ public final class VillagerTownResetService {
         List<CapturedNpc> order = new ArrayList<>(captured.values());
         order.sort(Comparator.comparingInt(VillagerTownResetService::captureSortKey));
 
-        PlotInstance innPlot = town.findCompletePlotWithConstruction(AetherhavenConstants.CONSTRUCTION_PLOT_INN);
+        PlotInstance innPlot = town.findCompletePlotWithConstruction(plugin.getConstructionCatalog(), AetherhavenConstants.CONSTRUCTION_PLOT_INN);
         int slot = 0;
         List<UUID> spawnedUuids = new ArrayList<>();
         for (CapturedNpc c : order) {

@@ -1,5 +1,6 @@
 {
   "id": "plot_park",
+  "scheduleSharedUtilityPick": true,
   "displayName": "Park",
   "description": "Trees, paths, and two village benches for relaxing.",
   "prefabPath": "Park_01.prefab.json",

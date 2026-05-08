@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.town;
 
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
@@ -176,6 +177,23 @@ public final class TownRecord {
     private List<TownPendingInvite> pendingInvites = new ArrayList<>();
 
     /**
+     * Crafting output item ids (same strings as {@link com.hypixel.hytale.builtin.crafting.CraftingPlugin#learnRecipe})
+     * unlocked for the whole town via quest rewards with {@code grantTo: town_members}. New members receive pending
+     * entries until they are in-world.
+     */
+    @Nullable
+    @SerializedName("townSharedCraftRecipeItemIds")
+    private LinkedHashSet<String> townSharedCraftRecipeItemIds;
+
+    /**
+     * Player UUID string → recipe item ids to apply with {@code CraftingPlugin.learnRecipe} when that player next has
+     * an entity in this world (offline at grant time, or new member after shared unlocks already exist).
+     */
+    @Nullable
+    @SerializedName("pendingCraftRecipeUnlockByPlayerUuid")
+    private Map<String, List<String>> pendingCraftRecipeUnlockByPlayerUuid;
+
+    /**
      * Level-1 charter amendment: {@link CharterTaxPolicy#id()}; immutable once set.
      */
     @Nullable
@@ -324,6 +342,16 @@ public final class TownRecord {
         migrateFounderMonumentCountIfNeeded();
         migrateFeastFieldsIfNeeded();
         migratePlotProductionIfNeeded();
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+    }
+
+    private void migrateSharedRecipeUnlockFieldsIfNeeded() {
+        if (townSharedCraftRecipeItemIds == null) {
+            townSharedCraftRecipeItemIds = new LinkedHashSet<>();
+        }
+        if (pendingCraftRecipeUnlockByPlayerUuid == null) {
+            pendingCraftRecipeUnlockByPlayerUuid = new LinkedHashMap<>();
+        }
     }
 
     private void migrateFeastFieldsIfNeeded() {
@@ -349,7 +377,11 @@ public final class TownRecord {
      *
      * @return true if any amount was reduced
      */
-    public boolean clampPlotProductionToCatalog(@Nonnull ProductionCatalog catalog, @Nonnull WorkplaceUnlockCatalog unlockCatalog) {
+    public boolean clampPlotProductionToCatalog(
+        @Nonnull ProductionCatalog catalog,
+        @Nonnull WorkplaceUnlockCatalog unlockCatalog,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
         migratePlotProductionIfNeeded();
         if (plotProductionByPlotId == null || plotProductionByPlotId.isEmpty()) {
             return false;
@@ -370,7 +402,7 @@ public final class TownRecord {
             if (plot == null) {
                 continue;
             }
-            String cid = plot.getConstructionId();
+            String cid = constructionCatalog.resolveGameplayConstructionId(plot.getConstructionId());
             if (!ProductionCatalog.isProductionWorkplaceConstruction(cid)) {
                 continue;
             }
@@ -962,14 +994,17 @@ public final class TownRecord {
         return s;
     }
 
-    /** True if any plot is COMPLETE with this construction id. */
-    public boolean hasCompletePlotWithConstruction(@Nonnull String constructionId) {
-        String c = constructionId.trim();
+    /** True if any plot is COMPLETE whose stored construction resolves to this gameplay construction id. */
+    public boolean hasCompletePlotWithConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId
+    ) {
+        String c = gameplayConstructionId.trim();
         if (c.isEmpty()) {
             return false;
         }
         for (PlotInstance p : getPlotInstances()) {
-            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(p.getConstructionId())) {
+            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 return true;
             }
         }
@@ -977,17 +1012,41 @@ public final class TownRecord {
     }
 
     @Nullable
-    public PlotInstance findCompletePlotWithConstruction(@Nonnull String constructionId) {
-        String c = constructionId.trim();
+    public PlotInstance findCompletePlotWithConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId
+    ) {
+        String c = gameplayConstructionId.trim();
         if (c.isEmpty()) {
             return null;
         }
         for (PlotInstance p : getPlotInstances()) {
-            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(p.getConstructionId())) {
+            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 return p;
             }
         }
         return null;
+    }
+
+    /**
+     * All COMPLETE plots whose stored {@link PlotInstance#getConstructionId()} resolves to {@code gameplayConstructionId}.
+     */
+    @Nonnull
+    public List<PlotInstance> listCompletePlotsWithGameplayConstruction(
+        @Nonnull ConstructionCatalog constructionCatalog,
+        @Nonnull String gameplayConstructionId
+    ) {
+        String c = gameplayConstructionId.trim();
+        List<PlotInstance> out = new ArrayList<>();
+        if (c.isEmpty()) {
+            return out;
+        }
+        for (PlotInstance p : getPlotInstances()) {
+            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+                out.add(p);
+            }
+        }
+        return out;
     }
 
     /**
@@ -1253,8 +1312,59 @@ public final class TownRecord {
         if (getOwnerUuid().equals(playerUuid)) {
             return;
         }
+        boolean newlyJoined = !getMemberRolesRaw().containsKey(playerUuid.toString());
         getMemberRolesRaw().put(playerUuid.toString(), role.name());
         getMemberPermissionsMap().put(playerUuid.toString(), TownMemberPermissions.fromRole(role));
+        if (newlyJoined) {
+            seedSharedCraftRecipeUnlocksForMember(playerUuid);
+        }
+    }
+
+    /**
+     * Queues every town-shared craft recipe for {@code playerUuid} so {@link TownSharedRecipeUnlockService} can apply
+     * them when the player is in-world (covers members who join after those quests completed).
+     */
+    private void seedSharedCraftRecipeUnlocksForMember(@Nonnull UUID playerUuid) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        for (String rid : townSharedCraftRecipeItemIds) {
+            if (rid != null && !rid.isBlank()) {
+                queuePendingCraftRecipeUnlock(playerUuid, rid.trim());
+            }
+        }
+    }
+
+    public void addTownSharedCraftRecipeItemId(@Nonnull String recipeItemId) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        townSharedCraftRecipeItemIds.add(recipeItemId.trim());
+    }
+
+    public void queuePendingCraftRecipeUnlock(@Nonnull UUID playerUuid, @Nonnull String recipeItemId) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        String key = playerUuid.toString();
+        String r = recipeItemId.trim();
+        List<String> list = pendingCraftRecipeUnlockByPlayerUuid.computeIfAbsent(key, k -> new ArrayList<>());
+        for (String existing : list) {
+            if (existing.equals(r)) {
+                return;
+            }
+        }
+        list.add(r);
+    }
+
+    /**
+     * @return a copy of pending recipe ids for this player and clears the pending list for them
+     */
+    @Nonnull
+    public List<String> takeAndClearPendingCraftRecipeUnlocks(@Nonnull UUID playerUuid) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        List<String> removed = pendingCraftRecipeUnlockByPlayerUuid.remove(playerUuid.toString());
+        return removed != null ? new ArrayList<>(removed) : new ArrayList<>();
+    }
+
+    public boolean hasPendingCraftRecipeUnlocks(@Nonnull UUID playerUuid) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        List<String> list = pendingCraftRecipeUnlockByPlayerUuid.get(playerUuid.toString());
+        return list != null && !list.isEmpty();
     }
 
     /**

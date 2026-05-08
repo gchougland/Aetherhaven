@@ -1,0 +1,19 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Barn_Hytiny.name",
+    "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_Barn_Hytiny.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Token_Hytinys_Barn.png",
+  "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
+  "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Item",
+  "Categories": ["Items.Utility"],
+  "Set": "Aetherhaven",
+  "Quality": "Common",
+  "Tags": {
+    "Type": ["Tool"],
+    "Family": ["Aetherhaven"]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood"
+}

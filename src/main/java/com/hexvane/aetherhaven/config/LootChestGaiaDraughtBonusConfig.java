@@ -37,10 +37,10 @@ public final class LootChestGaiaDraughtBonusConfig {
             .add()
             .build();
 
-    private double shardChance = 0.07;
+    private double shardChance = 0.06;
     @Nonnull
     private String shardItemId = "Aetherhaven_Shard_Of_Gaia";
-    private double catalystChance = 0.06;
+    private double catalystChance = 0.05;
     @Nonnull
     private String catalystItemId = "Aetherhaven_Verdant_Catalyst";
 

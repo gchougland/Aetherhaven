@@ -26,7 +26,8 @@
   "rewards": [
     {
       "kind": "learn_recipe",
-      "recipeItemId": "Aetherhaven_Gaias_Draught"
+      "recipeItemId": "Aetherhaven_Gaias_Draught",
+      "grantTo": "town_members"
     },
     {
       "kind": "reputation",

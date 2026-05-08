@@ -1,0 +1,35 @@
+{
+  "id": "plot_barn_hytiny",
+  "displayName": "Hytiny's Barn",
+  "description": "A barn variant that counts as a standard barn for jobs, production, and quests. Prefab built by HytinyBuilds.",
+  "prefabPath": "Hytinys_Barn.prefab.json",
+  "countsAsConstructionId": "plot_barn",
+  "selfBuildGameDays": 3,
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Barn_Hytiny",
+  "plotAnchorOffset": [9, 0, 9],
+  "managementBlockLocalPos": [-2, 2, 7],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 3,
+  "autonomyNavRoofExclusionYBelowMaxY": 6,
+  "treasuryGoldCoinCost": 56,
+  "materials": [
+    { "resourceTypeId": "Wood_All", "count": 600 },
+    { "resourceTypeId": "Soils", "count": 40 },
+    { "resourceTypeId": "Rock", "count": 200 }
+  ],
+  "pois": [
+    {
+      "localX": -5,
+      "localY": 2,
+      "localZ": 8,
+      "blockTypeId": "Bench_Farming",
+      "interactionKind": "WORK_SURFACE",
+      "tags": ["WORK"],
+      "capacity": 1,
+      "interactionTargetLocalX": -5,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 9
+    }
+  ]
+}

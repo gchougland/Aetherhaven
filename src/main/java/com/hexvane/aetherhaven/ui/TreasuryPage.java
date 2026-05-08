@@ -174,7 +174,7 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
         @Nonnull AetherhavenPlugin plugin
     ) {
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
-        TaxMorningBreakdown b = TownTaxService.computeTaxMorningBreakdown(town, store, cfg);
+        TaxMorningBreakdown b = TownTaxService.computeTaxMorningBreakdown(town, store, cfg, plugin.getConstructionCatalog());
         CharterTaxPolicy policyEnum = town.getCharterTaxPolicyEnum();
 
         commandBuilder.set(
