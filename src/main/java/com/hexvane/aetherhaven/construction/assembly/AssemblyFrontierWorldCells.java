@@ -60,7 +60,7 @@ public final class AssemblyFrontierWorldCells {
                 continue;
             }
             frontierScratch.clear();
-            PlotAssemblyService.appendFrontierWorldCells(job, plot, frontierScratch);
+            PlotAssemblyService.appendFrontierWorldCells(world, job, plot, frontierScratch);
             for (int fi = 0; fi < frontierScratch.size(); fi++) {
                 Vector3i cell = frontierScratch.get(fi);
                 double cx = cell.x + 0.5;
@@ -72,16 +72,7 @@ public final class AssemblyFrontierWorldCells {
                 if (dx * dx + dy * dy + dz * dz > rangeSq) {
                     continue;
                 }
-                boolean duplicate = false;
-                for (Vector3i c : out) {
-                    if (c.equals(cell)) {
-                        duplicate = true;
-                        break;
-                    }
-                }
-                if (!duplicate) {
-                    out.add(cell);
-                }
+                out.add(cell);
             }
         }
         out.sort(
@@ -90,5 +81,25 @@ public final class AssemblyFrontierWorldCells {
                 .thenComparingInt(v -> v.y)
                 .thenComparingInt(v -> v.z)
         );
+        dedupeSortedByBlockCoords(out);
+    }
+
+    /** {@link Vector3i} may not implement value equality; collapse identical block coords after sort for stable hashes. */
+    private static void dedupeSortedByBlockCoords(@Nonnull List<Vector3i> sorted) {
+        int w = 0;
+        for (int r = 0; r < sorted.size(); r++) {
+            Vector3i c = sorted.get(r);
+            if (w == 0) {
+                sorted.set(w++, c);
+            } else {
+                Vector3i p = sorted.get(w - 1);
+                if (p.x != c.x || p.y != c.y || p.z != c.z) {
+                    sorted.set(w++, c);
+                }
+            }
+        }
+        if (w < sorted.size()) {
+            sorted.subList(w, sorted.size()).clear();
+        }
     }
 }

@@ -28,6 +28,7 @@ import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAc
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.util.PrefabUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -129,7 +130,15 @@ public final class PlotAssemblyService {
         }
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         ConstructionPasteOps.prepAssemblySite(world, anchor, seq.pendingBlocks(), true, seq.prefabRotation(), buffer);
-        List<PendingBlock> placementOrder = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        ConstructionPasteOps.AssemblyDeferredPartition split =
+            ConstructionPasteOps.partitionAssemblyDeferredBlocks(
+                nonAirCells,
+                BlockType.getAssetMap(),
+                def.getAssemblyDeferredBlockIds()
+            );
+        List<PendingBlock> placementOrder = split.main();
+        List<PendingBlock> assemblyDeferredBlocks = split.deferred();
 
         world.breakBlock(physicalSignWorld.x, physicalSignWorld.y, physicalSignWorld.z, BREAK_SIGN_SETTINGS);
 
@@ -154,6 +163,7 @@ public final class PlotAssemblyService {
                 anchor,
                 yaw,
                 placementOrder,
+                assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -161,7 +171,8 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        AssemblyWorldRegistry.put(world, plotId, job);
+        PlotAssemblyFrontierRuntime assemblyRt = PlotAssemblyFrontierRuntime.create(placementOrder, plot);
+        AssemblyWorldRegistry.put(world, plotId, job, assemblyRt);
     }
 
     private static boolean tryRegisterJob(
@@ -183,7 +194,15 @@ public final class PlotAssemblyService {
         }
         int prefabId = start.getPrefabId();
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
-        List<PendingBlock> placementOrder = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks());
+        ConstructionPasteOps.AssemblyDeferredPartition split =
+            ConstructionPasteOps.partitionAssemblyDeferredBlocks(
+                nonAirCells,
+                BlockType.getAssetMap(),
+                def.getAssemblyDeferredBlockIds()
+            );
+        List<PendingBlock> placementOrder = split.main();
+        List<PendingBlock> assemblyDeferredBlocks = split.deferred();
         long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
         plot.setAssemblyPrefabId(prefabId);
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -195,6 +214,7 @@ public final class PlotAssemblyService {
                 anchor,
                 yaw,
                 placementOrder,
+                assemblyDeferredBlocks,
                 seq.prefabEntitiesInOrder(),
                 buffer,
                 seq.prefabRotation(),
@@ -202,7 +222,8 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        AssemblyWorldRegistry.put(world, plot.getPlotId(), job);
+        PlotAssemblyFrontierRuntime assemblyRt = PlotAssemblyFrontierRuntime.create(placementOrder, plot);
+        AssemblyWorldRegistry.put(world, plot.getPlotId(), job, assemblyRt);
         return true;
     }
 
@@ -274,10 +295,8 @@ public final class PlotAssemblyService {
             }
             int burst = 0;
             while (burst < PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB && placedCount < pending.size()) {
-                IntOpenHashSet placedSet = new IntOpenHashSet();
-                plot.fillAssemblyPlacedSet(placedSet, pending.size());
-                IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
-                int pick = PlotAssemblyFrontier.smallestPlacementIndex(frontier);
+                PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
+                int pick = rt.smallestPlacementIndex();
                 if (pick < 0) {
                     break;
                 }
@@ -326,17 +345,21 @@ public final class PlotAssemblyService {
         if (placedSet.contains(placementIndex)) {
             return false;
         }
-        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
-        if (!PlotAssemblyFrontier.frontierContains(frontier, placementIndex)) {
+        PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
+        if (!rt.frontierContains(placementIndex)) {
             return false;
         }
         if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(placementIndex))) {
             return false;
         }
-        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        LocalCachedChunkAccessor chunkAccessor = rt.getOrCreateChunkAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap);
         plot.addAssemblyPlacedIndex(placementIndex);
+        rt.onBlockPlaced(placementIndex, pending, plot);
+        if (fromStaff && staffActor != null) {
+            PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
+        }
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
         if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
             if (deferCompletionWhenFullyPlaced) {
@@ -382,6 +405,14 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job
     ) {
         UUID plotId = plot.getPlotId();
+        List<PendingBlock> deferredAssembly = job.assemblyDeferredBlocks();
+        if (!deferredAssembly.isEmpty()) {
+            LocalCachedChunkAccessor deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+            BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+            for (PendingBlock pb : deferredAssembly) {
+                ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
+            }
+        }
         ConstructionPasteOps.finishFluidsAndEntities(
             world,
             job.anchor(),
@@ -399,6 +430,21 @@ public final class PlotAssemblyService {
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
     }
 
+    @Nonnull
+    private static PlotAssemblyFrontierRuntime frontierRuntimeOrRebuild(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotInstance plot,
+        @Nonnull List<PendingBlock> pending
+    ) {
+        PlotAssemblyFrontierRuntime rt = AssemblyWorldRegistry.frontierRuntime(world, job.plotId());
+        if (rt == null) {
+            rt = PlotAssemblyFrontierRuntime.create(pending, plot);
+            AssemblyWorldRegistry.put(world, job.plotId(), job, rt);
+        }
+        return rt;
+    }
+
     private static boolean isChunkLoadedForBlock(@Nonnull World world, @Nonnull Vector3i origin, @Nonnull PendingBlock pb) {
         int bx = origin.x + pb.x();
         int bz = origin.z + pb.z();
@@ -407,11 +453,17 @@ public final class PlotAssemblyService {
 
     /** Appends world-space integer cells for every frontier placement (for previews / ray tests). */
     public static void appendFrontierWorldCells(
+        @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotInstance plot,
         @Nonnull List<Vector3i> out
     ) {
         List<PendingBlock> pending = job.pendingBlocks();
+        PlotAssemblyFrontierRuntime rt = AssemblyWorldRegistry.frontierRuntime(world, job.plotId());
+        if (rt != null) {
+            rt.appendFrontierWorldCells(job.anchor(), pending, out);
+            return;
+        }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
         IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
@@ -425,11 +477,16 @@ public final class PlotAssemblyService {
      * @return pending sequence index if {@code cellWorld} matches a frontier cell for this plot, else {@code -1}.
      */
     public static int resolveFrontierPlacementIndex(
+        @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotInstance plot,
         @Nonnull Vector3i cellWorld
     ) {
         List<PendingBlock> pending = job.pendingBlocks();
+        PlotAssemblyFrontierRuntime rt = AssemblyWorldRegistry.frontierRuntime(world, job.plotId());
+        if (rt != null) {
+            return rt.resolveFrontierPlacementIndex(job.anchor(), pending, cellWorld);
+        }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
         IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
@@ -452,22 +509,22 @@ public final class PlotAssemblyService {
      */
     @Nonnull
     public static IntArrayList frontierPlacementIndicesNearChebyshev(
+        @Nonnull World world,
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotInstance plot,
         @Nonnull Vector3i centerWorld,
         int radius
     ) {
         List<PendingBlock> pending = job.pendingBlocks();
-        IntOpenHashSet placedSet = new IntOpenHashSet();
-        plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
         IntArrayList matches = new IntArrayList();
         int cx = centerWorld.x;
         int cy = centerWorld.y;
         int cz = centerWorld.z;
         Vector3i anchor = job.anchor();
-        for (int k = 0; k < frontier.size(); k++) {
-            int pi = frontier.getInt(k);
+        IntIterator fit = rt.frontierIterator();
+        while (fit.hasNext()) {
+            int pi = fit.nextInt();
             PendingBlock pb = pending.get(pi);
             int bx = anchor.x + pb.x();
             int by = anchor.y + pb.y();
@@ -531,7 +588,7 @@ public final class PlotAssemblyService {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            if (resolveFrontierPlacementIndex(job, plot, cellWorld) >= 0) {
+            if (resolveFrontierPlacementIndex(world, job, plot, cellWorld) >= 0) {
                 return job;
             }
         }
@@ -566,10 +623,8 @@ public final class PlotAssemblyService {
             return true;
         }
         while (plot.getAssemblyPlacedBlockCount() < pending.size()) {
-            IntOpenHashSet placedSet = new IntOpenHashSet();
-            plot.fillAssemblyPlacedSet(placedSet, pending.size());
-            IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
-            int pick = PlotAssemblyFrontier.smallestPlacementIndex(frontier);
+            PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
+            int pick = rt.smallestPlacementIndex();
             if (pick < 0) {
                 LOGGER.atWarning().log("instantCompleteJob: empty frontier plot %s", plot.getPlotId());
                 return false;

@@ -4,11 +4,14 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -44,6 +47,14 @@ public final class ConstructionDefinition {
     @SerializedName("requiredVillagerId")
     @Nullable
     private String requiredVillagerId;
+
+    /**
+     * Prefab block type ids (same namespace as {@link BlockType#getId()}) excluded from the incremental assembly frontier:
+     * placed in one batch immediately before {@link ConstructionPasteOps#finishFluidsAndEntities} (still after the main
+     * shell/tree so structure assembles first). Empty = default (all non-air cells follow the normal frontier).
+     */
+    @SerializedName("assemblyDeferredBlockIds")
+    private List<String> assemblyDeferredBlockIds = Collections.emptyList();
 
     @SerializedName("materials")
     private List<MaterialRequirement> materials = Collections.emptyList();
@@ -198,6 +209,22 @@ public final class ConstructionDefinition {
 
     public List<MaterialRequirement> getMaterials() {
         return materials != null ? materials : Collections.emptyList();
+    }
+
+    /** Block type ids deferred to the post-frontier batch assembly step; see {@link #assemblyDeferredBlockIds}. */
+    @Nonnull
+    public Set<String> getAssemblyDeferredBlockIds() {
+        List<String> raw = assemblyDeferredBlockIds;
+        if (raw == null || raw.isEmpty()) {
+            return Set.of();
+        }
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        for (String bid : raw) {
+            if (bid != null && !bid.isBlank()) {
+                ids.add(bid.trim());
+            }
+        }
+        return Collections.unmodifiableSet(ids);
     }
 
     public long getTreasuryGoldCoinCost() {

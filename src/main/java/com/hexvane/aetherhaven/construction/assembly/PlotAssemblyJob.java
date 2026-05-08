@@ -17,6 +17,11 @@ public record PlotAssemblyJob(
     @Nonnull Vector3i anchor,
     @Nonnull Rotation yaw,
     @Nonnull List<PendingBlock> pendingBlocks,
+    /**
+     * Cells whose block types match construction {@code assemblyDeferredBlockIds}: not on the frontier; placed as a batch
+     * in {@link PlotAssemblyService#completeAssembly} before {@link com.hexvane.aetherhaven.construction.ConstructionPasteOps#finishFluidsAndEntities}.
+     */
+    @Nonnull List<PendingBlock> assemblyDeferredBlocks,
     @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
     @Nonnull IPrefabBuffer buffer,
     @Nonnull PrefabRotation prefabRotation,

@@ -30,8 +30,11 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Collection;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,6 +78,12 @@ public final class ConstructionPasteOps {
         @Nonnull List<PendingBlock> pendingBlocks,
         @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
         @Nonnull PrefabRotation prefabRotation
+    ) {}
+
+    /** Split of non-air assembly cells: incremental frontier uses {@code main}; {@code deferred} is placed in one batch at completion. */
+    public record AssemblyDeferredPartition(
+        @Nonnull List<PendingBlock> main,
+        @Nonnull List<PendingBlock> deferred
     ) {}
 
     @Nonnull
@@ -125,6 +134,51 @@ public final class ConstructionPasteOps {
     @Nonnull
     public static List<PendingBlock> withoutPureAirCells(@Nonnull List<PendingBlock> full) {
         return full.stream().filter(pb -> !isPureAirPrefabCell(pb)).collect(Collectors.toUnmodifiableList());
+    }
+
+    /**
+     * Partitions {@code nonAirPlacementOrder} (typically {@link #withoutPureAirCells}) so block types listed in the
+     * construction JSON’s {@code assemblyDeferredBlockIds} are not indexed for the assembly frontier — they are written
+     * in {@code deferred} order after the frontier completes.
+     */
+    @Nonnull
+    public static AssemblyDeferredPartition partitionAssemblyDeferredBlocks(
+        @Nonnull List<PendingBlock> nonAirPlacementOrder,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap,
+        @Nonnull Collection<String> deferBlockTypeIds
+    ) {
+        if (deferBlockTypeIds.isEmpty()) {
+            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
+        }
+        HashSet<String> want = new HashSet<>();
+        for (String id : deferBlockTypeIds) {
+            if (id != null && !id.isBlank()) {
+                want.add(id.trim());
+            }
+        }
+        if (want.isEmpty()) {
+            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
+        }
+        List<PendingBlock> main = new ArrayList<>();
+        List<PendingBlock> deferred = new ArrayList<>();
+        for (PendingBlock pb : nonAirPlacementOrder) {
+            String typeId = null;
+            if (pb.blockId() != 0) {
+                BlockType bt = blockTypeMap.getAsset(pb.blockId());
+                if (bt != null) {
+                    typeId = bt.getId();
+                }
+            }
+            if (typeId != null && want.contains(typeId)) {
+                deferred.add(pb);
+            } else {
+                main.add(pb);
+            }
+        }
+        if (main.isEmpty() && !deferred.isEmpty()) {
+            return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
+        }
+        return new AssemblyDeferredPartition(List.copyOf(main), List.copyOf(deferred));
     }
 
     @Nonnull

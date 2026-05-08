@@ -142,7 +142,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             if (!tPick.playerCanManageConstructions(uuid)) {
                 return;
             }
-            if (PlotAssemblyService.resolveFrontierPlacementIndex(jPick, pPick, rayHit) < 0) {
+            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, jPick, pPick, rayHit) < 0) {
                 return;
             }
             channel.setBrushLock(rayHit);
@@ -167,7 +167,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             channel.resetChargeSession();
             return;
         }
-        if (PlotAssemblyService.resolveFrontierPlacementIndex(job, plot, activeCell) < 0) {
+        if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, activeCell) < 0) {
             channel.resetChargeSession();
             return;
         }
@@ -179,6 +179,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         IntArrayList batch =
             PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
+                world,
                 job,
                 plot,
                 activeCell,

@@ -4,15 +4,16 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.math.vector.Transform;
 import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,11 +49,16 @@ public final class AssemblyPreviewRay {
         dx /= len;
         dy /= len;
         dz /= len;
+        double ox = o.getX();
+        double oy = o.getY();
+        double oz = o.getZ();
+
         double bestT = Double.POSITIVE_INFINITY;
         Vector3i bestCell = null;
-        ArrayList<Vector3i> frontierCells = new ArrayList<>(128);
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        ArrayList<Vector3i> frontierScratch = new ArrayList<>(256);
         for (PlotAssemblyJob job : AssemblyWorldRegistry.jobs(world)) {
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownOwningPlot(job.plotId());
+            TownRecord town = tm.findTownOwningPlot(job.plotId());
             if (town == null) {
                 continue;
             }
@@ -60,11 +66,11 @@ public final class AssemblyPreviewRay {
             if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            frontierCells.clear();
-            PlotAssemblyService.appendFrontierWorldCells(job, plot, frontierCells);
-            for (int i = 0; i < frontierCells.size(); i++) {
-                Vector3i cell = frontierCells.get(i);
-                Double t = rayEnterUnitCube(o.getX(), o.getY(), o.getZ(), dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
+            frontierScratch.clear();
+            PlotAssemblyService.appendFrontierWorldCells(world, job, plot, frontierScratch);
+            for (int i = 0; i < frontierScratch.size(); i++) {
+                Vector3i cell = frontierScratch.get(i);
+                Double t = rayEnterUnitCube(ox, oy, oz, dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);
                 if (t != null && t < bestT) {
                     bestT = t;
                     bestCell = cell;

@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
 import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
@@ -840,6 +841,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
             PlotPreviewSpawner.rebuild(store, prefabOrigin, session.getPrefabYaw(), buf, session.getPreviewEntityRefs());
             if (pr != null) {
                 PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
+                PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
             }
         } finally {
             buf.release();

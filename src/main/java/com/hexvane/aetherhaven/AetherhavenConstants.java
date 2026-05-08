@@ -62,6 +62,12 @@ public final class AetherhavenConstants {
      */
     public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS = 1;
 
+    /**
+     * Caps per-player assembly frontier ghost cubes ({@link PlotAssemblyPreviewSystem}) so huge shells do not emit tens
+     * of thousands of debug draws per tick.
+     */
+    public static final int BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS = 512;
+
     /** Root interaction asset id (RequireNewClick false) for staff secondary. */
     public static final String ROOT_INTERACTION_BUILDING_STAFF_SECONDARY = "Aetherhaven_BuildingStaff_Secondary_Root";
 

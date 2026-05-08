@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
 import com.hexvane.aetherhaven.placement.CharterRelocationService;
 import com.hexvane.aetherhaven.placement.CharterRelocationSession;
 import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
@@ -504,6 +505,7 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
         );
         if (pr != null) {
             PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
+            PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
         }
     }
 

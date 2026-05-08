@@ -174,7 +174,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
             if (!town.playerCanManageConstructions(playerUuid)) {
                 continue;
             }
-            if (PlotAssemblyService.resolveFrontierPlacementIndex(job, plot, cell) < 0) {
+            if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, cell) < 0) {
                 continue;
             }
             double cx = cell.x + 0.5;

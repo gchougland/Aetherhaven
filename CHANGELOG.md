@@ -5,10 +5,13 @@
 ### Added
 
 - **Plot Token Icons** Changed plot tokens icons to reflect the building its for.
+- **Miner Block Options** Added dirt and gravel to the options for the miner.
+- **Variant Buildings** Added new variants for buildings built by HytinyBuilds.
 
 ### Changed
 
 - **Town Quest Rewards** Recipe unlocks from quests should now unlock for all players part of a town.
+- **Improved Building Performance** Large improvement to building stability and performance to allow for massive buildings.
 
 ### Fixed
 
