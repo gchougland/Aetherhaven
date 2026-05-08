@@ -1,0 +1,17 @@
+{
+  "Layers": [
+    {
+      "Files": ["Sounds/Blocks/Building/Clone_1.ogg"],
+      "RandomSettings": {
+        "MinPitch": -2,
+        "MaxPitch": 2,
+        "MinVolume": -3
+      }
+    }
+  ],
+  "Volume": -1,
+  "MaxDistance": 140,
+  "StartAttenuationDistance": 35,
+  "MaxInstance": 12,
+  "PreventSoundInterruption": true
+}

@@ -80,3 +80,7 @@ commands.aetherhaven.debug_autonomy.clear.desc=Clear Aetherhaven autonomy debug 
 
 commands.aetherhaven.debug_lootchest.desc=Debug: Aetherhaven chest bonus rolls on targeted container
 commands.aetherhaven.debug_lootchest.fill.desc=Apply forced jewelry, gold, and plot-token rolls to the item container you are looking at
+
+commands.aetherhaven.floatinggift.desc=Floating gift balloon: debug spawn or next-scheduled info
+commands.aetherhaven.floatinggift.spawn.desc=Spawn one floating gift (debug)
+commands.aetherhaven.floatinggift.next.desc=Show time until your next natural floating gift (game calendar clock; dilation affects real wait)

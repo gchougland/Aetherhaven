@@ -1,0 +1,18 @@
+{
+  "Layers": [
+    {
+      "Files": ["Sounds/Environments/Global/Wind/Emit_Wind_Grass_01.ogg"],
+      "RandomSettings": {
+        "MinVolume": 0,
+        "MaxVolume": 4,
+        "MinPitch": -4,
+        "MaxPitch": 4
+      }
+    }
+  ],
+  "Volume": 4,
+  "MaxDistance": 120,
+  "StartAttenuationDistance": 28,
+  "MaxInstance": 8,
+  "PreventSoundInterruption": true
+}

@@ -117,9 +117,7 @@ public final class BuildingStaffFrontierTracerInteraction extends SimpleInstantI
         }
         Store<EntityStore> store = commandBuffer.getStore();
         ItemStack hand = InventoryComponent.getItemInHand(commandBuffer, playerRef);
-        if (hand == null
-            || hand.isEmpty()
-            || !AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(hand.getItemId())) {
+        if (hand == null || hand.isEmpty() || !BuildingStaffTiers.isBuildingStaff(hand.getItemId())) {
             context.getState().state = InteractionState.Failed;
             return;
         }

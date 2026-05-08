@@ -7,6 +7,8 @@
 - **Plot Token Icons** Changed plot tokens icons to reflect the building its for.
 - **Miner Block Options** Added dirt and gravel to the options for the miner.
 - **Variant Buildings** Added new variants for buildings built by HytinyBuilds.
+- **Floating Gifts** Balloons carrying gifts will now float by the player occasionally and can be shot down for gold coins and special building variants.
+- **Tiered Building Staves** Added 5 tiers of building staff with increasing build radii. Built in the planning desk. Planning desk now has upgrades to unlock each tier of building staff.
 
 ### Changed
 

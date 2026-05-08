@@ -1,22 +1,22 @@
 {
   "TranslationProperties": {
-    "Name": "aetherhaven_misc.items.Aetherhaven_Building_Staff.name",
-    "Description": "aetherhaven_misc.items.Aetherhaven_Building_Staff.description"
+    "Name": "aetherhaven_misc.items.Aetherhaven_Building_Staff_Iron.name",
+    "Description": "aetherhaven_misc.items.Aetherhaven_Building_Staff_Iron.description"
   },
   "Recipe": {
-    "TimeSeconds": 3,
+    "TimeSeconds": 3.5,
     "Input": [
       {
-        "ItemId": "Ingredient_Bar_Copper",
-        "Quantity": 3
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 5
       },
       {
-        "ResourceTypeId": "Wood_Trunk",
-        "Quantity": 6
+        "ItemId": "Ingredient_Leather_Light",
+        "Quantity": 2
       },
       {
-        "ItemId": "Ingredient_Fibre",
-        "Quantity": 1
+        "ItemId": "Ingredient_Fabric_Scrap_Linen",
+        "Quantity": 2
       }
     ],
     "BenchRequirement": [
@@ -26,19 +26,19 @@
         "Categories": [
           "Aetherhaven_TownPlanning"
         ],
-        "RequiredTierLevel": 1
+        "RequiredTierLevel": 2
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Aetherhaven_Building_Staff.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Building_Staff_Iron.png",
   "Categories": [
     "Items.Tools"
   ],
   "Model": "Items/Aetherhaven/Building_Staff/Building_Staff.blockymodel",
-  "Texture": "Items/Aetherhaven/Building_Staff/Building_Staff_Copper.png",
+  "Texture": "Items/Aetherhaven/Building_Staff/Building_Staff_Iron.png",
   "PlayerAnimationsId": "Staff",
   "MaxStack": 1,
-  "Quality": "Common",
+  "Quality": "Uncommon",
   "Set": "Aetherhaven",
   "Interactions": {
     "Primary": {

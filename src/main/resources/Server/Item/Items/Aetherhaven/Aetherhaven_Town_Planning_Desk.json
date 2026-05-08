@@ -65,7 +65,62 @@
       "LocalOpenSoundEventId": "SFX_Workbench_Open",
       "LocalCloseSoundEventId": "SFX_Workbench_Close",
       "CompletedSoundEventId": "SFX_Workbench_Craft",
-      "FailedSoundEventId": "SFX_Generic_Crafting_Failed"
+      "FailedSoundEventId": "SFX_Generic_Crafting_Failed",
+      "BenchUpgradeSoundEventId": "SFX_Workbench_Upgrade_Start_Default",
+      "BenchUpgradeCompletedSoundEventId": "SFX_Workbench_Upgrade_Complete_Default",
+      "TierLevels": [
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Aetherhaven_Gold_Coin",
+                "Quantity": 50
+              }
+            ],
+            "TimeSeconds": 3
+          }
+        },
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Aetherhaven_Gold_Coin",
+                "Quantity": 100
+              }
+            ],
+            "TimeSeconds": 3
+          }
+        },
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Aetherhaven_Gold_Coin",
+                "Quantity": 200
+              }
+            ],
+            "TimeSeconds": 3
+          }
+        },
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Aetherhaven_Gold_Coin",
+                "Quantity": 400
+              }
+            ],
+            "TimeSeconds": 3
+          }
+        },
+        {
+          "CraftingTimeReductionModifier": 0.0
+        }
+      ]
     },
     "BlockEntity": {
       "Components": {

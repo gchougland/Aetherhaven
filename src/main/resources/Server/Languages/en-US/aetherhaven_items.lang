@@ -9,9 +9,9 @@ items.Aetherhaven_Charter.name=Town charter
 items.Aetherhaven_Charter.description=Place to found a town. Each player may have one town per world. Use to open town info.
 
 items.Aetherhaven_Town_Planning_Desk.name=Town planning desk
-items.Aetherhaven_Town_Planning_Desk.description=Craft town charters, the plot placement staff, the building staff (speeds passive plot construction), the quest journal, geode anvil, charter amendments table, and plot tokens. Build one at a workbench.
+items.Aetherhaven_Town_Planning_Desk.description=Town planning bench. Charters, plot tokens, tiered building staves, and related recipes. Craft at a workbench.
 items.Aetherhaven_Charter_Amendments_Table.name=Charter amendments table
-items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; you must know the schematic.
+items.Aetherhaven_Charter_Amendments_Table.description=Records how the town's tithe is counted and what trade the charter favors. Use to open amendments once your population supports it. Craft at your town planning desk; <color is="#ffa726">you must know the schematic</color>.
 items.Aetherhaven_Banquet_Table.name=Banquet table
 items.Aetherhaven_Banquet_Table.description=A long table for town feasts. Place in your territory and use it to serve a civic feast. Craft at the town planning desk once someone in town shares the pattern.
 items.Aetherhaven_Founder_Monument.name=Founder monument
@@ -24,7 +24,7 @@ items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building. Nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.
 
 items.Aetherhaven_Poi_Tool.name=POI debug tool
-items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: aetherhaven.poi.tool). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
+items.Aetherhaven_Poi_Tool.description=Shows town POIs while held (permission: <color is="#5AB5B5">aetherhaven.poi.tool</color>). Primary: select nearest POI. Secondary: move the POI anchor to that block. Use: set/clear autonomy path target for the selected POI (click the POI block again to clear).
 items.Aetherhaven_Poi_Tool.legendTitle=POI tool
 items.Aetherhaven_Poi_Tool.legendPrimary=Primary: select nearest POI near the block
 items.Aetherhaven_Poi_Tool.legendSecondary=Secondary: move selected POI to the block
@@ -100,28 +100,28 @@ commands.aetherhaven.path.revert.id=Path commit id (UUID from cement chat messag
 commands.aetherhaven.path.navviz.desc=Toggle debug drawing of path-nav polylines (aetherhaven.path.tool; sub: navviz)
 
 items.Aetherhaven_Path_Tool.name=Path designer shovel
-items.Aetherhaven_Path_Tool.description=Designs spline paths (aetherhaven.path.tool). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
+items.Aetherhaven_Path_Tool.description=Designs spline paths (<color is="#5AB5B5">aetherhaven.path.tool</color>). Secondary: add nodes. Primary: select; in move mode, click ground to move. Q: mode cycle. 2nd ability: path width 1-8. 3rd ability: path style (inner blocks; PathToolStyles in config). F: nudge yaw in rotate, or place in place mode (2+ nodes). Revert: aetherhaven path revert. Config: PathToolStyles, raycast, and replace lists.
 
 items.Aetherhaven_Plot_Token_Inn.name=Inn plot token
-items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the plot placement staff for the inn footprint.
+items.Aetherhaven_Plot_Token_Inn.description=<color is="#ffa726">Required</color> in inventory to use the plot placement staff for the inn footprint.
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
-items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Market_Stall.description=<color is="#ffa726">Required</color> to place the market stall footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farm plot token
-items.Aetherhaven_Plot_Token_Farm.description=Required to place the farm plot footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Farm.description=<color is="#ffa726">Required</color> to place the farm plot footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=<color is="#ffa726">Required</color> to place the blacksmith shop footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Park.name=Park plot token
-items.Aetherhaven_Plot_Token_Park.description=Required to place the park footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Park.description=<color is="#ffa726">Required</color> to place the park footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_House.name=House plot token
-items.Aetherhaven_Plot_Token_House.description=Required to place the shared house footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_House.description=<color is="#ffa726">Required</color> to place the shared house footprint from the plot placement staff.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=Town hall plot token
-items.Aetherhaven_Plot_Token_Town_Hall.description=Required to place the town hall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Town_Hall.description=<color is="#ffa726">Required</color> to place the town hall footprint from the plot placement staff.
 
 items.Aetherhaven_Gold_Coin.name=Gold coin
 items.Aetherhaven_Gold_Coin.description=Town currency stored in the treasury.
@@ -130,7 +130,7 @@ items.Aetherhaven_Geode.name=Geode
 items.Aetherhaven_Geode.description=A hollow stone that may hold crystals, gems, or ore. Pay a blacksmith to crack it open.
 
 items.Aetherhaven_Geode_Anvil.name=Geode anvil
-items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; you must know the schematic to craft it at your town planning desk.
+items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; <color is="#ffa726">you must know the schematic</color> to craft it at your town planning desk.
 
 barter.aetherhaven_vex.title=Vex's daily stock
 

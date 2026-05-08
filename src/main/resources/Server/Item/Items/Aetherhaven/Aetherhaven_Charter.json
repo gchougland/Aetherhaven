@@ -48,9 +48,6 @@
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#797668",
-    "Support": {
-      "Down": [{ "FaceType": "Full" }]
-    },
     "VariantRotation": "NESW",
     "Flags": {
       "IsUsable": true

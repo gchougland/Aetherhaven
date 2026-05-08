@@ -19,9 +19,9 @@
   ],
   "pois": [
     {
-      "localX": 1,
-      "localY": 2,
-      "localZ": 2,
+      "localX": 2,
+      "localY": 3,
+      "localZ": 3,
       "interactionKind": "SLEEP",
       "tags": ["SLEEP", "ENERGY"],
       "capacity": 1,

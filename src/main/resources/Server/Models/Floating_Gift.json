@@ -1,0 +1,51 @@
+{
+  "Model": "Items/Aetherhaven/Floating_Gift/Floating_Gift.blockymodel",
+  "Texture": "Items/Aetherhaven/Floating_Gift/Floating_Gift.png",
+  "HitBox": {
+    "Max": { "X": 1.0, "Y": 1.5, "Z": 1.0 },
+    "Min": { "X": -1.0, "Y": -1.5, "Z": -1.0 }
+  },
+  "MinScale": 1,
+  "MaxScale": 1,
+  "AnimationSets": {
+    "Float": {
+      "Animations": [
+        {
+          "Animation": "Items/Aetherhaven/Floating_Gift/Float.blockyanim",
+          "Looping": true,
+          "BlendingDuration": 0.1
+        }
+      ]
+    },
+    "Pop": {
+      "NextAnimationDelay": {
+        "Min": 604800,
+        "Max": 604800
+      },
+      "Animations": [
+        {
+          "Animation": "Items/Aetherhaven/Floating_Gift/Pop.blockyanim",
+          "Speed": 1,
+          "BlendingDuration": 0,
+          "Looping": false,
+          "PassiveLoopCount": 1
+        }
+      ]
+    },
+    "PopHold": {
+      "NextAnimationDelay": {
+        "Min": 604800,
+        "Max": 604800
+      },
+      "Animations": [
+        {
+          "Animation": "Items/Aetherhaven/Floating_Gift/Pop_Hold.blockyanim",
+          "Speed": 1,
+          "BlendingDuration": 0,
+          "Looping": true,
+          "PassiveLoopCount": 1
+        }
+      ]
+    }
+  }
+}

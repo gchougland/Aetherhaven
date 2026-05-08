@@ -57,16 +57,16 @@ public final class AetherhavenConstants {
     public static final String BUILDING_STAFF_ITEM_ID = "Aetherhaven_Building_Staff";
 
     /**
-     * Chebyshev distance (max of dx,dy,dz) from the ray-selected center cell: staff places every frontier block in this
-     * cube (e.g. 1 = 3×3×3) after the channel completes.
+     * Fallback brush radius when the held item id is unknown; tiered staffs use {@link
+     * com.hexvane.aetherhaven.construction.assembly.BuildingStaffTiers#assemblyBrushChebyshevRadius}.
      */
-    public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS = 1;
+    public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS_DEFAULT = 1;
 
     /**
      * Caps per-player assembly frontier ghost cubes ({@link PlotAssemblyPreviewSystem}) so huge shells do not emit tens
      * of thousands of debug draws per tick.
      */
-    public static final int BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS = 512;
+    public static final int BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS = 768;
 
     /** Root interaction asset id (RequireNewClick false) for staff secondary. */
     public static final String ROOT_INTERACTION_BUILDING_STAFF_SECONDARY = "Aetherhaven_BuildingStaff_Secondary_Root";

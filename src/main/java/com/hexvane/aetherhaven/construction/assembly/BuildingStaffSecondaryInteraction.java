@@ -95,9 +95,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         Store<EntityStore> store = commandBuffer.getStore();
         ItemStack hand = context.getHeldItem();
-        if (hand == null
-            || hand.isEmpty()
-            || !AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(hand.getItemId())) {
+        if (hand == null || hand.isEmpty() || !BuildingStaffTiers.isBuildingStaff(hand.getItemId())) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -122,6 +120,8 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         if (firstRun) {
             channel.resetChargeSession();
         }
+        int brushRadiusBlocks = BuildingStaffTiers.assemblyBrushChebyshevRadius(hand.getItemId());
+        channel.setBrushChebyshevRadius(brushRadiusBlocks);
         if (!channel.hasBrushLock()) {
             Vector3i rayHit = AssemblyPreviewRay.findPenetratingPreviewCellHit(playerRef, world, plugin, RAY_MAX, store);
             if (rayHit == null) {
@@ -183,7 +183,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
                 job,
                 plot,
                 activeCell,
-                AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS
+                brushRadiusBlocks
             );
         boolean anyPlaced = false;
         for (int bi = 0; bi < batch.size(); bi++) {

@@ -27,9 +27,9 @@
       "interactionKind": "WORK_SURFACE",
       "tags": ["WORK"],
       "capacity": 1,
-      "interactionTargetLocalX": -5,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 9
+      "interactionTargetLocalX": -6,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": 10
     }
   ]
 }

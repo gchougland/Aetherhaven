@@ -41,6 +41,16 @@ public final class BuildingStaffAssemblyChannelComponent implements Component<En
     private int brushLockX = Integer.MIN_VALUE;
     private int brushLockY;
     private int brushLockZ;
+    /** Matches held staff tier; affects {@link #cellMatchesBrush}. */
+    private int brushChebyshevRadius = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS_DEFAULT;
+
+    public void setBrushChebyshevRadius(int radiusBlocks) {
+        brushChebyshevRadius = Math.max(0, radiusBlocks);
+    }
+
+    public int getBrushChebyshevRadius() {
+        return brushChebyshevRadius;
+    }
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType =
@@ -133,14 +143,14 @@ public final class BuildingStaffAssemblyChannelComponent implements Component<En
     }
 
     /**
-     * Whether {@code (x,y,z)} lies in the brush box around the channel center (Chebyshev radius from
-     * {@link AetherhavenConstants#BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS}).
+     * Whether {@code (x,y,z)} lies in the brush box around the channel center (Chebyshev radius from the held staff
+     * tier via {@link BuildingStaffSecondaryInteraction}).
      */
     public boolean cellMatchesBrush(int x, int y, int z) {
         if (!hasActiveTarget()) {
             return false;
         }
-        int r = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS;
+        int r = brushChebyshevRadius;
         int dx = Math.abs(x - channelCellX);
         int dy = Math.abs(y - channelCellY);
         int dz = Math.abs(z - channelCellZ);

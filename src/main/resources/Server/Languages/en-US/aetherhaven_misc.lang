@@ -21,5 +21,13 @@ aetherhaven.banner.reputation.unlock.primary=Unlocked
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Building Staff
-items.Aetherhaven_Building_Staff.description=Primary sends a guiding bolt through blocks to the nearest assembly preview in range. Hold secondary and aim through blocks at the assembly preview to place the next block instantly (town build permission). Passive builds still advance on their own when you are away.
+items.Aetherhaven_Building_Staff.name=Copper building staff
+items.Aetherhaven_Building_Staff.description=Primary sends a guiding bolt through blocks to the nearest assembly preview in range. Hold secondary and aim through blocks at that preview to channel and place building nodes after a brief hold (town build permission). Fills up to <color is="#4ade80">3×3×3</color> highlighted building nodes around your aim at once. Higher-tier staves widen that cube. Passive plot assembly still progresses while you are away.
+items.Aetherhaven_Building_Staff_Iron.name=Iron building staff
+items.Aetherhaven_Building_Staff_Iron.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">5×5×5</color> highlighted building nodes at once.
+items.Aetherhaven_Building_Staff_Thorium.name=Thorium building staff
+items.Aetherhaven_Building_Staff_Thorium.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">7×7×7</color> highlighted building nodes at once.
+items.Aetherhaven_Building_Staff_Cobalt.name=Cobalt building staff
+items.Aetherhaven_Building_Staff_Cobalt.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">9×9×9</color> highlighted building nodes at once.
+items.Aetherhaven_Building_Staff_Adamantite.name=Adamantite building staff
+items.Aetherhaven_Building_Staff_Adamantite.description=Same as the copper building staff. Secondary fills up to <color is="#4ade80">11×11×11</color> highlighted building nodes at once.

@@ -1,0 +1,9 @@
+{
+  "entries": [
+    { "itemId": "Aetherhaven_Plot_Token_Barn_Hytiny", "weight": 20 },
+    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage", "weight": 20 },
+    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper", "weight": 20 },
+    { "itemId": "Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House", "weight": 20 },
+    { "itemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse", "weight": 5 }
+  ]
+}

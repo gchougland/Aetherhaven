@@ -198,6 +198,13 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("FloatingGift", FloatingGiftConfig.CODEC),
+            (o, v) -> o.floatingGift = v != null ? v : new FloatingGiftConfig(),
+            o -> o.floatingGift
+        )
+        .documentation("Floating gift balloon world events: spawn cadence, movement, hit radius, and lifetime.")
+        .add()
+        .append(
             new KeyedCodec<>("Jewelry", JewelryConfig.CODEC),
             (o, v) -> o.jewelry = v != null ? v : new JewelryConfig(),
             o -> o.jewelry
@@ -419,6 +426,7 @@ public final class AetherhavenPluginConfig {
     private int founderMonumentTaxPermille = 1100;
 
     private LootChestConfig lootChest = new LootChestConfig();
+    private FloatingGiftConfig floatingGift = new FloatingGiftConfig();
     private JewelryConfig jewelry = new JewelryConfig();
 
     private int feastTaxBonusPermille = 1250;
@@ -567,6 +575,59 @@ public final class AetherhavenPluginConfig {
     @Nonnull
     public JewelryConfig getJewelry() {
         return jewelry != null ? jewelry : new JewelryConfig();
+    }
+
+    public boolean isFloatingGiftEnabled() {
+        return getFloatingGift().isEnabled();
+    }
+
+    @Nonnull
+    public FloatingGiftConfig getFloatingGift() {
+        return floatingGift != null ? floatingGift : new FloatingGiftConfig();
+    }
+
+    public double getFloatingGiftSpawnRadiusBlocks() {
+        return getFloatingGift().getSpawnRadiusBlocks();
+    }
+
+    public double getFloatingGiftSpawnHeightOffsetBlocks() {
+        return getFloatingGift().getSpawnHeightOffsetBlocks();
+    }
+
+    public double getFloatingGiftSpawnIntervalDaysMin() {
+        return getFloatingGift().getSpawnIntervalDaysMin();
+    }
+
+    public double getFloatingGiftSpawnIntervalDaysMax() {
+        return getFloatingGift().getSpawnIntervalDaysMax();
+    }
+
+    public double getFloatingGiftMoveSpeedBlocksPerSec() {
+        return getFloatingGift().getMoveSpeedBlocksPerSec();
+    }
+
+    public double getFloatingGiftFallSpeedBlocksPerSec() {
+        return getFloatingGift().getFallSpeedBlocksPerSec();
+    }
+
+    public double getFloatingGiftMaxLifeSeconds() {
+        return getFloatingGift().getMaxLifeSeconds();
+    }
+
+    public double getFloatingGiftPopDurationSeconds() {
+        return getFloatingGift().getPopDurationSeconds();
+    }
+
+    public double getFloatingGiftPopHoldLatchSeconds() {
+        return getFloatingGift().getPopHoldLatchSeconds();
+    }
+
+    public double getFloatingGiftProjectileHitRadiusBlocks() {
+        return getFloatingGift().getProjectileHitRadiusBlocks();
+    }
+
+    public int getFloatingGiftMaxActivePerWorld() {
+        return getFloatingGift().getMaxActivePerWorld();
     }
 
     /** Clamped to [1000, 2000]. */

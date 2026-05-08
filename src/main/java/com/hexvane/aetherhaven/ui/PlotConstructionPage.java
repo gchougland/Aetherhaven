@@ -96,6 +96,8 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
     private boolean templateAppended;
     /** House management: hide villagers who already have a home assigned on another completed house plot. */
     private boolean hideHouseResidentElsewhereHoused;
+    /** Persist house-resident hide toggle per player across page instances. */
+    private static final Map<UUID, Boolean> HOUSE_RESIDENT_HIDE_ELSEWHERE_PREF = new LinkedHashMap<>();
 
     public PlotConstructionPage(
         @Nonnull PlayerRef playerRef,
@@ -120,6 +122,13 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         this.managementUi = managementUi;
         this.managementTab = initialManagementTab;
         this.pendingMoveBuildingModal = openMoveBuildingModalOnFirstBuild;
+        UUID prefKey = playerRef.getUuid();
+        if (prefKey != null) {
+            Boolean saved = HOUSE_RESIDENT_HIDE_ELSEWHERE_PREF.get(prefKey);
+            if (saved != null) {
+                this.hideHouseResidentElsewhereHoused = saved;
+            }
+        }
     }
 
     @Override
@@ -620,6 +629,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
         if (data.houseResidentHideElsewhere != null) {
             hideHouseResidentElsewhereHoused = data.houseResidentHideElsewhere;
+            UUID prefKey = playerRef.getUuid();
+            if (prefKey != null) {
+                HOUSE_RESIDENT_HIDE_ELSEWHERE_PREF.put(prefKey, hideHouseResidentElsewhereHoused);
+            }
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -929,6 +942,10 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                         : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.updatedHome")
                 );
             }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("PickupPlot")) {
@@ -1317,7 +1334,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
         return holder[0];
     }
 
-    private static boolean isHomeResidentElsewhereOnCompleteHouse(
+    private static boolean isHomeResidentElsewhereOnHouse(
         @Nonnull TownRecord town,
         @Nonnull ConstructionCatalog catalog,
         @Nonnull UUID exceptPlotId,
@@ -1325,9 +1342,6 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
     ) {
         for (PlotInstance p : town.getPlotInstances()) {
             if (p.getPlotId().equals(exceptPlotId)) {
-                continue;
-            }
-            if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(p.getConstructionId()))) {
@@ -1422,7 +1436,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                     UUID u = uc.getUuid();
                     if (hideElsewhereHoused
                         && plugin != null
-                        && isHomeResidentElsewhereOnCompleteHouse(town, plugin.getConstructionCatalog(), currentHousePlotId, u)) {
+                        && isHomeResidentElsewhereOnHouse(town, plugin.getConstructionCatalog(), currentHousePlotId, u)) {
                         continue;
                     }
                     String label = NpcPortraitProvider.displayLabelForRoleId(npc.getRoleName());
@@ -1430,17 +1444,44 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                 }
             }
         );
-        addHouseFallbackIfMissing(byUuid, town.getElderEntityUuid(), AetherhavenConstants.ELDER_NPC_ROLE_ID);
-        addHouseFallbackIfMissing(byUuid, town.getInnkeeperEntityUuid(), AetherhavenConstants.INNKEEPER_NPC_ROLE_ID);
+        addHouseFallbackIfMissing(
+            byUuid,
+            town.getElderEntityUuid(),
+            AetherhavenConstants.ELDER_NPC_ROLE_ID,
+            hideElsewhereHoused,
+            plugin,
+            town,
+            currentHousePlotId
+        );
+        addHouseFallbackIfMissing(
+            byUuid,
+            town.getInnkeeperEntityUuid(),
+            AetherhavenConstants.INNKEEPER_NPC_ROLE_ID,
+            hideElsewhereHoused,
+            plugin,
+            town,
+            currentHousePlotId
+        );
         List<HouseResidentRow> out = new ArrayList<>(byUuid.values());
         out.sort(Comparator.comparing(HouseResidentRow::label, String.CASE_INSENSITIVE_ORDER));
         return out;
     }
 
     private static void addHouseFallbackIfMissing(
-        @Nonnull Map<UUID, HouseResidentRow> byUuid, @Nullable UUID entityUuid, @Nonnull String roleId
+        @Nonnull Map<UUID, HouseResidentRow> byUuid,
+        @Nullable UUID entityUuid,
+        @Nonnull String roleId,
+        boolean hideElsewhereHoused,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull UUID currentHousePlotId
     ) {
         if (entityUuid == null || byUuid.containsKey(entityUuid)) {
+            return;
+        }
+        if (hideElsewhereHoused
+            && plugin != null
+            && isHomeResidentElsewhereOnHouse(town, plugin.getConstructionCatalog(), currentHousePlotId, entityUuid)) {
             return;
         }
         byUuid.put(

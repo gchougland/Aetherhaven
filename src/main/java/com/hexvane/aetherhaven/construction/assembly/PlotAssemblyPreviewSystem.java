@@ -103,10 +103,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
             return;
         }
-        boolean staffInHand =
-            hand != null
-                && !hand.isEmpty()
-                && AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(hand.getItemId());
+        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
         if (!staffInHand) {
             return;
         }
@@ -130,6 +127,9 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         long nowNs = System.nanoTime();
         BuildingStaffAssemblyChannelComponent channel =
             store.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
+        if (channel != null) {
+            channel.setBrushChebyshevRadius(BuildingStaffTiers.assemblyBrushChebyshevRadius(hand.getItemId()));
+        }
         int maxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
         List<Vector3i> drawCells =
             cellsInRange.size() <= maxDraw
@@ -188,10 +188,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             }
             return;
         }
-        boolean staffInHand =
-            hand != null
-                && !hand.isEmpty()
-                && AetherhavenConstants.BUILDING_STAFF_ITEM_ID.equals(hand.getItemId());
+        boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
         if (!staffInHand) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 STAFF_ASSEMBLY_FRONTIER_REFRESH.remove(previewCacheKey);
@@ -227,6 +224,13 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             commandBuffer.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
         if (channelForDraw == null) {
             channelForDraw = channel;
+        }
+        int brushR = BuildingStaffTiers.assemblyBrushChebyshevRadius(hand.getItemId());
+        if (channel != null) {
+            channel.setBrushChebyshevRadius(brushR);
+        }
+        if (channelForDraw != null) {
+            channelForDraw.setBrushChebyshevRadius(brushR);
         }
         int maxDraw = AetherhavenConstants.BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS;
         List<Vector3i> drawCells =

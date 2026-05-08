@@ -19,7 +19,7 @@
   ],
   "pois": [
     {
-      "localX": 1,
+      "localX": 3,
       "localY": 3,
       "localZ": -4,
       "blockTypeId": "Furniture_Feran_Bed",
@@ -28,7 +28,7 @@
       "capacity": 1,
       "interactionTargetLocalX": 1,
       "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -3
+      "interactionTargetLocalZ": -2
     }
   ]
 }

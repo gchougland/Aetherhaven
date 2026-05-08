@@ -13,13 +13,13 @@ items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
 items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
-items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a 3×3 area. Runs once each in-game morning. Smallest coverage.
+items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a <color is="#4ade80">3×3</color> area. Runs once each in-game morning. Smallest coverage.
 items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
-items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a 5×5 area. Once each in-game morning. Larger than iron.
+items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a <color is="#4ade80">5×5</color> area. Once each in-game morning. Larger than iron.
 items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
-items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a 7×7 area. Once each in-game morning. Wide coverage.
+items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a <color is="#4ade80">7×7</color> area. Once each in-game morning. Wide coverage.
 items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
-items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a 9×9 area. Once each in-game morning. Widest coverage.
+items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a <color is="#4ade80">9×9</color> area. Once each in-game morning. Widest coverage.
 
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
@@ -33,7 +33,7 @@ npcRoles.Aetherhaven_Logger.name=Seren Fairhollow
 npcRoles.Aetherhaven_Rancher.name=Thalen Meadowrun
 
 items.Aetherhaven_Production_Storage.name=Workplace stores
-items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and cannot be picked up.
+items.Aetherhaven_Production_Storage.description=Holds what your workers bring in. Open to set outputs and take stacks. Part of the building and <color is="#ffa726">cannot be picked up</color>.
 items.Aetherhaven_Plot_Token_Miners_Hut.name=Miners hut plot token
 items.Aetherhaven_Plot_Token_Miners_Hut.description=Marks where the miners hut prefab can be built. Craft at the town planning desk.
 items.Aetherhaven_Plot_Token_Lumbermill.name=Lumbermill plot token
@@ -49,7 +49,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Marks w
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny's cozy camper plot token
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Marks where Hytiny's cozy camper can be built. Prefab by HytinyBuilds. Craft at the town planning desk.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny's potted treehouse plot token
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.

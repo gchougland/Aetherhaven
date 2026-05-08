@@ -66,6 +66,11 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftComponent;
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftLootFiles;
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftSchedulerSystem;
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftDamagePopSystem;
+import com.hexvane.aetherhaven.floatinggift.FloatingGiftSystem;
 import com.hexvane.aetherhaven.jewelry.TooltipBridge;
 import com.hexvane.aetherhaven.jewelry.JewelryGemTraits;
 import com.hexvane.aetherhaven.jewelry.JewelryPlayerInitSystem;
@@ -291,6 +296,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             LOGGER.atInfo().log("Created default config at %s", configPath);
         }
         GeodeLootFiles.ensureDefaultLootFile(this);
+        FloatingGiftLootFiles.ensureDefaultLootFile(this);
         TooltipBridge.register();
 
         this.gameTimeCursorResourceType =
@@ -331,6 +337,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         PurificationPowderPlayerComponent.register(this.getEntityStoreRegistry());
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
+        FloatingGiftComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
                 "AetherhavenPoiDebugLabel",
@@ -443,6 +450,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
+        this.getEntityStoreRegistry().registerSystem(new FloatingGiftSystem());
+        this.getEntityStoreRegistry().registerSystem(new FloatingGiftDamagePopSystem());
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));
