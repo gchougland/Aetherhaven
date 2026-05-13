@@ -14,9 +14,12 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.FromPrefab;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPlaceEntityEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferCall;
@@ -393,6 +396,13 @@ public final class ConstructionPasteOps {
         PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
         entityAccessor.invoke(prefabPlaceEntityEvent);
         clone.ensureComponent(FromPrefab.getComponentType());
+        // Decorative prefab props (sign models, bench item props, etc.) are valid melee targets unless marked
+        // Invulnerable. NPCs keep role-driven invulnerability; players must never be tagged here.
+        if (clone.getComponent(NPCEntity.getComponentType()) == null
+            && clone.getComponent(Player.getComponentType()) == null
+            && clone.getComponent(Invulnerable.getComponentType()) == null) {
+            clone.ensureComponent(Invulnerable.getComponentType());
+        }
         entityAccessor.addEntity(clone, AddReason.LOAD);
     }
 }

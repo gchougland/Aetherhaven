@@ -1,0 +1,137 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Wood_Scaffold.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Wood_Scaffold.description"
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Wood_Scaffold.png",
+  "Categories": [
+    "Blocks.Structural"
+  ],
+  "Set": "Aetherhaven",
+  "Recipe": {
+    "Input": [
+      {
+        "ResourceTypeId": "Wood_All",
+        "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ],
+    "OutputQuantity": 8
+  },
+  "MaxStack": 64,
+  "PlayerAnimationsId": "Block",
+  "BlockType": {
+    "Material": "Solid",
+    "DrawType": "Model",
+    "Opacity": "Solid",
+    "CustomModel": "Blocks/Scaffold/Wood_Scaffold.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Weight": 1,
+        "Texture": "Blocks/Scaffold/Wood_Scaffold_Texture.png"
+      }
+    ],
+    "HitboxType": "Aetherhaven_Scaffold_Wood",
+    "VariantRotation": "NESW",
+    "Flags": {},
+    "Gathering": {
+      "Soft": {
+        "IsWeaponBreakable": true,
+        "ItemId": "Aetherhaven_Wood_Scaffold"
+      },
+      "Physics": {
+        "ItemId": "Aetherhaven_Wood_Scaffold"
+      },
+      "UseDefaultDropWhenPlaced": false
+    },
+    "MovementSettings": {
+      "IsClimbable": true
+    },
+    "PlacementSettings": {
+      "RotationMode": "BlockNormal"
+    },
+    "Supporting": {
+      "Up": [
+        {
+          "FaceType": "Full"
+        }
+      ],
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "MaxSupportDistance": 14,
+    "IgnoreSupportWhenPlaced": true,
+    "Support": {
+      "Down": [
+        {
+          "AllowSupportPropagation": true,
+          "FaceType": "Full",
+          "Rotate": false
+        }
+      ],
+      "Horizontal": [
+        {
+          "TagId": "Type=Scaffold",
+          "Rotate": false,
+          "Support": "Ignored"
+        }
+      ]
+    },
+    "BlockParticleSetId": "Wood",
+    "ParticleColor": "#8b7355",
+    "BlockSoundSetId": "Wood",
+    "BlockBreakingDecalId": "Breaking_Decals_Wood"
+  },
+  "Interactions": {
+    "Primary": "Block_Primary",
+    "Secondary": "Block_Secondary",
+    "Use": "Aetherhaven_Scaffold_Use_Root"
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    }
+  },
+  "ResourceTypes": [
+    {
+      "Id": "Fuel"
+    },
+    {
+      "Id": "Charcoal"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Wood",
+      "Scaffold"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "IconProperties": {
+    "Scale": 0.58823,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -13.5
+    ]
+  }
+}

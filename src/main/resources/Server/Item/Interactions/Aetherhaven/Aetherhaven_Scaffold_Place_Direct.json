@@ -1,0 +1,10 @@
+{
+  "Type": "AetherhavenScaffoldStackPlace",
+  "RemoveItemInHand": true,
+  "AllowDragPlacement": true,
+  "Effects": {
+    "WaitForAnimationToFinish": false,
+    "ItemAnimationId": "Build"
+  },
+  "RunTime": 0.125
+}

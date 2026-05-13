@@ -9,6 +9,9 @@ public final class AetherhavenConstants {
     /** Block type id matches item id for block items. */
     public static final String CHARTER_BLOCK_TYPE_ID = "Aetherhaven_Charter";
 
+    /** Minecraft-style wooden scaffolding (climbable, physics-linked column). */
+    public static final String WOOD_SCAFFOLD_ITEM_ID = "Aetherhaven_Wood_Scaffold";
+
     public static final String PAGE_PLOT_CONSTRUCTION = "AetherhavenPlotConstruction";
     /** Management bookcase after build; separate id so OpenCustomUI resolves the correct supplier. */
     public static final String PAGE_PLOT_MANAGEMENT = "AetherhavenPlotManagement";

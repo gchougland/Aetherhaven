@@ -56,6 +56,11 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyDebugTag;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockMountSafetySystem;
+import com.hexvane.aetherhaven.scaffold.ScaffoldBreakDebugSystem;
+import com.hexvane.aetherhaven.scaffold.ScaffoldColumnCascadeBreakSystem;
+import com.hexvane.aetherhaven.scaffold.ScaffoldDamageBlockDebugSystem;
+import com.hexvane.aetherhaven.scaffold.ScaffoldStackPlaceInteraction;
+import com.hexvane.aetherhaven.scaffold.ScaffoldUseExtendInteraction;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
@@ -431,6 +436,18 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 BuildingStaffFrontierTracerInteraction.class,
                 BuildingStaffFrontierTracerInteraction.CODEC
             );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenScaffoldStackPlace",
+                ScaffoldStackPlaceInteraction.class,
+                ScaffoldStackPlaceInteraction.CODEC
+            );
+        this.getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenScaffoldUseExtend",
+                ScaffoldUseExtendInteraction.class,
+                ScaffoldUseExtendInteraction.CODEC
+            );
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(this));
@@ -440,6 +457,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
         this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
@@ -453,6 +471,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSystem());
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftDamagePopSystem());
+        this.getEntityStoreRegistry().registerSystem(new ScaffoldBreakDebugSystem());
+        this.getEntityStoreRegistry().registerSystem(new ScaffoldDamageBlockDebugSystem());
 
         this.getEventRegistry()
             .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), this));

@@ -1,9 +1,10 @@
 # Changelog
 
-## [1.4.0] - Unreleased
+## [1.4.0] - 5/8/2026
 
 ### Added
 
+- **Wood scaffolding** Added a scaffold block for reaching higher places with the building staff (but also any other building the player wants to do). If you break the bottom they all fall to the ground. You can use F on the side of a scaffold to have it stack vertically, or on the top of the scaffold to build out horizontally.
 - **Plot Token Icons** Changed plot tokens icons to reflect the building its for.
 - **Miner Block Options** Added dirt and gravel to the options for the miner.
 - **Variant Buildings** Added new variants for buildings built by HytinyBuilds.
@@ -20,6 +21,7 @@
 
 - **Villager Duplication Bug** Fixed bugs where multiples of a villager would spawn in the Inn.
 - **Charter Breaking** Charter would break if block under it was broken, this has been fixed.
+- **Building Entites Smackable** Player could smack entities in buildings. This has been fixed.
 
 ## [1.3.0] - 5/4/2026
 

@@ -21,6 +21,10 @@ items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block belo
 items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
 items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a <color is="#4ade80">9×9</color> area. Once each in-game morning. Widest coverage.
 
+items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
+items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
+items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.
+
 # === NPC role display names (npcRoles.*) ===
 npcRoles.Aetherhaven_Elder_Lyren.name=Elder Lyren
 npcRoles.Aetherhaven_Innkeeper.name=Corin Mosscup

@@ -1,0 +1,13 @@
+{
+  "Cooldown": {
+    "Id": "BlockInteraction",
+    "Cooldown": 0.278,
+    "ClickBypass": true
+  },
+  "Settings": {
+    "Creative": {
+      "AllowSkipChainOnClick": true
+    }
+  },
+  "Interactions": ["Aetherhaven_Scaffold_Use_Direct"]
+}

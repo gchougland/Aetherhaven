@@ -1,6 +1,10 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
+items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
+items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.
+items.Aetherhaven_Wood_Scaffold.legendUse=Use (F): extend tower / branch from top while aiming at scaffold. Right-click: normal block placement.
+
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Plot sign
 items.Aetherhaven_Plot_Sign.description=Marks where a prefab can be built. Use /aetherhaven plot to configure.

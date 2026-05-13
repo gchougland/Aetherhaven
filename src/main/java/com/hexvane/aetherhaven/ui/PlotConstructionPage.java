@@ -261,9 +261,7 @@ public final class PlotConstructionPage extends InteractiveCustomUIPage<PlotCons
                         + treasuryBal
                         + " + inventory "
                         + invGold
-                        + " = "
-                        + spendableGold
-                        + " spendable)";
+                        + ")";
                 commandBuilder.set("#TreasuryLabel.Style.TextColor", spendableGold >= goldCost ? "#3d913f" : "#962f2f");
             }
             commandBuilder.set("#TreasuryLabel.TextSpans", Message.raw(tLine));
