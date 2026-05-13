@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -15,6 +16,7 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -59,18 +61,33 @@ public final class VillagerNeedsDecaySystem extends EntityTickingSystem<EntitySt
         long nowMs = resolveNowMs(store);
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
         float rate = cfg.getVillagerNeedsDecayPerSecond();
+        TownManager tm = null;
+        TownRecord townRecord = null;
         if (!TownVillagerBinding.isVisitorKind(binding.getKind())) {
             World world = store.getExternalData().getWorld();
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            TownRecord town = tm.getTown(binding.getTownId());
-            if (town != null) {
+            tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            townRecord = tm.getTown(binding.getTownId());
+            if (townRecord != null) {
                 long dawn = VillagerReputationService.currentGameEpochDay(store);
-                if (FeastService.isHearthglassDecayActive(town, dawn)) {
+                if (FeastService.isHearthglassDecayActive(townRecord, dawn)) {
                     rate *= cfg.getFeastNeedsDecayScalePermille() / 1000f;
                 }
             }
         }
         needs.applyDecay(nowMs, rate);
+        if (townRecord != null && tm != null) {
+            UUIDComponent uc = archetypeChunk.getComponent(index, UUIDComponent.getComponentType());
+            if (uc != null) {
+                ResidentRegistryService.writeLastKnownNeedsIfChanged(
+                    townRecord,
+                    tm,
+                    uc.getUuid(),
+                    needs.getHunger(),
+                    needs.getEnergy(),
+                    needs.getFun()
+                );
+            }
+        }
         Ref<EntityStore> entityRef = archetypeChunk.getReferenceTo(index);
         commandBuffer.putComponent(entityRef, VillagerNeeds.getComponentType(), needs);
     }

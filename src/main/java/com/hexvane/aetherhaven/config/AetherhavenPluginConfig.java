@@ -171,7 +171,7 @@ public final class AetherhavenPluginConfig {
             o -> o.charterTaxPerCapitaFlatFraction
         )
         .documentation(
-            "For per-capita charter tax policy: blend maxPer * (flatFraction + (1-flatFraction) * needsRatio). Clamped internally."
+            "Legacy field; per-capita charter tax now uses CharterPerCapitaMinGoldPerResidentPerDay and CharterPerCapitaMaxGoldPerResidentPerDay."
         )
         .add()
         .append(
@@ -179,7 +179,40 @@ public final class AetherhavenPluginConfig {
             (o, v) -> o.charterTaxHappinessExponent = v != null ? v : 1.25,
             o -> o.charterTaxHappinessExponent
         )
-        .documentation("For happiness-weighted charter tax: maxPer * needsRatio^exponent. Exponent >= 1.")
+        .documentation("Legacy field; happiness-weighted tax now uses CharterHappinessTaxMinComfortRatio and CharterHappinessTaxPeakPermille.")
+        .add()
+        .append(
+            new KeyedCodec<>("CharterHappinessTaxMinComfortRatio", Codec.DOUBLE),
+            (o, v) -> o.charterHappinessTaxMinComfortRatio = v != null ? v : 0.5,
+            o -> o.charterHappinessTaxMinComfortRatio
+        )
+        .documentation(
+            "Happiness-weighted charter tax: average needs ratio (0..1) at or below this pays 0 gold; above it, tax rises on a curve to the peak."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("CharterHappinessTaxPeakPermille", Codec.INTEGER),
+            (o, v) -> o.charterHappinessTaxPeakPermille = v != null ? v : 1500,
+            o -> o.charterHappinessTaxPeakPermille
+        )
+        .documentation(
+            "Happiness-weighted charter tax: at full needs, per-resident gold is TreasuryMaxGoldTaxPerVillagerPerDay * (permille/1000) "
+                + "(e.g. 1500 = 150% of the linear cap)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("CharterPerCapitaMinGoldPerResidentPerDay", Codec.INTEGER),
+            (o, v) -> o.charterPerCapitaMinGoldPerResidentPerDay = v != null ? v : 5,
+            o -> o.charterPerCapitaMinGoldPerResidentPerDay
+        )
+        .documentation("Per-capita charter tax: gold at 0% average needs (floor of the per-resident range).")
+        .add()
+        .append(
+            new KeyedCodec<>("CharterPerCapitaMaxGoldPerResidentPerDay", Codec.INTEGER),
+            (o, v) -> o.charterPerCapitaMaxGoldPerResidentPerDay = v != null ? v : 8,
+            o -> o.charterPerCapitaMaxGoldPerResidentPerDay
+        )
+        .documentation("Per-capita charter tax: gold at 100% average needs (ceiling of the per-resident range).")
         .add()
         .append(
             new KeyedCodec<>("FounderMonumentTaxPermille", Codec.INTEGER),
@@ -423,6 +456,10 @@ public final class AetherhavenPluginConfig {
 
     private double charterTaxPerCapitaFlatFraction = 0.35;
     private double charterTaxHappinessExponent = 1.25;
+    private double charterHappinessTaxMinComfortRatio = 0.5;
+    private int charterHappinessTaxPeakPermille = 1500;
+    private int charterPerCapitaMinGoldPerResidentPerDay = 5;
+    private int charterPerCapitaMaxGoldPerResidentPerDay = 8;
     private int founderMonumentTaxPermille = 1100;
 
     private LootChestConfig lootChest = new LootChestConfig();
@@ -547,6 +584,46 @@ public final class AetherhavenPluginConfig {
     public double getCharterTaxHappinessExponent() {
         double v = charterTaxHappinessExponent;
         return v >= 1.0 ? v : 1.25;
+    }
+
+    /** In (0, 1): at or below this average comfort ratio, happiness-weighted tax pays 0 for that resident. */
+    public double getCharterHappinessTaxMinComfortRatio() {
+        double v = charterHappinessTaxMinComfortRatio;
+        if (v <= 0.0) {
+            return 0.5;
+        }
+        if (v >= 0.999) {
+            return 0.99;
+        }
+        return v;
+    }
+
+    /** Permille on {@link #getTreasuryMaxGoldTaxPerVillagerPerDay} at full comfort (1000 = same as linear cap). Clamped 1000..3000. */
+    public int getCharterHappinessTaxPeakPermille() {
+        int v = charterHappinessTaxPeakPermille;
+        if (v < 1000) {
+            return 1000;
+        }
+        return Math.min(v, 3000);
+    }
+
+    /** Per-capita policy floor per resident per morning (clamped 0..9999). */
+    public int getCharterPerCapitaMinGoldPerResidentPerDay() {
+        int v = charterPerCapitaMinGoldPerResidentPerDay;
+        if (v < 0) {
+            return 0;
+        }
+        return Math.min(v, 9999);
+    }
+
+    /** Per-capita policy ceiling per resident per morning; forced to be at least the min getter returns. */
+    public int getCharterPerCapitaMaxGoldPerResidentPerDay() {
+        int mn = getCharterPerCapitaMinGoldPerResidentPerDay();
+        int v = charterPerCapitaMaxGoldPerResidentPerDay;
+        if (v < mn) {
+            return mn;
+        }
+        return Math.min(v, 9999);
     }
 
     /** Clamped to [1000, 2000]. */

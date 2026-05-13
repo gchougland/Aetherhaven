@@ -134,6 +134,15 @@ public final class TownRecord {
     private Long treasuryLastTaxEpochDay;
 
     /**
+     * {@link java.time.LocalDate#toEpochDay()} of {@link com.hypixel.hytale.server.core.modules.time.WorldTimeResource#getGameDateTime}
+     * when automatic morning tithe last ran. Prevents double collection when sunrise crosses during the same in-game
+     * calendar date while {@code treasuryLastTaxEpochDay} (dawn-aligned) advances.
+     */
+    @Nullable
+    @SerializedName("treasuryLastTaxGameLocalDateEpochDay")
+    private Long treasuryLastTaxGameLocalDateEpochDay;
+
+    /**
      * Outer key: player UUID string. Inner key: villager NPC entity UUID string.
      * Values: reputation, daily talk tracking, milestone rewards.
      */
@@ -1106,6 +1115,15 @@ public final class TownRecord {
 
     public void setTreasuryLastTaxEpochDay(@Nullable Long epochDay) {
         this.treasuryLastTaxEpochDay = epochDay;
+    }
+
+    @Nullable
+    public Long getTreasuryLastTaxGameLocalDateEpochDay() {
+        return treasuryLastTaxGameLocalDateEpochDay;
+    }
+
+    public void setTreasuryLastTaxGameLocalDateEpochDay(@Nullable Long epochDay) {
+        this.treasuryLastTaxGameLocalDateEpochDay = epochDay;
     }
 
     @Nullable

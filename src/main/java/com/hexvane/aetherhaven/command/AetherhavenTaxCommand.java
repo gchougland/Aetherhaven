@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Debug: show dawn-aligned morning tax math for your town (loaded residents only).
+ * Debug: show dawn-aligned morning tax math for your town (loaded villagers plus roster fallbacks).
  * Normal command permissions apply.
  */
 public final class AetherhavenTaxCommand extends AbstractCommandCollection {
@@ -96,7 +96,8 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
                         Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.debug.state3")
                             .param("a", b.taxPolicyId() == null ? "(linear)" : b.taxPolicyId())
                             .param("b", String.valueOf(b.maxGoldPerResidentPerDay()))
-                            .param("c", String.valueOf(b.loadedResidentCount()))
+                            .param("c", String.valueOf(b.taxResidentRowCount()))
+                            .param("d", String.valueOf(b.simulatedResidentEntityCount()))
                     );
                     for (VillagerTaxLine line : b.lines()) {
                         playerRef.sendMessage(

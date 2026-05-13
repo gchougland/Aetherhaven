@@ -11,12 +11,13 @@ aetherhaven.ui.treasury.makeRoom=Make room in your inventory.
 aetherhaven.ui.treasury.couldNotAddCoins=Could not add coins.
 aetherhaven.ui.treasury.withdrew=Withdrew {count} gold coins.
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=Tax breakdown (loaded chunks only; unloaded residents contribute 0 until simulated):
+aetherhaven.ui.treasury.notificationTaxCollected={amount} in taxes collected
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Tax breakdown (loaded villagers use live needs; roster rows not in loaded chunks use last saved needs when available):
 aetherhaven.ui.treasury.debug.titheNoHall=Tithe: no complete town hall in this town.
-aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 gold (no loaded residents, or 0 from policy math). Unload/needs/breakdown: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheZero=Tithe: 0 gold (no eligible residents, or 0 from policy math). Breakdown: /aetherhaven tax breakdown
 aetherhaven.ui.treasury.debug.titheApplied=Tithe applied: +{amount} gold to treasury (same rules as a morning collection).
 aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} residentRows={c} simulatedNow={d}
 aetherhaven.ui.treasury.debug.villagerLine=  {name} ({kind}) comfort={comfort} gold={gold}
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}

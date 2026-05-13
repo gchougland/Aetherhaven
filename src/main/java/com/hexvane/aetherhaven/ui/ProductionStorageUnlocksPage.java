@@ -95,8 +95,8 @@ public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/ProductionStorageUnlocks.ui");
             templateAppended = true;
+            AetherhavenUiLocalization.applyProductionStorageUnlocks(commandBuilder);
         }
-        AetherhavenUiLocalization.applyProductionStorageUnlocks(commandBuilder);
         commandBuilder.set(ERR_MSG + ".Visible", false);
         commandBuilder.set(DETAIL_PANEL + ".Visible", false);
         eventBuilder.addEventBinding(

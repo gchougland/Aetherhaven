@@ -5,11 +5,13 @@
 ### Changed
 
 - **Ore Production Storage** Corrected maximum storage for all ores to be 25.
+- **Taxes** Taxes are now collected whether or not the town is loaded as long as one of the town members is on the server. Also added a notification each morning saying how much was earned.
 
 ### Fixed
 
 - **Floating Gift** Fixed errors related to floating gift balloons.
 - **Variant houses** Fixed bug where variant houses don't count for quests.
+- **Produciton GUI** Fixed occassional customUI error in the produciton gui.
 
 ## [1.4.0] - 5/8/2026
 

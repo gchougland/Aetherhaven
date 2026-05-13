@@ -179,7 +179,9 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
 
         commandBuilder.set(
             "#TaxIntro.TextSpans",
-            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.intro").param("count", b.loadedResidentCount())
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.intro")
+                .param("live", String.valueOf(b.simulatedResidentEntityCount()))
+                .param("count", String.valueOf(b.taxResidentRowCount()))
         );
         commandBuilder.set("#TaxPolicyShort.TextSpans", taxPolicyShortMessage(policyEnum, b.maxGoldPerResidentPerDay(), cfg));
         boolean hall = b.townHallComplete();
@@ -187,7 +189,8 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
 
         commandBuilder.set(
             "#TitheSubLabel.TextSpans",
-            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetSubLabel").param("count", b.loadedResidentCount())
+            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetSubLabel")
+                .param("count", String.valueOf(b.taxResidentRowCount()))
         );
         commandBuilder.set("#TitheSubGold.TextSpans", Message.raw(padGoldColumn(b.sumBeforeTownMultipliers())));
 
@@ -283,14 +286,16 @@ public final class TreasuryPage extends InteractiveCustomUIPage<TreasuryPage.Pag
             return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.linear").param("max", maxPer);
         }
         if (policy == CharterTaxPolicy.PER_CAPITA) {
-            int flatPct = (int) Math.round(cfg.getCharterTaxPerCapitaFlatFraction() * 100.0);
             return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.perCapita")
-                .param("max", maxPer)
-                .param("flatPct", flatPct);
+                .param("min", String.valueOf(cfg.getCharterPerCapitaMinGoldPerResidentPerDay()))
+                .param("max", String.valueOf(cfg.getCharterPerCapitaMaxGoldPerResidentPerDay()));
         }
+        int minComfortPct = (int) Math.round(cfg.getCharterHappinessTaxMinComfortRatio() * 100.0);
+        int peakGold = (int) Math.floor(maxPer * (cfg.getCharterHappinessTaxPeakPermille() / 1000.0));
         return Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.policyShort.happiness")
-            .param("max", maxPer)
-            .param("exp", String.format(Locale.US, "%.2f", cfg.getCharterTaxHappinessExponent()));
+            .param("base", String.valueOf(maxPer))
+            .param("minComfortPct", String.valueOf(minComfortPct))
+            .param("peak", String.valueOf(peakGold));
     }
 
     @Override

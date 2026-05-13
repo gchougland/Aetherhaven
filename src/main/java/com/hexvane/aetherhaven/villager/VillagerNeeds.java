@@ -104,6 +104,12 @@ public final class VillagerNeeds implements Component<EntityStore> {
     }
 
     /**
+     * Wall-clock gap with no ticks (e.g. chunk unloaded) does not drain needs; we only resume decay from "now".
+     * Loaded NPCs tick often, so legitimate gaps stay tiny.
+     */
+    private static final long OFFLINE_GAP_SKIP_DECAY_MS = 5L * 60L * 1000L;
+
+    /**
      * One-time migration from legacy 0..1 components, then decay toward 0 using {@code decayPerSecond} hunger points
      * per second of game time (energy/fun use slightly lower multipliers).
      */
@@ -113,10 +119,15 @@ public final class VillagerNeeds implements Component<EntityStore> {
             lastSimulatedEpochMs = nowMs;
             return;
         }
-        double seconds = (nowMs - lastSimulatedEpochMs) / 1000.0;
-        if (seconds <= 0) {
+        long elapsedMs = nowMs - lastSimulatedEpochMs;
+        if (elapsedMs <= 0L) {
             return;
         }
+        if (elapsedMs > OFFLINE_GAP_SKIP_DECAY_MS) {
+            lastSimulatedEpochMs = nowMs;
+            return;
+        }
+        double seconds = elapsedMs / 1000.0;
         seconds = Math.min(seconds, 3600.0);
         lastSimulatedEpochMs = nowMs;
         float step = (float) (seconds * decayPerSecond);

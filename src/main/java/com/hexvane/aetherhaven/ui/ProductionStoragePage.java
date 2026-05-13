@@ -80,8 +80,10 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/ProductionStorage.ui");
             templateAppended = true;
+            // Static labels/tooltips only when the template is first attached. Live refresh re-runs build() without
+            // append; re-setting #ProductionTitleText etc. can race the client and log "Selected element ... not found".
+            AetherhavenUiLocalization.applyProductionStorage(commandBuilder);
         }
-        AetherhavenUiLocalization.applyProductionStorage(commandBuilder);
         commandBuilder.set("#ErrMsg.Visible", false);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         World world = store.getExternalData().getWorld();

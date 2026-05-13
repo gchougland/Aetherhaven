@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.CharterTaxPolicy;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
@@ -20,29 +21,44 @@ import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Daily gold tithe into {@link TownRecord} treasury. Invoked only from {@link TownEconomyTimeService#onGameTimeFromHub}
- * (wired by {@link com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber}) on the entity-store thread, once
- * per dawn-aligned game day when town hall is complete and the tithe total is positive.
+ * Daily gold tithe into {@link TownRecord} treasury. Invoked from {@link TownEconomyTimeService#onGameTimeFromHub}
+ * (wired by {@link com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber}) on the entity-store thread during
+ * the configured in-game morning window when the town hall is complete, the dawn-aligned day has not been stamped yet,
+ * at least one owner or member player is online in this world, at least one paying resident row exists (loaded NPCs
+ * and/or roster snapshots with last-known needs when those villagers are not loaded), and the tithe has been computed.
  * {@link VillagerReputationService#currentGameEpochDay} matches reputation and other dawn-based dailies (not raw calendar midnight).
  */
 public final class TownTaxService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
+    /**
+     * Persisted {@link TownRecord#getTreasuryLastTaxEpochDay()} values far below any realistic dawn id (e.g. corrupt
+     * saves or pre-migration quirks) are ignored so collection can resume.
+     */
+    private static final long STALE_TREASURY_LAST_TAX_DAY = -200_000L;
+
     private TownTaxService() {}
 
-    /** One resident row counted during a tax scan (loaded simulation only). */
+    /** One resident row counted during a tax scan (simulated NPC and/or roster-only row). */
     public record VillagerTaxLine(
         @Nonnull UUID entityUuid,
         @Nonnull String bindingKind,
@@ -56,14 +72,16 @@ public final class TownTaxService {
     ) {}
 
     /**
-     * Full morning tax snapshot for debugging. {@link #loadedResidentCount()} is NPCs in loaded chunks with binding +
-     * needs; unloaded residents do not contribute until their chunks simulate.
+     * Full morning tax snapshot for debugging. {@link #taxResidentRowCount()} is {@code lines().size()}.
+     * {@link #simulatedResidentEntityCount()} is paying residents currently in loaded chunks; automatic tithe runs when
+     * {@link #taxResidentRowCount()} is positive (rows can be roster-only).
      */
     public record TaxMorningBreakdown(
         boolean townHallComplete,
         @Nullable String taxPolicyId,
         int maxGoldPerResidentPerDay,
-        int loadedResidentCount,
+        int taxResidentRowCount,
+        int simulatedResidentEntityCount,
         @Nonnull List<VillagerTaxLine> lines,
         long sumBeforeTownMultipliers,
         boolean founderMonumentActive,
@@ -88,9 +106,17 @@ public final class TownTaxService {
         @Nonnull WorldTimeResource wtr,
         @Nonnull Store<EntityStore> store
     ) {
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
+        int morningStart = cfg.getGameMorningStartHour();
+        int morningEndEx = cfg.getGameMorningEndHourExclusive();
+        if (!AetherhavenMorningWindow.isGameMorning(wtr, morningStart, morningEndEx)) {
+            return;
+        }
+
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         long titheDay = VillagerReputationService.currentGameEpochDay(store);
+        long todayGameLocalEpochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
+        Set<UUID> onlinePlayers = collectOnlinePlayerUuids(store);
 
         for (TownRecord town : tm.allTowns()) {
             if (!world.getName().equals(town.getWorldName())) {
@@ -100,25 +126,49 @@ public final class TownTaxService {
             if (hall == null) {
                 continue;
             }
-            Long last = town.getTreasuryLastTaxEpochDay();
+            if (!anyAffiliatedTownPlayerOnline(town, onlinePlayers)) {
+                continue;
+            }
+            Long lastRaw = town.getTreasuryLastTaxEpochDay();
+            Long last = sanitizeTreasuryLastTaxDay(lastRaw, titheDay);
             if (last != null && last >= titheDay) {
                 continue;
             }
+            Long lastCal = town.getTreasuryLastTaxGameLocalDateEpochDay();
+            if (lastCal != null && lastCal == todayGameLocalEpochDay) {
+                continue;
+            }
             TaxMorningBreakdown breakdown = computeTaxMorningBreakdown(town, store, cfg, plugin.getConstructionCatalog());
+            if (breakdown.taxResidentRowCount() <= 0) {
+                continue;
+            }
             long added = breakdown.finalTotal();
-            // Only stamp the dawn day when gold was credited (never advance last on a dry run).
+            town.setTreasuryLastTaxEpochDay(titheDay);
+            town.setTreasuryLastTaxGameLocalDateEpochDay(todayGameLocalEpochDay);
             if (added > 0L) {
                 town.addTreasuryGoldCoins(added);
-                town.setTreasuryLastTaxEpochDay(titheDay);
-                tm.updateTown(town);
+            }
+            tm.updateTown(town);
+            if (added > 0L) {
+                notifyTownTaxCollected(store, town, added);
                 LOGGER.atInfo().log(
-                    "Aetherhaven treasury tithe applied: world=%s townId=%s +%d gold dawnDay=%d gameDateTime=%s loadedResidents=%d",
+                    "Aetherhaven treasury tithe applied: world=%s townId=%s +%d gold dawnDay=%d gameDateTime=%s residentRows=%d simulated=%d",
                     world.getName(),
                     town.getTownId(),
                     added,
                     titheDay,
                     wtr.getGameDateTime(),
-                    breakdown.loadedResidentCount()
+                    breakdown.taxResidentRowCount(),
+                    breakdown.simulatedResidentEntityCount()
+                );
+            } else {
+                LOGGER.atFine().log(
+                    "Aetherhaven treasury tithe stamped (0 gold): world=%s townId=%s dawnDay=%d residentRows=%d simulated=%d",
+                    world.getName(),
+                    town.getTownId(),
+                    titheDay,
+                    breakdown.taxResidentRowCount(),
+                    breakdown.simulatedResidentEntityCount()
                 );
             }
         }
@@ -126,7 +176,7 @@ public final class TownTaxService {
 
     /**
      * Debug: apply the current morning tithe math to this town, credit the treasury, and set last-collected day, without
-     * requiring the in-game morning window. Does not add gold if the final total is 0 (e.g. no residents loaded).
+     * requiring the in-game morning window. Does not add gold if the final total is 0 (e.g. no resident tax rows).
      * Still requires a complete town hall when {@code requireCompleteTownHall} is true.
      *
      * @return gold credited, or -1 if town hall required but missing, -2 if already collected this dawn day (when
@@ -146,9 +196,17 @@ public final class TownTaxService {
         }
         long titheDay = VillagerReputationService.currentGameEpochDay(store);
         if (!ignoreAlreadyCollectedThisCalendarDay) {
-            Long last = town.getTreasuryLastTaxEpochDay();
+            Long last = sanitizeTreasuryLastTaxDay(town.getTreasuryLastTaxEpochDay(), titheDay);
             if (last != null && last >= titheDay) {
                 return -2L;
+            }
+            WorldTimeResource wtrForce = store.getResource(WorldTimeResource.getResourceType());
+            if (wtrForce != null) {
+                long cal = wtrForce.getGameDateTime().toLocalDate().toEpochDay();
+                Long lastCal = town.getTreasuryLastTaxGameLocalDateEpochDay();
+                if (lastCal != null && lastCal == cal) {
+                    return -2L;
+                }
             }
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
@@ -158,6 +216,10 @@ public final class TownTaxService {
         if (added > 0L) {
             town.addTreasuryGoldCoins(added);
             town.setTreasuryLastTaxEpochDay(titheDay);
+            WorldTimeResource wtrStamp = store.getResource(WorldTimeResource.getResourceType());
+            if (wtrStamp != null) {
+                town.setTreasuryLastTaxGameLocalDateEpochDay(wtrStamp.getGameDateTime().toLocalDate().toEpochDay());
+            }
             tm.updateTown(town);
         }
         return added;
@@ -175,9 +237,14 @@ public final class TownTaxService {
         int morningEndEx = cfg.getGameMorningEndHourExclusive();
         boolean morning = wtr != null && AetherhavenMorningWindow.isGameMorning(wtr, morningStart, morningEndEx);
         long dawnDay = VillagerReputationService.currentGameEpochDay(store);
-        Long last = town.getTreasuryLastTaxEpochDay();
+        Long lastRaw = town.getTreasuryLastTaxEpochDay();
+        Long lastSanitized = sanitizeTreasuryLastTaxDay(lastRaw, dawnDay);
+        Long lastTaxCal = town.getTreasuryLastTaxGameLocalDateEpochDay();
+        boolean alreadyThisGameCalendarDay =
+            wtr != null && lastTaxCal != null && lastTaxCal == wtr.getGameDateTime().toLocalDate().toEpochDay();
         boolean hall = town.findCompletePlotWithConstruction(constructionCatalog, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL) != null;
-        boolean wouldCollect = hall && (last == null || last < dawnDay);
+        Set<UUID> onlinePlayers = collectOnlinePlayerUuids(store);
+        boolean anyMember = anyAffiliatedTownPlayerOnline(town, onlinePlayers);
 
         int maxPer = cfg.getTreasuryMaxGoldTaxPerVillagerPerDay();
         CharterTaxPolicy policy = town.getCharterTaxPolicyEnum();
@@ -185,11 +252,19 @@ public final class TownTaxService {
         if (policyId != null && policyId.isBlank()) {
             policyId = null;
         }
-        double flatFrac = cfg.getCharterTaxPerCapitaFlatFraction();
-        double exp = cfg.getCharterTaxHappinessExponent();
 
         List<VillagerTaxLine> lines = new ArrayList<>();
-        long sum = accumulateResidentTaxLines(town, store, maxPer, policy, flatFrac, exp, lines);
+        int[] simulatedCount = new int[1];
+        long sum = accumulateResidentTaxLines(town, store, maxPer, cfg, policy, lines, simulatedCount);
+        int simulated = simulatedCount[0];
+        int taxRows = lines.size();
+        boolean wouldCollect =
+            hall
+                && (lastSanitized == null || lastSanitized < dawnDay)
+                && !alreadyThisGameCalendarDay
+                && morning
+                && anyMember
+                && taxRows > 0;
 
         boolean founder = town.isFounderMonumentActive();
         int founderPm = cfg.getFounderMonumentTaxPermille();
@@ -204,7 +279,8 @@ public final class TownTaxService {
             hall,
             policyId,
             maxPer,
-            lines.size(),
+            taxRows,
+            simulated,
             List.copyOf(lines),
             sum,
             founder,
@@ -215,7 +291,7 @@ public final class TownTaxService {
             finalTotal,
             morning,
             dawnDay,
-            last,
+            lastRaw,
             wouldCollect
         );
     }
@@ -224,13 +300,14 @@ public final class TownTaxService {
         @Nonnull TownRecord town,
         @Nonnull Store<EntityStore> store,
         int maxPerVillager,
+        @Nonnull AetherhavenPluginConfig cfg,
         @Nullable CharterTaxPolicy policy,
-        double flatFrac,
-        double exp,
-        @Nonnull List<VillagerTaxLine> outLines
+        @Nonnull List<VillagerTaxLine> outLines,
+        @Nonnull int[] simulatedResidentEntityCountOut
     ) {
         UUID tid = town.getTownId();
         long[] sum = new long[1];
+        Set<UUID> counted = new HashSet<>();
         Query<EntityStore> q =
             Query.and(
                 TownVillagerBinding.getComponentType(),
@@ -255,23 +332,18 @@ public final class TownTaxService {
                     if (id == null) {
                         continue;
                     }
+                    UUID entityUuid = id.getUuid();
+                    counted.add(entityUuid);
+                    simulatedResidentEntityCountOut[0]++;
                     String role = npc != null ? npc.getRoleName() : null;
                     String displayName = AetherhavenRoleLabels.listLinePlainEnglish(role, b.getKind());
                     float avg = (needs.getHunger() + needs.getEnergy() + needs.getFun()) / 3f;
                     float ratio = Math.max(0f, Math.min(1f, avg / VillagerNeeds.MAX));
-                    double per;
-                    if (policy == null) {
-                        per = maxPerVillager * ratio;
-                    } else if (policy == CharterTaxPolicy.PER_CAPITA) {
-                        per = maxPerVillager * (flatFrac + (1.0 - flatFrac) * ratio);
-                    } else {
-                        per = maxPerVillager * Math.pow(ratio, exp);
-                    }
-                    long floored = (long) Math.floor(per);
+                    long floored = contributionGold(maxPerVillager, cfg, policy, ratio);
                     sum[0] += floored;
                     outLines.add(
                         new VillagerTaxLine(
-                            id.getUuid(),
+                            entityUuid,
                             b.getKind(),
                             role,
                             displayName,
@@ -285,6 +357,163 @@ public final class TownTaxService {
                 }
             }
         );
+        appendOfflineResidentTaxFromRecords(town, maxPerVillager, cfg, policy, counted, outLines, sum);
         return sum[0];
+    }
+
+    private static void appendOfflineResidentTaxFromRecords(
+        @Nonnull TownRecord town,
+        int maxPerVillager,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nullable CharterTaxPolicy policy,
+        @Nonnull Set<UUID> countedEntityIds,
+        @Nonnull List<VillagerTaxLine> outLines,
+        @Nonnull long[] sum
+    ) {
+        UUID nil = new UUID(0L, 0L);
+        for (ResidentNpcRecord rec : town.getResidentNpcRecords()) {
+            if (rec == null) {
+                continue;
+            }
+            if (TownVillagerBinding.isVisitorKind(rec.getKind())) {
+                continue;
+            }
+            UUID id = rec.getLastEntityUuid();
+            if (nil.equals(id) || countedEntityIds.contains(id)) {
+                continue;
+            }
+            if (!rec.hasLastKnownNeeds()) {
+                continue;
+            }
+            countedEntityIds.add(id);
+            float h = rec.getLastKnownHunger();
+            float e = rec.getLastKnownEnergy();
+            float f = rec.getLastKnownFun();
+            float avg = (h + e + f) / 3f;
+            float ratio = Math.max(0f, Math.min(1f, avg / VillagerNeeds.MAX));
+            long floored = contributionGold(maxPerVillager, cfg, policy, ratio);
+            sum[0] += floored;
+            String roleId = rec.getNpcRoleId();
+            String role = roleId != null && !roleId.isBlank() ? roleId : null;
+            String displayName = AetherhavenRoleLabels.listLinePlainEnglish(role, rec.getKind());
+            outLines.add(
+                new VillagerTaxLine(
+                    id,
+                    rec.getKind(),
+                    role,
+                    displayName,
+                    h,
+                    e,
+                    f,
+                    ratio,
+                    floored
+                )
+            );
+        }
+    }
+
+    private static long contributionGold(
+        int treasuryMaxPerResident,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nullable CharterTaxPolicy policy,
+        float ratio
+    ) {
+        double r = Math.max(0.0, Math.min(1.0, ratio));
+        if (policy == null) {
+            return (long) Math.floor(treasuryMaxPerResident * r);
+        }
+        if (policy == CharterTaxPolicy.PER_CAPITA) {
+            int mn = cfg.getCharterPerCapitaMinGoldPerResidentPerDay();
+            int mx = cfg.getCharterPerCapitaMaxGoldPerResidentPerDay();
+            double per = mn + (mx - mn) * r;
+            return (long) Math.floor(per);
+        }
+        // HAPPINESS_WEIGHTED: no gold at or below comfort threshold; curved rise to peak at full needs.
+        double thr = cfg.getCharterHappinessTaxMinComfortRatio();
+        if (r <= thr) {
+            return 0L;
+        }
+        double span = 1.0 - thr;
+        if (span <= 1.0e-6) {
+            return 0L;
+        }
+        double t = (r - thr) / span;
+        double curved = smoothstep01(t);
+        double peak = treasuryMaxPerResident * (cfg.getCharterHappinessTaxPeakPermille() / 1000.0);
+        return (long) Math.floor(peak * curved);
+    }
+
+    /** Hermite smoothstep on [0,1] for a soft curve (zero first derivative at endpoints). */
+    private static double smoothstep01(double t) {
+        if (t <= 0.0) {
+            return 0.0;
+        }
+        if (t >= 1.0) {
+            return 1.0;
+        }
+        return t * t * (3.0 - 2.0 * t);
+    }
+
+    @Nullable
+    private static Long sanitizeTreasuryLastTaxDay(@Nullable Long raw, long currentTitheDay) {
+        if (raw == null) {
+            return null;
+        }
+        if (raw < STALE_TREASURY_LAST_TAX_DAY) {
+            return null;
+        }
+        if (raw > currentTitheDay + 5000L) {
+            return null;
+        }
+        return raw;
+    }
+
+    @Nonnull
+    private static Set<UUID> collectOnlinePlayerUuids(@Nonnull Store<EntityStore> store) {
+        Query<EntityStore> q = Query.and(Player.getComponentType(), UUIDComponent.getComponentType());
+        Set<UUID> out = new HashSet<>();
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (uc != null) {
+                        out.add(uc.getUuid());
+                    }
+                }
+            }
+        );
+        return out;
+    }
+
+    private static boolean anyAffiliatedTownPlayerOnline(@Nonnull TownRecord town, @Nonnull Set<UUID> onlinePlayers) {
+        for (UUID u : onlinePlayers) {
+            if (town.hasMemberOrOwner(u)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void notifyTownTaxCollected(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town, long goldAdded) {
+        Message msg =
+            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.treasury.notificationTaxCollected").param("amount", Long.toString(goldAdded));
+        Query<EntityStore> q = Query.and(Player.getComponentType(), UUIDComponent.getComponentType(), PlayerRef.getComponentType());
+        store.forEachChunk(
+            q,
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    UUIDComponent uc = chunk.getComponent(i, UUIDComponent.getComponentType());
+                    PlayerRef pr = chunk.getComponent(i, PlayerRef.getComponentType());
+                    if (uc == null || pr == null) {
+                        continue;
+                    }
+                    if (!town.hasMemberOrOwner(uc.getUuid())) {
+                        continue;
+                    }
+                    NotificationUtil.sendNotification(pr.getPacketHandler(), msg, NotificationStyle.Success);
+                }
+            }
+        );
     }
 }

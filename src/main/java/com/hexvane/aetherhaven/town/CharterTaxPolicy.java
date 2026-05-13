@@ -5,9 +5,15 @@ import javax.annotation.Nullable;
 
 /** Level-1 charter amendment: how morning treasury tax scales with residents vs villager needs. */
 public enum CharterTaxPolicy {
-    /** Emphasize headcount: higher base per resident, weaker dependence on average needs. */
+    /**
+     * Headcount-stable revenue: each resident pays between configured min and max gold per morning, scaling linearly
+     * with average needs (hunger, energy, fun).
+     */
     PER_CAPITA("per_capita"),
-    /** Emphasize happiness: stronger scaling from average needs ratio. */
+    /**
+     * Rewards high average needs: no tax at or below a comfort threshold, then a smooth curve up to a peak above the
+     * linear treasury cap at full needs.
+     */
     HAPPINESS_WEIGHTED("happiness_weighted");
 
     private final String id;

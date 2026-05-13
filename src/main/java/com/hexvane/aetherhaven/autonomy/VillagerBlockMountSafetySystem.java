@@ -33,13 +33,14 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 /**
- * Clears {@link MountedComponent} on block seats before chunk unload paths run: vanilla {@code MountSystems} can call
- * {@code ChunkStore.removeComponent} while the chunk store is already processing (e.g. {@code EntityChunkLoadingSystem}
- * during non-ticking), which throws. Town villagers also get {@link VillagerAutonomySystem#onUnloadSafetyDismount} for
- * POI cleanup.
+ * Clears {@link MountedComponent} before chunk unload paths run: vanilla {@code MountSystems} can call
+ * {@code Store.removeComponent} while a store is already processing (e.g. {@code EntityChunkLoadingSystem} during chunk
+ * unload), which throws {@link IllegalStateException}. Applies to <em>all</em> mount controllers (not only block seats).
+ * Town villagers also get {@link VillagerAutonomySystem#onUnloadSafetyDismount} for POI cleanup.
  *
- * <p>Dismount when the entity’s chunk or the <em>seat block’s</em> chunk is not {@link ChunkTracker.ChunkVisibility#HOT},
- * so NPCs sitting on POIs in a neighbor chunk are cleared before that chunk stops ticking.
+ * <p>Dismount when there is no player {@link ChunkTracker} interest, or the entity’s chunk (and for block mounts the
+ * seat block’s chunk) is not {@link ChunkTracker.ChunkVisibility#HOT}, so mounts are dropped via {@link CommandBuffer}
+ * before unload-driven removal runs.
  */
 public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
@@ -72,12 +73,30 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         MountedComponent mounted = archetypeChunk.getComponent(index, MountedComponent.getComponentType());
-        if (mounted == null || mounted.getControllerType() != MountController.BlockMount) {
+        if (mounted == null) {
             return;
         }
+        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+        World world = store.getExternalData().getWorld();
+        ObjectArrayList<ChunkTracker> trackers = collectChunkTrackers(world);
+
+        if (mounted.getControllerType() != MountController.BlockMount) {
+            TransformComponent tc = archetypeChunk.getComponent(index, TransformComponent.getComponentType());
+            if (tc == null) {
+                commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
+                return;
+            }
+            long entityChunk = entityChunkIndex(tc);
+            ChunkTracker.ChunkVisibility entityVis = ChunkUnloadingSystem.getChunkVisibility(trackers, entityChunk);
+            if (shouldDismountForChunkUnload(trackers, entityVis, ChunkTracker.ChunkVisibility.HOT)) {
+                dismountForUnload(ref, archetypeChunk, index, store, commandBuffer, world, plugin);
+            }
+            return;
+        }
+
         Ref<ChunkStore> blockRef = mounted.getMountedToBlock();
         if (blockRef == null || !blockRef.isValid()) {
-            commandBuffer.tryRemoveComponent(archetypeChunk.getReferenceTo(index), MountedComponent.getComponentType());
+            commandBuffer.tryRemoveComponent(ref, MountedComponent.getComponentType());
             return;
         }
 
@@ -85,18 +104,7 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
         if (tc == null) {
             return;
         }
-        World world = store.getExternalData().getWorld();
-        ObjectArrayList<ChunkTracker> trackers = new ObjectArrayList<>();
-        for (PlayerRef pr : world.getPlayerRefs()) {
-            ChunkTracker ct = pr.getChunkTracker();
-            if (ct != null) {
-                trackers.add(ct);
-            }
-        }
-
-        int bx = (int) Math.floor(tc.getPosition().getX());
-        int bz = (int) Math.floor(tc.getPosition().getZ());
-        long entityChunk = ChunkUtil.indexChunkFromBlock(bx, bz);
+        long entityChunk = entityChunkIndex(tc);
         ChunkTracker.ChunkVisibility entityVis = ChunkUnloadingSystem.getChunkVisibility(trackers, entityChunk);
 
         ChunkTracker.ChunkVisibility seatVis = ChunkTracker.ChunkVisibility.HOT;
@@ -108,11 +116,53 @@ public final class VillagerBlockMountSafetySystem extends EntityTickingSystem<En
             seatVis = ChunkUnloadingSystem.getChunkVisibility(trackers, seatChunk);
         }
 
-        if (entityVis == ChunkTracker.ChunkVisibility.HOT && seatVis == ChunkTracker.ChunkVisibility.HOT) {
-            return;
+        if (shouldDismountForChunkUnload(trackers, entityVis, seatVis)) {
+            dismountForUnload(ref, archetypeChunk, index, store, commandBuffer, world, plugin);
         }
+    }
 
-        Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+    /**
+     * With no loaded player chunk interest, {@link ChunkUnloadingSystem#getChunkVisibility} is not reliable; treat as
+     * unsafe so mounts are cleared via {@link CommandBuffer} before unload removes entities.
+     */
+    private static boolean shouldDismountForChunkUnload(
+        @Nonnull ObjectArrayList<ChunkTracker> trackers,
+        @Nonnull ChunkTracker.ChunkVisibility entityVis,
+        @Nonnull ChunkTracker.ChunkVisibility seatVis
+    ) {
+        if (trackers.isEmpty()) {
+            return true;
+        }
+        return entityVis != ChunkTracker.ChunkVisibility.HOT || seatVis != ChunkTracker.ChunkVisibility.HOT;
+    }
+
+    private static long entityChunkIndex(@Nonnull TransformComponent tc) {
+        int bx = (int) Math.floor(tc.getPosition().getX());
+        int bz = (int) Math.floor(tc.getPosition().getZ());
+        return ChunkUtil.indexChunkFromBlock(bx, bz);
+    }
+
+    @Nonnull
+    private static ObjectArrayList<ChunkTracker> collectChunkTrackers(@Nonnull World world) {
+        ObjectArrayList<ChunkTracker> trackers = new ObjectArrayList<>();
+        for (PlayerRef pr : world.getPlayerRefs()) {
+            ChunkTracker ct = pr.getChunkTracker();
+            if (ct != null) {
+                trackers.add(ct);
+            }
+        }
+        return trackers;
+    }
+
+    private void dismountForUnload(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull ArchetypeChunk<EntityStore> archetypeChunk,
+        int index,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
         TownVillagerBinding binding = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
         if (binding != null) {
             NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());

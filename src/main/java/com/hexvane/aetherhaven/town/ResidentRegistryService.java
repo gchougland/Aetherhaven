@@ -42,8 +42,19 @@ public final class ResidentRegistryService {
             return;
         }
         List<ResidentNpcRecord> list = town.getResidentNpcRecords();
-        list.removeIf(r -> rid.equalsIgnoreCase(r.getNpcRoleId()));
-        list.add(new ResidentNpcRecord(rid, kind, jobPlotId, entityUuid));
+        ResidentNpcRecord incoming = new ResidentNpcRecord(rid, kind, jobPlotId, entityUuid);
+        boolean[] copied = {false};
+        list.removeIf(r -> {
+            if (!rid.equalsIgnoreCase(r.getNpcRoleId())) {
+                return false;
+            }
+            if (!copied[0] && entityUuid.equals(r.getLastEntityUuid()) && r.hasLastKnownNeeds()) {
+                incoming.copyLastKnownNeedsFrom(r);
+                copied[0] = true;
+            }
+            return true;
+        });
+        list.add(incoming);
         tm.updateTown(town);
     }
 
@@ -106,6 +117,7 @@ public final class ResidentRegistryService {
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
             if (oldUuid.equals(r.getLastEntityUuid())) {
                 r.setLastEntityUuid(newUuid);
+                r.clearLastKnownNeeds();
                 changed = true;
             }
         }
@@ -338,6 +350,29 @@ public final class ResidentRegistryService {
         }
         if (removed) {
             tm.updateTown(town);
+        }
+    }
+
+    /**
+     * Persists last hunger/energy/fun for a roster row matching {@code entityUuid} when values move enough to matter.
+     * Called while the NPC is loaded and ticking.
+     */
+    public static void writeLastKnownNeedsIfChanged(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID entityUuid,
+        float hunger,
+        float energy,
+        float fun
+    ) {
+        for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
+            if (!entityUuid.equals(r.getLastEntityUuid())) {
+                continue;
+            }
+            if (r.setLastKnownNeedsIfChanged(hunger, energy, fun, 0.5f)) {
+                tm.updateTown(town);
+            }
+            return;
         }
     }
 }

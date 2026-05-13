@@ -40,7 +40,7 @@ commands.aetherhaven.needs.which.desc=hunger, energy, or fun
 commands.aetherhaven.needs.value.desc=Value from 0 to 100 (100 = fully satisfied)
 
 commands.aetherhaven.tax.desc=Debug: treasury morning tax
-commands.aetherhaven.tax.breakdown.desc=Show per-villager tax lines and totals for your town (loaded chunks only)
+commands.aetherhaven.tax.breakdown.desc=Show per-villager tax lines and totals for your town (loaded villagers plus roster fallbacks)
 commands.aetherhaven.tax.now.desc=Apply morning tithe to treasury now (bypasses morning time and last-collected day)
 
 commands.aetherhaven.questdebug.desc=Debug: town quest bypass
