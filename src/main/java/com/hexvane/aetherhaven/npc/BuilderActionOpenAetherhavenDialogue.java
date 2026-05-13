@@ -58,7 +58,7 @@ public final class BuilderActionOpenAetherhavenDialogue extends BuilderActionBas
             data,
             "VillagerKind",
             s -> this.villagerKind = s,
-            "test_villager",
+            "merchant",
             null,
             BuilderDescriptorState.Stable,
             "Resolver key for which dialogue tree to open",

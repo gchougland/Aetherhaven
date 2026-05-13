@@ -30,7 +30,7 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         this.dialogueId = builder.dialogueId;
         this.villagerKind = builder.villagerKind != null && !builder.villagerKind.isBlank()
             ? builder.villagerKind.trim()
-            : "test_villager";
+            : "merchant";
     }
 
     @Override

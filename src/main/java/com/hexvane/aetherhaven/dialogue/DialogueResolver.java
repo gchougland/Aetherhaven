@@ -23,9 +23,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class DialogueResolver {
-    public static final String KIND_TEST_VILLAGER = "test_villager";
+    private static final String DEFAULT_DIALOGUE_KIND = "merchant";
+    private static final String DEFAULT_RESIDENT_DIALOGUE_TREE = "aetherhaven_merchant";
     public static final String KIND_ELDER_LYREN = "elder_lyren";
-    public static final String TREE_TEST = "aetherhaven_dialogue_test";
     public static final String TREE_ELDER_WEEK1 = "aetherhaven_elder_week1";
     public static final String TREE_ELDER_WEEK2 = "aetherhaven_elder_week2";
     public static final String KIND_INNKEEPER = "innkeeper";
@@ -45,10 +45,8 @@ public final class DialogueResolver {
     private void applyLegacyDefaultKindMaps() {
         kindToTree.clear();
         kindToVisitorTree.clear();
-        kindToTree.put(KIND_TEST_VILLAGER, TREE_TEST);
         kindToTree.put(KIND_ELDER_LYREN, TREE_ELDER_WEEK2);
         kindToTree.put(KIND_INNKEEPER, TREE_INN_WELCOME);
-        kindToVisitorTree.put(KIND_TEST_VILLAGER, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_ELDER_LYREN, VISITOR_ELDER);
         kindToVisitorTree.put(KIND_INNKEEPER, VISITOR_INN);
         kindToVisitorTree.put("merchant", VISITOR_DEFAULT);
@@ -73,7 +71,10 @@ public final class DialogueResolver {
             if (k.isEmpty()) {
                 continue;
             }
-            String res = d.getResidentTreeId() != null && !d.getResidentTreeId().isBlank() ? d.getResidentTreeId() : TREE_TEST;
+            String res =
+                d.getResidentTreeId() != null && !d.getResidentTreeId().isBlank()
+                    ? d.getResidentTreeId()
+                    : DEFAULT_RESIDENT_DIALOGUE_TREE;
             String vis = d.getVisitorTreeId() != null && !d.getVisitorTreeId().isBlank() ? d.getVisitorTreeId() : VISITOR_DEFAULT;
             kindToTree.put(k, res);
             kindToVisitorTree.put(k, vis);
@@ -88,11 +89,11 @@ public final class DialogueResolver {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
-        String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : KIND_TEST_VILLAGER;
+        String kind = villagerKind != null && !villagerKind.isBlank() ? villagerKind.trim() : DEFAULT_DIALOGUE_KIND;
         String tree =
             explicitDialogueId != null && !explicitDialogueId.isBlank()
                 ? explicitDialogueId.trim()
-                : kindToTree.getOrDefault(kind, TREE_TEST);
+                : kindToTree.getOrDefault(kind, DEFAULT_RESIDENT_DIALOGUE_TREE);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         String entry = "root";
         if (plugin != null) {

@@ -4,11 +4,10 @@
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
 aetherhaven.blacksmith.repair.insufficientGold=Your purse is too light for this repair.
 aetherhaven.blacksmith.repair.success={itemName} is whole again. Good as new.
-commands.aetherhaven.dialogue.desc=Open a dialogue tree by id (for testing)
-commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (e.g. aetherhaven_dialogue_test)
+commands.aetherhaven.dialogue.desc=Open a dialogue by id
+commands.aetherhaven.dialogue.treeId.desc=Dialogue tree id (example aetherhaven_merchant)
 commands.aetherhaven.dialogue.entry.desc=Optional entry node id (default: root)
 aetherhaven.interaction.dialogue=Press [{key}] to talk
-npcRoles.Aetherhaven_Test_Villager.name=Dialogue Test Villager
 aetherhaven.banner.quest.completed.primary=Quest Complete
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Building Complete

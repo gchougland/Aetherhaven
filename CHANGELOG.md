@@ -6,6 +6,7 @@
 
 - **Ore Production Storage** Corrected maximum storage for all ores to be 25.
 - **Taxes** Taxes are now collected whether or not the town is loaded as long as one of the town members is on the server. Also added a notification each morning saying how much was earned.
+- **Removed Test Villager** Removed old test villager that isn't used any more.
 
 ### Fixed
 
