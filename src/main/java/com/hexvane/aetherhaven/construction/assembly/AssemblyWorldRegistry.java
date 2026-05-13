@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.construction.assembly;
 
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +17,18 @@ public final class AssemblyWorldRegistry {
     private record AssemblyEntry(@Nonnull PlotAssemblyJob job, @Nonnull PlotAssemblyFrontierRuntime runtime) {}
 
     private AssemblyWorldRegistry() {}
+
+    /**
+     * {@link IPrefabBuffer#release()} on cached prefab accessors is not idempotent (internal duplicate is nulled).
+     * Overlapping cleanup (e.g. unload vs tick) or any double dispose must not crash the world thread.
+     */
+    private static void releaseJobBufferQuietly(@Nonnull IPrefabBuffer buffer) {
+        try {
+            buffer.release();
+        } catch (NullPointerException ignored) {
+            // Already released
+        }
+    }
 
     @Nonnull
     private static ConcurrentHashMap<UUID, AssemblyEntry> mapFor(@Nonnull World world) {
@@ -46,7 +59,7 @@ public final class AssemblyWorldRegistry {
     public static void remove(@Nonnull World world, @Nonnull UUID plotId) {
         AssemblyEntry e = mapFor(world).remove(plotId);
         if (e != null) {
-            e.job().buffer().release();
+            releaseJobBufferQuietly(e.job().buffer());
         }
     }
 
@@ -63,7 +76,7 @@ public final class AssemblyWorldRegistry {
         ConcurrentHashMap<UUID, AssemblyEntry> m = BY_WORLD.remove(worldName);
         if (m != null) {
             for (AssemblyEntry e : m.values()) {
-                e.job().buffer().release();
+                releaseJobBufferQuietly(e.job().buffer());
             }
         }
     }

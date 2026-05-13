@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -55,6 +56,13 @@ public final class ConstructionDefinition {
      */
     @SerializedName("assemblyDeferredBlockIds")
     private List<String> assemblyDeferredBlockIds = Collections.emptyList();
+
+    /**
+     * Split the main assembly volume into an {@code N×N×N} grid in prefab space ({@code N=1} disables). Finishing one
+     * section unlocks the next; deferred blocks and entities are unchanged.
+     */
+    @SerializedName("assemblyPrefabSectionsPerAxis")
+    private int assemblyPrefabSectionsPerAxis = 1;
 
     @SerializedName("materials")
     private List<MaterialRequirement> materials = Collections.emptyList();
@@ -225,6 +233,11 @@ public final class ConstructionDefinition {
             }
         }
         return Collections.unmodifiableSet(ids);
+    }
+
+    /** {@code 1} = no split; otherwise splits prefab bounds into an {@code N×N×N} assembly grid. */
+    public int getAssemblyPrefabSectionsPerAxis() {
+        return assemblyPrefabSectionsPerAxis <= 1 ? 1 : AssemblySectionMapper.clampAxisDivisions(assemblyPrefabSectionsPerAxis);
     }
 
     public long getTreasuryGoldCoinCost() {

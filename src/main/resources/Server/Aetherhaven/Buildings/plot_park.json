@@ -7,6 +7,9 @@
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Park",
   "plotAnchorOffset": [10, 0, 10],
+  "assemblyDeferredBlockIds": [
+    "Plant_Leaves_Beech"
+  ],
   "managementBlockLocalPos": [-3, 2, -4],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,

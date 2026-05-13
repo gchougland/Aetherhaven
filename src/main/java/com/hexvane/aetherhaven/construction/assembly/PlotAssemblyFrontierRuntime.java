@@ -7,6 +7,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -39,6 +40,9 @@ public final class PlotAssemblyFrontierRuntime {
     @Nullable
     private LocalCachedChunkAccessor cachedChunkAccessor;
 
+    @Nullable
+    private final AssemblySectionMapper sectionMapper;
+
     private PlotAssemblyFrontierRuntime(
         @Nonnull Long2IntOpenHashMap prefabCoordToIndex,
         @Nonnull IntOpenHashSet frontier,
@@ -47,7 +51,8 @@ public final class PlotAssemblyFrontierRuntime {
         int minPrefabY,
         int maxPrefabY,
         int minPrefabZ,
-        int maxPrefabZ
+        int maxPrefabZ,
+        @Nullable AssemblySectionMapper sectionMapper
     ) {
         this.prefabCoordToIndex = prefabCoordToIndex;
         this.frontier = frontier;
@@ -57,6 +62,7 @@ public final class PlotAssemblyFrontierRuntime {
         this.maxPrefabY = maxPrefabY;
         this.minPrefabZ = minPrefabZ;
         this.maxPrefabZ = maxPrefabZ;
+        this.sectionMapper = sectionMapper;
     }
 
     /**
@@ -64,7 +70,11 @@ public final class PlotAssemblyFrontierRuntime {
      * current placement progress on {@code plot}.
      */
     @Nonnull
-    public static PlotAssemblyFrontierRuntime create(@Nonnull List<PendingBlock> pending, @Nonnull PlotInstance plot) {
+    public static PlotAssemblyFrontierRuntime create(
+        @Nonnull List<PendingBlock> pending,
+        @Nonnull PlotInstance plot,
+        int sectionsPerAxis
+    ) {
         Long2IntOpenHashMap map = new Long2IntOpenHashMap();
         map.defaultReturnValue(-1);
         int minX = Integer.MAX_VALUE;
@@ -90,8 +100,9 @@ public final class PlotAssemblyFrontierRuntime {
             }
         }
         IntOpenHashSet f = new IntOpenHashSet();
+        AssemblySectionMapper mapper = AssemblySectionMapper.tryCreate(pending, sectionsPerAxis);
         PlotAssemblyFrontierRuntime rt =
-            new PlotAssemblyFrontierRuntime(map, f, minX, maxX, minY, maxY, minZ, maxZ);
+            new PlotAssemblyFrontierRuntime(map, f, minX, maxX, minY, maxY, minZ, maxZ, mapper);
         rt.rebuildFrontierFromPlot(pending, plot);
         return rt;
     }
@@ -101,10 +112,23 @@ public final class PlotAssemblyFrontierRuntime {
         frontier.clear();
         IntOpenHashSet placed = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placed, pending.size());
-        var full = PlotAssemblyFrontier.frontierIndices(pending, placed);
+        IntArrayList full =
+            sectionMapper == null
+                ? PlotAssemblyFrontier.frontierIndices(pending, placed)
+                : PlotAssemblyFrontier.frontierIndicesForActiveSection(
+                    pending,
+                    placed,
+                    plot.getAssemblyActiveSectionIndex(),
+                    sectionMapper
+                );
         for (int i = 0; i < full.size(); i++) {
             frontier.add(full.getInt(i));
         }
+    }
+
+    @Nullable
+    public AssemblySectionMapper getSectionMapper() {
+        return sectionMapper;
     }
 
     public int minPrefabX() {
@@ -192,25 +216,34 @@ public final class PlotAssemblyFrontierRuntime {
         IntOpenHashSet placed = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placed, pending.size());
         PendingBlock pb = pending.get(placedIndex);
+        int activeFlat = plot.getAssemblyActiveSectionIndex();
         for (int n = 0; n < 6; n++) {
             int nx = pb.x() + NB_DX[n];
             int ny = pb.y() + NB_DY[n];
             int nz = pb.z() + NB_DZ[n];
             int ni = prefabCoordToIndex.get(packPrefabCell(nx, ny, nz));
-            if (ni >= 0 && !placed.contains(ni)) {
-                frontier.add(ni);
+            if (ni < 0 || placed.contains(ni)) {
+                continue;
             }
+            if (sectionMapper != null && !sectionMapper.isCellInSection(pending.get(ni), activeFlat)) {
+                continue;
+            }
+            frontier.add(ni);
         }
         if (frontier.isEmpty() && placed.size() < pending.size()) {
-            seedDisconnectedMinYLayer(pending, placed);
+            seedDisconnectedMinYLayer(pending, placed, plot);
         }
     }
 
-    private void seedDisconnectedMinYLayer(@Nonnull List<PendingBlock> pending, @Nonnull IntSet placed) {
+    private void seedDisconnectedMinYLayer(@Nonnull List<PendingBlock> pending, @Nonnull IntSet placed, @Nonnull PlotInstance plot) {
+        int activeFlat = plot.getAssemblyActiveSectionIndex();
         int minYUnplaced = Integer.MAX_VALUE;
         int n = pending.size();
         for (int i = 0; i < n; i++) {
             if (placed.contains(i)) {
+                continue;
+            }
+            if (sectionMapper != null && !sectionMapper.isCellInSection(pending.get(i), activeFlat)) {
                 continue;
             }
             minYUnplaced = Math.min(minYUnplaced, pending.get(i).y());
@@ -219,7 +252,13 @@ public final class PlotAssemblyFrontierRuntime {
             return;
         }
         for (int i = 0; i < n; i++) {
-            if (!placed.contains(i) && pending.get(i).y() == minYUnplaced) {
+            if (placed.contains(i)) {
+                continue;
+            }
+            if (sectionMapper != null && !sectionMapper.isCellInSection(pending.get(i), activeFlat)) {
+                continue;
+            }
+            if (pending.get(i).y() == minYUnplaced) {
                 frontier.add(i);
             }
         }

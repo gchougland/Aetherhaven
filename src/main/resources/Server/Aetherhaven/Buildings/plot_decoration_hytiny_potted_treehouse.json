@@ -7,8 +7,13 @@
   "plotTokenItemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse",
   "plotAnchorOffset": [6, 0, 6],
   "assemblyDeferredBlockIds": [
-    "Plant_Leaves_Windwillow"
+    "Plant_Leaves_Windwillow",
+    "Wood_Ash_Trunk_Full",
+    "Wood_Ash_Branch_Corner",
+    "Wood_Ash_Branch_Long",
+    "Wood_Ash_Trunk"
   ],
+  "assemblyPrefabSectionsPerAxis": 3,
   "managementBlockLocalPos": [0, 4, -9],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,

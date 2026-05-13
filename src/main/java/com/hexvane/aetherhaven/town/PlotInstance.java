@@ -115,6 +115,19 @@ public final class PlotInstance {
     @SerializedName("assemblyOwnerUuid")
     private String assemblyOwnerUuid;
 
+    /**
+     * When {@code > 1}, main assembly is split into an {@code N×N×N} grid of prefab-local sections ({@code N} per axis).
+     * Persisted for rehydrate; omitted or 1 for normal single-volume growth.
+     */
+    @Nullable
+    @SerializedName("assemblySectionDivisions")
+    private Integer assemblySectionDivisions;
+
+    /** Flat index {@code 0..N³-1} (x + y·N + z·N²) of the section currently accepting frontier placements. */
+    @Nullable
+    @SerializedName("assemblyActiveSectionIndex")
+    private Integer assemblyActiveSectionIndex;
+
     public PlotInstance() {}
 
     public PlotInstance(
@@ -367,7 +380,6 @@ public final class PlotInstance {
         this.assemblyPrefabId = id;
     }
 
-    /** Clears persisted assembly fields when leaving ASSEMBLING. */
     @Nullable
     public UUID getAssemblyOwnerUuid() {
         if (assemblyOwnerUuid == null || assemblyOwnerUuid.isBlank()) {
@@ -384,6 +396,24 @@ public final class PlotInstance {
         this.assemblyOwnerUuid = uuid.toString();
     }
 
+    @Nullable
+    public Integer getAssemblySectionDivisions() {
+        return assemblySectionDivisions;
+    }
+
+    public void setAssemblySectionDivisions(@Nullable Integer divisionsPerAxis) {
+        this.assemblySectionDivisions = divisionsPerAxis;
+    }
+
+    public int getAssemblyActiveSectionIndex() {
+        return assemblyActiveSectionIndex != null ? assemblyActiveSectionIndex : 0;
+    }
+
+    public void setAssemblyActiveSectionIndex(@Nullable Integer flatIndex) {
+        this.assemblyActiveSectionIndex = flatIndex;
+    }
+
+    /** Clears persisted assembly fields when leaving ASSEMBLING. */
     public void clearAssemblyPersistence() {
         this.assemblyBlockIndex = null;
         this.assemblyPlacedIndices = null;
@@ -391,5 +421,7 @@ public final class PlotInstance {
         this.assemblyNextPassiveDueSimMs = null;
         this.assemblyPrefabId = null;
         this.assemblyOwnerUuid = null;
+        this.assemblySectionDivisions = null;
+        this.assemblyActiveSectionIndex = null;
     }
 }

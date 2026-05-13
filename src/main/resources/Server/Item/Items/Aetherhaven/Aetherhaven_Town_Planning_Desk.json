@@ -75,6 +75,18 @@
             "Material": [
               {
                 "ItemId": "Aetherhaven_Gold_Coin",
+                "Quantity": 25
+              }
+            ],
+            "TimeSeconds": 3
+          }
+        },
+        {
+          "CraftingTimeReductionModifier": 0.0,
+          "UpgradeRequirement": {
+            "Material": [
+              {
+                "ItemId": "Aetherhaven_Gold_Coin",
                 "Quantity": 50
               }
             ],
@@ -100,18 +112,6 @@
               {
                 "ItemId": "Aetherhaven_Gold_Coin",
                 "Quantity": 200
-              }
-            ],
-            "TimeSeconds": 3
-          }
-        },
-        {
-          "CraftingTimeReductionModifier": 0.0,
-          "UpgradeRequirement": {
-            "Material": [
-              {
-                "ItemId": "Aetherhaven_Gold_Coin",
-                "Quantity": 400
               }
             ],
             "TimeSeconds": 3

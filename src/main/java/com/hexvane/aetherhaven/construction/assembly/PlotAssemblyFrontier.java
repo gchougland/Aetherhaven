@@ -84,6 +84,84 @@ public final class PlotAssemblyFrontier {
         return out;
     }
 
+    /**
+     * Like {@link #frontierIndices} but only indices whose prefab cell lies in {@code activeSectionFlat} for
+     * {@code sections}. Adjacency to already placed cells in <em>any</em> section still counts (next section grows from
+     * the finished shell).
+     */
+    @Nonnull
+    public static IntArrayList frontierIndicesForActiveSection(
+        @Nonnull List<PendingBlock> pending,
+        @Nonnull IntSet placed,
+        int activeSectionFlat,
+        @Nonnull AssemblySectionMapper sections
+    ) {
+        int n = pending.size();
+        IntArrayList out = new IntArrayList();
+        if (placed.size() >= n) {
+            return out;
+        }
+
+        if (placed.isEmpty()) {
+            int minY = Integer.MAX_VALUE;
+            for (int i = 0; i < n; i++) {
+                if (!sections.isCellInSection(pending.get(i), activeSectionFlat)) {
+                    continue;
+                }
+                minY = Math.min(minY, pending.get(i).y());
+            }
+            if (minY == Integer.MAX_VALUE) {
+                return out;
+            }
+            for (int i = 0; i < n; i++) {
+                if (!placed.contains(i)
+                    && sections.isCellInSection(pending.get(i), activeSectionFlat)
+                    && pending.get(i).y() == minY) {
+                    out.add(i);
+                }
+            }
+            return out;
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (placed.contains(i) || !sections.isCellInSection(pending.get(i), activeSectionFlat)) {
+                continue;
+            }
+            PendingBlock pi = pending.get(i);
+            IntIterator it = placed.iterator();
+            while (it.hasNext()) {
+                int j = it.nextInt();
+                if (areAdjacent6(pi, pending.get(j))) {
+                    out.add(i);
+                    break;
+                }
+            }
+        }
+
+        if (!out.isEmpty()) {
+            return out;
+        }
+
+        int minYUnplaced = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (placed.contains(i) || !sections.isCellInSection(pending.get(i), activeSectionFlat)) {
+                continue;
+            }
+            minYUnplaced = Math.min(minYUnplaced, pending.get(i).y());
+        }
+        if (minYUnplaced == Integer.MAX_VALUE) {
+            return out;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!placed.contains(i)
+                && sections.isCellInSection(pending.get(i), activeSectionFlat)
+                && pending.get(i).y() == minYUnplaced) {
+                out.add(i);
+            }
+        }
+        return out;
+    }
+
     public static boolean frontierContains(@Nonnull IntArrayList frontier, int placementIndex) {
         for (int k = 0; k < frontier.size(); k++) {
             if (frontier.getInt(k) == placementIndex) {

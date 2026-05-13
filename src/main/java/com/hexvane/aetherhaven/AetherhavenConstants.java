@@ -420,19 +420,22 @@ public final class AetherhavenConstants {
     /** Max applications per upgrade path (shard capacity / catalyst heal tier). */
     public static final int GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE = 5;
 
+    /** Gold tithe per step; shared by shard and catalyst paths. Index = completed upgrades before this step (0..4). */
+    private static final long[] GAIAS_DRAUGHT_UPGRADE_GOLD_BY_STEP = {50L, 80L, 100L, 120L, 150L};
+
     /**
      * Gold tithe for the next shard upgrade after {@code completedShardUpgrades} successful upgrades (0-based: first
      * upgrade uses completed count 0).
      */
     public static long gaiaDraughtShardUpgradeGoldCost(int completedShardUpgrades) {
         int n = Math.max(0, Math.min(GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE - 1, completedShardUpgrades));
-        return 100L + 85L * n;
+        return GAIAS_DRAUGHT_UPGRADE_GOLD_BY_STEP[n];
     }
 
     /** Gold tithe for the next catalyst upgrade after {@code completedCatalystUpgrades} successful upgrades. */
     public static long gaiaDraughtCatalystUpgradeGoldCost(int completedCatalystUpgrades) {
         int n = Math.max(0, Math.min(GAIAS_DRAUGHT_UPGRADE_MAX_PER_TYPE - 1, completedCatalystUpgrades));
-        return 150L + 100L * n;
+        return GAIAS_DRAUGHT_UPGRADE_GOLD_BY_STEP[n];
     }
 
     /** Missing health divided by this, rounded up, is the priestess heal gold cost. */

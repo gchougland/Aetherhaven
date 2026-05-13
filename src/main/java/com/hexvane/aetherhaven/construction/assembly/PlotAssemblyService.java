@@ -149,6 +149,14 @@ public final class PlotAssemblyService {
         Instant assemblySimStart = entityStore.getResource(TimeResource.getResourceType()).getNow();
         plot.setAssemblyStartEpochMs(assemblySimStart.toEpochMilli());
         plot.resetAssemblyPlacementProgress();
+        int sectionAxis = def.getAssemblyPrefabSectionsPerAxis();
+        if (sectionAxis > 1) {
+            plot.setAssemblySectionDivisions(sectionAxis);
+            plot.setAssemblyActiveSectionIndex(AssemblySectionMapper.firstOccupiedFlatSection(placementOrder, sectionAxis));
+        } else {
+            plot.setAssemblySectionDivisions(null);
+            plot.setAssemblyActiveSectionIndex(null);
+        }
         plot.setAssemblyPrefabId(prefabId);
         plot.setAssemblyOwnerUuid(assemblyOwnerUuid);
         long slot = computeSlotWallMs(world, plugin, def, placementOrder.size());
@@ -171,7 +179,8 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        PlotAssemblyFrontierRuntime assemblyRt = PlotAssemblyFrontierRuntime.create(placementOrder, plot);
+        PlotAssemblyFrontierRuntime assemblyRt =
+            PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
         AssemblyWorldRegistry.put(world, plotId, job, assemblyRt);
     }
 
@@ -222,7 +231,8 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        PlotAssemblyFrontierRuntime assemblyRt = PlotAssemblyFrontierRuntime.create(placementOrder, plot);
+        PlotAssemblyFrontierRuntime assemblyRt =
+            PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
         AssemblyWorldRegistry.put(world, plot.getPlotId(), job, assemblyRt);
         return true;
     }
@@ -360,6 +370,14 @@ public final class PlotAssemblyService {
         }
         plot.addAssemblyPlacedIndex(placementIndex);
         rt.onBlockPlaced(placementIndex, pending, plot);
+        AssemblySectionMapper sm = rt.getSectionMapper();
+        if (sm != null && plot.getAssemblyPlacedBlockCount() < pending.size()) {
+            TownManager tmAdv = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            if (maybeAdvanceAssemblySection(tmAdv, town, plot, pending, sm)) {
+                rt.rebuildFrontierFromPlot(pending, plot);
+                rt.clearChunkAccessor();
+            }
+        }
         if (fromStaff && staffActor != null) {
             PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
         }
@@ -445,10 +463,40 @@ public final class PlotAssemblyService {
     ) {
         PlotAssemblyFrontierRuntime rt = AssemblyWorldRegistry.frontierRuntime(world, job.plotId());
         if (rt == null) {
-            rt = PlotAssemblyFrontierRuntime.create(pending, plot);
+            int ax = assemblySectionsPerAxisForPlot(plot);
+            rt = PlotAssemblyFrontierRuntime.create(pending, plot, ax);
             AssemblyWorldRegistry.put(world, job.plotId(), job, rt);
         }
         return rt;
+    }
+
+    private static int assemblySectionsPerAxisForPlot(@Nonnull PlotInstance plot) {
+        Integer d = plot.getAssemblySectionDivisions();
+        return d != null && d > 1 ? AssemblySectionMapper.clampAxisDivisions(d) : 1;
+    }
+
+    private static boolean maybeAdvanceAssemblySection(
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull List<PendingBlock> pending,
+        @Nonnull AssemblySectionMapper mapper
+    ) {
+        int active = plot.getAssemblyActiveSectionIndex();
+        if (!mapper.isSectionComplete(pending, plot, active)) {
+            return false;
+        }
+        int vol = mapper.sectionCount();
+        int next = active + 1;
+        while (next < vol && !mapper.sectionHasAnyCell(pending, next)) {
+            next++;
+        }
+        if (next >= vol) {
+            return false;
+        }
+        plot.setAssemblyActiveSectionIndex(next);
+        tm.updateTown(town);
+        return true;
     }
 
     private static boolean isChunkLoadedForBlock(@Nonnull World world, @Nonnull Vector3i origin, @Nonnull PendingBlock pb) {
@@ -472,7 +520,16 @@ public final class PlotAssemblyService {
         }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        int ax = assemblySectionsPerAxisForPlot(plot);
+        IntArrayList frontier =
+            ax > 1
+                ? PlotAssemblyFrontier.frontierIndicesForActiveSection(
+                    pending,
+                    placedSet,
+                    plot.getAssemblyActiveSectionIndex(),
+                    AssemblySectionMapper.create(pending, ax)
+                )
+                : PlotAssemblyFrontier.frontierIndices(pending, placedSet);
         for (int k = 0; k < frontier.size(); k++) {
             PendingBlock pb = pending.get(frontier.getInt(k));
             out.add(new Vector3i(job.anchor().x + pb.x(), job.anchor().y + pb.y(), job.anchor().z + pb.z()));
@@ -495,7 +552,16 @@ public final class PlotAssemblyService {
         }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        IntArrayList frontier = PlotAssemblyFrontier.frontierIndices(pending, placedSet);
+        int ax = assemblySectionsPerAxisForPlot(plot);
+        IntArrayList frontier =
+            ax > 1
+                ? PlotAssemblyFrontier.frontierIndicesForActiveSection(
+                    pending,
+                    placedSet,
+                    plot.getAssemblyActiveSectionIndex(),
+                    AssemblySectionMapper.create(pending, ax)
+                )
+                : PlotAssemblyFrontier.frontierIndices(pending, placedSet);
         for (int k = 0; k < frontier.size(); k++) {
             int pi = frontier.getInt(k);
             PendingBlock pb = pending.get(pi);
