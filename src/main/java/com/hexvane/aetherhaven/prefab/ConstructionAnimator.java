@@ -137,8 +137,13 @@ public final class ConstructionAnimator {
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         int placed = 0;
         while (index < pendingBlocks.size() && placed < blocksPerBatch) {
-            PendingBlock pb = pendingBlocks.get(index++);
-            ConstructionPasteOps.placeOne(world, origin, pb, force, chunkAccessor, blockTypeMap);
+            PendingBlock pb = pendingBlocks.get(index);
+            if (!ConstructionPasteOps.placeOne(world, origin, pb, force, chunkAccessor, blockTypeMap)) {
+                chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
+                plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
+                return;
+            }
+            index++;
             placed++;
         }
         if (index < pendingBlocks.size()) {

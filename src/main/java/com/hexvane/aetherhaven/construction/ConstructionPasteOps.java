@@ -216,6 +216,9 @@ public final class ConstructionPasteOps {
             int by = origin.y + pb.y;
             int bz = origin.z + pb.z;
             WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+            if (chunk == null || !chunk.getReference().isValid()) {
+                continue;
+            }
             if (pb.blockId == 0) {
                 if (force) {
                     chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
@@ -228,7 +231,11 @@ public final class ConstructionPasteOps {
         }
     }
 
-    public static void placeOne(
+    /**
+     * @return false if the target chunk column is not available (e.g. unloaded mid tick); caller should retry later
+     *     with a fresh {@link LocalCachedChunkAccessor}.
+     */
+    public static boolean placeOne(
         @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull PendingBlock pb,
@@ -240,14 +247,23 @@ public final class ConstructionPasteOps {
         int by = origin.y + pb.y;
         int bz = origin.z + pb.z;
         WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        if (chunk == null || !chunk.getReference().isValid()) {
+            return false;
+        }
         applyPrefabFluidForCell(world, bx, by, bz, pb.fluidId, pb.fluidLevel, chunkAccessor);
+        if (!chunk.getReference().isValid()) {
+            return false;
+        }
         BlockType block = blockTypeMap.getAsset(pb.blockId);
+        if (block == null) {
+            return false;
+        }
         String blockKey = block.getId();
         if (pb.filler != 0) {
             if (pb.holder != null) {
                 setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
             }
-            return;
+            return true;
         }
         if (pb.blockId == 0) {
             if (force) {
@@ -255,7 +271,7 @@ public final class ConstructionPasteOps {
             } else {
                 chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             }
-            return;
+            return true;
         }
         if (!force) {
             RotationTuple rot = RotationTuple.get(pb.blockRotation);
@@ -267,6 +283,9 @@ public final class ConstructionPasteOps {
         }
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
+            if (!ref.isValid()) {
+                return false;
+            }
             Store<ChunkStore> store = ref.getStore();
             Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
             if (section != null) {
@@ -276,6 +295,7 @@ public final class ConstructionPasteOps {
         if (pb.holder != null) {
             setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
         }
+        return true;
     }
 
     public static void finishFluidsAndEntities(
@@ -320,9 +340,13 @@ public final class ConstructionPasteOps {
         int rotation,
         @Nonnull Holder<ChunkStore> holder
     ) {
+        Ref<ChunkStore> chunkRef = chunk.getReference();
+        if (!chunkRef.isValid()) {
+            return;
+        }
         com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
             world.getChunkStore().getStore(),
-            chunk.getReference(),
+            chunkRef,
             chunk.getBlockComponentChunk(),
             bx,
             by,
@@ -336,9 +360,16 @@ public final class ConstructionPasteOps {
     @SuppressWarnings("deprecation")
     private static Ref<ChunkStore> sectionRefForBlockY(@Nonnull WorldChunk chunk, int blockY) {
         Ref<ChunkStore> columnRef = chunk.getReference();
+        if (!columnRef.isValid()) {
+            return null;
+        }
         Store<ChunkStore> store = columnRef.getStore();
         ChunkColumn column = store.getComponent(columnRef, ChunkColumn.getComponentType());
-        return column == null ? null : column.getSection(ChunkUtil.chunkCoordinate(blockY));
+        if (column == null) {
+            return null;
+        }
+        Ref<ChunkStore> section = column.getSection(ChunkUtil.chunkCoordinate(blockY));
+        return section != null && section.isValid() ? section : null;
     }
 
     public static void applyPrefabFluidForCell(
@@ -351,6 +382,9 @@ public final class ConstructionPasteOps {
         @Nonnull LocalCachedChunkAccessor chunkAccessor
     ) {
         WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        if (chunk == null || !chunk.getReference().isValid()) {
+            return;
+        }
         Store<ChunkStore> fluidStore = world.getChunkStore().getStore();
         Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
         if (section == null) {

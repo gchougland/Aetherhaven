@@ -229,6 +229,11 @@ public final class PlotAssemblyFrontierRuntime {
         return prefabCoordToIndex.get(packPrefabCell(rx, ry, rz));
     }
 
+    /** Clears cached chunks so the next placement pass re-queries the world (stale refs after unload). */
+    public void clearChunkAccessor() {
+        this.cachedChunkAccessor = null;
+    }
+
     @Nonnull
     public LocalCachedChunkAccessor getOrCreateChunkAccessor(
         @Nonnull World world,

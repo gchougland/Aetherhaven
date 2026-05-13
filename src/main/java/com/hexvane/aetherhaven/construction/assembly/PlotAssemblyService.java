@@ -354,7 +354,10 @@ public final class PlotAssemblyService {
         }
         LocalCachedChunkAccessor chunkAccessor = rt.getOrCreateChunkAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap);
+        if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap)) {
+            rt.clearChunkAccessor();
+            return false;
+        }
         plot.addAssemblyPlacedIndex(placementIndex);
         rt.onBlockPlaced(placementIndex, pending, plot);
         if (fromStaff && staffActor != null) {
@@ -410,7 +413,10 @@ public final class PlotAssemblyService {
             LocalCachedChunkAccessor deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
             BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
             for (PendingBlock pb : deferredAssembly) {
-                ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
+                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap)) {
+                    deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+                    ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
+                }
             }
         }
         ConstructionPasteOps.finishFluidsAndEntities(

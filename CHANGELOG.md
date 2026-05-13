@@ -14,6 +14,7 @@
 - **Variant houses** Fixed bug where variant houses don't count for quests.
 - **Produciton GUI** Fixed occassional customUI error in the produciton gui.
 - **Villager Despawn** Added some protection to villagers so they don't get despawned by the game.
+- **Passive building** Fixed a rare crash when walking away from a town while a building was still assembling.
 
 ## [1.4.0] - 5/8/2026
 
