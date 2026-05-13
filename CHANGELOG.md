@@ -12,6 +12,7 @@
 - **Floating Gift** Fixed errors related to floating gift balloons.
 - **Variant houses** Fixed bug where variant houses don't count for quests.
 - **Produciton GUI** Fixed occassional customUI error in the produciton gui.
+- **Villager Despawn** Added some protection to villagers so they don't get despawned by the game.
 
 ## [1.4.0] - 5/8/2026
 

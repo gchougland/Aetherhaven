@@ -165,6 +165,7 @@ public final class InnPoolService {
                 continue;
             }
             town.migrateInnFieldsIfNeeded();
+            syncInnPoolWithResidentBindings(town, store, tm);
             for (long epochDay : days) {
                 Long last = town.getInnPoolLastMorningEpochDay();
                 if (last != null && last >= epochDay) {
@@ -207,7 +208,9 @@ public final class InnPoolService {
                 continue;
             }
             town.getInnPoolNpcIds().remove(sid);
-            store.removeEntity(ref, RemoveReason.REMOVE);
+            if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+            }
         }
         town.setInnPoolLastMorningEpochDay(epochDay);
         town.setInnPoolLastMorningGameDate(LocalDate.ofEpochDay(epochDay).toString());
@@ -405,7 +408,7 @@ public final class InnPoolService {
                 continue;
             }
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
-            if (ref != null && ref.isValid()) {
+            if (ref != null && ref.isValid() && isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
                 store.removeEntity(ref, RemoveReason.REMOVE);
             }
         }
@@ -466,6 +469,27 @@ public final class InnPoolService {
     }
 
     /**
+     * {@link TownRecord#getInnPoolNpcIds()} should only list inn visitors. When a UUID is stale (e.g. promoted
+     * resident) we still drop it from the list, but we must not call {@code removeEntity} on non-visitors.
+     */
+    private static boolean isInnPoolListedEntityVisitorToDespawn(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull UUID poolEntryUuid
+    ) {
+        TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (b == null || !b.getTownId().equals(town.getTownId())) {
+            return false;
+        }
+        if (!TownVillagerBinding.isVisitorKind(b.getKind())) {
+            return false;
+        }
+        UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        return uuidComp != null && poolEntryUuid.equals(uuidComp.getUuid());
+    }
+
+    /**
      * Once per calendar game day, during the morning window: remove unlocked pool NPCs (so fill can spawn new roles).
      * Locked quest NPCs stay.
      */
@@ -508,7 +532,9 @@ public final class InnPoolService {
                 continue;
             }
             town.getInnPoolNpcIds().remove(sid);
-            store.removeEntity(ref, RemoveReason.REMOVE);
+            if (isInnPoolListedEntityVisitorToDespawn(town, store, ref, u)) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+            }
         }
         town.setInnPoolLastMorningEpochDay(epochDay);
         town.setInnPoolLastMorningGameDate(wtr.getGameDateTime().toLocalDate().toString());

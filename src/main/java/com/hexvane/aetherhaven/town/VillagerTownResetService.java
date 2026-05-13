@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
@@ -26,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,7 +35,10 @@ import javax.annotation.Nullable;
 /**
  * Debug/admin: remove all town-tracked villager NPCs and respawn them near a position while preserving town quest state,
  * reputation (entity-UUID keys migrated), gift logs (role-keyed), and inn pool rules. Missing or unloaded entities are
- * still respawned from persisted town data; loaded entities are removed before respawn.
+ * still respawned from persisted town data; loaded entities are removed before respawn. Also removes loaded stray
+ * Aetherhaven villager NPCs for this town (same-town binding not in town data, or mod-marked with no binding / lost
+ * binding when the debug handle matches this town). NPCs bound to another town that still exists in this world's save
+ * are left alone; NPCs whose binding town id is missing from save data are treated as invalid and removed.
  */
 public final class VillagerTownResetService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -66,8 +71,12 @@ public final class VillagerTownResetService {
         // Sync visitor bindings / resident registry with completed job plots (fixes "quest completed but still visitor").
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
+        int straysPurged = purgeStrayLoadedVillagerNpcsForTownReset(store, town, tm, captured.keySet());
+        if (straysPurged > 0) {
+            LOGGER.atInfo().log("Reset: removed %s stray loaded villager NPC(s) for town %s", straysPurged, town.getTownId());
+        }
         if (captured.isEmpty()) {
-            return "No tracked villager NPCs found for this town.";
+            return straysPurged > 0 ? null : "No tracked villager NPCs found for this town.";
         }
 
         for (CapturedNpc c : captured.values()) {
@@ -256,6 +265,104 @@ public final class VillagerTownResetService {
         }
 
         return map;
+    }
+
+    /**
+     * Removes loaded NPCs that look like Aetherhaven villagers but are not part of this town's reset capture set.
+     * <ul>
+     *   <li>Same {@link TownVillagerBinding#getTownId()} as {@code town} and not in the capture set: orphan for this
+     *       town, removed.
+     *   <li>Binding to a <em>different</em> town id that {@link TownManager#getTown(UUID)} still resolves: that town
+     *       exists in this world's save; NPC is left alone.
+     *   <li>Binding to a different id with no {@link TownRecord} in {@code tm}, or unreadable town id on the component:
+     *       invalid / stale binding, removed.
+     *   <li>No binding but mod-marked ({@link AetherhavenVillagerHandle} suffix for this town, or {@link VillagerNeeds}
+     *       alone): removed as before.
+     * </ul>
+     *
+     * @return number of entities removed
+     */
+    private static int purgeStrayLoadedVillagerNpcsForTownReset(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Set<UUID> uuidsInResetCapture
+    ) {
+        UUID townId = town.getTownId();
+        Query<EntityStore> q = Query.and(
+            NPCEntity.getComponentType(),
+            Query.or(
+                TownVillagerBinding.getComponentType(),
+                VillagerNeeds.getComponentType(),
+                AetherhavenVillagerHandle.getComponentType()
+            )
+        );
+        List<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                if (npcRef == null || !npcRef.isValid()) {
+                    continue;
+                }
+                UUIDComponent uuc = store.getComponent(npcRef, UUIDComponent.getComponentType());
+                if (uuc == null) {
+                    continue;
+                }
+                UUID uuid = uuc.getUuid();
+                if (NIL_UUID.equals(uuid) || uuidsInResetCapture.contains(uuid)) {
+                    continue;
+                }
+                TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (b != null) {
+                    UUID bindingTownId;
+                    try {
+                        bindingTownId = b.getTownId();
+                    } catch (RuntimeException ex) {
+                        toRemove.add(npcRef);
+                        continue;
+                    }
+                    if (townId.equals(bindingTownId)) {
+                        toRemove.add(npcRef);
+                        continue;
+                    }
+                    TownRecord boundTown = tm.getTown(bindingTownId);
+                    if (boundTown != null) {
+                        continue;
+                    }
+                    toRemove.add(npcRef);
+                    continue;
+                }
+                AetherhavenVillagerHandle h = store.getComponent(npcRef, AetherhavenVillagerHandle.getComponentType());
+                VillagerNeeds needs = store.getComponent(npcRef, VillagerNeeds.getComponentType());
+                boolean hasHandle = h != null && !h.getHandle().isBlank();
+                boolean hasNeeds = needs != null;
+                if (!hasHandle && !hasNeeds) {
+                    continue;
+                }
+                if (hasHandle && !villagerHandleMatchesTownSuffix(townId, h.getHandle())) {
+                    continue;
+                }
+                toRemove.add(npcRef);
+            }
+        });
+        int count = 0;
+        for (Ref<EntityStore> r : toRemove) {
+            if (r.isValid()) {
+                store.removeEntity(r, RemoveReason.REMOVE);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static boolean villagerHandleMatchesTownSuffix(@Nonnull UUID townId, @Nonnull String handle) {
+        String hex = townId.toString().replace("-", "");
+        if (hex.isEmpty()) {
+            return false;
+        }
+        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
+        return handle.toLowerCase().endsWith(suffix.toLowerCase());
     }
 
     private static void putNonVisitorFromTownData(

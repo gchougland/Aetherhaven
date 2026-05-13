@@ -67,6 +67,7 @@ import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.economy.TreasuryBreakBlockSystem;
@@ -334,6 +335,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
         }
         AetherhavenVillagerHandle.register(this.getEntityStoreRegistry());
         TownVillagerBinding.register(this.getEntityStoreRegistry());
+        this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.OnAdd());
+        this.getEntityStoreRegistry().registerSystem(new TownVillagerNpcWorldSpawnSanitizeSystems.EachTick());
         VillagerAutonomyState.register(this.getEntityStoreRegistry());
         VillagerScheduleTickState.register(this.getEntityStoreRegistry());
         VillagerAutonomyDebugTag.register(this.getEntityStoreRegistry());
