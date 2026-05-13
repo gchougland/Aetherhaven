@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.floatinggift;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.component.AddReason;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -24,9 +23,12 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
 import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
+import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.time.Instant;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,6 +38,11 @@ public final class FloatingGiftSpawnService {
 
     public static final String MODEL_ID = "Floating_Gift";
     public static final String FLOAT_ANIMATION = "Float";
+    /**
+     * Idle bob uses {@link AnimationSlot#Action} with the Float set — same slot chain as Pop / PopHold. Emote is
+     * resolved for player-like rigs on the client; prop blockymodels log missing Emote for {@code Float}.
+     */
+    public static final AnimationSlot FLOAT_ANIMATION_SLOT = AnimationSlot.Action;
     public static final String POP_ANIMATION = "Pop";
     /** Frozen popped pose — loops so clients do not strip Action after one-shot Pop finishes. */
     public static final String POP_HOLD_ANIMATION = "PopHold";
@@ -47,29 +54,62 @@ public final class FloatingGiftSpawnService {
     }
 
     /**
-     * Queues spawn for later in the tick — required when calling from an {@link com.hypixel.hytale.component.system.tick.EntityTickingSystem};
-     * never use {@link Store#addEntity} directly from inside a ticking system.
+     * Natural spawn from {@link FloatingGiftSchedulerSystem}: must not call {@link World#getNonTickingChunk(long)}
+     * during an entity ticking system. {@link World#execute} runs after {@code EntityStore.tick} for this frame, so
+     * heightmap sampling and {@link Store#addEntity} are safe there.
      */
-    public static boolean enqueueSpawnAroundTarget(
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
-        @Nonnull Store<EntityStore> store,
+    public static void scheduleNaturalSpawnAfterEntityTick(
+        @Nonnull World world,
+        @Nonnull UUID playerUuid,
         @Nonnull Vector3d origin,
         @Nonnull Vector3d target
     ) {
-        Holder<EntityStore> holder = createSpawnHolder(store, origin, target);
-        if (holder == null) {
-            return false;
+        if (!FloatingGiftSpawnSchedule.tryBeginDeferredSpawn(playerUuid)) {
+            return;
         }
-        FloatingGiftComponent gift = holder.getComponent(FloatingGiftComponent.getComponentType());
-        if (gift != null) {
-            gift.requestDeferredSpawnFloatAnimation();
-        }
-        commandBuffer.addEntity(holder, AddReason.SPAWN);
-        return true;
+        Vector3d o = origin.clone();
+        Vector3d t = target.clone();
+        world.execute(() -> {
+            try {
+                if (!world.isAlive()) {
+                    return;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return;
+                }
+                AetherhavenPluginConfig cfg = plugin.getConfig().get();
+                if (!cfg.isFloatingGiftEnabled()) {
+                    return;
+                }
+                Store<EntityStore> store = world.getEntityStore().getStore();
+                WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
+                if (wtr == null) {
+                    return;
+                }
+                Instant gameNow = wtr.getGameTime();
+                if (FloatingGiftSystem.countActiveGifts(store) >= cfg.getFloatingGiftMaxActivePerWorld()) {
+                    return;
+                }
+                if (!isModelAssetRegistered()) {
+                    FloatingGiftSpawnSchedule.onSpawnFailed(playerUuid, gameNow);
+                    return;
+                }
+                Ref<EntityStore> ref = spawnAroundTarget(store, o, t);
+                if (ref != null && ref.isValid()) {
+                    FloatingGiftSpawnSchedule.onSpawnSucceeded(playerUuid, gameNow, cfg);
+                } else {
+                    FloatingGiftSpawnSchedule.onSpawnFailed(playerUuid, gameNow);
+                }
+            } finally {
+                FloatingGiftSpawnSchedule.clearDeferredSpawnInFlight(playerUuid);
+            }
+        });
     }
 
     /**
-     * Immediate spawn — safe from commands and other non-tick contexts. Initial float clip is applied synchronously.
+     * Immediate spawn — safe from commands, world task queue, and other non-entity-tick contexts. Initial float clip is
+     * applied synchronously.
      */
     @Nullable
     public static Ref<EntityStore> spawnAroundTarget(@Nonnull Store<EntityStore> store, @Nonnull Vector3d origin, @Nonnull Vector3d target) {
@@ -86,17 +126,12 @@ public final class FloatingGiftSpawnService {
         if (gift != null) {
             gift.markSpawnFloatPlayedImmediately();
         }
-        // Float on Emote only — Pop uses Action; periodic Emote retriggers never touch Action.
-        FloatingGiftAnimationHelper.playAnimation(store, ref, AnimationSlot.Emote, FLOAT_ANIMATION);
+        FloatingGiftAnimationHelper.playAnimation(store, ref, FLOAT_ANIMATION_SLOT, FLOAT_ANIMATION);
         return ref;
     }
 
     @Nullable
-    private static Holder<EntityStore> createSpawnHolder(
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Vector3d origin,
-        @Nonnull Vector3d target
-    ) {
+    private static Holder<EntityStore> createSpawnHolder(@Nonnull Store<EntityStore> store, @Nonnull Vector3d origin, @Nonnull Vector3d target) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return null;
@@ -152,7 +187,10 @@ public final class FloatingGiftSpawnService {
         holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(new Vector3d(sx, sy, sz), rot));
         holder.addComponent(HeadRotation.getComponentType(), new HeadRotation(rot));
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
-        holder.addComponent(PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
+        holder.addComponent(
+            PersistentModel.getComponentType(),
+            new PersistentModel(new Model.ModelReference(MODEL_ID, model.getScale(), model.getRandomAttachmentIds(), false))
+        );
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(Box.horizontallyCentered(1.0, 1.5, 1.0)));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
         holder.addComponent(ActiveAnimationComponent.getComponentType(), new ActiveAnimationComponent());

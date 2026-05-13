@@ -103,7 +103,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
 
     private static final double FLOAT_BOB_RAD_PER_SEC = Math.PI * 2.0 / 4.25;
 
-    /** Re-send Emote float with stop+play so the client restarts the procedural loop reliably. */
+    /** Re-send idle Float (Action slot) with stop+play so the client restarts the procedural loop reliably. */
     private static final double FLOAT_CLIP_RETRIGGER_SEC = 2.25;
 
     /**
@@ -127,11 +127,11 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull BoundingBox giftBoundingBox
     ) {
         if (gift.consumeDeferredSpawnFloatAnimation()) {
-            FloatingGiftAnimationHelper.playAnimation(store, ref, AnimationSlot.Emote, FloatingGiftSpawnService.FLOAT_ANIMATION);
+            FloatingGiftAnimationHelper.playAnimation(store, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
         }
         gift.addFloatClipRetriggerAccum(dt);
         if (gift.consumeFloatClipRetriggerAccum(FLOAT_CLIP_RETRIGGER_SEC)) {
-            FloatingGiftAnimationHelper.restartAnimation(store, ref, AnimationSlot.Emote, FloatingGiftSpawnService.FLOAT_ANIMATION);
+            FloatingGiftAnimationHelper.restartAnimation(store, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
         }
         gift.addAmbientCueAccum(dt);
         if (gift.consumeAmbientCueAccum(FloatingGiftSounds.NEARBY_AMBIENT_INTERVAL_SEC)) {

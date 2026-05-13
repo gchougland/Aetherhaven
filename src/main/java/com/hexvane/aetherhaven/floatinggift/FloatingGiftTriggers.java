@@ -30,7 +30,6 @@ public final class FloatingGiftTriggers {
         gift.resetAmbientCueAccum();
         Vector3d popPos = transform.getPosition().clone();
         FloatingGiftSounds.playPop3d(popPos, commandBuffer.getStore());
-        FloatingGiftAnimationHelper.stopAnimation(commandBuffer.getStore(), ref, AnimationSlot.Emote);
         FloatingGiftAnimationHelper.stopAnimation(commandBuffer.getStore(), ref, AnimationSlot.Action);
         FloatingGiftAnimationHelper.playAnimation(commandBuffer.getStore(), ref, AnimationSlot.Action, FloatingGiftSpawnService.POP_ANIMATION);
         velocity.setZero();

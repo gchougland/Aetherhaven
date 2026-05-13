@@ -5,6 +5,7 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,7 +21,19 @@ public final class FloatingGiftSpawnSchedule {
 
     private static final Map<UUID, Instant> NEXT = new ConcurrentHashMap<>();
 
+    /** Prevents stacking multiple {@link com.hypixel.hytale.server.core.universe.world.World#execute} spawns for one player. */
+    private static final Set<UUID> DEFERRED_SPAWN_IN_FLIGHT = ConcurrentHashMap.newKeySet();
+
     private FloatingGiftSpawnSchedule() {}
+
+    /** @return {@code true} if this UUID was not already waiting on a deferred spawn */
+    public static boolean tryBeginDeferredSpawn(@Nonnull UUID playerUuid) {
+        return DEFERRED_SPAWN_IN_FLIGHT.add(playerUuid);
+    }
+
+    public static void clearDeferredSpawnInFlight(@Nonnull UUID playerUuid) {
+        DEFERRED_SPAWN_IN_FLIGHT.remove(playerUuid);
+    }
 
     @Nonnull
     public static Instant ensureAndGet(@Nonnull UUID playerUuid, @Nonnull Instant gameNow, @Nonnull AetherhavenPluginConfig cfg) {

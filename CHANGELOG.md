@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0] - Unreleased
+
+### Changed
+
+- **Ore Production Storage** Corrected maximum storage for all ores to be 25.
+
+### Fixed
+
+- **Floating Gift** Fixed errors related to floating gift balloons.
+
 ## [1.4.0] - 5/8/2026
 
 ### Added

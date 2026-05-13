@@ -12,6 +12,7 @@ import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.Instant;
 import java.util.UUID;
@@ -66,11 +67,12 @@ public final class FloatingGiftSchedulerSystem extends EntityTickingSystem<Entit
         if (now.isBefore(next)) {
             return;
         }
-        Vector3d pos = transform.getPosition();
-        if (FloatingGiftSpawnService.enqueueSpawnAroundTarget(commandBuffer, store, pos.clone(), pos.clone())) {
-            FloatingGiftSpawnSchedule.onSpawnSucceeded(playerUuid, now, cfg);
-        } else {
+        if (!FloatingGiftSpawnService.isModelAssetRegistered()) {
             FloatingGiftSpawnSchedule.onSpawnFailed(playerUuid, now);
+            return;
         }
+        Vector3d pos = transform.getPosition();
+        World world = store.getExternalData().getWorld();
+        FloatingGiftSpawnService.scheduleNaturalSpawnAfterEntityTick(world, playerUuid, pos.clone(), pos.clone());
     }
 }

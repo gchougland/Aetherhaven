@@ -67,8 +67,8 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
     private double floatClipRetriggerAccum = 0.0;
     private double ambientCueAccum = 0.0;
     /**
-     * When true, first {@link FloatingGiftSystem} tick should send the initial Emote float (entities added via
-     * {@link com.hypixel.hytale.component.CommandBuffer} are not real until the buffer flushes). Omitted from CODEC;
+     * When true, first {@link FloatingGiftSystem} tick should send the initial Action-slot float (buffered entity adds
+     * are rare; natural spawns use {@link World#execute} and play float immediately). Omitted from CODEC;
      * default false so decoded entities do not replay the spawn clip.
      */
     private boolean needsDeferredSpawnFloatAnimation = false;
