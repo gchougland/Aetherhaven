@@ -2,6 +2,11 @@
 
 ## [1.5.0] - Unreleased
 
+### Added
+
+- **Floating Gift Furniture** Floating gifts can now contain random furniture.
+- **Token Salvage** Tokens from balloons can be salvaged for gold coins.
+
 ### Changed
 
 - **Ore Production Storage** Corrected maximum storage for all ores to be 25.

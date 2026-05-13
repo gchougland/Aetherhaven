@@ -1,0 +1,25 @@
+{
+  "Input": [
+    {
+      "ItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage",
+      "Quantity": 1
+    }
+  ],
+  "PrimaryOutput": {
+    "ItemId": "Aetherhaven_Gold_Coin",
+    "Quantity": 5
+  },
+  "Output": [
+    {
+      "ItemId": "Aetherhaven_Gold_Coin",
+      "Quantity": 5
+    }
+  ],
+  "BenchRequirement": [
+    {
+      "Type": "Processing",
+      "Id": "Salvagebench"
+    }
+  ],
+  "TimeSeconds": 4
+}

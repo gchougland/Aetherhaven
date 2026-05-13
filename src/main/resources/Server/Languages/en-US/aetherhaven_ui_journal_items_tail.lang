@@ -45,15 +45,15 @@ items.Aetherhaven_Plot_Token_Lumbermill.description=Marks where the lumbermill p
 items.Aetherhaven_Plot_Token_Barn.name=Barn plot token
 items.Aetherhaven_Plot_Token_Barn.description=Marks where the barn prefab can be built. Craft at the town planning desk.
 items.Aetherhaven_Plot_Token_Barn_Hytiny.name=Hytiny's barn plot token
-items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Marks where the compact Hytiny barn prefab can be built. Prefab by HytinyBuilds. Not sold at the planning desk.
+items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Marks where the compact Hytiny barn prefab can be built. Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Hytiny's cozy cottage plot token
-items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Marks where Hytiny's cozy cottage can be built. Prefab by HytinyBuilds. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Marks where Hytiny's cozy cottage can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
 items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Hytiny's Japanese tea house plot token
-items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Marks where Hytiny's Japanese tea house can be built. Prefab by HytinyBuilds. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Marks where Hytiny's Japanese tea house can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny's cozy camper plot token
-items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Marks where Hytiny's cozy camper can be built. Prefab by HytinyBuilds. Craft at the town planning desk.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Marks where Hytiny's cozy camper can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny's potted treehouse plot token
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.
