@@ -9,6 +9,7 @@
 ### Fixed
 
 - **Floating Gift** Fixed errors related to floating gift balloons.
+- **Variant houses** Fixed bug where variant houses don't count for quests.
 
 ## [1.4.0] - 5/8/2026
 

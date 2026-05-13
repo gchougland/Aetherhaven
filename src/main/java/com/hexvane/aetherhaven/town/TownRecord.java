@@ -1051,14 +1051,15 @@ public final class TownRecord {
 
     /**
      * True if this villager NPC is listed as home resident on any complete residential plot in this town
-     * (used for house-quest dialogue completion after assignment).
+     * (used for house-quest dialogue completion after assignment). Uses {@link ConstructionCatalog#resolveGameplayConstructionId}
+     * so variant houses ({@code countsAsConstructionId}: {@link AetherhavenConstants#CONSTRUCTION_PLOT_HOUSE}) count.
      */
-    public boolean isNpcHomeResidentOnHousePlot(@Nonnull UUID npcEntityUuid) {
+    public boolean isNpcHomeResidentOnHousePlot(@Nonnull UUID npcEntityUuid, @Nonnull ConstructionCatalog constructionCatalog) {
         for (PlotInstance p : getPlotInstances()) {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(p.getConstructionId())) {
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
             UUID h = p.getHomeResidentEntityUuid();

@@ -291,7 +291,7 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         } else {
             t = townFor(playerRef, store);
         }
-        return t != null && t.isNpcHomeResidentOnHousePlot(npcUuid);
+        return t != null && t.isNpcHomeResidentOnHousePlot(npcUuid, plugin.getConstructionCatalog());
     }
 
     @Override

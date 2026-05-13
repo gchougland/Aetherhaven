@@ -135,7 +135,7 @@ public final class VillagerScheduleResolver {
             return "empty or invalid location symbol";
         }
         return switch (loc) {
-            case LOC_HOME -> describeHomeUnresolved(town, entityUuid);
+            case LOC_HOME -> describeHomeUnresolved(town, entityUuid, constructionCatalog);
             case LOC_WORK -> describeWorkUnresolved(town, binding, villagerDef, constructionCatalog);
             case LOC_INN ->
                 describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
@@ -192,12 +192,16 @@ public final class VillagerScheduleResolver {
     }
 
     @Nonnull
-    private static String describeHomeUnresolved(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+    private static String describeHomeUnresolved(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
         for (PlotInstance p : town.getPlotInstances()) {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(p.getConstructionId())) {
+            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
             UUID resident = p.getHomeResidentEntityUuid();
