@@ -1,13 +1,21 @@
 # Changelog
 
-## [1.5.0] - Unreleased
+## [1.6.0] - Unreleased
+
+### Fixed
+
+- **Variant Display In Journal** Variants displayed as the regular version in the journal, this has been fixed.
+- **Production Storage** Extracting resources with a full inventory would delete them, this has been fixed.
+
+## [1.5.0] - 5/13/2026
 
 ### Added
 
 - **Reworked Journal** The quest journal is now the Town Journal with many more features in it.
   - **Guide** The journal now has a page for an in-game mod wiki of Aetherhaven. It also has support for Voile.
   - **Town** A page where you can see all villagers and plots. You can choose to destroy plots from this page and you can see villagers current locations and reputation easily.
-  
+  - **Reworked Quests** Quests page has been improved a bit.
+  - **Settings & Debug** A page where you can modify some of the mods setting from in-game and buttons for repairing things easily.
 - **Floating Gift Furniture** Floating gifts can now contain random furniture.
 - **Token Salvage** Tokens from balloons can be salvaged for gold coins.
 

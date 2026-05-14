@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=Você não pode abrir este depósito pa
 aetherhaven.ui.production.err.plot=Este quarteirão não está localizado dentro de um terreno de trabalho concluído (fazenda, celeiro, moinho ou cabana de mineiro) para sua cidade.
 aetherhaven.ui.production.err.catalog=Não há catálogo de produção configurado para este edifício.
 aetherhaven.ui.production.err.inventoryFull=Seu estoque está muito cheio para receber essa quantidade.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Desbloqueia
 aetherhaven.ui.production.unlockTooltip=Veja e compre espaços de trabalho bloqueados para este edifício.
 

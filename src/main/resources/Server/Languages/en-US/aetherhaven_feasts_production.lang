@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=You cannot open this storage for this t
 aetherhaven.ui.production.err.plot=This block is not inside a completed workplace plot (farm, barn, mill, or miners hut) for your town.
 aetherhaven.ui.production.err.catalog=No production catalog is configured for this building.
 aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take that much.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Unlocks
 aetherhaven.ui.production.unlockTooltip=View and purchase locked workplace outputs for this building.
 

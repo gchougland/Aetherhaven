@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=您无法为该城镇打开此存储空
 aetherhaven.ui.production.err.plot=该地块不在您城镇已建成的工作场所地块（农场、谷仓、磨坊或矿工小屋）内。
 aetherhaven.ui.production.err.catalog=该建筑未配置任何生产目录。
 aetherhaven.ui.production.err.inventoryFull=您的库存已满，无法容纳这么多东西。
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=解锁
 aetherhaven.ui.production.unlockTooltip=查看并购买此建筑物的已锁定工作场所输出。
 

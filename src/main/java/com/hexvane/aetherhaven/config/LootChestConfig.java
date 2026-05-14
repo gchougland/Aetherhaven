@@ -144,4 +144,13 @@ public final class LootChestConfig {
     public LootChestGaiaDraughtBonusConfig getGaiaDraughtBonuses() {
         return gaiaDraughtBonuses != null ? gaiaDraughtBonuses : new LootChestGaiaDraughtBonusConfig();
     }
+
+    /** Town Journal: clamp to 0..1. */
+    public void applyJournalJewelryChance(double v) {
+        if (Double.isNaN(v) || v < 0.0) {
+            this.jewelryChance = 0.0;
+        } else {
+            this.jewelryChance = Math.min(1.0, v);
+        }
+    }
 }

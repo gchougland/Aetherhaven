@@ -88,4 +88,19 @@ public final class LootChestGoldConfig {
     public String getNote() {
         return note;
     }
+
+    /** Town Journal: clamp chance to 0..1 and quantities to sane chest injection ranges. Item id unchanged. */
+    public void applyJournalTuning(double chance, int min, int max) {
+        double c = chance;
+        if (Double.isNaN(c) || c < 0.0) {
+            c = 0.0;
+        } else if (c > 1.0) {
+            c = 1.0;
+        }
+        this.chance = c;
+        int mn = min >= 1 ? min : 1;
+        int mx = max >= mn ? max : mn;
+        this.min = Math.min(mn, 10_000);
+        this.max = Math.min(mx, 10_000);
+    }
 }

@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=No puedes abrir este almacén para esta
 aetherhaven.ui.production.err.plot=Este bloque no se encuentra dentro de una parcela de lugar de trabajo terminada (granja, establo, molino o cabaña de minero) para tu ciudad.
 aetherhaven.ui.production.err.catalog=No hay ningún catálogo de producción configurado para este edificio.
 aetherhaven.ui.production.err.inventoryFull=Tu inventario está demasiado lleno para aceptar tanto.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Desbloquea
 aetherhaven.ui.production.unlockTooltip=Vea y compre los permisos de salida restringidos para el lugar de trabajo en este edificio.
 

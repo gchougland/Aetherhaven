@@ -352,13 +352,23 @@ public final class ProductionStoragePage extends InteractiveCustomUIPage<Product
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"),
                 NotificationStyle.Warning
             );
+            tm.updateTown(town);
             refresh(ref, store);
             return;
         }
-        long given = grant.getQuantity();
-        long refund = take - given;
-        if (refund > 0L) {
-            state.addAmount(itemId, refund, entry.maxStorageForItem(itemId));
+        ItemStack remainder = giveTx.getRemainder();
+        long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
+        if (notAdded > 0L) {
+            state.addAmount(itemId, notAdded, entry.maxStorageForItem(itemId));
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation(
+                    notAdded == take
+                        ? "aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"
+                        : "aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryPartial"
+                ),
+                NotificationStyle.Warning
+            );
         }
         tm.updateTown(town);
         refresh(ref, store);

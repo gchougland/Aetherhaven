@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "1.4.0"
+version = "1.6.0"
 val javaVersion = 25
 
 repositories {
@@ -26,6 +26,25 @@ dependencies {
     compileOnly(libs.jspecify)
     compileOnly(dynamicTooltipsLib)
     runtimeOnly(dynamicTooltipsLib)
+}
+
+/**
+ * Hytale loads each plugin from an isolated classloader with only the plugin jar (no Gradle lib folder).
+ * Embed runtime dependency jars (Flexmark, Gson, optional Curse libs) so classes like
+ * {@code com.vladsch.flexmark.util.ast.Node} resolve at runtime.
+ */
+tasks.named<Jar>("jar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.isFile && it.extension.equals("jar", ignoreCase = true) }
+            .map { zipTree(it) }
+    }) {
+        exclude("META-INF/INDEX.LIST")
+        exclude("META-INF/*.SF")
+        exclude("META-INF/*.DSA")
+        exclude("META-INF/*.RSA")
+    }
 }
 
 hytale {

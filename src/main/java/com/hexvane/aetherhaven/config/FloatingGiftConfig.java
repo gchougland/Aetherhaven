@@ -132,4 +132,22 @@ public final class FloatingGiftConfig {
     public int getMaxActivePerWorld() {
         return Math.max(1, maxActivePerWorld);
     }
+
+    /** Town Journal: toggle balloons and the in game days between spawn rolls range. */
+    public void applyJournalSpawnCadence(boolean enabled, double intervalDaysMin, double intervalDaysMax) {
+        this.enabled = enabled;
+        double mn = intervalDaysMin;
+        if (Double.isNaN(mn) || mn < 0.1) {
+            mn = 0.1;
+        }
+        this.spawnIntervalDaysMin = mn;
+        double mx = intervalDaysMax;
+        if (Double.isNaN(mx)) {
+            mx = mn;
+        }
+        if (mx < mn) {
+            mx = mn;
+        }
+        this.spawnIntervalDaysMax = mx;
+    }
 }

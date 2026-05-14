@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=Vous ne pouvez pas ouvrir cet entrepôt
 aetherhaven.ui.production.err.plot=Ce bloc ne se trouve pas à l'intérieur d'un terrain de travail achevé (ferme, grange, moulin ou cabane de mineur) de votre ville.
 aetherhaven.ui.production.err.catalog=Aucun catalogue de production n'est configuré pour ce bâtiment.
 aetherhaven.ui.production.err.inventoryFull=Votre stock est déjà trop plein pour accepter autant.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Déverrouille
 aetherhaven.ui.production.unlockTooltip=Consultez et achetez les livrables verrouillés de ce bâtiment.
 

@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=この町では、この倉庫を開放
 aetherhaven.ui.production.err.plot=この区画は、あなたの町の完成済みの職場区画（農場、納屋、製粉所、鉱夫小屋など）内にはありません。
 aetherhaven.ui.production.err.catalog=この建物には、生産カタログが設定されていません。
 aetherhaven.ui.production.err.inventoryFull=あなたの持ち物は満杯なので、そんなにたくさん持ち込むことはできません。
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=アンロック
 aetherhaven.ui.production.unlockTooltip=この建物のロックされた作業スペースの出力内容を表示および購入します。
 

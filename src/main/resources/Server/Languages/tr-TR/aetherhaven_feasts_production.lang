@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=Bu kasaba için bu depoyu açamazsını
 aetherhaven.ui.production.err.plot=Bu blok, kasabanızdaki tamamlanmış bir iş yeri arsası (çiftlik, ahır, değirmen veya madenci kulübesi) içinde yer almıyor.
 aetherhaven.ui.production.err.catalog=Bu bina için yapılandırılmış bir üretim kataloğu bulunmamaktadır.
 aetherhaven.ui.production.err.inventoryFull=Envanteriniz o kadar miktarı kaldıramayacak kadar dolu.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Kilidi açar
 aetherhaven.ui.production.unlockTooltip=Bu binaya ait kilitli iş yeri çıktılarını görüntüleyin ve satın alın.
 

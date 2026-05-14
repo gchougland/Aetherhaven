@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=Ви не можете відкрити
 aetherhaven.ui.production.err.plot=Цей блок не знаходиться всередині завершеної робочої ділянки (ферми, сараю, млина чи шахтарської хатини) для вашого міста.
 aetherhaven.ui.production.err.catalog=Для цієї будівлі не налаштовано виробничий каталог.
 aetherhaven.ui.production.err.inventoryFull=Ваш інвентар занадто повний, щоб витримати стільки.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Розблоковує
 aetherhaven.ui.production.unlockTooltip=Перегляньте та придбайте заблоковані виходи на робочому місці для цієї будівлі.
 

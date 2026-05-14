@@ -135,6 +135,12 @@ public final class AetherhavenConstants {
     /** Bypass town ownership checks for commands (grant to moderators). Creative mode also bypasses. */
     public static final String PERMISSION_TOWN_ADMIN = "aetherhaven.town.admin";
 
+    /**
+     * Town Journal Settings tab: live config save and repair tools. Operators always have access; grant this permission
+     * on a role for trusted server staff without full operator.
+     */
+    public static final String PERMISSION_JOURNAL_SETTINGS = "aetherhaven.journal.settings";
+
     /** Non-block token: player must hold in inventory to select this plot type in the placement tool. */
     public static final String PLOT_TOKEN_INN_PLACEHOLDER = "Aetherhaven_Plot_Token_Inn";
 

@@ -1116,6 +1116,102 @@ public final class AetherhavenPluginConfig {
         return out;
     }
 
+    /**
+     * Applies gameplay fields edited from the Town Journal Settings UI. Values are clamped to safe ranges consistent
+     * with getters. Most reads use live config, so changes take effect without restarting the server.
+     */
+    public void applyTownJournalGameplayTuning(
+        boolean passivePlotAssembly,
+        int constructionBlocksPerTickRaw,
+        long constructionMinIntervalMsRaw,
+        double geodeDropChanceRaw,
+        double chestJewelryChanceRaw,
+        double goldChestChanceRaw,
+        int goldChestMinRaw,
+        int goldChestMaxRaw,
+        boolean floatingGiftEnabled,
+        double floatingGiftIntervalDaysMinRaw,
+        double floatingGiftIntervalDaysMaxRaw
+    ) {
+        this.passivePlotAssembly = passivePlotAssembly;
+        this.constructionBlocksPerTick = Math.max(1, constructionBlocksPerTickRaw);
+        this.constructionMinIntervalMs = Math.max(0L, constructionMinIntervalMsRaw);
+        double geode = geodeDropChanceRaw;
+        if (Double.isNaN(geode) || geode < 0.0) {
+            geode = 0.0;
+        }
+        this.geodeDropChancePerOreBreak = Math.min(1.0, geode);
+        if (this.lootChest == null) {
+            this.lootChest = new LootChestConfig();
+        }
+        this.lootChest.applyJournalJewelryChance(chestJewelryChanceRaw);
+        this.lootChest.getGold().applyJournalTuning(goldChestChanceRaw, goldChestMinRaw, goldChestMaxRaw);
+        if (this.floatingGift == null) {
+            this.floatingGift = new FloatingGiftConfig();
+        }
+        this.floatingGift.applyJournalSpawnCadence(
+            floatingGiftEnabled,
+            floatingGiftIntervalDaysMinRaw,
+            floatingGiftIntervalDaysMaxRaw
+        );
+    }
+
+    /**
+     * Copies every stored field from {@code source} into this instance. Intended for resetting the live server config
+     * in place using {@link #defaults()} or another template (same config object the plugin already holds).
+     */
+    public void copyStateFrom(@Nonnull AetherhavenPluginConfig o) {
+        this.constructionBlocksPerTick = o.constructionBlocksPerTick;
+        this.constructionMinIntervalMs = o.constructionMinIntervalMs;
+        this.assemblyGameDayLengthMsOverride = o.assemblyGameDayLengthMsOverride;
+        this.passivePlotAssembly = o.passivePlotAssembly;
+        this.ignoreVillagerRequirement = o.ignoreVillagerRequirement;
+        this.defaultTerritoryChunkRadius = o.defaultTerritoryChunkRadius;
+        this.villagerNeedsDecayPerSecond = o.villagerNeedsDecayPerSecond;
+        this.innPoolMorningStartHour = o.innPoolMorningStartHour;
+        this.innPoolMorningEndHour = o.innPoolMorningEndHour;
+        this.villagerScheduleEnabled = o.villagerScheduleEnabled;
+        this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
+        this.treasuryMaxGoldTaxPerVillagerPerDay = o.treasuryMaxGoldTaxPerVillagerPerDay;
+        this.geodeDropChancePerOreBreak = o.geodeDropChancePerOreBreak;
+        this.geodeOreUseBlocksOresCategory = o.geodeOreUseBlocksOresCategory;
+        this.geodeOreSubcategories = o.geodeOreSubcategories != null ? o.geodeOreSubcategories : "";
+        this.geodeOreExcludedSubcategories = o.geodeOreExcludedSubcategories != null ? o.geodeOreExcludedSubcategories : "";
+        this.geodeExtraOreGatherTypes = o.geodeExtraOreGatherTypes != null ? o.geodeExtraOreGatherTypes : "";
+        this.geodeExtraOreBlockTypeIds = o.geodeExtraOreBlockTypeIds != null ? o.geodeExtraOreBlockTypeIds : "";
+        this.charterTaxPerCapitaFlatFraction = o.charterTaxPerCapitaFlatFraction;
+        this.charterTaxHappinessExponent = o.charterTaxHappinessExponent;
+        this.charterHappinessTaxMinComfortRatio = o.charterHappinessTaxMinComfortRatio;
+        this.charterHappinessTaxPeakPermille = o.charterHappinessTaxPeakPermille;
+        this.charterPerCapitaMinGoldPerResidentPerDay = o.charterPerCapitaMinGoldPerResidentPerDay;
+        this.charterPerCapitaMaxGoldPerResidentPerDay = o.charterPerCapitaMaxGoldPerResidentPerDay;
+        this.founderMonumentTaxPermille = o.founderMonumentTaxPermille;
+        this.lootChest = o.lootChest != null ? o.lootChest : new LootChestConfig();
+        this.floatingGift = o.floatingGift != null ? o.floatingGift : new FloatingGiftConfig();
+        this.jewelry = o.jewelry != null ? o.jewelry : new JewelryConfig();
+        this.feastTaxBonusPermille = o.feastTaxBonusPermille;
+        this.feastNeedsDecayScalePermille = o.feastNeedsDecayScalePermille;
+        this.feastGatherTimeoutSeconds = o.feastGatherTimeoutSeconds;
+        this.productionTimeMultiplier = o.productionTimeMultiplier;
+        this.pathToolNodeBlockYOffset = o.pathToolNodeBlockYOffset;
+        this.pathToolSamplesPerBlock = o.pathToolSamplesPerBlock;
+        this.pathToolHalfWidth = o.pathToolHalfWidth;
+        this.pathToolRayStartAboveY = o.pathToolRayStartAboveY;
+        this.pathToolMaxRayDown = o.pathToolMaxRayDown;
+        this.pathToolReplaceableBlockIds = o.pathToolReplaceableBlockIds != null ? o.pathToolReplaceableBlockIds : "";
+        this.pathToolReplaceableResourceTypeIds =
+            o.pathToolReplaceableResourceTypeIds != null ? o.pathToolReplaceableResourceTypeIds : "";
+        this.pathToolStyles = o.pathToolStyles != null && !o.pathToolStyles.isBlank() ? o.pathToolStyles : PathToolStyleDefinition.DEFAULT_JSON;
+        this.pathNavEnabled = o.pathNavEnabled;
+        this.pathNavNodeSpacing = o.pathNavNodeSpacing;
+        this.pathNavSnapRadius = o.pathNavSnapRadius;
+        this.pathNavJunctionEps = o.pathNavJunctionEps;
+        this.pathNavEndpointGateRadius = o.pathNavEndpointGateRadius;
+        this.pathNavMaxNodesPerTown = o.pathNavMaxNodesPerTown;
+        this.pathNavPreferIfShorterOnly = o.pathNavPreferIfShorterOnly;
+        this.pathNavPathfindingLog = o.pathNavPathfindingLog;
+    }
+
     @Nonnull
     public static AetherhavenPluginConfig defaults() {
         return new AetherhavenPluginConfig();

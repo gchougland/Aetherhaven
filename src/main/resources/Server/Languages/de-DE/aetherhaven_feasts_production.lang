@@ -39,6 +39,7 @@ aetherhaven.ui.production.err.permission=Dieser Lagerraum kann für diese Stadt 
 aetherhaven.ui.production.err.plot=Dieser Block befindet sich nicht innerhalb eines fertiggestellten Arbeitsplatzgrundstücks (Bauernhof, Scheune, Mühle oder Bergmannshütte) für Ihre Stadt.
 aetherhaven.ui.production.err.catalog=Für dieses Gebäude ist kein Produktionskatalog konfiguriert.
 aetherhaven.ui.production.err.inventoryFull=Ihr Lager ist zu voll, um so viel aufzunehmen.
+aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
 aetherhaven.ui.production.unlockButton=Schaltet frei
 aetherhaven.ui.production.unlockTooltip=Zugriff auf gesperrte Arbeitsplatz-Outputs für dieses Gebäude einsehen und erwerben.
 
