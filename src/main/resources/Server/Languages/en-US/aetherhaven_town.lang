@@ -39,6 +39,7 @@ aetherhaven.ui.memberPermissions.title=Member permissions
 aetherhaven.ui.memberPermissions.backTooltip=Back to player list
 aetherhaven.ui.memberPermissions.placePlots=Place plots
 aetherhaven.ui.memberPermissions.manageConstructions=Build and manage constructions (assembly, production, feasts, charter amendments, move buildings)
+aetherhaven.ui.memberPermissions.removePlots=Remove buildings from the town journal
 aetherhaven.ui.memberPermissions.spendTreasuryGold=Spend town treasury gold on construction costs
 aetherhaven.ui.memberPermissions.openTreasuryPanel=Open treasury (deposit / withdraw)
 aetherhaven.ui.memberPermissions.acceptQuests=Accept / start town quests

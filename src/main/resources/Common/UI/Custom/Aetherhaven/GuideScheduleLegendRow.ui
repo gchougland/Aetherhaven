@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+
+Group #ScheduleLegendRow {
+  LayoutMode: Top;
+  Anchor: (Top: 4, Bottom: 2);
+
+  Label #Legend {
+    Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #a8a090, Wrap: true);
+    Text: "";
+  }
+}

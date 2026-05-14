@@ -1,0 +1,14 @@
+{
+  "documentations": [
+    {
+      "group": "Hexvane",
+      "id": "AetherhavenWiki",
+      "name": "Aetherhaven Guide",
+      "compatibility": {
+        "mod": {
+          "universalDocumentationLoader": true
+        }
+      }
+    }
+  ]
+}

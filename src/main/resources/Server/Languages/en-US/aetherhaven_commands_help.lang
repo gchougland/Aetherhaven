@@ -87,3 +87,11 @@ commands.aetherhaven.debug_lootchest.fill.desc=Apply forced jewelry, gold, and p
 commands.aetherhaven.floatinggift.desc=Floating gift balloon: debug spawn or next-scheduled info
 commands.aetherhaven.floatinggift.spawn.desc=Spawn one floating gift (debug)
 commands.aetherhaven.floatinggift.next.desc=Show time until your next natural floating gift (game calendar clock; dilation affects real wait)
+
+commands.aetherhaven.time.desc=Set world clock by schedule wall time: hour 0–23 or dawn (06:00). Same scale as villager schedule JSON and the journal red line (not the same as vanilla /time set dawn).
+commands.aetherhaven.time.set.desc=Set world clock to H:00 (24h hour, 0–23)
+commands.aetherhaven.time.hour.desc=Hour 0–23 (example: 14 for 2:00 PM)
+commands.aetherhaven.time.set.success=Clock set to {gameTime}
+commands.aetherhaven.time.dawn.desc=Set world clock to 06:00 on the schedule wall clock (many routines start here; vanilla /time set dawn is earlier)
+commands.aetherhaven.time.dawn.success=Clock set: {gameTime}
+commands.aetherhaven.time.noResource=This world has no time resource loaded.

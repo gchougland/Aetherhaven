@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+
+Group #MdParagraphRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 8);
+
+  Label #Body {
+    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8, FontSize: 14);
+    Text: "";
+  }
+}

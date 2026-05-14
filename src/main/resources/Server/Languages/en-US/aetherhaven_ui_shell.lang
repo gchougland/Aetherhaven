@@ -22,12 +22,11 @@ aetherhaven.ui.treasury.debug.villagerLine=  {name} ({kind}) comfort={comfort} g
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
-# === UI: quest journal (log panel) ===
-# UI — quest journal
-aetherhaven.ui.questJournal.needTown=You need a town in this world to track quests.
-aetherhaven.ui.questJournal.noPermission=You do not have permission to manage town quests.
-aetherhaven.ui.questJournal.noActive=No active quests.
-aetherhaven.ui.questJournal.hint=Tap a quest for details. × removes it from your log (you can take it again from the giver).
+# === UI: town journal (quest list messages) ===
+aetherhaven.ui.questJournal.needTown=You need a town in this world to use this tab.
+aetherhaven.ui.questJournal.noPermission=You cannot manage town quests.
+aetherhaven.ui.questJournal.noActive=No active quests right now.
+aetherhaven.ui.questJournal.hint=Pick a quest on the left to read it here.
 
 # === UI: NPC dialogue page (shell / errors) ===
 # UI — dialogue

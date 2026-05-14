@@ -116,8 +116,10 @@ import com.hexvane.aetherhaven.ui.GeodeOpenPage;
 import com.hexvane.aetherhaven.ui.OpenHandMirrorUiInteraction;
 import com.hexvane.aetherhaven.ui.JewelryAppraisalPage;
 import com.hexvane.aetherhaven.ui.JewelryCraftingPage;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
+import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionTickSystem;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
@@ -323,7 +325,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
         VillagerNeeds.register(this.getEntityStoreRegistry());
         PlayerJewelryLoadout.register(this.getEntityStoreRegistry());
+        PlayerTownJournalState.register(this.getEntityStoreRegistry());
         this.getEntityStoreRegistry().registerSystem(new JewelryPlayerInitSystem());
+        this.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         this.getEntityStoreRegistry().registerSystem(new JewelryStatSyncSystem());
         LootChestWorldLootPending.register(this.getChunkStoreRegistry());
         LootrChestProcessedPlayers.register(this.getChunkStoreRegistry());

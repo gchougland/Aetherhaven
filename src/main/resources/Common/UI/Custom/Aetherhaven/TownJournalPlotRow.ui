@@ -1,0 +1,77 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@TownPlotRowHeight = 64;
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@BulldozerRemoveStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../bulldozer_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+Group #TownJournalPlotRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8);
+
+  Group #PlotIconHost {
+    LayoutMode: Middle;
+    Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight, Right: 10);
+
+    ItemGrid #PlotTokenSlot {
+      Anchor: (Width: @TownPlotRowHeight, Height: @TownPlotRowHeight);
+      SlotsPerRow: 1;
+      Style: (
+        SlotSize: @TownPlotRowHeight,
+        SlotIconSize: @TownPlotRowHeight,
+        SlotSpacing: 0,
+        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+      );
+    }
+  }
+
+  Group {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    Anchor: (Vertical: 0);
+
+    Label #PlotTitle {
+      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 15, Wrap: true);
+      Anchor: (Bottom: 4);
+      Text: "";
+    }
+
+    Label #PlotCoords {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 13, Wrap: true);
+      Anchor: (Bottom: 4);
+      Text: "";
+    }
+
+    Label #PlotStatus {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #b8c0cc, FontSize: 12, Wrap: true);
+      Text: "";
+    }
+  }
+
+  Group {
+    LayoutMode: Middle;
+    Anchor: (Width: 44, Height: @TownPlotRowHeight, Left: 6);
+
+    TextButton #RemovePlot {
+      Style: @BulldozerRemoveStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+    }
+  }
+}

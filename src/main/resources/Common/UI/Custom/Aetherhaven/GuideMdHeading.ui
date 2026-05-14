@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+
+Group #MdHeadingRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 10);
+
+  Label #Line {
+    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #f4e8c8, RenderBold: true, FontSize: 18);
+    Text: "";
+  }
+}

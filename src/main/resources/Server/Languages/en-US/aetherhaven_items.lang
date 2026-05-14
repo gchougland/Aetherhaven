@@ -141,5 +141,5 @@ barter.aetherhaven_vex.title=Vex's daily stock
 items.Aetherhaven_Treasury.name=Town treasury
 items.Aetherhaven_Treasury.description=Holds the town's gold coins. Use to deposit or withdraw (town owner).
 
-items.Aetherhaven_Quest_Journal.name=Town quest journal
-items.Aetherhaven_Quest_Journal.description=Secondary use: review active town quests. The Elder may give you one after the inn is built.
+items.Aetherhaven_Quest_Journal.name=Town Journal
+items.Aetherhaven_Quest_Journal.description=Secondary use: open your town journal. You can check quests here.

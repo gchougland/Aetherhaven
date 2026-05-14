@@ -1,0 +1,70 @@
+$C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@IconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@GuideNavExpandCollapsedStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_forward_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+@GuideNavExpandExpandedStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../arrow_down_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Common/Buttons/Disabled.png", Border: 12), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
+Group #GuideTopicRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 4);
+  Padding: (Horizontal: 4, Vertical: 2);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+  Group #ExpandToggleHost {
+    Visible: false;
+    Anchor: (Width: 28, Height: 28);
+    LayoutMode: Middle;
+
+    TextButton #ExpandToggleCollapsed {
+      Visible: true;
+      Anchor: (Width: 28, Height: 28);
+      Padding: (Full: 0);
+      Style: @GuideNavExpandCollapsedStyle;
+      Text: "";
+    }
+
+    TextButton #ExpandToggleExpanded {
+      Visible: false;
+      Anchor: (Width: 28, Height: 28);
+      Padding: (Full: 0);
+      Style: @GuideNavExpandExpandedStyle;
+      Text: "";
+    }
+  }
+
+  Button #Select {
+    LayoutMode: Left;
+    FlexWeight: 1;
+    Padding: (Horizontal: 6, Vertical: 4);
+    Style: (
+      Default: (Background: #000000(0.0)),
+      Hovered: (Background: #ffffff(0.08)),
+      Pressed: (Background: #ffffff(0.12))
+    );
+
+    Label #TopicTitle {
+      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #e8dcc8, Wrap: true);
+      FlexWeight: 1;
+    }
+  }
+}

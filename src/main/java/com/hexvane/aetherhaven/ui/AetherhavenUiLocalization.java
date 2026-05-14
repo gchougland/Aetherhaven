@@ -50,6 +50,7 @@ public final class AetherhavenUiLocalization {
         b.set("#MemberPermBack.TooltipTextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.backTooltip"));
         b.set("#CapPlacePlots.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.placePlots"));
         b.set("#CapManageConstructions.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.manageConstructions"));
+        b.set("#CapRemovePlots.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.removePlots"));
         b.set("#CapSpendTreasuryGold.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.spendTreasuryGold"));
         b.set("#CapOpenTreasuryPanel.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.openTreasuryPanel"));
         b.set("#CapAcceptQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.acceptQuests"));
@@ -195,11 +196,27 @@ public final class AetherhavenUiLocalization {
         b.set("#NavToProduction.TextSpans", t("aetherhaven_feasts_production.aetherhaven.ui.productionUnlocks.navProduction"));
     }
 
-    public static void applyQuestJournalStatic(@Nonnull UICommandBuilder b) {
-        b.set("#JournalPageTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.questjournal.title"));
-        b.set("#Hint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.questjournal.hint"));
-        b.set("#DetailTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.questjournal.detailPlaceholder"));
-        b.set("#DetailBody.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.questjournal.detailPlaceholderBody"));
+    public static void applyTownJournalStatic(@Nonnull UICommandBuilder b) {
+        b.set("#JournalShellTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.shellTitle"));
+        b.set("#TabTown.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.town"));
+        b.set("#TabGuide.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.guide"));
+        b.set("#TabQuests.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.quests"));
+        b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
+        b.set("#TownVillagersHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townVillagersHeading"));
+        b.set("#TownPlotsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townPlotsHeading"));
+        b.set("#SettingsPageBody.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.placeholder.settings"));
+        b.set("#GuideListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.listHeading"));
+        b.set("#QuestListHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.questListHeading"));
+        b.set("#RewardSectionHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.rewardHeading"));
+        b.set("#AbandonQuestButton.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.abandon"));
+        b.set("#JournalAbandonModalTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.abandonConfirmTitle"));
+        b.set("#JournalAbandonModalText.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.abandonConfirmBody"));
+        b.set("#JournalAbandonModalConfirm.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.abandonConfirm"));
+        b.set("#JournalAbandonModalCancel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.abandonCancel"));
+        b.set("#JournalPlotRemoveModalTitle.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotRemoveConfirmTitle"));
+        b.set("#JournalPlotRemoveModalText.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotRemoveConfirmBody"));
+        b.set("#JournalPlotRemoveModalConfirm.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotRemoveConfirm"));
+        b.set("#JournalPlotRemoveModalCancel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotRemoveCancel"));
     }
 
     /** Title only; dynamic lines are set in {@link PathToolStatusHud#refresh}. */

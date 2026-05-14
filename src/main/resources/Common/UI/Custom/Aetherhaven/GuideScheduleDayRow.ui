@@ -1,0 +1,181 @@
+$C = "../Common.ui";
+
+Group #ScheduleDayRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 5);
+
+  Label #DayLabel {
+    Anchor: (Width: 44, Right: 6);
+    Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #c8c0b0, RenderBold: true, Wrap: false);
+    Text: "";
+  }
+
+  Group #StripArea {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    Anchor: (Height: 28);
+
+    Group #StripHost {
+      LayoutMode: Full;
+      Anchor: (Full: 0);
+
+      Group #Strip {
+        LayoutMode: Left;
+        Anchor: (Full: 0);
+        Padding: (Horizontal: 2, Vertical: 2);
+        Background: #0c1018;
+
+        Group #S0 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L0 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S1 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L1 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S2 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L2 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S3 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L3 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S4 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L4 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S5 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L5 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S6 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L6 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S7 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L7 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S8 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L8 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+        Group #S9 {
+          Visible: false;
+          LayoutMode: Middle;
+          FlexWeight: 1;
+          Padding: (Horizontal: 1);
+          HitTestVisible: true;
+          Background: #3a4558;
+          Label #L9 {
+            Style: (...$C.@DefaultLabelStyle, FontSize: 9, TextColor: #f4ead8, HorizontalAlignment: Center, Wrap: false);
+            Text: "";
+          }
+        }
+      }
+
+      Group #NowMarkerOverlay {
+        Visible: false;
+        LayoutMode: Full;
+        Anchor: (Full: 0);
+        HitTestVisible: false;
+
+        Group #NowMarkerRow {
+          LayoutMode: Left;
+          Anchor: (Full: 0);
+
+          Group #NowSpacerLeft {
+            FlexWeight: 1;
+            HitTestVisible: false;
+          }
+
+          Group #NowLine {
+            Visible: false;
+            LayoutMode: Middle;
+            Anchor: (Width: 2, Top: 0, Bottom: 0);
+            HitTestVisible: true;
+            Background: #e62828;
+          }
+
+          Group #NowSpacerRight {
+            FlexWeight: 1;
+            HitTestVisible: false;
+          }
+        }
+      }
+    }
+  }
+}

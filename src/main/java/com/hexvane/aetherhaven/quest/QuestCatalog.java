@@ -257,6 +257,31 @@ public final class QuestCatalog {
 
     public record QuestReputationGrant(int amount, @Nonnull String beneficiaryRoleId) {}
 
+    /** First {@code item} reward in catalog order, for journal preview. */
+    public record FirstItemReward(@Nonnull String itemId, int count) {}
+
+    /**
+     * @return first reward with kind {@code item} and a non blank item id, or null
+     */
+    @Nullable
+    public FirstItemReward firstItemReward(@Nonnull String questId) {
+        QuestDefinition def = get(questId);
+        if (def == null) {
+            return null;
+        }
+        for (QuestReward r : def.rewardsOrEmpty()) {
+            if (r.kind() == null || !"item".equalsIgnoreCase(r.kind().trim())) {
+                continue;
+            }
+            String id = r.itemId();
+            if (id == null || id.isBlank()) {
+                continue;
+            }
+            return new FirstItemReward(id.trim(), r.count());
+        }
+        return null;
+    }
+
     @Nonnull
     public String displayName(@Nonnull String questId) {
         QuestDefinition def = get(questId);

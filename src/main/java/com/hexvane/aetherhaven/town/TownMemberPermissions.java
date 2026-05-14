@@ -32,6 +32,9 @@ public final class TownMemberPermissions {
     @SerializedName("reviveVillagers")
     private boolean reviveVillagers;
 
+    @SerializedName("removePlots")
+    private boolean removePlots;
+
     public TownMemberPermissions() {}
 
     public TownMemberPermissions(
@@ -42,7 +45,8 @@ public final class TownMemberPermissions {
         boolean acceptQuests,
         boolean completeQuests,
         boolean abandonQuests,
-        boolean reviveVillagers
+        boolean reviveVillagers,
+        boolean removePlots
     ) {
         this.placePlots = placePlots;
         this.manageConstructions = manageConstructions;
@@ -52,18 +56,19 @@ public final class TownMemberPermissions {
         this.completeQuests = completeQuests;
         this.abandonQuests = abandonQuests;
         this.reviveVillagers = reviveVillagers;
+        this.removePlots = removePlots;
     }
 
     @Nonnull
     public static TownMemberPermissions fullMember() {
-        return new TownMemberPermissions(true, true, true, true, true, true, true, true);
+        return new TownMemberPermissions(true, true, true, true, true, true, true, true, true);
     }
 
     @Nonnull
     public static TownMemberPermissions fromRole(@Nonnull TownMemberRole role) {
         return switch (role) {
-            case BUILD -> new TownMemberPermissions(true, true, true, false, false, false, false, false);
-            case QUEST -> new TownMemberPermissions(false, false, false, false, true, true, true, false);
+            case BUILD -> new TownMemberPermissions(true, true, true, false, false, false, false, false, true);
+            case QUEST -> new TownMemberPermissions(false, false, false, false, true, true, true, false, false);
             case BOTH -> fullMember();
         };
     }
@@ -149,6 +154,14 @@ public final class TownMemberPermissions {
         this.reviveVillagers = reviveVillagers;
     }
 
+    public boolean removePlots() {
+        return removePlots;
+    }
+
+    public void setRemovePlots(boolean removePlots) {
+        this.removePlots = removePlots;
+    }
+
     @Nonnull
     public TownMemberPermissions copy() {
         return new TownMemberPermissions(
@@ -159,7 +172,8 @@ public final class TownMemberPermissions {
             acceptQuests,
             completeQuests,
             abandonQuests,
-            reviveVillagers
+            reviveVillagers,
+            removePlots
         );
     }
 }

@@ -1315,6 +1315,14 @@ public final class TownRecord {
         return getEffectiveMemberPermissions(playerUuid).reviveVillagers();
     }
 
+    /** Town owner always may remove plots from the town journal; members need the explicit permission. */
+    public boolean playerCanRemovePlots(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        return getEffectiveMemberPermissions(playerUuid).removePlots();
+    }
+
     /** Legacy: true if the player may place plots or manage constructions (any former "build" capability). */
     public boolean playerHasBuildPermission(@Nonnull UUID playerUuid) {
         return playerCanPlacePlots(playerUuid) || playerCanManageConstructions(playerUuid);

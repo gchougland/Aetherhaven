@@ -20,6 +20,7 @@ repositories {
 val dynamicTooltipsLib = "curse.maven:dynamictooltipslib-1459711:7939479"
 
 dependencies {
+    implementation("com.vladsch.flexmark:flexmark-all:0.64.8")
     implementation("com.google.code.gson:gson:2.11.0")
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)

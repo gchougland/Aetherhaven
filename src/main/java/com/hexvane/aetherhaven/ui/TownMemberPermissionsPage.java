@@ -39,6 +39,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
     private static final String FLAG_COMPLETE_QUESTS = "completeQuests";
     private static final String FLAG_ABANDON_QUESTS = "abandonQuests";
     private static final String FLAG_REVIVE = "reviveVillagers";
+    private static final String FLAG_REMOVE_PLOTS = "removePlots";
 
     private final Ref<ChunkStore> managementBlockRef;
     @Nonnull
@@ -114,6 +115,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
 
         bindToggle(eventBuilder, "#PermCbPlacePlots", "TogglePermPlacePlots");
         bindToggle(eventBuilder, "#PermCbManageConstructions", "TogglePermManageConstructions");
+        bindToggle(eventBuilder, "#PermCbRemovePlots", "TogglePermRemovePlots");
         bindToggle(eventBuilder, "#PermCbSpendTreasuryGold", "TogglePermSpendTreasuryGold");
         bindToggle(eventBuilder, "#PermCbOpenTreasuryPanel", "TogglePermOpenTreasuryPanel");
         bindToggle(eventBuilder, "#PermCbAcceptQuests", "TogglePermAcceptQuests");
@@ -124,6 +126,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         TownMemberPermissions p = town.getEffectiveMemberPermissions(targetPlayerUuid);
         setCheck(commandBuilder, "#PermCbPlacePlots", p.placePlots());
         setCheck(commandBuilder, "#PermCbManageConstructions", p.manageConstructions());
+        setCheck(commandBuilder, "#PermCbRemovePlots", p.removePlots());
         setCheck(commandBuilder, "#PermCbSpendTreasuryGold", p.spendTreasuryGold());
         setCheck(commandBuilder, "#PermCbOpenTreasuryPanel", p.openTreasuryPanel());
         setCheck(commandBuilder, "#PermCbAcceptQuests", p.acceptQuests());
@@ -205,6 +208,9 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         if (a.equalsIgnoreCase("TogglePermManageConstructions")) {
             return FLAG_MANAGE_CONSTRUCTIONS;
         }
+        if (a.equalsIgnoreCase("TogglePermRemovePlots")) {
+            return FLAG_REMOVE_PLOTS;
+        }
         if (a.equalsIgnoreCase("TogglePermSpendTreasuryGold")) {
             return FLAG_SPEND_TREASURY;
         }
@@ -230,6 +236,7 @@ public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<Tow
         switch (flag) {
             case FLAG_PLACE_PLOTS -> p.setPlacePlots(on);
             case FLAG_MANAGE_CONSTRUCTIONS -> p.setManageConstructions(on);
+            case FLAG_REMOVE_PLOTS -> p.setRemovePlots(on);
             case FLAG_SPEND_TREASURY -> p.setSpendTreasuryGold(on);
             case FLAG_OPEN_TREASURY -> p.setOpenTreasuryPanel(on);
             case FLAG_ACCEPT_QUESTS -> p.setAcceptQuests(on);

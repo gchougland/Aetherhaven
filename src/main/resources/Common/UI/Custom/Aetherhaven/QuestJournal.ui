@@ -1,47 +1,516 @@
 $C = "../Common.ui";
 
+@MainWidth = 1180;
+@NavTabGap = 12;
+@NavTabHeight = 50;
+@NavStripPad = (Horizontal: 12, Vertical: 10);
+@ContentHeight = 630;
+@TabBodyHeight = 540;
+@RewardSlotSize = 48;
+
 $C.@PageOverlay {
-  LayoutMode: Middle;
+  LayoutMode: Top;
 
-  $C.@DecoratedContainer {
-    Anchor: (Width: 560);
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
 
-    #Title {
-      Label #JournalPageTitle {
-        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
-        Padding: (Horizontal: 19);
-        Text: "";
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      Group {
+        LayoutMode: Top;
+        Anchor: (Horizontal: 0);
+
+        Group #TopNavBar {
+          LayoutMode: Middle;
+          Anchor: (Horizontal: 0);
+          Padding: (Bottom: 12);
+
+          Group #TopNavStrip {
+            LayoutMode: Middle;
+            Anchor: (Width: @MainWidth);
+            Padding: @NavStripPad;
+            Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+            Group {
+              LayoutMode: Left;
+              Anchor: (Horizontal: 0, Vertical: 0);
+
+              $C.@SecondaryTextButton #TabTown {
+                Text: "";
+                FlexWeight: 1;
+                Anchor: (Height: @NavTabHeight);
+              }
+
+              Group {
+                Anchor: (Width: @NavTabGap);
+              }
+
+              $C.@SecondaryTextButton #TabGuide {
+                Text: "";
+                FlexWeight: 1;
+                Anchor: (Height: @NavTabHeight);
+              }
+
+              Group {
+                Anchor: (Width: @NavTabGap);
+              }
+
+              $C.@SecondaryTextButton #TabQuests {
+                Text: "";
+                FlexWeight: 1;
+                Anchor: (Height: @NavTabHeight);
+              }
+
+              Group {
+                Anchor: (Width: @NavTabGap);
+              }
+
+              $C.@SecondaryTextButton #TabSettings {
+                Text: "";
+                FlexWeight: 1;
+                Anchor: (Height: @NavTabHeight);
+              }
+            }
+          }
+        }
+
+        $C.@DecoratedContainer {
+          Anchor: (Width: @MainWidth);
+
+          #Title {
+            Label #JournalShellTitle {
+              Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+              Padding: (Horizontal: 19);
+              Text: "";
+            }
+          }
+
+          #Content {
+            LayoutMode: Top;
+            Padding: (Full: 16);
+
+            Group #JournalBody {
+              LayoutMode: Top;
+              Anchor: (Height: @ContentHeight);
+
+            Label #PageTitle {
+              Anchor: (Bottom: 12);
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 18);
+              Text: "";
+            }
+
+            Group #TabPagesHost {
+              LayoutMode: Top;
+              Anchor: (Height: @TabBodyHeight);
+
+              Group #QuestsPage {
+                LayoutMode: Top;
+                FlexWeight: 1;
+                Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                Visible: true;
+
+              Label #QuestsBlocked {
+                Visible: false;
+                Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
+                Text: "";
+              }
+
+              Group #QuestsSplit {
+                LayoutMode: Left;
+                FlexWeight: 1;
+                Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+
+                Group #QuestListPane {
+                  LayoutMode: Top;
+                  Anchor: (Width: 320, Right: 14);
+                  Padding: (Right: 10);
+
+                  Label #QuestListHeading {
+                    Anchor: (Bottom: 8);
+                    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #94a7bb, FontSize: 13);
+                    Text: "";
+                  }
+
+                  Group #QuestRowList {
+                    LayoutMode: TopScrolling;
+                    FlexWeight: 1;
+                    ScrollbarStyle: $C.@DefaultScrollbarStyle;
+                  }
+                }
+
+                Group #QuestDetailPane {
+                  LayoutMode: Top;
+                  FlexWeight: 1;
+                  Padding: (Left: 8);
+                  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+                  Label #QuestDetailTitle {
+                    Anchor: (Bottom: 8);
+                    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 17);
+                    Text: "";
+                  }
+
+                  Label #QuestDetailDescription {
+                    Anchor: (Bottom: 10);
+                    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8);
+                    Text: "";
+                  }
+
+                  Label #QuestStepsHeading {
+                    Anchor: (Bottom: 6);
+                    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #c8c2b0, FontSize: 14);
+                    Text: "";
+                  }
+
+                  Label #QuestStepsBody {
+                    Anchor: (Bottom: 14);
+                    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8);
+                    Text: "";
+                  }
+
+                  Group #RewardBlock {
+                    LayoutMode: Top;
+                    Anchor: (Bottom: 14);
+
+                    Label #RewardSectionHeading {
+                      Anchor: (Bottom: 8);
+                      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #c8c2b0, FontSize: 14);
+                      Text: "";
+                    }
+
+                    Group #RewardRow {
+                      LayoutMode: Left;
+                      Anchor: (Bottom: 8);
+                      Visible: false;
+
+                      Group {
+                        LayoutMode: Middle;
+                        Anchor: (Width: @RewardSlotSize, Height: @RewardSlotSize, Right: 12);
+
+                        ItemGrid #RewardSlot {
+                          Anchor: (Width: @RewardSlotSize, Height: @RewardSlotSize);
+                          SlotsPerRow: 1;
+                          Style: (
+                            SlotSize: @RewardSlotSize,
+                            SlotIconSize: @RewardSlotSize,
+                            SlotSpacing: 0,
+                            SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+                          );
+                        }
+                      }
+
+                      Group #RewardTextCluster {
+                        LayoutMode: Middle;
+                        FlexWeight: 1;
+
+                        Group {
+                          LayoutMode: Left;
+
+                          Label #RewardQuantity {
+                            Anchor: (Right: 10);
+                            Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 15, RenderBold: true, VerticalAlignment: Center);
+                            Text: "";
+                          }
+
+                          Label #RewardTitle {
+                            FlexWeight: 1;
+                            Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #f0e6d2, VerticalAlignment: Center);
+                            Text: "";
+                          }
+                        }
+                      }
+                    }
+
+                    Label #RewardFallback {
+                      Visible: false;
+                      Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #a8a090);
+                      Text: "";
+                    }
+                  }
+
+                  Group #QuestActionRow {
+                    LayoutMode: Left;
+                    Anchor: (Bottom: 8);
+
+                    $C.@CancelTextButton #AbandonQuestButton {
+                      Text: "";
+                      Anchor: (Right: 8);
+                    }
+                  }
+                }
+              }
+              }
+
+              Group #TownPage {
+                LayoutMode: Top;
+                FlexWeight: 1;
+                Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                Visible: false;
+
+                Label #TownBlocked {
+                  Visible: false;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
+                  Text: "";
+                }
+
+                Group #TownSplit {
+                  LayoutMode: Left;
+                  FlexWeight: 1;
+                  Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+
+                  Group #TownVillagerPane {
+                    LayoutMode: Top;
+                    Anchor: (Width: 380, Right: 14);
+                    Padding: (Right: 10);
+
+                    Label #TownVillagersHeading {
+                      Anchor: (Bottom: 8);
+                      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #94a7bb, FontSize: 13);
+                      Text: "";
+                    }
+
+                    Group #TownVillagerScroll {
+                      LayoutMode: TopScrolling;
+                      FlexWeight: 1;
+                      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+                      Group #TownVillagerRowList {
+                        LayoutMode: Top;
+                      }
+                    }
+                  }
+
+                  Group #TownPlotPane {
+                    LayoutMode: Top;
+                    FlexWeight: 1;
+                    Padding: (Left: 8);
+                    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+                    Label #TownPlotsHeading {
+                      Anchor: (Bottom: 8);
+                      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #94a7bb, FontSize: 13);
+                      Text: "";
+                    }
+
+                    Group #TownPlotScroll {
+                      LayoutMode: TopScrolling;
+                      FlexWeight: 1;
+                      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+                      Group #TownPlotRowList {
+                        LayoutMode: Top;
+                      }
+                    }
+                  }
+                }
+              }
+
+              Group #GuidePage {
+                LayoutMode: Top;
+                FlexWeight: 1;
+                Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                Visible: false;
+
+                Label #GuidePluginMissing {
+                  Visible: false;
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
+                  Text: "";
+                }
+
+                Group #GuideSplit {
+                  LayoutMode: Left;
+                  FlexWeight: 1;
+                  Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                  Visible: true;
+
+                  Group #GuideListPane {
+                    LayoutMode: Top;
+                    Anchor: (Width: 300, Right: 14);
+                    Padding: (Right: 10);
+
+                    Label #GuideListHeading {
+                      Anchor: (Bottom: 8);
+                      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #94a7bb, FontSize: 13);
+                      Text: "";
+                    }
+
+                    Group #GuideTopicRowList {
+                      LayoutMode: TopScrolling;
+                      FlexWeight: 1;
+                      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+                    }
+                  }
+
+                  Group #GuideDetailPane {
+                    LayoutMode: Top;
+                    FlexWeight: 1;
+                    Padding: (Left: 8);
+                    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+                    Group #GuideMarkdownHost {
+                      LayoutMode: TopScrolling;
+                      FlexWeight: 1;
+                      Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                      ScrollbarStyle: $C.@DefaultScrollbarStyle;
+                    }
+
+                    Group #GuideScheduleBlock {
+                      LayoutMode: Top;
+                      Anchor: (Top: 8);
+                      Visible: false;
+
+                      $C.@SecondaryTextButton #GuideScheduleToggleButton {
+                        Text: "";
+                        Anchor: (Bottom: 8, Height: 36);
+                      }
+
+                      Group #GuideScheduleListScrolling {
+                        LayoutMode: TopScrolling;
+                        Visible: false;
+                        Anchor: (Height: 320);
+                        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+                        Group #GuideScheduleRows {
+                          LayoutMode: Top;
+                        }
+                      }
+                    }
+
+                    Group #GuideGiftBlock {
+                      LayoutMode: Top;
+                      Anchor: (Top: 8);
+                      Visible: false;
+
+                      $C.@SecondaryTextButton #GuideGiftToggleButton {
+                        Text: "";
+                        Anchor: (Bottom: 8, Height: 36);
+                      }
+
+                      Group #GuideGiftListScrolling {
+                        LayoutMode: TopScrolling;
+                        Visible: false;
+                        Anchor: (Height: 280);
+                        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+
+                        Group #GuideGiftRows {
+                          LayoutMode: Top;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              Group #SettingsPage {
+                LayoutMode: Top;
+                FlexWeight: 1;
+                Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
+                Visible: false;
+
+                Label #SettingsPageBody {
+                  Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #b8c0cc);
+                  Text: "";
+                }
+              }
+            }
+            }
+          }
+        }
       }
     }
 
-    #Content {
-      LayoutMode: Top;
-      Padding: (Full: 16);
+    Group #JournalAbandonModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
 
-      Label #Hint {
-        Anchor: (Bottom: 8);
-        Style: (...$C.@DefaultLabelStyle, Wrap: true);
-        Text: "";
-      }
+      $C.@DecoratedContainer {
+        Anchor: (Width: 440);
 
-      Group #QuestList {
-        LayoutMode: Top;
-        Anchor: (Bottom: 10);
+        #Title {
+          Label #JournalAbandonModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
 
-        Group #QuestRows {
+        #Content {
           LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #JournalAbandonModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #JournalAbandonModalConfirm {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #JournalAbandonModalCancel {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
         }
       }
+    }
 
-      Label #DetailTitle {
-        Anchor: (Bottom: 6);
-        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2);
-        Text: "";
-      }
+    Group #JournalPlotRemoveModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
 
-      Label #DetailBody {
-        Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8);
-        Text: "";
+      $C.@DecoratedContainer {
+        Anchor: (Width: 440);
+
+        #Title {
+          Label #JournalPlotRemoveModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #JournalPlotRemoveModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #JournalPlotRemoveModalConfirm {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #JournalPlotRemoveModalCancel {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
+        }
       }
     }
   }

@@ -90,6 +90,16 @@ $C.@PageOverlay {
                 Anchor: (Right: 30, Left: 11);
               }
             }
+            Group #MemberPermRemovePlots {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbRemovePlots {}
+              Label #CapRemovePlots {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
             Group #MemberPermSpendTreasuryGold {
               LayoutMode: Left;
               Anchor: (Bottom: 6);

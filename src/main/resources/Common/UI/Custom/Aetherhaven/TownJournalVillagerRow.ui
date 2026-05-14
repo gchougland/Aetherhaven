@@ -1,0 +1,32 @@
+$C = "../Common.ui";
+
+Group #TownJournalVillagerRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+
+  AssetImage #Portrait {
+    Anchor: (Width: 64, Height: 64, Right: 10);
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+
+  Group {
+    LayoutMode: Top;
+    FlexWeight: 1;
+
+    Label #VillagerName {
+      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 14, Wrap: true);
+      Anchor: (Bottom: 4);
+      Text: "";
+    }
+
+    Group #ReputationHeartSlots {
+      LayoutMode: Left;
+      Anchor: (Bottom: 6);
+    }
+
+    Label #ScheduleLocation {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, FontSize: 12, Wrap: true);
+      Text: "";
+    }
+  }
+}

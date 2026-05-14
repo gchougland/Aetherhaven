@@ -1,7 +1,66 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
-# Bundle: quest journal detail UI, npcRoles, workplace plot tokens
+# Bundle: town journal UI, npcRoles, workplace plot tokens
 
-# === UI: quest journal (detailed view; keys use questjournal lowercase) ===
+# === UI: town journal ===
+aetherhaven.ui.townJournal.shellTitle=Town Journal
+aetherhaven.ui.townJournal.tab.town=Town
+aetherhaven.ui.townJournal.tab.guide=Guide
+aetherhaven.ui.townJournal.tab.quests=Quests
+aetherhaven.ui.townJournal.tab.settings=Settings
+aetherhaven.ui.townJournal.pageTitle.town=Town
+aetherhaven.ui.townJournal.pageTitle.guide=Guide
+aetherhaven.ui.townJournal.pageTitle.quests=Quests
+aetherhaven.ui.townJournal.pageTitle.settings=Settings
+aetherhaven.ui.townJournal.placeholder.town=Nothing here yet.
+aetherhaven.ui.townJournal.placeholder.settings=Nothing here yet.
+aetherhaven.ui.townJournal.guide.listHeading=Topics
+aetherhaven.ui.townJournal.guide.pluginMissing=Load the Aetherhaven mod to read this guide.
+aetherhaven.ui.townJournal.guide.facts.questsHeading=Story quests for this villager
+aetherhaven.ui.townJournal.guide.facts.repHeading=Friendship gifts
+aetherhaven.ui.townJournal.guide.facts.scheduleHeading=Weekly route
+aetherhaven.ui.townJournal.guide.giftToggleShow=Show gift ideas (spoilers)
+aetherhaven.ui.townJournal.guide.giftToggleHide=Hide gift ideas
+aetherhaven.ui.townJournal.guide.scheduleToggleShow=Show weekly schedule
+aetherhaven.ui.townJournal.guide.scheduleToggleHide=Hide weekly schedule
+aetherhaven.ui.townJournal.guide.scheduleLegend=Each row is one in-game day. Colored segments run from that day’s first schedule time through midnight (same as JSON). Strip width matches time in each segment; hover for exact times. Colors: home, work, inn, commons, altar. Red line = current world clock mapped onto that strip (left = first transition time).
+aetherhaven.ui.townJournal.guide.scheduleNowMarker=Current world clock when this schedule was shown (same clock as villager JSON and /aetherhaven time).
+aetherhaven.ui.townJournal.guide.giftHeaderLoves=Greatly loved gifts
+aetherhaven.ui.townJournal.guide.giftHeaderLikes=Liked gifts
+aetherhaven.ui.townJournal.guide.giftHeaderDislikes=Disliked gifts
+aetherhaven.ui.townJournal.guide.noQuests=No story quests list this villager yet.
+aetherhaven.ui.townJournal.guide.noRepMilestones=No friendship gifts are scripted yet for this villager.
+aetherhaven.ui.townJournal.guide.noSchedule=No weekly route file yet for this villager.
+aetherhaven.ui.townJournal.questListHeading=Active quests
+aetherhaven.ui.townJournal.stepsHeading=Steps
+aetherhaven.ui.townJournal.rewardHeading=Reward
+aetherhaven.ui.townJournal.rewardFallback=See the quest text for what you earn.
+aetherhaven.ui.townJournal.abandon=Leave quest
+aetherhaven.ui.townJournal.abandonConfirmTitle=Leave this quest?
+aetherhaven.ui.townJournal.abandonConfirmBody=You can take this quest again later from whoever gave it to you.
+aetherhaven.ui.townJournal.abandonConfirm=Yes, leave it
+aetherhaven.ui.townJournal.abandonCancel=Stay on quest
+aetherhaven.ui.townJournal.townVillagersHeading=People in town
+aetherhaven.ui.townJournal.townPlotsHeading=Buildings
+aetherhaven.ui.townJournal.scheduleUnknown=No route set
+aetherhaven.ui.townJournal.scheduleHome=At home
+aetherhaven.ui.townJournal.scheduleWork=At work
+aetherhaven.ui.townJournal.scheduleInn=At the inn
+aetherhaven.ui.townJournal.schedulePark=At the park
+aetherhaven.ui.townJournal.scheduleAltar=At the altar
+aetherhaven.ui.townJournal.plotStatusNotStarted=Not started
+aetherhaven.ui.townJournal.plotStatusInProgress=In progress
+aetherhaven.ui.townJournal.plotStatusComplete=Complete
+aetherhaven.ui.townJournal.plotStatusUnknown=Unknown
+aetherhaven.ui.townJournal.removePlot=Remove
+aetherhaven.ui.townJournal.removePlotTooltip=Stand near the town so the building can be cleared safely.
+aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Remove this building?
+aetherhaven.ui.townJournal.plotRemoveConfirmBody=The building will be cleared from the world and removed from your town list. You cannot undo this.
+aetherhaven.ui.townJournal.plotRemoveConfirm=Yes, remove it
+aetherhaven.ui.townJournal.plotRemoveCancel=Keep it
+aetherhaven.ui.townJournal.removePlotAreaNotLoaded=Move closer to that building and try again.
+aetherhaven.ui.townJournal.removePlotFailed=Could not update the town list. Try again.
+
+# Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Quest journal
 aetherhaven.ui.questjournal.hint=Select a quest for details.
 aetherhaven.ui.questjournal.abandon=Abandon

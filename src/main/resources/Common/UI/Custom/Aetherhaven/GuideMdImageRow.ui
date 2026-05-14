@@ -1,0 +1,9 @@
+Group #MdImageRow {
+  LayoutMode: Middle;
+  Anchor: (Bottom: 12, Horizontal: 0);
+
+  /** GuideMarkdownUiAppender sets AssetPath and Anchor (pixel size) from the image file. */
+  AssetImage #MdImage {
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+}

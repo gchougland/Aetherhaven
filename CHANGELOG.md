@@ -4,6 +4,10 @@
 
 ### Added
 
+- **Reworked Journal** The quest journal is now the Town Journal with many more features in it.
+  - **Guide** The journal now has a page for an in-game mod wiki of Aetherhaven. It also has support for Voile.
+  - **Town** A page where you can see all villagers and plots. You can choose to destroy plots from this page and you can see villagers current locations and reputation easily.
+  
 - **Floating Gift Furniture** Floating gifts can now contain random furniture.
 - **Token Salvage** Tokens from balloons can be salvaged for gold coins.
 
