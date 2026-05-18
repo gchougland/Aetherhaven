@@ -45,6 +45,15 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 (c, v) -> c.lastTab = JournalTab.fromPersisted(v),
                 c -> c.lastTab.persisted())
             .add()
+            .append(
+                new KeyedCodec<>("ShowTownBordersOnMap", Codec.BOOLEAN),
+                (c, v) -> {
+                    if (v != null) {
+                        c.showTownBordersOnMap = v;
+                    }
+                },
+                c -> c.showTownBordersOnMap)
+            .add()
             .build();
 
     @Nullable
@@ -67,6 +76,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     @Nonnull
     private JournalTab lastTab = JournalTab.QUESTS;
 
+    private boolean showTownBordersOnMap = true;
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -74,6 +85,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     public Component<EntityStore> clone() {
         PlayerTownJournalState c = new PlayerTownJournalState();
         c.lastTab = lastTab;
+        c.showTownBordersOnMap = showTownBordersOnMap;
         return c;
     }
 
@@ -84,5 +96,13 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     public void setLastTab(@Nonnull JournalTab tab) {
         this.lastTab = tab;
+    }
+
+    public boolean isShowTownBordersOnMap() {
+        return showTownBordersOnMap;
+    }
+
+    public void setShowTownBordersOnMap(boolean showTownBordersOnMap) {
+        this.showTownBordersOnMap = showTownBordersOnMap;
     }
 }

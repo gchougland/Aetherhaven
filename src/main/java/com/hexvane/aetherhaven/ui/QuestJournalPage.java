@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.guide.GuideScheduleWeekAppender;
 import com.hexvane.aetherhaven.guide.GuideTopicFile;
 import com.hexvane.aetherhaven.guide.GuideTopicRepository;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
@@ -336,6 +337,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 false
             );
         }
+
+        commandBuilder.set("#TownShowBordersCheck #CheckBox.Value", stateForTabs.isShowTownBordersOnMap());
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#TownShowBordersCheck #CheckBox",
+            new EventData()
+                .append("Action", "TownShowBordersToggle")
+                .append("@Checked", "#TownShowBordersCheck #CheckBox.Value"),
+            false
+        );
 
         if (currentTab != PlayerTownJournalState.JournalTab.QUESTS) {
             commandBuilder.clear(QUEST_ROWS);
@@ -1269,6 +1280,24 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (action == null) {
             return;
         }
+        if (action.equalsIgnoreCase("TownShowBordersToggle")) {
+            if (data.checked == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.setShowTownBordersOnMap(data.checked);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            World world = store.getExternalData().getWorld();
+            TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
+            return;
+        }
         if (action.equalsIgnoreCase("Tab")) {
             String tabId = data.tabId;
             PlayerTownJournalState.JournalTab tab = parseTab(tabId);
@@ -1987,6 +2016,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@VillagerPick", Codec.STRING), (d, v) -> d.villagerPick = v, d -> d.villagerPick)
             .add()
+            .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
+            .add()
             .build();
 
         @Nullable
@@ -2033,5 +2064,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String plotPick;
         @Nullable
         private String villagerPick;
+        @Nullable
+        private Boolean checked;
     }
 }

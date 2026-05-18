@@ -204,6 +204,11 @@ public final class AetherhavenUiLocalization {
         b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
         b.set("#TownVillagersHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townVillagersHeading"));
         b.set("#TownPlotsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townPlotsHeading"));
+        b.set("#TownShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));
+        b.set(
+            "#TownShowBordersLabel.TooltipTextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBordersTooltip")
+        );
         b.set("#SettingsGeneralHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.generalHeading"));
         b.set("#SettingsPassiveLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.passiveLabel"));
         b.set("#SettingsConstrHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.constrHeading"));

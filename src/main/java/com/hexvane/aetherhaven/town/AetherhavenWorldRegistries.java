@@ -9,6 +9,9 @@ import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.inn.InnkeeperSpawnService;
 import com.hexvane.aetherhaven.pathtool.PathToolPersistence;
 import com.hexvane.aetherhaven.pathtool.PathToolRegistry;
+import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
+import com.hexvane.aetherhaven.map.TownMapMarkerProvider;
+import com.hexvane.aetherhaven.map.TownSharedMapMarkerService;
 import com.hexvane.aetherhaven.poi.PoiPersistence;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -81,6 +84,7 @@ public final class AetherhavenWorldRegistries {
     }
 
     public static void unloadWorld(@Nonnull World world) {
+        TownBorderMapOverlayService.stopWorld(world);
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());
         TownManager tm = TOWN_MANAGERS.remove(world.getName());
@@ -127,5 +131,8 @@ public final class AetherhavenWorldRegistries {
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
         PlotAssemblyService.rehydrate(world, plugin);
+        TownBorderMapOverlayService.startWorld(world);
+        world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
+        TownSharedMapMarkerService.purgeLegacyStoredMarkers(world);
     }
 }

@@ -5,6 +5,7 @@
 ### Added
 
 - **Breakable container coins** Crates, barrels, pots, sacks, and coffins in the world can rarely drop gold coins when smashed. Uses weighted rolls so most breaks find nothing and one or two coins are less common.
+- **Town Borders on Map** Added town border on the map with a town waypoint. Can be toggled per player in the journal.
 
 ### Fixed
 

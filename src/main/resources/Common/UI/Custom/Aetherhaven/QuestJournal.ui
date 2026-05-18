@@ -250,6 +250,22 @@ $C.@PageOverlay {
                 Anchor: (Top: 0, Bottom: 0, Left: 0, Right: 0);
                 Visible: false;
 
+                Group #TownMapBorderRow {
+                  LayoutMode: Left;
+                  Anchor: (Bottom: 10);
+
+                  Group #TownShowBordersCheck {
+                    LayoutMode: Left;
+                    $C.@CheckBox #CheckBox {}
+                  }
+
+                  Label #TownShowBordersLabel {
+                    Anchor: (Left: 10, Top: 4);
+                    Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                    Text: "";
+                  }
+                }
+
                 Label #TownBlocked {
                   Visible: false;
                   Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #c8d0dc);
