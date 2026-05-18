@@ -231,6 +231,15 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("BreakableContainers", BreakableContainersConfig.CODEC),
+            (o, v) -> o.breakableContainers = v != null ? v : new BreakableContainersConfig(),
+            o -> o.breakableContainers
+        )
+        .documentation(
+            "Bonus gold when players break eligible world crates, barrels, pots, sacks, and coffins. Nested Gold uses weighted 0/1/2 rolls."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("FloatingGift", FloatingGiftConfig.CODEC),
             (o, v) -> o.floatingGift = v != null ? v : new FloatingGiftConfig(),
             o -> o.floatingGift
@@ -463,6 +472,7 @@ public final class AetherhavenPluginConfig {
     private int founderMonumentTaxPermille = 1100;
 
     private LootChestConfig lootChest = new LootChestConfig();
+    private BreakableContainersConfig breakableContainers = new BreakableContainersConfig();
     private FloatingGiftConfig floatingGift = new FloatingGiftConfig();
     private JewelryConfig jewelry = new JewelryConfig();
 
@@ -647,6 +657,11 @@ public final class AetherhavenPluginConfig {
     @Nonnull
     public LootChestConfig getLootChest() {
         return lootChest != null ? lootChest : new LootChestConfig();
+    }
+
+    @Nonnull
+    public BreakableContainersConfig getBreakableContainers() {
+        return breakableContainers != null ? breakableContainers : new BreakableContainersConfig();
     }
 
     @Nonnull
@@ -1129,6 +1144,9 @@ public final class AetherhavenPluginConfig {
         double goldChestChanceRaw,
         int goldChestMinRaw,
         int goldChestMaxRaw,
+        int breakableWeightNoneRaw,
+        int breakableWeightOneRaw,
+        int breakableWeightTwoRaw,
         boolean floatingGiftEnabled,
         double floatingGiftIntervalDaysMinRaw,
         double floatingGiftIntervalDaysMaxRaw
@@ -1146,6 +1164,12 @@ public final class AetherhavenPluginConfig {
         }
         this.lootChest.applyJournalJewelryChance(chestJewelryChanceRaw);
         this.lootChest.getGold().applyJournalTuning(goldChestChanceRaw, goldChestMinRaw, goldChestMaxRaw);
+        if (this.breakableContainers == null) {
+            this.breakableContainers = new BreakableContainersConfig();
+        }
+        this.breakableContainers
+            .getGold()
+            .applyJournalTuning(breakableWeightNoneRaw, breakableWeightOneRaw, breakableWeightTwoRaw);
         if (this.floatingGift == null) {
             this.floatingGift = new FloatingGiftConfig();
         }
@@ -1187,6 +1211,7 @@ public final class AetherhavenPluginConfig {
         this.charterPerCapitaMaxGoldPerResidentPerDay = o.charterPerCapitaMaxGoldPerResidentPerDay;
         this.founderMonumentTaxPermille = o.founderMonumentTaxPermille;
         this.lootChest = o.lootChest != null ? o.lootChest : new LootChestConfig();
+        this.breakableContainers = o.breakableContainers != null ? o.breakableContainers : new BreakableContainersConfig();
         this.floatingGift = o.floatingGift != null ? o.floatingGift : new FloatingGiftConfig();
         this.jewelry = o.jewelry != null ? o.jewelry : new JewelryConfig();
         this.feastTaxBonusPermille = o.feastTaxBonusPermille;

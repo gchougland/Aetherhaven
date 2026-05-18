@@ -2,6 +2,10 @@
 
 ## [1.6.0] - Unreleased
 
+### Added
+
+- **Breakable container coins** Crates, barrels, pots, sacks, and coffins in the world can rarely drop gold coins when smashed. Uses weighted rolls so most breaks find nothing and one or two coins are less common.
+
 ### Fixed
 
 - **Gaia's Draught** Fixed some issues with it not having the right number of uses and not being able to store it in chests.

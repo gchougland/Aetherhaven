@@ -683,6 +683,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#SettingsGoldChanceField.Value", String.format(Locale.US, "%.3f", cfg.getLootChestGoldCoinChance()));
         commandBuilder.set("#SettingsGoldMinField.Value", String.valueOf(cfg.getLootChestGoldCoinMin()));
         commandBuilder.set("#SettingsGoldMaxField.Value", String.valueOf(cfg.getLootChestGoldCoinMax()));
+        commandBuilder.set(
+            "#SettingsBreakableWeightNoneField.Value",
+            String.valueOf(cfg.getBreakableContainers().getGold().getWeightNone())
+        );
+        commandBuilder.set(
+            "#SettingsBreakableWeightOneField.Value",
+            String.valueOf(cfg.getBreakableContainers().getGold().getWeightOne())
+        );
+        commandBuilder.set(
+            "#SettingsBreakableWeightTwoField.Value",
+            String.valueOf(cfg.getBreakableContainers().getGold().getWeightTwo())
+        );
         commandBuilder.set("#SettingsGiftEnabledCheck #CheckBox.Value", cfg.isFloatingGiftEnabled());
         commandBuilder.set(
             "#SettingsGiftDaysMinField.Value",
@@ -718,6 +730,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@GoldCh", "#SettingsGoldChanceField.Value")
                 .append("@GoldMin", "#SettingsGoldMinField.Value")
                 .append("@GoldMax", "#SettingsGoldMaxField.Value")
+                .append("@BreakW0", "#SettingsBreakableWeightNoneField.Value")
+                .append("@BreakW1", "#SettingsBreakableWeightOneField.Value")
+                .append("@BreakW2", "#SettingsBreakableWeightTwoField.Value")
                 .append("@GiftEn", "#SettingsGiftEnabledCheck #CheckBox.Value")
                 .append("@GiftMinDays", "#SettingsGiftDaysMinField.Value")
                 .append("@GiftMaxDays", "#SettingsGiftDaysMaxField.Value"),
@@ -1503,6 +1518,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (goldMax < goldMin) {
                 goldMax = goldMin;
             }
+            int breakW0Def = parseSrc.getBreakableContainers().getGold().getWeightNone();
+            int breakW1Def = parseSrc.getBreakableContainers().getGold().getWeightOne();
+            int breakW2Def = parseSrc.getBreakableContainers().getGold().getWeightTwo();
+            int breakW0 = parseIntSafe(data.breakW0, 0, 10_000, breakW0Def);
+            int breakW1 = parseIntSafe(data.breakW1, 0, 10_000, breakW1Def);
+            int breakW2 = parseIntSafe(data.breakW2, 0, 10_000, breakW2Def);
             double giftMinDays = parseDoubleSafe(
                 data.giftMinDays,
                 0.1,
@@ -1533,6 +1554,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 goldCh,
                 goldMin,
                 goldMax,
+                breakW0,
+                breakW1,
+                breakW2,
                 floatingOn,
                 giftMinDays,
                 giftMaxDays
@@ -1947,6 +1971,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@GoldMax", Codec.STRING), (d, v) -> d.goldMax = v, d -> d.goldMax)
             .add()
+            .append(new KeyedCodec<>("@BreakW0", Codec.STRING), (d, v) -> d.breakW0 = v, d -> d.breakW0)
+            .add()
+            .append(new KeyedCodec<>("@BreakW1", Codec.STRING), (d, v) -> d.breakW1 = v, d -> d.breakW1)
+            .add()
+            .append(new KeyedCodec<>("@BreakW2", Codec.STRING), (d, v) -> d.breakW2 = v, d -> d.breakW2)
+            .add()
             .append(new KeyedCodec<>("@GiftEn", Codec.BOOLEAN), (d, v) -> d.giftEn = v, d -> d.giftEn)
             .add()
             .append(new KeyedCodec<>("@GiftMinDays", Codec.STRING), (d, v) -> d.giftMinDays = v, d -> d.giftMinDays)
@@ -1987,6 +2017,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String goldMin;
         @Nullable
         private String goldMax;
+        @Nullable
+        private String breakW0;
+        @Nullable
+        private String breakW1;
+        @Nullable
+        private String breakW2;
         @Nullable
         private Boolean giftEn;
         @Nullable

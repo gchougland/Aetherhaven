@@ -92,7 +92,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtCraftSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
-import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
+import com.hexvane.aetherhaven.loot.PlayerBlockBreakBonusSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
@@ -467,7 +467,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ScaffoldColumnCascadeBreakSystem());
-        this.getEntityStoreRegistry().registerSystem(new GeodeOreBreakSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new PlayerBlockBreakBonusSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentPlaceSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
         this.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(this));

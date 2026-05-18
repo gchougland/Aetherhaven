@@ -518,6 +518,39 @@ $C.@PageOverlay {
                       }
                     }
 
+                    Label #SettingsBreakableHeading {
+                      Anchor: (Top: 8, Bottom: 6);
+                      Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #c8c2b0, FontSize: 13);
+                      Text: "";
+                    }
+
+                    Label #SettingsBreakableWeightNoneLabel {
+                      Anchor: (Bottom: 4);
+                      Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                      Text: "";
+                    }
+                    $C.@TextField #SettingsBreakableWeightNoneField {
+                      Anchor: (Bottom: 8, Height: 40, Left: 0, Right: 0);
+                    }
+
+                    Label #SettingsBreakableWeightOneLabel {
+                      Anchor: (Bottom: 4);
+                      Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                      Text: "";
+                    }
+                    $C.@TextField #SettingsBreakableWeightOneField {
+                      Anchor: (Bottom: 8, Height: 40, Left: 0, Right: 0);
+                    }
+
+                    Label #SettingsBreakableWeightTwoLabel {
+                      Anchor: (Bottom: 4);
+                      Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                      Text: "";
+                    }
+                    $C.@TextField #SettingsBreakableWeightTwoField {
+                      Anchor: (Bottom: 10, Height: 40, Left: 0, Right: 0);
+                    }
+
                     Label #SettingsGiftHeading {
                       Anchor: (Top: 8, Bottom: 6);
                       Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #c8c2b0, FontSize: 13);

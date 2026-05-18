@@ -215,6 +215,19 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsGoldChanceLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.goldChanceLabel"));
         b.set("#SettingsGoldMinLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.goldMinLabel"));
         b.set("#SettingsGoldMaxLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.goldMaxLabel"));
+        b.set("#SettingsBreakableHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableHeading"));
+        b.set(
+            "#SettingsBreakableWeightNoneLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableWeightNoneLabel")
+        );
+        b.set(
+            "#SettingsBreakableWeightOneLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableWeightOneLabel")
+        );
+        b.set(
+            "#SettingsBreakableWeightTwoLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.breakableWeightTwoLabel")
+        );
         b.set("#SettingsGiftHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftHeading"));
         b.set("#SettingsGiftEnabledLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftEnabledLabel"));
         b.set("#SettingsGiftDaysMinLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.giftDaysMinLabel"));
