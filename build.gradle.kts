@@ -20,7 +20,9 @@ repositories {
 val dynamicTooltipsLib = "curse.maven:dynamictooltipslib-1459711:7939479"
 
 dependencies {
-    implementation("com.vladsch.flexmark:flexmark-all:0.64.8")
+    // Core parser only. flexmark-all also embeds PDF/HTML converters (iText, OpenHTML) with tens of
+    // thousands of extra classes that trigger CurseForge manual security review on upload.
+    implementation("com.vladsch.flexmark:flexmark:0.64.8")
     implementation("com.google.code.gson:gson:2.11.0")
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
@@ -30,7 +32,7 @@ dependencies {
 
 /**
  * Hytale loads each plugin from an isolated classloader with only the plugin jar (no Gradle lib folder).
- * Embed runtime dependency jars (Flexmark, Gson, optional Curse libs) so classes like
+ * Embed runtime dependency jars (flexmark core, Gson, optional Curse libs) so classes like
  * {@code com.vladsch.flexmark.util.ast.Node} resolve at runtime.
  */
 tasks.named<Jar>("jar") {

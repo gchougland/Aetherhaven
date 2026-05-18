@@ -4,6 +4,11 @@
 
 ### Fixed
 
+- **Gaia's Draught** Fixed some issues with it not having the right number of uses and not being able to store it in chests.
+
+### Changed
+
+- **Guide Image Resolution** Resized guide images to be smaller. Might help with black texture issues.
 
 ## [1.5.1] - 5/15/2026
 
