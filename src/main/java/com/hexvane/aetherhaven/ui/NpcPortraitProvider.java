@@ -11,21 +11,25 @@ import javax.annotation.Nonnull;
  * GUI portraits for {@link VillagerNeedsOverviewPage}, {@link GaiaStatueRevivePage}, etc.: PNGs under
  * {@code Common/Icons/ModelsGenerated/}
  * (asset path {@code Icons/ModelsGenerated/&lt;file&gt;}).
+ *
+ * <p>Use only {@code Aetherhaven_*.png} filenames here. Shipping {@code Farmer.png}, {@code Merchant.png}, etc. at the
+ * stock paths overrides the game's shared villager icons and Memories portraits; incompatible textures have been
+ * reported to break unrelated client UI (black panels) on some GPUs.
  */
 public final class NpcPortraitProvider {
     private static final String ICON_DIR = "Icons/ModelsGenerated/";
     private static final String MISSING = "UI/Custom/Pages/Memories/MissingIcon.png";
 
     private static final Map<String, String> ROLE_ID_TO_FILE = Map.ofEntries(
-        Map.entry(AetherhavenConstants.ELDER_NPC_ROLE_ID, "Village_Elder.png"),
-        Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Innkeep.png"),
-        Map.entry("Aetherhaven_Merchant", "Merchant.png"),
-        Map.entry("Aetherhaven_Blacksmith", "Blacksmith.png"),
-        Map.entry("Aetherhaven_Farmer", "Farmer.png"),
-        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Priestess.png"),
-        Map.entry(AetherhavenConstants.NPC_MINER, "Miner.png"),
-        Map.entry(AetherhavenConstants.NPC_LOGGER, "Logger.png"),
-        Map.entry(AetherhavenConstants.NPC_RANCHER, "Rancher.png")
+        Map.entry(AetherhavenConstants.ELDER_NPC_ROLE_ID, "Aetherhaven_Elder_Lyren.png"),
+        Map.entry(AetherhavenConstants.INNKEEPER_NPC_ROLE_ID, "Aetherhaven_Innkeeper.png"),
+        Map.entry("Aetherhaven_Merchant", "Aetherhaven_Merchant.png"),
+        Map.entry("Aetherhaven_Blacksmith", "Aetherhaven_Blacksmith.png"),
+        Map.entry("Aetherhaven_Farmer", "Aetherhaven_Farmer.png"),
+        Map.entry(AetherhavenConstants.NPC_PRIESTESS, "Aetherhaven_Priestess.png"),
+        Map.entry(AetherhavenConstants.NPC_MINER, "Aetherhaven_Miner.png"),
+        Map.entry(AetherhavenConstants.NPC_LOGGER, "Aetherhaven_Logger.png"),
+        Map.entry(AetherhavenConstants.NPC_RANCHER, "Aetherhaven_Rancher.png")
     );
 
     private NpcPortraitProvider() {}

@@ -37,7 +37,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -62,7 +62,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournalPage.PageData> {
+public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<QuestJournalPage.PageData> {
     private static final String QUEST_ROWS = "#QuestsPage #QuestsSplit #QuestListPane #QuestRowList";
     private static final String GUIDE_TOPIC_ROWS = "#GuidePage #GuideSplit #GuideListPane #GuideTopicRowList";
     private static final String GUIDE_MD_ROWS = "#GuidePage #GuideSplit #GuideDetailPane #GuideMarkdownHost";
@@ -822,12 +822,10 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             commandBuilder.set(row + " #PlotStatus.TextSpans", Message.translation(plotStatusLangKey(pst)));
             String tokenId = journalPlotTokenItemId(plotCatalog, p);
             if (tokenId != null && !tokenId.isBlank()) {
-                commandBuilder.set(
-                    row + " #PlotTokenSlot.Slots",
-                    new ItemGridSlot[]{new ItemGridSlot(new ItemStack(tokenId.trim(), 1))}
-                );
+                AetherhavenUiItemGrids.setSingleSlot(
+                    commandBuilder, row + " #PlotTokenSlot", new ItemStack(tokenId.trim(), 1));
             } else {
-                commandBuilder.set(row + " #PlotTokenSlot.Slots", new ItemGridSlot[]{new ItemGridSlot()});
+                AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #PlotTokenSlot");
             }
             boolean areaLoaded = PlotFootprintChunkUtil.isPlotFullyLoaded(world, p);
             commandBuilder.set(row + " #RemovePlot.Visible", canRemovePlots);
@@ -1212,7 +1210,7 @@ public final class QuestJournalPage extends InteractiveCustomUIPage<QuestJournal
             for (int i = 0; i < n; i++) {
                 gridSlots[i] = new ItemGridSlot(new ItemStack(sorted.get(off + i), 1));
             }
-            commandBuilder.set(block + " #IconGrid.Slots", gridSlots);
+            AetherhavenUiItemGrids.setSlots(commandBuilder, block + " #IconGrid", gridSlots);
             bi++;
         }
         return bi;

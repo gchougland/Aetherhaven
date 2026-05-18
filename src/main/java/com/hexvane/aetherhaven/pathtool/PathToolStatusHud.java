@@ -42,11 +42,9 @@ public final class PathToolStatusHud extends CustomUIHud {
 
     public void refresh(@Nonnull PathToolPlayerComponent st, @Nonnull AetherhavenPluginConfig cfg) {
         UICommandBuilder b = new UICommandBuilder();
-        // Partial Set commands fail if the client HUD tree was cleared (other UI, reconnect, MHUD edge cases).
-        // Under vanilla CustomHud we own the whole layer: re-append the template then patch in one packet.
-        if (!mhudLayout) {
-            build(b);
-        }
+        // Initial tree comes from {@link #show()} (append + clear). Use partial CustomHud updates here: sending
+        // clear=true and re-appending every tick was hammering the client and has been linked to black/broken HUD
+        // overlays on some GPUs (e.g. AMD) when holding the path tool idle.
         AetherhavenUiLocalization.applyPathToolStatusHudTitle(b, this::scoped);
         b.set(
             scoped("#ModeName.TextSpans"),
@@ -87,6 +85,6 @@ public final class PathToolStatusHud extends CustomUIHud {
                 .param("n", String.valueOf(st.getNodes().size()))
         );
         b.set(scoped("#HintLine.TextSpans"), Message.translation("aetherhaven_items.aetherhaven.pathTool.hudHint"));
-        this.update(!mhudLayout, b);
+        this.update(false, b);
     }
 }

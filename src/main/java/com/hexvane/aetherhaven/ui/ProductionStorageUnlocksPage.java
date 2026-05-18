@@ -23,7 +23,7 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -43,7 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Purchase workplace output unlocks for the current production plot (opened from {@link ProductionStoragePage}). */
-public final class ProductionStorageUnlocksPage extends InteractiveCustomUIPage<ProductionStorageUnlocksPage.PageData> {
+public final class ProductionStorageUnlocksPage extends AetherhavenInteractiveCustomUIPage<ProductionStorageUnlocksPage.PageData> {
     private static final String ROWS = "#Content #GridScroll #UnlockRows";
     private static final String ERR_MSG = "#Content #ErrMsg";
     private static final String DETAIL_PANEL = "#Content #DetailPanel";

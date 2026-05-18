@@ -40,4 +40,39 @@ public final class PlayerHealUtil {
         map.setStatValue(hi, hv.getMax());
         store.putComponent(playerRef, EntityStatMap.getComponentType(), map);
     }
+
+    /** Heals a fraction of max health (matches vanilla instant health potion tiers). */
+    public static void healPercentOfMax(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        float percent
+    ) {
+        if (percent <= 0f) {
+            return;
+        }
+        EntityStatMap map = store.getComponent(playerRef, EntityStatMap.getComponentType());
+        if (map == null) {
+            return;
+        }
+        int hi = DefaultEntityStatTypes.getHealth();
+        EntityStatValue hv = map.get(hi);
+        if (hv == null) {
+            return;
+        }
+        float max = hv.getMax();
+        float cur = hv.get();
+        float add = max * (percent / 100f);
+        map.setStatValue(hi, Math.min(max, cur + add));
+        store.putComponent(playerRef, EntityStatMap.getComponentType(), map);
+    }
+
+    /** @see GaiaDraughtState#instantHealEffectId(int) */
+    public static float healPercentForDraughtTier(int tier) {
+        return switch (Math.min(GaiaDraughtState.MAX_HEAL_TIER, Math.max(0, tier))) {
+            case 0 -> 15f;
+            case 1 -> 25f;
+            case 2 -> 35f;
+            default -> 50f;
+        };
+    }
 }

@@ -32,6 +32,8 @@ import javax.annotation.Nullable;
 public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore> {
     private static final int MAX_PLANNED = 800;
     private static final ConcurrentHashMap<UUID, Long> LAST_DEBUG_SIGNATURE = new ConcurrentHashMap<>();
+    /** Same signature as debug preview; cleared whenever the path-tool HUD is removed so reopening always refreshes. */
+    private static final ConcurrentHashMap<UUID, Long> LAST_HUD_SIGNATURE = new ConcurrentHashMap<>();
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
     @SuppressWarnings("unused")
@@ -76,30 +78,22 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         if (pr == null) {
             return;
         }
-        if (hand == null
-            || hand.isEmpty()
-            || !AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
-            PathToolHudSupport.removePathToolHud(p, pr);
+        boolean holdingPathTool =
+            hand != null && !hand.isEmpty() && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId());
+        boolean customPageOpen = p.getPageManager().getCustomPage() != null;
+        boolean pathHudApplicable = holdingPathTool && !customPageOpen;
+
+        if (!pathHudApplicable) {
+            if (PathToolHudSupport.isPathToolHudActive(p)) {
+                PathToolHudSupport.removePathToolHud(p, pr);
+            }
+            LAST_HUD_SIGNATURE.remove(pr.getUuid());
             @Nullable
             UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
             if (uuidComp != null) {
                 UUID id = uuidComp.getUuid();
                 // Only clear debug when we had path preview state — clearing every tick wipes other DisplayDebug
                 // overlays (e.g. plot placement wireframes) for anyone with path-tool permission.
-                if (LAST_DEBUG_SIGNATURE.remove(id) != null) {
-                    PathDebugPreviewUtil.clear(pr);
-                }
-            }
-            return;
-        }
-        // Custom pages (e.g. plot placement) replace the client's custom HUD; path-tool HUD partial updates then fail
-        // (#ModeName.TextSpans not found) and can disconnect the client.
-        if (p.getPageManager().getCustomPage() != null) {
-            PathToolHudSupport.removePathToolHud(p, pr);
-            @Nullable
-            UUIDComponent uuidBlocked = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uuidBlocked != null) {
-                UUID id = uuidBlocked.getUuid();
                 if (LAST_DEBUG_SIGNATURE.remove(id) != null) {
                     PathDebugPreviewUtil.clear(pr);
                 }
@@ -116,14 +110,18 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             return;
         }
         st.clampPathStyleIndex(cfg.getPathToolStyleDefinitions().size());
-        PathToolHudSupport.obtainPathToolHud(p, pr).refresh(st, cfg);
+        UUID playerUuid = pr.getUuid();
+        long sig = PathToolPreviewSignature.compute(st);
+        Long prevHud = LAST_HUD_SIGNATURE.get(playerUuid);
+        if (prevHud == null || prevHud != sig) {
+            LAST_HUD_SIGNATURE.put(playerUuid, sig);
+            PathToolHudSupport.obtainPathToolHud(p, pr).refresh(st, cfg);
+        }
         @Nullable
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uuidComp == null) {
             return;
         }
-        UUID playerUuid = uuidComp.getUuid();
-        long sig = PathToolPreviewSignature.compute(st);
         Long prev = LAST_DEBUG_SIGNATURE.get(playerUuid);
         if (prev != null && prev == sig) {
             return;

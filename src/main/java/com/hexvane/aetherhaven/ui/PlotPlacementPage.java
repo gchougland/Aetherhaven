@@ -35,7 +35,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -58,7 +58,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlacementPage.PageData> {
+public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<PlotPlacementPage.PageData> {
     /** Shared with {@link CharterRelocationPage} (same .ui document). */
     static final String MSG_PLOT_UI = "aetherhaven_plot_move.aetherhaven.ui.plotplacement";
 
@@ -234,6 +234,7 @@ public final class PlotPlacementPage extends InteractiveCustomUIPage<PlotPlaceme
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        super.onDismiss(ref, store);
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {

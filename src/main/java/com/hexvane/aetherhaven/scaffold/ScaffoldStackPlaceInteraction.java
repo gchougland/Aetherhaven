@@ -22,11 +22,8 @@ import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockFace;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
-import com.hypixel.hytale.server.core.entity.EntityUtils;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
-import com.hypixel.hytale.server.core.entity.LivingEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.Inventory;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.ItemContainer;
 import com.hypixel.hytale.server.core.modules.entity.component.BoundingBox;
@@ -37,7 +34,6 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHa
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInteraction;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -181,11 +177,6 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                     }
                 }
 
-                Inventory inventory = null;
-                if (EntityUtils.getEntity(ref, commandBuffer) instanceof LivingEntity livingEntity) {
-                    inventory = livingEntity.getInventory();
-                }
-
                 int clientPlacedBlockId = clientState.placedBlockId;
                 String clientPlacedBlockTypeKey =
                     clientPlacedBlockId == -1 ? null : BlockType.getAssetMap().getAsset(clientPlacedBlockId).getId();
@@ -235,7 +226,7 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                     placementNormal,
                     targetBlockPosition,
                     blockRotation,
-                    inventory,
+                    playerComponent != null ? playerComponent.getInventory() : null,
                     context.getHeldItemSlot(),
                     this.removeItemInHand,
                     chunkReference,
@@ -258,8 +249,12 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                     context.setHeldItem(null);
                 }
 
-                BlockChunk blockChunk = chunkStore.getComponent(chunkReference, BlockChunk.getComponentType());
-                BlockSection section = blockChunk.getSectionAtBlockY(targetBlockPosition.y);
+                BlockSection section =
+                    ScaffoldBlockSync.blockSectionAtWorldBlock(world, chunkStore, targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z);
+                if (section == null) {
+                    context.getState().state = InteractionState.Failed;
+                    return;
+                }
                 RotationTuple resultRotation = section.getRotation(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z);
                 context.getState().blockPosition =
                     new BlockPosition(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z);

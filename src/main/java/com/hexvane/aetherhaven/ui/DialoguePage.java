@@ -29,7 +29,7 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -44,7 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Custom dialogue UI: full node text and choices in one build (no progressive reveal). */
-public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.DialogueEventData> {
+public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<DialoguePage.DialogueEventData> {
     private static final String DIALOGUE_PANEL = "#DialoguePanel";
     private static final String DIALOGUE_COLUMN = DIALOGUE_PANEL + " #DialogueFill #DialogueColumn";
     /** Full path so command targets match the appended layout tree. */
@@ -104,6 +104,7 @@ public final class DialoguePage extends InteractiveCustomUIPage<DialoguePage.Dia
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        super.onDismiss(ref, store);
         NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
     }
 

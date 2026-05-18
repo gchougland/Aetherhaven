@@ -126,6 +126,21 @@ public final class PathToolHudSupport {
     }
 
     /**
+     * True when this mod's path-tool status layer is currently registered (MHUD slot or vanilla root custom HUD).
+     * Used to avoid repeated teardown work every tick when nothing is showing.
+     */
+    public static boolean isPathToolHudActive(@Nonnull Player player) {
+        ensureMhudResolved();
+        if (isMhudAvailable()) {
+            CustomUIHud root = player.getHudManager().getCustomHud();
+            if (isMultipleCustomHud(root) && getChildFromMulti(root) != null) {
+                return true;
+            }
+        }
+        return player.getHudManager().getCustomHud() instanceof PathToolStatusHud;
+    }
+
+    /**
      * Removes the path-tool overlay without clearing other MHUD layers.
      */
     public static void removePathToolHud(@Nonnull Player player, @Nonnull PlayerRef playerRef) {

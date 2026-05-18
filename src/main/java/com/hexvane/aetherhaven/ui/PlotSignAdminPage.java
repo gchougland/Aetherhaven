@@ -15,7 +15,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
@@ -31,7 +31,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import org.bson.BsonDocument;
 
-public final class PlotSignAdminPage extends InteractiveCustomUIPage<PlotSignAdminPage.PageData> {
+public final class PlotSignAdminPage extends AetherhavenInteractiveCustomUIPage<PlotSignAdminPage.PageData> {
     public PlotSignAdminPage(@Nonnull PlayerRef playerRef) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
     }

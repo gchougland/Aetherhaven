@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_farm",
   "displayName": "Irienne Mossmark",
-  "portraitIcon": "Farmer.png",
+  "portraitIcon": "Aetherhaven_Farmer.png",
   "uiSortOrder": 4,
   "innPoolEligible": true,
   "innPoolOrder": 2,

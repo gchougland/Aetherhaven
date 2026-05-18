@@ -32,6 +32,8 @@ import com.hypixel.hytale.protocol.GameMode;
 
 import com.hypixel.hytale.protocol.Position;
 
+import com.hypixel.hytale.protocol.packets.world.ServerSetBlock;
+
 import com.hypixel.hytale.protocol.InteractionState;
 
 import com.hypixel.hytale.protocol.InteractionSyncData;
@@ -48,15 +50,9 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 
-import com.hypixel.hytale.server.core.entity.EntityUtils;
-
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 
-import com.hypixel.hytale.server.core.entity.LivingEntity;
-
 import com.hypixel.hytale.server.core.entity.entities.Player;
-
-import com.hypixel.hytale.server.core.inventory.Inventory;
 
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 
@@ -73,8 +69,6 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Int
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInteraction;
 
 import com.hypixel.hytale.server.core.universe.world.World;
-
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 
@@ -102,9 +96,9 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
      * When the server places at a resolved cell (e.g. column top) but the client predicted {@link PlaceBlockInteraction} at
      * {@code clientPlacement}, the client can keep a ghost scaffold in the predicted air cell. That cell stays correct on
      * the server (usually still air), but viewers can desync; breaking the ghost then does not drop. Vanilla
-     * {@link BlockPlaceUtils#placeBlock} only {@code invalidateBlock}s the original coordinates when the final position lands
-     * in a <em>different chunk</em>, not when it is only a few blocks away in the same chunk — so we explicitly refresh the
-     * predicted cell after a redirect.
+     * {@link BlockPlaceUtils#placeBlock} only refreshes the original cell when the final position lands in a <em>different
+     * chunk</em>, not when it is only a few blocks away in the same chunk — so we explicitly replicate the predicted cell's
+     * server state to watching clients after a redirect (same {@link ServerSetBlock} path as chunk replication).
      */
     private static void resyncClientPredictedCellIfRedirected(
         @Nonnull World world,
@@ -120,14 +114,13 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
         if (clientChunkRef == null || !clientChunkRef.isValid()) {
             return;
         }
-        BlockChunk clientBlockChunk = chunkStore.getComponent(clientChunkRef, BlockChunk.getComponentType());
-        if (clientBlockChunk == null) {
-            return;
-        }
-        BlockSection clientSection = clientBlockChunk.getSectionAtBlockY(clientPlacement.y);
-        if (clientSection != null) {
-            clientSection.invalidateBlock(clientPlacement.x, clientPlacement.y, clientPlacement.z);
-        }
+        ScaffoldBlockSync.broadcastCurrentBlockStateToChunkWatchers(
+            world,
+            chunkStore,
+            clientPlacement.x,
+            clientPlacement.y,
+            clientPlacement.z
+        );
         world.performBlockUpdate(clientPlacement.x, clientPlacement.y, clientPlacement.z, false);
         ScaffoldDebug.resolve(
             "[UseExtend] resync client-predicted cell %s,%s,%s (placed at %s,%s,%s)",
@@ -497,18 +490,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                 }
 
-
-
-                Inventory inventory = null;
-
-                if (EntityUtils.getEntity(ref, commandBuffer) instanceof LivingEntity livingEntity) {
-
-                    inventory = livingEntity.getInventory();
-
-                }
-
-
-
                 int clientPlacedBlockId = clientState.placedBlockId;
 
                 String clientPlacedBlockTypeKey = null;
@@ -603,7 +584,7 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                     blockRotation,
 
-                    inventory,
+                    playerComponent != null ? playerComponent.getInventory() : null,
 
                     context.getHeldItemSlot(),
 
@@ -649,11 +630,20 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
 
 
-                BlockChunk blockChunk = chunkStore.getComponent(chunkReference, BlockChunk.getComponentType());
-
-                BlockSection section = blockChunk.getSectionAtBlockY(targetBlockPosition.y);
-
-                RotationTuple resultRotation = section.getRotation(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z);
+                BlockSection section =
+                    ScaffoldBlockSync.blockSectionAtWorldBlock(
+                        world,
+                        chunkStore,
+                        targetBlockPosition.x,
+                        targetBlockPosition.y,
+                        targetBlockPosition.z
+                    );
+                if (section == null) {
+                    context.getState().state = InteractionState.Failed;
+                    return;
+                }
+                RotationTuple resultRotation =
+                    section.getRotation(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z);
 
                 context.getState().blockPosition =
 

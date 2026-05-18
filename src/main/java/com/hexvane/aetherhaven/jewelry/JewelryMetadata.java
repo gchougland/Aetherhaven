@@ -31,13 +31,22 @@ public final class JewelryMetadata {
         return stack.getFromMetadataOrNull(BSON_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT) != null;
     }
 
+    /**
+     * Whether this stack should show appraised jewelry UI (revealed traits, no “still need appraisal” blurbs).
+     * <p>Uses BSON {@code appraised} when present ({@linkplain #readAppraisedLenient tolerant} decoding). When the wire
+     * representation drops that flag but keeps {@link #INSTANCE_TRANSLATION_PROPERTIES_KEY}/{@code Description} in sync
+     * from {@link #syncInstanceDescriptionForTooltip}, we infer appraisal from matching that text to what an appraised
+     * stack would render — so DynamicTooltipsLib tooltips agree with appraisal UI even if network metadata sanitizes booleans.</p>
+     */
     public static boolean isAppraised(@Nonnull ItemStack stack) {
         BsonDocument root = readRoot(stack);
         if (root == null) {
             return false;
         }
-        BsonValue v = root.get("appraised");
-        return v != null && v.isBoolean() && v.asBoolean().getValue();
+        if (readAppraisedLenient(root)) {
+            return true;
+        }
+        return inferAppraisedFromSyncedDescription(stack);
     }
 
     @Nonnull
@@ -190,6 +199,77 @@ public final class JewelryMetadata {
     @Nullable
     private static BsonDocument readRoot(@Nonnull ItemStack stack) {
         return stack.getFromMetadataOrNull(BSON_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT);
+    }
+
+    /** True when BSON carries a truthy {@code appraised} value (boolean, number, or common string forms). */
+    private static boolean readAppraisedLenient(@Nonnull BsonDocument jewelryRoot) {
+        BsonValue v = jewelryRoot.get("appraised");
+        if (v == null || v.isNull()) {
+            return false;
+        }
+        if (v.isBoolean()) {
+            return v.asBoolean().getValue();
+        }
+        if (v.isNumber()) {
+            return v.asNumber().doubleValue() != 0.0;
+        }
+        if (v.isString()) {
+            String s = v.asString().getValue().trim();
+            return "true".equalsIgnoreCase(s) || "yes".equalsIgnoreCase(s) || "1".equals(s);
+        }
+        return false;
+    }
+
+    @Nullable
+    private static String readInstanceDescriptionPlain(@Nonnull ItemStack stack) {
+        BsonDocument tp =
+            stack.getFromMetadataOrNull(INSTANCE_TRANSLATION_PROPERTIES_KEY, AetherhavenBsonCodecs.BSON_DOCUMENT);
+        if (tp == null) {
+            return null;
+        }
+        BsonValue d = tp.get("Description");
+        return d != null && d.isString() ? d.asString().getValue() : null;
+    }
+
+    @Nonnull
+    private static String normalizePlainDescription(@Nonnull String s) {
+        return s.replace("\r\n", "\n").trim().replaceAll("[ \t]+", " ");
+    }
+
+    /** When wired metadata lacks a truthy appraisal flag but instance description matches an appraised projection. */
+    private static boolean inferAppraisedFromSyncedDescription(@Nonnull ItemStack stack) {
+        String synced = readInstanceDescriptionPlain(stack);
+        if (synced == null || synced.isBlank()) {
+            return false;
+        }
+        ItemStack asIf = duplicateWithAppraisedBson(stack, true);
+        if (asIf == stack) {
+            return false;
+        }
+        String expected = JewelryTooltipMessages.toPlainEnglishDescription(asIf);
+        String unappraisedBaseline = JewelryTooltipMessages.toPlainEnglishDescription(duplicateWithAppraisedBson(stack, false));
+        String nSync = normalizePlainDescription(synced);
+        if (!nSync.equals(normalizePlainDescription(unappraisedBaseline))) {
+            return nSync.equals(normalizePlainDescription(expected));
+        }
+        return false;
+    }
+
+    /**
+     * Same traits/rarity but {@code appraised} overwritten; does not rerun {@link #syncInstanceDescriptionForTooltip}.
+     * <p>{@link JewelryTooltipMessages} for probes must not inherit {@link #INSTANCE_TRANSLATION_PROPERTIES_KEY}: that
+     * text stays in sync while BSON {@code appraised} may be dropped on the wire — keeping it would make {@link
+     * #inferAppraisedFromSyncedDescription} recurse and miscompute baselines.</p>
+     */
+    @Nonnull
+    private static ItemStack duplicateWithAppraisedBson(@Nonnull ItemStack stack, boolean appraised) {
+        BsonDocument root = readRoot(stack);
+        if (root == null) {
+            return stack;
+        }
+        BsonDocument next = root.clone();
+        next.put("appraised", BsonBoolean.valueOf(appraised));
+        return stripInstanceDescriptionOverride(writeRoot(stack, next));
     }
 
     @Nonnull

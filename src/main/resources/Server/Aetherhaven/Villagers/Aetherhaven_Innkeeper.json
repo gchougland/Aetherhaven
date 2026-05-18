@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_inn",
   "workConstructionId": "plot_inn",
   "displayName": "Corin Mosscup",
-  "portraitIcon": "Innkeep.png",
+  "portraitIcon": "Aetherhaven_Innkeeper.png",
   "uiSortOrder": 1,
   "reputationMilestones": [
     {

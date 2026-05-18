@@ -26,7 +26,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
  * Positions a new charter block; validates that all town buildings remain inside the territory centered on the new
  * charter.
  */
-public final class CharterRelocationPage extends InteractiveCustomUIPage<CharterRelocationPage.PageData> {
+public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIPage<CharterRelocationPage.PageData> {
     @Nonnull
     private final CharterRelocationSession session;
 
@@ -150,6 +150,7 @@ public final class CharterRelocationPage extends InteractiveCustomUIPage<Charter
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        super.onDismiss(ref, store);
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {

@@ -6,7 +6,7 @@
   "workConstructionId": "plot_miners_hut",
   "scheduleRoleId": "Aetherhaven_Miner",
   "displayName": "Gorruk Stonevein",
-  "portraitIcon": "Miner.png",
+  "portraitIcon": "Aetherhaven_Miner.png",
   "uiSortOrder": 6,
   "innPoolEligible": true,
   "innPoolOrder": 4,

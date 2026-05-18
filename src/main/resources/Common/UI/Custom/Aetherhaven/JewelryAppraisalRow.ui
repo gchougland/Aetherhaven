@@ -1,6 +1,6 @@
 $C = "../Common.ui";
 
-Button #Row {
+Button #JewelryAppraisalPick {
   LayoutMode: Left;
   Anchor: (Bottom: 6);
   Padding: (Horizontal: 10, Vertical: 8);
@@ -10,7 +10,7 @@ Button #Row {
     Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75)))
   );
 
-  ItemGrid #Icon {
+  ItemGrid #JewelryAppraisalItemGrid {
     Anchor: (Width: 40, Height: 40, Right: 10);
     SlotsPerRow: 1;
     Style: (

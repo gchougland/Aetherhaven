@@ -19,7 +19,7 @@
       }
     ]
   },
-  "Icon": "Icons/ItemsGenerated/Token_Park_01.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Park_01.png",
   "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
   "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
   "MaxStack": 64,

@@ -4,8 +4,14 @@
 
 ### Fixed
 
+
+## [1.5.1] - 5/15/2026
+
+### Fixed
+
 - **Variant Display In Journal** Variants displayed as the regular version in the journal, this has been fixed.
 - **Production Storage** Extracting resources with a full inventory would delete them, this has been fixed.
+- **Jewelry UI Crash** Fixed errors in appraisal and hand mirror guis.
 
 ## [1.5.0] - 5/13/2026
 

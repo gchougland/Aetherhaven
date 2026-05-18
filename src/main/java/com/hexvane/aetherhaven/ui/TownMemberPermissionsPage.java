@@ -18,7 +18,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -30,7 +30,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class TownMemberPermissionsPage extends InteractiveCustomUIPage<TownMemberPermissionsPage.PageData> {
+public final class TownMemberPermissionsPage extends AetherhavenInteractiveCustomUIPage<TownMemberPermissionsPage.PageData> {
     private static final String FLAG_PLACE_PLOTS = "placePlots";
     private static final String FLAG_MANAGE_CONSTRUCTIONS = "manageConstructions";
     private static final String FLAG_SPEND_TREASURY = "spendTreasuryGold";

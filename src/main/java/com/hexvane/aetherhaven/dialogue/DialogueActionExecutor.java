@@ -280,7 +280,19 @@ public final class DialogueActionExecutor {
             UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
             if (pu != null) {
                 GaiaDraughtService.unlockAndFill(town, pu.getUuid());
-                GaiaDraughtService.ensureDraughtStacksOrGrantFirst(rewardPlayerRef, store, town, pu.getUuid());
+                tm.updateTown(town);
+                // Grant on the next world tick so inventory sync cannot stall dialogue UI on the same frame.
+                world.execute(() -> {
+                    if (!rewardPlayerRef.isValid()) {
+                        return;
+                    }
+                    Store<EntityStore> liveStore = rewardPlayerRef.getStore();
+                    TownRecord liveTown = tm.findTownForPlayerInWorld(pu.getUuid());
+                    if (liveTown != null) {
+                        GaiaDraughtService.ensureDraughtStacksOrGrantFirst(rewardPlayerRef, liveStore, liveTown, pu.getUuid());
+                        tm.updateTown(liveTown);
+                    }
+                });
             }
         }
         tm.updateTown(town);

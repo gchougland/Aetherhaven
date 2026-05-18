@@ -41,6 +41,7 @@ items.Aetherhaven_Purification_Powder.name=Purification powder
 items.Aetherhaven_Purification_Powder.description=While held, nearby latent spawn points shimmer with Gaia-touched motes. Use on a highlighted spawn to banish it and spend one charge.
 items.Aetherhaven_Gaias_Draught.name=Gaia's Draught
 items.Aetherhaven_Gaias_Draught.description=A blessed flask of living water that follows you alone. Hold it and drink with secondary use like other potions. Remaining sips match the ammo readout and the flask durability bar. Blessings at the altar widen what it holds and deepen how strongly it heals.
+aetherhaven.gaiadraught.cannotStore=Gaia's Draught stays with you. It cannot go into storage.
 items.Aetherhaven_Shard_Of_Gaia.name=Shard of Gaia
 items.Aetherhaven_Shard_Of_Gaia.description=A priestess token. Offer it with tithe at the Gaia altar to widen how many sips your draught can hold.
 items.Aetherhaven_Verdant_Catalyst.name=Verdant catalyst

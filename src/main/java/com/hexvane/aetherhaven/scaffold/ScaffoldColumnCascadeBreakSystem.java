@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.component.Archetype;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -11,11 +12,15 @@ import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.protocol.BlockMaterial;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockBreakingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockGathering;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.HarvestingDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.PhysicsDropType;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.SoftBlockDropType;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.universe.world.chunk.BlockChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -146,6 +151,58 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
         return grounded;
     }
 
+    /**
+     * Same semantics as {@link BlockHarvestUtils#naturallyRemoveBlockByPhysics}, which delegates to
+     * {@link BlockHarvestUtils#naturallyRemoveBlock} after resolving physics-style drops from {@link BlockGathering}.
+     */
+    private static void naturallyRemoveBlockByPhysicsNonDeprecated(
+        @Nonnull Vector3i blockPosition,
+        @Nonnull BlockType blockType,
+        int filler,
+        int setBlockSettings,
+        @Nonnull Ref<ChunkStore> chunkReference,
+        @Nonnull ComponentAccessor<EntityStore> entityStore,
+        @Nonnull ComponentAccessor<ChunkStore> chunkStore
+    ) {
+        int quantity = 1;
+        String itemId = null;
+        String dropListId = null;
+        BlockGathering blockGathering = blockType.getGathering();
+        if (blockGathering != null) {
+            PhysicsDropType physics = blockGathering.getPhysics();
+            BlockBreakingDropType breaking = blockGathering.getBreaking();
+            SoftBlockDropType soft = blockGathering.getSoft();
+            HarvestingDropType harvest = blockGathering.getHarvest();
+            if (physics != null) {
+                itemId = physics.getItemId();
+                dropListId = physics.getDropListId();
+            } else if (breaking != null) {
+                quantity = breaking.getQuantity();
+                itemId = breaking.getItemId();
+                dropListId = breaking.getDropListId();
+            } else if (soft != null) {
+                itemId = soft.getItemId();
+                dropListId = soft.getDropListId();
+            } else if (harvest != null) {
+                itemId = harvest.getItemId();
+                dropListId = harvest.getDropListId();
+            }
+        }
+        int settings = setBlockSettings | 32;
+        BlockHarvestUtils.naturallyRemoveBlock(
+            blockPosition,
+            blockType,
+            filler,
+            quantity,
+            itemId,
+            dropListId,
+            settings,
+            chunkReference,
+            entityStore,
+            chunkStore
+        );
+    }
+
     private static void removeFloatingScaffold(
         @Nonnull World world,
         @Nonnull Store<EntityStore> entityStore,
@@ -162,22 +219,12 @@ public final class ScaffoldColumnCascadeBreakSystem extends EntityEventSystem<En
             if (chunkRef == null || !chunkRef.isValid()) {
                 continue;
             }
-            BlockChunk blockChunk = chunkStore.getComponent(chunkRef, BlockChunk.getComponentType());
-            if (blockChunk == null) {
+            BlockSection section = ScaffoldBlockSync.blockSectionAtWorldBlock(world, chunkStore, p.getX(), p.getY(), p.getZ());
+            if (section == null) {
                 continue;
             }
-            @SuppressWarnings({ "deprecation", "removal" })
-            BlockSection section = blockChunk.getSectionAtBlockY(p.getY());
             int filler = section.getFiller(p.getX(), p.getY(), p.getZ());
-            BlockHarvestUtils.naturallyRemoveBlockByPhysics(
-                p,
-                t,
-                filler,
-                0,
-                chunkRef,
-                entityStore,
-                chunkStore
-            );
+            naturallyRemoveBlockByPhysicsNonDeprecated(p, t, filler, 0, chunkRef, entityStore, chunkStore);
         }
     }
 

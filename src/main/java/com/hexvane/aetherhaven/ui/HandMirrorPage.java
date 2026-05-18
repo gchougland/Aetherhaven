@@ -14,10 +14,9 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
-import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -30,17 +29,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Custom UI: list player's jewelry in inventory, equip to loadout slots. */
-public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage.PageData> {
+public final class HandMirrorPage extends AetherhavenInteractiveCustomUIPage<HandMirrorPage.PageData> {
     private static final String LEFT = "#Content #LeftColumn";
     private static final String ROWS = LEFT + " #JewelryListScroll #Rows";
     private static final int MAX_ROWS = 48;
     private static final String TRAIT_BODY = "#Content #TraitColumn #TraitBody";
 
-    private static final String R1_ICON = LEFT + " #EquippedRow #Ring1Column #Ring1SlotBox #Ring1Slot #Ring1Icon";
+    private static final String R1_ICON = "#Ring1Icon";
     private static final String R1_UNEQUIP = LEFT + " #EquippedRow #Ring1Column #UnequipRing1";
-    private static final String R2_ICON = LEFT + " #EquippedRow #Ring2Column #Ring2SlotBox #Ring2Slot #Ring2Icon";
+    private static final String R2_ICON = "#Ring2Icon";
     private static final String R2_UNEQUIP = LEFT + " #EquippedRow #Ring2Column #UnequipRing2";
-    private static final String NECK_ICON = LEFT + " #EquippedRow #NeckColumn #NeckSlotBox #NeckSlot #NeckIcon";
+    private static final String NECK_ICON = "#NeckIcon";
     private static final String NECK_UNEQUIP = LEFT + " #EquippedRow #NeckColumn #UnequipNeck";
 
     private boolean templateAppended;
@@ -107,9 +106,8 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
                 it != null && it.getTranslationKey() != null && !it.getTranslationKey().isBlank()
                     ? Message.translation(it.getTranslationKey())
                     : Message.raw(stack.getItemId());
-            ItemStack forRow = JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(stack));
-            String iconSlot = row + " #IconFrame #Icon";
-            applyItemGridStack(commandBuilder, iconSlot, forRow);
+            AetherhavenUiItemGrids.setSingleSlot(
+                commandBuilder, row + " #IconFrame #Icon", AetherhavenUiItemGrids.jewelrySlotForUi(stack));
             commandBuilder.set(
                 row + " #Line.TextSpans",
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.handmirror.listRow").param("itemName", itemName).param("qty", stack.getQuantity()));
@@ -160,20 +158,12 @@ public final class HandMirrorPage extends InteractiveCustomUIPage<HandMirrorPage
         @Nonnull String unequipSelector,
         @Nullable ItemStack st) {
         if (st == null || ItemStack.isEmpty(st)) {
-            commandBuilder.set(iconSelector + ".Visible", false);
+            AetherhavenUiItemGrids.hide(commandBuilder, iconSelector);
             commandBuilder.set(unequipSelector + ".Visible", false);
             return;
         }
         commandBuilder.set(unequipSelector + ".Visible", true);
-        ItemStack prepared = JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(st));
-        applyItemGridStack(commandBuilder, iconSelector, prepared);
-    }
-
-    private static void applyItemGridStack(
-        @Nonnull UICommandBuilder commandBuilder, @Nonnull String itemGridSelector, @Nonnull ItemStack forDisplay) {
-        commandBuilder.set(itemGridSelector + ".Visible", true);
-        commandBuilder.set(
-            itemGridSelector + ".Slots", new ItemGridSlot[] {new ItemGridSlot(forDisplay)});
+        AetherhavenUiItemGrids.setSingleSlot(commandBuilder, iconSelector, AetherhavenUiItemGrids.jewelrySlotForUi(st));
     }
 
     private static void bindUnequip(@Nonnull UIEventBuilder eventBuilder, @Nonnull String buttonSelector, int target) {

@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_market_stall",
   "displayName": "Vex Sunderlane",
-  "portraitIcon": "Merchant.png",
+  "portraitIcon": "Aetherhaven_Merchant.png",
   "uiSortOrder": 2,
   "innPoolEligible": true,
   "innPoolOrder": 0,

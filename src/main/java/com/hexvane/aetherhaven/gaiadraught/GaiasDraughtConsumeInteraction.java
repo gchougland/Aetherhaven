@@ -12,11 +12,9 @@ import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
-import com.hypixel.hytale.server.core.asset.type.entityeffect.config.EntityEffect;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.effect.EffectControllerComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
@@ -90,22 +88,21 @@ public final class GaiasDraughtConsumeInteraction extends SimpleInstantInteracti
             context.getState().state = InteractionState.Failed;
             return;
         }
+        GaiaDraughtState st = town.getOrCreateGaiaDraughtState(uc.getUuid());
+        if (!st.isUnlocked() || st.getCharges() <= 0) {
+            context.getState().state = InteractionState.Failed;
+            return;
+        }
+        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, st);
         if (!GaiaDraughtService.tryConsumeOneCharge(town, uc.getUuid())) {
             context.getState().state = InteractionState.Failed;
             return;
         }
         tm.updateTown(town);
-        GaiaDraughtState st = town.getOrCreateGaiaDraughtState(uc.getUuid());
+        st = town.getOrCreateGaiaDraughtState(uc.getUuid());
+        GaiaDraughtService.applyDraughtHeal(playerRef, commandBuffer, st.getHealTier());
         GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, st);
         GaiaDraughtAmmoHudSupport.syncHeldDraughtAmmoHud(commandBuffer, playerRef, town, uc.getUuid());
-        String effectId = GaiaDraughtState.instantHealEffectId(st.getHealTier());
-        EntityEffect asset = EntityEffect.getAssetMap().getAsset(effectId);
-        if (asset != null) {
-            EffectControllerComponent ecc = commandBuffer.getComponent(playerRef, EffectControllerComponent.getComponentType());
-            if (ecc != null) {
-                ecc.addEffect(playerRef, asset, commandBuffer);
-            }
-        }
         playConsumedSound(playerRef, store);
     }
 

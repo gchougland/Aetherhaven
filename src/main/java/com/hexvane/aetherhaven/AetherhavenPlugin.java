@@ -88,6 +88,8 @@ import com.hexvane.aetherhaven.jewelry.LootChestWorldLootMarkSystem;
 import com.hexvane.aetherhaven.jewelry.LootChestWorldLootPending;
 import com.hexvane.aetherhaven.jewelry.JewelryStatSyncSystem;
 import com.hexvane.aetherhaven.jewelry.PlayerJewelryLoadout;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtCraftSystem;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
 import com.hexvane.aetherhaven.geode.GeodeOreBreakSystem;
@@ -473,6 +475,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
+        GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(this);
+        this.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
+        this.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem.Pre(gaiaDraughtCraftSystem));
+        this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventoryChangeSystem());
         this.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PathToolPreviewSystem(this));
         this.getEntityStoreRegistry().registerSystem(new FloatingGiftSchedulerSystem());
@@ -763,6 +769,12 @@ public final class AetherhavenPlugin extends JavaPlugin {
 
     @Override
     protected void start() {
+        TooltipBridge.registerIfNeeded();
+        if (!TooltipBridge.isRegistered()) {
+            LOGGER
+                .atWarning()
+                .log("DynamicTooltipsLib did not initialize; inventory jewelry tooltips from AetherhavenJewelryDynamicTooltipProvider are disabled");
+        }
         JewelryGemTraits.validateStatIdsAtStartup();
         // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
         // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.

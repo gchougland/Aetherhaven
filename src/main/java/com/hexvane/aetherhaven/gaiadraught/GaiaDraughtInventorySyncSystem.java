@@ -103,13 +103,6 @@ public final class GaiaDraughtInventorySyncSystem extends EntityTickingSystem<En
             return;
         }
         String id = AetherhavenConstants.ITEM_GAIAS_DRAUGHT;
-        if (!GaiaDraughtService.playerHasDraughtStack(inv) && st.getCharges() > 0) {
-            GaiaDraughtService.ensureDraughtStacksOrGrantFirst(playerRef, store, town, uc.getUuid());
-            inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-            if (inv == null) {
-                return;
-            }
-        }
         if (InventoryMaterials.count(inv, id) <= 0 && st.getCharges() <= 0) {
             return;
         }

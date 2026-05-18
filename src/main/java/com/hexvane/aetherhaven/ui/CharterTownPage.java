@@ -21,7 +21,7 @@ import com.hypixel.hytale.math.vector.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -33,7 +33,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class CharterTownPage extends InteractiveCustomUIPage<CharterTownPage.PageData> {
+public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<CharterTownPage.PageData> {
     private final Ref<ChunkStore> charterBlockRef;
     /**
      * {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the

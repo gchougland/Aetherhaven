@@ -9,17 +9,17 @@ $Sounds = "../Sounds.ui";
 );
 
 @RingPicStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../ring.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Default: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_ring.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_ring.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_ring.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_ring.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
 @NeckPicStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../necklace.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Default: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_necklace.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_necklace.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_necklace.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_necklace.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
 @IconMinusStyle = TextButtonStyle(
@@ -51,10 +51,10 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 @ForgeIconStyle = TextButtonStyle(
-  Default: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
-  Hovered: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
-  Pressed: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
-  Disabled: (Background: PatchStyle(TexturePath: "../blacksmith.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Default: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_blacksmith.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_blacksmith.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_blacksmith.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../Aetherhaven_jewelry_tab_blacksmith.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
 

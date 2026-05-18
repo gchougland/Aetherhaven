@@ -21,13 +21,12 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
-import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -40,10 +39,12 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.herolias.tooltips.api.DynamicTooltipsApi;
+import org.herolias.tooltips.api.DynamicTooltipsApiProvider;
 
 /** Appraise jewelry stacks in combined inventory; merchant charges gold, appraisal bench does not. */
-public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
-    private static final String ROWS = "#Content #ListScroll #Rows";
+public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPage<JewelryAppraisalPage.PageData> {
+    private static final String ROWS = "#Content #ListScroll #JewelryAppraisalRows";
     private static final int MAX_ROWS = 48;
 
     private final boolean chargeGold;
@@ -135,9 +136,8 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
                 JewelryMetadata.isAppraised(stack)
                     ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.statusAppraised")
                     : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.statusUnidentified");
-            ItemStack forRow = JewelryMetadata.syncInstanceDescriptionForTooltip(JewelryMetadata.ensureRolled(stack));
-            commandBuilder.set(
-                row + " #Icon.Slots", new ItemGridSlot[] {new ItemGridSlot(forRow)});
+            AetherhavenUiItemGrids.setSingleSlot(
+                commandBuilder, row + " #JewelryAppraisalItemGrid", AetherhavenUiItemGrids.jewelrySlotForUi(stack));
             commandBuilder.set(
                 row + " #Line.TextSpans",
                 Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.row").param("itemName", itemName).param("status", statusMsg)
@@ -329,6 +329,12 @@ public final class JewelryAppraisalPage extends InteractiveCustomUIPage<JewelryA
             Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.jewelryAppraisal.done"),
             NotificationStyle.Success
         );
+        if (uc != null) {
+            DynamicTooltipsApi dtlApi = DynamicTooltipsApiProvider.get();
+            if (dtlApi != null) {
+                dtlApi.refreshPlayer(uc.getUuid());
+            }
+        }
         UiSoundEffects.play2dUi(ref, store, AetherhavenConstants.SFX_ARCANE_WORKBENCH_CRAFT);
         selectedSlot = slot;
         refresh(ref, store);

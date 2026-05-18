@@ -6,7 +6,7 @@
   "workConstructionId": "plot_barn",
   "scheduleRoleId": "Aetherhaven_Rancher",
   "displayName": "Thalen Meadowrun",
-  "portraitIcon": "Rancher.png",
+  "portraitIcon": "Aetherhaven_Rancher.png",
   "uiSortOrder": 8,
   "innPoolEligible": true,
   "innPoolOrder": 6,

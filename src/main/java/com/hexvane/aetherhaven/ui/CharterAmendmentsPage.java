@@ -16,7 +16,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Skill-tree style charter amendments: tax policy (tier 1) and specialization (tier 2). */
-public final class CharterAmendmentsPage extends InteractiveCustomUIPage<CharterAmendmentsPage.PageData> {
+public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIPage<CharterAmendmentsPage.PageData> {
     private boolean templateAppended;
 
     public CharterAmendmentsPage(@Nonnull PlayerRef playerRef) {

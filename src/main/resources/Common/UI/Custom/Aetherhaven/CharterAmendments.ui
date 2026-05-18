@@ -129,7 +129,7 @@ $C.@PageOverlay {
 
                       AssetImage #T1PerCapitaIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/multiple-users-silhouette.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_MultipleUsers.png";
                       }
                       Group #T1PerCapitaDim {
                         LayoutMode: Full;
@@ -175,7 +175,7 @@ $C.@PageOverlay {
 
                       AssetImage #T1HappinessIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/emotions.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_Emotions.png";
                       }
                       Group #T1HappinessDim {
                         LayoutMode: Full;
@@ -235,7 +235,7 @@ $C.@PageOverlay {
 
                       AssetImage #T2MiningIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/pickaxe.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_Pickaxe.png";
                       }
                       Group #T2MiningDim {
                         LayoutMode: Full;
@@ -271,7 +271,7 @@ $C.@PageOverlay {
 
                       AssetImage #T2LoggingIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/axe.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_Axe.png";
                       }
                       Group #T2LoggingDim {
                         LayoutMode: Full;
@@ -311,7 +311,7 @@ $C.@PageOverlay {
 
                       AssetImage #T2FarmingIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/farmer.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_Farmer.png";
                       }
                       Group #T2FarmingDim {
                         LayoutMode: Full;
@@ -347,7 +347,7 @@ $C.@PageOverlay {
 
                       AssetImage #T2SmithingIcon {
                         Anchor: (Full: 0);
-                        AssetPath: "Icons/ItemsGenerated/blacksmith.png";
+                        AssetPath: "Icons/ItemsGenerated/Aetherhaven_Charter_Icon_Blacksmith.png";
                       }
                       Group #T2SmithingDim {
                         LayoutMode: Full;

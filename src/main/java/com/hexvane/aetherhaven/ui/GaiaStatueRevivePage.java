@@ -22,7 +22,7 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -39,7 +39,7 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class GaiaStatueRevivePage extends InteractiveCustomUIPage<GaiaStatueRevivePage.PageData> {
+public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPage<GaiaStatueRevivePage.PageData> {
     private static final String ROWS = "#Rows";
     private static final int MAX_ROWS = 16;
 

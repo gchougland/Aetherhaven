@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_blacksmith_shop",
   "displayName": "Garren Vale",
-  "portraitIcon": "Blacksmith.png",
+  "portraitIcon": "Aetherhaven_Blacksmith.png",
   "uiSortOrder": 3,
   "innPoolEligible": true,
   "innPoolOrder": 1,

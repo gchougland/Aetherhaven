@@ -6,7 +6,7 @@
   "workConstructionId": "plot_lumbermill",
   "scheduleRoleId": "Aetherhaven_Logger",
   "displayName": "Seren Fairhollow",
-  "portraitIcon": "Logger.png",
+  "portraitIcon": "Aetherhaven_Logger.png",
   "uiSortOrder": 7,
   "innPoolEligible": true,
   "innPoolOrder": 5,

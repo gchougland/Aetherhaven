@@ -19,7 +19,7 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.modules.i18n.I18nModule;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.entity.entities.player.pages.InteractiveCustomUIPage;
+import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -39,7 +39,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCraftingPage.PageData> {
+public final class JewelryCraftingPage extends AetherhavenInteractiveCustomUIPage<JewelryCraftingPage.PageData> {
     private static final int ESSENCE_MAX = 999;
 
     private boolean templateAppended;
@@ -237,13 +237,8 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
             commandBuilder.set("#OutputItem.Slots", new ItemGridSlot[0]);
             return;
         }
-        ItemStack display =
-            JewelryMetadata.syncInstanceDescriptionForTooltip(
-                JewelryMetadata.ensureRolled(pendingCraftOutput));
-        commandBuilder.set(
-            "#OutputItem.Slots",
-            new ItemGridSlot[] {new ItemGridSlot(display)}
-        );
+        AetherhavenUiItemGrids.setSingleSlot(
+            commandBuilder, "#OutputItem", AetherhavenUiItemGrids.jewelrySlotForUi(pendingCraftOutput));
     }
 
     private static void bindA(@Nonnull UIEventBuilder eventBuilder, @Nonnull String selector, @Nonnull String action) {
@@ -301,6 +296,7 @@ public final class JewelryCraftingPage extends InteractiveCustomUIPage<JewelryCr
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        super.onDismiss(ref, store);
         if (pendingCraftOutput == null || ItemStack.isEmpty(pendingCraftOutput)) {
             return;
         }

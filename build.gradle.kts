@@ -38,6 +38,11 @@ tasks.named<Jar>("jar") {
     from({
         configurations.runtimeClasspath.get()
             .filter { it.isFile && it.extension.equals("jar", ignoreCase = true) }
+            .filter { jar ->
+                val n = jar.name.lowercase()
+                // Belt-and-suspenders: never merge DTL into the fat jar even if it appears on runtimeClasspath.
+                !n.contains("dynamictooltip") && !n.contains("dynamictooltips")
+            }
             .map { zipTree(it) }
     }) {
         exclude("META-INF/INDEX.LIST")

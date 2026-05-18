@@ -3,7 +3,7 @@
     "Name": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name",
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description"
   },
-  "Icon": "Icons/ItemsGenerated/Token_Hytiny_Cozy_Camper.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Token_Hytiny_Cozy_Camper.png",
   "Model": "Blocks/Decorative_Sets/Lumberjack/Sign.blockymodel",
   "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
   "MaxStack": 64,

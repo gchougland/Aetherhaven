@@ -5,7 +5,7 @@
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_gaia_altar",
   "displayName": "Serah Thornwell",
-  "portraitIcon": "Priestess.png",
+  "portraitIcon": "Aetherhaven_Priestess.png",
   "uiSortOrder": 5,
   "innPoolEligible": true,
   "innPoolOrder": 3,
