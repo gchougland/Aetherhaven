@@ -7,8 +7,8 @@
     "TimeSeconds": 0,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Planks",
-        "Quantity": 6
+        "ItemId": "Aetherhaven_Gold_Coin",
+        "Quantity": 5
       }
     ],
     "BenchRequirement": [

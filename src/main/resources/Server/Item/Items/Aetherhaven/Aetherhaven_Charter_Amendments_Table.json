@@ -8,7 +8,7 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Wood_Planks",
+        "ResourceTypeId": "Wood_All",
         "Quantity": 6
       },
       {

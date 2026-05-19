@@ -14,6 +14,8 @@
 ### Changed
 
 - **Guide Image Resolution** Resized guide images to be smaller. Might help with black texture issues.
+- **Plot Token Recipes** All plot tokens now take 5 gold coins to craft and can be salvaged for 5 gold coins.
+- **Misc Recipes** Changed any recipes that used wood planks to take any kind of wood for consistency.
 
 ## [1.5.1] - 5/15/2026
 
