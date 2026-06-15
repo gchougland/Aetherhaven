@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.plot;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hypixel.hytale.protocol.ItemBase;
 import com.hypixel.hytale.protocol.ItemWithAllMetadata;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
@@ -32,6 +34,29 @@ public final class PlotTokenIconWire {
 
     public static boolean hasPlotTokenMetaFromMetadataJson(@Nullable String metadataJson) {
         return readConstructionIdFromMetadataJson(metadataJson) != null;
+    }
+
+    /**
+     * Stack for {@link com.hypixel.hytale.server.core.ui.ItemGridSlot}: per-building virtual id for unified tokens,
+     * legacy item id otherwise. Custom UI cannot carry plot-token BSON metadata — use the plot's stored construction
+     * id so variant icons resolve correctly (not the gameplay parent id).
+     */
+    @Nonnull
+    public static ItemStack forItemGrid(@Nonnull String plotStoredConstructionId, @Nullable ConstructionCatalog catalog) {
+        String stored = plotStoredConstructionId.trim();
+        if (stored.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        ConstructionDefinition def = catalog != null ? catalog.get(stored) : null;
+        if (def != null) {
+            String legacy = def.getPlotTokenItemId();
+            if (legacy != null
+                && !legacy.isBlank()
+                && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacy.trim())) {
+                return new ItemStack(legacy.trim(), 1);
+            }
+        }
+        return new ItemStack(PlotTokenVirtualItemRegistry.generateVirtualId(stored), 1);
     }
 
     @Nullable

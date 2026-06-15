@@ -91,7 +91,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static final String TOWN_PLOT_ROWS =
         "#TownPage #TownSplit #TownPlotPane #TownPlotScroll #TownPlotRowList";
     private static final int MAX_ROWS = 24;
-    private static final int MAX_TOWN_PLOTS = 32;
     private static final int MAX_GUIDE_TOPICS = 48;
     /** Long topics (e.g. mechanic_commands) need nested list rows; 96 truncated sub-bullets. */
     private static final int MAX_GUIDE_MD_ROWS = 256;
@@ -993,9 +992,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
             plots.add(p);
         }
+        plots.sort((a, b) -> compareJournalPlots(plotCatalog, a, b));
         boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
-        int np = Math.min(plots.size(), MAX_TOWN_PLOTS);
-        for (int i = 0; i < np; i++) {
+        for (int i = 0; i < plots.size(); i++) {
             PlotInstance p = plots.get(i);
             commandBuilder.append(TOWN_PLOT_ROWS, "Aetherhaven/TownJournalPlotRow.ui");
             String row = TOWN_PLOT_ROWS + "[" + i + "]";
@@ -1005,10 +1004,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
             PlotInstanceState pst = p.getState();
             commandBuilder.set(row + " #PlotStatus.TextSpans", Message.translation(plotStatusLangKey(pst)));
-            String tokenId = journalPlotTokenItemId(plotCatalog, p);
-            if (tokenId != null && !tokenId.isBlank()) {
-                AetherhavenUiItemGrids.setSingleSlot(
-                    commandBuilder, row + " #PlotTokenSlot", new ItemStack(tokenId.trim(), 1));
+            ItemGridSlot tokenSlot = AetherhavenUiItemGrids.plotTokenSlotForConstruction(p.getConstructionId(), plotCatalog);
+            if (tokenSlot != null) {
+                AetherhavenUiItemGrids.setSingleSlot(commandBuilder, row + " #PlotTokenSlot", tokenSlot);
             } else {
                 AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #PlotTokenSlot");
             }
@@ -1055,27 +1053,25 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         return byGameplay != null ? byGameplay.getDisplayName() : t;
     }
 
-    @Nullable
-    private static String journalPlotTokenItemId(@Nonnull ConstructionCatalog catalog, @Nonnull PlotInstance plot) {
-        String stored = plot.getConstructionId();
-        if (stored == null || stored.isBlank()) {
-            return null;
+    private static int compareJournalPlots(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull PlotInstance a,
+        @Nonnull PlotInstance b
+    ) {
+        int byTitle =
+            journalPlotConstructionTitle(catalog, a).compareToIgnoreCase(journalPlotConstructionTitle(catalog, b));
+        if (byTitle != 0) {
+            return byTitle;
         }
-        String t = stored.trim();
-        ConstructionDefinition byStored = catalog.get(t);
-        if (byStored != null) {
-            String tok = byStored.getPlotTokenItemId();
-            if (tok != null && !tok.isBlank()) {
-                return tok.trim();
-            }
+        int byX = Integer.compare(a.getSignX(), b.getSignX());
+        if (byX != 0) {
+            return byX;
         }
-        String gameplay = catalog.resolveGameplayConstructionId(t);
-        ConstructionDefinition byGameplay = catalog.get(gameplay);
-        if (byGameplay == null) {
-            return null;
+        int byZ = Integer.compare(a.getSignZ(), b.getSignZ());
+        if (byZ != 0) {
+            return byZ;
         }
-        String tok = byGameplay.getPlotTokenItemId();
-        return tok != null && !tok.isBlank() ? tok.trim() : null;
+        return Integer.compare(a.getSignY(), b.getSignY());
     }
 
     private static void setTownTabBlocked(@Nonnull UICommandBuilder commandBuilder, @Nonnull Message msg) {

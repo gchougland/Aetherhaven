@@ -12,6 +12,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.HolderSystem;
 import com.hypixel.hytale.protocol.PlayerSkin;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.modules.entity.system.ModelSystems;
@@ -58,6 +59,7 @@ public final class FounderMonumentStatueRestoreSystem extends HolderSystem<Entit
             PersistentModel.getComponentType(),
             new PersistentModel(new Model.ModelReference("Player", persistScale, monument.getRandomAttachmentIds(), true))
         );
+        holder.putComponent(Invulnerable.getComponentType(), Invulnerable.INSTANCE);
     }
 
     @Override

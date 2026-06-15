@@ -1,8 +1,11 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipMessages;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipWire;
+import com.hexvane.aetherhaven.plot.PlotTokenIconWire;
+import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.ItemGridSlot;
@@ -47,6 +50,23 @@ public final class AetherhavenUiItemGrids {
      * {@link ItemGridSlot} with metadata stripped for custom UI. Returns null when the id is missing from the asset
      * map so callers can skip the slot instead of crashing the client.
      */
+    /** Plot token icon for custom UI; uses virtual ids for unified tokens (see {@link PlotTokenIconWire#forItemGrid}). */
+    @Nullable
+    public static ItemGridSlot plotTokenSlotForConstruction(
+        @Nonnull String plotStoredConstructionId,
+        @Nullable ConstructionCatalog catalog
+    ) {
+        ItemStack stack = PlotTokenIconWire.forItemGrid(plotStoredConstructionId, catalog);
+        if (ItemStack.isEmpty(stack)) {
+            return null;
+        }
+        String itemId = stack.getItemId();
+        if (PlotTokenVirtualItemRegistry.isVirtualId(itemId) || isKnownItemId(itemId)) {
+            return new ItemGridSlot(plainStackForUi(itemId, stack.getQuantity()));
+        }
+        return null;
+    }
+
     @Nullable
     public static ItemGridSlot slotForKnownItem(@Nonnull String itemId, int quantity) {
         String id = itemId.trim();

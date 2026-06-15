@@ -324,7 +324,7 @@ public final class PlotCreatorInteractions {
                 yield true;
             }
             case MATERIALS -> {
-                PlotCreatorMaterialsHelper.openMaterialsWindow(playerRef, ref, store, session);
+                PlotCreatorMaterialsActions.openMaterialsPanel(session, playerRef, ref, store);
                 yield true;
             }
             case REVIEW -> PlotCreatorService.saveAndFinish(AetherhavenPlugin.get(), session, playerRef, ref, store);

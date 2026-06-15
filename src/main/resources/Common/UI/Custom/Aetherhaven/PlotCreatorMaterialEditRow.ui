@@ -1,0 +1,44 @@
+$C = "../Common.ui";
+
+Group #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+
+  Group #IconFrame {
+    Anchor: (Width: 40, Height: 40, Right: 8);
+    LayoutMode: Full;
+    Background: #1a2530;
+    Padding: 2;
+
+    AssetImage #Icon {
+      Anchor: (Full: 0);
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+    }
+  }
+
+  Label #Name {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, Wrap: true, VerticalAlignment: Center);
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+  }
+
+  $C.@SmallSecondaryTextButton #MinusButton {
+    @Text = "";
+    Anchor: (Width: 36, Right: 4);
+  }
+
+  Label #Count {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, HorizontalAlignment: Center, VerticalAlignment: Center);
+    Anchor: (Width: 48);
+  }
+
+  $C.@SmallSecondaryTextButton #PlusButton {
+    @Text = "";
+    Anchor: (Width: 36, Right: 4);
+  }
+
+  $C.@SmallSecondaryTextButton #RemoveButton {
+    @Text = "";
+    Anchor: (Width: 36);
+  }
+}

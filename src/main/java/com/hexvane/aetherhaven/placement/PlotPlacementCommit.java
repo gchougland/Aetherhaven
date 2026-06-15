@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
@@ -43,8 +44,10 @@ public final class PlotPlacementCommit {
         if (!ok) {
             return false;
         }
-        Ref<ChunkStore> signRef = chunk.getBlockComponentEntity(x, y, z);
+        // placeBlock can leave the voxel without a live Ref on non-ticking chunks; ensure like farming/chest code paths.
+        Ref<ChunkStore> signRef = BlockModule.ensureBlockEntity(chunk, x, y, z);
         if (signRef == null) {
+            world.breakBlock(x, y, z, PLACE_SETTINGS);
             return false;
         }
         Store<ChunkStore> cs = signRef.getStore();

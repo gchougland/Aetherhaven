@@ -161,9 +161,38 @@ $C.@PageOverlay {
       }
 
       $C.@TextButton #OpenMaterialsButton {
-        Anchor: (Bottom: 12, Height: 40);
+        Anchor: (Bottom: 8, Height: 40);
         Text: "";
         Visible: false;
+      }
+
+      $C.@TextButton #FillFromBuildShapeButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+        Visible: false;
+      }
+
+      Label #MaterialsPageLabel {
+        Style: (...@HintStyle, TextColor: #e8dcc8);
+        Text: "";
+        Anchor: (Bottom: 8);
+        Visible: false;
+      }
+
+      Group #MaterialsPageRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 12);
+        Visible: false;
+
+        $C.@TextButton #MaterialsPrevPageButton {
+          Anchor: (Right: 8, Height: 36, Width: 120);
+          Text: "";
+        }
+
+        $C.@TextButton #MaterialsNextPageButton {
+          Anchor: (Height: 36, Width: 120);
+          Text: "";
+        }
       }
 
       $C.@DropdownBox #KindDropdown {

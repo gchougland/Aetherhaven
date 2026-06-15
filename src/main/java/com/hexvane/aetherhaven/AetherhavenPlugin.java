@@ -15,6 +15,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
+import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsService;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChannelComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
@@ -318,6 +319,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private final Config<AetherhavenPluginConfig> config = this.withConfig("config", AetherhavenPluginConfig.CODEC);
     private ConstructionCatalog constructionCatalog = ConstructionCatalog.empty();
     private PrefabMaterialsCatalog prefabMaterialsCatalog = PrefabMaterialsCatalog.empty();
+    private PrefabMaterialsService prefabMaterialsService = PrefabMaterialsService.fromClassLoader(
+        AetherhavenPlugin.class.getClassLoader()
+    );
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private QuestBoardCatalog questBoardCatalog = QuestBoardCatalog.empty();
@@ -395,6 +399,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public PrefabMaterialsCatalog getPrefabMaterialsCatalog() {
         return prefabMaterialsCatalog;
+    }
+
+    @Nonnull
+    public PrefabMaterialsService getPrefabMaterialsService() {
+        return prefabMaterialsService;
     }
 
     @Nonnull
@@ -1293,6 +1302,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
         Path customData = this.getDataDirectory();
         this.constructionCatalog = ConstructionCatalog.loadFromAssetPacksOrClasspath(cl, customData);
+        this.prefabMaterialsService.generateAllForCatalog(this.constructionCatalog, customData);
         this.prefabMaterialsCatalog = PrefabMaterialsCatalog.loadFromAssetPacksOrClasspath(cl, customData);
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);

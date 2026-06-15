@@ -45,7 +45,18 @@ aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded = That visitor spawn sp
 aetherhaven.plotcreator.hint.poiRecorded = Activity spot saved.
 
 aetherhaven.plotcreator.button.save = Save building
-aetherhaven.plotcreator.button.openMaterials = Open build cost storage
+aetherhaven.plotcreator.button.addFromInventory = Add from inventory
+aetherhaven.plotcreator.button.useBuildShape = Use prefab materials
+aetherhaven.plotcreator.button.clearPrefabMaterials = Clear build costs
+aetherhaven.plotcreator.button.materialsPrevPage = Previous
+aetherhaven.plotcreator.button.materialsNextPage = Next
+aetherhaven.plotcreator.button.materialRemove = X
+
+aetherhaven.plotcreator.materials.pageLabel = Page {page} of {pages}
+aetherhaven.plotcreator.materials.emptyList = No build costs yet. Use prefab materials or add items from your inventory.
+aetherhaven.plotcreator.materials.confirmReplace = Click Use prefab materials again to replace the current build costs.
+aetherhaven.plotcreator.materials.confirmClear = Click Clear build costs again to remove all build costs.
+aetherhaven.plotcreator.materials.fillFailed = Could not fill build costs from your prefab. Save the build shape first.
 
 aetherhaven.plotcreator.field.displayName = Building name
 aetherhaven.plotcreator.field.description = Short description (optional)
@@ -79,7 +90,7 @@ aetherhaven.plotcreator.hud.SUBSTEP.primary = Click the required block or spot i
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer spawn marker
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor = Remove a visitor spawn marker
 aetherhaven.plotcreator.hud.SUBSTEP.q = Go back (extra placement blocks from the step you leave are removed)
-aetherhaven.plotcreator.hud.MATERIALS.f = Open material storage
+aetherhaven.plotcreator.hud.MATERIALS.f = Open build materials menu
 aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings
 aetherhaven.plotcreator.hud.REVIEW.f = Save the building
 
@@ -178,9 +189,8 @@ aetherhaven.plotcreator.step.SUBSTEP.title = Important spots
 aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each substep. Place or click the required blocks and spots inside the footprint.
 
 aetherhaven.plotcreator.step.MATERIALS.title = Build materials
-aetherhaven.plotcreator.step.MATERIALS.hint = Add the items players must supply to build this plot. Items are returned to your inventory when you continue.
-
-aetherhaven.plotcreator.step.MATERIALS.detail = Virtual chest for this building only — not placed in the world.
+aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open the build materials menu. Prefab fill adds costs without giving you items.
+aetherhaven.plotcreator.step.MATERIALS.detail = Use plus and minus to change counts. Add from inventory copies counts into the list and returns your items.
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
 aetherhaven.plotcreator.step.CONFIGURE.hint = Set treasury gold cost, self-build days, prefab empty spaces, plot token lock, and assembly sections.

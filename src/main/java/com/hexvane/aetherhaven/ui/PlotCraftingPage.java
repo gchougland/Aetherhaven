@@ -150,7 +150,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
-            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE) : null;
+            player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -275,7 +275,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
 
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.ARMOR_HOTBAR_UTILITY_STORAGE);
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING);
         if (inv == null) {
             return;
         }

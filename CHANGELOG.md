@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.1] - Unreleased
+
+### Added
+
+- **Plot creator build costs** The materials step fills build costs from your build shape automatically. The build materials menu shows the list without spawning items. You can edit counts, add items from inventory, or clear prefab costs. Hard mode material lists are generated when the server starts and when you save a new building.
+
+### Fixed
+
+- **Plot creator materials menu** F opens a paginated build materials menu with count editing instead of a chest full of spawned items.
+- **Founder Monument Crash** Founder monument would cause a crash when it gets damaged. Its no longer able to be damaged.
+- **Command mode self visibility** Guard command mode no longer hides your character from yourself, so per-player equipment effects keep working during and after command mode.
+- **Command mode hotbar restore** Exiting guard command mode now restores full hotbar item stacks (enchantments, jewelry metadata, durability, and other item data) instead of stripping everything down to item id and quantity.
+- **Command post breaking** The guard command post now uses stone break sounds and requires a pickaxe to mine instead of wood sounds and a hatchet.
+- **Plot Crafting** Plot crafting now takes gold from backpacks as well.
+- **Plot token pickup** Picking up a plot sign now returns the correct configured plot token (building name and metadata) instead of a blank unified token.
+- **Custom Plot Tokens in Town Journal** Custom tokens would show up as the regular plot sign instead of their icons.
+
 ## [2.0.0] - 6/13/2026
 
 ### Added

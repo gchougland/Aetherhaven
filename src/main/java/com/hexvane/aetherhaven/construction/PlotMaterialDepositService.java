@@ -172,6 +172,34 @@ public final class PlotMaterialDepositService {
         }
     }
 
+    /** Gives item stacks to the player; overflow spawns as item drops at {@code dropPosition} (preserves stack metadata). */
+    public static void refundItemStacksToPlayer(
+        @Nonnull Player player,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull List<ItemStack> stacks,
+        @Nonnull Vector3d dropPosition
+    ) {
+        List<ItemStack> overflow = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (ItemStack.isEmpty(stack)) {
+                continue;
+            }
+            ItemStackTransaction tx = player.giveItem(stack, ref, store);
+            if (!tx.succeeded()) {
+                overflow.add(stack);
+                continue;
+            }
+            ItemStack remainder = tx.getRemainder();
+            if (!ItemStack.isEmpty(remainder)) {
+                overflow.add(remainder);
+            }
+        }
+        if (!overflow.isEmpty()) {
+            spawnItemDrops(store, ref, overflow, dropPosition);
+        }
+    }
+
     private static void spawnItemDrops(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> playerRef,

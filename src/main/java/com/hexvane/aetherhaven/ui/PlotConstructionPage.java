@@ -15,6 +15,8 @@ import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
+import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
@@ -1459,9 +1461,17 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             PlotMaterialDepositService.refundToPlayer(player, ref, store, refunded, dropPos);
         }
         world.breakBlock(blockWorldPos.x, blockWorldPos.y, blockWorldPos.z, BREAK_SETTINGS);
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (def.consumesPlotToken()) {
-            ItemStack tokenStack = new ItemStack(tokenId, 1);
+            String language = "en-US";
+            if (pr != null && pr.getLanguage() != null && !pr.getLanguage().isBlank()) {
+                language = pr.getLanguage();
+            }
+            ItemStack tokenStack = PlotTokenInventory.createTokenStackForDefinition(def, language);
             ItemStackTransaction giveTx = player.giveItem(tokenStack, ref, store);
+            if (giveTx.succeeded()) {
+                PlotTokenIconSync.afterTokenGranted(pr);
+            }
             if (!giveTx.succeeded() || !ItemStack.isEmpty(giveTx.getRemainder())) {
                 List<ItemStack> tokenOverflow = new ArrayList<>();
                 if (!giveTx.succeeded()) {
@@ -1469,18 +1479,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 } else {
                     tokenOverflow.add(giveTx.getRemainder());
                 }
-                PlotMaterialDepositService.refundToPlayer(
-                    player,
-                    ref,
-                    store,
-                    tokenOverflow.stream()
-                        .map(s -> MaterialRequirement.ofItem(s.getItemId(), s.getQuantity()))
-                        .toList(),
-                    dropPos
-                );
+                PlotMaterialDepositService.refundItemStacksToPlayer(player, ref, store, tokenOverflow, dropPos);
             }
         }
-        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.plotConstruction.plotRemoved"));
         }

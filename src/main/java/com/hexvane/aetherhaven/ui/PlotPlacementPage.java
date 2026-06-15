@@ -627,7 +627,17 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             placedSignPos = previewAnchor;
         }
         String err =
-            PlotPlacementValidator.validate(world, tm, town, uc.getUuid(), previewAnchor, session.getPrefabYaw(), def, plugin);
+            PlotPlacementValidator.validate(
+                world,
+                tm,
+                town,
+                uc.getUuid(),
+                placedSignPos,
+                session.getPrefabYaw(),
+                def,
+                plugin,
+                session.getMovePlotId()
+            );
         if (err != null) {
             sendError(store, ref, err);
             return false;
@@ -657,7 +667,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getPrefabYaw());
+                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(placedSignPos, session.getPrefabYaw());
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
@@ -665,9 +675,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                         session.getConstructionId(),
                         PlotInstanceState.BLUEPRINTING,
                         fp,
-                        previewAnchor.x,
-                        previewAnchor.y,
-                        previewAnchor.z,
+                        placedSignPos.x,
+                        placedSignPos.y,
+                        placedSignPos.z,
                         System.currentTimeMillis()
                     );
                 inst.setPlacementPrefabYaw(session.getPrefabYaw());
@@ -678,12 +688,12 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         } else {
             PlotFootprintRecord mini =
                 new PlotFootprintRecord(
-                    previewAnchor.x,
-                    previewAnchor.y,
-                    previewAnchor.z,
-                    previewAnchor.x,
-                    previewAnchor.y,
-                    previewAnchor.z
+                    placedSignPos.x,
+                    placedSignPos.y,
+                    placedSignPos.z,
+                    placedSignPos.x,
+                    placedSignPos.y,
+                    placedSignPos.z
                 );
             PlotInstance miniPlot =
                 new PlotInstance(
@@ -691,9 +701,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     session.getConstructionId(),
                     PlotInstanceState.BLUEPRINTING,
                     mini,
-                    previewAnchor.x,
-                    previewAnchor.y,
-                    previewAnchor.z,
+                    placedSignPos.x,
+                    placedSignPos.y,
+                    placedSignPos.z,
                     System.currentTimeMillis()
                 );
             miniPlot.setPlacementPrefabYaw(session.getPrefabYaw());

@@ -44,6 +44,14 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
                 Message.translation(LANG_PREFIX + "hud.kindSelected").param("kind", session.getDraft().getKind().name())
             );
             b.set("#DetailLine.Visible", true);
+        } else if (step == PlotCreatorStep.MATERIALS && PlotCreatorMaterialsHelper.pageCount(session.getDraft()) > 1) {
+            int page = PlotCreatorMaterialsHelper.clampPageIndex(session) + 1;
+            int pages = PlotCreatorMaterialsHelper.pageCount(session.getDraft());
+            b.set(
+                "#DetailLine.TextSpans",
+                Message.translation(LANG_PREFIX + "materials.pageLabel").param("page", page).param("pages", pages)
+            );
+            b.set("#DetailLine.Visible", true);
         } else {
             b.set("#DetailLine.Visible", false);
         }

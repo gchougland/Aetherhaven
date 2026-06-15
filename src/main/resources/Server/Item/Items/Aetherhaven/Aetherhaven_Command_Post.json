@@ -36,8 +36,9 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Command_Post.png",
   "BlockType": {
-    "BlockParticleSetId": "Wood",
-    "BlockSoundSetId": "Wood",
+    "BlockParticleSetId": "Stone",
+    "BlockSoundSetId": "Stone",
+    "PhysicalMaterialId": "Stone",
     "CustomModel": "Blocks/Command_Table.blockymodel",
     "CustomModelTexture": [
       {
@@ -51,7 +52,7 @@
     },
     "Gathering": {
       "Breaking": {
-        "GatherType": "Woods"
+        "GatherType": "Rocks"
       }
     },
     "HitboxType": "Furniture_Stool",
@@ -86,7 +87,7 @@
       "Aetherhaven"
     ]
   },
-  "ItemSoundSetId": "ISS_Blocks_Wood",
+  "ItemSoundSetId": "ISS_Blocks_Stone",
   "MaxStack": 8,
   "IconProperties": {
     "Scale": 0.58823,

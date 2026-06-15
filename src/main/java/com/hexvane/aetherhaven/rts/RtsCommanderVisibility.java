@@ -9,7 +9,11 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
-/** Hides the commander model from all players (including self) while in RTS mode. */
+/**
+ * Hides the commander model from other players while in RTS mode.
+ * The commander stays visible to themselves so per-viewer entity updates on their
+ * own character (e.g. armor-driven dynamic light) keep working during command mode.
+ */
 public final class RtsCommanderVisibility {
     private RtsCommanderVisibility() {}
 
@@ -19,6 +23,9 @@ public final class RtsCommanderVisibility {
             return;
         }
         for (PlayerRef viewer : playerRefs(world)) {
+            if (commanderUuid.equals(viewer.getUuid())) {
+                continue;
+            }
             viewer.getHiddenPlayersManager().hidePlayer(commanderUuid);
         }
     }
@@ -29,6 +36,9 @@ public final class RtsCommanderVisibility {
             return;
         }
         for (PlayerRef viewer : playerRefs(world)) {
+            if (commanderUuid.equals(viewer.getUuid())) {
+                continue;
+            }
             viewer.getHiddenPlayersManager().showPlayer(commanderUuid);
         }
     }

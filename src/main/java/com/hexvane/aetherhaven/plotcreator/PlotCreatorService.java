@@ -224,14 +224,15 @@ public final class PlotCreatorService {
             PlotCreatorSubstepGrants.revokeAll(session, player);
         }
         if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
-            PlotCreatorMaterialsHelper.snapshotAndReturnMaterials(session, player, ref, store);
+            PlotCreatorMaterialsHelper.snapshotAndCloseMaterials(session, player, ref, store);
+            PlotCreatorMaterialsActions.clearFillConfirm(session);
         }
         PlotCreatorStep next = order.get(idx + 1);
         if (next == PlotCreatorStep.SUBSTEP) {
             session.getDraft().setSubstepIndex(0);
         }
         if (next == PlotCreatorStep.MATERIALS) {
-            PlotCreatorMaterialsHelper.ensureMaterialsContainer(session);
+            PlotCreatorMaterialsActions.onEnterMaterialsStep(session);
         }
         session.getDraft().setStep(next);
         onStepEntered(session, ref, store, next);
@@ -263,7 +264,8 @@ public final class PlotCreatorService {
         }
         PlotCreatorStep prev = order.get(idx - 1);
         if (current == PlotCreatorStep.MATERIALS && player != null && ref != null && store != null) {
-            PlotCreatorMaterialsHelper.snapshotAndReturnMaterials(session, player, ref, store);
+            PlotCreatorMaterialsHelper.snapshotAndCloseMaterials(session, player, ref, store);
+            PlotCreatorMaterialsActions.clearFillConfirm(session);
         }
         if (current == PlotCreatorStep.SUBSTEP && player != null) {
             PlotCreatorSubstepGrants.revokeAll(session, player);
@@ -272,6 +274,9 @@ public final class PlotCreatorService {
             List<PlotBuildingKindRequirements.SubstepRequirement> subs =
                 PlotBuildingKindRequirements.forDraft(session.getDraft(), AetherhavenPlugin.get());
             session.getDraft().setSubstepIndex(Math.max(0, subs.size() - 1));
+        }
+        if (prev == PlotCreatorStep.MATERIALS) {
+            PlotCreatorMaterialsActions.onEnterMaterialsStep(session);
         }
         session.getDraft().setStep(prev);
         onStepEntered(session, ref, store, prev);
@@ -373,6 +378,10 @@ public final class PlotCreatorService {
         } catch (Exception e) {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
             return false;
+        }
+        String prefabPath = draft.getPrefabPath();
+        if (prefabPath != null && !prefabPath.isBlank()) {
+            plugin.getPrefabMaterialsService().generateOne(draft.getConstructionId().trim(), prefabPath, plugin.getDataDirectory());
         }
         plugin.reloadConfigsAndAssetCatalogs();
         Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), draft.getConstructionId().trim());

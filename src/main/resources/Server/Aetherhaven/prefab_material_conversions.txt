@@ -1,0 +1,70 @@
+# Prefab block → building material conversions for Hard mode (PrefabMaterials/*.json).
+# Edit this file, then run: python scripts/generate_prefab_materials.py
+#
+# Format (one rule per line):
+#   <input> = <outputs>
+#
+# <input>:
+#   Exact prefab block id (after normalization), or
+#   pattern:<glob>   (fnmatch; first matching pattern wins)
+#
+# <outputs>:
+#   skip                          — do not add any requirement for this block
+#   <ItemId>:<count>              — per prefab block instance, add this many items
+#   resource:<ResourceTypeId>:<count>  — per block, add resource-type requirement
+#   Comma-separate multiple outputs on one line.
+#
+# Examples:
+#   Furniture_Temple_Dark_Candle = Ingredient_Bar_Iron:3
+#   pattern:*_Branch* = skip
+
+Empty = skip
+Deco_Torch = Furniture_Crude_Torch
+Wood_Torch_Wall = Furniture_Crude_Torch
+pattern:Soil_* = resource:Soils:1
+pattern:*_Branch* = resource:Wood_All:1
+pattern:*_Barrel* = Wood_Hardwood_Planks:2
+pattern:*_Crate* = Wood_Hardwood_Planks:2
+pattern:*_Roof_Leather* = Ingredient_Leather_Light:1
+Furniture_Temple_Dark_Candle = Ingredient_Bar_Iron:3
+pattern:Plant_* = Ingredient_Fibre:2
+pattern:*_Village_Wall* = resource:Wood_All:1
+Furniture_Village_Bed = Cloth_Block_Wool_White:3
+Aetherhaven_Management_Block = skip
+Furniture_Village_Planter = resource:Rock:2
+Furniture_Tavern_Planter = Wood_Hardwood_Planks:2
+Furniture_Crude_Brazier = resource:Wood_All:2
+Furniture_Village_Counter = Wood_Hardwood_Planks:2
+Deco_Lantern_Ceiling = Deco_Lantern
+Furniture_Village_Bench = Wood_Hardwood_Planks:2
+Rock_Stone_Cobble_Mossy = resource:Rock:1
+Aetherhaven_Treasury = skip
+Furniture_Village_Statue = resource:Rock:2
+Furniture_Village_Bookcase = Wood_Hardwood_Planks:1
+Deco_Book_Pile_Small = skip
+pattern:*_Pot* = Soil_Clay:2
+Furniture_Village_Painting_1x1 = Ingredient_Leather_Light:1
+Aetherhaven_Production_Storage = skip
+Deco_Iron_Bars = Ingredient_Bar_Iron:1
+Deco_Iron_Chain_Small = Ingredient_Bar_Iron:1
+Rock_Magma_Cooled_Brick = resource:Rock:1
+Rock_Magma_Cooled_Brick_Half = resource:Rock:1
+pattern:Cloth_Roof* = Cloth_Block_Wool_White:1
+Aetherhaven_Statue_Of_Gaia = skip
+Bench_Lumbermill = skip
+Furniture_Human_Ruins_Desk = Wood_Hardwood_Planks:2
+pattern:Rubble_* = resource:Rubble:1
+Furniture_Tavern_Shelf = Wood_Hardwood_Planks:2
+Prototype_Wood_Darkwood_Fence_Platform = Wood_Darkwood_Planks:2
+Furniture_Human_Ruins_Door = Wood_Hardwood_Planks:2
+Bench_Trough = Wood_Softwood_Planks:2
+Furniture_Ancient_Sack = Ingredient_Fibre:2
+Tinkering_Target_Dummy = Wood_Softwood_Planks:2
+Editor_Empty = skip
+Aetherhaven_Shop_Spot = skip
+Aetherhaven_Shop_Safe = skip
+Aetherhaven_Inn_Bell = skip
+Aetherhaven_Quest_Board = skip
+Aetherhaven_Tourist_Portal = skip
+Prototype_Wood_Hardwood_Fence_Platform = skip
+Prototype_Wood_Goldenwood_Fence_Platform = skip

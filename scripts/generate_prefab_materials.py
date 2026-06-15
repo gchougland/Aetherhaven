@@ -34,7 +34,9 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 BUILDINGS_DIR = REPO_ROOT / "src" / "main" / "resources" / "Server" / "Aetherhaven" / "Buildings"
 PREFABS_DIR = REPO_ROOT / "src" / "main" / "resources" / "Server" / "Prefabs"
 OUT_DIR = BUILDINGS_DIR / "PrefabMaterials"
-CONVERSIONS_FILE = Path(__file__).resolve().parent / "prefab_material_conversions.txt"
+CONVERSIONS_FILE = REPO_ROOT / "src" / "main" / "resources" / "Server" / "Aetherhaven" / "prefab_material_conversions.txt"
+# Legacy fallback (same content as bundled resource above):
+_LEGACY_CONVERSIONS = Path(__file__).resolve().parent / "prefab_material_conversions.txt"
 
 # Prefab-only state suffixes (not separate player items).
 _STATE_DEFINITIONS_RE = re.compile(r"_State_Definitions_.*$")
@@ -118,9 +120,10 @@ def parse_outputs(raw: str) -> ConversionRule:
 def load_conversions() -> ConversionTable:
     exact: dict[str, ConversionRule] = {"Empty": ConversionRule(skip=True, outputs=())}
     patterns: list[tuple[str, ConversionRule]] = []
-    if not CONVERSIONS_FILE.is_file():
+    conv_path = CONVERSIONS_FILE if CONVERSIONS_FILE.is_file() else _LEGACY_CONVERSIONS
+    if not conv_path.is_file():
         return ConversionTable(exact=exact, patterns=patterns)
-    for line_no, line in enumerate(CONVERSIONS_FILE.read_text(encoding="utf-8").splitlines(), start=1):
+    for line_no, line in enumerate(conv_path.read_text(encoding="utf-8").splitlines(), start=1):
         line = line.strip()
         if not line or line.startswith("#"):
             continue

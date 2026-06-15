@@ -5,7 +5,7 @@ import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorMainConstructions;
-import com.hexvane.aetherhaven.plotcreator.PlotCreatorMaterialsHelper;
+import com.hexvane.aetherhaven.plotcreator.PlotCreatorMaterialsActions;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorSession;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorStep;
@@ -139,6 +139,24 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             CustomUIEventBindingType.Activating,
             "#OpenMaterialsButton",
             EventData.of("Action", "OpenMaterials"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#FillFromBuildShapeButton",
+            EventData.of("Action", "FillFromBuildShape"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#MaterialsPrevPageButton",
+            EventData.of("Action", "MaterialsPrevPage"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#MaterialsNextPageButton",
+            EventData.of("Action", "MaterialsNextPage"),
             false
         );
         eventBuilder.addEventBinding(
@@ -300,6 +318,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#AssemblySectionsLabel.Visible", false);
             b.set("#AssemblySectionsField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
+            b.set("#FillFromBuildShapeButton.Visible", false);
+            b.set("#MaterialsPageLabel.Visible", false);
+            b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
             return;
@@ -325,6 +346,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#AssemblySectionsLabel.Visible", true);
             b.set("#AssemblySectionsField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
+            b.set("#FillFromBuildShapeButton.Visible", false);
+            b.set("#MaterialsPageLabel.Visible", false);
+            b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
             return;
@@ -348,7 +372,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#AssemblySectionsLabel.Visible", false);
         b.set("#AssemblySectionsField.Visible", false);
-        b.set("#OpenMaterialsButton.Visible", step == PlotCreatorStep.MATERIALS);
+        b.set("#OpenMaterialsButton.Visible", false);
+        b.set("#FillFromBuildShapeButton.Visible", step == PlotCreatorStep.MATERIALS);
+        b.set("#MaterialsPageLabel.Visible", false);
+        b.set("#MaterialsPageRow.Visible", false);
+        b.set("#MaterialsPrevPageButton.Visible", false);
+        b.set("#MaterialsNextPageButton.Visible", false);
         b.set("#ReviewSummary.Visible", step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE);
         b.set("#DetailHint.Visible", step == PlotCreatorStep.SUBSTEP || step == PlotCreatorStep.MATERIALS);
         if (step == PlotCreatorStep.SUBSTEP) {
@@ -358,8 +387,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             }
         }
         if (step == PlotCreatorStep.MATERIALS) {
+            b.set("#StepHint.TextSpans", Message.translation(MSG + ".step.MATERIALS.hint"));
             b.set("#DetailHint.TextSpans", Message.translation(MSG + ".step.MATERIALS.detail"));
-            b.set("#OpenMaterialsButton.TextSpans", Message.translation(MSG + ".button.openMaterials"));
+            b.set("#FillFromBuildShapeButton.TextSpans", Message.translation(MSG + ".button.useBuildShape"));
         }
         if (step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE) {
             b.set("#ReviewSummary.TextSpans", Message.raw(buildReviewText()));
@@ -455,8 +485,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         @Nonnull PageData data
     ) {
         applyIncomingFields(data);
-        if ("OpenMaterials".equals(data.action)) {
-            PlotCreatorMaterialsHelper.openMaterialsWindow(playerRef, ref, store, session);
+        if ("FillFromBuildShape".equals(data.action)) {
+            PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef);
+            refreshPartial();
             return;
         }
         if ("Cancel".equals(data.action)) {

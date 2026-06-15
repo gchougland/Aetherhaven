@@ -105,6 +105,22 @@ public final class PlotTokenInventory {
         return inv.removeItemStackFromSlot(slot, stack, 1).succeeded();
     }
 
+    /**
+     * Plot token stack for a building definition: unified tokens carry per-building metadata; legacy tokens use a
+     * dedicated item id per construction.
+     */
+    @Nonnull
+    public static ItemStack createTokenStackForDefinition(
+        @Nonnull ConstructionDefinition def,
+        @Nullable String language
+    ) {
+        String legacy = def.getPlotTokenItemId();
+        if (legacy != null && !legacy.isBlank() && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacy.trim())) {
+            return new ItemStack(legacy.trim(), 1);
+        }
+        return createTokenStack(def.getId(), 1, def.getDisplayName(), language);
+    }
+
     @Nonnull
     public static ItemStack createTokenStack(@Nonnull String constructionId, int quantity, @Nullable String displayName) {
         return createTokenStack(constructionId, quantity, displayName, null);

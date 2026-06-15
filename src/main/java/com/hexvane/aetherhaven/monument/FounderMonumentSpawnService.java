@@ -16,12 +16,14 @@ import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.cosmetics.CosmeticsModule;
 import com.hypixel.hytale.server.core.entity.Frozen;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import java.util.Collections;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -173,6 +175,7 @@ public final class FounderMonumentSpawnService {
             new PersistentModel(new Model.ModelReference("Player", persistScale, monumentModel.getRandomAttachmentIds(), true))
         );
         store.ensureComponent(ref, Frozen.getComponentType());
+        store.putComponent(ref, Invulnerable.getComponentType(), Invulnerable.INSTANCE);
         store.putComponent(
             ref,
             PersistentDisplayName.getComponentType(),
@@ -199,7 +202,7 @@ public final class FounderMonumentSpawnService {
             dynamic.getCrouchOffset(),
             dynamic.getSittingOffset(),
             dynamic.getSleepingOffset(),
-            null,
+            Collections.emptyMap(),
             dynamic.getCamera(),
             dynamic.getLight(),
             dynamic.getParticles(),

@@ -1,0 +1,103 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 520);
+
+    #Title {
+      Label #MaterialsTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #StepHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 8);
+      }
+
+      Label #DetailHint {
+        Style: (...@HintStyle, TextColor: #a89878);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Label #PageLabel {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 15);
+        Text: "";
+        Anchor: (Bottom: 8);
+      }
+
+      Group #PageButtonRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@TextButton #MaterialsPrevPageButton {
+          Anchor: (Right: 8, Height: 36, Width: 120);
+          Text: "";
+        }
+
+        $C.@TextButton #MaterialsNextPageButton {
+          Anchor: (Height: 36, Width: 120);
+          Text: "";
+        }
+      }
+
+      Group #MaterialListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 10);
+
+        Group #MaterialRows {
+          LayoutMode: Top;
+        }
+      }
+
+      Label #EmptyHint {
+        Style: (...@HintStyle, TextColor: #a89878);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      $C.@TextButton #AddFromInventoryButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+      }
+
+      $C.@TextButton #FillFromBuildShapeButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+      }
+
+      $C.@TextButton #ClearPrefabMaterialsButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        $C.@TextButton #CloseButton {
+          FlexWeight: 1;
+          Anchor: (Height: 40);
+          Text: "";
+        }
+      }
+    }
+  }
+}

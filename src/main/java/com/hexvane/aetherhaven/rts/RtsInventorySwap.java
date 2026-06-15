@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hypixel.hytale.codec.ExtraInfo;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.bson.BsonDocument;
+import org.bson.BsonValue;
 
 public final class RtsInventorySwap {
     private static final Gson GSON = new GsonBuilder().create();
@@ -31,9 +34,9 @@ public final class RtsInventorySwap {
         for (short i = 0; i < cap; i++) {
             ItemStack stack = hotbar.getInventory().getItemStack(i);
             if (ItemStack.isEmpty(stack)) {
-                slots.add(new HotbarSlotSnapshot(i, "", 0));
+                slots.add(new HotbarSlotSnapshot(i, null));
             } else {
-                slots.add(new HotbarSlotSnapshot(i, stack.getItemId(), stack.getQuantity()));
+                slots.add(new HotbarSlotSnapshot(i, encodeStack(stack)));
             }
         }
         return GSON.toJson(new HotbarSnapshot(hotbar.getActiveSlot(), slots));
@@ -87,10 +90,10 @@ public final class RtsInventorySwap {
                             if (snap == null || snap.slot < 0 || snap.slot >= hotbar.getInventory().getCapacity()) {
                                 continue;
                             }
-                            if (snap.itemId == null || snap.itemId.isBlank() || snap.quantity <= 0) {
-                                continue;
+                            ItemStack restored = snap.toItemStack();
+                            if (restored != null && !ItemStack.isEmpty(restored)) {
+                                hotbar.getInventory().setItemStackForSlot(snap.slot, restored);
                             }
-                            hotbar.getInventory().setItemStackForSlot(snap.slot, new ItemStack(snap.itemId.trim(), snap.quantity));
                         }
                     }
                 }
@@ -102,10 +105,10 @@ public final class RtsInventorySwap {
                             if (snap == null || snap.slot < 0 || snap.slot >= hotbar.getInventory().getCapacity()) {
                                 continue;
                             }
-                            if (snap.itemId == null || snap.itemId.isBlank() || snap.quantity <= 0) {
-                                continue;
+                            ItemStack restored = snap.toItemStack();
+                            if (restored != null && !ItemStack.isEmpty(restored)) {
+                                hotbar.getInventory().setItemStackForSlot(snap.slot, restored);
                             }
-                            hotbar.getInventory().setItemStackForSlot(snap.slot, new ItemStack(snap.itemId.trim(), snap.quantity));
                         }
                     }
                 } catch (RuntimeException ignoredLegacy) {
@@ -119,6 +122,28 @@ public final class RtsInventorySwap {
         PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             RtsHotbarSync.syncHotbarRewriteToClient(pr, hotbar);
+        }
+    }
+
+    @Nonnull
+    private static String encodeStack(@Nonnull ItemStack stack) {
+        BsonValue encoded = ItemStack.CODEC.encode(stack, new ExtraInfo());
+        if (encoded.isDocument()) {
+            return encoded.asDocument().toJson();
+        }
+        return encoded.toString();
+    }
+
+    @Nullable
+    private static ItemStack decodeStack(@Nullable String stackJson) {
+        if (stackJson == null || stackJson.isBlank()) {
+            return null;
+        }
+        try {
+            BsonDocument doc = BsonDocument.parse(stackJson);
+            return ItemStack.CODEC.decode(doc, new ExtraInfo());
+        } catch (RuntimeException ignored) {
+            return null;
         }
     }
 
@@ -143,16 +168,34 @@ public final class RtsInventorySwap {
         @SerializedName("slot")
         short slot;
 
+        /** Full {@link ItemStack} payload (metadata, durability, etc.). */
+        @SerializedName("stack")
+        @Nullable
+        String stack;
+
+        /** Legacy saves before v2.0.1 only stored id and quantity. */
         @SerializedName("itemId")
+        @Nullable
         String itemId;
 
         @SerializedName("quantity")
         int quantity;
 
-        HotbarSlotSnapshot(short slot, String itemId, int quantity) {
+        HotbarSlotSnapshot(short slot, @Nullable String stack) {
             this.slot = slot;
-            this.itemId = itemId;
-            this.quantity = quantity;
+            this.stack = stack;
+        }
+
+        @Nullable
+        ItemStack toItemStack() {
+            ItemStack fromCodec = decodeStack(stack);
+            if (fromCodec != null && !ItemStack.isEmpty(fromCodec)) {
+                return fromCodec;
+            }
+            if (itemId == null || itemId.isBlank() || quantity <= 0) {
+                return null;
+            }
+            return new ItemStack(itemId.trim(), quantity);
         }
     }
 }
