@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=양수인
 aetherhaven.patrolWand.guardTypeKnight=기사
 aetherhaven.patrolWand.guardTypeArcher=궁수
 aetherhaven.patrolWand.guardTypeMage=마술사
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=포인트 추가됨
 aetherhaven.patrolWand.toastRemoved=포인트 삭제됨
 aetherhaven.patrolWand.toastSelected=경로 선택됨

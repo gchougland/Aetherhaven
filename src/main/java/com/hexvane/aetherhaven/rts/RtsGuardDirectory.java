@@ -97,6 +97,10 @@ public final class RtsGuardDirectory {
         return profileId.contains("mage");
     }
 
+    public static boolean isRogue(@Nonnull String profileId) {
+        return profileId.contains("rogue");
+    }
+
     public static boolean inBox(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,

@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Назначать
 aetherhaven.patrolWand.guardTypeKnight=Рыцарь
 aetherhaven.patrolWand.guardTypeArcher=Лучник
 aetherhaven.patrolWand.guardTypeMage=Маг
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=Добавлен пункт
 aetherhaven.patrolWand.toastRemoved=Точка удалена
 aetherhaven.patrolWand.toastSelected=Выбранный маршрут

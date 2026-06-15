@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=分配
 aetherhaven.patrolWand.guardTypeKnight=騎士
 aetherhaven.patrolWand.guardTypeArcher=射手
 aetherhaven.patrolWand.guardTypeMage=法師
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=加分
 aetherhaven.patrolWand.toastRemoved=點已移除
 aetherhaven.patrolWand.toastSelected=已選路線

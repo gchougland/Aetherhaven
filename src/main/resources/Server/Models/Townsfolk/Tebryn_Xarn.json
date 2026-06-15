@@ -1,0 +1,89 @@
+{
+  "Parent": "Player",
+  "Model": "Characters/Player.blockymodel",
+  "Texture": "Characters/Player_Textures/Player_Muscular_Greyscale.png",
+  "GradientSet": "Skin",
+  "GradientId": "50",
+  "DefaultAttachments": [
+    {
+      "Model": "Cosmetics/Underwears/Underwear.blockymodel",
+      "Texture": "Cosmetics/Underwears/Underwear_Textures/Underwear_Boxer_Texture.png",
+      "GradientSet": "Colored_Cotton",
+      "GradientId": "Cream"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel",
+      "Texture": "Characters/Body_Attachments/Faces/Faces_Detached_Textures/Almond_Eyes_Face.png",
+      "GradientSet": "Skin",
+      "GradientId": "50"
+    },
+    {
+      "Model": "Cosmetics/Head/Elf_Ear.blockymodel",
+      "Texture": "Cosmetics/Head/Elf_Ear_Greyscale.png",
+      "GradientSet": "Skin",
+      "GradientId": "50"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Mouths/Mouth1.blockymodel",
+      "Texture": "Characters/Body_Attachments/Mouths/Mouth1_Textures/Thin_Lips.png",
+      "GradientSet": "Skin",
+      "GradientId": "50"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyes/Eyes.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyes/Eyes_Textures/Plain_Greyscale.png",
+      "GradientSet": "Eyes_Gradient",
+      "GradientId": "Purple"
+    },
+    {
+      "Model": "Characters/Body_Attachments/Eyebrows/Eyebrows_Medium.blockymodel",
+      "Texture": "Characters/Body_Attachments/Eyebrows/Angry_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "Grey"
+    },
+    {
+      "Model": "Characters/Haircuts/Viking.blockymodel",
+      "Texture": "Characters/Haircuts/Viking_Greyscale.png",
+      "GradientSet": "Hair",
+      "GradientId": "Grey"
+    },
+    {
+      "Model": "Cosmetics/Pants/Voidbearer_Pants.blockymodel",
+      "Texture": "Cosmetics/Pants/Voidbearer_Pants_Textures/Voidbearer_Pants_Gold_Greyscale.png",
+      "GradientSet": "Faded_Leather",
+      "GradientId": "Black"
+    },
+    {
+      "Model": "Cosmetics/Undertops/Voidbearer_CursedArm.blockymodel",
+      "Texture": "Cosmetics/Undertops/Voidbearer_CursedArm_Texture.png"
+    },
+    {
+      "Model": "Cosmetics/Overtops/FancyMiniJacket.blockymodel",
+      "Texture": "Cosmetics/Overtops/FancyMiniJacket_Textures/PopstarJacket_Textures.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Black"
+    },
+    {
+      "Model": "Cosmetics/Shoes/Boots_Leather.blockymodel",
+      "Texture": "Cosmetics/Shoes/Boots_Leather_Textures/Bannerlord_Greyscale.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Black"
+    },
+    {
+      "Model": "Cosmetics/Gloves/BasicGloves.blockymodel",
+      "Texture": "Cosmetics/Gloves/Blazen_Wizard.png"
+    },
+    {
+      "Model": "Cosmetics/Head/DoubleEarrings.blockymodel",
+      "Texture": "Cosmetics/Head/MetalEarring_Texture_Greyscale.png",
+      "GradientSet": "Ornamented_Metal",
+      "GradientId": "Silver_Blue"
+    },
+    {
+      "Model": "Cosmetics/Capes/Cape_Wasteland_Marauder.blockymodel",
+      "Texture": "Cosmetics/Capes/Cape_Wasteland_Marauder_Texture.png",
+      "GradientSet": "Fantasy_Cotton_Dark",
+      "GradientId": "Purple"
+    }
+  ]
+}

@@ -5,6 +5,7 @@
 ### Added
 
 - **Plot creator build costs** The materials step fills build costs from your build shape automatically. The build materials menu shows the list without spawning items. You can edit counts, add items from inventory, or clear prefab costs. Hard mode material lists are generated when the server starts and when you save a new building.
+- **Rogue Guard Class** Now some townsfolk are Rogues which wield daggers and wear leather armor.
 
 ### Fixed
 

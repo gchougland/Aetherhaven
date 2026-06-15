@@ -37,7 +37,8 @@ public final class NpcPortraitProvider {
         Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Aetherhaven_Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_KNIGHT, "Guild_Master.png"),
         Map.entry(AetherhavenConstants.NPC_GUARD_ARCHER, "Guild_Master.png"),
-        Map.entry(AetherhavenConstants.NPC_GUARD_MAGE, "Guild_Master.png")
+        Map.entry(AetherhavenConstants.NPC_GUARD_MAGE, "Guild_Master.png"),
+        Map.entry(AetherhavenConstants.NPC_GUARD_ROGUE, "Guild_Master.png")
     );
 
     private static final String RESCUE_ROLE_SUFFIX = "_Rescue";

@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Atamak
 aetherhaven.patrolWand.guardTypeKnight=Şövalye
 aetherhaven.patrolWand.guardTypeArcher=Okçu
 aetherhaven.patrolWand.guardTypeMage=Büyücü
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=Puan eklendi
 aetherhaven.patrolWand.toastRemoved=Nokta kaldırıldı
 aetherhaven.patrolWand.toastSelected=Seçilen rota

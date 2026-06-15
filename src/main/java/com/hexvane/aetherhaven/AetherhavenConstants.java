@@ -579,6 +579,7 @@ public final class AetherhavenConstants {
     public static final String NPC_GUARD_KNIGHT = "Aetherhaven_Guard_Knight";
     public static final String NPC_GUARD_ARCHER = "Aetherhaven_Guard_Archer";
     public static final String NPC_GUARD_MAGE = "Aetherhaven_Guard_Mage";
+    public static final String NPC_GUARD_ROGUE = "Aetherhaven_Guard_Rogue";
 
     /** Shown during autonomous campfire “eating”; matches vanilla cooked meat (consume / third-person eat anim). */
     public static final String CAMPFIRE_EAT_ITEM_ID = "Food_Wildmeat_Cooked";

@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Assign
 aetherhaven.patrolWand.guardTypeKnight=Knight
 aetherhaven.patrolWand.guardTypeArcher=Archer
 aetherhaven.patrolWand.guardTypeMage=Mage
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=Point added
 aetherhaven.patrolWand.toastRemoved=Point removed
 aetherhaven.patrolWand.toastSelected=Route selected

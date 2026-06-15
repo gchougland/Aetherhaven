@@ -280,6 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=割り当てる
 aetherhaven.patrolWand.guardTypeKnight=騎士
 aetherhaven.patrolWand.guardTypeArcher=射手
 aetherhaven.patrolWand.guardTypeMage=メイジ
+aetherhaven.patrolWand.guardTypeRogue=Rogue
 aetherhaven.patrolWand.toastAdded=追加ポイント
 aetherhaven.patrolWand.toastRemoved=ポイントが削除されました
 aetherhaven.patrolWand.toastSelected=ルートが選択されました

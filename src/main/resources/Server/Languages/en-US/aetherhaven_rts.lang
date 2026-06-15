@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Select all guards
 items.Aetherhaven_Rts_Select_All.description=Select every hired guard in town.
 
 items.Aetherhaven_Rts_Select_Knight.name=Select knights
-items.Aetherhaven_Rts_Select_Knight.description=Select all knight guards.
+items.Aetherhaven_Rts_Select_Knight.description=Select all knight and rogue guards.
 
 items.Aetherhaven_Rts_Select_Archer.name=Select archers
 items.Aetherhaven_Rts_Select_Archer.description=Select all archer guards.

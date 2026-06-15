@@ -1,0 +1,19 @@
+{
+  "id": "celly_beans",
+  "displayName": "Celly Beans",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Celly_Beans",
+  "personalityIds": [
+    "adventurer",
+    "bookworm",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue"
+}

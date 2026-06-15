@@ -101,6 +101,9 @@ public final class AetherhavenRoleLabels {
         if (AetherhavenConstants.NPC_GUARD_MAGE.equals(roleId)) {
             return "aetherhaven_items.aetherhaven.patrolWand.guardTypeMage";
         }
+        if (AetherhavenConstants.NPC_GUARD_ROGUE.equals(roleId)) {
+            return "aetherhaven_items.aetherhaven.patrolWand.guardTypeRogue";
+        }
         return "aetherhaven_items.aetherhaven.patrolWand.guardTypeKnight";
     }
 
@@ -159,13 +162,17 @@ public final class AetherhavenRoleLabels {
         if (AetherhavenConstants.NPC_GUARD_MAGE.equals(r)) {
             return "Mage";
         }
+        if (AetherhavenConstants.NPC_GUARD_ROGUE.equals(r)) {
+            return "Rogue";
+        }
         return "Knight";
     }
 
     private static boolean isGuardRoleId(@Nonnull String roleId) {
         return AetherhavenConstants.NPC_GUARD_KNIGHT.equals(roleId)
             || AetherhavenConstants.NPC_GUARD_ARCHER.equals(roleId)
-            || AetherhavenConstants.NPC_GUARD_MAGE.equals(roleId);
+            || AetherhavenConstants.NPC_GUARD_MAGE.equals(roleId)
+            || AetherhavenConstants.NPC_GUARD_ROGUE.equals(roleId);
     }
 
     @Nullable

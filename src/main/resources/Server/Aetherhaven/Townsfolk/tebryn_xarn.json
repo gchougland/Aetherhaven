@@ -1,0 +1,19 @@
+{
+  "id": "tebryn_xarn",
+  "displayName": "Tebryn Xarn",
+  "gender": "male",
+  "race": "darkelf",
+  "modelAssetId": "Tebryn_Xarn",
+  "personalityIds": [
+    "cynical",
+    "mischievous",
+    "adventurer"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue"
+}

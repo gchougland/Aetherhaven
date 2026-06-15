@@ -621,7 +621,8 @@ public final class PatrolWandInteractions {
         String role = npc.getRoleName();
         return AetherhavenConstants.NPC_GUARD_KNIGHT.equals(role)
             || AetherhavenConstants.NPC_GUARD_ARCHER.equals(role)
-            || AetherhavenConstants.NPC_GUARD_MAGE.equals(role);
+            || AetherhavenConstants.NPC_GUARD_MAGE.equals(role)
+            || AetherhavenConstants.NPC_GUARD_ROGUE.equals(role);
     }
 
     @Nonnull

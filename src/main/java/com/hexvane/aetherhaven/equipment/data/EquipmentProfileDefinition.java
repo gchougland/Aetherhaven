@@ -91,6 +91,7 @@ public final class EquipmentProfileDefinition {
         return switch (getId()) {
             case "guard_archer" -> "Aetherhaven_Guard_Archer";
             case "guard_mage" -> "Aetherhaven_Guard_Mage";
+            case "guard_rogue" -> "Aetherhaven_Guard_Rogue";
             default -> "Aetherhaven_Guard_Knight";
         };
     }

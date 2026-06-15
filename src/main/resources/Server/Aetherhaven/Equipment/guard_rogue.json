@@ -1,0 +1,14 @@
+{
+  "id": "guard_rogue",
+  "guardNpcRole": "Aetherhaven_Guard_Rogue",
+  "displayName": "Rogue",
+  "hireGoldCost": 45,
+  "armor": [
+    "Armor_Leather_Light_Chest",
+    "Armor_Leather_Light_Legs",
+    "Armor_Leather_Light_Hands"
+  ],
+  "hotbar": [
+    { "slot": 0, "itemId": "Weapon_Daggers_Iron" }
+  ]
+}

@@ -124,7 +124,7 @@ public final class RtsSelectionService {
                 continue;
             }
             boolean match = switch (filter) {
-                case KNIGHT -> RtsGuardDirectory.isKnight(profile);
+                case KNIGHT -> RtsGuardDirectory.isKnight(profile) || RtsGuardDirectory.isRogue(profile);
                 case ARCHER -> RtsGuardDirectory.isArcher(profile);
                 case MAGE -> RtsGuardDirectory.isMage(profile);
             };
