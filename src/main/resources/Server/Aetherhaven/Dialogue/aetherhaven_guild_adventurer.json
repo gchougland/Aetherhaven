@@ -28,8 +28,7 @@
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.yes",
           "condition": { "type": "guard_hire_affordable" },
           "whenFalse": "disabled",
-          "actions": [{ "type": "hire_guild_adventurer" }],
-          "next": "hire_done"
+          "actions": [{ "type": "hire_guild_adventurer" }]
         },
         {
           "text": "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.hire_confirm.no",

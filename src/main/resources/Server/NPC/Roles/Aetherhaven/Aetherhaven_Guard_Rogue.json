@@ -175,10 +175,10 @@
                   "Modify": {
                     "ViewRange": { "Compute": "ViewRange" },
                     "AttackDistance": { "Compute": "AttackDistance" },
-                    "DesiredAttackDistanceRange": { "Value": [1.2, 2.0] },
-                    "StrafingDurationRange": { "Value": [0.3, 0.8] },
-                    "StrafingFrequencyRange": { "Value": [0.4, 1.2] },
-                    "AttackPauseRange": { "Value": [0.8, 1.5] }
+                    "DesiredAttackDistanceRange": [1.2, 2.0],
+                    "StrafingDurationRange": [0.3, 0.8],
+                    "StrafingFrequencyRange": [0.4, 1.2],
+                    "AttackPauseRange": [0.8, 1.5]
                   }
                 }
               ]

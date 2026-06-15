@@ -256,7 +256,22 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull World world,
         @Nonnull TouristPlotVisit plot
     ) {
-        beginTravelToPlotOnStore(ref, store, plugin, npc, autonomy, now, town, world, plot);
+        beginTravelToPlot(ref, store, commandBuffer, npc, autonomy, now, town, world, plot, true);
+    }
+
+    private void beginTravelToPlot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull TouristPlotVisit plot,
+        boolean usePathNav
+    ) {
+        beginTravelToPlotOnStore(ref, store, plugin, npc, autonomy, now, town, world, plot, usePathNav);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -277,6 +292,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
         autonomy.setTravelTarget(x, y, z, destinationId);
         autonomy.setTravelStuckTicks(0);
+        autonomy.setTravelDirectFallback(false);
         autonomy.setNextDecisionEpochMs(now + TRAVEL_PHASE_MAX_MS);
     }
 
@@ -291,6 +307,21 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull World world,
         @Nonnull TouristPlotVisit plot
     ) {
+        beginTravelToPlotOnStore(ref, store, plugin, npc, autonomy, now, town, world, plot, true);
+    }
+
+    private static void beginTravelToPlotOnStore(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull TouristPlotVisit plot,
+        boolean usePathNav
+    ) {
         autonomy.setVisitPlotId(plot.plotId());
         beginTravelTo(autonomy, now, plot.entryX(), plot.entryY(), plot.entryZ(), plot.destinationId());
         routeNpcToTarget(
@@ -301,7 +332,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             autonomy,
             town,
             world,
-            new Vector3d(plot.entryX(), plot.entryY(), plot.entryZ())
+            new Vector3d(plot.entryX(), plot.entryY(), plot.entryZ()),
+            usePathNav
         );
     }
 
@@ -320,7 +352,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         double ty = poi.hasInteractionTarget() ? poi.getInteractionTargetY() + 0.02 : poi.getY() + 0.02;
         double tz = poi.hasInteractionTarget() ? poi.getInteractionTargetZ() + 0.5 : poi.getZ() + 0.5;
         beginTravelTo(autonomy, now, tx, ty, tz, poi.getId());
-        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(tx, ty, tz));
+        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(tx, ty, tz), false);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -334,8 +366,14 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull TouristAutonomyState autonomy,
         @Nonnull TownRecord town,
         @Nonnull World world,
-        @Nonnull Vector3d finalTarget
+        @Nonnull Vector3d finalTarget,
+        boolean usePathNav
     ) {
+        if (!usePathNav || autonomy.isTravelDirectFallback()) {
+            autonomy.clearTravelWaypoints();
+            npc.setLeashPoint(finalTarget);
+            return;
+        }
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc != null) {
             AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
@@ -367,6 +405,16 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             autonomy.clearTravelWaypoints();
             npc.setLeashPoint(finalTarget);
         }
+    }
+
+    private static void applyDirectTravelFallback(
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy
+    ) {
+        autonomy.setTravelDirectFallback(true);
+        autonomy.clearTravelWaypoints();
+        autonomy.setTravelStuckTicks(0);
+        npc.setLeashPoint(new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()));
     }
 
     private static boolean supportsAutonomyPoiRoleState(@Nonnull NPCEntity npc) {
@@ -420,7 +468,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         Vector3d feet = TouristPortalBlockUtil.returnStandPosition(world, blockPos);
         autonomy.clearVisitPlot();
         beginTravelTo(autonomy, now, feet.x, feet.y, feet.z, AetherhavenConstants.TOURIST_PORTAL_RETURN_POI_ID);
-        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, feet);
+        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, feet, true);
         return true;
     }
 
@@ -507,6 +555,13 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         MotionController mc = npc.getRole() != null ? npc.getRole().getActiveMotionController() : null;
         NavState nav = mc != null ? mc.getNavState() : NavState.INIT;
         if (nav == NavState.ABORTED) {
+            if (returning && !autonomy.isTravelDirectFallback()) {
+                applyDirectTravelFallback(npc, autonomy);
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                applyAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
             failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, tb);
             return;
         }
@@ -684,7 +739,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         beginTravelTo(autonomy, now, stand[0], stand[1], stand[2], spot.getSpotId());
-        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(stand[0], stand[1], stand[2]));
+        routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(stand[0], stand[1], stand[2]), false);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -758,7 +813,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             )) {
             TouristPlotVisit entry = findPlotVisit(town, catalog, world, plotId);
             if (entry != null) {
-                beginTravelToPlot(ref, store, commandBuffer, npc, autonomy, now, town, world, entry);
+                beginTravelToPlot(ref, store, commandBuffer, npc, autonomy, now, town, world, entry, false);
             }
             return;
         }
@@ -786,6 +841,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
 
         if (now >= autonomy.getNextPoiPickEpochMs()) {
             Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
+            int npcFeetY = tc != null ? (int) Math.floor(tc.getPosition().y) : 64;
             PoiEntry poi =
                 TouristDestinationResolver.pickVisitPoiOnPlot(
                     town,
@@ -793,7 +849,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                     catalog,
                     plotId,
                     autonomy.getLastPlotPoiUuid(),
-                    random
+                    random,
+                    world,
+                    plugin,
+                    npcFeetY
                 );
             scheduleNextPoiPick(autonomy, now, ref.hashCode());
             if (poi != null) {
@@ -1026,7 +1085,13 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                 finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
                 return;
             }
-            beginReturnToPortal(ref, store, commandBuffer, npc, autonomy, now, town, world);
+            if (!autonomy.isTravelDirectFallback()) {
+                applyDirectTravelFallback(npc, autonomy);
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                applyAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
             return;
         }
         if (autonomy.getVisitPlotUuid() != null) {

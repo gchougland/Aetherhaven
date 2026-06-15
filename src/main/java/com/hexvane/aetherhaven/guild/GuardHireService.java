@@ -326,6 +326,7 @@ public final class GuardHireService {
         String guardRole = profile.getGuardNpcRole();
         int roleIndex = npcPlugin.getIndex(guardRole);
         if (roleIndex < 0) {
+            LOGGER.atWarning().log("Cannot spawn hired guard: unknown NPC role %s (profile %s)", guardRole, profile.getId());
             return null;
         }
 

@@ -276,8 +276,11 @@ public final class PathNavGraphService {
     ) {
         List<Vector3d> chain = buildDijkstraVertexChain(graphPos, end, prev);
         List<Vector3d> out = reprojectStartOntoDijkstraChain(from, chain);
-        if (out.isEmpty() || horizontal(out.get(out.size() - 1), toWorld) > 0.35) {
-            out.add(toWorld);
+        if (!out.isEmpty()) {
+            double finalLeg = horizontal(out.get(out.size() - 1), toWorld);
+            if (finalLeg > 0.35 && finalLeg <= PathNavTravelWaypoints.MAX_ON_PATH_FINAL_LEG) {
+                out.add(toWorld);
+            }
         }
         return out;
     }

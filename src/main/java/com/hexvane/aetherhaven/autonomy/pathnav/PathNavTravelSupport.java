@@ -9,8 +9,8 @@ import org.joml.Vector3d;
  * skips, and position-stall recovery when NPCs wedge on path corners or doorway approaches.
  */
 public final class PathNavTravelSupport {
-    /** Looser than POI leash arrive so NPCs do not pause on every closely spaced path node. */
-    public static final double INTERMEDIATE_WAYPOINT_ARRIVE_HORIZONTAL = 2.35;
+    /** Looser than POI leash arrive so NPCs do not pause on every closely spaced path node. Must be <= Leash sensor Range (1.5). */
+    public static final double INTERMEDIATE_WAYPOINT_ARRIVE_HORIZONTAL = 1.25;
     public static final double INTERMEDIATE_WAYPOINT_ARRIVE_SQ =
         INTERMEDIATE_WAYPOINT_ARRIVE_HORIZONTAL * INTERMEDIATE_WAYPOINT_ARRIVE_HORIZONTAL;
     public static final long WAYPOINT_TIMEOUT_MS = 12_000L;

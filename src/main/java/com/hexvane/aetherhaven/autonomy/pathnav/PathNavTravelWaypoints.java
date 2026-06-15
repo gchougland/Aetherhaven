@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
  */
 public final class PathNavTravelWaypoints {
     private static final double EPS_FINAL = 0.3;
+    /** When the last graph node is farther than this from the goal, omit the goal from waypoints (direct Seek after path). */
+    public static final double MAX_ON_PATH_FINAL_LEG = 3.0;
     /** Drop a terminal path node when the cut toward the POI is sharper than this (cosine). */
     private static final double SHARP_APPROACH_DOT = 0.55;
     private static final double SHARP_APPROACH_MAX_LEG = 5.5;

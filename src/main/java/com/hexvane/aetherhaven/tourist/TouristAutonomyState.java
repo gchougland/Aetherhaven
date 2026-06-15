@@ -94,6 +94,12 @@ public final class TouristAutonomyState implements Component<EntityStore>, PathN
                 v -> v.encodePendingDoors()
             )
             .add()
+            .append(
+                new KeyedCodec<>("TravelDirectFallback", Codec.BOOLEAN),
+                (v, x) -> v.travelDirectFallback = x != null && x,
+                v -> v.travelDirectFallback
+            )
+            .add()
             .build();
 
     @Nullable
@@ -140,6 +146,8 @@ public final class TouristAutonomyState implements Component<EntityStore>, PathN
     private transient double travelSampleX = Double.NaN;
     private transient double travelSampleZ = Double.NaN;
     private transient int travelProgressStallTicks;
+    /** When true, skip path-nav and Seek directly toward the travel target (return-travel recovery). */
+    private boolean travelDirectFallback;
 
     @Nonnull
     public static TouristAutonomyState fresh(long nowMs) {
@@ -307,6 +315,14 @@ public final class TouristAutonomyState implements Component<EntityStore>, PathN
 
     public void setTravelStuckTicks(int travelStuckTicks) {
         this.travelStuckTicks = travelStuckTicks;
+    }
+
+    public boolean isTravelDirectFallback() {
+        return travelDirectFallback;
+    }
+
+    public void setTravelDirectFallback(boolean travelDirectFallback) {
+        this.travelDirectFallback = travelDirectFallback;
     }
 
     public void setTravelWaypoints(@Nonnull List<Vector3d> points) {
@@ -535,6 +551,7 @@ public final class TouristAutonomyState implements Component<EntityStore>, PathN
         c.lastPlotShopSpotId = lastPlotShopSpotId;
         c.shopPurchaseDoneThisVisit = shopPurchaseDoneThisVisit;
         c.shopSpotsBrowsedThisVisit = shopSpotsBrowsedThisVisit;
+        c.travelDirectFallback = travelDirectFallback;
         for (int[] d : pendingOpenDoors) {
             c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });
         }

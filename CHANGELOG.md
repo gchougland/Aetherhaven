@@ -1,11 +1,15 @@
 # Changelog
 
-## [2.0.1] - Unreleased
+## [2.0.1] - 6/15/2026
 
 ### Added
 
 - **Plot creator build costs** The materials step fills build costs from your build shape automatically. The build materials menu shows the list without spawning items. You can edit counts, add items from inventory, or clear prefab costs. Hard mode material lists are generated when the server starts and when you save a new building.
 - **Rogue Guard Class** Now some townsfolk are Rogues which wield daggers and wear leather armor.
+
+### Changed
+
+- **Floating gift cap** Only one gift balloon can be active per world at a time (was eight). Existing server configs keep their saved `MaxActivePerWorld` until you change it.
 
 ### Fixed
 
@@ -17,6 +21,7 @@
 - **Plot Crafting** Plot crafting now takes gold from backpacks as well.
 - **Plot token pickup** Picking up a plot sign now returns the correct configured plot token (building name and metadata) instead of a blank unified token.
 - **Custom Plot Tokens in Town Journal** Custom tokens would show up as the regular plot sign instead of their icons.
+- **Tourist Pathing** Attempted to fix path issue where tourists walk in circles.
 
 ## [2.0.0] - 6/13/2026
 

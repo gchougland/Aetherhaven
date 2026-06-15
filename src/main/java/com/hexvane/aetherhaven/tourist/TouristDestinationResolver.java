@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.tourist;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.AutonomyNavBounds;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -96,9 +98,12 @@ public final class TouristDestinationResolver {
         @Nonnull ConstructionCatalog catalog,
         @Nonnull UUID plotId,
         @Nullable UUID excludePoiId,
-        @Nonnull Random random
+        @Nonnull Random random,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        int npcFeetY
     ) {
-        List<PoiEntry> candidates = listVisitPoisOnPlot(town, poiRegistry, catalog, plotId);
+        List<PoiEntry> candidates = listVisitPoisOnPlot(town, poiRegistry, catalog, plotId, world, plugin, npcFeetY);
         if (candidates.isEmpty()) {
             return null;
         }
@@ -121,6 +126,19 @@ public final class TouristDestinationResolver {
         @Nonnull ConstructionCatalog catalog,
         @Nonnull UUID plotId
     ) {
+        return listVisitPoisOnPlot(town, poiRegistry, catalog, plotId, null, null, Integer.MIN_VALUE);
+    }
+
+    @Nonnull
+    public static List<PoiEntry> listVisitPoisOnPlot(
+        @Nonnull TownRecord town,
+        @Nonnull PoiRegistry poiRegistry,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID plotId,
+        @Nullable World world,
+        @Nullable AetherhavenPlugin plugin,
+        int npcFeetY
+    ) {
         List<PoiEntry> out = new ArrayList<>();
         for (PoiEntry poi : poiRegistry.allEntries()) {
             if (!town.getTownId().equals(poi.getTownId())) {
@@ -129,11 +147,51 @@ public final class TouristDestinationResolver {
             if (!plotId.equals(poi.getPlotId())) {
                 continue;
             }
-            if (isUsableVisitPoi(poi, town, catalog)) {
-                out.add(poi);
+            if (!isUsableVisitPoi(poi, town, catalog)) {
+                continue;
             }
+            if (world != null && plugin != null && !isReachableVisitPoi(world, plugin, town, poi, npcFeetY)) {
+                continue;
+            }
+            out.add(poi);
         }
         return out;
+    }
+
+    /** True when the POI interaction stand column is walkable for an NPC at {@code npcFeetY}. */
+    public static boolean isReachableVisitPoi(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PoiEntry poi,
+        int npcFeetY
+    ) {
+        int columnX;
+        int columnZ;
+        int poiBlockY;
+        if (poi.hasInteractionTarget()) {
+            Double tx = poi.getInteractionTargetX();
+            Double ty = poi.getInteractionTargetY();
+            Double tz = poi.getInteractionTargetZ();
+            if (tx == null || ty == null || tz == null) {
+                return false;
+            }
+            columnX = tx.intValue();
+            columnZ = tz.intValue();
+            poiBlockY = ty.intValue();
+        } else {
+            columnX = poi.getX();
+            columnZ = poi.getZ();
+            poiBlockY = poi.getY();
+        }
+        int feetYHint = npcFeetY != Integer.MIN_VALUE ? npcFeetY : poiBlockY;
+        AutonomyNavBounds.NavVerticalRange range =
+            AutonomyNavBounds.tryRangeForPoi(plugin, town, poi, columnX, columnZ);
+        int standY = VillagerBlockUtil.findStandYForNav(world, columnX, columnZ, poiBlockY, feetYHint, range);
+        if (standY == Integer.MIN_VALUE) {
+            return false;
+        }
+        return VillagerBlockUtil.isNpcStandColumn(world, columnX, standY, columnZ);
     }
 
     public static boolean isInsidePlotFootprint(double x, double z, @Nonnull PlotInstance plot, int padding) {

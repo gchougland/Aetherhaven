@@ -81,7 +81,7 @@ public final class FloatingGiftConfig {
     /** After hit, elapsed seconds before swapping Action from one-shot Pop to looping PopHold (see Server/Models/Floating_Gift.json). */
     private double popHoldLatchSeconds = 1.05;
     private double projectileHitRadiusBlocks = 1.4;
-    private int maxActivePerWorld = 8;
+    private int maxActivePerWorld = 1;
     private int typeWeightRegular = 40;
     private int typeWeightGreen = 10;
     private int typeWeightRed = 50;

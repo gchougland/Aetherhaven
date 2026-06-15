@@ -18,7 +18,7 @@
   "MaxHealth": 200,
   "IsMemory": false,
   "DisableDamageGroups": ["Self", "Player", "Aetherhaven_Townsfolk", "Friendly"],
-  "CombatConfig": { "EntityEffect": "Immunity_Environmental" },
+  "CombatConfig": { "EntityEffect": "Immunity_Fire" },
   "BusyStates": ["$Interaction"],
   "Invulnerable": { "Compute": "Invulnerable" },
   "KnockbackScale": 0.5,

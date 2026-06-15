@@ -79,9 +79,9 @@
       "capacity": 1,
       "blockTypeId": "Furniture_Crude_Brazier",
       "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 6,
+      "interactionTargetLocalX": 5,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "interactionTargetLocalZ": 0
     }
   ]
 }
