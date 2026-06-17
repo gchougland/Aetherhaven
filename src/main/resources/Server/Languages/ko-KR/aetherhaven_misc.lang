@@ -22,7 +22,7 @@ aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
 items.Aetherhaven_Building_Staff.name=구리 건물 직원
-items.Aetherhaven_Building_Staff.description=주 무기는 범위 내에서 가장 가까운 조립 미리보기 위치로 안내 볼트를 발사합니다. 보조 무기를 누른 상태에서 블록을 통해 미리보기 위치를 조준하면 잠시 후 건물 노드를 배치할 수 있습니다(마을 건설 권한). 조준한 위치 주변의 강조 표시된 건물 노드를 최대 3×3×3개까지 한 번에 채울 수 있습니다. 보조 무기를 누르고 있는 동안 최대 마나가 150 증가합니다. 블록 하나를 배치할 때마다 마나가 1 소모됩니다. 보조 무기를 몇 초 동안 사용하지 않으면 마나가 더 빨리 회복됩니다. 등급이 높은 지팡이일수록 마나 회복량과 회복 속도가 더 빠릅니다. 자리를 비운 동안에도 수동 배치는 계속 진행됩니다.
+items.Aetherhaven_Building_Staff.description=주 무기는 범위 내에서 가장 가까운 조립 미리보기 지점으로 안내 볼트를 발사합니다. 보조 무기를 누른 상태에서 해당 미리보기 지점을 조준하면 잠시 후 건물 노드를 배치할 수 있습니다(마을 건설 권한). 조준한 지점 주변의 강조 표시된 건물 노드를 최대 3×3×3개까지 한 번에 채울 수 있습니다. 보조 무기를 누르고 있는 동안 최대 마나가 150 증가합니다. 블록 하나를 배치할 때마다 마나가 1 소모됩니다. 보조 무기를 몇 초 동안 사용하지 않으면 마나가 더 빨리 회복됩니다. 등급이 높은 지팡이일수록 마나 회복량과 회복 속도가 더 빠릅니다. 자리를 비운 동안에도 부지 조립은 계속 진행됩니다.
 items.Aetherhaven_Building_Staff_Iron.name=철골 건설 직원
 items.Aetherhaven_Building_Staff_Iron.description=구리 건물 지팡이와 동일합니다. 보조 지팡이는 강조 표시된 건물 노드를 한 번에 최대 5×5×5개까지 채웁니다. 들고 있는 동안 최대 마나가 +250 증가하고 마나 회복 속도가 빨라집니다. 블록 하나를 설치할 때마다 마나가 1씩 소모됩니다.
 items.Aetherhaven_Building_Staff_Thorium.name=토륨 빌딩 직원

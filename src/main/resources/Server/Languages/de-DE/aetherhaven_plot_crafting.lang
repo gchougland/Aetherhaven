@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Werkbank im Grundstück
-aetherhaven.ui.plotCrafting.previewTitle =Vorschau
-aetherhaven.ui.plotCrafting.variantSectionTitle =Varianten
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Kerngebäude
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Dekorationen
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Vorheriger Stil
-aetherhaven.ui.plotCrafting.variantNextTooltip =Nächster Stil
-aetherhaven.ui.plotCrafting.craftButton =Handwerksplatz-Token
-aetherhaven.ui.plotCrafting.costLine =Kosten: {cost} Gold
-aetherhaven.ui.plotCrafting.fundsLine =Deine Münzen: {inv} · Stadtkasse: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Nicht genug Gold.
-aetherhaven.ui.plotCrafting.noSpace =Schaffen Sie zunächst Platz in Ihrem Lagerbestand.
-aetherhaven.ui.plotCrafting.crafted =Erstelltes {name}-Grundstückstoken.
-aetherhaven.ui.plotCrafting.unlockSuccess =Du hast das {building}-Plot freigeschaltet.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Diese Handlung kennst du bereits.
-aetherhaven.ui.plotCrafting.unlockInvalid =Dieser Bauplan ist unlesbar.
+aetherhaven.ui.plotCrafting.title=Werkbank im Grundstück
+aetherhaven.ui.plotCrafting.previewTitle=Vorschau
+aetherhaven.ui.plotCrafting.variantSectionTitle=Varianten
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Kerngebäude
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Dekorationen
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Vorheriger Stil
+aetherhaven.ui.plotCrafting.variantNextTooltip=Nächster Stil
+aetherhaven.ui.plotCrafting.craftButton=Handwerksplatz-Token
+aetherhaven.ui.plotCrafting.costLine=Kosten: {cost} Gold
+aetherhaven.ui.plotCrafting.fundsLine=Deine Münzen: {inv} · Stadtkasse: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Nicht genug Gold.
+aetherhaven.ui.plotCrafting.noSpace=Schaffen Sie zunächst Platz in Ihrem Lagerbestand.
+aetherhaven.ui.plotCrafting.crafted=Erstelltes {name}-Grundstückstoken.
+aetherhaven.ui.plotCrafting.unlockSuccess=Du hast das {building}-Plot freigeschaltet.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Diese Handlung kennst du bereits.
+aetherhaven.ui.plotCrafting.unlockInvalid=Dieser Bauplan ist unlesbar.

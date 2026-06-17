@@ -2,7 +2,7 @@
 
 aetherhaven.ui.wallplacement.title=墙杖
 aetherhaven.ui.wallplacement.summary=为你的城镇铺设墙体。方向箭头指示放置标志牌并开始建造下一块墙体。完成墙体建造后，当前预览将提交并结束本次会话。像建造其他地块一样建造每个标志牌。
-aetherhaven.ui.wallplacement.tips=选择墙、门或塔。使用中间的箭头滑动起始位置，使用旋转按钮在放置第一个位置前旋转它。使用右侧的箭头放置并继续前进。完成墙会提交当前预览并结束本次会话（包括终点塔）。创造模式：/ah walldebug on 会在聊天中记录每一步操作。左侧按键选择视角方向。撤销会移除最后一个标记。取消会结束本次会话。
+aetherhaven.ui.wallplacement.tips=选择墙、门或塔。使用中间的箭头滑动起始点，使用旋转按钮在第一个位置前旋转它。使用右侧的箭头放置并继续前进。完成墙会提交当前预览并结束本次会话（包括终点塔）。创造模式：/ah walldebug on 会在聊天中记录每一步操作。左侧按键选择视角方向。撤销会移除最后一个标记。取消会结束本次会话。
 aetherhaven.ui.wallplacement.place=位置标志
 aetherhaven.ui.wallplacement.completeWall=完整墙体
 aetherhaven.ui.wallplacement.pieceWall=墙

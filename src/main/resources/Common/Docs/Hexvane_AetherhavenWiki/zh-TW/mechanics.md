@@ -1,0 +1,34 @@
+---
+name: 機械
+description: 工具、建築物和城鎮系統
+author: Hexvane
+sub-topics:
+  - mechanic_commands
+  - mechanic_plot_placement_staff
+  - mechanic_plot_creator_staff
+  - mechanic_building_staff
+  - mechanic_charter
+  - mechanic_villager_needs
+  - mechanic_reputation
+  - mechanic_town_records_shelf
+  - mechanic_production_wardrobe
+  - mechanic_floating_gifts
+  - mechanic_geodes
+  - mechanic_jewelry
+  - mechanic_purification_powder
+  - mechanic_sprinklers
+  - mechanic_inn_pool_visitors
+  - mechanic_treasury_taxes
+  - mechanic_plot_tokens
+  - mechanic_path_designer_shovel
+  - mechanic_quest_board
+  - mechanic_guild_hall_and_guards
+  - mechanic_player_shop
+  - mechanic_tourist_portal
+---
+
+![Mechanics hub art](wiki/mechanics_hub.png)
+
+# 機制
+
+這些頁面描述了每個主要功能在實際遊戲中的體驗。請從左側清單中開啟您感興趣的頁面。

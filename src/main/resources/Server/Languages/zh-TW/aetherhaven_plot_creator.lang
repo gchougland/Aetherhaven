@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =您沒有使用劇情產生器的權限。
-aetherhaven.plotcreator.error.id_empty =請輸入建築物編號。
-aetherhaven.plotcreator.error.id_prefix =id 必須以 plot_ 開頭
-aetherhaven.plotcreator.error.id_wall =目前該工具還無法建立牆體圖。
-aetherhaven.plotcreator.error.id_chars =ID 中只能使用小寫字母、數字和底線。
-aetherhaven.plotcreator.error.id_taken =該建築編號已被使用。
-aetherhaven.plotcreator.error.incomplete =請先完成所有必要步驟。
-aetherhaven.plotcreator.error.prefab_missing =在完成之前儲存預製件。
-aetherhaven.plotcreator.error.prefabName =請輸入預製件檔案的名稱。
-aetherhaven.plotcreator.error.prefabExport =無法保存預製件。請檢查邊界並重試。
-aetherhaven.plotcreator.error.saveFailed =無法保存建築文件。
-aetherhaven.plotcreator.error.anchorInside =地塊標誌不能位於建築邊界內。請改用外部角落。
-aetherhaven.plotcreator.error.anchorNotCorner =點擊建築物的四個外角之一（從佔地面積沿著 X 和 Z 方向各向外移動一個方塊）。
-aetherhaven.plotcreator.error.needAnchor =點擊外側角落查看地塊標誌，然後再繼續。
-aetherhaven.plotcreator.error.outsideBounds =點選標記區域內。
-aetherhaven.plotcreator.error.wrongBlock =這不是此步驟所需的模組。
-aetherhaven.plotcreator.error.shopSpotNotConfigured =先確認店舖攤位設置，然後與地塊建立人員點選。
-aetherhaven.plotcreator.error.tooManyVisitors =這棟建築只需要兩個訪客停車位。
-aetherhaven.plotcreator.error.editNotCustom =只有保存在伺服器資料資料夾中的自訂建築物才能進行編輯。
-aetherhaven.plotcreator.error.editUnknown =未找到 ID 為 {id} 的自訂建築物。
-aetherhaven.plotcreator.edit.loaded =已載入 {id} 進行編輯。返回修改詳細資訊或儲存以更新文件。
+aetherhaven.plotcreator.error.noPermission=您沒有使用劇情產生器的權限。
+aetherhaven.plotcreator.error.id_empty=請輸入建築物編號。
+aetherhaven.plotcreator.error.id_prefix=id 必須以 plot_ 開頭
+aetherhaven.plotcreator.error.id_wall=目前該工具還無法建立牆體圖。
+aetherhaven.plotcreator.error.id_chars=ID 中只能使用小寫字母、數字和底線。
+aetherhaven.plotcreator.error.id_taken=該建築編號已被使用。
+aetherhaven.plotcreator.error.incomplete=請先完成所有必要步驟。
+aetherhaven.plotcreator.error.prefab_missing=在完成之前儲存預製件。
+aetherhaven.plotcreator.error.prefabName=請輸入預製件檔案的名稱。
+aetherhaven.plotcreator.error.prefabExport=無法保存預製件。請檢查邊界並重試。
+aetherhaven.plotcreator.error.saveFailed=無法保存建築文件。
+aetherhaven.plotcreator.error.anchorInside=地塊標誌不能位於建築邊界內。請改用外部角落。
+aetherhaven.plotcreator.error.anchorNotCorner=點擊建築物的四個外角之一（從佔地面積沿著 X 和 Z 方向各向外移動一個方塊）。
+aetherhaven.plotcreator.error.needAnchor=點擊外側角落查看地塊標誌，然後再繼續。
+aetherhaven.plotcreator.error.outsideBounds=點選標記區域內。
+aetherhaven.plotcreator.error.wrongBlock=這不是此步驟所需的模組。
+aetherhaven.plotcreator.error.shopSpotNotConfigured=先確認店舖攤位設置，然後與地塊建立人員點選。
+aetherhaven.plotcreator.error.tooManyVisitors=這棟建築只需要兩個訪客停車位。
+aetherhaven.plotcreator.error.editNotCustom=只有保存在伺服器資料資料夾中的自訂建築物才能進行編輯。
+aetherhaven.plotcreator.error.editUnknown=未找到 ID 為 {id} 的自訂建築物。
+aetherhaven.plotcreator.edit.loaded=已載入 {id} 進行編輯。返回修改詳細資訊或儲存以更新文件。
 
-aetherhaven.plotcreator.generateicon.error.empty =請輸入建築物 ID 或預製件路徑。
-aetherhaven.plotcreator.generateicon.error.noPrefab =沒有 {id} 的預製件路徑。
-aetherhaven.plotcreator.generateicon.error.noOutputId =無法確定輸出 ID；請將 ID 作為第二個參數傳遞。
-aetherhaven.plotcreator.generateicon.error.notFound =找不到預製件：{prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =無法載入預製件：{prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed ={id} 的圖示渲染失敗。
-aetherhaven.plotcreator.generateicon.ok =圖示已儲存至 {path}（資源路徑：{asset}），適用於 {id}。
+aetherhaven.plotcreator.generateicon.error.empty=請輸入建築物 ID 或預製件路徑。
+aetherhaven.plotcreator.generateicon.error.noPrefab=沒有 {id} 的預製件路徑。
+aetherhaven.plotcreator.generateicon.error.noOutputId=無法確定輸出 ID；請將 ID 作為第二個參數傳遞。
+aetherhaven.plotcreator.generateicon.error.notFound=找不到預製件：{prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=無法載入預製件：{prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed={id} 的圖示渲染失敗。
+aetherhaven.plotcreator.generateicon.ok=圖示已儲存至 {path}（資源路徑：{asset}），適用於 {id}。
 
-aetherhaven.plotcreator.hint.cornerFirstSet =首先標記一個角落。接下來標記對角線。
-aetherhaven.plotcreator.hint.cornerSecondSet =邊界已設定。接下來，標記地塊外角標誌，然後選擇建築類型，放置所需的模組，最後儲存形狀。
-aetherhaven.plotcreator.hint.anchorSet =地塊標誌點設定。
-aetherhaven.plotcreator.hint.blockRecorded =位置已儲存。
-aetherhaven.plotcreator.hint.shopSpotRecorded =店舖攤位保住了。
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =那個店面已經預留給這一步了。
-aetherhaven.plotcreator.hint.touristPortalRecorded =旅遊門戶網站已儲存。
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =此旅遊門戶網站已儲存，以便此步驟使用。
-aetherhaven.plotcreator.hint.spawnRecorded =已保存重生點。
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =冒險者刷新點已移除。
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =訪客刷新點已移除。
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =那個訪客生成點已經保存了。
-aetherhaven.plotcreator.hint.poiRecorded =活動地點已保存。
+aetherhaven.plotcreator.hint.cornerFirstSet=首先標記一個角落。接下來標記對角線。
+aetherhaven.plotcreator.hint.cornerSecondSet=邊界已設定。接下來，標記地塊外角標誌，然後選擇建築類型，放置所需的模組，最後儲存形狀。
+aetherhaven.plotcreator.hint.anchorSet=地塊標誌點設定。
+aetherhaven.plotcreator.hint.blockRecorded=位置已儲存。
+aetherhaven.plotcreator.hint.shopSpotRecorded=店舖攤位保住了。
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=那個店面已經預留給這一步了。
+aetherhaven.plotcreator.hint.touristPortalRecorded=旅遊門戶網站已儲存。
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=此旅遊門戶網站已儲存，以便此步驟使用。
+aetherhaven.plotcreator.hint.spawnRecorded=已保存重生點。
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=冒險者刷新點已移除。
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=訪客刷新點已移除。
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=那個訪客生成點已經保存了。
+aetherhaven.plotcreator.hint.poiRecorded=活動地點已保存。
 
-aetherhaven.plotcreator.button.save =拯救建築
-aetherhaven.plotcreator.button.openMaterials =開放式建設成本存儲
+aetherhaven.plotcreator.button.save=拯救建築
+aetherhaven.plotcreator.button.addFromInventory=從庫存中加入
+aetherhaven.plotcreator.button.useBuildShape=使用預製材料
+aetherhaven.plotcreator.button.clearPrefabMaterials=清晰的建設成本
+aetherhaven.plotcreator.button.materialsPrevPage=以前的
+aetherhaven.plotcreator.button.materialsNextPage=下一個
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =建築物名稱
-aetherhaven.plotcreator.field.description =簡短描述（可選）
-aetherhaven.plotcreator.field.constructionId =建築編號（plot_my_building）
-aetherhaven.plotcreator.field.prefabName =預製件檔名
-aetherhaven.plotcreator.field.tags =標籤（以逗號分隔）
-aetherhaven.plotcreator.field.variantOf =計入建築物 ID
-aetherhaven.plotcreator.field.goldCost =國庫黃金成本
+aetherhaven.plotcreator.materials.pageLabel=第 {page} 頁，共 {pages} 頁
+aetherhaven.plotcreator.materials.emptyList=目前無需支付建造費用。您可以使用預製材料或從庫存中添加物品。
+aetherhaven.plotcreator.materials.confirmReplace=點擊“再次使用預製材料”以替換當前的建造成本。
+aetherhaven.plotcreator.materials.confirmClear=再次點擊“清除建造費用”以移除所有建造費用。
+aetherhaven.plotcreator.materials.fillFailed=無法從您的預製件中獲取建造費用。請先保存建造形狀。
 
-aetherhaven.plotcreator.session.started =地塊建立器已啟動。在遊戲世界中工作時，請使用HUD和快捷鍵。
+aetherhaven.plotcreator.field.displayName=建築物名稱
+aetherhaven.plotcreator.field.description=簡短描述（可選）
+aetherhaven.plotcreator.field.constructionId=建築編號（plot_my_building）
+aetherhaven.plotcreator.field.prefabName=預製件檔名
+aetherhaven.plotcreator.field.tags=標籤（以逗號分隔）
+aetherhaven.plotcreator.field.variantOf=計入建築物 ID
+aetherhaven.plotcreator.field.goldCost=國庫黃金成本
 
-aetherhaven.plotcreator.hud.title =劇情創作者
+aetherhaven.plotcreator.session.started=地塊建立器已啟動。在遊戲世界中工作時，請使用HUD和快捷鍵。
 
-aetherhaven.plotcreator.hud.common.q =上一步
-aetherhaven.plotcreator.hud.common.e =繼續下一步
-aetherhaven.plotcreator.hud.common.r =取消會話
+aetherhaven.plotcreator.hud.title=劇情創作者
 
-aetherhaven.plotcreator.hud.WELCOME.f =開始
-aetherhaven.plotcreator.hud.WELCOME.e =開始
+aetherhaven.plotcreator.hud.common.q=上一步
+aetherhaven.plotcreator.hud.common.e=繼續下一步
+aetherhaven.plotcreator.hud.common.r=取消會話
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =點選建築物一角的方塊。
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =點擊對角線以標記整個區域
-aetherhaven.plotcreator.hud.ANCHOR.primary =點擊足跡的四個外角之一。
+aetherhaven.plotcreator.hud.WELCOME.f=開始
+aetherhaven.plotcreator.hud.WELCOME.e=開始
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =匯出邊界內的建造形狀。
-aetherhaven.plotcreator.hud.KIND.f =打開建築類型選擇器
-aetherhaven.plotcreator.hud.IDENTITY.f =請輸入顯示名稱、描述和建築物 ID
-aetherhaven.plotcreator.hud.TAGS.f =編輯標籤（以逗號分隔）
-aetherhaven.plotcreator.hud.VARIANT.f =選擇此變體屬於哪種主要建築類型。
-aetherhaven.plotcreator.hud.SUBSTEP.primary =點選圖案範圍內所需的方塊或位置。
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =移除冒險者產生標記
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =移除訪客產生標記
-aetherhaven.plotcreator.hud.SUBSTEP.q =返回（移除離開步驟中多餘的放置塊）
-aetherhaven.plotcreator.hud.MATERIALS.f =開放式材料存儲
-aetherhaven.plotcreator.hud.CONFIGURE.f =開放式建築環境
-aetherhaven.plotcreator.hud.REVIEW.f =拯救這棟建築
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=點選建築物一角的方塊。
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=點擊對角線以標記整個區域
+aetherhaven.plotcreator.hud.ANCHOR.primary=點擊足跡的四個外角之一。
 
-aetherhaven.plotcreator.hud.kindSelected =類型：{kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=匯出邊界內的建造形狀。
+aetherhaven.plotcreator.hud.KIND.f=打開建築類型選擇器
+aetherhaven.plotcreator.hud.IDENTITY.f=請輸入顯示名稱、描述和建築物 ID
+aetherhaven.plotcreator.hud.TAGS.f=編輯標籤（以逗號分隔）
+aetherhaven.plotcreator.hud.VARIANT.f=選擇此變體屬於哪種主要建築類型。
+aetherhaven.plotcreator.hud.SUBSTEP.primary=點選圖案範圍內所需的方塊或位置。
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=移除冒險者產生標記
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=移除訪客產生標記
+aetherhaven.plotcreator.hud.SUBSTEP.q=返回（移除離開步驟中多餘的放置塊）
+aetherhaven.plotcreator.hud.MATERIALS.f=打開建築材料選單
+aetherhaven.plotcreator.hud.CONFIGURE.f=開放式建築環境
+aetherhaven.plotcreator.hud.REVIEW.f=拯救這棟建築
 
-aetherhaven.plotcreator.hint.clickBlock =此步驟中，請點選世界中的一個方塊。
+aetherhaven.plotcreator.hud.kindSelected=類型：{kind}
 
-aetherhaven.plotcreator.hint.kindCycled =建築類型：{kind}
+aetherhaven.plotcreator.hint.clickBlock=此步驟中，請點選世界中的一個方塊。
 
-aetherhaven.plotcreator.hint.prefabSaved =預製件已儲存為{file}。準備好進行下一步時，請按 E 鍵。
+aetherhaven.plotcreator.hint.kindCycled=建築類型：{kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =點選第一個角點後再繼續。
+aetherhaven.plotcreator.hint.prefabSaved=預製件已儲存為{file}。準備好進行下一步時，請按 E 鍵。
 
-aetherhaven.plotcreator.error.needCornerSecond =請點選對角線位置再繼續。
+aetherhaven.plotcreator.error.needCornerFirst=點選第一個角點後再繼續。
 
-aetherhaven.plotcreator.error.needKind =按 F 鍵開啟建築類型選擇器，選擇一種類型後再繼續。
+aetherhaven.plotcreator.error.needCornerSecond=請點選對角線位置再繼續。
 
-aetherhaven.plotcreator.error.needVariantOf =按 F 鍵，然後選擇此變體屬於哪座主要建築，然後再繼續。
+aetherhaven.plotcreator.error.needKind=按 F 鍵開啟建築類型選擇器，選擇一種類型後再繼續。
 
-aetherhaven.plotcreator.error.invalidVariantOf =此主要建築類型不在地塊創建器清單中。
+aetherhaven.plotcreator.error.needVariantOf=按 F 鍵，然後選擇此變體屬於哪座主要建築，然後再繼續。
+
+aetherhaven.plotcreator.error.invalidVariantOf=此主要建築類型不在地塊創建器清單中。
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =穀倉
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =鐵匠鋪
-aetherhaven.plotcreator.mainType.plot_farm =農地
-aetherhaven.plotcreator.mainType.plot_gaia_altar =蓋亞祭壇
-aetherhaven.plotcreator.mainType.plot_guild_hall =公會大廳
-aetherhaven.plotcreator.mainType.plot_house =房子
-aetherhaven.plotcreator.mainType.plot_inn =客棧
-aetherhaven.plotcreator.mainType.plot_lumbermill =木材廠
-aetherhaven.plotcreator.mainType.plot_market_stall =市場攤位
-aetherhaven.plotcreator.mainType.plot_player_shop =玩家商店
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =點擊您放置的商店保險箱。
-aetherhaven.plotcreator.mainType.plot_miners_hut =礦工小屋
-aetherhaven.plotcreator.mainType.plot_builders_hut =建築工人的小屋
-aetherhaven.plotcreator.mainType.plot_park =公園
-aetherhaven.plotcreator.mainType.plot_town_hall =市政廳
-aetherhaven.plotcreator.mainType.plot_tourist_portal =旅遊門戶網站
+aetherhaven.plotcreator.mainType.plot_barn=穀倉
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=鐵匠鋪
+aetherhaven.plotcreator.mainType.plot_farm=農地
+aetherhaven.plotcreator.mainType.plot_gaia_altar=蓋亞祭壇
+aetherhaven.plotcreator.mainType.plot_guild_hall=公會大廳
+aetherhaven.plotcreator.mainType.plot_house=房子
+aetherhaven.plotcreator.mainType.plot_inn=客棧
+aetherhaven.plotcreator.mainType.plot_lumbermill=木材廠
+aetherhaven.plotcreator.mainType.plot_market_stall=市場攤位
+aetherhaven.plotcreator.mainType.plot_player_shop=玩家商店
+aetherhaven.plotcreator.mainType.plot_bomb_shop=炸彈商店
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=水晶守護者的商店
+aetherhaven.plotcreator.mainType.plot_flower_shop=花店
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=點擊您放置的商店保險箱。
+aetherhaven.plotcreator.mainType.plot_miners_hut=礦工小屋
+aetherhaven.plotcreator.mainType.plot_builders_hut=建築工人的小屋
+aetherhaven.plotcreator.mainType.plot_park=公園
+aetherhaven.plotcreator.mainType.plot_town_hall=市政廳
+aetherhaven.plotcreator.mainType.plot_tourist_portal=旅遊門戶網站
 
-aetherhaven.plotcreator.cancelConfirm.title =取消劇情創作者？
-aetherhaven.plotcreator.cancelConfirm.body =本次會話中的所有進度將會遺失。邊界、預製件匯出和草圖資料都將被丟棄。
-aetherhaven.plotcreator.cancelConfirm.yes =是的，取消
-aetherhaven.plotcreator.cancelConfirm.no =繼續努力
+aetherhaven.plotcreator.cancelConfirm.title=取消劇情創作者？
+aetherhaven.plotcreator.cancelConfirm.body=本次會話中的所有進度將會遺失。邊界、預製件匯出和草圖資料都將被丟棄。
+aetherhaven.plotcreator.cancelConfirm.yes=是的，取消
+aetherhaven.plotcreator.cancelConfirm.no=繼續努力
 
-aetherhaven.plotcreator.button.back =後退
-aetherhaven.plotcreator.button.cancel =取消
-aetherhaven.plotcreator.button.close =關閉
-aetherhaven.plotcreator.button.done =完畢
-aetherhaven.plotcreator.button.next =繼續
+aetherhaven.plotcreator.button.back=後退
+aetherhaven.plotcreator.button.cancel=取消
+aetherhaven.plotcreator.button.close=關閉
+aetherhaven.plotcreator.button.done=完畢
+aetherhaven.plotcreator.button.next=繼續
 
-aetherhaven.plotcreator.step.WELCOME.title =歡迎
-aetherhaven.plotcreator.step.WELCOME.hint =將你建造的東西變成城鎮建築。
+aetherhaven.plotcreator.step.WELCOME.title=歡迎
+aetherhaven.plotcreator.step.WELCOME.hint=將你建造的東西變成城鎮建築。
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =第一彎
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =在建築的一角做個標記。
+aetherhaven.plotcreator.step.CORNER_FIRST.title=第一彎
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=在建築物的一個角落做個標記。
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =對角線
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =標記對角線以確定整個區域。
+aetherhaven.plotcreator.step.CORNER_SECOND.title=對角線
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=標記對角線以確定整個區域。
 
-aetherhaven.plotcreator.step.ANCHOR.title =地塊標誌位置
-aetherhaven.plotcreator.step.ANCHOR.hint =在建築佔地面積的四個外角之一上做記號（X 軸和 Z 軸方向均超出邊界一個方塊）。標記點不得位於建築區域內。
+aetherhaven.plotcreator.step.ANCHOR.title=地塊標誌位置
+aetherhaven.plotcreator.step.ANCHOR.hint=在建築佔地面積的四個外角之一上做記號（X 軸和 Z 軸方向均超出邊界一個方塊）。標記點不得位於建築區域內。
 
-aetherhaven.plotcreator.step.KIND.title =建築類型
-aetherhaven.plotcreator.step.KIND.hint =選擇符合您城鎮規劃的建築類型。若要了解每種類型的具體意義，請開啟城鎮日誌：指南 → 機制 → 地塊創建者工作人員。
-aetherhaven.plotcreator.kind.DECORATION =裝飾
-aetherhaven.plotcreator.kind.VARIANT =另一棟建築的變體
-aetherhaven.plotcreator.kind.HOME =家
-aetherhaven.plotcreator.kind.WORK =工作場所
-aetherhaven.plotcreator.kind.AMENITY =便利設施
-aetherhaven.plotcreator.kind.SHOP =村民商店
-aetherhaven.plotcreator.kind.PLAYER_SHOP =玩家商店
-aetherhaven.plotcreator.kind.INN =客棧
-aetherhaven.plotcreator.kind.TOWN_HALL =市政廳
-aetherhaven.plotcreator.kind.GUILD_HALL =公會大廳
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =旅遊門戶網站
+aetherhaven.plotcreator.step.KIND.title=建築類型
+aetherhaven.plotcreator.step.KIND.hint=選擇符合您城鎮規劃的建築類型。若要了解每種類型的具體意義，請開啟城鎮日誌：指南 → 機制 → 地塊創建者工作人員。
+aetherhaven.plotcreator.kind.DECORATION=裝飾
+aetherhaven.plotcreator.kind.VARIANT=另一棟建築的變體
+aetherhaven.plotcreator.kind.HOME=家
+aetherhaven.plotcreator.kind.WORK=工作場所
+aetherhaven.plotcreator.kind.AMENITY=便利設施
+aetherhaven.plotcreator.kind.SHOP=村民商店
+aetherhaven.plotcreator.kind.PLAYER_SHOP=玩家商店
+aetherhaven.plotcreator.kind.INN=客棧
+aetherhaven.plotcreator.kind.TOWN_HALL=市政廳
+aetherhaven.plotcreator.kind.GUILD_HALL=公會大廳
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=旅遊門戶網站
 
-aetherhaven.plotcreator.step.IDENTITY.title =姓名和ID
-aetherhaven.plotcreator.step.IDENTITY.hint =請輸入顯示名稱、描述和建築 ID。 ID 會根據名稱自動更新，直到您手動編輯 ID 欄位為止。預製件檔案將使用此 ID。
+aetherhaven.plotcreator.step.IDENTITY.title=姓名和ID
+aetherhaven.plotcreator.step.IDENTITY.hint=請輸入顯示名稱、描述和建築 ID。 ID 會根據名稱自動更新，直到您手動編輯 ID 欄位為止。預製件檔案將使用此 ID。
 
-aetherhaven.plotcreator.step.TAGS.title =建築物標籤
-aetherhaven.plotcreator.step.TAGS.hint =新增標籤（以逗號分隔）。例如：便利設施、自然、樂趣。
+aetherhaven.plotcreator.step.TAGS.title=建築物標籤
+aetherhaven.plotcreator.step.TAGS.hint=新增標籤（以逗號分隔）。例如：便利設施、自然、樂趣。
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =保持形狀
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =使用上一步中的建築設置，匯出邊界內的所有內容。
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=保持形狀
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=使用上一步中的建築設置，匯出邊界內的所有內容。
 
-aetherhaven.plotcreator.error.needIdentity =匯出預製件之前，請設定顯示名稱和建築 ID。
+aetherhaven.plotcreator.error.needIdentity=匯出預製件之前，請設定顯示名稱和建築 ID。
 
-aetherhaven.plotcreator.error.selfBuildDays =自建工期必須大於零天。
+aetherhaven.plotcreator.error.selfBuildDays=自建工期必須大於零天。
 
-aetherhaven.plotcreator.error.assemblySections =每軸的組裝段數必須是 1 到 16 之間的整數（1 表示停用分段組裝）。
+aetherhaven.plotcreator.error.assemblySections=每軸的組裝段數必須是 1 到 16 之間的整數（1 表示停用分段組裝）。
 
-aetherhaven.plotcreator.step.VARIANT.title =變體
-aetherhaven.plotcreator.step.VARIANT.hint =選擇此變體屬於哪種主要建築類型。
+aetherhaven.plotcreator.step.VARIANT.title=變體
+aetherhaven.plotcreator.step.VARIANT.hint=選擇此變體屬於哪種主要建築類型。
 
-aetherhaven.plotcreator.step.SUBSTEP.title =重要地點
-aetherhaven.plotcreator.step.SUBSTEP.hint =每個子步驟都會在您的物品欄中新增放置方塊。請在圖案區域內放置或點選所需的方塊和位置。
+aetherhaven.plotcreator.step.SUBSTEP.title=重要地點
+aetherhaven.plotcreator.step.SUBSTEP.hint=每個子步驟都會在您的物品欄中新增放置方塊。請在圖案區域內放置或點選所需的方塊和位置。
 
-aetherhaven.plotcreator.step.MATERIALS.title =建築材料
-aetherhaven.plotcreator.step.MATERIALS.hint =增加玩家建造此地塊所需的物品。物品會在您繼續遊戲時返回您的物品欄。
+aetherhaven.plotcreator.step.MATERIALS.title=建築材料
+aetherhaven.plotcreator.step.MATERIALS.hint=按 F 鍵開啟建築材料選單。預製件填充會增加成本，但不會提供物品。
+aetherhaven.plotcreator.step.MATERIALS.detail=使用加號和減號更改數量。從庫存中新增物品會將數量複製到清單中並返回您的物品。
 
-aetherhaven.plotcreator.step.MATERIALS.detail =僅限此建築使用的虛擬寶箱——不會放置在現實世界中。
+aetherhaven.plotcreator.step.CONFIGURE.title=建築環境
+aetherhaven.plotcreator.step.CONFIGURE.hint=設定金庫黃金成本、自建天數、預製空位、地塊代幣鎖定和組裝部分。
 
-aetherhaven.plotcreator.step.CONFIGURE.title =建築環境
-aetherhaven.plotcreator.step.CONFIGURE.hint =設定金庫黃金成本、自建天數、預製空位、地塊代幣鎖定和組裝部分。
+aetherhaven.plotcreator.step.CONFIGURE.detail=建造地塊時，城鎮金庫會支付金幣。 「自建天數」是指在沒有建築工人的情況下完成地塊建造所需的時間。 「節省空地」控制是否在建造時保留地塊空間以清除方塊。 「地塊代幣鎖定」要求玩家先在地塊製作台解鎖該地塊，然後才能製作代幣。 「組裝區域」將建造區域分割成 N×N×N 的網格（1 = 關閉）。
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =建造地塊時，城鎮金庫會支付金幣。 「自建天數」是指在沒有建築工人的情況下完成地塊建造所需的時間。 「節省空地」控制是否在建造時保留地塊空間以清除方塊。 「地塊代幣鎖定」要求玩家先在地塊製作台解鎖該地塊，然後才能製作代幣。 「組裝區域」將建造區域分割成 N×N×N 的網格（1 = 關閉）。
+aetherhaven.plotcreator.field.selfBuildDays=自建日（遊戲日）
 
-aetherhaven.plotcreator.field.selfBuildDays =自建日（遊戲日）
+aetherhaven.plotcreator.field.saveEmptySpaces=節省預製件中的空餘空間
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=啟用此功能後，建築範圍內的空氣將被保存，並在建築組裝時清除這些方塊。停用此功能後，僅儲存實體方塊，並保留現有地形。編輯器中的空標記總是會清除方塊。
+aetherhaven.plotcreator.field.touristDestination=遊客可以在此停留。
+aetherhaven.plotcreator.field.touristDestination.hint=開放期間，門戶訪客可以在白天步行前往這棟建築。
+aetherhaven.plotcreator.field.plotTokenLocked=預設情況下，繪圖標記已鎖定。
+aetherhaven.plotcreator.field.plotTokenLocked.hint=啟用後，玩家必須先在地塊製作台（使用地塊藍圖）解鎖該地塊，然後才能為其製作地塊代幣。
+aetherhaven.plotcreator.field.assemblySections=每軸裝配部分（1-16）
 
-aetherhaven.plotcreator.field.saveEmptySpaces =節省預製件中的空餘空間
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =啟用此功能後，建築範圍內的空氣將被保存，並在建築組裝時清除這些方塊。停用此功能後，僅儲存實體方塊，並保留現有地形。編輯器中的空標記總是會清除方塊。
-aetherhaven.plotcreator.field.touristDestination =遊客可以在此停留。
-aetherhaven.plotcreator.field.touristDestination.hint =開放期間，門戶訪客可以在白天步行前往這棟建築。
-aetherhaven.plotcreator.field.plotTokenLocked =預設情況下，繪圖標記已鎖定。
-aetherhaven.plotcreator.field.plotTokenLocked.hint =啟用後，玩家必須先在地塊製作台（使用地塊藍圖）解鎖該地塊，然後才能為其製作地塊代幣。
-aetherhaven.plotcreator.field.assemblySections =每軸裝配部分（1-16）
+aetherhaven.plotcreator.step.REVIEW.title=審查
+aetherhaven.plotcreator.step.REVIEW.hint=保留這棟建築。您將獲得一個地塊代幣，可以將其放置在城鎮中。
 
-aetherhaven.plotcreator.step.REVIEW.title =審查
-aetherhaven.plotcreator.step.REVIEW.hint =保留這棟建築。您將獲得一個地塊代幣，可以將其放置在城鎮中。
+aetherhaven.plotcreator.step.DONE.title=完畢
+aetherhaven.plotcreator.step.DONE.hint=你的建築已保存。使用物品欄中的地塊標記將其放置在城鎮中。
 
-aetherhaven.plotcreator.step.DONE.title =完畢
-aetherhaven.plotcreator.step.DONE.hint =你的建築已保存。使用物品欄中的地塊標記將其放置在城鎮中。
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=點擊你放置的城鎮檔案架。
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=點擊您放置的生產儲存空間。
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=點選你放置的金庫方塊。
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=點擊城鎮規劃服務台。
+aetherhaven.plotcreator.substep.WORK_POI=點選工作位置（工作台或桌子）。
+aetherhaven.plotcreator.substep.BARD_WORK_POI=點擊吟遊詩人應該站在任務板旁的位置。
+aetherhaven.plotcreator.substep.SLEEP_POI=點選床位或休息位置。
+aetherhaven.plotcreator.substep.EAT_POI=點擊一家餐廳。
+aetherhaven.plotcreator.substep.FUN_POI=點擊一個有趣的地方（可以坐的長椅）。
+aetherhaven.plotcreator.substep.SHOP_SPOT=從庫存中放置商店攤位，確認每個設置，然後使用地塊創建器點擊每個攤位。
+aetherhaven.plotcreator.substep.SHOP_POI=點擊商店櫃檯工作區。
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=點擊指示訪客應該站在商店前的位置。
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=從物品欄放置傳送門平台，然後用地塊創建器點擊它。
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=點擊旅館老闆應該站立的位置。
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=點擊每位旅館客人應該站立的位置（共兩個位置）。右鍵點擊青色標記即可移除。
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=點擊公會會長應該站立的位置。
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=點擊冒險者刷新點。右鍵點擊紫色標記即可移除。
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =點擊你放置的城鎮檔案架。
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =點擊您放置的生產儲存空間。
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =點選你放置的金庫方塊。
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =點擊城鎮規劃服務台。
-aetherhaven.plotcreator.substep.WORK_POI =點選工作位置（工作台或桌子）。
-aetherhaven.plotcreator.substep.BARD_WORK_POI =點擊吟遊詩人應該站在任務板旁的位置。
-aetherhaven.plotcreator.substep.SLEEP_POI =點選床位或休息位置。
-aetherhaven.plotcreator.substep.EAT_POI =點擊一家餐廳。
-aetherhaven.plotcreator.substep.FUN_POI =點擊一個有趣的地方（可以坐的長椅）。
-aetherhaven.plotcreator.substep.SHOP_SPOT =從庫存中放置商店攤位，確認每個設置，然後使用地塊創建器點擊每個攤位。
-aetherhaven.plotcreator.substep.SHOP_POI =點擊商店櫃檯工作區。
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =點擊指示訪客應該站在商店前的位置。
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =從物品欄放置傳送門平台，然後用地塊創建器點擊它。
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =點擊旅館老闆應該站立的位置。
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =點擊每位旅館客人應該站立的位置（共兩個位置）。右鍵點擊青色標記即可移除。
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =點擊公會會長應該站立的位置。
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =點擊冒險者刷新點。右鍵點擊紫色標記即可移除。
+aetherhaven.plotcreator.success.saved=建築已保存為{id}。您已獲得地塊令牌。
+aetherhaven.plotcreator.success.registered=建築物已儲存為 {id}，並在您所在城鎮您標記的位置註冊（已完成 - 無地塊標誌）。
+aetherhaven.plotcreator.success.savedTokenFallback=建築文件已儲存為{id}。無法將其連結到您遊戲中的城鎮；請使用地塊令牌放置它。
 
-aetherhaven.plotcreator.success.saved =建築已保存為{id}。您已獲得地塊令牌。
-aetherhaven.plotcreator.success.registered =建築物已儲存為 {id}，並在您所在城鎮您標記的位置註冊（已完成 - 無地塊標誌）。
-aetherhaven.plotcreator.success.savedTokenFallback =建築文件已儲存為{id}。無法將其連結到您遊戲中的城鎮；請使用地塊令牌放置它。
+aetherhaven.plotcreator.error.noTown=先放置城鎮憲章，然後在該城鎮內完成地塊創建器。
+aetherhaven.plotcreator.error.signBlocked=無法將地塊標誌放置在您標記的位置。建築文件已儲存；如有需要，請使用地塊標記。
+aetherhaven.plotcreator.error.unknownConstruction=保存後建築定義遺失。請嘗試重新載入伺服器。
 
-aetherhaven.plotcreator.error.noTown =先放置城鎮憲章，然後在該城鎮內完成地塊創建器。
-aetherhaven.plotcreator.error.signBlocked =無法將地塊標誌放置在您標記的位置。建築文件已儲存；如有需要，請使用地塊標記。
-aetherhaven.plotcreator.error.unknownConstruction =保存後建築定義遺失。請嘗試重新載入伺服器。
-
-aetherhaven.plottoken.error.unknownBuilding =未知建築物 ID：{id}
-aetherhaven.plottoken.gave =給予 {amount} 地塊標記 {name}。
-aetherhaven.plottoken.list.empty =未找到建築物。
-aetherhaven.plottoken.list.header =建築物編號：
+aetherhaven.plottoken.error.unknownBuilding=未知建築物 ID：{id}
+aetherhaven.plottoken.gave=給予 {amount} 地塊標記 {name}。
+aetherhaven.plottoken.unlock.success =您在工作台解鎖了{name}地塊。
+aetherhaven.plottoken.unlock.alreadyKnown =你已經解鎖了{name}地塊。
+aetherhaven.plottoken.unlock.notLockable =那棟大樓不需要解鎖。
+aetherhaven.plottoken.unlockall.success =在工作台解鎖{count}地塊。
+aetherhaven.plottoken.unlockall.noneLeft =你已經解鎖了所有地塊。
+aetherhaven.plottoken.list.empty=未找到建築物。
+aetherhaven.plottoken.list.header=建築物編號：

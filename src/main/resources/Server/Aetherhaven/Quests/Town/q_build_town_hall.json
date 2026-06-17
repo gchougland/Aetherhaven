@@ -6,24 +6,29 @@
   "title": "Raise The Town Hall",
   "description": "Lyren wants a hall that belongs to everyone: records, plans, and the treasury under one roof.",
   "prerequisites": {
-    "completedQuestIds": ["q_build_inn"],
+    "completedQuestIds": [
+      "q_build_inn"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the town hall plot token from Lyren."
+      "text": "Take the town hall plot token from Lyren.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.token"
     },
     {
       "id": "place_build",
       "kind": "journal",
-      "text": "Stake and build the town hall prefab."
+      "text": "Stake and build the town hall prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.place_build"
     },
     {
       "id": "tell_elder",
       "kind": "journal",
-      "text": "Tell Lyren in person when construction is complete."
+      "text": "Tell Lyren in person when construction is complete.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.tell_elder"
     }
   ],
   "rewards": [
@@ -43,9 +48,16 @@
   "lifecycle": {
     "onStart": [],
     "onComplete": [
-      { "effect": "refresh_inn_pool", "params": {} }
+      {
+        "effect": "refresh_inn_pool",
+        "params": {}
+      }
     ],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.description"
 }

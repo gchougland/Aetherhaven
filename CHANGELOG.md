@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.2] - 6/15/2026
+
+### Added
+
+- **New shops to plot creator variants** The bomb, flower, and crystal shops didn't have options for variant in the plot creator staff. Now they do.
+- **Plot Unlock Commands** Added commands to unlock specific tokens and a one to unlock all tokens.
+- **Journal/Guide Translation** Added translations for all the guide pages and missing parts of journal UI.
+
+### Fixed
+
+- **Building Height Issue** Fixed issue where building was not building at the correct height.
+- **Plot Creator Entities** Fixed issue where plot creator wouldn't save item entities placed with the entity tool.
+- **Missing Townsfolk Portrait** Added missing portraits for the two newest townsfolk.
+- **Shop plot relocation** Moving a shop plot from the town records shelf no longer leaves floating shop spot item displays at the old site.
+- **Guard Hiring Bug** A blank dialogue would show after hiring a guard, this is fixed now.
+- **Production Upgrade Requirements** The text for production upgrade materials only said "Bars" instead of what type of bars.
+
 ## [2.0.1] - 6/15/2026
 
 ### Added

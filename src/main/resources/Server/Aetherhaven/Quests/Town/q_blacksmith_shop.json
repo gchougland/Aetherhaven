@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the blacksmith shop plot token from Garren."
+      "text": "Take the blacksmith shop plot token from Garren.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the blacksmith shop prefab."
+      "text": "Stake and build the blacksmith shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Garren at the weapon bench and close the quest in dialogue."
+      "text": "Find Garren at the weapon bench and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.description"
 }

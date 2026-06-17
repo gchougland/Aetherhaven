@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -32,6 +33,7 @@ public final class ShopSpotExtractor {
     ) {
         PlotFootprintRecord fp = plot.toFootprint();
         ShopSpotRegistry registry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
         int activated = 0;
         WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
         long epochDay = wtr != null ? wtr.getGameDateTime().toLocalDate().toEpochDay() : Long.MIN_VALUE;
@@ -52,10 +54,25 @@ public final class ShopSpotExtractor {
                             continue;
                         }
                     }
-                    activated += activateSpot(world, plugin, store, registry, town, plotId, pos, blockComp, epochDay);
+                    activated +=
+                        activateSpot(
+                            world,
+                            plugin,
+                            store,
+                            registry,
+                            town,
+                            plotId,
+                            plot,
+                            def,
+                            pos,
+                            blockComp,
+                            epochDay
+                        );
                 }
             }
         }
+
+        ShopSpotPlotRelocation.finishPlotMove(plotId);
 
         if (activated > 0) {
             ShopSpotPersistence.save(world, plugin, registry);
@@ -70,6 +87,8 @@ public final class ShopSpotExtractor {
         @Nonnull ShopSpotRegistry registry,
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
+        @Nonnull PlotInstance plot,
+        @Nullable ConstructionDefinition def,
         @Nonnull Vector3i pos,
         @Nullable ShopSpotBlock blockComp,
         long epochDay
@@ -80,22 +99,27 @@ public final class ShopSpotExtractor {
             registry.remove(existing.getSpotId());
         }
 
-        UUID spotId = UUID.randomUUID();
-        ShopSpotRecord record = new ShopSpotRecord();
-        record.setSpotId(spotId);
+        ShopSpotRecord record =
+            def != null ? ShopSpotPlotRelocation.takeDetached(plotId, pos, plot, def) : null;
+        if (record == null) {
+            record = new ShopSpotRecord();
+            record.setSpotId(UUID.randomUUID());
+            record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
+            if (blockComp != null && blockComp.isConfigured()) {
+                blockComp.applyToRecord(record);
+            }
+            if (!record.isPlayerControlled()) {
+                ShopSpotDailyRerollService.initialRollIfNeeded(record, plugin, epochDay);
+            }
+        } else {
+            record.setDisplayEntityUuid(null);
+            record.setListingDisplaySignature(null);
+            record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
+        }
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);
         record.setTownId(town.getTownId());
         record.setPlotId(plotId);
-        record.setDisplayYawRadians(ShopSpotDisplayRotation.yawFromBlockAt(world, pos));
-
-        if (blockComp != null && blockComp.isConfigured()) {
-            blockComp.applyToRecord(record);
-        }
-
-        if (!record.isPlayerControlled()) {
-            ShopSpotDailyRerollService.initialRollIfNeeded(record, plugin, epochDay);
-        }
 
         registry.put(record);
         ShopSpotBlockUtil.syncConfigToBlock(world, pos, record);

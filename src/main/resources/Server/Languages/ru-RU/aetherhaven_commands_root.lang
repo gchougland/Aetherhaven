@@ -2,18 +2,18 @@
 # Bundle: /aetherhaven reload, starter kit, export skin
 
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
-commands.aetherhaven.root.desc=Команды мода Aetherhaven
+commands.aetherhaven.root.desc=Этерхейвен повелевает (/ах)
 commands.aetherhaven.difficulty.desc=Творческий режим: открытый мир, сложность строительства зависит от стоимости построек.
-commands.aetherhaven.reload.desc=Перезагрузка файла config.json и JSON-каталогов Aetherhaven с диска (в творческом режиме)
+commands.aetherhaven.reload.desc=Творческий режим: перезагрузка конфигурации и данных мода с диска.
 commands.aetherhaven.reload.success=Конфигурационные каталоги и каталоги ресурсов Aetherhaven перезагружены.
 commands.aetherhaven.reload.failure=Перезагрузка не удалась: {detail}
 commands.aetherhaven.reload.noPlugin=Плагин Aetherhaven не загружен.
-commands.aetherhaven.starterkit.desc=Приобретите себе стартовый набор Aetherhaven (персонал для размещения участков, устав, отдел городского планирования, персонал для строительства; творческий режим).
+commands.aetherhaven.starterkit.desc=Творческий подход: соберите себе стартовый набор (сотрудники по организации стажировок, устав, отдел планирования, персонал по строительству).
 commands.aetherhaven.starterkit.success=Стартовый набор добавлен в ваш инвентарь.
 commands.aetherhaven.starterkit.partial=Стартовый набор предоставлен частично; предмет(ы) {failed} не поместились (освободите место в инвентаре).
 
-commands.aetherhaven.exportskin.desc=Экспортируйте скин вашего аватара в формате JSON модели (Родитель: Игрок)
-commands.aetherhaven.exportskin.other.desc=Экспорт скина аватара другого игрока в формате JSON модели.
+commands.aetherhaven.exportskin.desc=Творческий режим: экспортируйте скин своего аватара в виде файла модели.
+commands.aetherhaven.exportskin.other.desc=Творческий режим: экспорт скина аватара другого игрока.
 commands.aetherhaven.exportskin.arg.path=Необязательный путь к выходному файлу (по умолчанию: plugin data/avatar_exports/)
 commands.aetherhaven.exportskin.noSkin=Для этого игрока нет доступного скина персонажа.
 commands.aetherhaven.exportskin.invalidSkin=Проверка кожи не удалась: {detail}

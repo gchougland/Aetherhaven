@@ -6,7 +6,7 @@ aetherhaven.dialogue.aetherhaven_guard.main_hub.leave=До свидания
 
 aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=Я присоединился к вашему городу, но до сих пор сплю под открытым небом. Не могли бы вы построить мне дом и написать мое имя на табличке?
 aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=Я построю тебе дом
-aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Возможно, позже
+aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=Возможно, позже.
 
 aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=Спасибо. Застолбейте участок под дом, закончите строительство, а потом выберите меня в качестве адреса для таблички с названием дома. Приходите, когда я буду там жить.
 aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Сделаю

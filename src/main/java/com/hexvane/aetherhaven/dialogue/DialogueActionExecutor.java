@@ -917,7 +917,7 @@ public final class DialogueActionExecutor {
             return;
         }
         if (GuardHireService.tryHire(world, plugin, town, tm, playerRef, npcRef, store)) {
-            out.setGotoNodeId("hire_done");
+            out.setCloseDialogue(true);
         } else {
             out.setGotoNodeId("hire_confirm");
         }

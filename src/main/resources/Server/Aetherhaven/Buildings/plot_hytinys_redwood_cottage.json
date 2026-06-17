@@ -13,23 +13,60 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 50,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 1100 },
-    { "resourceTypeId": "Rock", "count": 330 },
-    { "itemId": "Bench_Armour", "count": 1 },
-    { "itemId": "Bench_Builders", "count": 1 },
-    { "itemId": "Bench_Campfire", "count": 1 },
-    { "itemId": "Bench_Cooking", "count": 1 },
-    { "itemId": "Bench_Farming", "count": 1 },
-    { "itemId": "Bench_Furnace", "count": 1 },
-    { "itemId": "Bench_Furniture", "count": 2 },
-    { "itemId": "Bench_Lumbermill", "count": 1 },
-    { "itemId": "Bench_Weapon", "count": 1 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 1100
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 330
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Campfire",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furniture",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Lumbermill",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "tags": [
     "decoration"
   ],
   "plotTokenLockedByDefault": true,
   "excludeFromTownJournal": true,
-  "decorationPlot": true
+  "decorationPlot": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_redwood_cottage.displayName"
 }

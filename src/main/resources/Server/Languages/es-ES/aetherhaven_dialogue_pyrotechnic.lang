@@ -1,10 +1,10 @@
 # Pyrotechnic dialogue (Grubble Sparkmatch)
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=¡Ja! ¡Reventaste la bolsa pegajosa! Grubble estuvo atrapado ahí para siempre. ¿Tu pueblo tiene una posada? Bien. Quizás Grubble la visite cuando quiera comida caliente y un banco seco.
 aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Cuidarse.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Si Grubble necesita hablar de trabajo, de la casa o de la burbuja, dígalo antes de que se le ocurran ideas.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=¿Gran auge hoy? ¿Pequeño auge? Grubble tiene ambos.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=No estornudes cerca del estante de polvos. Grubble aprendió la lección.
@@ -30,7 +30,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble no 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Le abriremos una tienda a Grubble.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Ahora mismo no. Grubble espera.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Toma la página del plano. Aprende en el mostrador de planificación urbana. Crea una ficha. Construye una tienda donde la gente pueda encontrarla sin perderse ni volar por los aires accidentalmente. Grubble espera en la posada. El polvo permanece en la bolsa hasta que las paredes sean gruesas.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Nos vemos cuando pongan el letrero.
 
@@ -39,7 +39,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=¿Aún no est
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Grubble, necesito abandonar la misión por ahora.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Sigo trabajando en ello. Grubble, seguiré adelante.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=¿Hoy no hay tienda? De acuerdo. Grubble guarda bombas en la bolsa y sueña con estanterías. Hablamos de nuevo si cambias de opinión.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=De acuerdo. Grubble, nos vemos.
 
@@ -52,11 +52,11 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Incluso el
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Grubble, te reservaré una casa.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Otra vez.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Cuando las paredes sean reales, pon el nombre de Grubble en el bloque interior como dice el estatuto. Luego ven y cuéntaselo a Grubble en voz alta. Grubble quiere oírlo, no adivinarlo.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Grubble se enterará por mí.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.body=Tómate tu tiempo con el marco. Cuando la casa esté lista, escribe Grubble en el estante interior y luego regresa. Grubble no tiene prisa. Solo quiere que su nombre esté en la pared.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.c0=Comprendido.
 

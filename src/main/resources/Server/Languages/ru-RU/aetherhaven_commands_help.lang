@@ -2,89 +2,89 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=Отладка: Список всех городов в текущем мире
+commands.aetherhaven.towns.desc=Отладка: вывести список всех городов этого мира
 
 commands.aetherhaven.replace_charter.desc=Верните блок, соответствующий уставу вашего города, на сохраненное место.
 commands.aetherhaven.replace_charter.townName.desc=Дополнительно: название города (полное название с пробелами)
 
-commands.aetherhaven.town.desc=Членство в городском совете: приглашение, роли, выход
+commands.aetherhaven.town.desc=Члены города: пригласить, принять, роли, покинуть
 commands.aetherhaven.town.invite.desc=Пригласите онлайн-игрока в свой город.
 commands.aetherhaven.town.invite.player.desc=Имя пользователя игрока (должен быть в сети)
 commands.aetherhaven.town.accept.desc=Принять ожидающее приглашение в город
 commands.aetherhaven.town.decline.desc=Отклонить ожидающее приглашение в город
 commands.aetherhaven.town.kick.desc=Удалите члена сообщества из вашего города
 commands.aetherhaven.town.kick.player.desc=Имя пользователя участника (должно быть подключено к сети)
-commands.aetherhaven.town.role.desc=Примените предустановленные права доступа к участнику (СТРОИТЕЛЬСТВО, ЗАДАНИЕ или ОБА). Используйте вкладку «Игроки» в блоке управления для настройки прав доступа по каждому флагу.
+commands.aetherhaven.town.role.desc=Выберите роль участника: СТРОИТЕЛЬСТВО, ЗАДАНИЕ или ОБЕ.
 commands.aetherhaven.town.role.player.desc=Имя пользователя участника (должно быть подключено к сети)
 commands.aetherhaven.town.role.role.desc=СТРОИТЕЛЬСТВО, ВЫПОЛНЕНИЕ ЗАДАНИЙ или И ТО И ДРУГОЕ
-commands.aetherhaven.town.leave.desc=Покинуть город, членом которого вы являетесь (а не владельцем).
-commands.aetherhaven.town.townName.desc=Необязательное название города для отображения; используйте полное название, включая пробелы (остальная часть строки). Опустите, если у вас только одно ожидающее приглашение.
+commands.aetherhaven.town.leave.desc=Покинь город, к которому ты принадлежишь (не как основатель).
+commands.aetherhaven.town.townName.desc=Название города (полное название с пробелами) необязательно. Пропустите этот шаг, если у вас только одно приглашение.
 
-commands.aetherhaven.poi.desc=Отладка: вспомогательный инструмент для Точек Интереса
-commands.aetherhaven.poi.list.desc=Список всех Точек Интереса города
-commands.aetherhaven.poi.town.desc=Введите id города или игрока. Или ничего (для своего города)
-commands.aetherhaven.poi.dump.desc=Перечислить все Точки Интереса для данного мира
+commands.aetherhaven.poi.desc=Отладка: вспомогательные средства для точек интереса
+commands.aetherhaven.poi.list.desc=Список объектов интереса (POI) для города
+commands.aetherhaven.poi.town.desc=Идентификатор города, me или опустите для вашего города
+commands.aetherhaven.poi.dump.desc=Перечислите все достопримечательности в этом мире.
 
-commands.aetherhaven.plots.desc=Отладка: вспомогательные функции для участка (в креативе - finishassembly / remove)
-commands.aetherhaven.plots.list.desc=Отладка: Список строящихся участков вашего города
-commands.aetherhaven.plots.finishassembly.desc=Креатив: закончить каждую недостроенную постройку в городе
-commands.aetherhaven.plots.remove.desc=Креатив: удалить один участок из города
-commands.aetherhaven.plots.remove.plotId.desc=Id участка из списка
+commands.aetherhaven.plots.desc=Отладка: вспомогательные функции для построения экземпляров графиков (креативные функции: finishassembly, remove)
+commands.aetherhaven.plots.list.desc=Отладка: список строительных участков в вашем городе
+commands.aetherhaven.plots.finishassembly.desc=Творческий режим: завершите все строящиеся здания в вашем городе.
+commands.aetherhaven.plots.remove.desc=Творческий режим: уберите один участок из своего города.
+commands.aetherhaven.plots.remove.plotId.desc=Идентификатор участка из списка участков
 
-commands.aetherhaven.needs.desc=Отладка: потребности жителей деревни
-commands.aetherhaven.needs.inspect.desc=Список объектов в загруженных чанках, имеющих потребность в жителях (VillagerNeeds).
-commands.aetherhaven.needs.set.desc=Установите значение счетчика потребностей от 0 до 100 (цель: обработчик из inspect, Elder или uuid).
-commands.aetherhaven.needs.target.desc=Идентификатор (например, Villager_Elder_xxxxxxxx), Elder или UUID сущности.
-commands.aetherhaven.needs.entity.desc=Устарело; используйте target (handle, Elder или uuid)
+commands.aetherhaven.needs.desc=Отладка: жителю деревни нужны счетчики
+commands.aetherhaven.needs.inspect.desc=Отладка: список жителей деревни с расположенными поблизости счетчиками потребности
+commands.aetherhaven.needs.set.desc=Отладка: установите уровень голода, энергии или уровень развлечений для жителя деревни.
+commands.aetherhaven.needs.target.desc=Имя пользователя жителя деревни, идентификатор старейшины или идентификатор сущности.
+commands.aetherhaven.needs.entity.desc=Устарело; используйте target
 commands.aetherhaven.needs.which.desc=голод, энергия или веселье
-commands.aetherhaven.needs.value.desc=Значение от 0 до 100 (100 = полностью удовлетворен)
+commands.aetherhaven.needs.value.desc=От 0 до 100 (100 — полный объем)
 
-commands.aetherhaven.tax.desc=Отладка: утренний налоговый отчет казначейства
-commands.aetherhaven.tax.breakdown.desc=Отобразить строки и итоговые суммы налогов для каждого жителя вашего города (только в загруженных фрагментах).
-commands.aetherhaven.tax.now.desc=Утреннюю десятину следует перечислить в казну сейчас (это позволяет избежать утреннего времени и последнего дня сбора).
+commands.aetherhaven.tax.desc=Отладка: утренний налог казначейства
+commands.aetherhaven.tax.breakdown.desc=Отладка: отобразить налоговые строки для вашего города
+commands.aetherhaven.tax.now.desc=Отладка: немедленно взимайте утренний налог.
 
 commands.aetherhaven.quest.desc=Отладка: помощники в выполнении заданий в городе
-commands.aetherhaven.questdebug.desc=Отладка: обход городского квеста
-commands.aetherhaven.questdebug.grant.desc=Отметьте задание как активное в вашем городе
-commands.aetherhaven.questdebug.complete.desc=Отметьте завершение задания в вашем городе.
-commands.aetherhaven.questdebug.clear.desc=Удалить задание из списка активных заданий в вашем городе
+commands.aetherhaven.questdebug.desc=Отладка: помощники в выполнении заданий в городе
+commands.aetherhaven.questdebug.grant.desc=Отладка: отметьте задание как активное в вашем городе
+commands.aetherhaven.questdebug.complete.desc=Отладка: отметьте задание как выполненное в вашем городе
+commands.aetherhaven.questdebug.clear.desc=Отладка: удалить задание из списка активных заданий вашего города.
 commands.aetherhaven.questdebug.id.desc=Идентификатор задания (по умолчанию q_build_inn)
-commands.aetherhaven.questdebug.status.desc=Отображение активных и выполненных заданий для вашего города (название + ID).
+commands.aetherhaven.questdebug.status.desc=Отладка: отображение активных и выполненных заданий для вашего города
 
-commands.aetherhaven.reputation.desc=Отладка: репутация
-commands.aetherhaven.reputation.set.desc=Повышайте свою репутацию у жителя деревни и ставьте в очередь награды за пройденные этапы для диалога.
-commands.aetherhaven.reputation.villagerUuid.desc=UUID сущности NPC-жителя
-commands.aetherhaven.reputation.villagerTarget.desc=UUID сущности жителя деревни или идентификатор роли NPC в вашем городе (например, Aetherhaven_Blacksmith).
+commands.aetherhaven.reputation.desc=Отладка: репутация жителя деревни
+commands.aetherhaven.reputation.set.desc=Отладка: установить репутацию с жителем деревни
+commands.aetherhaven.reputation.villagerUuid.desc=Идентификатор сущности жителя деревни
+commands.aetherhaven.reputation.villagerTarget.desc=Идентификатор сущности или роли жителя вашего города.
 commands.aetherhaven.reputation.value.desc=Репутация от 0 до 100
-commands.aetherhaven.reputation.reward.desc=Перечислите определения этапов или предоставьте одну награду напрямую.
-commands.aetherhaven.reputation.reward.list.desc=Список этапов повышения репутации (необязательно: фильтр по идентификатору роли NPC)
-commands.aetherhaven.reputation.reward.roleFilter.desc=Идентификатор роли NPC (например, Aetherhaven_Merchant) для фильтрации списка.
-commands.aetherhaven.reputation.reward.grant.desc=Выдайте одну награду за достижение определенного этапа (заработанные баллы); используйте список наград за репутацию для получения идентификаторов.
-commands.aetherhaven.reputation.rewardId.desc=Идентификатор награды за репутацию (например, rep_merchant_50)
+commands.aetherhaven.reputation.reward.desc=Отладка: отображение списка или предоставление наград за репутацию.
+commands.aetherhaven.reputation.reward.list.desc=Отладка: список наград за достижение определенных уровней репутации
+commands.aetherhaven.reputation.reward.roleFilter.desc=Необязательный идентификатор роли для фильтрации списка.
+commands.aetherhaven.reputation.reward.grant.desc=Отладка: выдать одну награду за репутацию сейчас
+commands.aetherhaven.reputation.rewardId.desc=Идентификатор вознаграждения (например, rep_merchant_50)
 
 commands.aetherhaven.villager.desc=Отладка: помощники жителей города
-commands.aetherhaven.villager.list.desc=Список UUID сущностей NPC-жителей города и деревни (для команд репутации / поиска).
-commands.aetherhaven.villager.locate.desc=Вывести координаты жителя города; телепортация (только для операторов) по желанию.
-commands.aetherhaven.villager.uuid.desc=UUID сущности NPC-жителя
-commands.aetherhaven.villager.target.desc=UUID сущности жителя деревни или идентификатор роли NPC в вашем городе (например, Aetherhaven_Merchant)
-commands.aetherhaven.villager.teleport.desc=Используйте значение true для телепортации к жителю деревни (только для операторов); или используйте --tp вместо этого.
-commands.aetherhaven.villager.tp_flag.desc=Телепортироваться к жителю деревни (только для операторов; то же самое, что и при прохождении через точку истина)
-commands.aetherhaven.villager.reset.desc=Удалите всех NPC-жителей города и создайте их заново рядом с вами (отладка; сохраняет квесты, репутацию, подарки; запускает ремонт бассейна в гостинице, чтобы привести жителей в соответствие с завершенными зданиями; обновляет бассейн посетителей гостиницы).
+commands.aetherhaven.villager.list.desc=Отладка: список идентификаторов жителей вашего города
+commands.aetherhaven.villager.locate.desc=Отладка: показать местоположение жителя деревни (опционально телепортация)
+commands.aetherhaven.villager.uuid.desc=Идентификатор сущности жителя деревни
+commands.aetherhaven.villager.target.desc=Идентификатор сущности или роли жителя вашего города.
+commands.aetherhaven.villager.teleport.desc=true для телепортации к жителю деревни (только для операторов)
+commands.aetherhaven.villager.tp_flag.desc=Телепортация к жителю деревни (только для операторов)
+commands.aetherhaven.villager.reset.desc=Отладка: перезапустите всех жителей города рядом с вами.
 commands.aetherhaven.villager.fixinn.desc=Отладка: исправить бассейн для посетителей гостиницы в вашем городе.
 aetherhaven.villager.resetDone=Жители города были перезагружены и появились снова рядом с вами.
 aetherhaven.villager.resetFailed=Не удалось сбросить жителей города: {reason}
-commands.aetherhaven.gift.desc=Отладка: сброс лимитов подарков или заполнение истории подарков (предварительный просмотр)
-commands.aetherhaven.gift.resetLimits.desc=Сбросить ежедневные/еженедельные лимиты подарков для всех игроков и всех жителей каждого города в этом мире.
-commands.aetherhaven.gift.fillHistory.desc=Добавьте по одной строке в лог для каждого предмета, который вам нравится/нравится/не нравится, для роли (вашего города), чтобы история подарков содержала какую-то информацию (для отладки).
-commands.aetherhaven.gift.roleId.desc=Идентификатор роли NPC (например, Aetherhaven_Merchant)
+commands.aetherhaven.gift.desc=Отладка: вспомогательные функции для ограничения количества подарков и истории.
+commands.aetherhaven.gift.resetLimits.desc=Отладка: сброс лимитов на подарки для всех пользователей в этом мире.
+commands.aetherhaven.gift.fillHistory.desc=Отладка: заполнение истории подарков для роли жителя деревни.
+commands.aetherhaven.gift.roleId.desc=Идентификатор роли жителя деревни (например, Aetherhaven_Merchant)
 
 commands.aetherhaven.debug_autonomy.desc=Отладка: наложение автономии жителей деревни
-commands.aetherhaven.debug_autonomy.toggle.desc=Включите отладку автономности для жителя города (посмотрите на NPC или используйте --ray).
-commands.aetherhaven.debug_autonomy.show.desc=Показать, включена ли отладка автономности для этого жителя деревни.
-commands.aetherhaven.debug_autonomy.clear.desc=Очистить отладку автономии Этерхейвена для этого жителя деревни.
+commands.aetherhaven.debug_autonomy.toggle.desc=Отладка: включить/выключить отладку автономности для жителя деревни.
+commands.aetherhaven.debug_autonomy.show.desc=Отладка: показать состояние отладки автономности
+commands.aetherhaven.debug_autonomy.clear.desc=Отладка: очистка автономии для жителя деревни.
 
-commands.aetherhaven.debug_lootchest.desc=Отладка: Бонусные броски сундука Этерхейвена для целевого контейнера.
-commands.aetherhaven.debug_lootchest.fill.desc=Примените принудительные броски кубиков для получения украшений, золота и сюжетных жетонов к контейнеру с предметом, который вы просматриваете.
+commands.aetherhaven.debug_lootchest.desc=Отладка: броски бонуса на сундук.
+commands.aetherhaven.debug_lootchest.fill.desc=Debug: force bonus loot on the chest you are looking at
 
 commands.aetherhaven.floatinggift.desc=Помощники для плавающих подарочных воздушных шаров
 commands.aetherhaven.floatinggift.spawn.desc=Отладка: создайте плавающий подарок в вашей позиции.
@@ -113,7 +113,7 @@ commands.aetherhaven.townsfolk.assignmentKind.desc=бездельник, тур�
 commands.aetherhaven.townsfolk.despawn.desc=Также удалите созданный объект из мира.
 commands.aetherhaven.townsfolk.spawn.ok=Появились жители города {id} ({assignment})
 commands.aetherhaven.townsfolk.spawn.failed=Не удалось создать жителей города (неизвестный идентификатор, уже используется, нет совпадения в пуле или создание не удалось).
-commands.aetherhaven.townsfolk.release.ok=Выпущен обратно в бассейн {id}
+commands.aetherhaven.townsfolk.release.ok=Выпущен обратно в бассейн
 commands.aetherhaven.townsfolk.release.notCheckedOut=Этот персонаж не проверен в этом мире.
 commands.aetherhaven.townsfolk.list.available=Доступно для {assignment}: {ids}
 commands.aetherhaven.townsfolk.list.availableIdle=Доступно для режима ожидания: {ids}
@@ -141,8 +141,11 @@ commands.aetherhaven.plotcreator.generateicon.desc=Сгенерируйте PNG-
 commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Идентификатор здания (plot_my_house) или ключ префаба (Guild_Hall.prefab.json)
 commands.aetherhaven.plotcreator.generateicon.outputId=Идентификатор выходного файла значка (по умолчанию — идентификатор здания или название префаба).
 
-commands.aetherhaven.plottoken.desc=Выдать и перечислить жетоны участков для зданий.
+commands.aetherhaven.plottoken.desc=Выдавать, разблокировать и отображать жетоны участков для зданий.
 commands.aetherhaven.plottoken.give.desc=Укажите токен участка для идентификатора здания.
 commands.aetherhaven.plottoken.give.constructionId=Идентификатор здания (например: plot_park)
 commands.aetherhaven.plottoken.give.amount=Размер стека (по умолчанию 1)
+commands.aetherhaven.plottoken.unlock.desc=Разблокируйте стиль оформления сюжета на верстаке.
+commands.aetherhaven.plottoken.unlock.constructionId=Идентификатор здания (например: plot_park)
+commands.aetherhaven.plottoken.unlockall.desc=Разблокируйте все стили сюжета на верстаке.
 commands.aetherhaven.plottoken.list.desc=Перечислите все идентификаторы зданий.

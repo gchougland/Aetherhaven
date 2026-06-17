@@ -26,8 +26,14 @@
       "itemId": "Ingredient_Crystal_Blue",
       "count": 10
     },
-    { "resourceTypeId": "Wood_All", "count": 360 },
-    { "resourceTypeId": "Rock", "count": 130 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 360
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 130
+    }
   ],
   "pois": [
     {
@@ -98,5 +104,6 @@
     "work",
     "crystals"
   ],
-  "touristDestination": true
+  "touristDestination": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_crystal_keepers_shop.displayName"
 }

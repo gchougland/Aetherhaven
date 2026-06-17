@@ -63,6 +63,17 @@ public final class ShopSpotRegistry {
         return new ArrayList<>(byId.values());
     }
 
+    @Nonnull
+    public List<ShopSpotRecord> listForPlot(@Nonnull UUID plotId) {
+        List<ShopSpotRecord> out = new ArrayList<>();
+        for (ShopSpotRecord r : byId.values()) {
+            if (plotId.equals(r.getPlotId())) {
+                out.add(r);
+            }
+        }
+        return out;
+    }
+
     /** Player controlled listings with stock on a plot. */
     @Nonnull
     public List<ShopSpotRecord> listPlayerListingsOnPlot(@Nonnull UUID plotId) {

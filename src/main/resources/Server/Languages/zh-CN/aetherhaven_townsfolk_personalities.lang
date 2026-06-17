@@ -37,7 +37,7 @@ aetherhaven.townsfolk.personality.homebody.greeting.4=你好。我家里的热�
 aetherhaven.townsfolk.personality.homebody.greeting.5=你好。我一切都好，但我家里的椅子好像知道我的名字。
 
 aetherhaven.townsfolk.personality.sporty.greeting.1=嘿！我正准备去跑步，要不要一起？
-aetherhaven.townsfolk.personality.sporty.greeting.2=你好！我尽量保持身体灵活。现在快速拉伸一下可以避免以后出现问题。
+aetherhaven.townsfolk.personality.sporty.greeting.2=你好！我尽量保持身体灵活。现在做个简单的拉伸运动，可以避免以后出现问题。
 aetherhaven.townsfolk.personality.sporty.greeting.3=你好。我一直保持运动，这让我心情很好。
 aetherhaven.townsfolk.personality.sporty.greeting.4=哦，你好！我刚才在心里数步数呢。老习惯了。
 aetherhaven.townsfolk.personality.sporty.greeting.5=嘿！如果你需要有人带你快速到达下一个弯道，我就是你要找的人。
@@ -103,11 +103,11 @@ aetherhaven.townsfolk.personality.grumpy.greeting.5=嘿，长话短说，我们�
 aetherhaven.townsfolk.personality.rude.greeting.1=你挡路了，让开。
 aetherhaven.townsfolk.personality.rude.greeting.2=我没时间闲聊，也没时间长谈，总之，任何谈话我都不想谈。
 aetherhaven.townsfolk.personality.rude.greeting.3=你想要什么？快点说。
-aetherhaven.townsfolk.personality.rude.greeting.4=我当时正忙着无视别人，你打断了我的好事。
+aetherhaven.townsfolk.personality.rude.greeting.4=我当时正忙着无视别人，你打断了我的计划。
 aetherhaven.townsfolk.personality.rude.greeting.5=你好。不，我并不高兴见到你。请找个更友善的人吧。
 
 aetherhaven.townsfolk.personality.gloomy.greeting.1=你好。下雨天更符合我的心情。或者下雪天也行。任何阴暗的天气都行。
-aetherhaven.townsfolk.personality.gloomy.greeting.2=嗨。我一直在想世间万物终将消逝。我知道，这话说起来有点儿悲观。
+aetherhaven.townsfolk.personality.gloomy.greeting.2=嗨。我一直在想世间万物终将消逝。我知道，这话说起来有点儿丧气。
 aetherhaven.townsfolk.personality.gloomy.greeting.3=哦，你好。希望你今天过得比我预想的要好。
 aetherhaven.townsfolk.personality.gloomy.greeting.4=嘿，世界照常运转。我也不知道为什么。
 aetherhaven.townsfolk.personality.gloomy.greeting.5=嗨，大家好。我带了伞，也带了我的疑虑。
@@ -136,7 +136,7 @@ aetherhaven.townsfolk.personality.cynical.greeting.3=嗨。我见过的承诺多
 aetherhaven.townsfolk.personality.cynical.greeting.4=哦，你好。信任是需要赢得的。我的信任很昂贵。
 aetherhaven.townsfolk.personality.cynical.greeting.5=嘿。抱最好的希望，做最坏的打算。这是我的座右铭。
 
-aetherhaven.townsfolk.personality.dramatic.greeting.1=没人理解我肩上的重担。虽然大部分是食品杂货，但即便如此，也还是很重。
+aetherhaven.townsfolk.personality.dramatic.greeting.1=没人理解我肩上的重担。虽然大部分是食品杂货，但即便如此，也还是很沉重。
 aetherhaven.townsfolk.personality.dramatic.greeting.2=大家好！这座小镇一定会记住我那天在鹅卵石路上绊倒的情景。我敢打赌。
 aetherhaven.townsfolk.personality.dramatic.greeting.3=嗨。我感觉一切都无比清晰，就连这句问候也不例外。
 aetherhaven.townsfolk.personality.dramatic.greeting.4=哦，命运啊！你又一次出现在我的生活中。
@@ -160,8 +160,8 @@ aetherhaven.townsfolk.personality.blunt.greeting.3=你好。我不拐弯抹角�
 aetherhaven.townsfolk.personality.blunt.greeting.4=哦，你好。你想要的是实话实说。这是你犯的第一个错误。
 aetherhaven.townsfolk.personality.blunt.greeting.5=嘿，我本意是好的，只是我的语气听起来不像。
 
-aetherhaven.townsfolk.personality.silly.greeting.1=你好！我刚刚教会了一只鸡对爵士手势做出反应。一切顺利。
+aetherhaven.townsfolk.personality.silly.greeting.1=你好！我刚刚教会了一只鸡对爵士手势做出反应。一切进展顺利。
 aetherhaven.townsfolk.personality.silly.greeting.2=大家好。这条路上的每一颗鹅卵石我都起了名字。请不要让我一次性全部介绍。
-aetherhaven.townsfolk.personality.silly.greeting.3=哦，嗨。我在练习摆出严肃的表情，以防有重要人物路过。这个表情怎么样？
+aetherhaven.townsfolk.personality.silly.greeting.3=哦，嗨。我在练习摆出严肃的表情，以防有重要人物路过。这个怎么样？
 aetherhaven.townsfolk.personality.silly.greeting.4=你好。我特意穿了两只不同的袜子。这是整体搭配，我坚持这么做。
 aetherhaven.townsfolk.personality.silly.greeting.5=嘿！我跟你打赌五枚硬币，保证在这次谈话结束前让你笑出来。别有压力。

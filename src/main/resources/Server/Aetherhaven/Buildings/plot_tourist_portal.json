@@ -16,10 +16,14 @@
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 30,
   "materials": [
-    { "resourceTypeId": "Rock", "count": 50 }
+    {
+      "resourceTypeId": "Rock",
+      "count": 50
+    }
   ],
   "tags": [
     "civic",
     "tourist"
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_tourist_portal.displayName"
 }

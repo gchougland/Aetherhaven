@@ -14,8 +14,14 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 45,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 430 },
-    { "resourceTypeId": "Rock", "count": 160 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 430
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 160
+    }
   ],
   "pois": [
     {
@@ -44,5 +50,6 @@
     "work",
     "flowers"
   ],
-  "touristDestination": true
+  "touristDestination": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_flower_shop.displayName"
 }

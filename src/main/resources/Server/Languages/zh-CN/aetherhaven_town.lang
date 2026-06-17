@@ -5,7 +5,7 @@
 # Town command resolution
 aetherhaven.town.resolve.notOwnerInWorld=在这个世界上，你并不拥有一座城镇。
 aetherhaven.town.resolve.noTownNamed=世界上没有一个城镇叫“{name}”。
-aetherhaven.town.resolve.ownerOrOpOnly=只有城镇所有者才能这样做（或者获得许可的经营者）。
+aetherhaven.town.resolve.ownerOrOpOnly=只有城镇所有者（或获得许可的经营者）才能这样做。
 aetherhaven.town.resolve.notInTown=你并不在这个世界的任何一座城镇里。
 aetherhaven.town.resolve.nameOnlyForOwner=只有城镇所有者（或经营者）才能在此处使用城镇名称。
 aetherhaven.town.resolve.specifyTownName=请指定城镇名称，或者使用您拥有的城镇的名称。
@@ -22,7 +22,7 @@ aetherhaven.town.kick.err.cannotRemoveOwner=无法移除城镇所有者。
 aetherhaven.town.kick.err.notMember=那名球员不是本镇居民。
 aetherhaven.town.kick.removed=从该镇移除{name}。
 aetherhaven.town.kick.removedYou=您已被移出“{town}”镇。
-aetherhaven.town.kick.removedGeneric=已将一名成员从镇上移除。
+aetherhaven.town.kick.removedGeneric=已将某成员从镇上移除。
 aetherhaven.town.role.err.ownerAlwaysFull=所有者始终拥有全部权限。
 aetherhaven.town.role.set=将 {name} 的角色设置为 {role}。
 aetherhaven.town.accept.err.noSuchTown=没有这个名字的城镇。

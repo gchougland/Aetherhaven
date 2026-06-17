@@ -6,24 +6,29 @@
   "title": "Your Own Shop",
   "description": "Build a shop where you can sell your goods to townsfolk and visitors.",
   "prerequisites": {
-    "completedQuestIds": ["q_merchant_stall"],
+    "completedQuestIds": [
+      "q_merchant_stall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the player shop plot token from Vex."
+      "text": "Take the player shop plot token from Vex.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the player shop prefab."
+      "text": "Stake and build the player shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Vex and close the quest in dialogue."
+      "text": "Find Vex and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.talk"
     }
   ],
   "rewards": [
@@ -40,5 +45,9 @@
       "grantTo": "player"
     }
   ],
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.description"
 }

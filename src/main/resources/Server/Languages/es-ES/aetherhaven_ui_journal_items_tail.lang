@@ -95,10 +95,31 @@ aetherhaven.ui.townJournal.guide.scheduleToggleShow=Mostrar horario semanal
 aetherhaven.ui.townJournal.guide.scheduleToggleHide=Ocultar horario semanal
 aetherhaven.ui.townJournal.guide.scheduleLegend=Cada fila representa un día del juego. Los segmentos de color van desde la primera hora programada del día hasta la medianoche (igual que en JSON). El ancho de la franja coincide con la hora de cada segmento; pase el cursor para ver la hora exacta. Colores: casa, trabajo, posada, zona común, altar. Línea roja = hora del mundo actual mapeada en esa franja (izquierda = primera hora de transición).
 aetherhaven.ui.townJournal.guide.scheduleNowMarker=Reloj mundial actual cuando se mostró este horario (el mismo reloj que el JSON del aldeano y la hora de /aetherhaven).
+aetherhaven.ui.townJournal.guide.scheduleDayMon=Lun
+aetherhaven.ui.townJournal.guide.scheduleDayTue=Mar
+aetherhaven.ui.townJournal.guide.scheduleDayWed=Casarse
+aetherhaven.ui.townJournal.guide.scheduleDayThu=Jue
+aetherhaven.ui.townJournal.guide.scheduleDayFri=Vie
+aetherhaven.ui.townJournal.guide.scheduleDaySat=Se sentó
+aetherhaven.ui.townJournal.guide.scheduleDaySun=Sol
+aetherhaven.ui.townJournal.guide.scheduleLocUnknown=…
+aetherhaven.ui.townJournal.guide.scheduleLocShortHome=Hogar
+aetherhaven.ui.townJournal.guide.scheduleLocShortWork=Trabajar
+aetherhaven.ui.townJournal.guide.scheduleLocShortInn=Posada
+aetherhaven.ui.townJournal.guide.scheduleLocShortPark=Parque
+aetherhaven.ui.townJournal.guide.scheduleLocShortAltar=Altar
+aetherhaven.ui.townJournal.guide.scheduleLocShortShop=Comercio
+aetherhaven.ui.townJournal.guide.scheduleLocHome=Descansa en casa.
+aetherhaven.ui.townJournal.guide.scheduleLocWork=Trabajo (lugar de trabajo)
+aetherhaven.ui.townJournal.guide.scheduleLocInn=Visita la posada
+aetherhaven.ui.townJournal.guide.scheduleLocPark=plaza del pueblo
+aetherhaven.ui.townJournal.guide.scheduleLocAltar=altar de Gaia
+aetherhaven.ui.townJournal.guide.scheduleLocShop=Recorriendo las tiendas del pueblo
+aetherhaven.ui.townJournal.guide.scheduleSegmentTooltip={location} · {start}–{end}
 aetherhaven.ui.townJournal.guide.giftHeaderLoves=Regalos muy apreciados
 aetherhaven.ui.townJournal.guide.giftHeaderLikes=Regalos que gustan
 aetherhaven.ui.townJournal.guide.giftHeaderDislikes=Regalos que no gustan
-aetherhaven.ui.townJournal.guide.noQuests=Este aldeano aún no aparece en ninguna misión de la historia.
+aetherhaven.ui.townJournal.guide.noQuests=Este aldeano aún no aparece en ninguna misión de la historia principal.
 aetherhaven.ui.townJournal.guide.noRepMilestones=Aún no hay regalos de amistad programados para este aldeano.
 aetherhaven.ui.townJournal.guide.noSchedule=Todavía no hay archivo de ruta semanal para este aldeano.
 aetherhaven.ui.townJournal.questListHeading=misiones activas
@@ -121,6 +142,7 @@ aetherhaven.ui.townJournal.scheduleWork=En el trabajo
 aetherhaven.ui.townJournal.scheduleInn=En la posada
 aetherhaven.ui.townJournal.schedulePark=En el parque
 aetherhaven.ui.townJournal.scheduleAltar=En el altar
+aetherhaven.ui.townJournal.scheduleShop=Recorriendo las tiendas del pueblo
 aetherhaven.ui.townJournal.plotStatusNotStarted=No ha comenzado
 aetherhaven.ui.townJournal.plotStatusInProgress=En curso
 aetherhaven.ui.townJournal.plotStatusComplete=Completo
@@ -146,7 +168,7 @@ items.Aetherhaven_Management_Block.name=Estante de archivos municipales
 items.Aetherhaven_Management_Block.description=Estantería de oficina para un edificio terminado. Abre el estado de construcción para su parcela.
 
 items.Aetherhaven_Sprinkler_Iron.name=Aspersor de hierro
-items.Aetherhaven_Sprinkler_Iron.description=Riega la tierra arada un bloque más abajo en un área de <color is="#4ade80">3×3</color>. Se ejecuta una vez cada mañana en el juego. Cobertura mínima.
+items.Aetherhaven_Sprinkler_Iron.description=Riega la tierra arada un bloque más abajo en un área de <color is="#4ade80">3×3</color>. Se ejecuta una vez cada mañana en el juego. Cobertura más pequeña.
 items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de torio
 items.Aetherhaven_Sprinkler_Thorium.description=El agua regaría la tierra un bloque más abajo en un área de <color is="#4ade80">5×5</color>. Una vez cada mañana en el juego. Más grande que el hierro.
 items.Aetherhaven_Sprinkler_Cobalt.name=Aspersor de cobalto
@@ -172,7 +194,7 @@ npcRoles.Aetherhaven_Townsfolk.name=Ciudadanos
 npcRoles.Aetherhaven_Guild_Master.name=Lyra Fairhollow
 npcRoles.Aetherhaven_Bard.name=Elias Thornwood
 npcRoles.Aetherhaven_Crystal_Keeper.name=Vaelith Prismshade
-npcRoles.Aetherhaven_Pyrotechnic.name=Grubble Sparkmatch
+npcRoles.Aetherhaven_Pyrotechnic.name=Chispa de Grubble
 npcRoles.Aetherhaven_Florist.name=Hiedra Bloomwell
 npcRoles.Aetherhaven_Builder.name=Rowan Ridgecraft
 npcRoles.Aetherhaven_Guard.name=Guardia de la ciudad
@@ -195,9 +217,9 @@ items.Aetherhaven_Plot_Token_Barn_Hytiny.description=Indica dónde se puede cons
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.name=Ficha para parcela de la acogedora cabaña de Hytiny
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage.description=Indica dónde se puede construir la acogedora cabaña de Hytiny. Prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar en un chatarrero por cinco monedas de oro.
 items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.name=Ficha para parcela de casa de té japonesa de Hytiny
-items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Indica dónde se puede construir la casa de té japonesa de Hytiny. Fabricación prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar en un chatarrero por cinco monedas de oro.
+items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Indica dónde se puede construir la casa de té japonesa de Hytiny. Fabricación prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar cinco monedas de oro en un chatarrero.
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Ficha para parcela de caravana acogedora de Hytiny
-items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Indica dónde se puede construir la acogedora caravana de Hytiny. Fabricación prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar cinco monedas de oro en un chatarrero.
+items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Indica dónde se puede construir la acogedora caravana de Hytiny. Prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar cinco monedas de oro en un chatarrero.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Ficha de parcela con casa en el árbol en maceta de Hytiny
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Advertencia: este es un prefab muy grande y puede ralentizar o bloquear notablemente al cliente y al servidor mientras se ensambla. Colócalo cuando tengas tiempo para dejar que termine.</color> Marca dónde se puede construir la casa del árbol en maceta de Hytiny (solo decorativa). Después de que termine de construirse, no se registra como una parcela de la ciudad; rompe o mueve los bloques tú mismo para quitarla o reubicarla; no se puede recoger del diario de la ciudad. Prefab de HytinyBuilds. No se vende en el escritorio de planificación. Recupéralo en un chatarrero por cinco monedas de oro.
 

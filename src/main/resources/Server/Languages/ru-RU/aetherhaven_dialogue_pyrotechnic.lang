@@ -26,13 +26,13 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Граббл, я 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=На этом пока всё. Граббл, увидимся позже.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Груббл Спаркматч
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Граббл не может вечно продавать всякую ерунду из карманов. Люди начинают нервничать. Нужен настоящий магазин с толстыми стенами, хорошей вывеской, полкой, которая не шатается, даже если маленькая бомба чихнет. Граббл рисовал чертежи на огнеупорной бумаге. Вы строите для города, а Граббл дает вам страницу чертежей.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Граббл не может вечно продавать всякую ерунду из карманов. Люди начинают нервничать. Нужен настоящий магазин с толстыми стенами, хорошей вывеской, полкой, которая не шатается, даже если маленькая бомба чихнет. Граббл рисовал планы на огнеупорной бумаге. Вы строите для города, а Граббл дает вам страницу чертежей.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Мы откроем Грабблу магазин.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Не сейчас. Граббл ждёт.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Груббл Спаркматч
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Возьмите страницу чертежа. Учитесь за столом городского планирования. Создайте жетон. Постройте магазин там, где люди смогут его найти, не заблудившись и не взорвавшись случайно. Граббл ждет в гостинице. Порох остается в мешке, пока стены не станут толстыми.
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Увидимся, когда вывеску повесят.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Увидимся, когда вывеска будет висеть.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Груббл Спаркматч
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=Магазин ещё не построен? Груббл ждёт. Порошок начинает волноваться, когда Груббл ждёт слишком долго. Ты всё ещё изучаешь планы и строишь стены, или Грубблу стоит перестать надеяться?

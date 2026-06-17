@@ -71,7 +71,7 @@ aetherhaven.dialogue.aetherhaven_merchant.vex_player_shop_done.speaker=Vex Sunde
 
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.fallback=Si viniste por el puesto, las actualizaciones del libro de contabilidad o un intercambio justo, te escucho.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.0=Mis productos se están vendiendo y mi cuenta está cuadrada. Es un buen día.
-aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.1=Esta mañana conté la moneda dos veces y todo cuadraba. Casi no me lo creía.
+aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.1=Conté la moneda dos veces esta mañana y todo cuadraba. Casi no me lo creía.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.2=Es más fácil vender algo que tiene una historia detrás. A la gente le encanta la idea de tener algo único para presumir ante los demás.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.3=Si tienes tu propia tienda, aquí tienes un consejo: Haz que tus productos suenen mejor de lo que realmente son.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.greeting.4=Un poco de profesionalismo es muy útil al intentar vender baratijas a viajeros ingenuos.
@@ -85,7 +85,7 @@ aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.1=Las joyas elabora
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.2=Los materiales raros hacen que mi día parezca más corto y más productivo.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.3=Un fajo ordenado de billetes honestos es, en sí mismo, una forma de halago.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.love.4=Siempre agradezco cuando la gente me trae mercancía para reponer mi stock.
-aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.0=No intentes intercambiarme chatarra como si fuera un tesoro secreto. Sé distinguir la diferencia.
+aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.0=No intentes intercambiarme mineral de desecho como si fuera un tesoro secreto. Sé distinguir la diferencia.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.1=El otro día alguien intentó regalarme una calavera. ¿Acaso parezco un ladrón de tumbas?
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.2=No me dedico a comerciar con porquerías de pantano. No las quiero cerca de mi tienda.
 aetherhaven.dialogue.aetherhaven_merchant.main_hub.hint.dislike.3=Los trastos rotos sin valor comercial solo ocupan espacio en las estanterías que no me puedo permitir desperdiciar.

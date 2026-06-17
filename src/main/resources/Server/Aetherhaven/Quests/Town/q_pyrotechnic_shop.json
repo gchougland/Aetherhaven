@@ -13,22 +13,26 @@
     {
       "id": "blueprint",
       "kind": "journal",
-      "text": "Take the shop blueprint from Grubble."
+      "text": "Take the shop blueprint from Grubble.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.blueprint"
     },
     {
       "id": "learn",
       "kind": "journal",
-      "text": "Use the blueprint to learn the bomb shop at your plot crafting bench."
+      "text": "Use the blueprint to learn the bomb shop at your plot crafting bench.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.learn"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Craft a shop plot token and build the bomb shop prefab."
+      "text": "Craft a shop plot token and build the bomb shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Grubble at the shop and close the quest in dialogue."
+      "text": "Find Grubble at the shop and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.talk"
     }
   ],
   "rewards": [
@@ -47,14 +51,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.description"
 }

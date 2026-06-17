@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=すべての警備員を選択
 items.Aetherhaven_Rts_Select_All.description=町中の雇われ警備員を全員選んでください。
 
 items.Aetherhaven_Rts_Select_Knight.name=騎士を選ぶ
-items.Aetherhaven_Rts_Select_Knight.description=騎士の護衛をすべて選択してください。
+items.Aetherhaven_Rts_Select_Knight.description=騎士と盗賊の衛兵をすべて選択してください。
 
 items.Aetherhaven_Rts_Select_Archer.name=弓兵を選抜する
 items.Aetherhaven_Rts_Select_Archer.description=全ての弓兵護衛を選択してください。

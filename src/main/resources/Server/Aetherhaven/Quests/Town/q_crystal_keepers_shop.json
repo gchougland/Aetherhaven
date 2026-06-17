@@ -13,22 +13,26 @@
     {
       "id": "blueprint",
       "kind": "journal",
-      "text": "Take the shop blueprint from Vaelith."
+      "text": "Take the shop blueprint from Vaelith.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.blueprint"
     },
     {
       "id": "learn",
       "kind": "journal",
-      "text": "Use the blueprint to learn the crystal shop at your plot crafting bench."
+      "text": "Use the blueprint to learn the crystal shop at your plot crafting bench.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.learn"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Craft a shop plot token and build the crystal shop prefab."
+      "text": "Craft a shop plot token and build the crystal shop prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Vaelith at the shop and close the quest in dialogue."
+      "text": "Find Vaelith at the shop and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.objective.talk"
     }
   ],
   "rewards": [
@@ -47,14 +51,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keepers_shop.description"
 }

@@ -6,7 +6,7 @@ aetherhaven.dialogue.aetherhaven_crystal_keeper_rescue.root.c0=小心。
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.root.speaker=瓦利斯棱镜
 aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.fallback=如果你需要建造圣所、房屋线，或者想了解石头所承载的故事，请说出来。
-aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=每一颗水晶都蕴含着比你的契约石更古老的记忆。
+aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.0=每一颗水晶都蕴含着比你的契约石还要古老的记忆。
 aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.1=自从第一个洞穴学会发光以来，我就一直在记录棱镜的种类。
 aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.2=你的小镇散发着一种静谧的气息。我觉得……很宜人。
 aetherhaven.dialogue.aetherhaven_crystal_keeper.main_hub.greeting.3=不要点击那个大的蓝色物体。它会做梦。
@@ -31,7 +31,7 @@ aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c0=我们会�
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_quest_shop.c1=现在不行，我还需要一点时间。
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.speaker=瓦利斯棱镜
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=拿着这些图纸。去城镇规划处好好研究一下，等格子架允许的时候制作一个地块标记，然后把店铺建在人们能方便到达的地方，这样就不会惊扰到玻璃罩里沉睡的生物。我会在旅店里等着，直到墙壁发出正常的嗡嗡声。
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.body=拿着这些图纸。去城镇规划处好好研究一下，等格子窗允许的时候制作一个地块标记，然后把店铺建在人们能方便到达的地方，这样就不会惊扰到玻璃橱窗里沉睡的生物。我会在旅店里等着，直到墙壁发出正常的嗡嗡声。
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_shop_accepted.c0=圣殿闪耀光芒之时，我们再见。
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.speaker=瓦利斯棱镜

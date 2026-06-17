@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the market stall plot token from Vex."
+      "text": "Take the market stall plot token from Vex.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_merchant_stall.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the market stall prefab."
+      "text": "Stake and build the market stall prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_merchant_stall.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Vex at the stall and close the quest in dialogue."
+      "text": "Find Vex at the stall and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_merchant_stall.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_merchant_stall.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_merchant_stall.description"
 }

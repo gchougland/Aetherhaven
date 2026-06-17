@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the farm plot token from Irienne."
+      "text": "Take the farm plot token from Irienne.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the farm plot prefab."
+      "text": "Stake and build the farm plot prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Irienne at the farming bench and close the quest in dialogue."
+      "text": "Find Irienne at the farming bench and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.description"
 }

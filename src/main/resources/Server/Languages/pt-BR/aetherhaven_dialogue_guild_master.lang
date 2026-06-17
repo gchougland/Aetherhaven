@@ -1,7 +1,7 @@
 aetherhaven.dialogue.aetherhaven_guild_master.main_hub.speaker=Lyra Fairhollow
-aetherhaven.dialogue.aetherhaven_guild_master.main_hub.fallback=Se você precisar de detalhes sobre a construção do salão, uma linha divisória da casa ou uma resposta direta sobre os guardas, diga.
+aetherhaven.dialogue.aetherhaven_guild_master.main_hub.fallback=Se você precisar de detalhes sobre a construção do salão, a linha de raciocínio da casa ou uma resposta direta sobre os guardas, diga.
 aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.0=Olá. Precisa de um guarda ou está apenas de passagem?
-aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.1=Lyren envia lembranças quando se lembra. O que posso fazer por você?
+aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.1=Lyren manda lembranças quando se lembra. O que posso fazer por você?
 aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.2=O salão fica silencioso até terminarmos de construí-lo. Depois, a lista de participantes é preenchida ao amanhecer.
 aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guild_hall=Você disse que a cidade precisa de uma sede de guilda adequada.
 aetherhaven.dialogue.aetherhaven_guild_master.main_hub.c_guild_hall_finish=A sede da guilda está concluída. Estou aqui para finalizar a missão.

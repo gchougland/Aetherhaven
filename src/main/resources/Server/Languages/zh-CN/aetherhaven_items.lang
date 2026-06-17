@@ -47,7 +47,7 @@ benchCategories.aetherhaven.town_planning=城镇规划
 benchCategories.aetherhaven.plot_tokens=地块标记
 
 items.Aetherhaven_Plot_Placement_Tool.name=场地布置人员
-items.Aetherhaven_Plot_Placement_Tool.description=将对应的地块标记放在背包里。使用这根法杖瞄准地面，可以看到建筑物的轮廓。轻轻调整法杖的位置，直到它与地块匹配，然后确认即可标记地块。取消操作即可清除预览，想要标记其他位置时可以再次使用法杖。
+items.Aetherhaven_Plot_Placement_Tool.description=将对应的地块标记放在背包里。使用这根法杖瞄准地面，可以看到建筑物的轮廓。轻轻调整法杖的位置，直到它与地面吻合，然后确认即可标记地块。取消操作即可清除预览，想要标记其他位置时可以再次使用法杖。
 
 items.Aetherhaven_Wall_Wand.name=墙杖
 items.Aetherhaven_Wall_Wand.description=规划城镇周围的石墙。次要功能可打开俯视图，显示城墙、城门和塔楼组件。主要功能可对现有组件进行扩展或移除。每个组件都使用地块标志，建造方式与其他城镇地块相同。
@@ -74,7 +74,7 @@ aetherhaven.poiTool.legendUse=用途：为选定的兴趣点设置NPC路径目�
 aetherhaven.poiTool.legendSpawnHeader=冒险者地点模式
 aetherhaven.poiTool.legendSecondarySpawn=次要功能：在方块上方放置一个标记，或移除你点击的标记。
 aetherhaven.poiTool.modeCycledToEdit=已切换到兴趣点编辑模式。
-aetherhaven.poiTool.modeCycledToPlacement=已切换到兴趣点放置模式。
+aetherhaven.poiTool.modeCycledToPlacement=已切换至兴趣点放置模式。
 aetherhaven.poiTool.modeCycledToRemove=已切换到兴趣点移除模式。
 aetherhaven.poiTool.modeCycledToAdventurerSpots=切换到冒险地点模式。
 aetherhaven.poiTool.hudTitle=POI 工具
@@ -183,7 +183,7 @@ aetherhaven.pathTool.emptyPlan=沿途未发现地面。
 aetherhaven.pathTool.cementFail=路边无需放置任何东西。
 aetherhaven.pathTool.cemented=路径已设置。
 aetherhaven.pathTool.removeSelected=已选择路径。
-aetherhaven.pathTool.removeNoHit=准星上没有路径。
+aetherhaven.pathTool.removeNoHit=十字准星上没有路径。
 aetherhaven.pathTool.removeNeedSelection=首先选择主路径。
 aetherhaven.pathTool.removeUnknown=那条路已经不存在了。
 aetherhaven.pathTool.removedPath=路径已移除。{cells} 块已恢复。
@@ -207,7 +207,7 @@ aetherhaven.pathTool.styleNameTitle=新路径样式
 aetherhaven.pathTool.styleNameHint=给你的风格命名，然后前往宝箱挑选方块。
 aetherhaven.pathTool.styleNameContinue=继续
 aetherhaven.pathTool.styleEditNameLabel=样式名称
-aetherhaven.pathTool.styleEditNamePlaceholder=我的路径样式
+aetherhaven.pathTool.styleEditNamePlaceholder=我的路径风格
 aetherhaven.pathTool.toastStyleSaved=已保存的路径样式
 aetherhaven.pathTool.styleEditNeedBlocks=保存前，至少在箱子里放入一个方块。
 aetherhaven.pathTool.styleEditNoSession=样式编辑器会话已过期。请重新打开样式管理器。
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=分配
 aetherhaven.patrolWand.guardTypeKnight=骑士
 aetherhaven.patrolWand.guardTypeArcher=射手
 aetherhaven.patrolWand.guardTypeMage=法师
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=流氓
 aetherhaven.patrolWand.toastAdded=加分
 aetherhaven.patrolWand.toastRemoved=点已移除
 aetherhaven.patrolWand.toastSelected=已选路线
@@ -312,13 +312,13 @@ items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=地块蓝图：{building}
 items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=阅读此文可永久解锁地块制作台上的 {building} 地块。
 
 items.Aetherhaven_Plot_Creator_Staff.name=剧情创作团队
-items.Aetherhaven_Plot_Creator_Staff.description=将建筑转换为自定义城镇建筑。请参阅城镇日志指南。F 键开始或执行当前步骤。单击方块以设置边界和位置。Q/E 键切换上一步/下一步。R 键取消。
+items.Aetherhaven_Plot_Creator_Staff.description=将建筑转换为自定义城镇建筑。请参阅城镇日志指南。F 键开始或执行当前步骤。单击方块可设置边界和位置。Q/E 键切换上一步/下一步。R 键取消。
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=铁匠铺地块代币
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=需要由地块放置人员放置铁匠铺的地基。
 
 items.Aetherhaven_Plot_Token_Park.name=公园地块代币
-items.Aetherhaven_Plot_Token_Park.description=需要根据场地规划人员的指示确定公园占地面积。
+items.Aetherhaven_Plot_Token_Park.description=需要根据场地规划人员的指示放置公园用地平面图。
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=旅游门户网站地块代币
 items.Aetherhaven_Plot_Token_Tourist_Portal.description=需要由场地布置人员放置旅游门户网站的占地面积。
 

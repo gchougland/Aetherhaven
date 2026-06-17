@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =Você não tem permissão para usar o criador de gráficos.
-aetherhaven.plotcreator.error.id_empty =Insira o ID do edifício.
-aetherhaven.plotcreator.error.id_prefix =O ID deve começar com plot_
-aetherhaven.plotcreator.error.id_wall =Ainda não é possível criar gráficos de muros com esta ferramenta.
-aetherhaven.plotcreator.error.id_chars =Use apenas letras minúsculas, números e sublinhados no ID.
-aetherhaven.plotcreator.error.id_taken =Esse ID de prédio já está em uso.
-aetherhaven.plotcreator.error.incomplete =Primeiro, conclua todas as etapas necessárias.
-aetherhaven.plotcreator.error.prefab_missing =Salve o modelo pré-fabricado antes de finalizar.
-aetherhaven.plotcreator.error.prefabName =Insira um nome para o arquivo pré-fabricado.
-aetherhaven.plotcreator.error.prefabExport =Não foi possível salvar o prefab. Verifique os limites e tente novamente.
-aetherhaven.plotcreator.error.saveFailed =Não foi possível salvar o arquivo de construção.
-aetherhaven.plotcreator.error.anchorInside =A placa de identificação do terreno não pode estar dentro dos limites da construção. Use um canto externo.
-aetherhaven.plotcreator.error.anchorNotCorner =Clique em um dos quatro cantos externos da construção (um bloco para fora, tanto em X quanto em Z, a partir da área de construção).
-aetherhaven.plotcreator.error.needAnchor =Antes de prosseguir, clique em um dos cantos externos para visualizar o símbolo do terreno.
-aetherhaven.plotcreator.error.outsideBounds =Clique dentro dos limites marcados.
-aetherhaven.plotcreator.error.wrongBlock =Esse não é o bloco necessário para esta etapa.
-aetherhaven.plotcreator.error.shopSpotNotConfigured =Primeiro, confirme a configuração da barraca da loja e, em seguida, clique nela com a equipe de criação de terrenos.
-aetherhaven.plotcreator.error.tooManyVisitors =Este edifício precisa apenas de duas vagas para visitantes.
-aetherhaven.plotcreator.error.editNotCustom =Somente os edifícios personalizados salvos na pasta de dados do seu servidor podem ser editados.
-aetherhaven.plotcreator.error.editUnknown =Nenhum edifício personalizado encontrado com o ID {id}.
-aetherhaven.plotcreator.edit.loaded =O arquivo {id} foi carregado para edição. Volte para alterar os detalhes ou salve para atualizar o arquivo.
+aetherhaven.plotcreator.error.noPermission=Você não tem permissão para usar o criador de gráficos.
+aetherhaven.plotcreator.error.id_empty=Insira o ID do edifício.
+aetherhaven.plotcreator.error.id_prefix=O ID deve começar com plot_
+aetherhaven.plotcreator.error.id_wall=Ainda não é possível criar gráficos de muros com esta ferramenta.
+aetherhaven.plotcreator.error.id_chars=Use apenas letras minúsculas, números e sublinhados no ID.
+aetherhaven.plotcreator.error.id_taken=Esse ID de prédio já está em uso.
+aetherhaven.plotcreator.error.incomplete=Primeiro, conclua todas as etapas necessárias.
+aetherhaven.plotcreator.error.prefab_missing=Salve o modelo pré-fabricado antes de finalizar.
+aetherhaven.plotcreator.error.prefabName=Insira um nome para o arquivo pré-fabricado.
+aetherhaven.plotcreator.error.prefabExport=Não foi possível salvar o prefab. Verifique os limites e tente novamente.
+aetherhaven.plotcreator.error.saveFailed=Não foi possível salvar o arquivo de construção.
+aetherhaven.plotcreator.error.anchorInside=A placa de identificação do terreno não pode estar dentro dos limites da construção. Use um canto externo.
+aetherhaven.plotcreator.error.anchorNotCorner=Clique em um dos quatro cantos externos da construção (um bloco para fora, tanto em X quanto em Z, a partir da área de construção).
+aetherhaven.plotcreator.error.needAnchor=Antes de prosseguir, clique em um dos cantos externos para visualizar o símbolo do terreno.
+aetherhaven.plotcreator.error.outsideBounds=Clique dentro dos limites marcados.
+aetherhaven.plotcreator.error.wrongBlock=Esse não é o bloco necessário para esta etapa.
+aetherhaven.plotcreator.error.shopSpotNotConfigured=Primeiro, confirme a configuração da barraca da loja e, em seguida, clique nela com a equipe de criação de terrenos.
+aetherhaven.plotcreator.error.tooManyVisitors=Este edifício precisa apenas de duas vagas para visitantes.
+aetherhaven.plotcreator.error.editNotCustom=Somente os edifícios personalizados salvos na pasta de dados do seu servidor podem ser editados.
+aetherhaven.plotcreator.error.editUnknown=Nenhum edifício personalizado encontrado com o ID {id}.
+aetherhaven.plotcreator.edit.loaded=O arquivo {id} foi carregado para edição. Volte para alterar os detalhes ou salve para atualizar o arquivo.
 
-aetherhaven.plotcreator.generateicon.error.empty =Insira o ID do edifício ou o caminho de uma estrutura pré-fabricada.
-aetherhaven.plotcreator.generateicon.error.noPrefab =Não existe caminho predefinido para {id}.
-aetherhaven.plotcreator.generateicon.error.noOutputId =Não foi possível determinar um ID de saída; passe um como segundo argumento.
-aetherhaven.plotcreator.generateicon.error.notFound =Prefab não encontrado: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =Não foi possível carregar o prefab: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed =A renderização do ícone falhou para {id}.
-aetherhaven.plotcreator.generateicon.ok =Ícone salvo para {id} em {path} (caminho do recurso: {asset})
+aetherhaven.plotcreator.generateicon.error.empty=Insira o ID do edifício ou o caminho de uma estrutura pré-fabricada.
+aetherhaven.plotcreator.generateicon.error.noPrefab=Não existe caminho predefinido para {id}.
+aetherhaven.plotcreator.generateicon.error.noOutputId=Não foi possível determinar um ID de saída; passe um como segundo argumento.
+aetherhaven.plotcreator.generateicon.error.notFound=Pré-fabricado não encontrado: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=Não foi possível carregar o prefab: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed=A renderização do ícone falhou para {id}.
+aetherhaven.plotcreator.generateicon.ok=Ícone salvo para {id} em {path} (caminho do recurso: {asset})
 
-aetherhaven.plotcreator.hint.cornerFirstSet =Primeiro conjunto de cantos. Marque o canto oposto em seguida.
-aetherhaven.plotcreator.hint.cornerSecondSet =Defina os limites. Em seguida, marque o canto externo do terreno, escolha o tipo de construção e coloque os blocos necessários antes de salvar a forma.
-aetherhaven.plotcreator.hint.anchorSet =Conjunto de pontos de sinalização para o terreno.
-aetherhaven.plotcreator.hint.blockRecorded =Vaga reservada.
-aetherhaven.plotcreator.hint.shopSpotRecorded =Banca de loja salva.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =Essa banca na loja já está reservada para esta etapa.
-aetherhaven.plotcreator.hint.touristPortalRecorded =Portal do turista salvo.
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =Esse portal turístico já está salvo para esta etapa.
-aetherhaven.plotcreator.hint.spawnRecorded =Ponto de spawn salvo.
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =Local de surgimento de aventureiros removido.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =Ponto de surgimento de visitantes removido.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =Esse ponto de surgimento de visitantes já está salvo.
-aetherhaven.plotcreator.hint.poiRecorded =Atividade salva.
+aetherhaven.plotcreator.hint.cornerFirstSet=Primeiro conjunto de cantos. Marque o canto oposto em seguida.
+aetherhaven.plotcreator.hint.cornerSecondSet=Defina os limites. Em seguida, marque o canto externo do terreno, escolha o tipo de construção e coloque os blocos necessários antes de salvar a forma.
+aetherhaven.plotcreator.hint.anchorSet=Conjunto de pontos de sinalização para o terreno.
+aetherhaven.plotcreator.hint.blockRecorded=Vaga reservada.
+aetherhaven.plotcreator.hint.shopSpotRecorded=Banca de loja salva.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=Essa banca na loja já está reservada para esta etapa.
+aetherhaven.plotcreator.hint.touristPortalRecorded=Portal do turista salvo.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=Esse portal turístico já está salvo para esta etapa.
+aetherhaven.plotcreator.hint.spawnRecorded=Ponto de renascimento salvo.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=Local de surgimento de aventureiros removido.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=Ponto de surgimento de visitantes removido.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=Esse ponto de surgimento de visitantes já está salvo.
+aetherhaven.plotcreator.hint.poiRecorded=Atividade salva.
 
-aetherhaven.plotcreator.button.save =Salvar construção
-aetherhaven.plotcreator.button.openMaterials =Armazenamento aberto de custos de construção
+aetherhaven.plotcreator.button.save=Salvar construção
+aetherhaven.plotcreator.button.addFromInventory=Adicionar do inventário
+aetherhaven.plotcreator.button.useBuildShape=Utilize materiais pré-fabricados
+aetherhaven.plotcreator.button.clearPrefabMaterials=Custos de construção claros
+aetherhaven.plotcreator.button.materialsPrevPage=Anterior
+aetherhaven.plotcreator.button.materialsNextPage=Próximo
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =Nome do edifício
-aetherhaven.plotcreator.field.description =Descrição breve (opcional)
-aetherhaven.plotcreator.field.constructionId =ID do edifício (plot_my_building)
-aetherhaven.plotcreator.field.prefabName =Nome do arquivo prefab
-aetherhaven.plotcreator.field.tags =Etiquetas (separadas por vírgula)
-aetherhaven.plotcreator.field.variantOf =Conta como ID de edifício
-aetherhaven.plotcreator.field.goldCost =Custo do ouro segundo o tesouro
+aetherhaven.plotcreator.materials.pageLabel=Página {page} de {pages}
+aetherhaven.plotcreator.materials.emptyList=Ainda não há custos de construção. Use materiais pré-fabricados ou adicione itens do seu inventário.
+aetherhaven.plotcreator.materials.confirmReplace=Clique em Usar materiais pré-fabricados novamente para substituir os custos de construção atuais.
+aetherhaven.plotcreator.materials.confirmClear=Clique em Limpar custos de construção novamente para remover todos os custos de construção.
+aetherhaven.plotcreator.materials.fillFailed=Não foi possível preencher os custos de construção a partir do seu modelo pré-fabricado. Salve primeiro o formato da construção.
 
-aetherhaven.plotcreator.session.started =Criador de enredo iniciado. Use a interface e as teclas de atalho enquanto trabalha no mundo.
+aetherhaven.plotcreator.field.displayName=Nome do edifício
+aetherhaven.plotcreator.field.description=Descrição breve (opcional)
+aetherhaven.plotcreator.field.constructionId=ID do edifício (plot_my_building)
+aetherhaven.plotcreator.field.prefabName=Nome do arquivo prefab
+aetherhaven.plotcreator.field.tags=Etiquetas (separadas por vírgula)
+aetherhaven.plotcreator.field.variantOf=Conta como ID de edifício
+aetherhaven.plotcreator.field.goldCost=Custo do ouro segundo o tesouro
 
-aetherhaven.plotcreator.hud.title =Criador do enredo
+aetherhaven.plotcreator.session.started=Criador de enredo iniciado. Use a interface e as teclas de atalho enquanto trabalha no mundo.
 
-aetherhaven.plotcreator.hud.common.q =Etapa anterior
-aetherhaven.plotcreator.hud.common.e =Continue para o próximo passo.
-aetherhaven.plotcreator.hud.common.r =Cancelar sessão
+aetherhaven.plotcreator.hud.title=Criador do enredo
 
-aetherhaven.plotcreator.hud.WELCOME.f =Começar
-aetherhaven.plotcreator.hud.WELCOME.e =Começar
+aetherhaven.plotcreator.hud.common.q=Etapa anterior
+aetherhaven.plotcreator.hud.common.e=Continue para o próximo passo.
+aetherhaven.plotcreator.hud.common.r=Cancelar sessão
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =Clique em um bloco em um dos cantos da sua construção.
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =Clique no canto oposto para selecionar a área completa.
-aetherhaven.plotcreator.hud.ANCHOR.primary =Clique em um dos quatro cantos externos da pegada.
+aetherhaven.plotcreator.hud.WELCOME.f=Começar
+aetherhaven.plotcreator.hud.WELCOME.e=Começar
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =Exporte a forma da construção dentro dos limites.
-aetherhaven.plotcreator.hud.KIND.f =Abra o seletor de tipo de edifício
-aetherhaven.plotcreator.hud.IDENTITY.f =Insira o nome de exibição, a descrição e o ID do edifício.
-aetherhaven.plotcreator.hud.TAGS.f =Editar etiquetas (separadas por vírgula)
-aetherhaven.plotcreator.hud.VARIANT.f =Selecione a qual tipo de edifício principal esta variante se refere.
-aetherhaven.plotcreator.hud.SUBSTEP.primary =Clique no bloco ou ponto desejado dentro da pegada.
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =Remover marcador de surgimento de aventureiro
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =Remova o marcador de geração de visitantes.
-aetherhaven.plotcreator.hud.SUBSTEP.q =Voltar (os blocos de posicionamento extras da etapa anterior serão removidos)
-aetherhaven.plotcreator.hud.MATERIALS.f =Armazenamento de materiais a céu aberto
-aetherhaven.plotcreator.hud.CONFIGURE.f =Ambientes de construção abertos
-aetherhaven.plotcreator.hud.REVIEW.f =Salvem o prédio
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=Clique em um bloco em um dos cantos da sua construção.
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=Clique no canto oposto para selecionar a área completa.
+aetherhaven.plotcreator.hud.ANCHOR.primary=Clique em um dos quatro cantos externos da pegada.
 
-aetherhaven.plotcreator.hud.kindSelected =Tipo: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=Exporte a forma da construção dentro dos limites.
+aetherhaven.plotcreator.hud.KIND.f=Abra o seletor de tipo de edifício
+aetherhaven.plotcreator.hud.IDENTITY.f=Insira o nome de exibição, a descrição e o ID do edifício.
+aetherhaven.plotcreator.hud.TAGS.f=Editar etiquetas (separadas por vírgula)
+aetherhaven.plotcreator.hud.VARIANT.f=Selecione a qual tipo de edifício principal esta variante se refere.
+aetherhaven.plotcreator.hud.SUBSTEP.primary=Clique no bloco ou ponto desejado dentro da pegada.
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=Remover marcador de surgimento de aventureiro
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=Remova o marcador de geração de visitantes.
+aetherhaven.plotcreator.hud.SUBSTEP.q=Voltar (os blocos de posicionamento extras da etapa anterior serão removidos)
+aetherhaven.plotcreator.hud.MATERIALS.f=Abra o menu de materiais de construção
+aetherhaven.plotcreator.hud.CONFIGURE.f=Ambientes de construção abertos
+aetherhaven.plotcreator.hud.REVIEW.f=Salvem o prédio
 
-aetherhaven.plotcreator.hint.clickBlock =Clique em um bloco no mundo para esta etapa.
+aetherhaven.plotcreator.hud.kindSelected=Tipo: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =Tipo de edifício: {kind}
+aetherhaven.plotcreator.hint.clickBlock=Clique em um bloco no mundo para esta etapa.
 
-aetherhaven.plotcreator.hint.prefabSaved =O modelo predefinido foi salvo como {file}. Pressione E quando estiver pronto para a próxima etapa.
+aetherhaven.plotcreator.hint.kindCycled=Tipo de edifício: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =Clique no primeiro canto antes de continuar.
+aetherhaven.plotcreator.hint.prefabSaved=O modelo predefinido foi salvo como {file}. Pressione E quando estiver pronto para a próxima etapa.
 
-aetherhaven.plotcreator.error.needCornerSecond =Clique no canto oposto antes de continuar.
+aetherhaven.plotcreator.error.needCornerFirst=Clique no primeiro canto antes de continuar.
 
-aetherhaven.plotcreator.error.needKind =Abra o seletor de tipo de construção com a tecla F e escolha um tipo antes de continuar.
+aetherhaven.plotcreator.error.needCornerSecond=Clique no canto oposto antes de continuar.
 
-aetherhaven.plotcreator.error.needVariantOf =Pressione F e selecione a qual edifício principal esta variante será considerada antes de continuar.
+aetherhaven.plotcreator.error.needKind=Abra o seletor de tipo de construção com a tecla F e escolha um tipo antes de continuar.
 
-aetherhaven.plotcreator.error.invalidVariantOf =Esse tipo de construção principal não está na lista do criador de lotes.
+aetherhaven.plotcreator.error.needVariantOf=Pressione F e selecione a qual edifício principal esta variante será considerada antes de continuar.
+
+aetherhaven.plotcreator.error.invalidVariantOf=Esse tipo de construção principal não está na lista do criador de lotes.
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =Celeiro
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =Oficina de ferreiro
-aetherhaven.plotcreator.mainType.plot_farm =Terreno agrícola
-aetherhaven.plotcreator.mainType.plot_gaia_altar =Altar de Gaia
-aetherhaven.plotcreator.mainType.plot_guild_hall =Salão da guilda
-aetherhaven.plotcreator.mainType.plot_house =Casa
-aetherhaven.plotcreator.mainType.plot_inn =Pousada
-aetherhaven.plotcreator.mainType.plot_lumbermill =Serraria
-aetherhaven.plotcreator.mainType.plot_market_stall =Banca de mercado
-aetherhaven.plotcreator.mainType.plot_player_shop =Loja do jogador
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =Clique no cofre da loja que você instalou.
-aetherhaven.plotcreator.mainType.plot_miners_hut =Cabana de mineiro
-aetherhaven.plotcreator.mainType.plot_builders_hut =Cabana de construtor
-aetherhaven.plotcreator.mainType.plot_park =Parque
-aetherhaven.plotcreator.mainType.plot_town_hall =Prefeitura
-aetherhaven.plotcreator.mainType.plot_tourist_portal =Portal turístico
+aetherhaven.plotcreator.mainType.plot_barn=Celeiro
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=Oficina de ferreiro
+aetherhaven.plotcreator.mainType.plot_farm=Terreno agrícola
+aetherhaven.plotcreator.mainType.plot_gaia_altar=Altar de Gaia
+aetherhaven.plotcreator.mainType.plot_guild_hall=Salão da guilda
+aetherhaven.plotcreator.mainType.plot_house=Casa
+aetherhaven.plotcreator.mainType.plot_inn=Pousada
+aetherhaven.plotcreator.mainType.plot_lumbermill=Serraria
+aetherhaven.plotcreator.mainType.plot_market_stall=Banca de mercado
+aetherhaven.plotcreator.mainType.plot_player_shop=Loja do jogador
+aetherhaven.plotcreator.mainType.plot_bomb_shop=Loja de bombas
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=Loja do Guardião dos Cristais
+aetherhaven.plotcreator.mainType.plot_flower_shop=Floricultura
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=Clique no cofre da loja que você instalou.
+aetherhaven.plotcreator.mainType.plot_miners_hut=Cabana de mineiro
+aetherhaven.plotcreator.mainType.plot_builders_hut=Cabana de construtor
+aetherhaven.plotcreator.mainType.plot_park=Parque
+aetherhaven.plotcreator.mainType.plot_town_hall=Prefeitura
+aetherhaven.plotcreator.mainType.plot_tourist_portal=Portal turístico
 
-aetherhaven.plotcreator.cancelConfirm.title =Cancelar criador de enredo?
-aetherhaven.plotcreator.cancelConfirm.body =Seu progresso nesta sessão será perdido. Os limites, a exportação do pré-fabricado e os dados do rascunho serão descartados.
-aetherhaven.plotcreator.cancelConfirm.yes =Sim, cancelar
-aetherhaven.plotcreator.cancelConfirm.no =Continue trabalhando
+aetherhaven.plotcreator.cancelConfirm.title=Cancelar criador de enredo?
+aetherhaven.plotcreator.cancelConfirm.body=Seu progresso nesta sessão será perdido. Os limites, a exportação do pré-fabricado e os dados do rascunho serão descartados.
+aetherhaven.plotcreator.cancelConfirm.yes=Sim, cancelar
+aetherhaven.plotcreator.cancelConfirm.no=Continue trabalhando
 
-aetherhaven.plotcreator.button.back =Voltar
-aetherhaven.plotcreator.button.cancel =Cancel
-aetherhaven.plotcreator.button.close =Fechar
-aetherhaven.plotcreator.button.done =Feito
-aetherhaven.plotcreator.button.next =Continuar
+aetherhaven.plotcreator.button.back=Voltar
+aetherhaven.plotcreator.button.cancel=Cancel
+aetherhaven.plotcreator.button.close=Fechar
+aetherhaven.plotcreator.button.done=Feito
+aetherhaven.plotcreator.button.next=Continuar
 
-aetherhaven.plotcreator.step.WELCOME.title =Bem-vindo
-aetherhaven.plotcreator.step.WELCOME.hint =Transforme algo que você construiu em um edifício da cidade.
+aetherhaven.plotcreator.step.WELCOME.title=Bem-vindo
+aetherhaven.plotcreator.step.WELCOME.hint=Transforme algo que você construiu em um edifício da cidade.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =Primeiro canto
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =Marque um dos cantos da sua construção.
+aetherhaven.plotcreator.step.CORNER_FIRST.title=Primeiro canto
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=Marque um dos cantos da sua construção.
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =Canto oposto
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =Marque o canto oposto para definir a área total.
+aetherhaven.plotcreator.step.CORNER_SECOND.title=Canto oposto
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=Marque o canto oposto para definir a área total.
 
-aetherhaven.plotcreator.step.ANCHOR.title =Ponto de sinalização do terreno
-aetherhaven.plotcreator.step.ANCHOR.hint =Marque um dos quatro cantos externos da área delimitada (um quarteirão além dos limites em X e Z). A placa não deve estar dentro da área de construção.
+aetherhaven.plotcreator.step.ANCHOR.title=Ponto de sinalização do terreno
+aetherhaven.plotcreator.step.ANCHOR.hint=Marque um dos quatro cantos externos da área delimitada (um quarteirão além dos limites em X e Z). A placa não deve estar dentro da área de construção.
 
-aetherhaven.plotcreator.step.KIND.title =Tipo de construção
-aetherhaven.plotcreator.step.KIND.hint =Escolha um tipo de construção que se adeque à sua estratégia. Para saber o significado de cada tipo, abra o seu diário da cidade: Guia → Mecânicas → Equipe de criação de terrenos.
-aetherhaven.plotcreator.kind.DECORATION =Decoração
-aetherhaven.plotcreator.kind.VARIANT =Variante de outro edifício
-aetherhaven.plotcreator.kind.HOME =Lar
-aetherhaven.plotcreator.kind.WORK =Local de trabalho
-aetherhaven.plotcreator.kind.AMENITY =comodidade
-aetherhaven.plotcreator.kind.SHOP =Loja do aldeão
-aetherhaven.plotcreator.kind.PLAYER_SHOP =Loja do jogador
-aetherhaven.plotcreator.kind.INN =Pousada
-aetherhaven.plotcreator.kind.TOWN_HALL =Prefeitura
-aetherhaven.plotcreator.kind.GUILD_HALL =Salão da guilda
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =Portal turístico
+aetherhaven.plotcreator.step.KIND.title=Tipo de construção
+aetherhaven.plotcreator.step.KIND.hint=Escolha um tipo de construção que se adeque à sua estratégia. Para saber o significado de cada tipo, abra o seu diário da cidade: Guia → Mecânicas → Equipe de criação de terrenos.
+aetherhaven.plotcreator.kind.DECORATION=Decoração
+aetherhaven.plotcreator.kind.VARIANT=Variante de outro edifício
+aetherhaven.plotcreator.kind.HOME=Lar
+aetherhaven.plotcreator.kind.WORK=Local de trabalho
+aetherhaven.plotcreator.kind.AMENITY=comodidade
+aetherhaven.plotcreator.kind.SHOP=Loja do aldeão
+aetherhaven.plotcreator.kind.PLAYER_SHOP=Loja do jogador
+aetherhaven.plotcreator.kind.INN=Pousada
+aetherhaven.plotcreator.kind.TOWN_HALL=Prefeitura
+aetherhaven.plotcreator.kind.GUILD_HALL=Salão da guilda
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=Portal turístico
 
-aetherhaven.plotcreator.step.IDENTITY.title =Nome e ID
-aetherhaven.plotcreator.step.IDENTITY.hint =Insira o nome de exibição, a descrição e o ID da construção. O ID é atualizado automaticamente a partir do nome até que você edite o campo de ID. O arquivo prefab utiliza esse ID.
+aetherhaven.plotcreator.step.IDENTITY.title=Nome e ID
+aetherhaven.plotcreator.step.IDENTITY.hint=Insira o nome de exibição, a descrição e o ID da construção. O ID é atualizado automaticamente a partir do nome até que você edite o campo de ID. O arquivo prefab utiliza esse ID.
 
-aetherhaven.plotcreator.step.TAGS.title =Etiquetas de construção
-aetherhaven.plotcreator.step.TAGS.hint =Adicione etiquetas (separadas por vírgulas). Exemplo: comodidade, natureza, diversão.
+aetherhaven.plotcreator.step.TAGS.title=Etiquetas de construção
+aetherhaven.plotcreator.step.TAGS.hint=Adicione etiquetas (separadas por vírgulas). Exemplo: comodidade, natureza, diversão.
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =Salvar formato
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =Exporte tudo dentro dos limites usando as configurações de construção da etapa anterior.
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=Salvar formato
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exporte tudo dentro dos limites usando as configurações de construção da etapa anterior.
 
-aetherhaven.plotcreator.error.needIdentity =Defina um nome de exibição e um ID de construção antes de exportar o pré-fabricado.
+aetherhaven.plotcreator.error.needIdentity=Defina um nome de exibição e um ID de construção antes de exportar o pré-fabricado.
 
-aetherhaven.plotcreator.error.selfBuildDays =Os dias de autoconstrução devem ser maiores que zero.
+aetherhaven.plotcreator.error.selfBuildDays=Os dias de autoconstrução devem ser maiores que zero.
 
-aetherhaven.plotcreator.error.assemblySections =O número de seções de montagem por eixo deve ser um número inteiro de 1 a 16 (1 desativa a montagem seccionada).
+aetherhaven.plotcreator.error.assemblySections=O número de seções de montagem por eixo deve ser um número inteiro de 1 a 16 (1 desativa a montagem seccionada).
 
-aetherhaven.plotcreator.step.VARIANT.title =Variante de
-aetherhaven.plotcreator.step.VARIANT.hint =Selecione a qual tipo de edifício principal esta variante se enquadra.
+aetherhaven.plotcreator.step.VARIANT.title=Variante de
+aetherhaven.plotcreator.step.VARIANT.hint=Selecione a qual tipo de edifício principal esta variante se enquadra.
 
-aetherhaven.plotcreator.step.SUBSTEP.title =Locais importantes
-aetherhaven.plotcreator.step.SUBSTEP.hint =Blocos de posicionamento são adicionados ao seu inventário para cada subetapa. Posicione ou clique nos blocos e espaços necessários dentro da área delimitada.
+aetherhaven.plotcreator.step.SUBSTEP.title=Locais importantes
+aetherhaven.plotcreator.step.SUBSTEP.hint=Blocos de posicionamento são adicionados ao seu inventário para cada subetapa. Posicione ou clique nos blocos e espaços necessários dentro da área delimitada.
 
-aetherhaven.plotcreator.step.MATERIALS.title =Materiais de construção
-aetherhaven.plotcreator.step.MATERIALS.hint =Adicione os itens que os jogadores devem fornecer para construir este enredo. Os itens retornam ao seu inventário ao continuar.
+aetherhaven.plotcreator.step.MATERIALS.title=Materiais de construção
+aetherhaven.plotcreator.step.MATERIALS.hint=Pressione F para abrir o menu de materiais de construção. O preenchimento com pré-fabricados adiciona custos sem fornecer itens.
+aetherhaven.plotcreator.step.MATERIALS.detail=Use os sinais de mais e menos para alterar as quantidades. Adicione as quantidades das cópias do inventário à lista e retorne seus itens.
 
-aetherhaven.plotcreator.step.MATERIALS.detail =Baú virtual exclusivo para este edifício — não localizado no mundo do jogo.
+aetherhaven.plotcreator.step.CONFIGURE.title=Configurações de construção
+aetherhaven.plotcreator.step.CONFIGURE.hint=Defina o custo do ouro do tesouro, os dias de autoconstrução, os espaços vazios pré-fabricados, o bloqueio do token de terreno e as seções de montagem.
 
-aetherhaven.plotcreator.step.CONFIGURE.title =Configurações de construção
-aetherhaven.plotcreator.step.CONFIGURE.hint =Defina o custo do ouro do tesouro, os dias de autoconstrução, os espaços vazios pré-fabricados, o bloqueio do token de terreno e as seções de montagem.
+aetherhaven.plotcreator.step.CONFIGURE.detail=O ouro é pago pelo tesouro da cidade quando o terreno é construído. Os dias de autoconstrução indicam quanto tempo leva para concluir o terreno sem a presença de funcionários. A opção "Salvar espaços vazios" controla se o espaço vazio na sua área de construção é usado para remover blocos durante a construção. A opção "Token de terreno bloqueado" exige que os jogadores desbloqueiem este terreno na bancada de criação de terrenos antes de poderem criar tokens. A opção "Seções de montagem" divide a construção em uma grade N×N×N (1 = desativado).
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =O ouro é pago pelo tesouro da cidade quando o terreno é construído. Os dias de autoconstrução indicam quanto tempo leva para concluir o terreno sem a presença de funcionários. A opção "Salvar espaços vazios" controla se o espaço vazio na sua área de construção é usado para remover blocos durante a construção. A opção "Token de terreno bloqueado" exige que os jogadores desbloqueiem este terreno na bancada de criação de terrenos antes de poderem criar tokens. A opção "Seções de montagem" divide a construção em uma grade N×N×N (1 = desativado).
+aetherhaven.plotcreator.field.selfBuildDays=Dias de autoconstrução (dias de jogo)
 
-aetherhaven.plotcreator.field.selfBuildDays =Dias de autoconstrução (dias de jogo)
+aetherhaven.plotcreator.field.saveEmptySpaces=Economize espaços vazios em pré-fabricados
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=Quando ativado, o espaço vazio na sua área de construção é salvo e esses blocos são removidos quando o edifício é montado. Quando desativado, apenas os blocos sólidos são salvos e o terreno existente é mantido. Os marcadores de espaço vazio do editor sempre removem os blocos.
+aetherhaven.plotcreator.field.touristDestination=Os visitantes podem parar aqui.
+aetherhaven.plotcreator.field.touristDestination.hint=Quando o portal estiver aberto, os visitantes poderão caminhar até este edifício durante o dia.
+aetherhaven.plotcreator.field.plotTokenLocked=O token de plotagem está bloqueado por padrão.
+aetherhaven.plotcreator.field.plotTokenLocked.hint=Quando ativada, os jogadores devem desbloquear essa área na bancada de criação de terrenos (usando um projeto de terreno) antes de poderem criar fichas de terreno para ela.
+aetherhaven.plotcreator.field.assemblySections=Seções de montagem por eixo (1–16)
 
-aetherhaven.plotcreator.field.saveEmptySpaces =Economize espaços vazios em pré-fabricados
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =Quando ativado, o espaço vazio na sua área de construção é salvo e esses blocos são removidos quando o edifício é montado. Quando desativado, apenas os blocos sólidos são salvos e o terreno existente é mantido. Os marcadores de espaço vazio do editor sempre removem os blocos.
-aetherhaven.plotcreator.field.touristDestination =Os visitantes podem parar aqui.
-aetherhaven.plotcreator.field.touristDestination.hint =Quando o portal estiver aberto, os visitantes poderão caminhar até este edifício durante o dia.
-aetherhaven.plotcreator.field.plotTokenLocked =O token de plotagem está bloqueado por padrão.
-aetherhaven.plotcreator.field.plotTokenLocked.hint =Quando ativada, os jogadores devem desbloquear essa área na bancada de criação de terrenos (usando um projeto de terreno) antes de poderem criar fichas de terreno para ela.
-aetherhaven.plotcreator.field.assemblySections =Seções de montagem por eixo (1–16)
+aetherhaven.plotcreator.step.REVIEW.title=Análise
+aetherhaven.plotcreator.step.REVIEW.hint=Salve o edifício. Você receberá uma ficha de terreno para colocá-lo na cidade.
 
-aetherhaven.plotcreator.step.REVIEW.title =Análise
-aetherhaven.plotcreator.step.REVIEW.hint =Salve o edifício. Você receberá uma ficha de terreno para colocá-lo na cidade.
+aetherhaven.plotcreator.step.DONE.title=Feito
+aetherhaven.plotcreator.step.DONE.hint=Seu edifício foi salvo. Use o marcador de terreno do seu inventário para colocá-lo em uma cidade.
 
-aetherhaven.plotcreator.step.DONE.title =Feito
-aetherhaven.plotcreator.step.DONE.hint =Seu edifício foi salvo. Use o marcador de terreno do seu inventário para colocá-lo em uma cidade.
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=Clique na estante de registros municipais que você colocou.
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=Clique no local de armazenamento de produção que você posicionou.
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=Clique no bloco do tesouro que você colocou.
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=Clique no balcão de planejamento urbano.
+aetherhaven.plotcreator.substep.WORK_POI=Clique em um local de trabalho (bancada ou mesa).
+aetherhaven.plotcreator.substep.BARD_WORK_POI=Clique onde o bardo deve ficar ao lado do quadro de missões.
+aetherhaven.plotcreator.substep.SLEEP_POI=Clique em uma cama ou local de descanso.
+aetherhaven.plotcreator.substep.EAT_POI=Clique em um restaurante.
+aetherhaven.plotcreator.substep.FUN_POI=Clique em um lugar agradável (um banco para sentar).
+aetherhaven.plotcreator.substep.SHOP_SPOT=Coloque as barracas da loja a partir do seu inventário, confirme cada configuração e, em seguida, clique em cada barraca com a ferramenta de criação de terrenos.
+aetherhaven.plotcreator.substep.SHOP_POI=Clique no balcão de atendimento da loja.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=Clique no local onde os visitantes devem ficar em frente à loja.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=Coloque a plataforma do portal a partir do seu inventário e, em seguida, clique nela com o cajado criador de terrenos.
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=Clique onde o dono da hospedaria deve ficar.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=Clique onde cada visitante da pousada deve ficar (dois pontos). Clique com o botão direito do mouse em um marcador azul-petróleo para removê-lo.
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=Clique onde o mestre da guilda deve ficar.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=Clique em um ponto de surgimento de aventureiros. Clique com o botão direito em um marcador roxo para removê-lo.
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =Clique na estante de registros municipais que você colocou.
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =Clique no local de armazenamento de produção que você posicionou.
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =Clique no bloco do tesouro que você colocou.
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =Clique no balcão de planejamento urbano.
-aetherhaven.plotcreator.substep.WORK_POI =Clique em um local de trabalho (bancada ou mesa).
-aetherhaven.plotcreator.substep.BARD_WORK_POI =Clique onde o bardo deve ficar ao lado do quadro de missões.
-aetherhaven.plotcreator.substep.SLEEP_POI =Clique em uma cama ou local de descanso.
-aetherhaven.plotcreator.substep.EAT_POI =Clique em um restaurante.
-aetherhaven.plotcreator.substep.FUN_POI =Clique em um lugar agradável (um banco para sentar).
-aetherhaven.plotcreator.substep.SHOP_SPOT =Coloque as barracas da loja a partir do seu inventário, confirme cada configuração e, em seguida, clique em cada barraca com o feiticeiro criador de terrenos.
-aetherhaven.plotcreator.substep.SHOP_POI =Clique no balcão de atendimento da loja.
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =Clique no local onde os visitantes devem ficar em frente à loja.
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =Coloque a plataforma do portal a partir do seu inventário e, em seguida, clique nela com o cajado criador de terrenos.
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =Clique onde o dono da hospedaria deve ficar.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =Clique onde cada visitante da pousada deve ficar (dois pontos). Clique com o botão direito do mouse em um marcador azul-petróleo para removê-lo.
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =Clique onde o mestre da guilda deve ficar.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =Clique em um ponto de surgimento de aventureiros. Clique com o botão direito em um marcador roxo para removê-lo.
+aetherhaven.plotcreator.success.saved=Edifício salvo como {id}. Você recebeu um token de terreno.
+aetherhaven.plotcreator.success.registered=Edifício salvo como {id} e registrado em sua cidade no local que você marcou (já concluído — sem placa de identificação do terreno).
+aetherhaven.plotcreator.success.savedTokenFallback=Arquivo de construção salvo como {id}. Não foi possível vinculá-lo à sua cidade no mundo virtual; use o marcador de terreno para colocá-lo.
 
-aetherhaven.plotcreator.success.saved =Edifício salvo como {id}. Você recebeu um token de terreno.
-aetherhaven.plotcreator.success.registered =Edifício salvo como {id} e registrado em sua cidade no local que você marcou (já concluído — sem placa de identificação do terreno).
-aetherhaven.plotcreator.success.savedTokenFallback =Arquivo de construção salvo como {id}. Não foi possível vinculá-lo à sua cidade no mundo virtual; use o marcador de terreno para colocá-lo.
+aetherhaven.plotcreator.error.noTown=Primeiro, coloque a carta de fundação da cidade e, em seguida, finalize o criador de lotes dentro dessa cidade.
+aetherhaven.plotcreator.error.signBlocked=Não foi possível colocar a placa de identificação do terreno no local marcado. O arquivo do edifício foi salvo; use o marcador de terreno, se necessário.
+aetherhaven.plotcreator.error.unknownConstruction=A definição do edifício está faltando após salvar. Tente recarregar o servidor.
 
-aetherhaven.plotcreator.error.noTown =Primeiro, coloque a carta de fundação da cidade e, em seguida, termine o criador de lotes dentro dessa cidade.
-aetherhaven.plotcreator.error.signBlocked =Não foi possível colocar a placa de identificação do terreno no local marcado. O arquivo do edifício foi salvo; use o marcador de terreno, se necessário.
-aetherhaven.plotcreator.error.unknownConstruction =A definição do edifício está faltando após salvar. Tente recarregar o servidor.
-
-aetherhaven.plottoken.error.unknownBuilding =Identificação de edifício desconhecida: {id}
-aetherhaven.plottoken.gave =Atribuiu o token de plotagem {amount} para {name}.
-aetherhaven.plottoken.list.empty =Nenhum edifício encontrado.
-aetherhaven.plottoken.list.header =Identificação dos edifícios:
+aetherhaven.plottoken.error.unknownBuilding=Identificação de edifício desconhecida: {id}
+aetherhaven.plottoken.gave=Atribuiu o token de plotagem {amount} para {name}.
+aetherhaven.plottoken.unlock.success=Você desbloqueou o terreno {name} na bancada de criação.
+aetherhaven.plottoken.unlock.alreadyKnown=Você já desbloqueou o enredo {name}.
+aetherhaven.plottoken.unlock.notLockable=Esse prédio não precisa ser destrancado.
+aetherhaven.plottoken.unlockall.success=Terrenos {count} desbloqueados na bancada de criação.
+aetherhaven.plottoken.unlockall.noneLeft=Você já desbloqueou todas as tramas.
+aetherhaven.plottoken.list.empty=Nenhum edifício encontrado.
+aetherhaven.plottoken.list.header=Identificação dos edifícios:

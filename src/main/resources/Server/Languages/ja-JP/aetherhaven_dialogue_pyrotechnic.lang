@@ -31,7 +31,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=グラブル�
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=今はまだだめだ。グラブルは待っている。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=グラブル・スパークマッチ
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=設計図のページを取る。都市計画デスクで学ぶ。トークンを作成する。人々が迷ったり、誤って爆破されたりすることなく見つけられる場所に店を建てる。宿屋で瓦礫が待っている。壁が厚くなるまで粉は袋に入れておく。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=設計図のページを取る。都市計画デスクで学ぶ。トークンを作成する。人々が迷ったり、誤って爆破されたりすることなく見つけられる場所に店を建てる。瓦礫は宿屋で待っている。壁が厚くなるまで、粉は袋に入れておく。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=看板が設置されたらまた会いましょう。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=グラブル・スパークマッチ
@@ -68,4 +68,4 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.confirm=グラブルに何か�
 aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.love=やった！これはすごい！グラブルは君に感謝しているよ。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.like=良い贈り物です。グラブルは同意にうなずく。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.neutral=うーん。迫力は足りないな。でも、とにかくありがとう。
-aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=グラブルはそれを望んでいない。もう一度頭の中に戻せ。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.gift.dislike=グラブルはそれを望んでいない。もう一度頭の中に戻して。

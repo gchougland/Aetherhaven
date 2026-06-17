@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the Gaia altar plot token from Serah."
+      "text": "Take the Gaia altar plot token from Serah.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the Gaia altar prefab."
+      "text": "Stake and build the Gaia altar prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Serah at the statue and close the quest in dialogue."
+      "text": "Find Serah at the statue and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.description"
 }

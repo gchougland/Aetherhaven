@@ -7,30 +7,36 @@
   "description": "Lyra runs the guild hall from dawn to dusk. She would like a quiet roof at night that belongs to her alone.",
   "assignNpcRoleId": "Aetherhaven_Guild_Master",
   "prerequisites": {
-    "completedQuestIds": ["q_build_guild_hall"],
+    "completedQuestIds": [
+      "q_build_guild_hall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the house plot token from Lyra."
+      "text": "Take the house plot token from Lyra.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house prefab."
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.objective.build"
     },
     {
       "id": "assign",
       "kind": "assign_house_resident",
       "npcRoleId": "Aetherhaven_Guild_Master",
-      "text": "Assign Lyra as resident on the house management block."
+      "text": "Assign Lyra as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Lyra and close the quest in dialogue."
+      "text": "Find Lyra and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.objective.talk"
     }
   ],
   "rewards": [
@@ -52,5 +58,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guild_master.description"
 }

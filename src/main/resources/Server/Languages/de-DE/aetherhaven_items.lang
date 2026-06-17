@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Zuordnen
 aetherhaven.patrolWand.guardTypeKnight=Ritter
 aetherhaven.patrolWand.guardTypeArcher=Bogenschütze
 aetherhaven.patrolWand.guardTypeMage=Magier
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Schurke
 aetherhaven.patrolWand.toastAdded=Punkt hinzugefügt
 aetherhaven.patrolWand.toastRemoved=Punkt entfernt
 aetherhaven.patrolWand.toastSelected=Route ausgewählt
@@ -295,7 +295,7 @@ items.Aetherhaven_Plot_Token_Inn.description=Erforderlich im Inventar, um das Pl
 items.Aetherhaven_Plot_Token_Market_Stall.name=Marktstand-Grundstücksmarke
 items.Aetherhaven_Plot_Token_Market_Stall.description=Die Mitarbeiter der Grundstückszuweisung müssen die Grundfläche des Marktstandes festlegen.
 items.Aetherhaven_Plot_Token_Player_Shop.name=Spielerladen-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Player_Shop.description=Erforderlich, um den Grundriss des Spielerladens vom Platzierungspersonal zu platzieren.
+items.Aetherhaven_Plot_Token_Player_Shop.description=Erforderlich, um den Grundriss des Spielerladens vom Grundstücksplatzierungspersonal zu platzieren.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farmparzellen-Token
 items.Aetherhaven_Plot_Token_Farm.description=Erforderlich ist die Platzierung des Grundrisses der landwirtschaftlichen Parzelle durch das Parzellenzuweisungspersonal.
@@ -326,7 +326,7 @@ items.Aetherhaven_Plot_Token_House.name=Hausgrundstücksmarke
 items.Aetherhaven_Plot_Token_House.description=Die Mitarbeiter der Grundstückszuweisung müssen den Grundriss des gemeinsamen Hauses festlegen.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=Grundstücksmarke für das Rathaus
-items.Aetherhaven_Plot_Token_Town_Hall.description=Erforderlich, um den Grundriss des Rathauses anhand der Angaben des Parzellenzuweisungspersonals zu bestimmen.
+items.Aetherhaven_Plot_Token_Town_Hall.description=Erforderlich, um den Grundriss des Rathauses anhand der Vorgaben des Grundstückszuweisungspersonals zu platzieren.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=Gildenhallen-Grundstücksmarke
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Markiert die Stellen, an denen das Fertiggebäude der Gildenhalle errichtet werden kann. Hergestellt am Stadtplanungsschalter.

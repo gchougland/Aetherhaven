@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Alle Wachen auswählen
 items.Aetherhaven_Rts_Select_All.description=Wähle jeden angeheuerten Wachmann in der Stadt aus.
 
 items.Aetherhaven_Rts_Select_Knight.name=Ritter auswählen
-items.Aetherhaven_Rts_Select_Knight.description=Wähle alle Ritterwachen aus.
+items.Aetherhaven_Rts_Select_Knight.description=Wähle alle Ritter- und Schurkenwachen aus.
 
 items.Aetherhaven_Rts_Select_Archer.name=Bogenschützen auswählen
 items.Aetherhaven_Rts_Select_Archer.description=Wähle alle Bogenschützenwachen aus.
@@ -38,7 +38,7 @@ aetherhaven.rts.stanceAggressive=Haltung: Aggressiv
 aetherhaven.rts.stanceStandGround=Haltung: Standhaft bleiben
 aetherhaven.rts.stanceHoldFire=Haltung: Feuer einstellen
 aetherhaven.rts.hudSelected={n} Wachen ausgewählt
-aetherhaven.rts.hudControls=Mit WASD verschiebt man die Schlachtfeldansicht. Mit Leertaste und Strg zoomt man nach oben und unten. Mit dem Mausrad oder den Zifferntasten wechselt man die Werkzeuge. Klickt man Wachen an, wählt man sie aus. Hält man die Umschalttaste gedrückt und klickt, fügt man eine Wache hinzu oder entfernt sie. Zieht man ein Kästchen, wählt man mehrere Wachen aus. Mit dem Befehl „Verlassen“ (Taste 8 in der Aktionsleiste) verlässt man das Schlachtfeld.
+aetherhaven.rts.hudControls=Mit WASD verschiebt man die Schlachtfeldansicht. Mit Leertaste und Strg zoomt man nach oben und unten. Mit dem Mausrad oder den Zifferntasten wechselt man die Werkzeuge. Klickt man Wachen an, wählt man sie aus. Hält man die Umschalttaste gedrückt und klickt, fügt man eine Wache hinzu oder entfernt sie. Zieht man ein Kästchen, wählt man mehrere Wachen aus. Mit dem Befehl „Verlassen“ (Aktionsleiste, Platz 8) verlässt man das Schlachtfeld.
 aetherhaven.rts.helpFlag=Rechtsklicke auf den Boden, um Wachen zu entsenden. Fähigkeit 1 wechselt zwischen Angriffs- und Bewegungsmodus. Fähigkeit 2 stoppt ausgewählte Wachen.
 aetherhaven.rts.helpSword=Klicken Sie mit der rechten Maustaste auf eine Kreatur, um Ihre Wachen darauf zu konzentrieren. Diese greifen weder Dorfbewohner noch Touristen oder Wachen an.
 aetherhaven.rts.helpSelectAll=Klicken Sie, um alle Wachen in der Stadt auszuwählen und die Auswahl der anderen aufzuheben.

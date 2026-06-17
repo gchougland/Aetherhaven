@@ -70,7 +70,7 @@ aetherhaven.poiTool.legendModeCycle=P: cambiar entre puntos de interés y lugare
 aetherhaven.poiTool.legendPoiHeader=Modo de puntos de interés
 aetherhaven.poiTool.legendPrimary=Primario: seleccione el punto de interés más cercano a la manzana.
 aetherhaven.poiTool.legendSecondaryPoi=Secundario: mover el punto de interés seleccionado al bloque
-aetherhaven.poiTool.legendUse=Uso: establece el destino de la ruta del PNJ para el POI seleccionado (Utilizar al eliminar bloques del POI)
+aetherhaven.poiTool.legendUse=Uso: establece el destino de la ruta del PNJ para el POI seleccionado (Usar al eliminar bloques del POI)
 aetherhaven.poiTool.legendSpawnHeader=Modo de avistamientos de aventureros
 aetherhaven.poiTool.legendSecondarySpawn=Secundario: coloca un espacio encima del bloque o elimina un espacio haciendo clic.
 aetherhaven.poiTool.modeCycledToEdit=Se cambió al modo de edición de puntos de interés.
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Asignar
 aetherhaven.patrolWand.guardTypeKnight=Caballero
 aetherhaven.patrolWand.guardTypeArcher=Arquero
 aetherhaven.patrolWand.guardTypeMage=Mago
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Pícaro
 aetherhaven.patrolWand.toastAdded=Punto añadido
 aetherhaven.patrolWand.toastRemoved=Punto eliminado
 aetherhaven.patrolWand.toastSelected=Ruta seleccionada
@@ -322,11 +322,11 @@ items.Aetherhaven_Plot_Token_Park.description=Se requiere colocar el perímetro 
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=token de parcela del portal turístico
 items.Aetherhaven_Plot_Token_Tourist_Portal.description=Se requiere colocar la huella del portal turístico por parte del personal de ubicación de parcelas.
 
-items.Aetherhaven_Plot_Token_House.name=Ficha para parcela de vivienda
+items.Aetherhaven_Plot_Token_House.name=ficha de parcela de vivienda
 items.Aetherhaven_Plot_Token_House.description=Se requiere que el personal de asignación de parcelas coloque el plano de la vivienda compartida.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=ficha de parcela del ayuntamiento
-items.Aetherhaven_Plot_Token_Town_Hall.description=Se requiere colocar el plano del ayuntamiento por parte del personal de ubicación de parcelas.
+items.Aetherhaven_Plot_Token_Town_Hall.description=Se requiere que el personal de ubicación de parcelas coloque el plano del ayuntamiento.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=ficha de parcela del ayuntamiento
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Indica dónde se puede construir la estructura prefabricada del gremio. Elaborar el proyecto en la oficina de planificación urbana.

@@ -14,23 +14,27 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the house plot token from Thalen."
+      "text": "Take the house plot token from Thalen.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house prefab."
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.objective.build"
     },
     {
       "id": "assign",
       "kind": "assign_house_resident",
       "npcRoleId": "Aetherhaven_Rancher",
-      "text": "Assign Thalen as resident on the house management block."
+      "text": "Assign Thalen as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Thalen and close the quest in dialogue."
+      "text": "Find Thalen and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.objective.talk"
     }
   ],
   "rewards": [
@@ -52,5 +56,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_rancher.description"
 }

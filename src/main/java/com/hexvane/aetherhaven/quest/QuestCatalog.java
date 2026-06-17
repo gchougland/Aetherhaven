@@ -283,12 +283,32 @@ public final class QuestCatalog {
 
     @Nonnull
     public String displayName(@Nonnull String questId) {
+        return titleMessage(questId).getAnsiMessage();
+    }
+
+    @Nonnull
+    public Message titleMessage(@Nonnull String questId) {
         QuestDefinition def = get(questId);
+        if (def != null && def.titleLangKey() != null && !def.titleLangKey().isBlank()) {
+            return Message.translation(def.titleLangKey().trim());
+        }
         if (def != null) {
-            return def.titleOrId();
+            return Message.raw(def.titleOrId());
         }
         String trimmed = questId.trim();
-        return trimmed.isEmpty() ? "" : trimmed;
+        return Message.raw(trimmed.isEmpty() ? "" : trimmed);
+    }
+
+    @Nonnull
+    public Message descriptionMessage(@Nonnull String questId) {
+        QuestDefinition def = get(questId);
+        if (def != null && def.descriptionLangKey() != null && !def.descriptionLangKey().isBlank()) {
+            return Message.translation(def.descriptionLangKey().trim());
+        }
+        if (def != null) {
+            return Message.raw(def.descriptionOrDefault());
+        }
+        return Message.translation("aetherhaven_story_quests.aetherhaven.storyQuests._meta.noDescription");
     }
 
     @Nonnull
@@ -299,17 +319,17 @@ public final class QuestCatalog {
         @Nonnull AetherhavenPlugin plugin
     ) {
         QuestDefinition def = get(questId);
-        String base = displayName(questId);
+        Message base = titleMessage(questId);
         if (def == null || !def.assignByEntity()) {
-            return Message.raw(base);
+            return base;
         }
         String targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
         if (targetName == null || targetName.isBlank()) {
-            return Message.raw(base);
+            return base;
         }
         return Message
             .translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.questForName")
-            .param("title", Message.raw(base))
+            .param("title", base)
             .param("name", Message.raw(targetName.trim()));
     }
 
@@ -321,27 +341,83 @@ public final class QuestCatalog {
         @Nonnull AetherhavenPlugin plugin
     ) {
         QuestDefinition def = get(questId);
-        String base = description(questId);
+        Message base = descriptionMessage(questId);
         if (def == null || !def.assignByEntity()) {
-            return Message.raw(base);
+            return base;
         }
         String targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
         if (targetName == null || targetName.isBlank()) {
-            return Message.raw(base);
+            return base;
         }
         return Message
             .translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.questDescriptionForName")
-            .param("body", Message.raw(base))
+            .param("body", base)
             .param("name", Message.raw(targetName.trim()));
     }
 
     @Nonnull
     public String description(@Nonnull String questId) {
+        return descriptionMessage(questId).getAnsiMessage();
+    }
+
+    @Nonnull
+    public Message objectivesMessage(
+        @Nonnull String questId,
+        @Nullable TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
         QuestDefinition def = get(questId);
-        if (def != null) {
-            return def.descriptionOrDefault();
+        if (def == null) {
+            return Message.raw("");
         }
-        return "No description for this quest yet.";
+        List<QuestObjective> lines = def.objectivesOrEmpty();
+        if (lines.isEmpty()) {
+            return Message.raw("");
+        }
+        String qid = questId.trim();
+        String targetName = null;
+        if (town != null && plugin != null && def.assignByEntity()) {
+            targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
+        }
+        Message out = Message.raw("");
+        for (int i = 0; i < lines.size(); i++) {
+            if (i > 0) {
+                out = out.insert(Message.raw("\n"));
+            }
+            QuestObjective o = lines.get(i);
+            Message lineMsg = objectiveLineMessage(o, targetName);
+            out = out.insert(Message.raw(String.valueOf(i + 1))).insert(Message.raw(". ")).insert(lineMsg);
+            if (town != null
+                && o.kind() != null
+                && "entity_kills".equalsIgnoreCase(o.kind().trim())
+                && o.id() != null
+                && !o.id().isBlank()) {
+                int cur = town.getQuestKillCount(qid, o.id().trim());
+                int need = Math.max(1, o.killCount());
+                out = out.insert(
+                    Message.raw(" (" + Math.min(cur, need) + "/" + need + ")")
+                );
+            }
+        }
+        return out;
+    }
+
+    @Nonnull
+    private static Message objectiveLineMessage(@Nonnull QuestObjective o, @Nullable String targetName) {
+        Message lineMsg;
+        if (o.textLangKey() != null && !o.textLangKey().isBlank()) {
+            lineMsg = Message.translation(o.textLangKey().trim());
+        } else {
+            lineMsg = Message.raw(o.text() != null ? o.text().trim() : "");
+        }
+        if (targetName != null && !targetName.isBlank() && o.text() != null && !o.text().isBlank()) {
+            String personalized = QuestAssigneeDisplay.personalizeObjectiveLine(o.text().trim(), targetName);
+            if (o.textLangKey() == null || o.textLangKey().isBlank()) {
+                lineMsg = Message.raw(personalized);
+            }
+        }
+        return lineMsg;
     }
 
     @Nonnull
@@ -361,41 +437,7 @@ public final class QuestCatalog {
         @Nullable Store<EntityStore> store,
         @Nullable AetherhavenPlugin plugin
     ) {
-        QuestDefinition def = get(questId);
-        if (def == null) {
-            return "";
-        }
-        List<QuestObjective> lines = def.objectivesOrEmpty();
-        if (lines.isEmpty()) {
-            return "";
-        }
-        String qid = questId.trim();
-        String targetName = null;
-        if (town != null && plugin != null && def.assignByEntity()) {
-            targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < lines.size(); i++) {
-            if (i > 0) {
-                sb.append('\n');
-            }
-            QuestObjective o = lines.get(i);
-            String line = o.text() != null ? o.text().trim() : "";
-            if (targetName != null && !targetName.isBlank()) {
-                line = QuestAssigneeDisplay.personalizeObjectiveLine(line, targetName);
-            }
-            sb.append(i + 1).append(". ").append(line);
-            if (town != null
-                && o.kind() != null
-                && "entity_kills".equalsIgnoreCase(o.kind().trim())
-                && o.id() != null
-                && !o.id().isBlank()) {
-                int cur = town.getQuestKillCount(qid, o.id().trim());
-                int need = Math.max(1, o.killCount());
-                sb.append(" (").append(Math.min(cur, need)).append("/").append(need).append(")");
-            }
-        }
-        return sb.toString();
+        return objectivesMessage(questId, town, store, plugin).getAnsiMessage();
     }
 
     @Nonnull

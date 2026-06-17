@@ -7,24 +7,29 @@
   "description": "Lyren wants a tourist portal so travelers can visit Aetherhaven each day and see what the town has become.",
   "assignNpcRoleId": "Aetherhaven_Elder_Lyren",
   "prerequisites": {
-    "completedQuestIds": ["q_build_town_hall"],
+    "completedQuestIds": [
+      "q_build_town_hall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the tourist portal plot token from Lyren."
+      "text": "Take the tourist portal plot token from Lyren.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the tourist portal."
+      "text": "Stake and build the tourist portal.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Tell Lyren in person when the portal is complete."
+      "text": "Tell Lyren in person when the portal is complete.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.talk"
     }
   ],
   "rewards": [
@@ -46,5 +51,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.description"
 }

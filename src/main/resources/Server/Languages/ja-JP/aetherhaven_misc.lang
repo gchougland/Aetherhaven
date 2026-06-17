@@ -30,4 +30,4 @@ items.Aetherhaven_Building_Staff_Thorium.description=銅製の建築スタッフ
 items.Aetherhaven_Building_Staff_Cobalt.name=コバルトビルのスタッフ
 items.Aetherhaven_Building_Staff_Cobalt.description=銅製の建築スタッフと同じです。セカンダリーは、ハイライトされた建築ノードを一度に最大<color is="#4ade80">9×9×9</color>まで満たします。保持している間、<color is="#60a5fa">+600最大マナ</color>とマナ回復速度の向上を付与します。配置されたブロック1つにつき、<color is="#60a5fa">1マナ</color>を消費します。
 items.Aetherhaven_Building_Staff_Adamantite.name=アダマンタイトビルディングスタッフ
-items.Aetherhaven_Building_Staff_Adamantite.description=銅製の建築スタッフと同じです。セカンダリーは、ハイライトされた建築ノードを一度に最大 <color is="#4ade80">11×11×11</color> まで満たします。保持中は、<color is="#60a5fa">+900 最大マナ</color> とマナ回復速度の向上を付与します。配置されたブロックごとに <color is="#60a5fa">1 マナ</color> のコストがかかります。
+items.Aetherhaven_Building_Staff_Adamantite.description=銅製の建築スタッフと同じです。セカンダリーは、ハイライトされた建築ノードを一度に最大 <color is="#4ade80">11×11×11</color> まで満たします。保持している間、<color is="#60a5fa">+900 最大マナ</color> とマナ回復速度の向上を付与します。配置されたブロックごとに <color is="#60a5fa">1 マナ</color> のコストがかかります。

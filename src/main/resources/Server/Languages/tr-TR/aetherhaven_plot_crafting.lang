@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Arsa oluşturma tezgahı
-aetherhaven.ui.plotCrafting.previewTitle =Önizleme
-aetherhaven.ui.plotCrafting.variantSectionTitle =Varyantlar
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Ana binalar
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Dekorasyonlar
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Önceki stil
-aetherhaven.ui.plotCrafting.variantNextTooltip =Sonraki stil
-aetherhaven.ui.plotCrafting.craftButton =Üretim alanı jetonu
-aetherhaven.ui.plotCrafting.costLine =Maliyet: {cost} altın
-aetherhaven.ui.plotCrafting.fundsLine =Madeni paralarınız: {inv} · Şehir hazinesi: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Yeterli altın yok.
-aetherhaven.ui.plotCrafting.noSpace =Öncelikle envanterinizde yer açın.
-aetherhaven.ui.plotCrafting.crafted =Oluşturulan {name} arsa belirteci.
-aetherhaven.ui.plotCrafting.unlockSuccess ={building} arsasının kilidini açtınız.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Bu olay örgüsünü zaten biliyorsunuz.
-aetherhaven.ui.plotCrafting.unlockInvalid =Bu plan okunamıyor.
+aetherhaven.ui.plotCrafting.title=Arsa oluşturma tezgahı
+aetherhaven.ui.plotCrafting.previewTitle=Önizleme
+aetherhaven.ui.plotCrafting.variantSectionTitle=Varyantlar
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Ana binalar
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Dekorasyonlar
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Önceki stil
+aetherhaven.ui.plotCrafting.variantNextTooltip=Sonraki stil
+aetherhaven.ui.plotCrafting.craftButton=Üretim alanı jetonu
+aetherhaven.ui.plotCrafting.costLine=Maliyet: {cost} altın
+aetherhaven.ui.plotCrafting.fundsLine=Madeni paralarınız: {inv} · Şehir hazinesi: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Yeterli altın yok.
+aetherhaven.ui.plotCrafting.noSpace=Öncelikle envanterinizde yer açın.
+aetherhaven.ui.plotCrafting.crafted=Oluşturulan {name} arsa belirteci.
+aetherhaven.ui.plotCrafting.unlockSuccess={building} arsasının kilidini açtınız.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Bu olay örgüsünü zaten biliyorsunuz.
+aetherhaven.ui.plotCrafting.unlockInvalid=Bu plan okunamıyor.

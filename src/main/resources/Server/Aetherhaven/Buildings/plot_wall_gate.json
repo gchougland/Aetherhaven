@@ -4,7 +4,11 @@
   "description": "A gated opening in your town wall.",
   "prefabPath": "Wall_Gate_NS.prefab.json",
   "plotTokenItemId": "Aetherhaven_Token_Wall_Gate",
-  "plotAnchorOffset": [0, 0, 0],
+  "plotAnchorOffset": [
+    0,
+    0,
+    0
+  ],
   "rotationYaw": "None",
   "selfBuildGameDays": 0.25,
   "treasuryGoldCoinCost": 20,
@@ -12,8 +16,18 @@
   "excludeFromTownJournal": true,
   "wallSegment": true,
   "materials": [
-    { "itemId": "Rock_Stone_Cobble", "count": 200 },
-    { "itemId": "Rock_Stone_Brick", "count": 100 },
-    { "resourceTypeId": "Wood_All", "count": 32 }
-  ]
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 200
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 100
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 32
+    }
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_wall_gate.displayName"
 }

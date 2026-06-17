@@ -28,6 +28,10 @@ Run:
   python scripts/build_server_translations.py --sleep-between-langs 5
   python scripts/build_server_translations.py --append-only ru-RU
   python scripts/build_server_translations.py --only ru-RU --append-only ru-RU
+
+Guide markdown (town journal wiki pages):
+  python scripts/translate_guide_pages.py
+  python scripts/translate_guide_pages.py --only fr-FR,de-DE
 """
 from __future__ import annotations
 

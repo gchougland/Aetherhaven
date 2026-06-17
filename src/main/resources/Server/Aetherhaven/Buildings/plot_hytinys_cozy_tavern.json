@@ -13,15 +13,42 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 80,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 1100 },
-    { "resourceTypeId": "Rock", "count": 910 },
-    { "itemId": "Bench_Campfire", "count": 1 },
-    { "itemId": "Bench_Cooking", "count": 2 },
-    { "itemId": "Bench_Farming", "count": 1 },
-    { "itemId": "Bench_Furnace", "count": 1 },
-    { "itemId": "Bench_Furniture", "count": 1 },
-    { "itemId": "Bench_Tannery", "count": 1 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 1100
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 910
+    },
+    {
+      "itemId": "Bench_Campfire",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furniture",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -102,5 +129,6 @@
     "guild",
     "cozy"
   ],
-  "plotTokenLockedByDefault": true
+  "plotTokenLockedByDefault": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_cozy_tavern.displayName"
 }

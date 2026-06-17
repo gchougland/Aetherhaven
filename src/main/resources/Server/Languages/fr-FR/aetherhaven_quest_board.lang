@@ -7,14 +7,14 @@ aetherhaven.questBoard.miner.iron_ore.description=Gorruk manque de minerai de fe
 aetherhaven.questBoard.miner.silver_ore.title=De l'argent pour le coffre-fort
 aetherhaven.questBoard.miner.silver_ore.description=Gorruk a besoin de minerai d'argent mis de côté pour constituer une réserve municipale.
 aetherhaven.questBoard.miner.gold_ore.title=De l'or pour le coffre de la charte
-aetherhaven.questBoard.miner.gold_ore.description=Gorruk a publié un contrat rare pour du minerai d'or destiné à des mains sûres.
+aetherhaven.questBoard.miner.gold_ore.description=Gorruk a publié une offre rare de contrat pour du minerai d'or, réservée à des mains expertes.
 
 aetherhaven.questBoard.farmer.wheat_bundle.title=Du blé pour le garde-manger
 aetherhaven.questBoard.farmer.wheat_bundle.description=Seren a besoin de blé en gerbes pour faire du pain et des semences.
 aetherhaven.questBoard.farmer.carrot_crate.title=Des carottes pour la cuisine
 aetherhaven.questBoard.farmer.carrot_crate.description=Seren veut des carottes fraîches pour le ragoût et des bocaux à échanger.
 aetherhaven.questBoard.farmer.potato_sack.title=Pommes de terre pour la cave
-aetherhaven.questBoard.farmer.potato_sack.description=Seren a besoin de pommes de terre stockées avant la semaine de gel.
+aetherhaven.questBoard.farmer.potato_sack.description=Seren a besoin de pommes de terre stockées avant la semaine des gelées.
 aetherhaven.questBoard.farmer.harvest_feast.title=Récolte pour la place
 aetherhaven.questBoard.farmer.harvest_feast.description=Seren organise une fête des récoltes et a besoin de cultures variées.
 
@@ -77,7 +77,7 @@ aetherhaven.questBoard.innkeeper.legendary_feast.title=festin légendaire
 aetherhaven.questBoard.innkeeper.legendary_feast.description=Corin veut organiser un grand festin pour la ville.
 
 aetherhaven.questBoard.elder.foundation_stones.title=Pierres de fondation
-aetherhaven.questBoard.elder.foundation_stones.description=Lyren souhaite que des pierres soient rassemblées pour les nouvelles bornes de la charte.
+aetherhaven.questBoard.elder.foundation_stones.description=Lyren souhaite que des pierres soient collectées pour les nouvelles bornes de la charte.
 aetherhaven.questBoard.elder.village_timber.title=Bois du village
 aetherhaven.questBoard.elder.village_timber.description=Lyren a besoin de rondins de chêne pour fabriquer des bancs près de la salle de la guilde.
 aetherhaven.questBoard.elder.community_grain.title=Magasins à grains communautaires

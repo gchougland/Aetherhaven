@@ -50,6 +50,52 @@ public final class PlotTokenUnlockService {
         return state.unlock(constructionId);
     }
 
+    /** @return true when a new unlock was added */
+    public static boolean unlock(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String constructionId
+    ) {
+        PlayerPlotTokenUnlockState state = store.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        boolean wasNew = state == null;
+        if (state == null) {
+            state = new PlayerPlotTokenUnlockState();
+        }
+        boolean added = state.unlock(constructionId);
+        if (wasNew) {
+            store.addComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        } else if (added) {
+            store.putComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        }
+        return added;
+    }
+
+    /** @return how many new unlocks were added */
+    public static int unlockAllLockable(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull ConstructionCatalog catalog
+    ) {
+        PlayerPlotTokenUnlockState state = store.getComponent(ref, PlayerPlotTokenUnlockState.getComponentType());
+        boolean wasNew = state == null;
+        if (state == null) {
+            state = new PlayerPlotTokenUnlockState();
+        }
+        int added = 0;
+        for (String id : catalog.ids()) {
+            ConstructionDefinition def = catalog.get(id);
+            if (requiresUnlock(def) && state.unlock(id)) {
+                added++;
+            }
+        }
+        if (wasNew) {
+            store.addComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        } else if (added > 0) {
+            store.putComponent(ref, PlayerPlotTokenUnlockState.getComponentType(), state);
+        }
+        return added;
+    }
+
     @Nullable
     public static String displayNameFor(@Nonnull String constructionId) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();

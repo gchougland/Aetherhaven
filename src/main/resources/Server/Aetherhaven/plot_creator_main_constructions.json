@@ -41,6 +41,18 @@
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_player_shop"
     },
     {
+      "id": "plot_bomb_shop",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_bomb_shop"
+    },
+    {
+      "id": "plot_crystal_keepers_shop",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop"
+    },
+    {
+      "id": "plot_flower_shop",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_flower_shop"
+    },
+    {
       "id": "plot_builders_hut",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_builders_hut"
     },

@@ -15,22 +15,26 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Talk to the visitor and take a house plot token."
+      "text": "Talk to the visitor and take a house plot token.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house."
+      "text": "Stake and build the house.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.build"
     },
     {
       "id": "assign",
       "kind": "custom",
-      "text": "Assign this visitor on the house sign."
+      "text": "Assign this visitor on the house sign.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to the visitor again when they are living there."
+      "text": "Talk to the visitor again when they are living there.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.talk"
     }
   ],
   "rewards": [
@@ -43,10 +47,17 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_tourist_for_npc", "params": {} }
+      {
+        "effect": "lock_tourist_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "per_entity" }
+  "repeat": {
+    "mode": "per_entity"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.description"
 }

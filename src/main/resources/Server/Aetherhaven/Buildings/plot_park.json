@@ -7,19 +7,34 @@
   "prefabPath": "Park_01.prefab.json",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Park",
-  "plotAnchorOffset": [10, 0, 10],
+  "plotAnchorOffset": [
+    10,
+    0,
+    10
+  ],
   "assemblyDeferredBlockIds": [
     "Plant_Leaves_Beech"
   ],
-  "managementBlockLocalPos": [-3, 2, -4],
+  "managementBlockLocalPos": [
+    -3,
+    2,
+    -4
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 38,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 80 },
-    { "resourceTypeId": "Rock", "count": 40 }],
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 80
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 40
+    }
+  ],
   "pois": [
     {
       "localX": -6,
@@ -27,7 +42,10 @@
       "localZ": -2,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "tags": ["FUN", "SIT"],
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": -6,
       "interactionTargetLocalY": 1,
@@ -39,11 +57,15 @@
       "localZ": 4,
       "blockTypeId": "Furniture_Village_Bench",
       "interactionKind": "SIT",
-      "tags": ["FUN", "SIT"],
+      "tags": [
+        "FUN",
+        "SIT"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": 7,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": 3
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_park.displayName"
 }

@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Верстак для создания участков
-aetherhaven.ui.plotCrafting.previewTitle =Предварительный просмотр
-aetherhaven.ui.plotCrafting.variantSectionTitle =Варианты
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Основные здания
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Украшения
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Предыдущий стиль
-aetherhaven.ui.plotCrafting.variantNextTooltip =Следующий стиль
-aetherhaven.ui.plotCrafting.craftButton =Жетон для создания сюжета
-aetherhaven.ui.plotCrafting.costLine =Стоимость: {cost} золота
-aetherhaven.ui.plotCrafting.fundsLine =Ваши монеты: {inv} · Городская казна: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Недостаточно золота.
-aetherhaven.ui.plotCrafting.noSpace =Сначала освободите место в инвентаре.
-aetherhaven.ui.plotCrafting.crafted =Создан токен участка {name}.
-aetherhaven.ui.plotCrafting.unlockSuccess =Вы разблокировали участок {building}.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Вы уже знаете этот сюжет.
-aetherhaven.ui.plotCrafting.unlockInvalid =Этот чертеж невозможно прочитать.
+aetherhaven.ui.plotCrafting.title=Верстак для создания участков
+aetherhaven.ui.plotCrafting.previewTitle=Предварительный просмотр
+aetherhaven.ui.plotCrafting.variantSectionTitle=Варианты
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Основные здания
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Украшения
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Предыдущий стиль
+aetherhaven.ui.plotCrafting.variantNextTooltip=Следующий стиль
+aetherhaven.ui.plotCrafting.craftButton=Жетон для создания сюжета
+aetherhaven.ui.plotCrafting.costLine=Стоимость: {cost} золота
+aetherhaven.ui.plotCrafting.fundsLine=Ваши монеты: {inv} · Городская казна: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Недостаточно золота.
+aetherhaven.ui.plotCrafting.noSpace=Сначала освободите место в инвентаре.
+aetherhaven.ui.plotCrafting.crafted=Создан токен участка {name}.
+aetherhaven.ui.plotCrafting.unlockSuccess=Вы разблокировали участок {building}.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Вы уже знаете этот сюжет.
+aetherhaven.ui.plotCrafting.unlockInvalid=Этот чертеж невозможно прочитать.

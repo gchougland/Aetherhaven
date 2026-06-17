@@ -31,11 +31,11 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=我们会给�
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=现在还不是时候。格鲁布尔在等着。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=拿走蓝图。到城镇规划桌学习。制作代币。建造商店，位置要方便居民找到，避免迷路或意外爆炸。格拉布尔在旅店等候。火药要等到城墙加厚后才能取出。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=拿走蓝图。到城镇规划桌学习。制作代币。建造商店，位置要方便居民找到，避免迷路或意外爆炸。格拉布尔在旅店等候。火药要等到城墙厚实后才能取出。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=等招牌挂出来再见。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=商店还没建好？格鲁布尔在等。格鲁布尔等得太久，粉末就不耐烦了。你还在学习设计图和砌墙，还是格鲁布尔该放弃希望了？
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=商店还没建好？格鲁布尔在等。格鲁布尔等得太久，粉末就开始焦躁不安了。你还在学习设计图和砌墙吗？还是格鲁布尔该放弃希望了？
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=格鲁布尔，我暂时得放弃这个任务了。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=还在努力。唉，我会继续的。
 
@@ -44,7 +44,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=今天没店
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=好吧。格鲁布尔，回头见。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=店铺开张啦！货架都摆好了！墙壁也砌好了！格鲁布尔终于可以像个正经的商人一样卖东西了，不用再躲在外套后面窃窃私语了。谢谢你，朋友。
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=店铺开张啦！货架都摆好了！墙壁也砌好了！格鲁布尔终于可以像个正经的商人哥布林一样卖起好东西了，不用再躲在外套后面窃窃私语了。谢谢你，朋友。
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=乐意效劳。格鲁布尔，如果镇上需要更多人手，就来找我。
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch

@@ -1,7 +1,7 @@
 # Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
 
 items.Aetherhaven_Shop_Spot.name=Emplacement de la boutique
-items.Aetherhaven_Shop_Spot.description=Placez-les sur un terrain constructible pour ouvrir une boutique, ou dans le mode Créatif/Créateur de terrains pour intégrer des étals configurés dans des bâtiments préfabriqués. Les étals sont ouverts le jour et fermés la nuit. Le stock des PNJ est réapprovisionné à l'aube. Les membres de la ville peuvent mettre des objets en vente sur les emplacements des joueurs.
+items.Aetherhaven_Shop_Spot.description=Placez-les sur un terrain constructible pour ouvrir une boutique, ou dans le mode Créatif/Créateur de terrains pour intégrer des étals configurés dans des bâtiments préfabriqués. Les étals sont ouverts le jour et fermés la nuit. Le stock des PNJ est réapprovisionné à l'aube. Les membres de la ville peuvent mettre des objets en vente sur les emplacements réservés aux joueurs.
 
 aetherhaven.shop.notInTown=Placez ceci à l'intérieur d'une ville.
 aetherhaven.shop.notInPlot=Placez ceci à l'intérieur d'un terrain constructible terminé.
@@ -48,7 +48,7 @@ aetherhaven.shop.hud.price={gold} or chacun
 aetherhaven.shop.hud.priceBatch={gold} or pour {count} {item}
 aetherhaven.shop.hud.stock={n} gauche
 aetherhaven.shop.hud.stockBatches={batches} lots restants ({items} au total)
-aetherhaven.shop.hud.hintNpc=F à acheter — Réapprovisionnement des actions NPC à l'aube
+aetherhaven.shop.hud.hintNpc=F à acheter — Réapprovisionnement des stocks de NPC à l'aube
 aetherhaven.shop.hud.hintPlayerBuy=F à acheter
 aetherhaven.shop.hud.hintPlayerList=F avec un article en main à mettre en vente
 aetherhaven.shop.hud.hintPlayerOwn=F pour reprendre vos articles

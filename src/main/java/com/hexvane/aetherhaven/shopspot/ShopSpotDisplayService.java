@@ -43,14 +43,38 @@ public final class ShopSpotDisplayService {
 
     private ShopSpotDisplayService() {}
 
-    /** Runtime-only floating item props spawned above configured stalls; never save these into prefabs. */
-    public static boolean isDisplayPropEntity(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
+    /**
+     * Runtime-only floating item props spawned above configured stalls; never save these into prefabs.
+     * Distinguished from entity-tool item props by {@link Intangible}, which shop displays always have.
+     */
+    public static boolean isRuntimeShopDisplayProp(@Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref) {
         if (!ref.isValid()) {
             return false;
         }
-        return store.getComponent(ref, ItemComponent.getComponentType()) != null
-            && store.getComponent(ref, PreventPickup.getComponentType()) != null
-            && store.getComponent(ref, PreventItemMerging.getComponentType()) != null;
+        return isRuntimeShopDisplayPropHolder(
+            store.getComponent(ref, ItemComponent.getComponentType()) != null,
+            store.getComponent(ref, PreventPickup.getComponentType()) != null,
+            store.getComponent(ref, PreventItemMerging.getComponentType()) != null,
+            store.getComponent(ref, Intangible.getComponentType()) != null
+        );
+    }
+
+    public static boolean isRuntimeShopDisplayProp(@Nonnull Holder<EntityStore> holder) {
+        return isRuntimeShopDisplayPropHolder(
+            holder.getComponent(ItemComponent.getComponentType()) != null,
+            holder.getComponent(PreventPickup.getComponentType()) != null,
+            holder.getComponent(PreventItemMerging.getComponentType()) != null,
+            holder.getComponent(Intangible.getComponentType()) != null
+        );
+    }
+
+    private static boolean isRuntimeShopDisplayPropHolder(
+        boolean hasItem,
+        boolean hasPreventPickup,
+        boolean hasPreventMerging,
+        boolean hasIntangible
+    ) {
+        return hasItem && hasPreventPickup && hasPreventMerging && hasIntangible;
     }
 
     public static void syncDisplay(
@@ -165,6 +189,17 @@ public final class ShopSpotDisplayService {
                 removeDisplayNow(world, deferred, plugin, registry, record);
             }
         });
+    }
+
+    /** Synchronous display teardown for plot relocation/removal on the world thread. */
+    public static void removeDisplayImmediate(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull ShopSpotRegistry registry,
+        @Nonnull ShopSpotRecord record
+    ) {
+        removeDisplayNow(world, store, plugin, registry, record);
     }
 
     private static void removeDisplayNow(

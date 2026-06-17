@@ -101,7 +101,7 @@ commands.aetherhaven.time.noResource=Ce monde ne dispose d'aucune ressource temp
 commands.aetherhaven.walldebug.desc=Créatif : lignes de débogage du placement de la baguette murale dans le chat
 commands.aetherhaven.walldebug.on.desc=Activer le débogage de la baguette murale
 commands.aetherhaven.walldebug.off.desc=Désactiver le débogage de la baguette murale
-commands.aetherhaven.walldebug.dump.desc=Imprimer l'état actuel de la session du terminal mural
+commands.aetherhaven.walldebug.dump.desc=Afficher l'état actuel de la session du terminal mural
 
 commands.aetherhaven.townsfolk.desc=Débogage : faire apparaître et gérer les PNJ du groupe de villageois partagé
 commands.aetherhaven.townsfolk.spawn.desc=Faites apparaître un PNJ habitant de votre ville (choix aléatoire ou en fournissant l'identifiant du personnage).
@@ -141,8 +141,11 @@ commands.aetherhaven.plotcreator.generateicon.desc=Générer une icône PNG de j
 commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Identifiant du bâtiment (plot_my_house) ou clé du préfabriqué (Guild_Hall.prefab.json)
 commands.aetherhaven.plotcreator.generateicon.outputId=Identifiant de sortie pour le fichier icône (par défaut : identifiant du bâtiment ou nom du préfabriqué)
 
-commands.aetherhaven.plottoken.desc=Attribuez et listez les jetons de parcelle pour les bâtiments
+commands.aetherhaven.plottoken.desc=Attribuer, débloquer et lister les jetons de parcelle pour les bâtiments
 commands.aetherhaven.plottoken.give.desc=Attribuez un jeton de parcelle à un identifiant de bâtiment
 commands.aetherhaven.plottoken.give.constructionId=Identifiant du bâtiment (exemple : plot_park)
 commands.aetherhaven.plottoken.give.amount=Taille de la pile (par défaut 1)
+commands.aetherhaven.plottoken.unlock.desc=Débloquez un style d'intrigue à l'établi.
+commands.aetherhaven.plottoken.unlock.constructionId=Identifiant du bâtiment (exemple : plot_park)
+commands.aetherhaven.plottoken.unlockall.desc=Débloquez tous les styles d'intrigue à l'établi.
 commands.aetherhaven.plottoken.list.desc=Liste de tous les identifiants de bâtiments

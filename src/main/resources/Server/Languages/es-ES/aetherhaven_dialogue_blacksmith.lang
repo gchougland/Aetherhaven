@@ -1,7 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_blacksmith)
 # Full translation keys are aetherhaven.dialogue.blacksmith.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.blacksmith.repairGear=Repara mi equipo (pago en monedas de oro)
-aetherhaven.dialogue.blacksmith.openGeodes=Rompe las geodas (5 de oro cada una)
+aetherhaven.dialogue.blacksmith.openGeodes=Abre las geodas (5 de oro cada una)
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.body=No hay resentimientos. Si decides que necesitas trabajos de metalistería de precisión de nuevo, solo tienes que pedírmelo directamente.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.c0=Comprendido.
 aetherhaven.dialogue.aetherhaven_blacksmith.garren_abandoned.speaker=Garren Vale
@@ -45,7 +45,7 @@ aetherhaven.dialogue.aetherhaven_blacksmith.root.c8=Dijiste que necesitabas una 
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c9=¡Cuidado con los dedos cerca del yunque!
 aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.love=¡Excelente! No olvidaré la calidad de este regalo.
-aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=Estructura sólida. Lo añadiré a la categoría premium de inmediato.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=Estructura sólida. Lo añadiré a la sección de productos premium de inmediato.
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral=Aceptable. Lo guardaré para consultarlo en el futuro si fuera necesario.
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=Aprecio la intención, pero mi forja requiere grados específicos de mineral, no... esto.
 

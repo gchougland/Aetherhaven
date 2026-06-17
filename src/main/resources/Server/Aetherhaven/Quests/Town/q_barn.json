@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the barn plot token from Thalen."
+      "text": "Take the barn plot token from Thalen.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the barn prefab."
+      "text": "Stake and build the barn prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Thalen at the farming bench and close the quest in dialogue."
+      "text": "Find Thalen at the farming bench and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.description"
 }

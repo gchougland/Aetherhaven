@@ -6,19 +6,49 @@
   "prefabPath": "Townhall.prefab.json",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
-  "plotAnchorOffset": [9, 0, 7],
-  "visitorSpawnLocals": [[-5, 1, -2]],
-  "managementBlockLocalPos": [-7, 2, 3],
-  "treasuryLocalPos": [7, 1, 2],
+  "plotAnchorOffset": [
+    9,
+    0,
+    7
+  ],
+  "visitorSpawnLocals": [
+    [
+      -5,
+      1,
+      -2
+    ]
+  ],
+  "managementBlockLocalPos": [
+    -7,
+    2,
+    3
+  ],
+  "treasuryLocalPos": [
+    7,
+    1,
+    2
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 1,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 400 },
-    { "resourceTypeId": "Rock", "count": 240 },
-    { "itemId": "Aetherhaven_Plot_Crafting_Bench", "count": 1 },
-    { "itemId": "Aetherhaven_Town_Planning_Desk", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 400
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 240
+    },
+    {
+      "itemId": "Aetherhaven_Plot_Crafting_Bench",
+      "count": 1
+    },
+    {
+      "itemId": "Aetherhaven_Town_Planning_Desk",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -27,11 +57,15 @@
       "localZ": 0,
       "blockTypeId": "Aetherhaven_Town_Planning_Desk",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK", "FUN"],
+      "tags": [
+        "WORK",
+        "FUN"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": -5,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -1
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_town_hall.displayName"
 }

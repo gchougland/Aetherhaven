@@ -22,12 +22,12 @@ aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Şehirde bir çiçek�
 aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=Şimdilik bu kadar. Daha sonra görüşürüz.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Ivy Bloomwell
-aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Küçük bitkilerim kasalardan ve el arabalarından daha iyisini hak ediyor. Büyüyebilecekleri, sergileyebilecekleri ve nefes alabilecekleri gerçek bir çiçekçi dükkanına ihtiyacım var. Planın taslağını buradaki yola çizdim. Eğer bunu kasaba için hayata geçirirseniz, planları sizinle paylaşabilirim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Küçük bitkilerim kasalardan ve araba tekerleklerinden daha iyisini hak ediyor. Büyüyebilecekleri, sergileyebilecekleri ve nefes alabilecekleri gerçek bir çiçekçi dükkanına ihtiyacım var. Planın taslağını buradaki yola çizdim. Eğer bunu kasaba için hayata geçirirseniz, planları sizinle paylaşabilirim.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Dükkanınızı inşa edeceğiz.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Şu an olmaz. Biraz daha zamana ihtiyacım var.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.speaker=Ivy Bloomwell
-aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=İşte dükkan planlarım. Şehir planlama masasında inceleyin, hazır olduğunuzda bir arsa belirteci oluşturun ve dükkanı, güneş ışığının fidelerin ulaşabileceği bir yere kurun. Kapı açılana kadar ben de saksılarımla handa bekleyeceğim.
+aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.body=İşte dükkan planlarım. Şehir planlama masasında inceleyin, hazır olduğunuzda bir arsa belirteci oluşturun ve dükkanı, güneş ışığının fidelerin ulaşabileceği bir yere kurun. Kapı açılana kadar ben de çömleğimle handa bekleyeceğim.
 aetherhaven.dialogue.aetherhaven_florist.ivy_shop_accepted.c0=Raflar yerleştirildiğinde görüşürüz.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_building.speaker=Ivy Bloomwell

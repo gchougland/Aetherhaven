@@ -136,7 +136,7 @@ aetherhaven.geode.row={count} × {itemName}
 aetherhaven.geode.open.insufficientGold=광물 결정 하나당 금화 5개가 필요합니다.
 aetherhaven.geode.open.reward=지오드: {amount} × {itemName}
 aetherhaven.geode.open.failed=전리품을 획득할 수 없었습니다. 동전과 광물이 반환되었습니다.
-aetherhaven.geode.open.noRoom=인벤토리 공간이 부족합니다. 코인과 광물이 반환되었습니다.
+aetherhaven.geode.open.noRoom=인벤토리 공간이 부족합니다. 동전과 광물이 반환되었습니다.
 
 # === UI: hand mirror (jewelry loadout) ===
 aetherhaven.ui.handmirror.title=보석류
@@ -208,7 +208,7 @@ aetherhaven.ui.jewelryCrafting.gold=금
 aetherhaven.ui.jewelryCrafting.silver=은
 aetherhaven.ui.jewelryCrafting.goldActive=금(에)
 aetherhaven.ui.jewelryCrafting.silverActive=실버(온)
-aetherhaven.ui.jewelryCrafting.rarityNone=아직 정수 "포인트"가 충분하지 않습니다. 미리보기에 등급이 표시될 때까지 + 버튼을 눌러 일반 정수 및/또는 농축 정수를 추가하세요.
+aetherhaven.ui.jewelryCrafting.rarityNone=아직 정수 "포인트"가 충분하지 않습니다. 미리보기에 등급이 표시될 때까지 + 키를 눌러 일반 정수 및/또는 농축 정수를 추가하세요.
 aetherhaven.ui.jewelryCrafting.rarityLine=에센스 결과: {rarity}
 aetherhaven.ui.jewelryCrafting.traitsLine=이 보석의 가능한 능력치: {stats}
 aetherhaven.ui.jewelryCrafting.craft=노

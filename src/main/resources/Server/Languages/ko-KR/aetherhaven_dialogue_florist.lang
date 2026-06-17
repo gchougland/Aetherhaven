@@ -22,7 +22,7 @@ aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=저는 당신이 시�
 aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=오늘은 여기까지입니다. 나중에 뵙겠습니다.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=아이비 블룸웰
-aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=제 작은 식물들은 상자나 수레바퀴에 담겨 있는 것보다 더 나은 대접을 받아야 해요. 자라고, 진열되고, 숨 쉴 공간이 있는 제대로 된 꽃집이 필요해요. 제가 여기 길가에 설계도를 그려봤어요. 마을에서 모금 활동을 지원해 주신다면, 그 설계도를 공유해 드릴게요.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=제 작은 식물들은 상자나 수레바퀴에 담겨 있는 것보다 더 나은 대접을 받아야 해요. 자라고, 진열하고, 숨 쉴 공간이 있는 제대로 된 꽃집이 필요해요. 제가 여기 길가에 설계도를 그려봤어요. 마을에서 모금 활동을 지원해 주신다면, 그 설계도를 공유해 드릴게요.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=저희가 가게를 지어드리겠습니다.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=지금은 안 돼요. 좀 더 시간이 필요해요.
 
@@ -44,7 +44,7 @@ aetherhaven.dialogue.aetherhaven_florist.ivy_done.body=어머, 보세요. 따뜻
 aetherhaven.dialogue.aetherhaven_florist.ivy_done.c0=기꺼이 도와드리겠습니다. 마을에 녹지가 더 필요하시면 저를 찾아오세요.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.speaker=아이비 블룸웰
-aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=가게는 제 일터입니다. 화분들을 놓을 수 있는 햇살 좋은 창가와 하루 일과를 마치고 차를 마실 수 있는 선반이 있는 작은 집을 여전히 갖고 싶어요. 다른 분들과 같은 부지에 집을 지을 수 있다면 좋겠습니다.
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.body=가게는 제 일터입니다. 화분들을 놓을 햇살 좋은 창가와 하루 일과를 마치고 차를 마실 수 있는 선반이 있는 작은 집을 여전히 갖고 싶어요. 다른 분들과 같은 부지에 집을 지을 수 있다면 좋겠습니다.
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=내가 너를 위해 집을 하나 사주겠다.
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=다음에.
 
@@ -64,4 +64,4 @@ aetherhaven.dialogue.aetherhaven_florist.gift.confirm=제게 뭐 좀 주시겠�
 aetherhaven.dialogue.aetherhaven_florist.gift.love=오! 이거 정말 완벽하네요. 당신은 정원사가 뭘 좋아하는지 정말 잘 아시는군요.
 aetherhaven.dialogue.aetherhaven_florist.gift.like=정말 친절하시네요. 저를 생각해 주셔서 감사합니다.
 aetherhaven.dialogue.aetherhaven_florist.gift.neutral=음. 제 취향은 아니지만, 어쨌든 감사합니다.
-aetherhaven.dialogue.aetherhaven_florist.gift.dislike=저건 안 키우고 싶어요. 식물들은 더 나은 친구들을 만날 자격이 있어요.
+aetherhaven.dialogue.aetherhaven_florist.gift.dislike=저건 차라리 두지 않는 게 좋겠어요. 식물들은 더 나은 친구들을 만날 자격이 있어요.

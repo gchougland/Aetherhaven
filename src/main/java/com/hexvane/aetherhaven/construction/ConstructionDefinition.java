@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import org.joml.Vector3i;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.prefab.PrefabRotation;
@@ -23,6 +24,10 @@ public final class ConstructionDefinition {
 
     @SerializedName("displayName")
     private String displayName;
+
+    @SerializedName("displayNameLangKey")
+    @Nullable
+    private String displayNameLangKey;
 
     @SerializedName("description")
     @Nullable
@@ -225,6 +230,20 @@ public final class ConstructionDefinition {
 
     public String getDisplayName() {
         return displayName != null ? displayName : id;
+    }
+
+    @Nullable
+    public String getDisplayNameLangKey() {
+        return displayNameLangKey != null && !displayNameLangKey.isBlank() ? displayNameLangKey.trim() : null;
+    }
+
+    @Nonnull
+    public Message displayNameMessage() {
+        String key = getDisplayNameLangKey();
+        if (key != null) {
+            return Message.translation(key);
+        }
+        return Message.raw(getDisplayName());
     }
 
     @Nullable

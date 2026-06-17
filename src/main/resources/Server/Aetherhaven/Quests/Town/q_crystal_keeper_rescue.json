@@ -15,5 +15,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keeper_rescue.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_crystal_keeper_rescue.description"
 }

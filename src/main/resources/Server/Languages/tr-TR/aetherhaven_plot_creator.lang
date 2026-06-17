@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =Hikaye oluşturma aracını kullanma izniniz yok.
-aetherhaven.plotcreator.error.id_empty =Bina kimlik numarasını girin.
-aetherhaven.plotcreator.error.id_prefix =Kimlik numarası plot_ ile başlamalıdır.
-aetherhaven.plotcreator.error.id_wall =Bu araçla henüz duvar planları oluşturulamıyor.
-aetherhaven.plotcreator.error.id_chars =Kimlik alanında yalnızca küçük harfler, rakamlar ve alt çizgiler kullanın.
-aetherhaven.plotcreator.error.id_taken =Bu bina kimlik numarası zaten kullanımda.
-aetherhaven.plotcreator.error.incomplete =Öncelikle gerekli tüm adımları tamamlayın.
-aetherhaven.plotcreator.error.prefab_missing =Üretimi tamamlamadan önce prefabrik yapıyı kaydedin.
-aetherhaven.plotcreator.error.prefabName =Hazır dosya için bir ad girin.
-aetherhaven.plotcreator.error.prefabExport =Prefab kaydedilemedi. Sınırları kontrol edin ve tekrar deneyin.
-aetherhaven.plotcreator.error.saveFailed =Yapı dosyasını kaydedemedim.
-aetherhaven.plotcreator.error.anchorInside =Parsel işareti inşaat sınırları içinde olamaz. Bunun yerine dış köşelerden birini kullanın.
-aetherhaven.plotcreator.error.anchorNotCorner =Yapının dört dış köşesinden birine tıklayın (ayak izinden hem X hem de Z ekseninde bir blok dışarıya).
-aetherhaven.plotcreator.error.needAnchor =Devam etmeden önce arsa işaretini görmek için dış köşelerden birine tıklayın.
-aetherhaven.plotcreator.error.outsideBounds =İşaretli sınırlar içine tıklayın.
-aetherhaven.plotcreator.error.wrongBlock =Bu adım için gereken blok bu değil.
-aetherhaven.plotcreator.error.shopSpotNotConfigured =Öncelikle dükkan tezgahının kurulumunu onaylayın, ardından arsa oluşturucu asasıyla üzerine tıklayın.
-aetherhaven.plotcreator.error.tooManyVisitors =Bu binaya sadece iki ziyaretçi park yeri yeterli.
-aetherhaven.plotcreator.error.editNotCustom =Yalnızca sunucu veri klasörünüzde kayıtlı özel binalar düzenlenebilir.
-aetherhaven.plotcreator.error.editUnknown ={id} kimlik numarasına sahip özel bir bina bulunamadı.
-aetherhaven.plotcreator.edit.loaded ={id} düzenleme için yüklendi. Ayrıntıları değiştirmek için geri dönün veya dosyayı güncellemek için kaydedin.
+aetherhaven.plotcreator.error.noPermission=Hikaye oluşturma aracını kullanma izniniz yok.
+aetherhaven.plotcreator.error.id_empty=Bina kimlik numarasını girin.
+aetherhaven.plotcreator.error.id_prefix=Kimlik numarası plot_ ile başlamalıdır.
+aetherhaven.plotcreator.error.id_wall=Bu araçla henüz duvar planları oluşturulamıyor.
+aetherhaven.plotcreator.error.id_chars=Kimlik alanında yalnızca küçük harfler, rakamlar ve alt çizgiler kullanın.
+aetherhaven.plotcreator.error.id_taken=Bu bina kimlik numarası zaten kullanımda.
+aetherhaven.plotcreator.error.incomplete=Öncelikle gerekli tüm adımları tamamlayın.
+aetherhaven.plotcreator.error.prefab_missing=Üretimi tamamlamadan önce prefabrik yapıyı kaydedin.
+aetherhaven.plotcreator.error.prefabName=Hazır dosya için bir ad girin.
+aetherhaven.plotcreator.error.prefabExport=Prefab kaydedilemedi. Sınırları kontrol edin ve tekrar deneyin.
+aetherhaven.plotcreator.error.saveFailed=Yapı dosyasını kaydedemedim.
+aetherhaven.plotcreator.error.anchorInside=Parsel işareti inşaat sınırları içinde olamaz. Bunun yerine dış köşelerden birini kullanın.
+aetherhaven.plotcreator.error.anchorNotCorner=Yapının dört dış köşesinden birine tıklayın (ayak izinden hem X hem de Z ekseninde bir blok dışarıya).
+aetherhaven.plotcreator.error.needAnchor=Devam etmeden önce arsa işaretini görmek için dış köşelerden birine tıklayın.
+aetherhaven.plotcreator.error.outsideBounds=İşaretli sınırlar içine tıklayın.
+aetherhaven.plotcreator.error.wrongBlock=Bu adım için gereken blok bu değil.
+aetherhaven.plotcreator.error.shopSpotNotConfigured=Öncelikle dükkan tezgahının kurulumunu onaylayın, ardından arsa oluşturucu asasıyla üzerine tıklayın.
+aetherhaven.plotcreator.error.tooManyVisitors=Bu binaya sadece iki ziyaretçi park yeri yeterli.
+aetherhaven.plotcreator.error.editNotCustom=Yalnızca sunucu veri klasörünüzde kayıtlı özel binalar düzenlenebilir.
+aetherhaven.plotcreator.error.editUnknown={id} kimlik numarasına sahip özel bir bina bulunamadı.
+aetherhaven.plotcreator.edit.loaded={id} düzenleme için yüklendi. Ayrıntıları değiştirmek için geri dönün veya dosyayı güncellemek için kaydedin.
 
-aetherhaven.plotcreator.generateicon.error.empty =Bir bina kimliği veya prefabrik yol girin.
-aetherhaven.plotcreator.generateicon.error.noPrefab ={id} için önceden tanımlanmış bir yol yok.
-aetherhaven.plotcreator.generateicon.error.noOutputId =Çıkış kimliği belirlenemedi; lütfen ikinci argüman olarak bir kimlik belirtin.
-aetherhaven.plotcreator.generateicon.error.notFound =Prefab bulunamadı: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =Prefab yüklenemedi: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed ={id} için simge oluşturma başarısız oldu.
-aetherhaven.plotcreator.generateicon.ok =Simge {id} için {path} konumunda kaydedildi (varlık yolu: {asset})
+aetherhaven.plotcreator.generateicon.error.empty=Bir bina kimliği veya prefabrik yol girin.
+aetherhaven.plotcreator.generateicon.error.noPrefab={id} için önceden tanımlanmış bir yol yok.
+aetherhaven.plotcreator.generateicon.error.noOutputId=Çıkış kimliği belirlenemedi; lütfen ikinci argüman olarak bir kimlik belirtin.
+aetherhaven.plotcreator.generateicon.error.notFound=Prefab bulunamadı: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=Prefab yüklenemedi: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed={id} için simge oluşturma başarısız oldu.
+aetherhaven.plotcreator.generateicon.ok=Simge {id} için {path} konumunda kaydedildi (varlık yolu: {asset})
 
-aetherhaven.plotcreator.hint.cornerFirstSet =İlk köşeyi işaretleyin. Ardından karşı köşeyi işaretleyin.
-aetherhaven.plotcreator.hint.cornerSecondSet =Sınırlar belirlendi. Ardından, dış köşe parsel işaretini işaretleyin, daha sonra bina tipini seçin ve şekli kaydetmeden önce gerekli blokları yerleştirin.
-aetherhaven.plotcreator.hint.anchorSet =Arsa işaretleme noktası belirlendi.
-aetherhaven.plotcreator.hint.blockRecorded =Yer kaydedildi.
-aetherhaven.plotcreator.hint.shopSpotRecorded =Dükkan tezgahı kurtarıldı.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =Bu aşama için o dükkan tezgahı zaten ayrılmış durumda.
-aetherhaven.plotcreator.hint.touristPortalRecorded =Turist portalı kaydedildi.
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =Bu aşama için turizm portalı zaten kaydedildi.
-aetherhaven.plotcreator.hint.spawnRecorded =Doğma noktası kaydedildi.
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =Maceracıların ortaya çıkma noktası kaldırıldı.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =Ziyaretçilerin ortaya çıkma noktası kaldırıldı.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =Ziyaretçilerin ortaya çıkma noktası zaten kaydedildi.
-aetherhaven.plotcreator.hint.poiRecorded =Aktivite noktası kaydedildi.
+aetherhaven.plotcreator.hint.cornerFirstSet=İlk köşeyi işaretleyin. Ardından karşı köşeyi işaretleyin.
+aetherhaven.plotcreator.hint.cornerSecondSet=Sınırlar belirlendi. Ardından, dış köşe parsel işaretini işaretleyin, daha sonra bina tipini seçin ve şekli kaydetmeden önce gerekli blokları yerleştirin.
+aetherhaven.plotcreator.hint.anchorSet=Arsa işaretleme noktası belirlendi.
+aetherhaven.plotcreator.hint.blockRecorded=Yer kaydedildi.
+aetherhaven.plotcreator.hint.shopSpotRecorded=Dükkan tezgahı kurtarıldı.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=Bu aşama için o dükkan tezgahı zaten ayrılmış durumda.
+aetherhaven.plotcreator.hint.touristPortalRecorded=Turist portalı kaydedildi.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=Bu aşama için turizm portalı zaten kaydedildi.
+aetherhaven.plotcreator.hint.spawnRecorded=Doğma noktası kaydedildi.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=Maceracıların ortaya çıkma noktası kaldırıldı.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=Ziyaretçilerin ortaya çıkma noktası kaldırıldı.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=Ziyaretçilerin ortaya çıkma noktası zaten kaydedildi.
+aetherhaven.plotcreator.hint.poiRecorded=Aktivite noktası kaydedildi.
 
-aetherhaven.plotcreator.button.save =Binayı kurtarın
-aetherhaven.plotcreator.button.openMaterials =Açık yapı maliyeti depolama
+aetherhaven.plotcreator.button.save=Binayı kurtarın
+aetherhaven.plotcreator.button.addFromInventory=Stoktan ekle
+aetherhaven.plotcreator.button.useBuildShape=Hazır malzemeler kullanın.
+aetherhaven.plotcreator.button.clearPrefabMaterials=Net inşaat maliyetleri
+aetherhaven.plotcreator.button.materialsPrevPage=Öncesi
+aetherhaven.plotcreator.button.materialsNextPage=Sonraki
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =Bina adı
-aetherhaven.plotcreator.field.description =Kısa açıklama (isteğe bağlı)
-aetherhaven.plotcreator.field.constructionId =Bina kimliği (plot_my_building)
-aetherhaven.plotcreator.field.prefabName =Prefab dosya adı
-aetherhaven.plotcreator.field.tags =Etiketler (virgülle ayrılmış)
-aetherhaven.plotcreator.field.variantOf =Bina kimliği olarak sayılır.
-aetherhaven.plotcreator.field.goldCost =Hazineden alınan altın fiyatı
+aetherhaven.plotcreator.materials.pageLabel=Sayfa {page} / {pages}
+aetherhaven.plotcreator.materials.emptyList=Henüz inşaat maliyeti yok. Hazır malzemeler kullanın veya envanterinizden öğeler ekleyin.
+aetherhaven.plotcreator.materials.confirmReplace=Mevcut inşaat maliyetlerini değiştirmek için "Hazır malzemeleri kullan" seçeneğine tekrar tıklayın.
+aetherhaven.plotcreator.materials.confirmClear=Tüm yapım maliyetlerini kaldırmak için "Yapım maliyetlerini temizle" seçeneğine tekrar tıklayın.
+aetherhaven.plotcreator.materials.fillFailed=Hazır yapı malzemesinden yapım maliyetlerini karşılayamadık. Öncelikle yapım şeklini kaydedin.
 
-aetherhaven.plotcreator.session.started =Hikaye oluşturucu başlatıldı. Dünyada çalışırken HUD'ı ve personel tuşlarını kullanın.
+aetherhaven.plotcreator.field.displayName=Bina adı
+aetherhaven.plotcreator.field.description=Kısa açıklama (isteğe bağlı)
+aetherhaven.plotcreator.field.constructionId=Bina kimliği (plot_my_building)
+aetherhaven.plotcreator.field.prefabName=Prefab dosya adı
+aetherhaven.plotcreator.field.tags=Etiketler (virgülle ayrılmış)
+aetherhaven.plotcreator.field.variantOf=Bina kimliği olarak sayılır.
+aetherhaven.plotcreator.field.goldCost=Hazineden alınan altın fiyatı
 
-aetherhaven.plotcreator.hud.title =Hikaye yaratıcısı
+aetherhaven.plotcreator.session.started=Hikaye oluşturucu başlatıldı. Dünyada çalışırken HUD'ı ve personel tuşlarını kullanın.
 
-aetherhaven.plotcreator.hud.common.q =Önceki adım
-aetherhaven.plotcreator.hud.common.e =Sonraki adıma geçin
-aetherhaven.plotcreator.hud.common.r =Oturumu iptal et
+aetherhaven.plotcreator.hud.title=Hikaye yaratıcısı
 
-aetherhaven.plotcreator.hud.WELCOME.f =Başlamak
-aetherhaven.plotcreator.hud.WELCOME.e =Başlamak
+aetherhaven.plotcreator.hud.common.q=Önceki adım
+aetherhaven.plotcreator.hud.common.e=Sonraki adıma geçin
+aetherhaven.plotcreator.hud.common.r=Oturumu iptal et
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =Yapınızın bir köşesindeki bir bloğa tıklayın.
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =Alanın tamamını işaretlemek için karşı köşeye tıklayın.
-aetherhaven.plotcreator.hud.ANCHOR.primary =Ayak izinin dört dış köşesinden birine tıklayın.
+aetherhaven.plotcreator.hud.WELCOME.f=Başlamak
+aetherhaven.plotcreator.hud.WELCOME.e=Başlamak
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =Yapı şeklini sınırlar dahilinde dışa aktarın.
-aetherhaven.plotcreator.hud.KIND.f =Bina tipi seçiciyi açın.
-aetherhaven.plotcreator.hud.IDENTITY.f =Görüntülenen adı, açıklamayı ve bina kimliğini girin.
-aetherhaven.plotcreator.hud.TAGS.f =Etiketleri düzenle (virgülle ayrılmış)
-aetherhaven.plotcreator.hud.VARIANT.f =Bu varyantın hangi ana bina türü olarak sayılacağını seçin.
-aetherhaven.plotcreator.hud.SUBSTEP.primary =İstenen bloğu veya alanı işaretleyin.
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =Maceracı doğma işaretini kaldır
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =Ziyaretçi spawn işaretini kaldırın
-aetherhaven.plotcreator.hud.SUBSTEP.q =Geri dön (terk ettiğiniz adımdaki fazladan yerleştirme blokları kaldırılır)
-aetherhaven.plotcreator.hud.MATERIALS.f =Açık malzeme deposu
-aetherhaven.plotcreator.hud.CONFIGURE.f =Açık bina ayarları
-aetherhaven.plotcreator.hud.REVIEW.f =Binayı kurtarın
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=Yapınızın bir köşesindeki bir bloğa tıklayın.
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=Alanın tamamını işaretlemek için karşı köşeye tıklayın.
+aetherhaven.plotcreator.hud.ANCHOR.primary=Ayak izinin dört dış köşesinden birine tıklayın.
 
-aetherhaven.plotcreator.hud.kindSelected =Tür: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=Yapı şeklini sınırlar dahilinde dışa aktarın.
+aetherhaven.plotcreator.hud.KIND.f=Bina tipi seçiciyi açın.
+aetherhaven.plotcreator.hud.IDENTITY.f=Görüntülenen adı, açıklamayı ve bina kimliğini girin.
+aetherhaven.plotcreator.hud.TAGS.f=Etiketleri düzenle (virgülle ayrılmış)
+aetherhaven.plotcreator.hud.VARIANT.f=Bu varyantın hangi ana bina türü olarak sayılacağını seçin.
+aetherhaven.plotcreator.hud.SUBSTEP.primary=İstenen bloğu veya alanı işaretleyin.
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=Maceracı doğma işaretini kaldır
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=Ziyaretçi spawn işaretini kaldırın
+aetherhaven.plotcreator.hud.SUBSTEP.q=Geri dön (terk ettiğiniz adımdaki fazladan yerleştirme blokları kaldırılır)
+aetherhaven.plotcreator.hud.MATERIALS.f=Yapı malzemeleri menüsünü açın
+aetherhaven.plotcreator.hud.CONFIGURE.f=Açık bina ayarları
+aetherhaven.plotcreator.hud.REVIEW.f=Binayı kurtarın
 
-aetherhaven.plotcreator.hint.clickBlock =Bu adım için dünyadaki bir bloğa tıklayın.
+aetherhaven.plotcreator.hud.kindSelected=Tür: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =Bina tipi: {kind}
+aetherhaven.plotcreator.hint.clickBlock=Bu adım için dünyadaki bir bloğa tıklayın.
 
-aetherhaven.plotcreator.hint.prefabSaved =Prefab {file} olarak kaydedildi. Sonraki adıma geçmeye hazır olduğunuzda E tuşuna basın.
+aetherhaven.plotcreator.hint.kindCycled=Bina tipi: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =Devam etmeden önce ilk köşeye tıklayın.
+aetherhaven.plotcreator.hint.prefabSaved=Prefab {file} olarak kaydedildi. Sonraki adıma geçmeye hazır olduğunuzda E tuşuna basın.
 
-aetherhaven.plotcreator.error.needCornerSecond =Devam etmeden önce karşı köşeye tıklayın.
+aetherhaven.plotcreator.error.needCornerFirst=Devam etmeden önce ilk köşeye tıklayın.
 
-aetherhaven.plotcreator.error.needKind =F tuşuyla bina tipi seçiciyi açın ve devam etmeden önce bir tip seçin.
+aetherhaven.plotcreator.error.needCornerSecond=Devam etmeden önce karşı köşeye tıklayın.
 
-aetherhaven.plotcreator.error.needVariantOf =Devam etmeden önce F tuşuna basın ve bu varyantın hangi ana bina olarak sayılacağını seçin.
+aetherhaven.plotcreator.error.needKind=F tuşuyla bina tipi seçiciyi açın ve devam etmeden önce bir tip seçin.
 
-aetherhaven.plotcreator.error.invalidVariantOf =Bu ana bina tipi, arsa oluşturucu listesinde bulunmuyor.
+aetherhaven.plotcreator.error.needVariantOf=Devam etmeden önce F tuşuna basın ve bu varyantın hangi ana bina olarak sayılacağını seçin.
+
+aetherhaven.plotcreator.error.invalidVariantOf=Bu ana bina tipi, arsa oluşturucu listesinde bulunmuyor.
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =Ahır
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =Demirci dükkanı
-aetherhaven.plotcreator.mainType.plot_farm =Çiftlik arazisi
-aetherhaven.plotcreator.mainType.plot_gaia_altar =Gaia sunağı
-aetherhaven.plotcreator.mainType.plot_guild_hall =Lonca binası
-aetherhaven.plotcreator.mainType.plot_house =Ev
-aetherhaven.plotcreator.mainType.plot_inn =Han
-aetherhaven.plotcreator.mainType.plot_lumbermill =Kereste fabrikası
-aetherhaven.plotcreator.mainType.plot_market_stall =Pazar tezgahı
-aetherhaven.plotcreator.mainType.plot_player_shop =Oyuncu dükkanı
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =Yerleştirdiğiniz kasaya tıklayın.
-aetherhaven.plotcreator.mainType.plot_miners_hut =Madenci kulübesi
-aetherhaven.plotcreator.mainType.plot_builders_hut =İnşaatçı kulübesi
-aetherhaven.plotcreator.mainType.plot_park =Park
-aetherhaven.plotcreator.mainType.plot_town_hall =Belediye binası
-aetherhaven.plotcreator.mainType.plot_tourist_portal =Turist portalı
+aetherhaven.plotcreator.mainType.plot_barn=Ahır
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=Demirci dükkanı
+aetherhaven.plotcreator.mainType.plot_farm=Çiftlik arazisi
+aetherhaven.plotcreator.mainType.plot_gaia_altar=Gaia sunağı
+aetherhaven.plotcreator.mainType.plot_guild_hall=Lonca binası
+aetherhaven.plotcreator.mainType.plot_house=Ev
+aetherhaven.plotcreator.mainType.plot_inn=Han
+aetherhaven.plotcreator.mainType.plot_lumbermill=Kereste fabrikası
+aetherhaven.plotcreator.mainType.plot_market_stall=Pazar tezgahı
+aetherhaven.plotcreator.mainType.plot_player_shop=Oyuncu dükkanı
+aetherhaven.plotcreator.mainType.plot_bomb_shop=Bomba dükkanı
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=Kristal Muhafızının Dükkanı
+aetherhaven.plotcreator.mainType.plot_flower_shop=Çiçekçi
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=Yerleştirdiğiniz kasaya tıklayın.
+aetherhaven.plotcreator.mainType.plot_miners_hut=Madenci kulübesi
+aetherhaven.plotcreator.mainType.plot_builders_hut=İnşaatçı kulübesi
+aetherhaven.plotcreator.mainType.plot_park=Park
+aetherhaven.plotcreator.mainType.plot_town_hall=Belediye binası
+aetherhaven.plotcreator.mainType.plot_tourist_portal=Turist portalı
 
-aetherhaven.plotcreator.cancelConfirm.title =Hikaye oluşturucuyu iptal et?
-aetherhaven.plotcreator.cancelConfirm.body =Bu oturumdaki ilerlemeniz kaybolacak. Sınırlar, prefabrik dışa aktarma ve taslak veriler atılacak.
-aetherhaven.plotcreator.cancelConfirm.yes =Evet, iptal et
-aetherhaven.plotcreator.cancelConfirm.no =Çalışmaya devam edin.
+aetherhaven.plotcreator.cancelConfirm.title=Hikaye oluşturucuyu iptal et?
+aetherhaven.plotcreator.cancelConfirm.body=Bu oturumdaki ilerlemeniz kaybolacak. Sınırlar, prefabrik dışa aktarma ve taslak veriler atılacak.
+aetherhaven.plotcreator.cancelConfirm.yes=Evet, iptal et
+aetherhaven.plotcreator.cancelConfirm.no=Çalışmaya devam edin.
 
-aetherhaven.plotcreator.button.back =Geri
-aetherhaven.plotcreator.button.cancel =İptal etmek
-aetherhaven.plotcreator.button.close =Kapalı
-aetherhaven.plotcreator.button.done =Tamamlamak
-aetherhaven.plotcreator.button.next =Devam etmek
+aetherhaven.plotcreator.button.back=Geri
+aetherhaven.plotcreator.button.cancel=İptal etmek
+aetherhaven.plotcreator.button.close=Kapalı
+aetherhaven.plotcreator.button.done=Tamamlamak
+aetherhaven.plotcreator.button.next=Devam etmek
 
-aetherhaven.plotcreator.step.WELCOME.title =Hoş geldin
-aetherhaven.plotcreator.step.WELCOME.hint =Yaptığınız bir şeyi şehir binasına dönüştürün.
+aetherhaven.plotcreator.step.WELCOME.title=Hoş geldin
+aetherhaven.plotcreator.step.WELCOME.hint=Yaptığınız bir şeyi şehir binasına dönüştürün.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =İlk köşe
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =Yapınızın bir köşesini işaretleyin.
+aetherhaven.plotcreator.step.CORNER_FIRST.title=İlk köşe
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=Yapınızın bir köşesini işaretleyin.
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =Karşı köşe
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =Alanın tamamını belirlemek için karşı köşeyi işaretleyin.
+aetherhaven.plotcreator.step.CORNER_SECOND.title=Karşı köşe
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=Alanın tamamını belirlemek için karşı köşeyi işaretleyin.
 
-aetherhaven.plotcreator.step.ANCHOR.title =Arsa işareti yeri
-aetherhaven.plotcreator.step.ANCHOR.hint =İnşaat alanının dört dış köşesinden birini işaretleyin (hem X hem de Z ekseninde sınırların bir blok ötesini). İşaret, inşaat alanının içinde olmamalıdır.
+aetherhaven.plotcreator.step.ANCHOR.title=Arsa işareti yeri
+aetherhaven.plotcreator.step.ANCHOR.hint=İnşaat alanının dört dış köşesinden birini işaretleyin (hem X hem de Z ekseninde sınırların bir blok ötesini). İşaret, inşaat alanının içinde olmamalıdır.
 
-aetherhaven.plotcreator.step.KIND.title =Bina tipi
-aetherhaven.plotcreator.step.KIND.hint =Yapınıza uygun bir bina türü seçin. Her türün ne anlama geldiğini öğrenmek için kasaba günlüğünüzü açın: Rehber → Mekanikler → Arsa oluşturucu personeli.
-aetherhaven.plotcreator.kind.DECORATION =Dekorasyon
-aetherhaven.plotcreator.kind.VARIANT =Başka bir binanın varyantı
-aetherhaven.plotcreator.kind.HOME =Ev
-aetherhaven.plotcreator.kind.WORK =İşyeri
-aetherhaven.plotcreator.kind.AMENITY =Tesis
-aetherhaven.plotcreator.kind.SHOP =Köylü dükkanı
-aetherhaven.plotcreator.kind.PLAYER_SHOP =Oyuncu dükkanı
-aetherhaven.plotcreator.kind.INN =Han
-aetherhaven.plotcreator.kind.TOWN_HALL =Belediye binası
-aetherhaven.plotcreator.kind.GUILD_HALL =Lonca binası
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =Turist portalı
+aetherhaven.plotcreator.step.KIND.title=Bina tipi
+aetherhaven.plotcreator.step.KIND.hint=Yapınıza uygun bir bina türü seçin. Her türün ne anlama geldiğini öğrenmek için kasaba günlüğünüzü açın: Rehber → Mekanikler → Arsa oluşturucu personeli.
+aetherhaven.plotcreator.kind.DECORATION=Dekorasyon
+aetherhaven.plotcreator.kind.VARIANT=Başka bir binanın varyantı
+aetherhaven.plotcreator.kind.HOME=Ev
+aetherhaven.plotcreator.kind.WORK=İşyeri
+aetherhaven.plotcreator.kind.AMENITY=Tesis
+aetherhaven.plotcreator.kind.SHOP=Köylü dükkanı
+aetherhaven.plotcreator.kind.PLAYER_SHOP=Oyuncu dükkanı
+aetherhaven.plotcreator.kind.INN=Han
+aetherhaven.plotcreator.kind.TOWN_HALL=Belediye binası
+aetherhaven.plotcreator.kind.GUILD_HALL=Lonca binası
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=Turist portalı
 
-aetherhaven.plotcreator.step.IDENTITY.title =Ad ve kimlik
-aetherhaven.plotcreator.step.IDENTITY.hint =Görüntülenen adı, açıklamayı ve bina kimliğini girin. Kimlik alanı kendiniz düzenlenene kadar, kimlik adı otomatik olarak güncellenir. Prefabrik dosya bu kimliği kullanır.
+aetherhaven.plotcreator.step.IDENTITY.title=Ad ve kimlik
+aetherhaven.plotcreator.step.IDENTITY.hint=Görüntülenen adı, açıklamayı ve bina kimliğini girin. Kimlik alanı kendiniz düzenlenene kadar, kimlik adı otomatik olarak güncellenir. Prefabrik dosya bu kimliği kullanır.
 
-aetherhaven.plotcreator.step.TAGS.title =Yapı etiketleri
-aetherhaven.plotcreator.step.TAGS.hint =Virgülle ayrılmış etiketler ekleyin. Örnek: olanak, doğa, eğlence.
+aetherhaven.plotcreator.step.TAGS.title=Yapı etiketleri
+aetherhaven.plotcreator.step.TAGS.hint=Virgülle ayrılmış etiketler ekleyin. Örnek: olanak, doğa, eğlence.
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =Şekli kaydet
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =Önceki adımda belirlediğiniz bina ayarlarını kullanarak sınırlar içindeki her şeyi dışa aktarın.
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=Şekli kaydet
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Önceki adımda belirlediğiniz bina ayarlarını kullanarak sınırlar içindeki her şeyi dışa aktarın.
 
-aetherhaven.plotcreator.error.needIdentity =Prefabrik dosyayı dışa aktarmadan önce bir görünen ad ve bina kimliği belirleyin.
+aetherhaven.plotcreator.error.needIdentity=Prefabrik dosyayı dışa aktarmadan önce bir görünen ad ve bina kimliği belirleyin.
 
-aetherhaven.plotcreator.error.selfBuildDays =Kendin inşa günlerinin sayısı sıfırdan büyük olmalıdır.
+aetherhaven.plotcreator.error.selfBuildDays=Kendin inşa günlerinin sayısı sıfırdan büyük olmalıdır.
 
-aetherhaven.plotcreator.error.assemblySections =Eksen başına montaj bölümlerinin sayısı 1 ile 16 arasında tam sayı olmalıdır (1, bölümlü montajı devre dışı bırakır).
+aetherhaven.plotcreator.error.assemblySections=Eksen başına montaj bölümlerinin sayısı 1 ile 16 arasında tam sayı olmalıdır (1, bölümlü montajı devre dışı bırakır).
 
-aetherhaven.plotcreator.step.VARIANT.title =Varyantı
-aetherhaven.plotcreator.step.VARIANT.hint =Bu varyantın hangi ana bina türü olarak sayılacağını seçin.
+aetherhaven.plotcreator.step.VARIANT.title=Varyantı
+aetherhaven.plotcreator.step.VARIANT.hint=Bu varyantın hangi ana bina türü olarak sayılacağını seçin.
 
-aetherhaven.plotcreator.step.SUBSTEP.title =Önemli noktalar
-aetherhaven.plotcreator.step.SUBSTEP.hint =Her alt adım için envanterinize yerleştirme blokları eklenir. Gerekli blokları ve noktaları, alanın içine yerleştirin veya tıklayın.
+aetherhaven.plotcreator.step.SUBSTEP.title=Önemli noktalar
+aetherhaven.plotcreator.step.SUBSTEP.hint=Her alt adım için envanterinize yerleştirme blokları eklenir. Gerekli blokları ve noktaları, alanın içine yerleştirin veya tıklayın.
 
-aetherhaven.plotcreator.step.MATERIALS.title =Yapı malzemeleri
-aetherhaven.plotcreator.step.MATERIALS.hint =Oyuncuların bu arsayı inşa etmek için sağlaması gereken eşyaları ekleyin. Devam ettiğinizde eşyalar envanterinize geri döner.
+aetherhaven.plotcreator.step.MATERIALS.title=Yapı malzemeleri
+aetherhaven.plotcreator.step.MATERIALS.hint=Yapı malzemeleri menüsünü açmak için F tuşuna basın. Hazır dolgu, size malzeme vermeden maliyeti artırır.
+aetherhaven.plotcreator.step.MATERIALS.detail=Sayıları değiştirmek için artı ve eksi işaretlerini kullanın. Envanter kopyalarının sayımlarını listeye ekleyin ve ürünlerinizi iade edin.
 
-aetherhaven.plotcreator.step.MATERIALS.detail =Bu bina için özel olarak oluşturulmuş sanal sandık; gerçek dünyada yer almamaktadır.
+aetherhaven.plotcreator.step.CONFIGURE.title=Bina ayarları
+aetherhaven.plotcreator.step.CONFIGURE.hint=Hazine altın maliyetini, kendi kendine inşa günlerini, prefabrik boş alanları, arsa jetonu kilidini ve montaj bölümlerini ayarlayın.
 
-aetherhaven.plotcreator.step.CONFIGURE.title =Bina ayarları
-aetherhaven.plotcreator.step.CONFIGURE.hint =Hazine altın maliyetini, kendi kendine inşa günlerini, prefabrik boş alanları, arsa jetonu kilidini ve montaj bölümlerini ayarlayın.
+aetherhaven.plotcreator.step.CONFIGURE.detail=Arsa inşa edildiğinde kasaba hazinesinden altın ödenir. Kendi kendine inşa günleri, arsanın inşaat personeli olmadan tamamlanması için geçen süreyi belirtir. Boş alanları kaydet, inşa edildiğinde blokları temizlemek için ayak izinizdeki havanın kaydedilip kaydedilmeyeceğini kontrol eder. Arsa jetonu kilitli, oyuncuların jeton üretmeden önce bu arsayı arsa üretim tezgahında kilidini açmasını gerektirir. Montaj bölümleri, yapıyı N×N×N'lik bir ızgaraya böler (1 = kapalı).
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =Arsa inşa edildiğinde kasaba hazinesinden altın ödenir. Kendi kendine inşa günleri, arsanın inşaat personeli olmadan tamamlanması için geçen süreyi belirtir. Boş alanları kaydet, inşa edildiğinde blokları temizlemek için ayak izinizdeki havanın kaydedilip kaydedilmeyeceğini kontrol eder. Arsa jetonu kilitli, oyuncuların jeton üretmeden önce bu arsayı arsa üretim tezgahında kilidini açmasını gerektirir. Montaj bölümleri, yapıyı N×N×N'lik bir ızgaraya böler (1 = kapalı).
+aetherhaven.plotcreator.field.selfBuildDays=Kendin inşa günleri (oyun günleri)
 
-aetherhaven.plotcreator.field.selfBuildDays =Kendin inşa günleri (oyun günleri)
+aetherhaven.plotcreator.field.saveEmptySpaces=Prefabrik yapılarda boş alanlardan tasarruf edin.
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=Etkinleştirildiğinde, ayak izinizdeki hava kaydedilir ve bina monte edildiğinde bu bloklar temizlenir. Etkinleştirilmediğinde, yalnızca dolu bloklar kaydedilir ve mevcut arazi korunur. Editördeki boş işaretleyiciler her zaman blokları temizler.
+aetherhaven.plotcreator.field.touristDestination=Ziyaretçiler burada mola verebilirler.
+aetherhaven.plotcreator.field.touristDestination.hint=Portal açık olduğunda, ziyaretçiler gün içinde bu binaya yürüyerek ulaşabilirler.
+aetherhaven.plotcreator.field.plotTokenLocked=Grafik belirteci varsayılan olarak kilitlidir.
+aetherhaven.plotcreator.field.plotTokenLocked.hint=Oyun aktif olduğunda, oyuncular bu arsa için arsa jetonları üretebilmek için önce arsa üretim tezgahında (arsa planı kullanarak) bu arsanın kilidini açmalıdır.
+aetherhaven.plotcreator.field.assemblySections=Eksen başına montaj bölümleri (1–16)
 
-aetherhaven.plotcreator.field.saveEmptySpaces =Prefabrik yapılarda boş alanlardan tasarruf edin.
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =Etkinleştirildiğinde, ayak izinizdeki hava kaydedilir ve bina monte edildiğinde bu bloklar temizlenir. Etkinleştirilmediğinde, yalnızca dolu bloklar kaydedilir ve mevcut arazi korunur. Editördeki boş işaretleyiciler her zaman blokları temizler.
-aetherhaven.plotcreator.field.touristDestination =Ziyaretçiler burada mola verebilirler.
-aetherhaven.plotcreator.field.touristDestination.hint =Portal açık olduğunda, ziyaretçiler gün içinde bu binaya yürüyerek ulaşabilirler.
-aetherhaven.plotcreator.field.plotTokenLocked =Grafik belirteci varsayılan olarak kilitlidir.
-aetherhaven.plotcreator.field.plotTokenLocked.hint =Oyun aktif olduğunda, oyuncular bu arsa için arsa jetonları üretebilmeden önce (arsa planı kullanarak) arsa üretim tezgahında bu arsanın kilidini açmalıdır.
-aetherhaven.plotcreator.field.assemblySections =Eksen başına montaj bölümleri (1–16)
+aetherhaven.plotcreator.step.REVIEW.title=Gözden geçirmek
+aetherhaven.plotcreator.step.REVIEW.hint=Binayı kurtarın. Onu kasabaya yerleştirmek için bir arsa jetonu alacaksınız.
 
-aetherhaven.plotcreator.step.REVIEW.title =Gözden geçirmek
-aetherhaven.plotcreator.step.REVIEW.hint =Binayı kurtarın. Onu kasabaya yerleştirmek için bir arsa jetonu alacaksınız.
+aetherhaven.plotcreator.step.DONE.title=Tamamlamak
+aetherhaven.plotcreator.step.DONE.hint=Binanız kurtarıldı. Binayı bir kasabaya yerleştirmek için envanterinizdeki arsa jetonunu kullanın.
 
-aetherhaven.plotcreator.step.DONE.title =Tamamlamak
-aetherhaven.plotcreator.step.DONE.hint =Binanız kurtarıldı. Binayı bir kasabaya yerleştirmek için envanterinizdeki arsa jetonunu kullanın.
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=Yerleştirdiğiniz kasaba kayıtları rafına tıklayın.
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=Yerleştirdiğiniz üretim deposuna tıklayın.
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=Yerleştirdiğiniz hazine bloğuna tıklayın.
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=Şehir planlama masasına tıklayın.
+aetherhaven.plotcreator.substep.WORK_POI=Bir çalışma alanı (tezgah veya masa) seçin.
+aetherhaven.plotcreator.substep.BARD_WORK_POI=Görev panosunun yanında ozanın durması gereken yere tıklayın.
+aetherhaven.plotcreator.substep.SLEEP_POI=Bir yatak veya dinlenme yeri seçin.
+aetherhaven.plotcreator.substep.EAT_POI=Bir yemek mekanı seçin.
+aetherhaven.plotcreator.substep.FUN_POI=Keyifli bir yer seçin (oturmak için bank).
+aetherhaven.plotcreator.substep.SHOP_SPOT=Envanterinizden dükkan tezgahları yerleştirin, her kurulumu onaylayın, ardından her tezgahı arsa oluşturucu asasıyla tıklayın.
+aetherhaven.plotcreator.substep.SHOP_POI=Mağaza tezgahındaki çalışma noktasına tıklayın.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=Mağazanın önünde ziyaretçilerin nerede durması gerektiğini tıklayın.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=Envanterinizden portal platformunu yerleştirin, ardından arsa oluşturucu asasıyla üzerine tıklayın.
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=Han sahibinin durması gereken yere tıklayın.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=Her bir otel ziyaretçisinin durması gereken yeri (iki nokta) tıklayın. Turkuaz renkli bir işaretçiyi kaldırmak için sağ tıklayın.
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=Lonca liderinin durması gereken yere tıklayın.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=Bir maceracı doğma noktasına tıklayın. Mor işaretleyiciye sağ tıklayarak onu kaldırın.
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =Yerleştirdiğiniz kasaba kayıtları rafına tıklayın.
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =Yerleştirdiğiniz üretim deposuna tıklayın.
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =Yerleştirdiğiniz hazine bloğuna tıklayın.
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =Şehir planlama masasına tıklayın.
-aetherhaven.plotcreator.substep.WORK_POI =Bir çalışma alanı (tezgah veya masa) seçin.
-aetherhaven.plotcreator.substep.BARD_WORK_POI =Görev panosunun yanında ozanın durması gereken yere tıklayın.
-aetherhaven.plotcreator.substep.SLEEP_POI =Bir yatak veya dinlenme yeri seçin.
-aetherhaven.plotcreator.substep.EAT_POI =Bir yemek mekanı seçin.
-aetherhaven.plotcreator.substep.FUN_POI =Keyifli bir yer seçin (oturmak için bank).
-aetherhaven.plotcreator.substep.SHOP_SPOT =Envanterinizden dükkan tezgahları yerleştirin, her kurulumu onaylayın, ardından her tezgahı arsa oluşturucu asasıyla tıklayın.
-aetherhaven.plotcreator.substep.SHOP_POI =Mağaza tezgahındaki çalışma noktasına tıklayın.
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =Mağazanın önünde ziyaretçilerin nerede durması gerektiğini tıklayın.
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =Envanterinizden portal platformunu yerleştirin, ardından arsa oluşturucu asasıyla üzerine tıklayın.
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =Han sahibinin durması gereken yere tıklayın.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =Her bir otel ziyaretçisinin durması gereken yeri (iki nokta) tıklayın. Turkuaz renkli bir işaretçiyi kaldırmak için sağ tıklayın.
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =Lonca liderinin durması gereken yere tıklayın.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =Bir maceracı doğma noktasına tıklayın. Mor işaretleyiciye sağ tıklayarak onu kaldırın.
+aetherhaven.plotcreator.success.saved=Bina {id} olarak kaydedildi. Bir arsa belirteci aldınız.
+aetherhaven.plotcreator.success.registered=Bina {id} olarak kaydedildi ve şehrinizde işaretlediğiniz yere tescil edildi (zaten tamamlandı - arsa işareti yok).
+aetherhaven.plotcreator.success.savedTokenFallback=Yapı dosyası {id} olarak kaydedildi. Sanal dünyadaki kasabanıza bağlanamadı; yerleştirmek için arsa belirtecini kullanın.
 
-aetherhaven.plotcreator.success.saved =Bina {id} olarak kaydedildi. Bir arsa belirteci aldınız.
-aetherhaven.plotcreator.success.registered =Bina {id} olarak kaydedildi ve şehrinizde işaretlediğiniz yere tescil edildi (zaten tamamlandı - arsa işareti yok).
-aetherhaven.plotcreator.success.savedTokenFallback =Yapı dosyası {id} olarak kaydedildi. Sanal dünyadaki kasabanıza bağlanamadı; yerleştirmek için arsa belirtecini kullanın.
+aetherhaven.plotcreator.error.noTown=Önce bir kasaba tüzüğü oluşturun, ardından o kasaba içindeki olay yeri oluşturma aracını tamamlayın.
+aetherhaven.plotcreator.error.signBlocked=İşaretlediğiniz yere arsa levhası yerleştirilemedi. Bina dosyası kaydedildi; gerekirse arsa belirtecini kullanın.
+aetherhaven.plotcreator.error.unknownConstruction=Kaydetme işleminden sonra bina tanımı kayboldu. Sunucuyu yeniden yüklemeyi deneyin.
 
-aetherhaven.plotcreator.error.noTown =Önce bir kasaba tüzüğü oluşturun, ardından o kasaba içindeki olay yeri oluşturma aracını tamamlayın.
-aetherhaven.plotcreator.error.signBlocked =İşaretlediğiniz yere arsa levhası yerleştirilemedi. Bina dosyası kaydedildi; gerekirse arsa belirtecini kullanın.
-aetherhaven.plotcreator.error.unknownConstruction =Kaydetme işleminden sonra bina tanımı kayboldu. Sunucuyu yeniden yüklemeyi deneyin.
-
-aetherhaven.plottoken.error.unknownBuilding =Bilinmeyen bina kimliği: {id}
-aetherhaven.plottoken.gave ={name} için {amount} parsel belirteci verildi.
-aetherhaven.plottoken.list.empty =Hiçbir bina bulunamadı.
-aetherhaven.plottoken.list.header =Bina kimlikleri:
+aetherhaven.plottoken.error.unknownBuilding=Bilinmeyen bina kimliği: {id}
+aetherhaven.plottoken.gave={name} için {amount} parsel belirteci verildi.
+aetherhaven.plottoken.unlock.success=Üretim tezgahında {name} alanının kilidini açtınız.
+aetherhaven.plottoken.unlock.alreadyKnown={name} bölgesinin kilidini zaten açtınız.
+aetherhaven.plottoken.unlock.notLockable=O binanın kilidinin açılmasına gerek yok.
+aetherhaven.plottoken.unlockall.success=Üretim tezgahında {count} parsellerinin kilidi açıldı.
+aetherhaven.plottoken.unlockall.noneLeft=Tüm hikaye bölümlerinin kilidini zaten açtınız.
+aetherhaven.plottoken.list.empty=Hiçbir bina bulunamadı.
+aetherhaven.plottoken.list.header=Bina kimlikleri:

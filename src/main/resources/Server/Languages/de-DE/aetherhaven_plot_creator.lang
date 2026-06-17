@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =Sie haben keine Berechtigung, den Plot-Editor zu verwenden.
-aetherhaven.plotcreator.error.id_empty =Geben Sie eine Gebäude-ID ein.
-aetherhaven.plotcreator.error.id_prefix =Die ID muss mit plot_ beginnen.
-aetherhaven.plotcreator.error.id_wall =Mit diesem Tool können noch keine Wanddiagramme erstellt werden.
-aetherhaven.plotcreator.error.id_chars =Verwenden Sie in der ID nur Kleinbuchstaben, Zahlen und Unterstriche.
-aetherhaven.plotcreator.error.id_taken =Diese Gebäude-ID wird bereits verwendet.
-aetherhaven.plotcreator.error.incomplete =Schließen Sie zunächst alle erforderlichen Schritte ab.
-aetherhaven.plotcreator.error.prefab_missing =Speichern Sie das Fertigteil, bevor Sie es fertigstellen.
-aetherhaven.plotcreator.error.prefabName =Geben Sie einen Namen für die vorgefertigte Datei ein.
-aetherhaven.plotcreator.error.prefabExport =Das Prefab konnte nicht gespeichert werden. Überprüfen Sie die Begrenzungen und versuchen Sie es erneut.
-aetherhaven.plotcreator.error.saveFailed =Die Gebäudedatei konnte nicht gespeichert werden.
-aetherhaven.plotcreator.error.anchorInside =Das Grundstücksschild darf nicht innerhalb der Baugrenzen liegen. Verwenden Sie stattdessen eine Außenecke.
-aetherhaven.plotcreator.error.anchorNotCorner =Klicken Sie auf eine der vier äußeren Ecken des Gebäudes (jeweils ein Block vom Grundriss entfernt in X- und Z-Richtung).
-aetherhaven.plotcreator.error.needAnchor =Klicken Sie auf eine äußere Ecke, um das Grundstücksschild anzuzeigen, bevor Sie fortfahren.
-aetherhaven.plotcreator.error.outsideBounds =Klicken Sie innerhalb der markierten Grenzen.
-aetherhaven.plotcreator.error.wrongBlock =Das ist nicht der für diesen Schritt benötigte Block.
-aetherhaven.plotcreator.error.shopSpotNotConfigured =Bestätigen Sie zuerst die Einrichtung des Ladenstands und klicken Sie dann mit dem Mitarbeiter des Plot-Erstellers darauf.
-aetherhaven.plotcreator.error.tooManyVisitors =Dieses Gebäude benötigt nur zwei Besucherparkplätze.
-aetherhaven.plotcreator.error.editNotCustom =Nur benutzerdefinierte Gebäude, die im Serverdatenordner gespeichert sind, können bearbeitet werden.
-aetherhaven.plotcreator.error.editUnknown =Es wurde kein benutzerdefiniertes Gebäude mit der ID {id} gefunden.
-aetherhaven.plotcreator.edit.loaded =Die Datei {id} wurde zur Bearbeitung geladen. Gehen Sie zurück, um Details zu ändern, oder speichern Sie die Datei, um sie zu aktualisieren.
+aetherhaven.plotcreator.error.noPermission=Sie haben keine Berechtigung, den Plot-Editor zu verwenden.
+aetherhaven.plotcreator.error.id_empty=Geben Sie eine Gebäude-ID ein.
+aetherhaven.plotcreator.error.id_prefix=Die ID muss mit plot_ beginnen.
+aetherhaven.plotcreator.error.id_wall=Mit diesem Tool können noch keine Wanddiagramme erstellt werden.
+aetherhaven.plotcreator.error.id_chars=Verwenden Sie in der ID nur Kleinbuchstaben, Zahlen und Unterstriche.
+aetherhaven.plotcreator.error.id_taken=Diese Gebäude-ID wird bereits verwendet.
+aetherhaven.plotcreator.error.incomplete=Schließen Sie zunächst alle erforderlichen Schritte ab.
+aetherhaven.plotcreator.error.prefab_missing=Speichern Sie das Fertigteil, bevor Sie es fertigstellen.
+aetherhaven.plotcreator.error.prefabName=Geben Sie einen Namen für die vorgefertigte Datei ein.
+aetherhaven.plotcreator.error.prefabExport=Das Prefab konnte nicht gespeichert werden. Überprüfen Sie die Begrenzungen und versuchen Sie es erneut.
+aetherhaven.plotcreator.error.saveFailed=Die Gebäudedatei konnte nicht gespeichert werden.
+aetherhaven.plotcreator.error.anchorInside=Das Grundstücksschild darf nicht innerhalb der Baugrenzen liegen. Verwenden Sie stattdessen eine Außenecke.
+aetherhaven.plotcreator.error.anchorNotCorner=Klicken Sie auf eine der vier äußeren Ecken des Gebäudes (jeweils ein Block vom Grundriss entfernt in X- und Z-Richtung).
+aetherhaven.plotcreator.error.needAnchor=Klicken Sie auf eine äußere Ecke, um das Grundstücksschild anzuzeigen, bevor Sie fortfahren.
+aetherhaven.plotcreator.error.outsideBounds=Klicken Sie innerhalb der markierten Grenzen.
+aetherhaven.plotcreator.error.wrongBlock=Das ist nicht der für diesen Schritt benötigte Block.
+aetherhaven.plotcreator.error.shopSpotNotConfigured=Bestätigen Sie zuerst die Einrichtung des Ladenstands und klicken Sie dann mit dem Mitarbeiter des Plot-Erstellers darauf.
+aetherhaven.plotcreator.error.tooManyVisitors=Dieses Gebäude benötigt nur zwei Besucherparkplätze.
+aetherhaven.plotcreator.error.editNotCustom=Nur benutzerdefinierte Gebäude, die im Serverdatenordner gespeichert sind, können bearbeitet werden.
+aetherhaven.plotcreator.error.editUnknown=Es wurde kein benutzerdefiniertes Gebäude mit der ID {id} gefunden.
+aetherhaven.plotcreator.edit.loaded=Die Datei {id} wurde zum Bearbeiten geladen. Gehen Sie zurück, um Details zu ändern, oder speichern Sie die Datei, um sie zu aktualisieren.
 
-aetherhaven.plotcreator.generateicon.error.empty =Geben Sie eine Gebäude-ID oder einen Fertigteilpfad ein.
-aetherhaven.plotcreator.generateicon.error.noPrefab =Kein vorgefertigter Pfad für {id}.
-aetherhaven.plotcreator.generateicon.error.noOutputId =Es konnte keine Ausgabe-ID ermittelt werden; übergeben Sie eine als zweites Argument.
-aetherhaven.plotcreator.generateicon.error.notFound =Fertigbauteil nicht gefunden: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =Das Prefab konnte nicht geladen werden: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed =Das Rendern des Symbols für {id} ist fehlgeschlagen.
-aetherhaven.plotcreator.generateicon.ok =Symbol für {id} bei {path} gespeichert (Asset-Pfad: {asset})
+aetherhaven.plotcreator.generateicon.error.empty=Geben Sie eine Gebäude-ID oder einen Fertigteilpfad ein.
+aetherhaven.plotcreator.generateicon.error.noPrefab=Kein vorgefertigter Pfad für {id}.
+aetherhaven.plotcreator.generateicon.error.noOutputId=Es konnte keine Ausgabe-ID ermittelt werden; übergeben Sie eine als zweites Argument.
+aetherhaven.plotcreator.generateicon.error.notFound=Fertigbauteil nicht gefunden: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=Das Prefab konnte nicht geladen werden: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed=Das Rendern des Symbols für {id} ist fehlgeschlagen.
+aetherhaven.plotcreator.generateicon.ok=Symbol für {id} bei {path} gespeichert (Asset-Pfad: {asset})
 
-aetherhaven.plotcreator.hint.cornerFirstSet =Die erste Ecke markieren. Als Nächstes die gegenüberliegende Ecke markieren.
-aetherhaven.plotcreator.hint.cornerSecondSet =Grenzen festlegen. Markieren Sie als Nächstes das äußere Eckzeichen des Grundstücks, wählen Sie dann den Gebäudetyp aus und platzieren Sie alle benötigten Blöcke, bevor Sie die Form speichern.
-aetherhaven.plotcreator.hint.anchorSet =Grundstücksschildplatz festgelegt.
-aetherhaven.plotcreator.hint.blockRecorded =Platz reserviert.
-aetherhaven.plotcreator.hint.shopSpotRecorded =Ladenstand gerettet.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =Dieser Ladenstand ist für diesen Schritt bereits reserviert.
-aetherhaven.plotcreator.hint.touristPortalRecorded =Touristenportal gespeichert.
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =Das entsprechende Touristenportal ist für diesen Schritt bereits gespeichert.
-aetherhaven.plotcreator.hint.spawnRecorded =Spawn-Punkt gespeichert.
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =Der Spawnpunkt für Abenteurer wurde entfernt.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =Besucher-Spawn-Punkt entfernt.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =Der Besucher-Spawnpunkt ist bereits gespeichert.
-aetherhaven.plotcreator.hint.poiRecorded =Aktivitätsfeld gespeichert.
+aetherhaven.plotcreator.hint.cornerFirstSet=Die erste Ecke markieren. Als Nächstes die gegenüberliegende Ecke markieren.
+aetherhaven.plotcreator.hint.cornerSecondSet=Grenzen festlegen. Markieren Sie als Nächstes das äußere Eckzeichen des Grundstücks, wählen Sie dann den Gebäudetyp aus und platzieren Sie alle benötigten Blöcke, bevor Sie die Form speichern.
+aetherhaven.plotcreator.hint.anchorSet=Grundstücksschildplatz festgelegt.
+aetherhaven.plotcreator.hint.blockRecorded=Platz reserviert.
+aetherhaven.plotcreator.hint.shopSpotRecorded=Ladenstand gerettet.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=Dieser Ladenstand ist für diesen Schritt bereits reserviert.
+aetherhaven.plotcreator.hint.touristPortalRecorded=Touristenportal gespeichert.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=Das entsprechende Touristenportal ist für diesen Schritt bereits gespeichert.
+aetherhaven.plotcreator.hint.spawnRecorded=Spawn-Punkt gespeichert.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=Der Spawnpunkt für Abenteurer wurde entfernt.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=Besucher-Spawn-Punkt entfernt.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=Der Besucher-Spawnpunkt ist bereits gespeichert.
+aetherhaven.plotcreator.hint.poiRecorded=Aktivitätsfeld gespeichert.
 
-aetherhaven.plotcreator.button.save =Gebäude retten
-aetherhaven.plotcreator.button.openMaterials =Offene Baukostenlagerung
+aetherhaven.plotcreator.button.save=Gebäude retten
+aetherhaven.plotcreator.button.addFromInventory=Aus dem Inventar hinzufügen
+aetherhaven.plotcreator.button.useBuildShape=Fertigbauteile verwenden
+aetherhaven.plotcreator.button.clearPrefabMaterials=Klare Baukosten
+aetherhaven.plotcreator.button.materialsPrevPage=Vorherige
+aetherhaven.plotcreator.button.materialsNextPage=Nächste
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =Gebäudename
-aetherhaven.plotcreator.field.description =Kurzbeschreibung (optional)
-aetherhaven.plotcreator.field.constructionId =Gebäude-ID (plot_my_building)
-aetherhaven.plotcreator.field.prefabName =Name der Fertigdatei
-aetherhaven.plotcreator.field.tags =Tags (durch Komma getrennt)
-aetherhaven.plotcreator.field.variantOf =Wird als Gebäude-ID akzeptiert
-aetherhaven.plotcreator.field.goldCost =Goldkosten aus der Staatskasse
+aetherhaven.plotcreator.materials.pageLabel=Seite {page} von {pages}
+aetherhaven.plotcreator.materials.emptyList=Es fallen noch keine Baukosten an. Verwenden Sie vorgefertigte Materialien oder fügen Sie Gegenstände aus Ihrem Inventar hinzu.
+aetherhaven.plotcreator.materials.confirmReplace=Klicken Sie erneut auf „Fertigbauteile verwenden“, um die aktuellen Baukosten zu ersetzen.
+aetherhaven.plotcreator.materials.confirmClear=Klicken Sie erneut auf „Baukosten löschen“, um alle Baukosten zu entfernen.
+aetherhaven.plotcreator.materials.fillFailed=Die Baukosten für Ihr Fertigteil konnten nicht gedeckt werden. Speichern Sie zuerst die Gebäudeform.
 
-aetherhaven.plotcreator.session.started =Die Handlungserstellung wurde gestartet. Verwenden Sie die HUD- und Stab-Tasten, während Sie in der Welt arbeiten.
+aetherhaven.plotcreator.field.displayName=Gebäudename
+aetherhaven.plotcreator.field.description=Kurzbeschreibung (optional)
+aetherhaven.plotcreator.field.constructionId=Gebäude-ID (plot_my_building)
+aetherhaven.plotcreator.field.prefabName=Name der Fertigdatei
+aetherhaven.plotcreator.field.tags=Tags (durch Komma getrennt)
+aetherhaven.plotcreator.field.variantOf=Wird als Gebäude-ID akzeptiert
+aetherhaven.plotcreator.field.goldCost=Goldkosten aus der Staatskasse
 
-aetherhaven.plotcreator.hud.title =Handlungsschöpfer
+aetherhaven.plotcreator.session.started=Die Handlungserstellung wurde gestartet. Verwenden Sie die HUD- und Stab-Tasten, während Sie in der Welt arbeiten.
 
-aetherhaven.plotcreator.hud.common.q =Vorheriger Schritt
-aetherhaven.plotcreator.hud.common.e =Weiter zum nächsten Schritt
-aetherhaven.plotcreator.hud.common.r =Sitzung abbrechen
+aetherhaven.plotcreator.hud.title=Handlungsschöpfer
 
-aetherhaven.plotcreator.hud.WELCOME.f =Beginnen
-aetherhaven.plotcreator.hud.WELCOME.e =Beginnen
+aetherhaven.plotcreator.hud.common.q=Vorheriger Schritt
+aetherhaven.plotcreator.hud.common.e=Weiter zum nächsten Schritt
+aetherhaven.plotcreator.hud.common.r=Sitzung abbrechen
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =Klicke auf einen Block in einer Ecke deines Bauwerks.
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =Klicken Sie auf die gegenüberliegende Ecke, um den gesamten Bereich zu markieren.
-aetherhaven.plotcreator.hud.ANCHOR.primary =Klicken Sie auf eine der vier äußeren Ecken des Fußabdrucks.
+aetherhaven.plotcreator.hud.WELCOME.f=Beginnen
+aetherhaven.plotcreator.hud.WELCOME.e=Beginnen
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =Exportiere die Bauform innerhalb der Grenzen.
-aetherhaven.plotcreator.hud.KIND.f =Öffnen Sie die Gebäudetypauswahl.
-aetherhaven.plotcreator.hud.IDENTITY.f =Geben Sie den Anzeigenamen, die Beschreibung und die Gebäude-ID ein.
-aetherhaven.plotcreator.hud.TAGS.f =Tags bearbeiten (durch Komma getrennt)
-aetherhaven.plotcreator.hud.VARIANT.f =Wählen Sie aus, zu welchem Hauptgebäudetyp diese Variante zählt.
-aetherhaven.plotcreator.hud.SUBSTEP.primary =Klicken Sie auf den gewünschten Block oder die gewünschte Stelle innerhalb des Footprints.
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =Entferne eine Abenteurer-Spawn-Markierung
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =Besucher-Spawn-Markierung entfernen
-aetherhaven.plotcreator.hud.SUBSTEP.q =Zurückgehen (zusätzliche Platzierungsblöcke aus dem vorherigen Schritt werden entfernt)
-aetherhaven.plotcreator.hud.MATERIALS.f =Offenes Materiallager
-aetherhaven.plotcreator.hud.CONFIGURE.f =Offene Gebäudeeinstellungen
-aetherhaven.plotcreator.hud.REVIEW.f =Rettet das Gebäude
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=Klicke auf einen Block in einer Ecke deines Bauwerks.
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=Klicken Sie auf die gegenüberliegende Ecke, um den gesamten Bereich zu markieren.
+aetherhaven.plotcreator.hud.ANCHOR.primary=Klicken Sie auf eine der vier äußeren Ecken des Fußabdrucks.
 
-aetherhaven.plotcreator.hud.kindSelected =Typ: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=Exportiere die Bauform innerhalb der Grenzen.
+aetherhaven.plotcreator.hud.KIND.f=Öffnen Sie die Gebäudetypauswahl.
+aetherhaven.plotcreator.hud.IDENTITY.f=Geben Sie den Anzeigenamen, die Beschreibung und die Gebäude-ID ein.
+aetherhaven.plotcreator.hud.TAGS.f=Tags bearbeiten (durch Komma getrennt)
+aetherhaven.plotcreator.hud.VARIANT.f=Wählen Sie aus, zu welchem Hauptgebäudetyp diese Variante zählt.
+aetherhaven.plotcreator.hud.SUBSTEP.primary=Klicken Sie auf den gewünschten Block oder die gewünschte Stelle innerhalb des Footprints.
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=Entferne eine Abenteurer-Spawn-Markierung
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=Besucher-Spawn-Markierung entfernen
+aetherhaven.plotcreator.hud.SUBSTEP.q=Zurückgehen (zusätzliche Platzierungsblöcke aus dem vorherigen Schritt werden entfernt)
+aetherhaven.plotcreator.hud.MATERIALS.f=Menü „Baumaterialien öffnen“
+aetherhaven.plotcreator.hud.CONFIGURE.f=Offene Gebäudeeinstellungen
+aetherhaven.plotcreator.hud.REVIEW.f=Rettet das Gebäude
 
-aetherhaven.plotcreator.hint.clickBlock =Für diesen Schritt klicke auf einen Block in der Welt.
+aetherhaven.plotcreator.hud.kindSelected=Typ: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =Gebäudetyp: {kind}
+aetherhaven.plotcreator.hint.clickBlock=Für diesen Schritt klicke auf einen Block in der Welt.
 
-aetherhaven.plotcreator.hint.prefabSaved =Fertigbauteil als {file} gespeichert. Drücken Sie E, wenn Sie für den nächsten Schritt bereit sind.
+aetherhaven.plotcreator.hint.kindCycled=Gebäudetyp: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =Klicken Sie auf die erste Ecke, bevor Sie fortfahren.
+aetherhaven.plotcreator.hint.prefabSaved=Fertigbauteil als {file} gespeichert. Drücken Sie E, wenn Sie für den nächsten Schritt bereit sind.
 
-aetherhaven.plotcreator.error.needCornerSecond =Klicken Sie auf die gegenüberliegende Ecke, bevor Sie fortfahren.
+aetherhaven.plotcreator.error.needCornerFirst=Klicken Sie auf die erste Ecke, bevor Sie fortfahren.
 
-aetherhaven.plotcreator.error.needKind =Öffnen Sie die Gebäudetypauswahl mit der Taste F und wählen Sie einen Typ aus, bevor Sie fortfahren.
+aetherhaven.plotcreator.error.needCornerSecond=Klicken Sie auf die gegenüberliegende Ecke, bevor Sie fortfahren.
 
-aetherhaven.plotcreator.error.needVariantOf =Drücken Sie F und wählen Sie aus, zu welchem Hauptgebäude diese Variante zählt, bevor Sie fortfahren.
+aetherhaven.plotcreator.error.needKind=Öffnen Sie die Gebäudetypauswahl mit der Taste F und wählen Sie einen Typ aus, bevor Sie fortfahren.
 
-aetherhaven.plotcreator.error.invalidVariantOf =Dieser Hauptgebäudetyp ist nicht in der Liste der Grundstücksersteller enthalten.
+aetherhaven.plotcreator.error.needVariantOf=Drücken Sie F und wählen Sie aus, zu welchem Hauptgebäude diese Variante zählt, bevor Sie fortfahren.
+
+aetherhaven.plotcreator.error.invalidVariantOf=Dieser Hauptgebäudetyp ist nicht in der Liste der Grundstücksersteller enthalten.
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =Scheune
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =Schmiede
-aetherhaven.plotcreator.mainType.plot_farm =Ackerfläche
-aetherhaven.plotcreator.mainType.plot_gaia_altar =Gaia-Altar
-aetherhaven.plotcreator.mainType.plot_guild_hall =Gildehalle
-aetherhaven.plotcreator.mainType.plot_house =Haus
-aetherhaven.plotcreator.mainType.plot_inn =Gasthof
-aetherhaven.plotcreator.mainType.plot_lumbermill =Sägewerk
-aetherhaven.plotcreator.mainType.plot_market_stall =Marktstand
-aetherhaven.plotcreator.mainType.plot_player_shop =Spielershop
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =Klicken Sie auf den Tresor, den Sie platziert haben.
-aetherhaven.plotcreator.mainType.plot_miners_hut =Bergmannshütte
-aetherhaven.plotcreator.mainType.plot_builders_hut =Bauarbeiterhütte
-aetherhaven.plotcreator.mainType.plot_park =Park
-aetherhaven.plotcreator.mainType.plot_town_hall =Rathaus
-aetherhaven.plotcreator.mainType.plot_tourist_portal =Touristenportal
+aetherhaven.plotcreator.mainType.plot_barn=Scheune
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=Schmiede
+aetherhaven.plotcreator.mainType.plot_farm=Ackerfläche
+aetherhaven.plotcreator.mainType.plot_gaia_altar=Gaia-Altar
+aetherhaven.plotcreator.mainType.plot_guild_hall=Gildehalle
+aetherhaven.plotcreator.mainType.plot_house=Haus
+aetherhaven.plotcreator.mainType.plot_inn=Gasthof
+aetherhaven.plotcreator.mainType.plot_lumbermill=Sägewerk
+aetherhaven.plotcreator.mainType.plot_market_stall=Marktstand
+aetherhaven.plotcreator.mainType.plot_player_shop=Spielershop
+aetherhaven.plotcreator.mainType.plot_bomb_shop=Bombenladen
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=Crystal Keeper's Laden
+aetherhaven.plotcreator.mainType.plot_flower_shop=Blumenladen
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=Klicken Sie auf den Tresor, den Sie platziert haben.
+aetherhaven.plotcreator.mainType.plot_miners_hut=Bergmannshütte
+aetherhaven.plotcreator.mainType.plot_builders_hut=Bauarbeiterhütte
+aetherhaven.plotcreator.mainType.plot_park=Park
+aetherhaven.plotcreator.mainType.plot_town_hall=Rathaus
+aetherhaven.plotcreator.mainType.plot_tourist_portal=Touristenportal
 
-aetherhaven.plotcreator.cancelConfirm.title =Handlungsersteller kündigen?
-aetherhaven.plotcreator.cancelConfirm.body =Ihr Fortschritt in dieser Sitzung geht verloren. Begrenzungen, vorgefertigte Exportdaten und Entwurfsdaten werden verworfen.
-aetherhaven.plotcreator.cancelConfirm.yes =Ja, stornieren.
-aetherhaven.plotcreator.cancelConfirm.no =Weiter so!
+aetherhaven.plotcreator.cancelConfirm.title=Handlungsersteller kündigen?
+aetherhaven.plotcreator.cancelConfirm.body=Ihr Fortschritt in dieser Sitzung geht verloren. Begrenzungen, vorgefertigte Exportdaten und Entwurfsdaten werden verworfen.
+aetherhaven.plotcreator.cancelConfirm.yes=Ja, stornieren.
+aetherhaven.plotcreator.cancelConfirm.no=Weiter so!
 
-aetherhaven.plotcreator.button.back =Zurück
-aetherhaven.plotcreator.button.cancel =Stornieren
-aetherhaven.plotcreator.button.close =Schließen
-aetherhaven.plotcreator.button.done =Erledigt
-aetherhaven.plotcreator.button.next =Weitermachen
+aetherhaven.plotcreator.button.back=Zurück
+aetherhaven.plotcreator.button.cancel=Stornieren
+aetherhaven.plotcreator.button.close=Schließen
+aetherhaven.plotcreator.button.done=Erledigt
+aetherhaven.plotcreator.button.next=Weitermachen
 
-aetherhaven.plotcreator.step.WELCOME.title =Willkommen
-aetherhaven.plotcreator.step.WELCOME.hint =Verwandle etwas, das du gebaut hast, in ein Stadtgebäude.
+aetherhaven.plotcreator.step.WELCOME.title=Willkommen
+aetherhaven.plotcreator.step.WELCOME.hint=Verwandle etwas, das du gebaut hast, in ein Stadtgebäude.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =Erste Kurve
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =Markieren Sie eine Ecke Ihres Bauwerks.
+aetherhaven.plotcreator.step.CORNER_FIRST.title=Erste Kurve
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=Markieren Sie eine Ecke Ihres Bauwerks.
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =Gegenüberliegende Ecke
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =Markieren Sie die gegenüberliegende Ecke, um die Gesamtfläche zu definieren.
+aetherhaven.plotcreator.step.CORNER_SECOND.title=Gegenüberliegende Ecke
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=Markieren Sie die gegenüberliegende Ecke, um die Gesamtfläche zu definieren.
 
-aetherhaven.plotcreator.step.ANCHOR.title =Grundstücksschildplatz
-aetherhaven.plotcreator.step.ANCHOR.hint =Markieren Sie eine der vier äußeren Ecken des Grundrisses (einen Block außerhalb der Grenzen in X- und Z-Richtung). Das Schild darf sich nicht innerhalb des Baubereichs befinden.
+aetherhaven.plotcreator.step.ANCHOR.title=Grundstücksschildplatz
+aetherhaven.plotcreator.step.ANCHOR.hint=Markieren Sie eine der vier äußeren Ecken des Grundrisses (einen Block außerhalb der Grenzen in X- und Z-Richtung). Das Schild darf sich nicht innerhalb des Baubereichs befinden.
 
-aetherhaven.plotcreator.step.KIND.title =Gebäudetyp
-aetherhaven.plotcreator.step.KIND.hint =Wähle einen Gebäudetyp, der zu deinem Bauvorhaben passt. Was die einzelnen Typen bedeuten, erfährst du in deinem Stadtjournal unter Leitfaden → Spielmechaniken → Mitarbeiter des Grundstückserstellers.
-aetherhaven.plotcreator.kind.DECORATION =Dekoration
-aetherhaven.plotcreator.kind.VARIANT =Variante eines anderen Gebäudes
-aetherhaven.plotcreator.kind.HOME =Heim
-aetherhaven.plotcreator.kind.WORK =Arbeitsplatz
-aetherhaven.plotcreator.kind.AMENITY =Annehmlichkeit
-aetherhaven.plotcreator.kind.SHOP =Dorfladen
-aetherhaven.plotcreator.kind.PLAYER_SHOP =Spielershop
-aetherhaven.plotcreator.kind.INN =Gasthof
-aetherhaven.plotcreator.kind.TOWN_HALL =Rathaus
-aetherhaven.plotcreator.kind.GUILD_HALL =Gildehalle
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =Touristenportal
+aetherhaven.plotcreator.step.KIND.title=Gebäudetyp
+aetherhaven.plotcreator.step.KIND.hint=Wähle einen Gebäudetyp, der zu deinem Bauvorhaben passt. Was die einzelnen Typen bedeuten, erfährst du in deinem Stadtjournal unter Leitfaden → Spielmechaniken → Mitarbeiter des Grundstückserstellers.
+aetherhaven.plotcreator.kind.DECORATION=Dekoration
+aetherhaven.plotcreator.kind.VARIANT=Variante eines anderen Gebäudes
+aetherhaven.plotcreator.kind.HOME=Heim
+aetherhaven.plotcreator.kind.WORK=Arbeitsplatz
+aetherhaven.plotcreator.kind.AMENITY=Annehmlichkeit
+aetherhaven.plotcreator.kind.SHOP=Dorfladen
+aetherhaven.plotcreator.kind.PLAYER_SHOP=Spielershop
+aetherhaven.plotcreator.kind.INN=Gasthof
+aetherhaven.plotcreator.kind.TOWN_HALL=Rathaus
+aetherhaven.plotcreator.kind.GUILD_HALL=Gildehalle
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=Touristenportal
 
-aetherhaven.plotcreator.step.IDENTITY.title =Name und ID
-aetherhaven.plotcreator.step.IDENTITY.hint =Geben Sie den Anzeigenamen, die Beschreibung und die Gebäude-ID ein. Die ID wird anhand des Namens aktualisiert, bis Sie das ID-Feld manuell bearbeiten. Die vorgefertigte Datei verwendet diese ID.
+aetherhaven.plotcreator.step.IDENTITY.title=Name und ID
+aetherhaven.plotcreator.step.IDENTITY.hint=Geben Sie den Anzeigenamen, die Beschreibung und die Gebäude-ID ein. Die ID wird anhand des Namens aktualisiert, bis Sie das ID-Feld manuell bearbeiten. Die vorgefertigte Datei verwendet diese ID.
 
-aetherhaven.plotcreator.step.TAGS.title =Gebäude-Tags
-aetherhaven.plotcreator.step.TAGS.hint =Fügen Sie Schlagwörter hinzu (durch Komma getrennt). Beispiel: Annehmlichkeiten, Natur, Freizeit.
+aetherhaven.plotcreator.step.TAGS.title=Gebäude-Tags
+aetherhaven.plotcreator.step.TAGS.hint=Fügen Sie Schlagwörter hinzu (durch Komma getrennt). Beispiel: Annehmlichkeiten, Natur, Freizeit.
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =Form beibehalten
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =Exportiere alles innerhalb der Grenzen mithilfe deiner Gebäudeeinstellungen aus dem vorherigen Schritt.
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=Form beibehalten
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exportiere alles innerhalb der Grenzen mithilfe deiner Gebäudeeinstellungen aus dem vorherigen Schritt.
 
-aetherhaven.plotcreator.error.needIdentity =Legen Sie vor dem Exportieren des Fertigbauteils einen Anzeigenamen und eine Gebäude-ID fest.
+aetherhaven.plotcreator.error.needIdentity=Legen Sie vor dem Exportieren des Fertigbauteils einen Anzeigenamen und eine Gebäude-ID fest.
 
-aetherhaven.plotcreator.error.selfBuildDays =Die Anzahl der Tage für den Selbstbau muss größer als null sein.
+aetherhaven.plotcreator.error.selfBuildDays=Die Anzahl der Tage für den Selbstbau muss größer als null sein.
 
-aetherhaven.plotcreator.error.assemblySections =Die Anzahl der Baugruppenabschnitte pro Achse muss eine ganze Zahl von 1 bis 16 sein (1 deaktiviert die segmentierte Baugruppe).
+aetherhaven.plotcreator.error.assemblySections=Die Anzahl der Baugruppenabschnitte pro Achse muss eine ganze Zahl von 1 bis 16 sein (1 deaktiviert die segmentierte Baugruppe).
 
-aetherhaven.plotcreator.step.VARIANT.title =Variante von
-aetherhaven.plotcreator.step.VARIANT.hint =Wählen Sie aus, zu welchem Hauptgebäudetyp diese Variante zählt.
+aetherhaven.plotcreator.step.VARIANT.title=Variante von
+aetherhaven.plotcreator.step.VARIANT.hint=Wählen Sie aus, zu welchem Hauptgebäudetyp diese Variante zählt.
 
-aetherhaven.plotcreator.step.SUBSTEP.title =Wichtige Orte
-aetherhaven.plotcreator.step.SUBSTEP.hint =Für jeden Teilschritt werden Platzierungsblöcke zu Ihrem Inventar hinzugefügt. Platzieren oder klicken Sie die benötigten Blöcke und Stellen innerhalb der vorgegebenen Fläche an.
+aetherhaven.plotcreator.step.SUBSTEP.title=Wichtige Orte
+aetherhaven.plotcreator.step.SUBSTEP.hint=Für jeden Teilschritt werden Platzierungsblöcke zu Ihrem Inventar hinzugefügt. Platzieren oder klicken Sie die benötigten Blöcke und Stellen innerhalb der vorgegebenen Fläche an.
 
-aetherhaven.plotcreator.step.MATERIALS.title =Baumaterialien
-aetherhaven.plotcreator.step.MATERIALS.hint =Füge die Gegenstände hinzu, die die Spieler zum Bau dieses Grundstücks benötigen. Die Gegenstände werden deinem Inventar wieder hinzugefügt, sobald du fortfährst.
+aetherhaven.plotcreator.step.MATERIALS.title=Baumaterialien
+aetherhaven.plotcreator.step.MATERIALS.hint=Drücke F, um das Menü für Baumaterialien zu öffnen. Fertigbauteile verursachen zusätzliche Kosten, ohne dir Gegenstände zu liefern.
+aetherhaven.plotcreator.step.MATERIALS.detail=Verwenden Sie Plus und Minus, um die Anzahl zu ändern. Mit „Aus dem Inventar hinzufügen“ werden die Anzahl der Artikel in die Liste kopiert und Ihre Artikel werden wiederhergestellt.
 
-aetherhaven.plotcreator.step.MATERIALS.detail =Virtuelle Truhe nur für dieses Gebäude – nicht in der realen Welt platziert.
+aetherhaven.plotcreator.step.CONFIGURE.title=Gebäudeeinstellungen
+aetherhaven.plotcreator.step.CONFIGURE.hint=Legen Sie die Goldkosten der Schatzkammer, die Tage für den Selbstbau, die vorgefertigten leeren Flächen, die Grundstücksmarkensperre und die Montageabschnitte fest.
 
-aetherhaven.plotcreator.step.CONFIGURE.title =Gebäudeeinstellungen
-aetherhaven.plotcreator.step.CONFIGURE.hint =Legen Sie die Goldkosten der Schatzkammer, die Tage für den Selbstbau, die vorgefertigten leeren Flächen, die Grundstücksmarkensperre und die Montageabschnitte fest.
+aetherhaven.plotcreator.step.CONFIGURE.detail=Gold wird aus der Stadtkasse bezahlt, sobald das Grundstück bebaut ist. Die Bauzeit (in Tagen) gibt an, wie lange der Bau ohne Bauarbeiter dauert. „Leere Felder sparen“ steuert, ob beim Bauen Platz zum Entfernen von Blöcken reserviert wird. Ist ein Grundstückstoken gesperrt, müssen Spieler dieses Grundstück an der Werkbank entsperren, bevor sie Token herstellen können. Die Montageabschnitte unterteilen den Bau in ein N×N×N-Raster (1 = deaktiviert).
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =Gold wird aus der Stadtkasse bezahlt, sobald das Grundstück bebaut ist. Die Bauzeit (in Tagen) gibt an, wie lange der Bau ohne Bauarbeiter dauert. „Leere Felder sparen“ steuert, ob beim Bauen Platz zum Entfernen von Blöcken reserviert wird. Ist ein Grundstückstoken gesperrt, müssen Spieler dieses Grundstück an der Werkbank entsperren, bevor sie Token herstellen können. Die Montageabschnitte unterteilen den Bau in ein N×N×N-Raster (1 = deaktiviert).
+aetherhaven.plotcreator.field.selfBuildDays=Selbstbautage (Spieltage)
 
-aetherhaven.plotcreator.field.selfBuildDays =Selbstbautage (Spieltage)
+aetherhaven.plotcreator.field.saveEmptySpaces=Platz sparen in Fertigbauweise
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=Wenn diese Option aktiviert ist, wird Luft im Bereich der Gebäudefläche eingespart und diese Blöcke werden beim Zusammenbau entfernt. Wenn sie deaktiviert ist, werden nur feste Blöcke eingespart und das bestehende Gelände bleibt erhalten. Leere Markierungen im Editor entfernen immer Blöcke.
+aetherhaven.plotcreator.field.touristDestination=Besucher können hier Halt machen.
+aetherhaven.plotcreator.field.touristDestination.hint=Wenn das Portal eingeschaltet ist, können Besucher tagsüber zu Fuß zu diesem Gebäude gelangen.
+aetherhaven.plotcreator.field.plotTokenLocked=Plot-Token standardmäßig gesperrt
+aetherhaven.plotcreator.field.plotTokenLocked.hint=Wenn diese Option aktiviert ist, müssen die Spieler dieses Grundstück an der Grundstückswerkbank (mithilfe eines Grundstücksplans) freischalten, bevor sie Grundstücksmarken dafür herstellen können.
+aetherhaven.plotcreator.field.assemblySections=Montageabschnitte pro Achse (1–16)
 
-aetherhaven.plotcreator.field.saveEmptySpaces =Platz sparen in Fertigbauweise
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =Wenn diese Option aktiviert ist, wird Luft im Bereich der Gebäudefläche eingespart und diese Blöcke werden beim Zusammenbau entfernt. Wenn sie deaktiviert ist, werden nur feste Blöcke eingespart und das bestehende Gelände bleibt erhalten. Leere Markierungen im Editor entfernen immer Blöcke.
-aetherhaven.plotcreator.field.touristDestination =Besucher können hier Halt machen.
-aetherhaven.plotcreator.field.touristDestination.hint =Wenn das Portal eingeschaltet ist, können Besucher tagsüber zu Fuß zu diesem Gebäude gelangen.
-aetherhaven.plotcreator.field.plotTokenLocked =Plot-Token standardmäßig gesperrt
-aetherhaven.plotcreator.field.plotTokenLocked.hint =Wenn diese Option aktiviert ist, müssen die Spieler dieses Grundstück an der Grundstückswerkbank (mithilfe eines Grundstücksplans) freischalten, bevor sie Grundstücksmarken dafür herstellen können.
-aetherhaven.plotcreator.field.assemblySections =Montageabschnitte pro Achse (1–16)
+aetherhaven.plotcreator.step.REVIEW.title=Rezension
+aetherhaven.plotcreator.step.REVIEW.hint=Rette das Gebäude. Du erhältst einen Grundstücksmarker, um es in der Stadt zu platzieren.
 
-aetherhaven.plotcreator.step.REVIEW.title =Rezension
-aetherhaven.plotcreator.step.REVIEW.hint =Rette das Gebäude. Du erhältst einen Grundstücksmarker, um es in der Stadt zu platzieren.
+aetherhaven.plotcreator.step.DONE.title=Erledigt
+aetherhaven.plotcreator.step.DONE.hint=Dein Gebäude wurde gespeichert. Verwende das Grundstückstoken aus deinem Inventar, um es in einer Stadt zu platzieren.
 
-aetherhaven.plotcreator.step.DONE.title =Erledigt
-aetherhaven.plotcreator.step.DONE.hint =Dein Gebäude wurde gespeichert. Verwende das Grundstückstoken aus deinem Inventar, um es in einer Stadt zu platzieren.
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=Klicken Sie auf das von Ihnen platzierte Regal mit den Stadtarchiven.
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=Klicken Sie auf den von Ihnen platzierten Produktionsspeicher.
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=Klicken Sie auf den von Ihnen platzierten Schatzblock.
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=Klicken Sie auf den Stadtplanungs-Schalter.
+aetherhaven.plotcreator.substep.WORK_POI=Klicken Sie auf einen Arbeitsplatz (Werkbank oder Schreibtisch).
+aetherhaven.plotcreator.substep.BARD_WORK_POI=Klicken Sie auf die Stelle neben dem Questbrett, an der der Barde stehen soll.
+aetherhaven.plotcreator.substep.SLEEP_POI=Klicken Sie auf ein Bett oder einen Ruheplatz.
+aetherhaven.plotcreator.substep.EAT_POI=Klicken Sie auf ein Restaurant.
+aetherhaven.plotcreator.substep.FUN_POI=Klicken Sie auf einen schönen Platz (Bank zum Sitzen).
+aetherhaven.plotcreator.substep.SHOP_SPOT=Platziere Verkaufsstände aus deinem Inventar, bestätige jede Platzierung und klicke dann mit dem Plot-Ersteller auf jeden Stand.
+aetherhaven.plotcreator.substep.SHOP_POI=Klicken Sie auf den Arbeitsplatz an der Ladentheke.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=Klicken Sie hier, wo die Besucher vor dem Geschäft stehen sollen.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=Platziere die Portalplattform aus deinem Inventar und klicke sie dann mit dem Handlungsplanerstellerstab an.
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=Klicken Sie dort, wo der Wirt stehen sollte.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=Klicken Sie auf die Stellen, an denen die Gasthausbesucher stehen sollen (zwei Punkte). Klicken Sie mit der rechten Maustaste auf eine türkisfarbene Markierung, um sie zu entfernen.
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=Klicken Sie dort, wo der Gildenmeister stehen sollte.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=Klicke auf einen Abenteurer-Spawnpunkt. Klicke mit der rechten Maustaste auf eine violette Markierung, um sie zu entfernen.
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =Klicken Sie auf das von Ihnen platzierte Regal mit den Stadtarchiven.
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =Klicken Sie auf den von Ihnen platzierten Produktionsspeicher.
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =Klicken Sie auf den von Ihnen platzierten Schatzblock.
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =Klicken Sie auf den Stadtplanungs-Schalter.
-aetherhaven.plotcreator.substep.WORK_POI =Klicken Sie auf einen Arbeitsplatz (Werkbank oder Schreibtisch).
-aetherhaven.plotcreator.substep.BARD_WORK_POI =Klicken Sie auf die Stelle neben dem Questbrett, an der der Barde stehen soll.
-aetherhaven.plotcreator.substep.SLEEP_POI =Klicken Sie auf ein Bett oder einen Ruheplatz.
-aetherhaven.plotcreator.substep.EAT_POI =Klicken Sie auf ein Restaurant.
-aetherhaven.plotcreator.substep.FUN_POI =Klicken Sie auf einen schönen Platz (Bank zum Sitzen).
-aetherhaven.plotcreator.substep.SHOP_SPOT =Platziere Verkaufsstände aus deinem Inventar, bestätige jede Platzierung und klicke dann mit dem Plot-Ersteller auf jeden Stand.
-aetherhaven.plotcreator.substep.SHOP_POI =Klicken Sie auf den Arbeitsplatz an der Ladentheke.
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =Klicken Sie hier, wo die Besucher vor dem Geschäft stehen sollen.
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =Platziere die Portalplattform aus deinem Inventar und klicke sie dann mit dem Handlungsplanerstellerstab an.
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =Klicken Sie dort, wo der Wirt stehen sollte.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =Klicken Sie auf die Stellen, an denen die Gasthausbesucher stehen sollen (zwei Punkte). Klicken Sie mit der rechten Maustaste auf eine türkisfarbene Markierung, um sie zu entfernen.
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =Klicken Sie dort, wo der Gildenmeister stehen sollte.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =Klicke auf einen Abenteurer-Spawnpunkt. Klicke mit der rechten Maustaste auf eine violette Markierung, um sie zu entfernen.
+aetherhaven.plotcreator.success.saved=Das Gebäude wurde als {id} gespeichert. Sie haben ein Grundstückstoken erhalten.
+aetherhaven.plotcreator.success.registered=Das Gebäude wurde als {id} gespeichert und in Ihrer Stadt an der von Ihnen markierten Stelle registriert (bereits fertiggestellt – kein Grundstücksschild).
+aetherhaven.plotcreator.success.savedTokenFallback=Die Gebäudedatei wurde als {id} gespeichert. Sie konnte nicht mit Ihrer Stadt in der Welt verknüpft werden; verwenden Sie das Grundstückstoken, um sie zu platzieren.
 
-aetherhaven.plotcreator.success.saved =Das Gebäude wurde als {id} gespeichert. Sie haben ein Grundstückstoken erhalten.
-aetherhaven.plotcreator.success.registered =Das Gebäude wurde als {id} gespeichert und in Ihrer Stadt an der von Ihnen markierten Stelle registriert (bereits fertiggestellt – kein Grundstücksschild).
-aetherhaven.plotcreator.success.savedTokenFallback =Die Gebäudedatei wurde als {id} gespeichert. Sie konnte nicht mit Ihrer Stadt in der Welt verknüpft werden; verwenden Sie das Grundstückstoken, um sie zu platzieren.
+aetherhaven.plotcreator.error.noTown=Platziere zuerst eine Stadtcharta und vervollständige dann den Plot-Editor innerhalb dieser Stadt.
+aetherhaven.plotcreator.error.signBlocked=Das Grundstücksschild konnte an der markierten Stelle nicht platziert werden. Die Gebäudedatei wurde gespeichert; verwenden Sie bei Bedarf das Grundstückssymbol.
+aetherhaven.plotcreator.error.unknownConstruction=Die Gebäudedefinition fehlt nach dem Speichern. Versuchen Sie, den Server neu zu laden.
 
-aetherhaven.plotcreator.error.noTown =Platziere zuerst eine Stadtcharta und vervollständige dann den Plot-Editor innerhalb dieser Stadt.
-aetherhaven.plotcreator.error.signBlocked =Das Grundstücksschild konnte an der markierten Stelle nicht platziert werden. Die Gebäudedatei wurde gespeichert; verwenden Sie bei Bedarf das Grundstückssymbol.
-aetherhaven.plotcreator.error.unknownConstruction =Die Gebäudedefinition fehlt nach dem Speichern. Versuchen Sie, den Server neu zu laden.
-
-aetherhaven.plottoken.error.unknownBuilding =Unbekannte Gebäude-ID: {id}
-aetherhaven.plottoken.gave ={amount}-Plot-Token für {name} übergeben.
-aetherhaven.plottoken.list.empty =Keine Gebäude gefunden.
-aetherhaven.plottoken.list.header =Gebäude-IDs:
+aetherhaven.plottoken.error.unknownBuilding=Unbekannte Gebäude-ID: {id}
+aetherhaven.plottoken.gave={amount}-Plot-Token für {name} übergeben.
+aetherhaven.plottoken.unlock.success=Du hast das {name}-Grundstück an der Werkbank freigeschaltet.
+aetherhaven.plottoken.unlock.alreadyKnown=Du hast das {name}-Plot bereits freigeschaltet.
+aetherhaven.plottoken.unlock.notLockable=Dieses Gebäude benötigt keine Entriegelung.
+aetherhaven.plottoken.unlockall.success=Freigeschaltete {count}-Bauplätze an der Werkbank.
+aetherhaven.plottoken.unlockall.noneLeft=Du hast bereits alle Handlungsstränge freigeschaltet.
+aetherhaven.plottoken.list.empty=Keine Gebäude gefunden.
+aetherhaven.plottoken.list.header=Gebäude-IDs:

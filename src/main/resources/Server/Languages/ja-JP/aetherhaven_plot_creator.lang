@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =プロット作成ツールを使用する許可がありません。
-aetherhaven.plotcreator.error.id_empty =建物のIDを入力してください。
-aetherhaven.plotcreator.error.id_prefix =IDはplot_で始まる必要があります
-aetherhaven.plotcreator.error.id_wall =このツールでは、現時点では壁面図を作成することはできません。
-aetherhaven.plotcreator.error.id_chars =IDには小文字の英字、数字、アンダースコアのみを使用してください。
-aetherhaven.plotcreator.error.id_taken =その建物IDは既に使用されています。
-aetherhaven.plotcreator.error.incomplete =まず、必要な手順をすべて完了させてください。
-aetherhaven.plotcreator.error.prefab_missing =仕上げる前にプレハブを保存してください。
-aetherhaven.plotcreator.error.prefabName =プレハブファイルの名前を入力してください。
-aetherhaven.plotcreator.error.prefabExport =プレハブを保存できませんでした。境界を確認して、もう一度お試しください。
-aetherhaven.plotcreator.error.saveFailed =建物ファイルを保存できませんでした。
-aetherhaven.plotcreator.error.anchorInside =区画標識は建築区域の内側に設置することはできません。代わりに外側の角に設置してください。
-aetherhaven.plotcreator.error.anchorNotCorner =建物の外側の4つの角のうちの1つをクリックします（設置場所からX軸とZ軸の両方で1ブロック外側）。
-aetherhaven.plotcreator.error.needAnchor =先に進む前に、区画標識の外側の角をクリックしてください。
-aetherhaven.plotcreator.error.outsideBounds =マークされた範囲内をクリックしてください。
-aetherhaven.plotcreator.error.wrongBlock =それはこのステップに必要なブロックではありません。
-aetherhaven.plotcreator.error.shopSpotNotConfigured =まず店舗の配置を確認し、次に区画作成スタッフでクリックしてください。
-aetherhaven.plotcreator.error.tooManyVisitors =この建物に必要な来客用駐車スペースは2つだけです。
-aetherhaven.plotcreator.error.editNotCustom =サーバーデータフォルダに保存されたカスタム建築物のみ編集可能です。
-aetherhaven.plotcreator.error.editUnknown =IDが{id}のカスタムビルディングは見つかりませんでした。
-aetherhaven.plotcreator.edit.loaded =編集のために{id}を読み込みました。詳細を変更するには戻るか、ファイルを更新するために保存してください。
+aetherhaven.plotcreator.error.noPermission=プロット作成ツールを使用する許可がありません。
+aetherhaven.plotcreator.error.id_empty=建物のIDを入力してください。
+aetherhaven.plotcreator.error.id_prefix=IDはplot_で始まる必要があります
+aetherhaven.plotcreator.error.id_wall=このツールでは、現時点では壁面図を作成することはできません。
+aetherhaven.plotcreator.error.id_chars=IDには小文字の英字、数字、アンダースコアのみを使用してください。
+aetherhaven.plotcreator.error.id_taken=その建物IDは既に使用されています。
+aetherhaven.plotcreator.error.incomplete=まず、必要な手順をすべて完了させてください。
+aetherhaven.plotcreator.error.prefab_missing=仕上げる前にプレハブを保存してください。
+aetherhaven.plotcreator.error.prefabName=プレハブファイルの名前を入力してください。
+aetherhaven.plotcreator.error.prefabExport=プレハブを保存できませんでした。境界を確認して、もう一度お試しください。
+aetherhaven.plotcreator.error.saveFailed=建物ファイルを保存できませんでした。
+aetherhaven.plotcreator.error.anchorInside=区画標識は建築区域の内側に設置することはできません。代わりに外側の角に設置してください。
+aetherhaven.plotcreator.error.anchorNotCorner=建物の外側の4つの角のうちの1つをクリックします（設置場所からX軸とZ軸の両方で1ブロック外側）。
+aetherhaven.plotcreator.error.needAnchor=先に進む前に、区画標識の外側の角をクリックしてください。
+aetherhaven.plotcreator.error.outsideBounds=マークされた範囲内をクリックしてください。
+aetherhaven.plotcreator.error.wrongBlock=それはこのステップに必要なブロックではありません。
+aetherhaven.plotcreator.error.shopSpotNotConfigured=まず店舗の配置を確認し、次に区画作成スタッフでクリックしてください。
+aetherhaven.plotcreator.error.tooManyVisitors=この建物に必要な来客用駐車スペースは2つだけです。
+aetherhaven.plotcreator.error.editNotCustom=サーバーデータフォルダに保存されたカスタム建築物のみ編集可能です。
+aetherhaven.plotcreator.error.editUnknown=IDが{id}のカスタムビルディングは見つかりませんでした。
+aetherhaven.plotcreator.edit.loaded=編集のために{id}を読み込みました。詳細を変更するには戻るか、ファイルを更新するために保存してください。
 
-aetherhaven.plotcreator.generateicon.error.empty =建物のIDまたはプレハブのパスを入力してください。
-aetherhaven.plotcreator.generateicon.error.noPrefab ={id} のプレファブパスがありません。
-aetherhaven.plotcreator.generateicon.error.noOutputId =出力IDを特定できませんでした。2番目の引数として出力IDを渡してください。
-aetherhaven.plotcreator.generateicon.error.notFound =プレハブが見つかりません: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =プレハブをロードできませんでした: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed ={id} のアイコンレンダリングに失敗しました。
-aetherhaven.plotcreator.generateicon.ok =アイコンは{id}用に{path}に保存されました（アセットパス：{asset}）
+aetherhaven.plotcreator.generateicon.error.empty=建物のIDまたはプレハブのパスを入力してください。
+aetherhaven.plotcreator.generateicon.error.noPrefab={id} のプレファブパスがありません。
+aetherhaven.plotcreator.generateicon.error.noOutputId=出力IDを特定できませんでした。2番目の引数として出力IDを渡してください。
+aetherhaven.plotcreator.generateicon.error.notFound=プレハブが見つかりません: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=プレハブをロードできませんでした: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed={id} のアイコンレンダリングに失敗しました。
+aetherhaven.plotcreator.generateicon.ok=アイコンは{id}用に{path}に保存されました（アセットパス：{asset}）
 
-aetherhaven.plotcreator.hint.cornerFirstSet =最初の角をマークします。次に反対側の角をマークします。
-aetherhaven.plotcreator.hint.cornerSecondSet =境界が設定されました。次に、外側の角の区画標識をマークし、建物の種類を選択して必要なブロックを配置してから、形状を保存します。
-aetherhaven.plotcreator.hint.anchorSet =区画標識設置場所を設定しました。
-aetherhaven.plotcreator.hint.blockRecorded =場所を確保しました。
-aetherhaven.plotcreator.hint.shopSpotRecorded =店の屋台は無事だった。
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =その店舗の屋台は、この工程のために既に確保されています。
-aetherhaven.plotcreator.hint.touristPortalRecorded =観光ポータルサイトが保存されました。
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =その観光ポータルサイトは、この手順のために既に保存されています。
-aetherhaven.plotcreator.hint.spawnRecorded =スポーン地点を保存しました。
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =冒険者の出現地点が削除されました。
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =訪問者の出現地点を削除しました。
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =その訪問者の出現地点は既に保存されています。
-aetherhaven.plotcreator.hint.poiRecorded =アクティビティスポットを保存しました。
+aetherhaven.plotcreator.hint.cornerFirstSet=最初の角をマークします。次に反対側の角をマークします。
+aetherhaven.plotcreator.hint.cornerSecondSet=境界が設定されました。次に、外側の角の区画標識をマークし、建物の種類を選択して必要なブロックを配置してから、形状を保存します。
+aetherhaven.plotcreator.hint.anchorSet=区画標識設置場所を設定しました。
+aetherhaven.plotcreator.hint.blockRecorded=場所を確保しました。
+aetherhaven.plotcreator.hint.shopSpotRecorded=店の屋台は無事だった。
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=その店舗の屋台は、この工程のために既に確保されています。
+aetherhaven.plotcreator.hint.touristPortalRecorded=観光ポータルサイトが保存されました。
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=その観光ポータルサイトは、この手順のために既に保存されています。
+aetherhaven.plotcreator.hint.spawnRecorded=スポーン地点を保存しました。
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=冒険者の出現地点が削除されました。
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=訪問者の出現地点を削除しました。
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=その訪問者の出現地点は既に保存されています。
+aetherhaven.plotcreator.hint.poiRecorded=アクティビティスポットを保存しました。
 
-aetherhaven.plotcreator.button.save =建物を保存する
-aetherhaven.plotcreator.button.openMaterials =オープンビルドコストストレージ
+aetherhaven.plotcreator.button.save=建物を保存する
+aetherhaven.plotcreator.button.addFromInventory=在庫から追加
+aetherhaven.plotcreator.button.useBuildShape=プレハブ材料を使用する
+aetherhaven.plotcreator.button.clearPrefabMaterials=明確な建設コスト
+aetherhaven.plotcreator.button.materialsPrevPage=前の
+aetherhaven.plotcreator.button.materialsNextPage=次
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =建物名
-aetherhaven.plotcreator.field.description =簡単な説明（任意）
-aetherhaven.plotcreator.field.constructionId =建物ID（plot_my_building）
-aetherhaven.plotcreator.field.prefabName =プレハブファイル名
-aetherhaven.plotcreator.field.tags =タグ（カンマ区切り）
-aetherhaven.plotcreator.field.variantOf =建物IDとしてカウントされます
-aetherhaven.plotcreator.field.goldCost =国庫からの金価格
+aetherhaven.plotcreator.materials.pageLabel=ページ {page} / {pages}
+aetherhaven.plotcreator.materials.emptyList=建築費用はまだかかりません。既製の資材を使用するか、在庫からアイテムを追加してください。
+aetherhaven.plotcreator.materials.confirmReplace=現在の建築コストを置き換えるには、「プレハブ材料を使用する」をもう一度クリックしてください。
+aetherhaven.plotcreator.materials.confirmClear=もう一度「構築コストをクリア」をクリックすると、すべての構築コストが削除されます。
+aetherhaven.plotcreator.materials.fillFailed=プレハブから建築コストを計算できませんでした。まず建築形状を保存してください。
 
-aetherhaven.plotcreator.session.started =プロット作成を開始しました。作業中はHUDとスタッフキーを使用してください。
+aetherhaven.plotcreator.field.displayName=建物名
+aetherhaven.plotcreator.field.description=簡単な説明（任意）
+aetherhaven.plotcreator.field.constructionId=建物ID（plot_my_building）
+aetherhaven.plotcreator.field.prefabName=プレハブファイル名
+aetherhaven.plotcreator.field.tags=タグ（カンマ区切り）
+aetherhaven.plotcreator.field.variantOf=建物IDとしてカウントされます
+aetherhaven.plotcreator.field.goldCost=国庫からの金価格
 
-aetherhaven.plotcreator.hud.title =プロット作成者
+aetherhaven.plotcreator.session.started=プロット作成を開始しました。作業中はHUDとスタッフキーを使用してください。
 
-aetherhaven.plotcreator.hud.common.q =前のステップ
-aetherhaven.plotcreator.hud.common.e =次のステップに進む
-aetherhaven.plotcreator.hud.common.r =セッションをキャンセル
+aetherhaven.plotcreator.hud.title=プロット作成者
 
-aetherhaven.plotcreator.hud.WELCOME.f =始める
-aetherhaven.plotcreator.hud.WELCOME.e =始める
+aetherhaven.plotcreator.hud.common.q=前のステップ
+aetherhaven.plotcreator.hud.common.e=次のステップに進む
+aetherhaven.plotcreator.hud.common.r=セッションをキャンセル
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =建築物の隅にあるブロックをクリックします。
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =反対側の角をクリックして、領域全体をマークします。
-aetherhaven.plotcreator.hud.ANCHOR.primary =足跡の4つの外側の角のいずれかをクリックします
+aetherhaven.plotcreator.hud.WELCOME.f=始める
+aetherhaven.plotcreator.hud.WELCOME.e=始める
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =境界内のビルド形状をエクスポートします
-aetherhaven.plotcreator.hud.KIND.f =建物タイプ選択ツールを開く
-aetherhaven.plotcreator.hud.IDENTITY.f =表示名、説明、および建物IDを入力してください
-aetherhaven.plotcreator.hud.TAGS.f =タグを編集（カンマ区切り）
-aetherhaven.plotcreator.hud.VARIANT.f =このバリアントがどの主要建物タイプに分類されるかを選択してください
-aetherhaven.plotcreator.hud.SUBSTEP.primary =フットプリント内の必要なブロックまたはスポットをクリックしてください
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =冒険者の出現マーカーを削除する
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =訪問者のスポーンマーカーを削除する
-aetherhaven.plotcreator.hud.SUBSTEP.q =戻る（前のステップで配置した余分なブロックは削除されます）
-aetherhaven.plotcreator.hud.MATERIALS.f =オープンな資材保管庫
-aetherhaven.plotcreator.hud.CONFIGURE.f =オープンな建物環境
-aetherhaven.plotcreator.hud.REVIEW.f =建物を保存
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=建築物の隅にあるブロックをクリックします。
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=反対側の角をクリックして、領域全体をマークします。
+aetherhaven.plotcreator.hud.ANCHOR.primary=足跡の4つの外側の角のいずれかをクリックします
 
-aetherhaven.plotcreator.hud.kindSelected =タイプ: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=境界内のビルド形状をエクスポートします
+aetherhaven.plotcreator.hud.KIND.f=建物タイプ選択ツールを開く
+aetherhaven.plotcreator.hud.IDENTITY.f=表示名、説明、および建物IDを入力してください
+aetherhaven.plotcreator.hud.TAGS.f=タグを編集（カンマ区切り）
+aetherhaven.plotcreator.hud.VARIANT.f=このバリアントがどの主要建物タイプに分類されるかを選択してください
+aetherhaven.plotcreator.hud.SUBSTEP.primary=フットプリント内の必要なブロックまたはスポットをクリックしてください
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=冒険者の出現マーカーを削除する
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=訪問者のスポーンマーカーを削除する
+aetherhaven.plotcreator.hud.SUBSTEP.q=戻る（前のステップで配置した余分なブロックは削除されます）
+aetherhaven.plotcreator.hud.MATERIALS.f=建築材料メニューを開く
+aetherhaven.plotcreator.hud.CONFIGURE.f=オープンな建物環境
+aetherhaven.plotcreator.hud.REVIEW.f=建物を保存
 
-aetherhaven.plotcreator.hint.clickBlock =この手順では、ゲーム内のブロックをクリックしてください。
+aetherhaven.plotcreator.hud.kindSelected=タイプ: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =建物タイプ: {kind}
+aetherhaven.plotcreator.hint.clickBlock=この手順では、ゲーム内のブロックをクリックしてください。
 
-aetherhaven.plotcreator.hint.prefabSaved =プレハブは{file}として保存されました。次のステップに進む準備ができたらEキーを押してください。
+aetherhaven.plotcreator.hint.kindCycled=建物タイプ: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =先に進む前に、最初の角をクリックしてください。
+aetherhaven.plotcreator.hint.prefabSaved=プレハブは{file}として保存されました。次のステップに進む準備ができたらEキーを押してください。
 
-aetherhaven.plotcreator.error.needCornerSecond =続行する前に、反対側の角をクリックしてください。
+aetherhaven.plotcreator.error.needCornerFirst=先に進む前に、最初の角をクリックしてください。
 
-aetherhaven.plotcreator.error.needKind =Fキーを押して建物タイプ選択画面を開き、タイプを選択してから続行してください。
+aetherhaven.plotcreator.error.needCornerSecond=続行する前に、反対側の角をクリックしてください。
 
-aetherhaven.plotcreator.error.needVariantOf =続行する前に、Fキーを押して、このバリアントがどの主要建物としてカウントされるかを選択してください。
+aetherhaven.plotcreator.error.needKind=Fキーを押して建物タイプ選択画面を開き、タイプを選択してから続行してください。
 
-aetherhaven.plotcreator.error.invalidVariantOf =その主要な建物タイプは、区画作成ツールのリストにありません。
+aetherhaven.plotcreator.error.needVariantOf=続行する前に、Fキーを押して、このバリアントがどの主要建物としてカウントされるかを選択してください。
+
+aetherhaven.plotcreator.error.invalidVariantOf=その主要な建物タイプは、区画作成ツールのリストにありません。
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =納屋
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =鍛冶屋
-aetherhaven.plotcreator.mainType.plot_farm =農地
-aetherhaven.plotcreator.mainType.plot_gaia_altar =ガイアの祭壇
-aetherhaven.plotcreator.mainType.plot_guild_hall =ギルドホール
-aetherhaven.plotcreator.mainType.plot_house =家
-aetherhaven.plotcreator.mainType.plot_inn =宿
-aetherhaven.plotcreator.mainType.plot_lumbermill =製材所
-aetherhaven.plotcreator.mainType.plot_market_stall =市場の露店
-aetherhaven.plotcreator.mainType.plot_player_shop =プレイヤーショップ
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =設置した店舗用金庫をクリックしてください。
-aetherhaven.plotcreator.mainType.plot_miners_hut =鉱夫の小屋
-aetherhaven.plotcreator.mainType.plot_builders_hut =建築業者の小屋
-aetherhaven.plotcreator.mainType.plot_park =公園
-aetherhaven.plotcreator.mainType.plot_town_hall =町役場
-aetherhaven.plotcreator.mainType.plot_tourist_portal =観光ポータル
+aetherhaven.plotcreator.mainType.plot_barn=納屋
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=鍛冶屋
+aetherhaven.plotcreator.mainType.plot_farm=農地
+aetherhaven.plotcreator.mainType.plot_gaia_altar=ガイアの祭壇
+aetherhaven.plotcreator.mainType.plot_guild_hall=ギルドホール
+aetherhaven.plotcreator.mainType.plot_house=家
+aetherhaven.plotcreator.mainType.plot_inn=宿
+aetherhaven.plotcreator.mainType.plot_lumbermill=製材所
+aetherhaven.plotcreator.mainType.plot_market_stall=市場の露店
+aetherhaven.plotcreator.mainType.plot_player_shop=プレイヤーショップ
+aetherhaven.plotcreator.mainType.plot_bomb_shop=爆弾ショップ
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=クリスタルキーパーの店
+aetherhaven.plotcreator.mainType.plot_flower_shop=花屋
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=設置した店舗用金庫をクリックしてください。
+aetherhaven.plotcreator.mainType.plot_miners_hut=鉱夫の小屋
+aetherhaven.plotcreator.mainType.plot_builders_hut=建築業者の小屋
+aetherhaven.plotcreator.mainType.plot_park=公園
+aetherhaven.plotcreator.mainType.plot_town_hall=町役場
+aetherhaven.plotcreator.mainType.plot_tourist_portal=観光ポータル
 
-aetherhaven.plotcreator.cancelConfirm.title =プロット作成者をキャンセルしますか？
-aetherhaven.plotcreator.cancelConfirm.body =このセッションでの作業内容はすべて失われます。境界値、プレハブのエクスポート、およびドラフトデータは破棄されます。
-aetherhaven.plotcreator.cancelConfirm.yes =はい、キャンセルします
-aetherhaven.plotcreator.cancelConfirm.no =働き続けよう
+aetherhaven.plotcreator.cancelConfirm.title=プロット作成者をキャンセルしますか？
+aetherhaven.plotcreator.cancelConfirm.body=このセッションでの作業内容はすべて失われます。境界値、プレハブのエクスポート、およびドラフトデータは破棄されます。
+aetherhaven.plotcreator.cancelConfirm.yes=はい、キャンセルします
+aetherhaven.plotcreator.cancelConfirm.no=働き続けよう
 
-aetherhaven.plotcreator.button.back =戻る
-aetherhaven.plotcreator.button.cancel =キャンセル
-aetherhaven.plotcreator.button.close =近い
-aetherhaven.plotcreator.button.done =終わり
-aetherhaven.plotcreator.button.next =続く
+aetherhaven.plotcreator.button.back=戻る
+aetherhaven.plotcreator.button.cancel=キャンセル
+aetherhaven.plotcreator.button.close=近い
+aetherhaven.plotcreator.button.done=終わり
+aetherhaven.plotcreator.button.next=続く
 
-aetherhaven.plotcreator.step.WELCOME.title =いらっしゃいませ
-aetherhaven.plotcreator.step.WELCOME.hint =自分が作ったものを街の建物に変えよう。
+aetherhaven.plotcreator.step.WELCOME.title=いらっしゃいませ
+aetherhaven.plotcreator.step.WELCOME.hint=自分が作ったものを街の建物に変えよう。
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =最初のコーナー
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =建物の角の一つに印をつけてください。
+aetherhaven.plotcreator.step.CORNER_FIRST.title=最初のコーナー
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=建物の角の一つに印をつけてください。
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =反対側の角
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =反対側の角に印を付けて、全体の範囲を定義します。
+aetherhaven.plotcreator.step.CORNER_SECOND.title=反対側の角
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=反対側の角に印を付けて、全体の領域を定義します。
 
-aetherhaven.plotcreator.step.ANCHOR.title =区画標識設置場所
-aetherhaven.plotcreator.step.ANCHOR.hint =建築予定地の四隅のうちの１つ（X軸とZ軸の両方で境界線から１ブロック外側）に印を付けてください。標識は建築区域内に設置してはいけません。
+aetherhaven.plotcreator.step.ANCHOR.title=区画標識設置場所
+aetherhaven.plotcreator.step.ANCHOR.hint=建築予定地の四隅のうちの１つ（X軸とZ軸の両方で境界線から１ブロック外側）に印を付けてください。標識は建築区域内に設置してはいけません。
 
-aetherhaven.plotcreator.step.KIND.title =建物タイプ
-aetherhaven.plotcreator.step.KIND.hint =建築物の種類は、ご自身の建築スタイルに合ったものをお選びください。各種類の意味については、町のジャーナルの「ガイド」→「システム」→「区画作成スタッフ」をご覧ください。
-aetherhaven.plotcreator.kind.DECORATION =装飾
-aetherhaven.plotcreator.kind.VARIANT =別の建物のバリエーション
-aetherhaven.plotcreator.kind.HOME =家
-aetherhaven.plotcreator.kind.WORK =職場
-aetherhaven.plotcreator.kind.AMENITY =アメニティ
-aetherhaven.plotcreator.kind.SHOP =村人の店
-aetherhaven.plotcreator.kind.PLAYER_SHOP =プレイヤーショップ
-aetherhaven.plotcreator.kind.INN =宿
-aetherhaven.plotcreator.kind.TOWN_HALL =町役場
-aetherhaven.plotcreator.kind.GUILD_HALL =ギルドホール
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =観光ポータル
+aetherhaven.plotcreator.step.KIND.title=建物タイプ
+aetherhaven.plotcreator.step.KIND.hint=建築物の種類は、ご自身の建築スタイルに合ったものをお選びください。各種類の意味については、町のジャーナルの「ガイド」→「システム」→「区画作成スタッフ」をご覧ください。
+aetherhaven.plotcreator.kind.DECORATION=装飾
+aetherhaven.plotcreator.kind.VARIANT=別の建物のバリエーション
+aetherhaven.plotcreator.kind.HOME=家
+aetherhaven.plotcreator.kind.WORK=職場
+aetherhaven.plotcreator.kind.AMENITY=アメニティ
+aetherhaven.plotcreator.kind.SHOP=村人の店
+aetherhaven.plotcreator.kind.PLAYER_SHOP=プレイヤーショップ
+aetherhaven.plotcreator.kind.INN=宿
+aetherhaven.plotcreator.kind.TOWN_HALL=町役場
+aetherhaven.plotcreator.kind.GUILD_HALL=ギルドホール
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=観光ポータル
 
-aetherhaven.plotcreator.step.IDENTITY.title =名前とID
-aetherhaven.plotcreator.step.IDENTITY.hint =表示名、説明、および建物IDを入力してください。IDは、IDフィールドを自分で編集するまで、名前から自動的に更新されます。プレハブファイルはこのIDを使用します。
+aetherhaven.plotcreator.step.IDENTITY.title=名前とID
+aetherhaven.plotcreator.step.IDENTITY.hint=表示名、説明、および建物IDを入力してください。IDは、IDフィールドを自分で編集するまで、名前から自動的に更新されます。プレハブファイルはこのIDを使用します。
 
-aetherhaven.plotcreator.step.TAGS.title =建物タグ
-aetherhaven.plotcreator.step.TAGS.hint =タグを追加してください（カンマ区切り）。例：アメニティ、自然、楽しみ。
+aetherhaven.plotcreator.step.TAGS.title=建物タグ
+aetherhaven.plotcreator.step.TAGS.hint=タグを追加してください（カンマ区切り）。例：アメニティ、自然、楽しみ。
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =形状を保存
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =前の手順で設定した建物の設定を使用して、境界内のすべての要素をエクスポートします。
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=形状を保存
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=前の手順で設定した建物の設定を使用して、境界内のすべての要素をエクスポートします。
 
-aetherhaven.plotcreator.error.needIdentity =プレハブをエクスポートする前に、表示名と建物IDを設定してください。
+aetherhaven.plotcreator.error.needIdentity=プレハブをエクスポートする前に、表示名と建物IDを設定してください。
 
-aetherhaven.plotcreator.error.selfBuildDays =セルフビルド日数はゼロより大きくなければならない。
+aetherhaven.plotcreator.error.selfBuildDays=セルフビルド日数はゼロより大きくなければならない。
 
-aetherhaven.plotcreator.error.assemblySections =軸ごとの組立セクション数は、1～16の整数でなければなりません（1にするとセクション組立が無効になります）。
+aetherhaven.plotcreator.error.assemblySections=各軸の組立セクション数は、1～16の整数でなければなりません（1の場合はセクション組立が無効になります）。
 
-aetherhaven.plotcreator.step.VARIANT.title =の変種
-aetherhaven.plotcreator.step.VARIANT.hint =このバリエーションがどの主要建築物タイプに分類されるかを選択してください。
+aetherhaven.plotcreator.step.VARIANT.title=の変種
+aetherhaven.plotcreator.step.VARIANT.hint=このバリエーションがどの主要建築物タイプに分類されるかを選択してください。
 
-aetherhaven.plotcreator.step.SUBSTEP.title =重要なスポット
-aetherhaven.plotcreator.step.SUBSTEP.hint =各サブステップごとに配置ブロックがインベントリに追加されます。フットプリント内の必要なブロックと場所を配置またはクリックしてください。
+aetherhaven.plotcreator.step.SUBSTEP.title=重要なスポット
+aetherhaven.plotcreator.step.SUBSTEP.hint=各サブステップごとに配置ブロックがインベントリに追加されます。フットプリント内の必要なブロックと場所を配置またはクリックしてください。
 
-aetherhaven.plotcreator.step.MATERIALS.title =建築材料
-aetherhaven.plotcreator.step.MATERIALS.hint =この区画を構築するためにプレイヤーが用意する必要のあるアイテムを追加してください。アイテムはゲームを続行するとインベントリに戻されます。
+aetherhaven.plotcreator.step.MATERIALS.title=建築材料
+aetherhaven.plotcreator.step.MATERIALS.hint=Fキーを押して建築資材メニューを開きます。プレハブ充填は、アイテムを提供しないままコストを追加します。
+aetherhaven.plotcreator.step.MATERIALS.detail=プラスとマイナスを使って数量を変更します。在庫からコピーした数量をリストに追加し、元のアイテムを返します。
 
-aetherhaven.plotcreator.step.MATERIALS.detail =この建物専用の仮想チェストであり、ゲームの世界には配置されません。
+aetherhaven.plotcreator.step.CONFIGURE.title=建物の設定
+aetherhaven.plotcreator.step.CONFIGURE.hint=国庫の金貨コスト、自己建設日数、プレハブ空きスペース、区画トークンロック、および組み立てセクションを設定します。
 
-aetherhaven.plotcreator.step.CONFIGURE.title =建物の設定
-aetherhaven.plotcreator.step.CONFIGURE.hint =国庫の金貨コスト、自己建設日数、プレハブ空きスペース、区画トークンロック、および組み立てセクションを設定します。
+aetherhaven.plotcreator.step.CONFIGURE.detail=区画が建設されると、町の財政から金が支払われます。セルフビルド日数は、建設スタッフなしで区画が完成するまでにかかる時間です。空きスペースの保存は、建設時にブロックをクリアするために、フットプリント内の空気を保存するかどうかを制御します。区画トークンロックは、トークンを作成する前に、プレイヤーが区画作成台でこの区画のロックを解除する必要があることを意味します。アセンブリセクションは、建設をN×N×Nグリッドに分割します（1 = オフ）。
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =区画が建設されると、町の財政から金が支払われます。セルフビルド日数は、建設スタッフなしで区画が完成するまでにかかる時間です。空きスペースの保存は、建設時にブロックをクリアするために、フットプリント内の空気を保存するかどうかを制御します。区画トークンロックは、トークンを作成する前に、プレイヤーが区画作成台でこの区画のロックを解除する必要があることを意味します。アセンブリセクションは、建設をN×N×Nグリッドに分割します（1 = オフ）。
+aetherhaven.plotcreator.field.selfBuildDays=セルフビルドデー（ゲームデー）
 
-aetherhaven.plotcreator.field.selfBuildDays =セルフビルドデー（ゲームデー）
+aetherhaven.plotcreator.field.saveEmptySpaces=プレハブの空きスペースを節約
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=オンにすると、フットプリント内の空気が保存され、建物の組み立て時にそれらのブロックがクリアされます。オフにすると、固体ブロックのみが保存され、既存の地形が保持されます。エディターの空のマーカーは常にブロックをクリアします。
+aetherhaven.plotcreator.field.touristDestination=訪問者はここで立ち止まることができます
+aetherhaven.plotcreator.field.touristDestination.hint=稼働中は、ポータル訪問者は日中、この建物まで歩いて行くことができます。
+aetherhaven.plotcreator.field.plotTokenLocked=プロットトークンはデフォルトでロックされています
+aetherhaven.plotcreator.field.plotTokenLocked.hint=有効になっている場合、プレイヤーは（プロットの設計図を使用して）プロット作成台でこのプロットをアンロックしてからでないと、そのプロットのトークンを作成できません。
+aetherhaven.plotcreator.field.assemblySections=各軸の組立セクション数（1～16）
 
-aetherhaven.plotcreator.field.saveEmptySpaces =プレハブの空きスペースを節約
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =オンにすると、フットプリント内の空気が保存され、建物の組み立て時にそれらのブロックがクリアされます。オフにすると、固体ブロックのみが保存され、既存の地形が保持されます。エディターの空のマーカーは常にブロックをクリアします。
-aetherhaven.plotcreator.field.touristDestination =訪問者はここで立ち止まることができます
-aetherhaven.plotcreator.field.touristDestination.hint =稼働中は、ポータル訪問者は日中、この建物まで歩いて行くことができます。
-aetherhaven.plotcreator.field.plotTokenLocked =プロットトークンはデフォルトでロックされています
-aetherhaven.plotcreator.field.plotTokenLocked.hint =有効になっている場合、プレイヤーは（プロットの設計図を使用して）プロット作成台でこのプロットをアンロックしてからでないと、そのプロットのトークンを作成できません。
-aetherhaven.plotcreator.field.assemblySections =各軸の組立セクション数（1～16）
+aetherhaven.plotcreator.step.REVIEW.title=レビュー
+aetherhaven.plotcreator.step.REVIEW.hint=建物を保存してください。保存すると、町に設置するための区画トークンがもらえます。
 
-aetherhaven.plotcreator.step.REVIEW.title =レビュー
-aetherhaven.plotcreator.step.REVIEW.hint =建物を保存してください。保存すると、町に設置するための区画トークンがもらえます。
+aetherhaven.plotcreator.step.DONE.title=終わり
+aetherhaven.plotcreator.step.DONE.hint=あなたの建物は保存されました。インベントリにある区画トークンを使って、町の中に配置してください。
 
-aetherhaven.plotcreator.step.DONE.title =終わり
-aetherhaven.plotcreator.step.DONE.hint =あなたの建物は保存されました。インベントリにある区画トークンを使って、町の中に配置してください。
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=設置した町の記録棚をクリックしてください。
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=設置した生産保管場所をクリックしてください。
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=設置した財務ブロックをクリックしてください。
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=都市計画デスクをクリックしてください。
+aetherhaven.plotcreator.substep.WORK_POI=作業場所（ベンチまたは机）をクリックしてください。
+aetherhaven.plotcreator.substep.BARD_WORK_POI=吟遊詩人がクエストボードの横に立つべき場所をクリックしてください。
+aetherhaven.plotcreator.substep.SLEEP_POI=ベッドまたは休憩場所をクリックしてください。
+aetherhaven.plotcreator.substep.EAT_POI=飲食店をクリックしてください。
+aetherhaven.plotcreator.substep.FUN_POI=お気に入りの場所（座るベンチなど）をクリックしてください。
+aetherhaven.plotcreator.substep.SHOP_SPOT=在庫から店舗の屋台を配置し、それぞれの配置を確認してから、区画作成スタッフで各屋台をクリックしてください。
+aetherhaven.plotcreator.substep.SHOP_POI=店舗のカウンター作業場所をクリックしてください。
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=来店客が店の前で立つべき場所をクリックしてください。
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=インベントリからポータルプラットフォームを配置し、プロットクリエーターの杖でそれをクリックします。
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=宿屋の主人が立つべき場所をクリックしてください。
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=宿の宿泊客が立つべき場所（2箇所）をクリックしてください。水色のマーカーを右クリックすると削除できます。
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=ギルドマスターが立つべき場所をクリックしてください。
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=冒険者の出現地点をクリックします。紫色のマーカーを右クリックすると、マーカーが削除されます。
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =設置した町の記録棚をクリックしてください。
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =設置した生産保管場所をクリックしてください。
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =設置した財務ブロックをクリックしてください。
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =都市計画デスクをクリックしてください。
-aetherhaven.plotcreator.substep.WORK_POI =作業場所（ベンチまたは机）をクリックしてください。
-aetherhaven.plotcreator.substep.BARD_WORK_POI =吟遊詩人がクエストボードの横に立つべき場所をクリックしてください。
-aetherhaven.plotcreator.substep.SLEEP_POI =ベッドまたは休憩場所をクリックしてください。
-aetherhaven.plotcreator.substep.EAT_POI =飲食店をクリックしてください。
-aetherhaven.plotcreator.substep.FUN_POI =お気に入りの場所（座るベンチなど）をクリックしてください。
-aetherhaven.plotcreator.substep.SHOP_SPOT =在庫から店舗の屋台を配置し、それぞれの配置を確認してから、区画作成スタッフで各屋台をクリックしてください。
-aetherhaven.plotcreator.substep.SHOP_POI =店舗のカウンター作業場所をクリックしてください。
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =来店客が店の前で立つべき場所をクリックしてください。
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =インベントリからポータルプラットフォームを配置し、プロットクリエーターの杖でそれをクリックします。
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =宿屋の主人が立つべき場所をクリックしてください。
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =宿の宿泊客が立つべき場所（2箇所）をクリックしてください。水色のマーカーを右クリックすると削除できます。
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =ギルドマスターが立つべき場所をクリックしてください。
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =冒険者の出現地点をクリックします。紫色のマーカーを右クリックすると、マーカーが削除されます。
+aetherhaven.plotcreator.success.saved=建物は{id}として保存されました。区画トークンを受け取りました。
+aetherhaven.plotcreator.success.registered=建物は{id}として保存され、あなたがマークした場所にあなたの町に登録されました（既に完了しており、区画標識はありません）。
+aetherhaven.plotcreator.success.savedTokenFallback=建物ファイルは{id}として保存されました。ゲーム内のあなたの町にリンクできませんでした。区画トークンを使用して配置してください。
 
-aetherhaven.plotcreator.success.saved =建物は{id}として保存されました。区画トークンを受け取りました。
-aetherhaven.plotcreator.success.registered =建物は{id}として保存され、あなたがマークした場所にあなたの町に登録されました（既に完了しており、区画標識はありません）。
-aetherhaven.plotcreator.success.savedTokenFallback =建物ファイルは{id}として保存されました。ゲーム内のあなたの町にリンクできませんでした。区画トークンを使用して配置してください。
+aetherhaven.plotcreator.error.noTown=まず町憲章を設置し、次にその町の中に区画作成ツールを完成させてください。
+aetherhaven.plotcreator.error.signBlocked=ご指定の場所に区画標識を設置できませんでした。建物ファイルは保存されました。必要に応じて区画トークンをご利用ください。
+aetherhaven.plotcreator.error.unknownConstruction=保存後に建物定義が失われました。サーバーを再起動してみてください。
 
-aetherhaven.plotcreator.error.noTown =まず町憲章を設置し、次にその町の中に区画作成ツールを完成させてください。
-aetherhaven.plotcreator.error.signBlocked =ご指定の場所に区画標識を設置できませんでした。建物ファイルは保存されました。必要に応じて区画トークンをご利用ください。
-aetherhaven.plotcreator.error.unknownConstruction =保存後に建物定義が失われました。サーバーを再起動してみてください。
-
-aetherhaven.plottoken.error.unknownBuilding =不明な建物ID: {id}
-aetherhaven.plottoken.gave ={amount} のプロットトークンを {name} に割り当てました。
-aetherhaven.plottoken.list.empty =建物は見つかりませんでした。
-aetherhaven.plottoken.list.header =建物ID:
+aetherhaven.plottoken.error.unknownBuilding=不明な建物ID: {id}
+aetherhaven.plottoken.gave={amount} のプロットトークンを {name} に割り当てました。
+aetherhaven.plottoken.unlock.success=クラフトベンチで{name}区画をアンロックしました。
+aetherhaven.plottoken.unlock.alreadyKnown=あなたは既に{name}区画のロックを解除しました。
+aetherhaven.plottoken.unlock.notLockable=その建物はロックを解除する必要はありません。
+aetherhaven.plottoken.unlockall.success=クラフトベンチで{count}区画のロックを解除しました。
+aetherhaven.plottoken.unlockall.noneLeft=あなたは既に全ての区画を解放しました。
+aetherhaven.plottoken.list.empty=建物は見つかりませんでした。
+aetherhaven.plottoken.list.header=建物ID:

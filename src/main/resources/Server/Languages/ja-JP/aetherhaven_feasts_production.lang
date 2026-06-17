@@ -44,7 +44,7 @@ aetherhaven.ui.production.unlockButton=アンロック
 aetherhaven.ui.production.unlockTooltip=この建物のロックされた作業スペースの出力内容を表示および購入します。
 aetherhaven.ui.production.pickTooltip=このラインが何を作るかを選択してください
 aetherhaven.ui.production.collectAllButton=すべて集める
-aetherhaven.ui.production.collectAllTooltip=各行に格納されているすべてのものを取得する
+aetherhaven.ui.production.collectAllTooltip=各行に格納されているすべてを取得する
 
 aetherhaven.ui.materialPicker.title=出力先を選択
 aetherhaven.ui.materialPicker.intro=この回線には、ロック解除済みの出力のうちいずれかを選択してください。

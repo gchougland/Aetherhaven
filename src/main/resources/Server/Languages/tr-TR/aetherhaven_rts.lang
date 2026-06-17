@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Tüm güvenlik görevlilerini seçin
 items.Aetherhaven_Rts_Select_All.description=Şehirdeki tüm kiralık güvenlik görevlilerini seçin.
 
 items.Aetherhaven_Rts_Select_Knight.name=Seçilmiş şövalyeler
-items.Aetherhaven_Rts_Select_Knight.description=Tüm şövalye muhafızlarını seçin.
+items.Aetherhaven_Rts_Select_Knight.description=Tüm şövalye ve haydut muhafızları seçin.
 
 items.Aetherhaven_Rts_Select_Archer.name=Okçuları seçin
 items.Aetherhaven_Rts_Select_Archer.description=Tüm okçu muhafızlarını seçin.
@@ -19,7 +19,7 @@ items.Aetherhaven_Rts_Select_Archer.description=Tüm okçu muhafızlarını seç
 items.Aetherhaven_Rts_Select_Mage.name=Görüntüleri seçin
 items.Aetherhaven_Rts_Select_Mage.description=Tüm büyücü muhafızlarını seçin.
 
-items.Aetherhaven_Rts_Stance_Banner.name=Duruş afişi
+items.Aetherhaven_Rts_Stance_Banner.name=Duruş pankartı
 items.Aetherhaven_Rts_Stance_Banner.description=Seçilen muhafızların nasıl savaşacağını ayarlayın.
 
 items.Aetherhaven_Rts_Free.name=Personeli serbest bırakın

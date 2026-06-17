@@ -1,7 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_rancher)
 # Full translation keys are aetherhaven.dialogue.aetherhaven_rancher.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_rancher.root.speaker=Thalen Meadowrun
-aetherhaven.dialogue.aetherhaven_rancher.root.body=Ich bin Thalen, Meadowrun. Ich kümmere mich um die Tiere und ihre Produkte wie Wolle, Felle, Eier und Fleisch. Dafür brauche ich aber einen ordentlichen Stall, saubere Behälter und eine Werkbank zur Weiterverarbeitung. Ich benötige daher von Ihnen eine professionelle Stalleinrichtung. Heu auf dem Heuboden, Waren im Lager.
+aetherhaven.dialogue.aetherhaven_rancher.root.body=Ich bin Thalen. Meadowrun. Ich kümmere mich um die Tiere und ihre Produkte, darunter Wolle, Felle, Eier und Fleisch. Allerdings brauche ich für all diese Arbeit einen ordentlichen Stall, saubere Behälter und eine Werkbank zur Weiterverarbeitung. Ich benötige daher von Ihnen eine entsprechende Stalleinrichtung. Heu auf dem Heuboden, Waren im Lager.
 aetherhaven.dialogue.aetherhaven_rancher.root.hc0=Du wolltest über ein Haus sprechen.
 aetherhaven.dialogue.aetherhaven_rancher.root.hc1=Dein Name steht im Bücherregal des Hauses. Du kannst einziehen, sobald du bereit bist.
 aetherhaven.dialogue.aetherhaven_rancher.root.hc2=Der Hausbau ist noch im Gange.
@@ -32,7 +32,7 @@ aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.body=Ich liebe Tiere
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c0=Ich werde das Haus abstecken und es bauen lassen.
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_offer.c1=Ein anderes Mal.
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.speaker=Thalen Meadowrun
-aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body=Wenn das Haus gebaut ist, tragt mich ins Bücherregal ein und kommt dann, um mich zu suchen.
+aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.body=Wenn das Haus gebaut ist, tragt mich im Bücherregal ein und kommt dann, um mich zu suchen.
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_accepted.c0=Das wirst du von mir hören.
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.speaker=Thalen Meadowrun
 aetherhaven.dialogue.aetherhaven_rancher.thalen_house_remind.body=Bau in deinem Tempo. Wenn das Gerüst fertig ist, schreib meinen Namen auf das Bücherregal im Inneren und komm dann zurück. Ich kümmere mich um den Betrieb der Scheune, während du deine Arbeit beendest.

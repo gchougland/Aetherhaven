@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =플롯 생성기를 사용할 권한이 없습니다.
-aetherhaven.plotcreator.error.id_empty =건물 ID를 입력하세요.
-aetherhaven.plotcreator.error.id_prefix =ID는 plot_으로 시작해야 합니다.
-aetherhaven.plotcreator.error.id_wall =이 도구로는 아직 벽면 도면을 만들 수 없습니다.
-aetherhaven.plotcreator.error.id_chars =ID에는 소문자, 숫자 및 밑줄만 사용하십시오.
-aetherhaven.plotcreator.error.id_taken =해당 건물 ID는 이미 사용 중입니다.
-aetherhaven.plotcreator.error.incomplete =필수 단계를 모두 완료하세요.
-aetherhaven.plotcreator.error.prefab_missing =작업을 완료하기 전에 프리팹을 저장하세요.
-aetherhaven.plotcreator.error.prefabName =프리팹 파일의 이름을 입력하세요.
-aetherhaven.plotcreator.error.prefabExport =프리팹을 저장할 수 없습니다. 경계를 확인하고 다시 시도하세요.
-aetherhaven.plotcreator.error.saveFailed =건물 파일을 저장할 수 없습니다.
-aetherhaven.plotcreator.error.anchorInside =부지 표시는 건축 경계선 내부에 있을 수 없습니다. 대신 외부 모서리를 사용하십시오.
-aetherhaven.plotcreator.error.anchorNotCorner =건축물의 네 모서리 중 하나(건축물의 기본 형태에서 X축과 Z축으로 각각 한 블록씩 떨어진 위치)를 클릭합니다.
-aetherhaven.plotcreator.error.needAnchor =계속 진행하기 전에 부지 표지판의 바깥쪽 모서리를 클릭하세요.
-aetherhaven.plotcreator.error.outsideBounds =표시된 영역 안쪽을 클릭하세요.
-aetherhaven.plotcreator.error.wrongBlock =저것은 이 단계에 필요한 블록이 아닙니다.
-aetherhaven.plotcreator.error.shopSpotNotConfigured =먼저 상점 가판대 설정을 확인한 다음, 부지 생성 담당자로 해당 가판대를 클릭하세요.
-aetherhaven.plotcreator.error.tooManyVisitors =이 건물에는 방문객 주차 공간이 두 곳만 있으면 됩니다.
-aetherhaven.plotcreator.error.editNotCustom =서버 데이터 폴더에 저장된 사용자 지정 건물만 편집할 수 있습니다.
-aetherhaven.plotcreator.error.editUnknown =ID가 {id}인 사용자 지정 건물을 찾을 수 없습니다.
-aetherhaven.plotcreator.edit.loaded =편집을 위해 {id} 파일을 불러왔습니다. 세부 정보를 변경하려면 뒤로 돌아가거나 파일을 업데이트하려면 저장하세요.
+aetherhaven.plotcreator.error.noPermission=플롯 생성기를 사용할 권한이 없습니다.
+aetherhaven.plotcreator.error.id_empty=건물 ID를 입력하세요.
+aetherhaven.plotcreator.error.id_prefix=ID는 plot_으로 시작해야 합니다.
+aetherhaven.plotcreator.error.id_wall=이 도구로는 아직 벽면 도면을 만들 수 없습니다.
+aetherhaven.plotcreator.error.id_chars=ID에는 소문자, 숫자 및 밑줄만 사용하십시오.
+aetherhaven.plotcreator.error.id_taken=해당 건물 ID는 이미 사용 중입니다.
+aetherhaven.plotcreator.error.incomplete=필수 단계를 모두 완료하세요.
+aetherhaven.plotcreator.error.prefab_missing=작업을 완료하기 전에 프리팹을 저장하세요.
+aetherhaven.plotcreator.error.prefabName=프리팹 파일의 이름을 입력하세요.
+aetherhaven.plotcreator.error.prefabExport=프리팹을 저장할 수 없습니다. 경계를 확인하고 다시 시도하세요.
+aetherhaven.plotcreator.error.saveFailed=건물 파일을 저장할 수 없습니다.
+aetherhaven.plotcreator.error.anchorInside=부지 표시는 건축 경계선 내부에 있을 수 없습니다. 대신 외부 모서리를 사용하십시오.
+aetherhaven.plotcreator.error.anchorNotCorner=건축물의 네 모서리 중 하나(건축물의 기본 형태에서 X축과 Z축으로 각각 한 블록씩 떨어진 위치)를 클릭합니다.
+aetherhaven.plotcreator.error.needAnchor=계속 진행하기 전에 부지 표지판의 바깥쪽 모서리를 클릭하세요.
+aetherhaven.plotcreator.error.outsideBounds=표시된 영역 안쪽을 클릭하세요.
+aetherhaven.plotcreator.error.wrongBlock=저것은 이 단계에 필요한 블록이 아닙니다.
+aetherhaven.plotcreator.error.shopSpotNotConfigured=먼저 상점 가판대 설정을 확인한 다음, 부지 생성 담당자로 해당 가판대를 클릭하세요.
+aetherhaven.plotcreator.error.tooManyVisitors=이 건물에는 방문객 주차 공간이 두 곳만 있으면 됩니다.
+aetherhaven.plotcreator.error.editNotCustom=서버 데이터 폴더에 저장된 사용자 지정 건물만 편집할 수 있습니다.
+aetherhaven.plotcreator.error.editUnknown=ID가 {id}인 사용자 지정 건물을 찾을 수 없습니다.
+aetherhaven.plotcreator.edit.loaded=편집을 위해 {id} 파일을 불러왔습니다. 세부 정보를 변경하려면 뒤로 돌아가거나 파일을 업데이트하려면 저장하세요.
 
-aetherhaven.plotcreator.generateicon.error.empty =건물 ID 또는 조립식 구조물의 경로를 입력하세요.
-aetherhaven.plotcreator.generateicon.error.noPrefab ={id}에 대한 사전 제작 경로가 없습니다.
-aetherhaven.plotcreator.generateicon.error.noOutputId =출력 ID를 확인할 수 없습니다. 두 번째 인수로 출력 ID를 전달하십시오.
-aetherhaven.plotcreator.generateicon.error.notFound =프리팹을 찾을 수 없습니다: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =프리팹을 로드할 수 없습니다: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed ={id}에 대한 아이콘 렌더링에 실패했습니다.
-aetherhaven.plotcreator.generateicon.ok ={id}에 대한 아이콘이 {path}에 저장되었습니다(자산 경로: {asset}).
+aetherhaven.plotcreator.generateicon.error.empty=건물 ID 또는 조립식 구조물의 경로를 입력하세요.
+aetherhaven.plotcreator.generateicon.error.noPrefab={id}에 대한 사전 제작 경로가 없습니다.
+aetherhaven.plotcreator.generateicon.error.noOutputId=출력 ID를 확인할 수 없습니다. 두 번째 인수로 출력 ID를 전달하십시오.
+aetherhaven.plotcreator.generateicon.error.notFound=프리팹을 찾을 수 없습니다: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=프리팹을 로드할 수 없습니다: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed={id}에 대한 아이콘 렌더링에 실패했습니다.
+aetherhaven.plotcreator.generateicon.ok={id}에 대한 아이콘이 {path}에 저장되었습니다(자산 경로: {asset}).
 
-aetherhaven.plotcreator.hint.cornerFirstSet =첫 번째 모서리 표시를 합니다. 다음으로 반대쪽 모서리를 표시합니다.
-aetherhaven.plotcreator.hint.cornerSecondSet =경계를 설정했습니다. 다음으로, 바깥쪽 모서리에 구획 표시를 하고, 건물 유형을 선택한 다음 필요한 블록을 배치하고 도형을 저장합니다.
-aetherhaven.plotcreator.hint.anchorSet =부지 표지판 설치 장소.
-aetherhaven.plotcreator.hint.blockRecorded =자리 예약 완료.
-aetherhaven.plotcreator.hint.shopSpotRecorded =가게 가판대가 구출됐어요.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =해당 상점 가판대는 이 단계를 위해 이미 저장되었습니다.
-aetherhaven.plotcreator.hint.touristPortalRecorded =관광 포털이 저장되었습니다.
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =해당 관광 포털 사이트는 이 단계를 위해 이미 저장되었습니다.
-aetherhaven.plotcreator.hint.spawnRecorded =스폰 지점이 저장되었습니다.
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =모험가 출현 지점이 삭제되었습니다.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =방문자 생성 지점이 제거되었습니다.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =해당 방문자 생성 위치는 이미 저장되었습니다.
-aetherhaven.plotcreator.hint.poiRecorded =활동 장소가 저장되었습니다.
+aetherhaven.plotcreator.hint.cornerFirstSet=첫 번째 모서리 표시를 합니다. 다음으로 반대쪽 모서리를 표시합니다.
+aetherhaven.plotcreator.hint.cornerSecondSet=경계를 설정했습니다. 다음으로, 바깥쪽 모서리에 구획 표시를 하고, 건물 유형을 선택한 다음 필요한 블록을 배치하고 도형을 저장합니다.
+aetherhaven.plotcreator.hint.anchorSet=부지 표지판 설치 장소.
+aetherhaven.plotcreator.hint.blockRecorded=자리 예약 완료.
+aetherhaven.plotcreator.hint.shopSpotRecorded=가게 가판대가 구출됐어요.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=해당 상점 가판대는 이 단계를 위해 이미 저장되었습니다.
+aetherhaven.plotcreator.hint.touristPortalRecorded=관광 포털이 저장되었습니다.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=해당 관광 포털 사이트는 이 단계를 위해 이미 저장되었습니다.
+aetherhaven.plotcreator.hint.spawnRecorded=스폰 지점이 저장되었습니다.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=모험가 출현 지점이 삭제되었습니다.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=방문자 생성 지점이 제거되었습니다.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=해당 방문자 생성 위치는 이미 저장되었습니다.
+aetherhaven.plotcreator.hint.poiRecorded=활동 장소가 저장되었습니다.
 
-aetherhaven.plotcreator.button.save =건물 저장
-aetherhaven.plotcreator.button.openMaterials =개방형 건축 비용 저장
+aetherhaven.plotcreator.button.save=건물 저장
+aetherhaven.plotcreator.button.addFromInventory=재고에서 추가
+aetherhaven.plotcreator.button.useBuildShape=조립식 자재를 사용하세요
+aetherhaven.plotcreator.button.clearPrefabMaterials=명확한 건설 비용
+aetherhaven.plotcreator.button.materialsPrevPage=이전의
+aetherhaven.plotcreator.button.materialsNextPage=다음
+aetherhaven.plotcreator.button.materialRemove=X
 
-aetherhaven.plotcreator.field.displayName =건물 이름
-aetherhaven.plotcreator.field.description =간략한 설명 (선택 사항)
-aetherhaven.plotcreator.field.constructionId =건물 ID (plot_my_building)
-aetherhaven.plotcreator.field.prefabName =프리팹 파일 이름
-aetherhaven.plotcreator.field.tags =태그 (쉼표로 구분)
-aetherhaven.plotcreator.field.variantOf =건물 ID로 간주됩니다.
-aetherhaven.plotcreator.field.goldCost =국고에서 금값
+aetherhaven.plotcreator.materials.pageLabel={pages} 페이지 중 {page} 페이지
+aetherhaven.plotcreator.materials.emptyList=아직 건설 비용이 없습니다. 미리 만들어진 자재를 사용하거나 인벤토리에서 아이템을 추가하세요.
+aetherhaven.plotcreator.materials.confirmReplace=현재 건설 비용을 대체하려면 '조립식 자재 사용'을 다시 클릭하십시오.
+aetherhaven.plotcreator.materials.confirmClear=모든 건설 비용을 제거하려면 '건설 비용 지우기'를 다시 클릭하세요.
+aetherhaven.plotcreator.materials.fillFailed=조립식 구조물에서 건축 비용을 입력할 수 없습니다. 먼저 건축 형태를 저장하세요.
 
-aetherhaven.plotcreator.session.started =스토리 제작자가 시작되었습니다. 월드에서 작업하는 동안 HUD와 스태프 키를 사용하세요.
+aetherhaven.plotcreator.field.displayName=건물 이름
+aetherhaven.plotcreator.field.description=간략한 설명 (선택 사항)
+aetherhaven.plotcreator.field.constructionId=건물 ID (plot_my_building)
+aetherhaven.plotcreator.field.prefabName=프리팹 파일 이름
+aetherhaven.plotcreator.field.tags=태그 (쉼표로 구분)
+aetherhaven.plotcreator.field.variantOf=건물 ID로 간주됩니다.
+aetherhaven.plotcreator.field.goldCost=국고에서 금값
 
-aetherhaven.plotcreator.hud.title =줄거리 작성자
+aetherhaven.plotcreator.session.started=스토리 제작자가 시작되었습니다. 월드에서 작업하는 동안 HUD와 스태프 키를 사용하세요.
 
-aetherhaven.plotcreator.hud.common.q =이전 단계
-aetherhaven.plotcreator.hud.common.e =다음 단계로 진행하세요
-aetherhaven.plotcreator.hud.common.r =세션 취소
+aetherhaven.plotcreator.hud.title=줄거리 작성자
 
-aetherhaven.plotcreator.hud.WELCOME.f =시작하다
-aetherhaven.plotcreator.hud.WELCOME.e =시작하다
+aetherhaven.plotcreator.hud.common.q=이전 단계
+aetherhaven.plotcreator.hud.common.e=다음 단계로 진행하세요
+aetherhaven.plotcreator.hud.common.r=세션 취소
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =건축물의 한쪽 모서리에 있는 블록을 클릭하세요.
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =반대쪽 모서리를 클릭하여 전체 영역을 표시하세요.
-aetherhaven.plotcreator.hud.ANCHOR.primary =발자국 모양의 네 모서리 중 하나를 클릭하세요.
+aetherhaven.plotcreator.hud.WELCOME.f=시작하다
+aetherhaven.plotcreator.hud.WELCOME.e=시작하다
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =경계 내의 빌드 형상을 내보냅니다.
-aetherhaven.plotcreator.hud.KIND.f =건물 유형 선택기를 엽니다.
-aetherhaven.plotcreator.hud.IDENTITY.f =표시 이름, 설명 및 건물 ID를 입력하세요.
-aetherhaven.plotcreator.hud.TAGS.f =태그 편집 (쉼표로 구분)
-aetherhaven.plotcreator.hud.VARIANT.f =이 변형이 어떤 주요 건물 유형으로 분류되는지 선택하세요.
-aetherhaven.plotcreator.hud.SUBSTEP.primary =발자국 안에서 필요한 블록이나 지점을 클릭하세요.
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =모험가 생성 마커를 제거합니다
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =방문자 생성 마커를 제거합니다.
-aetherhaven.plotcreator.hud.SUBSTEP.q =뒤로 가기 (이전 단계에서 남은 추가 배치 블록이 제거됩니다)
-aetherhaven.plotcreator.hud.MATERIALS.f =개방형 자재 보관
-aetherhaven.plotcreator.hud.CONFIGURE.f =개방형 건물 환경
-aetherhaven.plotcreator.hud.REVIEW.f =건물을 보존하세요
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=건축물의 한쪽 모서리에 있는 블록을 클릭하세요.
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=반대쪽 모서리를 클릭하여 전체 영역을 표시하세요.
+aetherhaven.plotcreator.hud.ANCHOR.primary=발자국 모양의 네 모서리 중 하나를 클릭하세요.
 
-aetherhaven.plotcreator.hud.kindSelected =유형: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=경계 내의 빌드 형상을 내보냅니다.
+aetherhaven.plotcreator.hud.KIND.f=건물 유형 선택기를 엽니다.
+aetherhaven.plotcreator.hud.IDENTITY.f=표시 이름, 설명 및 건물 ID를 입력하세요.
+aetherhaven.plotcreator.hud.TAGS.f=태그 편집 (쉼표로 구분)
+aetherhaven.plotcreator.hud.VARIANT.f=이 변형이 어떤 주요 건물 유형으로 분류되는지 선택하세요.
+aetherhaven.plotcreator.hud.SUBSTEP.primary=발자국 안에서 필요한 블록이나 지점을 클릭하세요.
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=모험가 생성 마커를 제거합니다
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=방문자 생성 마커를 제거합니다.
+aetherhaven.plotcreator.hud.SUBSTEP.q=뒤로 가기 (이전 단계에서 남은 추가 배치 블록이 제거됩니다)
+aetherhaven.plotcreator.hud.MATERIALS.f=건축 자재 메뉴 열기
+aetherhaven.plotcreator.hud.CONFIGURE.f=개방형 건물 환경
+aetherhaven.plotcreator.hud.REVIEW.f=건물을 보존하세요
 
-aetherhaven.plotcreator.hint.clickBlock =이 단계를 위해 월드에서 블록을 클릭하세요.
+aetherhaven.plotcreator.hud.kindSelected=유형: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =건물 유형: {kind}
+aetherhaven.plotcreator.hint.clickBlock=이 단계를 위해 월드에서 블록을 클릭하세요.
 
-aetherhaven.plotcreator.hint.prefabSaved =프리팹이 {file}으로 저장되었습니다. 다음 단계로 진행할 준비가 되면 E 키를 누르십시오.
+aetherhaven.plotcreator.hint.kindCycled=건물 유형: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =계속하기 전에 첫 번째 모서리를 클릭하세요.
+aetherhaven.plotcreator.hint.prefabSaved=프리팹이 {file}으로 저장되었습니다. 다음 단계로 진행할 준비가 되면 E 키를 누르십시오.
 
-aetherhaven.plotcreator.error.needCornerSecond =계속하기 전에 반대쪽 모서리를 클릭하세요.
+aetherhaven.plotcreator.error.needCornerFirst=계속하기 전에 첫 번째 모서리를 클릭하세요.
 
-aetherhaven.plotcreator.error.needKind =F 키를 눌러 건물 유형 선택기를 열고 유형을 선택한 후 계속 진행하십시오.
+aetherhaven.plotcreator.error.needCornerSecond=계속 진행하기 전에 반대쪽 모서리를 클릭하세요.
 
-aetherhaven.plotcreator.error.needVariantOf =F 키를 누르고 이 변형이 어떤 주요 건물로 간주되는지 선택한 후 계속 진행하십시오.
+aetherhaven.plotcreator.error.needKind=F 키를 눌러 건물 유형 선택기를 열고 유형을 선택한 후 계속 진행하십시오.
 
-aetherhaven.plotcreator.error.invalidVariantOf =해당 주요 건물 유형은 부지 생성기 목록에 없습니다.
+aetherhaven.plotcreator.error.needVariantOf=F 키를 누르고 이 변형이 어떤 주요 건물로 간주되는지 선택한 후 계속 진행하십시오.
+
+aetherhaven.plotcreator.error.invalidVariantOf=해당 주요 건물 유형은 부지 생성기 목록에 없습니다.
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =헛간
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =대장간
-aetherhaven.plotcreator.mainType.plot_farm =농지
-aetherhaven.plotcreator.mainType.plot_gaia_altar =가이아 제단
-aetherhaven.plotcreator.mainType.plot_guild_hall =길드홀
-aetherhaven.plotcreator.mainType.plot_house =집
-aetherhaven.plotcreator.mainType.plot_inn =여관
-aetherhaven.plotcreator.mainType.plot_lumbermill =제재소
-aetherhaven.plotcreator.mainType.plot_market_stall =시장 가판대
-aetherhaven.plotcreator.mainType.plot_player_shop =플레이어 샵
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =설치해둔 상점 금고를 클릭하세요.
-aetherhaven.plotcreator.mainType.plot_miners_hut =광부 오두막
-aetherhaven.plotcreator.mainType.plot_builders_hut =건축업자의 오두막
-aetherhaven.plotcreator.mainType.plot_park =공원
-aetherhaven.plotcreator.mainType.plot_town_hall =시청
-aetherhaven.plotcreator.mainType.plot_tourist_portal =관광 포털
+aetherhaven.plotcreator.mainType.plot_barn=헛간
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=대장간
+aetherhaven.plotcreator.mainType.plot_farm=농지
+aetherhaven.plotcreator.mainType.plot_gaia_altar=가이아 제단
+aetherhaven.plotcreator.mainType.plot_guild_hall=길드홀
+aetherhaven.plotcreator.mainType.plot_house=집
+aetherhaven.plotcreator.mainType.plot_inn=여관
+aetherhaven.plotcreator.mainType.plot_lumbermill=제재소
+aetherhaven.plotcreator.mainType.plot_market_stall=시장 가판대
+aetherhaven.plotcreator.mainType.plot_player_shop=플레이어 샵
+aetherhaven.plotcreator.mainType.plot_bomb_shop=폭탄 가게
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=크리스탈 키퍼의 가게
+aetherhaven.plotcreator.mainType.plot_flower_shop=꽃집
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=설치해둔 상점 금고를 클릭하세요.
+aetherhaven.plotcreator.mainType.plot_miners_hut=광부 오두막
+aetherhaven.plotcreator.mainType.plot_builders_hut=건축업자의 오두막
+aetherhaven.plotcreator.mainType.plot_park=공원
+aetherhaven.plotcreator.mainType.plot_town_hall=시청
+aetherhaven.plotcreator.mainType.plot_tourist_portal=관광 포털
 
-aetherhaven.plotcreator.cancelConfirm.title =플롯 생성기를 취소하시겠습니까?
-aetherhaven.plotcreator.cancelConfirm.body =이번 세션에서 진행한 내용이 모두 손실됩니다. 경계, 프리팹 내보내기 및 초안 데이터가 모두 삭제됩니다.
-aetherhaven.plotcreator.cancelConfirm.yes =네, 취소해 주세요.
-aetherhaven.plotcreator.cancelConfirm.no =계속 노력하세요
+aetherhaven.plotcreator.cancelConfirm.title=플롯 생성기를 취소하시겠습니까?
+aetherhaven.plotcreator.cancelConfirm.body=이번 세션에서 진행한 내용이 모두 손실됩니다. 경계, 프리팹 내보내기 및 초안 데이터가 모두 삭제됩니다.
+aetherhaven.plotcreator.cancelConfirm.yes=네, 취소해 주세요.
+aetherhaven.plotcreator.cancelConfirm.no=계속 노력하세요
 
-aetherhaven.plotcreator.button.back =뒤쪽에
-aetherhaven.plotcreator.button.cancel =취소
-aetherhaven.plotcreator.button.close =닫다
-aetherhaven.plotcreator.button.done =완료
-aetherhaven.plotcreator.button.next =계속하다
+aetherhaven.plotcreator.button.back=뒤쪽에
+aetherhaven.plotcreator.button.cancel=취소
+aetherhaven.plotcreator.button.close=닫다
+aetherhaven.plotcreator.button.done=완료
+aetherhaven.plotcreator.button.next=계속하다
 
-aetherhaven.plotcreator.step.WELCOME.title =환영
-aetherhaven.plotcreator.step.WELCOME.hint =직접 만든 건물을 마을 건물로 바꿔보세요.
+aetherhaven.plotcreator.step.WELCOME.title=환영
+aetherhaven.plotcreator.step.WELCOME.hint=직접 만든 건물을 마을 건물로 바꿔보세요.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =첫 번째 코너
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =건축물의 한쪽 모서리를 표시하세요.
+aetherhaven.plotcreator.step.CORNER_FIRST.title=첫 번째 코너
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=건축물의 한쪽 모서리를 표시하세요.
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =반대편 모퉁이
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =반대쪽 모서리를 표시하여 전체 영역을 정의하십시오.
+aetherhaven.plotcreator.step.CORNER_SECOND.title=반대편 모퉁이
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=반대쪽 모서리를 표시하여 전체 영역을 정의하십시오.
 
-aetherhaven.plotcreator.step.ANCHOR.title =부지 표지판 위치
-aetherhaven.plotcreator.step.ANCHOR.hint =건축 구역의 네 모서리 중 하나(X축과 Z축 경계선에서 각각 한 블록씩 벗어난 위치)에 표시를 하십시오. 표지판은 건축 구역 내부에 있으면 안 됩니다.
+aetherhaven.plotcreator.step.ANCHOR.title=부지 표지판 위치
+aetherhaven.plotcreator.step.ANCHOR.hint=건축 구역의 네 모서리 중 하나(X축과 Z축 경계선에서 각각 한 블록씩 벗어난 위치)에 표시를 하십시오. 표지판은 건축 구역 내부에 있으면 안 됩니다.
 
-aetherhaven.plotcreator.step.KIND.title =건물 유형
-aetherhaven.plotcreator.step.KIND.hint =원하는 건축물에 맞는 건물 유형을 선택하세요. 각 유형의 의미는 마을 일지 안내 → 시스템 → 플롯 제작 담당자에서 확인할 수 있습니다.
-aetherhaven.plotcreator.kind.DECORATION =장식
-aetherhaven.plotcreator.kind.VARIANT =다른 건물의 변형
-aetherhaven.plotcreator.kind.HOME =집
-aetherhaven.plotcreator.kind.WORK =직장
-aetherhaven.plotcreator.kind.AMENITY =편의시설
-aetherhaven.plotcreator.kind.SHOP =마을 상점
-aetherhaven.plotcreator.kind.PLAYER_SHOP =플레이어 샵
-aetherhaven.plotcreator.kind.INN =여관
-aetherhaven.plotcreator.kind.TOWN_HALL =시청
-aetherhaven.plotcreator.kind.GUILD_HALL =길드홀
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =관광 포털
+aetherhaven.plotcreator.step.KIND.title=건물 유형
+aetherhaven.plotcreator.step.KIND.hint=원하는 건축물에 맞는 건물 유형을 선택하세요. 각 유형의 의미는 마을 일지 안내 → 시스템 → 플롯 제작 담당자에서 확인할 수 있습니다.
+aetherhaven.plotcreator.kind.DECORATION=장식
+aetherhaven.plotcreator.kind.VARIANT=다른 건물의 변형
+aetherhaven.plotcreator.kind.HOME=집
+aetherhaven.plotcreator.kind.WORK=직장
+aetherhaven.plotcreator.kind.AMENITY=편의시설
+aetherhaven.plotcreator.kind.SHOP=마을 상점
+aetherhaven.plotcreator.kind.PLAYER_SHOP=플레이어 샵
+aetherhaven.plotcreator.kind.INN=여관
+aetherhaven.plotcreator.kind.TOWN_HALL=시청
+aetherhaven.plotcreator.kind.GUILD_HALL=길드홀
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=관광 포털
 
-aetherhaven.plotcreator.step.IDENTITY.title =이름 및 ID
-aetherhaven.plotcreator.step.IDENTITY.hint =표시 이름, 설명 및 건물 ID를 입력하세요. ID는 사용자가 직접 ID 필드를 수정할 때까지 이름에서 자동으로 업데이트됩니다. 프리팹 파일은 이 ID를 사용합니다.
+aetherhaven.plotcreator.step.IDENTITY.title=이름 및 ID
+aetherhaven.plotcreator.step.IDENTITY.hint=표시 이름, 설명 및 건물 ID를 입력하세요. ID는 사용자가 직접 ID 필드를 수정할 때까지 이름에서 자동으로 업데이트됩니다. 프리팹 파일은 이 ID를 사용합니다.
 
-aetherhaven.plotcreator.step.TAGS.title =건물 태그
-aetherhaven.plotcreator.step.TAGS.hint =태그를 추가하세요(쉼표로 구분). 예: 편의 시설, 자연, 재미.
+aetherhaven.plotcreator.step.TAGS.title=태그 생성
+aetherhaven.plotcreator.step.TAGS.hint=태그를 추가하세요(쉼표로 구분). 예: 편의 시설, 자연, 재미.
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =저장 모양
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =이전 단계에서 설정한 건물 설정을 사용하여 경계 내의 모든 것을 내보냅니다.
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=저장 모양
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=이전 단계에서 설정한 건물 설정을 사용하여 경계 내의 모든 것을 내보냅니다.
 
-aetherhaven.plotcreator.error.needIdentity =프리팹을 내보내기 전에 표시 이름과 건물 ID를 설정하세요.
+aetherhaven.plotcreator.error.needIdentity=프리팹을 내보내기 전에 표시 이름과 건물 ID를 설정하세요.
 
-aetherhaven.plotcreator.error.selfBuildDays =자가 건축 일수는 0일보다 커야 합니다.
+aetherhaven.plotcreator.error.selfBuildDays=자가 건축 일수는 0일보다 커야 합니다.
 
-aetherhaven.plotcreator.error.assemblySections =축별 조립 섹션 수는 1부터 16까지의 정수여야 합니다(1인 경우 섹션 조립이 비활성화됩니다).
+aetherhaven.plotcreator.error.assemblySections=축별 조립 섹션 수는 1부터 16까지의 정수여야 합니다(1인 경우 섹션 조립이 비활성화됩니다).
 
-aetherhaven.plotcreator.step.VARIANT.title =변형
-aetherhaven.plotcreator.step.VARIANT.hint =이 변형이 어떤 주요 건물 유형으로 분류되는지 선택하십시오.
+aetherhaven.plotcreator.step.VARIANT.title=변형
+aetherhaven.plotcreator.step.VARIANT.hint=이 변형이 어떤 주요 건물 유형으로 분류되는지 선택하십시오.
 
-aetherhaven.plotcreator.step.SUBSTEP.title =중요 지점
-aetherhaven.plotcreator.step.SUBSTEP.hint =각 하위 단계마다 배치 블록이 인벤토리에 추가됩니다. 필요한 블록과 위치를 발자국 안에 배치하거나 클릭하세요.
+aetherhaven.plotcreator.step.SUBSTEP.title=중요 지점
+aetherhaven.plotcreator.step.SUBSTEP.hint=각 하위 단계마다 배치 블록이 인벤토리에 추가됩니다. 필요한 블록과 위치를 발자국 안에 배치하거나 클릭하세요.
 
-aetherhaven.plotcreator.step.MATERIALS.title =건축 자재
-aetherhaven.plotcreator.step.MATERIALS.hint =이 구역을 건설하는 데 플레이어가 제공해야 하는 아이템을 추가하세요. 아이템은 게임을 계속하면 인벤토리로 돌아갑니다.
+aetherhaven.plotcreator.step.MATERIALS.title=건축 자재
+aetherhaven.plotcreator.step.MATERIALS.hint=F 키를 눌러 건축 자재 메뉴를 여세요. 프리팹 채우기는 아이템을 제공하지 않고 비용만 추가합니다.
+aetherhaven.plotcreator.step.MATERIALS.detail=플러스(+)와 마이너스(-) 연산자를 사용하여 수량을 변경하세요. 재고 목록에서 복사본의 수량을 추가하고 품목 목록을 반환하세요.
 
-aetherhaven.plotcreator.step.MATERIALS.detail =이 건물 전용 가상 보관함이며, 실제 게임 월드에는 배치되지 않습니다.
+aetherhaven.plotcreator.step.CONFIGURE.title=건물 설정
+aetherhaven.plotcreator.step.CONFIGURE.hint=재무부 금 비용, 자가 건설 일수, 조립식 빈 공간, 부지 토큰 잠금 및 조립 섹션을 설정합니다.
 
-aetherhaven.plotcreator.step.CONFIGURE.title =건물 설정
-aetherhaven.plotcreator.step.CONFIGURE.hint =재무부 금 비용, 자가 건설 일수, 조립식 빈 공간, 부지 토큰 잠금 및 조립 섹션을 설정합니다.
+aetherhaven.plotcreator.step.CONFIGURE.detail=부지를 건설할 때 마을 금고에서 금이 지급됩니다. 자가 건설 일수는 건설 담당 직원 없이 부지를 완공하는 데 걸리는 시간입니다. 빈 공간 저장 기능은 건설 시 부지 내 빈 공간을 저장하여 블록을 제거할지 여부를 설정합니다. 부지 토큰 잠금은 플레이어가 토큰을 제작하기 전에 부지 제작대에서 해당 부지의 잠금을 해제해야 함을 의미합니다. 조립 구역은 건설 구역을 N×N×N 격자로 나눕니다(1 = 비활성화).
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =부지를 건설할 때 마을 금고에서 금이 지급됩니다. 자가 건설 일수는 건설 담당 직원 없이 부지를 완공하는 데 걸리는 시간입니다. 빈 공간 저장 기능은 건설 시 부지 내 빈 공간을 저장하여 블록을 제거할지 여부를 설정합니다. 부지 토큰 잠금은 플레이어가 토큰을 제작하기 전에 부지 제작대에서 해당 부지의 잠금을 해제해야 함을 의미합니다. 조립 구역은 건설 구역을 N×N×N 격자로 나눕니다(1 = 비활성화).
+aetherhaven.plotcreator.field.selfBuildDays=셀프 빌드 일수 (게임 일수)
 
-aetherhaven.plotcreator.field.selfBuildDays =셀프 빌드 일수 (게임 일수)
+aetherhaven.plotcreator.field.saveEmptySpaces=조립식 건물의 빈 공간을 저장하세요
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=이 기능을 켜면, 사용자의 발자국 내의 빈 공간이 저장되고 건물을 조립할 때 해당 블록이 제거됩니다. 이 기능을 끄면, 단단한 블록만 저장되고 기존 지형은 유지됩니다. 에디터에서 빈 공간을 표시하는 마커는 항상 블록을 제거합니다.
+aetherhaven.plotcreator.field.touristDestination=방문객은 이곳에 들를 수 있습니다.
+aetherhaven.plotcreator.field.touristDestination.hint=포털이 활성화되면 방문객은 낮 시간 동안 이 건물까지 걸어갈 수 있습니다.
+aetherhaven.plotcreator.field.plotTokenLocked=플롯 토큰은 기본적으로 잠겨 있습니다.
+aetherhaven.plotcreator.field.plotTokenLocked.hint=이 기능이 활성화되면 플레이어는 해당 부지 제작대에서 (부지 설계도를 사용하여) 부지를 잠금 해제한 후에야 부지 토큰을 제작할 수 있습니다.
+aetherhaven.plotcreator.field.assemblySections=축별 조립 섹션 수 (1~16)
 
-aetherhaven.plotcreator.field.saveEmptySpaces =조립식 건물의 빈 공간을 저장하세요
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =이 기능을 켜면, 생성한 영역 내의 빈 공간이 저장되고 건물을 조립할 때 해당 블록이 제거됩니다. 이 기능을 끄면, 단단한 블록만 저장되고 기존 지형은 유지됩니다. 에디터에서 빈 공간을 표시하는 마커는 항상 블록을 제거합니다.
-aetherhaven.plotcreator.field.touristDestination =방문객은 이곳에 들를 수 있습니다.
-aetherhaven.plotcreator.field.touristDestination.hint =포털이 활성화되면 방문객은 낮 시간 동안 이 건물까지 걸어갈 수 있습니다.
-aetherhaven.plotcreator.field.plotTokenLocked =플롯 토큰은 기본적으로 잠겨 있습니다.
-aetherhaven.plotcreator.field.plotTokenLocked.hint =이 기능이 활성화되면 플레이어는 해당 부지 제작대에서 (부지 설계도를 사용하여) 부지를 잠금 해제한 후에야 부지 토큰을 제작할 수 있습니다.
-aetherhaven.plotcreator.field.assemblySections =축별 조립 섹션 수 (1~16)
+aetherhaven.plotcreator.step.REVIEW.title=검토
+aetherhaven.plotcreator.step.REVIEW.hint=건물을 구하세요. 그러면 마을에 건물을 배치할 수 있는 부지 토큰을 받게 됩니다.
 
-aetherhaven.plotcreator.step.REVIEW.title =검토
-aetherhaven.plotcreator.step.REVIEW.hint =건물을 구하세요. 그러면 마을에 건물을 배치할 수 있는 부지 토큰을 얻게 됩니다.
+aetherhaven.plotcreator.step.DONE.title=완료
+aetherhaven.plotcreator.step.DONE.hint=건물이 저장되었습니다. 인벤토리에서 부지 토큰을 사용하여 마을에 배치하세요.
 
-aetherhaven.plotcreator.step.DONE.title =완료
-aetherhaven.plotcreator.step.DONE.hint =건물이 저장되었습니다. 인벤토리에서 부지 토큰을 사용하여 마을에 배치하세요.
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=설치해둔 마을 기록 보관대를 클릭하세요.
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=설치한 생산 저장소를 클릭하세요.
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=배치한 재무부 블록을 클릭하세요.
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=도시계획 담당 부서를 클릭하세요.
+aetherhaven.plotcreator.substep.WORK_POI=작업 공간(벤치 또는 책상)을 클릭하세요.
+aetherhaven.plotcreator.substep.BARD_WORK_POI=퀘스트 게시판 옆, 음유시인이 서야 할 위치를 클릭하세요.
+aetherhaven.plotcreator.substep.SLEEP_POI=침대나 휴식 공간을 클릭하세요.
+aetherhaven.plotcreator.substep.EAT_POI=식당을 클릭하세요.
+aetherhaven.plotcreator.substep.FUN_POI=앉을 만한 좋은 장소(벤치 등)를 클릭하세요.
+aetherhaven.plotcreator.substep.SHOP_SPOT=인벤토리에서 상점 가판대를 배치하고, 각 설정을 확인한 다음, 부지 생성 도구를 사용하여 각 가판대를 클릭하세요.
+aetherhaven.plotcreator.substep.SHOP_POI=매장 카운터 작업 영역을 클릭하세요.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=매장 앞에서 방문객이 서야 할 위치를 클릭하세요.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=인벤토리에서 포털 플랫폼을 꺼내 배치한 다음, 플롯 생성 도구로 해당 플랫폼을 클릭하세요.
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=여관 주인이 서 있어야 할 위치를 클릭하세요.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=각 여관 방문객이 서야 할 위치(두 곳)를 클릭하세요. 청록색 마커를 마우스 오른쪽 버튼으로 클릭하여 제거할 수 있습니다.
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=길드장이 서야 할 위치를 클릭하세요.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=모험가 출현 지점을 클릭하세요. 보라색 마커를 마우스 오른쪽 버튼으로 클릭하여 제거할 수 있습니다.
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =설치해둔 마을 기록 보관대를 클릭하세요.
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =설치한 생산 저장소를 클릭하세요.
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =배치한 재무부 블록을 클릭하세요.
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =도시계획 담당 부서를 클릭하세요.
-aetherhaven.plotcreator.substep.WORK_POI =작업 공간(벤치 또는 책상)을 클릭하세요.
-aetherhaven.plotcreator.substep.BARD_WORK_POI =퀘스트 게시판 옆, 음유시인이 서야 할 위치를 클릭하세요.
-aetherhaven.plotcreator.substep.SLEEP_POI =침대나 휴식 공간을 클릭하세요.
-aetherhaven.plotcreator.substep.EAT_POI =식당을 클릭하세요.
-aetherhaven.plotcreator.substep.FUN_POI =앉을 만한 좋은 장소(벤치 등)를 클릭하세요.
-aetherhaven.plotcreator.substep.SHOP_SPOT =인벤토리에서 상점 가판대를 배치하고 각 설정을 확인한 다음, 부지 생성 도구를 사용하여 각 가판대를 클릭하세요.
-aetherhaven.plotcreator.substep.SHOP_POI =매장 카운터 작업 영역을 클릭하세요.
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =매장 앞에서 방문객이 서야 할 위치를 클릭하세요.
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =인벤토리에서 포털 플랫폼을 꺼내 배치한 다음, 플롯 생성 도구로 해당 플랫폼을 클릭하세요.
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =여관 주인이 서 있어야 할 위치를 클릭하세요.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =각 여관 방문객이 서야 할 위치(두 곳)를 클릭하세요. 청록색 마커를 마우스 오른쪽 버튼으로 클릭하여 제거할 수 있습니다.
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =길드장이 서야 할 위치를 클릭하세요.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =모험가 출현 지점을 클릭하세요. 보라색 마커를 마우스 오른쪽 버튼으로 클릭하여 제거할 수 있습니다.
+aetherhaven.plotcreator.success.saved=건물이 {id}으로 저장되었습니다. 부지 토큰을 받으셨습니다.
+aetherhaven.plotcreator.success.registered=건물이 {id}으로 저장되었고, 지정하신 위치에 마을에 등록되었습니다(이미 완료되었으며, 부지 표지판은 없습니다).
+aetherhaven.plotcreator.success.savedTokenFallback=건물 파일이 {id}으로 저장되었습니다. 게임 내 마을에 연결할 수 없습니다. 부지 토큰을 사용하여 배치하세요.
 
-aetherhaven.plotcreator.success.saved =건물이 {id}으로 저장되었습니다. 부지 토큰을 받으셨습니다.
-aetherhaven.plotcreator.success.registered =건물이 {id}으로 저장되었고, 지정하신 위치에 마을에 등록되었습니다(이미 완료되었으며, 부지 표지판은 없습니다).
-aetherhaven.plotcreator.success.savedTokenFallback =건물 파일이 {id}으로 저장되었습니다. 게임 내 마을에 연결할 수 없습니다. 부지 토큰을 사용하여 배치하세요.
+aetherhaven.plotcreator.error.noTown=먼저 마을 헌장을 설치한 다음, 그 마을 안에 플롯 생성기를 완성하세요.
+aetherhaven.plotcreator.error.signBlocked=지정하신 위치에 부지 표지판을 설치할 수 없습니다. 건물 파일은 저장되었습니다. 필요한 경우 부지 토큰을 사용하십시오.
+aetherhaven.plotcreator.error.unknownConstruction=저장 후 건물 정의가 누락되었습니다. 서버를 다시 시작해 보세요.
 
-aetherhaven.plotcreator.error.noTown =먼저 마을 헌장을 설치한 다음, 그 마을 안에 플롯 생성기를 완성하세요.
-aetherhaven.plotcreator.error.signBlocked =지정하신 위치에 부지 표지판을 설치할 수 없습니다. 건물 파일은 저장되었습니다. 필요한 경우 부지 토큰을 사용하십시오.
-aetherhaven.plotcreator.error.unknownConstruction =저장 후 건물 정의가 누락되었습니다. 서버를 다시 시작해 보세요.
-
-aetherhaven.plottoken.error.unknownBuilding =알 수 없는 건물 ID: {id}
-aetherhaven.plottoken.gave ={name}에 대해 {amount} 플롯 토큰을 부여했습니다.
-aetherhaven.plottoken.list.empty =건물이 발견되지 않았습니다.
-aetherhaven.plottoken.list.header =건물 ID:
+aetherhaven.plottoken.error.unknownBuilding=알 수 없는 건물 ID: {id}
+aetherhaven.plottoken.gave={name}에 대해 {amount} 플롯 토큰을 부여했습니다.
+aetherhaven.plottoken.unlock.success=제작대에서 {name} 구역을 잠금 해제했습니다.
+aetherhaven.plottoken.unlock.alreadyKnown=이미 {name} 플롯을 잠금 해제했습니다.
+aetherhaven.plottoken.unlock.notLockable=저 건물은 잠금 해제가 필요하지 않습니다.
+aetherhaven.plottoken.unlockall.success=제작대에서 {count} 구획을 잠금 해제했습니다.
+aetherhaven.plottoken.unlockall.noneLeft=당신은 이미 모든 구역을 해금했습니다.
+aetherhaven.plottoken.list.empty=건물이 발견되지 않았습니다.
+aetherhaven.plottoken.list.header=건물 ID:

@@ -17,7 +17,7 @@ aetherhaven.ui.treasury.debug.titheNoHall=Десятина: у цьому міс
 aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (немає резидентів, які мають право на участь, або 0 згідно з математичними розрахунками політики). Розбивка: розподіл податків /aetherhaven
 aetherhaven.ui.treasury.debug.titheApplied=Застосована десятина: +{amount} золота до скарбниці (ті ж правила, що й для ранкового збору).
 aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=політика={a} макс.Передавець={b} рядки резидентів={c} симульованоЗараз={d}
+aetherhaven.ui.treasury.debug.state3=політика={a} макс.Передавець={b} рядки резидента={c} симульованоЗараз={d}
 aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) комфорт={comfort} золото={gold}
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}

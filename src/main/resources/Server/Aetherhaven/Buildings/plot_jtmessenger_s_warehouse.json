@@ -1,6 +1,6 @@
 {
   "id": "plot_jtmessenger_s_warehouse",
-  "displayName": "JTMessenger\u0027s Warehouse",
+  "displayName": "JTMessenger's Warehouse",
   "description": "By JTMessenger After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
   "prefabPath": "plot_jtmessenger_s_warehouse.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,15 +14,31 @@
   "treasuryGoldCoinCost": 35,
   "plotTokenLockedByDefault": true,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 900 },
-    { "resourceTypeId": "Rock", "count": 420 },
-    { "itemId": "Bench_Builders", "count": 1 },
-    { "itemId": "Bench_Furnace", "count": 1 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 900
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 420
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "tags": [
     "decoration"
   ],
   "excludeFromTownJournal": true,
-  "decorationPlot": true
+  "decorationPlot": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jtmessenger_s_warehouse.displayName"
 }

@@ -1,0 +1,19 @@
+{
+  "id": "kate_g",
+  "displayName": "Kate G",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Kate_G",
+  "personalityIds": [
+    "adventurer",
+    "crafty",
+    "curious"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight"
+}

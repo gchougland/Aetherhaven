@@ -74,7 +74,7 @@ aetherhaven.poiTool.legendUse=용도: 선택한 POI에 대한 NPC 경로 대상�
 aetherhaven.poiTool.legendSpawnHeader=모험가 스팟 모드
 aetherhaven.poiTool.legendSecondarySpawn=보조 기능: 블록 위에 점을 찍거나 클릭한 점을 제거합니다.
 aetherhaven.poiTool.modeCycledToEdit=관심 지점(POI) 편집 모드로 전환했습니다.
-aetherhaven.poiTool.modeCycledToPlacement=관심 지점 배치 모드로 전환했습니다.
+aetherhaven.poiTool.modeCycledToPlacement=POI 배치 모드로 전환했습니다.
 aetherhaven.poiTool.modeCycledToRemove=관심 지점 제거 모드로 전환했습니다.
 aetherhaven.poiTool.modeCycledToAdventurerSpots=모험가 명소 모드로 전환했습니다.
 aetherhaven.poiTool.hudTitle=POI 도구
@@ -96,7 +96,7 @@ aetherhaven.pathTool.legendHotkeyUse=Q는 이동, 회전, 배치, 제거, 스타
 aetherhaven.pathTool.legendHotkeyCrouchUse=웅크리기 대신 Q 키를 눌러 모드를 변경하세요.
 aetherhaven.pathTool.legendVisuals=미리보기: 흰색 노드와 선, 갈색 경로, 녹색 테두리. 제거 모드에서는 배치된 경로가 주황색으로 표시됩니다. 스타일 디자이너를 열면 경로 스타일을 만들 수 있는 상자 모양의 그리드가 나타납니다.
 aetherhaven.pathTool.statusHeader=도구를 잡고 있는 동안
-aetherhaven.pathTool.statusLine1=포인트를 추가하거나, 모드를 전환(Q)하거나, 확정 모드를 활성화할 때 건배 및 채팅 메시지가 표시됩니다.
+aetherhaven.pathTool.statusLine1=포인트를 추가하거나, 모드를 전환(Q)하거나, 확정 모드를 사용할 때 건배 및 채팅 메시지가 표시됩니다.
 aetherhaven.pathTool.statusLine2=선택: 구체를 조준하세요. 빗맞으면 현재 선택이 유지됩니다. Q 스킬은 모드를 순환하고, 두 번째 스킬은 순환 폭을, 세 번째 스킬은 순환 경로를 변경합니다.
 
 aetherhaven.pathTool.hudTitle=경로 도구
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=양수인
 aetherhaven.patrolWand.guardTypeKnight=기사
 aetherhaven.patrolWand.guardTypeArcher=궁수
 aetherhaven.patrolWand.guardTypeMage=마술사
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=악당
 aetherhaven.patrolWand.toastAdded=포인트 추가됨
 aetherhaven.patrolWand.toastRemoved=포인트 삭제됨
 aetherhaven.patrolWand.toastSelected=경로 선택됨
@@ -335,10 +335,10 @@ items.Aetherhaven_Gold_Coin.name=금화
 items.Aetherhaven_Gold_Coin.description=마을 화폐는 금고에 보관되어 있습니다.
 
 items.Aetherhaven_Geode.name=지오드
-items.Aetherhaven_Geode.description=속이 빈 돌에는 수정, 보석 또는 광석이 들어 있을 수 있습니다. 대장장이에게 의뢰하여 깨뜨려 보세요.
+items.Aetherhaven_Geode.description=수정, 보석 또는 광석을 함유할 수 있는 속이 빈 돌. 대장장이에게 의뢰하여 깨뜨려 보세요.
 
 items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
-items.Aetherhaven_Geode_Anvil.description=대장장이 수수료 없이 광석을 엽니다. 설치하고 사용하세요. 제작하려면 설계도를 알아야 합니다.
+items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 광석을 열 수 있습니다. 설치 후 사용하세요. 제작하려면 설계도를 알아야 합니다.
 
 items.Aetherhaven_Crystallized_Person.name=결정화된 사람
 

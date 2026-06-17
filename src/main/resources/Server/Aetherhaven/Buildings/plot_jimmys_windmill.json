@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_windmill",
-  "displayName": "Jimmy\u0027s Windmill",
+  "displayName": "Jimmy's Windmill",
   "description": "By Jimmy G",
   "prefabPath": "plot_jimmys_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,8 +14,14 @@
   "treasuryGoldCoinCost": 50,
   "plotTokenLockedByDefault": true,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 850 },
-    { "resourceTypeId": "Rock", "count": 340 },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 850
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 340
+    },
     {
       "itemId": "Cloth_Block_Wool_White",
       "count": 25
@@ -52,5 +58,6 @@
     "farm",
     "work",
     "nature"
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_windmill.displayName"
 }

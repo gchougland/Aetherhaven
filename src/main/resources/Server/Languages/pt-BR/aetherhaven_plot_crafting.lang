@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Bancada de criação de enredo
-aetherhaven.ui.plotCrafting.previewTitle =Pré-visualização
-aetherhaven.ui.plotCrafting.variantSectionTitle =Variantes
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Edifícios principais
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Decorações
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Estilo anterior
-aetherhaven.ui.plotCrafting.variantNextTooltip =Próximo estilo
-aetherhaven.ui.plotCrafting.craftButton =Ficha de enredo de criação
-aetherhaven.ui.plotCrafting.costLine =Custo: {cost} ouro
-aetherhaven.ui.plotCrafting.fundsLine =Suas moedas: {inv} · Tesouraria da cidade: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Ouro insuficiente.
-aetherhaven.ui.plotCrafting.noSpace =Primeiro, libere espaço no seu estoque.
-aetherhaven.ui.plotCrafting.crafted =Token de enredo {name} criado.
-aetherhaven.ui.plotCrafting.unlockSuccess =Você desbloqueou o gráfico {building}.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Você já conhece essa história.
-aetherhaven.ui.plotCrafting.unlockInvalid =Esta planta não pode ser lida.
+aetherhaven.ui.plotCrafting.title=Bancada de criação de terreno
+aetherhaven.ui.plotCrafting.previewTitle=Pré-visualização
+aetherhaven.ui.plotCrafting.variantSectionTitle=Variantes
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Edifícios principais
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Decorações
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Estilo anterior
+aetherhaven.ui.plotCrafting.variantNextTooltip=Próximo estilo
+aetherhaven.ui.plotCrafting.craftButton=Ficha de enredo de criação
+aetherhaven.ui.plotCrafting.costLine=Custo: {cost} ouro
+aetherhaven.ui.plotCrafting.fundsLine=Suas moedas: {inv} · Tesouraria da cidade: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Ouro insuficiente.
+aetherhaven.ui.plotCrafting.noSpace=Primeiro, libere espaço no seu estoque.
+aetherhaven.ui.plotCrafting.crafted=Token de enredo {name} criado.
+aetherhaven.ui.plotCrafting.unlockSuccess=Você desbloqueou o gráfico {building}.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Você já conhece essa história.
+aetherhaven.ui.plotCrafting.unlockInvalid=Esta planta não pode ser lida.

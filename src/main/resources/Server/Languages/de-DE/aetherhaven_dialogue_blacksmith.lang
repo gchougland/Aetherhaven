@@ -36,7 +36,7 @@ aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_25.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.rep_reward_50.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.root.body=Garren Vale. Der Wind ist schwach genug, damit die Schmiede gleichmäßig funktioniert. Metall hat hier draußen besondere Eigenschaften, und ich bin hier, um sie zu verstehen, anstatt mit ihnen zu streiten.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c2=Du wolltest über ein Haus sprechen.
-aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=Das Haus ist fertig und Ihr Name steht im Gästebuch.
+aetherhaven.dialogue.aetherhaven_blacksmith.root.c3=Das Haus ist fertig und Ihr Name steht im Register.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c4=Das Haus befindet sich noch im Bau.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c5=Es ist gut zu sehen, dass Sie sorgsam mit Stahl umgehen.
 aetherhaven.dialogue.aetherhaven_blacksmith.root.c6=Die Werkstatt ist gebaut. Die Werkbank ist ausgerichtet und einsatzbereit.
@@ -47,7 +47,7 @@ aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker=Garren Vale
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.love=Ausgezeichnet! Die Qualität dieses Geschenks werde ich nicht vergessen.
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.like=Solide Verarbeitung. Ich werde es sofort in die Premium-Kategorie einsortieren.
 aetherhaven.dialogue.aetherhaven_blacksmith.gift.neutral=Akzeptabel. Ich werde es für spätere Verwendung speichern.
-aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=Ich schätze die Absicht, aber meine Schmiede benötigt bestimmte Erzqualitäten, nicht... dieses hier.
+aetherhaven.dialogue.aetherhaven_blacksmith.gift.dislike=Ich schätze die Absicht, aber meine Schmiede benötigt bestimmte Erzqualitäten, nicht... das.
 
 aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.fallback=Sprechen Sie Klartext. Ich bin sehr beschäftigt.
 aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.greeting.0=Die Schmiede ist so leise, dass ich hören kann, wie ein Scharnier perfekt einrastet. Das ist ein sehr gutes Zeichen.

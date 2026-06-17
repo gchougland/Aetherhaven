@@ -11,7 +11,7 @@ aetherhaven.poi.noPoiBlock=Hiçbir ilgi noktası seçili değil. Öncelikle bir 
 aetherhaven.poi.clearedInteractionTarget=Etkileşim hedefi temizlendi; NPC'ler ilgi noktası bloğunun merkezini kullanıyor.
 aetherhaven.poi.setInteractionTarget=Etkileşim hedefi olarak {x}, {y}, {z} değerlerini ayarlayın.
 aetherhaven.poi.selected=Seçilen ilgi noktası {id}, {x}, {y}, {z} konumlarındadır.
-aetherhaven.poi.targetBlockMismatch=Hedef blok, bu ilgi noktası (POI) için beklenen {type} türüyle eşleşmelidir.
+aetherhaven.poi.targetBlockMismatch=Hedef blok, bu ilgi noktası için beklenen {type} türüyle eşleşmelidir.
 aetherhaven.poi.removed=POI kaldırıldı.
 aetherhaven.poi.noTownPlot=O blokta tamamlanmış bir şehir arsası bulunmamaktadır.
 

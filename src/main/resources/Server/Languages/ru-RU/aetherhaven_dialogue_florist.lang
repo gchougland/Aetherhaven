@@ -1,7 +1,7 @@
 # Florist dialogue (Ivy Bloomwell)
 
 aetherhaven.dialogue.aetherhaven_florist.root.speaker=Айви Блумвелл
-aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Если вам нужно что-то для строительства магазина, для оформления дома или просто хотите узнать, что цветет, скажите об этом.
+aetherhaven.dialogue.aetherhaven_florist.main_hub.fallback=Если вам нужно что-то построить в мастерской, проложить линию электропередач или сообщить о том, что цветет, просто скажите.
 aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.0=Доброе утро. Листья сегодня выглядят довольными.
 aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.1=Я взял с собой в кармане дополнительные семена. Старая привычка.
 aetherhaven.dialogue.aetherhaven_florist.main_hub.greeting.2=В вашем городе хорошее освещение для роста растений.
@@ -22,7 +22,7 @@ aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=Я хочу помо�
 aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=На этом пока всё. Увидимся позже.
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.speaker=Айви Блумвелл
-aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Мои маленькие растения заслуживают лучшего, чем ящики и колеса от телег. Мне нужен настоящий цветочный магазин с местом для роста, демонстрации и свободного пространства. Я набросала план прямо у дороги. Если вы поднимете его для города, я смогу поделиться с вами этими планами.
+aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.body=Мои маленькие растения заслуживают лучшего, чем ящики и колеса от телег. Мне нужен настоящий цветочный магазин с местом для роста, демонстрации и свободного пространства. Я набросала план прямо здесь, по дороге. Если вы поднимете его для города, я смогу поделиться с вами этими планами.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c0=Мы построим ваш магазин.
 aetherhaven.dialogue.aetherhaven_florist.ivy_quest_shop.c1=Не сейчас. Мне нужно еще немного времени.
 

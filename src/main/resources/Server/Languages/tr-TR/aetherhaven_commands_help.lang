@@ -17,7 +17,7 @@ commands.aetherhaven.town.kick.player.desc=Üye kullanıcı adı (çevrimiçi ol
 commands.aetherhaven.town.role.desc=Üye rolü belirleyin: İNŞA ET, GÖREV YAP veya HER İKİSİ
 commands.aetherhaven.town.role.player.desc=Üye kullanıcı adı (çevrimiçi olmanız gerekir)
 commands.aetherhaven.town.role.role.desc=İNŞA ET, GÖREVİ TAMAMLA veya HER İKİSİ BİRDEN
-commands.aetherhaven.town.leave.desc=Kurucusu olmadığınız halde ait olduğunuz bir kasabayı terk edin.
+commands.aetherhaven.town.leave.desc=Kurucusu olmadığınız, ait olduğunuz bir kasabayı terk edin.
 commands.aetherhaven.town.townName.desc=İsteğe bağlı şehir adı (boşluklu tam ad). Sadece bir davetiyeniz varsa bu kısmı atlayın.
 
 commands.aetherhaven.poi.desc=Hata ayıklama: ilgi noktası yardımcıları
@@ -100,7 +100,7 @@ commands.aetherhaven.time.noResource=Bu dünyaya zaman kaynağı yüklenmedi.
 
 commands.aetherhaven.walldebug.desc=Yaratıcı: Duvara asa yerleştirme hata ayıklama satırları sohbette
 commands.aetherhaven.walldebug.on.desc=Duvar çubuğu hata ayıklamasını açın.
-commands.aetherhaven.walldebug.off.desc=Duvar çubuğu hata ayıklama özelliğini kapatın.
+commands.aetherhaven.walldebug.off.desc=Duvar tarayıcı hata ayıklama özelliğini kapatın.
 commands.aetherhaven.walldebug.dump.desc=Mevcut duvar çubuğu oturum durumunu yazdırın
 
 commands.aetherhaven.townsfolk.desc=Hata ayıklama: Ortak kasaba halkı havuzundaki NPC'leri oluşturma ve yönetme
@@ -108,7 +108,7 @@ commands.aetherhaven.townsfolk.spawn.desc=Kasabanızda bir kasaba sakini NPC olu
 commands.aetherhaven.townsfolk.id.desc=Kasaba sakini karakter kimliği (ör. female_elf_01)
 commands.aetherhaven.townsfolk.release.desc=Bir karakteri tekrar dünya havuzuna bırakın.
 commands.aetherhaven.townsfolk.list.desc=Bu dünyadaki müsait ve ziyaret edilmiş kasaba sakinlerinin listesi
-commands.aetherhaven.townsfolk.characterId.desc=Server/Aetherhaven/Townsfolk/ adresinden Townsfolk karakter kimliği.
+commands.aetherhaven.townsfolk.characterId.desc=Server/Aetherhaven/Townsfolk/ adresindeki kasaba sakini karakter kimliği.
 commands.aetherhaven.townsfolk.assignmentKind.desc=boşta, turist veya bekçi
 commands.aetherhaven.townsfolk.despawn.desc=Ayrıca oluşturulan varlığı dünyadan kaldırın.
 commands.aetherhaven.townsfolk.spawn.ok=Kasaba halkı ortaya çıktı {id} ({assignment})
@@ -141,8 +141,11 @@ commands.aetherhaven.plotcreator.generateicon.desc=Mevcut bir prefab'dan bir ars
 commands.aetherhaven.plotcreator.generateicon.idOrPrefab=Bina kimliği (plot_my_house) veya prefabrik anahtar (Guild_Hall.prefab.json)
 commands.aetherhaven.plotcreator.generateicon.outputId=Simge dosyası için çıktı kimliği (varsayılan olarak bina kimliği veya prefab adı)
 
-commands.aetherhaven.plottoken.desc=Binalar için arsa belirteçlerini verin ve listeleyin.
+commands.aetherhaven.plottoken.desc=Binalar için arsa jetonları verin, kilidini açın ve listeleyin.
 commands.aetherhaven.plottoken.give.desc=Bir bina kimliği için bir arsa belirteci verin.
 commands.aetherhaven.plottoken.give.constructionId=Bina kimliği (örnek: plot_park)
 commands.aetherhaven.plottoken.give.amount=Yığın boyutu (varsayılan 1)
+commands.aetherhaven.plottoken.unlock.desc=Üretim tezgahında bir arsa stili kilidini açın.
+commands.aetherhaven.plottoken.unlock.constructionId=Bina kimliği (örnek: plot_park)
+commands.aetherhaven.plottoken.unlockall.desc=Üretim tezgahında tüm arsa stillerinin kilidini açın.
 commands.aetherhaven.plottoken.list.desc=Tüm bina kimliklerini listeleyin

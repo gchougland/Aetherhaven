@@ -28,7 +28,7 @@ aetherhaven.shop.safe.couldNotAddCoins=인벤토리에 금을 추가할 수 없�
 aetherhaven.shop.safe.collected=당신은 금고에서 {gold}개의 금을 꺼냈습니다.
 
 aetherhaven.shop.config.title=이 가게를 차리세요
-aetherhaven.shop.config.intro=이 상점의 운영 방식을 선택하세요. NPC 상점은 선택한 재고 목록에서 새벽에 상품을 다시 채워 넣습니다.
+aetherhaven.shop.config.intro=이 상점의 운영 방식을 선택하세요. NPC 상점은 선택한 재고 테이블에서 새벽에 상품을 다시 채워 넣습니다.
 aetherhaven.shop.config.playerControlled=마을 주민들이 여기서 판매하도록 하세요.
 aetherhaven.shop.config.npcHeading=NPC 상점 재고
 aetherhaven.shop.config.lootHeader=주식 테이블 파일

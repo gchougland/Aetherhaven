@@ -24,7 +24,7 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Uso (F): extiende la torre/rama desde 
 items.Aetherhaven_Plot_Sign.name=Señal de parcela
 items.Aetherhaven_Plot_Sign.description=Marcas que indican dónde se puede colocar un edificio. Crea fichas de parcela en un banco de creación de parcelas.
 
-items.Aetherhaven_Charter.name=estatuto municipal
+items.Aetherhaven_Charter.name=estatuto de la ciudad
 items.Aetherhaven_Charter.description=Lugar para fundar un pueblo. Cada jugador puede tener un pueblo por mundo. Úselo para abrir la información del pueblo.
 
 items.Aetherhaven_Town_Planning_Desk.name=Oficina de planificación urbana
@@ -126,14 +126,14 @@ aetherhaven.pathTool.hud.rotate.secondary=Haz clic en el suelo para añadir un n
 aetherhaven.pathTool.hud.rotate.f=Mueva ligeramente la dirección del nodo seleccionado.
 aetherhaven.pathTool.hud.rotate.q=Siguiente modo
 aetherhaven.pathTool.hud.rotate.e=Ancho del carril bici
-aetherhaven.pathTool.hud.rotate.r=Estilo de carril bici
+aetherhaven.pathTool.hud.rotate.r=estilo carril bici
 
 aetherhaven.pathTool.hud.place.primary=Seleccione un nodo
 aetherhaven.pathTool.hud.place.secondary=Haz clic en el suelo para añadir un nodo, o apunta a un nodo para eliminarlo.
 aetherhaven.pathTool.hud.place.f=Coloca el camino
 aetherhaven.pathTool.hud.place.q=Siguiente modo
 aetherhaven.pathTool.hud.place.e=Ancho del carril bici
-aetherhaven.pathTool.hud.place.r=estilo carril bici
+aetherhaven.pathTool.hud.place.r=Estilo de carril bici
 
 aetherhaven.pathTool.hud.remove.primary=Seleccione una ruta
 aetherhaven.pathTool.hud.remove.f=Eliminar la ruta seleccionada
@@ -164,7 +164,7 @@ aetherhaven.pathTool.modeToggled=Modo: {m}
 aetherhaven.pathTool.selectedNode=Nodo seleccionado.
 aetherhaven.pathTool.movedNode=Nodo movido.
 aetherhaven.pathTool.noNodeHit=No hay ningún nodo de control dentro del alcance. En el modo de movimiento con un nodo seleccionado, intente mover el nodo principal en el suelo.
-aetherhaven.pathTool.noNodeOnAim=No hay ningún nodo en la mira. La selección permanece sin cambios.
+aetherhaven.pathTool.noNodeOnAim=No hay ningún nodo en la cruz. La selección permanece sin cambios.
 aetherhaven.pathTool.toastAdd=Punto de control añadido
 aetherhaven.pathTool.toastModeTranslate=Modo de movimiento
 aetherhaven.pathTool.toastModeRotate=Modo de rotación
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Asignar
 aetherhaven.patrolWand.guardTypeKnight=Caballero
 aetherhaven.patrolWand.guardTypeArcher=Arquero
 aetherhaven.patrolWand.guardTypeMage=Mago
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Pícaro
 aetherhaven.patrolWand.toastAdded=Punto añadido
 aetherhaven.patrolWand.toastRemoved=Punto eliminado
 aetherhaven.patrolWand.toastSelected=Ruta seleccionada

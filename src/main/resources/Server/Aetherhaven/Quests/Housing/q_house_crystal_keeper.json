@@ -14,23 +14,27 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the house plot token from Vaelith."
+      "text": "Take the house plot token from Vaelith.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house prefab."
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.objective.build"
     },
     {
       "id": "assign",
       "kind": "assign_house_resident",
       "npcRoleId": "Aetherhaven_Crystal_Keeper",
-      "text": "Assign Vaelith as resident on the house management block."
+      "text": "Assign Vaelith as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Vaelith and close the quest in dialogue."
+      "text": "Find Vaelith and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.objective.talk"
     }
   ],
   "rewards": [
@@ -52,5 +56,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_crystal_keeper.description"
 }

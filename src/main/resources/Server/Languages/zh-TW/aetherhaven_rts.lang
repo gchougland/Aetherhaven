@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=選擇所有守衛
 items.Aetherhaven_Rts_Select_All.description=選中鎮上所有僱用的保全。
 
 items.Aetherhaven_Rts_Select_Knight.name=挑選騎士
-items.Aetherhaven_Rts_Select_Knight.description=選擇所有騎士衛兵。
+items.Aetherhaven_Rts_Select_Knight.description=選擇所有騎士和流氓守衛。
 
 items.Aetherhaven_Rts_Select_Archer.name=挑選弓箭手
 items.Aetherhaven_Rts_Select_Archer.description=選中所有弓箭手衛兵。
@@ -43,7 +43,7 @@ aetherhaven.rts.helpFlag=右鍵點擊地面派遣守衛。技能1可在攻擊移
 aetherhaven.rts.helpSword=右鍵點擊生物即可讓你的守衛集中攻擊它。他們不會攻擊村民、遊客或守衛。
 aetherhaven.rts.helpSelectAll=點擊選擇鎮上所有守衛，取消選擇其他守衛。
 aetherhaven.rts.helpStance=能力1循環戰鬥姿態並將其應用於選定的守衛。
-aetherhaven.rts.helpFree=右鍵單擊以從您的命令中釋放選定的守衛。
+aetherhaven.rts.helpFree=右鍵點選以解除對選取守衛的命令。
 aetherhaven.rts.helpSelectType=點擊選擇鎮上所有此類守衛，取消選擇其他守衛。
 aetherhaven.rts.helpExit=點選退出守衛指令模式。
 aetherhaven.rts.errorUseExitTool=使用快速列中的「離開」指令工具退出命令模式。

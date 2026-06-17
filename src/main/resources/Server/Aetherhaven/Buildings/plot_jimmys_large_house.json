@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_large_house",
-  "displayName": "Jimmy\u0027s Large House",
+  "displayName": "Jimmy's Large House",
   "description": "By Jimmy G",
   "prefabPath": "plot_jimmys_large_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,9 +14,18 @@
   "treasuryGoldCoinCost": 55,
   "plotTokenLockedByDefault": true,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 600 },
-    { "resourceTypeId": "Rock", "count": 180 },
-    { "itemId": "Bench_Cooking", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 600
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 180
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -43,5 +52,6 @@
   "countsAsConstructionId": "plot_house",
   "tags": [
     "house"
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_large_house.displayName"
 }

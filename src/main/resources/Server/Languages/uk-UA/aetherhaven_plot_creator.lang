@@ -1,235 +1,253 @@
 # Plot creator wizard and commands
 
-aetherhaven.plotcreator.error.noPermission =У вас немає дозволу на використання засобу створення сюжету.
-aetherhaven.plotcreator.error.id_empty =Введіть ідентифікатор будівлі.
-aetherhaven.plotcreator.error.id_prefix =Ідентифікатор має починатися з plot_
-aetherhaven.plotcreator.error.id_wall =Створювати графіки стін за допомогою цього інструменту поки що неможливо.
-aetherhaven.plotcreator.error.id_chars =Використовуйте в ідентифікаторі лише малі літери, цифри та символи підкреслення.
-aetherhaven.plotcreator.error.id_taken =Цей ідентифікатор будівлі вже використовується.
-aetherhaven.plotcreator.error.incomplete =Спочатку виконайте всі необхідні кроки.
-aetherhaven.plotcreator.error.prefab_missing =Збережіть префаб перед завершенням.
-aetherhaven.plotcreator.error.prefabName =Введіть назву для файлу префабу.
-aetherhaven.plotcreator.error.prefabExport =Не вдалося зберегти префаб. Перевірте межі та спробуйте ще раз.
-aetherhaven.plotcreator.error.saveFailed =Не вдалося зберегти файл будівлі.
-aetherhaven.plotcreator.error.anchorInside =Знак ділянки не може бути в межах забудови. Використовуйте натомість зовнішній кут.
-aetherhaven.plotcreator.error.anchorNotCorner =Клацніть один з чотирьох зовнішніх кутів збірки (на один блок по X та Z від контуру).
-aetherhaven.plotcreator.error.needAnchor =Клацніть зовнішній кут для знаку сюжету, перш ніж продовжити.
-aetherhaven.plotcreator.error.outsideBounds =Клацніть усередині позначених меж.
-aetherhaven.plotcreator.error.wrongBlock =Це не той блок, який потрібен для цього кроку.
-aetherhaven.plotcreator.error.shopSpotNotConfigured =Спочатку підтвердіть налаштування торгового кіоску, а потім клацніть на ньому разом із персоналом, що створює сюжет.
-aetherhaven.plotcreator.error.tooManyVisitors =Цій будівлі потрібно лише два місця для відвідувачів.
-aetherhaven.plotcreator.error.editNotCustom =Можна редагувати лише власні будівлі, збережені в папці даних вашого сервера.
-aetherhaven.plotcreator.error.editUnknown =Не знайдено жодної користувацької будівлі з ідентифікатором {id}.
-aetherhaven.plotcreator.edit.loaded =Завантажено {id} для редагування. Поверніться, щоб змінити деталі, або збережіть, щоб оновити файл.
+aetherhaven.plotcreator.error.noPermission=У вас немає дозволу на використання засобу створення сюжету.
+aetherhaven.plotcreator.error.id_empty=Введіть ідентифікатор будівлі.
+aetherhaven.plotcreator.error.id_prefix=Ідентифікатор має починатися з plot_
+aetherhaven.plotcreator.error.id_wall=Створювати графіки стін за допомогою цього інструменту поки що неможливо.
+aetherhaven.plotcreator.error.id_chars=Використовуйте в ідентифікаторі лише малі літери, цифри та символи підкреслення.
+aetherhaven.plotcreator.error.id_taken=Цей ідентифікатор будівлі вже використовується.
+aetherhaven.plotcreator.error.incomplete=Спочатку виконайте всі необхідні кроки.
+aetherhaven.plotcreator.error.prefab_missing=Збережіть префаб перед завершенням.
+aetherhaven.plotcreator.error.prefabName=Введіть назву для файлу префабу.
+aetherhaven.plotcreator.error.prefabExport=Не вдалося зберегти префаб. Перевірте межі та спробуйте ще раз.
+aetherhaven.plotcreator.error.saveFailed=Не вдалося зберегти файл будівлі.
+aetherhaven.plotcreator.error.anchorInside=Знак ділянки не може бути в межах забудови. Використовуйте натомість зовнішній кут.
+aetherhaven.plotcreator.error.anchorNotCorner=Клацніть один з чотирьох зовнішніх кутів збірки (на один блок по X та Z від контуру).
+aetherhaven.plotcreator.error.needAnchor=Клацніть зовнішній кут для знаку сюжету, перш ніж продовжити.
+aetherhaven.plotcreator.error.outsideBounds=Клацніть всередині позначених меж.
+aetherhaven.plotcreator.error.wrongBlock=Це не той блок, який потрібен для цього кроку.
+aetherhaven.plotcreator.error.shopSpotNotConfigured=Спочатку підтвердіть налаштування торгового кіоску, а потім клацніть на ньому разом із персоналом, що створює сюжет.
+aetherhaven.plotcreator.error.tooManyVisitors=Цій будівлі потрібно лише два місця для відвідувачів.
+aetherhaven.plotcreator.error.editNotCustom=Можна редагувати лише власні будівлі, збережені в папці даних вашого сервера.
+aetherhaven.plotcreator.error.editUnknown=Не знайдено жодної користувацької будівлі з ідентифікатором {id}.
+aetherhaven.plotcreator.edit.loaded=Завантажено {id} для редагування. Поверніться, щоб змінити деталі, або збережіть, щоб оновити файл.
 
-aetherhaven.plotcreator.generateicon.error.empty =Введіть ідентифікатор будівлі або шлях до збірного елемента.
-aetherhaven.plotcreator.generateicon.error.noPrefab =Немає попередньо визначеного шляху для {id}.
-aetherhaven.plotcreator.generateicon.error.noOutputId =Не вдалося визначити вихідний ідентифікатор; передайте його як другий аргумент.
-aetherhaven.plotcreator.generateicon.error.notFound =Префаб не знайдено: {prefab}
-aetherhaven.plotcreator.generateicon.error.loadFailed =Не вдалося завантажити префаб: {prefab}
-aetherhaven.plotcreator.generateicon.error.renderFailed =Не вдалося відобразити піктограму для {id}.
-aetherhaven.plotcreator.generateicon.ok =Піктограму збережено для {id} о {path} (шлях до ресурсу: {asset})
+aetherhaven.plotcreator.generateicon.error.empty=Введіть ідентифікатор будівлі або шлях до збірного елемента.
+aetherhaven.plotcreator.generateicon.error.noPrefab=Немає попередньо визначеного шляху для {id}.
+aetherhaven.plotcreator.generateicon.error.noOutputId=Не вдалося визначити вихідний ідентифікатор; передайте його як другий аргумент.
+aetherhaven.plotcreator.generateicon.error.notFound=Префаб не знайдено: {prefab}
+aetherhaven.plotcreator.generateicon.error.loadFailed=Не вдалося завантажити префаб: {prefab}
+aetherhaven.plotcreator.generateicon.error.renderFailed=Не вдалося відобразити піктограму для {id}.
+aetherhaven.plotcreator.generateicon.ok=Піктограму збережено для {id} о {path} (шлях до ресурсу: {asset})
 
-aetherhaven.plotcreator.hint.cornerFirstSet =Перший кут встановлено. Далі позначте протилежний кут.
-aetherhaven.plotcreator.hint.cornerSecondSet =Межі встановлено. Далі позначте знак зовнішнього кута ділянки, потім виберіть тип будівлі та розмістіть будь-які необхідні блоки, перш ніж зберегти форму.
-aetherhaven.plotcreator.hint.anchorSet =Набір знаків ділянки.
-aetherhaven.plotcreator.hint.blockRecorded =Місце збережено.
-aetherhaven.plotcreator.hint.shopSpotRecorded =Магазинний кіоск збережено.
-aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded =Цей торговий кіоск вже збережено для цього кроку.
-aetherhaven.plotcreator.hint.touristPortalRecorded =Туристичний портал збережено.
-aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded =Цей туристичний портал вже збережено для цього кроку.
-aetherhaven.plotcreator.hint.spawnRecorded =Місце спавну збережено.
-aetherhaven.plotcreator.hint.adventurerSpawnRemoved =Місце появи шукачів пригод видалено.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved =Місце появи відвідувачів видалено.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded =Це місце появи відвідувачів вже збережено.
-aetherhaven.plotcreator.hint.poiRecorded =Місце активності збережено.
+aetherhaven.plotcreator.hint.cornerFirstSet=Перший кут встановлено. Далі позначте протилежний кут.
+aetherhaven.plotcreator.hint.cornerSecondSet=Межі встановлено. Далі позначте знак зовнішнього кута ділянки, потім виберіть тип будівлі та розмістіть будь-які необхідні блоки, перш ніж зберегти форму.
+aetherhaven.plotcreator.hint.anchorSet=Набір знаків ділянки.
+aetherhaven.plotcreator.hint.blockRecorded=Місце збережено.
+aetherhaven.plotcreator.hint.shopSpotRecorded=Магазинний кіоск збережено.
+aetherhaven.plotcreator.hint.shopSpotAlreadyRecorded=Цей торговий кіоск вже збережено для цього кроку.
+aetherhaven.plotcreator.hint.touristPortalRecorded=Туристичний портал збережено.
+aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded=Цей туристичний портал вже збережено для цього кроку.
+aetherhaven.plotcreator.hint.spawnRecorded=Місце спавну збережено.
+aetherhaven.plotcreator.hint.adventurerSpawnRemoved=Місце появи шукачів пригод видалено.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved=Місце появи відвідувачів видалено.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded=Це місце появи відвідувачів вже збережено.
+aetherhaven.plotcreator.hint.poiRecorded=Місце активності збережено.
 
-aetherhaven.plotcreator.button.save =Зберегти будівлю
-aetherhaven.plotcreator.button.openMaterials =Відкрите сховище вартості збірки
+aetherhaven.plotcreator.button.save=Зберегти будівлю
+aetherhaven.plotcreator.button.addFromInventory=Додати з інвентарю
+aetherhaven.plotcreator.button.useBuildShape=Використовуйте збірні матеріали
+aetherhaven.plotcreator.button.clearPrefabMaterials=Чіткі витрати на будівництво
+aetherhaven.plotcreator.button.materialsPrevPage=Попередній
+aetherhaven.plotcreator.button.materialsNextPage=Далі
+aetherhaven.plotcreator.button.materialRemove=Х
 
-aetherhaven.plotcreator.field.displayName =Назва будівлі
-aetherhaven.plotcreator.field.description =Короткий опис (необов'язково)
-aetherhaven.plotcreator.field.constructionId =Ідентифікатор будівлі (plot_my_building)
-aetherhaven.plotcreator.field.prefabName =Ім'я файлу префабу
-aetherhaven.plotcreator.field.tags =Теги (розділені комами)
-aetherhaven.plotcreator.field.variantOf =Вважається ідентифікатором будівлі
-aetherhaven.plotcreator.field.goldCost =Вартість золота з казначейства
+aetherhaven.plotcreator.materials.pageLabel=Сторінка {page} з {pages}
+aetherhaven.plotcreator.materials.emptyList=Поки що немає витрат на будівництво. Використовуйте готові матеріали або додавайте предмети зі свого інвентарю.
+aetherhaven.plotcreator.materials.confirmReplace=Знову натисніть «Використовувати збірні матеріали», щоб замінити поточні витрати на збірку.
+aetherhaven.plotcreator.materials.confirmClear=Знову натисніть «Очистити витрати на складання», щоб видалити всі витрати на складання.
+aetherhaven.plotcreator.materials.fillFailed=Не вдалося заповнити дані про вартість будівництва з вашого префабу. Спочатку збережіть форму будівництва.
 
-aetherhaven.plotcreator.session.started =Конструктор сюжету розпочато. Використовуйте HUD та клавіші персоналу під час роботи у світі.
+aetherhaven.plotcreator.field.displayName=Назва будівлі
+aetherhaven.plotcreator.field.description=Короткий опис (необов'язково)
+aetherhaven.plotcreator.field.constructionId=Ідентифікатор будівлі (plot_my_building)
+aetherhaven.plotcreator.field.prefabName=Ім'я файлу префабу
+aetherhaven.plotcreator.field.tags=Теги (розділені комами)
+aetherhaven.plotcreator.field.variantOf=Вважається ідентифікатором будівлі
+aetherhaven.plotcreator.field.goldCost=Вартість золота з казначейства
 
-aetherhaven.plotcreator.hud.title =Творець сюжету
+aetherhaven.plotcreator.session.started=Конструктор сюжету розпочато. Використовуйте HUD та клавіші персоналу під час роботи у світі.
 
-aetherhaven.plotcreator.hud.common.q =Попередній крок
-aetherhaven.plotcreator.hud.common.e =Перейти до наступного кроку
-aetherhaven.plotcreator.hud.common.r =Скасувати сеанс
+aetherhaven.plotcreator.hud.title=Творець сюжету
 
-aetherhaven.plotcreator.hud.WELCOME.f =Початок
-aetherhaven.plotcreator.hud.WELCOME.e =Початок
+aetherhaven.plotcreator.hud.common.q=Попередній крок
+aetherhaven.plotcreator.hud.common.e=Перейти до наступного кроку
+aetherhaven.plotcreator.hud.common.r=Скасувати сеанс
 
-aetherhaven.plotcreator.hud.CORNER_FIRST.primary =Клацніть блок в одному куті вашої збірки
-aetherhaven.plotcreator.hud.CORNER_SECOND.primary =Клацніть на протилежному куті, щоб позначити всю область
-aetherhaven.plotcreator.hud.ANCHOR.primary =Клацніть один із чотирьох зовнішніх кутів сліду
+aetherhaven.plotcreator.hud.WELCOME.f=Початок
+aetherhaven.plotcreator.hud.WELCOME.e=Початок
 
-aetherhaven.plotcreator.hud.PREFAB_SAVE.f =Експорт форми побудови в межах
-aetherhaven.plotcreator.hud.KIND.f =Відкрити вибір типу будівлі
-aetherhaven.plotcreator.hud.IDENTITY.f =Введіть назву, опис та ідентифікатор будівлі для відображення
-aetherhaven.plotcreator.hud.TAGS.f =Редагувати теги (розділені комами)
-aetherhaven.plotcreator.hud.VARIANT.f =Виберіть, до якого основного типу будівлі враховується цей варіант
-aetherhaven.plotcreator.hud.SUBSTEP.primary =Клацніть потрібний блок або точку всередині сліду
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer =Видалити маркер появи шукача пригод
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor =Видалити маркер появи відвідувачів
-aetherhaven.plotcreator.hud.SUBSTEP.q =Повернутися назад (зайві блоки розміщення з кроку, який ви залишили, видаляються)
-aetherhaven.plotcreator.hud.MATERIALS.f =Відкрите сховище матеріалів
-aetherhaven.plotcreator.hud.CONFIGURE.f =Відкрити налаштування будівлі
-aetherhaven.plotcreator.hud.REVIEW.f =Врятуйте будівлю
+aetherhaven.plotcreator.hud.CORNER_FIRST.primary=Клацніть блок в одному куті вашої збірки
+aetherhaven.plotcreator.hud.CORNER_SECOND.primary=Клацніть на протилежному куті, щоб позначити всю область
+aetherhaven.plotcreator.hud.ANCHOR.primary=Клацніть один із чотирьох зовнішніх кутів сліду
 
-aetherhaven.plotcreator.hud.kindSelected =Тип: {kind}
+aetherhaven.plotcreator.hud.PREFAB_SAVE.f=Експорт форми побудови в межах
+aetherhaven.plotcreator.hud.KIND.f=Відкрити вибір типу будівлі
+aetherhaven.plotcreator.hud.IDENTITY.f=Введіть назву, опис та ідентифікатор будівлі для відображення
+aetherhaven.plotcreator.hud.TAGS.f=Редагувати теги (розділені комами)
+aetherhaven.plotcreator.hud.VARIANT.f=Виберіть, до якого основного типу будівлі враховується цей варіант
+aetherhaven.plotcreator.hud.SUBSTEP.primary=Клацніть потрібний блок або точку всередині сліду
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer=Видалити маркер появи шукача пригод
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor=Видалити маркер появи відвідувачів
+aetherhaven.plotcreator.hud.SUBSTEP.q=Повернутися назад (зайві блоки розміщення з кроку, який ви залишили, видаляються)
+aetherhaven.plotcreator.hud.MATERIALS.f=Відкрити меню будівельних матеріалів
+aetherhaven.plotcreator.hud.CONFIGURE.f=Відкрити налаштування будівлі
+aetherhaven.plotcreator.hud.REVIEW.f=Врятуйте будівлю
 
-aetherhaven.plotcreator.hint.clickBlock =Клацніть блок у світі для цього кроку.
+aetherhaven.plotcreator.hud.kindSelected=Тип: {kind}
 
-aetherhaven.plotcreator.hint.kindCycled =Тип будівлі: {kind}
+aetherhaven.plotcreator.hint.clickBlock=Клацніть блок у світі для цього кроку.
 
-aetherhaven.plotcreator.hint.prefabSaved =Префаб збережено як {file}. Натисніть E, коли будете готові до наступного кроку.
+aetherhaven.plotcreator.hint.kindCycled=Тип будівлі: {kind}
 
-aetherhaven.plotcreator.error.needCornerFirst =Клацніть перший кут, перш ніж продовжити.
+aetherhaven.plotcreator.hint.prefabSaved=Префаб збережено як {file}. Натисніть E, коли будете готові до наступного кроку.
 
-aetherhaven.plotcreator.error.needCornerSecond =Клацніть на протилежному куті, перш ніж продовжити.
+aetherhaven.plotcreator.error.needCornerFirst=Клацніть перший кут, перш ніж продовжити.
 
-aetherhaven.plotcreator.error.needKind =Відкрийте вибір типу будівлі за допомогою клавіші F та виберіть тип, перш ніж продовжити.
+aetherhaven.plotcreator.error.needCornerSecond=Клацніть на протилежному куті, перш ніж продовжити.
 
-aetherhaven.plotcreator.error.needVariantOf =Натисніть F та виберіть, якою головною будівлею вважається цей варіант, перш ніж продовжити.
+aetherhaven.plotcreator.error.needKind=Відкрийте вибір типу будівлі за допомогою клавіші F та виберіть тип, перш ніж продовжити.
 
-aetherhaven.plotcreator.error.invalidVariantOf =Цього основного типу будівлі немає у списку творців сюжету.
+aetherhaven.plotcreator.error.needVariantOf=Натисніть F та виберіть, якою головною будівлею вважається цей варіант, перш ніж продовжити.
+
+aetherhaven.plotcreator.error.invalidVariantOf=Цього основного типу будівлі немає у списку творців сюжету.
 
 # Main construction types (variant "counts as" dropdown; keys referenced from plot_creator_main_constructions.json)
-aetherhaven.plotcreator.mainType.plot_barn =Сарай
-aetherhaven.plotcreator.mainType.plot_blacksmith_shop =Ковальська майстерня
-aetherhaven.plotcreator.mainType.plot_farm =Фермерська ділянка
-aetherhaven.plotcreator.mainType.plot_gaia_altar =Вівтар Геї
-aetherhaven.plotcreator.mainType.plot_guild_hall =Гільдійський зал
-aetherhaven.plotcreator.mainType.plot_house =Будинок
-aetherhaven.plotcreator.mainType.plot_inn =Готель
-aetherhaven.plotcreator.mainType.plot_lumbermill =Лісопилка
-aetherhaven.plotcreator.mainType.plot_market_stall =Ринковий кіоск
-aetherhaven.plotcreator.mainType.plot_player_shop =Магазин гравців
-aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK =Натисніть на сейф магазину, який ви розмістили.
-aetherhaven.plotcreator.mainType.plot_miners_hut =Шатська хатина
-aetherhaven.plotcreator.mainType.plot_builders_hut =Будиночок будівельника
-aetherhaven.plotcreator.mainType.plot_park =Парк
-aetherhaven.plotcreator.mainType.plot_town_hall =Ратуша
-aetherhaven.plotcreator.mainType.plot_tourist_portal =Туристичний портал
+aetherhaven.plotcreator.mainType.plot_barn=Сарай
+aetherhaven.plotcreator.mainType.plot_blacksmith_shop=Ковальська майстерня
+aetherhaven.plotcreator.mainType.plot_farm=Фермерська ділянка
+aetherhaven.plotcreator.mainType.plot_gaia_altar=Вівтар Геї
+aetherhaven.plotcreator.mainType.plot_guild_hall=Гільдійський зал
+aetherhaven.plotcreator.mainType.plot_house=Будинок
+aetherhaven.plotcreator.mainType.plot_inn=Готель
+aetherhaven.plotcreator.mainType.plot_lumbermill=Лісопилка
+aetherhaven.plotcreator.mainType.plot_market_stall=Ринковий кіоск
+aetherhaven.plotcreator.mainType.plot_player_shop=Магазин гравців
+aetherhaven.plotcreator.mainType.plot_bomb_shop=Магазин бомб
+aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop=Магазин Кришталевого Хранителя
+aetherhaven.plotcreator.mainType.plot_flower_shop=Квітковий магазин
+aetherhaven.plotcreator.substep.SHOP_SAFE_BLOCK=Натисніть на сейф магазину, який ви розмістили.
+aetherhaven.plotcreator.mainType.plot_miners_hut=Шатська хатина
+aetherhaven.plotcreator.mainType.plot_builders_hut=Будиночок будівельника
+aetherhaven.plotcreator.mainType.plot_park=Парк
+aetherhaven.plotcreator.mainType.plot_town_hall=Ратуша
+aetherhaven.plotcreator.mainType.plot_tourist_portal=Туристичний портал
 
-aetherhaven.plotcreator.cancelConfirm.title =Скасувати створення сюжету?
-aetherhaven.plotcreator.cancelConfirm.body =Ваш прогрес у цьому сеансі буде втрачено. Межі, експорт префабів та дані чернеток будуть відхилені.
-aetherhaven.plotcreator.cancelConfirm.yes =Так, скасувати
-aetherhaven.plotcreator.cancelConfirm.no =Продовжуйте працювати
+aetherhaven.plotcreator.cancelConfirm.title=Скасувати створення сюжету?
+aetherhaven.plotcreator.cancelConfirm.body=Ваш прогрес у цьому сеансі буде втрачено. Межі, експорт префабів та дані чернеток будуть відхилені.
+aetherhaven.plotcreator.cancelConfirm.yes=Так, скасувати
+aetherhaven.plotcreator.cancelConfirm.no=Продовжуйте працювати
 
-aetherhaven.plotcreator.button.back =Назад
-aetherhaven.plotcreator.button.cancel =Скасувати
-aetherhaven.plotcreator.button.close =Закрити
-aetherhaven.plotcreator.button.done =Готово
-aetherhaven.plotcreator.button.next =Продовжити
+aetherhaven.plotcreator.button.back=Назад
+aetherhaven.plotcreator.button.cancel=Скасувати
+aetherhaven.plotcreator.button.close=Закрити
+aetherhaven.plotcreator.button.done=Готово
+aetherhaven.plotcreator.button.next=Продовжити
 
-aetherhaven.plotcreator.step.WELCOME.title =Ласкаво просимо
-aetherhaven.plotcreator.step.WELCOME.hint =Перетворіть щось, що ви збудували, на міську будівлю.
+aetherhaven.plotcreator.step.WELCOME.title=Ласкаво просимо
+aetherhaven.plotcreator.step.WELCOME.hint=Перетворіть щось, що ви збудували, на міську будівлю.
 
-aetherhaven.plotcreator.step.CORNER_FIRST.title =Перший кут
-aetherhaven.plotcreator.step.CORNER_FIRST.hint =Позначте один кут вашої конструкції.
+aetherhaven.plotcreator.step.CORNER_FIRST.title=Перший кут
+aetherhaven.plotcreator.step.CORNER_FIRST.hint=Позначте один кут вашої конструкції.
 
-aetherhaven.plotcreator.step.CORNER_SECOND.title =Протилежний кут
-aetherhaven.plotcreator.step.CORNER_SECOND.hint =Позначте протилежний кут, щоб визначити повну площу.
+aetherhaven.plotcreator.step.CORNER_SECOND.title=Протилежний кут
+aetherhaven.plotcreator.step.CORNER_SECOND.hint=Позначте протилежний кут, щоб визначити повну площу.
 
-aetherhaven.plotcreator.step.ANCHOR.title =знак ділянки
-aetherhaven.plotcreator.step.ANCHOR.hint =Позначте один із чотирьох зовнішніх кутів контуру (на один блок за межами як по X, так і по Z). Знак не повинен знаходитися всередині зони будівництва.
+aetherhaven.plotcreator.step.ANCHOR.title=знак ділянки
+aetherhaven.plotcreator.step.ANCHOR.hint=Позначте один із чотирьох зовнішніх кутів контуру (на один блок за межами як по X, так і по Z). Знак не повинен знаходитися всередині зони будівництва.
 
-aetherhaven.plotcreator.step.KIND.title =Тип будівлі
-aetherhaven.plotcreator.step.KIND.hint =Оберіть тип будівлі, який відповідає вашій конструкції. Щоб дізнатися, що означає кожен тип, відкрийте журнал міста у розділі «Путівник» → «Механіка» → «Співробітники розробника сюжету».
-aetherhaven.plotcreator.kind.DECORATION =Прикраса
-aetherhaven.plotcreator.kind.VARIANT =Варіант іншої будівлі
-aetherhaven.plotcreator.kind.HOME =Дім
-aetherhaven.plotcreator.kind.WORK =Робоче місце
-aetherhaven.plotcreator.kind.AMENITY =Зручності
-aetherhaven.plotcreator.kind.SHOP =Магазин селянина
-aetherhaven.plotcreator.kind.PLAYER_SHOP =Магазин гравців
-aetherhaven.plotcreator.kind.INN =Готель
-aetherhaven.plotcreator.kind.TOWN_HALL =Ратуша
-aetherhaven.plotcreator.kind.GUILD_HALL =Гільдійський зал
-aetherhaven.plotcreator.kind.TOURIST_PORTAL =Туристичний портал
+aetherhaven.plotcreator.step.KIND.title=Тип будівлі
+aetherhaven.plotcreator.step.KIND.hint=Оберіть тип будівлі, який відповідає вашій конструкції. Щоб дізнатися, що означає кожен тип, відкрийте журнал міста у розділі «Путівник» → «Механіка» → «Співробітники розробника сюжету».
+aetherhaven.plotcreator.kind.DECORATION=Прикраса
+aetherhaven.plotcreator.kind.VARIANT=Варіант іншої будівлі
+aetherhaven.plotcreator.kind.HOME=Дім
+aetherhaven.plotcreator.kind.WORK=Робоче місце
+aetherhaven.plotcreator.kind.AMENITY=Зручності
+aetherhaven.plotcreator.kind.SHOP=Магазин селянина
+aetherhaven.plotcreator.kind.PLAYER_SHOP=Магазин гравців
+aetherhaven.plotcreator.kind.INN=Готель
+aetherhaven.plotcreator.kind.TOWN_HALL=Ратуша
+aetherhaven.plotcreator.kind.GUILD_HALL=Гільдійський зал
+aetherhaven.plotcreator.kind.TOURIST_PORTAL=Туристичний портал
 
-aetherhaven.plotcreator.step.IDENTITY.title =Ім'я та ідентифікатор
-aetherhaven.plotcreator.step.IDENTITY.hint =Введіть відображувану назву, опис та ідентифікатор будівлі. Ідентифікатор оновлюватиметься від назви, доки ви самостійно не відредагуєте поле ідентифікатора. Файл префабу використовує цей ідентифікатор.
+aetherhaven.plotcreator.step.IDENTITY.title=Ім'я та ідентифікатор
+aetherhaven.plotcreator.step.IDENTITY.hint=Введіть відображувану назву, опис та ідентифікатор будівлі. Ідентифікатор оновлюватиметься від назви, доки ви самостійно не відредагуєте поле ідентифікатора. Файл префабу використовує цей ідентифікатор.
 
-aetherhaven.plotcreator.step.TAGS.title =Теги будівель
-aetherhaven.plotcreator.step.TAGS.hint =Додайте теги (розділені комами). Наприклад: зручності, природа, розваги.
+aetherhaven.plotcreator.step.TAGS.title=Теги будівель
+aetherhaven.plotcreator.step.TAGS.hint=Додайте теги (розділені комами). Наприклад: зручності, природа, розваги.
 
-aetherhaven.plotcreator.step.PREFAB_SAVE.title =Зберегти форму
-aetherhaven.plotcreator.step.PREFAB_SAVE.hint =Експортуйте все, що знаходиться в межах, використовуючи налаштування будівлі з попереднього кроку.
+aetherhaven.plotcreator.step.PREFAB_SAVE.title=Зберегти форму
+aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Експортуйте все, що знаходиться в межах, використовуючи налаштування будівлі з попереднього кроку.
 
-aetherhaven.plotcreator.error.needIdentity =Перед експортом префаба встановіть назву для відображення та ідентифікатор будівлі.
+aetherhaven.plotcreator.error.needIdentity=Перед експортом префаба встановіть назву для відображення та ідентифікатор будівлі.
 
-aetherhaven.plotcreator.error.selfBuildDays =Дні самостійного будівництва повинні бути більшими за нуль.
+aetherhaven.plotcreator.error.selfBuildDays=Дні самостійного будівництва повинні бути більшими за нуль.
 
-aetherhaven.plotcreator.error.assemblySections =Кількість секцій збірки на вісь має бути цілим числом від 1 до 16 (1 вимикає секційну збірку).
+aetherhaven.plotcreator.error.assemblySections=Кількість секцій збірки на вісь має бути цілим числом від 1 до 16 (1 вимикає секційну збірку).
 
-aetherhaven.plotcreator.step.VARIANT.title =Варіант
-aetherhaven.plotcreator.step.VARIANT.hint =Виберіть, до якого основного типу будівлі належить цей варіант.
+aetherhaven.plotcreator.step.VARIANT.title=Варіант
+aetherhaven.plotcreator.step.VARIANT.hint=Виберіть, до якого основного типу будівлі належить цей варіант.
 
-aetherhaven.plotcreator.step.SUBSTEP.title =Важливі місця
-aetherhaven.plotcreator.step.SUBSTEP.hint =Блоки розміщення додаються до вашого інвентарю для кожного підкроку. Розмістіть або клацніть потрібні блоки та точки всередині сліду.
+aetherhaven.plotcreator.step.SUBSTEP.title=Важливі місця
+aetherhaven.plotcreator.step.SUBSTEP.hint=Блоки розміщення додаються до вашого інвентарю для кожного підкроку. Розмістіть або клацніть потрібні блоки та точки всередині сліду.
 
-aetherhaven.plotcreator.step.MATERIALS.title =Будівельні матеріали
-aetherhaven.plotcreator.step.MATERIALS.hint =Додайте предмети, які гравці повинні надати для будівництва цієї ділянки. Предмети повертаються до вашого інвентарю, коли ви продовжуєте.
+aetherhaven.plotcreator.step.MATERIALS.title=Будівельні матеріали
+aetherhaven.plotcreator.step.MATERIALS.hint=Натисніть F, щоб відкрити меню будівельних матеріалів. Префаб-заповнення додає витрати, не надаючи вам елементів.
+aetherhaven.plotcreator.step.MATERIALS.detail=Використовуйте плюс і мінус для зміни кількості. Додайте кількість копій з інвентарю до списку та поверніть свої елементи.
 
-aetherhaven.plotcreator.step.MATERIALS.detail =Віртуальна скриня лише для цієї будівлі — не розміщена у світі.
+aetherhaven.plotcreator.step.CONFIGURE.title=Налаштування будівлі
+aetherhaven.plotcreator.step.CONFIGURE.hint=Встановіть вартість золота в скарбниці, дні самостійного будівництва, порожні місця для префабів, блокування жетонів сюжету та секції складання.
 
-aetherhaven.plotcreator.step.CONFIGURE.title =Налаштування будівлі
-aetherhaven.plotcreator.step.CONFIGURE.hint =Встановіть вартість золота в скарбниці, дні самостійного будівництва, порожні місця для префабів, блокування жетонів сюжету та секції складання.
+aetherhaven.plotcreator.step.CONFIGURE.detail=Золото виплачується з міської скарбниці під час будівництва ділянки. Дні самостійного будівництва – це час, необхідний для завершення ділянки без будівельного персоналу. Параметр «Збереження порожніх місць» контролює, чи зберігатиметься повітря у вашому сліді для очищення блоків під час будівництва. «Заблокований жетон ділянки» вимагає від гравців розблокувати цю ділянку на верстаті для виготовлення ділянок, перш ніж вони зможуть створювати жетони. Розділи складання розділяють будівництво на сітку N×N×N (1 = вимкнено).
 
-aetherhaven.plotcreator.step.CONFIGURE.detail =Золото виплачується з міської скарбниці під час будівництва ділянки. Дні самостійного будівництва – це час, необхідний для завершення ділянки без будівельного персоналу. Параметр «Збереження порожніх місць» контролює, чи зберігатиметься повітря у вашому сліді для очищення блоків під час будівництва. «Заблокований жетон ділянки» вимагає від гравців розблокувати цю ділянку на верстаті для виготовлення ділянок, перш ніж вони зможуть створювати жетони. Розділи складання розділяють будівництво на сітку N×N×N (1 = вимкнено).
+aetherhaven.plotcreator.field.selfBuildDays=Дні самостійного будівництва (ігрові дні)
 
-aetherhaven.plotcreator.field.selfBuildDays =Дні самостійного будівництва (ігрові дні)
+aetherhaven.plotcreator.field.saveEmptySpaces=Збереження порожніх місць у префабі
+aetherhaven.plotcreator.field.saveEmptySpaces.hint=Коли ця функція ввімкнена, повітря у вашому сліді зберігається та очищає ці блоки під час складання будівлі. Коли ця функція вимкнена, зберігаються лише суцільні блоки, а існуючий ландшафт залишається. Порожні маркери редактора завжди очищають блоки.
+aetherhaven.plotcreator.field.touristDestination=Відвідувачі можуть зупинитися тут
+aetherhaven.plotcreator.field.touristDestination.hint=Коли ця функція увімкнена, відвідувачі порталу можуть ходити до цієї будівлі протягом дня.
+aetherhaven.plotcreator.field.plotTokenLocked=Маркер сюжету заблоковано за замовчуванням
+aetherhaven.plotcreator.field.plotTokenLocked.hint=Коли ця функція увімкнена, гравці повинні розблокувати цю ділянку на лавці для створення ділянок (використовуючи креслення ділянки), перш ніж вони зможуть створити для неї жетони ділянок.
+aetherhaven.plotcreator.field.assemblySections=Секції складання на вісь (1–16)
 
-aetherhaven.plotcreator.field.saveEmptySpaces =Збереження порожніх місць у префабі
-aetherhaven.plotcreator.field.saveEmptySpaces.hint =Коли ця функція ввімкнена, повітря у вашому сліді зберігається та очищає ці блоки під час складання будівлі. Коли ця функція вимкнена, зберігаються лише суцільні блоки, а існуючий ландшафт залишається. Порожні маркери редактора завжди очищають блоки.
-aetherhaven.plotcreator.field.touristDestination =Відвідувачі можуть зупинитися тут
-aetherhaven.plotcreator.field.touristDestination.hint =Коли ця функція увімкнена, відвідувачі порталу можуть ходити до цієї будівлі протягом дня.
-aetherhaven.plotcreator.field.plotTokenLocked =Маркер сюжету заблоковано за замовчуванням
-aetherhaven.plotcreator.field.plotTokenLocked.hint =Коли ця функція увімкнена, гравці повинні розблокувати цю ділянку на лавці для створення ділянок (використовуючи креслення ділянки), перш ніж вони зможуть створити для неї жетони ділянок.
-aetherhaven.plotcreator.field.assemblySections =Секції складання на вісь (1–16)
+aetherhaven.plotcreator.step.REVIEW.title=Огляд
+aetherhaven.plotcreator.step.REVIEW.hint=Збережіть будівлю. Ви отримаєте жетон ділянки, щоб розмістити її в місті.
 
-aetherhaven.plotcreator.step.REVIEW.title =Огляд
-aetherhaven.plotcreator.step.REVIEW.hint =Збережіть будівлю. Ви отримаєте жетон ділянки, щоб розмістити її в місті.
+aetherhaven.plotcreator.step.DONE.title=Готово
+aetherhaven.plotcreator.step.DONE.hint=Вашу будівлю збережено. Використайте жетон ділянки з вашого інвентарю, щоб розмістити її в місті.
 
-aetherhaven.plotcreator.step.DONE.title =Готово
-aetherhaven.plotcreator.step.DONE.hint =Вашу будівлю збережено. Використайте жетон ділянки з вашого інвентарю, щоб розмістити її в місті.
+aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK=Клацніть на полицю міських записів, яку ви розмістили.
+aetherhaven.plotcreator.substep.PRODUCTION_STORAGE=Клацніть на розміщеному вами виробничому сховищі.
+aetherhaven.plotcreator.substep.TREASURY_BLOCK=Клацніть на розміщеному вами блокі скарбниці.
+aetherhaven.plotcreator.substep.PLANNING_DESK_POI=Натисніть на бюро містобудування.
+aetherhaven.plotcreator.substep.WORK_POI=Клацніть робоче місце (лавку або стіл).
+aetherhaven.plotcreator.substep.BARD_WORK_POI=Клацніть там, де має стояти бард, поруч із дошкою завдань.
+aetherhaven.plotcreator.substep.SLEEP_POI=Натисніть на ліжко або місце відпочинку.
+aetherhaven.plotcreator.substep.EAT_POI=Натисніть на місце для харчування.
+aetherhaven.plotcreator.substep.FUN_POI=Клацніть на цікаве місце (лавку, щоб посидіти).
+aetherhaven.plotcreator.substep.SHOP_SPOT=Розмістіть торгові кіоски зі свого інвентарю, підтвердіть кожне налаштування, потім клацніть кожен кіоск за допомогою персоналу творця сюжету.
+aetherhaven.plotcreator.substep.SHOP_POI=Клацніть на робочому місці прилавка магазину.
+aetherhaven.plotcreator.substep.TOURIST_VISIT_POI=Натисніть там, де відвідувачі мають стояти перед магазином.
+aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK=Розмістіть портальну платформу зі свого інвентарю, потім клацніть на ній посохом творця сюжету.
+aetherhaven.plotcreator.substep.INNKEEPER_SPAWN=Клацніть там, де має стояти власник готелю.
+aetherhaven.plotcreator.substep.VISITOR_SPAWN=Клацніть там, де має стояти кожен відвідувач готелю (дві позиції). Клацніть правою кнопкою миші на бірюзовому маркері, щоб видалити його.
+aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN=Натисніть там, де має стояти майстер гільдії.
+aetherhaven.plotcreator.substep.ADVENTURER_SPAWN=Клацніть на місці появи шукача пригод. Клацніть правою кнопкою миші на фіолетовому маркері, щоб видалити його.
 
-aetherhaven.plotcreator.substep.MANAGEMENT_BLOCK =Клацніть на полицю міських записів, яку ви розмістили.
-aetherhaven.plotcreator.substep.PRODUCTION_STORAGE =Клацніть на розміщеному вами виробничому сховищі.
-aetherhaven.plotcreator.substep.TREASURY_BLOCK =Клацніть на розміщеному вами блокі скарбниці.
-aetherhaven.plotcreator.substep.PLANNING_DESK_POI =Натисніть на бюро містобудування.
-aetherhaven.plotcreator.substep.WORK_POI =Клацніть робоче місце (лавку або стіл).
-aetherhaven.plotcreator.substep.BARD_WORK_POI =Клацніть там, де має стояти бард, поруч із дошкою завдань.
-aetherhaven.plotcreator.substep.SLEEP_POI =Натисніть на ліжко або місце відпочинку.
-aetherhaven.plotcreator.substep.EAT_POI =Натисніть на місце для харчування.
-aetherhaven.plotcreator.substep.FUN_POI =Клацніть на цікаве місце (лавку, щоб посидіти).
-aetherhaven.plotcreator.substep.SHOP_SPOT =Розмістіть торгові кіоски зі свого інвентарю, підтвердіть кожне налаштування, потім клацніть кожен кіоск за допомогою персоналу творця сюжету.
-aetherhaven.plotcreator.substep.SHOP_POI =Клацніть на робочому місці прилавка магазину.
-aetherhaven.plotcreator.substep.TOURIST_VISIT_POI =Натисніть там, де відвідувачі мають стояти перед магазином.
-aetherhaven.plotcreator.substep.TOURIST_PORTAL_BLOCK =Розмістіть портальну платформу зі свого інвентарю, потім клацніть на ній посохом творця сюжету.
-aetherhaven.plotcreator.substep.INNKEEPER_SPAWN =Клацніть там, де має стояти власник готелю.
-aetherhaven.plotcreator.substep.VISITOR_SPAWN =Клацніть там, де має стояти кожен відвідувач готелю (дві позиції). Клацніть правою кнопкою миші на бірюзовому маркері, щоб видалити його.
-aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN =Натисніть там, де має стояти майстер гільдії.
-aetherhaven.plotcreator.substep.ADVENTURER_SPAWN =Клацніть на місці появи шукача пригод. Клацніть правою кнопкою миші на фіолетовому маркері, щоб видалити його.
+aetherhaven.plotcreator.success.saved=Будівлю збережено як {id}. Ви отримали жетон ділянки.
+aetherhaven.plotcreator.success.registered=Будівлю збережено як {id} та зареєстровано у вашому місті на місці, яке ви позначили (вже завершено — немає таблички з ділянкою).
+aetherhaven.plotcreator.success.savedTokenFallback=Файл будівлі збережено як {id}. Не вдалося пов'язати його з вашим містом у світі; використовуйте жетон сюжету, щоб розмістити його.
 
-aetherhaven.plotcreator.success.saved =Будівлю збережено як {id}. Ви отримали жетон ділянки.
-aetherhaven.plotcreator.success.registered =Будівлю збережено як {id} та зареєстровано у вашому місті на місці, яке ви позначили (вже завершено — немає таблички з ділянкою).
-aetherhaven.plotcreator.success.savedTokenFallback =Файл будівлі збережено як {id}. Не вдалося пов'язати його з вашим містом у світі; використовуйте жетон сюжету, щоб розмістити його.
+aetherhaven.plotcreator.error.noTown=Спочатку розмістіть статут міста, а потім завершіть створення сюжетної лінії всередині цього міста.
+aetherhaven.plotcreator.error.signBlocked=Не вдалося розмістити знак ділянки у позначеному вами місці. Файл будівлі збережено; за потреби використовуйте маркер ділянки.
+aetherhaven.plotcreator.error.unknownConstruction=Визначення будівлі відсутнє після збереження. Спробуйте перезавантажити сервер.
 
-aetherhaven.plotcreator.error.noTown =Спочатку розмістіть статут міста, а потім завершіть створення сюжетної лінії всередині цього міста.
-aetherhaven.plotcreator.error.signBlocked =Не вдалося розмістити знак ділянки у позначеному вами місці. Файл будівлі збережено; за потреби використовуйте маркер ділянки.
-aetherhaven.plotcreator.error.unknownConstruction =Визначення будівлі відсутнє після збереження. Спробуйте перезавантажити сервер.
-
-aetherhaven.plottoken.error.unknownBuilding =Невідомий ідентифікатор будівлі: {id}
-aetherhaven.plottoken.gave =Надано {amount} жетон сюжету для {name}.
-aetherhaven.plottoken.list.empty =Не знайдено жодної будівлі.
-aetherhaven.plottoken.list.header =Ідентифікатори будівель:
+aetherhaven.plottoken.error.unknownBuilding=Невідомий ідентифікатор будівлі: {id}
+aetherhaven.plottoken.gave=Надано {amount} жетон сюжету для {name}.
+aetherhaven.plottoken.unlock.success=Ви розблокували сюжет {name} на верстаті.
+aetherhaven.plottoken.unlock.alreadyKnown=Ви вже розблокували сюжет {name}.
+aetherhaven.plottoken.unlock.notLockable=Ця будівля не потребує відмикання.
+aetherhaven.plottoken.unlockall.success=Розблоковано {count} ділянки на верстаті.
+aetherhaven.plottoken.unlockall.noneLeft=Ти вже розблокував кожен сюжет.
+aetherhaven.plottoken.list.empty=Не знайдено будівель.
+aetherhaven.plottoken.list.header=Ідентифікатори будівель:

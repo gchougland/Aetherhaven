@@ -2,7 +2,7 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
-commands.aetherhaven.towns.desc=디버그: 이 세계의 모든 마을 목록을 표시합니다.
+commands.aetherhaven.towns.desc=디버그: 이 세계의 모든 마을을 나열합니다.
 
 commands.aetherhaven.replace_charter.desc=헌장 블록을 마을의 저장된 위치에 다시 놓으세요.
 commands.aetherhaven.replace_charter.townName.desc=선택 사항: 도시 이름 (띄어쓰기를 포함한 전체 이름)
@@ -94,7 +94,7 @@ commands.aetherhaven.time.desc=창의적인 기능: 게임 내 일정 시계를 
 commands.aetherhaven.time.set.desc=창의적인 방법: 스케줄 시계를 1시간 간격(0~23시간)으로 설정하세요.
 commands.aetherhaven.time.hour.desc=0시부터 23시까지 (예: 오후 2시는 14시)
 commands.aetherhaven.time.set.success=시계가 {gameTime}으로 설정되었습니다.
-commands.aetherhaven.time.dawn.desc=창의적인 아이디어: 일정 시계를 아침 6시로 설정하세요
+commands.aetherhaven.time.dawn.desc=창의적인 아이디어: 스케줄 시계를 아침 6시로 설정하세요
 commands.aetherhaven.time.dawn.success=시계 설정: {gameTime}
 commands.aetherhaven.time.noResource=이 세계에는 시간 자원이 로드되어 있지 않습니다.
 
@@ -141,8 +141,11 @@ commands.aetherhaven.plotcreator.generateicon.desc=기존 프리팹에서 플롯
 commands.aetherhaven.plotcreator.generateicon.idOrPrefab=건물 ID(plot_my_house) 또는 프리팹 키(Guild_Hall.prefab.json)
 commands.aetherhaven.plotcreator.generateicon.outputId=아이콘 파일의 출력 ID(기본값은 건물 ID 또는 프리팹 이름)
 
-commands.aetherhaven.plottoken.desc=건물에 사용할 부지 토큰을 제공하고 목록을 작성하세요.
+commands.aetherhaven.plottoken.desc=건물에 대한 부지 토큰을 부여하고, 잠금 해제하고, 목록을 만드세요.
 commands.aetherhaven.plottoken.give.desc=건물 ID에 대한 플롯 토큰을 제공하세요.
 commands.aetherhaven.plottoken.give.constructionId=건물 ID (예: plot_park)
 commands.aetherhaven.plottoken.give.amount=스택 크기(기본값 1)
+commands.aetherhaven.plottoken.unlock.desc=제작대에서 플롯 스타일을 잠금 해제하세요
+commands.aetherhaven.plottoken.unlock.constructionId=건물 ID (예: plot_park)
+commands.aetherhaven.plottoken.unlockall.desc=제작대에서 모든 플롯 스타일을 잠금 해제하세요
 commands.aetherhaven.plottoken.list.desc=모든 건물 ID를 나열하세요

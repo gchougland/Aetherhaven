@@ -1,0 +1,19 @@
+{
+  "id": "jimmy_g",
+  "displayName": "Jimmy G",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Jimmy_G",
+  "personalityIds": [
+    "impatient",
+    "blunt",
+    "adventurer"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer"
+}

@@ -3,7 +3,7 @@
 aetherhaven.dialogue.aetherhaven_logger.rep_reward_50.speaker=Seren Fairhollow
 aetherhaven.dialogue.aetherhaven_logger.rep_reward_100.speaker=Seren Fairhollow
 aetherhaven.dialogue.aetherhaven_logger.root.speaker=Seren Fairhollow
-aetherhaven.dialogue.aetherhaven_logger.root.body=Ich fälle Bäume und verarbeite sie zu Bauholz für die Siedlung. Diese Arbeit wird viel präziser, wenn wir ein richtiges Sägewerk mit ordentlichen Sägen, Lagerfläche und einer festen Werkbank haben. Wenn Sie mir das bauen, kann ich die Bretterregale voll halten, anstatt gutes Holz in unordentlichen Haufen vor den Mauern liegen zu lassen. Ich brauche scharfes Eisen und gerade Bretter; so arbeite ich.
+aetherhaven.dialogue.aetherhaven_logger.root.body=Ich fälle Bäume und verarbeite sie zu Bauholz für die Siedlung. Diese Arbeit wird viel präziser, wenn wir ein richtiges Sägewerk mit ordentlichen Sägen, Lagerfläche und einer festen Werkbank haben. Wenn Sie mir das bauen, kann ich die Bretterregale immer voll halten, anstatt gutes Holz in unordentlichen Haufen vor den Mauern liegen zu lassen. Ich brauche scharfes Eisen und gerade Bretter; so arbeite ich.
 aetherhaven.dialogue.aetherhaven_logger.root.hc0=Du wolltest über ein Haus sprechen.
 aetherhaven.dialogue.aetherhaven_logger.root.hc1=Das Haus ist bezugsfertig. Ich wollte, dass du es persönlich von mir erfährst.
 aetherhaven.dialogue.aetherhaven_logger.root.hc2=Der Hausbau ist noch im Gange.

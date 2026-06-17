@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
+import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -104,6 +106,9 @@ public final class PlotBuildingRelocation {
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         reg.unregisterByPlotId(movePlotId);
 
+        ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
+        ShopSpotPlotRelocation.beginPlotMove(world, plugin, store, shopRegistry, movePlotId, plot, def);
+
         relocateTownNpcsOutOfFootprint(store, town, oldFootprint);
 
         PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, town);
@@ -112,7 +117,7 @@ public final class PlotBuildingRelocation {
         IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
         PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buffer);
         plot.applySignAndFootprint(signPos.x, signPos.y, signPos.z, newFp);
-        plot.setPlacementPrefabYaw(session.getPrefabYaw());
+        plot.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
         tm.updateTown(town);
 
         Runnable onComplete =

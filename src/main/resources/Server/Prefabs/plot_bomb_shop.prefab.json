@@ -7,9 +7,15 @@
   "blocks": [
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -27,14 +33,14 @@
       "x": 1,
       "y": 4,
       "z": -9,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -9,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -104,9 +110,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -124,14 +136,14 @@
       "x": 1,
       "y": 4,
       "z": -8,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -8,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -201,12 +213,18 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 1,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
       "y": 2,
       "z": -7,
       "name": "Empty"
@@ -221,14 +239,14 @@
       "x": 1,
       "y": 4,
       "z": -7,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -7,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -298,9 +316,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -318,14 +342,14 @@
       "x": 1,
       "y": 4,
       "z": -6,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -6,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -395,19 +419,19 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 1,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 1,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Plant_Vine_Wall",
       "support": 15,
@@ -415,16 +439,22 @@
     },
     {
       "x": 1,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 1,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Wood_Softwood_Roof_Hollow",
       "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -494,9 +524,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -514,14 +550,14 @@
       "x": 1,
       "y": 4,
       "z": -4,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -4,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -591,9 +627,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -611,14 +653,14 @@
       "x": 1,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -3,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -688,9 +730,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -708,14 +756,14 @@
       "x": 1,
       "y": 4,
       "z": -2,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -2,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -785,9 +833,15 @@
     },
     {
       "x": 1,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -805,14 +859,14 @@
       "x": 1,
       "y": 4,
       "z": -1,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 3
     },
     {
       "x": 1,
       "y": 5,
       "z": -1,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 1,
@@ -882,12 +936,18 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
       "y": 2,
       "z": -9,
       "name": "Empty"
@@ -901,12 +961,6 @@
     {
       "x": 2,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15,
@@ -914,10 +968,16 @@
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -981,9 +1041,16 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -8,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
     },
     {
       "x": 2,
@@ -1004,22 +1071,21 @@
       "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
-      "support": 15
-    },
-    {
-      "x": 2,
-      "y": 5,
-      "z": -8,
-      "name": "Wood_Beech_Trunk",
       "support": 15,
       "rotation": 4
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1083,31 +1149,31 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Rock_Stone_Brick_Mossy"
     },
     {
       "x": 2,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 2,
-      "y": 4,
+      "y": 3,
       "z": -7,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 2,
-      "y": 5,
+      "y": 4,
       "z": -7,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -1115,10 +1181,16 @@
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -7,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1182,15 +1254,22 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
-      "y": 2,
+      "y": 1,
       "z": -6,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -6,
+      "name": "Furniture_Village_Window",
+      "rotation": 1
     },
     {
       "x": 2,
@@ -1203,23 +1282,22 @@
       "x": 2,
       "y": 4,
       "z": -6,
-      "name": "Furniture_Village_Window",
-      "rotation": 1
-    },
-    {
-      "x": 2,
-      "y": 5,
-      "z": -6,
       "name": "Wood_Beech_Trunk",
       "support": 15,
       "rotation": 4
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -6,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1283,31 +1361,31 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 2,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 2,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 2,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -1315,10 +1393,16 @@
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1382,15 +1466,22 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 2,
-      "y": 2,
+      "y": 1,
       "z": -4,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -4,
+      "name": "Furniture_Village_Window",
+      "rotation": 1
     },
     {
       "x": 2,
@@ -1403,23 +1494,22 @@
       "x": 2,
       "y": 4,
       "z": -4,
-      "name": "Furniture_Village_Window",
-      "rotation": 1
-    },
-    {
-      "x": 2,
-      "y": 5,
-      "z": -4,
       "name": "Wood_Beech_Trunk",
       "support": 15,
       "rotation": 4
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -4,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1483,31 +1573,31 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 2,
-      "y": 2,
+      "y": 1,
       "z": -3,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 2,
-      "y": 3,
+      "y": 2,
       "z": -3,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 2,
-      "y": 4,
+      "y": 3,
       "z": -3,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 2,
-      "y": 5,
+      "y": 4,
       "z": -3,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -1515,10 +1605,16 @@
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -3,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1582,9 +1678,16 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -2,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
     },
     {
       "x": 2,
@@ -1611,15 +1714,14 @@
       "x": 2,
       "y": 5,
       "z": -2,
-      "name": "Wood_Beech_Trunk",
-      "support": 15
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
     },
     {
       "x": 2,
       "y": 6,
       "z": -2,
-      "name": "Wood_Softwood_Roof",
-      "rotation": 3
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1683,9 +1785,15 @@
     },
     {
       "x": 2,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1702,22 +1810,22 @@
     {
       "x": 2,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 2,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15
     },
     {
       "x": 2,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 2,
@@ -1781,9 +1889,15 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -1800,12 +1914,6 @@
     {
       "x": 3,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 5,
       "z": -9,
       "name": "Plant_Vine_Wall",
       "support": 15,
@@ -1813,17 +1921,23 @@
     },
     {
       "x": 3,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -1881,31 +1995,31 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 3,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 3,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 3,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -1913,16 +2027,22 @@
     },
     {
       "x": 3,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -1980,18 +2100,24 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Furniture_Village_Crate"
     },
     {
       "x": 3,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 3,
       "z": -7,
       "name": "Empty"
@@ -2006,21 +2132,21 @@
       "x": 3,
       "y": 5,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": -7,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -7,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2078,9 +2204,15 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2104,21 +2236,21 @@
       "x": 3,
       "y": 5,
       "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": -6,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -6,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2176,48 +2308,54 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 3,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Furniture_Human_Ruins_Candle"
     },
     {
       "x": 3,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Furniture_Human_Ruins_Candle",
       "filler": 1024
     },
     {
       "x": 3,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 3,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -5,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2275,18 +2413,24 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -4,
       "name": "Furniture_Village_Crate"
     },
     {
       "x": 3,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
       "y": 3,
       "z": -4,
       "name": "Empty"
@@ -2301,21 +2445,21 @@
       "x": 3,
       "y": 5,
       "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": -4,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -4,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2373,15 +2517,21 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -3,
       "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2399,21 +2549,21 @@
       "x": 3,
       "y": 5,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "z": -3,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -3,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2471,31 +2621,31 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 3,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 3,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 3,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 3,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -2503,16 +2653,22 @@
     },
     {
       "x": 3,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2570,9 +2726,15 @@
     },
     {
       "x": 3,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2583,35 +2745,35 @@
     {
       "x": 3,
       "y": 3,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 3,
-      "y": 4,
       "z": -1,
       "name": "Plant_Vine_Wall",
       "support": 15
     },
     {
       "x": 3,
-      "y": 5,
+      "y": 4,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 3,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 3,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Roof",
       "rotation": 3
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 3,
@@ -2669,9 +2831,15 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2688,12 +2856,6 @@
     {
       "x": 4,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Short",
       "support": 15,
@@ -2701,22 +2863,28 @@
     },
     {
       "x": 4,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 4,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2768,15 +2936,21 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -8,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 4,
@@ -2787,12 +2961,6 @@
     {
       "x": 4,
       "y": 4,
-      "z": -8,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 4,
-      "y": 5,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -2800,21 +2968,27 @@
     },
     {
       "x": 4,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 4,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2866,9 +3040,15 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2898,20 +3078,20 @@
       "x": 4,
       "y": 6,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -7,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2963,9 +3143,15 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -2995,20 +3181,20 @@
       "x": 4,
       "y": 6,
       "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -6,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -6,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 4,
@@ -3026,7 +3212,7 @@
       "x": 4,
       "y": 11,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3060,19 +3246,19 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 4,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 4,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -3096,6 +3282,12 @@
     },
     {
       "x": 4,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 4,
       "z": -5,
       "name": "Empty"
@@ -3110,20 +3302,20 @@
       "x": 4,
       "y": 6,
       "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -5,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -5,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 4,
@@ -3141,7 +3333,7 @@
       "x": 4,
       "y": 11,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3158,26 +3350,32 @@
     {
       "x": 4,
       "y": 14,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 15,
       "z": -5,
       "name": "Cloth_Block_Wool_Orange"
     },
     {
       "x": 4,
+      "y": 15,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 4,
       "y": 16,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3207,20 +3405,20 @@
       "x": 4,
       "y": 6,
       "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -4,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -4,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 4,
@@ -3238,7 +3436,7 @@
       "x": 4,
       "y": 11,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3272,9 +3470,15 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3304,20 +3508,20 @@
       "x": 4,
       "y": 6,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 7,
-      "z": -3,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3369,15 +3573,21 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 4,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick_Mossy"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "z": -2,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 4,
@@ -3388,12 +3598,6 @@
     {
       "x": 4,
       "y": 4,
-      "z": -2,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 4,
-      "y": 5,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -3401,21 +3605,27 @@
     },
     {
       "x": 4,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 4,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3467,9 +3677,15 @@
     },
     {
       "x": 4,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3486,34 +3702,34 @@
     {
       "x": 4,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 4,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Short",
       "support": 15
     },
     {
       "x": 4,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 4,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Stairs",
       "rotation": 11
     },
     {
       "x": 4,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 4,
@@ -3565,9 +3781,15 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3597,20 +3819,20 @@
       "x": 5,
       "y": 6,
       "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3662,15 +3884,21 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 5,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -8,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 5,
@@ -3681,12 +3909,6 @@
     {
       "x": 5,
       "y": 4,
-      "z": -8,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 5,
-      "y": 5,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -3694,21 +3916,27 @@
     },
     {
       "x": 5,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 5,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3760,9 +3988,15 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3792,24 +4026,24 @@
       "x": 5,
       "y": 6,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -7,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Roof_Flat",
       "rotation": 2
     },
     {
       "x": 5,
+      "y": 8,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 5,
       "y": 9,
       "z": -7,
       "name": "Cloth_Block_Wool_Black"
@@ -3824,7 +4058,7 @@
       "x": 5,
       "y": 11,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3858,9 +4092,15 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3890,14 +4130,14 @@
       "x": 5,
       "y": 6,
       "z": -6,
-      "name": "Empty"
+      "name": "Wood_Softwood_Planks_Half",
+      "rotation": 8
     },
     {
       "x": 5,
       "y": 7,
       "z": -6,
-      "name": "Wood_Softwood_Planks_Half",
-      "rotation": 8
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 5,
@@ -3909,13 +4149,13 @@
       "x": 5,
       "y": 9,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
       "y": 10,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 5,
@@ -3927,7 +4167,7 @@
       "x": 5,
       "y": 12,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -3955,19 +4195,19 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 5,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 5,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -3991,6 +4231,12 @@
     },
     {
       "x": 5,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
       "y": 4,
       "z": -5,
       "name": "Empty"
@@ -4005,20 +4251,20 @@
       "x": 5,
       "y": 6,
       "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -5,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -5,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4036,13 +4282,13 @@
       "x": 5,
       "y": 11,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 5,
       "y": 12,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4059,20 +4305,26 @@
     {
       "x": 5,
       "y": 15,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 16,
       "z": -5,
       "name": "Cloth_Block_Wool_White"
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 16,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 5,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4102,20 +4354,20 @@
       "x": 5,
       "y": 6,
       "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -4,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -4,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4127,7 +4379,7 @@
       "x": 5,
       "y": 10,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 5,
@@ -4139,7 +4391,7 @@
       "x": 5,
       "y": 12,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4167,9 +4419,15 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4199,23 +4457,23 @@
       "x": 5,
       "y": 6,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
-      "z": -3,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Roof_Flat"
     },
     {
       "x": 5,
+      "y": 8,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 5,
       "y": 9,
       "z": -3,
       "name": "Cloth_Block_Wool_Black"
@@ -4230,7 +4488,7 @@
       "x": 5,
       "y": 11,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4264,15 +4522,21 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 5,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "z": -2,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 5,
@@ -4283,12 +4547,6 @@
     {
       "x": 5,
       "y": 4,
-      "z": -2,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 5,
-      "y": 5,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -4296,21 +4554,27 @@
     },
     {
       "x": 5,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 5,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4362,9 +4626,15 @@
     },
     {
       "x": 5,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4393,21 +4663,21 @@
     {
       "x": 5,
       "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 5,
-      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 5,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 5,
@@ -4459,9 +4729,15 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4478,12 +4754,6 @@
     {
       "x": 6,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Short",
       "support": 15,
@@ -4491,22 +4761,28 @@
     },
     {
       "x": 6,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 6,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 6,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4558,31 +4834,31 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 6,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 6,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 6,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 6,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -4590,21 +4866,27 @@
     },
     {
       "x": 6,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 6,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 6,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -8,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
@@ -4622,7 +4904,7 @@
       "x": 6,
       "y": 11,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4656,25 +4938,31 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 6,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 6,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "Wood_Deadwood_Stairs",
       "rotation": 3
     },
     {
       "x": 6,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 4,
       "z": -7,
       "name": "Empty"
@@ -4688,18 +4976,18 @@
     {
       "x": 6,
       "y": 6,
-      "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
-      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 6,
+      "y": 7,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 6,
       "y": 8,
       "z": -7,
       "name": "Cloth_Block_Wool_Black"
@@ -4708,13 +4996,13 @@
       "x": 6,
       "y": 9,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
       "y": 10,
       "z": -7,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
@@ -4726,7 +5014,7 @@
       "x": 6,
       "y": 12,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4754,9 +5042,15 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4816,7 +5110,7 @@
       "x": 6,
       "y": 11,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
@@ -4828,7 +5122,7 @@
       "x": 6,
       "y": 13,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4850,19 +5144,19 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 6,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 6,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -4886,6 +5180,12 @@
     },
     {
       "x": 6,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
       "y": 4,
       "z": -5,
       "name": "Empty"
@@ -4936,13 +5236,13 @@
       "x": 6,
       "y": 12,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
       "y": 13,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -4953,20 +5253,26 @@
     {
       "x": 6,
       "y": 15,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
-      "y": 16,
       "z": -5,
       "name": "Cloth_Block_Wool_White"
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 16,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 6,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5026,7 +5332,7 @@
       "x": 6,
       "y": 11,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
@@ -5038,7 +5344,7 @@
       "x": 6,
       "y": 13,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5060,9 +5366,15 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5091,18 +5403,18 @@
     {
       "x": 6,
       "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
-      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 6,
+      "y": 7,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 6,
       "y": 8,
       "z": -3,
       "name": "Cloth_Block_Wool_Black"
@@ -5111,13 +5423,13 @@
       "x": 6,
       "y": 9,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
       "y": 10,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
@@ -5129,7 +5441,7 @@
       "x": 6,
       "y": 12,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5157,31 +5469,31 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 6,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 6,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 6,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 6,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -5189,39 +5501,45 @@
     },
     {
       "x": 6,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 6,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 6,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
     },
     {
       "x": 6,
-      "y": 9,
+      "y": 8,
       "z": -2,
       "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 6,
-      "y": 10,
+      "y": 9,
       "z": -2,
       "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 6,
-      "y": 11,
+      "y": 10,
       "z": -2,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5255,9 +5573,15 @@
     },
     {
       "x": 6,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5274,34 +5598,34 @@
     {
       "x": 6,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 6,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Short",
       "support": 15
     },
     {
       "x": 6,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 6,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 6,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 6,
@@ -5353,9 +5677,15 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5385,20 +5715,20 @@
       "x": 7,
       "y": 6,
       "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
-      "y": 7,
-      "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 7,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "z": -9,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -5416,7 +5746,7 @@
       "x": 7,
       "y": 11,
       "z": -9,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5450,31 +5780,31 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick_Mossy"
     },
     {
       "x": 7,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 7,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 7,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -5482,15 +5812,21 @@
     },
     {
       "x": 7,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 7,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -8,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -5502,13 +5838,13 @@
       "x": 7,
       "y": 9,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
       "y": 10,
       "z": -8,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -5520,7 +5856,7 @@
       "x": 7,
       "y": 12,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5548,28 +5884,34 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 7,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 7,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "Wood_Deadwood_Stairs",
       "rotation": 11
     },
     {
       "x": 7,
-      "y": 4,
+      "y": 3,
       "z": -7,
       "name": "Wood_Deadwood_Planks_Half"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5611,7 +5953,7 @@
       "x": 7,
       "y": 11,
       "z": -7,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -5623,7 +5965,7 @@
       "x": 7,
       "y": 13,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5645,9 +5987,15 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5664,22 +6012,22 @@
     {
       "x": 7,
       "y": 4,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
-      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 32767
     },
     {
       "x": 7,
-      "y": 6,
+      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 1023
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5715,13 +6063,13 @@
       "x": 7,
       "y": 12,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
       "y": 13,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5743,20 +6091,20 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 7,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Furniture_Human_Ruins_Desk",
       "filler": 31
     },
     {
       "x": 7,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -5780,26 +6128,32 @@
     },
     {
       "x": 7,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 7,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31775
     },
     {
       "x": 7,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31
     },
     {
       "x": 7,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 7,
       "z": -5,
       "name": "Empty"
@@ -5832,25 +6186,25 @@
       "x": 7,
       "y": 12,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
       "y": 13,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
       "y": 14,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_White"
     },
     {
       "x": 7,
       "y": 15,
       "z": -5,
-      "name": "Cloth_Block_Wool_White"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5860,9 +6214,15 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5879,25 +6239,25 @@
     {
       "x": 7,
       "y": 4,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
-      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31807
     },
     {
       "x": 7,
-      "y": 6,
+      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 63
     },
     {
       "x": 7,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 7,
       "y": 7,
       "z": -4,
       "name": "Empty"
@@ -5930,13 +6290,13 @@
       "x": 7,
       "y": 12,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
       "y": 13,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -5958,9 +6318,15 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -6020,7 +6386,7 @@
       "x": 7,
       "y": 11,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -6032,7 +6398,7 @@
       "x": 7,
       "y": 13,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -6054,31 +6420,31 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 7,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 7,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 7,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 7,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -6086,15 +6452,21 @@
     },
     {
       "x": 7,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 7,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -6106,13 +6478,13 @@
       "x": 7,
       "y": 9,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
       "y": 10,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
@@ -6124,7 +6496,7 @@
       "x": 7,
       "y": 12,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -6152,9 +6524,15 @@
     },
     {
       "x": 7,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -6183,18 +6561,18 @@
     {
       "x": 7,
       "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 7,
-      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 7,
+      "y": 7,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Yellow_Light"
+    },
+    {
+      "x": 7,
       "y": 8,
       "z": -1,
       "name": "Cloth_Block_Wool_Yellow_Light"
@@ -6203,19 +6581,19 @@
       "x": 7,
       "y": 9,
       "z": -1,
-      "name": "Cloth_Block_Wool_Yellow_Light"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 7,
       "y": 10,
       "z": -1,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 7,
       "y": 11,
       "z": -1,
-      "name": "Cloth_Block_Wool_Yellow_Light"
+      "name": "Empty"
     },
     {
       "x": 7,
@@ -6249,9 +6627,15 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6268,12 +6652,6 @@
     {
       "x": 8,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 8,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Short",
       "support": 15,
@@ -6281,22 +6659,28 @@
     },
     {
       "x": 8,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 8,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 8,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 8,
+      "y": 8,
+      "z": -9,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
@@ -6314,7 +6698,7 @@
       "x": 8,
       "y": 11,
       "z": -9,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6348,9 +6732,16 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -8,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
     },
     {
       "x": 8,
@@ -6391,14 +6782,13 @@
       "x": 8,
       "y": 7,
       "z": -8,
-      "name": "Wood_Beech_Trunk",
-      "support": 15
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 8,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6416,13 +6806,13 @@
       "x": 8,
       "y": 11,
       "z": -8,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 12,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6450,19 +6840,19 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 8,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 8,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "Aetherhaven_Management_Block",
       "components": {
@@ -6476,9 +6866,15 @@
     },
     {
       "x": 8,
-      "y": 4,
+      "y": 3,
       "z": -7,
       "name": "Wood_Deadwood_Planks_Half"
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6526,13 +6922,13 @@
       "x": 8,
       "y": 12,
       "z": -7,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 13,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6554,9 +6950,15 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6573,22 +6975,22 @@
     {
       "x": 8,
       "y": 4,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 8,
-      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 32736
     },
     {
       "x": 8,
-      "y": 6,
+      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 992
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6624,13 +7026,13 @@
       "x": 8,
       "y": 12,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 13,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6652,19 +7054,19 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 8,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Furniture_Human_Ruins_Desk"
     },
     {
       "x": 8,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -6688,22 +7090,28 @@
     },
     {
       "x": 8,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 8,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31744
     },
     {
       "x": 8,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier"
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "z": -5,
+      "name": "Deco_Iron_Chain_Small"
     },
     {
       "x": 8,
@@ -6739,7 +7147,7 @@
       "x": 8,
       "y": 12,
       "z": -5,
-      "name": "Deco_Iron_Chain_Small"
+      "name": "Cloth_Block_Wool_White"
     },
     {
       "x": 8,
@@ -6751,7 +7159,7 @@
       "x": 8,
       "y": 14,
       "z": -5,
-      "name": "Cloth_Block_Wool_White"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6767,9 +7175,15 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6786,25 +7200,25 @@
     {
       "x": 8,
       "y": 4,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 8,
-      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31776
     },
     {
       "x": 8,
-      "y": 6,
+      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 32
     },
     {
       "x": 8,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 8,
       "y": 7,
       "z": -4,
       "name": "Empty"
@@ -6837,13 +7251,13 @@
       "x": 8,
       "y": 12,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 13,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6865,9 +7279,15 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6933,13 +7353,13 @@
       "x": 8,
       "y": 12,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 13,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -6961,32 +7381,32 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 8,
+      "y": 1,
+      "z": -2,
+      "name": "*Furniture_Village_Door_State_Definitions_CloseDoorOut"
+    },
+    {
+      "x": 8,
       "y": 2,
       "z": -2,
-      "name": "*Furniture_Village_Door_State_Definitions_CloseDoorIn"
+      "name": "*Furniture_Village_Door_State_Definitions_CloseDoorOut",
+      "filler": 1024
     },
     {
       "x": 8,
       "y": 3,
       "z": -2,
-      "name": "*Furniture_Village_Door_State_Definitions_CloseDoorIn",
-      "filler": 1024
-    },
-    {
-      "x": 8,
-      "y": 4,
-      "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 8,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -6994,6 +7414,13 @@
     },
     {
       "x": 8,
+      "y": 5,
+      "z": -2,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
+    },
+    {
+      "x": 8,
       "y": 6,
       "z": -2,
       "name": "Wood_Beech_Trunk",
@@ -7003,14 +7430,13 @@
       "x": 8,
       "y": 7,
       "z": -2,
-      "name": "Wood_Beech_Trunk",
-      "support": 15
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 8,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -7028,13 +7454,13 @@
       "x": 8,
       "y": 11,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 8,
       "y": 12,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -7062,9 +7488,15 @@
     },
     {
       "x": 8,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -7081,40 +7513,40 @@
     {
       "x": 8,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 8,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Short",
       "support": 15
     },
     {
       "x": 8,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 8,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 8,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 8,
-      "y": 9,
+      "y": 8,
       "z": -1,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 8,
@@ -7126,7 +7558,7 @@
       "x": 8,
       "y": 11,
       "z": -1,
-      "name": "Cloth_Block_Wool_Yellow_Light"
+      "name": "Empty"
     },
     {
       "x": 8,
@@ -7160,9 +7592,15 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7185,12 +7623,6 @@
     {
       "x": 9,
       "y": 5,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 9,
-      "y": 6,
       "z": -9,
       "name": "Plant_Vine_Wall",
       "support": 15,
@@ -7198,16 +7630,22 @@
     },
     {
       "x": 9,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 9,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "z": -9,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7225,7 +7663,7 @@
       "x": 9,
       "y": 11,
       "z": -9,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7259,31 +7697,31 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 9,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 9,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 9,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 9,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -7291,21 +7729,27 @@
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 9,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 9,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7317,7 +7761,7 @@
       "x": 9,
       "y": 10,
       "z": -8,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7329,7 +7773,7 @@
       "x": 9,
       "y": 12,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7357,28 +7801,34 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 9,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 9,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "Wood_Deadwood_Stairs",
       "rotation": 9
     },
     {
       "x": 9,
-      "y": 4,
+      "y": 3,
       "z": -7,
       "name": "Wood_Deadwood_Planks_Half"
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7420,7 +7870,7 @@
       "x": 9,
       "y": 11,
       "z": -7,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7432,7 +7882,7 @@
       "x": 9,
       "y": 13,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7454,9 +7904,15 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7473,22 +7929,22 @@
     {
       "x": 9,
       "y": 4,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 9,
-      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 32737
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -6,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 993
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7524,13 +7980,13 @@
       "x": 9,
       "y": 12,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
       "y": 13,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7552,19 +8008,19 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 9,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 9,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -7588,26 +8044,32 @@
     },
     {
       "x": 9,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 9,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31745
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 1
     },
     {
       "x": 9,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 9,
       "y": 7,
       "z": -5,
       "name": "Empty"
@@ -7640,13 +8102,13 @@
       "x": 9,
       "y": 12,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
       "y": 13,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7668,9 +8130,15 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7687,25 +8155,25 @@
     {
       "x": 9,
       "y": 4,
-      "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 9,
-      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 31777
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -4,
       "name": "Furniture_Tavern_Chandelier",
       "filler": 33
     },
     {
       "x": 9,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 9,
       "y": 7,
       "z": -4,
       "name": "Empty"
@@ -7738,13 +8206,13 @@
       "x": 9,
       "y": 12,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
       "y": 13,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7766,9 +8234,15 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7828,7 +8302,7 @@
       "x": 9,
       "y": 11,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7840,7 +8314,7 @@
       "x": 9,
       "y": 13,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7862,31 +8336,31 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 9,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 9,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 9,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 9,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -7894,15 +8368,21 @@
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 9,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "z": -2,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7914,13 +8394,13 @@
       "x": 9,
       "y": 9,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
       "y": 10,
       "z": -2,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
@@ -7932,7 +8412,7 @@
       "x": 9,
       "y": 12,
       "z": -2,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7960,9 +8440,15 @@
     },
     {
       "x": 9,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -7979,28 +8465,28 @@
     {
       "x": 9,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 9,
-      "y": 5,
       "z": -1,
       "name": "Plant_Vine_Wall",
       "support": 15
     },
     {
       "x": 9,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 9,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "z": -1,
+      "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 9,
@@ -8012,19 +8498,19 @@
       "x": 9,
       "y": 9,
       "z": -1,
-      "name": "Cloth_Block_Wool_Yellow_Light"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 9,
       "y": 10,
       "z": -1,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 9,
       "y": 11,
       "z": -1,
-      "name": "Cloth_Block_Wool_Yellow_Light"
+      "name": "Empty"
     },
     {
       "x": 9,
@@ -8058,9 +8544,15 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8077,12 +8569,6 @@
     {
       "x": 10,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 10,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Short",
       "support": 15,
@@ -8090,22 +8576,28 @@
     },
     {
       "x": 10,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 10,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 10,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8157,31 +8649,31 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 10,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 10,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 10,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 10,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -8189,21 +8681,27 @@
     },
     {
       "x": 10,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 10,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 10,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "z": -8,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
@@ -8221,7 +8719,7 @@
       "x": 10,
       "y": 11,
       "z": -8,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8255,25 +8753,31 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 10,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 10,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "Wood_Deadwood_Stairs",
       "rotation": 1
     },
     {
       "x": 10,
+      "y": 3,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 10,
       "y": 4,
       "z": -7,
       "name": "Empty"
@@ -8287,18 +8791,18 @@
     {
       "x": 10,
       "y": 6,
-      "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 10,
-      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 10,
+      "y": 7,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 10,
       "y": 8,
       "z": -7,
       "name": "Cloth_Block_Wool_Black"
@@ -8307,13 +8811,13 @@
       "x": 10,
       "y": 9,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
       "y": 10,
       "z": -7,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
@@ -8325,7 +8829,7 @@
       "x": 10,
       "y": 12,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8353,9 +8857,15 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8415,7 +8925,7 @@
       "x": 10,
       "y": 11,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
@@ -8427,7 +8937,7 @@
       "x": 10,
       "y": 13,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8449,19 +8959,19 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 10,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 10,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -8485,6 +8995,12 @@
     },
     {
       "x": 10,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 10,
       "y": 4,
       "z": -5,
       "name": "Empty"
@@ -8535,13 +9051,13 @@
       "x": 10,
       "y": 12,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
       "y": 13,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8563,9 +9079,15 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8625,7 +9147,7 @@
       "x": 10,
       "y": 11,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
@@ -8637,7 +9159,7 @@
       "x": 10,
       "y": 13,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8659,9 +9181,15 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8690,18 +9218,18 @@
     {
       "x": 10,
       "y": 6,
-      "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 10,
-      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 10,
+      "y": 7,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 10,
       "y": 8,
       "z": -3,
       "name": "Cloth_Block_Wool_Black"
@@ -8710,13 +9238,13 @@
       "x": 10,
       "y": 9,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
       "y": 10,
       "z": -3,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
@@ -8728,7 +9256,7 @@
       "x": 10,
       "y": 12,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8756,31 +9284,31 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 10,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 10,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 10,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 10,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -8788,39 +9316,45 @@
     },
     {
       "x": 10,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 10,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 10,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
     },
     {
       "x": 10,
-      "y": 9,
+      "y": 8,
       "z": -2,
       "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 10,
-      "y": 10,
+      "y": 9,
       "z": -2,
       "name": "Cloth_Block_Wool_Yellow_Light"
     },
     {
       "x": 10,
-      "y": 11,
+      "y": 10,
       "z": -2,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8854,9 +9388,15 @@
     },
     {
       "x": 10,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8873,34 +9413,34 @@
     {
       "x": 10,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 10,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Short",
       "support": 15
     },
     {
       "x": 10,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 10,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 10,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 10,
@@ -8952,9 +9492,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -8984,20 +9530,20 @@
       "x": 11,
       "y": 6,
       "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 11,
-      "y": 7,
-      "z": -9,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9049,18 +9595,24 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 11,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 11,
+      "y": 2,
+      "z": -8,
+      "name": "Furniture_Village_Window"
+    },
+    {
+      "x": 11,
       "y": 3,
       "z": -8,
       "name": "Furniture_Village_Window"
@@ -9068,12 +9620,6 @@
     {
       "x": 11,
       "y": 4,
-      "z": -8,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 11,
-      "y": 5,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -9081,21 +9627,27 @@
     },
     {
       "x": 11,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 11,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9147,9 +9699,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9179,20 +9737,20 @@
       "x": 11,
       "y": 6,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 11,
-      "y": 7,
-      "z": -7,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -7,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
@@ -9210,7 +9768,7 @@
       "x": 11,
       "y": 11,
       "z": -7,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9244,9 +9802,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9276,14 +9840,14 @@
       "x": 11,
       "y": 6,
       "z": -6,
-      "name": "Empty"
+      "name": "Wood_Softwood_Planks_Half",
+      "rotation": 8
     },
     {
       "x": 11,
       "y": 7,
       "z": -6,
-      "name": "Wood_Softwood_Planks_Half",
-      "rotation": 8
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
@@ -9295,13 +9859,13 @@
       "x": 11,
       "y": 9,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
       "y": 10,
       "z": -6,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
@@ -9313,7 +9877,7 @@
       "x": 11,
       "y": 12,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9341,19 +9905,19 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 11,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 11,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Aetherhaven_Shop_Spot",
       "components": {
@@ -9377,6 +9941,12 @@
     },
     {
       "x": 11,
+      "y": 3,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 11,
       "y": 4,
       "z": -5,
       "name": "Empty"
@@ -9391,20 +9961,20 @@
       "x": 11,
       "y": 6,
       "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 11,
-      "y": 7,
-      "z": -5,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -5,
       "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9422,13 +9992,13 @@
       "x": 11,
       "y": 11,
       "z": -5,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
       "y": 12,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9456,9 +10026,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9488,14 +10064,14 @@
       "x": 11,
       "y": 6,
       "z": -4,
-      "name": "Empty"
+      "name": "Wood_Softwood_Planks_Half",
+      "rotation": 8
     },
     {
       "x": 11,
       "y": 7,
       "z": -4,
-      "name": "Wood_Softwood_Planks_Half",
-      "rotation": 8
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
@@ -9507,13 +10083,13 @@
       "x": 11,
       "y": 9,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
       "y": 10,
       "z": -4,
-      "name": "Empty"
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 11,
@@ -9525,7 +10101,7 @@
       "x": 11,
       "y": 12,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9553,9 +10129,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9585,23 +10167,23 @@
       "x": 11,
       "y": 6,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 11,
-      "y": 7,
-      "z": -3,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Roof_Flat"
     },
     {
       "x": 11,
+      "y": 8,
+      "z": -3,
+      "name": "Cloth_Block_Wool_Black"
+    },
+    {
+      "x": 11,
       "y": 9,
       "z": -3,
       "name": "Cloth_Block_Wool_Black"
@@ -9616,7 +10198,7 @@
       "x": 11,
       "y": 11,
       "z": -3,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9650,15 +10232,21 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 11,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick_Mossy"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "z": -2,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 11,
@@ -9669,12 +10257,6 @@
     {
       "x": 11,
       "y": 4,
-      "z": -2,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 11,
-      "y": 5,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -9682,21 +10264,27 @@
     },
     {
       "x": 11,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Furniture_Village_Window"
     },
     {
       "x": 11,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9748,9 +10336,15 @@
     },
     {
       "x": 11,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9779,21 +10373,21 @@
     {
       "x": 11,
       "y": 6,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 11,
-      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Planks_Half",
       "rotation": 8
     },
     {
       "x": 11,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 11,
@@ -9845,9 +10439,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -9864,12 +10464,6 @@
     {
       "x": 12,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Short",
       "support": 15,
@@ -9877,22 +10471,28 @@
     },
     {
       "x": 12,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 12,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -9,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -9944,18 +10544,24 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 12,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick_Mossy"
     },
     {
       "x": 12,
+      "y": 2,
+      "z": -8,
+      "name": "Furniture_Village_Window"
+    },
+    {
+      "x": 12,
       "y": 3,
       "z": -8,
       "name": "Furniture_Village_Window"
@@ -9963,12 +10569,6 @@
     {
       "x": 12,
       "y": 4,
-      "z": -8,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 12,
-      "y": 5,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -9976,21 +10576,27 @@
     },
     {
       "x": 12,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 12,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -8,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10042,9 +10648,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10074,20 +10686,20 @@
       "x": 12,
       "y": 6,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 7,
-      "z": -7,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -7,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10139,9 +10751,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10171,20 +10789,20 @@
       "x": 12,
       "y": 6,
       "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 7,
-      "z": -6,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -6,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -6,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 12,
@@ -10202,7 +10820,7 @@
       "x": 12,
       "y": 11,
       "z": -6,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10236,18 +10854,24 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 12,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Fence_Gate"
     },
     {
       "x": 12,
+      "y": 2,
+      "z": -5,
+      "name": "Empty"
+    },
+    {
+      "x": 12,
       "y": 3,
       "z": -5,
       "name": "Empty"
@@ -10268,20 +10892,20 @@
       "x": 12,
       "y": 6,
       "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 7,
-      "z": -5,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -5,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -5,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 12,
@@ -10299,7 +10923,7 @@
       "x": 12,
       "y": 11,
       "z": -5,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10333,9 +10957,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10365,20 +10995,20 @@
       "x": 12,
       "y": 6,
       "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 7,
-      "z": -4,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -4,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -4,
+      "name": "Cloth_Block_Wool_Black"
     },
     {
       "x": 12,
@@ -10396,7 +11026,7 @@
       "x": 12,
       "y": 11,
       "z": -4,
-      "name": "Cloth_Block_Wool_Black"
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10430,9 +11060,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10462,20 +11098,20 @@
       "x": 12,
       "y": 6,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 7,
-      "z": -3,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -3,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10527,15 +11163,21 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 12,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "z": -2,
+      "name": "Furniture_Village_Window"
     },
     {
       "x": 12,
@@ -10546,12 +11188,6 @@
     {
       "x": 12,
       "y": 4,
-      "z": -2,
-      "name": "Furniture_Village_Window"
-    },
-    {
-      "x": 12,
-      "y": 5,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -10559,21 +11195,27 @@
     },
     {
       "x": 12,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 12,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -2,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10625,9 +11267,15 @@
     },
     {
       "x": 12,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10644,34 +11292,34 @@
     {
       "x": 12,
       "y": 4,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 12,
-      "y": 5,
       "z": -1,
       "name": "Wood_Beech_Branch_Short",
       "support": 15
     },
     {
       "x": 12,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 12,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 12,
-      "y": 8,
+      "y": 7,
       "z": -1,
       "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 12,
@@ -10723,9 +11371,15 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -10736,12 +11390,6 @@
     {
       "x": 13,
       "y": 3,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 4,
       "z": -9,
       "name": "Plant_Vine_Wall",
       "support": 15,
@@ -10749,23 +11397,29 @@
     },
     {
       "x": 13,
-      "y": 5,
+      "y": 4,
       "z": -9,
       "name": "Empty"
     },
     {
       "x": 13,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -9,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -10823,31 +11477,31 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 13,
-      "y": 2,
+      "y": 1,
       "z": -8,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 13,
-      "y": 3,
+      "y": 2,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 13,
-      "y": 4,
+      "y": 3,
       "z": -8,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 13,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -10855,16 +11509,22 @@
     },
     {
       "x": 13,
-      "y": 6,
+      "y": 5,
       "z": -8,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -8,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -10922,18 +11582,24 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 13,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": 13,
+      "y": 2,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 13,
       "y": 3,
       "z": -7,
       "name": "Empty"
@@ -10948,21 +11614,21 @@
       "x": 13,
       "y": 5,
       "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 6,
-      "z": -7,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -7,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11020,9 +11686,15 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Wood_Softwood_Planks"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11046,21 +11718,21 @@
       "x": 13,
       "y": 5,
       "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 6,
-      "z": -6,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -6,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11118,48 +11790,54 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 13,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Wood_Deadwood_Planks"
     },
     {
       "x": 13,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "Furniture_Human_Ruins_Candle"
     },
     {
       "x": 13,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "Furniture_Human_Ruins_Candle",
       "filler": 1024
     },
     {
       "x": 13,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Empty"
     },
     {
       "x": 13,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -5,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11217,18 +11895,24 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 13,
-      "y": 2,
+      "y": 1,
       "z": -4,
       "name": "Furniture_Tavern_Barrel"
     },
     {
       "x": 13,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 13,
       "y": 3,
       "z": -4,
       "name": "Empty"
@@ -11243,21 +11927,21 @@
       "x": 13,
       "y": 5,
       "z": -4,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 6,
-      "z": -4,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -4,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11315,12 +11999,18 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Wood_Softwood_Planks"
     },
     {
       "x": 13,
+      "y": 1,
+      "z": -3,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": 13,
       "y": 2,
       "z": -3,
       "name": "Furniture_Village_Crate"
@@ -11329,7 +12019,7 @@
       "x": 13,
       "y": 3,
       "z": -3,
-      "name": "Furniture_Village_Crate"
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11341,21 +12031,21 @@
       "x": 13,
       "y": 5,
       "z": -3,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 6,
-      "z": -3,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -3,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11413,31 +12103,31 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble_Mossy"
     },
     {
       "x": 13,
-      "y": 2,
+      "y": 1,
       "z": -2,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 13,
-      "y": 3,
+      "y": 2,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 13,
-      "y": 4,
+      "y": 3,
       "z": -2,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 13,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -11445,16 +12135,22 @@
     },
     {
       "x": 13,
-      "y": 6,
+      "y": 5,
       "z": -2,
       "name": "Wood_Village_Wall_Full"
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -2,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11512,9 +12208,15 @@
     },
     {
       "x": 13,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11537,22 +12239,22 @@
     {
       "x": 13,
       "y": 5,
-      "z": -1,
-      "name": "Empty"
-    },
-    {
-      "x": 13,
-      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Stairs",
       "rotation": 9
     },
     {
       "x": 13,
-      "y": 7,
+      "y": 6,
       "z": -1,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 13,
@@ -11610,9 +12312,15 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -11629,12 +12337,6 @@
     {
       "x": 14,
       "y": 4,
-      "z": -9,
-      "name": "Empty"
-    },
-    {
-      "x": 14,
-      "y": 5,
       "z": -9,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15,
@@ -11642,10 +12344,16 @@
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -9,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -11709,9 +12417,16 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "z": -8,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
     },
     {
       "x": 14,
@@ -11738,15 +12453,14 @@
       "x": 14,
       "y": 5,
       "z": -8,
-      "name": "Wood_Beech_Trunk",
-      "support": 15
+      "name": "Wood_Softwood_Roof",
+      "rotation": 1
     },
     {
       "x": 14,
       "y": 6,
       "z": -8,
-      "name": "Wood_Softwood_Roof",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -11810,31 +12524,31 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -7,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 14,
-      "y": 3,
+      "y": 2,
       "z": -7,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 14,
-      "y": 4,
+      "y": 3,
       "z": -7,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 14,
-      "y": 5,
+      "y": 4,
       "z": -7,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -11842,10 +12556,16 @@
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -7,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -11909,18 +12629,25 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -6,
       "name": "Rock_Stone_Brick_Mossy"
     },
     {
       "x": 14,
+      "y": 2,
+      "z": -6,
+      "name": "Furniture_Village_Window",
+      "rotation": 1
+    },
+    {
+      "x": 14,
       "y": 3,
       "z": -6,
       "name": "Furniture_Village_Window",
@@ -11930,23 +12657,22 @@
       "x": 14,
       "y": 4,
       "z": -6,
-      "name": "Furniture_Village_Window",
-      "rotation": 1
-    },
-    {
-      "x": 14,
-      "y": 5,
-      "z": -6,
       "name": "Wood_Beech_Trunk",
       "support": 15,
       "rotation": 4
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -6,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -12010,31 +12736,31 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -5,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 14,
-      "y": 3,
+      "y": 2,
       "z": -5,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 14,
-      "y": 4,
+      "y": 3,
       "z": -5,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 14,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -12042,10 +12768,16 @@
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -5,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -12109,15 +12841,22 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -4,
       "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "z": -4,
+      "name": "Furniture_Village_Window",
+      "rotation": 1
     },
     {
       "x": 14,
@@ -12130,23 +12869,22 @@
       "x": 14,
       "y": 4,
       "z": -4,
-      "name": "Furniture_Village_Window",
-      "rotation": 1
-    },
-    {
-      "x": 14,
-      "y": 5,
-      "z": -4,
       "name": "Wood_Beech_Trunk",
       "support": 15,
       "rotation": 4
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -4,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -12210,31 +12948,31 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -3,
       "name": "Rock_Stone_Brick"
     },
     {
       "x": 14,
-      "y": 3,
+      "y": 2,
       "z": -3,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Bottom"
     },
     {
       "x": 14,
-      "y": 4,
+      "y": 3,
       "z": -3,
       "name": "*Wood_Village_Wall_Full_State_Definitions_Top"
     },
     {
       "x": 14,
-      "y": 5,
+      "y": 4,
       "z": -3,
       "name": "Wood_Beech_Trunk",
       "support": 15,
@@ -12242,10 +12980,16 @@
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -3,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -12309,9 +13053,16 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "z": -2,
+      "name": "Wood_Beech_Trunk",
+      "support": 15
     },
     {
       "x": 14,
@@ -12338,15 +13089,14 @@
       "x": 14,
       "y": 5,
       "z": -2,
-      "name": "Wood_Beech_Trunk",
-      "support": 15
+      "name": "Wood_Softwood_Roof",
+      "rotation": 1
     },
     {
       "x": 14,
       "y": 6,
       "z": -2,
-      "name": "Wood_Softwood_Roof",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 14,
@@ -12410,45 +13160,51 @@
     },
     {
       "x": 14,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
     },
     {
       "x": 14,
-      "y": 2,
+      "y": 1,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 14,
-      "y": 3,
+      "y": 2,
       "z": -1,
       "name": "Plant_Vine_Wall",
       "support": 15
     },
     {
       "x": 14,
-      "y": 4,
+      "y": 3,
       "z": -1,
       "name": "Empty"
     },
     {
       "x": 14,
-      "y": 5,
+      "y": 4,
       "z": -1,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15
     },
     {
       "x": 14,
-      "y": 6,
+      "y": 5,
       "z": -1,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
     },
     {
       "x": 14,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 14,
       "y": 7,
       "z": -1,
       "name": "Empty"
@@ -12509,9 +13265,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -9,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -9,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12529,14 +13291,14 @@
       "x": 15,
       "y": 4,
       "z": -9,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
     },
     {
       "x": 15,
       "y": 5,
       "z": -9,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12606,9 +13368,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -8,
       "name": "Rock_Stone_Cobble_Mossy"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -8,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12619,12 +13387,6 @@
     {
       "x": 15,
       "y": 3,
-      "z": -8,
-      "name": "Empty"
-    },
-    {
-      "x": 15,
-      "y": 4,
       "z": -8,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15,
@@ -12632,13 +13394,19 @@
     },
     {
       "x": 15,
-      "y": 5,
+      "y": 4,
       "z": -8,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
     },
     {
       "x": 15,
+      "y": 5,
+      "z": -8,
+      "name": "Empty"
+    },
+    {
+      "x": 15,
       "y": 6,
       "z": -8,
       "name": "Empty"
@@ -12705,9 +13473,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -7,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -7,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12724,18 +13498,18 @@
     {
       "x": 15,
       "y": 4,
-      "z": -7,
-      "name": "Empty"
-    },
-    {
-      "x": 15,
-      "y": 5,
       "z": -7,
       "name": "Wood_Softwood_Roof_Hollow",
       "rotation": 1
     },
     {
       "x": 15,
+      "y": 5,
+      "z": -7,
+      "name": "Empty"
+    },
+    {
+      "x": 15,
       "y": 6,
       "z": -7,
       "name": "Empty"
@@ -12802,9 +13576,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -6,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -6,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12821,18 +13601,18 @@
     {
       "x": 15,
       "y": 4,
-      "z": -6,
-      "name": "Empty"
-    },
-    {
-      "x": 15,
-      "y": 5,
       "z": -6,
       "name": "Wood_Softwood_Roof_Hollow",
       "rotation": 1
     },
     {
       "x": 15,
+      "y": 5,
+      "z": -6,
+      "name": "Empty"
+    },
+    {
+      "x": 15,
       "y": 6,
       "z": -6,
       "name": "Empty"
@@ -12899,9 +13679,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -5,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12912,12 +13698,6 @@
     {
       "x": 15,
       "y": 3,
-      "z": -5,
-      "name": "Empty"
-    },
-    {
-      "x": 15,
-      "y": 4,
       "z": -5,
       "name": "Plant_Vine_Wall",
       "support": 15,
@@ -12925,10 +13705,16 @@
     },
     {
       "x": 15,
-      "y": 5,
+      "y": 4,
       "z": -5,
       "name": "Wood_Softwood_Roof_Hollow",
       "rotation": 1
+    },
+    {
+      "x": 15,
+      "y": 5,
+      "z": -5,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -12998,9 +13784,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -4,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13018,14 +13810,14 @@
       "x": 15,
       "y": 4,
       "z": -4,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
     },
     {
       "x": 15,
       "y": 5,
       "z": -4,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13095,9 +13887,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -3,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13115,14 +13913,14 @@
       "x": 15,
       "y": 4,
       "z": -3,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
     },
     {
       "x": 15,
       "y": 5,
       "z": -3,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13192,9 +13990,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -2,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13205,12 +14009,6 @@
     {
       "x": 15,
       "y": 3,
-      "z": -2,
-      "name": "Empty"
-    },
-    {
-      "x": 15,
-      "y": 4,
       "z": -2,
       "name": "Wood_Beech_Branch_Corner",
       "support": 15,
@@ -13218,10 +14016,16 @@
     },
     {
       "x": 15,
-      "y": 5,
+      "y": 4,
       "z": -2,
       "name": "Wood_Softwood_Roof",
       "rotation": 1
+    },
+    {
+      "x": 15,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13291,9 +14095,15 @@
     },
     {
       "x": 15,
-      "y": 1,
+      "y": 0,
       "z": -1,
       "name": "Rock_Stone_Cobble"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13311,14 +14121,14 @@
       "x": 15,
       "y": 4,
       "z": -1,
-      "name": "Empty"
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
     },
     {
       "x": 15,
       "y": 5,
       "z": -1,
-      "name": "Wood_Softwood_Roof_Hollow",
-      "rotation": 1
+      "name": "Empty"
     },
     {
       "x": 15,
@@ -13385,6 +14195,599 @@
       "y": 16,
       "z": -1,
       "name": "Empty"
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 8.931035995483398,
+            "Y": 3.4932327270507812,
+            "Z": -6.491161346435547
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9978567361831665,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Ingredient_Powder_Boom",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.9978563785552979,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 7.985733985900879,
+            "Y": 3.5046768188476562,
+            "Z": -6.4416656494140625
+          },
+          "Rotation": {
+            "Pitch": 0.14999358355998993,
+            "Yaw": 2.19307279586792,
+            "Roll": 0.10678723454475403
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.14999371767044067,
+            "Yaw": 2.1930720806121826,
+            "Roll": 0.10678716003894806
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 9.61922836303711,
+            "Y": 3.5046768188476562,
+            "Z": -6.4416656494140625
+          },
+          "Rotation": {
+            "Pitch": -0.030199801549315453,
+            "Yaw": -3.464296817779541,
+            "Roll": 0.1674160659313202
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.03019886091351509,
+            "Yaw": -3.464297294616699,
+            "Roll": 0.16741614043712616
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 8.574987411499023,
+            "Y": 3.4955291748046875,
+            "Z": -6.357368469238281
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.640582799911499,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Ingredient_Powder_Boom",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.640582799911499,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 7.3764848709106445,
+            "Y": 3.5046539306640625,
+            "Z": -6.441661834716797
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.796621561050415,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.796621561050415,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 4.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6lQUzWjMMsCFg0YGtZwNsA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Ingredient_Powder_Boom",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 5.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "rzv63shcNxOgpaIBYb6eXg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 6.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "YrxwkWWmPgKdFSEKuvuULA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 7.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "53jtDjTMO8i3NXHbDgv0fw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 8.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "DKjWLFIKMRqOeW8vnuERbw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 11.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "zjo4SGt6NPyqUEt1cGFOyg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb_Stun",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 9.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hkIJuB0QOAuAe1onhDjYqw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb_Popberry",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 10.5,
+            "Y": 2.219999999999999,
+            "Z": -4.5
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "ysEsBOTEN0O8npvB+OQyRA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "Intangible": {},
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Bomb_Potion_Poison",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.1415927410125732,
+            "Roll": 0.0
+          }
+        }
+      }
     }
   ]
 }

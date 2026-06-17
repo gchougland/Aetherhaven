@@ -217,6 +217,7 @@ public final class ProductionUpgradeTreeUi {
         boolean ingotOk = heldIngot >= needIngot;
         Message ingotLine =
             t("aetherhaven.ui.productionUpgrades.tooltip.ingotNeed")
+                .param("item", UiMaterialLabels.itemNameMessage(ingot))
                 .param("held", String.valueOf(heldIngot))
                 .param("need", String.valueOf(needIngot))
                 .color(ingotOk ? TOOLTIP_OK : TOOLTIP_BAD);

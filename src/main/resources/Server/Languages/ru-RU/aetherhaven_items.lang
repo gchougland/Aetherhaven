@@ -16,61 +16,61 @@ items.Aetherhaven_Hunting_Knife.description=Острый нож для охот�
 items.Aetherhaven_Lute.name=лютня
 items.Aetherhaven_Lute.description=Деревянная лютня с тёплыми струнами. Элиас Торнвуд всегда держит одну такую при себе, когда играет в зале гильдии.
 
-items.Aetherhaven_Wood_Scaffold.name=Строительные леса
-items.Aetherhaven_Wood_Scaffold.description=Можно взбираться как по лестнице. ПКМ размещает их как обычный блок. Задержите клавишу "Использовать" (F) пока смотрите на блок, чтобы нарастить столб с верхней части. Разрушение нижней части приведёт к разрушению всех верхних блоков.
-items.Aetherhaven_Wood_Scaffold.legendUse=Нажатие F: увеличить колонну сверху. ПКМ: обычная установка блока.
+items.Aetherhaven_Wood_Scaffold.name=Деревянные строительные леса
+items.Aetherhaven_Wood_Scaffold.description=Поднимайтесь, как по лестнице. Щелкните правой кнопкой мыши, чтобы разместить блок, как обычный. Удерживайте клавишу Use (F), целясь в строительные леса, чтобы расширить башню сбоку или сделать горизонтальные ответвления от верхней грани. Разрушение нижней незакрепленной части приводит к обрушению всей конструкции.
+items.Aetherhaven_Wood_Scaffold.legendUse=Используйте клавишу (F): вытяните башню/ветку сверху, нацелившись на строительные леса. Щелчок правой кнопкой мыши: обычное размещение блоков.
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
-items.Aetherhaven_Plot_Sign.name=Знак участка
-items.Aetherhaven_Plot_Sign.description=Отмечает место для установки постройки. Вы можете скрафтить жетоны построек на столе планирования.
+items.Aetherhaven_Plot_Sign.name=Указатель участка
+items.Aetherhaven_Plot_Sign.description=Отмечает места, где можно разместить здание. Создавайте жетоны участка на верстаке для создания участков.
 
 items.Aetherhaven_Charter.name=Устав города
-items.Aetherhaven_Charter.description=Разместите чтобы основать город. Каждый игрок может владеть только одним городом на мир. Используйте чтобы просмотреть информацию о городе.
+items.Aetherhaven_Charter.description=Место для основания города. Каждый игрок может иметь один город на одном мире. Используйте для открытия информации о городе.
 
-items.Aetherhaven_Town_Planning_Desk.name=Стол планирования
-items.Aetherhaven_Town_Planning_Desk.description=Стол планирования города. Устав города, жетоны построек, строительные леса и другие рецепты. Можно создать на верстаке.
+items.Aetherhaven_Town_Planning_Desk.name=отдел городского планирования
+items.Aetherhaven_Town_Planning_Desk.description=Градостроительный верстак. Уставы, строительные доски, верстак для создания участков и связанные с ними рецепты. Создавайте предметы на верстаке.
 items.Aetherhaven_Plot_Crafting_Bench.name=Верстак для создания сюжетов
 items.Aetherhaven_Plot_Crafting_Bench.description=Создавайте жетоны участков для зданий и украшений. Используйте их, чтобы выбрать здание, просмотреть его и заплатить золотом за жетон. Создавайте жетоны за столом городского планирования.
-items.Aetherhaven_Charter_Amendments_Table.name=Стол правок Устава
-items.Aetherhaven_Charter_Amendments_Table.description=Здесь задаётся расчёт налогов и какие возможности даёт Устав. Используйте чтобы редактировать Устав. <color is="#ffa726">Вы должны сами открыть этот рецепт</color>.
-items.Aetherhaven_Banquet_Table.name=Банектный стол
-items.Aetherhaven_Banquet_Table.description=Большой стол для хороших пиршеств. Разместите его в городе чтобы проводить общественные застолья. Можно создать на Столе Планирования когда кто-то поделится рецептом крафта.
-items.Aetherhaven_Founder_Monument.name=Статуя основателя
-items.Aetherhaven_Founder_Monument.description=Каменный постамент изображающий основателя города. Разместите в городе чтобы воспеть его. Благодаря статуе утрений налог немного увеличится. Может быть только одна в городе.
+items.Aetherhaven_Charter_Amendments_Table.name=таблица поправок к Уставу
+items.Aetherhaven_Charter_Amendments_Table.description=Записывает, как подсчитывается десятина в городе и какие виды торговли поддерживает устав. Используйте для открытия поправок, как только ваше население их поддержит. Создавайте на своем столе городского планирования; <color is="#ffa726">вы должны знать схему</color>.
+items.Aetherhaven_Banquet_Table.name=Банкетный стол
+items.Aetherhaven_Banquet_Table.description=Длинный стол для городских пиршеств. Разместите его на своей территории и используйте для сервировки городского пира. Создайте его за столом городского планирования, как только кто-нибудь в городе поделится с вами шаблоном.
+items.Aetherhaven_Founder_Monument.name=Памятник основателю
+items.Aetherhaven_Founder_Monument.description=Каменный постамент с изображением основателя. Устанавливается на территории города в знак уважения; утренняя доля казны немного увеличивается, пока постамент стоит. Только один на город.
 items.Aetherhaven_Inn_Bell.name=колокол гостиницы
 items.Aetherhaven_Inn_Bell.description=Позвоните, чтобы позвать гостей гостиницы обратно в гостевую зону.
 
 items.Aetherhaven_Smokestack.name=Дымовая труба
 items.Aetherhaven_Smokestack.description=Разместите на дымоходах и крышах, чтобы получить постоянный клубящийся дым. В установленном виде устройство незаметно.
 
-benchCategories.aetherhaven.town_planning=Планирование города
-benchCategories.aetherhaven.plot_tokens=Жетоны постройки
+benchCategories.aetherhaven.town_planning=Градостроительство
+benchCategories.aetherhaven.plot_tokens=Токены сюжета
 
-items.Aetherhaven_Plot_Placement_Tool.name=Посох размещения построек
-items.Aetherhaven_Plot_Placement_Tool.description=Возьмите нужный жетон в свой инвентарь. Используйте этот посох пока смотрите на поврхность чтобы создать образ постройки. Передвигайте и вращайте его чтобы поставить на нужное место. Можно выйти из предпросмотра и вернутся в него в любое время снова использовав посох.
+items.Aetherhaven_Plot_Placement_Tool.name=Персонал по размещению участков
+items.Aetherhaven_Plot_Placement_Tool.description=Храните соответствующий жетон участка в сумке. Используйте этот посох, целясь в землю, чтобы увидеть призрак здания. Подталкивайте и поворачивайте его, пока он не подойдет, затем подтвердите, чтобы закрепить участок. Отмените действие, чтобы очистить предварительный просмотр, и используйте посох снова, когда вам понадобится другое место.
 
-items.Aetherhaven_Wall_Wand.name=Посох стен
-items.Aetherhaven_Wall_Wand.description=Размещайте стены в своём городе. ПКМ открывает режим просмотра сверху для создания стен, башен и ворот. ЛКМ позволяет изменить или удалить уже достроенную стену. Для каждой части стены создаётся свой указатель и строительство происходит так же как и с другими зданиями.
-items.Aetherhaven_Token_Wall.name=Маркер стены
-items.Aetherhaven_Token_Wall.description=Показывает на стены которые нужно посторить. Не берётся из инвентаря.
+items.Aetherhaven_Wall_Wand.name=Настенная палочка
+items.Aetherhaven_Wall_Wand.description=Планируйте каменные стены вокруг вашего города. Вторичное использование открывает вид сверху на элементы каменной стены, ворот и башен. Основное использование существующего участка позволяет расширить или убрать стену. Для каждого участка используется табличка с указанием места, и он строится так же, как и другие городские участки.
+items.Aetherhaven_Token_Wall.name=Настенный маркер
+items.Aetherhaven_Token_Wall.description=Отображается на табличках на стене во время размещения. Не используется из вашего инвентаря.
 items.Aetherhaven_Token_Wall_Gate.name=Маркер ворот
-items.Aetherhaven_Token_Wall_Gate.description=Показывает на ворота которые нужно посторить. Не берётся из инвентаря.
+items.Aetherhaven_Token_Wall_Gate.description=Отображается на табличках у ворот во время размещения. Не используется из вашего инвентаря.
 items.Aetherhaven_Token_Wall_Tower.name=Маркер башни
-items.Aetherhaven_Token_Wall_Tower.description=Показывает на башню которую нужно посторить. Не берётся из инвентаря.
+items.Aetherhaven_Token_Wall_Tower.description=Отображается на табличках участка башни во время размещения. Не используется из вашего инвентаря.
 
-items.Aetherhaven_Poi_Tool.name=Инструмент отладки Точек Интереса
-items.Aetherhaven_Poi_Tool.description=Показывает Точки Интереса города пока держишь (Необходимые права: <color is="#5AB5B5">aetherhaven.poi.tool</color>). ЛКМ: выбрать ближайшую Точку Интереса. ПКМ: передвинуть Точку Интереса. Клавиша F: установка/удаление маршрута для выбранной Точки Интереса.
-items.Aetherhaven_Poi_Tool.legendTitle=Инструмент Точек Интереса
-items.Aetherhaven_Poi_Tool.legendPrimary=ЛКМ: выберите ближайшую Точку Интереса
-items.Aetherhaven_Poi_Tool.legendSecondary=ПКМ: передвинуть Точку Интереса
-items.Aetherhaven_Poi_Tool.legendUse=Клавиша F: установить Точку Интереса для НПС (используется и для удаления)
+items.Aetherhaven_Poi_Tool.name=инструмент отладки POI
+items.Aetherhaven_Poi_Tool.description=Редактируйте точки интереса в городе, размещайте новые маркеры точек интереса в префабах и устанавливайте маркеры появления искателей приключений (права доступа: <color is="#5AB5B5">aetherhaven.poi.tool</color>). Нажмите Q для переключения режимов.
+items.Aetherhaven_Poi_Tool.legendTitle=инструмент POI
+items.Aetherhaven_Poi_Tool.legendPrimary=Основной: выберите ближайшую точку интереса (POI) рядом с кварталом.
+items.Aetherhaven_Poi_Tool.legendSecondary=Вторичная функция: переместить выбранную точку интереса в блок.
+items.Aetherhaven_Poi_Tool.legendUse=Применение: установить целевой путь NPC для выбранной точки интереса (используйте при очистке блоков точек интереса).
 
-aetherhaven.poiTool.legendTitle=Инструмент Точек Интереса
+aetherhaven.poiTool.legendTitle=инструмент POI
 aetherhaven.poiTool.legendModeCycle=В: переключение между достопримечательностями и местами для искателей приключений
 aetherhaven.poiTool.legendPoiHeader=режим точек интереса
-aetherhaven.poiTool.legendPrimary=Primary: Выбрать ближайшую Точку Интереса
-aetherhaven.poiTool.legendSecondaryPoi=Вторичная задача: переместить выбранную точку интереса в блок.
-aetherhaven.poiTool.legendUse=Use: Установить Точку Интереса для НПС
+aetherhaven.poiTool.legendPrimary=Основной: выберите ближайшую точку интереса (POI) рядом с кварталом.
+aetherhaven.poiTool.legendSecondaryPoi=Вторичная функция: переместить выбранную точку интереса в блок.
+aetherhaven.poiTool.legendUse=Применение: установить целевой путь NPC для выбранной точки интереса (используйте при очистке блоков точек интереса).
 aetherhaven.poiTool.legendSpawnHeader=Режим мест приключений
 aetherhaven.poiTool.legendSecondarySpawn=Второстепенная функция: разместить точку над блоком или удалить точку, на которую вы нажимаете.
 aetherhaven.poiTool.modeCycledToEdit=Переключился в режим редактирования точек интереса.
@@ -88,21 +88,21 @@ aetherhaven.poiTool.hudHelpRemove=Вторичный шаг: удалить бл
 aetherhaven.poiTool.hudHelpAdventurerSpots=Вторичный вариант: разместите точку над блоком, обращенным к вам, или удалите соседнюю точку.
 aetherhaven.poiTool.hudHint=В: редактирование/размещение/удаление циклов/места для искателей приключений
 
-aetherhaven.pathTool.legendPageTitle=Инструмент тропинок
-aetherhaven.pathTool.legendBlurb=Простройте кривую, просмотрите её и подтвердите. Пока вы удерживаете инструмент, в углу экрана отображается панель состояния. При установке мода MHUD от Buuz135 панель регистрируется как отдельный слой, поэтому другие моды также останутся видимыми.
-aetherhaven.pathTool.legendHotkeyAdd=ПКМ по земле добавляет точку (золотая сфера). ПКМ по существующей точке удаляет её. Новые точки смотрят в сторону взгляда игрока.
-aetherhaven.pathTool.legendHotkeyAim=Выберите точку. В режиме перемещения ЛКМ по земле перемещает точку. ЛКМ по самой точке не делает ничего.
-aetherhaven.pathTool.legendHotkeyUse=Клавиша F: в режиме вращения, делает поворот вокруг оси для точки. В режиме перемещения не делает ничего. В режиме размещения, F создаёт тропинку (необходимо несколько точек). Q: переключить режим. E: установить ширину тропы (от 1 до 8). R: стиль тропы. ПКМ по точке удаляет её.
-aetherhaven.pathTool.legendHotkeyCrouchUse=Опционально: приседание больше не нужно для смены режима; Используйте клавишу Q.
-aetherhaven.pathTool.legendVisuals=Предпросмотр: белым цветом показаны точки и кривая, коричневым - внутренняя часть тропы, зелёным - внешняя часть; красным - если размещение не доступно. Дорога будет отмечена плиточками на земле. Нажатие E меняет ширину (от 1 до 8). Нажатие R меняет стиль. При создании тропинки вся растительность над ней будет уничтожена.
-aetherhaven.pathTool.statusHeader=Пока инструмент в руке
-aetherhaven.pathTool.statusLine1=При добавлении точек, переключении режима или строительстве в чат выводятся соответствующие уведомления
-aetherhaven.pathTool.statusLine2=Выделение: кликните по сфере. Промах не удаляет текущее выделение. Q переключает режимы; Клавиша E переключает ширину; Клавиша R меняет стиль.
+aetherhaven.pathTool.legendPageTitle=Инструмент «Путь»
+aetherhaven.pathTool.legendBlurb=Создайте контур, просмотрите его, а затем разместите. Во время удержания инструмента появится панель состояния.
+aetherhaven.pathTool.legendHotkeyAdd=Прицеливание из дополнительного оружия на земле добавляет узел. Прицеливание из дополнительного оружия во время прицеливания удаляет узел.
+aetherhaven.pathTool.legendHotkeyAim=Основной узел выбирает узел. В режиме перемещения основной узел на земле перемещает выбранный узел.
+aetherhaven.pathTool.legendHotkeyUse=Q переключает режимы: Перемещение, Вращение, Размещение, Удаление, Конструктор стилей. F меняет режимы: смещение направления, размещение контура, удаление контура или открытие менеджера стилей. E переключает ширину. R переключает стиль.
+aetherhaven.pathTool.legendHotkeyCrouchUse=Для смены режима используйте клавишу Q вместо приседания.
+aetherhaven.pathTool.legendVisuals=Предварительный просмотр: белые узлы и линия, коричневый контур, зеленые ребра. В режиме удаления размещенные контуры отображаются оранжевым цветом. Конструктор стилей открывает сетку сундука для создания стилей контуров.
+aetherhaven.pathTool.statusHeader=Удерживая инструмент
+aetherhaven.pathTool.statusLine1=При добавлении баллов, переключении режима (Q) или закреплении в режиме подтверждения появляются всплывающие уведомления и сообщения в чате.
+aetherhaven.pathTool.statusLine2=Выделение: наведите прицел на сферу. Промах сохраняет текущее выделение. Q переключает режим; вторая способность переключает ширину; третья способность переключает стиль пути.
 
-aetherhaven.pathTool.hudTitle=Инструмент тропинок
-aetherhaven.pathTool.hudNameTranslate=Перемещать
-aetherhaven.pathTool.hudNameRotate=Вращать
-aetherhaven.pathTool.hudNameCommit=Установить
+aetherhaven.pathTool.hudTitle=Инструмент «Путь»
+aetherhaven.pathTool.hudNameTranslate=Двигаться
+aetherhaven.pathTool.hudNameRotate=Повернуть
+aetherhaven.pathTool.hudNameCommit=Место
 aetherhaven.pathTool.hudNameRemove=Удалять
 aetherhaven.pathTool.hudNameStyleDesigner=дизайнер стиля
 aetherhaven.pathTool.hudDescTranslate=Добавляйте и перемещайте узлы, чтобы формировать свой путь.
@@ -110,9 +110,9 @@ aetherhaven.pathTool.hudDescRotate=Поверните выбранный узе�
 aetherhaven.pathTool.hudDescCommit=Когда будете готовы, проложите дорожку на земле.
 aetherhaven.pathTool.hudDescRemove=Просматривайте созданные пути и удаляйте те, которые вам больше не нужны.
 aetherhaven.pathTool.hudDescStyleDesigner=Создавайте и редактируйте стили контуров с помощью сетки сундука.
-aetherhaven.pathTool.hudStyle=Выбранный стиль: {style}
-aetherhaven.pathTool.hudWidth=Выбранная ширина: {w} блоков (E чтобы поменять)
-aetherhaven.pathTool.hudNodes=Количество точек: {n}
+aetherhaven.pathTool.hudStyle=Стиль: {style}
+aetherhaven.pathTool.hudWidth=Ширина: {w} блоков
+aetherhaven.pathTool.hudNodes=Узлы: {n}
 aetherhaven.pathTool.hudPlaceReminder=Переключитесь в режим «Разместить», чтобы проложить путь.
 
 aetherhaven.pathTool.hud.move.primary=Выберите узел, затем щелкните по земле, чтобы переместить его.
@@ -145,57 +145,57 @@ aetherhaven.pathTool.hud.styleDesigner.fContinue=Откройте сундук, 
 aetherhaven.pathTool.hud.styleDesigner.eSave=Сохранить стиль пути
 aetherhaven.pathTool.hud.styleDesigner.q=Следующий режим
 aetherhaven.pathTool.hud.styleDesigner.infoColumns=Левые столбцы заполняются от левого края внутрь, правые столбцы — от правого края внутрь, а средний столбец заполняет центр контура.
-aetherhaven.pathTool.hud.styleDesigner.infoRows=Располагайте блоки в столбик, чтобы выбирать между ними.
+aetherhaven.pathTool.hud.styleDesigner.infoRows=Чтобы выбирать между блоками, располагайте их в столбик.
 aetherhaven.pathTool.hud.styleDesigner.infoWeight=Чем больше одинаковых блоков в столбце, тем чаще они появляются.
 
-aetherhaven.pathTool.addedNode=Точка {n} была размещена.
-aetherhaven.pathTool.modeCycledToTranslate=Режим: создание и перемещение точек.
-aetherhaven.pathTool.modeCycledToRotate=Режим: поворот. Нажмите F чтобы повернуть точку по оси.
-aetherhaven.pathTool.modeCycledToCommit=Режим: установка. Нажмите F чтобы подтвердить установку тропы (необходимо несколько точек).
+aetherhaven.pathTool.addedNode=Узел {n} добавлен.
+aetherhaven.pathTool.modeCycledToTranslate=Режим: Перемещение
+aetherhaven.pathTool.modeCycledToRotate=Режим: Поворот
+aetherhaven.pathTool.modeCycledToCommit=Режим: Место
 aetherhaven.pathTool.modeCycledToRemove=Режим: Удалить
 aetherhaven.pathTool.modeCycledToStyleDesigner=Режим: Дизайнер стиля
-aetherhaven.pathTool.widthCycled=Ширина тропы: {w} (от 1 до 8)
-aetherhaven.pathTool.styleCycled=Стиль тропы: {style}
-aetherhaven.pathTool.toastStyleCycled=Стиль тропы был изменён
-aetherhaven.pathTool.useInTranslateMode=Клавиша F не делает ничего в режиме перемещения. Нажмите Q чтобы сменить режим, а затем F чтобы вращать или подтвердить установку тропы.
-aetherhaven.pathTool.rotateNoSelection=Выберите точку (наведитесь на золотую сферу) чтобы вращать её или нажмите Q чтобы изменить режим.
+aetherhaven.pathTool.widthCycled=Ширина пути: {w}
+aetherhaven.pathTool.styleCycled=Стиль пути: {style}
+aetherhaven.pathTool.toastStyleCycled=Стиль пути изменен
+aetherhaven.pathTool.useInTranslateMode=Нажимайте клавишу Q, пока не перейдете в режим «Разместить», затем нажмите клавишу F, чтобы разместить контур.
+aetherhaven.pathTool.rotateNoSelection=Сначала выберите узел или нажмите Q, чтобы изменить режим.
 aetherhaven.pathTool.wrongMode=В этом режиме ввод данных не работает. Нажмите Q для смены режима.
 aetherhaven.pathTool.modeToggled=Режим: {m}
-aetherhaven.pathTool.selectedNode=Точка выбрана.
-aetherhaven.pathTool.movedNode=Точка была перемещена.
-aetherhaven.pathTool.noNodeHit=Нет точек вблизи. В режиме перемещения выберите точку и используйте ЛКМ по земле чтобы переместить её.
-aetherhaven.pathTool.noNodeOnAim=Вы не навелись на точку. Наведитесь на золотую сферу чтобы выбрать. Выделение не сброшено.
-aetherhaven.pathTool.toastAdd=Точка добавлена
-aetherhaven.pathTool.toastModeTranslate=Перемещение: ЛКМ по блоку перемещает выделение; ЛКМ добавляет точку.
-aetherhaven.pathTool.toastModeRotate=Вращение: клавиша F вращает выбранную точку по оси.
-aetherhaven.pathTool.toastModeCommit=Установка: клавиша F размещает тропу (необходимо несколько точек). Перключить режим - Q.
+aetherhaven.pathTool.selectedNode=Узел выбран.
+aetherhaven.pathTool.movedNode=Узел перемещен.
+aetherhaven.pathTool.noNodeHit=В зоне действия нет управляющего узла. В режиме перемещения с выбранным узлом попробуйте переместить основной узел на земле.
+aetherhaven.pathTool.noNodeOnAim=На перекрестии нет узла. Выделение не изменено.
+aetherhaven.pathTool.toastAdd=Добавлена контрольная точка
+aetherhaven.pathTool.toastModeTranslate=Режим перемещения
+aetherhaven.pathTool.toastModeRotate=Режим поворота
+aetherhaven.pathTool.toastModeCommit=Режим размещения
 aetherhaven.pathTool.toastModeRemove=Удалить режим
 aetherhaven.pathTool.toastModeStyleDesigner=режим дизайнера стиля
-aetherhaven.pathTool.toastMoved=Позиция точки обновлена
-aetherhaven.pathTool.toastRemoved=Точка удалена
-aetherhaven.pathTool.toastRotated=Вращение обновлено
-aetherhaven.pathTool.toastCemented=Тропа установлена. Проверьте чат для id отмены.
+aetherhaven.pathTool.toastMoved=Положение узла обновлено
+aetherhaven.pathTool.toastRemoved=Контрольная точка удалена
+aetherhaven.pathTool.toastRotated=Направление скорректировано
+aetherhaven.pathTool.toastCemented=Путь проложен
 aetherhaven.pathTool.toastRemovedPath=Путь удален
-aetherhaven.pathTool.rotated=Вращение на {deg}°.
-aetherhaven.pathTool.removedNode=Точка удалена. Осталось: {n}
-aetherhaven.pathTool.needTwoNodes=Необходимо как минимум несколько точек. Добавьте ещё одну на ПКМ или нажмите клавишу Q чтобы выйти из режима установки тропы.
-aetherhaven.pathTool.emptyPlan=Поверхность не была найдена вдоль всей тропы (крутые склоны / пустота / непрогруженные чанки).
-aetherhaven.pathTool.cementFail=Нечего устанавливать: заменяемая поверхность не найдена или установка не была совершена.
-aetherhaven.pathTool.cemented=Тропа размещена. Id для отмены: {id} (Для этого используйте /ah path revert <id>)
-aetherhaven.pathTool.removeSelected=Выбранный путь.
+aetherhaven.pathTool.rotated=Повернуто на {deg} градусов.
+aetherhaven.pathTool.removedNode=Узел удален. Осталось {n} узлов.
+aetherhaven.pathTool.needTwoNodes=Необходимо как минимум два узла. Добавьте еще один с дополнительным узлом или нажмите Q для смены режима.
+aetherhaven.pathTool.emptyPlan=Вдоль тропы не обнаружено никаких признаков грунта.
+aetherhaven.pathTool.cementFail=Вдоль дорожки нечего размещать.
+aetherhaven.pathTool.cemented=Путь проложен.
+aetherhaven.pathTool.removeSelected=Выбран путь.
 aetherhaven.pathTool.removeNoHit=На перекрестии нет пути.
 aetherhaven.pathTool.removeNeedSelection=Сначала выберите путь с основным адресом.
 aetherhaven.pathTool.removeUnknown=Этот путь больше не существует.
 aetherhaven.pathTool.removedPath=Путь удален. Блоки {cells} восстановлены.
-aetherhaven.pathTool.revertNoPerm=У вас нет права для отмены размещения (aetherhaven.path.revert)
-aetherhaven.pathTool.badUuid=Некорректный id: {raw}
-aetherhaven.pathTool.unknownId=Нет сохраненной трапы с таким id.
-aetherhaven.pathTool.reverted=Было возвращено {cells} блок(ов) по {id}
-aetherhaven.pathTool.navvizOn=Отладка размещения троп включена (Сервер отображает уже проложенные точки в виде линий; выполните снова чтобы отключить)
-aetherhaven.pathTool.navvizOff=Отладка размещения троп отключена
-aetherhaven.pathTool.navvizNoPerm=Отладка размещения троп требует права aetherhaven.path.tool
+aetherhaven.pathTool.revertNoPerm=У вас нет разрешения aetherhaven.path.revert
+aetherhaven.pathTool.badUuid=Неверный идентификатор: {raw}
+aetherhaven.pathTool.unknownId=Нет сохраненного пути с таким идентификатором.
+aetherhaven.pathTool.reverted=Блок(и) {cells} отменены для {id}
+aetherhaven.pathTool.navvizOn=Отладка навигации по пути: включена
+aetherhaven.pathTool.navvizOff=Отладка навигации по пути: выключена
+aetherhaven.pathTool.navvizNoPerm=Для отладки навигации по пути требуется aetherhaven.path.tool
 
-aetherhaven.pathTool.styleListTitle=Стили путей
+aetherhaven.pathTool.styleListTitle=Стили контуров
 aetherhaven.pathTool.styleListSelected=Выбрано: {name}
 aetherhaven.pathTool.styleListEmpty=Пока нет стилей контура. Нажмите «Создать», чтобы создать его.
 aetherhaven.pathTool.styleListRowSelected=Избранные
@@ -213,13 +213,13 @@ aetherhaven.pathTool.styleEditNeedBlocks=Добавьте хотя бы один
 aetherhaven.pathTool.styleEditNoSession=Срок действия сессии редактора стилей истек. Откройте менеджер стилей снова.
 aetherhaven.pathTool.styleSaved=Сохраненный стиль пути: {name}
 
-commands.aetherhaven.path.root.desc=Утилиты инструмента троп
-commands.aetherhaven.path.revert.desc=Отмените размещение тропы, выполнив команду с использованием идентификатора из чата
-commands.aetherhaven.path.revert.id=Id тропы из чата после размещения.
-commands.aetherhaven.path.navviz.desc=Отладка: переключить отображение размещения троп
+commands.aetherhaven.path.root.desc=Вспомогательные инструменты для работы с контурами
+commands.aetherhaven.path.revert.desc=Отмените добавленный путь, используя идентификатор, полученный в чате при его добавлении.
+commands.aetherhaven.path.revert.id=Идентификатор пути из чата, когда вы указывали путь.
+commands.aetherhaven.path.navviz.desc=Отладка: переключение отладочных строк навигации по пути
 
-items.Aetherhaven_Path_Tool.name=Проектировщик тропинок
-items.Aetherhaven_Path_Tool.description=Проектирует кривые для создания троп (<color is="#5AB5B5">aetherhaven.path.tool</color>). ПКМ: создаёт точки. ЛКМ: выбирает и перемещает точки. Q: переключить режим. E: устанавливает ширину тропы (от 1 до 8). R: сменить стиль тропы. F: вращает точку вокруг оси или размещает тропу. Отмена: /ah path revert. Конфигурация: PathToolStyles, трассировка лучей и списки замены.
+items.Aetherhaven_Path_Tool.name=проектировщик дорожек лопата
+items.Aetherhaven_Path_Tool.description=Создает маршруты для вашего города. Q переключает режимы. Вторичная клавиша добавляет или удаляет узлы. F размещает, удаляет или открывает менеджер стилей в зависимости от режима. E устанавливает ширину. R устанавливает стиль.
 
 items.Aetherhaven_Patrol_Wand.name=Патрульная палочка
 items.Aetherhaven_Patrol_Wand.description=Задает маршруты патрулирования охраны для вашего города (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Изготовить можно за столом городского планирования. Держа палочку в руках, вы увидите легенду на экране.
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Назначать
 aetherhaven.patrolWand.guardTypeKnight=Рыцарь
 aetherhaven.patrolWand.guardTypeArcher=Лучник
 aetherhaven.patrolWand.guardTypeMage=Маг
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Негодяй
 aetherhaven.patrolWand.toastAdded=Добавлен пункт
 aetherhaven.patrolWand.toastRemoved=Точка удалена
 aetherhaven.patrolWand.toastSelected=Выбранный маршрут
@@ -289,16 +289,16 @@ aetherhaven.patrolWand.toastAssigned=назначен охранник
 aetherhaven.patrolWand.toastCleared=Охранник убран
 aetherhaven.patrolWand.toastNewRoute=Новый маршрут
 
-items.Aetherhaven_Plot_Token_Inn.name=Жетон Трактира
-items.Aetherhaven_Plot_Token_Inn.description=<color is="#ffa726">Нужен</color> чтобы создать трактир. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Inn.name=Жетон для участка в гостинице
+items.Aetherhaven_Plot_Token_Inn.description=Необходимо добавить в инвентарь, чтобы использовать персонал для размещения участка под гостиницу.
 
-items.Aetherhaven_Plot_Token_Market_Stall.name=Жетон Прилавка
-items.Aetherhaven_Plot_Token_Market_Stall.description=<color is="#ffa726">Нужен</color> чтобы разместить Прилавок. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Market_Stall.name=жетон для размещения рыночного прилавка
+items.Aetherhaven_Plot_Token_Market_Stall.description=Необходимо, чтобы планировка торгового места была определена сотрудниками, занимающимися размещением торговых площадок.
 items.Aetherhaven_Plot_Token_Player_Shop.name=Жетон участка в магазине игрока
 items.Aetherhaven_Plot_Token_Player_Shop.description=Необходимо разместить место для магазина игрока, используя данные о размещении объекта.
 
-items.Aetherhaven_Plot_Token_Farm.name=Жетон Фермы
-items.Aetherhaven_Plot_Token_Farm.description=<color is="#ffa726">Нужен</color> чтобы разместить Ферму. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Farm.name=Жетон для фермерского участка
+items.Aetherhaven_Plot_Token_Farm.description=Необходимо, чтобы планировка фермерского участка была определена сотрудниками, занимающимися размещением участков.
 
 items.Aetherhaven_Plot_Token.name=Токен графика
 items.Aetherhaven_Plot_Token.description=Размещает созданное сотрудниками отдела размещения участков здание для города. Каждый жетон привязан к одному типу зданий.
@@ -314,31 +314,31 @@ items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Прочитайт
 items.Aetherhaven_Plot_Creator_Staff.name=Команда, создающая сюжет
 items.Aetherhaven_Plot_Creator_Staff.description=Превратите постройку в пользовательское здание города. См. руководство по журналу города. F запускает текущий шаг или выполняет действие на нем. Основной щелчок мышью определяет границы и места. Q/E — предыдущий/следующий. R — отмена.
 
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Жетон Магазина кузнеца
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=<color is="#ffa726">Нужен</color> чтобы разместить Магазин кузнеца. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Жетон участка кузницы
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Необходимо разместить контур кузницы, используя данные о размещении участка.
 
-items.Aetherhaven_Plot_Token_Park.name=Жетон парка
-items.Aetherhaven_Plot_Token_Park.description=<color is="#ffa726">Нужен</color> чтобы разместить Парк. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Park.name=токен для паркового участка
+items.Aetherhaven_Plot_Token_Park.description=Необходимо, чтобы планировка парка была определена сотрудниками, занимающимися размещением участков.
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=Токен для размещения туристического портала
 items.Aetherhaven_Plot_Token_Tourist_Portal.description=Необходимо, чтобы сотрудники, занимающиеся размещением объектов на участке, определили местоположение туристического портала.
 
-items.Aetherhaven_Plot_Token_House.name=Жетон дома
-items.Aetherhaven_Plot_Token_House.description=<color is="#ffa726">Нужен</color> чтобы разместить Дом. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_House.name=Жетон земельного участка
+items.Aetherhaven_Plot_Token_House.description=Необходимо, чтобы план застройки общего жилого дома был утвержден сотрудниками, занимающимися размещением участков.
 
-items.Aetherhaven_Plot_Token_Town_Hall.name=Жетон Ратуши
-items.Aetherhaven_Plot_Token_Town_Hall.description=<color is="#ffa726">Нужен</color> чтобы разместить Ратушу. Используйте посох размещения построек чтобы войти в режим предпросмотра.
+items.Aetherhaven_Plot_Token_Town_Hall.name=Жетон для участка в ратуше
+items.Aetherhaven_Plot_Token_Town_Hall.description=Необходимо, чтобы сотрудники, занимающиеся размещением участков, определили местоположение здания ратуши.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=Жетон участка в зале гильдии
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Отмечает место, где можно построить сборный дом гильдии. Изготовление на заказ в отделе городского планирования.
 
 items.Aetherhaven_Gold_Coin.name=Золотая монета
-items.Aetherhaven_Gold_Coin.description=Валюта города которая хранится в Казне.
+items.Aetherhaven_Gold_Coin.description=Городская валюта хранится в казначействе.
 
-items.Aetherhaven_Geode.name=Жеода
-items.Aetherhaven_Geode.description=Камень в котором могут находится кристаллы, драгоценные камни или руда. Заплатите кузнецу чтобы получить ресурсы.
+items.Aetherhaven_Geode.name=Геода
+items.Aetherhaven_Geode.description=Полый камень, в котором могут находиться кристаллы, драгоценные камни или руда. За его раскалывание обратитесь к кузнецу.
 
-items.Aetherhaven_Geode_Anvil.name=Жеодовая наковальня
-items.Aetherhaven_Geode_Anvil.description=Позволяет открывать Жеоды без кузнеца. <color is="#ffa726">Вы должны сами открыть этот рецепт</color> чтобы скрафтить наковальню на столе планирования.
+items.Aetherhaven_Geode_Anvil.name=Геодовая наковальня
+items.Aetherhaven_Geode_Anvil.description=Открывает жеоды без платы кузнеца. Разместите и используйте; <color is="#ffa726">вы должны знать схему</color>, чтобы изготовить его за столом городского планирования.
 
 items.Aetherhaven_Crystallized_Person.name=Кристаллизованная личность
 
@@ -347,5 +347,5 @@ items.Aetherhaven_Treasury.description=Хранит золотые монеты 
 items.Aetherhaven_Shop_Safe.name=Безопасные покупки
 items.Aetherhaven_Shop_Safe.description=Накапливает золото, полученное от продаж в вашем игровом магазине. Используйте для сбора заработанных средств.
 
-items.Aetherhaven_Quest_Journal.name=Журнал квестов города
-items.Aetherhaven_Quest_Journal.description=ПКМ: открывает журнал города. С помощью него вы можете проверять квесты.
+items.Aetherhaven_Quest_Journal.name=Городской журнал
+items.Aetherhaven_Quest_Journal.description=Дополнительное назначение: откройте журнал вашего города. Здесь вы можете проверить задания.

@@ -7,24 +7,29 @@
   "description": "Corin wants a small park with benches so townsfolk can sit outside and feel a little lighter between chores.",
   "assignNpcRoleId": "Aetherhaven_Innkeeper",
   "prerequisites": {
-    "completedQuestIds": ["q_build_inn"],
+    "completedQuestIds": [
+      "q_build_inn"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the park plot token from Corin."
+      "text": "Take the park plot token from Corin.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the park."
+      "text": "Stake and build the park.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Corin at the inn and close the quest in dialogue."
+      "text": "Find Corin at the inn and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.talk"
     }
   ],
   "rewards": [
@@ -46,5 +51,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.description"
 }

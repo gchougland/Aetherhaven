@@ -7,30 +7,36 @@
   "description": "Elias plays at the guild hall most days. He would like a quiet roof at night that belongs to him alone.",
   "assignNpcRoleId": "Aetherhaven_Bard",
   "prerequisites": {
-    "completedQuestIds": ["q_build_guild_hall"],
+    "completedQuestIds": [
+      "q_build_guild_hall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the house plot token from Elias."
+      "text": "Take the house plot token from Elias.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house prefab."
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.build"
     },
     {
       "id": "assign",
       "kind": "assign_house_resident",
       "npcRoleId": "Aetherhaven_Bard",
-      "text": "Assign Elias as resident on the house management block."
+      "text": "Assign Elias as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Elias and close the quest in dialogue."
+      "text": "Find Elias and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.talk"
     }
   ],
   "rewards": [
@@ -52,5 +58,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.description"
 }

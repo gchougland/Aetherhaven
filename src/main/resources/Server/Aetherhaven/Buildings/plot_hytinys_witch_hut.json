@@ -13,15 +13,28 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 50,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 960 },
-    { "resourceTypeId": "Rock", "count": 210 },
-    { "itemId": "Bench_Alchemy", "count": 1 },
-    { "itemId": "Bench_Arcane", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 960
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 210
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Arcane",
+      "count": 1
+    }
   ],
   "tags": [
     "decoration"
   ],
   "plotTokenLockedByDefault": true,
   "excludeFromTownJournal": true,
-  "decorationPlot": true
+  "decorationPlot": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_witch_hut.displayName"
 }

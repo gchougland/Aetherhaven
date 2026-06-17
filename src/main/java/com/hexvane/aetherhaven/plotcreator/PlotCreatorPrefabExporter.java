@@ -2,31 +2,42 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
+import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.builtin.buildertools.BuilderToolsPlugin;
 import com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaveContributor;
-import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
+import com.hypixel.hytale.component.ComponentRegistry;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.math.vector.VectorBoxUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.prefab.PrefabCopyableComponent;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
+import com.hypixel.hytale.server.core.universe.world.chunk.EntityChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 /**
@@ -46,16 +57,6 @@ public final class PlotCreatorPrefabExporter {
         @Nonnull Path outputFile,
         boolean overwrite
     ) {
-        return export(world, draft, outputFile, overwrite, null);
-    }
-
-    public static boolean export(
-        @Nonnull World world,
-        @Nonnull PlotCreatorDraft draft,
-        @Nonnull Path outputFile,
-        boolean overwrite,
-        @Nullable CommandBuffer<EntityStore> commandBuffer
-    ) {
         Vector3i min = draft.boundsMin();
         Vector3i max = draft.boundsMax();
         Vector3i anchor = draft.getPlotAnchor();
@@ -64,15 +65,6 @@ public final class PlotCreatorPrefabExporter {
         }
         draft.setPrefabOriginMin(new Vector3i(min));
         PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
-
-        Store<EntityStore> entityStore = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
-        if (entityStore != null && !draft.getAdventurerSpawns().isEmpty()) {
-            if (commandBuffer != null) {
-                PlotCreatorAdventurerMarkers.syncAll(world, commandBuffer, draft);
-            } else {
-                PlotCreatorAdventurerMarkers.syncAll(world, entityStore, draft);
-            }
-        }
 
         int xMin = min.x;
         int yMin = min.y;
@@ -147,14 +139,9 @@ public final class PlotCreatorPrefabExporter {
 
         selection.setAnchorAtWorldPos(anchor.x, anchor.y, anchor.z);
 
+        Store<EntityStore> entityStore = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
         if (entityStore != null) {
-            BuilderToolsPlugin.forEachCopyableInSelection(world, xMin, yMin, zMin, width, height, depth, e -> {
-                if (ShopSpotDisplayService.isDisplayPropEntity(entityStore, e)) {
-                    return;
-                }
-                Holder<EntityStore> holder = entityStore.copyEntity(e);
-                selection.addEntityFromWorld(holder);
-            });
+            copyEntitiesInBounds(world, entityStore, selection, xMin, yMin, zMin, width, height, depth);
         }
 
         BuilderToolsPlugin builderTools = BuilderToolsPlugin.get();
@@ -185,6 +172,102 @@ public final class PlotCreatorPrefabExporter {
             LOGGER.atSevere().withCause(e).log("Failed to save prefab to %s", outputFile);
             return false;
         }
+    }
+
+    private static void copyEntitiesInBounds(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull BlockSelection selection,
+        int xMin,
+        int yMin,
+        int zMin,
+        int width,
+        int height,
+        int depth
+    ) {
+        Set<UUID> addedEntityUuids = new HashSet<>();
+        ComponentRegistry.Data<EntityStore> registryData = EntityStore.REGISTRY.getData();
+        ComponentType<EntityStore, PrefabCopyableComponent> prefabCopyableType = PrefabCopyableComponent.getComponentType();
+        ComponentType<EntityStore, TransformComponent> transformType = TransformComponent.getComponentType();
+        ComponentType<EntityStore, BlockEntity> blockEntityType = BlockEntity.getComponentType();
+
+        BuilderToolsPlugin.forEachCopyableInSelection(world, xMin, yMin, zMin, width, height, depth, e -> {
+            if (ShopSpotDisplayService.isRuntimeShopDisplayProp(entityStore, e)) {
+                return;
+            }
+            if (isEditorBlockEntity(entityStore.getComponent(e, blockEntityType))) {
+                return;
+            }
+            Holder<EntityStore> holder = entityStore.copyEntity(e);
+            trackUuid(addedEntityUuids, holder);
+            selection.addEntityFromWorld(holder);
+        });
+
+        ChunkStore chunkStore = world.getChunkStore();
+        Store<ChunkStore> chunkComponentStore = chunkStore.getStore();
+        int minChunkX = xMin >> 5;
+        int maxChunkX = (xMin + width) >> 5;
+        int minChunkZ = zMin >> 5;
+        int maxChunkZ = (zMin + depth) >> 5;
+
+        for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+            for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                Ref<ChunkStore> chunkRef = chunkStore.getChunkReference(ChunkUtil.indexChunk(cx, cz));
+                if (chunkRef == null || !chunkRef.isValid()) {
+                    continue;
+                }
+                EntityChunk entityChunk = chunkComponentStore.getComponent(chunkRef, EntityChunk.getComponentType());
+                if (entityChunk == null) {
+                    continue;
+                }
+                for (Holder<EntityStore> holder : entityChunk.getEntityHolders()) {
+                    if (!holder.getArchetype().contains(prefabCopyableType) || !holder.hasSerializableComponents(registryData)) {
+                        continue;
+                    }
+                    if (ShopSpotDisplayService.isRuntimeShopDisplayProp(holder)) {
+                        continue;
+                    }
+                    if (isEditorBlockEntity(holder.getComponent(blockEntityType))) {
+                        continue;
+                    }
+                    TransformComponent transform = holder.getComponent(transformType);
+                    Vector3d position = transform != null ? transform.getPosition() : null;
+                    if (transform == null
+                        || position == null
+                        || !VectorBoxUtil.isInside(xMin, yMin, zMin, 0.0, 0.0, 0.0, width + 1, height + 1, depth + 1, position)) {
+                        continue;
+                    }
+                    UUIDComponent uuidComp = holder.getComponent(UUIDComponent.getComponentType());
+                    if (uuidComp != null && addedEntityUuids.contains(uuidComp.getUuid())) {
+                        continue;
+                    }
+                    trackUuid(addedEntityUuids, holder);
+                    Holder<EntityStore> clonedHolder = holder.clone();
+                    TransformComponent clonedTransform = clonedHolder.getComponent(transformType);
+                    if (clonedTransform != null && clonedTransform.getPosition() != null) {
+                        clonedTransform.getPosition().sub(selection.getX(), selection.getY(), selection.getZ());
+                    }
+                    selection.addEntityHolderRaw(clonedHolder);
+                }
+            }
+        }
+
+        selection.sortEntitiesByPosition();
+    }
+
+    private static void trackUuid(@Nonnull Set<UUID> addedEntityUuids, @Nonnull Holder<EntityStore> holder) {
+        UUIDComponent uuidComp = holder.getComponent(UUIDComponent.getComponentType());
+        if (uuidComp != null) {
+            addedEntityUuids.add(uuidComp.getUuid());
+        }
+    }
+
+    private static boolean isEditorBlockEntity(@Nullable BlockEntity blockEntity) {
+        if (blockEntity == null) {
+            return false;
+        }
+        String key = blockEntity.getBlockTypeKey();
+        return key != null && (key.equals("Editor_Block") || key.equals("Editor_Empty") || key.equals("Editor_Anchor"));
     }
 
     /**

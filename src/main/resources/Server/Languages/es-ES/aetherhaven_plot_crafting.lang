@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Banco de trabajo para crear parcelas
-aetherhaven.ui.plotCrafting.previewTitle =Vista previa
-aetherhaven.ui.plotCrafting.variantSectionTitle =Variantes
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Edificios principales
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Decoraciones
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Estilo anterior
-aetherhaven.ui.plotCrafting.variantNextTooltip =Siguiente estilo
-aetherhaven.ui.plotCrafting.craftButton =Ficha de parcela de artesanía
-aetherhaven.ui.plotCrafting.costLine =Costo: {cost} oro
-aetherhaven.ui.plotCrafting.fundsLine =Tus monedas: {inv} · Tesorería municipal: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =No hay suficiente oro.
-aetherhaven.ui.plotCrafting.noSpace =Primero, haz espacio en tu inventario.
-aetherhaven.ui.plotCrafting.crafted =Token de parcela {name} creado.
-aetherhaven.ui.plotCrafting.unlockSuccess =Has desbloqueado la trama {building}.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Ya conoces esta trama.
-aetherhaven.ui.plotCrafting.unlockInvalid =Este plano no se puede leer.
+aetherhaven.ui.plotCrafting.title=Banco de trabajo para crear parcelas
+aetherhaven.ui.plotCrafting.previewTitle=Vista previa
+aetherhaven.ui.plotCrafting.variantSectionTitle=Variantes
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Edificios principales
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Decoraciones
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Estilo anterior
+aetherhaven.ui.plotCrafting.variantNextTooltip=Siguiente estilo
+aetherhaven.ui.plotCrafting.craftButton=Ficha de parcela de artesanía
+aetherhaven.ui.plotCrafting.costLine=Costo: {cost} oro
+aetherhaven.ui.plotCrafting.fundsLine=Tus monedas: {inv} · Tesorería municipal: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=No hay suficiente oro.
+aetherhaven.ui.plotCrafting.noSpace=Primero, haz espacio en tu inventario.
+aetherhaven.ui.plotCrafting.crafted=Token de parcela {name} creado.
+aetherhaven.ui.plotCrafting.unlockSuccess=Has desbloqueado la trama {building}.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Ya conoces esta trama.
+aetherhaven.ui.plotCrafting.unlockInvalid=Este plano no se puede leer.

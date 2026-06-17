@@ -4,7 +4,11 @@
   "description": "A wall tower for an outer corner with two connections.",
   "prefabPath": "Wall_Tower_OuterCorner_SE.prefab.json",
   "plotTokenItemId": "Aetherhaven_Token_Wall_Tower",
-  "plotAnchorOffset": [0, 0, 0],
+  "plotAnchorOffset": [
+    0,
+    0,
+    0
+  ],
   "rotationYaw": "None",
   "selfBuildGameDays": 0.35,
   "treasuryGoldCoinCost": 20,
@@ -12,8 +16,18 @@
   "excludeFromTownJournal": true,
   "wallSegment": true,
   "materials": [
-    { "itemId": "Rock_Stone_Cobble", "count": 250 },
-    { "itemId": "Rock_Stone_Brick", "count": 150 },
-    { "resourceTypeId": "Wood_All", "count": 100 }
-  ]
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 250
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 150
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 100
+    }
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_wall_tower_outercorner_se.displayName"
 }

@@ -16,7 +16,7 @@ aetherhaven.dialogue.aetherhaven_florist.root.c_house=你想谈谈房子的事�
 aetherhaven.dialogue.aetherhaven_florist.root.c_house_done=你的名字写在房子的架子上。我想让你亲耳听到这个消息。
 aetherhaven.dialogue.aetherhaven_florist.root.c_house_remind=房子还在建设中。
 aetherhaven.dialogue.aetherhaven_florist.root.c_shop_done=我想来看看花店现在是否已经重新开张了。
-aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=花店已经装修完毕。我来这里是为了和你做最后的交代。
+aetherhaven.dialogue.aetherhaven_florist.root.c_shop_complete=花店已经关门了。我来这里是为了和你做最后的交代。
 aetherhaven.dialogue.aetherhaven_florist.root.c_shop_building=店铺还在筹备中。我想问问目前的进展情况。
 aetherhaven.dialogue.aetherhaven_florist.root.c_shop_offer=我想帮你在镇上开一家花店。
 aetherhaven.dialogue.aetherhaven_florist.root.c_goodbye=今天就到这里。回头见。
@@ -49,7 +49,7 @@ aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c0=我会为你抵押�
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_offer.c1=下次吧。
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.speaker=艾薇·布卢姆韦尔
-aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=等墙砌好了，按照章程要求，把我的名字刻在里面的砖块上，然后亲自来告诉我。我想在动手之前亲耳听到你这么说。
+aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.body=等墙砌好了，按照章程要求，把我的名字刻在里面的砖块上，然后亲自来告诉我。我想在动工之前亲耳听到你这么说。
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_accepted.c0=你会从我这里听到这个消息。
 
 aetherhaven.dialogue.aetherhaven_florist.ivy_house_remind.speaker=艾薇·布卢姆韦尔

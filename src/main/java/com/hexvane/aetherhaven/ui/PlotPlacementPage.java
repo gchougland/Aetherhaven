@@ -28,6 +28,8 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.BlockMaterial;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
@@ -632,7 +634,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 tm,
                 town,
                 uc.getUuid(),
-                placedSignPos,
+                previewAnchor,
                 session.getPrefabYaw(),
                 def,
                 plugin,
@@ -640,6 +642,14 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
             );
         if (err != null) {
             sendError(store, ref, err);
+            return false;
+        }
+        if (!tm.isInsideTerritory(town, placedSignPos.x, placedSignPos.z)) {
+            sendError(store, ref, "Plot sign position is outside your town territory.");
+            return false;
+        }
+        if (!isReplaceableSignCell(world, placedSignPos.x, placedSignPos.y, placedSignPos.z)) {
+            sendError(store, ref, "Could not place plot sign (blocked or invalid spot).");
             return false;
         }
         if (!PlotTokenInventory.consumePlotToken(inv, def)) {
@@ -667,7 +677,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(placedSignPos, session.getPrefabYaw());
+                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getPrefabYaw());
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
@@ -680,7 +690,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                         placedSignPos.z,
                         System.currentTimeMillis()
                     );
-                inst.setPlacementPrefabYaw(session.getPrefabYaw());
+                inst.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
                 town.addPlotInstance(inst);
                 tm.updateTown(town);
             } finally {
@@ -706,7 +716,12 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     placedSignPos.z,
                     System.currentTimeMillis()
                 );
-            miniPlot.setPlacementPrefabYaw(session.getPrefabYaw());
+            miniPlot.setPrefabWorldPlacement(
+                previewAnchor.x,
+                previewAnchor.y,
+                previewAnchor.z,
+                session.getPrefabYaw()
+            );
             town.addPlotInstance(miniPlot);
             tm.updateTown(town);
         }
@@ -858,6 +873,11 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (pr != null) {
             pr.sendMessage(Message.raw(text));
         }
+    }
+
+    private static boolean isReplaceableSignCell(@Nonnull World world, int x, int y, int z) {
+        BlockType t = world.getBlockType(x, y, z);
+        return t == null || t.getMaterial() == BlockMaterial.Empty;
     }
 
     /**

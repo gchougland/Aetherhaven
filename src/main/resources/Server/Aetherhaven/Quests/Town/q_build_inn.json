@@ -13,12 +13,14 @@
     {
       "id": "place_plot",
       "kind": "journal",
-      "text": "Stake the inn plot with your placement staff."
+      "text": "Stake the inn plot with your placement staff.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.objective.place_plot"
     },
     {
       "id": "build_prefab",
       "kind": "journal",
-      "text": "Gather materials and finish construction at the plot sign."
+      "text": "Gather materials and finish construction at the plot sign.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.objective.build_prefab"
     }
   ],
   "rewards": [
@@ -38,9 +40,16 @@
   "lifecycle": {
     "onStart": [],
     "onComplete": [
-      { "effect": "spawn_innkeeper_if_inn_ready", "params": {} }
+      {
+        "effect": "spawn_innkeeper_if_inn_ready",
+        "params": {}
+      }
     ],
     "onAbandon": []
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.description"
 }

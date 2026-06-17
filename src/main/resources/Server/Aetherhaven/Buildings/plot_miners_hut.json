@@ -5,17 +5,34 @@
   "prefabPath": "MinersHut.prefab.json",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Miners_Hut",
-  "plotAnchorOffset": [4, 0, 4],
-  "managementBlockLocalPos": [1, 2, -4],
+  "plotAnchorOffset": [
+    4,
+    0,
+    4
+  ],
+  "managementBlockLocalPos": [
+    1,
+    2,
+    -4
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 3,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 55,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 190 },
-    { "resourceTypeId": "Rock", "count": 90 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 190
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 90
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -24,11 +41,14 @@
       "localZ": -3,
       "blockTypeId": "Bench_WorkBench",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK"],
+      "tags": [
+        "WORK"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": 0,
       "interactionTargetLocalY": 3,
       "interactionTargetLocalZ": -2
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_miners_hut.displayName"
 }

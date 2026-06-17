@@ -22,13 +22,13 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Utiliser (F) : étendre la tour/branc
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=Panneau de l'intrigue
-items.Aetherhaven_Plot_Sign.description=Indique l'emplacement possible d'un bâtiment. Fabriquez des jetons de parcelle à un établi de création de parcelles.
+items.Aetherhaven_Plot_Sign.description=Indique l'emplacement possible d'un bâtiment. Fabriquez des jetons de parcelle à un établi de création de parcelle.
 
 items.Aetherhaven_Charter.name=Charte municipale
 items.Aetherhaven_Charter.description=Emplacement pour fonder une ville. Chaque joueur peut avoir une ville par monde. Utilisez-le pour afficher les informations de la ville.
 
 items.Aetherhaven_Town_Planning_Desk.name=Bureau d'urbanisme
-items.Aetherhaven_Town_Planning_Desk.description=Établi d'urbanisme. Chartes, permis de construire, établi de création d'intrigues et recettes associées. Fabriquez à un établi.
+items.Aetherhaven_Town_Planning_Desk.description=Établi de planification urbaine. Chartes, permis de construire, établi de création d'intrigues et recettes associées. Fabriquez à un établi.
 items.Aetherhaven_Plot_Crafting_Bench.name=Établi de création d'intrigues
 items.Aetherhaven_Plot_Crafting_Bench.description=Fabriquez des jetons de terrain pour les bâtiments et les décorations. Utilisez-les pour choisir un bâtiment, le prévisualiser et payer en or pour obtenir un jeton. Fabriquez-les à votre bureau d'urbanisme.
 items.Aetherhaven_Charter_Amendments_Table.name=tableau des amendements à la charte
@@ -36,7 +36,7 @@ items.Aetherhaven_Charter_Amendments_Table.description=Ce document indique comme
 items.Aetherhaven_Banquet_Table.name=Table de banquet
 items.Aetherhaven_Banquet_Table.description=Une longue table pour les festins de la ville. Placez-la sur votre territoire et utilisez-la pour un festin civique. Fabriquez-la au bureau d'urbanisme une fois que quelqu'un en ville vous aura partagé le modèle.
 items.Aetherhaven_Founder_Monument.name=Monument du fondateur
-items.Aetherhaven_Founder_Monument.description=Un piédestal de pierre portant l'effigie du fondateur. À placer sur le territoire de la ville en son honneur ; la part du trésor du matin augmente légèrement tant qu'il est là. Un seul par ville.
+items.Aetherhaven_Founder_Monument.description=Un piédestal de pierre portant l'effigie du fondateur. À placer sur le territoire de la ville en son honneur ; la part du trésor dans la rentrée matinale augmente légèrement tant qu'il est là. Un seul par ville.
 items.Aetherhaven_Inn_Bell.name=Auberge Bell
 items.Aetherhaven_Inn_Bell.description=Sonnez pour rappeler les visiteurs de l'auberge dans l'espace réservé aux clients.
 
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Attribuer
 aetherhaven.patrolWand.guardTypeKnight=Chevalier
 aetherhaven.patrolWand.guardTypeArcher=Archer
 aetherhaven.patrolWand.guardTypeMage=Mage
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Voyou
 aetherhaven.patrolWand.toastAdded=Point ajouté
 aetherhaven.patrolWand.toastRemoved=Point supprimé
 aetherhaven.patrolWand.toastSelected=Itinéraire sélectionné

@@ -83,7 +83,7 @@ aetherhaven.profession.kind.townsfolk=Ciudadanos
 aetherhaven.profession.kind.unknown=Residente
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
-aetherhaven.ui.chartertown.title=estatuto municipal
+aetherhaven.ui.chartertown.title=estatuto de la ciudad
 aetherhaven.ui.chartertown.townNameLabel=Nombre para mostrar de la ciudad
 aetherhaven.ui.chartertown.namePlaceholder=Escribe un nombre único para tu ciudad.
 aetherhaven.ui.chartertown.ownerOnlyHint=Solo el propietario del municipio puede cambiar el nombre que aparece en los estatutos.

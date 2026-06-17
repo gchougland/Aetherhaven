@@ -1,7 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_miner)
 # Full translation keys are aetherhaven.dialogue.aetherhaven_miner.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_miner.root.speaker=고룩 스톤베인
-aetherhaven.dialogue.aetherhaven_miner.root.body=마을에 필요한 돌과 광석을 캐낼 계획인데, 제대로 하려면 진짜 광부 오두막이 필요해. 잠을 잘 곳도 건조하고 튼튼한 작업대도 있어야지. 예전 동료들이 광맥을 따라가라고 했는데, 난 아직도 그 말을 명심하고 있어. 오두막을 내게 주면, 땅에서 나는 광석으로 창고를 가득 채워줄게.
+aetherhaven.dialogue.aetherhaven_miner.root.body=마을에 필요한 돌과 광석을 캐낼 계획인데, 제대로 하려면 진짜 광부 오두막이 필요해. 잠을 잘 곳도 건조하고 튼튼한 작업대도 있어야지. 예전 동료들이 광맥을 따라가라고 했는데, 난 아직도 그 말을 명심하고 있어. 오두막을 내게 주면, 땅에서 나는 광물로 창고를 가득 채워줄게.
 aetherhaven.dialogue.aetherhaven_miner.root.hc0=당신은 집에 대해 이야기하고 싶어했잖아요.
 aetherhaven.dialogue.aetherhaven_miner.root.hc1=요청하신 대로 새 집의 혼인신고서에 당신 이름이 올라 있습니다.
 aetherhaven.dialogue.aetherhaven_miner.root.hc2=집은 아직 공사 중입니다.
@@ -33,12 +33,12 @@ aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c0=나는 주택 부�
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_offer.c1=다음에.
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.speaker=고룩 스톤베인
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.body=건축이 완료되면 정관에 명시된 대로 제 이름을 책장에 등록해 주시고, 그 후에 직접 와서 알려주세요.
-aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.c0=그건 제 얘기로 들으실 겁니다.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_accepted.c0=그건 내 입으로 직접 듣게 될 거야.
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.speaker=고룩 스톤베인
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.body=액자 조립은 천천히 하세요. 다 조립되면 책꽂이에 제 이름을 적어주시고 다시 오세요. 재촉하는 건 아니고요, 확실히 하고 싶어서요.
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_remind.c0=이해했다.
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.speaker=고룩 스톤베인
-aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.body=좋아. 이제 코린이 여관에 모래를 묻히고 들어왔다고 나를 꾸짖을 필요는 없겠군. 돌이나 광석이 더 필요하면 나를 찾아오렴.
+aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.body=좋아. 이제 코린이 여관에 모래를 묻혔다고 나를 꾸짖을 일은 없겠군. 돌이나 광석이 더 필요하면 나를 찾아오렴.
 aetherhaven.dialogue.aetherhaven_miner.gorruk_house_finish.c0=행복해 보여서 다행이에요.
 aetherhaven.dialogue.aetherhaven_miner.gift.love=채굴 작업대에서 제가 딱 좋아하는 재료입니다. 가져다주셔서 감사해요.
 aetherhaven.dialogue.aetherhaven_miner.gift.like=그건 제가 여기서 하는 일에 정말 유용해요. 생각해 주셔서 감사합니다.

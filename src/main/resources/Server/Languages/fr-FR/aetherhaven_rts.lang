@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Sélectionnez tous les gardes
 items.Aetherhaven_Rts_Select_All.description=Sélectionnez tous les gardes engagés de la ville.
 
 items.Aetherhaven_Rts_Select_Knight.name=chevaliers sélectionnés
-items.Aetherhaven_Rts_Select_Knight.description=Sélectionnez tous les gardes chevaliers.
+items.Aetherhaven_Rts_Select_Knight.description=Sélectionnez tous les chevaliers et les gardes voleurs.
 
 items.Aetherhaven_Rts_Select_Archer.name=Sélectionner les archers
 items.Aetherhaven_Rts_Select_Archer.description=Sélectionnez tous les gardes archers.
@@ -38,7 +38,7 @@ aetherhaven.rts.stanceAggressive=Posture : Agressive
 aetherhaven.rts.stanceStandGround=Position : Tenir debout
 aetherhaven.rts.stanceHoldFire=Position : Ne tirez pas
 aetherhaven.rts.hudSelected=gardes {n} sélectionnés
-aetherhaven.rts.hudControls=WASD permet de se déplacer dans la vue du champ de bataille. Espace et Ctrl permettent de zoomer. La molette de la souris ou les touches numériques permettent de changer d'outil. Cliquez sur les gardes pour les sélectionner. Maintenez Maj enfoncé et cliquez pour en ajouter ou en supprimer un. Tracez un rectangle pour en sélectionner plusieurs. Utilisez la commande Quitter (emplacement 8 de la barre d'accès rapide) pour quitter la zone.
+aetherhaven.rts.hudControls=WASD permet de se déplacer dans la vue du champ de bataille. Espace et Ctrl permettent de zoomer. La molette de la souris ou les touches numériques permettent de changer d'outil. Cliquez sur les gardes pour les sélectionner. Maintenez Maj enfoncé et cliquez pour en ajouter ou en supprimer un. Tracez un rectangle pour en sélectionner plusieurs. Utilisez la commande Quitter (emplacement 8 de la barre d'accès rapide) pour sortir du champ de bataille.
 aetherhaven.rts.helpFlag=Un clic droit au sol permet d'envoyer des gardes. La capacité 1 permet de basculer entre l'attaque et le déplacement. La capacité 2 immobilise les gardes sélectionnés.
 aetherhaven.rts.helpSword=Faites un clic droit sur une créature pour y concentrer vos gardes. Ils n'attaqueront ni les villageois, ni les touristes, ni les gardes.
 aetherhaven.rts.helpSelectAll=Cliquez pour sélectionner tous les gardes de la ville et désélectionnez les autres.

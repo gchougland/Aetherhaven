@@ -11,9 +11,9 @@ items.Aetherhaven_Rts_Select_All.name=Вибрати всіх охоронців
 items.Aetherhaven_Rts_Select_All.description=Оберіть кожного найманого охоронця в місті.
 
 items.Aetherhaven_Rts_Select_Knight.name=Оберіть лицарів
-items.Aetherhaven_Rts_Select_Knight.description=Виберіть усіх лицарів-гвардійців.
+items.Aetherhaven_Rts_Select_Knight.description=Виберіть усіх лицарів та охоронців-розбійників.
 
-items.Aetherhaven_Rts_Select_Archer.name=Оберіть лучників
+items.Aetherhaven_Rts_Select_Archer.name=Виберіть лучників
 items.Aetherhaven_Rts_Select_Archer.description=Виберіть усіх лучників-охоронців.
 
 items.Aetherhaven_Rts_Select_Mage.name=Виберіть магів

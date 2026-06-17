@@ -2,18 +2,18 @@
 # Bundle: blacksmith repair, dialogue command, banners, building staff items
 
 # === Blacksmith repair: UI results (Java open_blacksmith_repair, not JSON dialogue) ===
-aetherhaven.blacksmith.repair.insufficientGold=Вам не хватает средств для ремонта.
-aetherhaven.blacksmith.repair.success={itemName} был восстановлен. Выглядит как новенький.
-commands.aetherhaven.dialogue.desc=Откройте дерево диалогов по id (для тестирования).
-commands.aetherhaven.dialogue.treeId.desc=Id дерева диалогов (например, aetherhaven_dialogue_test)
-commands.aetherhaven.dialogue.entry.desc=Необязательный идентификатор узла записи (по умолчанию: root)
-aetherhaven.interaction.dialogue=Нажмите [{key}], чтобы поговорить.
+aetherhaven.blacksmith.repair.insufficientGold=Ваша сумочка слишком лёгкая для такого ремонта.
+aetherhaven.blacksmith.repair.success={itemName} снова цел. Как новенький.
+commands.aetherhaven.dialogue.desc=Отладка: открыть дерево диалогов по идентификатору
+commands.aetherhaven.dialogue.treeId.desc=Идентификатор дерева диалогов (например, aetherhaven_merchant)
+commands.aetherhaven.dialogue.entry.desc=Необязательный начальный узел (корневой узел по умолчанию)
+aetherhaven.interaction.dialogue=Нажмите [{key}], чтобы начать разговор.
 aetherhaven.banner.quest.completed.primary=Задание выполнено
 aetherhaven.banner.quest.completed.secondary={name}
 aetherhaven.banner.assembly.complete.primary=Строительство завершено.
 aetherhaven.banner.assembly.complete.secondary={name}
-aetherhaven.assembly.complete.chat={name} готово.
-aetherhaven.assembly.tracer.none_in_range=Предварительный просмотр здания недоступен (приблизьтесь или проверьте разрешение на строительство в городе).
+aetherhaven.assembly.complete.chat={name} готов.
+aetherhaven.assembly.tracer.none_in_range=Предварительный просмотр сборки недоступен (приблизьтесь или проверьте разрешение на строительство в городе).
 aetherhaven.assembly.staff.no_mana=Не хватает маны для установки строительных блоков. Удерживайте посох для более быстрого восстановления маны, затем попробуйте снова.
 aetherhaven.banner.quest.started.primary=Задание начато
 aetherhaven.banner.quest.started.secondary={name}
@@ -21,8 +21,8 @@ aetherhaven.banner.reputation.unlock.primary=Разблокировано
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Посох строительства
-items.Aetherhaven_Building_Staff.description=ЛКМ создаёт пролетающий сквозь блоки снаряд летящий к ближайшей точке строительства в пределах досягаемости. Удерживайте ПКМ и наведите прицел на здание, чтобы быстро установить блоки (при наличии разрешения на строительство в городе). Здания продолжат возводиться самостоятельно, даже когда вас нет рядом.
+items.Aetherhaven_Building_Staff.name=Персонал медного здания
+items.Aetherhaven_Building_Staff.description=Основное умение посылает направляющий луч сквозь блоки к ближайшему предварительному просмотру сборки в пределах досягаемости. Удерживайте дополнительное умение и наведите прицел сквозь блоки на этот предварительный просмотр, чтобы направить и разместить строительные узлы после короткого удержания (разрешение на строительство в городе). Заполняет до <color is="#4ade80">3×3×3</color> выделенных строительных узлов вокруг вашего прицела одновременно. Во время удержания дает <color is="#60a5fa">+150 максимальной маны</color>; каждый размещенный блок стоит <color is="#60a5fa">1 маны</color>. Мана восстанавливается быстрее, если вы прекратите использовать дополнительное умение на пару секунд. Посохи более высокого уровня дают больше маны и восстанавливают ее быстрее. Пассивная сборка участка продолжается, пока вас нет.
 items.Aetherhaven_Building_Staff_Iron.name=Железный строительный персонал
 items.Aetherhaven_Building_Staff_Iron.description=Аналогично медному строительному посоху. Вторичное заполнение позволяет одновременно заполнить до <color is="#4ade80">5×5×5</color> выделенных строительных узлов. При удержании дает <color is="#60a5fa">+250 максимальной маны</color> и ускоряет восстановление маны; каждый установленный блок стоит <color is="#60a5fa">1 маны</color>.
 items.Aetherhaven_Building_Staff_Thorium.name=Персонал здания Thorium

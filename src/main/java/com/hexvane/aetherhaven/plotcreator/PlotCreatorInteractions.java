@@ -336,7 +336,7 @@ public final class PlotCreatorInteractions {
     }
 
     public static boolean exportPrefab(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
-        session.getWorld().execute(() -> doExportPrefab(session, playerRef, null));
+        session.getWorld().execute(() -> doExportPrefab(session, playerRef));
         return true;
     }
 
@@ -345,42 +345,31 @@ public final class PlotCreatorInteractions {
         @Nonnull PlayerRef playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        return doExportPrefab(session, playerRef, commandBuffer);
+        session.getWorld().execute(() -> doExportPrefab(session, playerRef));
+        return true;
     }
 
-    private static boolean doExportPrefab(
-        @Nonnull PlotCreatorSession session,
-        @Nonnull PlayerRef playerRef,
-        @Nullable CommandBuffer<EntityStore> commandBuffer
-    ) {
+    private static void doExportPrefab(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
-            return false;
+            return;
         }
         PlotCreatorDraft d = session.getDraft();
         String fileName = PlotCreatorPrefabExporter.prefabPathKeyFromConstructionId(d.getConstructionId());
         if (fileName == null) {
             playerRef.sendMessage(Message.translation(MSG + ".error.needIdentity"));
-            return false;
+            return;
         }
         Path out = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory()).resolve(fileName);
-        boolean ok =
-            PlotCreatorPrefabExporter.export(
-                session.getWorld(),
-                d,
-                out,
-                d.getEditingConstructionId() != null,
-                commandBuffer
-            );
+        boolean ok = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, d.getEditingConstructionId() != null);
         if (!ok) {
             playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
-            return false;
+            return;
         }
         d.setPrefabPath(fileName);
         d.setPrefabFileName(fileName);
         com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(fileName);
         playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
-        return true;
     }
 
     public static boolean stepUsesConfigPanel(@Nonnull PlotCreatorStep step) {

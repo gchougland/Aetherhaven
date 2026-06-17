@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =プロット作成ベンチ
-aetherhaven.ui.plotCrafting.previewTitle =プレビュー
-aetherhaven.ui.plotCrafting.variantSectionTitle =バリエーション
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =コアビルディング
-aetherhaven.ui.plotCrafting.tabDecorTooltip =装飾品
-aetherhaven.ui.plotCrafting.variantPrevTooltip =以前のスタイル
-aetherhaven.ui.plotCrafting.variantNextTooltip =次のスタイル
-aetherhaven.ui.plotCrafting.craftButton =クラフト区画トークン
-aetherhaven.ui.plotCrafting.costLine =価格：{cost} ゴールド
-aetherhaven.ui.plotCrafting.fundsLine =あなたのコイン：{inv} · 町の金庫：{treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =金が足りない。
-aetherhaven.ui.plotCrafting.noSpace =まず、持ち物に空きスペースを作りましょう。
-aetherhaven.ui.plotCrafting.crafted =作成された{name}プロットトークン。
-aetherhaven.ui.plotCrafting.unlockSuccess ={building} の区画をアンロックしました。
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =この筋書きは既にご存知でしょう。
-aetherhaven.ui.plotCrafting.unlockInvalid =この設計図は判読できません。
+aetherhaven.ui.plotCrafting.title=プロット作成ベンチ
+aetherhaven.ui.plotCrafting.previewTitle=プレビュー
+aetherhaven.ui.plotCrafting.variantSectionTitle=バリエーション
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=コアビルディング
+aetherhaven.ui.plotCrafting.tabDecorTooltip=装飾品
+aetherhaven.ui.plotCrafting.variantPrevTooltip=以前のスタイル
+aetherhaven.ui.plotCrafting.variantNextTooltip=次のスタイル
+aetherhaven.ui.plotCrafting.craftButton=クラフト区画トークン
+aetherhaven.ui.plotCrafting.costLine=価格：{cost} ゴールド
+aetherhaven.ui.plotCrafting.fundsLine=あなたのコイン：{inv} · 町の金庫：{treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=金が足りない。
+aetherhaven.ui.plotCrafting.noSpace=まず、持ち物に空きスペースを作りましょう。
+aetherhaven.ui.plotCrafting.crafted=作成された{name}プロットトークン。
+aetherhaven.ui.plotCrafting.unlockSuccess={building} の区画をアンロックしました。
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=この筋書きは既にご存知でしょう。
+aetherhaven.ui.plotCrafting.unlockInvalid=この設計図は判読できません。

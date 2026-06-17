@@ -1,7 +1,7 @@
 # Shop spot block, config UI, look-at HUD, and purchase messages (en-US)
 
 items.Aetherhaven_Shop_Spot.name=ショップスポット
-items.Aetherhaven_Shop_Spot.description=完成した建築区画に配置するとショップがオープンします。また、クリエイティブモードや区画作成モードでは、設定済みの屋台をプレハブに組み込むことができます。屋台は日中は営業し、夜間は閉店します。NPCの在庫は夜明けに補充されます。町民はプレイヤーのスポットにアイテムを出品できます。
+items.Aetherhaven_Shop_Spot.description=完成した建築区画に配置するとショップがオープンします。また、クリエイティブモード／区画作成モードでは、設定済みの屋台をプレハブに組み込むことができます。屋台は日中は営業し、夜間は閉店します。NPCの在庫は夜明けに補充されます。町民はプレイヤーのスポットにアイテムを出品できます。
 
 aetherhaven.shop.notInTown=これを町の中に置いてください。
 aetherhaven.shop.notInPlot=これを完成済みの建築用地内に設置してください。

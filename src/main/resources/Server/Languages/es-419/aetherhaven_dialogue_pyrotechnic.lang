@@ -4,7 +4,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.speaker=Chispa de Grubb
 aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.body=¡Ja! ¡Reventaste la bolsa pegajosa! Grubble estuvo atrapado ahí para siempre. ¿Tu pueblo tiene una posada? Bien. Quizás Grubble la visite cuando quiera comida caliente y un banco seco.
 aetherhaven.dialogue.aetherhaven_pyrotechnic_rescue.root.c0=Cuidarse.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.root.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.fallback=Si Grubble necesita hablar de trabajo, de la casa o de la burbuja, dígalo antes de que se le ocurran ideas.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.0=¿Gran auge hoy? ¿Pequeño auge? Grubble tiene ambos.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.main_hub.greeting.1=No estornudes cerca del estante de polvos. Grubble aprendió la lección.
@@ -25,7 +25,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=La tienda aún
 aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Grubble, quiero ayudarte a abrir una tienda como Dios manda en la ciudad.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=Eso es todo por ahora. Grubble, te veo luego.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble no puede vender cosas baratas desde el bolsillo para siempre. La gente se pone nerviosa. Necesita una tienda de verdad, con paredes gruesas, un buen letrero y un estante que no se tambalee cuando una pequeña bomba estornuda. Grubble dibujó los planos en papel ignífugo. Tú construyes para el pueblo, Grubble te da el plano.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=Le abriremos una tienda a Grubble.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c1=Ahora mismo no. Grubble espera.
@@ -34,7 +34,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.speaker=Chisp
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.body=Toma la página del plano. Aprende en el mostrador de planificación urbana. Crea una ficha. Construye una tienda donde la gente pueda encontrarla sin perderse ni volar por los aires accidentalmente. Grubble espera en la posada. El polvo permanece en la bolsa hasta que las paredes sean gruesas.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_shop_accepted.c0=Nos vemos cuando pongan el letrero.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.body=¿Aún no está construida la tienda? Grubble espera. Powder se impacienta cuando Grubble espera demasiado. ¿Sigues aprendiendo planos y construyendo muros, o Grubble debería dejar de tener esperanzas?
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c0=Grubble, necesito abandonar la misión por ahora.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_building.c1=Sigo trabajando en ello. Grubble, seguiré adelante.
@@ -43,16 +43,16 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.speaker=Grubble S
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.body=¿Hoy no hay tienda? De acuerdo. Grubble guarda bombas en la bolsa y sueña con estanterías. Hablamos de nuevo si cambias de opinión.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_abandoned.c0=De acuerdo. Grubble, nos vemos.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.body=¡La tienda está lista! ¡Los estantes preparados! ¡Las paredes gruesas! Grubble puede vender cosas increíbles como un duende hombre de negocios de verdad, en lugar de susurrar desde su abrigo. Gracias, amigo.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_done.c0=Encantado de ayudar. Grubble, ven a buscarme si el pueblo necesita más gente.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Incluso el duende explosivo necesita una cama. Una cama tranquila. Lejos del estante de polvos y del rincón de las arañas. La tienda es para trabajar. Grubble quiere la misma casita que los demás. ¿Te animas a apostar una?
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.speaker=Chispa de Grubble
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.body=Incluso el duende explosivo necesita una cama. Una cama tranquila. Lejos del estante de polvos y del rincón de las arañas. La tienda es para trabajar. Grubble quiere la misma casita que los demás. ¿Te apuntas a una?
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Grubble, te reservaré una casa.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Otra vez.
 
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Chispa de Grubble
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Cuando las paredes sean reales, pon el nombre de Grubble en el bloque interior como dice el estatuto. Luego ven y cuéntaselo a Grubble en voz alta. Grubble quiere oírlo, no adivinarlo.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Grubble se enterará por mí.
 

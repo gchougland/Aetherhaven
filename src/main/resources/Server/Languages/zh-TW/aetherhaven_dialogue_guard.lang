@@ -8,7 +8,7 @@ aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.body=我加入了你們
 aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.accept=我會為你蓋一棟房子
 aetherhaven.dialogue.aetherhaven_guard.guard_house_offer.decline=也許以後
 
-aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=謝謝。先劃塊地蓋好房子，然後把房子牌子上的名字寫上我的名字。等我住進去了再來。
+aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.body=謝謝。先劃塊地蓋房子，蓋好房子，然後在門牌上寫上我的名字。等我住進去了再來。
 aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=會做
 
 aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=我的房子還沒蓋好。把房子蓋好，然後在門牌選我的名字。

@@ -491,7 +491,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                         "#QuestStepsHeading.TextSpans",
                         Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
                     );
-                    commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(steps));
+                    commandBuilder.set(
+                        "#QuestStepsBody.TextSpans",
+                        quests.objectivesMessage(sel, town, entityStore, plugin)
+                    );
                 } else {
                     commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
                     commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
@@ -595,8 +598,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     if (p.getState() != PlotInstanceState.ASSEMBLING) {
                         continue;
                     }
-                    String title = journalPlotConstructionTitle(ccat, p);
-                    String label = title + "  " + p.getSignX() + " " + p.getSignY() + " " + p.getSignZ();
+                    Message title = journalPlotConstructionTitle(ccat, p);
+                    String label = title.getAnsiMessage() + "  " + p.getSignX() + " " + p.getSignY() + " " + p.getSignZ();
                     String v = p.getPlotId().toString();
                     if (firstValue.isEmpty()) {
                         firstValue = v;
@@ -998,8 +1001,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             PlotInstance p = plots.get(i);
             commandBuilder.append(TOWN_PLOT_ROWS, "Aetherhaven/TownJournalPlotRow.ui");
             String row = TOWN_PLOT_ROWS + "[" + i + "]";
-            String title = journalPlotConstructionTitle(plotCatalog, p);
-            commandBuilder.set(row + " #PlotTitle.TextSpans", Message.raw(title));
+            Message title = journalPlotConstructionTitle(plotCatalog, p);
+            commandBuilder.set(row + " #PlotTitle.TextSpans", title);
             String coords = p.getSignX() + " " + p.getSignY() + " " + p.getSignZ();
             commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
             PlotInstanceState pst = p.getState();
@@ -1038,19 +1041,20 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         };
     }
 
-    private static String journalPlotConstructionTitle(@Nonnull ConstructionCatalog catalog, @Nonnull PlotInstance plot) {
+    @Nonnull
+    private static Message journalPlotConstructionTitle(@Nonnull ConstructionCatalog catalog, @Nonnull PlotInstance plot) {
         String stored = plot.getConstructionId();
         if (stored == null || stored.isBlank()) {
-            return "?";
+            return Message.raw("?");
         }
         String t = stored.trim();
         ConstructionDefinition byStored = catalog.get(t);
         if (byStored != null) {
-            return byStored.getDisplayName();
+            return byStored.displayNameMessage();
         }
         String gameplay = catalog.resolveGameplayConstructionId(t);
         ConstructionDefinition byGameplay = catalog.get(gameplay);
-        return byGameplay != null ? byGameplay.getDisplayName() : t;
+        return byGameplay != null ? byGameplay.displayNameMessage() : Message.raw(t);
     }
 
     private static int compareJournalPlots(
@@ -1059,7 +1063,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull PlotInstance b
     ) {
         int byTitle =
-            journalPlotConstructionTitle(catalog, a).compareToIgnoreCase(journalPlotConstructionTitle(catalog, b));
+            journalPlotConstructionTitle(catalog, a)
+                .getAnsiMessage()
+                .compareToIgnoreCase(journalPlotConstructionTitle(catalog, b).getAnsiMessage());
         if (byTitle != 0) {
             return byTitle;
         }
@@ -1151,6 +1157,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.schedulePark");
             case VillagerScheduleResolver.LOC_GAIA_ALTAR ->
                 Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleAltar");
+            case VillagerScheduleResolver.LOC_SHOP ->
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleShop");
             default -> Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleUnknown");
         };
     }
@@ -1238,7 +1246,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#GuidePluginMissing.Visible", false);
         commandBuilder.set("#GuideSplit.Visible", true);
 
-        GuideTopicRepository repo = GuideTopicRepository.get(plugin.getClass().getClassLoader());
+        String guideLocale = playerRef.getLanguage() != null && !playerRef.getLanguage().isBlank()
+            ? playerRef.getLanguage()
+            : "en-US";
+        GuideTopicRepository repo = GuideTopicRepository.get(plugin.getClass().getClassLoader(), guideLocale);
         boolean idOk = false;
         for (GuideTopicRepository.GuideNavEntry e : repo.navEntries()) {
             if (e.topicId().equals(selectedGuideTopicId)) {

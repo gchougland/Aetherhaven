@@ -6,18 +6,38 @@
   "prefabPath": "Blacksmith_Shop.prefab.json",
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Blacksmith_Shop",
-  "plotAnchorOffset": [5, 0, 5],
-  "managementBlockLocalPos": [2, 1, 5],
+  "plotAnchorOffset": [
+    5,
+    0,
+    5
+  ],
+  "managementBlockLocalPos": [
+    2,
+    1,
+    5
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 58,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 350 },
-    { "resourceTypeId": "Rock", "count": 180 },
-    { "itemId": "Bench_Armour", "count": 1 },
-    { "itemId": "Bench_Weapon", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 350
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 180
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -26,11 +46,14 @@
       "localZ": 0,
       "blockTypeId": "Bench_Weapon",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK"],
+      "tags": [
+        "WORK"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": 2,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -1
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_blacksmith_shop.displayName"
 }

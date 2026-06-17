@@ -204,7 +204,7 @@ aetherhaven.pathTool.styleListCreate=Yeni
 aetherhaven.pathTool.styleListEdit=Düzenlemek
 aetherhaven.pathTool.styleListCancel=İptal etmek
 aetherhaven.pathTool.styleNameTitle=Yeni yol stili
-aetherhaven.pathTool.styleNameHint=Stilinizi belirleyin, ardından sandığa giderek blokları seçin.
+aetherhaven.pathTool.styleNameHint=Stilinizin adını belirleyin, ardından sandığa giderek blokları seçin.
 aetherhaven.pathTool.styleNameContinue=Devam etmek
 aetherhaven.pathTool.styleEditNameLabel=Stil adı
 aetherhaven.pathTool.styleEditNamePlaceholder=Benim yol stilim
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Atamak
 aetherhaven.patrolWand.guardTypeKnight=Şövalye
 aetherhaven.patrolWand.guardTypeArcher=Okçu
 aetherhaven.patrolWand.guardTypeMage=Büyücü
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Haydut
 aetherhaven.patrolWand.toastAdded=Puan eklendi
 aetherhaven.patrolWand.toastRemoved=Nokta kaldırıldı
 aetherhaven.patrolWand.toastSelected=Seçilen rota
@@ -318,7 +318,7 @@ items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Demirci dükkanı arsa jetonu
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Parsel yerleştirme personeli tarafından demirci dükkanının yerinin belirlenmesi gerekmektedir.
 
 items.Aetherhaven_Plot_Token_Park.name=Park yeri jetonu
-items.Aetherhaven_Plot_Token_Park.description=Parsel yerleştirme personeli tarafından park alanının yerleşim planının oluşturulması gerekmektedir.
+items.Aetherhaven_Plot_Token_Park.description=Park alanının yerleşim planının, planlama personeli tarafından belirlenmesi gerekmektedir.
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=Turist portalı arsa belirteci
 items.Aetherhaven_Plot_Token_Tourist_Portal.description=Turist giriş kapısının yerleşim planı personelinden alınması gerekmektedir.
 

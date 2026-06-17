@@ -40,7 +40,7 @@ aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c0=Мені п�
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_building.c1=Я все ще над цим працюю і продовжуватиму.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.speaker=Ваеліт Призмотінь
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Можливо, решітка була ще трохи готова. Призми ще трохи потерплять. Якщо ви передумаєте, поговоріть зі мною ще раз.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.body=Можливо, решітка була ще не готова. Призми ще трохи потерплять. Якщо ви передумаєте, поговоріть зі мною ще раз.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_abandoned.c0=Досить справедливо. Ще побачимося.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.speaker=Ваеліт Призмотінь
@@ -48,8 +48,8 @@ aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.body=Крамниц
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_done.c0=Радий допомогти. Приходьте до мене, якщо місту потрібно більше світла.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.speaker=Ваеліт Призмотінь
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Навіть хранителям світла потрібен тихий куточок для відпочинку, коли призми зачинені. Святилище призначене для роботи. Я б хотів такий самий маленький будиночок, як і ваші інші мешканці, з полицею для мого імені, коли стіни стануть справжніми.
-aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Я заставлю для тебе будинок.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.body=Навіть хранителям світла потрібен тихий куточок для відпочинку, коли призми зачинені. Святилище призначене для роботи. Я хотів би такий самий маленький будиночок, як і ваші інші мешканці, з полицею для мого імені, коли стіни стануть справжніми.
+aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c0=Я за тебе будинок закладу.
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_offer.c1=Іншим разом.
 
 aetherhaven.dialogue.aetherhaven_crystal_keeper.vaelith_house_accepted.speaker=Ваеліт Призмотінь

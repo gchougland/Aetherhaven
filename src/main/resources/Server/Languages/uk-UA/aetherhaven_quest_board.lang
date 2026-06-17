@@ -37,7 +37,7 @@ aetherhaven.questBoard.rancher.raw_meat.description=Талену потрібн�
 aetherhaven.questBoard.rancher.leather_hide.title=Сховати для приклеювання
 aetherhaven.questBoard.rancher.leather_hide.description=Тален лагодить упряж і йому потрібна легка шкіра.
 aetherhaven.questBoard.rancher.ranch_provisions.title=Запаси провізією на ранчо
-aetherhaven.questBoard.rancher.ranch_provisions.description=Талену потрібні м'ясо та шкіра для складів квартирмейстера гільдії.
+aetherhaven.questBoard.rancher.ranch_provisions.description=Талену потрібні м'ясо та шкіра для магазинів квартирмейстера гільдії.
 
 aetherhaven.questBoard.priestess.life_essence.title=Життєва есенція для вівтаря
 aetherhaven.questBoard.priestess.life_essence.description=Жриця варить зливки і потребує життєвої сутності.
@@ -90,7 +90,7 @@ aetherhaven.questBoard.elder.silver_tribute.title=Срібна данина
 aetherhaven.questBoard.elder.silver_tribute.description=Лірен відклала срібну данину для міської скарбниці.
 aetherhaven.questBoard.elder.gold_tribute.title=Золота данина
 aetherhaven.questBoard.elder.gold_tribute.description=Лірен внесла золоту данину за сховище статуту.
-aetherhaven.questBoard.elder.elder_legacy.title=Пропозиція старійшини
+aetherhaven.questBoard.elder.elder_legacy.title=Спадщина старійшин
 aetherhaven.questBoard.elder.elder_legacy.description=Лірен шукає золото, злитки та есенцію для обряду заснування.
 aetherhaven.questBoard.elder.vermin_clear.title=Очистіть від шкідників
 aetherhaven.questBoard.elder.vermin_clear.description={villager} хоче позбутися шкідників на доріжках міста.

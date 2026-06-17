@@ -6,24 +6,29 @@
   "title": "Raise The Guild Hall",
   "description": "Lyra wants a proper guild hall where adventurers can sign on and guards can be hired.",
   "prerequisites": {
-    "completedQuestIds": ["q_build_town_hall"],
+    "completedQuestIds": [
+      "q_build_town_hall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the guild hall plot token from Lyra."
+      "text": "Take the guild hall plot token from Lyra.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the guild hall prefab."
+      "text": "Stake and build the guild hall prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Lyra at the guild hall and close the quest in dialogue."
+      "text": "Find Lyra at the guild hall and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.talk"
     }
   ],
   "rewards": [
@@ -42,15 +47,31 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} },
-      { "effect": "activate_guild_hall_if_ready", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      },
+      {
+        "effect": "activate_guild_hall_if_ready",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.description"
 }

@@ -5,7 +5,7 @@ aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.1=안녕하세요 친구
 aetherhaven.dialogue.aetherhaven_bard.main_hub.greeting.2=환영합니다. 음악은 도시에 생기를 불어넣습니다.
 
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_play=그에게 노래를 연주해달라고 부탁하세요.
-aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=그에게 연주를 멈추라고 하세요
+aetherhaven.dialogue.aetherhaven_bard.main_hub.c_stop=그에게 연주를 멈추라고 하세요.
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house=엘리아스를 위한 집에 대해 문의해 보세요.
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_finish=엘리아스에게 집이 있는지 확인하세요
 aetherhaven.dialogue.aetherhaven_bard.main_hub.c_house_remind=집에 대해 다시 물어보세요

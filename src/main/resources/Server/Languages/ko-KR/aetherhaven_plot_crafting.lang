@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =플롯 제작대
-aetherhaven.ui.plotCrafting.previewTitle =미리보기
-aetherhaven.ui.plotCrafting.variantSectionTitle =변형
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =핵심 건물
-aetherhaven.ui.plotCrafting.tabDecorTooltip =장식
-aetherhaven.ui.plotCrafting.variantPrevTooltip =이전 스타일
-aetherhaven.ui.plotCrafting.variantNextTooltip =다음 스타일
-aetherhaven.ui.plotCrafting.craftButton =제작 플롯 토큰
-aetherhaven.ui.plotCrafting.costLine =비용: {cost} 금
-aetherhaven.ui.plotCrafting.fundsLine =보유 코인: {inv} · 마을 재정: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =금이 충분하지 않다.
-aetherhaven.ui.plotCrafting.noSpace =먼저 인벤토리에 공간을 확보하세요.
-aetherhaven.ui.plotCrafting.crafted ={name} 플롯 토큰을 제작했습니다.
-aetherhaven.ui.plotCrafting.unlockSuccess ={building} 플롯을 잠금 해제했습니다.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =당신은 이미 이 줄거리를 알고 있잖아요.
-aetherhaven.ui.plotCrafting.unlockInvalid =이 설계도는 읽을 수 없습니다.
+aetherhaven.ui.plotCrafting.title=플롯 제작대
+aetherhaven.ui.plotCrafting.previewTitle=미리보기
+aetherhaven.ui.plotCrafting.variantSectionTitle=변형
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=핵심 건물
+aetherhaven.ui.plotCrafting.tabDecorTooltip=장식
+aetherhaven.ui.plotCrafting.variantPrevTooltip=이전 스타일
+aetherhaven.ui.plotCrafting.variantNextTooltip=다음 스타일
+aetherhaven.ui.plotCrafting.craftButton=제작 플롯 토큰
+aetherhaven.ui.plotCrafting.costLine=비용: {cost} 금
+aetherhaven.ui.plotCrafting.fundsLine=보유 코인: {inv} · 마을 재정: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=금이 충분하지 않다.
+aetherhaven.ui.plotCrafting.noSpace=먼저 인벤토리에 공간을 확보하세요.
+aetherhaven.ui.plotCrafting.crafted={name} 플롯 토큰을 제작했습니다.
+aetherhaven.ui.plotCrafting.unlockSuccess={building} 플롯을 잠금 해제했습니다.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=당신은 이미 이 줄거리를 알고 있잖아요.
+aetherhaven.ui.plotCrafting.unlockInvalid=이 설계도는 읽을 수 없습니다.

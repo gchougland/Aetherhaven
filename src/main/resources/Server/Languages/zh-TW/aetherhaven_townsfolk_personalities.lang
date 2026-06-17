@@ -9,7 +9,7 @@ aetherhaven.townsfolk.personality.cheerful.greeting.5=你好！如果你需要�
 aetherhaven.townsfolk.personality.shy.greeting.1=哦，你好。我不是故意盯著你看的。
 aetherhaven.townsfolk.personality.shy.greeting.2=你好。抱歉，我不太擅長開啟對話。
 aetherhaven.townsfolk.personality.shy.greeting.3=你好，我只是路過，請不要介意。
-aetherhaven.townsfolk.personality.shy.greeting.4=哦，你好。希望我沒有礙事。
+aetherhaven.townsfolk.personality.shy.greeting.4=哦，你好。希望我沒有礙到你。
 aetherhaven.townsfolk.personality.shy.greeting.5=你好。我會盡量不跟你嘮叨個沒完。
 
 aetherhaven.townsfolk.personality.curious.greeting.1=你最近在這附近看到什麼有趣的事了嗎？
@@ -28,7 +28,7 @@ aetherhaven.townsfolk.personality.mischievous.greeting.1=如果你之後聽到�
 aetherhaven.townsfolk.personality.mischievous.greeting.2=你好！我只是在計劃一件無傷大雅的小事。大概吧。
 aetherhaven.townsfolk.personality.mischievous.greeting.3=你好。你看起來需要一點刺激。我可能認識個這樣的人。
 aetherhaven.townsfolk.personality.mischievous.greeting.4=哦，真是太巧了。我正需要一個不會告密的證人。
-aetherhaven.townsfolk.personality.mischievous.greeting.5=嘿！答應我你不會再說這種話，但我可能給某人留下了一個驚喜。
+aetherhaven.townsfolk.personality.mischievous.greeting.5=嘿！答應我你不會再說下去了，但我可能給某人留下了一個驚喜。
 
 aetherhaven.townsfolk.personality.homebody.greeting.1=你好。我正打算盡快回家。
 aetherhaven.townsfolk.personality.homebody.greeting.2=嗨。沒有什麼比回到家更讓我感到溫暖的了。
@@ -103,7 +103,7 @@ aetherhaven.townsfolk.personality.grumpy.greeting.5=嘿，長話短說，我們�
 aetherhaven.townsfolk.personality.rude.greeting.1=你擋路了，讓開。
 aetherhaven.townsfolk.personality.rude.greeting.2=我沒時間閒聊，也沒時間長談，總之，任何談話我都不想談。
 aetherhaven.townsfolk.personality.rude.greeting.3=你想要什麼？快點說。
-aetherhaven.townsfolk.personality.rude.greeting.4=我當時正忙著無視別人，你打斷了我的計畫。
+aetherhaven.townsfolk.personality.rude.greeting.4=我當時正忙著無視別人，你打斷了我的好事。
 aetherhaven.townsfolk.personality.rude.greeting.5=你好。不，我並不高興見到你。請找個更友善的人吧。
 
 aetherhaven.townsfolk.personality.gloomy.greeting.1=你好。下雨天更符合我的心情。或下雪天也行。任何陰暗的天氣都行。

@@ -13,9 +13,18 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 40,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 360 },
-    { "resourceTypeId": "Rock", "count": 80 },
-    { "itemId": "Bench_Builders", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 360
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 80
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -41,5 +50,6 @@
   "tags": [
     "work",
     "builder"
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_builders_hut.displayName"
 }

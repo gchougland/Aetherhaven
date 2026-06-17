@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the lumbermill plot token from Seren."
+      "text": "Take the lumbermill plot token from Seren.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the lumbermill prefab."
+      "text": "Stake and build the lumbermill prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Seren at the desk and close the quest in dialogue."
+      "text": "Find Seren at the desk and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.description"
 }

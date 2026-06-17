@@ -8,29 +8,35 @@
   "title": "A home for a guard",
   "description": "This guard wants a house in town before they count as a full resident.",
   "prerequisites": {
-    "completedQuestIds": ["q_build_guild_hall"],
+    "completedQuestIds": [
+      "q_build_guild_hall"
+    ],
     "anyCompletedQuestIds": []
   },
   "objectives": [
     {
       "id": "token",
       "kind": "journal",
-      "text": "Talk to the guard and take a house plot token."
+      "text": "Talk to the guard and take a house plot token.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the house."
+      "text": "Stake and build the house.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.objective.build"
     },
     {
       "id": "assign",
       "kind": "custom",
-      "text": "Assign this guard on the house sign."
+      "text": "Assign this guard on the house sign.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.objective.assign"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Talk to the guard again when they are living there."
+      "text": "Talk to the guard again when they are living there.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.objective.talk"
     }
   ],
   "rewards": [
@@ -46,5 +52,9 @@
     "onComplete": [],
     "onAbandon": []
   },
-  "repeat": { "mode": "per_entity" }
+  "repeat": {
+    "mode": "per_entity"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_guard.description"
 }

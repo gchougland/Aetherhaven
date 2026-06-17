@@ -30,7 +30,7 @@ aetherhaven.poiMarkerConfig.presetSit=Sentarse / divertirse
 aetherhaven.poiMarkerConfig.presetWork=Trabajar
 aetherhaven.poiMarkerConfig.summary={preset} ({kind})
 aetherhaven.poiMarkerConfig.capacity=Espacios para PNJ (1–4)
-aetherhaven.poiMarkerConfig.mountToggle=Se monta en muebles (camas, sillas).
+aetherhaven.poiMarkerConfig.mountToggle=Se puede montar en muebles (camas, sillas).
 aetherhaven.poiMarkerConfig.workAction=Acción laboral
 aetherhaven.poiMarkerConfig.workNone=Ninguno
 aetherhaven.poiMarkerConfig.workMine=Mío
@@ -53,7 +53,7 @@ aetherhaven.founder.createFailed=No se pudo crear la estatua del fundador. El bl
 # === Debug: villager autonomy overlay ===
 # Autonomy debug
 aetherhaven.debug.autonomy.notVillager=El objetivo no es un aldeano de Aetherhaven.
-aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía ACTIVADA (DisplayCustom + VisPath). Superposición de AH en la placa de identificación.
+aetherhaven.debug.autonomy.toggledOn=Depuración de autonomía ACTIVADA (DisplayCustom + VisPath). Superposición AH en la placa de identificación.
 aetherhaven.debug.autonomy.toggledOff=Desactivación de la depuración de autonomía para este aldeano.
 aetherhaven.debug.autonomy.state=Depuración de autonomía para este aldeano: {state}
 aetherhaven.debug.autonomy.cleared=Se ha solucionado el problema de autonomía de Aetherhaven para este aldeano.
@@ -101,7 +101,7 @@ aetherhaven.debug.plots.finishassemblyNone=No se deben ensamblar parcelas con un
 aetherhaven.debug.plots.finishassemblyDone=Se finalizaron instantáneamente las construcciones de parcelas en curso de {count}.
 aetherhaven.debug.plots.removeBadUuid=UUID de parcela no válido. Utilice el ID de la lista de parcelas de /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=No hay parcela {plotId} en tu ciudad.
-aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verifique los registros).
+aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verificar los registros).
 aetherhaven.debug.plots.removedPlot=Se eliminó la parcela {plotId} del municipio y se limpió su huella.
 aetherhaven.debug.poi.invalidTownUuid=UUID de ciudad no válido: {raw}
 aetherhaven.debug.poi.noTownArg=No tienes ninguna ciudad en este mundo (usa un argumento UUID de ciudad).

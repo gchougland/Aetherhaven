@@ -8,8 +8,14 @@
   "plotTokenLockedByDefault": true,
   "decorationPlot": true,
   "excludeFromTownJournal": true,
-  "tags": ["decoration"],
-  "plotAnchorOffset": [6, 0, 6],
+  "tags": [
+    "decoration"
+  ],
+  "plotAnchorOffset": [
+    6,
+    0,
+    6
+  ],
   "assemblyDeferredBlockIds": [
     "Plant_Leaves_Windwillow",
     "Wood_Ash_Trunk_Full",
@@ -24,10 +30,26 @@
   "autonomyNavRoofExclusionYBelowMaxY": 8,
   "treasuryGoldCoinCost": 28,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 320 },
-    { "resourceTypeId": "Rock", "count": 40 },
-    { "itemId": "Bench_Cooking", "count": 2 },
-    { "itemId": "Bench_Furnace", "count": 2 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
-  ]
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 320
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 40
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_decoration_hytiny_potted_treehouse.displayName"
 }

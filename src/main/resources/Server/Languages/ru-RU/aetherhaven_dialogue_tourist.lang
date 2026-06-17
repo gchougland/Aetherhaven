@@ -1,12 +1,12 @@
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Хотели бы вы здесь жить?
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Ваш дом готов.
-aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=О моем доме...
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=О моём доме...
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=О переезде...
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=До свидания
 
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=Мне нравится ваш город. Не могли бы вы найти мне дом? Как только у меня появится место для ночлега, я буду ежедневно вносить взносы в казну.
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=Я найду тебе дом
-aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Возможно, позже
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Возможно, позже.
 
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Спасибо. Забронирую участок под дом, закончу строительство, а потом напишу на табличке с названием дома. Приезжайте, когда я буду там жить.
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Сделаю

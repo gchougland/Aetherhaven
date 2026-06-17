@@ -12,21 +12,21 @@ aetherhaven.ui.treasury.couldNotAddCoins=Не удалось добавить м
 aetherhaven.ui.treasury.withdrew=Снял золотые монеты {count}.
 aetherhaven.ui.treasury.tax.comfortPercent={pct}%
 aetherhaven.ui.treasury.notificationTaxCollected={amount} в собранных налогах
-aetherhaven.ui.treasury.debug.taxBreakdownIntro=Распределение налогов (только загруженные участки; незагруженные жители не вносят 0% до момента моделирования):
+aetherhaven.ui.treasury.debug.taxBreakdownIntro=Распределение налогов (для загруженных жителей используются текущие потребности; для строк списка, не входящих в загруженные фрагменты, используются последние сохраненные потребности, если таковые имеются):
 aetherhaven.ui.treasury.debug.titheNoHall=Десятина: в этом городе нет полноценной ратуши.
-aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (нет загруженных жителей или 0 по результатам расчетов политики). Разгрузка/потребности/разборка: /aetherhaven tax breakdown
+aetherhaven.ui.treasury.debug.titheZero=Десятина: 0 золота (нет имеющих право на получение десятины жителей или 0 по результатам расчетов политики). Расчет: /aetherhaven tax breakdown
 aetherhaven.ui.treasury.debug.titheApplied=Десятина: +{amount} золота в казну (те же правила, что и при утреннем сборе).
 aetherhaven.ui.treasury.debug.state2=townHallComplete={a} morningWindow={b} dawnEpochDay={c} treasuryLastTaxDay={d} wouldCollectNextMorningTick={e}
-aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} loadedResidents={c}
+aetherhaven.ui.treasury.debug.state3=policy={a} maxPerResident={b} residentRows={c} simulatedNow={d}
 aetherhaven.ui.treasury.debug.villagerLine={name} ({kind}) комфорт={comfort} золото={gold}
 aetherhaven.ui.treasury.debug.state4=sumResidents={a} founderActive={b} founderPermille={c} afterFounder={d}
 aetherhaven.ui.treasury.debug.state5=stewardsFeastTax={a} feastPermille={b} finalTotal={c}
 
 # === UI: town journal (quest list messages) ===
-aetherhaven.ui.questJournal.needTown=В этом мире вам нужен город, чтобы отслеживать задания.
-aetherhaven.ui.questJournal.noPermission=У вас нет разрешения на управление городскими заданиями.
-aetherhaven.ui.questJournal.noActive=Активных заданий нет.
-aetherhaven.ui.questJournal.hint=Нажмите на задание, чтобы узнать подробности. × удаляет его из вашего журнала (вы можете взять его снова у того, кто его выдал).
+aetherhaven.ui.questJournal.needTown=Для использования этой вкладки вам нужен город в этом мире.
+aetherhaven.ui.questJournal.noPermission=Вы не можете управлять городскими заданиями.
+aetherhaven.ui.questJournal.noActive=В данный момент активных заданий нет.
+aetherhaven.ui.questJournal.hint=Выберите вопрос слева, чтобы прочитать его здесь.
 aetherhaven.ui.questJournal.questForName={title} для {name}
 aetherhaven.ui.questJournal.questDescriptionForName={body} Присвойте {name} табличке дома, когда она будет готова.
 
@@ -41,7 +41,7 @@ aetherhaven.ui.dialogue.missingNode=Отсутствующий узел: {id}
 aetherhaven.ui.plotConstruction.buildingTitle=Здание
 aetherhaven.ui.plotConstruction.plotSignTitle=Указатель участка
 aetherhaven.ui.plotConstruction.noConstruction=Для данного участка строительство не запланировано.
-aetherhaven.ui.plotConstruction.assignResidentHint=Назначьте жителя деревни, который здесь проживает (квест на получение дома будет завершен, если он совпадает).
+aetherhaven.ui.plotConstruction.assignResidentHint=Выберите, кто будет жить в этом доме.
 aetherhaven.ui.plotConstruction.houseResidentUnassigned=Не назначено
 aetherhaven.ui.plotConstruction.couldNotLoadPlayerData=Не удалось загрузить данные игрока.
 aetherhaven.ui.plotConstruction.townDataMissing=Данные о населенном пункте для этого квартала не найдены.

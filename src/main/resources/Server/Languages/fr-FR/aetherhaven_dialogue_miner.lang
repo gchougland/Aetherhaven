@@ -1,7 +1,7 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_miner)
 # Full translation keys are aetherhaven.dialogue.aetherhaven_miner.<lineKey> (see Hytale I18nModule).
 aetherhaven.dialogue.aetherhaven_miner.root.speaker=Veine de pierre de Gorruk
-aetherhaven.dialogue.aetherhaven_miner.root.body=Je compte extraire de la pierre et du minerai pour la ville, mais il me faut une vraie cabane de mineur pour m'y atteler correctement. J'ai besoin d'un endroit sec pour dormir et d'un établi solide. Mes anciens collègues disaient qu'il faut suivre le filon, et je crois toujours à cette vérité. Donnez-moi la cabane, et je remplirai vos coffres avec ce que la terre a à offrir.
+aetherhaven.dialogue.aetherhaven_miner.root.body=Je compte extraire de la pierre et du minerai pour la ville, mais il me faut une vraie cabane de mineur avant de pouvoir m'y atteler correctement. J'ai besoin d'un endroit sec pour dormir et d'un établi solide. Mes anciens collègues disaient qu'il faut suivre le filon, et je reste fidèle à cette maxime. Donnez-moi la cabane, et je remplirai vos coffres avec ce que la terre a à offrir.
 aetherhaven.dialogue.aetherhaven_miner.root.hc0=Vous vouliez parler d'une maison.
 aetherhaven.dialogue.aetherhaven_miner.root.hc1=Votre nom figure sur le registre de votre nouvelle maison, comme vous l'aviez demandé.
 aetherhaven.dialogue.aetherhaven_miner.root.hc2=La maison est encore en construction.

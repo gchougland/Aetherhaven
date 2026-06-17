@@ -144,7 +144,10 @@ public final class PlotBuildingKindRequirements {
             || AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(baseId)) {
             return PlotBuildingKind.AMENITY;
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(baseId)) {
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(baseId)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(baseId)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(baseId)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(baseId)) {
             return PlotBuildingKind.SHOP;
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(baseId)) {

@@ -47,7 +47,7 @@ benchCategories.aetherhaven.town_planning=Planejamento urbano
 benchCategories.aetherhaven.plot_tokens=Fichas de enredo
 
 items.Aetherhaven_Plot_Placement_Tool.name=equipe de alocação de lotes
-items.Aetherhaven_Plot_Placement_Tool.description=Guarde a ficha de terreno correspondente em sua bolsa. Use este bastão enquanto mira no chão para ver uma representação fantasma do edifício. Ajuste e gire-o até que se encaixe, depois confirme para marcar o terreno. Cancele para limpar a pré-visualização e use o bastão novamente quando quiser um local diferente.
+items.Aetherhaven_Plot_Placement_Tool.description=Guarde a ficha de terreno correspondente em sua bolsa. Use este bastão enquanto mira no chão para ver uma representação fantasma do edifício. Ajuste e gire-o até que se encaixe e confirme para marcar o terreno. Cancele para limpar a pré-visualização e use o bastão novamente quando quiser um local diferente.
 
 items.Aetherhaven_Wall_Wand.name=varinha de parede
 items.Aetherhaven_Wall_Wand.description=Planeje muros de pedra ao redor da sua cidade. O uso secundário abre uma visão superior para peças de muralha de arame, portão e torre. O uso primário em uma peça existente permite estender ou remover o muro. Cada peça usa uma placa de terreno e é construída como outros terrenos da cidade.
@@ -68,7 +68,7 @@ items.Aetherhaven_Poi_Tool.legendUse=Utilização: define o caminho alvo do NPC 
 aetherhaven.poiTool.legendTitle=Ferramenta POI
 aetherhaven.poiTool.legendModeCycle=P: Alternar entre pontos de interesse e pontos de aventureiros
 aetherhaven.poiTool.legendPoiHeader=modo de pontos de interesse
-aetherhaven.poiTool.legendPrimary=Primário: selecione o ponto de interesse (POI) mais próximo do bloco.
+aetherhaven.poiTool.legendPrimary=Primário: selecione o ponto de interesse mais próximo do bloco.
 aetherhaven.poiTool.legendSecondaryPoi=Secundário: mover o ponto de interesse selecionado para o bloco
 aetherhaven.poiTool.legendUse=Utilização: define o caminho alvo do NPC para o Ponto de Interesse selecionado (Usar em bloqueios de Pontos de Interesse)
 aetherhaven.poiTool.legendSpawnHeader=Modo de pontos de aventura
@@ -254,7 +254,7 @@ aetherhaven.patrolWand.hudRouteNew=Nova rota
 aetherhaven.patrolWand.hudHint=Construir: adicionar pontos, loop R, nome F e salvar | Atribuir: lista de guardas F | Q: modo | E: nova rota ou limpar guarda
 
 aetherhaven.patrolWand.addedNode=Ponto adicionado. {n} nesta rota.
-aetherhaven.patrolWand.removedNode=Ponto removido. {n} saiu nesta rota.
+aetherhaven.patrolWand.removedNode=Ponto removido. {n} à esquerda nesta rota.
 aetherhaven.patrolWand.needBuildMode=Alterne para o modo de construção com a tecla Q para adicionar ou remover pontos.
 aetherhaven.patrolWand.notInTown=Fique dentro da sua cidade para usar a varinha de patrulha.
 aetherhaven.patrolWand.notMember=Você precisa ser membro da cidade para editar rotas de patrulha.
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Atribuir
 aetherhaven.patrolWand.guardTypeKnight=Cavaleiro
 aetherhaven.patrolWand.guardTypeArcher=Arqueiro
 aetherhaven.patrolWand.guardTypeMage=Mago
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Por conta própria
 aetherhaven.patrolWand.toastAdded=Ponto adicionado
 aetherhaven.patrolWand.toastRemoved=Ponto removido
 aetherhaven.patrolWand.toastSelected=Rota selecionada
@@ -314,7 +314,7 @@ items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Leia isto para des
 items.Aetherhaven_Plot_Creator_Staff.name=Equipe de criação de enredo
 items.Aetherhaven_Plot_Creator_Staff.description=Transforme uma construção em um edifício personalizado da cidade. Consulte o Guia do Diário da Cidade. F inicia ou executa a ação na etapa atual. Clique com o botão direito do mouse nos blocos para definir limites e locais. Q/E anterior/próximo. R cancela.
 
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=ficha de terreno da loja do ferreiro
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=ficha de lote da loja do ferreiro
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=É necessário posicionar a planta da oficina do ferreiro usando a ferramenta de posicionamento de terrenos.
 
 items.Aetherhaven_Plot_Token_Park.name=Ficha de loteamento de parque

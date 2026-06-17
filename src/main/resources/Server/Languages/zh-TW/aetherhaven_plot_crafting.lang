@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =地塊製作台
-aetherhaven.ui.plotCrafting.previewTitle =預覽
-aetherhaven.ui.plotCrafting.variantSectionTitle =變體
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =核心建築
-aetherhaven.ui.plotCrafting.tabDecorTooltip =裝飾
-aetherhaven.ui.plotCrafting.variantPrevTooltip =舊款式
-aetherhaven.ui.plotCrafting.variantNextTooltip =下一代風格
-aetherhaven.ui.plotCrafting.craftButton =工藝地塊代幣
-aetherhaven.ui.plotCrafting.costLine =成本：{cost}金幣
-aetherhaven.ui.plotCrafting.fundsLine =您的金幣：{inv} · 城鎮金庫：{treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =黃金不夠。
-aetherhaven.ui.plotCrafting.noSpace =首先要騰出庫存空間。
-aetherhaven.ui.plotCrafting.crafted =精心製作的 {name} 地塊標記。
-aetherhaven.ui.plotCrafting.unlockSuccess =你已解鎖{building}地塊。
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =你已經知道這個劇情了。
-aetherhaven.ui.plotCrafting.unlockInvalid =這份藍圖無法辨認。
+aetherhaven.ui.plotCrafting.title=地塊製作台
+aetherhaven.ui.plotCrafting.previewTitle=預覽
+aetherhaven.ui.plotCrafting.variantSectionTitle=變體
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=核心建築
+aetherhaven.ui.plotCrafting.tabDecorTooltip=裝飾
+aetherhaven.ui.plotCrafting.variantPrevTooltip=舊款式
+aetherhaven.ui.plotCrafting.variantNextTooltip=下一代風格
+aetherhaven.ui.plotCrafting.craftButton=工藝地塊代幣
+aetherhaven.ui.plotCrafting.costLine=成本：{cost}金幣
+aetherhaven.ui.plotCrafting.fundsLine=您的金幣：{inv} · 城鎮金庫：{treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=黃金不夠。
+aetherhaven.ui.plotCrafting.noSpace=首先要騰出庫存空間。
+aetherhaven.ui.plotCrafting.crafted=精心製作的 {name} 地塊標記。
+aetherhaven.ui.plotCrafting.unlockSuccess=你已解鎖{building}地塊。
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=你已經知道這個劇情了。
+aetherhaven.ui.plotCrafting.unlockInvalid=這份藍圖無法辨認。

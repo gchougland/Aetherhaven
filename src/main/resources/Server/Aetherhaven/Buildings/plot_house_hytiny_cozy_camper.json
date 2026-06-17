@@ -7,20 +7,46 @@
   "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper",
   "plotTokenLockedByDefault": true,
-  "plotAnchorOffset": [4, 0, 4],
-  "managementBlockLocalPos": [0, 5, -4],
+  "plotAnchorOffset": [
+    4,
+    0,
+    4
+  ],
+  "managementBlockLocalPos": [
+    0,
+    5,
+    -4
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 48,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 235 },
-    { "resourceTypeId": "Rock", "count": 75 },
-    { "itemId": "Bench_Cooking", "count": 1 },
-    { "itemId": "Bench_Farming", "count": 1 },
-    { "itemId": "Bench_Lumbermill", "count": 1 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 235
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 75
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Lumbermill",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -29,11 +55,15 @@
       "localZ": -4,
       "blockTypeId": "Furniture_Feran_Bed",
       "interactionKind": "SLEEP",
-      "tags": ["SLEEP", "ENERGY"],
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": 1,
       "interactionTargetLocalY": 3,
       "interactionTargetLocalZ": -2
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_cozy_camper.displayName"
 }

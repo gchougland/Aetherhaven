@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Seleccionar todos los guardias
 items.Aetherhaven_Rts_Select_All.description=Seleccione a todos los guardias contratados en la ciudad.
 
 items.Aetherhaven_Rts_Select_Knight.name=Caballeros selectos
-items.Aetherhaven_Rts_Select_Knight.description=Seleccione a todos los caballeros guardias.
+items.Aetherhaven_Rts_Select_Knight.description=Seleccione a todos los guardias caballeros y pícaros.
 
 items.Aetherhaven_Rts_Select_Archer.name=Seleccionar arqueros
 items.Aetherhaven_Rts_Select_Archer.description=Seleccione a todos los guardias arqueros.

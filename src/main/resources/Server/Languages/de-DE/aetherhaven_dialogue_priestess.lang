@@ -1,6 +1,6 @@
 # Split from server.lang - dialogue bundle (aetherhaven_dialogue_priestess)
 # Full translation keys are aetherhaven.dialogue.aetherhaven_priestess.<lineKey> (see Hytale I18nModule).
-aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. Ich verwalte Gaias Schutz und lehre andere ihre Gnade. Das Gasthaus bietet Obdach, doch kann ich die notwendigen Riten nicht in einem kleinen, lärmenden Raum vollziehen. Ich benötige einen eigenen Altar im Freien: Wege, Sitzgelegenheiten und eine Statue, wo die Menschen beten können, ohne Küchenrauch einzuatmen.
+aetherhaven.dialogue.aetherhaven_priestess.root.body=Serah Thornwell. Ich vermittle Gaias Schutz und lehre andere ihre Gnade. Das Gasthaus bietet Obdach, doch kann ich die notwendigen Riten nicht in einem kleinen, lärmenden Raum vollziehen. Ich benötige einen eigenen Altar im Freien: Wege, Sitzgelegenheiten und eine Statue, wo die Menschen beten können, ohne Küchenrauch einzuatmen.
 aetherhaven.dialogue.aetherhaven_priestess.root.c0=Du wolltest über ein Haus sprechen.
 aetherhaven.dialogue.aetherhaven_priestess.root.c1=Sie sind wie gewünscht im Bücherregal registriert.
 aetherhaven.dialogue.aetherhaven_priestess.root.c2=Das Haus ist noch nicht fertig.
@@ -93,10 +93,10 @@ aetherhaven.dialogue.aetherhaven_priestess.main_hub.greeting.7=Du glaubst vielle
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.greeting.8=Wenn Sie Sorgen im Herzen tragen, setzen Sie sich zu mir, und wir können sie gemeinsam angehen.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.greeting.9=Ich kann Wunden heilen, aber ich habe kein Heilmittel für ein verdorbenes Herz.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.0=Eine nahrhafte Mahlzeit nach der Gebetswache stärkt den Körper besser als Gebete allein.
-aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.1=Saubere Verbände und zuverlässige Heilmittel werden hier immer benötigt.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.1=Saubere Verbände und zuverlässige Heiltränke werden hier immer benötigt.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.2=Wenn ihr Lichtpartikel oder Heiltränke mitbringt, wird Gaias Altar noch heller leuchten.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.3=Schmuck mit einem bestimmten Zweck kann als Opfergabe dienen, wenn die Absicht rein ist.
-aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.4=Ich nehme jede Spende an, die aufrichtig für den Zweck des Altars bestimmt ist.
+aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.love.4=Ich nehme jede Spende an, die in gutem Glauben für den Zweck des Altars bestimmt ist.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.0=Manche Gegenstände sind kontaminiert und sollten besser unberührt bleiben. Bringen Sie sie bitte nicht hierher.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.1=Schmutz und Staub haben an diesem Ort der Reinheit und Sauberkeit keinen Platz.
 aetherhaven.dialogue.aetherhaven_priestess.main_hub.hint.dislike.2=Unbehandelte Knochenartefakte haben hier nichts zu suchen.

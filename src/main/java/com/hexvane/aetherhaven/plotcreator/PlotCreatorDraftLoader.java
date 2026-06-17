@@ -107,7 +107,10 @@ public final class PlotCreatorDraftLoader {
             || AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(id)) {
             return PlotBuildingKind.AMENITY;
         }
-        if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(id)) {
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(id)) {
             return PlotBuildingKind.SHOP;
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(id)) {

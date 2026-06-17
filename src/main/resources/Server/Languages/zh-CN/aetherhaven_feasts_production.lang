@@ -23,7 +23,7 @@ aetherhaven.ui.feast.err.feastNotUnlocked=你还没学会这顿盛宴的习俗�
 aetherhaven.ui.feast.err.timedFeastActive=该镇已开始实施另一项限时盛宴。
 aetherhaven.ui.feast.err.waitForTimedFeastEnd=请等到当前限时盛宴结束后再供应 Berrycircle Concord。
 aetherhaven.ui.feast.err.berrycircleCooldown=浆果圈协约技能仍在冷却中。
-aetherhaven.ui.feast.err.notEnoughIngredients=您缺少所需的全部材料。
+aetherhaven.ui.feast.err.notEnoughIngredients=您缺少所需的全部食材。
 
 aetherhaven.ui.production.title=工作场所商店
 aetherhaven.ui.production.prev=上一页
@@ -69,7 +69,7 @@ aetherhaven.ui.productionUnlocks.notify.unlocked=已解锁此工作场所的{ite
 
 aetherhaven.feast.stewards.name=管家账簿晚宴
 aetherhaven.feast.stewards.description=准备面包、奶酪和一份正宗的南瓜派，这样一周的早晨奉献就会比较丰盛。
-aetherhaven.feast.hearthglass.name=炉边守望
+aetherhaven.feast.hearthglass.name=炉边守夜
 aetherhaven.feast.hearthglass.description=烤鱼、熟肉和蔬菜摆放在一起，作为一顿慢火熬制的守夜餐。村民们的需求在一周内逐渐消退。
 aetherhaven.feast.berrycircle.name=浆果圈康科德
 aetherhaven.feast.berrycircle.description=一圈轻盈的餐盘：浆果沙拉、水果串和爆米花，用来搭配吐司。邻居们会因此对你格外友善。下次再端上这道菜之前，请等待一周的清晨。

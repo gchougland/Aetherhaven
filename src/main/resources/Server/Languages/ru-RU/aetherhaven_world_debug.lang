@@ -37,7 +37,7 @@ aetherhaven.poiMarkerConfig.workMine=Мой
 aetherhaven.poiMarkerConfig.workChop=Нарезать
 aetherhaven.poiMarkerConfig.confirm=Местоположение POI
 aetherhaven.poiMarkerConfig.cancel=Отмена
-aetherhaven.poiMarkerConfig.placed=Объект интереса установлен.
+aetherhaven.poiMarkerConfig.placed=Точка интереса размещена.
 
 # === Plots, placement, founder monument (world messages) ===
 # Plots & placement
@@ -97,7 +97,7 @@ aetherhaven.debug.plots.header={index}. plot={plotId} state={state} type={type}
 aetherhaven.towns.inWorldCount=Города Этерхейвена в этом мире: {count}
 aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
 aetherhaven.debug.plots.line={plotId} {construction} {state} знак@{x},{y},{z}
-aetherhaven.debug.plots.finishassemblyNone=Не объединяйте участки под застройку, если в вашем городе уже есть работа (загружайте чанки вокруг построек или начинайте строительство первым).
+aetherhaven.debug.plots.finishassemblyNone=Не следует объединять участки под застройку, если в вашем городе уже ведется работа (загружайте чанки вокруг построек или начинайте строительство первым).
 aetherhaven.debug.plots.finishassemblyDone=Мгновенно завершено создание (создания) текущего участка {count}.
 aetherhaven.debug.plots.removeBadUuid=Недопустимый UUID графика. Используйте идентификатор из списка графиков /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=В вашем городе нет участка {plotId}.

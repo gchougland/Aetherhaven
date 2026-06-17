@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Établi de création d'intrigues
-aetherhaven.ui.plotCrafting.previewTitle =Aperçu
-aetherhaven.ui.plotCrafting.variantSectionTitle =Variantes
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Bâtiments principaux
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Décorations
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Style précédent
-aetherhaven.ui.plotCrafting.variantNextTooltip =Style suivant
-aetherhaven.ui.plotCrafting.craftButton =jeton de complot d'artisanat
-aetherhaven.ui.plotCrafting.costLine =Coût : {cost} or
-aetherhaven.ui.plotCrafting.fundsLine =Vos pièces : {inv} · Trésor de la ville : {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Pas assez d'or.
-aetherhaven.ui.plotCrafting.noSpace =Commencez par faire de la place dans votre inventaire.
-aetherhaven.ui.plotCrafting.crafted =Jeton de scénario {name} fabriqué.
-aetherhaven.ui.plotCrafting.unlockSuccess =Vous avez débloqué le scénario {building}.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Vous connaissez déjà cette intrigue.
-aetherhaven.ui.plotCrafting.unlockInvalid =Ce plan est illisible.
+aetherhaven.ui.plotCrafting.title=Établi de création d'intrigues
+aetherhaven.ui.plotCrafting.previewTitle=Aperçu
+aetherhaven.ui.plotCrafting.variantSectionTitle=Variantes
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Bâtiments principaux
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Décorations
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Style précédent
+aetherhaven.ui.plotCrafting.variantNextTooltip=Style suivant
+aetherhaven.ui.plotCrafting.craftButton=jeton d'intrigue d'artisanat
+aetherhaven.ui.plotCrafting.costLine=Coût : {cost} or
+aetherhaven.ui.plotCrafting.fundsLine=Vos pièces : {inv} · Trésor de la ville : {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Pas assez d'or.
+aetherhaven.ui.plotCrafting.noSpace=Commencez par faire de la place dans votre inventaire.
+aetherhaven.ui.plotCrafting.crafted=Jeton de scénario {name} fabriqué.
+aetherhaven.ui.plotCrafting.unlockSuccess=Vous avez débloqué le scénario {building}.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Vous connaissez déjà cette intrigue.
+aetherhaven.ui.plotCrafting.unlockInvalid=Ce plan est illisible.

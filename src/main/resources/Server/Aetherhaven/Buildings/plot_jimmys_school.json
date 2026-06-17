@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_school",
-  "displayName": "Jimmy\u0027s School",
+  "displayName": "Jimmy's School",
   "description": "By Jimmy G After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
   "prefabPath": "plot_jimmys_school.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -14,14 +14,24 @@
   "treasuryGoldCoinCost": 40,
   "plotTokenLockedByDefault": true,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 900 },
-    { "resourceTypeId": "Rock", "count": 260 },
-    { "itemId": "Bench_Cooking", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 900
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 260
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    }
   ],
   "tags": [
     "decoration",
     "civic"
   ],
   "excludeFromTownJournal": true,
-  "decorationPlot": true
+  "decorationPlot": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_school.displayName"
 }

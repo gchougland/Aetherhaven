@@ -1,19 +1,19 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title =Лавка для створення сюжету
-aetherhaven.ui.plotCrafting.previewTitle =Попередній перегляд
-aetherhaven.ui.plotCrafting.variantSectionTitle =Варіанти
-aetherhaven.ui.plotCrafting.variantIndex ={current}/{total}
-aetherhaven.ui.plotCrafting.tabCoreTooltip =Основні будівлі
-aetherhaven.ui.plotCrafting.tabDecorTooltip =Прикраси
-aetherhaven.ui.plotCrafting.variantPrevTooltip =Попередній стиль
-aetherhaven.ui.plotCrafting.variantNextTooltip =Наступний стиль
-aetherhaven.ui.plotCrafting.craftButton =Жетон сюжету для крафту
-aetherhaven.ui.plotCrafting.costLine =Вартість: {cost} золота
-aetherhaven.ui.plotCrafting.fundsLine =Ваші монети: {inv} · Міська скарбниця: {treasury}
-aetherhaven.ui.plotCrafting.insufficientGold =Недостатньо золота.
-aetherhaven.ui.plotCrafting.noSpace =Спочатку звільніть місце в інвентарі.
-aetherhaven.ui.plotCrafting.crafted =Виготовлений жетон сюжету {name}.
-aetherhaven.ui.plotCrafting.unlockSuccess =Ви розблокували сюжет {building}.
-aetherhaven.ui.plotCrafting.unlockAlreadyKnown =Ви вже знаєте цей сюжет.
-aetherhaven.ui.plotCrafting.unlockInvalid =Цей креслення неможливо прочитати.
+aetherhaven.ui.plotCrafting.title=Лавка для створення сюжету
+aetherhaven.ui.plotCrafting.previewTitle=Попередній перегляд
+aetherhaven.ui.plotCrafting.variantSectionTitle=Варіанти
+aetherhaven.ui.plotCrafting.variantIndex={current}/{total}
+aetherhaven.ui.plotCrafting.tabCoreTooltip=Основні будівлі
+aetherhaven.ui.plotCrafting.tabDecorTooltip=Прикраси
+aetherhaven.ui.plotCrafting.variantPrevTooltip=Попередній стиль
+aetherhaven.ui.plotCrafting.variantNextTooltip=Наступний стиль
+aetherhaven.ui.plotCrafting.craftButton=Жетон сюжету для крафту
+aetherhaven.ui.plotCrafting.costLine=Вартість: {cost} золота
+aetherhaven.ui.plotCrafting.fundsLine=Ваші монети: {inv} · Міська скарбниця: {treasury}
+aetherhaven.ui.plotCrafting.insufficientGold=Недостатньо золота.
+aetherhaven.ui.plotCrafting.noSpace=Спочатку звільніть місце в інвентарі.
+aetherhaven.ui.plotCrafting.crafted=Виготовлений жетон сюжету {name}.
+aetherhaven.ui.plotCrafting.unlockSuccess=Ви розблокували сюжет {building}.
+aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Ви вже знаєте цей сюжет.
+aetherhaven.ui.plotCrafting.unlockInvalid=Цей креслення неможливо прочитати.

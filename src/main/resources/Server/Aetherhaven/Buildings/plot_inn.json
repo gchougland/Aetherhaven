@@ -7,18 +7,51 @@
   "prefabPath": "Inn.prefab.json",
   "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Inn",
-  "plotAnchorOffset": [9, 0, 6],
-  "managementBlockLocalPos": [6, 2, 4],
-  "innkeeperSpawnLocal": [4, 1, 4],
-  "guildMasterSpawnLocal": [7, 1, 2],
-  "visitorSpawnLocals": [[5, 1, 0], [2, 1, 0]],
+  "plotAnchorOffset": [
+    9,
+    0,
+    6
+  ],
+  "managementBlockLocalPos": [
+    6,
+    2,
+    4
+  ],
+  "innkeeperSpawnLocal": [
+    4,
+    1,
+    4
+  ],
+  "guildMasterSpawnLocal": [
+    7,
+    1,
+    2
+  ],
+  "visitorSpawnLocals": [
+    [
+      5,
+      1,
+      0
+    ],
+    [
+      2,
+      1,
+      0
+    ]
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 580 },
-    { "resourceTypeId": "Rock", "count": 200 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 580
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 200
+    }
   ],
   "pois": [
     {
@@ -27,7 +60,9 @@
       "localZ": 4,
       "blockTypeId": "Aetherhaven_Management_Block",
       "interactionKind": "WORK_SURFACE",
-      "tags": ["WORK"],
+      "tags": [
+        "WORK"
+      ],
       "capacity": 2,
       "interactionTargetLocalX": 5,
       "interactionTargetLocalY": 1,
@@ -39,7 +74,10 @@
       "localZ": 4,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
-      "tags": ["SLEEP", "ENERGY"],
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": -5,
       "interactionTargetLocalY": 1,
@@ -51,7 +89,10 @@
       "localZ": 4,
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
-      "tags": ["SLEEP", "ENERGY"],
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": -1,
       "interactionTargetLocalY": 1,
@@ -66,7 +107,9 @@
       "interactionTargetLocalZ": -1,
       "blockTypeId": "Furniture_Crude_Brazier",
       "interactionKind": "USE_BENCH",
-      "tags": ["EAT"],
+      "tags": [
+        "EAT"
+      ],
       "capacity": 1
     },
     {
@@ -83,5 +126,6 @@
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": 0
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_inn.displayName"
 }

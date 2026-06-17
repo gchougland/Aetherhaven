@@ -22,7 +22,7 @@ items.Aetherhaven_Wood_Scaffold.legendUse=Використання (F): вису
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
 items.Aetherhaven_Plot_Sign.name=знак сюжету
-items.Aetherhaven_Plot_Sign.description=Позначки, де можна розмістити будівлю. Жетони ділянки для крафту знаходяться на верстаті ділянки.
+items.Aetherhaven_Plot_Sign.description=Позначки, де можна розмістити будівлю. Жетони ділянки для виготовлення на верстаті ділянки.
 
 items.Aetherhaven_Charter.name=Статут міста
 items.Aetherhaven_Charter.description=Місце для заснування міста. Кожен гравець може мати одне місто у світі. Використовуйте, щоб відкрити інформацію про місто.
@@ -191,7 +191,7 @@ aetherhaven.pathTool.revertNoPerm=У вас немає прав доступу �
 aetherhaven.pathTool.badUuid=Недійсний ідентифікатор: {raw}
 aetherhaven.pathTool.unknownId=Немає збереженого шляху з таким ідентифікатором.
 aetherhaven.pathTool.reverted=Скасовано блок(и) {cells} для {id}
-aetherhaven.pathTool.navvizOn=Налагодження навігації по шляху: увімкнено
+aetherhaven.pathTool.navvizOn=Налагодження навігації шляхом: увімкнено
 aetherhaven.pathTool.navvizOff=Налагодження навігації по шляху: вимкнено
 aetherhaven.pathTool.navvizNoPerm=Для налагодження навігації по шляху потрібен aetherhaven.path.tool
 
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=Призначити
 aetherhaven.patrolWand.guardTypeKnight=Лицар
 aetherhaven.patrolWand.guardTypeArcher=Лучник
 aetherhaven.patrolWand.guardTypeMage=Маг
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=Розбійник
 aetherhaven.patrolWand.toastAdded=Додано бал
 aetherhaven.patrolWand.toastRemoved=Точку видалено
 aetherhaven.patrolWand.toastSelected=Вибраний маршрут

@@ -13,17 +13,20 @@
     {
       "id": "token",
       "kind": "journal",
-      "text": "Take the builder's hut plot token from Rowan."
+      "text": "Take the builder's hut plot token from Rowan.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.token"
     },
     {
       "id": "build",
       "kind": "journal",
-      "text": "Stake and build the builder's hut prefab."
+      "text": "Stake and build the builder's hut prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.build"
     },
     {
       "id": "talk",
       "kind": "journal",
-      "text": "Find Rowan at the hut and close the quest in dialogue."
+      "text": "Find Rowan at the hut and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.talk"
     }
   ],
   "rewards": [
@@ -42,14 +45,27 @@
   ],
   "lifecycle": {
     "onStart": [
-      { "effect": "lock_inn_visitor_for_npc", "params": {} }
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
     ],
     "onComplete": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ],
     "onAbandon": [
-      { "effect": "clear_inn_visitor_locks", "params": {} }
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
     ]
   },
-  "repeat": { "mode": "none" }
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.description"
 }

@@ -14,8 +14,8 @@ aetherhaven.dialogue.aetherhaven_guard.guard_house_accepted.ok=Yapacak
 aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.body=Hâlâ bir çatıya ihtiyacım var. Evi bitirin ve ev tabelasında beni seçin.
 aetherhaven.dialogue.aetherhaven_guard.guard_house_remind.ok=Sağ
 
-aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Önce bir başka bekçi evde bekliyor. O evi bitirdikten sonra gel benimle konuş.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.body=Önce bir başka bekçi evi bekliyor. O evi bitirdikten sonra gel benimle konuş.
 aetherhaven.dialogue.aetherhaven_guard.guard_house_waiting.ok=Anlaşıldı
 
-aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Güzel. Bir kapım ve bir yatağım var. Herkes gibi ben de payımı ödeyeceğim.
+aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.body=Güzel. Benim de bir kapım ve yatağım var. Herkes gibi ben de payımı ödeyeceğim.
 aetherhaven.dialogue.aetherhaven_guard.guard_house_finish.ok=Teşekkür ederim

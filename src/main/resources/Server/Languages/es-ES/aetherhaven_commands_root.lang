@@ -8,9 +8,9 @@ commands.aetherhaven.reload.desc=Creativo: recargar la configuración del mod y 
 commands.aetherhaven.reload.success=Se han recargado los catálogos de configuración y de activos de Aetherhaven.
 commands.aetherhaven.reload.failure=Error al recargar: {detail}
 commands.aetherhaven.reload.noPlugin=El complemento Aetherhaven no se ha cargado.
-commands.aetherhaven.starterkit.desc=Creatividad: prepárate con el kit de inicio (personal de prácticas, estatutos, mesa de planificación, personal de construcción).
+commands.aetherhaven.starterkit.desc=Creatividad: prepárate con el kit de inicio (personal de colocación, estatutos, mesa de planificación, personal de construcción).
 commands.aetherhaven.starterkit.success=Kit de inicio añadido a tu inventario.
-commands.aetherhaven.starterkit.partial=Kit de inicio parcialmente concedido; el/los artículo(s) {failed} no cabían (haga espacio en el inventario).
+commands.aetherhaven.starterkit.partial=Kit de inicio parcialmente concedido; el/los artículo(s) {failed} no cabían (liberar espacio en el inventario).
 
 commands.aetherhaven.exportskin.desc=Creativo: exporta la apariencia de tu avatar como un archivo de modelo.
 commands.aetherhaven.exportskin.other.desc=Creativo: exportar el aspecto del avatar de otro jugador.

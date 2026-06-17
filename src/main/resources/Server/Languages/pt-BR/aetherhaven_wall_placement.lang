@@ -2,7 +2,7 @@
 
 aetherhaven.ui.wallplacement.title=varinha de parede
 aetherhaven.ui.wallplacement.summary=Posicione as peças da muralha para sua cidade. As setas de direção colocam uma placa e iniciam a próxima peça. Concluir a muralha confirma a pré-visualização atual e encerra esta sessão. Construa cada placa como se fossem outros terrenos.
-aetherhaven.ui.wallplacement.tips=Escolha uma parede, portão ou torre. Use as setas do meio para deslizar o ponto inicial e o botão de girar para rotacioná-lo antes de chegar ao seu primeiro lugar. As setas à direita posicionam o marcador para continuar a corrida. Concluir a Parede confirma a pré-visualização atual e encerra esta sessão (incluindo uma torre final). No Modo Criativo: /ah walldebug ativado registra cada passo no chat. O direcional esquerdo seleciona o lado de onde você visualiza. Desfazer remove o último marcador. Cancelar encerra esta sessão.
+aetherhaven.ui.wallplacement.tips=Escolha uma parede, portão ou torre. Use as setas do meio para deslizar o ponto inicial e o botão de girar para rotacioná-lo antes de chegar ao seu primeiro lugar. As setas à direita posicionam o marcador para continuar a corrida. Concluir a parede confirma a pré-visualização atual e encerra esta sessão (incluindo uma torre final). No modo Criativo: /ah walldebug ativado registra cada passo no chat. O direcional esquerdo seleciona o lado de onde você visualiza. Desfazer remove o último marcador. Cancelar encerra esta sessão.
 aetherhaven.ui.wallplacement.place=Placa de sinalização
 aetherhaven.ui.wallplacement.completeWall=Parede completa
 aetherhaven.ui.wallplacement.pieceWall=Parede

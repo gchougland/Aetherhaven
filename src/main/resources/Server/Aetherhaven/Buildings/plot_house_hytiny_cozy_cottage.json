@@ -7,25 +7,66 @@
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Cottage",
   "plotTokenLockedByDefault": true,
-  "plotAnchorOffset": [4, 0, 4],
-  "managementBlockLocalPos": [4, 2, 6],
+  "plotAnchorOffset": [
+    4,
+    0,
+    4
+  ],
+  "managementBlockLocalPos": [
+    4,
+    2,
+    6
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 2,
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 48,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 235 },
-    { "resourceTypeId": "Rock", "count": 75 },
-    { "itemId": "Bench_Alchemy", "count": 1 },
-    { "itemId": "Bench_Armour", "count": 1 },
-    { "itemId": "Bench_Builders", "count": 1 },
-    { "itemId": "Bench_Cooking", "count": 1 },
-    { "itemId": "Bench_Farming", "count": 1 },
-    { "itemId": "Bench_Furnace", "count": 1 },
-    { "itemId": "Bench_Tannery", "count": 1 },
-    { "itemId": "Bench_Weapon", "count": 1 },
-    { "itemId": "Bench_WorkBench", "count": 1 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 235
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 75
+    },
+    {
+      "itemId": "Bench_Alchemy",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Armour",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Builders",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Farming",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Tannery",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Weapon",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 1
+    }
   ],
   "pois": [
     {
@@ -34,11 +75,15 @@
       "localZ": -4,
       "blockTypeId": "Furniture_Human_Ruins_Bed",
       "interactionKind": "SLEEP",
-      "tags": ["SLEEP", "ENERGY"],
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
       "capacity": 1,
       "interactionTargetLocalX": 3,
       "interactionTargetLocalY": 4,
       "interactionTargetLocalZ": -1
     }
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_cozy_cottage.displayName"
 }

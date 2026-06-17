@@ -47,7 +47,7 @@ aetherhaven.plotSign.couldNotAdd=区画標識を追加できませんでした�
 
 # Founder monument
 aetherhaven.founder.inTerritory=町の領土内に創設者の記念碑を設置してください。
-aetherhaven.founder.cannotPlace=創設者の記念碑をここに設置することはできません。
+aetherhaven.founder.cannotPlace=ここに創設者の記念碑を設置することはできません。
 aetherhaven.founder.createFailed=創始者の像を作成できませんでした。ブロックは既に設置されています。もう一度試すには、ブロックを破壊してください。
 
 # === Debug: villager autonomy overlay ===
@@ -98,10 +98,10 @@ aetherhaven.towns.inWorldCount=この世界のエーテルヘイブンの町：{
 aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plots={plots}
 aetherhaven.debug.plots.line={plotId} {construction} {state} 署名@{x}、{y}、{z}
 aetherhaven.debug.plots.finishassemblyNone=町で作業が進行中の場合は、区画を組み立てないでください（建物の周囲にチャンクを読み込むか、先に建物を建設してください）。
-aetherhaven.debug.plots.finishassemblyDone=進行中の {count} プロット構築が即座に完了しました。
+aetherhaven.debug.plots.finishassemblyDone=進行中の{count}プロット構築が即座に完了しました。
 aetherhaven.debug.plots.removeBadUuid=無効なプロットUUIDです。/aetherhaven plots list のIDを使用してください。
 aetherhaven.debug.plots.removeNotFound=あなたの町には区画 {plotId} がありません。
-aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町データから区画を削除するのに失敗しました（ログを確認してください）。
+aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町のデータから区画を削除するのに失敗しました（ログを確認してください）。
 aetherhaven.debug.plots.removedPlot=区画 {plotId} を町から削除し、その占有範囲をクリアしました。
 aetherhaven.debug.poi.invalidTownUuid=無効な町のUUID: {raw}
 aetherhaven.debug.poi.noTownArg=この世界にはあなたの町がありません（町のUUID引数を使用してください）。

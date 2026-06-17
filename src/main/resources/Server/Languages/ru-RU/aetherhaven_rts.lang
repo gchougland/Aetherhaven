@@ -11,7 +11,7 @@ items.Aetherhaven_Rts_Select_All.name=Выбрать всех охраннико
 items.Aetherhaven_Rts_Select_All.description=Выберите всех наемных охранников в городе.
 
 items.Aetherhaven_Rts_Select_Knight.name=Избранные рыцари
-items.Aetherhaven_Rts_Select_Knight.description=Выбрать всех рыцарей-стражей.
+items.Aetherhaven_Rts_Select_Knight.description=Выбрать всех рыцарей и разбойников-стражей.
 
 items.Aetherhaven_Rts_Select_Archer.name=Отбор лучников
 items.Aetherhaven_Rts_Select_Archer.description=Выбрать всех охранников-лучников.
@@ -23,7 +23,7 @@ items.Aetherhaven_Rts_Stance_Banner.name=Баннер позиции
 items.Aetherhaven_Rts_Stance_Banner.description=Настройте стиль боя выбранных охранников.
 
 items.Aetherhaven_Rts_Free.name=Сотрудники отдела выпуска
-items.Aetherhaven_Rts_Free.description=Верните выбранных охранников к выполнению своих обычных обязанностей.
+items.Aetherhaven_Rts_Free.description=Верните выбранных охранников к выполнению обычных обязанностей.
 
 items.Aetherhaven_Rts_Exit.name=Команда "Выход"
 items.Aetherhaven_Rts_Exit.description=Выйдите из режима управления охраной и вернитесь к обычной игре.

@@ -112,7 +112,7 @@ aetherhaven.debug.poi.dumpHeader=世界註冊表中的所有興趣點 ({count}):
 aetherhaven.debug.poi.dumpLine=城鎮={town} {x},{y},{z} 類型={kind} 區塊類型ID={block} 標籤={tags} 地塊={plot}
 
 aetherhaven.debug.tourist.noTown=你在這個世界上沒有自己的城鎮。
-aetherhaven.debug.tourist.targetsHeader={town}（{count} 地塊）的遊客訪問目標：
+aetherhaven.debug.tourist.targetsHeader={town}（{count} 地塊）的遊客造訪目標：
 aetherhaven.debug.tourist.targetsEmpty=沒有已完成的啟用 TouristDestination 的地塊（請檢查地塊建立器或建置 JSON）。
 aetherhaven.debug.tourist.plotLine={building} 地塊={plot} 入口=({entryX},{entryY},{entryZ}) 首選={preferred} 存取點={poiCount}
 aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}

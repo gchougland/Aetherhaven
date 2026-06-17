@@ -4,14 +4,14 @@ items.Aetherhaven_Command_Post.description=坐在这个凳子上，你可以从�
 items.Aetherhaven_Rts_Flag.name=命令标志
 items.Aetherhaven_Rts_Flag.description=派卫兵到地面指定地点。
 
-items.Aetherhaven_Rts_Sword.name=统御剑
+items.Aetherhaven_Rts_Sword.name=统帅剑
 items.Aetherhaven_Rts_Sword.description=集中兵力攻击一个生物。
 
 items.Aetherhaven_Rts_Select_All.name=选择所有守卫
 items.Aetherhaven_Rts_Select_All.description=选中镇上所有雇佣的保安。
 
 items.Aetherhaven_Rts_Select_Knight.name=挑选骑士
-items.Aetherhaven_Rts_Select_Knight.description=选择所有骑士卫兵。
+items.Aetherhaven_Rts_Select_Knight.description=选择所有骑士和流氓守卫。
 
 items.Aetherhaven_Rts_Select_Archer.name=挑选弓箭手
 items.Aetherhaven_Rts_Select_Archer.description=选中所有弓箭手卫兵。
@@ -38,7 +38,7 @@ aetherhaven.rts.stanceAggressive=姿态：激进
 aetherhaven.rts.stanceStandGround=姿势：站立
 aetherhaven.rts.stanceHoldFire=姿态：停止射击
 aetherhaven.rts.hudSelected=已选择 {n} 警卫
-aetherhaven.rts.hudControls=WASD键平移战场视角。空格键和Ctrl键上下移动缩放。滚轮或数字键切换工具。点击守卫进行选择。按住Shift键并点击可添加或移除守卫。拖动框选多个守卫。使用“离开”命令工具（快捷栏第8格）退出游戏。
+aetherhaven.rts.hudControls=WASD键平移战场视角。空格键和Ctrl键上下移动缩放。滚轮或数字键切换工具。点击守卫进行选择。按住Shift键并点击可添加或移除守卫。拖动鼠标框选多个守卫。使用“离开”命令工具（快捷栏第8格）退出游戏。
 aetherhaven.rts.helpFlag=右键点击地面派遣守卫。技能1可在攻击移动和移动之间切换。技能2可使选定的守卫停止移动。
 aetherhaven.rts.helpSword=右键点击生物即可让你的守卫集中攻击它。他们不会攻击村民、游客或守卫。
 aetherhaven.rts.helpSelectAll=点击选择镇上所有守卫，取消选择其他守卫。

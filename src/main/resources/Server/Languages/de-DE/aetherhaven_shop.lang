@@ -28,7 +28,7 @@ aetherhaven.shop.safe.couldNotAddCoins=Gold konnte Ihrem Inventar nicht hinzugef
 aetherhaven.shop.safe.collected=Du hast {gold} Gold aus dem Safe entnommen.
 
 aetherhaven.shop.config.title=Richten Sie diesen Shop ein
-aetherhaven.shop.config.intro=Wähle die Funktionsweise dieses Standes. Die Waren der NPC-Läden werden bei Tagesanbruch anhand der von dir gewählten Warenliste aufgefüllt.
+aetherhaven.shop.config.intro=Wähle die Funktionsweise dieses Standes. Die NPC-Läden werden bei Tagesanbruch anhand der von dir gewählten Warentabelle wieder aufgefüllt.
 aetherhaven.shop.config.playerControlled=Hier sollen die Einwohner ihre Waren verkaufen.
 aetherhaven.shop.config.npcHeading=NPC-Shop-Lagerbestand
 aetherhaven.shop.config.lootHeader=Aktientabellendatei

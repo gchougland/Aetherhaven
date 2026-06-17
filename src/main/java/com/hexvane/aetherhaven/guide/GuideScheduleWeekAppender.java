@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.guide;
 
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
+import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTransition;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -19,6 +20,8 @@ import javax.annotation.Nullable;
  * same JSON transitions as {@link com.hexvane.aetherhaven.schedule.VillagerScheduleRegistry}.
  */
 public final class GuideScheduleWeekAppender {
+    private static final String LANG = "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.";
+
     private static final int MAX_SEGMENTS = 10;
     private static final int MINUTES_PER_DAY = 24 * 60;
     private static final DayOfWeek[] WEEK_ORDER = {
@@ -80,10 +83,7 @@ public final class GuideScheduleWeekAppender {
         }
         cmd.append(rowsSelector, "Aetherhaven/GuideScheduleLegendRow.ui");
         String leg = rowsSelector + "[" + rows + "]";
-        cmd.set(
-            leg + " #Legend.TextSpans",
-            Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.scheduleLegend")
-        );
+        cmd.set(leg + " #Legend.TextSpans", Message.translation(LANG + "scheduleLegend"));
         rows++;
         return rows;
     }
@@ -101,7 +101,7 @@ public final class GuideScheduleWeekAppender {
     ) {
         cmd.append(rowsSelector, "Aetherhaven/GuideScheduleDayRow.ui");
         String row = rowsSelector + "[" + rowIndex + "]";
-        cmd.set(row + " #DayLabel.TextSpans", Message.raw(dayAbbrev(dow)));
+        cmd.set(row + " #DayLabel.TextSpans", dayAbbrevMessage(dow));
         String overlay = row + " #StripArea #StripHost #NowMarkerOverlay";
         boolean showNow = gameNow != null && gameNow.getDayOfWeek() == dow;
         if (showNow) {
@@ -122,7 +122,7 @@ public final class GuideScheduleWeekAppender {
             cmd.set(overlay + " #NowMarkerRow #NowLine.Visible", true);
             cmd.set(
                 overlay + " #NowMarkerRow #NowLine.TooltipTextSpans",
-                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.guide.scheduleNowMarker")
+                Message.translation(LANG + "scheduleNowMarker")
             );
         } else {
             cmd.set(overlay + ".Visible", false);
@@ -136,8 +136,8 @@ public final class GuideScheduleWeekAppender {
             Segment sg = segs.get(s);
             cmd.set(cell + ".Visible", true);
             cmd.set(cell + ".Background", segmentColor(sg.locationNorm));
-            cmd.set(cell + " #L" + s + ".TextSpans", Message.raw(sg.shortLabel));
-            cmd.set(cell + ".TooltipTextSpans", Message.raw(sg.tooltip));
+            cmd.set(cell + " #L" + s + ".TextSpans", sg.shortLabel);
+            cmd.set(cell + ".TooltipTextSpans", sg.tooltip);
             int flex = Math.max(1, sg.durationMinutes / 5);
             cmd.set(cell + ".FlexWeight", flex);
         }
@@ -157,8 +157,8 @@ public final class GuideScheduleWeekAppender {
             out.add(
                 new Segment(
                     norm,
-                    shortLabel(norm),
-                    tooltipLine(norm, start, end),
+                    shortLabelMessage(norm),
+                    tooltipLineMessage(norm, start, end),
                     end - start
                 )
             );
@@ -186,24 +186,24 @@ public final class GuideScheduleWeekAppender {
         Segment b = segs.get(best + 1);
         String norm = a.locationNorm.equals(b.locationNorm) ? a.locationNorm : "?";
         int dur = a.durationMinutes + b.durationMinutes;
-        String tip = a.tooltip + "\n" + b.tooltip;
-        Segment merged = new Segment(norm, shortLabel(norm), tip, dur);
+        Message tip = a.tooltip.insert(Message.raw("\n")).insert(b.tooltip);
+        Segment merged = new Segment(norm, shortLabelMessage(norm), tip, dur);
         segs.set(best, merged);
         segs.remove(best + 1);
     }
 
-    private record Segment(@Nonnull String locationNorm, @Nonnull String shortLabel, @Nonnull String tooltip, int durationMinutes) {}
+    private record Segment(@Nonnull String locationNorm, @Nonnull Message shortLabel, @Nonnull Message tooltip, int durationMinutes) {}
 
     @Nonnull
-    private static String dayAbbrev(@Nonnull DayOfWeek dow) {
+    private static Message dayAbbrevMessage(@Nonnull DayOfWeek dow) {
         return switch (dow) {
-            case MONDAY -> "Mon";
-            case TUESDAY -> "Tue";
-            case WEDNESDAY -> "Wed";
-            case THURSDAY -> "Thu";
-            case FRIDAY -> "Fri";
-            case SATURDAY -> "Sat";
-            case SUNDAY -> "Sun";
+            case MONDAY -> Message.translation(LANG + "scheduleDayMon");
+            case TUESDAY -> Message.translation(LANG + "scheduleDayTue");
+            case WEDNESDAY -> Message.translation(LANG + "scheduleDayWed");
+            case THURSDAY -> Message.translation(LANG + "scheduleDayThu");
+            case FRIDAY -> Message.translation(LANG + "scheduleDayFri");
+            case SATURDAY -> Message.translation(LANG + "scheduleDaySat");
+            case SUNDAY -> Message.translation(LANG + "scheduleDaySun");
         };
     }
 
@@ -251,32 +251,38 @@ public final class GuideScheduleWeekAppender {
     }
 
     @Nonnull
-    private static String shortLabel(@Nonnull String locNorm) {
+    private static Message shortLabelMessage(@Nonnull String locNorm) {
         return switch (locNorm) {
-            case "?" -> "…";
-            case "home" -> "Home";
-            case "work" -> "Work";
-            case "inn" -> "Inn";
-            case "park" -> "Park";
-            case "gaia_altar" -> "Altar";
-            default -> locNorm.length() > 5 ? locNorm.substring(0, 5) : locNorm;
+            case "?" -> Message.translation(LANG + "scheduleLocUnknown");
+            case "home" -> Message.translation(LANG + "scheduleLocShortHome");
+            case "work" -> Message.translation(LANG + "scheduleLocShortWork");
+            case "inn" -> Message.translation(LANG + "scheduleLocShortInn");
+            case "park" -> Message.translation(LANG + "scheduleLocShortPark");
+            case "gaia_altar" -> Message.translation(LANG + "scheduleLocShortAltar");
+            case VillagerScheduleResolver.LOC_SHOP -> Message.translation(LANG + "scheduleLocShortShop");
+            default -> Message.raw(locNorm.length() > 5 ? locNorm.substring(0, 5) : locNorm);
         };
     }
 
     @Nonnull
-    private static String tooltipLine(@Nonnull String locNorm, int startMin, int endMin) {
-        return friendlyLocation(locNorm) + " · " + formatClock(startMin) + "–" + formatClock(endMin);
+    private static Message tooltipLineMessage(@Nonnull String locNorm, int startMin, int endMin) {
+        return Message
+            .translation(LANG + "scheduleSegmentTooltip")
+            .param("location", friendlyLocationMessage(locNorm))
+            .param("start", formatClock(startMin))
+            .param("end", formatClock(endMin));
     }
 
     @Nonnull
-    private static String friendlyLocation(@Nonnull String locNorm) {
+    private static Message friendlyLocationMessage(@Nonnull String locNorm) {
         return switch (locNorm) {
-            case "home" -> "Rest at home";
-            case "work" -> "Work (job site)";
-            case "inn" -> "Visit the inn";
-            case "park" -> "Town commons";
-            case "gaia_altar" -> "Gaia altar";
-            default -> locNorm;
+            case "home" -> Message.translation(LANG + "scheduleLocHome");
+            case "work" -> Message.translation(LANG + "scheduleLocWork");
+            case "inn" -> Message.translation(LANG + "scheduleLocInn");
+            case "park" -> Message.translation(LANG + "scheduleLocPark");
+            case "gaia_altar" -> Message.translation(LANG + "scheduleLocAltar");
+            case VillagerScheduleResolver.LOC_SHOP -> Message.translation(LANG + "scheduleLocShop");
+            default -> Message.raw(locNorm);
         };
     }
 
@@ -295,6 +301,7 @@ public final class GuideScheduleWeekAppender {
             case "inn" -> "#5c4a72";
             case "park" -> "#4a6d62";
             case "gaia_altar" -> "#7a5c3a";
+            case VillagerScheduleResolver.LOC_SHOP -> "#6b5a42";
             default -> "#3a4558";
         };
     }

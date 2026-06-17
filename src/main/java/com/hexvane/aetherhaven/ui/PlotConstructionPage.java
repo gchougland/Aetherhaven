@@ -1266,10 +1266,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             sendBuildError(store, ref, "This plot is not registered in your town.");
             return;
         }
-        Vector3i logicalSignEarly =
-            new Vector3i(plotEarly.getSignX(), plotEarly.getSignY(), plotEarly.getSignZ());
         Rotation yawEarly = plotEarly.resolvePrefabYaw();
-        Vector3i anchorEarly = def.resolvePrefabAnchorWorld(logicalSignEarly, yawEarly);
+        Vector3i anchorEarly = plotEarly.resolvePrefabAnchorWorld(def);
         Path prefabPathEarly = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
         if (prefabPathEarly == null) {
             sendBuildError(store, ref, "Prefab not found for path: " + def.getPrefabPath());

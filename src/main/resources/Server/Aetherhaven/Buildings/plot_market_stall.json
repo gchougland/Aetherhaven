@@ -22,8 +22,14 @@
   "autonomyNavRoofExclusionYBelowMaxY": 5,
   "treasuryGoldCoinCost": 42,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 360 },
-    { "resourceTypeId": "Rock", "count": 130 }
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 360
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 130
+    }
   ],
   "pois": [
     {
@@ -45,5 +51,6 @@
   "tags": [
     "shop",
     "work"
-  ]
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName"
 }

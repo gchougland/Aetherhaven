@@ -7,7 +7,7 @@ aetherhaven.shop.notInTown=把它放在城鎮裡。
 aetherhaven.shop.notInPlot=將其放置在已建成的建築用地內。
 aetherhaven.shop.closed=售罄
 aetherhaven.shop.closedNight=商店當晚關門了。
-aetherhaven.shop.holdItemToList=手持物品，然後按 (F) 鍵或右鍵點擊攤位，即可將其掛牌出售。
+aetherhaven.shop.holdItemToList=手持物品，按 (F) 鍵或右鍵點擊攤位，即可掛牌出售。
 aetherhaven.shop.cannotAfford=你負擔不起。
 aetherhaven.shop.inventoryFull=您的庫存已滿。
 aetherhaven.shop.cannotBuyOwnListing=用 F 退回你的商品，而不是購買。
@@ -20,7 +20,7 @@ aetherhaven.shop.damagedItem=出售前請先到鐵匠鋪修理好該物品。
 aetherhaven.shop.jewelryNeedsAppraisal=在將珠寶掛牌出售前，請先進行估價。
 aetherhaven.shop.listed=您的商品現已上架販售。
 aetherhaven.shop.removedListing=房源已移除。
-aetherhaven.shop.soldNotify={buyer} 用 {gold} 金幣購買了 {count} 和 {item}。
+aetherhaven.shop.soldNotify={buyer} 用 {gold} 金幣購買了 {count} 和 {item}
 
 aetherhaven.shop.safe.empty=保險箱裡沒有你的黃金。
 aetherhaven.shop.safe.makeRoom=首先要騰出庫存空間。

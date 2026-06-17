@@ -13,9 +13,18 @@
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 50,
   "materials": [
-    { "resourceTypeId": "Wood_All", "count": 360 },
-    { "resourceTypeId": "Rock", "count": 100 },
-    { "itemId": "Cloth_Block_Wool_Black", "count": 20}
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 360
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 100
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Black",
+      "count": 20
+    }
   ],
   "pois": [
     {
@@ -73,5 +82,6 @@
     "bomb"
   ],
   "touristDestination": true,
-  "plotTokenLockedByDefault": true
+  "plotTokenLockedByDefault": true,
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_bomb_shop.displayName"
 }

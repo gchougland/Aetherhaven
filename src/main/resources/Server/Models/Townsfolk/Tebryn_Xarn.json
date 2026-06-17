@@ -85,5 +85,18 @@
       "GradientSet": "Fantasy_Cotton_Dark",
       "GradientId": "Purple"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Tebryn_Xarn.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
 }

@@ -17,7 +17,7 @@ items.Aetherhaven_Lute.name=リュート
 items.Aetherhaven_Lute.description=温かみのある弦を持つ木製のリュート。エリアス・ソーンウッドは、ギルドホールで演奏する際にいつもこのリュートをそばに置いている。
 
 items.Aetherhaven_Wood_Scaffold.name=木製足場
-items.Aetherhaven_Wood_Scaffold.description=はしごのように登ります。通常のブロックと同じように右クリックします。足場を狙ってUseキー（F）を押し続けると、側面からタワーを拡張したり、上面から水平方向に枝分かれさせたりできます。一番下の支えのないピースを破壊すると、積み重ねたタワーが崩れます。
+items.Aetherhaven_Wood_Scaffold.description=はしごのように登ります。通常のブロックと同じように右クリックします。足場を狙ってUseキー（F）を押し続けると、タワーを側面から拡張したり、上面から水平方向に枝分かれさせたりできます。一番下の支えのないピースを破壊すると、積み重ねたタワーが崩れます。
 items.Aetherhaven_Wood_Scaffold.legendUse=（F）キーを押すと、足場を狙いながらタワー／枝を上部から伸ばします。右クリックすると、通常のブロック配置ができます。
 
 # === Items: town, plot tokens, currency, geodes, barter, shelves, sprinklers (items.*) ===
@@ -47,7 +47,7 @@ benchCategories.aetherhaven.town_planning=都市計画
 benchCategories.aetherhaven.plot_tokens=プロットトークン
 
 items.Aetherhaven_Plot_Placement_Tool.name=区画配置スタッフ
-items.Aetherhaven_Plot_Placement_Tool.description=対応する区画トークンはバッグに入れておいてください。この杖を地面に向けて使用すると、建物の幻影が表示されます。建物が合うまで微調整して回転させ、確定すると区画が確保されます。キャンセルするとプレビューがクリアされ、別の場所に区画を設定したい場合は再び杖を使用できます。
+items.Aetherhaven_Plot_Placement_Tool.description=対応する区画トークンはバッグに入れておいてください。この杖を地面に向けて使用すると、建物の幻影が表示されます。建物が合うまで微調整して回転させ、確定すると区画が確保されます。キャンセルするとプレビューがクリアされ、別の場所を選びたいときに再び杖を使用できます。
 
 items.Aetherhaven_Wall_Wand.name=壁掛け杖
 items.Aetherhaven_Wall_Wand.description=町の周囲に石垣を計画しましょう。二次利用では、鎖壁、門、塔などのパーツを上空から見下ろすビューが開きます。既存のパーツに一次利用を適用すると、壁を拡張したり、削除したりできます。各パーツは区画標識を使用し、他の町の区画と同様に構築できます。
@@ -280,7 +280,7 @@ aetherhaven.patrolWand.assignPageAssignButton=割り当てる
 aetherhaven.patrolWand.guardTypeKnight=騎士
 aetherhaven.patrolWand.guardTypeArcher=射手
 aetherhaven.patrolWand.guardTypeMage=メイジ
-aetherhaven.patrolWand.guardTypeRogue=Rogue
+aetherhaven.patrolWand.guardTypeRogue=ローグ
 aetherhaven.patrolWand.toastAdded=追加ポイント
 aetherhaven.patrolWand.toastRemoved=ポイントが削除されました
 aetherhaven.patrolWand.toastSelected=ルートが選択されました

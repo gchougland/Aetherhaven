@@ -53,7 +53,7 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c0=Grubble, sen
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_offer.c1=Başka bir zaman.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.speaker=Grubble Sparkmatch
-aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Duvarlar gerçek olduğunda, tüzükte yazdığı gibi Grubble'ın adını içerideki bloğun üzerine yazın. Sonra gelip Grubble'a sözlü olarak anlatın. Grubble duymak istiyor, tahmin etmek değil.
+aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.body=Duvarlar gerçek olduğunda, tüzükte yazdığı gibi Grubble'ın adını içerideki bloğa yazın. Sonra gelip Grubble'a sözlü olarak anlatın. Grubble duymak istiyor, tahmin etmek değil.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_accepted.c0=Grubble benden bunu duyacak.
 
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_house_remind.speaker=Grubble Sparkmatch
