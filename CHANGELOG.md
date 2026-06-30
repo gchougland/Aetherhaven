@@ -1,5 +1,35 @@
 # Changelog
 
+##[2.1.0] - Unreleased
+
+### Fixed
+
+- **Plot crafting bench preview** Survival players now see the rotatable 3D building preview in the plot crafting bench. The client only renders `PrefabPreviewComponent` data in Creative mode, so Adventure players get a temporary client-side Creative mode while the bench is open (server game mode unchanged).
+
+## [2.0.3] - 6/19/2026
+
+### Added
+
+- **Plot link repair** `/ah plots repair` re-links town records shelves, Gaia statues, treasuries, and shop safes for every completed plot in your town. Town Journal Settings includes a **Repair plot links** button that runs the same check.
+- **Plot reconstruct** `/ah plots reconstruct <constructionId> [index] [townName]` clears a plot footprint and re-pastes the prefab (same plot id in town data). Use the index when several buildings share one construction id.
+- **Plot link diagnose** `/ah plots diagnose` lists each plot’s link status without changing anything (debug / World Editor).
+- **Automatic plot link reconciliation** On world load and every few minutes while players are online, completed plots are checked and special blocks are re-stamped when their link data drifted from `towns.json`.
+- **Building staff assembly markers** While a plot is assembling, the building staff shows red markers on blocks to break and markers on spots where blocks will go. Markers swell while you hold the staff to place or break.
+
+### Fixed
+
+- **Sporadic plot/building unlinking** Town records shelves and Gaia altars could show “no construction” or “not linked to a town” after restart or mid-session when block components and `towns.json` drifted apart. Reconciliation, repair commands, and save/load hardening address the common causes.
+- **Gaia altar statue linking** New Gaia altars could finish with an unlinked statue (“not linked to a town”) and `/ah plots repair` could not fix them. Plot link stamping now matches the statue block id case-insensitively, stamps the multi-block prop’s base cell, and falls back to scanning the plot footprint when the expected column misses.
+- **finishassembly / journal finish-plot** Creative instant-finish could place most blocks but fail before `finishBuild`, leaving shelves and statues with empty link data. Empty frontiers now retry and brute-force remaining blocks; completion always verifies block links afterward.
+- **towns.json reload** Re-entering a world no longer overwrites unsaved in-memory town data with an older disk snapshot. Saves keep a `towns.json.bak` fallback; failed loads keep the current in-memory towns.
+- **Town records shelf break protection** Linked management blocks (town records shelves) can no longer be broken in survival while the plot still exists in town data, matching treasury and shop safe behavior.
+- **Management UI diagnostics** Opening a shelf that cannot resolve its plot now logs whether the block ids, town row, or plot row is missing (server log).
+- **Villagers Eating Tools** The villagers now have enough iron in their diets and don't need to eat their tools.
+- **Building Process Fixes** A bunch of fixes have been done to the builder and building system to alleviate the issues players have been having.
+- **Builder home quest** Rowan sometimes stayed an inn visitor after his hut was finished, which hid the home quest dialogue. Inn-pool promotion and repair now include the builder, and shop completion can promote him even when he is not listed at the inn.
+- **Shop spot listing removal** Taking an item off your shop spot with a full inventory no longer disconnects you from the server.
+- **Building staff preview markers** Assembly markers no longer flicker or vanish when plot footprint overlays refresh. Destruction and placement markers are sized correctly and stay visible while the staff is held. Furniture placement hints use a wood plank look when a block texture cannot be shown on the marker.
+
 ## [2.0.2] - 6/15/2026
 
 ### Added

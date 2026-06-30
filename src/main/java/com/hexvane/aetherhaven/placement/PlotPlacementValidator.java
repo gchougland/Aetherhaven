@@ -25,12 +25,68 @@ public final class PlotPlacementValidator {
         @Nonnull TownManager townManager,
         @Nonnull TownRecord town,
         @Nonnull UUID ownerUuid,
-        @Nonnull Vector3i signPosition,
+        @Nonnull Vector3i previewSignAnchor,
         @Nonnull Rotation prefabYaw,
         @Nonnull ConstructionDefinition def,
         @Nonnull AetherhavenPlugin plugin
     ) {
-        return validate(world, townManager, town, ownerUuid, signPosition, prefabYaw, def, plugin, null);
+        return validate(world, townManager, town, ownerUuid, previewSignAnchor, prefabYaw, def, plugin, null);
+    }
+
+    /**
+     * Validates footprint at the preview building anchor while checking sign territory at the grounded sign cell.
+     */
+    @Nullable
+    public static String validateWithResolvedHeights(
+        @Nonnull World world,
+        @Nonnull TownManager townManager,
+        @Nonnull TownRecord town,
+        @Nonnull UUID ownerUuid,
+        @Nonnull Vector3i previewSignAnchor,
+        @Nonnull Vector3i groundedSignCell,
+        @Nonnull Vector3i buildingPrefabAnchor,
+        @Nonnull Rotation prefabYaw,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable UUID excludePlotId
+    ) {
+        if (!town.playerCanPlacePlots(ownerUuid)) {
+            return "You do not have permission to place buildings for this town.";
+        }
+        if (!townManager.isInsideTerritory(town, groundedSignCell.x, groundedSignCell.z)) {
+            return "Plot sign position is outside your town territory.";
+        }
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            return "Prefab not found for construction: " + def.getId();
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+        try {
+            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(buildingPrefabAnchor, prefabYaw, buf);
+            for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                    if (!townManager.isInsideTerritory(town, x, z)) {
+                        return "Part of this building would sit outside your town territory.";
+                    }
+                }
+            }
+            if (fp.containsBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ())) {
+                return "This plot would overlap the town charter.";
+            }
+            if (def.isWallSegment()) {
+                PlotFootprintRecord overlap = town.findOverlappingNonWallPlot(fp, excludePlotId);
+                if (overlap != null) {
+                    return "This wall would overlap another building in your town.";
+                }
+                return null;
+            }
+            PlotFootprintRecord overlap = town.findOverlappingPlot(fp, excludePlotId);
+            if (overlap != null) {
+                return "This plot overlaps another registered plot in your town.";
+            }
+            return null;
+        } finally {
+        }
     }
 
     /**

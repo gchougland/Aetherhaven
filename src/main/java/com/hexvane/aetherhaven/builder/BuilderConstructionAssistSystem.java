@@ -3,6 +3,9 @@ package com.hexvane.aetherhaven.builder;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyPassiveBoostRegistry;
+import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPhase;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -128,6 +131,9 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             BuilderConstructionVisuals.beginAssist(ref, store, commandBuffer, plugin, npc);
             AssemblyPassiveBoostRegistry.setBoost(world, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST);
+            PlotAssemblyService.snapPassiveDueForBoost(
+                world, plugin, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST
+            );
             maybeSwingHammer(ref, store, commandBuffer, npc, assist);
             applyAutonomySeek(ref, npc, commandBuffer);
             commandBuffer.putComponent(ref, BuilderConstructionAssistState.getComponentType(), assist);
@@ -223,24 +229,32 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             return null;
         }
         Vector3d pos = tc.getPosition();
-        PlotInstance best = null;
-        double bestDistSq = Double.MAX_VALUE;
+        PlotInstance bestClearing = null;
+        PlotInstance bestOther = null;
+        double bestClearingDistSq = Double.MAX_VALUE;
+        double bestOtherDistSq = Double.MAX_VALUE;
         for (PlotInstance plot : town.getPlotInstances()) {
             if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
-            if (com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry.get(world, plot.getPlotId()) == null) {
+            UUID plotId = plot.getPlotId();
+            if (AssemblyWorldRegistry.get(world, plotId) == null) {
                 continue;
             }
             double dx = (plot.getSignX() + 0.5) - pos.x;
             double dz = (plot.getSignZ() + 0.5) - pos.z;
             double distSq = dx * dx + dz * dz;
-            if (distSq < bestDistSq) {
-                bestDistSq = distSq;
-                best = plot;
+            if (AssemblyWorldRegistry.phase(world, plotId) == PlotAssemblyPhase.CLEARING) {
+                if (distSq < bestClearingDistSq) {
+                    bestClearingDistSq = distSq;
+                    bestClearing = plot;
+                }
+            } else if (distSq < bestOtherDistSq) {
+                bestOtherDistSq = distSq;
+                bestOther = plot;
             }
         }
-        return best;
+        return bestClearing != null ? bestClearing : bestOther;
     }
 
     /** Package-private bridge so builder system can call autonomy helpers without circular dependency on private methods. */

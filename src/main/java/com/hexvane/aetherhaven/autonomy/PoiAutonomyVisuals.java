@@ -159,7 +159,7 @@ public final class PoiAutonomyVisuals {
         if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && poi.getTags().contains("EAT")) {
             stopCampfireConsumeVisuals(npcRef, store, commandBuffer, npc);
             AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
-            tryClearCampfireHeldFood(npcRef, store, commandBuffer);
+            tryRestoreHeldEquipmentAfterCampfireEat(npcRef, store, commandBuffer, poi);
         }
         if (poi.getTags().contains("SHOP")) {
             ShopSpotBrowseVisuals.endPonder(npcRef, store, commandBuffer);
@@ -180,12 +180,48 @@ public final class PoiAutonomyVisuals {
             return;
         }
         try {
-            hb.getInventory().setItemStackForSlot((short) 0, new ItemStack(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID, 1));
-            hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
+            byte slot = hb.getActiveSlot();
+            if (slot < 0 || slot >= hb.getInventory().getCapacity()) {
+                slot = 0;
+            }
+            hb.getInventory().setItemStackForSlot((short) slot, new ItemStack(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID, 1));
+            VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer);
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip campfire display item on NPC hotbar");
         }
+    }
+
+    private static void tryRestoreHeldEquipmentAfterCampfireEat(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PoiEntry poi
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            String profileId = poi.getEquipmentProfileId();
+            if (profileId == null) {
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (npc != null && npc.getRoleName() != null) {
+                    var villagerDef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName());
+                    if (villagerDef != null) {
+                        profileId = villagerDef.getWorkEquipmentProfileId();
+                    }
+                }
+            }
+            if (profileId != null) {
+                VillagerEquipmentService.applyProfile(
+                    npcRef,
+                    store,
+                    commandBuffer,
+                    plugin.getEquipmentProfileCatalog(),
+                    profileId
+                );
+                return;
+            }
+        }
+        tryClearCampfireHeldFood(npcRef, store, commandBuffer);
     }
 
     private static void tryClearCampfireHeldFood(
@@ -198,7 +234,15 @@ public final class PoiAutonomyVisuals {
             return;
         }
         try {
-            hb.getInventory().removeItemStackFromSlot((short) 0);
+            byte slot = hb.getActiveSlot();
+            if (slot < 0 || slot >= hb.getInventory().getCapacity()) {
+                slot = 0;
+            }
+            ItemStack active = hb.getActiveItem();
+            if (active != null && AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID.equals(active.getItemId())) {
+                hb.getInventory().removeItemStackFromSlot((short) slot);
+                VillagerEquipmentService.markHotbarEquipmentDirty(hb, slot, npcRef, commandBuffer);
+            }
             commandBuffer.putComponent(npcRef, InventoryComponent.Hotbar.getComponentType(), hb);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not clear campfire display item from NPC hotbar");

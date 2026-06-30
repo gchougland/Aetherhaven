@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -186,7 +187,7 @@ public final class PoiExtractor {
         @Nonnull String expectedType
     ) {
         BlockType center = world.getBlockType(cx, cy, cz);
-        if (center != null && expectedType.equals(center.getId())) {
+        if (center != null && blockTypeIdMatches(expectedType, center.getId())) {
             return new Vector3i(cx, cy, cz);
         }
         int bestX = 0;
@@ -204,7 +205,7 @@ public final class PoiExtractor {
                     int y = cy + dy;
                     int z = cz + dz;
                     BlockType bt = world.getBlockType(x, y, z);
-                    if (bt != null && expectedType.equals(bt.getId())) {
+                    if (bt != null && blockTypeIdMatches(expectedType, bt.getId())) {
                         long d2 = (long) dx * dx + (long) dy * dy + (long) dz * dz;
                         if (!found || d2 < bestD2) {
                             found = true;
@@ -218,5 +219,17 @@ public final class PoiExtractor {
             }
         }
         return found ? new Vector3i(bestX, bestY, bestZ) : null;
+    }
+
+    private static boolean blockTypeIdMatches(@Nonnull String expectedId, @Nonnull String actualId) {
+        if (expectedId.equals(actualId) || expectedId.equalsIgnoreCase(actualId)) {
+            return true;
+        }
+        BlockTypeAssetMap<String, BlockType> map = BlockType.getAssetMap();
+        int expectedIndex = map.getIndex(expectedId);
+        if (expectedIndex < 0) {
+            return false;
+        }
+        return expectedIndex == map.getIndex(actualId);
     }
 }

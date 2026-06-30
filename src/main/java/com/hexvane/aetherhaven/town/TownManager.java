@@ -10,7 +10,9 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,6 +34,8 @@ public final class TownManager {
     private final World world;
     private final Path saveFile;
     private final Map<UUID, TownRecord> byTownId = new LinkedHashMap<>();
+    private long lastLoadedFromDiskMs;
+    private long lastSavedToDiskMs;
 
     public TownManager(@Nonnull World world, @Nonnull Path pluginDataDirectory) {
         this.world = world;
@@ -58,20 +62,63 @@ public final class TownManager {
             byTownId.clear();
             return;
         }
-        byTownId.clear();
         try {
-            TownWorldFile file = TownWorldFile.readOrEmpty(saveFile);
+            TownWorldFile file = readTownFileWithBackupFallback(saveFile);
+            Map<UUID, TownRecord> loaded = new LinkedHashMap<>();
             for (TownRecord t : file.getTowns()) {
                 t.migrateLegacyPlotFootprintsIfNeeded();
                 t.migrateInnFieldsIfNeeded();
                 t.migrateTownSocialFieldsIfNeeded();
-                byTownId.put(t.getTownId(), t);
+                loaded.put(t.getTownId(), t);
             }
+            byTownId.clear();
+            byTownId.putAll(loaded);
             dedupeDisplayNamesAfterLoad();
+            lastLoadedFromDiskMs = System.currentTimeMillis();
             LOGGER.atInfo().log("Aetherhaven loaded %s towns for world %s from %s", byTownId.size(), world.getName(), saveFile);
         } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to load towns for world %s", world.getName());
+            LOGGER.atWarning().withCause(e).log("Failed to load towns for world %s; keeping in-memory data", world.getName());
         }
+    }
+
+    @Nonnull
+    private static TownWorldFile readTownFileWithBackupFallback(@Nonnull Path path) throws IOException {
+        try {
+            return TownWorldFile.readOrEmpty(path);
+        } catch (IOException primary) {
+            Path bak = path.resolveSibling("towns.json.bak");
+            if (Files.isRegularFile(bak)) {
+                LOGGER.atWarning().withCause(primary).log("Falling back to towns.json.bak for %s", path);
+                return TownWorldFile.readOrEmpty(bak);
+            }
+            throw primary;
+        }
+    }
+
+    public long getLastLoadedFromDiskMs() {
+        return lastLoadedFromDiskMs;
+    }
+
+    public long getLastSavedToDiskMs() {
+        return lastSavedToDiskMs;
+    }
+
+    public long getSaveFileLastModifiedMs() {
+        try {
+            if (Files.isRegularFile(saveFile)) {
+                return Files.getLastModifiedTime(saveFile).toMillis();
+            }
+        } catch (IOException ignored) {
+        }
+        return 0L;
+    }
+
+    public int countAllPlotInstances() {
+        int n = 0;
+        for (TownRecord t : byTownId.values()) {
+            n += t.getPlotInstances().size();
+        }
+        return n;
     }
 
     /**
@@ -99,9 +146,14 @@ public final class TownManager {
             return;
         }
         try {
+            if (Files.isRegularFile(saveFile)) {
+                Path bak = saveFile.resolveSibling("towns.json.bak");
+                Files.copy(saveFile, bak, StandardCopyOption.REPLACE_EXISTING);
+            }
             TownWorldFile file = new TownWorldFile();
             file.getTowns().addAll(byTownId.values());
             file.writeAtomic(saveFile);
+            lastSavedToDiskMs = System.currentTimeMillis();
         } catch (IOException e) {
             LOGGER.atSevere().withCause(e).log("Failed to save towns for world %s", world.getName());
         }

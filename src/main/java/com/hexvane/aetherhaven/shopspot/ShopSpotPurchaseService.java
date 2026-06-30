@@ -131,7 +131,15 @@ public final class ShopSpotPurchaseService {
             return false;
         }
         ItemStack grant = ShopSpotJewelrySupport.buildListingStack(itemId, itemQty, record);
-        ShopSpotItemDelivery.Result delivery = ShopSpotItemDelivery.grantAtShop(player, playerRef, store, grant, targetBlock);
+        ShopSpotItemDelivery.Result delivery =
+            ShopSpotItemDelivery.grantAtShop(
+                player,
+                playerRef,
+                commandBuffer != null ? commandBuffer : store,
+                commandBuffer,
+                grant,
+                targetBlock
+            );
         if (!delivery.succeeded()) {
             GoldCoinPayment.refund(payerTown, player, playerRef, store, breakdown);
             if (payerTown != null) {
@@ -339,7 +347,8 @@ public final class ShopSpotPurchaseService {
             return;
         }
         ItemStack stack = ShopSpotJewelrySupport.buildListingStack(itemId, stock, record);
-        ShopSpotItemDelivery.Result delivery = ShopSpotItemDelivery.grantAtShop(player, playerRef, store, stack, shopBlock);
+        ShopSpotItemDelivery.Result delivery =
+            ShopSpotItemDelivery.grantAtShop(player, playerRef, commandBuffer, commandBuffer, stack, shopBlock);
         if (!delivery.succeeded()) {
             notify(playerRef, commandBuffer, Message.translation(MSG + ".inventoryFull"));
             fail(context);

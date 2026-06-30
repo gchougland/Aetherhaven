@@ -18,6 +18,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -54,6 +55,9 @@ public final class InnVisitorShopCompletion {
         }
 
         Ref<EntityStore> npcRef = findInnPoolNpcRef(store, town, config.npcRoleId());
+        if (npcRef == null || !npcRef.isValid()) {
+            npcRef = findTownVisitorNpcRef(store, town, config.npcRoleId());
+        }
         if (npcRef == null || !npcRef.isValid()) {
             return;
         }
@@ -116,5 +120,34 @@ public final class InnVisitorShopCompletion {
             }
         }
         return null;
+    }
+
+    /** Fallback when the NPC left the inn pool list but is still loaded as a town visitor. */
+    @Nullable
+    private static Ref<EntityStore> findTownVisitorNpcRef(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull String npcRoleId
+    ) {
+        AtomicReference<Ref<EntityStore>> found = new AtomicReference<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            if (found.get() != null) {
+                return;
+            }
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.isVisitorKind(b.getKind())) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            if (npc != null && npcRoleId.equals(npc.getRoleName())) {
+                found.set(ref);
+            }
+        });
+        return found.get();
     }
 }

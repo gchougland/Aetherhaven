@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
 import com.hexvane.aetherhaven.placement.WallPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementValidator;
+import com.hexvane.aetherhaven.placement.PlotSignGrounding;
 import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.placement.WallPlacementDebug;
 import com.hexvane.aetherhaven.placement.WallPlacementRemoveService;
@@ -662,6 +663,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         boolean valid = err == null;
         IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
         try {
+            session.reGroundSignYAtCurrentColumn(world, def, buf);
             List<PlotFootprintRecord> committedFps = new ArrayList<>();
             for (WallPlacementSession.CommittedStep step : session.getCommitted()) {
                 ConstructionDefinition stepDef = plugin.getConstructionCatalog().get(step.constructionId);
@@ -925,13 +927,22 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         Vector3i previewAnchor = session.getCurrentAnchor();
         int rotationSteps = session.getCurrentRotationSteps();
-        Vector3i placedSignPos = new Vector3i(previewAnchor.x, previewAnchor.y, previewAnchor.z);
-        Vector3i ghostOriginAtCommit =
-            WallPlacementSession.prefabOriginForSign(def, previewAnchor, rotationSteps);
         Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        Vector3i placedSignPos;
+        if (prefabPath != null) {
+            IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
+            placedSignPos =
+                PlotSignGrounding.resolveSignCell(
+                    world, previewAnchor, def, session.getCurrentPrefabYaw(), buf
+                );
+        } else {
+            placedSignPos = new Vector3i(previewAnchor.x, previewAnchor.y, previewAnchor.z);
+        }
+        Vector3i ghostOriginAtCommit =
+            WallPlacementSession.prefabOriginForSign(def, placedSignPos, rotationSteps);
         String err =
             PlotPlacementValidator.validate(
-                world, tm, town, uc.getUuid(), previewAnchor, session.getCurrentPrefabYaw(), def, plugin
+                world, tm, town, uc.getUuid(), placedSignPos, session.getCurrentPrefabYaw(), def, plugin
             );
         if (err != null) {
             sendError(store, ref, Message.raw(err));

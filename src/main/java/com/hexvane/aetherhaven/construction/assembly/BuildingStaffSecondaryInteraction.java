@@ -67,8 +67,8 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         BuilderCodec
             .builder(BuildingStaffSecondaryInteraction.class, BuildingStaffSecondaryInteraction::new, ChargingInteraction.CODEC)
             .documentation(
-                "Hold secondary for half a second; aim locks until you release or the target becomes invalid. "
-                    + "Red markers: break obstructing blocks; green markers: place frontier blocks."
+                "Hold secondary for half a second. Aim locks until you release or the target becomes invalid. "
+                    + "Red markers show blocks to break. Green markers show blocks to place."
             )
             .build();
 
@@ -154,6 +154,10 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             return;
         }
         PlotAssemblyPhase phase = AssemblyWorldRegistry.phase(world, job.plotId());
+        if (phase == null) {
+            channel.resetChargeSession();
+            return;
+        }
         if (phase == PlotAssemblyPhase.PLACING) {
             if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, activeCell) < 0) {
                 channel.resetChargeSession();
@@ -242,6 +246,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         @Nonnull UUID uuid,
         @Nonnull BuildingStaffAssemblyChannelComponent channel
     ) {
+        PlotAssemblyService.ensureAssemblyJobsForAssemblingPlots(world, plugin, store);
         Vector3i blockHit = TargetUtil.getTargetBlock(playerRef, RAY_MAX, store);
         if (blockHit != null) {
             PlotAssemblyJob clearingJob = PlotAssemblyService.findClearingJobForObstructedCell(world, plugin, blockHit);

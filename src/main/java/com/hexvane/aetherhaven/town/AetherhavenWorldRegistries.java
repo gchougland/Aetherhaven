@@ -28,12 +28,14 @@ import com.hexvane.aetherhaven.tourist.TouristPortalPersistence;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 
 /** Holds {@link TownManager} and {@link PoiRegistry} per loaded world. */
 public final class AetherhavenWorldRegistries {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final ConcurrentHashMap<String, TownManager> TOWN_MANAGERS = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PoiRegistry> POI_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, PathToolRegistry> PATH_TOOL_REGISTRIES = new ConcurrentHashMap<>();
@@ -54,7 +56,25 @@ public final class AetherhavenWorldRegistries {
         if (existing == null) {
             return;
         }
+        long diskMtime = existing.getSaveFileLastModifiedMs();
+        if (diskMtime > 0L && existing.getLastSavedToDiskMs() > diskMtime) {
+            LOGGER.atInfo().log(
+                "Skipping towns.json reload for world %s: in-memory state is newer than disk",
+                world.getName()
+            );
+            return;
+        }
+        int plotsBefore = existing.countAllPlotInstances();
         existing.loadFromDisk();
+        int plotsAfter = existing.countAllPlotInstances();
+        if (plotsAfter < plotsBefore) {
+            LOGGER.atWarning().log(
+                "towns.json reload for world %s dropped plot count from %d to %d",
+                world.getName(),
+                plotsBefore,
+                plotsAfter
+            );
+        }
         existing.clampAllPlotProductionToCatalog(
             plugin.getProductionCatalog(),
             plugin.getWorkplaceUnlockCatalog(),
@@ -173,6 +193,7 @@ public final class AetherhavenWorldRegistries {
         if (tm != null) {
             tm.saveToDisk();
         }
+        PlotLinkReconcileService.clearWorldState(world.getName());
         PoiRegistry pr = POI_REGISTRIES.remove(world.getName());
         if (pr != null) {
             AetherhavenPlugin p = AetherhavenPlugin.get();
@@ -266,6 +287,7 @@ public final class AetherhavenWorldRegistries {
         TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);
         PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
         com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin);
+        PlotLinkReconcileService.scheduleAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-raid-quests", RaidQuestMarkerProvider.INSTANCE);

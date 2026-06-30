@@ -145,16 +145,25 @@ public final class AetherhavenConstants {
     public static final int BUILDING_STAFF_ASSEMBLY_BRUSH_CHEBYSHEV_RADIUS_DEFAULT = 1;
 
     /**
-     * Caps per-player clearing obstruction markers ({@link PlotAssemblyPreviewSystem}). Uses three debug shapes per cell;
+     * Caps per-player clearing obstruction markers ({@link PlotAssemblyPreviewSystem}). One preview entity per cell;
      * keep high enough that typical prefab footprints show every obstructed cell in range.
      */
     public static final int BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS = 1024;
 
     /**
-     * Caps per-player assembly frontier ghost cubes ({@link PlotAssemblyPreviewSystem}) so huge shells do not emit tens
-     * of thousands of debug draws per tick.
+     * Caps per-player assembly frontier placement markers ({@link PlotAssemblyPreviewSystem}) so huge shells do not
+     * spawn tens of thousands of preview entities per player.
      */
     public static final int BUILDING_STAFF_ASSEMBLY_PREVIEW_MAX_GHOST_CELLS = 768;
+
+    /** Model asset for building staff placement preview markers. */
+    public static final String MODEL_ASSET_BUILDING_MARKER = "Building_Marker";
+
+    /** Model asset for building staff clearing preview markers. */
+    public static final String MODEL_ASSET_DESTRUCTION_MARKER = "Destruction_Marker";
+
+    /** Fallback block texture for furniture and non-cube placement preview markers. */
+    public static final String FURNITURE_MARKER_FALLBACK_BLOCK_ID = "Wood_Softwood_Planks";
 
     /** Root interaction asset id (RequireNewClick false) for staff secondary. */
     public static final String ROOT_INTERACTION_BUILDING_STAFF_SECONDARY = "Aetherhaven_BuildingStaff_Secondary_Root";

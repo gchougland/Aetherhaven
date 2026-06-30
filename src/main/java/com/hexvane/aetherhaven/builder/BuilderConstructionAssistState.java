@@ -19,7 +19,8 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
 
     public static final int BUILDER_PASSIVE_BOOST = 4;
 
-    private static final double ASSIST_RANGE_HORIZONTAL_SQ = 4.0 * 4.0;
+    private static final double ASSIST_RANGE_HORIZONTAL_SQ = 5.0 * 5.0;
+    private static final double ASSIST_RANGE_VERTICAL = 16.0;
 
     @Nonnull
     public static final BuilderCodec<BuilderConstructionAssistState> CODEC =
@@ -127,7 +128,7 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
         double dx = npcX - targetX;
         double dy = npcY - targetY;
         double dz = npcZ - targetZ;
-        return dx * dx + dy * dy + dz * dz <= ASSIST_RANGE_HORIZONTAL_SQ + 4.0;
+        return dx * dx + dz * dz <= ASSIST_RANGE_HORIZONTAL_SQ && Math.abs(dy) <= ASSIST_RANGE_VERTICAL;
     }
 
     @Nonnull

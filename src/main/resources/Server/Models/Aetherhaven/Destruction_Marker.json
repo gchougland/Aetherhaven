@@ -1,0 +1,10 @@
+{
+  "Model": "Items/Aetherhaven/Destruction_Marker/Destruction_Marker.blockymodel",
+  "Texture": "Items/Aetherhaven/Destruction_Marker/Destruction_Marker.png",
+  "HitBox": {
+    "Max": { "X": 0.5, "Y": 0.5, "Z": 0.5 },
+    "Min": { "X": -0.5, "Y": -0.5, "Z": -0.5 }
+  },
+  "MinScale": 0.01,
+  "MaxScale": 8
+}

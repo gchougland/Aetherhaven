@@ -14,7 +14,7 @@ Use **Show weekly schedule** below to see where Vaelith goes each day.
 ### Quests
 
 #### Vaelith's rescue
-While exploring, you may find Vaelith trapped in stone. Free her to complete this quest. She will then start appearing at the inn.
+While exploring, you may find Vaelith trapped in crystal. Free her to complete this quest. She will then start appearing at the inn.
 
 #### Vaelith's crystal shop
 Vaelith wants a proper shop where she can share her crystal collection with the town.

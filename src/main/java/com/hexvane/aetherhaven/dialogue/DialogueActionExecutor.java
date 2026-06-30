@@ -397,6 +397,7 @@ public final class DialogueActionExecutor {
             || q.equals(AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP)
             || q.equals(AetherhavenConstants.QUEST_PYROTECHNIC_SHOP)
             || q.equals(AetherhavenConstants.QUEST_FLORIST_SHOP)
+            || q.equals(AetherhavenConstants.QUEST_BUILDERS_HUT)
             || q.equals(AetherhavenConstants.QUEST_BUILD_GUILD_HALL);
     }
 

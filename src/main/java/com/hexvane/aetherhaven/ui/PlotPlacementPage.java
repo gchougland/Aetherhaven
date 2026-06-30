@@ -5,7 +5,7 @@ import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
-import com.hexvane.aetherhaven.placement.PlotSignGrounding;
+import com.hexvane.aetherhaven.placement.PlotPlacementHeights;
 import com.hexvane.aetherhaven.placement.PlotPlacementSession;
 import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
 import com.hexvane.aetherhaven.placement.PlotPlacementRotationUtil;
@@ -618,28 +618,48 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         Vector3i previewAnchor = session.getAnchor();
         Path prefabPathEarly = resolvePrefabAssetPath(def.getPrefabPath());
-        Vector3i placedSignPos;
+        PlotPlacementHeights.ResolvedPlacement resolved;
         if (prefabPathEarly != null) {
             IPrefabBuffer groundBuf = PrefabBufferUtil.getCached(prefabPathEarly);
             try {
-                placedSignPos = PlotSignGrounding.resolveSignCell(world, previewAnchor, def, session.getPrefabYaw(), groundBuf);
+                resolved =
+                    PlotPlacementHeights.resolve(
+                        world, previewAnchor, def, session.getPrefabYaw(), groundBuf
+                    );
             } finally {
             }
         } else {
-            placedSignPos = previewAnchor;
+            Vector3i buildingAnchor = def.resolvePrefabAnchorWorld(previewAnchor, session.getPrefabYaw());
+            resolved = new PlotPlacementHeights.ResolvedPlacement(previewAnchor, buildingAnchor);
         }
+        Vector3i placedSignPos = resolved.signCell();
+        Vector3i buildingAnchor = resolved.buildingPrefabAnchor();
         String err =
-            PlotPlacementValidator.validate(
-                world,
-                tm,
-                town,
-                uc.getUuid(),
-                previewAnchor,
-                session.getPrefabYaw(),
-                def,
-                plugin,
-                session.getMovePlotId()
-            );
+            prefabPathEarly != null
+                ? PlotPlacementValidator.validateWithResolvedHeights(
+                    world,
+                    tm,
+                    town,
+                    uc.getUuid(),
+                    previewAnchor,
+                    placedSignPos,
+                    buildingAnchor,
+                    session.getPrefabYaw(),
+                    def,
+                    plugin,
+                    session.getMovePlotId()
+                )
+                : PlotPlacementValidator.validate(
+                    world,
+                    tm,
+                    town,
+                    uc.getUuid(),
+                    previewAnchor,
+                    session.getPrefabYaw(),
+                    def,
+                    plugin,
+                    session.getMovePlotId()
+                );
         if (err != null) {
             sendError(store, ref, err);
             return false;
@@ -677,7 +697,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         if (prefabPath != null) {
             IPrefabBuffer buf = PrefabBufferUtil.getCached(prefabPath);
             try {
-                Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(previewAnchor, session.getPrefabYaw());
+                Vector3i prefabOrigin = buildingAnchor;
                 PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
                 PlotInstance inst =
                     new PlotInstance(
@@ -717,9 +737,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     System.currentTimeMillis()
                 );
             miniPlot.setPrefabWorldPlacement(
-                previewAnchor.x,
-                previewAnchor.y,
-                previewAnchor.z,
+                buildingAnchor.x,
+                buildingAnchor.y,
+                buildingAnchor.z,
                 session.getPrefabYaw()
             );
             town.addPlotInstance(miniPlot);

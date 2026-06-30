@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
+import com.hexvane.aetherhaven.town.PlotLinkReconcileService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -38,6 +39,13 @@ public final class TownJournalAdminService {
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         return VillagerTownResetService.resetAllTownVillagersNearPlayer(world, plugin, town, tm, store, playerPosition);
+    }
+
+    @Nonnull
+    public static PlotLinkReconcileService.TownRepairReport repairPlots(
+        @Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town
+    ) {
+        return PlotLinkReconcileService.repairTown(world, plugin, town, true);
     }
 
     @Nonnull

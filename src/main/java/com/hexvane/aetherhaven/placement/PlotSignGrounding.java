@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Keeps plot sign XZ from the placement preview, snaps sign Y to terrain under the prefab footprint, and falls back to
- * the footprint floor when no surface is found (e.g. fully underground).
+ * the preview sign Y when no surface is found (e.g. fully underground).
  */
 public final class PlotSignGrounding {
     private static final int MAX_RAY_DOWN = 512;
@@ -34,13 +34,13 @@ public final class PlotSignGrounding {
         int sz = anchorPreview.z;
         Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(anchorPreview, prefabYaw);
         PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, prefabYaw, buf);
-        int startY = fp.getMaxY();
+        int startY = Math.max(anchorPreview.y, fp.getMaxY());
         Integer support = PathGrounding.findSupportY(world, sx, sz, startY, MAX_RAY_DOWN, 1);
         int signY;
         if (support != null) {
             signY = Math.min(318, support + 1);
         } else {
-            signY = fp.getMinY();
+            signY = anchorPreview.y;
         }
         signY = Math.max(1, Math.min(318, signY));
         return new Vector3i(sx, signY, sz);

@@ -322,6 +322,12 @@ public final class PlotInstance {
         this.assemblyBlockIndex = null;
     }
 
+    /** Clears passive assembly clock fields when a new build starts or assembly is abandoned. */
+    public void resetAssemblyPassiveTimers() {
+        this.assemblyStartEpochMs = null;
+        this.assemblyNextPassiveDueSimMs = null;
+    }
+
     public void fillAssemblyPlacedSet(@Nonnull IntOpenHashSet out, int pendingSize) {
         out.clear();
         if (assemblyPlacedIndices != null && !assemblyPlacedIndices.isEmpty()) {

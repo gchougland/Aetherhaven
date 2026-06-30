@@ -3,9 +3,13 @@ package com.hexvane.aetherhaven.construction.assembly;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
+import com.hexvane.aetherhaven.plot.PlotBlockStamper;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.construction.ConstructionPasteOps.PendingBlock;
+import com.hexvane.aetherhaven.construction.PlotMaterialDepositService;
+import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.inventory.BenchAdjacentChestUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -13,7 +17,7 @@ import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
-import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -21,8 +25,14 @@ import com.hypixel.hytale.math.util.ChunkUtil;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
+import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPasteEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
@@ -148,12 +158,12 @@ public final class PlotAssemblyService {
 
     /**
      * Starts assembly on the world thread: paste begin, optional clearing phase, break plot sign, persist ASSEMBLING,
-     * register job. Caller must have consumed materials/treasury already.
+     * register job. Spends treasury gold and clears material deposits after paste is accepted.
      */
-    public static void startFromBuildClick(
+    @Nonnull
+    public static PlotAssemblyBuildStartResult startFromBuildClick(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull World world,
-        @Nonnull Store<EntityStore> entityStore,
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
         @Nonnull Vector3i physicalSignWorld,
@@ -161,20 +171,65 @@ public final class PlotAssemblyService {
         @Nonnull Vector3i anchor,
         @Nonnull Rotation yaw,
         @Nonnull ConstructionDefinition def,
-        @Nonnull IPrefabBuffer buffer
+        @Nonnull IPrefabBuffer buffer,
+        long goldCost,
+        boolean creativeBypassPayment
     ) {
+        if (world.getEntityStore() == null) {
+            return PlotAssemblyBuildStartResult.BUILDER_UNAVAILABLE;
+        }
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
         UUID plotId = plot.getPlotId();
-        if (AssemblyWorldRegistry.get(world, plotId) != null) {
+        if (plot.getState() == PlotInstanceState.ASSEMBLING) {
+            LOGGER.atWarning().log("Build click while plot already assembling %s", plotId);
+            return PlotAssemblyBuildStartResult.ALREADY_ASSEMBLING;
+        }
+        if (AssemblyWorldRegistry.hasJob(world, plotId)) {
             LOGGER.atWarning().log("Assembly already active for plot %s", plotId);
-            return;
+            return PlotAssemblyBuildStartResult.ASSEMBLY_ALREADY_ACTIVE;
         }
         int prefabId = PrefabUtil.getNextPrefabId();
         PrefabPasteEvent start = new PrefabPasteEvent(prefabId, true);
         entityStore.invoke(start);
         if (start.isCancelled()) {
             LOGGER.atWarning().log("Prefab paste start cancelled for plot %s", plotId);
-            return;
+            return PlotAssemblyBuildStartResult.PASTE_CANCELLED;
         }
+        if (!creativeBypassPayment) {
+            Ref<EntityStore> builderRef = entityStore.getExternalData().getRefFromUUID(assemblyOwnerUuid);
+            if (builderRef == null || !builderRef.isValid()) {
+                return PlotAssemblyBuildStartResult.BUILDER_UNAVAILABLE;
+            }
+            Player player = entityStore.getComponent(builderRef, Player.getComponentType());
+            if (player == null) {
+                return PlotAssemblyBuildStartResult.BUILDER_UNAVAILABLE;
+            }
+            CombinedItemContainer inv =
+                BenchAdjacentChestUtil.combinedPlayerAndAdjacentChestsForBlock(
+                    world,
+                    entityStore,
+                    builderRef,
+                    physicalSignWorld.x,
+                    physicalSignWorld.y,
+                    physicalSignWorld.z
+                );
+            if (inv == null) {
+                return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
+            }
+            if (goldCost > 0L) {
+                boolean allowTreasury = town.playerCanSpendTreasuryGold(assemblyOwnerUuid);
+                if (!GoldCoinPayment.canAfford(town, inv, goldCost, allowTreasury)) {
+                    return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
+                }
+                if (GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury) == null) {
+                    return PlotAssemblyBuildStartResult.PAYMENT_FAILED;
+                }
+            }
+            PlotMaterialDepositService.clearDeposits(plot);
+        }
+        TownManager tmPay = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        tmPay.updateTown(town);
+
         ConstructionPasteOps.PrefabSequence seq = ConstructionPasteOps.buildSequence(buffer, yaw);
         List<PendingBlock> footprintCells = seq.pendingBlocks();
         List<PendingBlock> nonAirCells = ConstructionPasteOps.withoutPureAirCells(footprintCells);
@@ -194,6 +249,7 @@ public final class PlotAssemblyService {
         plot.setState(PlotInstanceState.ASSEMBLING);
         plot.setLastStateChangeEpochMs(wallNow);
         plot.resetAssemblyPlacementProgress();
+        plot.resetAssemblyPassiveTimers();
         int sectionAxis = def.getAssemblyPrefabSectionsPerAxis();
         if (sectionAxis > 1) {
             plot.setAssemblySectionDivisions(sectionAxis);
@@ -229,6 +285,105 @@ public final class PlotAssemblyService {
             registerClearingJob(world, plotId, job);
         } else {
             beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);
+        }
+        notifyBuildStarted(world, entityStore, assemblyOwnerUuid, def);
+        return PlotAssemblyBuildStartResult.OK;
+    }
+
+    private static void notifyBuildStarted(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull UUID builderUuid,
+        @Nonnull ConstructionDefinition def
+    ) {
+        Ref<EntityStore> ref = entityStore.getExternalData().getRefFromUUID(builderUuid);
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        PlayerRef pr = entityStore.getComponent(ref, PlayerRef.getComponentType());
+        if (pr == null) {
+            return;
+        }
+        NotificationUtil.sendNotification(
+            pr.getPacketHandler(),
+            Message.translation("aetherhaven_misc.aetherhaven.assembly.buildStarted.title"),
+            Message.translation("aetherhaven_misc.aetherhaven.assembly.buildStarted.body")
+                .param("name", def.getDisplayName()),
+            NotificationStyle.Success
+        );
+    }
+
+    /**
+     * Restores missing in-memory jobs for every assembling plot in the world (preview/staff safety).
+     */
+    public static void ensureAssemblyJobsForAssemblingPlots(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore
+    ) {
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        for (TownRecord town : tm.allTowns()) {
+            if (!world.getName().equals(town.getWorldName())) {
+                continue;
+            }
+            for (PlotInstance plot : town.getPlotInstances()) {
+                if (plot.getState() == PlotInstanceState.ASSEMBLING
+                    && !AssemblyWorldRegistry.hasJob(world, plot.getPlotId())) {
+                    ensureAssemblyJob(world, plugin, town, plot, entityStore);
+                }
+            }
+        }
+    }
+
+    public static void schedulePassiveFromHub(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+        if (!plugin.getConfig().get().isPassivePlotAssemblyEnabled()) {
+            return;
+        }
+        if (AssemblyWorldRegistry.jobs(world).isEmpty()) {
+            return;
+        }
+        world.execute(
+            () -> {
+                if (world.getEntityStore() == null) {
+                    return;
+                }
+                Store<EntityStore> store = world.getEntityStore().getStore();
+                tickPassive(world, plugin, store, store);
+            }
+        );
+    }
+
+    /**
+     * When the builder villager begins assisting, snap the passive timer so a higher boost applies immediately.
+     */
+    public static void snapPassiveDueForBoost(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID plotId,
+        int newBoost
+    ) {
+        if (newBoost <= 1) {
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.findTownOwningPlot(plotId);
+        if (town == null) {
+            return;
+        }
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot == null || plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return;
+        }
+        if (world.getEntityStore() == null) {
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        Instant simNow = store.getResource(TimeResource.getResourceType()).getNow();
+        long simNowMs = simNow.toEpochMilli();
+        long due = plot.getAssemblyNextPassiveDueSimMs();
+        if (due > simNowMs) {
+            plot.setAssemblyNextPassiveDueSimMs(simNowMs);
+            tm.updateTown(town);
         }
     }
 
@@ -405,11 +560,40 @@ public final class PlotAssemblyService {
         return start;
     }
 
+    /**
+     * {@link PlotInstance#getAssemblyNextPassiveDueSimMs()} uses sim time; legacy wall clock values far ahead of
+     * {@link TimeResource#getNow()} stall passive ticks until snapped once.
+     */
+    private static long resolvePassiveNextDue(
+        @Nonnull PlotInstance plot,
+        @Nonnull Instant simNow,
+        long slot,
+        @Nonnull Instant assemblyStart,
+        @Nonnull TownManager tm,
+        @Nonnull TownRecord town
+    ) {
+        long simNowMs = simNow.toEpochMilli();
+        long nextDue = plot.getAssemblyNextPassiveDueSimMs();
+        if (nextDue == 0L) {
+            nextDue = assemblyStart.toEpochMilli() + slot;
+            plot.setAssemblyNextPassiveDueSimMs(nextDue);
+            tm.updateTown(town);
+            return nextDue;
+        }
+        long wallNow = System.currentTimeMillis();
+        if (nextDue > wallNow + 86_400_000L || nextDue > simNowMs + 3_600_000L) {
+            plot.setAssemblyNextPassiveDueSimMs(simNowMs);
+            tm.updateTown(town);
+            return simNowMs;
+        }
+        return nextDue;
+    }
+
     public static void tickPassive(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Store<EntityStore> entityStore,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer
+        @Nonnull ComponentAccessor<EntityStore> entityAccessor
     ) {
         if (!plugin.getConfig().get().isPassivePlotAssemblyEnabled()) {
             return;
@@ -438,12 +622,7 @@ public final class PlotAssemblyService {
                     long slot = Math.max(1L, job.slotWallMs() / boost);
                     int maxBlocks = PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
                     Instant assemblyStart = resolvePassiveAssemblyStart(clearingPlot, simNow, tm, clearingTown);
-                    long nextDue = clearingPlot.getAssemblyNextPassiveDueSimMs();
-                    if (nextDue == 0L) {
-                        nextDue = assemblyStart.toEpochMilli() + slot;
-                        clearingPlot.setAssemblyNextPassiveDueSimMs(nextDue);
-                        tm.updateTown(clearingTown);
-                    }
+                    long nextDue = resolvePassiveNextDue(clearingPlot, simNow, slot, assemblyStart, tm, clearingTown);
                     if (simNowMs >= nextDue) {
                         ArrayList<Vector3i> obstructed = new ArrayList<>();
                         clearingRt.appendAllObstructedCells(world, job, obstructed);
@@ -460,7 +639,7 @@ public final class PlotAssemblyService {
                             if (!advanceClearingAtCell(
                                 world,
                                 plugin,
-                                commandBuffer,
+                                entityAccessor,
                                 entityStore,
                                 clearingTown,
                                 clearingPlot,
@@ -506,12 +685,7 @@ public final class PlotAssemblyService {
             int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
             long slot = Math.max(1L, job.slotWallMs() / boost);
             int maxBlocks = PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
-            long nextDue = plot.getAssemblyNextPassiveDueSimMs();
-            if (nextDue == 0L) {
-                nextDue = assemblyStart.toEpochMilli() + slot;
-                plot.setAssemblyNextPassiveDueSimMs(nextDue);
-                tm.updateTown(town);
-            }
+            long nextDue = resolvePassiveNextDue(plot, simNow, slot, assemblyStart, tm, town);
             if (simNowMs < nextDue) {
                 continue;
             }
@@ -520,7 +694,12 @@ public final class PlotAssemblyService {
                 PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
                 int pick = rt.smallestPlacementIndex();
                 if (pick < 0) {
-                    break;
+                    rt.rebuildFrontierFromPlot(pending, plot);
+                    pick = rt.smallestPlacementIndex();
+                    if (pick < 0) {
+                        LOGGER.atWarning().log("Assembly frontier empty but plot %s incomplete (%d/%d)", job.plotId(), placedCount, pending.size());
+                        break;
+                    }
                 }
                 if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(pick))) {
                     break;
@@ -684,6 +863,65 @@ public final class PlotAssemblyService {
         UUID finisher = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
         AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, finisher, plot);
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
+        verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
+    }
+
+    private static void verifyPlotBlockLinksAfterComplete(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        if (def == null) {
+            return;
+        }
+        PlotBlockStamper.PlotBlockRepairResult repair =
+            PlotBlockStamper.verifyAndRepairPlot(world, town, plot, def, job.anchor(), job.yaw());
+        if (repair.getRelinked() > 0) {
+            LOGGER.atInfo().log(
+                "Post-assembly link repair for plot %s: relinked=%d",
+                plot.getPlotId(),
+                repair.getRelinked()
+            );
+            AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        }
+    }
+
+    private static boolean bruteForcePlaceRemaining(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        List<PendingBlock> pending = job.pendingBlocks();
+        IntOpenHashSet placedSet = new IntOpenHashSet();
+        plot.fillAssemblyPlacedSet(placedSet, pending.size());
+        LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        boolean any = false;
+        for (int i = 0; i < pending.size(); i++) {
+            if (placedSet.contains(i)) {
+                continue;
+            }
+            if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(i))) {
+                return false;
+            }
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, chunkAccessor, blockTypeMap)) {
+                chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, chunkAccessor, blockTypeMap)) {
+                    continue;
+                }
+            }
+            plot.addAssemblyPlacedIndex(i);
+            any = true;
+        }
+        if (any) {
+            AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        }
+        return plot.getAssemblyPlacedBlockCount() >= pending.size();
     }
 
     /**
@@ -948,7 +1186,7 @@ public final class PlotAssemblyService {
     public static boolean advanceClearingAtCell(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull ComponentAccessor<EntityStore> entityAccessor,
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot,
@@ -975,7 +1213,7 @@ public final class PlotAssemblyService {
             maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
             return false;
         }
-        if (!AssemblyStaffClearBreak.breakWithLoot(world, cellWorld, commandBuffer)) {
+        if (!AssemblyStaffClearBreak.breakWithLoot(world, cellWorld, entityAccessor)) {
             if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld)) {
                 clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
                 maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
@@ -1041,12 +1279,34 @@ public final class PlotAssemblyService {
         );
     }
 
+    public static final class InstantCompleteTownResult {
+        private int finished;
+        private int failed;
+        private int stillAssembling;
+        private int linksRepaired;
+
+        public int getFinished() {
+            return finished;
+        }
+
+        public int getFailed() {
+            return failed;
+        }
+
+        public int getStillAssembling() {
+            return stillAssembling;
+        }
+
+        public int getLinksRepaired() {
+            return linksRepaired;
+        }
+    }
+
     /**
      * Creative/debug: place every remaining assembly block for one job in frontier order, then run
      * {@link #completeAssembly} on the same thread (no deferred task). Caller must be on the world thread.
      *
-     * @return true when the job finished (or was already fully placed), false on missing chunk, bad state, or empty
-     *     frontier.
+     * @return true when the job finished (or was already fully placed), false on missing chunk or bad state.
      */
     public static boolean instantCompleteJob(
         @Nonnull World world,
@@ -1080,18 +1340,39 @@ public final class PlotAssemblyService {
             completeAssembly(world, plugin, entityStore, town, plot, job);
             return true;
         }
-        while (plot.getAssemblyPlacedBlockCount() < pending.size()) {
+        int guard = 0;
+        int maxLoops = pending.size() * 3 + 16;
+        while (plot.getAssemblyPlacedBlockCount() < pending.size() && guard++ < maxLoops) {
             PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
             int pick = rt.smallestPlacementIndex();
             if (pick < 0) {
-                LOGGER.atWarning().log("instantCompleteJob: empty frontier plot %s", plot.getPlotId());
-                return false;
+                rt.rebuildFrontierFromPlot(pending, plot);
+                pick = rt.smallestPlacementIndex();
+            }
+            if (pick < 0) {
+                if (bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
+                    break;
+                }
+                LOGGER.atWarning().log(
+                    "instantCompleteJob: empty frontier plot %s (%d/%d placed)",
+                    plot.getPlotId(),
+                    plot.getAssemblyPlacedBlockCount(),
+                    pending.size()
+                );
+                break;
             }
             if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, false)) {
-                return false;
+                if (!bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
+                    break;
+                }
+                break;
             }
         }
-        return true;
+        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
+            completeAssembly(world, plugin, entityStore, town, plot, job);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1105,19 +1386,37 @@ public final class PlotAssemblyService {
         @Nonnull Store<EntityStore> entityStore,
         @Nonnull TownRecord town
     ) {
-        int finished = 0;
+        return instantCompleteAllAssemblingJobsForTownDetailed(world, plugin, entityStore, town).getFinished();
+    }
+
+    @Nonnull
+    public static InstantCompleteTownResult instantCompleteAllAssemblingJobsForTownDetailed(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town
+    ) {
+        InstantCompleteTownResult result = new InstantCompleteTownResult();
         for (PlotInstance plot : town.getPlotInstances()) {
             if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                 continue;
             }
             PlotAssemblyJob job = ensureAssemblyJob(world, plugin, town, plot, entityStore);
             if (job == null) {
+                result.failed++;
                 continue;
             }
             if (instantCompleteJob(world, plugin, entityStore, town, plot, job)) {
-                finished++;
+                result.finished++;
+            } else {
+                result.failed++;
             }
         }
-        return finished;
+        for (PlotInstance plot : town.getPlotInstances()) {
+            if (plot.getState() == PlotInstanceState.ASSEMBLING) {
+                result.stillAssembling++;
+            }
+        }
+        return result;
     }
 }

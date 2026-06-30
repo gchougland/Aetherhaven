@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.time;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.economy.TownEconomyTimeService;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.feast.FeastService;
@@ -52,6 +53,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
         QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
         CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
+        PlotAssemblyService.schedulePassiveFromHub(world, plugin);
     }
 
     @Override
@@ -83,5 +85,6 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
         QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
         CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
+        PlotAssemblyService.schedulePassiveFromHub(world, plugin);
     }
 }

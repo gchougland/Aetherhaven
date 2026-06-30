@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.wall.WallTowerPrefabResolver;
 import com.hypixel.hytale.component.Ref;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -399,6 +400,19 @@ public final class WallPlacementSession {
             return false;
         }
         return applyOutgoingDirectionToLastTower(outgoingExpandDir);
+    }
+
+    public void reGroundSignYAtCurrentColumn(
+        @Nonnull World world,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull IPrefabBuffer buf
+    ) {
+        if (heightManuallyAdjusted) {
+            return;
+        }
+        Vector3i grounded =
+            PlotSignGrounding.resolveSignCell(world, currentAnchor, def, getCurrentPrefabYaw(), buf);
+        currentAnchor = new Vector3i(grounded.x, grounded.y, grounded.z);
     }
 
     private void applyExpandPreviewPlan(@Nonnull WallPlacementChainPlanner.ExpandPreviewPlan plan) {

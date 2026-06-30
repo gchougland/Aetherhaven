@@ -29,6 +29,10 @@ public abstract class AetherhavenInteractiveCustomUIPage<T> extends InteractiveC
         super(playerRef, lifetime, eventDataCodec);
     }
 
+    protected boolean isDismissed() {
+        return dismissed;
+    }
+
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         dismissed = true;

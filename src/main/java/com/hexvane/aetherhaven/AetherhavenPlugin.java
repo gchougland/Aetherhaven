@@ -20,6 +20,9 @@ import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChanne
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerComponent;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffMarkerEntity;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffPreviewPlayerComponent;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffPreviewPlayerRemoveSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffHotbarManaHudSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffManaRegenSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffSecondaryInteraction;
@@ -43,6 +46,7 @@ import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
+import com.hexvane.aetherhaven.plot.ManagementBreakBlockSystem;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.plot.FounderMonumentBlock;
@@ -607,6 +611,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         ShopSpotPlayerComponent.register(this.getEntityStoreRegistry());
         BuildingStaffAssemblyChannelComponent.register(this.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(this.getEntityStoreRegistry());
+        BuildingStaffPreviewPlayerComponent.register(this.getEntityStoreRegistry());
         FloatingGiftComponent.register(this.getEntityStoreRegistry());
         this.getEntityRegistry()
             .registerEntity(
@@ -660,6 +665,19 @@ public final class AetherhavenPlugin extends JavaPlugin {
                     return e;
                 },
                 PurificationPreviewEntity.CODEC
+            );
+        this.getEntityRegistry()
+            .registerEntity(
+                "AetherhavenBuildingStaffMarker",
+                BuildingStaffMarkerEntity.class,
+                world -> {
+                    BuildingStaffMarkerEntity e = new BuildingStaffMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                BuildingStaffMarkerEntity.CODEC
             );
         this.getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);
@@ -854,6 +872,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new ProductionTickSystem(this));
         this.getEntityStoreRegistry().registerSystem(new CharterPlaceEventSystem(this));
         this.getEntityStoreRegistry().registerSystem(new TreasuryBreakBlockSystem(this));
+        this.getEntityStoreRegistry().registerSystem(new ManagementBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new ShopSafeBreakBlockSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(this));
@@ -876,6 +895,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.getEntityStoreRegistry().registerSystem(new GuildHallDisplayAnchorSystem());
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(this));
         this.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
+        this.getEntityStoreRegistry().registerSystem(new BuildingStaffPreviewPlayerRemoveSystem());
         this.getEntityStoreRegistry().registerSystem(new QuestKillProgressSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(this));
         this.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(this));

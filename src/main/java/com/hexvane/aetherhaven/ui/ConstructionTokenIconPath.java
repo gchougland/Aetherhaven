@@ -62,4 +62,56 @@ public final class ConstructionTokenIconPath {
         }
         return CustomBuildingsPaths.iconAssetPath(id);
     }
+
+    /**
+     * Whether a plot-token icon is safe to show in custom UI item grids (avoids client NRE when the PNG is missing).
+     */
+    public static boolean isIconAvailable(@Nonnull String constructionId, @Nullable Path dataDirectory) {
+        String id = constructionId.trim();
+        if (id.isEmpty()) {
+            return false;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(id);
+            if (def != null) {
+                return isIconAvailable(def, dataDirectory);
+            }
+        }
+        if (dataDirectory != null && Files.isRegularFile(CustomBuildingsPaths.iconFile(dataDirectory, id))) {
+            return true;
+        }
+        return hasBundledTokenIcon(id);
+    }
+
+    public static boolean isIconAvailable(@Nonnull ConstructionDefinition def, @Nullable Path dataDirectory) {
+        String id = def.getId().trim();
+        if (dataDirectory != null && Files.isRegularFile(CustomBuildingsPaths.iconFile(dataDirectory, id))) {
+            return true;
+        }
+        String tokenItemId = def.getPlotTokenItemId();
+        if (tokenItemId != null
+            && !tokenItemId.isBlank()
+            && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(tokenItemId.trim())) {
+            return Item.getAssetMap().getAsset(tokenItemId.trim()) != null;
+        }
+        return hasBundledTokenIcon(id);
+    }
+
+    /** Unified plot token default icon from {@link AetherhavenConstants#PLOT_TOKEN_UNIFIED}. */
+    @Nonnull
+    public static String unifiedPlotTokenFallbackIconPath() {
+        Item unified = Item.getAssetMap().getAsset(AetherhavenConstants.PLOT_TOKEN_UNIFIED);
+        return ItemAssetImagePath.forItem(unified, AetherhavenConstants.PLOT_TOKEN_UNIFIED);
+    }
+
+    private static boolean hasBundledTokenIcon(@Nonnull String constructionId) {
+        String resourcePath =
+            CustomBuildingsPaths.ICONS_RELATIVE + "/" + CustomBuildingsPaths.iconFileName(constructionId);
+        ClassLoader cl =
+            AetherhavenPlugin.get() != null
+                ? AetherhavenPlugin.get().getClassLoader()
+                : ConstructionTokenIconPath.class.getClassLoader();
+        return cl.getResource(resourcePath) != null;
+    }
 }

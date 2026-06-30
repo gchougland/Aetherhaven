@@ -96,6 +96,7 @@ public final class VillagerEquipmentService {
                 active = (byte) s;
             }
             hb.setActiveSlot(active, npcRef, commandBuffer);
+            markHotbarEquipmentDirty(hb, active, npcRef, commandBuffer);
             putHotbar(npcRef, store, commandBuffer, hb);
         } catch (RuntimeException ex) {
             LOGGER.at(Level.FINE).withCause(ex).log("Could not equip hotbar on NPC");
@@ -134,6 +135,35 @@ public final class VillagerEquipmentService {
         } else {
             store.putComponent(npcRef, InventoryComponent.Armor.getComponentType(), armor);
         }
+    }
+
+    /**
+     * NPC held-item visuals only refresh on active-slot changes or {@link InventoryComponent.Hotbar#setOutdatedEquipment}.
+     * Replacing the item in the already-active slot needs both.
+     */
+    public static void markHotbarEquipmentDirty(
+        @Nonnull InventoryComponent.Hotbar hb,
+        byte targetSlot,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        byte current = hb.getActiveSlot();
+        if (current == targetSlot) {
+            byte alt = alternateHotbarSlot(hb, targetSlot);
+            hb.setActiveSlot(alt, npcRef, commandBuffer);
+        }
+        hb.setActiveSlot(targetSlot, npcRef, commandBuffer);
+        hb.setOutdatedEquipment(true);
+    }
+
+    private static byte alternateHotbarSlot(@Nonnull InventoryComponent.Hotbar hb, byte avoid) {
+        short capacity = hb.getInventory().getCapacity();
+        for (short s = 0; s < capacity; s++) {
+            if ((byte) s != avoid) {
+                return (byte) s;
+            }
+        }
+        return -1;
     }
 
     private static void putHotbar(

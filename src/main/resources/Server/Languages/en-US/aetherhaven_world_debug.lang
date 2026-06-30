@@ -99,6 +99,21 @@ aetherhaven.towns.entry=  {name}  id={id} owner={owner} charter={cx},{cy},{cz} p
 aetherhaven.debug.plots.line=  {plotId} {construction} {state} sign@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=No assembling plots with an active job for your town (load chunks around builds, or start a build first).
 aetherhaven.debug.plots.finishassemblyDone=Instantly finished {count} in-progress plot build(s).
+aetherhaven.debug.plots.finishassemblySummary=Finish assembly: finished {finished} failed {failed} still assembling {still}
+aetherhaven.debug.plots.repairSummary=Plot repair for {town}: scanned {scanned} re-linked {relinked} already ok {ok} skipped unloaded {skipped} failed {failed} orphan blocks {orphans}
+aetherhaven.debug.plots.reconstructNoId=Provide a construction id (e.g. plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=No plot matches "{id}" in that town. Check spelling or run /ah plots list.
+aetherhaven.debug.plots.reconstructBadIndex=Index out of range. Use the number from the list below.
+aetherhaven.debug.plots.reconstructAmbiguous=Multiple plots match "{id}". Run again with an index:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Usage: /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk=Reconstructing {construction} [{index}] at {x}, {y}, {z} (stand nearby until paste finishes).
+aetherhaven.debug.plots.reconstructChunks=Load all chunks around that building first, then try again.
+aetherhaven.debug.plots.reconstructUnknown=Unknown construction for that plot.
+aetherhaven.debug.plots.reconstructPrefab=Prefab file missing for that building.
+aetherhaven.debug.plots.reconstructWall=Wall and decoration plots cannot be reconstructed with this command.
+aetherhaven.debug.plots.reconstructFailed=Reconstruct failed. Check the server log.
+aetherhaven.debug.plots.diagnoseHeader=Plot link diagnose for {town}:
+aetherhaven.debug.plots.diagnoseLine=  {construction} {state} @ {x},{y},{z} links={link}
 aetherhaven.debug.plots.removeBadUuid=Invalid plot UUID. Use the id from /aetherhaven plots list.
 aetherhaven.debug.plots.removeNotFound=No plot {plotId} in your town.
 aetherhaven.debug.plots.removeDataFailed=World was cleared but removing the plot from town data failed (check logs).

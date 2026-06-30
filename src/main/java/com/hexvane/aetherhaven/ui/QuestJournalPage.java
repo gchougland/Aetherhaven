@@ -30,10 +30,13 @@ import com.hexvane.aetherhaven.rts.RtsPickTuning;
 import com.hexvane.aetherhaven.rts.RtsScreenPickUtil;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintChunkUtil;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
+import com.hexvane.aetherhaven.town.PlotLinkReconcileService;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -67,6 +70,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -919,6 +924,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
+                "#SettingsRepairPlotsButton",
+                new EventData().append("Action", "JournalRepairPlots"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
                 "#SettingsFinishPlotButton",
                 new EventData().append("Action", "JournalOpenPlotFinishModal"),
                 false
@@ -1007,10 +1018,13 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
             PlotInstanceState pst = p.getState();
             commandBuilder.set(row + " #PlotStatus.TextSpans", Message.translation(plotStatusLangKey(pst)));
+            ensurePlotTokenIconRegistered(plugin, p.getConstructionId());
             ItemGridSlot tokenSlot = AetherhavenUiItemGrids.plotTokenSlotForConstruction(p.getConstructionId(), plotCatalog);
             if (tokenSlot != null) {
+                commandBuilder.set(row + " #PlotIconHost.Visible", true);
                 AetherhavenUiItemGrids.setSingleSlot(commandBuilder, row + " #PlotTokenSlot", tokenSlot);
             } else {
+                commandBuilder.set(row + " #PlotIconHost.Visible", false);
                 AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #PlotTokenSlot");
             }
             boolean areaLoaded = PlotFootprintChunkUtil.isPlotFullyLoaded(world, p);
@@ -1086,6 +1100,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#TownSplit.Visible", false);
         commandBuilder.clear(TOWN_VILLAGER_ROWS);
         commandBuilder.clear(TOWN_PLOT_ROWS);
+    }
+
+    /** Registers runtime plot-creator PNGs so the client receives icons before journal ItemGrid slots render. */
+    private static void ensurePlotTokenIconRegistered(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+        String id = constructionId.trim();
+        if (id.isEmpty()) {
+            return;
+        }
+        Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), id);
+        if (Files.isRegularFile(iconFile)) {
+            CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
+        }
     }
 
     @Nonnull
@@ -2135,6 +2161,37 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     .param("locked", String.valueOf(rep.getLockedQuestVisitors()))
                     .param("promoted", String.valueOf(rep.getPromotedResidents()))
                     .param("removed", String.valueOf(rep.getRemovedPoolEntries()))
+            );
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("JournalRepairPlots")) {
+            if (!JournalSettingsAccess.canOpen(store, ref)) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            if (town == null) {
+                return;
+            }
+            PlotLinkReconcileService.TownRepairReport rep = TownJournalAdminService.repairPlots(world, plugin, town);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.plotsRepairDone")
+                    .param("scanned", String.valueOf(rep.getScanned()))
+                    .param("relinked", String.valueOf(rep.getRelinked()))
+                    .param("skipped", String.valueOf(rep.getSkippedChunkUnloaded()))
+                    .param("orphans", String.valueOf(rep.getOrphans()))
             );
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();

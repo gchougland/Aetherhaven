@@ -26,6 +26,11 @@ import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.placement.PlotSignGrounding;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
+import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import java.nio.file.Path;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -115,12 +120,7 @@ public final class WallPlacementEditHelper {
         PlotFootprintRecord fp = seg.toFootprint();
         int cx = (fp.getMinX() + fp.getMaxX()) / 2;
         int cz = (fp.getMinZ() + fp.getMaxZ()) / 2;
-        Vector3i anchor =
-            new Vector3i(
-                cx,
-                fp.getMinY() + com.hexvane.aetherhaven.AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
-                cz
-            );
+        Vector3i anchor = groundedSignAnchorForSegment(world, plugin, seg, cx, cz, fp.getMaxY());
         WallPlacementSession session = new WallPlacementSession(world, anchor);
         session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw()));
         if (WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())) {
@@ -183,13 +183,9 @@ public final class WallPlacementEditHelper {
         session.setEditTargetPlotId(null);
         session.setRemoveConfirmOpen(false);
         PlotFootprintRecord fp = seg.toFootprint();
-        session.setCurrentAnchor(
-            new Vector3i(
-                seg.getPrefabAnchorX(),
-                seg.getPrefabAnchorY() + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
-                seg.getPrefabAnchorZ()
-            )
-        );
+        int cx = (fp.getMinX() + fp.getMaxX()) / 2;
+        int cz = (fp.getMinZ() + fp.getMaxZ()) / 2;
+        session.setCurrentAnchor(groundedSignAnchorForSegment(world, plugin, seg, cx, cz, fp.getMaxY()));
         session.setCurrentRotationSteps(PlotPlacementSession.rotationStepsFromPrefabYaw(seg.resolvePrefabYaw()));
         if (WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())) {
             session.setPieceKind(WallPlacementSession.PieceKind.TOWER);
@@ -199,6 +195,38 @@ public final class WallPlacementEditHelper {
             session.setPieceKind(WallPlacementSession.PieceKind.SEGMENT);
         }
         return true;
+    }
+
+    @Nonnull
+    private static Vector3i groundedSignAnchorForSegment(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull WallSegmentRecord seg,
+        int signX,
+        int signZ,
+        int previewY
+    ) {
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(seg.getConstructionId());
+        if (def == null) {
+            PlotFootprintRecord fp = seg.toFootprint();
+            return new Vector3i(
+                signX,
+                fp.getMinY() + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+                signZ
+            );
+        }
+        Path path = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (path == null) {
+            PlotFootprintRecord fp = seg.toFootprint();
+            return new Vector3i(
+                signX,
+                fp.getMinY() + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+                signZ
+            );
+        }
+        IPrefabBuffer buf = PrefabBufferUtil.getCached(path);
+        Vector3i preview = new Vector3i(signX, previewY, signZ);
+        return PlotSignGrounding.resolveSignCell(world, preview, def, seg.resolvePrefabYaw(), buf);
     }
 
     @Nullable

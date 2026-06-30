@@ -95,7 +95,10 @@ public final class PlotTokenVirtualItemRegistry {
             }
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             Path dataDir = plugin != null ? plugin.getDataDirectory() : null;
-            String iconPath = ConstructionTokenIconPath.forConstructionId(constructionId, dataDir);
+            String iconPath =
+                ConstructionTokenIconPath.isIconAvailable(constructionId, dataDir)
+                    ? ConstructionTokenIconPath.forConstructionId(constructionId, dataDir)
+                    : ConstructionTokenIconPath.unifiedPlotTokenFallbackIconPath();
 
             ItemBase clone = originalPacket.clone();
             clone.id = virtualId;

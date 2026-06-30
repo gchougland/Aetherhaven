@@ -77,14 +77,26 @@ public final class PlotBuildingRelocation {
             sendError(store, ref, "Unknown construction: " + plot.getConstructionId());
             return false;
         }
-        Vector3i signPos = session.getAnchor();
+        Vector3i previewAnchor = session.getAnchor();
+        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
+        if (prefabPath == null) {
+            sendError(store, ref, "Prefab not found for construction: " + def.getId());
+            return false;
+        }
+        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
+        PlotPlacementHeights.ResolvedPlacement resolved =
+            PlotPlacementHeights.resolve(world, previewAnchor, def, session.getPrefabYaw(), buffer);
+        Vector3i signPos = resolved.signCell();
+        Vector3i prefabOrigin = resolved.buildingPrefabAnchor();
         String err =
-            PlotPlacementValidator.validate(
+            PlotPlacementValidator.validateWithResolvedHeights(
                 world,
                 tm,
                 town,
                 playerUuid,
+                previewAnchor,
                 signPos,
+                prefabOrigin,
                 session.getPrefabYaw(),
                 def,
                 plugin,
@@ -94,14 +106,8 @@ public final class PlotBuildingRelocation {
             sendError(store, ref, err);
             return false;
         }
-        Path prefabPath = PrefabResolveUtil.resolvePrefabPath(def.getPrefabPath());
-        if (prefabPath == null) {
-            sendError(store, ref, "Prefab not found for construction: " + def.getId());
-            return false;
-        }
 
         PlotFootprintRecord oldFootprint = plot.toFootprint();
-        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(signPos, session.getPrefabYaw());
 
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         reg.unregisterByPlotId(movePlotId);
@@ -114,7 +120,6 @@ public final class PlotBuildingRelocation {
         PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(store, oldFootprint, town);
         PrefabFootprintClearUtil.clearFootprint(world, oldFootprint);
 
-        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
         PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buffer);
         plot.applySignAndFootprint(signPos.x, signPos.y, signPos.z, newFp);
         plot.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
@@ -145,7 +150,7 @@ public final class PlotBuildingRelocation {
         return true;
     }
 
-    private static void relocateTownNpcsOutOfFootprint(
+    public static void relocateTownNpcsOutOfFootprint(
         @Nonnull Store<EntityStore> store, @Nonnull TownRecord town, @Nonnull PlotFootprintRecord fp
     ) {
         double tx = town.getCharterX() + 0.5;

@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.GroupEntry;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.Tab;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.VariantEntry;
 import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreview;
+import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreviewClientMode;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockService;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
@@ -22,6 +23,7 @@ import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.protocol.packets.interface_.CustomPage;
 import com.hypixel.hytale.protocol.packets.interface_.CustomPageLifetime;
 import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
@@ -48,6 +50,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final String TAB_CORE = "Core";
     private static final String TAB_DECORATIONS = "Decorations";
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
+    /** Delayed attempts so {@code #PrefabPreview} is mounted before {@link BuilderToolPrefabPreview} arrives. */
+    private static final long[] PREFAB_PREVIEW_RETRY_DELAYS_MS = {50L, 100L, 150L};
 
     private Tab activeTab = Tab.CORE;
     private boolean openSoundPlayed;
@@ -123,6 +127,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         VariantEntry variant = selectedVariant(selectedGroup);
         int variantCount = selectedGroup != null ? selectedGroup.variants().size() : 0;
         int variantDisplayIndex = selectedVariantIndex(selectedGroup);
+        Player player = store.getComponent(ref, Player.getComponentType());
         boolean variantLocked = false;
         if (variant != null) {
             variantLocked = !PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId());
@@ -148,7 +153,6 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             pendingPreviewPrefabKey = null;
         }
 
-        Player player = store.getComponent(ref, Player.getComponentType());
         CombinedItemContainer inv =
             player != null ? InventoryComponent.getCombined(store, ref, InventoryComponent.EVERYTHING) : null;
         World world = store.getExternalData().getWorld();
@@ -180,43 +184,86 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         commandBuilder.set("#CraftButton.Disabled", !canCraft);
 
         if (!deferPreviewToSendUpdate) {
-            schedulePrefabPreviewAfterUi(ref, store);
+            schedulePrefabPreviewWithRetries(ref, store);
         }
     }
 
     @Override
     protected void sendUpdate(@Nullable UICommandBuilder commandBuilder, @Nullable UIEventBuilder eventBuilder, boolean clear) {
-        super.sendUpdate(commandBuilder, eventBuilder, clear);
-        Ref<EntityStore> ref = playerRef.getReference();
-        if (ref != null) {
-            schedulePrefabPreviewAfterUi(ref, ref.getStore());
+        if (isDismissed()) {
+            return;
         }
-    }
-
-    /** Send prefab preview data only after the client has mounted {@code #PrefabPreview} (avoids a UI packet race). */
-    private void schedulePrefabPreviewAfterUi(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        Ref<EntityStore> ref = playerRef.getReference();
+        if (ref == null) {
+            return;
+        }
+        Store<EntityStore> store = ref.getStore();
         World world = store.getExternalData().getWorld();
-        final int serial = ++prefabPreviewSendSerial;
         world.execute(
             () -> {
-                if (!ref.isValid()) {
+                if (isDismissed() || !ref.isValid()) {
                     return;
                 }
-                if (serial != prefabPreviewSendSerial) {
+                Player playerComponent = store.getComponent(ref, Player.getComponentType());
+                if (playerComponent == null) {
+                    return;
+                }
+                if (playerComponent.getPageManager().getCustomPage() != this) {
+                    return;
+                }
+                playerComponent.getPageManager()
+                    .updateCustomPage(
+                        new CustomPage(
+                            this.getClass().getName(),
+                            false,
+                            clear,
+                            this.lifetime,
+                            commandBuilder != null ? commandBuilder.getCommands() : UICommandBuilder.EMPTY_COMMAND_ARRAY,
+                            eventBuilder != null ? eventBuilder.getEvents() : UIEventBuilder.EMPTY_EVENT_BINDING_ARRAY
+                        )
+                    );
+                schedulePrefabPreviewWithRetries(ref, store);
+            }
+        );
+    }
+
+    /**
+     * Send prefab preview data after the client has mounted {@code #PrefabPreview}. Retries cover slow Adventure clients
+     * and the initial {@code openCustomPage} path where UI is sent immediately after {@link #build}.
+     */
+    private void schedulePrefabPreviewWithRetries(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        final int serial = ++prefabPreviewSendSerial;
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        Runnable attempt =
+            () -> {
+                if (!ref.isValid() || serial != prefabPreviewSendSerial) {
                     return;
                 }
                 Player player = store.getComponent(ref, Player.getComponentType());
                 if (player == null || player.getPageManager().getCustomPage() != this) {
                     return;
                 }
+                PlotCraftingPrefabPreviewClientMode.ensureClientCreativeForPreview(playerRef, player.getGameMode());
                 String prefabKey = pendingPreviewPrefabKey;
                 if (prefabKey == null || prefabKey.isBlank()) {
                     PlotCraftingPrefabPreview.clear(playerRef);
                 } else {
                     PlotCraftingPrefabPreview.send(playerRef, prefabKey);
                 }
+            };
+        for (long delayMs : PREFAB_PREVIEW_RETRY_DELAYS_MS) {
+            if (plugin != null) {
+                plugin.scheduleOnWorld(world, attempt, delayMs);
+            } else {
+                world.execute(attempt);
             }
-        );
+        }
+    }
+
+    @Override
+    protected void sendUpdate(@Nullable UICommandBuilder commandBuilder, boolean clear) {
+        sendUpdate(commandBuilder, null, clear);
     }
 
     @Override
@@ -255,6 +302,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        prefabPreviewSendSerial++;
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player != null) {
+            PlotCraftingPrefabPreviewClientMode.restoreClientGameMode(playerRef, player.getGameMode());
+        }
         PlotCraftingPrefabPreview.clear(playerRef);
         super.onDismiss(ref, store);
     }

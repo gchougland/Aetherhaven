@@ -63,7 +63,7 @@ public final class PlotCraftingPrefabPreview {
             packet.entityChanges = editorPacket.entityChanges;
             applyTintFromPlayerPosition(playerRef, packet);
         }
-        playerRef.getPacketHandler().write(packet);
+        playerRef.getPacketHandler().writeNoCache(packet);
     }
 
     public static void clear(@Nonnull PlayerRef playerRef) {

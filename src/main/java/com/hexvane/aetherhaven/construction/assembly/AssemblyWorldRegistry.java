@@ -63,10 +63,17 @@ public final class AssemblyWorldRegistry {
         return e != null ? e.job() : null;
     }
 
-    @Nonnull
+  /**
+     * Active phase for {@code plotId}, or {@code null} when no in-memory job is registered (do not assume PLACING).
+     */
+    @Nullable
     public static PlotAssemblyPhase phase(@Nonnull World world, @Nonnull UUID plotId) {
         AssemblyEntry e = mapFor(world).get(plotId);
-        return e != null ? e.phase() : PlotAssemblyPhase.PLACING;
+        return e != null ? e.phase() : null;
+    }
+
+    public static boolean hasJob(@Nonnull World world, @Nonnull UUID plotId) {
+        return mapFor(world).containsKey(plotId);
     }
 
     @Nullable

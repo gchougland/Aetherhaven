@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipMessages;
@@ -7,6 +8,7 @@ import com.hexvane.aetherhaven.jewelry.JewelryTooltipWire;
 import com.hexvane.aetherhaven.plot.PlotTokenIconWire;
 import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
+import java.nio.file.Path;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.ui.ItemGridSlot;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
@@ -61,6 +63,16 @@ public final class AetherhavenUiItemGrids {
             return null;
         }
         String itemId = stack.getItemId();
+        if (PlotTokenVirtualItemRegistry.isVirtualId(itemId)) {
+            Path dataDir = null;
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                dataDir = plugin.getDataDirectory();
+            }
+            if (!ConstructionTokenIconPath.isIconAvailable(plotStoredConstructionId.trim(), dataDir)) {
+                return null;
+            }
+        }
         if (PlotTokenVirtualItemRegistry.isVirtualId(itemId) || isKnownItemId(itemId)) {
             return new ItemGridSlot(plainStackForUi(itemId, stack.getQuantity()));
         }
