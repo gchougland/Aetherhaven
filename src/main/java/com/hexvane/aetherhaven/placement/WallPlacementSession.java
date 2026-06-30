@@ -926,10 +926,7 @@ public final class WallPlacementSession {
                     : null;
             Vector3i sign = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
             ConstructionDefinition def = resolveConstructionDef(plot.getConstructionId());
-            Vector3i origin =
-                def != null
-                    ? prefabOriginForSign(def, sign, rot)
-                    : sign;
+            Vector3i origin = def != null ? plot.resolvePrefabAnchorWorld(def) : sign;
             return new CommittedStep(plotId, plot.getConstructionId(), sign, rot, towerDirs, null, origin);
         }
         if (segmentId != null) {
@@ -948,11 +945,8 @@ public final class WallPlacementSession {
                 WallPieceGeometry.isTowerConstructionId(seg.getConstructionId())
                     ? WallTowerPrefabResolver.connectionsForPlacedTower(seg.getConstructionId(), rot)
                     : null;
-            ConstructionDefinition def = resolveConstructionDef(seg.getConstructionId());
             Vector3i origin =
-                def != null
-                    ? prefabOriginForSign(def, sign, rot)
-                    : sign;
+                new Vector3i(seg.getPrefabAnchorX(), seg.getPrefabAnchorY(), seg.getPrefabAnchorZ());
             return new CommittedStep(segmentId, seg.getConstructionId(), sign, rot, towerDirs, null, origin);
         }
         return null;

@@ -12,6 +12,7 @@
 
 ### Fixed
 
+- **Wall wand height** Walls and towers now build at preview height; plot sign height is independent (same behavior as plot placement staff).
 - **Plot crafting bench preview** Survival players now see the rotatable 3D building preview in the plot crafting bench. The client only renders `PrefabPreviewComponent` data in Creative mode, so Adventure players get a temporary client-side Creative mode while the bench is open (server game mode unchanged).
 - **Large plot clearing lag** Severe server lag when starting or passively clearing big buildings (for example Hytiny's Potted Treehouse), while holding the building staff, or with a builder villager assisting on site.
 - **Building staff clearing preview** Destruction markers are capped lower on large footprints so holding the staff during clearing stays responsive instead of spawning hundreds of preview entities.
