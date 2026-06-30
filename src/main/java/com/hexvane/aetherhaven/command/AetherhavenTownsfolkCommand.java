@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
@@ -18,7 +19,6 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -40,26 +40,13 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
         this.addSubCommand(new ClearSubCommand());
     }
 
-    @Nullable
-    private static TownRecord townForPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-    }
-
     private static void executeSpawn(
         @Nonnull CommandContext ctx,
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> ref,
         @Nonnull World world,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull DebugTownTargetArgs townTarget,
         @Nullable String characterId,
         @Nonnull String assignmentKind
     ) {
@@ -68,11 +55,12 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
             return;
         }
-        TownRecord town = townForPlayer(store, ref, world);
-        if (town == null) {
-            ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+        TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+        if (!townRes.isOk()) {
+            ctx.sendMessage(townRes.error());
             return;
         }
+        TownRecord town = townRes.townOrThrow();
         TransformComponent transform = store.getComponent(ref, TransformComponent.getComponentType());
         if (transform == null) {
             return;
@@ -104,9 +92,12 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
     private static final class SpawnSubCommand extends AbstractPlayerCommand {
         private final OptionalArg<String> assignmentArg =
             this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         SpawnSubCommand() {
             super("spawn", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
             this.addUsageVariant(new SpawnWithIdCommand());
             this.addUsageVariant(new SpawnWithIdAndAssignmentCommand());
         }
@@ -120,7 +111,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             @Nonnull World world
         ) {
             String assignment = assignmentArg.provided(ctx) ? assignmentArg.get(ctx) : TownsfolkAssignmentKinds.IDLE;
-            executeSpawn(ctx, store, ref, world, null, assignment);
+            executeSpawn(ctx, store, ref, world, playerRef, townTarget, null, assignment);
         }
     }
 
@@ -130,10 +121,13 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
         private final OptionalArg<String> assignmentArg =
             this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         SpawnWithIdCommand() {
             super("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -145,7 +139,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             @Nonnull World world
         ) {
             String assignment = assignmentArg.provided(ctx) ? assignmentArg.get(ctx) : TownsfolkAssignmentKinds.IDLE;
-            executeSpawn(ctx, store, ref, world, idArg.get(ctx).trim(), assignment);
+            executeSpawn(ctx, store, ref, world, playerRef, townTarget, idArg.get(ctx).trim(), assignment);
         }
     }
 
@@ -155,10 +149,13 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
         private final RequiredArg<String> assignmentArg =
             this.withRequiredArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         SpawnWithIdAndAssignmentCommand() {
             super("aetherhaven_commands_help.commands.aetherhaven.townsfolk.spawn.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -169,7 +166,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             @Nonnull PlayerRef playerRef,
             @Nonnull World world
         ) {
-            executeSpawn(ctx, store, ref, world, idArg.get(ctx).trim(), assignmentArg.get(ctx).trim());
+            executeSpawn(ctx, store, ref, world, playerRef, townTarget, idArg.get(ctx).trim(), assignmentArg.get(ctx).trim());
         }
     }
 

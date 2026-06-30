@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.reputation.VillagerReputationEntry;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.VillagerGiftLogEntry;
@@ -24,7 +25,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Debug: reset villager gift limits, or seed gift log entries for history UI. Requires
@@ -36,21 +36,6 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
         this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new ResetLimitsCommand());
         this.addSubCommand(new FillHistoryCommand());
-    }
-
-    @Nullable
-    private static TownRecord townForPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
     }
 
     private static int resetGiftLimitsInTown(@Nonnull TownRecord town) {
@@ -119,9 +104,12 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
         @Nonnull
         private final RequiredArg<String> roleArg =
             this.withRequiredArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.gift.roleId.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         FillHistoryCommand() {
             super("fillHistory", "aetherhaven_commands_help.commands.aetherhaven.gift.fillHistory.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -136,11 +124,12 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
             if (uc == null) {
                 return;

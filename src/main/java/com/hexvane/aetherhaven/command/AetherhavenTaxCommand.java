@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.economy.TownTaxService;
 import com.hexvane.aetherhaven.economy.TownTaxService.TaxMorningBreakdown;
 import com.hexvane.aetherhaven.economy.TownTaxService.VillagerTaxLine;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -12,13 +13,11 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.Locale;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Debug: show dawn-aligned morning tax math for your town (loaded villagers plus roster fallbacks).
@@ -32,24 +31,13 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
         this.addSubCommand(new NowCommand());
     }
 
-    @Nullable
-    private static TownRecord townForQuestPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-    }
-
     private static final class BreakdownCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         BreakdownCommand() {
             super("breakdown", "aetherhaven_commands_help.commands.aetherhaven.tax.breakdown.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -64,19 +52,12 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             Store<EntityStore> es = world.getEntityStore().getStore();
             world.execute(
                 () -> {
@@ -132,8 +113,12 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
      * "already collected this day" so you can recover if automatic tithe was skipped (debug).
      */
     private static final class NowCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         NowCommand() {
             super("now", "aetherhaven_commands_help.commands.aetherhaven.tax.now.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -148,19 +133,12 @@ public final class AetherhavenTaxCommand extends AbstractCommandCollection {
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             Store<EntityStore> es = world.getEntityStore().getStore();
             world.execute(
                 () -> {

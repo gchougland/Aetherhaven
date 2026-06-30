@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.town;
 
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -148,5 +149,66 @@ public final class TownCommandResolution {
             return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.adminOtherTown"));
         }
         return ok(named, true);
+    }
+
+    /**
+     * Debug commands: default to sender's town; {@code --town} or {@code --player} require
+     * {@code canAdministerForeign} and skip quest-permission checks.
+     */
+    @Nonnull
+    public static TownCommandResolution resolveDebugTarget(
+        @Nonnull TownManager tm,
+        @Nonnull World world,
+        @Nonnull UUID senderUuid,
+        boolean canAdministerForeign,
+        boolean requireQuestPermissionWhenImplicit,
+        @Nullable String townFlag,
+        @Nullable String playerFlag
+    ) {
+        boolean hasTown = townFlag != null && !townFlag.isBlank();
+        boolean hasPlayer = playerFlag != null && !playerFlag.isBlank();
+        if (hasTown && hasPlayer) {
+            return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.bothTownAndPlayer"));
+        }
+        if (hasPlayer) {
+            if (!canAdministerForeign) {
+                return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.debugAdminOnly"));
+            }
+            UUID playerUuid = TownPlayerLookup.resolvePlayerUuid(world, playerFlag);
+            if (playerUuid == null) {
+                return error(
+                    Message.translation("aetherhaven_town.aetherhaven.town.resolve.playerNotFound")
+                        .param("name", playerFlag.trim())
+                );
+            }
+            TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+            if (town == null) {
+                return error(
+                    Message.translation("aetherhaven_town.aetherhaven.town.resolve.playerNoTown")
+                        .param("name", playerFlag.trim())
+                );
+            }
+            return ok(town, town.getOwnerUuid().equals(senderUuid));
+        }
+        if (hasTown) {
+            if (!canAdministerForeign) {
+                return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.debugAdminOnly"));
+            }
+            TownRecord town = tm.findTownByIdOrDisplayName(townFlag);
+            if (town == null) {
+                return error(
+                    Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", townFlag.trim())
+                );
+            }
+            return ok(town, town.getOwnerUuid().equals(senderUuid));
+        }
+        TownRecord town = tm.findTownForPlayerInWorld(senderUuid);
+        if (town == null) {
+            return error(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+        }
+        if (requireQuestPermissionWhenImplicit && !town.playerHasQuestPermission(senderUuid)) {
+            return error(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
+        }
+        return ok(town, town.getOwnerUuid().equals(senderUuid));
     }
 }

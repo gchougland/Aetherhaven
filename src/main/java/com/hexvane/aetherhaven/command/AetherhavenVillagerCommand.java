@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.VillagerTownResetService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -52,21 +53,6 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new ResetSubCommand());
     }
 
-    @Nullable
-    private static TownRecord townForQuestPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-    }
-
     @Nonnull
     private static String npcRoleIfLoaded(@Nonnull Store<EntityStore> store, @Nonnull UUID npcUuid) {
         Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(npcUuid);
@@ -100,8 +86,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     }
 
     private static final class ListSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         ListSubCommand() {
             super("list", "aetherhaven_commands_help.commands.aetherhaven.villager.list.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -116,19 +106,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             Map<UUID, String> notes = new LinkedHashMap<>();
             mergeVillagerNote(notes, town.getElderEntityUuid(), "Elder");
             mergeVillagerNote(notes, town.getInnkeeperEntityUuid(), "Innkeeper");
@@ -179,9 +162,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         /** Same as {@code teleport true}; easier in chat than a trailing boolean. */
         @Nonnull
         private final FlagArg teleportFlag = this.withFlagArg("tp", "aetherhaven_commands_help.commands.aetherhaven.villager.tp_flag.desc");
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         LocateSubCommand() {
             super("locate", "aetherhaven_commands_help.commands.aetherhaven.villager.locate.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -200,15 +186,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             if (uc == null) {
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = townRes.townOrThrow();
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {
@@ -273,8 +256,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     }
 
     private static final class ResetSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         ResetSubCommand() {
             super("reset", "aetherhaven_commands_help.commands.aetherhaven.villager.reset.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -289,19 +276,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
             if (tc == null) {
                 playerRef.sendMessage(Message.translation("aetherhaven_commands_help.aetherhaven.villager.resetFailed").param("reason", "No player position."));
@@ -319,8 +299,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     }
 
     private static final class FixInnSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         FixInnSubCommand() {
             super("fixinn", "aetherhaven_commands_help.commands.aetherhaven.villager.fixinn.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -335,19 +319,12 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             InnPoolService.RepairReport report = InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
             playerRef.sendMessage(

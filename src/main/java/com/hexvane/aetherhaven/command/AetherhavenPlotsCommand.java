@@ -44,8 +44,12 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     }
 
     private static final class ListCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         ListCommand() {
             super("list", "aetherhaven_commands_help.commands.aetherhaven.plots.list.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -60,16 +64,12 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town =
-                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
             playerRef.sendMessage(
                 Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.forTown").param("id", town.getTownId().toString())
             );
@@ -89,9 +89,13 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
 
     /** Creative: instantly finish every assembling plot in your town that has an active assembly job (chunks loaded). */
     private static final class FinishAssemblyCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         FinishAssemblyCommand() {
             super("finishassembly", "aetherhaven_commands_help.commands.aetherhaven.plots.finishassembly.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -106,42 +110,34 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town =
-                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
-            PlotAssemblyService.InstantCompleteTownResult res =
+            TownRecord town = res.townOrThrow();
+            PlotAssemblyService.InstantCompleteTownResult assemblyRes =
                 PlotAssemblyService.instantCompleteAllAssemblingJobsForTownDetailed(world, plugin, store, town);
-            if (res.getFinished() == 0 && res.getFailed() == 0) {
+            if (assemblyRes.getFinished() == 0 && assemblyRes.getFailed() == 0) {
                 playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.finishassemblyNone"));
                 return;
             }
             playerRef.sendMessage(
                 Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.finishassemblySummary")
-                    .param("finished", String.valueOf(res.getFinished()))
-                    .param("failed", String.valueOf(res.getFailed()))
-                    .param("still", String.valueOf(res.getStillAssembling()))
+                    .param("finished", String.valueOf(assemblyRes.getFinished()))
+                    .param("failed", String.valueOf(assemblyRes.getFailed()))
+                    .param("still", String.valueOf(assemblyRes.getStillAssembling()))
             );
         }
     }
 
     private static final class RepairCommand extends AbstractPlayerCommand {
         @Nonnull
-        private final OptionalArg<String> townArg =
-            this.withOptionalArg(
-                "townName",
-                "aetherhaven_commands_help.commands.aetherhaven.plots.repair.townName.desc",
-                ArgTypes.GREEDY_STRING
-            );
+        private final DebugTownTargetArgs townTarget;
 
         RepairCommand() {
             super("repair", "aetherhaven_commands_help.commands.aetherhaven.plots.repair.desc");
+            townTarget = DebugTownTargetArgs.registerOnWithTownNameAlias(this);
         }
 
         @Override
@@ -153,18 +149,10 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             @Nonnull World world
         ) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin == null) {
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            Player player = store.getComponent(ref, Player.getComponentType());
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (player == null || uc == null) {
-                return;
-            }
-            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            String townOpt = context.provided(townArg) ? context.get(townArg) : null;
-            TownCommandResolution res = TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townOpt, admin);
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
             if (!res.isOk()) {
                 playerRef.sendMessage(res.error());
                 return;
@@ -199,10 +187,13 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
                 "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.tail.desc",
                 ArgTypes.GREEDY_STRING
             );
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         ReconstructCommand() {
             super("reconstruct", "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOnWithTownNameAlias(this);
         }
 
         @Override
@@ -221,12 +212,6 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (uc == null) {
                 return;
             }
-            Player player = store.getComponent(ref, Player.getComponentType());
-            if (player == null) {
-                return;
-            }
-            boolean admin = TownPermissionUtil.canAdministerForeignTowns(player, playerRef);
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             String constructionId = context.get(constructionIdArg).trim();
             Integer index = null;
             String townName = null;
@@ -244,7 +229,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
                 }
             }
             TownCommandResolution townRes =
-                TownCommandResolution.resolveForOwnerAction(tm, uc.getUuid(), townName, admin);
+                townTarget.resolve(context, world, store, ref, playerRef, false, townName);
             if (!townRes.isOk()) {
                 playerRef.sendMessage(townRes.error());
                 return;
@@ -297,16 +282,12 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
 
     private static final class DiagnoseCommand extends AbstractPlayerCommand {
         @Nonnull
-        private final OptionalArg<String> townArg =
-            this.withOptionalArg(
-                "townName",
-                "aetherhaven_commands_help.commands.aetherhaven.plots.diagnose.townName.desc",
-                ArgTypes.GREEDY_STRING
-            );
+        private final DebugTownTargetArgs townTarget;
 
         DiagnoseCommand() {
             super("diagnose", "aetherhaven_commands_help.commands.aetherhaven.plots.diagnose.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOnWithTownNameAlias(this);
         }
 
         @Override
@@ -321,28 +302,12 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            String townOpt = context.provided(townArg) ? context.get(townArg) : null;
-            TownRecord town;
-            if (townOpt != null && !townOpt.isBlank()) {
-                town = tm.findTownByDisplayName(townOpt.trim());
-                if (town == null) {
-                    playerRef.sendMessage(
-                        Message.translation("aetherhaven_town.aetherhaven.town.resolve.noTownNamed").param("name", townOpt.trim())
-                    );
-                    return;
-                }
-            } else {
-                town = tm.findTownForPlayerInWorld(uc.getUuid());
-                if (town == null) {
-                    playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                    return;
-                }
-            }
+            TownRecord town = res.townOrThrow();
             List<PlotLinkReconcileService.PlotDiagnoseRow> rows =
                 PlotLinkReconcileService.diagnoseTown(world, plugin, town);
             playerRef.sendMessage(
@@ -367,10 +332,13 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     private static final class RemoveCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> plotIdArg =
             this.withRequiredArg("plotId", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.plotId.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         RemoveCommand() {
             super("remove", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.desc");
             this.setPermissionGroups("hytale:WorldEditor");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -385,16 +353,13 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
-                return;
-            }
             UUID plotId;
             try {
                 plotId = UUID.fromString(context.get(plotIdArg).trim());

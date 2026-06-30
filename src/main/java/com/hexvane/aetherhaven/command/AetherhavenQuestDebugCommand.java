@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.quest.QuestPlotBlueprintOnStart;
 import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -15,14 +16,11 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import javax.annotation.Nonnull;
-import com.hypixel.hytale.protocol.GameMode;
-import javax.annotation.Nullable;
 
 public final class AetherhavenQuestDebugCommand extends AbstractCommandCollection {
     public AetherhavenQuestDebugCommand() {
@@ -32,21 +30,6 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
         this.addSubCommand(new CompleteCommand());
         this.addSubCommand(new ClearCommand());
         this.addSubCommand(new StatusCommand());
-    }
-
-    @Nullable
-    private static TownRecord townForPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
     }
 
     @Nonnull
@@ -73,8 +56,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     }
 
     private static final class StatusCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         StatusCommand() {
             super("status", "aetherhaven_commands_help.commands.aetherhaven.questdebug.status.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -89,11 +76,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
+            TownRecord town = res.townOrThrow();
             playerRef.sendMessage(
                 questStatusMessage(plugin, true, town.getActiveQuestIdsSnapshot())
             );
@@ -107,9 +95,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
         @Nonnull
         private final OptionalArg<String> idArg =
             this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         GrantCommand() {
             super("grant", "aetherhaven_commands_help.commands.aetherhaven.questdebug.grant.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -124,11 +115,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
             if (qid == null || qid.isBlank()) {
                 qid = AetherhavenConstants.QUEST_BUILD_INN;
@@ -153,9 +145,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
         @Nonnull
         private final OptionalArg<String> idArg =
             this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         CompleteCommand() {
             super("complete", "aetherhaven_commands_help.commands.aetherhaven.questdebug.complete.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -170,11 +165,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
             if (qid == null || qid.isBlank()) {
                 qid = AetherhavenConstants.QUEST_BUILD_INN;
@@ -193,9 +189,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
         @Nonnull
         private final OptionalArg<String> idArg =
             this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         ClearCommand() {
             super("clear", "aetherhaven_commands_help.commands.aetherhaven.questdebug.clear.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -210,11 +209,12 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             String qid = context.provided(idArg) ? context.get(idArg) : AetherhavenConstants.QUEST_BUILD_INN;
             if (qid == null || qid.isBlank()) {
                 qid = AetherhavenConstants.QUEST_BUILD_INN;

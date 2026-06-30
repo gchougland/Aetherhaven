@@ -97,17 +97,36 @@ These are for creative mode or people running the server. Not needed for normal 
   - Access: Creative
 
 - **`/ah plots finishassembly`** — Instantly finish every building still assembling in your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.finishassembly`
   - Access: Creative
 
 - **`/ah plots remove <plotId>`** — Remove one plot from your town by id.
   - `<plotId>` — Plot id from `plots list`.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.remove`
   - Access: Creative
 
 ## Debug commands
 
 For testing and fixing worlds. Not part of normal play.
+
+### Debug town targeting (staff)
+
+Many town-scoped debug commands accept optional flags so staff can work on another player's town without being a quest-permitted member of that town:
+
+- **`--town=<displayName|uuid>`** — Target a town by name or UUID.
+- **`--player=<username|uuid>`** — Target the town that player belongs to in this world (username must be online; UUID works offline).
+
+Requires **Creative mode** or the **`aetherhaven.town.admin`** permission. Without a flag, commands use your own town as before. You cannot use both flags on the same command.
+
+Examples:
+
+- `/ah villager reset --player=Steve`
+- `/ah villager fixinn --town=Oakshire`
+- `/ah quest status --player=<uuid>`
+- `/ah plots repair --town=Oakshire`
+- `/ah rep set elder 50 --town=Oakshire`
 
 - **`/ah replace-charter [townName]`** — Put the charter block back at your town's saved spot if it was broken.
   - `[townName]` — Full town name with spaces. Omit for your town.
@@ -118,8 +137,8 @@ For testing and fixing worlds. Not part of normal play.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.towns`
   - Access: Creative
 
-- **`/ah poi list [town]`** — List points of interest for a town.
-  - `[town]` — Town id, `me`, or omit for your town.
+- **`/ah poi list`** — List points of interest for a town.
+  - Optional **`--town`** or **`--player`** — Which town (staff; see **Debug town targeting** above). Omit for your town.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.poi.list`
   - Access: Creative
 
@@ -128,8 +147,26 @@ For testing and fixing worlds. Not part of normal play.
   - Access: Creative
 
 - **`/ah plots list`** — List plot instances in your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.list`
   - Access: Creative
+
+- **`/ah plots repair`** — Re-link town records, shelves, and special blocks for every completed plot.
+  - Optional **`--town`**, **`--player`**, or legacy **`--townName`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.repair`
+  - Access: Creative
+
+- **`/ah plots diagnose`** — Show plot link status without modifying anything.
+  - Optional **`--town`**, **`--player`**, or legacy **`--townName`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.diagnose`
+  - Access: Creative
+
+- **`/ah plots reconstruct <constructionId> [indexOrTown]`** — Clear and rebuild one plot by construction id.
+  - `<constructionId>` — Construction id (example `plot_inn`, `plot_gaia_altar`).
+  - `[indexOrTown]` — Optional 1-based plot index and/or town name.
+  - Optional **`--town`**, **`--player`**, or legacy **`--townName`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.plots.reconstruct`
+  - Access: Creative (World Editor group)
 
 - **`/ah needs inspect`** — List villagers with need meters nearby.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.needs.inspect`
@@ -143,35 +180,42 @@ For testing and fixing worlds. Not part of normal play.
   - Access: Creative
 
 - **`/ah tax breakdown`** — Show tax lines for your town treasury.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.tax.breakdown`
   - Access: Creative
 
 - **`/ah tax now`** — Run morning tax collection right away.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.tax.now`
   - Access: Creative
 
 - **`/ah quest grant [questId]`** — Mark a quest active on your town.
   - `[questId]` — Quest id. Default `q_build_inn` when omitted.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.quest.grant`
   - Access: Creative
 
 - **`/ah quest complete [questId]`** — Mark a quest completed on your town.
   - `[questId]` — Quest id. Default `q_build_inn` when omitted.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.quest.complete`
   - Access: Creative
 
 - **`/ah quest clear [questId]`** — Remove a quest from your town's active list.
   - `[questId]` — Quest id. Default `q_build_inn` when omitted.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.quest.clear`
   - Access: Creative
 
 - **`/ah quest status`** — Show active and completed quests for your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.quest.status`
   - Access: Creative
 
 - **`/ah reputation set <villager> <value>`** — Set your reputation with a villager.
   - `<villager>` — Villager entity id or role id in your town.
   - `<value>` — Reputation 0 to 100.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.reputation.set`
   - Access: Creative
 
@@ -183,24 +227,29 @@ For testing and fixing worlds. Not part of normal play.
 - **`/ah reputation reward grant <villager> <rewardId>`** — Grant one reputation reward now.
   - `<villager>` — Villager entity id or role id in your town.
   - `<rewardId>` — Reward id (example `rep_merchant_50`).
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.reputation.reward.grant`
   - Access: Creative
 
 - **`/ah villager list`** — List villager entity ids in your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.list`
   - Access: Creative
 
 - **`/ah villager locate <villager> [--tp]`** — Show where a villager is (optional teleport for operators).
   - `<villager>` — Villager entity id or role id in your town.
   - `[teleport]` or `--tp` — `true` or `--tp` to teleport (operators only).
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.locate`
   - Access: Creative
 
 - **`/ah villager reset`** — Respawn all town villagers near you.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.reset`
   - Access: Creative
 
 - **`/ah villager fixinn`** — Repair inn visitor pool issues for your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.fixinn`
   - Access: Creative
 
@@ -208,8 +257,44 @@ For testing and fixing worlds. Not part of normal play.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.gift.resetlimits`
   - Access: Creative
 
+- **`/ah guild respawn`** — Despawn guild hall adventurers, roll today's slots, and respawn immediately.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.guild.respawn`
+  - Access: Creative
+
+- **`/ah guild clearguards`** — Despawn all hired guards in your town and release their pool entries.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.guild.clearguards`
+  - Access: Creative
+
+- **`/ah guild status`** — Show guild hall adventurer pool diagnostics for your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.guild.status`
+  - Access: Creative
+
+- **`/ah townsfolk spawn [id]`** — Spawn a townsfolk NPC in your town (random pool pick, or pass character id).
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.townsfolk.spawn`
+  - Access: Creative
+
+- **`/ah townsfolk list`** — List available and checked-out townsfolk in this world.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.townsfolk.list`
+  - Access: Creative
+
+- **`/ah townsfolk clear`** — Despawn all townsfolk in this world and reset the shared pool.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.townsfolk.clear`
+  - Access: Creative
+
+- **`/ah tourist targets`** — List tourist destination plots and optional POIs in your town.
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.tourist.targets`
+  - Access: Creative
+
 - **`/ah gift fillHistory <roleId>`** — Fill gift history preview rows for testing.
   - `<roleId>` — Villager role id (example `Aetherhaven_Merchant`).
+  - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).
   - Permission: `hexvane.aetherhaven.command.aetherhaven.gift.fillhistory`
   - Access: Creative
 

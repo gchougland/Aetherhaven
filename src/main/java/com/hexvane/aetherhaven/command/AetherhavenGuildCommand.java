@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
@@ -12,7 +13,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -29,24 +29,13 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
         this.addSubCommand(new StatusSubCommand());
     }
 
-    @Nullable
-    private static TownRecord townForPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-    }
-
     private static final class RespawnSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         RespawnSubCommand() {
             super("respawn", "aetherhaven_commands_help.commands.aetherhaven.guild.respawn.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -62,11 +51,12 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
                 ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+            TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                ctx.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             if (!town.isGuildHallActive()) {
                 ctx.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.guild.notActive"));
                 return;
@@ -87,8 +77,12 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
     }
 
     private static final class ClearGuardsSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         ClearGuardsSubCommand() {
             super("clearguards", "aetherhaven_commands_help.commands.aetherhaven.guild.clearguards.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -104,11 +98,12 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
                 ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+            TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                ctx.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             int despawned = GuildHallAdventurerPoolService.clearHiredGuardsInTown(world, plugin, town, tm, store);
             ctx.sendMessage(
@@ -119,8 +114,12 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
     }
 
     private static final class StatusSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         StatusSubCommand() {
             super("status", "aetherhaven_commands_help.commands.aetherhaven.guild.status.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -136,11 +135,12 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
                 ctx.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
                 return;
             }
-            TownRecord town = townForPlayer(store, ref, world);
-            if (town == null) {
-                ctx.sendMessage(Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+            TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                ctx.sendMessage(townRes.error());
                 return;
             }
+            TownRecord town = townRes.townOrThrow();
             TownsfolkExistenceService.PoolSummary summary = TownsfolkExistenceService.summarizePool(world, plugin);
             WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
             long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();

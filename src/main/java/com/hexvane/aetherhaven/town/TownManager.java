@@ -249,6 +249,25 @@ public final class TownManager {
         return null;
     }
 
+    /** Town UUID string or case-insensitive display name in this world. */
+    @Nullable
+    public TownRecord findTownByIdOrDisplayName(@Nonnull String raw) {
+        String trimmed = raw.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        try {
+            UUID id = UUID.fromString(trimmed);
+            TownRecord byId = getTown(id);
+            if (byId != null && world.getName().equals(byId.getWorldName())) {
+                return byId;
+            }
+            return null;
+        } catch (IllegalArgumentException ignored) {
+            return findTownByDisplayName(trimmed);
+        }
+    }
+
     public boolean isDisplayNameAvailable(@Nonnull String displayName, @Nullable UUID excludeTownId) {
         String want = displayName.trim();
         if (want.isEmpty()) {

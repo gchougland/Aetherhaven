@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.tourist.TouristDestinationResolver;
 import com.hexvane.aetherhaven.tourist.TouristPlotVisit;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -16,7 +17,6 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -32,8 +32,12 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
     }
 
     private static final class TargetsCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
         TargetsCommand() {
             super("targets", "aetherhaven_commands_help.commands.aetherhaven.tourist.targets.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -48,16 +52,12 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
-            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-            if (uc == null) {
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
                 return;
             }
-            TownRecord town =
-                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.tourist.noTown"));
-                return;
-            }
+            TownRecord town = res.townOrThrow();
 
             ConstructionCatalog catalog = plugin.getConstructionCatalog();
             PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);

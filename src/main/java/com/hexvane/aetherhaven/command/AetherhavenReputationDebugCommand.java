@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -22,7 +23,6 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * Debug: set reputation with milestone queue, list milestone definitions, grant one reward directly.
@@ -37,21 +37,6 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
         this.addSubCommand(new RewardSubCommand());
     }
 
-    @Nullable
-    private static TownRecord townForQuestPlayer(
-        @Nonnull Store<EntityStore> store, @Nonnull Ref<EntityStore> ref, @Nonnull World world
-    ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return null;
-        }
-        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        if (uc == null) {
-            return null;
-        }
-        return AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-    }
-
     private static final class SetSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
@@ -59,9 +44,12 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
         @Nonnull
         private final RequiredArg<Integer> reputationArg =
             this.withRequiredArg("value", "aetherhaven_commands_help.commands.aetherhaven.reputation.value.desc", ArgTypes.INTEGER);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         SetSubCommand() {
             super("set", "aetherhaven_commands_help.commands.aetherhaven.reputation.set.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -80,15 +68,12 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             if (uc == null) {
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = townRes.townOrThrow();
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {
@@ -179,9 +164,12 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
         @Nonnull
         private final RequiredArg<String> rewardIdArg =
             this.withRequiredArg("rewardId", "aetherhaven_commands_help.commands.aetherhaven.reputation.rewardId.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         GrantRewardSubCommand() {
             super("grant", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.grant.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -200,15 +188,12 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
             if (uc == null) {
                 return;
             }
-            TownRecord town = townForQuestPlayer(store, ref, world);
-            if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!townRes.isOk()) {
+                playerRef.sendMessage(townRes.error());
                 return;
             }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noQuestPermission"));
-                return;
-            }
+            TownRecord town = townRes.townOrThrow();
             TownVillagerTargetResolver.Outcome target =
                 TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
             if (!target.isOk()) {

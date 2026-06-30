@@ -3,20 +3,17 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownCommandResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
-import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.protocol.GameMode;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -31,11 +28,11 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
 
     private static final class ListCommand extends AbstractPlayerCommand {
         @Nonnull
-        private final OptionalArg<String> townFilterArg =
-            this.withOptionalArg("town", "aetherhaven_commands_help.commands.aetherhaven.poi.town.desc", ArgTypes.STRING);
+        private final DebugTownTargetArgs townTarget;
 
         ListCommand() {
             super("list", "aetherhaven_commands_help.commands.aetherhaven.poi.list.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -50,34 +47,14 @@ public final class AetherhavenPoiCommand extends AbstractCommandCollection {
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
             }
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, false);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
+                return;
+            }
+            TownRecord town = res.townOrThrow();
+            UUID townUuid = town.getTownId();
             var reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-            UUID townUuid = null;
-            if (context.provided(townFilterArg)) {
-                String raw = context.get(townFilterArg);
-                if (raw != null && !raw.isBlank() && !raw.equalsIgnoreCase("me")) {
-                    try {
-                        townUuid = UUID.fromString(raw.trim());
-                    } catch (IllegalArgumentException e) {
-                        playerRef.sendMessage(
-                            Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.invalidTownUuid").param("raw", raw)
-                        );
-                        return;
-                    }
-                }
-            }
-            if (townUuid == null) {
-                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-                if (uc == null) {
-                    return;
-                }
-                TownRecord tr =
-                    AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-                if (tr == null) {
-                    playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.noTownArg"));
-                    return;
-                }
-                townUuid = tr.getTownId();
-            }
             List<PoiEntry> list = reg.listByTown(townUuid);
             playerRef.sendMessage(
                 Message.translation("aetherhaven_world_debug.aetherhaven.debug.poi.listHeader")

@@ -22,7 +22,7 @@ commands.aetherhaven.town.townName.desc=Optional town name (full name with space
 
 commands.aetherhaven.poi.desc=Debug: point of interest helpers
 commands.aetherhaven.poi.list.desc=List POIs for a town
-commands.aetherhaven.poi.town.desc=Town id, me, or omit for your town
+commands.aetherhaven.poi.town.desc=Town display name or UUID (or omit for your town; use --player for another player's town)
 commands.aetherhaven.poi.dump.desc=List every POI in this world
 
 commands.aetherhaven.plots.desc=Debug: plot instance helpers (creative: finishassembly, repair, reconstruct, remove)
@@ -156,3 +156,6 @@ commands.aetherhaven.plottoken.unlock.desc=Unlock a plot style at the crafting b
 commands.aetherhaven.plottoken.unlock.constructionId=Building id (example: plot_park)
 commands.aetherhaven.plottoken.unlockall.desc=Unlock every plot style at the crafting bench
 commands.aetherhaven.plottoken.list.desc=List all building ids
+
+commands.aetherhaven.debug.townFlag.desc=Target town by display name or UUID (creative / town admin)
+commands.aetherhaven.debug.playerFlag.desc=Target the town of an online player or UUID (creative / town admin)
