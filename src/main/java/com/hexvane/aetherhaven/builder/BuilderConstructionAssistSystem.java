@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
  */
 public final class BuilderConstructionAssistSystem extends EntityTickingSystem<EntityStore> {
     private static final long SWING_INTERVAL_NS = 900_000_000L;
+    private static final int PLOT_RESCAN_INTERVAL_TICKS = 40;
 
     private final AetherhavenPlugin plugin;
     @Nonnull
@@ -103,11 +104,13 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             return;
         }
 
-        PlotInstance targetPlot = findBestAssemblingPlot(world, town, ref, store);
+        PlotInstance targetPlot = resolveAssemblingTargetPlot(world, town, ref, store, assist);
         if (targetPlot == null) {
             clearAssist(ref, store, commandBuffer, npc, assist, null);
             return;
         }
+
+        assist.incrementTicksSincePlotRescan();
 
         double tx = targetPlot.getSignX() + 0.5;
         double ty = targetPlot.getSignY() + 0.02;
@@ -126,16 +129,22 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         }
 
         if (assist.isWithinAssistRange(pos.x, pos.y, pos.z)) {
+            int prevPhase = assist.getPhase();
             assist.setPhase(BuilderConstructionAssistState.PHASE_ASSIST);
             npc.setLeashPoint(new Vector3d(tx, ty, tz));
             commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
             BuilderConstructionVisuals.beginAssist(ref, store, commandBuffer, plugin, npc);
-            AssemblyPassiveBoostRegistry.setBoost(world, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST);
-            PlotAssemblyService.snapPassiveDueForBoost(
-                world, plugin, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST
-            );
+            if (prevPhase != BuilderConstructionAssistState.PHASE_ASSIST || !assist.isBoostAppliedForTarget()) {
+                AssemblyPassiveBoostRegistry.setBoost(world, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST);
+                PlotAssemblyService.snapPassiveDueForBoost(
+                    world, plugin, plotId, BuilderConstructionAssistState.BUILDER_PASSIVE_BOOST
+                );
+                assist.setBoostAppliedForTarget(true);
+            }
             maybeSwingHammer(ref, store, commandBuffer, npc, assist);
-            applyAutonomySeek(ref, npc, commandBuffer);
+            if (prevPhase != BuilderConstructionAssistState.PHASE_ASSIST) {
+                applyAutonomySeek(ref, npc, commandBuffer);
+            }
             commandBuffer.putComponent(ref, BuilderConstructionAssistState.getComponentType(), assist);
             return;
         }
@@ -215,6 +224,27 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         LocalDateTime gameTime = wtr.getGameDateTime();
         String loc = VillagerScheduleResolver.activeLocationSymbol(schedule, gameTime);
         return VillagerScheduleResolver.LOC_WORK.equals(loc);
+    }
+
+    @Nullable
+    private PlotInstance resolveAssemblingTargetPlot(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull BuilderConstructionAssistState assist
+    ) {
+        UUID cachedId = assist.getTargetPlotId();
+        if (cachedId != null && assist.getTicksSincePlotRescan() < PLOT_RESCAN_INTERVAL_TICKS) {
+            PlotInstance cached = town.findPlotById(cachedId);
+            if (cached != null
+                && cached.getState() == PlotInstanceState.ASSEMBLING
+                && AssemblyWorldRegistry.get(world, cachedId) != null) {
+                return cached;
+            }
+        }
+        assist.resetTicksSincePlotRescan();
+        return findBestAssemblingPlot(world, town, ref, store);
     }
 
     @Nullable

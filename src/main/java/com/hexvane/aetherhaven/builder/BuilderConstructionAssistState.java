@@ -49,6 +49,8 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     private double targetY;
     private double targetZ;
     private long lastSwingNs;
+    private transient int ticksSincePlotRescan;
+    private transient boolean boostAppliedForTarget;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType =
@@ -93,15 +95,42 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     }
 
     public void setTargetPlot(@Nullable UUID plotId, double x, double y, double z) {
+        UUID prev = getTargetPlotId();
         this.targetPlotId = plotId != null ? plotId.toString() : null;
         this.targetX = x;
         this.targetY = y;
         this.targetZ = z;
+        if (plotId == null || !plotId.equals(prev)) {
+            boostAppliedForTarget = false;
+            ticksSincePlotRescan = 0;
+        }
     }
 
     public void clearTarget() {
         this.targetPlotId = null;
         this.phase = PHASE_OFF;
+        boostAppliedForTarget = false;
+        ticksSincePlotRescan = 0;
+    }
+
+    public int getTicksSincePlotRescan() {
+        return ticksSincePlotRescan;
+    }
+
+    public void incrementTicksSincePlotRescan() {
+        ticksSincePlotRescan++;
+    }
+
+    public void resetTicksSincePlotRescan() {
+        ticksSincePlotRescan = 0;
+    }
+
+    public boolean isBoostAppliedForTarget() {
+        return boostAppliedForTarget;
+    }
+
+    public void setBoostAppliedForTarget(boolean boostAppliedForTarget) {
+        this.boostAppliedForTarget = boostAppliedForTarget;
     }
 
     public double getTargetX() {

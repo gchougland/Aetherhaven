@@ -148,7 +148,7 @@ public final class AetherhavenConstants {
      * Caps per-player clearing obstruction markers ({@link PlotAssemblyPreviewSystem}). One preview entity per cell;
      * keep high enough that typical prefab footprints show every obstructed cell in range.
      */
-    public static final int BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS = 1024;
+    public static final int BUILDING_STAFF_CLEARING_PREVIEW_MAX_GHOST_CELLS = 512;
 
     /**
      * Caps per-player assembly frontier placement markers ({@link PlotAssemblyPreviewSystem}) so huge shells do not

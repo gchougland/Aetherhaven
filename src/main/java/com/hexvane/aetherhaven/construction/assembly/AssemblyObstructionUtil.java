@@ -85,12 +85,28 @@ public final class AssemblyObstructionUtil {
 
     /** Silently clears {@link #isSoftClearingSkippedBlock} cells inside the loaded prefab footprint. */
     public static void clearSoftSkippedBlocksInFootprint(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
+        clearSoftSkippedBlocksInFootprint(world, job, null, 0);
+    }
+
+    /**
+     * Like {@link #clearSoftSkippedBlocksInFootprint(World, PlotAssemblyJob)} but only for one assembly section when
+     * {@code sectionMapper} is non-null.
+     */
+    public static void clearSoftSkippedBlocksInFootprint(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nullable AssemblySectionMapper sectionMapper,
+        int flatSection
+    ) {
         LocalCachedChunkAccessor chunkAccessor =
             ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
         Vector3i anchor = job.anchor();
         List<PendingBlock> footprint = job.footprintCells();
         for (int i = 0; i < footprint.size(); i++) {
             PendingBlock pb = footprint.get(i);
+            if (sectionMapper != null && !sectionMapper.isCellInSection(pb, flatSection)) {
+                continue;
+            }
             int wx = anchor.x + pb.x();
             int wy = anchor.y + pb.y();
             int wz = anchor.z + pb.z();
@@ -147,18 +163,7 @@ public final class AssemblyObstructionUtil {
     }
 
     public static boolean footprintContainsWorldCell(@Nonnull PlotAssemblyJob job, @Nonnull Vector3i cellWorld) {
-        Vector3i anchor = job.anchor();
-        int lx = cellWorld.x - anchor.x;
-        int ly = cellWorld.y - anchor.y;
-        int lz = cellWorld.z - anchor.z;
-        List<PendingBlock> footprint = job.footprintCells();
-        for (int i = 0; i < footprint.size(); i++) {
-            PendingBlock pb = footprint.get(i);
-            if (pb.x() == lx && pb.y() == ly && pb.z() == lz) {
-                return true;
-            }
-        }
-        return false;
+        return job.footprintIndex().containsWorldCell(job.anchor(), cellWorld);
     }
 
     /** {@code true} when every loaded footprint cell is air (unloaded columns are ignored). */
@@ -186,5 +191,43 @@ public final class AssemblyObstructionUtil {
     /** {@code true} when any loaded footprint cell still holds a solid block. */
     public static boolean hasObstructionsInLoadedChunks(@Nonnull World world, @Nonnull PlotAssemblyJob job) {
         return !isFootprintClearInLoadedChunks(world, job);
+    }
+
+    /**
+     * Section-aware obstruction probe: scans sections in order and returns on first obstruction (avoids full-footprint
+     * reads when the first occupied section is already blocked).
+     */
+    public static boolean hasObstructionsInLoadedChunks(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nullable AssemblySectionMapper sectionMapper
+    ) {
+        if (sectionMapper == null) {
+            return hasObstructionsInLoadedChunks(world, job);
+        }
+        LocalCachedChunkAccessor chunkAccessor =
+            ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        Vector3i anchor = job.anchor();
+        List<PendingBlock> footprint = job.footprintCells();
+        int vol = sectionMapper.sectionCount();
+        for (int s = 0; s < vol; s++) {
+            for (int i = 0; i < footprint.size(); i++) {
+                PendingBlock pb = footprint.get(i);
+                if (!sectionMapper.isCellInSection(pb, s)) {
+                    continue;
+                }
+                int wx = anchor.x + pb.x();
+                int wy = anchor.y + pb.y();
+                int wz = anchor.z + pb.z();
+                WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+                if (chunk == null || !chunk.getReference().isValid()) {
+                    continue;
+                }
+                if (isObstructedAt(world, anchor, wx, wy, wz, chunkAccessor)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -191,7 +191,7 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         boolean anyAction = false;
         if (phase == PlotAssemblyPhase.CLEARING) {
             ArrayList<Vector3i> batch =
-                PlotAssemblyService.obstructionCellsNearChebyshev(world, job, activeCell, brushRadiusBlocks);
+                PlotAssemblyService.obstructionCellsNearChebyshev(world, job, plot, activeCell, brushRadiusBlocks);
             for (int bi = 0; bi < batch.size(); bi++) {
                 if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
                     maybeNotifyNoMana(playerRef, store, uuid, nowNs);

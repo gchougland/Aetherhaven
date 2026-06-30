@@ -6,6 +6,7 @@ import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAc
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Growth frontier for the clearing phase: obstructed footprint cells with at least one 6-neighbor open to air (live
@@ -65,10 +66,37 @@ public final class AssemblyClearingFrontier {
         @Nonnull ArrayList<Vector3i> obstructedWorldCells,
         @Nonnull LocalCachedChunkAccessor chunkAccessor
     ) {
+        return frontierWorldCellsLive(world, job, obstructedWorldCells, chunkAccessor, null, 0);
+    }
+
+    /**
+     * Like {@link #frontierWorldCellsLive(World, PlotAssemblyJob, ArrayList, LocalCachedChunkAccessor)} but only
+     * considers obstructed cells in {@code activeSectionFlat} when {@code sectionMapper} is non-null.
+     */
+    @Nonnull
+    public static ArrayList<Vector3i> frontierWorldCellsLive(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull ArrayList<Vector3i> obstructedWorldCells,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        @Nullable AssemblySectionMapper sectionMapper,
+        int activeSectionFlat
+    ) {
+        ArrayList<Vector3i> scoped = obstructedWorldCells;
+        if (sectionMapper != null) {
+            scoped = new ArrayList<>();
+            Vector3i anchor = job.anchor();
+            for (int i = 0; i < obstructedWorldCells.size(); i++) {
+                Vector3i cell = obstructedWorldCells.get(i);
+                if (sectionMapper.isWorldCellInSection(anchor, cell.x, cell.y, cell.z, activeSectionFlat)) {
+                    scoped.add(cell);
+                }
+            }
+        }
         ArrayList<Vector3i> frontier = new ArrayList<>();
         ArrayList<Vector3i> stillObstructed = new ArrayList<>();
-        for (int i = 0; i < obstructedWorldCells.size(); i++) {
-            Vector3i cell = obstructedWorldCells.get(i);
+        for (int i = 0; i < scoped.size(); i++) {
+            Vector3i cell = scoped.get(i);
             if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cell, chunkAccessor)) {
                 continue;
             }

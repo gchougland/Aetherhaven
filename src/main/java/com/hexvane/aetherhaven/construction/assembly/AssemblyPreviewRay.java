@@ -133,7 +133,7 @@ public final class AssemblyPreviewRay {
                 continue;
             }
             obstructionScratch.clear();
-            clearingRt.appendAllVisibleObstructedCells(world, job, obstructionScratch);
+            PlotAssemblyService.appendClearingFrontierWorldCells(world, job, plot, obstructionScratch);
             for (int i = 0; i < obstructionScratch.size(); i++) {
                 Vector3i cell = obstructionScratch.get(i);
                 Double t = rayEnterUnitCube(ox, oy, oz, dx, dy, dz, cell.x, cell.y, cell.z, maxDistance);

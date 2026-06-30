@@ -41,9 +41,12 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
      * sub-voxel movement between ticks.
      */
     private static final double PREVIEW_OBSERVER_SNAP_GRID = 0.25;
+    private static final int PREVIEW_RECOMPUTE_INTERVAL_TICKS = 3;
 
     /** {@code true} while this player is actively showing staff + non-empty assembly preview. */
     private static final ConcurrentHashMap<UUID, Boolean> ASSEMBLY_FRONTIER_PREVIEW_ACTIVE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Integer> PREVIEW_TICK_COUNTER = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, PreviewCells> CACHED_PREVIEW_CELLS = new ConcurrentHashMap<>();
 
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -56,7 +59,11 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
 
     /** Called when the building staff commits one assembly block for this player. */
     public static void markStaffAssemblyBlockPlaced(@Nullable UUID staffActor) {
-        // Marker set changes are picked up on the next sync tick via cell collection.
+        if (staffActor == null) {
+            return;
+        }
+        PREVIEW_TICK_COUNTER.remove(staffActor);
+        CACHED_PREVIEW_CELLS.remove(staffActor);
     }
 
     /**
@@ -169,6 +176,8 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             && !hand.isEmpty()
             && AetherhavenConstants.PATH_TOOL_ITEM_ID.equals(hand.getItemId())) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
+                PREVIEW_TICK_COUNTER.remove(previewCacheKey);
+                CACHED_PREVIEW_CELLS.remove(previewCacheKey);
                 exitPreview(world, pr, ref, store);
             }
             return;
@@ -176,6 +185,8 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         boolean staffInHand = hand != null && !hand.isEmpty() && BuildingStaffTiers.isBuildingStaff(hand.getItemId());
         if (!staffInHand) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
+                PREVIEW_TICK_COUNTER.remove(previewCacheKey);
+                CACHED_PREVIEW_CELLS.remove(previewCacheKey);
                 exitPreview(world, pr, ref, store);
             }
             return;
@@ -199,9 +210,18 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (channelForDraw != null) {
             channelForDraw.setBrushChebyshevRadius(brushR);
         }
-        PreviewCells cells = collectPreviewCells(world, p, tc.getPosition(), channelForDraw, nowNs);
+        Vector3d snappedPos = snapObserverForAssemblyPreview(tc.getPosition());
+        int tickCount = PREVIEW_TICK_COUNTER.merge(previewCacheKey, 1, Integer::sum);
+        PreviewCells cells = CACHED_PREVIEW_CELLS.get(previewCacheKey);
+        if (cells == null || tickCount >= PREVIEW_RECOMPUTE_INTERVAL_TICKS) {
+            PREVIEW_TICK_COUNTER.put(previewCacheKey, 0);
+            cells = collectPreviewCells(world, p, snappedPos, channelForDraw, nowNs);
+            CACHED_PREVIEW_CELLS.put(previewCacheKey, cells);
+        }
         if (cells.isEmpty()) {
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
+                PREVIEW_TICK_COUNTER.remove(previewCacheKey);
+                CACHED_PREVIEW_CELLS.remove(previewCacheKey);
                 exitPreview(world, pr, ref, store);
             }
             return;

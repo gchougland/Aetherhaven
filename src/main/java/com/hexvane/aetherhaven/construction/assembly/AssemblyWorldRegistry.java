@@ -18,7 +18,8 @@ public final class AssemblyWorldRegistry {
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyPhase phase,
         @Nullable PlotAssemblyFrontierRuntime runtime,
-        @Nullable PlotAssemblyClearingRuntime clearingRuntime
+        @Nullable PlotAssemblyClearingRuntime clearingRuntime,
+        @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRuntime
     ) {}
 
     private AssemblyWorldRegistry() {}
@@ -49,9 +50,15 @@ public final class AssemblyWorldRegistry {
         @Nonnull PlotAssemblyJob job,
         @Nonnull PlotAssemblyPhase phase,
         @Nullable PlotAssemblyFrontierRuntime runtime,
-        @Nullable PlotAssemblyClearingRuntime clearingRuntime
+        @Nullable PlotAssemblyClearingRuntime clearingRuntime,
+        @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRuntime
     ) {
-        AssemblyEntry previous = mapFor(world).put(plotId, new AssemblyEntry(job, phase, runtime, clearingRuntime));
+        AssemblyEntry previous =
+            mapFor(world)
+                .put(
+                    plotId,
+                    new AssemblyEntry(job, phase, runtime, clearingRuntime, clearingFrontierRuntime)
+                );
         if (previous != null) {
             releaseJobBufferQuietly(previous.job().buffer());
         }
@@ -88,6 +95,12 @@ public final class AssemblyWorldRegistry {
         return e != null ? e.clearingRuntime() : null;
     }
 
+    @Nullable
+    public static PlotAssemblyClearingFrontierRuntime clearingFrontierRuntime(@Nonnull World world, @Nonnull UUID plotId) {
+        AssemblyEntry e = mapFor(world).get(plotId);
+        return e != null ? e.clearingFrontierRuntime() : null;
+    }
+
     public static void transitionToPlacing(
         @Nonnull World world,
         @Nonnull UUID plotId,
@@ -98,7 +111,23 @@ public final class AssemblyWorldRegistry {
         if (e == null) {
             return;
         }
-        map.put(plotId, new AssemblyEntry(e.job(), PlotAssemblyPhase.PLACING, runtime, null));
+        map.put(plotId, new AssemblyEntry(e.job(), PlotAssemblyPhase.PLACING, runtime, null, null));
+    }
+
+    public static void updateClearingFrontierRuntime(
+        @Nonnull World world,
+        @Nonnull UUID plotId,
+        @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRuntime
+    ) {
+        ConcurrentHashMap<UUID, AssemblyEntry> map = mapFor(world);
+        AssemblyEntry e = map.get(plotId);
+        if (e == null) {
+            return;
+        }
+        map.put(
+            plotId,
+            new AssemblyEntry(e.job(), e.phase(), e.runtime(), e.clearingRuntime(), clearingFrontierRuntime)
+        );
     }
 
     public static void remove(@Nonnull World world, @Nonnull UUID plotId) {

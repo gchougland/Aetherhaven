@@ -14,7 +14,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
- * Collects obstructed footprint world cells for jobs in {@link PlotAssemblyPhase#CLEARING}, deduped and filtered by
+ * Collects clearing frontier world cells for jobs in {@link PlotAssemblyPhase#CLEARING}, deduped and filtered by
  * distance from an observer. Shared by preview and tracer systems.
  */
 public final class AssemblyObstructionWorldCells {
@@ -58,7 +58,24 @@ public final class AssemblyObstructionWorldCells {
             if (clearingRt == null || clearingRt.isEmpty()) {
                 continue;
             }
-            clearingRt.appendVisibleWithinRangeSq(world, job, observerPos, rangeSq, out);
+            ArrayList<Vector3i> frontierScratch = new ArrayList<>(256);
+            PlotAssemblyService.appendClearingFrontierWorldCells(world, job, plot, frontierScratch);
+            double ox = observerPos.x();
+            double oy = observerPos.y();
+            double oz = observerPos.z();
+            for (int fi = 0; fi < frontierScratch.size(); fi++) {
+                Vector3i cell = frontierScratch.get(fi);
+                double cx = cell.x + 0.5;
+                double cy = cell.y + 0.5;
+                double cz = cell.z + 0.5;
+                double dx = cx - ox;
+                double dy = cy - oy;
+                double dz = cz - oz;
+                if (dx * dx + dy * dy + dz * dz > rangeSq) {
+                    continue;
+                }
+                out.add(cell);
+            }
         }
         out.sort(
             Comparator

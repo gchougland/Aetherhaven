@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /**
  * Splits prefab-local space into an {@code N×N×N} grid of assembly sections (one section finished at a time).
@@ -104,6 +105,32 @@ public final class AssemblySectionMapper {
 
     public boolean isCellInSection(@Nonnull PendingBlock pb, int flatSection) {
         return flatSectionFor(pb) == flatSection;
+    }
+
+    public int flatSectionForWorldCell(@Nonnull Vector3i anchor, int wx, int wy, int wz) {
+        return flatSectionFor(wx - anchor.x, wy - anchor.y, wz - anchor.z);
+    }
+
+    public boolean isWorldCellInSection(@Nonnull Vector3i anchor, int wx, int wy, int wz, int flatSection) {
+        return flatSectionForWorldCell(anchor, wx, wy, wz) == flatSection;
+    }
+
+    /** First flat index that contains at least one obstructed world cell. */
+    public static int firstOccupiedFlatSectionForWorldCells(
+        @Nonnull AssemblySectionMapper mapper,
+        @Nonnull Vector3i anchor,
+        @Nonnull List<Vector3i> worldCells
+    ) {
+        int vol = mapper.sectionCount();
+        for (int s = 0; s < vol; s++) {
+            for (int i = 0; i < worldCells.size(); i++) {
+                Vector3i c = worldCells.get(i);
+                if (mapper.isWorldCellInSection(anchor, c.x, c.y, c.z, s)) {
+                    return s;
+                }
+            }
+        }
+        return 0;
     }
 
     public boolean sectionHasAnyCell(@Nonnull List<PendingBlock> pending, int flatSection) {
