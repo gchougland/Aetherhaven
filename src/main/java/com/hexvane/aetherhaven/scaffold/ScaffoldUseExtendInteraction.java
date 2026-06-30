@@ -4,6 +4,10 @@ package com.hexvane.aetherhaven.scaffold;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
+
 import com.hypixel.hytale.codec.Codec;
 
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -122,15 +126,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
             clientPlacement.z
         );
         world.performBlockUpdate(clientPlacement.x, clientPlacement.y, clientPlacement.z, false);
-        ScaffoldDebug.resolve(
-            "[UseExtend] resync client-predicted cell %s,%s,%s (placed at %s,%s,%s)",
-            clientPlacement.x(),
-            clientPlacement.y(),
-            clientPlacement.z(),
-            targetBlockPosition.x(),
-            targetBlockPosition.y(),
-            targetBlockPosition.z()
-        );
     }
 
     /**
@@ -240,13 +235,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
             if (clientState.blockFace == com.hypixel.hytale.protocol.BlockFace.None) {
                 clientState.blockFace = com.hypixel.hytale.protocol.BlockFace.Down;
             }
-            ScaffoldDebug.resolve(
-                "[UseExtend] inferred place sync pos=%s,%s,%s face=%s (client omitted blockPosition; ray/feet on scaffold)",
-                inferred.x,
-                inferred.y,
-                inferred.z,
-                clientState.blockFace
-            );
         }
     }
 
@@ -340,6 +328,12 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
     ) {
 
+        if (firstRun && SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.CONSTRUCTION)) {
+
+            return;
+
+        }
+
         InteractionSyncData clientState = context.getClientState();
 
 
@@ -355,7 +349,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
         } else {
 
             if (!isExtendTriggerType(type)) {
-                ScaffoldDebug.resolve("[UseExtend] ignored: interactionType=%s (expected Use or Secondary for place sync)", type);
                 context.getState().state = InteractionState.Failed;
 
                 return;
@@ -416,7 +409,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
                 String interactionBlockTypeKey = this.blockTypeKey != null ? this.blockTypeKey : heldItemStack.getBlockKey();
 
                 if (interactionBlockTypeKey == null) {
-                    ScaffoldDebug.resolve("[UseExtend] failed: held item has no block key");
                     context.getState().state = InteractionState.Failed;
                     return;
 
@@ -535,36 +527,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
                         ? BlockFace.UP.getDirection()
                         : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection());
 
-
-
-                ScaffoldDebug.place(
-
-                    "[UseExtend] resolved=%s,%s,%s client=%s,%s,%s useUpNormal=%s placementNormal=%s,%s,%s",
-
-                    targetBlockPosition.x(),
-
-                    targetBlockPosition.y(),
-
-                    targetBlockPosition.z(),
-
-                    clientPlacement.x(),
-
-                    clientPlacement.y(),
-
-                    clientPlacement.z(),
-
-                    useUpNormal,
-
-                    placementNormal.x(),
-
-                    placementNormal.y(),
-
-                    placementNormal.z()
-
-                );
-
-
-
                 BlockPlaceUtils.placeBlock(
                     ref,
                     heldItemStack,
@@ -588,18 +550,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
                 if (AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(interactionBlockTypeKey)) {
 
                     world.performBlockUpdate(targetBlockPosition.x(), targetBlockPosition.y(), targetBlockPosition.z(), false);
-
-                    ScaffoldDebug.physics(
-
-                        "[UseExtend] performBlockUpdate at %s,%s,%s",
-
-                        targetBlockPosition.x,
-
-                        targetBlockPosition.y,
-
-                        targetBlockPosition.z
-
-                    );
 
                 }
 
@@ -646,13 +596,6 @@ public final class ScaffoldUseExtendInteraction extends SimpleInteraction {
 
                     );
 
-            } else {
-                ScaffoldDebug.resolve(
-                    "[UseExtend] skipped: missing block sync pos=%s rot=%s face=%s",
-                    blockPosition == null ? "null" : "ok",
-                    blockRotation == null ? "null" : "ok",
-                    clientState.blockFace
-                );
             }
 
 

@@ -120,12 +120,12 @@ public final class AetherhavenUiLocalization {
     }
 
     public static void applyGaiaStatueRevivePage(@Nonnull UICommandBuilder b) {
-        b.set("#GaiaReviveTitleText.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.title"));
-        b.set("#Footer.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.footer"));
+        b.set("#GaiaReviveTitleText.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.title"));
+        b.set("#Footer.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.footer"));
     }
 
     public static void applyGaiaStatueReviveRow(@Nonnull UICommandBuilder b, @Nonnull String rowPath) {
-        b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.revive"));
+        b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.revive"));
     }
 
     public static void applyPatrolWandAssignGuardPage(@Nonnull UICommandBuilder b) {
@@ -197,17 +197,17 @@ public final class AetherhavenUiLocalization {
     }
 
     public static void applyCharterTownPage(@Nonnull UICommandBuilder b) {
-        b.set("#CharterTownTitleText.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.title"));
-        b.set("#MoveCharterHint.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.moveCharterHint"));
-        b.set("#MoveCharterButton.TooltipTextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.moveCharterTooltip"));
-        b.set("#TownNameLabel.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.townNameLabel"));
-        b.set("#SaveTownNameButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.saveTownName"));
-        b.set("#NameInput.PlaceholderText", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.namePlaceholder"));
-        b.set("#OwnerOnlyHint.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.ownerOnlyHint"));
-        b.set("#DissolveButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolve"));
-        b.set("#DissolveHint.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolveHint"));
-        b.set("#CharterModalConfirmButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolveConfirm"));
-        b.set("#CharterModalCancelButton.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.modalCancel"));
+        b.set("#CharterTownTitleText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.title"));
+        b.set("#MoveCharterHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.moveCharterHint"));
+        b.set("#MoveCharterButton.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.moveCharterTooltip"));
+        b.set("#TownNameLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.townNameLabel"));
+        b.set("#SaveTownNameButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.saveTownName"));
+        b.set("#NameInput.PlaceholderText", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.namePlaceholder"));
+        b.set("#OwnerOnlyHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.ownerOnlyHint"));
+        b.set("#DissolveButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolve"));
+        b.set("#DissolveHint.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveHint"));
+        b.set("#CharterModalConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveConfirm"));
+        b.set("#CharterModalCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.chartertown.modalCancel"));
     }
 
     public static void applyProductionStorage(@Nonnull UICommandBuilder b) {

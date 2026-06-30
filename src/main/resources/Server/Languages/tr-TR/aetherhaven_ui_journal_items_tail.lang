@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Yukarıdan bir görev seçin.
 items.Aetherhaven_Management_Block.name=Kasaba kayıtları rafı
 items.Aetherhaven_Management_Block.description=Tamamlanmış bir bina için katip rafı. Bulunduğu arsanın inşaat durumunu gösterir.
 
-items.Aetherhaven_Sprinkler_Iron.name=Demir sulama başlığı
-items.Aetherhaven_Sprinkler_Iron.description=Bir blok aşağıda bulunan <color is="#4ade80">3×3</color>'lük bir alanda işlenmiş toprağı sular. Oyun içi her sabah bir kez çalışır. En küçük kapsama alanı.
-items.Aetherhaven_Sprinkler_Thorium.name=Toryum fıskiyesi
-items.Aetherhaven_Sprinkler_Thorium.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan <color is="#4ade80">5×5</color>'lik bir alanda işlenmiş toprağı sular. Demirden daha büyüktür.
-items.Aetherhaven_Sprinkler_Cobalt.name=Kobalt sulama sistemi
-items.Aetherhaven_Sprinkler_Cobalt.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan 7x7'lik bir alanda işlenmiş toprağı sular. Geniş bir alanı kapsar.
-items.Aetherhaven_Sprinkler_Adamantite.name=Adamantit fıskiyesi
-items.Aetherhaven_Sprinkler_Adamantite.description=Oyun içi her sabah bir kez, bir blok aşağıda bulunan 9x9'luk bir alanda işlenmiş toprağı sular. En geniş kapsama alanı için.
 
 items.Aetherhaven_Wood_Scaffold.name=Ahşap iskele
 items.Aetherhaven_Wood_Scaffold.description=Merdiven gibi tırmanın. Normal bir blok gibi yerlere sağ tıklayın. İskeleyi yandan uzatmak veya üst yüzeyden yatay olarak dallanmak için iskeleye nişan alırken Kullan (F) tuşunu basılı tutun. Alttaki desteksiz parçayı kırmak, yığını çökertir.

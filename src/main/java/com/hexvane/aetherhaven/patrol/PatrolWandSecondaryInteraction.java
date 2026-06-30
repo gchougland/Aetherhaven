@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.patrol;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -34,6 +36,9 @@ public final class PatrolWandSecondaryInteraction extends SimpleBlockInteraction
         @Nonnull Vector3i targetBlock,
         @Nonnull com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PATROL_ROUTES)) {
+            return;
+        }
         if (!PatrolWandInteractions.isPatrolWandItem(itemInHand)) {
             context.getState().state = InteractionState.Failed;
             return;

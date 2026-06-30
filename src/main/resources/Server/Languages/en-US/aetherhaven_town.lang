@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=You left "{town}".
 aetherhaven.town.memberRole.BUILD=BUILD
 aetherhaven.town.memberRole.QUEST=QUEST
 aetherhaven.town.memberRole.BOTH=BOTH
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=Elder
+aetherhaven.profession.kind.innkeeper=Innkeeper
+aetherhaven.profession.kind.merchant=Merchant
+aetherhaven.profession.kind.farmer=Farmer
+aetherhaven.profession.kind.blacksmith=Blacksmith
+aetherhaven.profession.kind.priestess=Priestess
+aetherhaven.profession.kind.miner=Miner
+aetherhaven.profession.kind.logger=Logger
+aetherhaven.profession.kind.rancher=Rancher
+aetherhaven.profession.kind.guild_master=Guild Master
+aetherhaven.profession.kind.crystal_keeper=Crystal Keeper
+aetherhaven.profession.kind.pyrotechnic=Pyrotechnic
+aetherhaven.profession.kind.florist=Florist
+aetherhaven.profession.kind.builder=Builder
+aetherhaven.profession.kind.bard=Bard
+aetherhaven.profession.kind.townsfolk=Townsfolk
+aetherhaven.profession.kind.unknown=Resident

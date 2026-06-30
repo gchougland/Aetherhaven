@@ -18,6 +18,8 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
+import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyBuildStartResult;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
@@ -358,7 +360,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             managementUi
                 && completed
                 && plotTabActive
-                && ProductionCatalog.isProductionWorkplaceConstruction(gameplayWorkplaceId);
+                && ProductionCatalog.isProductionWorkplaceConstruction(gameplayWorkplaceId)
+                && AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION);
 
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
         commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign);
@@ -1886,6 +1889,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         @Nonnull Store<EntityStore> store,
         @Nullable String branchRaw
     ) {
+        if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.PRODUCTION)) {
+            return;
+        }
         if (!managementUi) {
             return;
         }

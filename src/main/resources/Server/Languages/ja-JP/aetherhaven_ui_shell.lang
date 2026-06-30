@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=プレイヤーデータを�
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=生命エネルギーが不足しています（{need}が必要です）。
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=生命のエッセンスをインベントリから削除できませんでした。
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=ガイア像
+aetherhaven.ui.gaiaStatue.hint=蘇生するたびに、{cost}の生命エネルギーを消費します。
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=町で
+aetherhaven.ui.gaiaStatue.status.missing=離れて
+aetherhaven.ui.gaiaStatue.reviveSuccess=広場に再び生命の息吹が宿る。
+aetherhaven.ui.gaiaStatue.reviveFailed=祝福は効かなかった。本質は返された。
+aetherhaven.ui.gaiaStatue.footer=この祝福は町の所有者のみが使用できる。行方不明の村人は、この像の近くで呼び戻される。
+aetherhaven.ui.gaiaStatue.revive=復活

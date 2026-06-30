@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=Brennholz
-items.Aetherhaven_Firewood.description=Getrocknete Holzbündel. Brennt in Öfen und Lagerfeuern etwa doppelt so lange wie Holzkohle.
 
-items.Aetherhaven_Root_Remover.name=Wurzelentferner
-items.Aetherhaven_Root_Remover.description=Klicken Sie mit der rechten Maustaste auf einen Baumstamm, um die vergrabenen Wurzeln auszureißen. Das Holz landet vor Ihren Füßen und das Loch füllt sich mit Erde.
 
-items.Aetherhaven_Growth_Serum.name=Wachstumsserum
-items.Aetherhaven_Growth_Serum.description=Zur Anwendung bei Jungtieren, um deren Wachstum zu fördern. Eine Ampulle genügt.
 
-items.Aetherhaven_Hunting_Knife.name=Jagdmesser
-items.Aetherhaven_Hunting_Knife.description=Ein scharfes Messer für Jäger. Damit werden Tiere erlegt, um manchmal zusätzliches rohes Fleisch, Felle und Federn zu erhalten.
 
 items.Aetherhaven_Lute.name=Laute
 items.Aetherhaven_Lute.description=Eine hölzerne Laute mit warmen Saiten. Elias Thornwood hat immer eine in seiner Nähe, wenn er in der Gilde spielt.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=Die Stadtwährung wird in der Schatzkamm
 items.Aetherhaven_Geode.name=Geode
 items.Aetherhaven_Geode.description=Ein hohler Stein, der Kristalle, Edelsteine oder Erz enthalten kann. Bezahle einen Schmied, der ihn aufbricht.
 
-items.Aetherhaven_Geode_Anvil.name=Geodenamboss
-items.Aetherhaven_Geode_Anvil.description=Öffnet Geoden ohne Schmiedegebühr. Platzieren und verwenden; <color is="#ffa726">Du musst die Bauanleitung kennen</color>, um es an deinem Stadtplanungstisch herzustellen.
 
 items.Aetherhaven_Crystallized_Person.name=Kristallisierte Person
 

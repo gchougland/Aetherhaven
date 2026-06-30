@@ -2,6 +2,10 @@
 
 ##[2.1.0] - Unreleased
 
+### Added
+
+- **Subplugins** — Aetherhaven loads as `Hexvane:Aetherhaven` (core) plus 17 optional feature subplugins. Disable features via the server `config.json` `Mods` section or `/plugin unload <id> --boot`
+
 ### Fixed
 
 - **Plot crafting bench preview** Survival players now see the rotatable 3D building preview in the plot crafting bench. The client only renders `PrefabPreviewComponent` data in Creative mode, so Adventure players get a temporary client-side Creative mode while the bench is open (server game mode unchanged).

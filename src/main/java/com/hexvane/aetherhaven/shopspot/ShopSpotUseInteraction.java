@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.ShopSpotBuyPage;
@@ -41,6 +43,9 @@ public final class ShopSpotUseInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.COMMERCE)) {
+            return;
+        }
         if (type != InteractionType.Use) {
             context.getState().state = InteractionState.Failed;
             return;

@@ -130,6 +130,9 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, TownVillagerBinding> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(TownVillagerBinding.class, "AetherhavenTownVillagerBinding", CODEC);
     }
 

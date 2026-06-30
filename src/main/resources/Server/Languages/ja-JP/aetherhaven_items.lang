@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=薪
-items.Aetherhaven_Firewood.description=乾燥させた薪の束。炉やキャンプファイヤーでは、木炭の約2倍の時間燃焼します。
 
-items.Aetherhaven_Root_Remover.name=根っこ除去剤
-items.Aetherhaven_Root_Remover.description=木の幹を右クリックすると、地中に埋まっている根を引き抜くことができます。木片は足元に落ち、穴は土で埋まります。
 
-items.Aetherhaven_Growth_Serum.name=成長血清
-items.Aetherhaven_Growth_Serum.description=幼齢動物に使用すると、成長促進に効果があります。1バイアル分です。
 
-items.Aetherhaven_Hunting_Knife.name=ハンティングナイフ
-items.Aetherhaven_Hunting_Knife.description=狩猟用の鋭利なナイフ。これで動物を仕留めれば、時折、追加の生肉、皮、羽毛が手に入る。
 
 items.Aetherhaven_Lute.name=リュート
 items.Aetherhaven_Lute.description=温かみのある弦を持つ木製のリュート。エリアス・ソーンウッドは、ギルドホールで演奏する際にいつもこのリュートをそばに置いている。
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=町の通貨は金庫に保管されて�
 items.Aetherhaven_Geode.name=晶洞
 items.Aetherhaven_Geode.description=水晶、宝石、鉱石などが中に詰まっている可能性のある、中が空洞の石。鍛冶屋に依頼して割ってもらうと良い。
 
-items.Aetherhaven_Geode_Anvil.name=ジオードアンビル
-items.Aetherhaven_Geode_Anvil.description=鍛冶屋の手数料なしで晶洞を開けます。設置して使用してください。<color is="#ffa726">設計図を知っている必要があります</color>。都市計画デスクで作成してください。
 
 items.Aetherhaven_Crystallized_Person.name=結晶化した人
 

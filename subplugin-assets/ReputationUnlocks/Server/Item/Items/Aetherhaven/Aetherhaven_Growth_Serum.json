@@ -1,0 +1,115 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_reputation_unlocks.items.Aetherhaven_Growth_Serum.name",
+    "Description": "aetherhaven_reputation_unlocks.items.Aetherhaven_Growth_Serum.description"
+  },
+  "PlayerAnimationsId": "Item",
+  "Categories": [
+    "Items.Potions"
+  ],
+  "Recipe": {
+    "TimeSeconds": 1,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Ingredient_Bone_Fragment",
+        "Quantity": 5
+      },
+      {
+        "ItemId": "Plant_Petals_Blood",
+        "Quantity": 2
+      }
+    ],
+    "OutputQuantity": 1,
+    "BenchRequirement": [
+      {
+        "Id": "Alchemybench",
+        "Type": "Crafting",
+        "Categories": [
+          "Alchemy_Potions_Misc"
+        ]
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.9,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -9
+    ]
+  },
+  "Interactions": {
+    "Use": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenGrowthSerumUse"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    },
+    "AllEntities": true
+  },
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Growth_Serum.png",
+  "MaxStack": 10,
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Type": [
+      "Potion"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "BlockType": {
+    "InteractionHint": "server.interactionHints.pickup",
+    "CustomModel": "Items/Consumables/Potions/Potion_Normal.blockymodel",
+    "CustomModelTexture": [
+      {
+        "Texture": "Items/Consumables/Potions/Potion_Textures/Iridescent.png",
+        "Weight": 1
+      }
+    ],
+    "BlockParticleSetId": "GlassMagic",
+    "ParticleColor": "#f1b0f8",
+    "Light": {
+      "Color": "#414"
+    },
+    "DrawType": "Model",
+    "Flags": {
+      "IsUsable": true
+    },
+    "Gathering": {
+      "Harvest": {},
+      "Soft": {}
+    },
+    "HitboxType": "Potion",
+    "Material": "Empty",
+    "RandomRotation": "YawStep1",
+    "Opacity": "Transparent",
+    "Support": {
+      "Down": [
+        {
+          "FaceType": "Full"
+        }
+      ]
+    },
+    "TextureComputedColor": "#A8C0D0"
+  },
+  "ItemLevel": 0,
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=플레이어 데이터를 �
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=생명 에너지가 부족합니다 (PH_0 필요).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=인벤토리에서 생명 에너지를 제거할 수 없습니다.
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=가이아 여신상
+aetherhaven.ui.gaiaStatue.hint=부활할 때마다 {cost} 생명 에너지가 소모됩니다.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=시내에서
+aetherhaven.ui.gaiaStatue.status.missing=떨어져 있는
+aetherhaven.ui.gaiaStatue.reviveSuccess=광장에 생명의 한 줄기가 다시 돌아왔습니다.
+aetherhaven.ui.gaiaStatue.reviveFailed=축복은 이루어지지 않았다. 본질은 되돌아왔다.
+aetherhaven.ui.gaiaStatue.footer=이 축복은 마을 주인만이 사용할 수 있습니다. 사라진 마을 사람들은 동상 근처에서 불러올 수 있습니다.
+aetherhaven.ui.gaiaStatue.revive=부활하다

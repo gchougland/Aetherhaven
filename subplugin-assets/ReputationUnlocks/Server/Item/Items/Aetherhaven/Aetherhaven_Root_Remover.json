@@ -1,0 +1,78 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_reputation_unlocks.items.Aetherhaven_Root_Remover.name",
+    "Description": "aetherhaven_reputation_unlocks.items.Aetherhaven_Root_Remover.description"
+  },
+  "PlayerAnimationsId": "Block",
+  "Categories": [
+    "Items.Tools"
+  ],
+  "Recipe": {
+    "TimeSeconds": 0,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Soil_Dirt",
+        "Quantity": 20
+      },
+      {
+        "ItemId": "Ingredient_Life_Essence",
+        "Quantity": 20
+      }
+    ],
+    "OutputQuantity": 5,
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "IconProperties": {
+    "Scale": 0.6,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -15
+    ]
+  },
+  "Interactions": {
+    "Secondary": {
+      "Interactions": [
+        {
+          "Type": "AetherhavenRootRemoverUse"
+        }
+      ]
+    }
+  },
+  "InteractionConfig": {
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    }
+  },
+  "Model": "Items/Tools/Feedbag/Feedbag.blockymodel",
+  "Texture": "Items/Aetherhaven/Root_Remover.png",
+  "Scale": 1.2,
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Root_Remover.png",
+  "MaxStack": 100,
+  "Quality": "Uncommon",
+  "Set": "Aetherhaven",
+  "Tags": {
+    "Type": [
+      "Tool"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "ItemLevel": 0,
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "Quests",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven quests, quest board, and raid NPCs (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

@@ -1,0 +1,30 @@
+# Reputation-gated reward items (ReputationUnlocks pack)
+
+items.Aetherhaven_Firewood.name=Дрова
+items.Aetherhaven_Firewood.description=Висушені в'язки полін. Горить приблизно вдвічі довше, ніж деревне вугілля в печах і на багаттях.
+items.Aetherhaven_Root_Remover.name=Засіб для видалення коренів
+items.Aetherhaven_Root_Remover.description=Клацніть правою кнопкою миші на стовбурі дерева, щоб витягнути коріння, що знаходиться під землею. Деревина впаде вам до ніг, а отвір заповниться землею.
+items.Aetherhaven_Growth_Serum.name=Сироватка для росту
+items.Aetherhaven_Growth_Serum.description=Використовуйте на молодій тварині, щоб допомогти їй одразу підрости. Використовується один флакон.
+items.Aetherhaven_Hunting_Knife.name=Мисливський ніж
+items.Aetherhaven_Hunting_Knife.description=Гострий ніж для мисливців. Вбивайте ним тварин, щоб іноді отримати додаткове сире м'ясо, шкіру та пір'я.
+items.Aetherhaven_Geode_Anvil.name=Жеодна ковадла
+items.Aetherhaven_Geode_Anvil.description=Відкриває геоди без плати за послуги коваля. Розміщення та використання; <color is="#ffa726">ви повинні знати схему</color>, щоб створити її у вашому столі містобудування.
+items.Aetherhaven_Sprinkler_Iron.name=Залізний розбризкувач
+items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">3×3</color>. Виконується один раз щоранку в грі. Найменше покриття.
+items.Aetherhaven_Sprinkler_Thorium.name=Торієва спринклерна система
+items.Aetherhaven_Sprinkler_Thorium.description=Поливає оброблену землю на один блок нижче в області <color is="#4ade80">5×5</color>. Один раз щоранку в грі. Більша за залізо.
+items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовий спринклер
+items.Aetherhaven_Sprinkler_Cobalt.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">7×7</color>. Один раз щоранку в грі. Широке покриття.
+items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовий розбризкувач
+items.Aetherhaven_Sprinkler_Adamantite.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">9×9</color>. Один раз щоранку в грі. Найширше покриття.
+items.Aetherhaven_Purification_Powder.name=Очисний порошок
+items.Aetherhaven_Purification_Powder.description=Поки ви тримаєте, приховані точки появи поблизу мерехтять частинками, яких торкнулася Гайя. Використовуйте на виділеній точці появи, щоб вигнати її та витратити один заряд.
+items.Aetherhaven_Gaias_Draught.name=Напій Геї
+items.Aetherhaven_Gaias_Draught.description=Благословенна фляга живої води, яка слідує за вами окремо. Тримайте її та пийте з вторинним використанням, як і інші зілля. Решта ковтків відповідають показникам боєприпасів та шкалі міцності фляги. Благословення біля вівтаря розширюють те, що вона містить, та посилюють її цілительні здібності.
+aetherhaven.gaiadraught.cannotStore=Напій Геї залишається з вами. Його не можна помістити на зберігання.
+items.Aetherhaven_Shard_Of_Gaia.name=Осколок Геї
+items.Aetherhaven_Shard_Of_Gaia.description=Жетон жриці. Пожертвуйте його разом з десятиною на вівтарі Геї, щоб збільшити кількість ковтків, які ви можете випити.
+items.Aetherhaven_Verdant_Catalyst.name=Зелений каталізатор
+items.Aetherhaven_Verdant_Catalyst.description=Жетон жриці. Пожертвуйте його разом з десятиною на вівтарі Геї, щоб посилити цілющий ефект вашого напою.
+interactionHints.purifySpawn=Натисніть [{key}], щоб очистити породу

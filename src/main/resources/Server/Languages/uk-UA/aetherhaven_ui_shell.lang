@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=Не вдалося зава
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=Недостатньо життєвої сутності (потрібна {need}).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Не вдалося видалити життєву есенцію з інвентарю.
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=Статуя Геї
+aetherhaven.ui.gaiaStatue.hint=Кожне відродження споживає {cost} життєвої сутності.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=У місті
+aetherhaven.ui.gaiaStatue.status.missing=У гостях
+aetherhaven.ui.gaiaStatue.reviveSuccess=Нитка життя повертається на площу.
+aetherhaven.ui.gaiaStatue.reviveFailed=Благословення не прийняли. Есенцію повернули.
+aetherhaven.ui.gaiaStatue.footer=Тільки власник міста може скористатися цим благословенням. Зниклих жителів села можна покликати назад біля статуї.
+aetherhaven.ui.gaiaStatue.revive=Відродити

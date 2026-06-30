@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=Вы покинули "{town}".
 aetherhaven.town.memberRole.BUILD=СТРОИТЬ
 aetherhaven.town.memberRole.QUEST=ПОИСК
 aetherhaven.town.memberRole.BOTH=ОБА
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=Старейшина
+aetherhaven.profession.kind.innkeeper=Трактирщик
+aetherhaven.profession.kind.merchant=Торговец
+aetherhaven.profession.kind.farmer=Фермер
+aetherhaven.profession.kind.blacksmith=Кузнец
+aetherhaven.profession.kind.priestess=Жрица
+aetherhaven.profession.kind.miner=Шахтер
+aetherhaven.profession.kind.logger=Лесоруб
+aetherhaven.profession.kind.rancher=Ранчер
+aetherhaven.profession.kind.guild_master=Мастер гильдии
+aetherhaven.profession.kind.crystal_keeper=Хранитель Кристалла
+aetherhaven.profession.kind.pyrotechnic=Пиротехника
+aetherhaven.profession.kind.florist=Цветочный магазин
+aetherhaven.profession.kind.builder=Строитель
+aetherhaven.profession.kind.bard=Бард
+aetherhaven.profession.kind.townsfolk=Горожане
+aetherhaven.profession.kind.unknown=Житель

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -24,6 +26,9 @@ public final class OpenHandMirrorUiInteraction extends SimpleInstantInteraction 
     @Override
     protected void firstRun(
         @Nonnull InteractionType type, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.JEWELRY)) {
+            return;
+        }
         Ref<EntityStore> ref = context.getEntity();
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         Player player = commandBuffer.getComponent(ref, Player.getComponentType());

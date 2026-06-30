@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.gaiadraught;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -49,6 +51,9 @@ public final class GaiasDraughtConsumeInteraction extends SimpleInstantInteracti
 
     @Override
     protected void firstRun(@Nonnull InteractionType type, @Nonnull InteractionContext context, @Nonnull CooldownHandler cooldownHandler) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.REPUTATION_UNLOCKS)) {
+            return;
+        }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         if (commandBuffer == null) {
             context.getState().state = InteractionState.Failed;

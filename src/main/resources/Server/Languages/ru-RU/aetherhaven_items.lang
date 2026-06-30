@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=Дрова
-items.Aetherhaven_Firewood.description=Связки сухих поленьев. Горят примерно в два раза дольше, чем древесный уголь, в печах и кострах.
 
-items.Aetherhaven_Root_Remover.name=Средство для удаления корней
-items.Aetherhaven_Root_Remover.description=Щёлкните правой кнопкой мыши по стволу дерева, чтобы вытащить зарытые под землёй корни. Древесина упадёт вам под ноги, а образовавшаяся яма заполнится землёй.
 
-items.Aetherhaven_Growth_Serum.name=Сыворотка роста
-items.Aetherhaven_Growth_Serum.description=Используйте для молодых животных, чтобы помочь им быстро повзрослеть. Одного флакона достаточно.
 
-items.Aetherhaven_Hunting_Knife.name=Охотничий нож
-items.Aetherhaven_Hunting_Knife.description=Острый нож для охотников. Им можно убивать животных, чтобы иногда добывать дополнительное сырое мясо, шкуры и перья.
 
 items.Aetherhaven_Lute.name=лютня
 items.Aetherhaven_Lute.description=Деревянная лютня с тёплыми струнами. Элиас Торнвуд всегда держит одну такую при себе, когда играет в зале гильдии.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=Городская валюта хран
 items.Aetherhaven_Geode.name=Геода
 items.Aetherhaven_Geode.description=Полый камень, в котором могут находиться кристаллы, драгоценные камни или руда. За его раскалывание обратитесь к кузнецу.
 
-items.Aetherhaven_Geode_Anvil.name=Геодовая наковальня
-items.Aetherhaven_Geode_Anvil.description=Открывает жеоды без платы кузнеца. Разместите и используйте; <color is="#ffa726">вы должны знать схему</color>, чтобы изготовить его за столом городского планирования.
 
 items.Aetherhaven_Crystallized_Person.name=Кристаллизованная личность
 

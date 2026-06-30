@@ -169,14 +169,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Choose a quest above.
 items.Aetherhaven_Management_Block.name=Town records shelf
 items.Aetherhaven_Management_Block.description=Clerk shelf for a completed building. Opens construction status for its plot.
 
-items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
-items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a <color is="#4ade80">3×3</color> area. Runs once each in-game morning. Smallest coverage.
-items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
-items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a <color is="#4ade80">5×5</color> area. Once each in-game morning. Larger than iron.
-items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
-items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a <color is="#4ade80">7×7</color> area. Once each in-game morning. Wide coverage.
-items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
-items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a <color is="#4ade80">9×9</color> area. Once each in-game morning. Widest coverage.
 
 items.Aetherhaven_Wood_Scaffold.name=Wood scaffolding
 items.Aetherhaven_Wood_Scaffold.description=Climb like a ladder. Right-click places like a normal block. Hold Use (F) while aiming at scaffolding to extend the tower from the side or branch horizontally from the top face. Breaking the bottom unsupported piece collapses the stack.

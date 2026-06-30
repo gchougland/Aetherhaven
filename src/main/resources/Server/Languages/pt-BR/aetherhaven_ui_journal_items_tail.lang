@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Escolha uma missão acima.
 items.Aetherhaven_Management_Block.name=Prateleira de registros da cidade
 items.Aetherhaven_Management_Block.description=Prateleira de informações para um edifício concluído. Exibe o status da construção do respectivo lote.
 
-items.Aetherhaven_Sprinkler_Iron.name=Aspersor de ferro
-items.Aetherhaven_Sprinkler_Iron.description=A irrigação ara o solo um bloco abaixo, em uma área de 3×3. Executa uma vez por manhã no jogo. Menor área de cobertura.
-items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de tório
-items.Aetherhaven_Sprinkler_Thorium.description=Waters revolveu o solo um bloco abaixo em uma área de <color is="#4ade80">5×5</color>. Uma vez por manhã no jogo. Maior que ferro.
-items.Aetherhaven_Sprinkler_Cobalt.name=Sprinkler de cobalto
-items.Aetherhaven_Sprinkler_Cobalt.description=A água revolveu o solo um bloco abaixo, numa área de 7×7. Uma vez por manhã, dentro do jogo. Ampla cobertura.
-items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
-items.Aetherhaven_Sprinkler_Adamantite.description=A água revolveu o solo um bloco abaixo em uma área de <color is="#4ade80">9×9</color>. Uma vez por manhã no jogo. Cobertura mais ampla.
 
 items.Aetherhaven_Wood_Scaffold.name=andaimes de madeira
 items.Aetherhaven_Wood_Scaffold.description=Suba como uma escada. Clique com o botão direito em locais como um bloco normal. Segure (F) enquanto mira no andaime para estender a torre pela lateral ou criar um ramal horizontal a partir da face superior. Quebrar a peça inferior sem suporte fará a pilha desmoronar.

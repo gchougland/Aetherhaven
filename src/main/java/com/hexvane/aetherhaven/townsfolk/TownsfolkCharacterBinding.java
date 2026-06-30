@@ -39,6 +39,9 @@ public final class TownsfolkCharacterBinding implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, TownsfolkCharacterBinding> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(TownsfolkCharacterBinding.class, "AetherhavenTownsfolkCharacterBinding", CODEC);
     }
 

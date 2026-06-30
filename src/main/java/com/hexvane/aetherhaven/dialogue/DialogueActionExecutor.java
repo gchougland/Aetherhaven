@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.inn.InnPoolService;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
+import com.hexvane.aetherhaven.quest.QuestAvailability;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
 import com.hexvane.aetherhaven.quest.QuestPlotBlueprintOnStart;
@@ -92,6 +93,11 @@ public final class DialogueActionExecutor {
         String type = getType(a);
         if (type == null) {
             LOGGER.atWarning().log("Dialogue action missing type: %s", a);
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null
+            && plugin.getDialogueActionRegistry().dispatch(type, a, playerRef, store, out, npcRef)) {
             return;
         }
         switch (type) {
@@ -192,6 +198,9 @@ public final class DialogueActionExecutor {
         String qid = id.trim();
         QuestCatalog quests = plugin.getQuestCatalog();
         QuestDefinition qdef = quests.get(qid);
+        if (qdef != null && !QuestAvailability.isEnabled(qdef)) {
+            return;
+        }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         if (qdef != null && qdef.repeatOrDefault().isPerEntity()) {
             if (town.hasQuestActive(qid)) {
@@ -261,6 +270,10 @@ public final class DialogueActionExecutor {
             return;
         }
         String qid = id.trim();
+        QuestDefinition precheck = plugin.getQuestCatalog().get(qid);
+        if (precheck != null && !QuestAvailability.isEnabled(precheck)) {
+            return;
+        }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
@@ -301,6 +314,9 @@ public final class DialogueActionExecutor {
         @Nullable Store<EntityStore> store
     ) {
         QuestDefinition def = plugin.getQuestCatalog().get(qid);
+        if (def != null && !QuestAvailability.isEnabled(def)) {
+            return;
+        }
         UUID guardPromoteUuid = null;
         UUID touristPromoteUuid = null;
         if (AetherhavenConstants.QUEST_HOUSE_GUARD.equals(qid.trim())) {

@@ -4,6 +4,12 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,12 +48,55 @@ public final class PurificationPowderPlayerComponent implements Component<Entity
     private final Set<UUID> pendingPreviewSpawn = new HashSet<>();
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType =
             registry.registerComponent(
                 PurificationPowderPlayerComponent.class,
                 "AetherhavenPurificationPowder",
                 PurificationPowderPlayerComponent.CODEC
             );
+    }
+
+    /** Removes this component and purification preview entities from every online player (before subplugin unload). */
+    public static void detachAllOnlinePlayers() {
+        ComponentType<EntityStore, PurificationPowderPlayerComponent> type;
+        try {
+            type = getComponentType();
+        } catch (IllegalStateException e) {
+            return;
+        }
+        Universe universe = Universe.get();
+        if (universe == null) {
+            return;
+        }
+        for (World world : universe.getWorlds().values()) {
+            if (!world.isStarted()) {
+                continue;
+            }
+            for (PlayerRef playerRef : world.getPlayerRefs()) {
+                Ref<EntityStore> ref = playerRef.getReference();
+                if (ref == null || !ref.isValid()) {
+                    continue;
+                }
+                Store<EntityStore> store = ref.getStore();
+                PurificationPowderPlayerComponent state = store.getComponent(ref, type);
+                if (state == null) {
+                    continue;
+                }
+                for (UUID previewId : new ArrayList<>(state.getSpawnEntityIdToPreviewEntityId().values())) {
+                    if (previewId == null) {
+                        continue;
+                    }
+                    Ref<EntityStore> previewRef = world.getEntityRef(previewId);
+                    if (previewRef != null && previewRef.isValid()) {
+                        store.removeEntity(previewRef, RemoveReason.REMOVE);
+                    }
+                }
+                store.removeComponent(ref, type);
+            }
+        }
     }
 
     @Nonnull

@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=이전 업그레이드부터 먼
 aetherhaven.ui.productionUpgrades.notify.maxed=이 업그레이드는 이미 전액 구매되었습니다.
 aetherhaven.ui.productionUpgrades.notify.failed=해당 업그레이드를 적용할 수 없습니다.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=마을 헌장
+aetherhaven.ui.chartertown.townNameLabel=도시 표시 이름
+aetherhaven.ui.chartertown.namePlaceholder=당신이 사는 마을에 고유한 이름을 입력하세요.
+aetherhaven.ui.chartertown.ownerOnlyHint=마을 소유주만이 정관에 따라 표시 이름을 변경할 수 있습니다.
+aetherhaven.ui.chartertown.saveTownName=이름을 저장하세요
+aetherhaven.ui.chartertown.dissolve=마을을 해체하다
+aetherhaven.ui.chartertown.dissolveHint=마을, 모든 건물, 마을 주민, 그리고 이 헌장을 영구적으로 제거합니다. 되돌릴 수 없습니다.
+aetherhaven.ui.chartertown.dissolveConfirmText=정말이세요? 이렇게 하면 마을이 영구적으로 삭제되고, 모든 건물과 주민이 사라지며, 이 헌장도 무효화됩니다. 되돌릴 수 없습니다.
+aetherhaven.ui.chartertown.dissolveConfirm=네, 마을을 해체하세요
+aetherhaven.ui.chartertown.dissolveCancel=취소
+aetherhaven.ui.chartertown.dissolved=마을은 해체되었다: 건물들은 철거되었고, 마을 사람들은 쫓겨났으며, 마을 헌장은 파기되었다.
+aetherhaven.ui.chartertown.moveCharter=이동 헌장
+aetherhaven.ui.chartertown.moveCharterTooltip=이동 헌장
+aetherhaven.ui.chartertown.moveCharterHint=영토를 새로운 경계 블록에 다시 배치합니다. 모든 건물이 마을 경계 안에 들어갈 수 있는 위치에만 건물을 지을 수 있습니다.
+aetherhaven.ui.chartertown.moveCharterConfirmText=새로운 구역을 마치 부지 배치처럼 (살짝 움직여 위치를 조정하고 확정하는 방식으로) 배치합니다. 만약 어떤 건물이라도 지정된 구역 밖에 위치하게 되면, 배치가 차단됩니다.
+aetherhaven.ui.chartertown.moveCharterConfirm=계속하다
+aetherhaven.ui.chartertown.moveCharterCancel=취소
+aetherhaven.ui.chartertown.charterMoved=헌장이 변경되었습니다. 귀하의 관할 구역은 이제 새로운 헌장을 중심으로 합니다.
+aetherhaven.ui.chartertown.modalDissolveTitle=마을을 해체하는 건가요?
+aetherhaven.ui.chartertown.modalMoveTitle=이사 전세인가요?
+aetherhaven.ui.chartertown.modalCancel=취소

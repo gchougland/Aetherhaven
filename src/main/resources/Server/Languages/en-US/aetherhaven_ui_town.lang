@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=Unlock the earlier upgrades firs
 aetherhaven.ui.productionUpgrades.notify.maxed=This upgrade is already fully bought.
 aetherhaven.ui.productionUpgrades.notify.failed=Could not apply that upgrade.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Town charter
+aetherhaven.ui.chartertown.townNameLabel=Town display name
+aetherhaven.ui.chartertown.namePlaceholder=Type a unique name for your town
+aetherhaven.ui.chartertown.ownerOnlyHint=Only the town owner can change the display name from the charter.
+aetherhaven.ui.chartertown.saveTownName=Save name
+aetherhaven.ui.chartertown.dissolve=Dissolve town
+aetherhaven.ui.chartertown.dissolveHint=Permanently removes the town, all buildings, villagers, and this charter. Cannot be undone.
+aetherhaven.ui.chartertown.dissolveConfirmText=Are you sure? This permanently deletes the town, removes every building and villager, and destroys this charter. This cannot be undone.
+aetherhaven.ui.chartertown.dissolveConfirm=Yes, dissolve town
+aetherhaven.ui.chartertown.dissolveCancel=Cancel
+aetherhaven.ui.chartertown.dissolved=Town dissolved: buildings cleared, villagers removed, charter destroyed.
+aetherhaven.ui.chartertown.moveCharter=Move charter
+aetherhaven.ui.chartertown.moveCharterTooltip=Move charter
+aetherhaven.ui.chartertown.moveCharterHint=Recenters your territory on a new charter block. You can only place where every building still fits inside the town border.
+aetherhaven.ui.chartertown.moveCharterConfirmText=You will position the new charter like plot placement (nudge and confirm). If any building would end up outside the territory, placement will be blocked.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continue
+aetherhaven.ui.chartertown.moveCharterCancel=Cancel
+aetherhaven.ui.chartertown.charterMoved=Charter moved. Your territory is now centered on the new charter.
+aetherhaven.ui.chartertown.modalDissolveTitle=Dissolve town?
+aetherhaven.ui.chartertown.modalMoveTitle=Move charter?
+aetherhaven.ui.chartertown.modalCancel=Cancel

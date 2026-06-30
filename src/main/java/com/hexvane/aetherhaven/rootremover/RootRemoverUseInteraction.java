@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.rootremover;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -38,6 +40,9 @@ public final class RootRemoverUseInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.REPUTATION_UNLOCKS)) {
+            return;
+        }
         if (type != InteractionType.Secondary) {
             context.getState().state = InteractionState.Failed;
             return;

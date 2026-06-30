@@ -79,7 +79,7 @@ public final class GaiaDraughtInventoryChangeSystem extends EntityEventSystem<En
     private static void notifyCannotStore(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
         PlayerRef pref = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pref != null) {
-            pref.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.gaiadraught.cannotStore"));
+            pref.sendMessage(Message.translation("aetherhaven_reputation_unlocks.aetherhaven.gaiadraught.cannotStore"));
         }
     }
 }

@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=Impossible de charger les do
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=Essence vitale insuffisante (besoin de {need}).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Impossible de retirer l'essence vitale de l'inventaire.
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=Statue de Gaïa
+aetherhaven.ui.gaiaStatue.hint=Chaque renaissance consomme {cost} d'essence vitale.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=En ville
+aetherhaven.ui.gaiaStatue.status.missing=Loin
+aetherhaven.ui.gaiaStatue.reviveSuccess=Un fil de vie revient sur la place.
+aetherhaven.ui.gaiaStatue.reviveFailed=La bénédiction n'a pas fonctionné. L'essence a été restituée.
+aetherhaven.ui.gaiaStatue.footer=Seul le propriétaire du village peut utiliser cette bénédiction. Les villageois disparus peuvent être rappelés près de la statue.
+aetherhaven.ui.gaiaStatue.revive=Relancer

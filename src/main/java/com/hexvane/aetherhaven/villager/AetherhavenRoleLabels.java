@@ -68,7 +68,7 @@ public final class AetherhavenRoleLabels {
     }
 
     /**
-     * Translation key (bundle-prefixed, e.g. {@code aetherhaven_jewelry_geode.aetherhaven.profession.kind.miner})
+     * Translation key (bundle-prefixed, e.g. {@code aetherhaven_town.aetherhaven.profession.kind.miner})
      * for a villager’s job label, e.g. Blacksmith, Elder. Prefer
      * {@code bindingKind} for residents so inn visitors are not conflated with a permanent job plot.
      */
@@ -80,16 +80,16 @@ public final class AetherhavenRoleLabels {
             return guardTypeTranslationKey(r);
         }
         if (TownVillagerBinding.KIND_TOWNSFOLK.equals(k)) {
-            return "aetherhaven_jewelry_geode.aetherhaven.profession.kind.townsfolk";
+            return "aetherhaven_town.aetherhaven.profession.kind.townsfolk";
         }
         if (!k.isEmpty() && !TownVillagerBinding.isVisitorKind(k)) {
-            return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + k;
+            return "aetherhaven_town.aetherhaven.profession.kind." + k;
         }
         String slug = professionKindSlugFromRoleId(r);
         if (TownVillagerBinding.KIND_GUARD.equals(slug)) {
             return guardTypeTranslationKey(r);
         }
-        return "aetherhaven_jewelry_geode.aetherhaven.profession.kind." + slug;
+        return "aetherhaven_town.aetherhaven.profession.kind." + slug;
     }
 
     /** Guard class label (Knight / Archer / Mage) for patrol, tithe, and resident UI. */

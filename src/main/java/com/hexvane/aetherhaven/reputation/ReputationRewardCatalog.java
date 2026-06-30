@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.reputation;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plugin.AetherhavenSubpluginContentCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -181,7 +182,12 @@ public final class ReputationRewardCatalog {
 
     @Nullable
     public static ReputationRewardDefinition byId(@Nonnull String rewardId) {
-        return BY_ID.get(rewardId.trim());
+        ReputationRewardDefinition def = BY_ID.get(rewardId.trim());
+        return def != null && isRewardAvailable(def) ? def : null;
+    }
+
+    private static boolean isRewardAvailable(@Nonnull ReputationRewardDefinition def) {
+        return AetherhavenSubpluginContentCatalog.isRewardItemAvailable(def.itemId(), def.learnRecipeItemId());
     }
 
     @Nonnull
@@ -189,7 +195,7 @@ public final class ReputationRewardCatalog {
         String r = npcRoleName.trim();
         List<ReputationRewardDefinition> out = new ArrayList<>();
         for (ReputationRewardDefinition d : activeDefinitions) {
-            if (r.equals(d.roleId())) {
+            if (r.equals(d.roleId()) && isRewardAvailable(d)) {
                 out.add(d);
             }
         }

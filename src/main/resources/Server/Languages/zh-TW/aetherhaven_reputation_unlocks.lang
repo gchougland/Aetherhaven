@@ -1,0 +1,30 @@
+# Reputation-gated reward items (ReputationUnlocks pack)
+
+items.Aetherhaven_Firewood.name=柴
+items.Aetherhaven_Firewood.description=乾柴捆。在爐子和篝火中燃燒時間大約是木炭的兩倍。
+items.Aetherhaven_Root_Remover.name=根部清除劑
+items.Aetherhaven_Root_Remover.description=右鍵點擊樹幹，即可拔出埋在地下的樹根。木頭會落在你的腳邊，樹坑會被泥土填滿。
+items.Aetherhaven_Growth_Serum.name=生長血清
+items.Aetherhaven_Growth_Serum.description=用於幼年動物，可幫助其快速成長。使用一瓶。
+items.Aetherhaven_Hunting_Knife.name=獵刀
+items.Aetherhaven_Hunting_Knife.description=一把鋒利的獵刀。用它來獵殺動物，有時還能獲得額外的生肉、皮毛和羽毛。
+items.Aetherhaven_Geode_Anvil.name=晶洞砧
+items.Aetherhaven_Geode_Anvil.description=無需支付鐵匠費即可開啟晶洞。放置並使用；<color is="#ffa726">你必須知道原理圖</color>才能在你的城鎮規劃桌上製作它。
+items.Aetherhaven_Sprinkler_Iron.name=鐵質灑水器
+items.Aetherhaven_Sprinkler_Iron.description=水流會翻耕下方一格範圍內的土壤，覆蓋範圍為 3×3 的區域。遊戲內每天早晨運行一次。覆蓋範圍最小。
+items.Aetherhaven_Sprinkler_Thorium.name=釷噴淋器
+items.Aetherhaven_Sprinkler_Thorium.description=水流翻耕下方一格範圍內的5×5區域土壤。每天遊戲時間早晨一次。比鐵塊大。
+items.Aetherhaven_Sprinkler_Cobalt.name=鈷噴淋器
+items.Aetherhaven_Sprinkler_Cobalt.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 7×7 格。每天遊戲時間早晨一次。覆蓋範圍廣。
+items.Aetherhaven_Sprinkler_Adamantite.name=鑽石噴灑器
+items.Aetherhaven_Sprinkler_Adamantite.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 9×9 格。每天遊戲時間早晨一次。覆蓋範圍最廣。
+items.Aetherhaven_Purification_Powder.name=淨化粉
+items.Aetherhaven_Purification_Powder.description=持有此技能時，附近的潛在刷新點會閃爍著蓋亞之力的微粒。對高亮顯示的刷新點使用技能可將其驅逐，並消耗一點充能。
+items.Aetherhaven_Gaias_Draught.name=蓋亞的飲料
+items.Aetherhaven_Gaias_Draught.description=一瓶神聖的生命之水，它將永遠伴隨你。像其他藥劑一樣，你可以隨身攜帶並飲用。剩餘的飲用次數與彈藥量和瓶子耐久度條相對應。在祭壇接受祝福可以擴大瓶子的容量，並增強其治療效果。
+aetherhaven.gaiadraught.cannotStore=蓋亞藥劑會一直留在你身邊，無法儲存。
+items.Aetherhaven_Shard_Of_Gaia.name=蓋亞碎片
+items.Aetherhaven_Shard_Of_Gaia.description=女祭司的信物。將其與什一稅一起獻在蓋亞祭壇上，可以增加你的酒量。
+items.Aetherhaven_Verdant_Catalyst.name=翠綠催化劑
+items.Aetherhaven_Verdant_Catalyst.description=女祭司的信物。將其與什一稅一同獻於蓋亞祭壇，可增強你的藥劑的療癒效果。
+interactionHints.purifySpawn=按下 [{key}] 淨化生成物

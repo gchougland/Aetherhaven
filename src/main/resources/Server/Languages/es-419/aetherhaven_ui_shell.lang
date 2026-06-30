@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=No se pudieron cargar los da
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=No hay suficiente esencia vital (se necesita {need}).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=No se pudo eliminar la esencia vital del inventario.
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=Estatua de Gaia
+aetherhaven.ui.gaiaStatue.hint=Cada resurrección consume esencia vital {cost}.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=En la ciudad
+aetherhaven.ui.gaiaStatue.status.missing=Lejos
+aetherhaven.ui.gaiaStatue.reviveSuccess=Un hilo de vida regresa a la plaza.
+aetherhaven.ui.gaiaStatue.reviveFailed=La bendición no surtió efecto. La esencia fue devuelta.
+aetherhaven.ui.gaiaStatue.footer=Solo el dueño del pueblo puede usar esta bendición. Los aldeanos desaparecidos pueden ser llamados de vuelta cerca de la estatua.
+aetherhaven.ui.gaiaStatue.revive=Reanimar

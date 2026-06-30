@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import org.joml.Vector3i;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -31,6 +33,9 @@ public final class PathToolSelectInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PATH_DESIGNER)) {
+            return;
+        }
         if (!PathToolInteractions.isPathToolItem(itemInHand)) {
             context.getState().state = InteractionState.Failed;
             return;

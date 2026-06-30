@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRecord;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
+import com.hexvane.aetherhaven.plugin.JournalTabVisibility;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.questboard.QuestBoardCatalog;
@@ -762,14 +763,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull PlayerTownJournalState journalPrefs
     ) {
         commandBuilder.set("#SettingsPersonalStatus.TextSpans", journalSettingsPersonalStatus != null ? journalSettingsPersonalStatus : Message.raw(""));
-        commandBuilder.set(
-            "#SettingsRtsPickFovField.Value",
-            String.format(Locale.US, "%.1f", journalPrefs.effectiveRtsPickVerticalFovDeg())
-        );
-        commandBuilder.set(
-            "#SettingsRtsPickAspectField.Value",
-            String.format(Locale.US, "%.3f", journalPrefs.effectiveRtsPickAspectRatio())
-        );
+        boolean rtsSettings = JournalTabVisibility.rtsTuningTab();
+        commandBuilder.set("#SettingsRtsPickFovField.Visible", rtsSettings);
+        commandBuilder.set("#SettingsRtsPickAspectField.Visible", rtsSettings);
+        if (rtsSettings) {
+            commandBuilder.set(
+                "#SettingsRtsPickFovField.Value",
+                String.format(Locale.US, "%.1f", journalPrefs.effectiveRtsPickVerticalFovDeg())
+            );
+            commandBuilder.set(
+                "#SettingsRtsPickAspectField.Value",
+                String.format(Locale.US, "%.3f", journalPrefs.effectiveRtsPickAspectRatio())
+            );
+        }
         commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
@@ -825,12 +831,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             Message.translation("aetherhaven_difficulty.aetherhaven.difficulty.journalCurrent")
                 .param("preset", Message.translation(presetLangKey(worldDifficulty.getPreset())))
         );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
-            "#SettingsOpenDifficultyButton",
-            new EventData().append("Action", "OpenDifficulty"),
-            false
-        );
+        boolean difficultyUi = JournalTabVisibility.difficultyTab();
+        commandBuilder.set("#SettingsOpenDifficultyButton.Visible", difficultyUi);
+        if (difficultyUi) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#SettingsOpenDifficultyButton",
+                new EventData().append("Action", "OpenDifficulty"),
+                false
+            );
+        }
         AetherhavenPluginConfig cfg =
             journalSettingsFormSnapshot != null ? journalSettingsFormSnapshot : plugin.getConfig().get();
         commandBuilder.set("#SettingsSaveButton.Disabled", false);
@@ -978,7 +988,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             String row = TOWN_VILLAGER_ROWS + "[" + i + "]";
             commandBuilder.set(row + " #Portrait.AssetPath", r.portraitPath());
             commandBuilder.set(row + " #VillagerName.TextSpans", Message.raw(r.label()));
-            boolean befriendable = VillagerBefriendableResolver.isBefriendableForJournal(store, r.entityUuid(), r.roleId(), plugin);
+            boolean befriendable =
+                JournalTabVisibility.reputationTab()
+                    && VillagerBefriendableResolver.isBefriendableForJournal(store, r.entityUuid(), r.roleId(), plugin);
             String heartsPath = row + " #ReputationHeartSlots";
             commandBuilder.set(heartsPath + ".Visible", befriendable);
             if (befriendable) {
@@ -1008,6 +1020,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         plots.sort((a, b) -> compareJournalPlots(plotCatalog, a, b));
         boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
+        java.util.Set<String> plotIconsEnsured = new java.util.HashSet<>();
         for (int i = 0; i < plots.size(); i++) {
             PlotInstance p = plots.get(i);
             commandBuilder.append(TOWN_PLOT_ROWS, "Aetherhaven/TownJournalPlotRow.ui");
@@ -1018,7 +1031,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
             PlotInstanceState pst = p.getState();
             commandBuilder.set(row + " #PlotStatus.TextSpans", Message.translation(plotStatusLangKey(pst)));
-            ensurePlotTokenIconRegistered(plugin, p.getConstructionId());
+            String constructionId = p.getConstructionId();
+            if (constructionId != null && plotIconsEnsured.add(constructionId.trim())) {
+                ensurePlotTokenIconRegistered(plugin, constructionId);
+            }
             ItemGridSlot tokenSlot = AetherhavenUiItemGrids.plotTokenSlotForConstruction(p.getConstructionId(), plotCatalog);
             if (tokenSlot != null) {
                 commandBuilder.set(row + " #PlotIconHost.Visible", true);
@@ -1965,6 +1981,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             return;
         }
         if (action.equalsIgnoreCase("OpenDifficulty")) {
+            if (!JournalTabVisibility.difficultyTab()) {
+                return;
+            }
             if (!JournalSettingsAccess.canOpen(store, ref)) {
                 return;
             }

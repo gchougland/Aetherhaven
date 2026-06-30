@@ -87,6 +87,9 @@ public final class VillagerAutonomyState implements Component<EntityStore>, Path
     private static volatile ComponentType<EntityStore, VillagerAutonomyState> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(
             VillagerAutonomyState.class,
             "AetherhavenVillagerAutonomyState",

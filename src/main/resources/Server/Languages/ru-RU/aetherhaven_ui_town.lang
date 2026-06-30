@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=Сначала разблоки�
 aetherhaven.ui.productionUpgrades.notify.maxed=Это обновление уже полностью оплачено.
 aetherhaven.ui.productionUpgrades.notify.failed=Не удалось применить это обновление.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Устав города
+aetherhaven.ui.chartertown.townNameLabel=Название города для отображения
+aetherhaven.ui.chartertown.namePlaceholder=Введите уникальное название для своего города.
+aetherhaven.ui.chartertown.ownerOnlyHint=Изменить отображаемое название в уставе может только владелец города.
+aetherhaven.ui.chartertown.saveTownName=Сохранить имя
+aetherhaven.ui.chartertown.dissolve=Растворить город
+aetherhaven.ui.chartertown.dissolveHint=Удаляет город, все здания, жителей и данный устав навсегда. Отменить невозможно.
+aetherhaven.ui.chartertown.dissolveConfirmText=Вы уверены? Это навсегда уничтожит город, все здания и жителей, а также аннулирует этот устав. Этого нельзя будет отменить.
+aetherhaven.ui.chartertown.dissolveConfirm=Да, город распустить
+aetherhaven.ui.chartertown.dissolveCancel=Отмена
+aetherhaven.ui.chartertown.dissolved=Город расформирован: здания снесены, жители выселены, устав упразднен.
+aetherhaven.ui.chartertown.moveCharter=Перевезти чартер
+aetherhaven.ui.chartertown.moveCharterTooltip=Перевезти чартер
+aetherhaven.ui.chartertown.moveCharterHint=Перемещает вашу территорию в новый квартал, созданный на основе устава города. Вы можете размещать здания только там, где все остальные по-прежнему помещаются в пределах границ города.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Вы будете размещать новый устав аналогично размещению участков (подталкивать и подтверждать). Если какое-либо здание окажется за пределами территории, размещение будет заблокировано.
+aetherhaven.ui.chartertown.moveCharterConfirm=Продолжать
+aetherhaven.ui.chartertown.moveCharterCancel=Отмена
+aetherhaven.ui.chartertown.charterMoved=Устав перенесен. Ваша территория теперь находится в пределах нового устава.
+aetherhaven.ui.chartertown.modalDissolveTitle=Город распадётся?
+aetherhaven.ui.chartertown.modalMoveTitle=Перенести чартер?
+aetherhaven.ui.chartertown.modalCancel=Отмена

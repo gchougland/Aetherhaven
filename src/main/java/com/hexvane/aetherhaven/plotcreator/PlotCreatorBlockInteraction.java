@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -33,6 +35,9 @@ public final class PlotCreatorBlockInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PLOT_CREATOR)) {
+            return;
+        }
         if (!PlotCreatorInteractions.isPlotCreatorStaff(itemInHand)) {
             context.getState().state = InteractionState.Failed;
             return;

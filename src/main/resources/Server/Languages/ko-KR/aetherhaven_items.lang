@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=장작
-items.Aetherhaven_Firewood.description=말린 통나무 묶음. 화로나 캠프파이어에서 숯보다 약 두 배 더 오래 탑니다.
 
-items.Aetherhaven_Root_Remover.name=뿌리 제거제
-items.Aetherhaven_Root_Remover.description=나무줄기를 마우스 오른쪽 버튼으로 클릭하여 땅속에 묻힌 뿌리를 뽑아내세요. 뽑힌 나무는 발밑에 떨어지고 구멍은 흙으로 채워집니다.
 
-items.Aetherhaven_Growth_Serum.name=성장 혈청
-items.Aetherhaven_Growth_Serum.description=어린 동물의 성장을 촉진하기 위해 사용하십시오. 1병이 필요합니다.
 
-items.Aetherhaven_Hunting_Knife.name=사냥용 칼
-items.Aetherhaven_Hunting_Knife.description=사냥꾼을 위한 날카로운 칼. 이 칼로 동물을 사냥하면 때때로 생고기, 가죽, 깃털 등을 얻을 수 있습니다.
 
 items.Aetherhaven_Lute.name=류트
 items.Aetherhaven_Lute.description=따뜻한 현이 달린 나무 류트. 엘리아스 손우드는 길드 회관에서 연주할 때 이 악기를 가까이 두고 연주한다.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=마을 화폐는 금고에 보관되어 
 items.Aetherhaven_Geode.name=지오드
 items.Aetherhaven_Geode.description=수정, 보석 또는 광석을 함유할 수 있는 속이 빈 돌. 대장장이에게 의뢰하여 깨뜨려 보세요.
 
-items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
-items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 광석을 열 수 있습니다. 설치 후 사용하세요. 제작하려면 설계도를 알아야 합니다.
 
 items.Aetherhaven_Crystallized_Person.name=결정화된 사람
 

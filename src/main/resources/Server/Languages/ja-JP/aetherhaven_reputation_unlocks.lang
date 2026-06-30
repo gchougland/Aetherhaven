@@ -1,0 +1,30 @@
+# Reputation-gated reward items (ReputationUnlocks pack)
+
+items.Aetherhaven_Firewood.name=薪
+items.Aetherhaven_Firewood.description=乾燥させた薪の束。炉やキャンプファイヤーでは、木炭の約2倍の時間燃焼します。
+items.Aetherhaven_Root_Remover.name=根っこ除去剤
+items.Aetherhaven_Root_Remover.description=木の幹を右クリックすると、地中に埋まっている根を引き抜くことができます。木片は足元に落ち、穴は土で埋まります。
+items.Aetherhaven_Growth_Serum.name=成長血清
+items.Aetherhaven_Growth_Serum.description=幼齢動物に使用すると、成長促進に効果があります。1バイアル分です。
+items.Aetherhaven_Hunting_Knife.name=ハンティングナイフ
+items.Aetherhaven_Hunting_Knife.description=狩猟用の鋭利なナイフ。これで動物を仕留めれば、時折、追加の生肉、皮、羽毛が手に入る。
+items.Aetherhaven_Geode_Anvil.name=ジオードアンビル
+items.Aetherhaven_Geode_Anvil.description=鍛冶屋の手数料なしで晶洞を開けます。設置して使用してください。<color is="#ffa726">設計図を知っている必要があります</color>。都市計画デスクで作成してください。
+items.Aetherhaven_Sprinkler_Iron.name=鉄製スプリンクラー
+items.Aetherhaven_Sprinkler_Iron.description=1ブロック下の<color is="#4ade80">3×3</color>の範囲に水を撒いて耕します。ゲーム内の毎朝1回実行されます。最小範囲。
+items.Aetherhaven_Sprinkler_Thorium.name=トリウム散水器
+items.Aetherhaven_Sprinkler_Thorium.description=水は、<color is="#4ade80">5×5</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。鉄よりも大きい。
+items.Aetherhaven_Sprinkler_Cobalt.name=コバルト製スプリンクラー
+items.Aetherhaven_Sprinkler_Cobalt.description=水は、7×7のエリアの1ブロック下の土壌を耕します。ゲーム内の毎朝1回。広範囲をカバーします。
+items.Aetherhaven_Sprinkler_Adamantite.name=アダマンタイト製スプリンクラー
+items.Aetherhaven_Sprinkler_Adamantite.description=水は、<color is="#4ade80">9×9</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。最も広い範囲をカバーします。
+items.Aetherhaven_Purification_Powder.name=精製粉末
+items.Aetherhaven_Purification_Powder.description=所持中は、近くの潜在的な出現地点がガイアに触れた微塵で輝きます。ハイライトされた出現地点に使用すると、それを消滅させ、チャージを1つ消費します。
+items.Aetherhaven_Gaias_Draught.name=ガイアの飲み物
+items.Aetherhaven_Gaias_Draught.description=あなただけを導く、祝福された生命の水のフラスコ。他のポーションと同様に、手に持って飲むことで二次的な効果を発揮します。残量は弾薬表示とフラスコの耐久度ゲージに反映されます。祭壇での祝福は、フラスコの容量を拡大し、治癒力を高めます。
+aetherhaven.gaiadraught.cannotStore=ガイアの薬はあなたの手元に残ります。保管庫に入れることはできません。
+items.Aetherhaven_Shard_Of_Gaia.name=ガイアの破片
+items.Aetherhaven_Shard_Of_Gaia.description=女司祭の証。ガイアの祭壇に十分の一税と共に捧げると、酒を飲める回数が増えます。
+items.Aetherhaven_Verdant_Catalyst.name=緑豊かな触媒
+items.Aetherhaven_Verdant_Catalyst.description=女司祭の証。ガイアの祭壇に十分の一税と共に捧げることで、あなたの癒しの効果がさらに強まります。
+interactionHints.purifySpawn=[{key}]を押してスポーンを浄化する

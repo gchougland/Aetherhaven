@@ -42,68 +42,11 @@ items.Aetherhaven_Appraisal_Bench.name=banc d'évaluation
 items.Aetherhaven_Appraisal_Bench.description=Identifie les bijoux que vous possédez déjà. Utilisation gratuite une fois installée.
 items.Aetherhaven_Jewelry_Crafting_Bench.name=établi de bijouterie
 items.Aetherhaven_Jewelry_Crafting_Bench.description=Une enclume en fer pour la finition des pièces. Fabriquez vos bijoux au bureau d'urbanisme une fois le plan en main. Infusez-les d'essence vitale à l'aide de lingots précieux et d'une gemme taillée pour forger des bijoux.
-items.Aetherhaven_Purification_Powder.name=Poudre de purification
-items.Aetherhaven_Purification_Powder.description=Maintenu en main, les points d'apparition latents à proximité scintillent de particules imprégnées par Gaïa. Utilisez-le sur un point d'apparition mis en évidence pour le bannir et dépenser une charge.
-items.Aetherhaven_Gaias_Draught.name=La potion de Gaïa
-items.Aetherhaven_Gaias_Draught.description=Une fiole bénie d'eau vive qui vous accompagne partout. Tenez-la et buvez-la, comme n'importe quelle autre potion. Le nombre de gorgées restantes correspond à la jauge de munitions et à la durabilité de la fiole. Les bénédictions à l'autel augmentent sa capacité et renforcent ses pouvoirs de guérison.
-aetherhaven.gaiadraught.cannotStore=La potion de Gaïa reste avec vous. Elle ne peut pas être stockée.
-items.Aetherhaven_Shard_Of_Gaia.name=Fragment de Gaïa
-items.Aetherhaven_Shard_Of_Gaia.description=Un gage de prêtresse. Offrez-le avec la dîme à l'autel de Gaïa pour augmenter la capacité de votre potion.
-items.Aetherhaven_Verdant_Catalyst.name=Catalyseur verdoyant
-items.Aetherhaven_Verdant_Catalyst.description=Un gage de prêtresse. Offrez-le avec la dîme à l'autel de Gaïa pour amplifier la puissance de guérison de votre potion.
-interactionHints.purifySpawn=Appuyez sur [{key}] pour purifier le frayère
 
 # === UI: Statue of Gaia (revival / resident list) ===
-aetherhaven.ui.gaiaStatue.title=Statue de Gaïa
-aetherhaven.ui.gaiaStatue.hint=Chaque renaissance consomme {cost} d'essence vitale.
-aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
-aetherhaven.ui.gaiaStatue.status.present=En ville
-aetherhaven.ui.gaiaStatue.status.missing=Loin
-aetherhaven.ui.gaiaStatue.reviveSuccess=Un fil de vie revient sur la place.
-aetherhaven.ui.gaiaStatue.reviveFailed=La bénédiction n'a pas fonctionné. L'essence a été restituée.
-aetherhaven.ui.gaiaStatue.footer=Seul le propriétaire du village peut utiliser cette bénédiction. Les villageois disparus peuvent être rappelés près de la statue.
-aetherhaven.ui.gaiaStatue.revive=Relancer
 
-aetherhaven.profession.kind.elder=Aîné
-aetherhaven.profession.kind.innkeeper=Aubergiste
-aetherhaven.profession.kind.merchant=Marchand
-aetherhaven.profession.kind.farmer=Fermier
-aetherhaven.profession.kind.blacksmith=Forgeron
-aetherhaven.profession.kind.priestess=Prêtresse
-aetherhaven.profession.kind.miner=Mineur
-aetherhaven.profession.kind.logger=Bûcheron
-aetherhaven.profession.kind.rancher=Propriétaire de ranch
-aetherhaven.profession.kind.guild_master=Maître de guilde
-aetherhaven.profession.kind.crystal_keeper=Gardien de cristal
-aetherhaven.profession.kind.pyrotechnic=Pyrotechnique
-aetherhaven.profession.kind.florist=Fleuriste
-aetherhaven.profession.kind.builder=Constructeur
-aetherhaven.profession.kind.bard=Barde
-aetherhaven.profession.kind.townsfolk=Citadins
-aetherhaven.profession.kind.unknown=Résident
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
-aetherhaven.ui.chartertown.title=Charte municipale
-aetherhaven.ui.chartertown.townNameLabel=Nom d'affichage de la ville
-aetherhaven.ui.chartertown.namePlaceholder=Saisissez un nom unique pour votre ville
-aetherhaven.ui.chartertown.ownerOnlyHint=Seul le propriétaire de la commune peut modifier le nom affiché dans la charte.
-aetherhaven.ui.chartertown.saveTownName=Nom de l'enregistrement
-aetherhaven.ui.chartertown.dissolve=Dissoudre la ville
-aetherhaven.ui.chartertown.dissolveHint=Supprime définitivement la ville, tous les bâtiments, les villageois et cette charte. Cette action est irréversible.
-aetherhaven.ui.chartertown.dissolveConfirmText=Êtes-vous sûr ? Cette action supprime définitivement la ville, tous les bâtiments et villageois, et détruit cette charte. Elle est irréversible.
-aetherhaven.ui.chartertown.dissolveConfirm=Oui, dissoudre la ville
-aetherhaven.ui.chartertown.dissolveCancel=Annuler
-aetherhaven.ui.chartertown.dissolved=Ville dissoute : bâtiments rasés, villageois expulsés, charte détruite.
-aetherhaven.ui.chartertown.moveCharter=Déplacer la charte
-aetherhaven.ui.chartertown.moveCharterTooltip=Déplacer la charte
-aetherhaven.ui.chartertown.moveCharterHint=Recentrez votre territoire sur un nouveau bloc de charte. Vous ne pouvez placer ce bloc que si tous les bâtiments tiennent encore à l'intérieur des limites de la ville.
-aetherhaven.ui.chartertown.moveCharterConfirmText=Vous positionnerez la nouvelle charte comme un terrain (déplacez-la et confirmez). Si un bâtiment se trouve en dehors du territoire, son placement sera bloqué.
-aetherhaven.ui.chartertown.moveCharterConfirm=Continuer
-aetherhaven.ui.chartertown.moveCharterCancel=Annuler
-aetherhaven.ui.chartertown.charterMoved=La charte a été déplacée. Votre territoire est désormais centré sur la nouvelle charte.
-aetherhaven.ui.chartertown.modalDissolveTitle=Dissoudre la ville ?
-aetherhaven.ui.chartertown.modalMoveTitle=Déplacer la charte ?
-aetherhaven.ui.chartertown.modalCancel=Annuler
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=trésor municipal

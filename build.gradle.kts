@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.hexvane"
-version = "2.0.3"
+version = "2.1.0"
 val javaVersion = 25
 
 repositories {
@@ -238,6 +238,23 @@ tasks.register<Test>("wallPlacementTests") {
     }
 }
 
+/** Optional subplugin assets embedded in the JAR under subplugin-packs/ (not root Server/). */
+val subpluginAssetPackNames = listOf(
+    "ReputationUnlocks",
+    "Jewelry",
+    "FloatingGifts",
+    "PathDesigner",
+    "Bard",
+    "AdminTools",
+    "Rts",
+    "PatrolRoutes",
+    "PlotCreator",
+    "Quests",
+    "Economy",
+    "Commerce",
+    "Guild"
+)
+
 tasks.named<ProcessResources>("processResources") {
     var replaceProperties = mapOf(
         "plugin_group" to findProperty("plugin_group"),
@@ -258,6 +275,16 @@ tasks.named<ProcessResources>("processResources") {
     }
 
     inputs.properties(replaceProperties)
+
+    subpluginAssetPackNames.forEach { packName ->
+        from(layout.projectDirectory.dir("subplugin-assets/$packName")) {
+            into("subplugin-packs/$packName")
+            exclude("Server/Languages/**")
+            filesMatching("manifest.json") {
+                expand(replaceProperties)
+            }
+        }
+    }
 }
 
 tasks.withType<Jar> {
@@ -305,6 +332,7 @@ val syncAssets = tasks.register<Copy>("syncAssets") {
 
     // IMPORTANT: Protect the manifest template from being overwritten
     exclude("manifest.json")
+    exclude("subplugin-packs/**")
 
     // If a file exists, overwrite it with the new version from the game
     duplicatesStrategy = DuplicatesStrategy.INCLUDE

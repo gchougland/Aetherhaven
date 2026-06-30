@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=Débloquez d'abord les améliora
 aetherhaven.ui.productionUpgrades.notify.maxed=Cette mise à niveau est déjà entièrement achetée.
 aetherhaven.ui.productionUpgrades.notify.failed=Impossible d'appliquer cette mise à niveau.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Charte municipale
+aetherhaven.ui.chartertown.townNameLabel=Nom d'affichage de la ville
+aetherhaven.ui.chartertown.namePlaceholder=Saisissez un nom unique pour votre ville
+aetherhaven.ui.chartertown.ownerOnlyHint=Seul le propriétaire de la commune peut modifier le nom affiché dans la charte.
+aetherhaven.ui.chartertown.saveTownName=Nom de l'enregistrement
+aetherhaven.ui.chartertown.dissolve=Dissoudre la ville
+aetherhaven.ui.chartertown.dissolveHint=Supprime définitivement la ville, tous les bâtiments, les villageois et cette charte. Cette action est irréversible.
+aetherhaven.ui.chartertown.dissolveConfirmText=Êtes-vous sûr ? Cette action supprime définitivement la ville, tous les bâtiments et villageois, et détruit cette charte. Elle est irréversible.
+aetherhaven.ui.chartertown.dissolveConfirm=Oui, dissoudre la ville
+aetherhaven.ui.chartertown.dissolveCancel=Annuler
+aetherhaven.ui.chartertown.dissolved=Ville dissoute : bâtiments rasés, villageois expulsés, charte détruite.
+aetherhaven.ui.chartertown.moveCharter=Déplacer la charte
+aetherhaven.ui.chartertown.moveCharterTooltip=Déplacer la charte
+aetherhaven.ui.chartertown.moveCharterHint=Recentrez votre territoire sur un nouveau bloc de charte. Vous ne pouvez placer ce bloc que si tous les bâtiments tiennent encore à l'intérieur des limites de la ville.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Vous positionnerez la nouvelle charte comme un terrain (déplacez-la et confirmez). Si un bâtiment se trouve en dehors du territoire, son placement sera bloqué.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continuer
+aetherhaven.ui.chartertown.moveCharterCancel=Annuler
+aetherhaven.ui.chartertown.charterMoved=La charte a été déplacée. Votre territoire est désormais centré sur la nouvelle charte.
+aetherhaven.ui.chartertown.modalDissolveTitle=Dissoudre la ville ?
+aetherhaven.ui.chartertown.modalMoveTitle=Déplacer la charte ?
+aetherhaven.ui.chartertown.modalCancel=Annuler

@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=Você saiu de "{town}".
 aetherhaven.town.memberRole.BUILD=CONSTRUIR
 aetherhaven.town.memberRole.QUEST=BUSCA
 aetherhaven.town.memberRole.BOTH=AMBOS
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=Ancião
+aetherhaven.profession.kind.innkeeper=Estalajadeiro
+aetherhaven.profession.kind.merchant=Comerciante
+aetherhaven.profession.kind.farmer=Agricultor
+aetherhaven.profession.kind.blacksmith=Ferreiro
+aetherhaven.profession.kind.priestess=Sacerdotisa
+aetherhaven.profession.kind.miner=Mineiro
+aetherhaven.profession.kind.logger=Logger
+aetherhaven.profession.kind.rancher=Rancheiro
+aetherhaven.profession.kind.guild_master=Mestre da Guilda
+aetherhaven.profession.kind.crystal_keeper=Guardião de Cristal
+aetherhaven.profession.kind.pyrotechnic=Pirotécnica
+aetherhaven.profession.kind.florist=Florista
+aetherhaven.profession.kind.builder=Construtor
+aetherhaven.profession.kind.bard=Bardo
+aetherhaven.profession.kind.townsfolk=moradores da cidade
+aetherhaven.profession.kind.unknown=Residente

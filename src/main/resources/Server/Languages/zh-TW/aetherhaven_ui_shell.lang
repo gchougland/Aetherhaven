@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=無法載入玩家資料。
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=生命精華不足（需{need}）。
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=無法從物品欄中移除生命精華。
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=蓋亞雕像
+aetherhaven.ui.gaiaStatue.hint=每次復甦都會消耗{cost}生命精華。
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=在鎮上
+aetherhaven.ui.gaiaStatue.status.missing=離開
+aetherhaven.ui.gaiaStatue.reviveSuccess=廣場上又重新燃起了生機。
+aetherhaven.ui.gaiaStatue.reviveFailed=祝福並未生效。精華歸還。
+aetherhaven.ui.gaiaStatue.footer=只有城鎮的主人才能使用此祝福。失蹤的村民可以在雕像附近被召喚回來。
+aetherhaven.ui.gaiaStatue.revive=復活

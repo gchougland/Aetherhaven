@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=请选择以上任务。
 items.Aetherhaven_Management_Block.name=城镇档案架
 items.Aetherhaven_Management_Block.description=已完工建筑的档案架。打开其地块的施工状态。
 
-items.Aetherhaven_Sprinkler_Iron.name=铁质洒水器
-items.Aetherhaven_Sprinkler_Iron.description=水流会翻耕下方一格范围内的土壤，覆盖范围为 3×3 的区域。游戏内每天早晨运行一次。覆盖范围最小。
-items.Aetherhaven_Sprinkler_Thorium.name=钍喷淋器
-items.Aetherhaven_Sprinkler_Thorium.description=水流翻耕下方一格范围内的5×5区域土壤。每天游戏时间早晨一次。比铁块大。
-items.Aetherhaven_Sprinkler_Cobalt.name=钴喷淋器
-items.Aetherhaven_Sprinkler_Cobalt.description=水流翻耕下方一格范围内的土壤，覆盖范围为 7×7 格。每天游戏时间早晨一次。覆盖范围广。
-items.Aetherhaven_Sprinkler_Adamantite.name=金刚石喷洒器
-items.Aetherhaven_Sprinkler_Adamantite.description=水流翻耕下方一格范围内的土壤，覆盖范围为 9×9 格。每天游戏时间早晨一次。覆盖范围最广。
 
 items.Aetherhaven_Wood_Scaffold.name=木制脚手架
 items.Aetherhaven_Wood_Scaffold.description=像爬梯子一样攀爬。右键点击放置物品，就像点击普通方块一样。按住使用键 (F) 并瞄准脚手架，可以从侧面延伸塔身，或从顶部水平分支。破坏底部未支撑的部分会使整个塔身坍塌。

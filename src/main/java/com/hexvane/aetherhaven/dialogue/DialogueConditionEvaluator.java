@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.bard.BardPerformanceService;
+import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
@@ -170,6 +172,7 @@ public final class DialogueConditionEvaluator {
             case "npc_schedule_at_work" -> npcScheduleAtWork(store, npcRef);
             case "bard_can_offer_music" -> bardCanOfferMusic(store, npcRef);
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);
+            case "subplugin_enabled" -> subpluginEnabled(o);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
                 yield false;
@@ -189,6 +192,17 @@ public final class DialogueConditionEvaluator {
     private static String stringOrEmpty(@Nonnull JsonObject o, @Nonnull String key) {
         String s = getString(o, key);
         return s != null ? s : "";
+    }
+
+    private static boolean subpluginEnabled(@Nonnull JsonObject o) {
+        String name = stringOrEmpty(o, "subplugin");
+        if (name.isEmpty()) {
+            name = stringOrEmpty(o, "name");
+        }
+        if (name.isEmpty()) {
+            return false;
+        }
+        return AetherhavenFeatures.isLoaded(AetherhavenPluginIds.id(name));
     }
 
     private static boolean npcBindingIsVisitor(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {

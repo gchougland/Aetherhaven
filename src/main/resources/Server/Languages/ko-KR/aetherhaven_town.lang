@@ -70,3 +70,22 @@ aetherhaven.town.leave.left="{town}"를 남기고 가셨습니다.
 aetherhaven.town.memberRole.BUILD=짓다
 aetherhaven.town.memberRole.QUEST=탐구
 aetherhaven.town.memberRole.BOTH=둘 다
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=장로
+aetherhaven.profession.kind.innkeeper=여관 주인
+aetherhaven.profession.kind.merchant=상인
+aetherhaven.profession.kind.farmer=농장주
+aetherhaven.profession.kind.blacksmith=대장장이
+aetherhaven.profession.kind.priestess=여사제
+aetherhaven.profession.kind.miner=갱부
+aetherhaven.profession.kind.logger=나무꾼
+aetherhaven.profession.kind.rancher=목장 경영자
+aetherhaven.profession.kind.guild_master=길드 조합원
+aetherhaven.profession.kind.crystal_keeper=크리스탈 키퍼
+aetherhaven.profession.kind.pyrotechnic=불꽃
+aetherhaven.profession.kind.florist=꽃집
+aetherhaven.profession.kind.builder=건축업자
+aetherhaven.profession.kind.bard=음유 시인
+aetherhaven.profession.kind.townsfolk=읍민
+aetherhaven.profession.kind.unknown=거주자

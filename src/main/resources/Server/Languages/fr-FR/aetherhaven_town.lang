@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=Vous avez laissé "{town}".
 aetherhaven.town.memberRole.BUILD=CONSTRUIRE
 aetherhaven.town.memberRole.QUEST=QUÊTE
 aetherhaven.town.memberRole.BOTH=LES DEUX
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=Aîné
+aetherhaven.profession.kind.innkeeper=Aubergiste
+aetherhaven.profession.kind.merchant=Marchand
+aetherhaven.profession.kind.farmer=Fermier
+aetherhaven.profession.kind.blacksmith=Forgeron
+aetherhaven.profession.kind.priestess=Prêtresse
+aetherhaven.profession.kind.miner=Mineur
+aetherhaven.profession.kind.logger=Bûcheron
+aetherhaven.profession.kind.rancher=Propriétaire de ranch
+aetherhaven.profession.kind.guild_master=Maître de guilde
+aetherhaven.profession.kind.crystal_keeper=Gardien de cristal
+aetherhaven.profession.kind.pyrotechnic=Pyrotechnique
+aetherhaven.profession.kind.florist=Fleuriste
+aetherhaven.profession.kind.builder=Constructeur
+aetherhaven.profession.kind.bard=Barde
+aetherhaven.profession.kind.townsfolk=Citadins
+aetherhaven.profession.kind.unknown=Résident

@@ -26,6 +26,9 @@ public final class AetherhavenVillagerHandle implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, AetherhavenVillagerHandle> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(AetherhavenVillagerHandle.class, "AetherhavenVillagerHandle", CODEC);
     }
 

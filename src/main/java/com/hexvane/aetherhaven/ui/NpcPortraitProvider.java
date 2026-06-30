@@ -111,7 +111,7 @@ public final class NpcPortraitProvider {
     }
 
     /**
-     * Lang key {@code aetherhaven_jewelry_geode.aetherhaven.profession.kind.&lt;slug&gt;} for UI lines such as {@code Name (Profession)}.
+     * Lang key {@code aetherhaven_town.aetherhaven.profession.kind.&lt;slug&gt;} for UI lines such as {@code Name (Profession)}.
      */
     @Nonnull
     public static String professionTranslationKey(@Nonnull String roleId, @Nonnull String kind) {

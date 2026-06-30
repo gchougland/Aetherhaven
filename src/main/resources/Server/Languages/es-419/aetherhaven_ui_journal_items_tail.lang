@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Elige una misión arriba.
 items.Aetherhaven_Management_Block.name=Estante de archivos municipales
 items.Aetherhaven_Management_Block.description=Estantería de oficina para un edificio terminado. Abre el estado de construcción para su parcela.
 
-items.Aetherhaven_Sprinkler_Iron.name=Aspersor de hierro
-items.Aetherhaven_Sprinkler_Iron.description=Riega la tierra arada un bloque más abajo en un área de <color is="#4ade80">3×3</color>. Se ejecuta una vez cada mañana en el juego. Cobertura mínima.
-items.Aetherhaven_Sprinkler_Thorium.name=Aspersor de torio
-items.Aetherhaven_Sprinkler_Thorium.description=El agua regaría la tierra un bloque más abajo en un área de <color is="#4ade80">5×5</color>. Una vez cada mañana en el juego. Más grande que el hierro.
-items.Aetherhaven_Sprinkler_Cobalt.name=Aspersor de cobalto
-items.Aetherhaven_Sprinkler_Cobalt.description=Riega la tierra arada un bloque más abajo en un área de <color is="#4ade80">7×7</color>. Una vez cada mañana en el juego. Amplia cobertura.
-items.Aetherhaven_Sprinkler_Adamantite.name=Aspersor de adamantita
-items.Aetherhaven_Sprinkler_Adamantite.description=Riega la tierra arada un bloque más abajo en un área de <color is="#4ade80">9×9</color>. Una vez cada mañana en el juego. Cobertura más amplia.
 
 items.Aetherhaven_Wood_Scaffold.name=andamios de madera
 items.Aetherhaven_Wood_Scaffold.description=Sube como una escalera. Haz clic derecho en los lugares como en un bloque normal. Mantén pulsada la tecla Usar (F) mientras apuntas a los andamios para extender la torre desde un lado o ramificarla horizontalmente desde la cara superior. Romper la pieza inferior sin soporte provoca el colapso de la pila.

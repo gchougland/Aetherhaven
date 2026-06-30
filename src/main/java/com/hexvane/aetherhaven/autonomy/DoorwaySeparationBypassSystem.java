@@ -28,13 +28,6 @@ import org.joml.Vector3d;
  */
 public final class DoorwaySeparationBypassSystem extends SteppableTickingSystem {
     @Nonnull
-    private static final Query<EntityStore> QUERY = Query.and(
-        NPCEntity.getComponentType(),
-        TransformComponent.getComponentType(),
-        Query.or(VillagerAutonomyState.getComponentType(), TouristAutonomyState.getComponentType())
-    );
-
-    @Nonnull
     private static final Set<Dependency<EntityStore>> DEPENDENCIES = Set.of(
         new SystemDependency<>(Order.AFTER, RoleSystems.BehaviourTickSystem.class),
         new SystemDependency<>(Order.BEFORE, AvoidanceSystem.class)
@@ -43,7 +36,11 @@ public final class DoorwaySeparationBypassSystem extends SteppableTickingSystem 
     @Nonnull
     @Override
     public Query<EntityStore> getQuery() {
-        return QUERY;
+        return Query.and(
+            NPCEntity.getComponentType(),
+            TransformComponent.getComponentType(),
+            Query.or(VillagerAutonomyState.getComponentType(), TouristAutonomyState.getComponentType())
+        );
     }
 
     @Nonnull

@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=あなたは「{town}」を残しました。
 aetherhaven.town.memberRole.BUILD=建てる
 aetherhaven.town.memberRole.QUEST=クエスト
 aetherhaven.town.memberRole.BOTH=両方
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=長老
+aetherhaven.profession.kind.innkeeper=宿屋の主人
+aetherhaven.profession.kind.merchant=商人
+aetherhaven.profession.kind.farmer=農家
+aetherhaven.profession.kind.blacksmith=鍛冶屋
+aetherhaven.profession.kind.priestess=女司祭
+aetherhaven.profession.kind.miner=鉱夫
+aetherhaven.profession.kind.logger=ロガー
+aetherhaven.profession.kind.rancher=牧場主
+aetherhaven.profession.kind.guild_master=ギルドマスター
+aetherhaven.profession.kind.crystal_keeper=クリスタルキーパー
+aetherhaven.profession.kind.pyrotechnic=花火
+aetherhaven.profession.kind.florist=花屋
+aetherhaven.profession.kind.builder=ビルダー
+aetherhaven.profession.kind.bard=吟遊詩人
+aetherhaven.profession.kind.townsfolk=町の人々
+aetherhaven.profession.kind.unknown=居住者

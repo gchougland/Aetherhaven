@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -33,6 +35,9 @@ public final class ShopSpotSecondaryInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.COMMERCE)) {
+            return;
+        }
         if (type != InteractionType.Secondary) {
             context.getState().state = InteractionState.Failed;
             return;

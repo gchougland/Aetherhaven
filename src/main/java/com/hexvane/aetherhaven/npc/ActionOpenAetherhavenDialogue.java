@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.npc;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
@@ -40,6 +42,9 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
 
     @Override
     public boolean execute(@Nonnull Ref<EntityStore> ref, @Nonnull Role role, InfoProvider sensorInfo, double dt, @Nonnull Store<EntityStore> store) {
+        if (!AetherhavenFeatures.isLoaded(AetherhavenPluginIds.DIALOGUE)) {
+            return false;
+        }
         super.execute(ref, role, sensorInfo, dt, store);
         Ref<EntityStore> playerRef = role.getStateSupport().getInteractionIterationTarget();
         if (playerRef == null) {

@@ -42,68 +42,11 @@ items.Aetherhaven_Appraisal_Bench.name=评估台
 items.Aetherhaven_Appraisal_Bench.description=识别您已佩戴的珠宝。放置后即可免费使用。
 items.Aetherhaven_Jewelry_Crafting_Bench.name=珠宝工作台
 items.Aetherhaven_Jewelry_Crafting_Bench.description=用于打磨部件的铁砧。在城镇规划桌前制作，前提是你已经知道设计图。将生命精华、珍贵的金条和切割好的宝石倒入其中，即可锻造珠宝。
-items.Aetherhaven_Purification_Powder.name=净化粉
-items.Aetherhaven_Purification_Powder.description=持有此技能时，附近的潜在刷新点会闪烁着盖亚之力的微粒。对高亮显示的刷新点使用技能可将其驱逐，并消耗一点充能。
-items.Aetherhaven_Gaias_Draught.name=盖亚的饮料
-items.Aetherhaven_Gaias_Draught.description=一瓶神圣的生命之水，它将永远伴随你。像其他药剂一样，你可以随身携带并饮用。剩余的饮用次数与弹药量和瓶子耐久度条相对应。在祭坛接受祝福可以扩大瓶子的容量，并增强其治疗效果。
-aetherhaven.gaiadraught.cannotStore=盖亚药剂会一直留在你身边，无法储存。
-items.Aetherhaven_Shard_Of_Gaia.name=盖亚碎片
-items.Aetherhaven_Shard_Of_Gaia.description=女祭司的信物。将其与什一税一起献在盖亚祭坛上，可以增加你的酒量。
-items.Aetherhaven_Verdant_Catalyst.name=翠绿催化剂
-items.Aetherhaven_Verdant_Catalyst.description=女祭司的信物。将其与什一税一同献于盖亚祭坛，可增强你的药剂的疗愈效果。
-interactionHints.purifySpawn=按下 [{key}] 净化生成物
 
 # === UI: Statue of Gaia (revival / resident list) ===
-aetherhaven.ui.gaiaStatue.title=盖亚雕像
-aetherhaven.ui.gaiaStatue.hint=每次复苏都会消耗{cost}生命精华。
-aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
-aetherhaven.ui.gaiaStatue.status.present=在镇上
-aetherhaven.ui.gaiaStatue.status.missing=离开
-aetherhaven.ui.gaiaStatue.reviveSuccess=广场上又重新燃起了生机。
-aetherhaven.ui.gaiaStatue.reviveFailed=祝福并未生效。精华归还。
-aetherhaven.ui.gaiaStatue.footer=只有城镇的主人才能使用此祝福。失踪的村民可以在雕像附近被召唤回来。
-aetherhaven.ui.gaiaStatue.revive=复活
 
-aetherhaven.profession.kind.elder=长老
-aetherhaven.profession.kind.innkeeper=旅店老板
-aetherhaven.profession.kind.merchant=商人
-aetherhaven.profession.kind.farmer=农民
-aetherhaven.profession.kind.blacksmith=铁匠
-aetherhaven.profession.kind.priestess=女祭司
-aetherhaven.profession.kind.miner=矿工
-aetherhaven.profession.kind.logger=日志记录器
-aetherhaven.profession.kind.rancher=牧场主
-aetherhaven.profession.kind.guild_master=公会会长
-aetherhaven.profession.kind.crystal_keeper=水晶守护者
-aetherhaven.profession.kind.pyrotechnic=烟火
-aetherhaven.profession.kind.florist=花店
-aetherhaven.profession.kind.builder=建造者
-aetherhaven.profession.kind.bard=诗人
-aetherhaven.profession.kind.townsfolk=镇民
-aetherhaven.profession.kind.unknown=居民
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
-aetherhaven.ui.chartertown.title=城镇宪章
-aetherhaven.ui.chartertown.townNameLabel=城镇显示名称
-aetherhaven.ui.chartertown.namePlaceholder=为您的城镇输入一个独一无二的名字
-aetherhaven.ui.chartertown.ownerOnlyHint=只有城镇所有者才能根据章程更改显示名称。
-aetherhaven.ui.chartertown.saveTownName=保存名称
-aetherhaven.ui.chartertown.dissolve=解散城镇
-aetherhaven.ui.chartertown.dissolveHint=永久移除城镇、所有建筑、村民以及本章程。无法撤销。
-aetherhaven.ui.chartertown.dissolveConfirmText=你确定吗？这样做会永久删除城镇，移除所有建筑和村民，并销毁这份契约。此操作无法撤销。
-aetherhaven.ui.chartertown.dissolveConfirm=是的，解散城镇
-aetherhaven.ui.chartertown.dissolveCancel=取消
-aetherhaven.ui.chartertown.dissolved=城镇解散：建筑物被拆除，村民被驱逐，宪章被销毁。
-aetherhaven.ui.chartertown.moveCharter=搬迁包机
-aetherhaven.ui.chartertown.moveCharterTooltip=搬迁包机
-aetherhaven.ui.chartertown.moveCharterHint=重新规划你的领地，使其位于新的版图上。你只能在所有建筑仍然位于城镇边界内的区域进行建造。
-aetherhaven.ui.chartertown.moveCharterConfirmText=您需要像放置地块一样放置新的宪章建筑（微调并确认）。如果任何建筑最终位于领地之外，则放置操作将被阻止。
-aetherhaven.ui.chartertown.moveCharterConfirm=继续
-aetherhaven.ui.chartertown.moveCharterCancel=取消
-aetherhaven.ui.chartertown.charterMoved=章程已变更。您的辖区现在以新章程为中心。
-aetherhaven.ui.chartertown.modalDissolveTitle=解散城镇？
-aetherhaven.ui.chartertown.modalMoveTitle=搬迁包机？
-aetherhaven.ui.chartertown.modalCancel=取消
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=镇财政

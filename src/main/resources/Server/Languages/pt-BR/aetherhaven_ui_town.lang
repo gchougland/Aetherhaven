@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=Desbloqueie primeiro as melhoria
 aetherhaven.ui.productionUpgrades.notify.maxed=Esta atualização já foi totalmente adquirida.
 aetherhaven.ui.productionUpgrades.notify.failed=Não foi possível aplicar essa atualização.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Carta da cidade
+aetherhaven.ui.chartertown.townNameLabel=Nome de exibição da cidade
+aetherhaven.ui.chartertown.namePlaceholder=Digite um nome único para sua cidade.
+aetherhaven.ui.chartertown.ownerOnlyHint=Somente o proprietário da cidade pode alterar o nome exibido na carta constitutiva.
+aetherhaven.ui.chartertown.saveTownName=Salvar nome
+aetherhaven.ui.chartertown.dissolve=Dissolver a cidade
+aetherhaven.ui.chartertown.dissolveHint=Remove permanentemente a cidade, todos os edifícios, moradores e esta carta. Não pode ser desfeito.
+aetherhaven.ui.chartertown.dissolveConfirmText=Tem certeza? Isso apaga a cidade permanentemente, remove todos os edifícios e moradores, e destrói esta carta. Esta ação é irreversível.
+aetherhaven.ui.chartertown.dissolveConfirm=Sim, dissolva a cidade
+aetherhaven.ui.chartertown.dissolveCancel=Cancelar
+aetherhaven.ui.chartertown.dissolved=Cidade dissolvida: edifícios demolidos, moradores removidos, estatuto destruído.
+aetherhaven.ui.chartertown.moveCharter=Transferir carta náutica
+aetherhaven.ui.chartertown.moveCharterTooltip=Transferir carta náutica
+aetherhaven.ui.chartertown.moveCharterHint=Recentraliza seu território em um novo bloco de carta. Você só pode posicionar edifícios onde cada construção ainda couber dentro dos limites da cidade.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Você posicionará o novo terreno como se estivesse fazendo um loteamento (apertando e confirmando). Se alguma construção ficar fora do território, a colocação será bloqueada.
+aetherhaven.ui.chartertown.moveCharterConfirm=Continuar
+aetherhaven.ui.chartertown.moveCharterCancel=Cancelar
+aetherhaven.ui.chartertown.charterMoved=A carta constitucional foi alterada. Seu território agora está centrado na nova carta constitucional.
+aetherhaven.ui.chartertown.modalDissolveTitle=Dissolver a cidade?
+aetherhaven.ui.chartertown.modalMoveTitle=Mudar o voo fretado?
+aetherhaven.ui.chartertown.modalCancel=Cancelar

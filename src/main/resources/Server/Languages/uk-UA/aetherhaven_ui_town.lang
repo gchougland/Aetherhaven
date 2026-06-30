@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=Спочатку розблок�
 aetherhaven.ui.productionUpgrades.notify.maxed=Це оновлення вже повністю придбано.
 aetherhaven.ui.productionUpgrades.notify.failed=Не вдалося застосувати це оновлення.
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=Статут міста
+aetherhaven.ui.chartertown.townNameLabel=Відображувана назва міста
+aetherhaven.ui.chartertown.namePlaceholder=Введіть унікальну назву для вашого міста
+aetherhaven.ui.chartertown.ownerOnlyHint=Тільки власник міста може змінити назву, зазначену в статуті.
+aetherhaven.ui.chartertown.saveTownName=Зберегти ім'я
+aetherhaven.ui.chartertown.dissolve=Розчиніть місто
+aetherhaven.ui.chartertown.dissolveHint=Назавжди видаляє місто, всі будівлі, жителів села та цей статут. Дію не можна скасувати.
+aetherhaven.ui.chartertown.dissolveConfirmText=Ви впевнені? Це назавжди видаляє місто, всі будівлі та селян, а також знищує цей статут. Цю дію неможливо скасувати.
+aetherhaven.ui.chartertown.dissolveConfirm=Так, розчинити місто
+aetherhaven.ui.chartertown.dissolveCancel=Скасувати
+aetherhaven.ui.chartertown.dissolved=Місто розпущене: будівлі очищені, селяни виселені, статут знищений.
+aetherhaven.ui.chartertown.moveCharter=Чартер переїзду
+aetherhaven.ui.chartertown.moveCharterTooltip=Чартер переїзду
+aetherhaven.ui.chartertown.moveCharterHint=Перецентруйте свою територію на новому статутному кварталі. Ви можете розмістити будівлю лише там, де вона все ще знаходиться в межах міста.
+aetherhaven.ui.chartertown.moveCharterConfirmText=Ви розташуєте новий статут, як розміщення на ділянці (підштовхнете та підтвердите). Якщо будь-яка будівля опиниться за межами території, розміщення буде заблоковано.
+aetherhaven.ui.chartertown.moveCharterConfirm=Продовжити
+aetherhaven.ui.chartertown.moveCharterCancel=Скасувати
+aetherhaven.ui.chartertown.charterMoved=Статут перенесено. Ваша територія тепер зосереджена на новому статуті.
+aetherhaven.ui.chartertown.modalDissolveTitle=Розчинити місто?
+aetherhaven.ui.chartertown.modalMoveTitle=Перемістити чартер?
+aetherhaven.ui.chartertown.modalCancel=Скасувати

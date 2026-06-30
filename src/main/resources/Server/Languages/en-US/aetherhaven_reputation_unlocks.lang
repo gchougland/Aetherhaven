@@ -1,0 +1,30 @@
+# Reputation-gated reward items (ReputationUnlocks pack)
+
+items.Aetherhaven_Firewood.name=Firewood
+items.Aetherhaven_Firewood.description=Dried log bundles. Burns about twice as long as charcoal in furnaces and campfires.
+items.Aetherhaven_Root_Remover.name=Root Remover
+items.Aetherhaven_Root_Remover.description=Right click a tree trunk to pull up buried roots below the ground. The wood lands at your feet and the hole fills with dirt.
+items.Aetherhaven_Growth_Serum.name=Growth Serum
+items.Aetherhaven_Growth_Serum.description=Use on a young animal to help it grow up right away. Uses one vial.
+items.Aetherhaven_Hunting_Knife.name=Hunting Knife
+items.Aetherhaven_Hunting_Knife.description=A sharp knife for hunters. Kill animals with it to sometimes get extra raw meat, hide, and feathers.
+items.Aetherhaven_Geode_Anvil.name=Geode anvil
+items.Aetherhaven_Geode_Anvil.description=Opens geodes without a smith's fee. Place and use; <color is="#ffa726">you must know the schematic</color> to craft it at your town planning desk.
+items.Aetherhaven_Sprinkler_Iron.name=Iron sprinkler
+items.Aetherhaven_Sprinkler_Iron.description=Waters tilled soil one block below in a <color is="#4ade80">3×3</color> area. Runs once each in-game morning. Smallest coverage.
+items.Aetherhaven_Sprinkler_Thorium.name=Thorium sprinkler
+items.Aetherhaven_Sprinkler_Thorium.description=Waters tilled soil one block below in a <color is="#4ade80">5×5</color> area. Once each in-game morning. Larger than iron.
+items.Aetherhaven_Sprinkler_Cobalt.name=Cobalt sprinkler
+items.Aetherhaven_Sprinkler_Cobalt.description=Waters tilled soil one block below in a <color is="#4ade80">7×7</color> area. Once each in-game morning. Wide coverage.
+items.Aetherhaven_Sprinkler_Adamantite.name=Adamantite sprinkler
+items.Aetherhaven_Sprinkler_Adamantite.description=Waters tilled soil one block below in a <color is="#4ade80">9×9</color> area. Once each in-game morning. Widest coverage.
+items.Aetherhaven_Purification_Powder.name=Purification powder
+items.Aetherhaven_Purification_Powder.description=While held, nearby latent spawn points shimmer with Gaia-touched motes. Use on a highlighted spawn to banish it and spend one charge.
+items.Aetherhaven_Gaias_Draught.name=Gaia's Draught
+items.Aetherhaven_Gaias_Draught.description=A blessed flask of living water that follows you alone. Hold it and drink with secondary use like other potions. Remaining sips match the ammo readout and the flask durability bar. Blessings at the altar widen what it holds and deepen how strongly it heals.
+aetherhaven.gaiadraught.cannotStore=Gaia's Draught stays with you. It cannot go into storage.
+items.Aetherhaven_Shard_Of_Gaia.name=Shard of Gaia
+items.Aetherhaven_Shard_Of_Gaia.description=A priestess token. Offer it with tithe at the Gaia altar to widen how many sips your draught can hold.
+items.Aetherhaven_Verdant_Catalyst.name=Verdant catalyst
+items.Aetherhaven_Verdant_Catalyst.description=A priestess token. Offer it with tithe at the Gaia altar to deepen how strongly your draught heals.
+interactionHints.purifySpawn=Press [{key}] to Purify Spawn

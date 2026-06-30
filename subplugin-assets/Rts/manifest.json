@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "Rts",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven guard command mode tools (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "Economy",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven treasury and shop safe (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

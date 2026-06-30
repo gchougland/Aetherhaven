@@ -106,7 +106,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
 
         commandBuilder.set(
             "#Hint.TextSpans",
-            Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.hint")
+            Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.hint")
                 .param("cost", AetherhavenConstants.GAIA_STATUE_REVIVE_COST_ESSENCE)
         );
         commandBuilder.clear(ROWS);
@@ -124,12 +124,12 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
             String profKey = NpcPortraitProvider.professionTranslationKey(roleId, r.getKind());
             Message statusMsg =
                 present
-                    ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.status.present")
-                    : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.status.missing");
+                    ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.status.present")
+                    : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.status.missing");
             Message nameMsg = Message.translation("aetherhaven_ui_journal_items_tail.npcRoles." + roleId + ".name");
             commandBuilder.set(
                 row + " #VillagerLine.TextSpans",
-                Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.row")
+                Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.row")
                     .param("name", nameMsg)
                     .param("profession", Message.translation(profKey))
                     .param("status", statusMsg)
@@ -247,8 +247,8 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
                 if (pr2 != null) {
                     pr2.sendMessage(
                         ok
-                            ? Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.reviveSuccess")
-                            : Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.gaiaStatue.reviveFailed")
+                            ? Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.reviveSuccess")
+                            : Message.translation("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.reviveFailed")
                     );
                 }
                 if (!ok) {

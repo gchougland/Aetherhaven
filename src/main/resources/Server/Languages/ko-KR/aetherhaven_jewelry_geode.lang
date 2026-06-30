@@ -42,68 +42,11 @@ items.Aetherhaven_Appraisal_Bench.name=평가 벤치
 items.Aetherhaven_Appraisal_Bench.description=이미 소지하고 있는 보석을 식별해 줍니다. 등록 후에는 무료로 사용할 수 있습니다.
 items.Aetherhaven_Jewelry_Crafting_Bench.name=보석 세공 작업대
 items.Aetherhaven_Jewelry_Crafting_Bench.description=마무리 작업을 위한 철제 모루. 설계도를 알게 되면 도시 계획 데스크에서 제작할 수 있습니다. 생명 정수와 귀금속, 세공된 보석을 넣어 장신구를 제작하세요.
-items.Aetherhaven_Purification_Powder.name=정제 분말
-items.Aetherhaven_Purification_Powder.description=들고 있는 동안 주변의 잠재적 생성 지점들이 가이아의 기운이 담긴 입자들로 반짝입니다. 강조 표시된 생성 지점에 사용하면 해당 생성 지점을 추방하고 사용 횟수 1회를 소모합니다.
-items.Aetherhaven_Gaias_Draught.name=가이아의 음료
-items.Aetherhaven_Gaias_Draught.description=축복받은 생명의 물이 담긴 병이 오직 당신만을 따라다닙니다. 다른 물약처럼 손에 들고 마시면 재사용할 수 있습니다. 남은 물약량은 탄약량과 병 내구도 표시기에 따라 달라집니다. 제단에서 축복을 받으면 병에 담을 수 있는 물약의 범위가 넓어지고 치유력이 강해집니다.
-aetherhaven.gaiadraught.cannotStore=가이아의 물약은 영구적으로 소지할 수 있으며, 보관할 수 없습니다.
-items.Aetherhaven_Shard_Of_Gaia.name=가이아의 조각
-items.Aetherhaven_Shard_Of_Gaia.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 술잔을 더 오래 마실 수 있습니다.
-items.Aetherhaven_Verdant_Catalyst.name=푸른 촉매
-items.Aetherhaven_Verdant_Catalyst.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 물약의 치유력이 더욱 강해집니다.
-interactionHints.purifySpawn=[{key}]을 눌러 스폰을 정화하세요
 
 # === UI: Statue of Gaia (revival / resident list) ===
-aetherhaven.ui.gaiaStatue.title=가이아 여신상
-aetherhaven.ui.gaiaStatue.hint=부활할 때마다 {cost} 생명 에너지가 소모됩니다.
-aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
-aetherhaven.ui.gaiaStatue.status.present=시내에서
-aetherhaven.ui.gaiaStatue.status.missing=떨어져 있는
-aetherhaven.ui.gaiaStatue.reviveSuccess=광장에 생명의 한 줄기가 다시 돌아왔습니다.
-aetherhaven.ui.gaiaStatue.reviveFailed=축복은 이루어지지 않았다. 본질은 되돌아왔다.
-aetherhaven.ui.gaiaStatue.footer=이 축복은 마을 주인만이 사용할 수 있습니다. 사라진 마을 사람들은 동상 근처에서 불러올 수 있습니다.
-aetherhaven.ui.gaiaStatue.revive=부활하다
 
-aetherhaven.profession.kind.elder=장로
-aetherhaven.profession.kind.innkeeper=여관 주인
-aetherhaven.profession.kind.merchant=상인
-aetherhaven.profession.kind.farmer=농장주
-aetherhaven.profession.kind.blacksmith=대장장이
-aetherhaven.profession.kind.priestess=여사제
-aetherhaven.profession.kind.miner=갱부
-aetherhaven.profession.kind.logger=나무꾼
-aetherhaven.profession.kind.rancher=목장 경영자
-aetherhaven.profession.kind.guild_master=길드 조합원
-aetherhaven.profession.kind.crystal_keeper=크리스탈 키퍼
-aetherhaven.profession.kind.pyrotechnic=불꽃
-aetherhaven.profession.kind.florist=꽃집
-aetherhaven.profession.kind.builder=건축업자
-aetherhaven.profession.kind.bard=음유 시인
-aetherhaven.profession.kind.townsfolk=읍민
-aetherhaven.profession.kind.unknown=거주자
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
-aetherhaven.ui.chartertown.title=마을 헌장
-aetherhaven.ui.chartertown.townNameLabel=도시 표시 이름
-aetherhaven.ui.chartertown.namePlaceholder=당신이 사는 마을에 고유한 이름을 입력하세요.
-aetherhaven.ui.chartertown.ownerOnlyHint=마을 소유주만이 정관에 따라 표시 이름을 변경할 수 있습니다.
-aetherhaven.ui.chartertown.saveTownName=이름을 저장하세요
-aetherhaven.ui.chartertown.dissolve=마을을 해체하다
-aetherhaven.ui.chartertown.dissolveHint=마을, 모든 건물, 마을 주민, 그리고 이 헌장을 영구적으로 제거합니다. 되돌릴 수 없습니다.
-aetherhaven.ui.chartertown.dissolveConfirmText=정말이세요? 이렇게 하면 마을이 영구적으로 삭제되고, 모든 건물과 주민이 사라지며, 이 헌장도 무효화됩니다. 되돌릴 수 없습니다.
-aetherhaven.ui.chartertown.dissolveConfirm=네, 마을을 해체하세요
-aetherhaven.ui.chartertown.dissolveCancel=취소
-aetherhaven.ui.chartertown.dissolved=마을은 해체되었다: 건물들은 철거되었고, 마을 사람들은 쫓겨났으며, 마을 헌장은 파기되었다.
-aetherhaven.ui.chartertown.moveCharter=이동 헌장
-aetherhaven.ui.chartertown.moveCharterTooltip=이동 헌장
-aetherhaven.ui.chartertown.moveCharterHint=영토를 새로운 경계 블록에 다시 배치합니다. 모든 건물이 마을 경계 안에 들어갈 수 있는 위치에만 건물을 지을 수 있습니다.
-aetherhaven.ui.chartertown.moveCharterConfirmText=새로운 구역을 마치 부지 배치처럼 (살짝 움직여 위치를 조정하고 확정하는 방식으로) 배치합니다. 만약 어떤 건물이라도 지정된 구역 밖에 위치하게 되면, 배치가 차단됩니다.
-aetherhaven.ui.chartertown.moveCharterConfirm=계속하다
-aetherhaven.ui.chartertown.moveCharterCancel=취소
-aetherhaven.ui.chartertown.charterMoved=헌장이 변경되었습니다. 귀하의 관할 구역은 이제 새로운 헌장을 중심으로 합니다.
-aetherhaven.ui.chartertown.modalDissolveTitle=마을을 해체하는 건가요?
-aetherhaven.ui.chartertown.modalMoveTitle=이사 전세인가요?
-aetherhaven.ui.chartertown.modalCancel=취소
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=시 재정

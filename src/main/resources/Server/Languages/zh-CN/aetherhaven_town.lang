@@ -70,3 +70,22 @@ aetherhaven.town.leave.left=您离开了“{town}”。
 aetherhaven.town.memberRole.BUILD=建造
 aetherhaven.town.memberRole.QUEST=寻求
 aetherhaven.town.memberRole.BOTH=两个都
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=长老
+aetherhaven.profession.kind.innkeeper=旅店老板
+aetherhaven.profession.kind.merchant=商人
+aetherhaven.profession.kind.farmer=农民
+aetherhaven.profession.kind.blacksmith=铁匠
+aetherhaven.profession.kind.priestess=女祭司
+aetherhaven.profession.kind.miner=矿工
+aetherhaven.profession.kind.logger=日志记录器
+aetherhaven.profession.kind.rancher=牧场主
+aetherhaven.profession.kind.guild_master=公会会长
+aetherhaven.profession.kind.crystal_keeper=水晶守护者
+aetherhaven.profession.kind.pyrotechnic=烟火
+aetherhaven.profession.kind.florist=花店
+aetherhaven.profession.kind.builder=建造者
+aetherhaven.profession.kind.bard=诗人
+aetherhaven.profession.kind.townsfolk=镇民
+aetherhaven.profession.kind.unknown=居民

@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "PatrolRoutes",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven patrol wand and route UI (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

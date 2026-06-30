@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Choisissez une quête ci-dessu
 items.Aetherhaven_Management_Block.name=Rayon des archives municipales
 items.Aetherhaven_Management_Block.description=Rayon du commis pour un bâtiment achevé. Permet de consulter l'état des travaux de sa parcelle.
 
-items.Aetherhaven_Sprinkler_Iron.name=Arroseur en fer
-items.Aetherhaven_Sprinkler_Iron.description=Arrose le sol situé un bloc plus bas dans une zone de 3×3. S'exécute une fois chaque matin en jeu. Zone de couverture minimale.
-items.Aetherhaven_Sprinkler_Thorium.name=Arroseur au thorium
-items.Aetherhaven_Sprinkler_Thorium.description=L'eau laboure le sol un bloc plus bas dans une zone de 5×5. Une fois par matin (en jeu). Plus grande que le fer.
-items.Aetherhaven_Sprinkler_Cobalt.name=Arroseur au cobalt
-items.Aetherhaven_Sprinkler_Cobalt.description=L'eau laboure le sol un bloc plus bas dans une zone de 7×7 blocs. Une fois par matin (en jeu). Large zone de couverture.
-items.Aetherhaven_Sprinkler_Adamantite.name=Arroseur en adamantite
-items.Aetherhaven_Sprinkler_Adamantite.description=L'eau a labouré le sol un bloc plus bas dans une zone de 9×9. Une fois par matin (en jeu). Couverture maximale.
 
 items.Aetherhaven_Wood_Scaffold.name=échafaudages en bois
 items.Aetherhaven_Wood_Scaffold.description=Grimpez comme sur une échelle. Cliquez avec le bouton droit sur les emplacements comme sur un bloc normal. Maintenez la touche Utiliser (F) enfoncée tout en visant un échafaudage pour étendre la tour latéralement ou créer une ramification horizontale depuis la face supérieure. Casser la partie inférieure non soutenue fait s'effondrer la structure.

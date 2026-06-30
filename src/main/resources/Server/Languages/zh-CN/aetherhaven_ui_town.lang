@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=先解锁之前的升级。
 aetherhaven.ui.productionUpgrades.notify.maxed=此次升级已全额购买。
 aetherhaven.ui.productionUpgrades.notify.failed=无法应用该升级。
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=城镇宪章
+aetherhaven.ui.chartertown.townNameLabel=城镇显示名称
+aetherhaven.ui.chartertown.namePlaceholder=为您的城镇输入一个独一无二的名字
+aetherhaven.ui.chartertown.ownerOnlyHint=只有城镇所有者才能根据章程更改显示名称。
+aetherhaven.ui.chartertown.saveTownName=保存名称
+aetherhaven.ui.chartertown.dissolve=解散城镇
+aetherhaven.ui.chartertown.dissolveHint=永久移除城镇、所有建筑、村民以及本章程。无法撤销。
+aetherhaven.ui.chartertown.dissolveConfirmText=你确定吗？这样做会永久删除城镇，移除所有建筑和村民，并销毁这份契约。此操作无法撤销。
+aetherhaven.ui.chartertown.dissolveConfirm=是的，解散城镇
+aetherhaven.ui.chartertown.dissolveCancel=取消
+aetherhaven.ui.chartertown.dissolved=城镇解散：建筑物被拆除，村民被驱逐，宪章被销毁。
+aetherhaven.ui.chartertown.moveCharter=搬迁包机
+aetherhaven.ui.chartertown.moveCharterTooltip=搬迁包机
+aetherhaven.ui.chartertown.moveCharterHint=重新规划你的领地，使其位于新的版图上。你只能在所有建筑仍然位于城镇边界内的区域进行建造。
+aetherhaven.ui.chartertown.moveCharterConfirmText=您需要像放置地块一样放置新的宪章建筑（微调并确认）。如果任何建筑最终位于领地之外，则放置操作将被阻止。
+aetherhaven.ui.chartertown.moveCharterConfirm=继续
+aetherhaven.ui.chartertown.moveCharterCancel=取消
+aetherhaven.ui.chartertown.charterMoved=章程已变更。您的辖区现在以新章程为中心。
+aetherhaven.ui.chartertown.modalDissolveTitle=解散城镇？
+aetherhaven.ui.chartertown.modalMoveTitle=搬迁包机？
+aetherhaven.ui.chartertown.modalCancel=取消

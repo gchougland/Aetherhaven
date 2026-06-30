@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Виберіть квест в
 items.Aetherhaven_Management_Block.name=полиця міських записів
 items.Aetherhaven_Management_Block.description=Полиця клерка для завершеної будівлі. Відкриває статус будівництва для її ділянки.
 
-items.Aetherhaven_Sprinkler_Iron.name=Залізний розбризкувач
-items.Aetherhaven_Sprinkler_Iron.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">3×3</color>. Виконується один раз щоранку в грі. Найменше покриття.
-items.Aetherhaven_Sprinkler_Thorium.name=Торієва спринклерна система
-items.Aetherhaven_Sprinkler_Thorium.description=Поливає оброблену землю на один блок нижче в області <color is="#4ade80">5×5</color>. Один раз щоранку в грі. Більша за залізо.
-items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовий спринклер
-items.Aetherhaven_Sprinkler_Cobalt.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">7×7</color>. Один раз щоранку в грі. Широке покриття.
-items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовий розбризкувач
-items.Aetherhaven_Sprinkler_Adamantite.description=Поливає оброблену землю на один блок нижче на ділянці <color is="#4ade80">9×9</color>. Один раз щоранку в грі. Найширше покриття.
 
 items.Aetherhaven_Wood_Scaffold.name=Дерев'яні риштування
 items.Aetherhaven_Wood_Scaffold.description=Піднімайтеся, як по драбині. Клацніть правою кнопкою миші на місцях, як на звичайному блоці. Утримуйте клавішу Використовувати (F), прицілюючись до риштувань, щоб розширити вежу збоку або відгалужуватися горизонтально від верхньої грані. Зламання нижньої непідтримуваної частини призведе до зруйнування стека.

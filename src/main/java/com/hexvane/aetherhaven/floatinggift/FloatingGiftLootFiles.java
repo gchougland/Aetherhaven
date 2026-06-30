@@ -29,6 +29,12 @@ public final class FloatingGiftLootFiles {
     public static String readDefaultJson() throws IOException {
         try (InputStream in = FloatingGiftLootFiles.class.getResourceAsStream(DEFAULT_RESOURCE)) {
             if (in == null) {
+                LOGGER
+                    .atWarning()
+                    .log(
+                        "Missing bundled default %s on classpath; using empty loot table stub",
+                        DEFAULT_RESOURCE
+                    );
                 return "{\"version\":" + CURRENT_LOOT_FILE_VERSION + ",\"entries\":[]}";
             }
             return new String(in.readAllBytes(), StandardCharsets.UTF_8);

@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=Lenha
-items.Aetherhaven_Firewood.description=Feixes de lenha seca. Queimam aproximadamente o dobro do tempo que o carvão vegetal em fornos e fogueiras.
 
-items.Aetherhaven_Root_Remover.name=Removedor de raízes
-items.Aetherhaven_Root_Remover.description=Clique com o botão direito do mouse no tronco de uma árvore para arrancar as raízes enterradas no chão. A madeira cairá aos seus pés e o buraco se encherá de terra.
 
-items.Aetherhaven_Growth_Serum.name=Soro de crescimento
-items.Aetherhaven_Growth_Serum.description=Use em animais jovens para ajudá-los a crescer rapidamente. Utiliza-se um frasco.
 
-items.Aetherhaven_Hunting_Knife.name=Faca de caça
-items.Aetherhaven_Hunting_Knife.description=Uma faca afiada para caçadores. Use-a para abater animais e, às vezes, obter carne crua, couro e penas extras.
 
 items.Aetherhaven_Lute.name=Alaúde
 items.Aetherhaven_Lute.description=Um alaúde de madeira com cordas de som quente. Elias Thornwood sempre carrega um por perto quando toca no salão da guilda.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=Moeda da cidade armazenada no tesouro.
 items.Aetherhaven_Geode.name=Geodo
 items.Aetherhaven_Geode.description=Uma pedra oca que pode conter cristais, gemas ou minério. Pague a um ferreiro para quebrá-la.
 
-items.Aetherhaven_Geode_Anvil.name=Bigorna de geodo
-items.Aetherhaven_Geode_Anvil.description=Abre geodos sem custo para o ferreiro. Coloque e use; <color is="#ffa726">você precisa conhecer o esquema</color> para criá-lo em sua mesa de planejamento urbano.
 
 items.Aetherhaven_Crystallized_Person.name=Pessoa Cristalizada
 

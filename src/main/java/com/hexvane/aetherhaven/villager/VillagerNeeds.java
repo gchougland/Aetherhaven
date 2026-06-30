@@ -39,6 +39,9 @@ public final class VillagerNeeds implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, VillagerNeeds> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(VillagerNeeds.class, "AetherhavenVillagerNeeds", VillagerNeeds.CODEC);
     }
 

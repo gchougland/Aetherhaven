@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=Bois de chauffage
-items.Aetherhaven_Firewood.description=Faisceaux de bois séché. Brûlent environ deux fois plus longtemps que le charbon de bois dans les fourneaux et les feux de camp.
 
-items.Aetherhaven_Root_Remover.name=Déracinateur
-items.Aetherhaven_Root_Remover.description=Faites un clic droit sur un tronc d'arbre pour déterrer les racines enfouies sous terre. Le bois retombe à vos pieds et le trou se remplit de terre.
 
-items.Aetherhaven_Growth_Serum.name=Sérum de croissance
-items.Aetherhaven_Growth_Serum.description=À utiliser sur un jeune animal pour favoriser sa croissance rapide. Utiliser une fiole.
 
-items.Aetherhaven_Hunting_Knife.name=Couteau de chasse
-items.Aetherhaven_Hunting_Knife.description=Un couteau tranchant pour les chasseurs. On l'utilise pour tuer des animaux et parfois obtenir un supplément de viande crue, de peau et de plumes.
 
 items.Aetherhaven_Lute.name=Luth
 items.Aetherhaven_Lute.description=Un luth en bois aux cordes chaudes. Elias Thornwood en garde un à portée de main lorsqu'il joue à la salle de la guilde.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=La monnaie de la ville est stockée dans
 items.Aetherhaven_Geode.name=Géode
 items.Aetherhaven_Geode.description=Une pierre creuse pouvant contenir des cristaux, des gemmes ou du minerai. Payez un forgeron pour la casser.
 
-items.Aetherhaven_Geode_Anvil.name=enclume en géode
-items.Aetherhaven_Geode_Anvil.description=Ouvre les géodes sans frais de forge. Placement et utilisation ; <color is="#ffa726">vous devez connaître le schéma</color> pour la fabriquer à votre bureau d'urbanisme.
 
 items.Aetherhaven_Crystallized_Person.name=Personne cristallisée
 

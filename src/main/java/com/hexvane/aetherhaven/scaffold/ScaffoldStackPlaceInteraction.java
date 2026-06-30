@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.scaffold;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -94,6 +96,9 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
         @Nonnull InteractionContext context,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (firstRun && SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.CONSTRUCTION)) {
+            return;
+        }
         InteractionSyncData clientState = context.getClientState();
 
         assert clientState != null;
@@ -204,20 +209,6 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
                         ? BlockFace.UP.getDirection()
                         : BlockFace.fromProtocolFace(context.getClientState().blockFace).getDirection());
 
-                ScaffoldDebug.place(
-                    "resolved=%s,%s,%s client=%s,%s,%s useUpNormal=%s placementNormal=%s,%s,%s",
-                    targetBlockPosition.x(),
-                    targetBlockPosition.y(),
-                    targetBlockPosition.z(),
-                    clientPlacement.x(),
-                    clientPlacement.y(),
-                    clientPlacement.z(),
-                    useUpNormal,
-                    placementNormal.x(),
-                    placementNormal.y(),
-                    placementNormal.z()
-                );
-
                 BlockPlaceUtils.placeBlock(
                     ref,
                     heldItemStack,
@@ -238,12 +229,6 @@ public final class ScaffoldStackPlaceInteraction extends SimpleInteraction {
 
                 if (AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(interactionBlockTypeKey)) {
                     world.performBlockUpdate(targetBlockPosition.x, targetBlockPosition.y, targetBlockPosition.z, false);
-                    ScaffoldDebug.physics(
-                        "after place performBlockUpdate at %s,%s,%s (vanilla markDeco unchanged)",
-                        targetBlockPosition.x,
-                        targetBlockPosition.y,
-                        targetBlockPosition.z
-                    );
                 }
                 boolean isAdventure = playerComponent == null || playerComponent.getGameMode() == GameMode.Adventure;
                 if (isAdventure && heldItemStack.getQuantity() == 1 && this.removeItemInHand) {

@@ -70,3 +70,22 @@ aetherhaven.town.leave.left="{town}" adresinden ayrıldınız.
 aetherhaven.town.memberRole.BUILD=İNŞA ETMEK
 aetherhaven.town.memberRole.QUEST=ARAYIŞ
 aetherhaven.town.memberRole.BOTH=İKİSİ BİRDEN
+
+# === Villager profession labels (core UI) ===
+aetherhaven.profession.kind.elder=Yaşlı
+aetherhaven.profession.kind.innkeeper=Han sahibi
+aetherhaven.profession.kind.merchant=Tüccar
+aetherhaven.profession.kind.farmer=Çiftçi
+aetherhaven.profession.kind.blacksmith=Demirci
+aetherhaven.profession.kind.priestess=Rahibe
+aetherhaven.profession.kind.miner=Madenci
+aetherhaven.profession.kind.logger=Oduncu
+aetherhaven.profession.kind.rancher=Çiftlik sahibi
+aetherhaven.profession.kind.guild_master=Lonca Ustası
+aetherhaven.profession.kind.crystal_keeper=Kristal Bekçisi
+aetherhaven.profession.kind.pyrotechnic=Havai fişek
+aetherhaven.profession.kind.florist=Çiçekçi
+aetherhaven.profession.kind.builder=İnşaatçı
+aetherhaven.profession.kind.bard=Ozan
+aetherhaven.profession.kind.townsfolk=Kasaba halkı
+aetherhaven.profession.kind.unknown=İkamet eden kişi

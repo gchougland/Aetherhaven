@@ -152,13 +152,13 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
         commandBuilder.set("#MoveCharterButton.Visible", owner && !modalOpen);
         commandBuilder.set("#MoveCharterHint.Visible", owner && !modalOpen);
         if (dissolveFlow) {
-            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.modalDissolveTitle"));
-            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolveConfirmText"));
-            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolveConfirm"));
+            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.modalDissolveTitle"));
+            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveConfirmText"));
+            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolveConfirm"));
         } else if (relocateFlow) {
-            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.modalMoveTitle"));
-            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.moveCharterConfirmText"));
-            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.moveCharterConfirm"));
+            commandBuilder.set("#CharterModalTitle.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.modalMoveTitle"));
+            commandBuilder.set("#CharterModalText.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.moveCharterConfirmText"));
+            commandBuilder.set("#CharterModalConfirmButton.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.moveCharterConfirm"));
         }
         if (owner) {
             eventBuilder.addEventBinding(
@@ -268,7 +268,7 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
                         TownDissolutionService.dissolveTown(worldDissolve, pluginDissolve, trDissolve, store);
                         PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
                         if (prDone != null) {
-                            prDone.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.dissolved"));
+                            prDone.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.dissolved"));
                         }
                         close();
                     }

@@ -1,0 +1,30 @@
+# Reputation-gated reward items (ReputationUnlocks pack)
+
+items.Aetherhaven_Firewood.name=장작
+items.Aetherhaven_Firewood.description=말린 통나무 묶음. 화로나 캠프파이어에서 숯보다 약 두 배 더 오래 탑니다.
+items.Aetherhaven_Root_Remover.name=뿌리 제거제
+items.Aetherhaven_Root_Remover.description=나무줄기를 마우스 오른쪽 버튼으로 클릭하여 땅속에 묻힌 뿌리를 뽑아내세요. 뽑힌 나무는 발밑에 떨어지고 구멍은 흙으로 채워집니다.
+items.Aetherhaven_Growth_Serum.name=성장 혈청
+items.Aetherhaven_Growth_Serum.description=어린 동물의 성장을 촉진하기 위해 사용하십시오. 1병이 필요합니다.
+items.Aetherhaven_Hunting_Knife.name=사냥용 칼
+items.Aetherhaven_Hunting_Knife.description=사냥꾼을 위한 날카로운 칼. 이 칼로 동물을 사냥하면 때때로 생고기, 가죽, 깃털 등을 얻을 수 있습니다.
+items.Aetherhaven_Geode_Anvil.name=지오드 앤빌
+items.Aetherhaven_Geode_Anvil.description=대장장이 비용 없이 광석을 열 수 있습니다. 설치 후 사용하세요. 제작하려면 설계도를 알아야 합니다.
+items.Aetherhaven_Sprinkler_Iron.name=철제 스프링클러
+items.Aetherhaven_Sprinkler_Iron.description=경작된 토양 바로 아래 3x3 영역의 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 실행됩니다. 최소 범위입니다.
+items.Aetherhaven_Sprinkler_Thorium.name=토륨 스프링클러
+items.Aetherhaven_Sprinkler_Thorium.description=5x5 크기의 경작된 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 사용할 수 있습니다. 철보다 큽니다.
+items.Aetherhaven_Sprinkler_Cobalt.name=코발트 스프링클러
+items.Aetherhaven_Sprinkler_Cobalt.description=경작된 흙 바로 아래 7x7 영역의 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩, 넓은 범위에 걸쳐 적용됩니다.
+items.Aetherhaven_Sprinkler_Adamantite.name=아다만타이트 스프링클러
+items.Aetherhaven_Sprinkler_Adamantite.description=경작된 토양 바로 아래 9x9 영역에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 적용됩니다. 가장 넓은 범위에 적용됩니다.
+items.Aetherhaven_Purification_Powder.name=정제 분말
+items.Aetherhaven_Purification_Powder.description=들고 있는 동안 주변의 잠재적 생성 지점들이 가이아의 기운이 담긴 입자들로 반짝입니다. 강조 표시된 생성 지점에 사용하면 해당 생성 지점을 추방하고 사용 횟수 1회를 소모합니다.
+items.Aetherhaven_Gaias_Draught.name=가이아의 음료
+items.Aetherhaven_Gaias_Draught.description=축복받은 생명의 물이 담긴 병이 오직 당신만을 따라다닙니다. 다른 물약처럼 손에 들고 마시면 재사용할 수 있습니다. 남은 물약량은 탄약량과 병 내구도 표시기에 따라 달라집니다. 제단에서 축복을 받으면 병에 담을 수 있는 물약의 범위가 넓어지고 치유력이 강해집니다.
+aetherhaven.gaiadraught.cannotStore=가이아의 물약은 영구적으로 소지할 수 있으며, 보관할 수 없습니다.
+items.Aetherhaven_Shard_Of_Gaia.name=가이아의 조각
+items.Aetherhaven_Shard_Of_Gaia.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 술잔을 더 오래 마실 수 있습니다.
+items.Aetherhaven_Verdant_Catalyst.name=푸른 촉매
+items.Aetherhaven_Verdant_Catalyst.description=여사제 토큰입니다. 가이아 제단에 십일조와 함께 바치면 물약의 치유력이 더욱 강해집니다.
+interactionHints.purifySpawn=[{key}]을 눌러 스폰을 정화하세요

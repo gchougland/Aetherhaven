@@ -93,6 +93,14 @@ public final class QuestDefinition {
     @Nullable
     private String grantPlotBlueprintConstructionId;
 
+    /**
+     * When set, the quest is only offerable and completable while this Aetherhaven subplugin is loaded (manifest name,
+     * e.g. {@code ReputationUnlocks}).
+     */
+    @SerializedName("requiresSubplugin")
+    @Nullable
+    private String requiresSubplugin;
+
     @Nonnull
     public String idOrEmpty() {
         return id != null ? id.trim() : "";
@@ -180,6 +188,11 @@ public final class QuestDefinition {
     @Nullable
     public String grantPlotBlueprintConstructionId() {
         return grantPlotBlueprintConstructionId != null ? grantPlotBlueprintConstructionId.trim() : null;
+    }
+
+    @Nullable
+    public String requiresSubpluginName() {
+        return requiresSubplugin != null ? requiresSubplugin.trim() : null;
     }
 
     /**

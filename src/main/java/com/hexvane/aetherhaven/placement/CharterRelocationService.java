@@ -103,7 +103,7 @@ public final class CharterRelocationService {
 
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
-            pr.sendMessage(Message.translation("aetherhaven_jewelry_geode.aetherhaven.ui.chartertown.charterMoved"));
+            pr.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.chartertown.charterMoved"));
         }
         return true;
     }

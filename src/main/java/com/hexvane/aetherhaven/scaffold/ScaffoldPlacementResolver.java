@@ -75,15 +75,6 @@ public final class ScaffoldPlacementResolver {
         if (side == null) {
             return java.util.Optional.empty();
         }
-        ScaffoldDebug.resolve(
-            "[UseExtend] deck-stand horizontal by body yaw -> %s,%s,%s (yaw=%.4f dx=%s dz=%s)",
-            side.x(),
-            side.y(),
-            side.z(),
-            (double) yaw,
-            dx,
-            dz
-        );
         return java.util.Optional.of(side);
     }
 
@@ -203,7 +194,6 @@ public final class ScaffoldPlacementResolver {
             if (Math.max(ax, az) < USE_TOP_FACE_CENTER_MAX) {
                 Vector3i stacked = cellClearForTower(world, cx, topY + 1, cz);
                 if (stacked != null) {
-                    ScaffoldDebug.resolve("[UseExtend] top-face center -> stack up");
                     return java.util.Optional.of(stacked);
                 }
                 return java.util.Optional.empty();
@@ -213,13 +203,6 @@ public final class ScaffoldPlacementResolver {
             for (int step = 1; step <= MAX_HORIZONTAL_BRANCH_STEPS; step++) {
                 Vector3i candidate = cellClearUseExtend(world, cx + dx * step, topY, cz + dz * step);
                 if (candidate != null) {
-                    ScaffoldDebug.resolve(
-                        "[UseExtend] top-face nearest-edge step=%s -> %s,%s,%s",
-                        step,
-                        candidate.x(),
-                        candidate.y(),
-                        candidate.z()
-                    );
                     return java.util.Optional.of(candidate);
                 }
             }
@@ -261,9 +244,6 @@ public final class ScaffoldPlacementResolver {
             pFace == BlockFace.Down && belowPlacementIsScaffold
                 ? BlockFace.Up
                 : (pFace == BlockFace.Down && clientPlacement.y() > attachRef.y() ? BlockFace.Up : pFace);
-        Vector3i dir = new Vector3i(
-            com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockFace.fromProtocolFace(clientState.blockFace)
-                .getDirection());
 
         Vector3i apexPlusOne = new Vector3i(cx, topY + 1, cz);
 
@@ -271,30 +251,10 @@ public final class ScaffoldPlacementResolver {
         int rayHitY = ray != null ? floorBlock(ray.y) : Integer.MIN_VALUE;
         double relYOnApex = ray != null ? (ray.y - (double) topY) : -99.0;
 
-        ScaffoldDebug.resolve(
-            "[UseExtend] clientPlacement=%s,%s,%s face=%s dir=%s,%s,%s ray=%s columnApex=%s,%s,%s rayColumn=%s rayHitY=%s relY=%.3f rayN=%s",
-            clientPlacement.x(),
-            clientPlacement.y(),
-            clientPlacement.z(),
-            clientState.blockFace,
-            dir.x(),
-            dir.y(),
-            dir.z(),
-            ray == null ? "null" : String.format("(%.3f,%.3f,%.3f)", ray.x, ray.y, ray.z),
-            cx,
-            topY,
-            cz,
-            rayColumn,
-            rayHitY,
-            relYOnApex,
-            rayN == null ? "null" : String.format("(%.3f,%.3f,%.3f)", rayN.x(), rayN.y(), rayN.z())
-        );
-
         if (rayColumn && rayHitY < topY) {
             BlockType hitSeg = world.getBlockType(cx, rayHitY, cz);
             if (hitSeg != null && AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(hitSeg.getId())) {
                 Vector3i up = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
-                ScaffoldDebug.resolve("[UseExtend] ray on column below apex -> tower %s", up != null ? up : "BLOCKED");
                 return java.util.Optional.of(up != null ? up : clientPlacement);
             }
         }
@@ -328,11 +288,9 @@ public final class ScaffoldPlacementResolver {
             if (rayColumn && rayHitY == topY) {
                 Vector3i upCap = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
                 if (upCap != null) {
-                    ScaffoldDebug.resolve("[UseExtend] horizontal face on column cap -> tower %s,%s,%s", upCap.x(), upCap.y(), upCap.z());
                     return java.util.Optional.of(upCap);
                 }
                 Vector3i beside = resolveHorizontalBesideColumn(world, cx, topY, cz, ray, rayN, face);
-                ScaffoldDebug.resolve("[UseExtend] cap tower blocked; beside=%s", beside != null ? beside : "null");
                 if (beside != null) {
                     return java.util.Optional.of(beside);
                 }
@@ -347,19 +305,12 @@ public final class ScaffoldPlacementResolver {
             // vertically on this column instead of placing in the adjacent cell beside the face you clicked.
             Vector3i sideUseTower = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
             if (sideUseTower != null) {
-                ScaffoldDebug.resolve(
-                    "[UseExtend] horizontal face side-USE (no ray column) -> tower %s,%s,%s",
-                    sideUseTower.x(),
-                    sideUseTower.y(),
-                    sideUseTower.z()
-                );
                 return java.util.Optional.of(sideUseTower);
             }
             Vector3i beside = resolveHorizontalBesideColumn(world, cx, topY, cz, ray, rayN, face);
             if (beside != null) {
                 return java.util.Optional.of(beside);
             }
-            ScaffoldDebug.resolve("[UseExtend] horizontal face tower blocked, no beside -> clientPlacement");
             return java.util.Optional.of(clientPlacement);
         }
 
@@ -463,43 +414,19 @@ public final class ScaffoldPlacementResolver {
             return java.util.Optional.empty();
         }
         if (velocity != null && velocity.getY() > JUMP_VY_THRESHOLD) {
-            ScaffoldDebug.resolve("jump guard vy=%.4f -> vanilla", velocity.getY());
             return java.util.Optional.empty();
         }
 
-        Vector3i dir = new Vector3i(
-            com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockFace.fromProtocolFace(clientState.blockFace)
-                .getDirection());
         Vector3i attach = resolveAttachColumn(world, clientPlacement, clientState.blockFace);
         Position ray = clientState.raycastHit;
 
-        ScaffoldDebug.resolve(
-            "start clientPlacement=%s,%s,%s face=%s dir=%s,%s,%s ray=%s attach=%s,%s,%s",
-            clientPlacement.x(),
-            clientPlacement.y(),
-            clientPlacement.z(),
-            clientState.blockFace,
-            dir.x(),
-            dir.y(),
-            dir.z(),
-            ray == null ? "null" : String.format("(%.3f,%.3f,%.3f)", ray.x, ray.y, ray.z),
-            attach.x(),
-            attach.y(),
-            attach.z()
-        );
-
         BlockType attachType = world.getBlockType(attach.x(), attach.y(), attach.z());
         if (attachType == null || !AetherhavenConstants.WOOD_SCAFFOLD_ITEM_ID.equals(attachType.getId())) {
-            ScaffoldDebug.resolve(
-                "attach not scaffold (id=%s) -> vanilla",
-                attachType != null ? attachType.getId() : "null"
-            );
             return java.util.Optional.empty();
         }
 
         int topY = highestScaffoldY(world, attach.x(), attach.z());
         if (topY < 0) {
-            ScaffoldDebug.resolve("topY < 0 -> vanilla");
             return java.util.Optional.empty();
         }
 
@@ -508,44 +435,24 @@ public final class ScaffoldPlacementResolver {
         BlockFace face =
             pFace == BlockFace.Down && clientPlacement.y() > attach.y() ? BlockFace.Up : pFace;
 
-        ScaffoldDebug.resolve(
-            "scaffold attach column topY=%s apex+1=%s,%s,%s",
-            topY,
-            apexPlusOne.x(),
-            apexPlusOne.y(),
-            apexPlusOne.z()
-        );
-
         if (isHorizontalSideFace(face)) {
             if (attach.y() < topY) {
                 if (rayHitsScaffoldColumnBelowApex(world, ray, attach.x(), attach.z(), topY)) {
                     Vector3i up = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
-                    ScaffoldDebug.resolve(
-                        "side face mid-column ray OK attach.y=%s < topY -> tower top %s",
-                        attach.y(),
-                        up != null ? String.format("%s,%s,%s", up.x(), up.y(), up.z()) : "BLOCKED"
-                    );
                     return java.util.Optional.of(up != null ? up : clientPlacement);
                 }
-                ScaffoldDebug.resolve("side face mid-column no ray hit -> vanilla tier placement");
                 return java.util.Optional.of(clientPlacement);
             }
-            ScaffoldDebug.resolve("side face on cap (attach.y==topY) -> vanilla clientPlacement");
             return java.util.Optional.of(clientPlacement);
         }
 
         if (pFace == BlockFace.None) {
-            ScaffoldDebug.resolve("face None -> vanilla");
             return java.util.Optional.empty();
         }
 
         if (face == BlockFace.Up) {
             if (attach.y() < topY) {
                 Vector3i up = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
-                ScaffoldDebug.resolve(
-                    "Up on lower segment -> extend apex+1 %s",
-                    up != null ? String.format("%s,%s,%s", up.x(), up.y(), up.z()) : "BLOCKED->vanilla"
-                );
                 return java.util.Optional.of(up != null ? up : clientPlacement);
             }
 
@@ -558,13 +465,6 @@ public final class ScaffoldPlacementResolver {
                 if (cardinalFromColumn) {
                     Vector3i inferred =
                         cellIfClear(world, clientPlacement.x(), topY, clientPlacement.z(), playerWorldBounds);
-                    ScaffoldDebug.resolve(
-                        "peak Up no-ray: infer horizontal neighbor at topY client=%s,%s,%s ok=%s",
-                        clientPlacement.x(),
-                        py,
-                        clientPlacement.z(),
-                        inferred != null
-                    );
                     if (inferred != null) {
                         return java.util.Optional.of(inferred);
                     }
@@ -576,13 +476,8 @@ public final class ScaffoldPlacementResolver {
                 double lz = ray.z - (attach.z() + 0.5);
                 double ax = Math.abs(lx);
                 double az = Math.abs(lz);
-                ScaffoldDebug.resolve("peak ray xz plane ax=%.4f az=%.4f centerMax=%s", ax, az, TOP_FACE_CENTER_MAX);
                 if (Math.max(ax, az) < TOP_FACE_CENTER_MAX) {
                     Vector3i stacked = cellClearForTower(world, attach.x(), attach.y() + 1, attach.z());
-                    ScaffoldDebug.resolve(
-                        "ray center stack up -> %s",
-                        stacked != null ? String.format("%s,%s,%s", stacked.x(), stacked.y(), stacked.z()) : "BLOCKED"
-                    );
                     return java.util.Optional.of(stacked != null ? stacked : clientPlacement);
                 }
                 int ox = ax >= az ? (lx > 0.0 ? 1 : -1) : 0;
@@ -593,30 +488,16 @@ public final class ScaffoldPlacementResolver {
                     int tz = attach.z() + oz * step;
                     Vector3i candidate = cellIfClear(world, tx, ty, tz, playerWorldBounds);
                     if (candidate != null) {
-                        ScaffoldDebug.resolve(
-                            "ray edge horizontal step=%s -> %s,%s,%s",
-                            step,
-                            candidate.x(),
-                            candidate.y(),
-                            candidate.z()
-                        );
                         return java.util.Optional.of(candidate);
                     }
                 }
-                ScaffoldDebug.resolve("ray edge horizontal all steps blocked -> vanilla");
                 return java.util.Optional.of(clientPlacement);
             }
 
             Vector3i stackUp = cellClearForTower(world, apexPlusOne.x(), apexPlusOne.y(), apexPlusOne.z());
-            ScaffoldDebug.resolve(
-                "peak Up fallthrough stackUp=%s -> %s",
-                apexPlusOne,
-                stackUp != null ? String.format("%s,%s,%s", stackUp.x(), stackUp.y(), stackUp.z()) : "BLOCKED->vanilla"
-            );
             return java.util.Optional.of(stackUp != null ? stackUp : clientPlacement);
         }
 
-        ScaffoldDebug.resolve("unhandled face -> vanilla");
         return java.util.Optional.empty();
     }
 

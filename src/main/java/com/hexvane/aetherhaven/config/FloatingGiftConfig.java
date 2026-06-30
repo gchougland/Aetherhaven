@@ -82,9 +82,9 @@ public final class FloatingGiftConfig {
     private double popHoldLatchSeconds = 1.05;
     private double projectileHitRadiusBlocks = 1.4;
     private int maxActivePerWorld = 1;
-    private int typeWeightRegular = 40;
+    private int typeWeightRegular = 60;
     private int typeWeightGreen = 10;
-    private int typeWeightRed = 50;
+    private int typeWeightRed = 30;
 
     public boolean isEnabled() {
         return enabled;

@@ -1,18 +1,7 @@
 package com.hexvane.aetherhaven.time;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
-import com.hexvane.aetherhaven.economy.TownEconomyTimeService;
-import com.hexvane.aetherhaven.farming.SprinklerWateringService;
-import com.hexvane.aetherhaven.feast.FeastService;
-import com.hexvane.aetherhaven.inn.InnPoolService;
-import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
-import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
-import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
-import com.hexvane.aetherhaven.shopspot.ShopSpotDailyRerollService;
-import com.hexvane.aetherhaven.shopspot.ShopSpotRefreshSystem;
-import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
-import com.hexvane.aetherhaven.town.CitizenDawnRevivalService;
+import com.hexvane.aetherhaven.plugin.GameTimeTickListenerRegistry;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -22,15 +11,22 @@ import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
 
 /**
- * Wires {@link AetherhavenGameTimeHub} to town economy (treasury tithe), inn visitor pool, farm sprinklers, and
- * villager schedules.
+ * Forwards game-time ticks to optional subplugin listeners. Core-only town ticks that must always run stay here
+ * only if no subplugin owns them; feature ticks register via {@link GameTimeTickListenerRegistry}.
  */
 public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGameTimeSubscriber {
     @Nonnull
     private final AetherhavenPlugin plugin;
 
-    public AetherhavenGameTimeBridgeSubscriber(@Nonnull AetherhavenPlugin plugin) {
+    @Nonnull
+    private final GameTimeTickListenerRegistry tickListeners;
+
+    public AetherhavenGameTimeBridgeSubscriber(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull GameTimeTickListenerRegistry tickListeners
+    ) {
         this.plugin = plugin;
+        this.tickListeners = tickListeners;
     }
 
     @Override
@@ -41,19 +37,7 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         long prevEpochMinute,
         long newEpochMinute
     ) {
-        TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
-        VillagerScheduleService.applyForWorld(world, store, plugin, false);
-        InnPoolService.scheduleTickFromHub(world, plugin, wtr);
-        GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
-        TouristPortalTickService.scheduleTickFromHub(world, plugin, wtr);
-        SprinklerWateringService.scheduleFromHub(world, store, plugin);
-        FeastService.pruneExpiredForWorld(world, plugin, store);
-        FeastService.checkGatherTimeoutsForWorld(world, plugin);
-        ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
-        ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
-        QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
-        CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
-        PlotAssemblyService.schedulePassiveFromHub(world, plugin);
+        tickListeners.onSmoothGameMinuteAdvanced(store, world, wtr, prevEpochMinute, newEpochMinute);
     }
 
     @Override
@@ -66,25 +50,6 @@ public final class AetherhavenGameTimeBridgeSubscriber implements AetherhavenGam
         @Nonnull LocalDateTime toDateTime,
         boolean backward
     ) {
-        TouristPortalTickService.catchUpLeaveAfterTimeJump(world, plugin, store, wtr);
-        if (!backward) {
-            InnPoolService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
-            SprinklerWateringService.catchUpAfterTimeJump(world, store, plugin, from, to);
-            ShopSpotDailyRerollService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
-            CitizenDawnRevivalService.catchUpAfterTimeJump(world, plugin, store, wtr, from, to);
-            TownEconomyTimeService.onGameTimeFromHub(world, plugin, wtr, store);
-        }
-        VillagerScheduleService.applyForWorld(world, store, plugin, true);
-        InnPoolService.scheduleTickFromHub(world, plugin, wtr);
-        GuildHallAdventurerPoolService.scheduleTickFromHub(world, plugin, wtr);
-        TouristPortalTickService.scheduleTickFromHub(world, plugin, wtr);
-        SprinklerWateringService.scheduleFromHub(world, store, plugin);
-        FeastService.pruneExpiredForWorld(world, plugin, store);
-        FeastService.checkGatherTimeoutsForWorld(world, plugin);
-        ShopSpotDailyRerollService.scheduleTickFromHub(world, plugin, wtr);
-        ShopSpotRefreshSystem.onGameMinute(world, store, plugin, wtr);
-        QuestBoardOnlineDawnService.tickWorld(world, store, plugin, wtr);
-        CitizenDawnRevivalService.scheduleTickFromHub(world, plugin, wtr);
-        PlotAssemblyService.schedulePassiveFromHub(world, plugin);
+        tickListeners.onGameTimeDiscontinuity(store, world, wtr, from, to, toDateTime, backward);
     }
 }

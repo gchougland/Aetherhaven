@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=柴
-items.Aetherhaven_Firewood.description=干柴捆。在炉子和篝火中燃烧时间大约是木炭的两倍。
 
-items.Aetherhaven_Root_Remover.name=根部清除剂
-items.Aetherhaven_Root_Remover.description=右键点击树干，即可拔出埋在地下的树根。木头会落在你的脚边，树坑则会被泥土填满。
 
-items.Aetherhaven_Growth_Serum.name=生长血清
-items.Aetherhaven_Growth_Serum.description=用于幼年动物，可帮助其快速成长。使用一瓶。
 
-items.Aetherhaven_Hunting_Knife.name=猎刀
-items.Aetherhaven_Hunting_Knife.description=一把锋利的猎刀。用它猎杀动物，有时还能获得额外的生肉、皮毛和羽毛。
 
 items.Aetherhaven_Lute.name=琵琶
 items.Aetherhaven_Lute.description=一把琴弦音色温暖的木制鲁特琴。伊莱亚斯·索恩伍德在公会大厅演奏时，总是随身带着一把。
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=城镇货币储存在国库中。
 items.Aetherhaven_Geode.name=晶洞
 items.Aetherhaven_Geode.description=一块空心石头，里面可能藏有水晶、宝石或矿石。付钱请铁匠把它敲开。
 
-items.Aetherhaven_Geode_Anvil.name=晶洞砧
-items.Aetherhaven_Geode_Anvil.description=无需支付铁匠费即可开启晶洞。放置并使用；<color is="#ffa726">你必须知道原理图</color>才能在你的城镇规划桌上制作它。
 
 items.Aetherhaven_Crystallized_Person.name=结晶人
 

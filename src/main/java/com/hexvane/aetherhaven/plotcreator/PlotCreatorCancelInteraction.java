@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -40,6 +42,9 @@ public final class PlotCreatorCancelInteraction extends SimpleInstantInteraction
         @Nonnull InteractionContext context,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.PLOT_CREATOR)) {
+            return;
+        }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         if (commandBuffer == null || type != InteractionType.Ability3) {
             context.getState().state = InteractionState.Failed;

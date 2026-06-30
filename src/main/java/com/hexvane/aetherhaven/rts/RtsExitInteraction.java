@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.rts;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.protocol.InteractionState;
@@ -41,6 +43,9 @@ public final class RtsExitInteraction extends SimpleInstantInteraction {
         @Nonnull InteractionContext context,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.RTS)) {
+            return;
+        }
         CommandBuffer<EntityStore> commandBuffer = context.getCommandBuffer();
         if (commandBuffer == null || type != InteractionType.Primary) {
             context.getState().state = InteractionState.Failed;

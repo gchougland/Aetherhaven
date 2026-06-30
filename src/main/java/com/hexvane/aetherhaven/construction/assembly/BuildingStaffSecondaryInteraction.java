@@ -2,12 +2,15 @@ package com.hexvane.aetherhaven.construction.assembly;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
@@ -80,6 +83,9 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         @Nonnull InteractionContext context,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (firstRun && SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.CONSTRUCTION)) {
+            return;
+        }
         super.tick0(firstRun, time, type, context, cooldownHandler);
         if (context.getState().state != InteractionState.NotFinished) {
             return;
@@ -118,10 +124,15 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         maybeSpawnDirectedStream(playerRef, store, uuid, nowNs);
 
         World world = store.getExternalData().getWorld();
-        BuildingStaffAssemblyChannelComponent channel = commandBuffer.getComponent(playerRef, BuildingStaffAssemblyChannelComponent.getComponentType());
+        ComponentType<EntityStore, BuildingStaffAssemblyChannelComponent> channelType =
+            BuildingStaffAssemblyChannelComponent.getComponentType();
+        BuildingStaffAssemblyChannelComponent channel = commandBuffer.getComponent(playerRef, channelType);
+        if (channel == null) {
+            channel = store.getComponent(playerRef, channelType);
+        }
         if (channel == null) {
             channel = new BuildingStaffAssemblyChannelComponent();
-            commandBuffer.addComponent(playerRef, BuildingStaffAssemblyChannelComponent.getComponentType(), channel);
+            commandBuffer.addComponent(playerRef, channelType, channel);
         }
         if (firstRun) {
             channel.resetChargeSession();

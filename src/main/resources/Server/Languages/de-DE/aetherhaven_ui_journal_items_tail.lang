@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Wähle oben eine Quest aus.
 items.Aetherhaven_Management_Block.name=Stadtarchiv
 items.Aetherhaven_Management_Block.description=Regal für ein fertiggestelltes Gebäude. Öffnet den Baustatus für das zugehörige Grundstück.
 
-items.Aetherhaven_Sprinkler_Iron.name=Eisensprinkler
-items.Aetherhaven_Sprinkler_Iron.description=Bewässert den umgegrabenen Boden einen Block tiefer in einem 3×3-Bereich. Läuft einmal pro Spielmorgen. Geringste Abdeckung.
-items.Aetherhaven_Sprinkler_Thorium.name=Thorium-Sprinkler
-items.Aetherhaven_Sprinkler_Thorium.description=Wasser umwälzt den Boden einen Block tiefer in einem 5×5-Feld. Einmal pro Spielmorgen. Größer als Eisen.
-items.Aetherhaven_Sprinkler_Cobalt.name=Kobalt-Sprinkler
-items.Aetherhaven_Sprinkler_Cobalt.description=Das Wasser bewässert den Boden eine Blockebene tiefer in einem 7×7-Feld. Einmal pro Spielmorgen. Große Abdeckung.
-items.Aetherhaven_Sprinkler_Adamantite.name=Adamantit-Sprinkler
-items.Aetherhaven_Sprinkler_Adamantite.description=Das Wasser bewässert den Boden eine Blockebene tiefer in einem 9×9-Feld. Einmal pro Spielmorgen. Größte Abdeckung.
 
 items.Aetherhaven_Wood_Scaffold.name=Holzgerüst
 items.Aetherhaven_Wood_Scaffold.description=Klettere wie auf einer Leiter. Platziere Blöcke per Rechtsklick wie normale Blöcke. Halte die Benutzungstaste (F) gedrückt, während du auf das Gerüst zielst, um den Turm seitlich zu erweitern oder ihn horizontal von der Oberseite abzuzweigen. Wenn du das unterste, nicht gestützte Teil zerstörst, stürzt der Turm ein.

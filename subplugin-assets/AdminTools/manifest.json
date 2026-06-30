@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "AdminTools",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven POI debug tool and difficulty UI (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

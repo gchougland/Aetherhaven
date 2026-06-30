@@ -162,3 +162,25 @@ aetherhaven.ui.productionUpgrades.notify.locked=まずは以前のアップグ�
 aetherhaven.ui.productionUpgrades.notify.maxed=このアップグレードは既に全額購入済みです。
 aetherhaven.ui.productionUpgrades.notify.failed=アップグレードを適用できませんでした。
 
+# === UI: town charter (held item: name, dissolve, relocate) ===
+aetherhaven.ui.chartertown.title=町憲章
+aetherhaven.ui.chartertown.townNameLabel=町名
+aetherhaven.ui.chartertown.namePlaceholder=あなたの町に固有の名前を入力してください
+aetherhaven.ui.chartertown.ownerOnlyHint=町の所有者のみが、定款に記載されている表示名を変更できます。
+aetherhaven.ui.chartertown.saveTownName=名前を保存
+aetherhaven.ui.chartertown.dissolve=町を溶かす
+aetherhaven.ui.chartertown.dissolveHint=町、すべての建物、村人、そしてこの憲章を完全に削除します。元に戻すことはできません。
+aetherhaven.ui.chartertown.dissolveConfirmText=本当に大丈夫ですか？この操作を行うと、町が完全に削除され、すべての建物と村人が消滅し、この憲章も破棄されます。元に戻すことはできません。
+aetherhaven.ui.chartertown.dissolveConfirm=はい、町を解散します
+aetherhaven.ui.chartertown.dissolveCancel=キャンセル
+aetherhaven.ui.chartertown.dissolved=町は解体された。建物は撤去され、村人は立ち退きを強いられ、町の憲章は破棄された。
+aetherhaven.ui.chartertown.moveCharter=チャーター便を移動
+aetherhaven.ui.chartertown.moveCharterTooltip=チャーター便を移動
+aetherhaven.ui.chartertown.moveCharterHint=領地を新しい区画に再配置します。建物を配置できるのは、すべての建物が町の境界線内に収まる場所に限ります。
+aetherhaven.ui.chartertown.moveCharterConfirmText=新しい領地は、区画配置のように配置します（微調整と確定）。もし建物が領地外に配置されてしまう場合は、配置はブロックされます。
+aetherhaven.ui.chartertown.moveCharterConfirm=続く
+aetherhaven.ui.chartertown.moveCharterCancel=キャンセル
+aetherhaven.ui.chartertown.charterMoved=憲章が変更されました。あなたの領地は新しい憲章の中心に位置するようになりました。
+aetherhaven.ui.chartertown.modalDissolveTitle=町を消滅させる？
+aetherhaven.ui.chartertown.modalMoveTitle=チャーターを移動しますか？
+aetherhaven.ui.chartertown.modalCancel=キャンセル

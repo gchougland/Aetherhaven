@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=Выберите один из
 items.Aetherhaven_Management_Block.name=Полка с городскими записями
 items.Aetherhaven_Management_Block.description=Стеллаж для документов по завершенному зданию. Открывает информацию о ходе строительства на данном участке.
 
-items.Aetherhaven_Sprinkler_Iron.name=Железный спринклер
-items.Aetherhaven_Sprinkler_Iron.description=Вода вспахивает почву на один блок ниже в области размером 3×3. Процесс повторяется одно игровое утро. Минимальная площадь покрытия.
-items.Aetherhaven_Sprinkler_Thorium.name=Ториевый спринклер
-items.Aetherhaven_Sprinkler_Thorium.description=Вода вспахивала почву на один блок ниже в области 5×5. Раз в игровое утро. Больше, чем железо.
-items.Aetherhaven_Sprinkler_Cobalt.name=Кобальтовый спринклер
-items.Aetherhaven_Sprinkler_Cobalt.description=Вода вспахивала почву на один блок ниже в области 7×7. Один раз каждое игровое утро. Широкое покрытие.
-items.Aetherhaven_Sprinkler_Adamantite.name=Адамантитовый спринклер
-items.Aetherhaven_Sprinkler_Adamantite.description=Вода вспахивала почву на один блок ниже в области 9×9. Один раз каждое игровое утро. Максимально широкое покрытие.
 
 items.Aetherhaven_Wood_Scaffold.name=Деревянные строительные леса
 items.Aetherhaven_Wood_Scaffold.description=Поднимайтесь, как по лестнице. Щелкните правой кнопкой мыши, чтобы разместить блок, как обычный. Удерживайте клавишу Use (F), целясь в строительные леса, чтобы расширить башню сбоку или сделать горизонтальные ответвления от верхней грани. Разрушение нижней незакрепленной части приводит к обрушению всей конструкции.

@@ -1,0 +1,197 @@
+package com.hexvane.aetherhaven.plugin;
+
+import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.command.AetherhavenCommand;
+import com.hexvane.aetherhaven.HStats;
+import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
+import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
+import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
+import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
+import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
+import com.hexvane.aetherhaven.questboard.QuestBoardOnlineDawnService;
+import com.hexvane.aetherhaven.rts.RtsCommandService;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeBridgeSubscriber;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
+import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
+import com.hexvane.aetherhaven.tourist.TouristReconcileService;
+import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
+import com.hexvane.aetherhaven.ui.QuestJournalPage;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.ResourceType;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.protocol.BlockPosition;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.event.events.player.PlayerDisconnectEvent;
+import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
+import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import javax.annotation.Nonnull;
+
+/** Parent-plugin registrations shared by all Aetherhaven subplugins. */
+public final class AetherhavenCoreBootstrap {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    private AetherhavenCoreBootstrap() {}
+
+    public static void register(@Nonnull AetherhavenPlugin plugin) {
+        logHstats(plugin);
+        plugin.loadAndMigrateConfig();
+        plugin.registerModCommonAssetDelivery();
+        plugin.registerPlotTokenIconPackets();
+
+        AetherhavenSharedEntityComponents.register(plugin);
+        AetherhavenSharedChunkComponents.register(plugin);
+
+        plugin
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenPlotTokenUnlockPageUse",
+                PlotTokenUnlockPageUseInteraction.class,
+                PlotTokenUnlockPageUseInteraction.CODEC
+            );
+        registerGaiaStatueOpenUi(plugin);
+        AetherhavenSubpluginAssetCodecs.registerAll(plugin);
+        AetherhavenEmbeddedSubpluginPacks.registerEnabled(plugin);
+
+        GameTimeTickListenerRegistry tickRegistry = plugin.getGameTimeTickListenerRegistry();
+        AetherhavenGameTimeBridgeSubscriber bridgeSubscriber =
+            new AetherhavenGameTimeBridgeSubscriber(plugin, tickRegistry);
+        plugin.getGameTimeHub().register(bridgeSubscriber);
+
+        ResourceType<EntityStore, AetherhavenGameTimeCursorResource> cursorType =
+            plugin
+                .getEntityStoreRegistry()
+                .registerResource(AetherhavenGameTimeCursorResource.class, AetherhavenGameTimeCursorResource::new);
+        plugin.setGameTimeCursorResourceType(cursorType);
+        plugin
+            .getEntityStoreRegistry()
+            .registerSystem(new AetherhavenGameTimeCoordinatorSystem(plugin.getGameTimeHub(), cursorType));
+
+        PlayerTownJournalState.register(plugin.getEntityStoreRegistry());
+        PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
+        plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
+
+        registerCorePlayerLifecycleHooks(plugin);
+
+        plugin
+            .getEventRegistry()
+            .registerGlobal(StartWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), plugin));
+        plugin
+            .getEventRegistry()
+            .registerGlobal(AddWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), plugin));
+        plugin
+            .getEventRegistry()
+            .registerGlobal(RemoveWorldEvent.class, e -> AetherhavenWorldRegistries.unloadWorld(e.getWorld()));
+
+        OpenCustomUIInteraction.registerSimple(
+            plugin,
+            QuestJournalPage.class,
+            AetherhavenConstants.PAGE_QUEST_JOURNAL,
+            QuestJournalPage::new
+        );
+
+        plugin.initAetherhavenCommand(new AetherhavenCommand());
+        LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
+    }
+
+    private static void registerGaiaStatueOpenUi(@Nonnull AetherhavenPlugin plugin) {
+        OpenCustomUIInteraction.registerCustomPageSupplier(
+            plugin,
+            GaiaStatueRevivePage.class,
+            AetherhavenConstants.PAGE_GAIA_STATUE,
+            (ref, componentAccessor, playerRef, context) -> {
+                BlockPosition targetBlock = context.getTargetBlock();
+                if (targetBlock == null) {
+                    return null;
+                }
+                Store<EntityStore> store = ref.getStore();
+                World world = store.getExternalData().getWorld();
+                PlotConstructionBlockResolver.PlotConstructionTarget target =
+                    PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, GaiaStatueBlock.getComponentType());
+                if (target == null) {
+                    return null;
+                }
+                return new GaiaStatueRevivePage(playerRef, target.blockRef(), target.blockWorldPos());
+            }
+        );
+    }
+
+    private static void logHstats(@Nonnull AetherhavenPlugin plugin) {
+        String hstatsModUuid = HstatsBuildMetadata.HSTATS_MOD_UUID;
+        String modVersion = plugin.getManifest().getVersion().toString();
+        if (!hstatsModUuid.isBlank()) {
+            new HStats(hstatsModUuid, modVersion);
+            LOGGER.atInfo().log("HStats metrics enabled for Aetherhaven v%s.", modVersion);
+        } else {
+            LOGGER
+                .atInfo()
+                .log(
+                    "HStats metrics disabled: set AETHERHAVEN_HSTATS_MOD_UUID when building, or Gradle property hstats_mod_uuid (gradle.properties / -Phstats_mod_uuid=...), to your hstats.dev mod UUID at build time to enable."
+                );
+        }
+    }
+
+    private static void registerCorePlayerLifecycleHooks(@Nonnull AetherhavenPlugin plugin) {
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                PlayerReadyEvent.class,
+                event -> {
+                    Player player = event.getPlayer();
+                    if (player == null || player.getWorld() == null || player.getReference() == null) {
+                        return;
+                    }
+                    player
+                        .getWorld()
+                        .execute(
+                            () -> {
+                                Ref<EntityStore> ref = player.getReference();
+                                Store<EntityStore> store = ref.getStore();
+                                QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
+                                UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                                if (uc != null) {
+                                    TouristReconcileService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                }
+                                RtsCommandService.exit(ref, store);
+                            });
+                });
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                PlayerDisconnectEvent.class,
+                event -> {
+                    Ref<EntityStore> ref = event.getPlayerRef().getReference();
+                    if (ref != null && ref.isValid()) {
+                        Store<EntityStore> store = ref.getStore();
+                        World world = store.getExternalData().getWorld();
+                        if (world != null) {
+                            world.execute(() -> RtsCommandService.exit(ref, store));
+                        }
+                    }
+                    if (plugin.getPlotTokenIconPacketAdapter() != null) {
+                        plugin.getPlotTokenIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
+                    }
+                    QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
+                }
+            );
+    }
+}

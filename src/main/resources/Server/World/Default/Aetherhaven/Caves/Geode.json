@@ -32,7 +32,7 @@
   "EntryPoints": {
     "Seed": "Aetherhaven-Geode-Cave",
     "Density": 0.35,
-    "Scale": 0.012,
+    "Scale": 0.008,
     "Jitter": 0.5
   },
   "FixedEntryHeight": [88, 98],

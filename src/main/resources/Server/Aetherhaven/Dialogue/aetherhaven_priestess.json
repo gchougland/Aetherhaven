@@ -186,6 +186,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "town_quest_completed",
                 "questId": "q_gaia_altar"
               },
@@ -212,6 +216,10 @@
           "condition": {
             "type": "and",
             "conditions": [
+              {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
               {
                 "type": "town_quest_completed",
                 "questId": "q_gaia_altar"
@@ -451,6 +459,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "town_quest_completed",
                 "questId": "q_gaia_altar"
               },
@@ -479,6 +491,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "town_quest_active",
                 "questId": "q_priestess_gaia_draught"
               },
@@ -500,6 +516,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "town_quest_active",
                 "questId": "q_priestess_gaia_draught"
               },
@@ -517,6 +537,10 @@
           "condition": {
             "type": "and",
             "conditions": [
+              {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
               {
                 "type": "gaia_draught_unlocked"
               },
@@ -539,6 +563,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "gaia_draught_unlocked"
               },
               {
@@ -549,6 +577,10 @@
           "condition": {
             "type": "and",
             "conditions": [
+              {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
               {
                 "type": "gaia_draught_unlocked"
               },
@@ -579,6 +611,10 @@
             "type": "and",
             "conditions": [
               {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
+              {
                 "type": "gaia_draught_unlocked"
               },
               {
@@ -589,6 +625,10 @@
           "condition": {
             "type": "and",
             "conditions": [
+              {
+                "type": "subplugin_enabled",
+                "subplugin": "ReputationUnlocks"
+              },
               {
                 "type": "gaia_draught_unlocked"
               },

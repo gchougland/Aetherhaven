@@ -84,6 +84,9 @@ public final class QuestDialogueEntry {
         if (qid.isEmpty()) {
             return false;
         }
+        if (!QuestAvailability.isEnabled(def)) {
+            return false;
+        }
         if (town.hasQuestActive(qid)) {
             return false;
         }

@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.shop;
 
+import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
+import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
 import com.hexvane.aetherhaven.plot.ShopSafeBlock;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -38,6 +40,9 @@ public final class ShopSafeUseInteraction extends SimpleBlockInteraction {
         @Nonnull Vector3i targetBlock,
         @Nonnull CooldownHandler cooldownHandler
     ) {
+        if (SubpluginInteractionGuard.failIfDisabled(context, AetherhavenPluginIds.ECONOMY)) {
+            return;
+        }
         if (type != InteractionType.Use) {
             context.getState().state = InteractionState.Failed;
             return;

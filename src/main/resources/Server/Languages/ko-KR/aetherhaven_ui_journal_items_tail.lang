@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=위에서 퀘스트를 선택�
 items.Aetherhaven_Management_Block.name=마을 기록 보관소
 items.Aetherhaven_Management_Block.description=완공된 건물의 관리용 선반입니다. 해당 부지의 건설 상태를 표시합니다.
 
-items.Aetherhaven_Sprinkler_Iron.name=철제 스프링클러
-items.Aetherhaven_Sprinkler_Iron.description=경작된 토양 바로 아래 3x3 영역의 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 실행됩니다. 최소 범위입니다.
-items.Aetherhaven_Sprinkler_Thorium.name=토륨 스프링클러
-items.Aetherhaven_Sprinkler_Thorium.description=5x5 크기의 경작된 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 사용할 수 있습니다. 철보다 큽니다.
-items.Aetherhaven_Sprinkler_Cobalt.name=코발트 스프링클러
-items.Aetherhaven_Sprinkler_Cobalt.description=경작된 흙 바로 아래 7x7 영역의 흙에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩, 넓은 범위에 걸쳐 적용됩니다.
-items.Aetherhaven_Sprinkler_Adamantite.name=아다만타이트 스프링클러
-items.Aetherhaven_Sprinkler_Adamantite.description=경작된 토양 바로 아래 9x9 영역에 물을 줍니다. 게임 내 시간으로 매일 아침 한 번씩 적용됩니다. 가장 넓은 범위에 적용됩니다.
 
 items.Aetherhaven_Wood_Scaffold.name=목재 비계
 items.Aetherhaven_Wood_Scaffold.description=사다리처럼 올라가세요. 일반 블록처럼 마우스 오른쪽 버튼을 클릭하여 설치하세요. 비계를 조준한 상태에서 사용(F) 키를 누르면 탑을 측면에서 확장하거나 윗면에서 수평으로 가지를 뻗을 수 있습니다. 지지대가 없는 맨 아래쪽 조각을 부수면 쌓아 올린 탑이 무너집니다.

@@ -106,6 +106,9 @@ public final class TouristAutonomyState implements Component<EntityStore>, PathN
     private static volatile ComponentType<EntityStore, TouristAutonomyState> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(TouristAutonomyState.class, "AetherhavenTouristAutonomyState", CODEC);
     }
 

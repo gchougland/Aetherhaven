@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "Jewelry",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven jewelry appraisal, crafting, and loadout items (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

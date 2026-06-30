@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,8 +23,15 @@ import javax.annotation.Nullable;
  */
 public final class CustomBuildingIconAssetRegistry {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    /** packId|assetName -> last registered file mtime (skip re-read / sendAsset on journal refresh). */
+    private static final ConcurrentHashMap<String, Long> REGISTERED_MTIMES = new ConcurrentHashMap<>();
 
     private CustomBuildingIconAssetRegistry() {}
+
+    @Nonnull
+    private static String cacheKey(@Nonnull String packId, @Nonnull String assetName) {
+        return packId + "|" + assetName;
+    }
 
     public static void syncFromDataDirectory(@Nonnull AetherhavenPlugin plugin) {
         CommonAssetModule module = CommonAssetModule.get();
@@ -50,7 +58,7 @@ public final class CustomBuildingIconAssetRegistry {
             return;
         }
         String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        CommonAsset asset = registerIconFile(module, packId, iconFile, true);
+        CommonAsset asset = registerIconFile(module, packId, iconFile, false);
         if (asset == null) {
             return;
         }
@@ -68,12 +76,19 @@ public final class CustomBuildingIconAssetRegistry {
         boolean log
     ) {
         String assetName = "Icons/ItemsGenerated/" + iconFile.getFileName();
+        String cacheKey = cacheKey(packId, assetName);
         try {
+            long mtime = Files.getLastModifiedTime(iconFile).toMillis();
+            Long registered = REGISTERED_MTIMES.get(cacheKey);
+            if (registered != null && registered == mtime) {
+                return null;
+            }
             byte[] bytes = Files.readAllBytes(iconFile);
             FileCommonAsset asset = new FileCommonAsset(iconFile, assetName, bytes);
             module.addCommonAsset(packId, asset, log);
-            if (log && Universe.get().getPlayerCount() > 0) {
-                // Force item-icon atlas rebuild so inventory slots pick up runtime PNGs.
+            REGISTERED_MTIMES.put(cacheKey, mtime);
+            if (Universe.get().getPlayerCount() > 0) {
+                // Force item-icon atlas rebuild so inventory slots pick up runtime PNGs (once per icon revision).
                 module.sendAsset(asset, true);
             }
             return asset;

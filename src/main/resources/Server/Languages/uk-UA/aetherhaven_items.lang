@@ -1,17 +1,9 @@
 # Split from server.lang — keys unchanged (same lookups as before; Java uses server.<key>).
 # Bundle: items, path tool, plot tokens through quest journal item
 
-items.Aetherhaven_Firewood.name=Дрова
-items.Aetherhaven_Firewood.description=Висушені в'язки полін. Горить приблизно вдвічі довше, ніж деревне вугілля в печах і на багаттях.
 
-items.Aetherhaven_Root_Remover.name=Засіб для видалення коренів
-items.Aetherhaven_Root_Remover.description=Клацніть правою кнопкою миші на стовбурі дерева, щоб витягнути коріння, що знаходиться під землею. Деревина впаде вам до ніг, а отвір заповниться землею.
 
-items.Aetherhaven_Growth_Serum.name=Сироватка для росту
-items.Aetherhaven_Growth_Serum.description=Використовуйте на молодій тварині, щоб допомогти їй одразу підрости. Використовується один флакон.
 
-items.Aetherhaven_Hunting_Knife.name=Мисливський ніж
-items.Aetherhaven_Hunting_Knife.description=Гострий ніж для мисливців. Вбивайте ним тварин, щоб іноді отримати додаткове сире м'ясо, шкіру та пір'я.
 
 items.Aetherhaven_Lute.name=Лютня
 items.Aetherhaven_Lute.description=Дерев'яна лютня з теплими струнами. Еліас Торнвуд тримає таку поруч, коли грає в залі гільдії.
@@ -337,8 +329,6 @@ items.Aetherhaven_Gold_Coin.description=Міська валюта зберіга
 items.Aetherhaven_Geode.name=Геода
 items.Aetherhaven_Geode.description=Порожнистий камінь, який може містити кристали, дорогоцінні камені або руду. Заплатіть ковалю, щоб він його розколов.
 
-items.Aetherhaven_Geode_Anvil.name=Жеодна ковадла
-items.Aetherhaven_Geode_Anvil.description=Відкриває геоди без плати за послуги коваля. Розміщення та використання; <color is="#ffa726">ви повинні знати схему</color>, щоб створити її у вашому столі містобудування.
 
 items.Aetherhaven_Crystallized_Person.name=Кристалізована людина
 

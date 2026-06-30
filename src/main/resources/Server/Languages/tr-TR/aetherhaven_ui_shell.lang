@@ -57,3 +57,14 @@ aetherhaven.ui.plotConstruction.couldNotLoadMembers=Oyuncu verileri yüklenemedi
 # UI — Gaia statue
 aetherhaven.ui.gaiaStatue.notEnoughEssence=Yeterli yaşam özü yok ({need} gerekiyor).
 aetherhaven.ui.gaiaStatue.essenceRemoveFailed=Envanterden yaşam özü çıkarılamadı.
+
+# === UI: Statue of Gaia (revival panel) ===
+aetherhaven.ui.gaiaStatue.title=Gaia Heykeli
+aetherhaven.ui.gaiaStatue.hint=Her diriliş {cost} yaşam özü tüketir.
+aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
+aetherhaven.ui.gaiaStatue.status.present=Şehirde
+aetherhaven.ui.gaiaStatue.status.missing=Uzak
+aetherhaven.ui.gaiaStatue.reviveSuccess=Meydana bir yaşam ipliği geri dönüyor.
+aetherhaven.ui.gaiaStatue.reviveFailed=Kutsama gerçekleşmedi. Öz geri döndü.
+aetherhaven.ui.gaiaStatue.footer=Bu kutsamayı yalnızca kasaba sahibi kullanabilir. Kayıp köylüler heykelin yanına geri çağrılabilir.
+aetherhaven.ui.gaiaStatue.revive=Canlandırmak

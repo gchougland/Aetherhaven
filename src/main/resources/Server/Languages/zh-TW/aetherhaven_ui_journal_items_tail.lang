@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=請選擇以上任務。
 items.Aetherhaven_Management_Block.name=城鎮檔案架
 items.Aetherhaven_Management_Block.description=已完工建築物的檔案架。打開其地塊的施工狀態。
 
-items.Aetherhaven_Sprinkler_Iron.name=鐵質灑水器
-items.Aetherhaven_Sprinkler_Iron.description=水流會翻耕下方一格範圍內的土壤，覆蓋範圍為 3×3 的區域。遊戲內每天早晨運行一次。覆蓋範圍最小。
-items.Aetherhaven_Sprinkler_Thorium.name=釷噴淋器
-items.Aetherhaven_Sprinkler_Thorium.description=水流翻耕下方一格範圍內的5×5區域土壤。每天遊戲時間早晨一次。比鐵塊大。
-items.Aetherhaven_Sprinkler_Cobalt.name=鈷噴淋器
-items.Aetherhaven_Sprinkler_Cobalt.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 7×7 格。每天遊戲時間早晨一次。覆蓋範圍廣。
-items.Aetherhaven_Sprinkler_Adamantite.name=鑽石噴灑器
-items.Aetherhaven_Sprinkler_Adamantite.description=水流翻耕下方一格範圍內的土壤，覆蓋範圍為 9×9 格。每天遊戲時間早晨一次。覆蓋範圍最廣。
 
 items.Aetherhaven_Wood_Scaffold.name=木製鷹架
 items.Aetherhaven_Wood_Scaffold.description=像爬梯子一樣攀爬。右鍵點擊放置物品，就像點擊普通方塊一樣。按住使用按鍵 (F) 並瞄準鷹架，可以從側面延伸塔身，或從頂部水平分支。破壞底部未支撐的部分會使整個塔身坍塌。

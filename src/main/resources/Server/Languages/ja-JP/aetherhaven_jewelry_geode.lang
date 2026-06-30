@@ -42,68 +42,11 @@ items.Aetherhaven_Appraisal_Bench.name=鑑定ベンチ
 items.Aetherhaven_Appraisal_Bench.description=あなたが既に所有しているジュエリーを識別します。一度登録すれば無料で利用できます。
 items.Aetherhaven_Jewelry_Crafting_Bench.name=ジュエリー製作作業台
 items.Aetherhaven_Jewelry_Crafting_Bench.description=仕上げ作業には鉄製の金床が必要です。設計図がわかったら、都市計画デスクで製作しましょう。貴重な延べ棒とカットされた宝石を注ぎ込んで、ジュエリーを鍛造します。
-items.Aetherhaven_Purification_Powder.name=精製粉末
-items.Aetherhaven_Purification_Powder.description=所持中は、近くの潜在的な出現地点がガイアに触れた微塵で輝きます。ハイライトされた出現地点に使用すると、それを消滅させ、チャージを1つ消費します。
-items.Aetherhaven_Gaias_Draught.name=ガイアの飲み物
-items.Aetherhaven_Gaias_Draught.description=あなただけを導く、祝福された生命の水のフラスコ。他のポーションと同様に、手に持って飲むことで二次的な効果を発揮します。残量は弾薬表示とフラスコの耐久度ゲージに反映されます。祭壇での祝福は、フラスコの容量を拡大し、治癒力を高めます。
-aetherhaven.gaiadraught.cannotStore=ガイアの薬はあなたの手元に残ります。保管庫に入れることはできません。
-items.Aetherhaven_Shard_Of_Gaia.name=ガイアの破片
-items.Aetherhaven_Shard_Of_Gaia.description=女司祭の証。ガイアの祭壇に十分の一税と共に捧げると、酒を飲める回数が増えます。
-items.Aetherhaven_Verdant_Catalyst.name=緑豊かな触媒
-items.Aetherhaven_Verdant_Catalyst.description=女司祭の証。ガイアの祭壇に十分の一税と共に捧げることで、あなたの癒しの効果がさらに強まります。
-interactionHints.purifySpawn=[{key}]を押してスポーンを浄化する
 
 # === UI: Statue of Gaia (revival / resident list) ===
-aetherhaven.ui.gaiaStatue.title=ガイア像
-aetherhaven.ui.gaiaStatue.hint=蘇生するたびに、{cost}の生命エネルギーを消費します。
-aetherhaven.ui.gaiaStatue.row={name} ({profession}): {status}
-aetherhaven.ui.gaiaStatue.status.present=町で
-aetherhaven.ui.gaiaStatue.status.missing=離れて
-aetherhaven.ui.gaiaStatue.reviveSuccess=広場に再び生命の息吹が宿る。
-aetherhaven.ui.gaiaStatue.reviveFailed=祝福は効かなかった。本質は返された。
-aetherhaven.ui.gaiaStatue.footer=この祝福は町の所有者のみが使用できる。行方不明の村人は、この像の近くで呼び戻される。
-aetherhaven.ui.gaiaStatue.revive=復活
 
-aetherhaven.profession.kind.elder=長老
-aetherhaven.profession.kind.innkeeper=宿屋の主人
-aetherhaven.profession.kind.merchant=商人
-aetherhaven.profession.kind.farmer=農家
-aetherhaven.profession.kind.blacksmith=鍛冶屋
-aetherhaven.profession.kind.priestess=女司祭
-aetherhaven.profession.kind.miner=鉱夫
-aetherhaven.profession.kind.logger=ロガー
-aetherhaven.profession.kind.rancher=牧場主
-aetherhaven.profession.kind.guild_master=ギルドマスター
-aetherhaven.profession.kind.crystal_keeper=クリスタルキーパー
-aetherhaven.profession.kind.pyrotechnic=花火
-aetherhaven.profession.kind.florist=花屋
-aetherhaven.profession.kind.builder=ビルダー
-aetherhaven.profession.kind.bard=吟遊詩人
-aetherhaven.profession.kind.townsfolk=町の人々
-aetherhaven.profession.kind.unknown=居住者
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
-aetherhaven.ui.chartertown.title=町憲章
-aetherhaven.ui.chartertown.townNameLabel=町名
-aetherhaven.ui.chartertown.namePlaceholder=あなたの町に固有の名前を入力してください
-aetherhaven.ui.chartertown.ownerOnlyHint=町の所有者のみが、定款に記載されている表示名を変更できます。
-aetherhaven.ui.chartertown.saveTownName=名前を保存
-aetherhaven.ui.chartertown.dissolve=町を溶かす
-aetherhaven.ui.chartertown.dissolveHint=町、すべての建物、村人、そしてこの憲章を完全に削除します。元に戻すことはできません。
-aetherhaven.ui.chartertown.dissolveConfirmText=本当に大丈夫ですか？この操作を行うと、町が完全に削除され、すべての建物と村人が消滅し、この憲章も破棄されます。元に戻すことはできません。
-aetherhaven.ui.chartertown.dissolveConfirm=はい、町を解散します
-aetherhaven.ui.chartertown.dissolveCancel=キャンセル
-aetherhaven.ui.chartertown.dissolved=町は解体された。建物は撤去され、村人は立ち退きを強いられ、町の憲章は破棄された。
-aetherhaven.ui.chartertown.moveCharter=チャーター便を移動
-aetherhaven.ui.chartertown.moveCharterTooltip=チャーター便を移動
-aetherhaven.ui.chartertown.moveCharterHint=領地を新しい区画に再配置します。建物を配置できるのは、すべての建物が町の境界線内に収まる場所に限ります。
-aetherhaven.ui.chartertown.moveCharterConfirmText=新しい領地は、区画配置のように配置します（微調整と確定）。もし建物が領地外に配置されてしまう場合は、配置はブロックされます。
-aetherhaven.ui.chartertown.moveCharterConfirm=続く
-aetherhaven.ui.chartertown.moveCharterCancel=キャンセル
-aetherhaven.ui.chartertown.charterMoved=憲章が変更されました。あなたの領地は新しい憲章の中心に位置するようになりました。
-aetherhaven.ui.chartertown.modalDissolveTitle=町を消滅させる？
-aetherhaven.ui.chartertown.modalMoveTitle=チャーターを移動しますか？
-aetherhaven.ui.chartertown.modalCancel=キャンセル
 
 # === UI: town treasury (player-facing panel: deposit, tithe tab, copy) ===
 aetherhaven.ui.treasury.title=町の財政

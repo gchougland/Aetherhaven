@@ -167,14 +167,6 @@ aetherhaven.ui.questjournal.detailPlaceholderBody=上のクエストから一つ
 items.Aetherhaven_Management_Block.name=町の記録棚
 items.Aetherhaven_Management_Block.description=完成した建物の事務用棚。その区画の建設状況を表示します。
 
-items.Aetherhaven_Sprinkler_Iron.name=鉄製スプリンクラー
-items.Aetherhaven_Sprinkler_Iron.description=1ブロック下の<color is="#4ade80">3×3</color>の範囲に水を撒いて耕します。ゲーム内の毎朝1回実行されます。最小範囲。
-items.Aetherhaven_Sprinkler_Thorium.name=トリウム散水器
-items.Aetherhaven_Sprinkler_Thorium.description=水は、<color is="#4ade80">5×5</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。鉄よりも大きい。
-items.Aetherhaven_Sprinkler_Cobalt.name=コバルト製スプリンクラー
-items.Aetherhaven_Sprinkler_Cobalt.description=水は、7×7のエリアの1ブロック下の土壌を耕します。ゲーム内の毎朝1回。広範囲をカバーします。
-items.Aetherhaven_Sprinkler_Adamantite.name=アダマンタイト製スプリンクラー
-items.Aetherhaven_Sprinkler_Adamantite.description=水は、<color is="#4ade80">9×9</color> の範囲で、1 ブロック下の土壌を耕します。ゲーム内の毎朝 1 回。最も広い範囲をカバーします。
 
 items.Aetherhaven_Wood_Scaffold.name=木製足場
 items.Aetherhaven_Wood_Scaffold.description=はしごのように登ります。通常のブロックと同じように右クリックします。足場を狙ってUseキー（F）を押し続けると、タワーを側面から拡張したり、上面から水平方向に枝分かれさせたりできます。一番下の支えのないピースを破壊すると、積み重ねたタワーが崩れます。
