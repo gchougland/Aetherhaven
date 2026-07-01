@@ -1,0 +1,161 @@
+{
+  "id": "plot_jszzas_guard_tower_1",
+  "displayName": "Jszza\u0027s Guard Tower 1",
+  "description": "Made by Jszza After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "prefabPath": "jszza/plot_jszzas_guard_tower_1.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    0,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 30,
+  "materials": [
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 61
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Stairs",
+      "count": 56
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 45
+    },
+    {
+      "itemId": "Wood_Ash_Trunk",
+      "count": 40
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 36
+    },
+    {
+      "itemId": "Rock_Aqua_Cobble_Stairs",
+      "count": 28
+    },
+    {
+      "itemId": "Wood_Hardwood_Stairs",
+      "count": 28
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 24
+    },
+    {
+      "itemId": "Rock_Calcite_Cobble",
+      "count": 23
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 19
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks_Half",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Aqua_Brick_Half",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Aqua_Brick_Stairs",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Blackwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 16
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 16
+    },
+    {
+      "itemId": "Rock_Aqua_Brick",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Crude_Trapdoor",
+      "count": 12
+    },
+    {
+      "itemId": "Furniture_Village_Ladder",
+      "count": 11
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 10
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Wall",
+      "count": 8
+    },
+    {
+      "itemId": "Cloth_Block_Wool_Cyan",
+      "count": 5
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Half",
+      "count": 4
+    },
+    {
+      "itemId": "Wood_Blackwood_Beam",
+      "count": 4
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 3
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Rock_Aqua_Cobble_Beam",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Mossy_Half",
+      "count": 2
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Wall",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Blackwood_Fence",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Rock_Calcite_Cobble_Half",
+      "count": 1
+    }
+  ],
+  "tags": [
+    "decoration"
+  ],
+  "touristDestination": true,
+  "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true,
+  "excludeFromTownJournal": true,
+  "decorationPlot": true
+}

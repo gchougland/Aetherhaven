@@ -3,7 +3,9 @@ package com.hexvane.aetherhaven.plot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
+import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
+import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -28,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
-/** Stamps plot-linked block components (management shelf, treasury, shop safe, Gaia statue). */
+/** Stamps plot-linked block components (management shelf, treasury, shop safe, Gaia statue, production storage). */
 public final class PlotBlockStamper {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final int PLACE_SETTINGS = 10;
@@ -99,6 +101,7 @@ public final class PlotBlockStamper {
         stampTreasuryBlock(world, town, plotId, def, anchor, yaw, true, false);
         stampShopSafeBlock(world, town, plotId, def, anchor, yaw, true, false);
         stampGaiaStatueBlock(world, town, plotId, plot, def, anchor, yaw, true, false);
+        stampProductionStorageBlock(world, plot, def, anchor, yaw, true, false);
     }
 
     /**
@@ -147,6 +150,7 @@ public final class PlotBlockStamper {
         recordOutcome(result, "treasury", stampTreasuryBlock(world, town, plotId, def, anchor, yaw, false, dryRun));
         recordOutcome(result, "shopSafe", stampShopSafeBlock(world, town, plotId, def, anchor, yaw, false, dryRun));
         recordOutcome(result, "gaiaStatue", stampGaiaStatueBlock(world, town, plotId, plot, def, anchor, yaw, false, dryRun));
+        recordOutcome(result, "productionStorage", stampProductionStorageBlock(world, plot, def, anchor, yaw, false, dryRun));
         return result;
     }
 
@@ -600,6 +604,110 @@ public final class PlotBlockStamper {
             new ShopSafeBlock(wantPlotId(plotId), wantTownId(town))
         );
         return StampOutcome.STAMPED;
+    }
+
+    @Nonnull
+    private static StampOutcome stampProductionStorageBlock(
+        @Nonnull World world,
+        @Nonnull PlotInstance plot,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw,
+        boolean force,
+        boolean dryRun
+    ) {
+        if (!ProductionCatalog.isProductionWorkplaceConstruction(def.getGameplayConstructionId())) {
+            return StampOutcome.ALREADY_OK;
+        }
+
+        int wx;
+        int wy;
+        int wz;
+        int[] local = def.getProductionStorageLocalPos();
+        if (local != null) {
+            Vector3i d = PrefabLocalOffset.rotate(yaw, local[0], local[1], local[2]);
+            wx = anchor.x + d.x;
+            wy = anchor.y + d.y;
+            wz = anchor.z + d.z;
+        } else {
+            Vector3i baseCell = findProductionStorageBaseCellInFootprint(world, plot);
+            if (baseCell == null) {
+                LOGGER.atWarning().log(
+                    "No production storage block in plot footprint for construction %s",
+                    def.getId()
+                );
+                return StampOutcome.BLOCK_MISSING;
+            }
+            wx = baseCell.x;
+            wy = baseCell.y;
+            wz = baseCell.z;
+        }
+
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null) {
+            LOGGER.atWarning().log("Production storage chunk not loaded at %s,%s,%s", wx, wy, wz);
+            return StampOutcome.CHUNK_UNLOADED;
+        }
+
+        Integer storageY = findBlockY(world, wx, wy, wz, AetherhavenConstants.BLOCK_PRODUCTION_STORAGE);
+        if (!force && storageY != null) {
+            return StampOutcome.ALREADY_OK;
+        }
+        if (dryRun) {
+            return storageY != null ? StampOutcome.ALREADY_OK : StampOutcome.STAMPED;
+        }
+
+        Vector3i cell = new Vector3i(wx, storageY != null ? storageY : wy, wz);
+        Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+        RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+        int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+        int placeY = storageY != null ? storageY : wy;
+        PrefabFootprintClearUtil.forceClearProductionStorageAt(world, wx, placeY, wz);
+        ensureBlockPlaced(
+            world,
+            chunk,
+            wx,
+            placeY,
+            wz,
+            AetherhavenConstants.BLOCK_PRODUCTION_STORAGE,
+            rt,
+            rotationIndex
+        );
+
+        BlockType placed = world.getBlockType(wx, placeY, wz);
+        if (placed == null || !blockTypeIdMatches(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, placed.getId())) {
+            LOGGER.atWarning().log("Production storage missing after re-place at %s,%s,%s", wx, placeY, wz);
+            return StampOutcome.FAILED;
+        }
+        return StampOutcome.STAMPED;
+    }
+
+    @Nullable
+    private static Vector3i findProductionStorageBaseCellInFootprint(@Nonnull World world, @Nonnull PlotInstance plot) {
+        PlotFootprintRecord fp = plot.toFootprint();
+        Set<Long> seenBases = new HashSet<>();
+        Vector3i first = null;
+        int minY = Math.max(0, fp.getMinY() - 1);
+        int maxY = Math.min(319, fp.getMaxY() + 1);
+        for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
+            for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
+                for (int y = minY; y <= maxY; y++) {
+                    BlockType bt = world.getBlockType(x, y, z);
+                    if (bt == null || !blockTypeIdMatches(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, bt.getId())) {
+                        continue;
+                    }
+                    BlockPosition base = gaiaStatueBaseBlock(world, x, y, z);
+                    long key = packBlockPos(base.x, base.y, base.z);
+                    if (!seenBases.add(key)) {
+                        continue;
+                    }
+                    if (first == null) {
+                        first = new Vector3i(base.x, base.y, base.z);
+                    }
+                }
+            }
+        }
+        return first;
     }
 
     @Nullable

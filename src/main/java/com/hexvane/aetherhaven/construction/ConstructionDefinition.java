@@ -168,6 +168,11 @@ public final class ConstructionDefinition {
     @Nullable
     private int[] shopSafeLocalPos;
 
+    /** Prefab-local position of the workplace production storage wardrobe; optional. */
+    @SerializedName("productionStorageLocalPos")
+    @Nullable
+    private int[] productionStorageLocalPos;
+
     /** Prefab-local POI anchors for autonomy; listed in each construction JSON under {@code Server/Aetherhaven/Buildings/}. */
     @SerializedName("pois")
     private List<BuildingPoisDefinition.PoiRow> pois = new ArrayList<>();
@@ -440,6 +445,12 @@ public final class ConstructionDefinition {
     @Nullable
     public int[] getShopSafeLocalPos() {
         return shopSafeLocalPos != null && shopSafeLocalPos.length == 3 ? shopSafeLocalPos : null;
+    }
+
+    /** @return prefab-local x,y,z of workplace production storage wardrobe, or null */
+    @Nullable
+    public int[] getProductionStorageLocalPos() {
+        return productionStorageLocalPos != null && productionStorageLocalPos.length == 3 ? productionStorageLocalPos : null;
     }
 
     @Nonnull

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -296,6 +297,9 @@ public final class ConstructionPasteOps {
                 chunk.breakBlock(bx, by, bz, SET_BLOCK_SETTINGS_CLEAR);
             }
             return true;
+        }
+        if (PrefabFootprintClearUtil.isProductionStorageBlockTypeId(blockKey)) {
+            PrefabFootprintClearUtil.forceClearProductionStorageAt(world, bx, by, bz);
         }
         RotationTuple rot = RotationTuple.get(pb.blockRotation);
         chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, !force);

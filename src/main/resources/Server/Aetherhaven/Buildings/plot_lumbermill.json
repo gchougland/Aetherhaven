@@ -15,6 +15,11 @@
     1,
     -4
   ],
+  "productionStorageLocalPos": [
+    2,
+    1,
+    -1
+  ],
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 3,
