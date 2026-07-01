@@ -2,7 +2,7 @@
   "id": "plot_jimmys_windmill",
   "displayName": "Jimmy's Windmill",
   "description": "By Jimmy G",
-  "prefabPath": "plot_jimmys_windmill.prefab.json",
+  "prefabPath": "Jimmys/plot_jimmys_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,

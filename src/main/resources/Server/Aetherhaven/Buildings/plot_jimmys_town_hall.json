@@ -1,0 +1,171 @@
+{
+  "id": "plot_jimmys_town_hall",
+  "displayName": "Jimmy\u0027s Town Hall",
+  "description": "Made by Jimmy G",
+  "prefabPath": "Jimmys/plot_jimmys_town_hall.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 35,
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 332
+    },
+    {
+      "itemId": "Rock_Quartzite",
+      "count": 171
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 170
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 131
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 91
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 82
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 69
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 43
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 42
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 28
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 18
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 12
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 10
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 7
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 5
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Aetherhaven_Town_Planning_Desk",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Mug",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Wardrobe",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Shelf_Full",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 4
+    }
+  ],
+  "pois": [
+    {
+      "localX": -17,
+      "localY": 2,
+      "localZ": 13,
+      "tags": [
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Aetherhaven_Town_Planning_Desk",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -17,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 12
+    }
+  ],
+  "managementBlockLocalPos": [
+    -18,
+    2,
+    13
+  ],
+  "treasuryLocalPos": [
+    -18,
+    1,
+    13
+  ],
+  "countsAsConstructionId": "plot_town_hall",
+  "tags": [
+    "town_hall",
+    "work"
+  ],
+  "touristDestination": true,
+  "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true
+}

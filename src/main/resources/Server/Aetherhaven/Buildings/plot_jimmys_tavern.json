@@ -1,0 +1,353 @@
+{
+  "id": "plot_jimmys_tavern",
+  "displayName": "Jimmy\u0027s Tavern",
+  "description": "Made by Jimmy G",
+  "prefabPath": "Jimmys/plot_jimmys_tavern.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 45,
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 631
+    },
+    {
+      "itemId": "Rock_Quartzite",
+      "count": 455
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 410
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 200
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 200
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 150
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 127
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 89
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 87
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 76
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 40
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 26
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 20
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 17
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 9
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 9
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Shelf_Full",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    }
+  ],
+  "pois": [
+    {
+      "localX": -12,
+      "localY": 2,
+      "localZ": 12,
+      "tags": [
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Editor_Empty",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -12,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 11
+    },
+    {
+      "localX": -13,
+      "localY": 0,
+      "localZ": 13,
+      "tags": [
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -13,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 12
+    },
+    {
+      "localX": -22,
+      "localY": 2,
+      "localZ": 12,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": -22,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 13
+    },
+    {
+      "localX": -27,
+      "localY": 2,
+      "localZ": 12,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": -27,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 13
+    },
+    {
+      "localX": -13,
+      "localY": 1,
+      "localZ": 10,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 9
+    },
+    {
+      "localX": -15,
+      "localY": 1,
+      "localZ": 12,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -14,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 12
+    },
+    {
+      "localX": -15,
+      "localY": 1,
+      "localZ": 14,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -14,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 14
+    },
+    {
+      "localX": -17,
+      "localY": 1,
+      "localZ": 13,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -17,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 12
+    },
+    {
+      "localX": -17,
+      "localY": 1,
+      "localZ": 16,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -17,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 17
+    },
+    {
+      "localX": -19,
+      "localY": 1,
+      "localZ": 14,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -18,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 14
+    },
+    {
+      "localX": -19,
+      "localY": 1,
+      "localZ": 11,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -18,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 11
+    },
+    {
+      "localX": -18,
+      "localY": 1,
+      "localZ": 9,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": -18,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 8
+    }
+  ],
+  "managementBlockLocalPos": [
+    -15,
+    2,
+    18
+  ],
+  "innkeeperSpawnLocal": [
+    -13,
+    1,
+    13
+  ],
+  "visitorSpawnLocals": [
+    [
+      -14,
+      1,
+      7
+    ],
+    [
+      -15,
+      0,
+      9
+    ]
+  ],
+  "countsAsConstructionId": "plot_inn",
+  "tags": [
+    "inn",
+    "tavern",
+    "work",
+    "eat"
+  ],
+  "touristDestination": true,
+  "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true
+}

@@ -2,7 +2,7 @@
   "id": "plot_jimmys_large_house",
   "displayName": "Jimmy's Large House",
   "description": "By Jimmy G",
-  "prefabPath": "plot_jimmys_large_house.prefab.json",
+  "prefabPath": "Jimmys/plot_jimmys_large_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,
