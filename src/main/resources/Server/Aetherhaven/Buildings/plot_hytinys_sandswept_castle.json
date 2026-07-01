@@ -12,6 +12,7 @@
   "rotationYaw": "None",
   "selfBuildGameDays": 1.0,
   "treasuryGoldCoinCost": 80,
+  "assemblyPrefabSectionsPerAxis": 3,
   "materials": [
     {
       "resourceTypeId": "Wood_All",
@@ -66,5 +67,6 @@
     "desert"
   ],
   "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_sandswept_castle.displayName"
 }

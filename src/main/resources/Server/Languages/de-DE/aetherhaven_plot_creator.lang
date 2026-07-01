@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Besucher können hier Halt mach
 aetherhaven.plotcreator.field.touristDestination.hint=Wenn das Portal eingeschaltet ist, können Besucher tagsüber zu Fuß zu diesem Gebäude gelangen.
 aetherhaven.plotcreator.field.plotTokenLocked=Plot-Token standardmäßig gesperrt
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Wenn diese Option aktiviert ist, müssen die Spieler dieses Grundstück an der Grundstückswerkbank (mithilfe eines Grundstücksplans) freischalten, bevor sie Grundstücksmarken dafür herstellen können.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Montageabschnitte pro Achse (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Rezension

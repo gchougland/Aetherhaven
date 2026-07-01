@@ -3,9 +3,11 @@ package com.hexvane.aetherhaven.construction.assembly;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Holder;
+import com.hypixel.hytale.component.NonSerialized;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -17,6 +19,9 @@ import com.hypixel.hytale.server.core.modules.entity.component.TransformComponen
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import org.joml.Vector3d;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,6 +69,7 @@ public final class AssemblyMarkerSpawner {
             Vector3d pos = cellCenter(x, y, z);
             holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(pos, rot));
             holder.ensureComponent(UUIDComponent.getComponentType());
+            holder.addComponent(EntityStore.REGISTRY.getNonSerializedComponentType(), NonSerialized.get());
             holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
             Store<EntityStore> wstore = world.getEntityStore().getStore();
             wstore.addEntity(holder, AddReason.SPAWN);
@@ -97,12 +103,94 @@ public final class AssemblyMarkerSpawner {
     }
 
     public static void removeMarkerByUuid(@Nonnull World world, @Nullable UUID markerUuid) {
+        removeMarkerByUuid(world, markerUuid, null);
+    }
+
+    public static void removeMarkerByUuid(
+        @Nonnull World world,
+        @Nullable UUID markerUuid,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
         if (markerUuid == null) {
             return;
         }
         Ref<EntityStore> ref = world.getEntityRef(markerUuid);
-        if (ref != null && ref.isValid()) {
-            world.getEntityStore().getStore().removeEntity(ref, RemoveReason.REMOVE);
+        removeMarkerRef(ref, commandBuffer, world.getEntityStore().getStore());
+    }
+
+    /** Removes every preview marker owned by {@code ownerPlayerEntityUuid}, including untracked orphans. */
+    public static void removeAllForOwner(
+        @Nonnull World world,
+        @Nonnull UUID ownerPlayerEntityUuid,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        ArrayList<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(BuildingStaffMarkerEntity.getComponentType()),
+            (chunk, chunkCommandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    BuildingStaffMarkerEntity marker = chunk.getComponent(i, BuildingStaffMarkerEntity.getComponentType());
+                    if (marker == null || !ownerPlayerEntityUuid.equals(marker.getOwnerPlayerUuid())) {
+                        continue;
+                    }
+                    Ref<EntityStore> markerRef = chunk.getReferenceTo(i);
+                    if (markerRef.isValid()) {
+                        toRemove.add(markerRef);
+                    }
+                }
+            }
+        );
+        removeMarkerRefs(toRemove, commandBuffer, store);
+    }
+
+    /** World shutdown / load hygiene: drop every transient assembly preview marker in this world. */
+    public static void purgeAllInWorld(@Nonnull World world) {
+        if (!world.isAlive()) {
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        ArrayList<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(BuildingStaffMarkerEntity.getComponentType()),
+            (chunk, commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    Ref<EntityStore> markerRef = chunk.getReferenceTo(i);
+                    if (markerRef.isValid()) {
+                        toRemove.add(markerRef);
+                    }
+                }
+            }
+        );
+        removeMarkerRefs(toRemove, null, store);
+    }
+
+    private static void removeMarkerRefs(
+        @Nonnull Iterable<Ref<EntityStore>> refs,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Store<EntityStore> store
+    ) {
+        Set<Ref<EntityStore>> seen = new HashSet<>();
+        for (Ref<EntityStore> ref : refs) {
+            if (ref == null || !ref.isValid() || !seen.add(ref)) {
+                continue;
+            }
+            removeMarkerRef(ref, commandBuffer, store);
+        }
+    }
+
+    private static void removeMarkerRef(
+        @Nullable Ref<EntityStore> ref,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (ref == null || !ref.isValid()) {
+            return;
+        }
+        if (commandBuffer != null) {
+            commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+        } else {
+            store.removeEntity(ref, RemoveReason.REMOVE);
         }
     }
 

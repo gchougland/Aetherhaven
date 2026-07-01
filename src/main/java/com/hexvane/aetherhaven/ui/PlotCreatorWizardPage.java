@@ -130,6 +130,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
+                .append("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value")
                 .append("@AssemblySections", "#AssemblySectionsField.Value"),
             false
         );
@@ -233,6 +234,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#FloatingGiftBlueprintToggle",
+            EventData.of("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#AssemblySectionsField",
             EventData.of("@AssemblySections", "#AssemblySectionsField.Value"),
             false
@@ -270,10 +277,13 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.TextSpans", Message.translation(MSG + ".field.touristDestination.hint"));
         b.set("#PlotTokenLockedLabel.TextSpans", Message.translation(MSG + ".field.plotTokenLocked"));
         b.set("#PlotTokenLockedHint.TextSpans", Message.translation(MSG + ".field.plotTokenLocked.hint"));
+        b.set("#FloatingGiftBlueprintLabel.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint"));
+        b.set("#FloatingGiftBlueprintHint.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint.hint"));
         b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
-        for (PlotBuildingKind k : PlotBuildingKind.values()) {
+        boolean playerTypesOnly = PlotCreatorService.limitBuildingTypesToPlayerKinds();
+        for (PlotBuildingKind k : PlotBuildingKind.selectableKinds(playerTypesOnly, session.getDraft().getKind())) {
             String labelKey = MSG + ".kind." + k.name();
             kinds.add(
                 new DropdownEntryInfo(
@@ -315,6 +325,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#TouristDestinationHint.Visible", false);
             b.set("#PlotTokenLockedRow.Visible", false);
             b.set("#PlotTokenLockedHint.Visible", false);
+            b.set("#FloatingGiftBlueprintRow.Visible", false);
+            b.set("#FloatingGiftBlueprintHint.Visible", false);
             b.set("#AssemblySectionsLabel.Visible", false);
             b.set("#AssemblySectionsField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -343,6 +355,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#TouristDestinationHint.Visible", true);
             b.set("#PlotTokenLockedRow.Visible", true);
             b.set("#PlotTokenLockedHint.Visible", true);
+            b.set("#FloatingGiftBlueprintRow.Visible", true);
+            b.set("#FloatingGiftBlueprintHint.Visible", true);
             b.set("#AssemblySectionsLabel.Visible", true);
             b.set("#AssemblySectionsField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -370,6 +384,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationHint.Visible", false);
         b.set("#PlotTokenLockedRow.Visible", false);
         b.set("#PlotTokenLockedHint.Visible", false);
+        b.set("#FloatingGiftBlueprintRow.Visible", false);
+        b.set("#FloatingGiftBlueprintHint.Visible", false);
         b.set("#AssemblySectionsLabel.Visible", false);
         b.set("#AssemblySectionsField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", false);
@@ -427,6 +443,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
+        b.set("#FloatingGiftBlueprintToggle.Value", d.isFloatingGiftBlueprint());
         if (d.getAssemblySectionsInput() != null) {
             b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
         } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
@@ -549,8 +566,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
     }
 
     private boolean applyKindPanelAndClose(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
-        if (session.getDraft().getKind() == null) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.needKind"));
+        String kindErr = PlotCreatorService.validateKindSelection(session.getDraft());
+        if (kindErr != null) {
+            playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
             return false;
         }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
@@ -653,6 +671,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.plotTokenLocked != null) {
             d.setPlotTokenLockedByDefault(data.plotTokenLocked);
         }
+        if (data.floatingGiftBlueprint != null) {
+            d.setFloatingGiftBlueprint(data.floatingGiftBlueprint);
+        }
         if (data.assemblySections != null) {
             d.setAssemblySectionsInput(data.assemblySections);
         }
@@ -689,6 +710,15 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (step == PlotCreatorStep.TAGS) {
             PlotCreatorService.applyTagsInput(d);
+            PlotCreatorService.advance(session, ref, store);
+            return;
+        }
+        if (step == PlotCreatorStep.KIND) {
+            String kindErr = PlotCreatorService.validateKindSelection(d);
+            if (kindErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
+                return;
+            }
             PlotCreatorService.advance(session, ref, store);
             return;
         }
@@ -753,6 +783,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@PlotTokenLocked", Codec.BOOLEAN), (d, v) -> d.plotTokenLocked = v, d -> d.plotTokenLocked)
             .add()
+            .append(
+                new KeyedCodec<>("@FloatingGiftBlueprint", Codec.BOOLEAN),
+                (d, v) -> d.floatingGiftBlueprint = v,
+                d -> d.floatingGiftBlueprint
+            )
+            .add()
             .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
             .add()
             .build();
@@ -783,6 +819,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean touristDestination;
         @Nullable
         private Boolean plotTokenLocked;
+        @Nullable
+        private Boolean floatingGiftBlueprint;
         @Nullable
         private String assemblySections;
     }

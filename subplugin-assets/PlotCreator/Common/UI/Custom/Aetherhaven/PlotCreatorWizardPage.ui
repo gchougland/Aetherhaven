@@ -148,6 +148,27 @@ $C.@PageOverlay {
         Visible: false;
       }
 
+      Group #FloatingGiftBlueprintRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #FloatingGiftBlueprintToggle {}
+
+        Label #FloatingGiftBlueprintLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #FloatingGiftBlueprintHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
+      }
+
       Label #AssemblySectionsLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

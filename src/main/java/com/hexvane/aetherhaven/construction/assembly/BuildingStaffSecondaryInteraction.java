@@ -14,11 +14,9 @@ import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
-import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Rotation3fc;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
-import com.hypixel.hytale.protocol.Color;
 import com.hypixel.hytale.protocol.InteractionState;
 import com.hypixel.hytale.protocol.InteractionSyncData;
 import com.hypixel.hytale.protocol.InteractionType;
@@ -36,10 +34,8 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.util.TargetUtil;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -56,15 +52,10 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
 
     private static final double RAY_MAX = 14.0;
     private static final long STREAM_INTERVAL_NS = 72_000_000L;
-    private static final int TRACER_STEPS = 14;
-    private static final Color TRACER_TINT = new Color((byte) 170, (byte) 255, (byte) 230);
     private static final ConcurrentHashMap<UUID, Long> LAST_STREAM_NS = new ConcurrentHashMap<>();
     /** Short creative brush ticks while charging (non-looping — stops when RMB releases). */
     private static final ConcurrentHashMap<UUID, Long> LAST_BRUSH_AMBIENT_NS = new ConcurrentHashMap<>();
     private static final long BRUSH_AMBIENT_INTERVAL_NS = 200_000_000L;
-    private static final ConcurrentHashMap<UUID, Long> LAST_NO_MANA_HINT_NS = new ConcurrentHashMap<>();
-    private static final long NO_MANA_HINT_INTERVAL_NS = 2_000_000_000L;
-
     @Nonnull
     public static final BuilderCodec<BuildingStaffSecondaryInteraction> CODEC =
         BuilderCodec
@@ -180,73 +171,6 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         }
         channel.beginOrContinueChannel(activeCell, nowNs);
         maybePlayBrushAmbientDuringChannel(uuid, playerRef, store, nowNs, channel);
-        long elapsed = nowNs - channel.getChannelStartNs();
-        if (elapsed < BuildingStaffAssemblyChannelComponent.CHANNEL_DURATION_NS) {
-            return;
-        }
-        if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
-            maybeNotifyNoMana(playerRef, store, uuid, nowNs);
-            return;
-        }
-        boolean anyAction = false;
-        if (phase == PlotAssemblyPhase.CLEARING) {
-            ArrayList<Vector3i> batch =
-                PlotAssemblyService.obstructionCellsNearChebyshev(world, job, plot, activeCell, brushRadiusBlocks);
-            for (int bi = 0; bi < batch.size(); bi++) {
-                if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
-                    maybeNotifyNoMana(playerRef, store, uuid, nowNs);
-                    break;
-                }
-                Vector3i cell = batch.get(bi);
-                if (!PlotAssemblyService.advanceClearingAtCell(
-                    world, plugin, commandBuffer, store, town, plot, job, cell, uuid
-                )) {
-                    continue;
-                }
-                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
-                    break;
-                }
-                anyAction = true;
-                if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-                    break;
-                }
-                if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
-                    break;
-                }
-            }
-        } else {
-            IntArrayList batch =
-                PlotAssemblyService.frontierPlacementIndicesNearChebyshev(
-                    world,
-                    job,
-                    plot,
-                    activeCell,
-                    brushRadiusBlocks
-                );
-            for (int bi = 0; bi < batch.size(); bi++) {
-                if (!BuildingStaffMana.canAffordBlock(playerRef, store)) {
-                    maybeNotifyNoMana(playerRef, store, uuid, nowNs);
-                    break;
-                }
-                int idx = batch.getInt(bi);
-                if (!PlotAssemblyService.advancePlacementAtIndex(world, plugin, store, town, plot, job, idx, true, uuid, true)) {
-                    continue;
-                }
-                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
-                    break;
-                }
-                anyAction = true;
-                if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-                    break;
-                }
-            }
-        }
-        channel.releaseBrushLockAfterPlacement(nowNs);
-        if (anyAction) {
-            spawnTracerBeadsAlongBeam(playerRef, store, activeCell);
-            Vector3d p = new Vector3d(activeCell.x + 0.5, activeCell.y + 0.5, activeCell.z + 0.5);
-            ParticleUtil.spawnParticleEffect(AetherhavenConstants.BUILDING_STAFF_STEP_PARTICLE_SYSTEM_ID, p, store);
-        }
     }
 
     private static boolean tryAcquireBrushLock(
@@ -313,23 +237,6 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
         return true;
     }
 
-    private static void maybeNotifyNoMana(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull UUID playerUuid,
-        long nowNs
-    ) {
-        Long prev = LAST_NO_MANA_HINT_NS.get(playerUuid);
-        if (prev != null && nowNs - prev < NO_MANA_HINT_INTERVAL_NS) {
-            return;
-        }
-        LAST_NO_MANA_HINT_NS.put(playerUuid, nowNs);
-        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
-        if (pr != null) {
-            pr.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.assembly.staff.no_mana"));
-        }
-    }
-
     private static void maybePlayBrushAmbientDuringChannel(
         @Nonnull UUID playerUuid,
         @Nonnull Ref<EntityStore> playerRef,
@@ -392,42 +299,6 @@ public final class BuildingStaffSecondaryInteraction extends ChargingInteraction
             store
         );
         LAST_STREAM_NS.put(playerUuid, nowNs);
-    }
-
-    private static void spawnTracerBeadsAlongBeam(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull Store<EntityStore> store,
-        @Nonnull Vector3i hit
-    ) {
-        TransformComponent transform = store.getComponent(playerRef, TransformComponent.getComponentType());
-        if (transform == null) {
-            return;
-        }
-        HeadRotation head = store.getComponent(playerRef, HeadRotation.getComponentType());
-        Vector3d forward = head != null ? head.getDirection() : directionFromRotation(transform.getRotation());
-        Vector3d tip = new Vector3d(transform.getPosition()).add(0.0, 1.32, 0.0).add(new Vector3d(forward).mul(0.42));
-        Vector3d target = new Vector3d(hit.x + 0.5, hit.y + 0.52, hit.z + 0.5);
-        List<Ref<EntityStore>> nearby = particleRecipientsForPlayer(playerRef, tip, store);
-        for (int i = 1; i < TRACER_STEPS; i++) {
-            double t = i / (double) TRACER_STEPS;
-            double x = tip.x + (target.x - tip.x) * t;
-            double y = tip.y + (target.y - tip.y) * t;
-            double z = tip.z + (target.z - tip.z) * t;
-            ParticleUtil.spawnParticleEffect(
-                AetherhavenConstants.BUILDING_STAFF_MATERIAL_BEAD_PARTICLE_SYSTEM_ID,
-                x,
-                y,
-                z,
-                0.0F,
-                0.0F,
-                0.0F,
-                0.42F,
-                TRACER_TINT,
-                null,
-                nearby,
-                store
-            );
-        }
     }
 
     @Nonnull

@@ -33,6 +33,20 @@ public final class FloatingGiftLootTable {
             this.constructionId = constructionId != null && !constructionId.isBlank() ? constructionId.trim() : null;
             this.weight = Math.max(0, weight);
         }
+
+        @Nonnull
+        public String itemId() {
+            return itemId;
+        }
+
+        @Nullable
+        public String constructionId() {
+            return constructionId;
+        }
+
+        public int weight() {
+            return weight;
+        }
     }
 
     private final List<Entry> entries;
@@ -50,6 +64,16 @@ public final class FloatingGiftLootTable {
     @Nonnull
     public static FloatingGiftLootTable empty() {
         return new FloatingGiftLootTable(List.of());
+    }
+
+    @Nonnull
+    public static FloatingGiftLootTable of(@Nonnull List<Entry> entries) {
+        return new FloatingGiftLootTable(new ArrayList<>(entries));
+    }
+
+    @Nonnull
+    public List<Entry> entries() {
+        return List.copyOf(entries);
     }
 
     @Nonnull

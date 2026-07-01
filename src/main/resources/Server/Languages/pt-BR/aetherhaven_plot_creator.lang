@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Os visitantes podem parar aqui.
 aetherhaven.plotcreator.field.touristDestination.hint=Quando o portal estiver aberto, os visitantes poderão caminhar até este edifício durante o dia.
 aetherhaven.plotcreator.field.plotTokenLocked=O token de plotagem está bloqueado por padrão.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Quando ativada, os jogadores devem desbloquear essa área na bancada de criação de terrenos (usando um projeto de terreno) antes de poderem criar fichas de terreno para ela.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Seções de montagem por eixo (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Análise

@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=遊客可以在此停留。
 aetherhaven.plotcreator.field.touristDestination.hint=開放期間，門戶訪客可以在白天步行前往這棟建築。
 aetherhaven.plotcreator.field.plotTokenLocked=預設情況下，繪圖標記已鎖定。
 aetherhaven.plotcreator.field.plotTokenLocked.hint=啟用後，玩家必須先在地塊製作台（使用地塊藍圖）解鎖該地塊，然後才能為其製作地塊代幣。
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=每軸裝配部分（1-16）
 
 aetherhaven.plotcreator.step.REVIEW.title=審查

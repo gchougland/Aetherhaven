@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyPersistence;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
+import com.hexvane.aetherhaven.construction.assembly.AssemblyMarkerSpawner;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
@@ -172,6 +173,7 @@ public final class AetherhavenWorldRegistries {
     }
 
     public static void unloadWorld(@Nonnull World world) {
+        AssemblyMarkerSpawner.purgeAllInWorld(world);
         TownBorderMapOverlayService.stopWorld(world);
         AssemblyWorldRegistry.unloadWorld(world.getName());
         SprinklerWateringService.clearWorldState(world.getName());

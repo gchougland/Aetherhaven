@@ -181,7 +181,7 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.test {
     useJUnitPlatform {
-        includeTags("wall-placement")
+        includeTags("wall-placement", "floating-gift")
     }
     testLogging {
         events("passed", "failed", "skipped")

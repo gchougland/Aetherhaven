@@ -38,6 +38,24 @@ public final class PlotCreatorService {
         return playerRef.hasPermission(com.hexvane.aetherhaven.AetherhavenConstants.PERMISSION_PLOT_CREATOR);
     }
 
+    public static boolean limitBuildingTypesToPlayerKinds() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        return plugin == null || plugin.getConfig().get().isPlotCreatorPlayerBuildingTypesOnly();
+    }
+
+    /** @return plot creator error lang suffix ({@code aetherhaven.plotcreator.error.<suffix>}), or null if valid */
+    @Nullable
+    public static String validateKindSelection(@Nonnull PlotCreatorDraft draft) {
+        PlotBuildingKind kind = draft.getKind();
+        if (kind == null) {
+            return "needKind";
+        }
+        if (limitBuildingTypesToPlayerKinds() && !kind.isPlayerKind()) {
+            return "kindNotAllowed";
+        }
+        return null;
+    }
+
     public static void startEditSession(
         @Nonnull PlayerRef playerRef,
         @Nonnull Ref<EntityStore> ref,

@@ -7,6 +7,7 @@
   "selfBuildGameDays": 0.5,
   "plotTokenItemId": "Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper",
   "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true,
   "plotAnchorOffset": [
     4,
     0,

@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Les visiteurs peuvent s'arrête
 aetherhaven.plotcreator.field.touristDestination.hint=Lorsque le portail est activé, les visiteurs peuvent accéder à ce bâtiment à pied pendant la journée.
 aetherhaven.plotcreator.field.plotTokenLocked=Jeton de parcelle verrouillé par défaut
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Une fois activée, les joueurs doivent débloquer cette intrigue à l'établi de création d'intrigues (à l'aide d'un plan d'intrigue) avant de pouvoir fabriquer des jetons d'intrigue pour celle-ci.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Sections d'assemblage par axe (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Revoir

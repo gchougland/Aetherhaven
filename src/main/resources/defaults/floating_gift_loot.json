@@ -6,83 +6,8 @@
     "rollsMax": 2
   },
   "regular": {
-    "entries": [
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_barn_hytiny",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_house_hytiny_cozy_cottage",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_house_hytiny_cozy_camper",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_house_hytiny_japanese_tea_house",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_decoration_hytiny_potted_treehouse",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_jtmessenger_s_warehouse",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_jimmys_windmill",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_lonestar_144_s_guard_tower",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_hytinys_witch_hut",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_hytinys_starter_base",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_hytinys_sandswept_castle",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_hytinys_cozy_tavern",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_jimmys_school",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_jimmys_large_house",
-        "weight": 5
-      },
-      {
-        "itemId": "Aetherhaven_Plot_Token_Unlock_Page",
-        "constructionId": "plot_hytinys_redwood_cottage",
-        "weight": 5
-      }
-    ]
+    "plotBlueprintWeight": 5,
+    "entries": []
   },
   "green": {
     "entries": []

@@ -17,10 +17,12 @@ public final class FloatingGiftLootBundle {
     private static final int DEFAULT_FILLER_ROLLS_MIN = 2;
     private static final int DEFAULT_FILLER_ROLLS_MAX = 4;
     private static final int DEFAULT_RED_FURNITURE_ROLLS = 3;
+    private static final int DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT = 5;
 
     private final FloatingGiftLootTable regularTable;
     private final FloatingGiftLootTable greenTable;
     private final FloatingGiftLootTable redTable;
+    private final int regularPlotBlueprintWeight;
     private final String fillerDroplistId;
     private final int fillerRollsMin;
     private final int fillerRollsMax;
@@ -30,6 +32,7 @@ public final class FloatingGiftLootBundle {
         @Nonnull FloatingGiftLootTable regularTable,
         @Nonnull FloatingGiftLootTable greenTable,
         @Nonnull FloatingGiftLootTable redTable,
+        int regularPlotBlueprintWeight,
         @Nonnull String fillerDroplistId,
         int fillerRollsMin,
         int fillerRollsMax,
@@ -38,6 +41,7 @@ public final class FloatingGiftLootBundle {
         this.regularTable = regularTable;
         this.greenTable = greenTable;
         this.redTable = redTable;
+        this.regularPlotBlueprintWeight = Math.max(0, regularPlotBlueprintWeight);
         this.fillerDroplistId = fillerDroplistId;
         this.fillerRollsMin = fillerRollsMin;
         this.fillerRollsMax = fillerRollsMax;
@@ -50,6 +54,7 @@ public final class FloatingGiftLootBundle {
             FloatingGiftLootTable.empty(),
             FloatingGiftLootTable.empty(),
             FloatingGiftLootTable.empty(),
+            DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
             DEFAULT_FILLER_DROPLIST,
             DEFAULT_FILLER_ROLLS_MIN,
             DEFAULT_FILLER_ROLLS_MAX,
@@ -71,11 +76,18 @@ public final class FloatingGiftLootBundle {
                 legacy,
                 FloatingGiftLootTable.empty(),
                 FloatingGiftLootTable.empty(),
+                DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT,
                 DEFAULT_FILLER_DROPLIST,
                 DEFAULT_FILLER_ROLLS_MIN,
                 DEFAULT_FILLER_ROLLS_MAX,
                 DEFAULT_RED_FURNITURE_ROLLS
             );
+        }
+
+        JsonObject regularSection = obj.getAsJsonObject("regular");
+        int plotBlueprintWeight = DEFAULT_REGULAR_PLOT_BLUEPRINT_WEIGHT;
+        if (regularSection != null && regularSection.has("plotBlueprintWeight")) {
+            plotBlueprintWeight = Math.max(0, regularSection.get("plotBlueprintWeight").getAsInt());
         }
 
         FloatingGiftLootTable regular = parseSectionTable(obj, "regular");
@@ -111,7 +123,30 @@ public final class FloatingGiftLootBundle {
             furnitureRolls = Math.max(0, redSection.get("furnitureRolls").getAsInt());
         }
 
-        return new FloatingGiftLootBundle(regular, green, red, droplistId, rollsMin, rollsMax, furnitureRolls);
+        return new FloatingGiftLootBundle(
+            regular,
+            green,
+            red,
+            plotBlueprintWeight,
+            droplistId,
+            rollsMin,
+            rollsMax,
+            furnitureRolls
+        );
+    }
+
+    @Nonnull
+    public FloatingGiftLootBundle withRegularTable(@Nonnull FloatingGiftLootTable regularTable) {
+        return new FloatingGiftLootBundle(
+            regularTable,
+            greenTable,
+            redTable,
+            regularPlotBlueprintWeight,
+            fillerDroplistId,
+            fillerRollsMin,
+            fillerRollsMax,
+            redFurnitureRolls
+        );
     }
 
     @Nonnull
@@ -168,5 +203,9 @@ public final class FloatingGiftLootBundle {
 
     public int getRedFurnitureRolls() {
         return redFurnitureRolls;
+    }
+
+    public int getRegularPlotBlueprintWeight() {
+        return regularPlotBlueprintWeight;
     }
 }

@@ -178,7 +178,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 PREVIEW_TICK_COUNTER.remove(previewCacheKey);
                 CACHED_PREVIEW_CELLS.remove(previewCacheKey);
-                exitPreview(world, pr, ref, store);
+                exitPreview(world, pr, ref, store, commandBuffer);
             }
             return;
         }
@@ -187,7 +187,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 PREVIEW_TICK_COUNTER.remove(previewCacheKey);
                 CACHED_PREVIEW_CELLS.remove(previewCacheKey);
-                exitPreview(world, pr, ref, store);
+                exitPreview(world, pr, ref, store, commandBuffer);
             }
             return;
         }
@@ -210,6 +210,19 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         if (channelForDraw != null) {
             channelForDraw.setBrushChebyshevRadius(brushR);
         }
+        if (channelForDraw != null && channelForDraw.hasBrushLock()) {
+            if (BuildingStaffAssemblyChannelExecutor.tryExecuteChargedBrush(
+                ref, store, commandBuffer, world, p, channelForDraw, previewCacheKey, nowNs
+            )) {
+                PREVIEW_TICK_COUNTER.put(previewCacheKey, 0);
+                CACHED_PREVIEW_CELLS.remove(previewCacheKey);
+                channel = store.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
+                channelForDraw = commandBuffer.getComponent(ref, BuildingStaffAssemblyChannelComponent.getComponentType());
+                if (channelForDraw == null) {
+                    channelForDraw = channel;
+                }
+            }
+        }
         Vector3d snappedPos = snapObserverForAssemblyPreview(tc.getPosition());
         int tickCount = PREVIEW_TICK_COUNTER.merge(previewCacheKey, 1, Integer::sum);
         PreviewCells cells = CACHED_PREVIEW_CELLS.get(previewCacheKey);
@@ -222,7 +235,7 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
             if (ASSEMBLY_FRONTIER_PREVIEW_ACTIVE.remove(previewCacheKey) != null) {
                 PREVIEW_TICK_COUNTER.remove(previewCacheKey);
                 CACHED_PREVIEW_CELLS.remove(previewCacheKey);
-                exitPreview(world, pr, ref, store);
+                exitPreview(world, pr, ref, store, commandBuffer);
             }
             return;
         }
@@ -256,9 +269,10 @@ public final class PlotAssemblyPreviewSystem extends EntityTickingSystem<EntityS
         @Nonnull World world,
         @Nonnull PlayerRef pr,
         @Nonnull Ref<EntityStore> ref,
-        @Nonnull Store<EntityStore> store
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        AssemblyMarkerPreviewSync.clearAllMarkers(world, ref, store);
+        AssemblyMarkerPreviewSync.clearAllMarkers(world, ref, store, commandBuffer);
         PathDebugPreviewUtil.clear(pr);
         PlotFootprintOverlayRefresh.afterClearDebugShapes(ref, store);
     }

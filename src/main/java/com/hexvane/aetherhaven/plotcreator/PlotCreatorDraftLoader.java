@@ -33,6 +33,7 @@ public final class PlotCreatorDraftLoader {
         draft.setScheduleSharedUtilityPick(def.isScheduleSharedUtilityPick());
         draft.setTouristDestination(def.isTouristDestination());
         draft.setPlotTokenLockedByDefault(def.isPlotTokenLockedByDefault());
+        draft.setFloatingGiftBlueprint(def.isFloatingGiftBlueprint());
         draft.setExcludeFromTownJournal(def.isExcludeFromTownJournal());
         draft.getBuildingTags().clear();
         draft.getBuildingTags().addAll(def.getBuildingTags());

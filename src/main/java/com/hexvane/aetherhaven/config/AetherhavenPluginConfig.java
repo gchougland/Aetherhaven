@@ -449,6 +449,16 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("PlotCreatorPlayerBuildingTypesOnly", Codec.BOOLEAN),
+            (o, v) -> o.plotCreatorPlayerBuildingTypesOnly = v != null ? v : true,
+            o -> o.plotCreatorPlayerBuildingTypesOnly
+        )
+        .documentation(
+            "When true (default), the plot creator building type picker only lists Decoration and Variant. "
+                + "Set false to expose all building types (homes, shops, town hall, etc.) for pack authors and admins."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("DialogueTalkDurationSeconds", Codec.FLOAT),
             (o, v) -> o.dialogueTalkDurationSeconds = v != null ? v : 3f,
             o -> o.dialogueTalkDurationSeconds
@@ -532,6 +542,9 @@ public final class AetherhavenPluginConfig {
 
     /** When true, plot creator staff and commands do not require explicit aetherhaven.plot.creator grants. */
     private boolean grantPlotCreatorPermissionToEveryone = true;
+
+    /** When true, plot creator building type picker only offers decoration and variant. */
+    private boolean plotCreatorPlayerBuildingTypesOnly = true;
 
     /** Max gold coins per resident per morning tax tick (needs-scaled). */
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
@@ -906,6 +919,10 @@ public final class AetherhavenPluginConfig {
      */
     public boolean isGrantPlotCreatorPermissionToEveryone() {
         return grantPlotCreatorPermissionToEveryone;
+    }
+
+    public boolean isPlotCreatorPlayerBuildingTypesOnly() {
+        return plotCreatorPlayerBuildingTypesOnly;
     }
 
     public int getShopSpotPlayerListingPricePercent() {
@@ -1388,6 +1405,7 @@ public final class AetherhavenPluginConfig {
         this.villagerScheduleEnabled = o.villagerScheduleEnabled;
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
         this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
+        this.plotCreatorPlayerBuildingTypesOnly = o.plotCreatorPlayerBuildingTypesOnly;
         this.treasuryMaxGoldTaxPerVillagerPerDay = o.treasuryMaxGoldTaxPerVillagerPerDay;
         this.geodeDropChancePerOreBreak = o.geodeDropChancePerOreBreak;
         this.geodeOreUseBlocksOresCategory = o.geodeOreUseBlocksOresCategory;

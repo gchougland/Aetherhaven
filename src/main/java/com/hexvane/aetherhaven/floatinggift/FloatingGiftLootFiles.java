@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,14 +94,23 @@ public final class FloatingGiftLootFiles {
 
     @Nonnull
     public static FloatingGiftLootBundle loadBundle(@Nonnull AetherhavenPlugin plugin) {
+        FloatingGiftLootBundle parsed;
         try {
-            return FloatingGiftLootBundle.loadFromFile(lootPath(plugin), readDefaultJson());
+            parsed = FloatingGiftLootBundle.loadFromFile(lootPath(plugin), readDefaultJson());
         } catch (IOException e) {
             try {
-                return FloatingGiftLootBundle.parseJson(readDefaultJson());
+                parsed = FloatingGiftLootBundle.parseJson(readDefaultJson());
             } catch (IOException e2) {
-                return FloatingGiftLootBundle.empty();
+                parsed = FloatingGiftLootBundle.empty();
             }
         }
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        FloatingGiftLootTable regular =
+            FloatingGiftBlueprintLoot.mergeIntoRegularTable(
+                parsed.tableFor(FloatingGiftType.REGULAR),
+                catalog,
+                parsed.getRegularPlotBlueprintWeight()
+            );
+        return parsed.withRegularTable(regular);
     }
 }

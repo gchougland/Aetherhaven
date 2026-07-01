@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Los visitantes pueden detenerse
 aetherhaven.plotcreator.field.touristDestination.hint=Cuando está habilitado, los visitantes del portal pueden acceder a este edificio a pie durante el día.
 aetherhaven.plotcreator.field.plotTokenLocked=El token de parcela está bloqueado por defecto.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Cuando está activada, los jugadores deben desbloquear esta parcela en el banco de creación de parcelas (usando un plano de parcela) antes de poder crear fichas de parcela para ella.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Secciones de ensamblaje por eje (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Revisar

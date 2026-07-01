@@ -6,6 +6,7 @@
 
 - **Subplugins** — Aetherhaven loads as `Hexvane:Aetherhaven` (core) plus 17 optional feature subplugins. Disable features via the server `config.json` `Mods` section or `/plugin unload <id> --boot`
 - **Debug town targeting** — Most town-scoped debug commands accept `--town=<name|uuid>` or `--player=<username|uuid>` so server staff in Creative or with `aetherhaven.town.admin` can fix another player's town without quest permissions on that town (examples: `/ah villager reset --player=Steve`, `/ah plots repair --town=Oakshire`).
+- **Balloon plot blueprints** — Regular (white) balloon gifts now include plot blueprint unlock pages for every building with `floatingGiftBlueprint: true` in its construction JSON. Manual blueprint rows in `floating_gift_loot.json` are no longer required. The Plot Creator configure panel includes a **Balloon plot blueprint** toggle (requires plot token locked).
 
 ### Changed
 

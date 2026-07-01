@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.asset.type.model.config.Model;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
@@ -45,15 +46,24 @@ public final class AssemblyMarkerPreviewSync {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
+        clearAllMarkers(world, playerRef, store, null);
+    }
+
+    public static void clearAllMarkers(
+        @Nonnull World world,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
         BuildingStaffPreviewPlayerComponent st =
             store.getComponent(playerRef, BuildingStaffPreviewPlayerComponent.getComponentType());
-        if (st == null) {
-            return;
+        UUIDComponent ownerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (ownerUuid != null) {
+            AssemblyMarkerSpawner.removeAllForOwner(world, ownerUuid.getUuid(), commandBuffer);
         }
-        for (UUID markerId : new ArrayList<>(st.getCellKeyToMarkerUuid().values())) {
-            world.execute(() -> AssemblyMarkerSpawner.removeMarkerByUuid(world, markerId));
+        if (st != null) {
+            st.clearAllTracking();
         }
-        st.clearAllTracking();
     }
 
     public static void syncMarkers(
@@ -152,7 +162,7 @@ public final class AssemblyMarkerPreviewSync {
             st.getCellKeyToLastScale().remove(key);
             st.getCellKeyToLastTexture().remove(key);
             st.getCellKeyToKind().remove(key);
-            world.execute(() -> AssemblyMarkerSpawner.removeMarkerByUuid(world, markerId));
+            removeMarkerEntity(world, markerId, commandBuffer, useCommandBuffer);
         }
 
         for (DesiredMarker d : desiredByKey.values()) {
@@ -269,6 +279,9 @@ public final class AssemblyMarkerPreviewSync {
         return out;
     }
 
+    /** Quantize marker grow steps to limit per-tick model rebuilds during the 0.5s channel. */
+    private static final int GROW_DISPLAY_STEPS = 12;
+
     private static double grow01ForCell(
         @Nonnull Vector3i cell,
         boolean staffInHand,
@@ -279,9 +292,33 @@ public final class AssemblyMarkerPreviewSync {
             && channel != null
             && channel.cellMatchesBrush(cell.x, cell.y, cell.z)
             && channel.isFresh(nowNs)) {
-            return channel.channelGrow01(nowNs);
+            return quantizeGrow01(channel.channelGrow01(nowNs));
         }
         return 0.0;
+    }
+
+    private static double quantizeGrow01(double grow01) {
+        if (grow01 <= 0.0) {
+            return 0.0;
+        }
+        if (grow01 >= 1.0) {
+            return 1.0;
+        }
+        double step = 1.0 / GROW_DISPLAY_STEPS;
+        return Math.floor(grow01 / step) * step;
+    }
+
+    private static void removeMarkerEntity(
+        @Nonnull World world,
+        @Nullable UUID markerUuid,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        boolean preferCommandBuffer
+    ) {
+        if (preferCommandBuffer && commandBuffer != null) {
+            AssemblyMarkerSpawner.removeMarkerByUuid(world, markerUuid, commandBuffer);
+        } else {
+            AssemblyMarkerSpawner.removeMarkerByUuid(world, markerUuid, null);
+        }
     }
 
     private static void ensurePreviewState(

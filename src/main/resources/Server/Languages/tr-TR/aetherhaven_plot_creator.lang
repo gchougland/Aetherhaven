@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Ziyaretçiler burada mola vereb
 aetherhaven.plotcreator.field.touristDestination.hint=Portal açık olduğunda, ziyaretçiler gün içinde bu binaya yürüyerek ulaşabilirler.
 aetherhaven.plotcreator.field.plotTokenLocked=Grafik belirteci varsayılan olarak kilitlidir.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Oyun aktif olduğunda, oyuncular bu arsa için arsa jetonları üretebilmek için önce arsa üretim tezgahında (arsa planı kullanarak) bu arsanın kilidini açmalıdır.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Eksen başına montaj bölümleri (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Gözden geçirmek

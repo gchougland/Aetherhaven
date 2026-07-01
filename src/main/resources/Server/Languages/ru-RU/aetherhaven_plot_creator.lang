@@ -208,6 +208,8 @@ aetherhaven.plotcreator.field.touristDestination=Посетители могут
 aetherhaven.plotcreator.field.touristDestination.hint=Включенный портал позволяет посетителям пройти к этому зданию пешком в течение дня.
 aetherhaven.plotcreator.field.plotTokenLocked=По умолчанию маркер графика заблокирован.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=В этом случае игрокам необходимо разблокировать этот участок на верстаке для создания участков (используя чертеж участка), прежде чем они смогут создавать для него жетоны участка.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Сборочные секции по осям (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title=Обзор

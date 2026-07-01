@@ -6,6 +6,7 @@
   "selfBuildGameDays": 1,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse",
   "plotTokenLockedByDefault": true,
+  "floatingGiftBlueprint": true,
   "decorationPlot": true,
   "excludeFromTownJournal": true,
   "tags": [

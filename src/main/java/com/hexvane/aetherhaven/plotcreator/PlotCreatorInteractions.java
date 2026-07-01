@@ -231,8 +231,9 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.KIND) {
-            if (d.getKind() == null) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.needKind"));
+            String kindErr = PlotCreatorService.validateKindSelection(d);
+            if (kindErr != null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
                 return false;
             }
             PlotCreatorService.advance(session, ref, store);

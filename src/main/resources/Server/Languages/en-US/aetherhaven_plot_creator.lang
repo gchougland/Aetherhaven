@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond = Click the opposite corner befor
 
 aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose a type before continuing.
 
+aetherhaven.plotcreator.error.kindNotAllowed = That building type is not available. Choose Decoration or Variant.
+
 aetherhaven.plotcreator.error.needVariantOf = Press F and choose which main building this variant counts as before continuing.
 
 aetherhaven.plotcreator.error.invalidVariantOf = That main building type is not in the plot creator list.
@@ -208,6 +210,8 @@ aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
 aetherhaven.plotcreator.field.touristDestination.hint = When on, portal visitors may walk to this building during the day.
 aetherhaven.plotcreator.field.plotTokenLocked = Plot token locked by default
 aetherhaven.plotcreator.field.plotTokenLocked.hint = When on, players must unlock this plot at the plot crafting bench (using a plot blueprint) before they can craft plot tokens for it.
+aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections = Assembly sections per axis (1–16)
 
 aetherhaven.plotcreator.step.REVIEW.title = Review

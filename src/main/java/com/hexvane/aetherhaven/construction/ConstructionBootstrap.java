@@ -5,12 +5,14 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
+import com.hexvane.aetherhaven.construction.assembly.AssemblyMarkerSpawner;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffAssemblyChannelComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerInteraction;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffFrontierTracerTickSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffHotbarManaHudSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffManaRegenSystem;
+import com.hexvane.aetherhaven.construction.assembly.BuildingStaffMarkerCleanupSystem;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffMarkerEntity;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffPreviewPlayerComponent;
 import com.hexvane.aetherhaven.construction.assembly.BuildingStaffPreviewPlayerRemoveSystem;
@@ -50,6 +52,7 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -220,6 +223,7 @@ public final class ConstructionBootstrap {
             );
         plugin.getEntityStoreRegistry().registerSystem(new PlotAssemblyTickSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PlotAssemblyPreviewSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffMarkerCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffFrontierTracerTickSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffManaRegenSystem());
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffHotbarManaHudSystem.SlotChangeHandler());
@@ -233,6 +237,16 @@ public final class ConstructionBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentStatueRestoreSystem());
         plugin.getEntityStoreRegistry().registerSystem(new FounderMonumentBreakSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BuildingStaffPreviewPlayerRemoveSystem());
+
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                StartWorldEvent.class,
+                event -> {
+                    World world = event.getWorld();
+                    world.execute(() -> AssemblyMarkerSpawner.purgeAllInWorld(world));
+                }
+            );
     }
 
     @Nonnull
