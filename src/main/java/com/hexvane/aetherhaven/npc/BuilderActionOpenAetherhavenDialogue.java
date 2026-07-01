@@ -65,6 +65,9 @@ public final class BuilderActionOpenAetherhavenDialogue extends BuilderActionBas
             null
         );
         this.requireInstructionType(EnumSet.of(InstructionType.Interaction));
+        // Roles sense $Interaction (BusyStates, watch-player block) but the state is applied in Java only
+        // after dialogue opens successfully; register this action as the setter for asset validation.
+        this.registerStateSetter("$Interaction", null, (main, sub) -> {});
         return this;
     }
 }

@@ -78,5 +78,6 @@
   "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_starter_base.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_starter_base.displayName",
+  "styleId": "hytiny"
 }

@@ -49,5 +49,6 @@
       "interactionTargetLocalZ": 2
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_japanese_tea_house.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_japanese_tea_house.displayName",
+  "styleId": "hytiny"
 }

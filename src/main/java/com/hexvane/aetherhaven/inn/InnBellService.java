@@ -73,14 +73,6 @@ public final class InnBellService {
 
         int actions = respawnAllPoolVisitorsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
 
-        if (town.getInnPoolNpcIds().size() < InnPoolService.MAX_VISITORS) {
-            int beforeFill = town.getInnPoolNpcIds().size();
-            InnPoolService.fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
-            if (town.getInnPoolNpcIds().size() > beforeFill) {
-                actions += town.getInnPoolNpcIds().size() - beforeFill;
-            }
-        }
-
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         tm.updateTown(town);
 

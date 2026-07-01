@@ -69,5 +69,6 @@
   "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_redwood_cottage.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_redwood_cottage.displayName",
+  "styleId": "hytiny"
 }

@@ -87,9 +87,11 @@ public final class DialogueResolver {
     /** Townsfolk and other dialogue kinds not backed by {@link VillagerDefinition} assets. */
     private void registerNonVillagerDialogueKinds() {
         kindToTree.put(KIND_TOWNSFOLK, TREE_TOWNSFOLK_GENERIC);
+        kindToTree.put(KIND_TOURIST, TREE_TOURIST);
         kindToTree.put(KIND_GUARD, TREE_GUARD);
         kindToTree.put(KIND_GUILD_ADVENTURER, TREE_GUILD_ADVENTURER);
         kindToVisitorTree.put(KIND_TOWNSFOLK, VISITOR_DEFAULT);
+        kindToVisitorTree.put(KIND_TOURIST, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_GUARD, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_GUILD_MASTER, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_GUILD_ADVENTURER, VISITOR_DEFAULT);

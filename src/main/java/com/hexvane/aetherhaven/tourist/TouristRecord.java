@@ -22,7 +22,7 @@ public final class TouristRecord {
     @SerializedName("citizen")
     private boolean citizen;
 
-    /** Game calendar day ({@link java.time.LocalDate#toEpochDay()}) when this tourist arrived. */
+    /** Dawn-aligned visit day ({@link com.hexvane.aetherhaven.reputation.VillagerReputationService#currentGameEpochDay}) when this tourist arrived. */
     @SerializedName("spawnEpochDay")
     private long spawnEpochDay;
 

@@ -41,5 +41,6 @@
   ],
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jtmessenger_s_warehouse.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jtmessenger_s_warehouse.displayName",
+  "styleId": "misc"
 }

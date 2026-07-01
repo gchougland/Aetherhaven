@@ -96,9 +96,12 @@ class AutonomyStuckTeleportRecoveryTest {
     }
 
     @Test
-    void shouldTrackTouristStallSkipsPoiUnlessLeaveDue() {
+    void shouldTrackTouristStallSkipsPoiAndIdleUnlessLeaveDue() {
         assertFalse(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_POI, false)
+        );
+        assertFalse(
+            AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_IDLE, false)
         );
         assertTrue(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_POI, true)

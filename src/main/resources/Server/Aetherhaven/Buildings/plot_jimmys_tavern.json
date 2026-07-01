@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_tavern",
-  "displayName": "Jimmy\u0027s Tavern",
+  "displayName": "Jimmy's Tavern",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -349,5 +349,6 @@
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jimmy"
 }

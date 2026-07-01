@@ -155,8 +155,7 @@
             "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
-              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "bard" },
-              { "Type": "State", "State": "$Interaction" }
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "bard" }
             ]
           }
         ]

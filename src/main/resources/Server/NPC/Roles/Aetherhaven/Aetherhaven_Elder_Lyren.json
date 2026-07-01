@@ -218,8 +218,7 @@
               {
                 "Type": "OpenAetherhavenDialogue",
                 "VillagerKind": "elder_lyren"
-              },
-              { "Type": "State", "State": "$Interaction" }
+              }
             ]
           }
         ]

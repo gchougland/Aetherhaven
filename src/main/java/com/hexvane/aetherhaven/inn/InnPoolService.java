@@ -61,8 +61,9 @@ import javax.annotation.Nullable;
  * {@link TownRecord#getInnPoolNpcIds()} is
  * the source of truth for which visitors the mod spawned. Treasury tax is handled by {@link com.hexvane.aetherhaven.economy.TownEconomyTimeService}.
  * <p>
- * <b>Spawning</b> happens only during the morning window and only when the inn's management block chunk is loaded —
- * never to "replace" entries whose entities are still unloaded elsewhere. <b>Pruning</b> never drops unlocked list
+ * <b>Spawning</b> happens only during the morning window, at most once per calendar game day after the daily
+ * refresh, and only when the inn's management block chunk is loaded — never to "replace" entries whose entities are
+ * still unloaded elsewhere. <b>Pruning</b> never drops unlocked list
  * entries with a missing entity ref (unloaded); morning refresh can despawn and remove only when refs are valid.
  * <p>
  * Unlocked visitors are cleared at most once per calendar game day during the morning window ({@link WorldTimeResource}
@@ -1044,45 +1045,25 @@ public final class InnPoolService {
         if (lastDay == null || lastDay != epochDay) {
             return;
         }
+        Long lastFillDay = town.getInnPoolLastFillEpochDay();
+        if (lastFillDay != null && lastFillDay >= epochDay) {
+            return;
+        }
         fillEmptySlotsForSpawn(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr);
+        town.setInnPoolLastFillEpochDay(epochDay);
+        tm.updateTown(town);
     }
 
     /**
-     * Fills open inn visitor slots when town state changes (e.g. town hall quest complete). Does not require the
-     * morning window; still requires a complete inn plot and loaded management chunk (same as dawn fill).
+     * Eligibility changes (e.g. town hall complete) take effect at the next dawn fill; vacant slots are not filled
+     * mid-day.
      */
     public static void tryFillOpenSlotsAfterTownStateChange(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownRecord town
     ) {
-        world.execute(
-            () -> {
-                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                Store<EntityStore> store = world.getEntityStore().getStore();
-                if (store == null) {
-                    return;
-                }
-                var innPlot =
-                    InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
-                if (innPlot == null) {
-                    return;
-                }
-                ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
-                if (innDef == null) {
-                    return;
-                }
-                int[][] spawnLocals = innDef.getVisitorSpawnLocals();
-                if (spawnLocals == null || spawnLocals.length == 0) {
-                    return;
-                }
-                WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
-                if (wtr == null) {
-                    return;
-                }
-                fillEmptySlotsForSpawn(world, plugin, town, tm, store, innPlot, innDef, spawnLocals, wtr);
-            }
-        );
+        // Dawn-only fill: see fillVisitorsAtDawnIfEligible.
     }
 
     private static void fillEmptySlotsForSpawn(
@@ -1803,7 +1784,7 @@ public final class InnPoolService {
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store
     ) {
-        return repairInnPoolForTown(world, plugin, town, tm, store, true);
+        return repairInnPoolForTown(world, plugin, town, tm, store, false);
     }
 
     @Nonnull
@@ -1983,8 +1964,7 @@ public final class InnPoolService {
     }
 
     /**
-     * When an inn visitor NPC dies, drop it from the active pool so dawn fill and open-slot logic are not blocked
-     * by a stale UUID.
+     * When an inn visitor NPC dies, drop it from the active pool. Replacement waits until the next dawn fill.
      */
     public static void onVisitorEntityDeath(
         @Nonnull World world,
@@ -1996,7 +1976,6 @@ public final class InnPoolService {
         boolean changed = removeVisitorFromPool(town, entityUuid);
         if (changed) {
             tm.updateTown(town);
-            tryFillOpenSlotsAfterTownStateChange(world, plugin, town);
         }
     }
 
@@ -2006,6 +1985,22 @@ public final class InnPoolService {
         boolean removed = town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
         town.removeInnLockedEntity(entityUuid);
         return removed;
+    }
+
+    /**
+     * When a visitor is quest-locked but missing from {@link TownRecord#getInnPoolNpcIds()}, add them so vacant-slot
+     * fill logic does not treat their slot as open.
+     */
+    public static void ensureVisitorListedInInnPool(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        String sid = entityUuid.toString();
+        for (String existing : town.getInnPoolNpcIds()) {
+            if (sid.equalsIgnoreCase(existing != null ? existing.trim() : "")) {
+                return;
+            }
+        }
+        if (town.getInnPoolNpcIds().size() < MAX_VISITORS) {
+            town.getInnPoolNpcIds().add(sid);
+        }
     }
 
     private static int promoteEligibleVisitorsToResidents(

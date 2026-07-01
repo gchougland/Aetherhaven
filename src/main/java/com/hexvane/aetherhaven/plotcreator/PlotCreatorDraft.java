@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
@@ -85,6 +86,10 @@ public final class PlotCreatorDraft {
     private boolean plotTokenLockedByDefault;
     /** When true, regular balloon gifts may drop a plot blueprint for this building (requires locked token). */
     private boolean floatingGiftBlueprint;
+
+    /** Crafting bench style filter id (core, jimmy, jszza, hytiny, misc). */
+    @Nullable
+    private String styleId;
 
     @Nullable
     private Vector3i stagingChestWorldPos;
@@ -417,6 +422,19 @@ public final class PlotCreatorDraft {
 
     public void setFloatingGiftBlueprint(boolean floatingGiftBlueprint) {
         this.floatingGiftBlueprint = floatingGiftBlueprint;
+    }
+
+    @Nullable
+    public String getStyleId() {
+        return styleId;
+    }
+
+    public void setStyleId(@Nullable String styleId) {
+        if (styleId == null || styleId.isBlank()) {
+            this.styleId = null;
+        } else {
+            this.styleId = styleId.trim().toLowerCase(Locale.ROOT);
+        }
     }
 
     @Nullable

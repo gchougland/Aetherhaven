@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted = Crafted {name} plot token.
 aetherhaven.ui.plotCrafting.unlockSuccess = You unlocked the {building} plot.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown = You already know this plot.
 aetherhaven.ui.plotCrafting.unlockInvalid = This blueprint cannot be read.
+aetherhaven.ui.plotCrafting.styleFilterTitle = Styles

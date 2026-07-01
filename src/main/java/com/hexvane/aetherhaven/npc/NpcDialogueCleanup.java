@@ -15,8 +15,35 @@ import javax.annotation.Nullable;
  */
 public final class NpcDialogueCleanup {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final String INTERACTION_STATE = "$Interaction";
 
     private NpcDialogueCleanup() {}
+
+    /**
+     * Puts the NPC into {@code $Interaction} on the world thread after dialogue UI is open (watch player, pause autonomy).
+     */
+    public static void scheduleEnterInteraction(@Nullable Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+        if (npcRef == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        world.execute(
+            () -> {
+                if (!npcRef.isValid()) {
+                    return;
+                }
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (npc == null || npc.getRole() == null) {
+                    return;
+                }
+                try {
+                    npc.getRole().getStateSupport().setState(npcRef, INTERACTION_STATE, null, store);
+                } catch (Exception e) {
+                    LOGGER.atWarning().withCause(e).log("Failed to set NPC to $Interaction for dialogue");
+                }
+            }
+        );
+    }
 
     /**
      * Returns the NPC to {@code Idle} on the world thread so interaction sensors and BodyMotion under {@code Idle} resume.

@@ -122,6 +122,14 @@ public final class TownRecord {
     private Long innPoolLastMorningEpochDay;
 
     /**
+     * Game calendar epoch day when we last ran the morning inn visitor fill (spawn into open slots).
+     * Compared to current game date so fill runs at most once per dawn after refresh.
+     */
+    @Nullable
+    @SerializedName("innPoolLastFillEpochDay")
+    private Long innPoolLastFillEpochDay;
+
+    /**
      * NPC role ids (e.g. {@link com.hexvane.aetherhaven.AetherhavenConstants#NPC_MERCHANT}) that must never be chosen
      * when filling the inn visitor pool (e.g. after promotion to a permanent town role).
      */
@@ -943,6 +951,15 @@ public final class TownRecord {
 
     public void setInnPoolLastMorningEpochDay(@Nullable Long epochDay) {
         this.innPoolLastMorningEpochDay = epochDay;
+    }
+
+    @Nullable
+    public Long getInnPoolLastFillEpochDay() {
+        return innPoolLastFillEpochDay;
+    }
+
+    public void setInnPoolLastFillEpochDay(@Nullable Long epochDay) {
+        this.innPoolLastFillEpochDay = epochDay;
     }
 
     @Nullable

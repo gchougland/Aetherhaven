@@ -66,5 +66,6 @@
       "interactionTargetLocalZ": -2
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_cozy_camper.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_house_hytiny_cozy_camper.displayName",
+  "styleId": "hytiny"
 }

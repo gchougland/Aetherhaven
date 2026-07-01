@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -322,11 +323,15 @@ public final class TouristPortalTickService {
 
         UUID entityUuid = spawned.get().entityUuid();
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
-        if (ref != null && ref.isValid()) {
-            TouristAutonomyState autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
-            autonomy.setHomePortalId(portal.getPortalId());
-            store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
-            TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
+        if (ref == null || !ref.isValid()) {
+            TownsfolkSpawnService.release(world, plugin, characterId);
+            LOGGER.atWarning().log(
+                "Tourist spawn for %s in town %s produced uuid %s but entity ref is missing",
+                characterId,
+                town.getTownId(),
+                entityUuid
+            );
+            return;
         }
 
         long spawnDawnDay = VillagerReputationService.currentGameEpochDay(store);
@@ -342,6 +347,11 @@ public final class TouristPortalTickService {
             )
         );
         tm.updateTown(town);
+
+        TouristAutonomyState autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
+        autonomy.setHomePortalId(portal.getPortalId());
+        store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
 
         playPortalBurst(world, store, blockPos);
     }
@@ -463,8 +473,7 @@ public final class TouristPortalTickService {
                 if (rec.isInvitedToStay() || rec.isCitizen()) {
                     continue;
                 }
-                ensureLeaveHour(rec);
-                if (!shouldTouristLeaveNow(rec, gameTime, dawnAlignedEpochDay)) {
+                if (!shouldTouristLeaveNow(rec, gameTime, dawnAlignedEpochDay, wtr)) {
                     if (rec.getSpawnEpochDay() == 0L) {
                         rec.setSpawnEpochDay(dawnAlignedEpochDay);
                         changed = true;
@@ -484,6 +493,10 @@ public final class TouristPortalTickService {
                     changed = true;
                     continue;
                 }
+                if (isTouristOverstay(rec, dawnAlignedEpochDay)) {
+                    despawnTourist(world, plugin, town, tm, store, entityUuid, rec.getPortalId());
+                    continue;
+                }
                 sendTouristHomeOrFinalize(world, plugin, tm, store, town, rec, entityUuid);
             }
             if (changed) {
@@ -500,12 +513,19 @@ public final class TouristPortalTickService {
         return shouldTouristLeaveNow(
             rec,
             wtr.getGameDateTime(),
-            VillagerReputationService.currentGameEpochDay(store)
+            VillagerReputationService.currentGameEpochDay(store),
+            wtr
         );
     }
 
-    public static boolean shouldTouristLeaveNow(@Nonnull TouristRecord rec, @Nonnull LocalDateTime gameTime) {
-        return shouldTouristLeaveNow(rec, gameTime, gameTime.toLocalDate().toEpochDay());
+    public static boolean isGameNight(@Nonnull WorldTimeResource wtr) {
+        return !ShopSpotOpenService.isGameDay(wtr);
+    }
+
+    /** True when the tourist's visit day has passed (dawn-aligned day id advanced past arrival). */
+    public static boolean isTouristOverstay(@Nonnull TouristRecord rec, long dawnAlignedEpochDay) {
+        long spawnDay = rec.getSpawnEpochDay();
+        return spawnDay != 0L && dawnAlignedEpochDay > spawnDay;
     }
 
     /**
@@ -515,23 +535,23 @@ public final class TouristPortalTickService {
     public static boolean shouldTouristLeaveNow(
         @Nonnull TouristRecord rec,
         @Nonnull LocalDateTime gameTime,
-        long dawnAlignedEpochDay
+        long dawnAlignedEpochDay,
+        @Nonnull WorldTimeResource wtr
     ) {
-        int leaveHour = ensureLeaveHour(rec);
+        if (isTouristOverstay(rec, dawnAlignedEpochDay)) {
+            return true;
+        }
         long spawnDay = rec.getSpawnEpochDay();
-        // 0 = legacy unset row only. Hytale game calendar epoch days are negative — never treat those as unset.
-        if (spawnDay == 0L) {
-            return gameTime.getHour() >= leaveHour;
-        }
-        if (dawnAlignedEpochDay > spawnDay) {
-            return true;
-        }
-        if (dawnAlignedEpochDay == spawnDay && gameTime.getHour() >= leaveHour) {
-            return true;
+        if (isGameNight(wtr)) {
+            // 0 = legacy unset row only. Hytale game calendar epoch days are negative — never treat those as unset.
+            return spawnDay == 0L || dawnAlignedEpochDay >= spawnDay;
         }
         // Pre-sunrise morning on a later calendar day (/time set dawn before dawn-aligned day advances).
         long calendarDay = gameTime.toLocalDate().toEpochDay();
-        return calendarDay > spawnDay && gameTime.getHour() < leaveHour;
+        if (spawnDay != 0L && calendarDay > spawnDay && dawnAlignedEpochDay == spawnDay) {
+            return true;
+        }
+        return false;
     }
 
     @Nullable
@@ -587,15 +607,24 @@ public final class TouristPortalTickService {
     ) {
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
         if (ref == null || !ref.isValid()) {
+            finalizeTouristRecord(world, plugin, town, tm, rec, store);
+            return;
+        }
+        long dawnDay = VillagerReputationService.currentGameEpochDay(store);
+        UUID portalId = rec.getPortalId();
+        if (isTouristOverstay(rec, dawnDay)) {
+            despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
             return;
         }
         TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
         if (autonomy == null) {
             autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
         }
-        UUID portalId = rec.getPortalId();
         if (portalId != null) {
             autonomy.setHomePortalId(portalId);
+        }
+        if (TouristAutonomySystem.isReturningHome(autonomy)) {
+            return;
         }
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc != null && portalId != null) {

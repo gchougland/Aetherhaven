@@ -127,5 +127,6 @@
       "interactionTargetLocalZ": 0
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_inn.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_inn.displayName",
+  "styleId": "core"
 }

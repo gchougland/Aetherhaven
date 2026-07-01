@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_guard_tower_2",
-  "displayName": "Jszza\u0027s Guard Tower 2",
+  "displayName": "Jszza's Guard Tower 2",
   "description": "Made by Jszza After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
   "prefabPath": "jszza/plot_jszzas_guard_tower_2.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -129,5 +129,6 @@
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
-  "decorationPlot": true
+  "decorationPlot": true,
+  "styleId": "jszza"
 }

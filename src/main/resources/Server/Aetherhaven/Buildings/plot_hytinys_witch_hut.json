@@ -38,5 +38,6 @@
   "floatingGiftBlueprint": true,
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_witch_hut.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_witch_hut.displayName",
+  "styleId": "hytiny"
 }

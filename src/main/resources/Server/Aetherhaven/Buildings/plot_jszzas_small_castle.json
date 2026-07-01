@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_small_castle",
-  "displayName": "Jszza\u0027s Small Castle",
+  "displayName": "Jszza's Small Castle",
   "description": "Made by Jszza",
   "prefabPath": "jszza/plot_jszzas_small_castle.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -261,5 +261,6 @@
     "decoration"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jszza"
 }

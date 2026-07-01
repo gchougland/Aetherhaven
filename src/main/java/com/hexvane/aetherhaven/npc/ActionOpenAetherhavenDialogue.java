@@ -65,21 +65,31 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
         DialogueCatalog catalog = plugin.getDialogueCatalog();
         DialogueResolver resolver = plugin.getDialogueResolver();
         DialogueResolver.ResolvedDialogue resolved = resolver.resolve(this.dialogueId, this.villagerKind, ref, playerRef, store);
+        if (catalog.get(resolved.treeId()) == null) {
+            return false;
+        }
         World world = store.getExternalData().getWorld();
         DialogueWorldView worldView = plugin.createDialogueWorldView(world, ref);
         Ref<EntityStore> npcRef = ref;
         Ref<EntityStore> playerEntityRef = playerRef;
         world.execute(
             () -> {
-                if (!playerEntityRef.isValid()) {
+                if (!playerEntityRef.isValid() || !npcRef.isValid()) {
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
                     return;
                 }
                 Player player = store.getComponent(playerEntityRef, Player.getComponentType());
                 if (player == null) {
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
                     return;
                 }
                 PlayerRef pr = store.getComponent(playerEntityRef, PlayerRef.getComponentType());
                 if (pr == null) {
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
+                    return;
+                }
+                if (player.getPageManager().getCustomPage() != null) {
+                    NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
                     return;
                 }
                 player.getPageManager()
@@ -89,6 +99,7 @@ public final class ActionOpenAetherhavenDialogue extends ActionBase {
                         new DialoguePage(pr, catalog, worldView, resolved.treeId(), resolved.entryNodeId(), npcRef)
                     );
                 NpcFaceVisuals.onDialogueOpened(npcRef, store);
+                NpcDialogueCleanup.scheduleEnterInteraction(npcRef, store);
             }
         );
         return true;

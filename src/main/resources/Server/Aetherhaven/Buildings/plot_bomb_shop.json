@@ -83,5 +83,6 @@
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_bomb_shop.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_bomb_shop.displayName",
+  "styleId": "core"
 }

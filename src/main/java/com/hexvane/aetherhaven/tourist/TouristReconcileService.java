@@ -332,6 +332,14 @@ public final class TouristReconcileService {
                 continue;
             }
             if (TouristPortalTickService.findTouristRecord(town, characterId) != null) {
+                TouristRecord existing = TouristPortalTickService.findTouristRecord(town, characterId);
+                if (existing != null
+                    && live.entityUuid() != null
+                    && !live.entityUuid().equals(existing.getEntityUuid())) {
+                    existing.setEntityUuid(live.entityUuid());
+                    ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, existing);
+                    changed = true;
+                }
                 continue;
             }
             if (!live.ref().isValid()) {

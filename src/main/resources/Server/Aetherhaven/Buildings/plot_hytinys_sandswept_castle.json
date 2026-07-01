@@ -82,5 +82,6 @@
   ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_sandswept_castle.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_sandswept_castle.displayName",
+  "styleId": "hytiny"
 }

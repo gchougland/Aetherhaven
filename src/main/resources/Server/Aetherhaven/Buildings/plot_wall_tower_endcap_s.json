@@ -29,5 +29,6 @@
       "count": 100
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_wall_tower_endcap_s.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_wall_tower_endcap_s.displayName",
+  "styleId": "core"
 }

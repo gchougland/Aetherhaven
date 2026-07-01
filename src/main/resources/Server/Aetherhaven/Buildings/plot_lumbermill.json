@@ -55,5 +55,6 @@
       "interactionTargetLocalZ": 5
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_lumbermill.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_lumbermill.displayName",
+  "styleId": "core"
 }

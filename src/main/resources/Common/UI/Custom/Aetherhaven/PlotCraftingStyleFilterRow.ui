@@ -1,0 +1,15 @@
+$C = "../Common.ui";
+
+Group #PlotCraftingStyleFilterRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8);
+
+  $C.@CheckBox #CheckBox {}
+
+  Label #StyleLabel {
+    Text: "";
+    Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, FontSize: 15, Wrap: true);
+    Anchor: (Left: 11);
+    FlexWeight: 1;
+  }
+}

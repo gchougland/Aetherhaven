@@ -55,5 +55,6 @@
       "interactionTargetLocalZ": -2
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_miners_hut.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_miners_hut.displayName",
+  "styleId": "core"
 }

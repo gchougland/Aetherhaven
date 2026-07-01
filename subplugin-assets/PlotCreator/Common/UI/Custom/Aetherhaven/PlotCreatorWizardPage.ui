@@ -65,6 +65,18 @@ $C.@PageOverlay {
         Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
       }
 
+      Label #StyleIdLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #StyleIdField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+      }
+
       Label #GoldCostLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";

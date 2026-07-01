@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_builders_workshop",
-  "displayName": "Jimmy\u0027s Builder\u0027s Workshop",
+  "displayName": "Jimmy's Builder's Workshop",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_builders_workshop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -141,5 +141,6 @@
     "work"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jimmy"
 }

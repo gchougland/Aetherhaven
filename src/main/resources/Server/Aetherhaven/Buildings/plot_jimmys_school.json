@@ -34,5 +34,6 @@
   ],
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_school.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_school.displayName",
+  "styleId": "jimmy"
 }

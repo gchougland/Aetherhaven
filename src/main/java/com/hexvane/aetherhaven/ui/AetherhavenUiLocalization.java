@@ -394,6 +394,7 @@ public final class AetherhavenUiLocalization {
         b.set("#VariantPrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantPrevTooltip"));
         b.set("#VariantNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantNextTooltip"));
         b.set("#CraftButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.craftButton"));
+        b.set("#StyleFilterTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.styleFilterTitle"));
     }
 
     public static void applyQuestBoardPage(@Nonnull UICommandBuilder b) {

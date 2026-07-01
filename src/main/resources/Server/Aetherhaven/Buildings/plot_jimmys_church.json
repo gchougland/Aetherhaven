@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_church",
-  "displayName": "Jimmy\u0027s Church",
+  "displayName": "Jimmy's Church",
   "description": "Made by Jimmy",
   "prefabPath": "Jimmys/plot_jimmys_church.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -247,5 +247,6 @@
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jimmy"
 }

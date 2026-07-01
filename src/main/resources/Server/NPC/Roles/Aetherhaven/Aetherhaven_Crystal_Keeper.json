@@ -172,8 +172,7 @@
             "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
-              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "crystal_keeper" },
-              { "Type": "State", "State": "$Interaction" }
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "crystal_keeper" }
             ]
           }
         ]

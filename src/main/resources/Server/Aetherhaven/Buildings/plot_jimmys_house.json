@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_house",
-  "displayName": "Jimmy\u0027s House",
+  "displayName": "Jimmy's House",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -142,5 +142,6 @@
     "home"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jimmy"
 }

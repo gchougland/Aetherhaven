@@ -53,7 +53,7 @@ public final class TownJournalAdminService {
         @Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town, @Nonnull Store<EntityStore> store
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        return InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+        return InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, true);
     }
 
     public enum FinishPlotResult {

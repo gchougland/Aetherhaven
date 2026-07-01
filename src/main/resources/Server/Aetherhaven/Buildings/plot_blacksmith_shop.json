@@ -55,5 +55,6 @@
       "interactionTargetLocalZ": -1
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_blacksmith_shop.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_blacksmith_shop.displayName",
+  "styleId": "core"
 }

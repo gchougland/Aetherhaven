@@ -329,6 +329,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 3000L);
             store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            clearAutonomyRoleStateOnStore(ref, npc, store);
             return;
         }
         beginTravelToPlotOnStore(ref, store, plugin, npc, autonomy, now, town, world, pick);
@@ -565,9 +566,13 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         return true;
     }
 
-    private static boolean isReturningTravel(@Nonnull TouristAutonomyState autonomy) {
+    public static boolean isReturningHome(@Nonnull TouristAutonomyState autonomy) {
         return autonomy.getPhase() == TouristAutonomyState.PHASE_RETURNING
             || AetherhavenConstants.isTouristPortalReturnPoi(autonomy.getTargetPoiUuid());
+    }
+
+    private static boolean isReturningTravel(@Nonnull TouristAutonomyState autonomy) {
+        return isReturningHome(autonomy);
     }
 
     private void tickTravel(
@@ -1267,6 +1272,25 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_AUTONOMY_POI, null, store);
+        store.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
+    public static void clearAutonomyRoleStateOnStore(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (npc.getRole() == null) {
+            return;
+        }
+        String state = npc.getRole().getStateSupport().getStateName();
+        if (state == null || !state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+            return;
+        }
+        npc.getRole().getStateSupport().setState(ref, "Idle", null, store);
+        npc.playAnimation(ref, AnimationSlot.Action, null, store);
+        npc.playAnimation(ref, AnimationSlot.Emote, null, store);
+        npc.playAnimation(ref, AnimationSlot.Status, null, store);
         store.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 

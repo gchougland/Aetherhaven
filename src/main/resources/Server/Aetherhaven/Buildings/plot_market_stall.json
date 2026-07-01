@@ -52,5 +52,6 @@
     "shop",
     "work"
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_market_stall.displayName",
+  "styleId": "core"
 }

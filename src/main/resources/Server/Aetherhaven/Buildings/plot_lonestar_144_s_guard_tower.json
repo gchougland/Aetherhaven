@@ -29,5 +29,6 @@
   ],
   "excludeFromTownJournal": true,
   "decorationPlot": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_lonestar_144_s_guard_tower.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_lonestar_144_s_guard_tower.displayName",
+  "styleId": "misc"
 }

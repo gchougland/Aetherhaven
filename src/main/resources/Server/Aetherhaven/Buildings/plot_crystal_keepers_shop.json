@@ -105,5 +105,6 @@
     "crystals"
   ],
   "touristDestination": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_crystal_keepers_shop.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_crystal_keepers_shop.displayName",
+  "styleId": "core"
 }

@@ -239,7 +239,7 @@ public final class ConstructionCompleter {
             // If onStallBuilt/onFarmBuilt/etc. no-op (e.g. missing WORK POI, NPC ref not resolved), promotion may still
             // succeed here without requiring a separate fixinn run.
             if (entityStore != null) {
-                InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore);
+                InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore, false);
             }
         }
     }

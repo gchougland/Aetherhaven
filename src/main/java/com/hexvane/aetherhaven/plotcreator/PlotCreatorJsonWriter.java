@@ -89,6 +89,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.getCountsAsConstructionId() != null && !draft.getCountsAsConstructionId().isBlank()) {
             root.put("countsAsConstructionId", draft.getCountsAsConstructionId());
         }
+        if (draft.getStyleId() != null && !draft.getStyleId().isBlank()) {
+            root.put("styleId", draft.getStyleId());
+        }
         if (!draft.getBuildingTags().isEmpty()) {
             root.put("tags", new ArrayList<>(draft.getBuildingTags()));
         }

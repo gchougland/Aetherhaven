@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_windmill",
-  "displayName": "Jszza\u0027s Windmill",
+  "displayName": "Jszza's Windmill",
   "description": "Made by Jszza",
   "prefabPath": "jszza/plot_jszzas_windmill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -142,5 +142,6 @@
     "work"
   ],
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jszza"
 }

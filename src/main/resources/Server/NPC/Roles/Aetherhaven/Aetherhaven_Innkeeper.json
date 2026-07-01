@@ -218,8 +218,7 @@
               {
                 "Type": "OpenAetherhavenDialogue",
                 "VillagerKind": "innkeeper"
-              },
-              { "Type": "State", "State": "$Interaction" }
+              }
             ]
           }
         ]

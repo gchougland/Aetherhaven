@@ -326,7 +326,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
             }
             TownRecord town = res.townOrThrow();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            InnPoolService.RepairReport report = InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+            InnPoolService.RepairReport report = InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, true);
             playerRef.sendMessage(
                 Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.innRepairDone")
                     .param("locked", String.valueOf(report.getLockedQuestVisitors()))

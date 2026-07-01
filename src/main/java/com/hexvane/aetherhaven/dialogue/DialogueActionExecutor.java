@@ -230,6 +230,10 @@ public final class DialogueActionExecutor {
         if (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean()
             && npcUuid != null) {
             town.addInnLockedEntity(npcUuid);
+            InnPoolService.ensureVisitorListedInInnPool(town, npcUuid);
+        }
+        if (npcUuid != null && town.isInnVisitorLocked(npcUuid)) {
+            InnPoolService.ensureVisitorListedInInnPool(town, npcUuid);
         }
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
@@ -380,7 +384,7 @@ public final class DialogueActionExecutor {
             TouristPortalTickService.promoteTouristToCitizen(town, tm, touristPromoteUuid);
         }
         if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
-            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+            InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         }
         if (rewardPlayerRef != null && beneficiaryNpcUuid != null && store != null) {
             UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());

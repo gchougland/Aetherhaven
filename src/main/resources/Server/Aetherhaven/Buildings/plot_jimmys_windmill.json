@@ -60,5 +60,6 @@
     "work",
     "nature"
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_windmill.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_windmill.displayName",
+  "styleId": "jimmy"
 }

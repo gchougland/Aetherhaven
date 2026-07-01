@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
+import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.GroupEntry;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog.Tab;
@@ -41,12 +42,15 @@ import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<PlotCraftingPage.PageData> {
-    private static final String ROWS = "#Content #BuildingListScroll #BuildingRows";
+    private static final String ROWS = "#BuildingListScroll #BuildingRows";
+    private static final String STYLE_ROWS = "#StyleFilterScroll #StyleFilterRows";
     private static final String TAB_CORE = "Core";
     private static final String TAB_DECORATIONS = "Decorations";
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
@@ -54,6 +58,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final long[] PREFAB_PREVIEW_RETRY_DELAYS_MS = {50L, 100L, 150L};
 
     private Tab activeTab = Tab.CORE;
+    private final Set<String> activeStyleFilters = new HashSet<>();
     private boolean openSoundPlayed;
     /** {@code append(ui)} must run only once per page instance; repeating it on every {@link #sendUpdate} duplicates the whole tree. */
     private boolean templateAppended;
@@ -91,8 +96,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
 
-        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader());
+        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
         ensureSelection(groups);
+
+        bindStyleFilters(commandBuilder, eventBuilder, catalog);
 
         commandBuilder.set("#PlotCraftTabs.SelectedTab", activeTab == Tab.CORE ? TAB_CORE : TAB_DECORATIONS);
 
@@ -289,6 +296,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             }
             case "VariantPrev" -> variantIndex--;
             case "VariantNext" -> variantIndex++;
+            case "StyleFilterToggle" -> applyStyleFilterToggle(data);
             case "Craft" -> {
                 tryCraft(ref, store);
                 return;
@@ -319,7 +327,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
-        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader());
+        List<GroupEntry> groups = PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
         GroupEntry group = findGroup(groups, selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
@@ -475,6 +483,55 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         return CustomBuildingsPaths.iconAssetPath(group.groupKey());
     }
 
+    private void applyStyleFilterToggle(@Nonnull PageData data) {
+        if (data.styleId == null || data.checked == null) {
+            return;
+        }
+        String styleId = PlotBuildingStyles.normalize(data.styleId);
+        if (styleId == null) {
+            return;
+        }
+        if (data.checked) {
+            activeStyleFilters.add(styleId);
+        } else {
+            activeStyleFilters.remove(styleId);
+        }
+    }
+
+    private void bindStyleFilters(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull ConstructionCatalog catalog
+    ) {
+        List<String> styleIds = PlotBuildingStyles.craftableStyleIds(catalog);
+        activeStyleFilters.retainAll(styleIds);
+        commandBuilder.clear(STYLE_ROWS);
+        for (int i = 0; i < styleIds.size(); i++) {
+            String styleId = styleIds.get(i);
+            commandBuilder.append(STYLE_ROWS, "Aetherhaven/PlotCraftingStyleFilterRow.ui");
+            String row = STYLE_ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #StyleLabel.TextSpans", Message.raw(displayStyleLabel(styleId)));
+            commandBuilder.set(row + " #CheckBox.Value", activeStyleFilters.contains(styleId));
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                row + " #CheckBox",
+                new EventData()
+                    .append("Action", "StyleFilterToggle")
+                    .append("StyleId", styleId)
+                    .append("@Checked", row + " #CheckBox.Value"),
+                false
+            );
+        }
+    }
+
+    @Nonnull
+    private static String displayStyleLabel(@Nonnull String styleId) {
+        if (styleId.isEmpty()) {
+            return styleId;
+        }
+        return styleId.substring(0, 1).toUpperCase(java.util.Locale.ROOT) + styleId.substring(1);
+    }
+
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
@@ -495,6 +552,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             .add()
             .append(new KeyedCodec<>("SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
             .add()
+            .append(new KeyedCodec<>("StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
+            .add()
+            .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
+            .add()
             .build();
 
         @Nullable
@@ -503,5 +564,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         private String groupKey;
         @Nullable
         private String selectedTab;
+        @Nullable
+        private String styleId;
+        @Nullable
+        private Boolean checked;
     }
 }

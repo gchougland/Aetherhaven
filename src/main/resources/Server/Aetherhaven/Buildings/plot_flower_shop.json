@@ -51,5 +51,6 @@
     "flowers"
   ],
   "touristDestination": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_flower_shop.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_flower_shop.displayName",
+  "styleId": "core"
 }

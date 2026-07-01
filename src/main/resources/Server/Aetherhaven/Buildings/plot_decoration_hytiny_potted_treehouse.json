@@ -52,5 +52,6 @@
       "count": 1
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_decoration_hytiny_potted_treehouse.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_decoration_hytiny_potted_treehouse.displayName",
+  "styleId": "hytiny"
 }

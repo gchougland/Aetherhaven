@@ -65,5 +65,6 @@
       "interactionTargetLocalZ": 10
     }
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn_hytiny.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn_hytiny.displayName",
+  "styleId": "hytiny"
 }

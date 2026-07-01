@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_tavern",
-  "displayName": "Jszza\u0027s Tavern",
+  "displayName": "Jszza's Tavern",
   "description": "Made by Jszza",
   "prefabPath": "jszza/plot_jszzas_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -465,5 +465,6 @@
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jszza"
 }

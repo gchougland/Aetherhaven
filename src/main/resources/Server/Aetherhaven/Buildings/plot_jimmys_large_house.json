@@ -54,5 +54,6 @@
   "tags": [
     "house"
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_large_house.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_large_house.displayName",
+  "styleId": "jimmy"
 }

@@ -51,5 +51,6 @@
     "work",
     "builder"
   ],
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_builders_hut.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_builders_hut.displayName",
+  "styleId": "core"
 }

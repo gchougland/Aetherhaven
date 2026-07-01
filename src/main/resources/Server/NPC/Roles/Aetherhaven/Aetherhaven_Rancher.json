@@ -170,8 +170,7 @@
             "Sensor": { "Type": "Not", "Sensor": { "Type": "State", "State": "$Interaction" } },
             "Actions": [
               { "Type": "LockOnInteractionTarget" },
-              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "rancher" },
-              { "Type": "State", "State": "$Interaction" }
+              { "Type": "OpenAetherhavenDialogue", "VillagerKind": "rancher" }
             ]
           }
         ]

@@ -4,10 +4,13 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -26,6 +29,16 @@ public final class PlotCraftingCatalog {
 
     @Nonnull
     public static List<GroupEntry> groupsForTab(@Nonnull ConstructionCatalog catalog, @Nonnull Tab tab, @Nonnull ClassLoader classLoader) {
+        return groupsForTab(catalog, tab, classLoader, Collections.emptySet());
+    }
+
+    @Nonnull
+    public static List<GroupEntry> groupsForTab(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Tab tab,
+        @Nonnull ClassLoader classLoader,
+        @Nonnull Set<String> activeStyleFilters
+    ) {
         Map<String, ObjectArrayList<ConstructionDefinition>> byGroup = new Object2ObjectOpenHashMap<>();
         for (ConstructionDefinition def : catalog.list()) {
             if (!isCraftable(def)) {
@@ -33,6 +46,9 @@ public final class PlotCraftingCatalog {
             }
             Tab defTab = tabFor(def);
             if (defTab != tab) {
+                continue;
+            }
+            if (!matchesStyleFilter(def, activeStyleFilters)) {
                 continue;
             }
             String groupKey = catalog.resolveGameplayConstructionId(def.getId());
@@ -57,13 +73,15 @@ public final class PlotCraftingCatalog {
                     )
                 );
             }
-            groups.add(new GroupEntry(groupKey, resolveGroupDisplayName(catalog, groupKey), variants));
+            if (!variants.isEmpty()) {
+                groups.add(new GroupEntry(groupKey, resolveGroupDisplayName(catalog, groupKey), variants));
+            }
         }
         groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
         return groups;
     }
 
-    private static boolean isCraftable(@Nonnull ConstructionDefinition def) {
+    static boolean isCraftable(@Nonnull ConstructionDefinition def) {
         if (def.isWallSegment()) {
             return false;
         }
@@ -72,6 +90,14 @@ public final class PlotCraftingCatalog {
         }
         String prefab = def.getPrefabPath();
         return prefab != null && !prefab.isBlank();
+    }
+
+    private static boolean matchesStyleFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeStyleFilters) {
+        if (activeStyleFilters.isEmpty()) {
+            return true;
+        }
+        String styleId = PlotBuildingStyles.styleIdOf(def);
+        return styleId != null && activeStyleFilters.contains(styleId);
     }
 
     @Nonnull

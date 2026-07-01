@@ -104,6 +104,7 @@ public final class QuestLifecycleEffects {
         }
         if (lock && talkingNpcUuid != null) {
             town.addInnLockedEntity(talkingNpcUuid);
+            InnPoolService.ensureVisitorListedInInnPool(town, talkingNpcUuid);
         }
     }
 

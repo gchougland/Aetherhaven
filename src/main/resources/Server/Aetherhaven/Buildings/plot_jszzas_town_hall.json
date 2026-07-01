@@ -1,6 +1,6 @@
 {
   "id": "plot_jszzas_town_hall",
-  "displayName": "Jszza\u0027s Town Hall",
+  "displayName": "Jszza's Town Hall",
   "description": "Made by Jszza",
   "prefabPath": "jszza/plot_jszzas_town_hall.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -368,5 +368,6 @@
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true
+  "floatingGiftBlueprint": true,
+  "styleId": "jszza"
 }

@@ -52,6 +52,40 @@ $C.@PageOverlay {
     Group #PanelsRow {
       LayoutMode: Left;
 
+      Group #StyleFilterColumn {
+        LayoutMode: Top;
+        Anchor: (Width: 168, Right: 10);
+
+        $C.@Container {
+          Anchor: (Width: 168, Height: @PlotPanelHeight, Top: 56);
+
+          #Title {
+            Label #StyleFilterTitle {
+              Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+              Padding: (Horizontal: 8);
+              Text: "";
+            }
+          }
+
+          #Content {
+            LayoutMode: Top;
+            Padding: (Full: 12);
+
+            Group #StyleFilterScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              FlexWeight: 1;
+              Anchor: (Height: @PlotPanelHeight - $C.@TitleHeight - 40);
+
+              Group #StyleFilterRows {
+                LayoutMode: Top;
+                Padding: (Horizontal: 2, Vertical: 2);
+              }
+            }
+          }
+        }
+      }
+
       Group #LeftColumn {
         LayoutMode: Top;
         Anchor: (Width: 500, Right: 10);

@@ -157,5 +157,6 @@
   ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_cozy_tavern.displayName"
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_cozy_tavern.displayName",
+  "styleId": "hytiny"
 }

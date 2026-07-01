@@ -110,7 +110,10 @@ public final class AutonomyStuckTeleportRecovery {
         if (leaveDue) {
             return true;
         }
-        return phase != TouristAutonomyState.PHASE_POI;
+        if (phase == TouristAutonomyState.PHASE_POI || phase == TouristAutonomyState.PHASE_IDLE) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean shouldTrackVillagerStall(int phase) {
