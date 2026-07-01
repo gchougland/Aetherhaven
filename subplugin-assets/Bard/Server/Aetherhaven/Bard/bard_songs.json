@@ -2,6 +2,13 @@
   "schemaVersion": 1,
   "songs": [
     {
+      "id": "aetherhaven",
+      "displayLangKey": "aetherhaven_bard.songs.aetherhaven",
+      "musicTrack": "Music/Aetherhaven/Aetherhaven.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Aetherhaven",
+      "durationSeconds": 140
+    },
+    {
       "id": "beach_chillin",
       "displayLangKey": "aetherhaven_bard.songs.beach_chillin",
       "musicTrack": "Music/zUnused/BeachChillin.ogg",

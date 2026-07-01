@@ -340,6 +340,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiEntry pick
     ) {
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
+        autonomy.resetAutonomyStallTracking();
         double tx;
         double tz;
         double leashY;
@@ -460,6 +461,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        if (tryStallTeleportRecovery(ref, store, commandBuffer, npc, autonomy, tc.getPosition())) {
+            return;
+        }
+
         Vector3d pos = tc.getPosition();
         Vector3d leash = npc.getLeashPoint();
         double dx = pos.x - leash.x;
@@ -555,6 +560,15 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     applyAutonomyRoleState(ref, npc, commandBuffer);
                     return;
                 }
+                Vector3d recovery = AutonomyStuckTeleportRecovery.resolveVillagerRecoveryTarget(autonomy);
+                if (recovery != null) {
+                    AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, recovery, npc);
+                    AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, recovery);
+                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                    commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                    applyAutonomyRoleState(ref, npc, commandBuffer);
+                    return;
+                }
                 failTravel(autonomy, now, nav == NavState.DEFER ? "DEFER" : "BLOCKED", commandBuffer, ref, npc);
                 return;
             }
@@ -600,6 +614,43 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
 
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    private static boolean tryStallTeleportRecovery(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull VillagerAutonomyState autonomy,
+        @Nonnull Vector3d pos
+    ) {
+        if (!AutonomyStuckTeleportRecovery.shouldTrackVillagerStall(autonomy.getPhase())) {
+            autonomy.resetAutonomyStallTracking();
+            return false;
+        }
+        if (store.getComponent(ref, MountedComponent.getComponentType()) != null) {
+            return false;
+        }
+
+        Vector3d leash = npc.getLeashPoint();
+        AutonomyStuckTeleportRecovery.updateStall(autonomy, pos, leash.x, leash.z);
+        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(autonomy)) {
+            return false;
+        }
+
+        Vector3d recovery = AutonomyStuckTeleportRecovery.resolveVillagerRecoveryTarget(autonomy);
+        if (recovery == null) {
+            AutonomyStuckTeleportRecovery.resetAfterRecovery(autonomy);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return false;
+        }
+
+        AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, recovery, npc);
+        AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, recovery);
+        commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+        return true;
     }
 
     private static void closePendingDoorsAfterTravelArrival(

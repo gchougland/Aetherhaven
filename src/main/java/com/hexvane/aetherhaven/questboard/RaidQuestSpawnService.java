@@ -25,8 +25,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class RaidQuestSpawnService {
-    public static final String MARCH_MARKER_ROLE_ID = "Aetherhaven_Raid_March_Marker";
-
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private RaidQuestSpawnService() {}
@@ -144,11 +142,9 @@ public final class RaidQuestSpawnService {
     ) {
         RaidQuestCompassCache.removeMobs(world.getName(), slot.raidSpawnedEntityUuidsOrEmpty());
         RaidQuestCompassCache.removeForTown(world.getName(), townId);
-        removeEntityByUuidString(store, slot.getRaidMarchMarkerUuid());
         for (String uuidStr : new ArrayList<>(slot.raidSpawnedEntityUuidsOrEmpty())) {
             removeEntityByUuidString(store, uuidStr);
         }
-        slot.setRaidMarchMarkerUuid(null);
         slot.setRaidSpawnedEntityUuids(new ArrayList<>());
     }
 

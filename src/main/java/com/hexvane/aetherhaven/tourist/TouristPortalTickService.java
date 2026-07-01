@@ -222,11 +222,19 @@ public final class TouristPortalTickService {
         long epochMinute,
         long epochDay
     ) {
+        long dayBase = epochDay * 24L * 60L;
+        long dayEnd = dayBase + 24L * 60L;
         for (Long planned : town.getTouristPlannedSpawnEpochMinutes()) {
-            if (planned == null || planned != epochMinute) {
+            if (planned == null) {
                 continue;
             }
             if (town.getTouristExecutedSpawnEpochMinutes().contains(planned)) {
+                continue;
+            }
+            if (planned < dayBase || planned >= dayEnd) {
+                continue;
+            }
+            if (planned > epochMinute) {
                 continue;
             }
             TouristPortalRecord portal = pickSpawnPortal(world, town, townPortals, planned);
@@ -445,13 +453,8 @@ public final class TouristPortalTickService {
         LocalDateTime gameTime = wtr.getGameDateTime();
         long dawnAlignedEpochDay = VillagerReputationService.currentGameEpochDay(store);
 
-        Set<UUID> onlinePlayers = TownOnlinePresence.collectOnlinePlayerUuids(world);
-
         for (TownRecord town : tm.allTowns()) {
             if (!world.getName().equals(town.getWorldName())) {
-                continue;
-            }
-            if (!TownOnlinePresence.hasAffiliatedPlayerOnline(town, onlinePlayers)) {
                 continue;
             }
             boolean changed = false;
@@ -603,12 +606,16 @@ public final class TouristPortalTickService {
                 store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
                 store.putComponent(ref, NPCEntity.getComponentType(), npc);
                 TouristAutonomySystem.applyAutonomyRoleStateOnStore(ref, npc, store);
+            } else if (shouldTouristLeaveNow(rec, store)) {
+                despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
             } else {
                 autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
                 autonomy.clearVisitPlot();
                 autonomy.clearTravelWaypoints();
                 store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             }
+        } else if (shouldTouristLeaveNow(rec, store)) {
+            despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
         } else {
             store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         }

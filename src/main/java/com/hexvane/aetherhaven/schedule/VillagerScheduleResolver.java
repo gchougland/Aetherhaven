@@ -289,6 +289,11 @@ public final class VillagerScheduleResolver {
             if (pi.getState() != PlotInstanceState.COMPLETE) {
                 return "work: job plot " + job + " state is " + pi.getState() + " (need COMPLETE)";
             }
+            String expected = workConstructionId(binding, def);
+            if (expected != null && !isValidWorkPlot(pi, expected, constructionCatalog)) {
+                String actual = constructionCatalog.resolveGameplayConstructionId(pi.getConstructionId());
+                return "work: job plot " + job + " construction resolves to " + actual + " (expected " + expected + ")";
+            }
             return "work: JobPlotId resolves but resolvePlot failed elsewhere (report as bug)";
         }
         UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def, constructionCatalog);
@@ -360,8 +365,26 @@ public final class VillagerScheduleResolver {
             case TownVillagerBinding.KIND_RANCHER -> AetherhavenConstants.CONSTRUCTION_PLOT_BARN;
             case TownVillagerBinding.KIND_INNKEEPER -> AetherhavenConstants.CONSTRUCTION_PLOT_INN;
             case TownVillagerBinding.KIND_ELDER -> AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL;
+            case TownVillagerBinding.KIND_GUILD_MASTER, TownVillagerBinding.KIND_BARD ->
+                AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL;
             default -> null;
         };
+    }
+
+    /** True when the plot is COMPLETE and resolves to the villager's expected gameplay workplace id. */
+    public static boolean isValidWorkPlot(
+        @Nonnull PlotInstance plot,
+        @Nonnull String expectedGameplayConstructionId,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        if (plot.getState() != PlotInstanceState.COMPLETE) {
+            return false;
+        }
+        String expected = expectedGameplayConstructionId.trim();
+        if (expected.isEmpty()) {
+            return false;
+        }
+        return expected.equals(constructionCatalog.resolveGameplayConstructionId(plot.getConstructionId()));
     }
 
     @Nonnull
@@ -392,10 +415,14 @@ public final class VillagerScheduleResolver {
         @Nullable VillagerDefinition def,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
+        String expectedWork = workConstructionId(binding, def);
+        if (expectedWork == null) {
+            return VillagerScheduleResolveOutcome.skip();
+        }
         UUID job = binding.getJobPlotId();
         if (job != null) {
             PlotInstance pi = town.findPlotById(job);
-            if (pi != null && pi.getState() == PlotInstanceState.COMPLETE) {
+            if (pi != null && isValidWorkPlot(pi, expectedWork, constructionCatalog)) {
                 return new VillagerScheduleResolveOutcome(job, null);
             }
         }
@@ -437,6 +464,8 @@ public final class VillagerScheduleResolver {
                 plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_INN, constructionCatalog);
             case TownVillagerBinding.KIND_ELDER ->
                 plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL, constructionCatalog);
+            case TownVillagerBinding.KIND_GUILD_MASTER, TownVillagerBinding.KIND_BARD ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL, constructionCatalog);
             default -> null;
         };
     }

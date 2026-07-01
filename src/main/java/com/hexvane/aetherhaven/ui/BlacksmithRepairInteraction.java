@@ -39,6 +39,10 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         if (ItemStack.isEmpty(stack) || stack.isUnbreakable()) {
             return false;
         }
+        // Gaia's Draught mirrors charge count in durability; refills are handled at the priestess altar.
+        if (AetherhavenConstants.ITEM_GAIAS_DRAUGHT.equals(stack.getItemId())) {
+            return false;
+        }
         double baseMax = stack.getItem().getMaxDurability();
         if (baseMax <= EPS) {
             return false;

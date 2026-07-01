@@ -759,6 +759,17 @@ public final class AetherhavenConstants {
     public static final int TOURIST_MIN_DAILY_SPAWNS = 3;
     public static final int TOURIST_MAX_DAILY_SPAWNS = 5;
 
+    /** Ticks without meaningful progress before autonomy teleports to the current destination. */
+    public static final int AUTONOMY_STALL_TELEPORT_TICKS = 90;
+    /** Horizontal displacement from the stall anchor required to count as real progress. NPCs wedged in a small area
+     * can jitter without exceeding this radius.
+     */
+    public static final double AUTONOMY_STALL_ANCHOR_RADIUS = 2.0;
+    /** Meters closer to the leash goal that resets stall tracking. */
+    public static final double AUTONOMY_STALL_GOAL_PROGRESS = 0.35;
+    /** Reconcile kicks tourists idle at a portal longer than this without starting a visit. */
+    public static final long TOURIST_PORTAL_IDLE_KICK_MS = 120_000L;
+
     public static final String TOURIST_PORTAL_IDLE_PARTICLE = "Aetherhaven_Tourist_Portal_Idle";
     public static final String TOURIST_PORTAL_SPAWN_BURST_PARTICLE = "Aetherhaven_Tourist_Portal_Burst";
     public static final String TOURIST_PORTAL_SPAWN_SOUND = "SFX_Portal_Neutral_Open";

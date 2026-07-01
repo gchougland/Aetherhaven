@@ -1,0 +1,4066 @@
+{
+  "version": 8,
+  "blockIdVersion": 11,
+  "anchorX": 0,
+  "anchorY": 0,
+  "anchorZ": 0,
+  "blocks": [
+    {
+      "x": -3,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -4,
+      "name": "*Wood_Softwood_Roof_Hollow_State_Definitions_Corner_Left",
+      "rotation": 2
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -3,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -3,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -3,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -2,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": -1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": -1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": -1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": -1,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 0,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 0,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 0,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 0,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 1,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 1,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Softwood_Roof",
+      "rotation": 3
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 3,
+      "z": 3,
+      "name": "*Wood_Softwood_Roof_Hollow_State_Definitions_Corner_Right"
+    },
+    {
+      "x": -3,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -3,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 2
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -3,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 2
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -2,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -2,
+      "name": "Deco_Rope"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -2,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Right",
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -2,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Right",
+      "filler": 1024,
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": -1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": -1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Tavern_Barrel"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 0,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 0,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 3
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 1,
+      "name": "Furniture_Village_Crate"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 1,
+      "name": "Aetherhaven_Management_Block",
+      "components": {
+        "Components": {
+          "AetherhavenManagementBlock": {
+            "PlotId": "",
+            "TownId": ""
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      },
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 1,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Right"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 1,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Right",
+      "filler": 1024
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 2,
+      "name": "Ingredient_Spices"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": -2,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -2,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -3,
+      "name": "Aetherhaven_Shop_Spot",
+      "components": {
+        "Components": {
+          "AetherhavenShopSpotBlock": {
+            "SpotId": "c0d6add6-bdf8-4358-a730-a0246e48c0d3",
+            "TownId": "7dd9488d-b613-493f-af68-938b1942e1aa",
+            "PlotId": "",
+            "PlayerControlled": false,
+            "LootTableId": "",
+            "Configured": false
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      }
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -2,
+      "name": "Bench_Trough",
+      "filler": 31
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 1,
+      "name": "Aetherhaven_Shop_Safe",
+      "components": {
+        "Components": {
+          "AetherhavenShopSafeBlock": {
+            "PlotId": "",
+            "TownId": ""
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      },
+      "rotation": 2
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Steep"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 0,
+      "z": 3,
+      "name": "Furniture_Tavern_Stool"
+    },
+    {
+      "x": -1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": -1,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": -1,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -3,
+      "name": "Aetherhaven_Shop_Spot",
+      "components": {
+        "Components": {
+          "AetherhavenShopSpotBlock": {
+            "SpotId": "bcb751db-d259-48ab-8c60-a95eb341caa9",
+            "TownId": "7dd9488d-b613-493f-af68-938b1942e1aa",
+            "PlotId": "",
+            "PlayerControlled": false,
+            "LootTableId": "",
+            "Configured": false
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -2,
+      "name": "Bench_Trough",
+      "components": {
+        "Components": {
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          },
+          "BenchBlock": {
+            "TierLevel": 1,
+            "UpgradeItems": []
+          }
+        }
+      }
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 2
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Steep"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -3,
+      "name": "Aetherhaven_Shop_Spot",
+      "components": {
+        "Components": {
+          "AetherhavenShopSpotBlock": {
+            "SpotId": "41f43ac9-a142-4cfa-86cf-5e699103278d",
+            "TownId": "7dd9488d-b613-493f-af68-938b1942e1aa",
+            "PlotId": "",
+            "PlayerControlled": false,
+            "LootTableId": "",
+            "Configured": false
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      }
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -2,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -2,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Left",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -2,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Left",
+      "filler": 1024,
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": -1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Tavern_Stool",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 0,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Steep",
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Steep",
+      "filler": 1024,
+      "rotation": 1
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 3
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 1,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Left"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 1,
+      "name": "*Wood_Softwood_Roof_Steep_State_Definitions_Corner_Left",
+      "filler": 1024
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Redwood_Beam",
+      "rotation": 5
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 2
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -4,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 2
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -3,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -3,
+      "name": "Rock_Stone_Brick_Beam"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -3,
+      "name": "Wood_Redwood_Beam"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": -1,
+      "name": "Wood_Redwood_Stairs",
+      "rotation": 11
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": -1,
+      "name": "Wood_Redwood_Beam"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": -1,
+      "name": "Wood_Redwood_Beam"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": -1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 0,
+      "name": "Wood_Redwood_Stairs",
+      "rotation": 11
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 0,
+      "name": "Aetherhaven_Shop_Spot",
+      "components": {
+        "Components": {
+          "AetherhavenShopSpotBlock": {
+            "SpotId": "92f287e9-51f4-4df2-af85-a223e0b9c207",
+            "TownId": "7dd9488d-b613-493f-af68-938b1942e1aa",
+            "PlotId": "",
+            "PlayerControlled": false,
+            "LootTableId": "",
+            "Configured": false
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      },
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 0,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "name": "Wood_Redwood_Stairs",
+      "rotation": 11
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 1,
+      "name": "Aetherhaven_Shop_Spot",
+      "components": {
+        "Components": {
+          "AetherhavenShopSpotBlock": {
+            "SpotId": "02c0bfe5-2e67-4e5c-a169-092d4e82f762",
+            "TownId": "7dd9488d-b613-493f-af68-938b1942e1aa",
+            "PlotId": "",
+            "PlayerControlled": false,
+            "LootTableId": "",
+            "Configured": false
+          },
+          "PlacedByInteraction": {
+            "WhoPlacedUuid": {
+              "$binary": "CGDBch1dRNaCa5bbX/Qg3A==",
+              "$type": "04"
+            }
+          }
+        }
+      },
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 1,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "name": "Rock_Stone_Brick"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 2,
+      "name": "Rock_Stone_Brick_Beam"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 2,
+      "name": "Wood_Redwood_Beam"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 2,
+      "name": "Wood_Hardwood_Planks"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -4,
+      "name": "*Wood_Softwood_Roof_Hollow_State_Definitions_Corner_Left",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -4,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -3,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -2,
+      "name": "Wood_Softwood_Roof_Hollow",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": -1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": -1,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": -1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 0,
+      "name": "Furniture_Tavern_Stool",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 0,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 0,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 0,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 1,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 1,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 1,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 2,
+      "name": "Furniture_Crude_Shelf",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 2,
+      "name": "Wood_Softwood_Roof_Flat",
+      "rotation": 1
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 2,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "z": 3,
+      "name": "Wood_Softwood_Roof_Hollow"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "z": 3,
+      "name": "Empty"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "z": 3,
+      "name": "Empty"
+    }
+  ],
+  "entities": [
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Tool_Fishing_Trap"
+        },
+        "Transform": {
+          "Position": {
+            "X": 0.05047416687011719,
+            "Y": 6.965156555175781,
+            "Z": 0.13714599609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.2389460802078247,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "I7WYSYLKOMytjSUqntsHhg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.8999991416931152
+        },
+        "Item": {
+          "Item": {
+            "Id": "Tool_Fishing_Trap",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Plate"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.5169868469238281,
+            "Y": 0.9873695373535156,
+            "Z": 2.3770751953125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.215831756591797,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "gYzfyJ3KQJy3QOLK5md6Wg==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.600000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Plate",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Rope"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.5418946743011475,
+            "Y": 3.2023239135742188,
+            "Z": 1.49169921875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.131312608718872,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "xcJ36kghMHurcz5yy6LbWQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.2000000476837158
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Rope",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Mug"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.3170499801635742,
+            "Y": 0.9859161376953125,
+            "Z": 1.48834228515625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.441347599029541,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "YBEPZ9uAOVeeElVs7tb2yQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.7999997138977051
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Mug",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Tool_Fishing_Trap"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.659358263015747,
+            "Y": 4.593807220458984,
+            "Z": 0.97637939453125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.6676688194274902,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "sPExQxWqQGWW3TKkSt53Jw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.1999996900558472
+        },
+        "Item": {
+          "Item": {
+            "Id": "Tool_Fishing_Trap",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Tool_Fishing_Trap"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.9287877082824707,
+            "Y": 2.3172683715820312,
+            "Z": 0.51312255859375
+          },
+          "Rotation": {
+            "Pitch": 0.0015236529288813472,
+            "Yaw": -1.5912318229675293,
+            "Roll": -3.11414260067977E-5
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "GBTx5Ki5NTS9Ku74GJPjbQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.1999996900558472
+        },
+        "Item": {
+          "Item": {
+            "Id": "Tool_Fishing_Trap",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Container_Bucket"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.6561651229858398,
+            "Y": 0.6641731262207031,
+            "Z": -0.4288330078125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.8080649375915527,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "hJ+feC6rPAW83kJRJdgRJQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.9999997615814209
+        },
+        "Item": {
+          "Item": {
+            "Id": "Container_Bucket",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Village_Sign"
+        },
+        "Transform": {
+          "Position": {
+            "X": 2.495083808898926,
+            "Y": 1.9539604187011719,
+            "Z": 3.0977783203125
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.6762140989303589,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "eNg56XWiMNiXeatvx2KYrQ==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 2.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Village_Sign",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Plate"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.3844327926635742,
+            "Y": 1.0037918090820312,
+            "Z": 0.51275634765625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.06144256517291069,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "6PiKuD4BTcic142xfMGH7A==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.7999997138977051
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Plate",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Food_Fish_Grilled"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.39740514755249023,
+            "Y": 1.0620918273925781,
+            "Z": 2.20263671875
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -2.6438231468200684,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "cn5SRg5BQES2ofFDTkXF4g==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.399999976158142
+        },
+        "Item": {
+          "Item": {
+            "Id": "Food_Fish_Grilled",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Food_Fish_Raw"
+        },
+        "Transform": {
+          "Position": {
+            "X": -1.3867130279541016,
+            "Y": 1.0310592651367188,
+            "Z": 0.48236083984375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.1004176139831543,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "+AMLEwLqN/uG/SdBwXGdhA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.49999967217445374
+        },
+        "Item": {
+          "Item": {
+            "Id": "Food_Fish_Raw",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Deco_Rope"
+        },
+        "Transform": {
+          "Position": {
+            "X": 3.6053810119628906,
+            "Y": 3.1825218200683594,
+            "Z": 2.43792724609375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.131312608718872,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "me3kxWMZR1mMGpRBSoOgmw==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.2000000476837158
+        },
+        "Item": {
+          "Item": {
+            "Id": "Deco_Rope",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -0.26134157180786133,
+            "Y": 0.4393119812011719,
+            "Z": -1.4976806640625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.5079493522644043,
+            "Roll": 1.5200982093811035
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.8999999761581421
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Minnow_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 2.5079493522644043,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 3.5683045387268066,
+            "Y": 2.735492706298828,
+            "Z": 1.75408935546875
+          },
+          "Rotation": {
+            "Pitch": 1.5542628765106201,
+            "Yaw": -2.8959622383117676,
+            "Roll": -1.3525113899959251E-6
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.100000023841858
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Pike_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.6614502668380737,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -0.03394603729248047,
+            "Y": 0.50634765625,
+            "Z": -1.35498046875
+          },
+          "Rotation": {
+            "Pitch": 0.06115071848034859,
+            "Yaw": -2.3947572708129883,
+            "Roll": 1.6349588632583618
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.699999988079071
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Tang_Blue_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.061150867491960526,
+            "Yaw": -2.394761800765991,
+            "Roll": 1.6349583864212036
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -0.4606747627258301,
+            "Y": 0.485107421875,
+            "Z": -1.32861328125
+          },
+          "Rotation": {
+            "Pitch": 0.06115071848034859,
+            "Yaw": -1.5668692588806152,
+            "Roll": 1.6349575519561768
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.699999988079071
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Tang_Blue_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.061149194836616516,
+            "Yaw": -1.566866397857666,
+            "Roll": 1.63495671749115
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -0.5088434219360352,
+            "Y": 1.0979461669921875,
+            "Z": 1.1854248046875
+          },
+          "Rotation": {
+            "Pitch": -0.002246798947453499,
+            "Yaw": -1.600610613822937,
+            "Roll": -1.6069830656051636
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.800000011920929
+        },
+        "Item": {
+          "Item": {
+            "Id": "Aetherhaven_Hunting_Knife",
+            "Quantity": 1,
+            "Durability": 120.0,
+            "MaxDurability": 120.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.002245785668492317,
+            "Yaw": -1.6006014347076416,
+            "Roll": -1.6069811582565308
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.5919933319091797,
+            "Y": 1.3224334716796875,
+            "Z": 2.39007568359375
+          },
+          "Rotation": {
+            "Pitch": 0.18769365549087524,
+            "Yaw": 2.6631569862365723,
+            "Roll": -3.1415927410125732
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.699999988079071
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Lobster_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 1.6243997812271118,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -1.451399326324463,
+            "Y": 1.0081596374511719,
+            "Z": -1.46331787109375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8645451068878174,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Tool_Trap_Bait",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.8645451068878174,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.5522246360778809,
+            "Y": 1.4696769714355469,
+            "Z": 3.05438232421875
+          },
+          "Rotation": {
+            "Pitch": -0.9884436130523682,
+            "Yaw": -2.030661106109619,
+            "Roll": 2.1509199142456055
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.699999988079071
+        },
+        "Item": {
+          "Item": {
+            "Id": "Weapon_Axe_Iron",
+            "Quantity": 1,
+            "Durability": 120.0,
+            "MaxDurability": 120.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.9884395599365234,
+            "Yaw": -2.030660629272461,
+            "Roll": 2.1509203910827637
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 2.6055855751037598,
+            "Y": 2.3350868225097656,
+            "Z": 3.06396484375
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.10410964488983154,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Minnow_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -0.10410964488983154,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 3.5541136264801025,
+            "Y": 2.886707305908203,
+            "Z": 2.541259765625
+          },
+          "Rotation": {
+            "Pitch": 1.5902657508850098,
+            "Yaw": -2.9485268592834473,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Catfish_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 3.0037131309509277,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": 0.4944949150085449,
+            "Y": 0.4305381774902344,
+            "Z": -1.59210205078125
+          },
+          "Rotation": {
+            "Pitch": -0.0972650870680809,
+            "Yaw": 0.05183722451329231,
+            "Roll": 1.5955109596252441
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.8999999761581421
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Minnow_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": -0.550281822681427,
+            "Yaw": 2.8097550868988037,
+            "Roll": -0.9881592988967896
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "Transform": {
+          "Position": {
+            "X": -1.6991853713989258,
+            "Y": 2.696422576904297,
+            "Z": -1.480224609375
+          },
+          "Rotation": {
+            "Pitch": 1.56338632106781,
+            "Yaw": 1.6215643882751465,
+            "Roll": 0.0
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Fish_Shark_Hammerhead_Item",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {},
+        "HeadRotation": {
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.9751598834991455,
+            "Roll": 0.0
+          }
+        }
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Potion_Health_Small"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.13168096542358398,
+            "Y": 1.0014381408691406,
+            "Z": 2.75390625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": -1.7034821510314941,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "cVkPTY6bOOO43TNW1VQeVA==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 0.800000011920929
+        },
+        "Item": {
+          "Item": {
+            "Id": "Potion_Health_Small",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    },
+    {
+      "Components": {
+        "PreventItemMerging": {},
+        "Prop": {},
+        "BlockEntity": {
+          "BlockTypeKey": "Furniture_Desert_Torch"
+        },
+        "Transform": {
+          "Position": {
+            "X": -0.8622803688049316,
+            "Y": 0.033145904541015625,
+            "Z": -0.72174072265625
+          },
+          "Rotation": {
+            "Pitch": 0.0,
+            "Yaw": 0.2860812246799469,
+            "Roll": 0.0
+          }
+        },
+        "UUID": {
+          "UUID": {
+            "$binary": "xZdulmrRM56m23XXz27C0w==",
+            "$type": "04"
+          }
+        },
+        "PreventPickup": {},
+        "EntityScale": {
+          "Scale": 1.0
+        },
+        "Item": {
+          "Item": {
+            "Id": "Furniture_Desert_Torch",
+            "Quantity": 1,
+            "Durability": 0.0,
+            "MaxDurability": 0.0,
+            "OverrideDroppedItemAnimation": true
+          },
+          "StackDelay": 1.5,
+          "PickupDelay": 0.5,
+          "PickupThrottle": 0.0,
+          "RemovedByPlayerPickup": false
+        },
+        "PrefabCopyable": {}
+      }
+    }
+  ]
+}

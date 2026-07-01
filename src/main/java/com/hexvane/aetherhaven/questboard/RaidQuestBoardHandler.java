@@ -84,7 +84,6 @@ public final class RaidQuestBoardHandler implements QuestBoardQuestTypeHandler {
         slot.setRaidKillRequired(roster.size());
         slot.setRaidKillProgress(0);
         slot.setRaidSpawnedEntityUuids(new ArrayList<>());
-        slot.setRaidMarchMarkerUuid(null);
         slot.setRaidApproachDirection(RaidApproachDirection.random(rng).id());
         if (entry.targetLabelLangKey() != null && !entry.targetLabelLangKey().isBlank()) {
             slot.setRaidTargetLabelLangKey(entry.targetLabelLangKey().trim());

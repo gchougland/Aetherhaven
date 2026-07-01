@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.poi.tool.PoiToolPlayerComponent;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSecondaryInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSelectInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolSetTargetInteraction;
+import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationPlayerRemoveSystem;
 import com.hexvane.aetherhaven.poi.tool.PoiToolVisualizationSystem;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
@@ -74,6 +75,7 @@ public final class AdminToolsBootstrap {
                 PoiDebugLabelEntity.CODEC
             );
         plugin.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new PoiToolVisualizationPlayerRemoveSystem());
         core.registerAetherhavenSubcommand(new AetherhavenPoiCommand());
         core.registerAetherhavenSubcommand(new AetherhavenAutonomyDebugCommand());
         core.registerAetherhavenSubcommand(new AetherhavenWallDebugCommand());

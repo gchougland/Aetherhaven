@@ -52,6 +52,9 @@ public final class VillagerRevivalService {
         if (roleId.isEmpty()) {
             return false;
         }
+        if (!ResidentRegistryService.isGaiaRevivalEligible(record.getKind(), roleId)) {
+            return false;
+        }
         if (ResidentRegistryService.hasLiveTownRevivalNpcForRole(store, town, record)) {
             LOGGER.atInfo()
                 .log(
@@ -118,6 +121,9 @@ public final class VillagerRevivalService {
     /** @return null if revival is allowed, otherwise a short English message for the player */
     @Nullable
     public static String validateCanRevive(@Nonnull Store<EntityStore> store, @Nonnull ResidentNpcRecord record) {
+        if (!ResidentRegistryService.isGaiaRevivalEligible(record.getKind(), record.getNpcRoleId())) {
+            return "That villager cannot be revived at the Gaia statue.";
+        }
         UUID oldUuid = record.getLastEntityUuid();
         Ref<EntityStore> existing = store.getExternalData().getRefFromUUID(oldUuid);
         if (existing != null && existing.isValid()) {

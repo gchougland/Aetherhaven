@@ -3,10 +3,13 @@ package com.hexvane.aetherhaven.inn;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
+import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -40,15 +43,11 @@ public final class GaiaAltarCompletion {
         }
         Store<EntityStore> store = world.getEntityStore().getStore();
 
-        PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
-        PoiEntry work = null;
-        for (PoiEntry e : reg.listByTown(town.getTownId())) {
-            if (altarPlotId.equals(e.getPlotId()) && e.getTags().contains("WORK")) {
-                work = e;
-                break;
-            }
+        PlotInstance altarPlot = town.findPlotById(altarPlotId);
+        if (altarPlot == null) {
+            return;
         }
-        if (work == null) {
+        if (!hasWorkPoiForAltar(world, plugin, town, altarPlotId, altarPlot)) {
             LOGGER.atWarning().log("No WORK POI for Gaia altar plot %s", altarPlotId);
             return;
         }
@@ -91,6 +90,31 @@ public final class GaiaAltarCompletion {
         }
         tm.updateTown(town);
         LOGGER.atInfo().log("Assigned priestess to Gaia altar plot %s; pathing to work POI", altarPlotId);
+    }
+
+    private static boolean hasWorkPoiForAltar(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull UUID altarPlotId,
+        @Nonnull PlotInstance altarPlot
+    ) {
+        PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        for (PoiEntry e : reg.listByTown(town.getTownId())) {
+            if (altarPlotId.equals(e.getPlotId()) && e.getTags().contains("WORK")) {
+                return true;
+            }
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(altarPlot.getConstructionId());
+        if (def == null) {
+            return false;
+        }
+        for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
+            if (row.getTags().contains("WORK")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable

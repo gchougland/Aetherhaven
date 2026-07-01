@@ -84,12 +84,14 @@ public final class VillagerTownResetService {
     ) {
         town.migrateInnFieldsIfNeeded();
         // Sync visitor bindings / resident registry with completed job plots (fixes "quest completed but still visitor").
-        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store);
+        InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
+        InnPoolService.reconcileInnVisitorEntities(world, town, tm, store, true);
         int straysPurged = purgeStrayLoadedVillagerNpcsForTownReset(store, town, tm, captured.keySet());
         if (straysPurged > 0) {
             LOGGER.atInfo().log("Reset: removed %s stray loaded villager NPC(s) for town %s", straysPurged, town.getTownId());
         }
+        InnPoolService.despawnAllTownInnVisitors(town, store);
         if (captured.isEmpty()) {
             return straysPurged > 0 ? null : "No tracked villager NPCs found for this town.";
         }

@@ -47,7 +47,7 @@ public final class TownMapMarkerProvider implements WorldMapManager.MarkerProvid
         double x = town.getCharterX() + 0.5;
         double z = town.getCharterZ() + 0.5;
         double y = standingY(world, town);
-        return new MapMarkerBuilder(markerId(town.getTownId()), MARKER_ICON, new Transform(x, y, z))
+        return new MapMarkerBuilder(markerId(town.getTownId()), MARKER_ICON, MapMarkerTransforms.at(x, y, z))
             .withCustomName(town.getDisplayName())
             .build();
     }

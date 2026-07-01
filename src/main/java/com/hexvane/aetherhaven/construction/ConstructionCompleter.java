@@ -13,7 +13,9 @@ import com.hexvane.aetherhaven.inn.ShopPromotionConfig;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
+import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
 import com.hexvane.aetherhaven.shopspot.ShopSpotExtractor;
 import com.hexvane.aetherhaven.tourist.TouristPortalExtractor;
 import com.hexvane.aetherhaven.plot.PlotBlockStamper;
@@ -119,6 +121,7 @@ public final class ConstructionCompleter {
             Store<EntityStore> entityStore =
                 world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
             if (entityStore != null) {
+                PoiMarkerDedupUtil.dedupeInPlot(entityStore, plot);
                 PoiExtractor.registerForCompletedBuild(
                     plugin,
                     world,
@@ -134,6 +137,7 @@ public final class ConstructionCompleter {
                 TouristPortalExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plotId, plot);
             }
             PlotBlockStamper.stampAllLinkedBlocks(world, town, plot, def, prefabAnchorWorld, prefabYaw);
+            TeleporterWarpSanitizer.schedulePlotFootprintSanitize(world, plot.toFootprint());
             if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(gid)) {
                 MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
             }

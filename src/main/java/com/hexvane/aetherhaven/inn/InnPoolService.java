@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -38,11 +39,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -179,6 +184,9 @@ public final class InnPoolService {
         private int lockedQuestVisitors;
         private int promotedResidents;
         private int removedPoolEntries;
+        private int removedDuplicateVisitors;
+        private int removedOrphanVisitors;
+        private int poolEntriesFixed;
 
         public int getLockedQuestVisitors() {
             return lockedQuestVisitors;
@@ -191,6 +199,349 @@ public final class InnPoolService {
         public int getRemovedPoolEntries() {
             return removedPoolEntries;
         }
+
+        public int getRemovedDuplicateVisitors() {
+            return removedDuplicateVisitors;
+        }
+
+        public int getRemovedOrphanVisitors() {
+            return removedOrphanVisitors;
+        }
+
+        public int getPoolEntriesFixed() {
+            return poolEntriesFixed;
+        }
+    }
+
+    public static final class ReconcileReport {
+        private int removedDuplicates;
+        private int removedOrphans;
+        private int poolEntriesFixed;
+
+        public int getRemovedDuplicates() {
+            return removedDuplicates;
+        }
+
+        public int getRemovedOrphans() {
+            return removedOrphans;
+        }
+
+        public int getPoolEntriesFixed() {
+            return poolEntriesFixed;
+        }
+    }
+
+    private record LoadedInnVisitor(@Nonnull UUID uuid, @Nonnull String roleId, boolean inPool, boolean questLocked) {}
+
+    /** True when {@code binding} is an inn visitor for {@code town} (never matches other towns). */
+    public static boolean isInnPoolVisitorForTown(@Nonnull TownRecord town, @Nullable TownVillagerBinding binding) {
+        return binding != null
+            && town.getTownId().equals(binding.getTownId())
+            && TownVillagerBinding.isVisitorKind(binding.getKind());
+    }
+
+    /** True when {@code binding} points at a live town other than {@code town}. */
+    public static boolean isVisitorBoundToLiveOtherTown(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nullable TownVillagerBinding binding
+    ) {
+        if (binding == null) {
+            return false;
+        }
+        try {
+            UUID bindingTownId = binding.getTownId();
+            if (town.getTownId().equals(bindingTownId)) {
+                return false;
+            }
+            return tm.getTown(bindingTownId) != null;
+        } catch (RuntimeException ex) {
+            return false;
+        }
+    }
+
+    /** Visitor binding whose town id is missing from {@link TownManager} (deleted / stale save). */
+    public static boolean isOrphanInnVisitorBinding(@Nonnull TownManager tm, @Nullable TownVillagerBinding binding) {
+        if (binding == null || !TownVillagerBinding.isVisitorKind(binding.getKind())) {
+            return false;
+        }
+        try {
+            return tm.getTown(binding.getTownId()) == null;
+        } catch (RuntimeException ex) {
+            return true;
+        }
+    }
+
+    /**
+     * Loaded inn visitors for this town only ({@link TownVillagerBinding#isVisitorKind} + matching {@code townId}).
+     */
+    public static int countTownInnVisitorsInStore(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        AtomicInteger count = new AtomicInteger();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (!isInnPoolVisitorForTown(town, b)) {
+                return;
+            }
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref != null && ref.isValid()) {
+                count.incrementAndGet();
+            }
+        });
+        return count.get();
+    }
+
+  private static boolean townHasInnVisitorDrift(@Nonnull Store<EntityStore> store, @Nonnull TownRecord town) {
+        if (countTownInnVisitorsInStore(store, town) > town.getInnPoolNpcIds().size()) {
+            return true;
+        }
+        Map<String, Integer> roleCounts = new HashMap<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (!isInnPoolVisitorForTown(town, b)) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            String roleName = npc != null ? npc.getRoleName() : null;
+            if (roleName == null || roleName.isBlank()) {
+                return;
+            }
+            roleCounts.merge(roleName.trim(), 1, Integer::sum);
+        });
+        for (int c : roleCounts.values()) {
+            if (c > 1) {
+                return true;
+            }
+        }
+        return countTownInnVisitorsInStore(store, town) > MAX_VISITORS;
+    }
+
+    private static int keeperPriority(@Nonnull LoadedInnVisitor v) {
+        int p = 0;
+        if (v.inPool()) {
+            p -= 100;
+        }
+        if (v.questLocked()) {
+            p -= 10;
+        }
+        return p;
+    }
+
+    private static int compareKeepers(@Nonnull LoadedInnVisitor a, @Nonnull LoadedInnVisitor b) {
+        int pa = keeperPriority(a);
+        int pb = keeperPriority(b);
+        if (pa != pb) {
+            return Integer.compare(pa, pb);
+        }
+        return a.uuid().toString().compareTo(b.uuid().toString());
+    }
+
+    @Nonnull
+    private static Set<String> innPoolIdSet(@Nonnull TownRecord town) {
+        Set<String> seen = new LinkedHashSet<>();
+        for (String sid : town.getInnPoolNpcIds()) {
+            if (sid != null && !sid.isBlank()) {
+                seen.add(sid.trim().toLowerCase());
+            }
+        }
+        return seen;
+    }
+
+    @Nonnull
+    private static List<LoadedInnVisitor> collectLoadedInnVisitorsForTown(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town
+    ) {
+        Set<String> poolIds = innPoolIdSet(town);
+        java.util.Queue<LoadedInnVisitor> out = new java.util.concurrent.ConcurrentLinkedQueue<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (!isInnPoolVisitorForTown(town, b)) {
+                return;
+            }
+            var uuidType = UUIDComponent.getComponentType();
+            UUIDComponent uc = uuidType != null ? archetypeChunk.getComponent(index, uuidType) : null;
+            if (uc == null) {
+                return;
+            }
+            var npcType = NPCEntity.getComponentType();
+            NPCEntity npc = npcType != null ? archetypeChunk.getComponent(index, npcType) : null;
+            String roleName = npc != null ? npc.getRoleName() : null;
+            if (roleName == null || roleName.isBlank()) {
+                return;
+            }
+            UUID uuid = uc.getUuid();
+            boolean inPool = poolIds.contains(uuid.toString().toLowerCase());
+            boolean questLocked = town.isInnVisitorLocked(uuid);
+            out.add(new LoadedInnVisitor(uuid, roleName.trim(), inPool, questLocked));
+        });
+        return new ArrayList<>(out);
+    }
+
+    @Nonnull
+    private static List<UUID> collectOrphanInnVisitorUuids(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        java.util.Queue<UUID> orphans = new java.util.concurrent.ConcurrentLinkedQueue<>();
+        store.forEachEntityParallel(TownVillagerBinding.getComponentType(), (index, archetypeChunk, commandBuffer) -> {
+            Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (ref == null || !ref.isValid()) {
+                return;
+            }
+            TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !TownVillagerBinding.isVisitorKind(b.getKind())) {
+                return;
+            }
+            if (isVisitorBoundToLiveOtherTown(town, tm, b)) {
+                return;
+            }
+            if (!isOrphanInnVisitorBinding(tm, b)) {
+                return;
+            }
+            var uuidType = UUIDComponent.getComponentType();
+            UUIDComponent uc = uuidType != null ? archetypeChunk.getComponent(index, uuidType) : null;
+            if (uc != null) {
+                orphans.add(uc.getUuid());
+            }
+        });
+        return new ArrayList<>(orphans);
+    }
+
+    private static void syncInnPoolListFromKeepers(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Set<UUID> keepUuids,
+        @Nonnull List<LoadedInnVisitor> keepersInOrder
+    ) {
+        List<String> previous = new ArrayList<>(town.getInnPoolNpcIds());
+        List<String> rebuilt = new ArrayList<>();
+        for (String sid : previous) {
+            UUID u = parseUuid(sid);
+            if (u != null && keepUuids.contains(u)) {
+                rebuilt.add(u.toString());
+            }
+        }
+        for (LoadedInnVisitor keeper : keepersInOrder) {
+            String sid = keeper.uuid().toString();
+            boolean already = rebuilt.stream().anyMatch(s -> sid.equalsIgnoreCase(s));
+            if (!already) {
+                rebuilt.add(sid);
+            }
+        }
+        if (rebuilt.size() > MAX_VISITORS) {
+            rebuilt = new ArrayList<>(rebuilt.subList(0, MAX_VISITORS));
+        }
+        boolean changed =
+            rebuilt.size() != town.getInnPoolNpcIds().size()
+                || !new ArrayList<>(town.getInnPoolNpcIds()).equals(rebuilt);
+        town.getInnPoolNpcIds().clear();
+        town.getInnPoolNpcIds().addAll(rebuilt);
+        dedupeInnPoolIds(town, tm);
+        if (changed) {
+            tm.updateTown(town);
+        }
+    }
+
+    /**
+     * Per-town inn pool reconcile: dedupe same-role visitors, cap at {@link #MAX_VISITORS}, sync {@link
+     * TownRecord#getInnPoolNpcIds()}, optionally remove orphan visitor-kind NPCs with no live owning town.
+     */
+    @Nonnull
+    public static ReconcileReport reconcileInnVisitorEntities(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        boolean purgeOrphans
+    ) {
+        ReconcileReport report = new ReconcileReport();
+        List<LoadedInnVisitor> loaded = collectLoadedInnVisitorsForTown(store, town);
+        if (loaded.isEmpty() && !purgeOrphans) {
+            return report;
+        }
+
+        Map<String, LoadedInnVisitor> bestByRole = new LinkedHashMap<>();
+        for (LoadedInnVisitor v : loaded) {
+            LoadedInnVisitor existing = bestByRole.get(v.roleId());
+            if (existing == null || compareKeepers(v, existing) < 0) {
+                bestByRole.put(v.roleId(), v);
+            }
+        }
+
+        List<LoadedInnVisitor> roleKeepers = new ArrayList<>(bestByRole.values());
+        roleKeepers.sort(InnPoolService::compareKeepers);
+
+        List<LoadedInnVisitor> finalKeepers = new ArrayList<>();
+        for (int i = 0; i < roleKeepers.size() && finalKeepers.size() < MAX_VISITORS; i++) {
+            finalKeepers.add(roleKeepers.get(i));
+        }
+
+        Set<UUID> keepUuids = new LinkedHashSet<>();
+        for (LoadedInnVisitor k : finalKeepers) {
+            keepUuids.add(k.uuid());
+        }
+
+        List<UUID> toRemove = new ArrayList<>();
+        for (LoadedInnVisitor v : loaded) {
+            if (!keepUuids.contains(v.uuid())) {
+                toRemove.add(v.uuid());
+            }
+        }
+        report.removedDuplicates = toRemove.size();
+
+        if (purgeOrphans) {
+            for (UUID orphan : collectOrphanInnVisitorUuids(town, tm, store)) {
+                if (!toRemove.contains(orphan)) {
+                    toRemove.add(orphan);
+                    report.removedOrphans++;
+                }
+            }
+        }
+
+        if (!toRemove.isEmpty()) {
+            PendingEntityRemovalService.scheduleAll(world, toRemove);
+            LOGGER.atInfo().log(
+                "Inn reconcile for town %s: scheduling removal of %s visitor(s) (%s duplicate(s), %s orphan(s))",
+                town.getTownId(),
+                toRemove.size(),
+                report.removedDuplicates,
+                report.removedOrphans
+            );
+        }
+
+        int poolSizeBefore = town.getInnPoolNpcIds().size();
+        if (!finalKeepers.isEmpty()) {
+            syncInnPoolListFromKeepers(town, tm, keepUuids, finalKeepers);
+        } else if (!toRemove.isEmpty()) {
+            for (UUID u : toRemove) {
+                String sid = u.toString();
+                town.getInnPoolNpcIds().removeIf(s -> sid.equalsIgnoreCase(s != null ? s.trim() : ""));
+                town.removeInnLockedEntity(u);
+            }
+        }
+        if (town.getInnPoolNpcIds().size() != poolSizeBefore) {
+            report.poolEntriesFixed++;
+        }
+
+        if (!finalKeepers.isEmpty()) {
+            for (String sid : new ArrayList<>(town.getInnLockedEntityUuids())) {
+                UUID u = parseUuid(sid);
+                if (u != null && !keepUuids.contains(u)) {
+                    town.removeInnLockedEntity(u);
+                }
+            }
+        }
+        if (report.poolEntriesFixed > 0 || !toRemove.isEmpty()) {
+            tm.updateTown(town);
+        }
+
+        return report;
     }
 
     /**
@@ -664,6 +1015,7 @@ public final class InnPoolService {
             town.migrateInnFieldsIfNeeded();
             dedupeInnPoolIds(town, tm);
             trimInnPoolListToMax(town, tm, store);
+            reconcileInnVisitorEntities(world, town, tm, store, true);
         }
     }
 
@@ -824,6 +1176,13 @@ public final class InnPoolService {
             return;
         }
 
+        if (townHasInnVisitorDrift(store, town)) {
+            reconcileInnVisitorEntities(world, town, tm, store, true);
+        }
+        if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
+            return;
+        }
+
         Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
         mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
 
@@ -858,6 +1217,9 @@ public final class InnPoolService {
 
         for (String roleId : mergedOrder) {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
+                break;
+            }
+            if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
                 break;
             }
             if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
@@ -1238,6 +1600,12 @@ public final class InnPoolService {
         if (wtr == null) {
             return;
         }
+        if (townHasInnVisitorDrift(store, town)) {
+            reconcileInnVisitorEntities(world, town, tm, store, true);
+        }
+        if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
+            return;
+        }
         Set<String> presentRoles = new LinkedHashSet<>(collectTownVisitorNpcRolesFromStore(store, town));
         mergeQuestCriticalRolesWhenLockedVisitorsUnresolved(town, store, presentRoles);
 
@@ -1247,6 +1615,9 @@ public final class InnPoolService {
         int slot = slotOffsetStart;
         for (String roleId : mergedOrder) {
             if (town.getInnPoolNpcIds().size() >= MAX_VISITORS) {
+                break;
+            }
+            if (countTownInnVisitorsInStore(store, town) >= MAX_VISITORS) {
                 break;
             }
             if (!isRoleEligibleForInnPool(plugin, town, pool, roleId)) {
@@ -1448,6 +1819,10 @@ public final class InnPoolService {
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
         town.migrateInnFieldsIfNeeded();
         dedupeInnPoolIds(town, tm);
+        ReconcileReport reconcile = reconcileInnVisitorEntities(world, town, tm, store, true);
+        report.removedDuplicateVisitors = reconcile.getRemovedDuplicates();
+        report.removedOrphanVisitors = reconcile.getRemovedOrphans();
+        report.poolEntriesFixed = reconcile.getPoolEntriesFixed();
         syncExcludedRolesFromResidents(town, store, tm, pool);
         report.lockedQuestVisitors = repairQuestLocksCount(town, store);
         autoLockQuestCriticalVisitors(town, tm, store);
@@ -1455,7 +1830,9 @@ public final class InnPoolService {
         report.removedPoolEntries = syncInnPoolWithResidentBindings(town, store, tm);
         report.removedPoolEntries += removeIneligiblePoolVisitors(town, plugin, tm, store, pool);
         trimInnPoolListToMax(town, tm, store);
-        if (fillOpenSlots && town.getInnPoolNpcIds().size() < MAX_VISITORS) {
+        if (fillOpenSlots
+            && town.getInnPoolNpcIds().size() < MAX_VISITORS
+            && countTownInnVisitorsInStore(store, town) < MAX_VISITORS) {
             PlotInstance innPlot =
                 InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
             if (innPlot != null) {
@@ -1464,6 +1841,11 @@ public final class InnPoolService {
                     fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
                 }
             }
+        }
+        if (fillOpenSlots) {
+            ReconcileReport afterFill = reconcileInnVisitorEntities(world, town, tm, store, false);
+            report.removedDuplicateVisitors += afterFill.getRemovedDuplicates();
+            report.poolEntriesFixed += afterFill.getPoolEntriesFixed();
         }
         return report;
     }
@@ -1480,7 +1862,7 @@ public final class InnPoolService {
                 return;
             }
             TownVillagerBinding b = archetypeChunk.getComponent(index, TownVillagerBinding.getComponentType());
-            if (b == null || !b.getTownId().equals(town.getTownId()) || !TownVillagerBinding.isVisitorKind(b.getKind())) {
+            if (!isInnPoolVisitorForTown(town, b)) {
                 return;
             }
             refs.add(ref);

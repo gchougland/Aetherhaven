@@ -290,6 +290,7 @@ public final class AetherhavenWorldRegistries {
         PlotAssemblyService.scheduleRehydrateAfterWorldLoad(world, plugin);
         com.hexvane.aetherhaven.shopspot.ShopSpotBootstrap.reconcileAfterWorldLoad(world, plugin);
         PlotLinkReconcileService.scheduleAfterWorldLoad(world, plugin);
+        WorkplaceJobPlotReconcileService.scheduleAfterWorldLoad(world, plugin);
         TownBorderMapOverlayService.startWorld(world);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-towns", TownMapMarkerProvider.INSTANCE);
         world.getWorldMapManager().addMarkerProvider("aetherhaven-raid-quests", RaidQuestMarkerProvider.INSTANCE);

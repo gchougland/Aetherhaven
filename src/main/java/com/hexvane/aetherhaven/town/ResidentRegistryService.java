@@ -176,17 +176,13 @@ public final class ResidentRegistryService {
     }
 
     /**
-     * Rows suitable for Gaia revival UI: story villagers and citizen guards only — not generic pool townsfolk or inn
-     * visitors.
+     * Rows suitable for Gaia revival UI: story villagers only — never guards, townsfolk, or inn visitors.
      */
     @Nonnull
     public static List<ResidentNpcRecord> revivalCandidates(@Nonnull TownRecord town) {
         List<ResidentNpcRecord> out = new ArrayList<>();
         for (ResidentNpcRecord r : town.getResidentNpcRecords()) {
-            if (!isRevivalCandidate(r.getKind(), r.getNpcRoleId())) {
-                continue;
-            }
-            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
+            if (!isGaiaRevivalEligible(r.getKind(), r.getNpcRoleId())) {
                 continue;
             }
             out.add(r);
@@ -225,10 +221,7 @@ public final class ResidentRegistryService {
                         continue;
                     }
                     String roleId = npc.getRoleName().trim();
-                    if (!isRevivalCandidate(b.getKind(), roleId)) {
-                        continue;
-                    }
-                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind()) && !isGuardCitizenUuid(town, uc.getUuid())) {
+                    if (!isGaiaRevivalEligible(b.getKind(), roleId)) {
                         continue;
                     }
                     byRole.put(
@@ -290,10 +283,7 @@ public final class ResidentRegistryService {
             if (!r.isPendingDawnRevival()) {
                 continue;
             }
-            if (!isRevivalCandidate(r.getKind(), r.getNpcRoleId())) {
-                continue;
-            }
-            if (TownVillagerBinding.KIND_GUARD.equals(r.getKind()) && !isGuardCitizen(town, r)) {
+            if (!isGaiaRevivalEligible(r.getKind(), r.getNpcRoleId())) {
                 continue;
             }
             out.add(r);
@@ -318,10 +308,7 @@ public final class ResidentRegistryService {
         @Nullable UUID jobPlotId
     ) {
         String rid = roleId.trim();
-        if (rid.isEmpty() || !isRevivalCandidate(kind, rid)) {
-            return;
-        }
-        if (TownVillagerBinding.KIND_GUARD.equals(kind) && !isGuardCitizenUuid(town, entityUuid)) {
+        if (rid.isEmpty() || !isGaiaRevivalEligible(kind, rid)) {
             return;
         }
         ResidentNpcRecord record = findRecordForDeathMark(town, entityUuid, rid);
@@ -381,10 +368,7 @@ public final class ResidentRegistryService {
                     if (!roleId.equalsIgnoreCase(npc.getRoleName().trim())) {
                         continue;
                     }
-                    if (!isRevivalCandidate(b.getKind(), npc.getRoleName().trim())) {
-                        continue;
-                    }
-                    if (TownVillagerBinding.KIND_GUARD.equals(b.getKind()) && !isGuardCitizenUuid(town, uc.getUuid())) {
+                    if (!isGaiaRevivalEligible(b.getKind(), npc.getRoleName().trim())) {
                         continue;
                     }
                     if (perEntity && !recordUuid.equals(uc.getUuid())) {
@@ -523,23 +507,26 @@ public final class ResidentRegistryService {
             return null;
         }
         String roleId = npc.getRoleName().trim();
-        if (!isRevivalCandidate(b.getKind(), roleId)) {
+        if (!isGaiaRevivalEligible(b.getKind(), roleId)) {
             return null;
         }
         return new ResidentNpcRecord(roleId, b.getKind(), b.getJobPlotId(), uc.getUuid());
     }
 
-    private static boolean isRevivalCandidate(@Nullable String kind, @Nonnull String roleId) {
+    /**
+     * Gaia revival UI and dawn auto-revival: story villagers only — never guards or townsfolk (including citizen guards
+     * and housed townsfolk).
+     */
+    /** Story villagers only; guards and townsfolk are never revivable at the Gaia statue. */
+    public static boolean isGaiaRevivalEligible(@Nullable String kind, @Nonnull String roleId) {
         if (roleId.isBlank()) {
             return false;
         }
         if (kind != null && TownVillagerBinding.isVisitorKind(kind)) {
             return false;
         }
-        if (kind != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(kind)) {
-            return false;
-        }
-        if (AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(roleId.trim())) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && TownResidentEligibility.isTownsfolkPoolKind(kind != null ? kind : "", roleId, plugin)) {
             return false;
         }
         return true;
@@ -637,20 +624,5 @@ public final class ResidentRegistryService {
             }
             return;
         }
-    }
-
-    private static boolean isGuardCitizen(@Nonnull TownRecord town, @Nonnull ResidentNpcRecord record) {
-        UUID entityUuid = record.getLastEntityUuid();
-        return entityUuid != null && isGuardCitizenUuid(town, entityUuid);
-    }
-
-    private static boolean isGuardCitizenUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
-        for (HiredGuardRecord rec : town.getHiredGuardRecords()) {
-            UUID u = rec.getEntityUuid();
-            if (u != null && u.equals(entityUuid)) {
-                return rec.isCitizen();
-            }
-        }
-        return false;
     }
 }

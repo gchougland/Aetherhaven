@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
 import com.hexvane.aetherhaven.construction.ConstructionCompleter;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
@@ -111,6 +112,11 @@ public final class PlotCreatorWorldRegistrar {
         inst.setPrefabWorldPlacement(prefabAnchor.x, prefabAnchor.y, prefabAnchor.z, yaw);
         town.addPlotInstance(inst);
         tm.updateTown(town);
+
+        PlotInstance registered = town.findPlotById(plotId);
+        if (registered != null) {
+            PoiMarkerDedupUtil.dedupeInPlot(entityStore, registered);
+        }
 
         ConstructionCompleter.finishBuild(world, plugin, playerUuid, plotId, prefabAnchor, yaw);
         LOGGER.atInfo().log(

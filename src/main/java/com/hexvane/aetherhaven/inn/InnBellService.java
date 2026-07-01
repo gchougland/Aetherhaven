@@ -68,6 +68,7 @@ public final class InnBellService {
             return RingOutcome.NO_VISITORS;
         }
 
+        InnPoolService.reconcileInnVisitorEntities(world, town, tm, store, true);
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
 
         int actions = respawnAllPoolVisitorsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);

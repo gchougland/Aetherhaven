@@ -258,6 +258,12 @@ public final class PoiScoring {
                 bestDistSq = distSq;
             }
         }
+        if (best == null && workOnlyShift && isBardBindingKind(binding.getKind()) && preferredPlot != null) {
+            best = pickRelaxedWorkPoiOnPlot(candidates, preferredPlot, cellOccupancy, npcX, npcZ);
+            if (best != null) {
+                bestScore = score(needs, best);
+            }
+        }
         if (best == null) {
             return null;
         }
@@ -266,6 +272,43 @@ public final class PoiScoring {
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
         if (preferredPlot == null && !shopBrowseShift && bestScore < 8f) {
             return null;
+        }
+        return best;
+    }
+
+    private static boolean isBardBindingKind(@Nonnull String bindingKind) {
+        return TownVillagerBinding.KIND_BARD.equals(bindingKind)
+            || TownVillagerBinding.KIND_VISITOR_BARD.equals(bindingKind);
+    }
+
+    /** When a guild-hall variant omits the BARD tag, still use a generic WORK spot on the assigned plot. */
+    @Nullable
+    private static PoiEntry pickRelaxedWorkPoiOnPlot(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull UUID preferredPlot,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ
+    ) {
+        PoiEntry best = null;
+        int bestUsed = Integer.MAX_VALUE;
+        double bestDistSq = Double.POSITIVE_INFINITY;
+        for (PoiEntry e : candidates) {
+            if (e.getPlotId() == null || !preferredPlot.equals(e.getPlotId()) || !isWorkPoi(e)) {
+                continue;
+            }
+            int cap = Math.max(1, e.getCapacity());
+            String cell = PoiOccupancy.cellKey(e.getX(), e.getY(), e.getZ());
+            int used = cellOccupancy.getOrDefault(cell, 0);
+            if (used >= cap) {
+                continue;
+            }
+            double distSq = distSqToPoi(e, npcX, npcZ);
+            if (best == null || used < bestUsed || (!Double.isNaN(distSq) && distSq < bestDistSq - 1e-9)) {
+                best = e;
+                bestUsed = used;
+                bestDistSq = distSq;
+            }
         }
         return best;
     }

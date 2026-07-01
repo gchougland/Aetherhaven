@@ -11,7 +11,6 @@ import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import java.util.ArrayList;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,7 +39,6 @@ public final class BuildingStaffMarkerCleanupSystem extends TickingSystem<Entity
     }
 
     static void removeOrphanedMarkers(@Nonnull Store<EntityStore> store, @Nonnull World world) {
-        ArrayList<Ref<EntityStore>> toRemove = new ArrayList<>();
         store.forEachChunk(
             Query.and(BuildingStaffMarkerEntity.getComponentType()),
             (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
@@ -51,16 +49,11 @@ public final class BuildingStaffMarkerCleanupSystem extends TickingSystem<Entity
                     }
                     Ref<EntityStore> markerRef = chunk.getReferenceTo(i);
                     if (markerRef.isValid()) {
-                        toRemove.add(markerRef);
+                        commandBuffer.removeEntity(markerRef, RemoveReason.REMOVE);
                     }
                 }
             }
         );
-        for (Ref<EntityStore> markerRef : toRemove) {
-            if (markerRef.isValid()) {
-                store.removeEntity(markerRef, RemoveReason.REMOVE);
-            }
-        }
     }
 
     private static boolean shouldKeepMarker(

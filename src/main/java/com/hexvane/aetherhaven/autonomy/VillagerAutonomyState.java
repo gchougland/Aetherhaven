@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
+import com.hexvane.aetherhaven.autonomy.AutonomyStallTrackable;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -15,7 +16,8 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public final class VillagerAutonomyState implements Component<EntityStore>, PathNavTravelSupport.TravelWaypoints {
+public final class VillagerAutonomyState
+    implements Component<EntityStore>, PathNavTravelSupport.TravelWaypoints, AutonomyStallTrackable {
     public static final int PHASE_IDLE = 0;
     public static final int PHASE_TRAVEL = 1;
     public static final int PHASE_USE = 2;
@@ -132,6 +134,12 @@ public final class VillagerAutonomyState implements Component<EntityStore>, Path
     private transient double travelSampleX = Double.NaN;
     private transient double travelSampleZ = Double.NaN;
     private transient int travelProgressStallTicks;
+    private transient double autonomySampleX = Double.NaN;
+    private transient double autonomySampleZ = Double.NaN;
+    private transient double autonomyAnchorX = Double.NaN;
+    private transient double autonomyAnchorZ = Double.NaN;
+    private transient double autonomyGoalDistSq = Double.NaN;
+    private transient int autonomyStallTicks;
 
     public VillagerAutonomyState() {}
 
@@ -275,6 +283,68 @@ public final class VillagerAutonomyState implements Component<EntityStore>, Path
         travelSampleX = Double.NaN;
         travelSampleZ = Double.NaN;
         travelProgressStallTicks = 0;
+    }
+
+    @Override
+    public double getAutonomySampleX() {
+        return autonomySampleX;
+    }
+
+    @Override
+    public double getAutonomySampleZ() {
+        return autonomySampleZ;
+    }
+
+    @Override
+    public double getAutonomyAnchorX() {
+        return autonomyAnchorX;
+    }
+
+    @Override
+    public double getAutonomyAnchorZ() {
+        return autonomyAnchorZ;
+    }
+
+    @Override
+    public double getAutonomyGoalDistSq() {
+        return autonomyGoalDistSq;
+    }
+
+    @Override
+    public void setAutonomyAnchorPosition(double x, double z) {
+        autonomyAnchorX = x;
+        autonomyAnchorZ = z;
+    }
+
+    @Override
+    public void setAutonomyGoalDistSq(double distSq) {
+        autonomyGoalDistSq = distSq;
+    }
+
+    @Override
+    public int getAutonomyStallTicks() {
+        return autonomyStallTicks;
+    }
+
+    @Override
+    public void setAutonomySamplePosition(double x, double z) {
+        autonomySampleX = x;
+        autonomySampleZ = z;
+    }
+
+    @Override
+    public void setAutonomyStallTicks(int ticks) {
+        autonomyStallTicks = Math.max(0, ticks);
+    }
+
+    @Override
+    public void resetAutonomyStallTracking() {
+        autonomySampleX = Double.NaN;
+        autonomySampleZ = Double.NaN;
+        autonomyAnchorX = Double.NaN;
+        autonomyAnchorZ = Double.NaN;
+        autonomyGoalDistSq = Double.NaN;
+        autonomyStallTicks = 0;
     }
 
     /**

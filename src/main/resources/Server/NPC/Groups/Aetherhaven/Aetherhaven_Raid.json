@@ -1,9 +1,6 @@
 {
-  "$Comment": "Quest-board raid march spawn roles (Aetherhaven_Raid_<rosterRoleId>). Excludes the non-combat march marker.",
+  "$Comment": "Quest-board raid march spawn roles (Aetherhaven_Raid_<rosterRoleId>).",
   "IncludeRoles": [
     "Aetherhaven_Raid_*"
-  ],
-  "ExcludeRoles": [
-    "Aetherhaven_Raid_March_Marker"
   ]
 }

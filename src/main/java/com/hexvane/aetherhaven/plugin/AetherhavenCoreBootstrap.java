@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
+import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
@@ -34,8 +35,10 @@ import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.Universe;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.events.AllWorldsLoadedEvent;
 import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -97,6 +100,9 @@ public final class AetherhavenCoreBootstrap {
         plugin
             .getEventRegistry()
             .registerGlobal(RemoveWorldEvent.class, e -> AetherhavenWorldRegistries.unloadWorld(e.getWorld()));
+        plugin
+            .getEventRegistry()
+            .registerGlobal(AllWorldsLoadedEvent.class, e -> scheduleTeleporterWarpSanitizeAfterLoad());
 
         OpenCustomUIInteraction.registerSimple(
             plugin,
@@ -107,6 +113,16 @@ public final class AetherhavenCoreBootstrap {
 
         plugin.initAetherhavenCommand(new AetherhavenCommand());
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
+    }
+
+    private static void scheduleTeleporterWarpSanitizeAfterLoad() {
+        World world = Universe.get().getDefaultWorld();
+        if (world == null) {
+            TeleporterWarpSanitizer.sanitizeAllTeleporterWarpsOnStartup();
+            return;
+        }
+        // Defer until after other AllWorldsLoaded handlers (e.g. TeleportPlugin.loadWarps) finish.
+        world.execute(TeleporterWarpSanitizer::sanitizeAllTeleporterWarpsOnStartup);
     }
 
     private static void registerGaiaStatueOpenUi(@Nonnull AetherhavenPlugin plugin) {

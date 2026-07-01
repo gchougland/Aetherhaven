@@ -97,10 +97,6 @@ public final class QuestBoardSlotRecord {
     @Nullable
     private List<String> raidSpawnedEntityUuids;
 
-    @SerializedName("raidMarchMarkerUuid")
-    @Nullable
-    private String raidMarchMarkerUuid;
-
     @SerializedName("raidMobRoleIds")
     @Nullable
     private List<String> raidMobRoleIds;
@@ -133,7 +129,6 @@ public final class QuestBoardSlotRecord {
         huntKillProgress = 0;
         raidKillProgress = 0;
         raidSpawnedEntityUuids = null;
-        raidMarchMarkerUuid = null;
     }
 
     public void clearToEmpty() {
@@ -161,7 +156,6 @@ public final class QuestBoardSlotRecord {
         raidKillRequired = 0;
         raidKillProgress = 0;
         raidSpawnedEntityUuids = null;
-        raidMarchMarkerUuid = null;
         raidMobRoleIds = null;
         raidApproachDirection = null;
     }
@@ -388,15 +382,6 @@ public final class QuestBoardSlotRecord {
 
     public void setRaidSpawnedEntityUuids(@Nonnull List<String> uuids) {
         this.raidSpawnedEntityUuids = new ArrayList<>(uuids);
-    }
-
-    @Nullable
-    public String getRaidMarchMarkerUuid() {
-        return raidMarchMarkerUuid;
-    }
-
-    public void setRaidMarchMarkerUuid(@Nullable String raidMarchMarkerUuid) {
-        this.raidMarchMarkerUuid = raidMarchMarkerUuid;
     }
 
     @Nonnull

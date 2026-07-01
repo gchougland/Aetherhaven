@@ -52,8 +52,10 @@ public final class BardWorkPoiResolver {
         if (poi != null) {
             return targetFromPoi(poi);
         }
-        ConstructionDefinition def =
-            plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        if (def == null || def.getBardWorkPoiLocal() == null) {
+            def = plugin.getConstructionCatalog().get(AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL);
+        }
         if (def == null) {
             return null;
         }

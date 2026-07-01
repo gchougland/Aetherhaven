@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.poi.marker;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.marker.MarkerEntityProximity;
 import com.hexvane.aetherhaven.marker.MarkerFacingYaw;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hexvane.aetherhaven.poi.PoiEntry;
@@ -79,6 +80,10 @@ public final class PoiMarkerPlacementService {
         float yawRadians,
         @Nonnull Store<EntityStore> store
     ) {
+        Vector3d pos = new Vector3d(anchorBlock.x + 0.5, anchorBlock.y + 0.5, anchorBlock.z + 0.5);
+        if (MarkerEntityProximity.isDuplicatePosition(store, PoiMarkerEntity.getComponentType(), pos)) {
+            return null;
+        }
         UUID poiId = UUID.randomUUID();
         PoiMarkerDataComponent data =
             new PoiMarkerDataComponent(poiId, tags, capacity, interactionKind, mountOnUse, equipmentProfileId);
@@ -87,7 +92,6 @@ public final class PoiMarkerPlacementService {
         PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         reg.register(entry);
 
-        Vector3d pos = new Vector3d(anchorBlock.x + 0.5, anchorBlock.y + 0.5, anchorBlock.z + 0.5);
         Holder<EntityStore> holder = PoiMarkerSpawner.createHolder(world, pos, yawRadians, data);
         if (holder == null) {
             reg.unregister(poiId);

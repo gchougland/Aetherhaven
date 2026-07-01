@@ -5,7 +5,6 @@ import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -79,7 +78,7 @@ public final class RaidQuestMarkerProvider implements WorldMapManager.MarkerProv
         return new MapMarkerBuilder(
             markerId(entry.instanceId(), entry.mobUuid()),
             MARKER_ICON,
-            new Transform(entry.x(), entry.y(), entry.z())
+            MapMarkerTransforms.at(entry.x(), entry.y(), entry.z())
         )
             .withName(label)
             .build();

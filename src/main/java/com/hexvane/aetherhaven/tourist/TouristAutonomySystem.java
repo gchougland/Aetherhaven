@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.tourist;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.AutonomyStuckTeleportRecovery;
 import com.hexvane.aetherhaven.autonomy.PoiAutonomyVisuals;
 import com.hexvane.aetherhaven.autonomy.VillagerDoorUtil;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
@@ -135,6 +136,9 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (tryLeaveIfDue(ref, store, commandBuffer, npc, autonomy, now, town, world, tb)) {
             return;
         }
+        if (tryStallTeleportRecovery(ref, store, commandBuffer, npc, autonomy, now, town, world, tb)) {
+            return;
+        }
         PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
 
@@ -188,7 +192,95 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return true;
         }
-        return false;
+        AutonomyStuckTeleportRecovery.resolvePortalForReturn(world, plugin, town, autonomy, rec);
+        if (beginReturnToPortalOnStore(ref, store, plugin, npc, autonomy, now, town, world)) {
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+            applyAutonomyRoleState(ref, npc, commandBuffer);
+            return true;
+        }
+        finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
+        return true;
+    }
+
+    private boolean tryStallTeleportRecovery(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull TownsfolkCharacterBinding tb
+    ) {
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
+            return false;
+        }
+        boolean leaveDue = AutonomyStuckTeleportRecovery.isTouristLeaveDue(town, store, tb.getCharacterId());
+        if (!AutonomyStuckTeleportRecovery.shouldTrackTouristStall(autonomy.getPhase(), leaveDue)) {
+            autonomy.resetAutonomyStallTracking();
+            return false;
+        }
+
+        Vector3d pos = tc.getPosition();
+        Vector3d leash = npc.getLeashPoint();
+        AutonomyStuckTeleportRecovery.updateStall(
+            autonomy,
+            pos,
+            Double.isFinite(leash.x) ? leash.x : autonomy.getTargetX(),
+            Double.isFinite(leash.z) ? leash.z : autonomy.getTargetZ()
+        );
+        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(autonomy)) {
+            return false;
+        }
+
+        AutonomyStuckTeleportRecovery.TouristRecoveryTarget target =
+            AutonomyStuckTeleportRecovery.resolveTouristRecoveryTarget(
+                plugin,
+                town,
+                world,
+                autonomy,
+                pos,
+                leaveDue,
+                now,
+                ref.hashCode()
+            );
+        if (leaveDue && target == null) {
+            finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
+            return true;
+        }
+        if (target == null) {
+            AutonomyStuckTeleportRecovery.resetAfterRecovery(autonomy);
+            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+            return false;
+        }
+
+        AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, target.position(), npc);
+        AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, target.position(), target.portalReturn());
+
+        if (target.portalReturn()) {
+            autonomy.setPhase(TouristAutonomyState.PHASE_RETURNING);
+            beginTravelTo(autonomy, now, target.position().x, target.position().y, target.position().z, AetherhavenConstants.TOURIST_PORTAL_RETURN_POI_ID);
+            TouristPortalRecord portal = resolveHomePortal(world, autonomy);
+            if (portal != null
+                && TouristPortalBlockUtil.isNearPortalDespawn(world, portal.getBlockPosition(), target.position())) {
+                finishReturnDespawn(ref, store, commandBuffer, autonomy, town, world);
+                return true;
+            }
+        } else if (autonomy.getPhase() == TouristAutonomyState.PHASE_IDLE) {
+            ConstructionCatalog catalog = plugin.getConstructionCatalog();
+            TouristPlotVisit plotVisit = findPlotVisitNearTarget(town, catalog, world, target.position());
+            if (plotVisit != null) {
+                beginTravelToPlotOnStore(ref, store, plugin, npc, autonomy, now, town, world, plotVisit, true);
+            }
+        }
+
+        commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+        return true;
     }
 
     private void tickIdle(
@@ -292,6 +384,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         }
         autonomy.setTravelTarget(x, y, z, destinationId);
         autonomy.setTravelStuckTicks(0);
+        autonomy.resetAutonomyStallTracking();
         autonomy.setTravelDirectFallback(false);
         autonomy.setNextDecisionEpochMs(now + TRAVEL_PHASE_MAX_MS);
     }
@@ -591,7 +684,13 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                     applyAutonomyRoleState(ref, npc, commandBuffer);
                     return;
                 }
-                failTravel(ref, store, commandBuffer, npc, autonomy, now, town, world, tb);
+                Vector3d recovery =
+                    new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+                AutonomyStuckTeleportRecovery.teleportNpc(ref, commandBuffer, store, recovery, npc);
+                AutonomyStuckTeleportRecovery.applyPostTeleportTravel(npc, autonomy, recovery, returning);
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                applyAutonomyRoleState(ref, npc, commandBuffer);
                 return;
             }
         } else if (nav == NavState.PROGRESSING || nav == NavState.INIT) {
@@ -973,6 +1072,24 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     ) {
         for (TouristPlotVisit visit : TouristDestinationResolver.listVisitPlots(town, catalog, world)) {
             if (plotId.equals(visit.plotId())) {
+                return visit;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static TouristPlotVisit findPlotVisitNearTarget(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull World world,
+        @Nonnull Vector3d target
+    ) {
+        for (TouristPlotVisit visit : TouristDestinationResolver.listVisitPlots(town, catalog, world)) {
+            double dx = visit.entryX() - target.x;
+            double dy = visit.entryY() - target.y;
+            double dz = visit.entryZ() - target.z;
+            if (dx * dx + dy * dy + dz * dz <= 0.25) {
                 return visit;
             }
         }

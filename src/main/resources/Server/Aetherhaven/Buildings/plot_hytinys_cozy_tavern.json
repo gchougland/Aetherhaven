@@ -65,7 +65,32 @@
       "interactionTargetLocalX": 11,
       "interactionTargetLocalY": 4,
       "interactionTargetLocalZ": -18
+    },
+    {
+      "localX": 8,
+      "localY": 5,
+      "localZ": -18,
+      "tags": [
+        "WORK",
+        "BARD"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Counter",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -17
     }
+  ],
+  "bardWorkPoiLocal": [
+    8,
+    5,
+    -18
+  ],
+  "bardWorkPoiInteractionTargetLocal": [
+    8,
+    5,
+    -17
   ],
   "managementBlockLocalPos": [
     14,

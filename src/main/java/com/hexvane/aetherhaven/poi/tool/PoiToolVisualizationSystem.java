@@ -272,11 +272,24 @@ public final class PoiToolVisualizationSystem extends EntityTickingSystem<Entity
         removeLabelEntities(world, state);
     }
 
-    private static void removeLabelEntities(@Nonnull World world, @Nonnull PoiToolPlayerComponent state) {
+    static void removeLabelEntities(@Nonnull World world, @Nonnull PoiToolPlayerComponent state) {
+        removeLabelEntities(world, state, null);
+    }
+
+    static void removeLabelEntities(
+        @Nonnull World world,
+        @Nonnull PoiToolPlayerComponent state,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
         Store<EntityStore> store = world.getEntityStore().getStore();
         for (UUID id : new ArrayList<>(state.getDebugLabelEntityUuids())) {
             Ref<EntityStore> labelRef = world.getEntityRef(id);
-            if (labelRef != null && labelRef.isValid()) {
+            if (labelRef == null || !labelRef.isValid()) {
+                continue;
+            }
+            if (commandBuffer != null) {
+                commandBuffer.removeEntity(labelRef, RemoveReason.REMOVE);
+            } else {
                 store.removeEntity(labelRef, RemoveReason.REMOVE);
             }
         }
