@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=Sunucu ayarları kaydedilemedi. Sunucu g
 aetherhaven.ui.journalSettings.toolsHeading=Tamir aletleri
 aetherhaven.ui.journalSettings.resetVillagers=Şehirdeki insanları sıfırla
 aetherhaven.ui.journalSettings.fixInn=Fix Inn ziyaretçi listesi
+aetherhaven.ui.journalSettings.repairPlots=Onarım planı bağlantıları
 aetherhaven.ui.journalSettings.finishPlot=Şimdi bir binayı bitirin.
 aetherhaven.ui.journalSettings.villagerReport=Köylü bilgisi metni oluştur
 aetherhaven.ui.journalSettings.plotModalTitle=Bitirmek istediğiniz binayı seçin.
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Kutuyu doldurun
 aetherhaven.ui.journalSettings.villagerCopyHint=Kutudaki tüm metni seçin ve ardından her zamanki kopyalama tuşlarınızı kullanarak kopyalayın.
 aetherhaven.ui.journalSettings.villagerModalClose=Kapalı
 aetherhaven.ui.journalSettings.innRepairDone=Han listesi düzeltildi. Kilitli ziyaretçiler {locked}, yükseltildi {promoted}, gereksiz girişler kaldırıldı {removed}.
+aetherhaven.ui.journalSettings.plotsRepairDone=Grafik onarımı tamamlandı. {scanned} tarandı, {relinked} yeniden bağlandı, {skipped} atlandı, {orphans} yetim bloklar kaldırıldı.
 aetherhaven.ui.innBell.notAllowed=Bu zil sadece kasabadaki handa kalan üyeler için geçerlidir.
 aetherhaven.ui.innBell.notOpen=Otel henüz açılmadı.
 aetherhaven.ui.innBell.returned=Ziyaretçiler konuk alanına geri döndüler.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Başlamadı
 aetherhaven.ui.townJournal.plotStatusInProgress=Devam etmekte
 aetherhaven.ui.townJournal.plotStatusComplete=Tamamlamak
 aetherhaven.ui.townJournal.plotStatusUnknown=Bilinmiyor
+aetherhaven.ui.townJournal.plotHouseResident=İkamet eden: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=İkametgah: Belirlenmemiş
+aetherhaven.ui.townJournal.plotWorkplaceWorker=İşçi: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Çalışan: Atanmamış
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Atanmamış
 aetherhaven.ui.townJournal.removePlot=Kaldırmak
 aetherhaven.ui.townJournal.removePlotTooltip=Bina güvenli bir şekilde boşaltılabilsin diye kasabaya yakın bir yerde durun.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Bu binayı yıkalım mı?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Hytiny'
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny'nin şirin karavanı, olay örgüsünün simgesi.
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Hytiny'nin şirin karavanının inşa edilebileceği yerleri işaretler. HytinyBuilds tarafından önceden üretilmiştir. Şehir planlama masasında üretilebilir. Beş altın karşılığında hurda toplayıcısında geri alınabilir.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny'nin saksıda ağaç ev arsası jetonu
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Uyarı: Bu çok büyük bir prefabrik yapıdır ve montajı sırasında istemci ve sunucuyu belirgin şekilde yavaşlatabilir veya takılmalara neden olabilir. Montajın tamamlanması için zamanınız olduğunda yerleştirin.</color> Hytiny'nin saksılı ağaç evinin inşa edilebileceği yerleri işaretler (sadece dekoratif amaçlı). İnşaatı tamamlandıktan sonra, kasaba arsası olarak kaydedilmez; kaldırmak veya yerini değiştirmek için blokları kendiniz kırın veya taşıyın; kasaba günlüğünden alınamaz. HytinyBuilds tarafından prefabrik olarak üretilmiştir. Planlama masasında satılmaz. Beş altın karşılığında hurdacıdan geri alın.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Uyarı: Bu çok büyük bir prefabrik yapıdır ve montajı sırasında istemci ve sunucuyu belirgin şekilde yavaşlatabilir veya takılmalara neden olabilir. Montajın tamamlanması için zamanınız olduğunda yerleştirin.</color> Hytiny'nin saksılı ağaç evinin inşa edilebileceği yerleri işaretler (sadece dekoratif amaçlı). HytinyBuilds tarafından prefabrik olarak üretilmiştir. Planlama masasında satılmaz. Beş altın karşılığında hurdacıdan geri alın.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia sunağı arsa jetonu
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Gaia sunağı prefabrik yapısının inşa edilebileceği yerleri işaretler. Şehir planlama masasında üretim.

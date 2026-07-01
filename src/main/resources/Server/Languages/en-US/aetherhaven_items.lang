@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Plot token
 items.Aetherhaven_Plot_Token.description=Places a custom town building from the plot placement staff. Each token is tied to one building type.
 items.Aetherhaven_Plot_Token.instance.name={building} plot token
 items.Aetherhaven_Plot_Token.instance.description=Required to place the {building} footprint from the plot placement staff.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Required to place the {building} footprint from the plot placement staff. After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plot blueprint
 items.Aetherhaven_Plot_Token_Unlock_Page.description=A special blueprint page. Use it to learn a new plot at your plot crafting bench.

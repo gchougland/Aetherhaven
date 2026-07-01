@@ -2,7 +2,7 @@
   "id": "plot_jszzas_tavern",
   "displayName": "Jszza's Tavern",
   "description": "Made by Jszza",
-  "prefabPath": "jszza/plot_jszzas_tavern.prefab.json",
+  "prefabPath": "Jszza/plot_jszzas_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,

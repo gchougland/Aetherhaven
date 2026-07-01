@@ -6,8 +6,13 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.mountpoints.BlockMountPoint;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.DoorInteraction;
+import com.hypixel.hytale.component.CommandBuffer;
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -52,6 +57,39 @@ public final class VillagerBlockUtil {
             }
         }
         return Integer.MIN_VALUE;
+    }
+
+    /** After block-mount release, snap feet to standable ground at the current X/Z (e.g. off a bed or chair). */
+    public static void snapNpcToStandY(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+        snapNpcToStandY(npcRef, store, null);
+    }
+
+    public static void snapNpcToStandY(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        TransformComponent tc =
+            commandBuffer != null
+                ? commandBuffer.getComponent(npcRef, TransformComponent.getComponentType())
+                : store.getComponent(npcRef, TransformComponent.getComponentType());
+        if (tc == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        Vector3d pos = tc.getPosition();
+        int bx = (int) Math.floor(pos.x);
+        int bz = (int) Math.floor(pos.z);
+        int standY = findStandY(world, bx, bz, (int) Math.floor(pos.y) + 2);
+        if (standY == Integer.MIN_VALUE) {
+            return;
+        }
+        pos.y = standY + 0.02;
+        if (commandBuffer != null) {
+            commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+        } else {
+            store.putComponent(npcRef, TransformComponent.getComponentType(), tc);
+        }
     }
 
     /**

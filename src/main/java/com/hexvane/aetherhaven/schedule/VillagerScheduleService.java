@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.schedule;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -232,6 +233,10 @@ public final class VillagerScheduleService {
         tickState.setLastGameEpochMinute(epochMinute);
         tickState.setLastAppliedScheduleSegment(loc);
         commandBuffer.putComponent(ref, VillagerScheduleTickState.getComponentType(), tickState);
+        if (plotLocationChanged || segmentLocationChanged) {
+            long nowMs = VillagerAutonomySystem.resolveAutonomyNowMs(store);
+            VillagerAutonomySystem.promptWorkplaceTravel(ref, store, commandBuffer, nowMs);
+        }
         if (cfg.isVillagerScheduleDebugLog() && (plotLocationChanged || segmentLocationChanged)) {
             LOGGER.at(Level.INFO).log(
                 "[Aetherhaven schedule] location change role=%s npc=%s time=%s segment: %s -> %s preferredPlot: %s -> %s",

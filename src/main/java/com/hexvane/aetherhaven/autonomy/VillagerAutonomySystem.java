@@ -22,6 +22,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.ArrayList;
 import com.hypixel.hytale.builtin.mounts.MountedComponent;
+import com.hypixel.hytale.protocol.MountController;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -83,15 +84,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         long now
     ) {
         if (autonomy != null && autonomy.getPhase() == VillagerAutonomyState.PHASE_USE) {
-            UUID poiId = autonomy.getTargetPoiUuid();
-            PoiEntry poi = poiId != null ? reg.get(poiId) : null;
-            if (poi != null) {
-                PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
-                if (needs != null) {
-                    PoiEffectTable.applyUseComplete(needs, poi);
-                    commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
-                }
-            }
+            abortActivePoiUseAndDismount(ref, store, commandBuffer, autonomy, needs, reg, true);
             autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
             autonomy.setTargetPoiUuid(null);
             autonomy.setPathFailureReason("");
@@ -102,8 +95,53 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             if (npc != null) {
                 clearAutonomyRoleState(ref, npc, commandBuffer);
             }
+        } else {
+            releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
         }
-        BlockMountRelease.release(ref, store, commandBuffer);
+    }
+
+    /**
+     * Interrupts {@link VillagerAutonomyState#PHASE_USE} (bed/chair/etc.), releases block mounts, and snaps to standable
+     * ground. Safe from the world thread ({@code commandBuffer} null) or a system tick.
+     */
+    static void abortActivePoiUseAndDismount(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nullable VillagerAutonomyState autonomy,
+        @Nullable VillagerNeeds needs,
+        @Nullable PoiRegistry reg,
+        boolean applyNeedEffects
+    ) {
+        if (autonomy != null && autonomy.getPhase() == VillagerAutonomyState.PHASE_USE) {
+            UUID poiId = autonomy.getTargetPoiUuid();
+            PoiEntry poi = poiId != null && reg != null ? reg.get(poiId) : null;
+            if (poi != null) {
+                PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi, false);
+                if (applyNeedEffects && needs != null) {
+                    PoiEffectTable.applyUseComplete(needs, poi);
+                    if (commandBuffer != null) {
+                        commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+                    } else {
+                        store.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+                    }
+                }
+            } else {
+                PoiAutonomyVisuals.forceAbortUseVisuals(ref, store, commandBuffer);
+            }
+        }
+        releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
+    }
+
+    static void releaseBlockMountAndSnapToGround(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        if (store.getComponent(ref, MountedComponent.getComponentType()) != null) {
+            BlockMountRelease.release(ref, store, commandBuffer);
+        }
+        VillagerBlockUtil.snapNpcToStandY(ref, store, commandBuffer);
     }
 
     private final AetherhavenPlugin plugin;
@@ -169,6 +207,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         }
 
         applyAutonomyDebugOverlay(ref, store, commandBuffer, npc, autonomy);
+
+        MountedComponent mounted = store.getComponent(ref, MountedComponent.getComponentType());
+        if (mounted != null && mounted.getControllerType() == MountController.BlockMount) {
+            int phase = autonomy.getPhase();
+            if (phase == VillagerAutonomyState.PHASE_IDLE || phase == VillagerAutonomyState.PHASE_TRAVEL) {
+                releaseBlockMountAndSnapToGround(ref, store, commandBuffer);
+            }
+        }
 
         String stateName = npc.getRole().getStateSupport().getStateName();
         if (stateName.contains("Interaction")) {
@@ -877,7 +923,20 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      * paths them there instead of leaving them idle until the next decision window.
      */
     public static void promptWorkplaceTravel(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, long nowMs) {
-        resetAutonomyForRescue(npcRef, store, nowMs);
+        resetAutonomyForRescue(npcRef, store, null, nowMs);
+    }
+
+    /**
+     * Same as {@link #promptWorkplaceTravel(Ref, Store, long)} but routes component writes through {@code commandBuffer}
+     * for use from tick/schedule systems (never write to {@link Store} directly during a tick).
+     */
+    public static void promptWorkplaceTravel(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        long nowMs
+    ) {
+        resetAutonomyForRescue(npcRef, store, commandBuffer, nowMs);
     }
 
     /**
@@ -885,11 +944,30 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
      * role motion (Seek) so pathfinding can start fresh.
      */
     public static void resetAutonomyForRescue(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, long nowMs) {
+        resetAutonomyForRescue(npcRef, store, null, nowMs);
+    }
+
+    private static void resetAutonomyForRescue(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        long nowMs
+    ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc == null) {
             return;
         }
         VillagerAutonomyState aut = store.getComponent(npcRef, VillagerAutonomyState.getComponentType());
+        VillagerNeeds needs = store.getComponent(npcRef, VillagerNeeds.getComponentType());
+        PoiRegistry reg = null;
+        if (aut != null && aut.getPhase() == VillagerAutonomyState.PHASE_USE) {
+            World world = store.getExternalData().getWorld();
+            AetherhavenPlugin pluginInstance = AetherhavenPlugin.get();
+            if (pluginInstance != null) {
+                reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, pluginInstance);
+            }
+        }
+        abortActivePoiUseAndDismount(npcRef, store, commandBuffer, aut, needs, reg, true);
         if (aut == null) {
             aut = VillagerAutonomyState.fresh(nowMs);
         } else {
@@ -901,19 +979,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         aut.setTravelStuckTicks(0);
         aut.setPhaseEndEpochMs(0L);
         aut.setNextDecisionEpochMs(nowMs);
-        store.putComponent(npcRef, VillagerAutonomyState.getComponentType(), aut);
-        if (npc.getRole() == null) {
-            return;
+        if (commandBuffer != null) {
+            commandBuffer.putComponent(npcRef, VillagerAutonomyState.getComponentType(), aut);
+            clearAutonomyRoleState(npcRef, npc, commandBuffer);
+        } else {
+            store.putComponent(npcRef, VillagerAutonomyState.getComponentType(), aut);
+            clearAutonomyRoleState(npcRef, npc, store);
         }
-        String state = npc.getRole().getStateSupport().getStateName();
-        if (!state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
-            return;
-        }
-        npc.getRole().getStateSupport().setState(npcRef, "Idle", null, store);
-        npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
-        npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
-        npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
-        store.putComponent(npcRef, NPCEntity.getComponentType(), npc);
+    }
+
+    /** Ends {@link AetherhavenConstants#NPC_STATE_AUTONOMY_POI} seek motion; used when builder assist or other systems stop travel. */
+    public static void clearAutonomySeekState(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        clearAutonomyRoleState(ref, npc, commandBuffer);
     }
 
     /** Hired guards and other roles without an {@code AetherhavenAutonomy} instruction block must not enter POI travel. */
@@ -960,5 +1041,24 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         npc.playAnimation(ref, AnimationSlot.Emote, null, commandBuffer);
         npc.playAnimation(ref, AnimationSlot.Status, null, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
+    private static void clearAutonomyRoleState(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (npc.getRole() == null) {
+            return;
+        }
+        String state = npc.getRole().getStateSupport().getStateName();
+        if (!state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+            return;
+        }
+        npc.getRole().getStateSupport().setState(ref, "Idle", null, store);
+        npc.playAnimation(ref, AnimationSlot.Action, null, store);
+        npc.playAnimation(ref, AnimationSlot.Emote, null, store);
+        npc.playAnimation(ref, AnimationSlot.Status, null, store);
+        store.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 }

@@ -64,7 +64,9 @@ public final class AetherhavenFloatingGiftCommand extends AbstractCommandCollect
                 );
                 return;
             }
-            Ref<EntityStore> gift = FloatingGiftSpawnService.spawnAroundTarget(store, new Vector3d(p), new Vector3d(p));
+            UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
+            UUID ownerUuid = uuidComp != null ? uuidComp.getUuid() : null;
+            Ref<EntityStore> gift = FloatingGiftSpawnService.spawnAroundTarget(store, new Vector3d(p), new Vector3d(p), ownerUuid);
             if (gift != null && gift.isValid()) {
                 playerRef.sendMessage(Message.raw("Spawned floating gift."));
             } else {

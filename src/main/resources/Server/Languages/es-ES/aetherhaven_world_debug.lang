@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} propietario={owner} estatuto={cx},{cy},{c
 aetherhaven.debug.plots.line={plotId} {construction} {state} signo@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=No se deben ensamblar parcelas con un trabajo activo para tu ciudad (carga los fragmentos alrededor de las construcciones o inicia una construcción primero).
 aetherhaven.debug.plots.finishassemblyDone=Se finalizaron instantáneamente las construcciones de parcelas en curso de {count}.
+aetherhaven.debug.plots.finishassemblySummary=Finalización del montaje: finalizado {finished} fallido {failed} todavía en proceso de montaje {still}
+aetherhaven.debug.plots.repairSummary=Reparación de trazas para {town}: escaneado {scanned} re-enlazado {relinked} ya está bien {ok} omitido descargado {skipped} falló {failed} bloques huérfanos {orphans}
+aetherhaven.debug.plots.reconstructNoId=Proporcione un identificador de construcción (por ejemplo, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=No se encontró ninguna parcela que coincida con "{id}" en esa ciudad. Compruebe la ortografía o ejecute /ah plots list.
+aetherhaven.debug.plots.reconstructBadIndex=Índice fuera de rango. Utilice el número de la lista a continuación.
+aetherhaven.debug.plots.reconstructAmbiguous=Varias parcelas coinciden con "{id}". Vuelva a ejecutar con un índice:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Uso: /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk=Reconstruyendo {construction} [{index}] en {x}, {y}, {z} (permanezca cerca hasta que se acabe la pasta).
+aetherhaven.debug.plots.reconstructChunks=Primero, carga todos los fragmentos alrededor de ese edificio y luego inténtalo de nuevo.
+aetherhaven.debug.plots.reconstructUnknown=Se desconoce la construcción de esa parcela.
+aetherhaven.debug.plots.reconstructPrefab=Falta el archivo prefabricado para ese edificio.
+aetherhaven.debug.plots.reconstructWall=Los planos de muros y elementos decorativos no se pueden reconstruir con este comando.
+aetherhaven.debug.plots.reconstructFailed=La reconstrucción falló. Compruebe el registro del servidor.
+aetherhaven.debug.plots.diagnoseHeader=Diagnóstico del enlace de la gráfica para {town}:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} enlaces={link}
 aetherhaven.debug.plots.removeBadUuid=UUID de parcela no válido. Utilice el ID de la lista de parcelas de /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=No hay parcela {plotId} en tu ciudad.
 aetherhaven.debug.plots.removeDataFailed=El mundo se ha despejado, pero la eliminación de la parcela de los datos de la ciudad ha fallado (verificar los registros).

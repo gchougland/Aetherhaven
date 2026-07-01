@@ -1,7 +1,7 @@
-{
+﻿{
   "id": "plot_hytinys_redwood_cottage",
   "displayName": "Hytiny's Redwood Cottage",
-  "description": "By HytinyBuilds After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "description": "By HytinyBuilds",
   "prefabPath": "plot_hytinys_redwood_cottage.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [

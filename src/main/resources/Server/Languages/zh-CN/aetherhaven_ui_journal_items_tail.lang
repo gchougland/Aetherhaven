@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=服务器设置无法保存。请查看�
 aetherhaven.ui.journalSettings.toolsHeading=维修工具
 aetherhaven.ui.journalSettings.resetVillagers=镇上的人都已重置
 aetherhaven.ui.journalSettings.fixInn=修改旅馆访客名单
+aetherhaven.ui.journalSettings.repairPlots=修复剧情链接
 aetherhaven.ui.journalSettings.finishPlot=现在就完成一栋楼的建设
 aetherhaven.ui.journalSettings.villagerReport=制作村民信息文本
 aetherhaven.ui.journalSettings.plotModalTitle=选择一栋建筑来完成
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=填写方框
 aetherhaven.ui.journalSettings.villagerCopyHint=选择框中的所有文本，然后使用常用的复制键进行复制。
 aetherhaven.ui.journalSettings.villagerModalClose=关闭
 aetherhaven.ui.journalSettings.innRepairDone=旅店列表已修复。已锁定访客 {locked}，已提升 {promoted}，已移除无关条目 {removed}
+aetherhaven.ui.journalSettings.plotsRepairDone=地块修复完成。已扫描 {scanned}，已重新链接 {relinked}，已跳过 {skipped}，已卸载孤立块 {orphans}
 aetherhaven.ui.innBell.notAllowed=这口钟只对镇上旅店的会员有效。
 aetherhaven.ui.innBell.notOpen=旅店还没开业。
 aetherhaven.ui.innBell.returned=访客们返回了宾客区。
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=未开始
 aetherhaven.ui.townJournal.plotStatusInProgress=进行中
 aetherhaven.ui.townJournal.plotStatusComplete=完全的
 aetherhaven.ui.townJournal.plotStatusUnknown=未知
+aetherhaven.ui.townJournal.plotHouseResident=居民：{name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=居民：未分配
+aetherhaven.ui.townJournal.plotWorkplaceWorker=工人：{name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=工作人员：未分配
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}：未分配
 aetherhaven.ui.townJournal.removePlot=消除
 aetherhaven.ui.townJournal.removePlotTooltip=站在城镇附近，以便安全地清理建筑物。
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=拆除这座建筑？
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=标记�
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny的舒适露营地代币
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=标记了海蒂尼舒适露营车的建造位置。预制件由海蒂尼建筑公司制作。可在城镇规划台制作。可在回收站回收，获得5枚金币。
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny的盆栽树屋地块代币
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">警告：这是一个非常大的预制件，组装过程中可能会明显减慢客户端和服务器的运行速度或导致卡顿。请在有时间等待组装完成时再放置。</color> 标记 Hytiny 的盆栽树屋的建造位置（仅作装饰用途）。建造完成后，它不会被登记为城镇地块——您需要自行破坏或移动方块来移除或重新定位它；它无法从城镇日志中拾取。此预制件由 HytinyBuilds 制作。不在规划台出售。可在回收站回收，可获得 5 枚金币。
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">警告：这是一个非常大的预制件，组装过程中可能会明显减慢客户端和服务器的运行速度或导致卡顿。请在有时间等待组装完成时再放置。</color> 标记 Hytiny 的盆栽树屋的建造位置（仅作装饰用途）。此预制件由 HytinyBuilds 制作。不在规划台出售。可在回收站回收，可获得 5 枚金币。
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=盖亚祭坛地块代币
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=标记出可以建造盖亚祭坛预制件的位置。在城镇规划台制作。

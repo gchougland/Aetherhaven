@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=Impossible d'enregistrer les paramètres
 aetherhaven.ui.journalSettings.toolsHeading=Outils de réparation
 aetherhaven.ui.journalSettings.resetVillagers=Réinstaller les gens en ville
 aetherhaven.ui.journalSettings.fixInn=Liste des visiteurs de l'auberge à corriger
+aetherhaven.ui.journalSettings.repairPlots=Liens de réparation
 aetherhaven.ui.journalSettings.finishPlot=Terminez un bâtiment maintenant
 aetherhaven.ui.journalSettings.villagerReport=Créer un texte d'information pour les villageois
 aetherhaven.ui.journalSettings.plotModalTitle=Choisissez un bâtiment à terminer
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Remplissez la case
 aetherhaven.ui.journalSettings.villagerCopyHint=Sélectionnez tout le texte dans la zone, puis copiez-le avec vos touches de copie habituelles.
 aetherhaven.ui.journalSettings.villagerModalClose=Fermer
 aetherhaven.ui.journalSettings.innRepairDone=Liste des auberges corrigée. Visiteurs bloqués {locked} promus {promoted} entrées errantes supprimées {removed}
+aetherhaven.ui.journalSettings.plotsRepairDone=Réparation du tracé effectuée. Numérisation de {scanned}, reliaison de {relinked}, blocs orphelins ignorés et déchargés de {skipped}, blocs orphelins de {orphans}
 aetherhaven.ui.innBell.notAllowed=Cette cloche ne fonctionne que pour les membres de l'auberge de leur village.
 aetherhaven.ui.innBell.notOpen=L'auberge n'est pas encore ouverte.
 aetherhaven.ui.innBell.returned=Les visiteurs retournèrent dans l'espace réservé aux invités.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Pas encore commencé
 aetherhaven.ui.townJournal.plotStatusInProgress=En cours
 aetherhaven.ui.townJournal.plotStatusComplete=Complet
 aetherhaven.ui.townJournal.plotStatusUnknown=Inconnu
+aetherhaven.ui.townJournal.plotHouseResident=Résident : {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Résident : Non attribué
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Ouvrier : {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Travailleur : Non affecté
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Non attribué
 aetherhaven.ui.townJournal.removePlot=Retirer
 aetherhaven.ui.townJournal.removePlotTooltip=Tenez-vous près de la ville afin que le bâtiment puisse être dégagé en toute sécurité.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Supprimer ce bâtiment ?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Emplace
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Jeton de l'emplacement confortable du camping-car d'Hytiny
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Emplacements indiqués pour la caravane confortable d'Hytiny. Modèle préfabriqué par HytinyBuilds. À fabriquer au bureau d'urbanisme. À récupérer chez un ferrailleur pour cinq pièces d'or.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Jeton de parcelle de cabane en pot dans les arbres d'Hytiny
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Attention : ce préfabriqué est très volumineux et peut ralentir considérablement le client et le serveur pendant son assemblage. Placez-le lorsque vous avez le temps de le laisser se terminer.</color> Indique l'emplacement où la cabane en pot d'Hytiny peut être construite (décorative uniquement). Une fois construite, elle n'est pas enregistrée comme parcelle de ville ; cassez ou déplacez les blocs vous-même pour la retirer ou la déplacer ; elle ne peut pas être récupérée depuis le journal de la ville. Préfabriqué par HytinyBuilds. Non vendu au bureau d'urbanisme. Récupérez-le chez un récupérateur pour cinq pièces d'or.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Attention : ce préfabriqué est très volumineux et peut ralentir considérablement le client et le serveur pendant son assemblage. Placez-le lorsque vous avez le temps de le laisser se terminer.</color> Indique l'emplacement où la cabane en pot d'Hytiny peut être construite (décorative uniquement). Préfabriqué par HytinyBuilds. Non vendu au bureau d'urbanisme. Récupérez-le chez un récupérateur pour cinq pièces d'or.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=jeton de parcelle d'autel de Gaïa
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Emplacements indiqués pour l'autel préfabriqué de Gaïa. À fabriquer au bureau d'urbanisme.

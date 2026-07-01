@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Клацніть на проти�
 
 aetherhaven.plotcreator.error.needKind=Відкрийте вибір типу будівлі за допомогою клавіші F та виберіть тип, перш ніж продовжити.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Цей тип будівлі недоступний. Виберіть «Декор» або «Варіант».
+
 aetherhaven.plotcreator.error.needVariantOf=Натисніть F та виберіть, якою головною будівлею вважається цей варіант, перш ніж продовжити.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Цього основного типу будівлі немає у списку творців сюжету.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Відвідувачі можу
 aetherhaven.plotcreator.field.touristDestination.hint=Коли ця функція увімкнена, відвідувачі порталу можуть ходити до цієї будівлі протягом дня.
 aetherhaven.plotcreator.field.plotTokenLocked=Маркер сюжету заблоковано за замовчуванням
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Коли ця функція увімкнена, гравці повинні розблокувати цю ділянку на лавці для створення ділянок (використовуючи креслення ділянки), перш ніж вони зможуть створити для неї жетони ділянок.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Секції складання на вісь (1–16)
+aetherhaven.plotcreator.field.styleId =Стиль
+aetherhaven.plotcreator.field.styleId.hint =Будь-яке ім'я, яке вам подобається
 
 aetherhaven.plotcreator.step.REVIEW.title=Огляд
 aetherhaven.plotcreator.step.REVIEW.hint=Збережіть будівлю. Ви отримаєте жетон ділянки, щоб розмістити її в місті.

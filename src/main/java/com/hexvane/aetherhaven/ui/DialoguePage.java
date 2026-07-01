@@ -213,38 +213,38 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 && plugin != null
                 && VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin);
         setReputationVisible(commandBuilder, showRep);
-        if (showRep) {
-            if (plugin != null) {
-                World world = store.getExternalData().getWorld();
-                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                TownRecord town = VillagerReputationService.findTownForPlayer(ref, store, tm);
-                if (town != null) {
-                    UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
-                    UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
-                    if (pu != null && nu != null) {
-                        long day = VillagerReputationService.currentGameEpochDay(store);
-                        int dailyGain = VillagerReputationService.applyDailyTalkBonus(world, town, tm, pu.getUuid(), nu.getUuid(), day);
-                        if (dailyGain > 0) {
-                            NotificationUtil.sendNotification(
-                                playerRef.getPacketHandler(),
-                                Message.translation("aetherhaven_ui_town.aetherhaven.reputation.dailyTalkGain").param("amount", dailyGain),
-                                NotificationStyle.Success
-                            );
-                        }
-                        int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), nu.getUuid()).getReputation();
-                        ReputationHeartUi.applyHearts(commandBuilder, HEART_SLOTS, rep);
-                        commandBuilder.set(
-                            HEART_SLOTS + ".TooltipText",
-                            rep + "/" + VillagerReputationService.MAX_REPUTATION
+        boolean firstEverTalk = false;
+        if (npcRef != null && npcRef.isValid() && plugin != null) {
+            World world = store.getExternalData().getWorld();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = VillagerReputationService.findTownForPlayer(ref, store, tm);
+            UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+            UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
+            if (town != null && pu != null && nu != null) {
+                firstEverTalk = VillagerReputationService.isFirstEverTalk(town, pu.getUuid(), nu.getUuid());
+                if (showRep) {
+                    long day = VillagerReputationService.currentGameEpochDay(store);
+                    int dailyGain = VillagerReputationService.applyDailyTalkBonus(world, town, tm, pu.getUuid(), nu.getUuid(), day);
+                    if (dailyGain > 0) {
+                        NotificationUtil.sendNotification(
+                            playerRef.getPacketHandler(),
+                            Message.translation("aetherhaven_ui_town.aetherhaven.reputation.dailyTalkGain").param("amount", dailyGain),
+                            NotificationStyle.Success
                         );
                     }
+                    int rep = VillagerReputationService.getOrCreateEntry(town, pu.getUuid(), nu.getUuid()).getReputation();
+                    ReputationHeartUi.applyHearts(commandBuilder, HEART_SLOTS, rep);
+                    commandBuilder.set(
+                        HEART_SLOTS + ".TooltipText",
+                        rep + "/" + VillagerReputationService.MAX_REPUTATION
+                    );
                 }
             }
         }
 
         applyPortrait(commandBuilder, store);
 
-        Message bodyMsg = resolveDialogueBody(ref, store, node);
+        Message bodyMsg = resolveDialogueBody(ref, store, node, firstEverTalk);
         if ("main_hub".equals(nodeId) && npcRef != null && npcRef.isValid()) {
             AetherhavenPlugin openerPlugin = AetherhavenPlugin.get();
             if (openerPlugin != null) {
@@ -297,10 +297,19 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
     @Nonnull
     private Message resolveDialogueBody(
-        @Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull DialogueNodeDefinition node
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueNodeDefinition node,
+        boolean firstEverTalk
     ) {
         String mode = node.getBodyMode();
         if (mode != null && "villager_greeting".equalsIgnoreCase(mode.trim())) {
+            if (firstEverTalk) {
+                String intro = node.getIntroText();
+                if (intro != null && !intro.isBlank()) {
+                    return dialogueMessage(intro.trim());
+                }
+            }
             if (npcRef != null && npcRef.isValid()) {
                 NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
                 UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
@@ -510,7 +519,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return null;
         }
         com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot =
-            com.hexvane.aetherhaven.questboard.QuestBoardService.findAcceptedForGiver(town, nu.getUuid());
+            com.hexvane.aetherhaven.questboard.QuestBoardService.findAcceptedForGiver(
+                town, nu.getUuid(), npcRoleId(store, npcRef), store
+            );
         if (slot == null) {
             return null;
         }
@@ -566,6 +577,18 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     private record QuestBoardTurnInRow(boolean ready, boolean huntQuest, boolean raidQuest) {}
+
+    @Nullable
+    private static String npcRoleId(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+            return null;
+        }
+        return npc.getRoleName().trim();
+    }
 
     @Nullable
     private static boolean isBardSongListNode(@Nonnull DialogueNodeDefinition node) {
@@ -701,7 +724,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         java.util.Random rng = new java.util.Random(nu.getUuid().getMostSignificantBits() ^ System.nanoTime());
         if (com.hexvane.aetherhaven.questboard.QuestBoardService.completeBoardQuest(
-            town, tm, ref, store, nu.getUuid(), plugin.getQuestBoardCatalog(), rng
+            town, tm, ref, store, nu.getUuid(), npcRoleId(store, npcRef), plugin.getQuestBoardCatalog(), rng
         )) {
             close();
         }

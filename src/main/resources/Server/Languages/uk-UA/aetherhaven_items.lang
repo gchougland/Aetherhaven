@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Жетона сюжету
 items.Aetherhaven_Plot_Token.description=Розміщує власну міську будівлю з персоналу розміщення ділянки. Кожен жетон пов'язаний з одним типом будівлі.
 items.Aetherhaven_Plot_Token.instance.name={building} токен сюжету
 items.Aetherhaven_Plot_Token.instance.description=Потрібно розмістити контур {building} з персоналу розміщення ділянки.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Потрібно розмістити слід {building} від персоналу з розміщення ділянок. Після завершення будівництва ця декорація не реєструється як міська ділянка. Щоб видалити або перемістити її, самостійно розбийте або перемістіть блоки — її не можна забрати з міського журналу.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=План ділянки
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Спеціальна сторінка з кресленнями. Використовуйте її, щоб вивчити новий сюжет на вашому верстаті для створення сюжетів.

@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=请点击对角线位置再继续
 
 aetherhaven.plotcreator.error.needKind=按 F 键打开建筑类型选择器，选择一种类型后再继续。
 
+aetherhaven.plotcreator.error.kindNotAllowed =该建筑类型不可用。请选择“装饰”或“变体”。
+
 aetherhaven.plotcreator.error.needVariantOf=按 F 键，然后选择此变体属于哪座主要建筑，然后再继续。
 
 aetherhaven.plotcreator.error.invalidVariantOf=该主要建筑类型不在地块创建器列表中。
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=游客可以在此停留。
 aetherhaven.plotcreator.field.touristDestination.hint=开放期间，门户访客可以在白天步行前往这座建筑。
 aetherhaven.plotcreator.field.plotTokenLocked=默认情况下，绘图标记已锁定。
 aetherhaven.plotcreator.field.plotTokenLocked.hint=启用后，玩家必须在土地制作台（使用土地蓝图）解锁该土地，然后才能为其制作土地代币。
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=每轴装配部分（1-16）
+aetherhaven.plotcreator.field.styleId =风格
+aetherhaven.plotcreator.field.styleId.hint =你喜欢的任何名字
 
 aetherhaven.plotcreator.step.REVIEW.title=审查
 aetherhaven.plotcreator.step.REVIEW.hint=保留这座建筑。您将获得一个地块代币，可以将其放置在城镇中。
@@ -246,10 +250,10 @@ aetherhaven.plotcreator.error.unknownConstruction=保存后建筑定义丢失。
 
 aetherhaven.plottoken.error.unknownBuilding=未知建筑物 ID：{id}
 aetherhaven.plottoken.gave=给予 {amount} 地块标记 {name}。
-aetherhaven.plottoken.unlock.success =您在工作台解锁了{name}地块。
-aetherhaven.plottoken.unlock.alreadyKnown =你已经解锁了{name}地块。
-aetherhaven.plottoken.unlock.notLockable =那栋楼不需要解锁。
-aetherhaven.plottoken.unlockall.success =在工作台解锁{count}地块。
-aetherhaven.plottoken.unlockall.noneLeft =你已经解锁了所有地块。
+aetherhaven.plottoken.unlock.success=您在工作台解锁了{name}地块。
+aetherhaven.plottoken.unlock.alreadyKnown=你已经解锁了{name}地块。
+aetherhaven.plottoken.unlock.notLockable=那栋楼不需要解锁。
+aetherhaven.plottoken.unlockall.success=在工作台解锁{count}地块。
+aetherhaven.plottoken.unlockall.noneLeft=你已经解锁了所有地块。
 aetherhaven.plottoken.list.empty=未找到建筑物。
 aetherhaven.plottoken.list.header=建筑物编号：

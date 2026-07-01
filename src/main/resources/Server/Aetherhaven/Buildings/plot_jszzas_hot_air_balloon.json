@@ -1,8 +1,8 @@
-{
+﻿{
   "id": "plot_jszzas_hot_air_balloon",
   "displayName": "Jszza's Hot Air Balloon",
-  "description": "Made by Jszza After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
-  "prefabPath": "jszza/plot_jszzas_hot_air_balloon.prefab.json",
+  "description": "Made by Jszza",
+  "prefabPath": "Jszza/plot_jszzas_hot_air_balloon.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,

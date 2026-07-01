@@ -100,7 +100,7 @@ public final class FloatingGiftSpawnService {
                     FloatingGiftSpawnSchedule.onSpawnFailed(playerUuid, gameNow);
                     return;
                 }
-                Ref<EntityStore> ref = spawnAroundTarget(store, o, t);
+                Ref<EntityStore> ref = spawnAroundTarget(store, o, t, playerUuid);
                 if (ref != null && ref.isValid()) {
                     FloatingGiftSpawnSchedule.onSpawnSucceeded(playerUuid, gameNow, cfg);
                 } else {
@@ -118,7 +118,17 @@ public final class FloatingGiftSpawnService {
      */
     @Nullable
     public static Ref<EntityStore> spawnAroundTarget(@Nonnull Store<EntityStore> store, @Nonnull Vector3d origin, @Nonnull Vector3d target) {
-        Holder<EntityStore> holder = createSpawnHolder(store, origin, target);
+        return spawnAroundTarget(store, origin, target, null);
+    }
+
+    @Nullable
+    public static Ref<EntityStore> spawnAroundTarget(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d origin,
+        @Nonnull Vector3d target,
+        @Nullable UUID ownerPlayerUuid
+    ) {
+        Holder<EntityStore> holder = createSpawnHolder(store, origin, target, ownerPlayerUuid);
         if (holder == null) {
             return null;
         }
@@ -136,7 +146,12 @@ public final class FloatingGiftSpawnService {
     }
 
     @Nullable
-    private static Holder<EntityStore> createSpawnHolder(@Nonnull Store<EntityStore> store, @Nonnull Vector3d origin, @Nonnull Vector3d target) {
+    private static Holder<EntityStore> createSpawnHolder(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Vector3d origin,
+        @Nonnull Vector3d target,
+        @Nullable UUID ownerPlayerUuid
+    ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return null;
@@ -212,6 +227,7 @@ public final class FloatingGiftSpawnService {
         gift.setSpeedBlocksPerSec(cfg.getFloatingGiftMoveSpeedBlocksPerSec());
         gift.setFallBlocksPerSec(cfg.getFloatingGiftFallSpeedBlocksPerSec());
         gift.setProjectileHitRadius(cfg.getFloatingGiftProjectileHitRadiusBlocks());
+        gift.setOwnerPlayerUuid(ownerPlayerUuid);
         holder.addComponent(FloatingGiftComponent.getComponentType(), gift);
         return holder;
     }

@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} propriétaire={owner} charte={cx},{cy},{c
 aetherhaven.debug.plots.line={plotId} {construction} {state} signe@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=Il est interdit d'assembler des parcelles avec un emploi actif pour votre ville (chargez les blocs autour des constructions ou commencez d'abord une construction).
 aetherhaven.debug.plots.finishassemblyDone=Construction(s) de parcelle(s) en cours {count} terminée(s) instantanément.
+aetherhaven.debug.plots.finishassemblySummary=Fin de l'assemblage : terminé {finished} échec {failed} assemblage en cours {still}
+aetherhaven.debug.plots.repairSummary=Réparation du tracé pour {town} : scanné {scanned} relié {relinked} déjà OK {ok} ignoré déchargé {skipped} échec {failed} blocs orphelins {orphans}
+aetherhaven.debug.plots.reconstructNoId=Fournissez un identifiant de construction (par exemple, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=Aucune parcelle ne correspond à « {id} » dans cette ville. Vérifiez l'orthographe ou exécutez la commande /ah plots list.
+aetherhaven.debug.plots.reconstructBadIndex=L'index est hors limites. Veuillez utiliser le numéro de la liste ci-dessous.
+aetherhaven.debug.plots.reconstructAmbiguous=Plusieurs graphiques correspondent à « {id} ». Relancez la commande avec un index :
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Utilisation : /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk=Reconstruction de {construction} [{index}] à {x}, {y}, {z} (restez à proximité jusqu'à ce que la colle soit terminée).
+aetherhaven.debug.plots.reconstructChunks=Chargez d'abord tous les blocs autour de ce bâtiment, puis réessayez.
+aetherhaven.debug.plots.reconstructUnknown=Construction inconnue pour cette parcelle.
+aetherhaven.debug.plots.reconstructPrefab=Fichier préfabriqué manquant pour ce bâtiment.
+aetherhaven.debug.plots.reconstructWall=Les plans des murs et des décorations ne peuvent pas être reconstitués avec cette commande.
+aetherhaven.debug.plots.reconstructFailed=La reconstruction a échoué. Consultez le journal du serveur.
+aetherhaven.debug.plots.diagnoseHeader=Diagnostic du lien du graphique pour {town}:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} liens={link}
 aetherhaven.debug.plots.removeBadUuid=UUID de la parcelle invalide. Utilisez l'identifiant de la liste des parcelles /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=Aucun terrain {plotId} dans votre ville.
 aetherhaven.debug.plots.removeDataFailed=Le monde a été nettoyé, mais la suppression de la parcelle des données de la ville a échoué (consultez les journaux).

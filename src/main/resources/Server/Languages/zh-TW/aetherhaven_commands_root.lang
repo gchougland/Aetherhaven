@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=以太港命令（/ah）
 commands.aetherhaven.difficulty.desc=創意：開放世界會增加建造成本的難度
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=創造模式：從磁碟重新載入模組配置和數據
 commands.aetherhaven.reload.success=Aetherhaven 設定和資源目錄已重新載入。
 commands.aetherhaven.reload.failure=重新載入失敗：{detail}

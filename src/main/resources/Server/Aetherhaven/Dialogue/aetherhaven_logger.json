@@ -5,6 +5,7 @@
     "main_hub": {
       "speaker": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.root.speaker",
       "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.root.body",
       "text": "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.main_hub.fallback",
       "choices": [
         {

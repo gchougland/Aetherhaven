@@ -5,6 +5,7 @@
     "main_hub": {
       "speaker": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.speaker",
       "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.root.body",
       "text": "aetherhaven_dialogue_priestess.aetherhaven.dialogue.aetherhaven_priestess.main_hub.fallback",
       "choices": [
         {

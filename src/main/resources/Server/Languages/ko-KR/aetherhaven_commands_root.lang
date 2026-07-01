@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=에테르헤이븐 명령어 (/ah)
 commands.aetherhaven.difficulty.desc=크리에이티브: 오픈 월드 난이도 (건축 비용 기준)
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=크리에이티브 모드: 디스크에서 모드 설정 및 데이터를 다시 불러오기
 commands.aetherhaven.reload.success=Aetherhaven 설정 및 자산 카탈로그가 다시 로드되었습니다.
 commands.aetherhaven.reload.failure=새로고침 실패: {detail}

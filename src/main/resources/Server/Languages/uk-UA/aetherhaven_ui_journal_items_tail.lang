@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=Не вдалося зберегти н�
 aetherhaven.ui.journalSettings.toolsHeading=Інструменти для ремонту
 aetherhaven.ui.journalSettings.resetVillagers=Перезавантажити людей у місті
 aetherhaven.ui.journalSettings.fixInn=Виправити список відвідувачів готелю
+aetherhaven.ui.journalSettings.repairPlots=Посилання на ділянку ремонту
 aetherhaven.ui.journalSettings.finishPlot=Завершіть одну будівлю зараз
 aetherhaven.ui.journalSettings.villagerReport=Зробіть інформаційний текст для селян
 aetherhaven.ui.journalSettings.plotModalTitle=Виберіть будівлю для завершення
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Заповніть поле
 aetherhaven.ui.journalSettings.villagerCopyHint=Виділіть весь текст у полі, а потім скопіюйте його за допомогою звичайних клавіш копіювання.
 aetherhaven.ui.journalSettings.villagerModalClose=Закрити
 aetherhaven.ui.journalSettings.innRepairDone=Список готелів виправлено. Заблокованих відвідувачів {locked} підвищили, {promoted} видалили випадкові записи {removed}
+aetherhaven.ui.journalSettings.plotsRepairDone=Виправлення графіка виконано. Відскановано {scanned}, повторно зв'язано {relinked}, пропущено, вивантажено {skipped} блоки-сиріти {orphans}
 aetherhaven.ui.innBell.notAllowed=Цей дзвін працює лише для членів клубу в їхньому міському заїзді.
 aetherhaven.ui.innBell.notOpen=Готель ще не відкритий.
 aetherhaven.ui.innBell.returned=Гості повернулися до гостьової зони.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Не розпочато
 aetherhaven.ui.townJournal.plotStatusInProgress=У процесі
 aetherhaven.ui.townJournal.plotStatusComplete=Завершено
 aetherhaven.ui.townJournal.plotStatusUnknown=Невідомо
+aetherhaven.ui.townJournal.plotHouseResident=Мешканець: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Мешканець: Не призначений
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Працівник: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Працівник: Непризначений
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Не призначено
 aetherhaven.ui.townJournal.removePlot=Видалити
 aetherhaven.ui.townJournal.removePlotTooltip=Стійте біля міста, щоб будівлю можна було безпечно очистити.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Знести цю будівлю?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Поз�
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Фішка затишної ділянки для кемпера Гітіні
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Позначки, де можна побудувати затишний кемпер Гітіні. Збірний варіант від HytinyBuilds. Зробити за столом містобудування. Зняти у рятувальника за п'ять золотих монет.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Жетон ділянки будиночка на дереві в горщику від Гітіні
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Попередження: це дуже великий префаб, який може помітно уповільнити або заблокувати клієнта та сервер під час складання. Розмістіть його, коли у вас буде час завершити його.</color> Позначає, де можна побудувати горщик на дереві від Hytiny (лише декоративний). Після завершення будівництва він не реєструється як міська ділянка — самостійно розбивайте або переміщуйте блоки, щоб видалити або перемістити його; його не можна забрати з міського журналу. Префаб від HytinyBuilds. Не продається на столі планування. Здається на збір у збірника за п'ять золотих монет.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Попередження: це дуже великий префаб, який може помітно уповільнити або заблокувати клієнта та сервер під час складання. Розмістіть його, коли у вас буде час завершити його.</color> Позначає, де можна побудувати горщик на дереві від Hytiny (лише декоративний). Префаб від HytinyBuilds. Не продається на столі планування. Здається на збір у збірника за п'ять золотих монет.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Жетон сюжету вівтаря Гаї
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Позначки, де можна побудувати збірний вівтар Геї. Зробіть це за столом містобудування.

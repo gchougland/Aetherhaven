@@ -23,8 +23,6 @@ public final class PlotTokenMetadata {
 
     private static final String LANG_NAME = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.name";
     private static final String LANG_DESC = "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.description";
-    private static final String LANG_DESC_DECORATION =
-        "aetherhaven_items.items.Aetherhaven_Plot_Token.instance.descriptionDecoration";
 
     private PlotTokenMetadata() {}
 
@@ -98,8 +96,7 @@ public final class PlotTokenMetadata {
         String label = buildingLabel.trim();
         String lang = language != null && !language.isBlank() ? language : "en-US";
         String namePlain = resolveLang(lang, LANG_NAME, label);
-        String descKey = isDecorationPlotConstruction(constructionId) ? LANG_DESC_DECORATION : LANG_DESC;
-        String descPlain = resolveLang(lang, descKey, label);
+        String descPlain = resolveDescription(lang, label, constructionId);
 
         BsonDocument tp = new BsonDocument();
         tp.put("Name", new BsonString(namePlain));
@@ -112,6 +109,25 @@ public final class PlotTokenMetadata {
     }
 
     @Nonnull
+    private static String resolveDescription(
+        @Nonnull String language,
+        @Nonnull String buildingLabel,
+        @Nonnull String constructionId
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            ConstructionDefinition def = plugin.getConstructionCatalog().get(constructionId.trim());
+            if (def != null) {
+                String custom = def.getDescription();
+                if (custom != null && !custom.isBlank()) {
+                    return custom.trim();
+                }
+            }
+        }
+        return resolveLang(language, LANG_DESC, buildingLabel);
+    }
+
+    @Nonnull
     private static String resolveLang(@Nonnull String language, @Nonnull String key, @Nonnull String buildingLabel) {
         I18nModule i18n = I18nModule.get();
         String text = i18n != null ? i18n.getMessage(language, key) : null;
@@ -119,15 +135,6 @@ public final class PlotTokenMetadata {
             text = key;
         }
         return text.replace("{building}", buildingLabel);
-    }
-
-    private static boolean isDecorationPlotConstruction(@Nonnull String constructionId) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return constructionId.startsWith("plot_decoration");
-        }
-        ConstructionDefinition def = plugin.getConstructionCatalog().get(constructionId.trim());
-        return def != null && def.isDecorationPlot();
     }
 
     @Nullable

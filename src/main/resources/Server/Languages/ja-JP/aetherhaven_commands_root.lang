@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=エーテルヘイブンコマンド（/ah）
 commands.aetherhaven.difficulty.desc=クリエイティブ：建築コストのオープンワールド難易度
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=クリエイティブ: ディスクからmodの設定とデータを再読み込みします
 commands.aetherhaven.reload.success=Aetherhavenの設定ファイルとアセットカタログが再読み込みされました。
 commands.aetherhaven.reload.failure=再読み込みに失敗しました: {detail}

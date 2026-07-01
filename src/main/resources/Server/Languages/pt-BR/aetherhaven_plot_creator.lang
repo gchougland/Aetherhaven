@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Clique no canto oposto antes de c
 
 aetherhaven.plotcreator.error.needKind=Abra o seletor de tipo de construção com a tecla F e escolha um tipo antes de continuar.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Esse tipo de construção não está disponível. Escolha Decoração ou Variante.
+
 aetherhaven.plotcreator.error.needVariantOf=Pressione F e selecione a qual edifício principal esta variante será considerada antes de continuar.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Esse tipo de construção principal não está na lista do criador de lotes.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Os visitantes podem parar aqui.
 aetherhaven.plotcreator.field.touristDestination.hint=Quando o portal estiver aberto, os visitantes poderão caminhar até este edifício durante o dia.
 aetherhaven.plotcreator.field.plotTokenLocked=O token de plotagem está bloqueado por padrão.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Quando ativada, os jogadores devem desbloquear essa área na bancada de criação de terrenos (usando um projeto de terreno) antes de poderem criar fichas de terreno para ela.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Seções de montagem por eixo (1–16)
+aetherhaven.plotcreator.field.styleId =Estilo
+aetherhaven.plotcreator.field.styleId.hint =Qualquer nome que você quiser.
 
 aetherhaven.plotcreator.step.REVIEW.title=Análise
 aetherhaven.plotcreator.step.REVIEW.hint=Salve o edifício. Você receberá uma ficha de terreno para colocá-lo na cidade.

@@ -12,17 +12,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PlotCreatorJsonWriter {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-
-    private static final String DECORATION_MANUAL_REMOVAL_MARKER = "not registered as a town plot";
-    private static final String DECORATION_MANUAL_REMOVAL_SUFFIX =
-        " After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.";
 
     private PlotCreatorJsonWriter() {}
 
@@ -31,11 +26,8 @@ public final class PlotCreatorJsonWriter {
         root.put("id", draft.getConstructionId());
         root.put("displayName", draft.getDisplayName());
         String description = draft.getDescription();
-        if (draft.getKind() == PlotBuildingKind.DECORATION) {
-            description = ensureDecorationManualRemovalDisclaimer(description);
-        }
         if (description != null && !description.isBlank()) {
-            root.put("description", description);
+            root.put("description", description.trim());
         }
         root.put("prefabPath", draft.getPrefabPath());
         root.put("plotTokenItemId", AetherhavenConstants.PLOT_TOKEN_UNIFIED);
@@ -116,17 +108,6 @@ public final class PlotCreatorJsonWriter {
         }
         Files.createDirectories(outputFile.getParent());
         Files.writeString(outputFile, GSON.toJson(root), StandardCharsets.UTF_8);
-    }
-
-    @Nonnull
-    private static String ensureDecorationManualRemovalDisclaimer(@Nullable String description) {
-        if (description != null && description.toLowerCase(Locale.ROOT).contains(DECORATION_MANUAL_REMOVAL_MARKER)) {
-            return description;
-        }
-        if (description == null || description.isBlank()) {
-            return DECORATION_MANUAL_REMOVAL_SUFFIX.trim();
-        }
-        return description.trim() + DECORATION_MANUAL_REMOVAL_SUFFIX;
     }
 
     @Nonnull

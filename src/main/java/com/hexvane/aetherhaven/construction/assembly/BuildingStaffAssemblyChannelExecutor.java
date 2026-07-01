@@ -113,15 +113,19 @@ public final class BuildingStaffAssemblyChannelExecutor {
                     break;
                 }
                 Vector3i cell = batch.get(bi);
-                if (!PlotAssemblyService.advanceClearingAtCell(
-                    world, plugin, commandBuffer, store, town, plot, job, cell, playerUuid
-                )) {
+                PlotAssemblyService.ClearingAdvanceOutcome outcome =
+                    PlotAssemblyService.advanceClearingAtCell(
+                        world, plugin, commandBuffer, store, town, plot, job, cell, playerUuid
+                    );
+                if (!outcome.progressed()) {
                     continue;
                 }
-                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
-                    break;
+                if (outcome.brokeBlock()) {
+                    if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
+                        break;
+                    }
+                    anyAction = true;
                 }
-                anyAction = true;
                 if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                     break;
                 }
@@ -144,15 +148,19 @@ public final class BuildingStaffAssemblyChannelExecutor {
                     break;
                 }
                 int idx = batch.getInt(bi);
-                if (!PlotAssemblyService.advancePlacementAtIndex(
-                    world, plugin, store, town, plot, job, idx, true, playerUuid, true
-                )) {
+                PlotAssemblyService.PlacementAdvanceOutcome outcome =
+                    PlotAssemblyService.advancePlacementAtIndex(
+                        world, plugin, store, town, plot, job, idx, true, playerUuid, true
+                    );
+                if (!outcome.progressed()) {
                     continue;
                 }
-                if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
-                    break;
+                if (outcome.wroteBlock()) {
+                    if (!BuildingStaffMana.consumeForBlock(playerRef, commandBuffer)) {
+                        break;
+                    }
+                    anyAction = true;
                 }
-                anyAction = true;
                 if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                     break;
                 }

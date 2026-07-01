@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Token de enredo {name} criado.
 aetherhaven.ui.plotCrafting.unlockSuccess=Você desbloqueou o gráfico {building}.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Você já conhece essa história.
 aetherhaven.ui.plotCrafting.unlockInvalid=Esta planta não pode ser lida.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Estilos

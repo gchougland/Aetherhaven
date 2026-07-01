@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Token de parcela
 items.Aetherhaven_Plot_Token.description=Coloca un edificio urbano personalizado desde el personal de colocación de parcelas. Cada ficha está vinculada a un tipo de edificio.
 items.Aetherhaven_Plot_Token.instance.name=Token de trazado {building}
 items.Aetherhaven_Plot_Token.instance.description=Se requiere colocar la huella {building} del personal de colocación de parcelas.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Es necesario colocar la huella {building} del personal de colocación de parcelas. Una vez terminada su construcción, esta decoración no se registra como parcela del pueblo. Para quitarla o reubicarla, rompa o mueva los bloques usted mismo; no se puede recoger del diario del pueblo.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plano de la parcela
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Una página de planos especial. Úsala para aprender una nueva trama en tu mesa de creación de tramas.

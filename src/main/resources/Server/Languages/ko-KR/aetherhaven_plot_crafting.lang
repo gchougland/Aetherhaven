@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted={name} 플롯 토큰을 제작했습니다.
 aetherhaven.ui.plotCrafting.unlockSuccess={building} 플롯을 잠금 해제했습니다.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=당신은 이미 이 줄거리를 알고 있잖아요.
 aetherhaven.ui.plotCrafting.unlockInvalid=이 설계도는 읽을 수 없습니다.
+aetherhaven.ui.plotCrafting.styleFilterTitle =스타일

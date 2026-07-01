@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Создан токен участка {name
 aetherhaven.ui.plotCrafting.unlockSuccess=Вы разблокировали участок {building}.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Вы уже знаете этот сюжет.
 aetherhaven.ui.plotCrafting.unlockInvalid=Этот чертеж невозможно прочитать.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Стили

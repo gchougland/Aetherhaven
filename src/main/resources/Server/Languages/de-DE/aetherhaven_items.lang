@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Plot-Token
 items.Aetherhaven_Plot_Token.description=Platziert ein benutzerdefiniertes Stadtgebäude aus dem Plotplatzierungsteam. Jeder Token ist einem Gebäudetyp zugeordnet.
 items.Aetherhaven_Plot_Token.instance.name={building} Plot-Token
 items.Aetherhaven_Plot_Token.instance.description=Erforderlich ist die Platzierung des {building}-Fußabdrucks durch das Personal für die Grundstücksplatzierung.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Für die Platzierung des {building}-Fußabdrucks ist ein Mitarbeiter der Grundstücksplatzierungsabteilung erforderlich. Nach Fertigstellung des Baus wird diese Dekoration nicht als Stadtgrundstück registriert. Um sie zu entfernen oder zu versetzen, müssen die Blöcke selbst abgebaut oder verschoben werden – sie kann nicht aus dem Stadtjournal aufgenommen werden.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plotplan
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Eine spezielle Bauplanseite. Nutze sie, um an deiner Bauplanwerkbank ein neues Grundstück zu erstellen.

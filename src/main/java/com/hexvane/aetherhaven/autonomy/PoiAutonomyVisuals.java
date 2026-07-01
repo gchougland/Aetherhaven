@@ -145,28 +145,106 @@ public final class PoiAutonomyVisuals {
         }
     }
 
-    /** Stop item consume / walk overlays after campfire USE. */
+    /** Stop item consume / walk overlays after POI USE. {@code commandBuffer} may be null on the world thread. */
     public static void cleanupAfterPoiUse(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        cleanupAfterPoiUse(npcRef, store, commandBuffer, poi, true);
+    }
+
+    public static void cleanupAfterPoiUse(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull PoiEntry poi,
+        boolean restoreEquipmentAfterEat
+    ) {
+        if (restoreEquipmentAfterEat) {
+            finishPoiUseCleanup(npcRef, store, commandBuffer, poi, true);
+        } else {
+            abortInterruptedPoiUse(npcRef, store, commandBuffer, poi);
+        }
+    }
+
+    /**
+     * Immediately ends any in-progress POI USE (sit, sleep, eat, shop browse, work bench, etc.) when schedule, workplace
+     * assignment, or building completion changes what the villager should be doing.
+     */
+    public static void abortInterruptedPoiUse(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nullable PoiEntry poi
+    ) {
+        finishPoiUseCleanup(npcRef, store, commandBuffer, poi, false);
+    }
+
+    /**
+     * Clears POI USE visuals when POI metadata is gone but the NPC is still mid-activity (e.g. ephemeral feast POI removed).
+     */
+    public static void forceAbortUseVisuals(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        abortInterruptedPoiUse(npcRef, store, commandBuffer, null);
+    }
+
+    private static void finishPoiUseCleanup(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nullable PoiEntry poi,
+        boolean restoreEquipmentAfterEat
+    ) {
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        if (poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP) {
-            BlockMountRelease.release(npcRef, store, commandBuffer);
+        BlockMountRelease.release(npcRef, store, commandBuffer);
+        if (poi != null
+            && poi.getInteractionKind() == PoiInteractionKind.USE_BENCH
+            && poi.getTags().contains("EAT")) {
+            if (restoreEquipmentAfterEat) {
+                tryRestoreHeldEquipmentAfterCampfireEat(npcRef, store, commandBuffer, poi);
+            } else {
+                tryClearCampfireHeldFood(npcRef, store, commandBuffer);
+            }
+        } else if (!restoreEquipmentAfterEat) {
+            tryClearCampfireHeldFood(npcRef, store, commandBuffer);
         }
-        if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && poi.getTags().contains("EAT")) {
-            stopCampfireConsumeVisuals(npcRef, store, commandBuffer, npc);
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
-            tryRestoreHeldEquipmentAfterCampfireEat(npcRef, store, commandBuffer, poi);
+        stopAllUseOverlayAnimations(npcRef, store, commandBuffer, npc);
+    }
+
+    /** Clears sit / sleep / eat / shop / emote overlays regardless of POI interaction kind. */
+    public static void stopAllUseOverlayAnimations(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
+        @Nullable NPCEntity npc
+    ) {
+        if (npc == null) {
+            npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         }
-        if (poi.getTags().contains("SHOP")) {
+        stopCampfireConsumeVisuals(npcRef, store, npc);
+        AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
+        if (commandBuffer != null) {
             ShopSpotBrowseVisuals.endPonder(npcRef, store, commandBuffer);
+        } else {
+            ShopSpotBrowseVisuals.endPonder(npcRef, store);
         }
         if (npc != null) {
-            // Sleep/Sit use Status; explicitly clear in case role transition timing skips it.
-            npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
+            if (commandBuffer != null) {
+                npc.playAnimation(npcRef, AnimationSlot.Status, null, commandBuffer);
+                npc.playAnimation(npcRef, AnimationSlot.Action, null, commandBuffer);
+                npc.playAnimation(npcRef, AnimationSlot.Emote, null, commandBuffer);
+                commandBuffer.putComponent(npcRef, NPCEntity.getComponentType(), npc);
+            } else {
+                npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
+                npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
+                npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
+                store.putComponent(npcRef, NPCEntity.getComponentType(), npc);
+            }
         }
     }
 
@@ -195,7 +273,7 @@ public final class PoiAutonomyVisuals {
     private static void tryRestoreHeldEquipmentAfterCampfireEat(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -227,7 +305,7 @@ public final class PoiAutonomyVisuals {
     private static void tryClearCampfireHeldFood(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer
+        @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
         InventoryComponent.Hotbar hb = store.getComponent(npcRef, InventoryComponent.Hotbar.getComponentType());
         if (hb == null) {
@@ -356,7 +434,6 @@ public final class PoiAutonomyVisuals {
     private static void stopCampfireConsumeVisuals(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,
-        @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nullable NPCEntity npc
     ) {
         AnimationUtils.stopAnimation(npcRef, AnimationSlot.Action, store);

@@ -20,7 +20,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -461,6 +460,7 @@ public final class QuestBoardService {
         slot.setState(QuestBoardSlotState.ACCEPTED);
         slot.setAcceptedByPlayerUuid(playerUuid.toString());
         slot.setOnlineDaysElapsed(0);
+        refreshGiverEntityUuid(slot, town, store);
         if (slot.isHuntQuest()) {
             slot.setHuntKillProgress(0);
         }
@@ -542,16 +542,83 @@ public final class QuestBoardService {
         return town.findAcceptedBoardQuestForGiver(giverEntityUuid);
     }
 
+    @Nullable
+    public static QuestBoardSlotRecord findAcceptedForGiver(
+        @Nonnull TownRecord town,
+        @Nonnull UUID giverEntityUuid,
+        @Nullable String giverRoleId,
+        @Nonnull Store<EntityStore> store
+    ) {
+        QuestBoardSlotRecord slot = town.findAcceptedBoardQuestForGiver(giverEntityUuid);
+        if (slot != null) {
+            return slot;
+        }
+        if (giverRoleId == null || giverRoleId.isBlank()) {
+            return null;
+        }
+        List<QuestBoardSlotRecord> forRole = town.findAcceptedBoardQuestsForRole(giverRoleId.trim());
+        if (forRole.isEmpty()) {
+            return null;
+        }
+        List<QuestBoardSlotRecord> stale = new ArrayList<>();
+        for (QuestBoardSlotRecord candidate : forRole) {
+            if (!isGiverEntityLive(store, candidate.getGiverEntityUuid())) {
+                stale.add(candidate);
+            }
+        }
+        QuestBoardSlotRecord picked = null;
+        if (stale.size() == 1) {
+            picked = stale.get(0);
+        } else if (stale.size() > 1) {
+            picked = stale.get(0);
+        } else if (forRole.size() == 1) {
+            picked = forRole.get(0);
+        }
+        if (picked != null) {
+            picked.setGiverEntityUuid(giverEntityUuid.toString());
+        }
+        return picked;
+    }
+
+    private static void refreshGiverEntityUuid(
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store
+    ) {
+        String roleId = slot.getGiverRoleId();
+        if (roleId == null || roleId.isBlank()) {
+            return;
+        }
+        List<TownVillagerRow> givers = giversForRole(town, store, roleId.trim());
+        if (!givers.isEmpty()) {
+            slot.setGiverEntityUuid(givers.get(0).entityUuid().toString());
+        }
+    }
+
+    private static boolean isGiverEntityLive(@Nonnull Store<EntityStore> store, @Nullable String giverEntityUuid) {
+        if (giverEntityUuid == null || giverEntityUuid.isBlank()) {
+            return false;
+        }
+        try {
+            UUID u = UUID.fromString(giverEntityUuid.trim());
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(u);
+            return ref != null && ref.isValid();
+        } catch (IllegalArgumentException ignored) {
+            return false;
+        }
+    }
+
     public static boolean completeFetchQuest(
         @Nonnull TownRecord town,
         @Nonnull TownManager tm,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID giverEntityUuid,
+        @Nullable String giverRoleId,
         @Nonnull QuestBoardCatalog catalog,
         @Nonnull Random rng
     ) {
-        return completeBoardQuest(town, tm, playerRef, store, giverEntityUuid, catalog, rng);
+        return completeBoardQuest(town, tm, playerRef, store, giverEntityUuid, giverRoleId, catalog, rng);
     }
 
     public static boolean completeBoardQuest(
@@ -560,10 +627,11 @@ public final class QuestBoardService {
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
         @Nonnull UUID giverEntityUuid,
+        @Nullable String giverRoleId,
         @Nonnull QuestBoardCatalog catalog,
         @Nonnull Random rng
     ) {
-        QuestBoardSlotRecord slot = town.findAcceptedBoardQuestForGiver(giverEntityUuid);
+        QuestBoardSlotRecord slot = findAcceptedForGiver(town, giverEntityUuid, giverRoleId, store);
         if (slot == null || slot.getQuestType() == null || slot.getQuestType().isBlank()) {
             return false;
         }

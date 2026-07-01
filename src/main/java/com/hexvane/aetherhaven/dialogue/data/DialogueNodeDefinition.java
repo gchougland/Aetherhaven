@@ -14,6 +14,9 @@ public final class DialogueNodeDefinition {
     /** When {@code villager_greeting}, {@link com.hexvane.aetherhaven.ui.DialoguePage} builds body from villager data. */
     @Nullable
     private String bodyMode;
+    /** When set with {@code villager_greeting}, shown once on first-ever talk instead of random greetings. */
+    @Nullable
+    private String introText;
     @Nullable
     private List<JsonObject> actions;
     @Nullable
@@ -32,6 +35,11 @@ public final class DialogueNodeDefinition {
     @Nullable
     public String getBodyMode() {
         return bodyMode;
+    }
+
+    @Nullable
+    public String getIntroText() {
+        return introText;
     }
 
     @Nonnull

@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=続行する前に、反対側の
 
 aetherhaven.plotcreator.error.needKind=Fキーを押して建物タイプ選択画面を開き、タイプを選択してから続行してください。
 
+aetherhaven.plotcreator.error.kindNotAllowed =その建物タイプはご利用いただけません。装飾またはバリエーションを選択してください。
+
 aetherhaven.plotcreator.error.needVariantOf=続行する前に、Fキーを押して、このバリアントがどの主要建物としてカウントされるかを選択してください。
 
 aetherhaven.plotcreator.error.invalidVariantOf=その主要な建物タイプは、区画作成ツールのリストにありません。
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=訪問者はここで立ち止�
 aetherhaven.plotcreator.field.touristDestination.hint=稼働中は、ポータル訪問者は日中、この建物まで歩いて行くことができます。
 aetherhaven.plotcreator.field.plotTokenLocked=プロットトークンはデフォルトでロックされています
 aetherhaven.plotcreator.field.plotTokenLocked.hint=有効になっている場合、プレイヤーは（プロットの設計図を使用して）プロット作成台でこのプロットをアンロックしてからでないと、そのプロットのトークンを作成できません。
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=各軸の組立セクション数（1～16）
+aetherhaven.plotcreator.field.styleId =スタイル
+aetherhaven.plotcreator.field.styleId.hint =お好きな名前
 
 aetherhaven.plotcreator.step.REVIEW.title=レビュー
 aetherhaven.plotcreator.step.REVIEW.hint=建物を保存してください。保存すると、町に設置するための区画トークンがもらえます。

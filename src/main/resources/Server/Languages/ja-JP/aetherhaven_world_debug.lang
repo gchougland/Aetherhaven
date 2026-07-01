@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plot
 aetherhaven.debug.plots.line={plotId} {construction} {state} 署名@{x}、{y}、{z}
 aetherhaven.debug.plots.finishassemblyNone=町で作業が進行中の場合は、区画を組み立てないでください（建物の周囲にチャンクを読み込むか、先に建物を建設してください）。
 aetherhaven.debug.plots.finishassemblyDone=進行中の{count}プロット構築が即座に完了しました。
+aetherhaven.debug.plots.finishassemblySummary=組み立て完了：完了 {finished} 失敗 {failed} 組み立て中 {still}
+aetherhaven.debug.plots.repairSummary={town} のプロット修復: スキャン済み {scanned} 再リンク済み {relinked} 既にOK {ok} スキップ済み アンロード済み {skipped} 失敗 {failed} 孤立ブロック {orphans}
+aetherhaven.debug.plots.reconstructNoId=建設ID（例：plot_inn）を指定してください。
+aetherhaven.debug.plots.reconstructNoMatch=その町には「{id}」に一致する区画はありません。スペルを確認するか、/ah plots list を実行してください。
+aetherhaven.debug.plots.reconstructBadIndex=インデックスが範囲外です。以下のリストから番号を選択してください。
+aetherhaven.debug.plots.reconstructAmbiguous=複数のプロットが「{id}」に一致します。インデックスを指定して再度実行してください。
+aetherhaven.debug.plots.reconstructAmbiguousUsage=使用方法: /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk={construction} [{index}] を {x}、{y}、{z} で再構築します（ペーストが完成するまで近くにお立ちください）。
+aetherhaven.debug.plots.reconstructChunks=まずその建物の周囲のチャンクをすべて読み込んでから、もう一度試してください。
+aetherhaven.debug.plots.reconstructUnknown=その区画の構造は不明です。
+aetherhaven.debug.plots.reconstructPrefab=その建物のプレハブファイルが見つかりません。
+aetherhaven.debug.plots.reconstructWall=このコマンドでは、壁や装飾の区画を再構築することはできません。
+aetherhaven.debug.plots.reconstructFailed=再構築に失敗しました。サーバーログを確認してください。
+aetherhaven.debug.plots.diagnoseHeader={town} のプロットリンク診断:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} リンク={link}
 aetherhaven.debug.plots.removeBadUuid=無効なプロットUUIDです。/aetherhaven plots list のIDを使用してください。
 aetherhaven.debug.plots.removeNotFound=あなたの町には区画 {plotId} がありません。
 aetherhaven.debug.plots.removeDataFailed=ワールドはクリアされましたが、町のデータから区画を削除するのに失敗しました（ログを確認してください）。

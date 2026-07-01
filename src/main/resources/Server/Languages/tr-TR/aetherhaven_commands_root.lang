@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=Aetherhaven komutları (/ah)
 commands.aetherhaven.difficulty.desc=Yaratıcı: İnşaat maliyetleri için açık dünya zorluğu
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=Yaratıcı: Mod yapılandırma dosyasını ve verilerini diskten yeniden yükle
 commands.aetherhaven.reload.success=Aetherhaven yapılandırma dosyaları ve varlık katalogları yeniden yüklendi.
 commands.aetherhaven.reload.failure=Yeniden yükleme başarısız oldu: {detail}

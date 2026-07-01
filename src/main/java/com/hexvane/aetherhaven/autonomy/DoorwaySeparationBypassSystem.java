@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -39,7 +40,11 @@ public final class DoorwaySeparationBypassSystem extends SteppableTickingSystem 
         return Query.and(
             NPCEntity.getComponentType(),
             TransformComponent.getComponentType(),
-            Query.or(VillagerAutonomyState.getComponentType(), TouristAutonomyState.getComponentType())
+            Query.or(
+                VillagerAutonomyState.getComponentType(),
+                TouristAutonomyState.getComponentType(),
+                BuilderConstructionAssistState.getComponentType()
+            )
         );
     }
 
@@ -80,6 +85,10 @@ public final class DoorwaySeparationBypassSystem extends SteppableTickingSystem 
     }
 
     private static boolean isTraveling(@Nonnull ArchetypeChunk<EntityStore> chunk, int index) {
+        BuilderConstructionAssistState assist = chunk.getComponent(index, BuilderConstructionAssistState.getComponentType());
+        if (assist != null && assist.getPhase() == BuilderConstructionAssistState.PHASE_TRAVEL) {
+            return true;
+        }
         VillagerAutonomyState villager = chunk.getComponent(index, VillagerAutonomyState.getComponentType());
         if (villager != null && villager.getPhase() == VillagerAutonomyState.PHASE_TRAVEL) {
             return true;

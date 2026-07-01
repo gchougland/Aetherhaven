@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Token de plotagem
 items.Aetherhaven_Plot_Token.description=Coloca um edifício personalizado da cidade a partir da equipe de posicionamento de terrenos. Cada marcador está vinculado a um tipo de edifício.
 items.Aetherhaven_Plot_Token.instance.name={building} token de plotagem
 items.Aetherhaven_Plot_Token.instance.description=Obrigatório posicionar a marca {building} conforme orientação da equipe de implantação do terreno.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=É necessário posicionar a marca {building} a partir da equipe de posicionamento de terrenos. Após a conclusão da construção, esta decoração não é registrada como um terreno urbano. Para removê-la ou realocá-la, quebre ou mova os blocos você mesmo — ela não pode ser recuperada do diário da cidade.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plano de loteamento
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Uma página de projeto especial. Use-a para aprender um novo enredo na sua bancada de criação de enredos.

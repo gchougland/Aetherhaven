@@ -2,7 +2,7 @@
   "id": "plot_jszzas_house",
   "displayName": "Jszza's House",
   "description": "Made by Jszza",
-  "prefabPath": "jszza/plot_jszzas_house.prefab.json",
+  "prefabPath": "Jszza/plot_jszzas_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,

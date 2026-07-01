@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Cliquez sur le coin opposé avant
 
 aetherhaven.plotcreator.error.needKind=Ouvrez le sélecteur de type de bâtiment avec la touche F et choisissez un type avant de continuer.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Ce type de bâtiment n'est pas disponible. Choisissez Décoration ou Variante.
+
 aetherhaven.plotcreator.error.needVariantOf=Appuyez sur F et choisissez le bâtiment principal auquel cette variante correspond avant de continuer.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Ce type de bâtiment principal ne figure pas dans la liste du créateur d'intrigue.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Les visiteurs peuvent s'arrête
 aetherhaven.plotcreator.field.touristDestination.hint=Lorsque le portail est activé, les visiteurs peuvent accéder à ce bâtiment à pied pendant la journée.
 aetherhaven.plotcreator.field.plotTokenLocked=Jeton de parcelle verrouillé par défaut
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Une fois activée, les joueurs doivent débloquer cette intrigue à l'établi de création d'intrigues (à l'aide d'un plan d'intrigue) avant de pouvoir fabriquer des jetons d'intrigue pour celle-ci.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Sections d'assemblage par axe (1–16)
+aetherhaven.plotcreator.field.styleId =Style
+aetherhaven.plotcreator.field.styleId.hint =Le nom que vous voulez
 
 aetherhaven.plotcreator.step.REVIEW.title=Revoir
 aetherhaven.plotcreator.step.REVIEW.hint=Sauvegardez le bâtiment. Vous obtiendrez un jeton de parcelle pour le placer en ville.

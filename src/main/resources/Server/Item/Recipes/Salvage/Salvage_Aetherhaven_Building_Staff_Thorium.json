@@ -1,0 +1,29 @@
+{
+  "Input": [
+    {
+      "ItemId": "Aetherhaven_Building_Staff_Thorium",
+      "Quantity": 1
+    }
+  ],
+  "PrimaryOutput": {
+    "ItemId": "Ore_Thorium",
+    "Quantity": 2
+  },
+  "Output": [
+    {
+      "ItemId": "Ore_Thorium",
+      "Quantity": 2
+    },
+    {
+      "ItemId": "Ingredient_Fabric_Scrap_Linen",
+      "Quantity": 1
+    }
+  ],
+  "BenchRequirement": [
+    {
+      "Type": "Processing",
+      "Id": "Salvagebench"
+    }
+  ],
+  "TimeSeconds": 4
+}

@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Devam etmeden önce karşı köş
 
 aetherhaven.plotcreator.error.needKind=F tuşuyla bina tipi seçiciyi açın ve devam etmeden önce bir tip seçin.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Bu bina tipi mevcut değil. Dekorasyon veya Varyant seçin.
+
 aetherhaven.plotcreator.error.needVariantOf=Devam etmeden önce F tuşuna basın ve bu varyantın hangi ana bina olarak sayılacağını seçin.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Bu ana bina tipi, arsa oluşturucu listesinde bulunmuyor.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Ziyaretçiler burada mola vereb
 aetherhaven.plotcreator.field.touristDestination.hint=Portal açık olduğunda, ziyaretçiler gün içinde bu binaya yürüyerek ulaşabilirler.
 aetherhaven.plotcreator.field.plotTokenLocked=Grafik belirteci varsayılan olarak kilitlidir.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Oyun aktif olduğunda, oyuncular bu arsa için arsa jetonları üretebilmek için önce arsa üretim tezgahında (arsa planı kullanarak) bu arsanın kilidini açmalıdır.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Eksen başına montaj bölümleri (1–16)
+aetherhaven.plotcreator.field.styleId =Stil
+aetherhaven.plotcreator.field.styleId.hint =İstediğiniz herhangi bir isim.
 
 aetherhaven.plotcreator.step.REVIEW.title=Gözden geçirmek
 aetherhaven.plotcreator.step.REVIEW.hint=Binayı kurtarın. Onu kasabaya yerleştirmek için bir arsa jetonu alacaksınız.

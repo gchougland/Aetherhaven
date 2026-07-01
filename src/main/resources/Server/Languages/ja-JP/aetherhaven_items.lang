@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=プロットトークン
 items.Aetherhaven_Plot_Token.description=区画配置スタッフからカスタムの町の建物を配置します。各トークンは1種類の建物タイプに対応しています。
 items.Aetherhaven_Plot_Token.instance.name={building} プロットトークン
 items.Aetherhaven_Plot_Token.instance.description=区画配置担当者から{building}の設置場所を指定する必要があります。
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=区画配置スタッフから{building}の設置指示を受ける必要があります。設置完了後、この装飾は町区画として登録されません。撤去または移動するには、ブロックを自分で破壊または移動してください。町の記録から取得することはできません。
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=区画設計図
 items.Aetherhaven_Plot_Token_Unlock_Page.description=特別な設計図ページです。これを使って、プロット作成台で新しいプロットを習得しましょう。

@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Jeton de l'intrigue
 items.Aetherhaven_Plot_Token.description=Place un bâtiment personnalisé de la ville à l'aide de l'outil de placement de parcelles. Chaque jeton est associé à un type de bâtiment.
 items.Aetherhaven_Plot_Token.instance.name=jeton de tracé {building}
 items.Aetherhaven_Plot_Token.instance.description=Il est nécessaire de placer l'empreinte {building} à partir du personnel de placement de la parcelle.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Il est nécessaire de placer l'empreinte {building} fournie par l'équipe de placement de parcelles. Une fois la construction terminée, cette décoration n'est pas enregistrée comme parcelle de ville. Pour la retirer ou la déplacer, cassez ou déplacez les blocs vous-même ; elle ne peut pas être récupérée depuis le journal de la ville.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plan de l'intrigue
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Une page de plan spéciale. Utilisez-la pour apprendre une nouvelle intrigue à votre établi de création d'intrigues.

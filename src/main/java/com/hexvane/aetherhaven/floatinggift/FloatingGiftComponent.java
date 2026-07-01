@@ -7,6 +7,7 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -77,6 +78,9 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
     private boolean needsDeferredSpawnFloatAnimation = false;
     /** Tracks whether looping {@code PopHold} was swapped in for Action (not persisted). */
     private boolean popHoldClipApplied = false;
+    /** Player this balloon was spawned for (natural scheduler or debug spawn); not persisted. */
+    @Nullable
+    private UUID ownerPlayerUuid;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType =
@@ -116,6 +120,15 @@ public final class FloatingGiftComponent implements Component<EntityStore> {
 
     public void setGiftType(@Nonnull FloatingGiftType type) {
         this.giftType = type.name();
+    }
+
+    @Nullable
+    public UUID getOwnerPlayerUuid() {
+        return ownerPlayerUuid;
+    }
+
+    public void setOwnerPlayerUuid(@Nullable UUID ownerPlayerUuid) {
+        this.ownerPlayerUuid = ownerPlayerUuid;
     }
 
     public double getDirX() {

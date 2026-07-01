@@ -6,11 +6,8 @@ import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardItemSetJson;
-import com.hexvane.aetherhaven.reputation.VillagerReputationService;
-import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.ui.TownVillagerDirectory;
-import com.hexvane.aetherhaven.ui.TownVillagerRow;
+import com.hexvane.aetherhaven.ui.UiMaterialLabels;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -146,8 +143,24 @@ public final class FetchQuestBoardHandler implements QuestBoardQuestTypeHandler 
         @Nonnull QuestBoardCatalog catalog
     ) {
         String villager = QuestBoardGiverDisplay.giverName(slot, store, town);
-        return Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.fetchObjective")
-            .param("villager", villager);
+        Message result =
+            Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.fetchObjective")
+                .param("villager", villager);
+        for (QuestBoardItemRequirement req : slot.requiredItemsOrEmpty()) {
+            String itemId = req.itemIdOrEmpty();
+            if (itemId.isBlank()) {
+                continue;
+            }
+            result =
+                result
+                    .insert(Message.raw("\n"))
+                    .insert(
+                        Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.rewardLine")
+                            .param("count", String.valueOf(req.count()))
+                            .param("item", UiMaterialLabels.itemNameMessage(itemId))
+                    );
+        }
+        return result;
     }
 
     @Override
@@ -184,6 +197,6 @@ public final class FetchQuestBoardHandler implements QuestBoardQuestTypeHandler 
         if (player == null) {
             return null;
         }
-        return InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
+        return InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
     }
 }

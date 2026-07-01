@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=플롯 토큰
 items.Aetherhaven_Plot_Token.description=부지 배치 담당자가 지정한 맞춤형 마을 건물을 배치합니다. 각 토큰은 하나의 건물 유형에 연결됩니다.
 items.Aetherhaven_Plot_Token.instance.name={building} 플롯 토큰
 items.Aetherhaven_Plot_Token.instance.description=부지 배치 담당자가 {building} 풋프린트를 배치해야 합니다.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=부지 배치 담당자가 {building} 크기의 구조물을 배치해야 합니다. 설치가 완료되면 이 장식물은 마을 부지로 등록되지 않습니다. 제거하거나 이동하려면 블록을 직접 부수거나 옮겨야 하며, 마을 일지에서 회수할 수 없습니다.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=플롯 설계도
 items.Aetherhaven_Plot_Token_Unlock_Page.description=특별한 설계도 페이지입니다. 이 페이지를 사용하여 작업대에서 새로운 구획을 배우세요.

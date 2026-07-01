@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=No se pudieron guardar los ajustes del s
 aetherhaven.ui.journalSettings.toolsHeading=Herramientas de reparación
 aetherhaven.ui.journalSettings.resetVillagers=Restablecer a la gente en la ciudad
 aetherhaven.ui.journalSettings.fixInn=Lista de visitantes de Fix Inn
+aetherhaven.ui.journalSettings.repairPlots=Reparar los enlaces de la parcela
 aetherhaven.ui.journalSettings.finishPlot=Terminen un edificio ahora
 aetherhaven.ui.journalSettings.villagerReport=Crear texto informativo del aldeano
 aetherhaven.ui.journalSettings.plotModalTitle=Elige un edificio para terminar
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Rellena la casilla
 aetherhaven.ui.journalSettings.villagerCopyHint=Seleccione todo el texto del cuadro y cópielo con sus teclas de copiar habituales.
 aetherhaven.ui.journalSettings.villagerModalClose=Cerca
 aetherhaven.ui.journalSettings.innRepairDone=Lista de posadas corregida. Visitantes bloqueados {locked} ascendidos {promoted} eliminados entradas sueltas {removed}
+aetherhaven.ui.journalSettings.plotsRepairDone=Reparación de la parcela realizada. Escaneado {scanned}, vuelto a enlazar {relinked}, omitido, descargado {skipped}, bloques huérfanos {orphans}
 aetherhaven.ui.innBell.notAllowed=Esta campana solo funciona para los miembros de la posada de su pueblo.
 aetherhaven.ui.innBell.notOpen=La posada aún no está abierta.
 aetherhaven.ui.innBell.returned=Los visitantes regresaron a la zona de huéspedes.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=No ha comenzado
 aetherhaven.ui.townJournal.plotStatusInProgress=En curso
 aetherhaven.ui.townJournal.plotStatusComplete=Completo
 aetherhaven.ui.townJournal.plotStatusUnknown=Desconocido
+aetherhaven.ui.townJournal.plotHouseResident=Residente: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Residente: No asignado
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Trabajador: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Trabajador: Sin asignar
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Sin asignar
 aetherhaven.ui.townJournal.removePlot=Eliminar
 aetherhaven.ui.townJournal.removePlotTooltip=Colócate cerca del pueblo para que el edificio pueda ser desalojado de forma segura.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=¿Demoler este edificio?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Indica 
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Ficha para parcela de caravana acogedora de Hytiny
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Indica dónde se puede construir la acogedora caravana de Hytiny. Prefabricada por HytinyBuilds. Se puede fabricar en la oficina de planificación urbana. Se puede recuperar cinco monedas de oro en un chatarrero.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Ficha de parcela con casa en el árbol en maceta de Hytiny
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Advertencia: este es un prefab muy grande y puede ralentizar o bloquear notablemente al cliente y al servidor mientras se ensambla. Colócalo cuando tengas tiempo para dejar que termine.</color> Marca dónde se puede construir la casa del árbol en maceta de Hytiny (solo decorativa). Después de que termine de construirse, no se registra como una parcela de la ciudad; rompe o mueve los bloques tú mismo para quitarla o reubicarla; no se puede recoger del diario de la ciudad. Prefab de HytinyBuilds. No se vende en el escritorio de planificación. Recupéralo en un chatarrero por cinco monedas de oro.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Advertencia: este es un prefab muy grande y puede ralentizar o bloquear notablemente al cliente y al servidor mientras se ensambla. Colócalo cuando tengas tiempo para dejar que termine.</color> Marca dónde se puede construir la casa del árbol en maceta de Hytiny (solo decorativa). Prefab de HytinyBuilds. No se vende en el escritorio de planificación. Recupéralo en un chatarrero por cinco monedas de oro.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=ficha de parcela del altar de Gaia
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Indicaciones sobre dónde se puede construir el altar prefabricado de Gaia. Elaboración de planos en la oficina de planificación urbana.

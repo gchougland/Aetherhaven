@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=Die Servereinstellungen konnten nicht ge
 aetherhaven.ui.journalSettings.toolsHeading=Reparaturwerkzeuge
 aetherhaven.ui.journalSettings.resetVillagers=Leute in der Stadt wieder auf den richtigen Weg bringen
 aetherhaven.ui.journalSettings.fixInn=Besucherliste des Fix Inn
+aetherhaven.ui.journalSettings.repairPlots=Reparatur der Plotverbindungen
 aetherhaven.ui.journalSettings.finishPlot=Jetzt ein Gebäude fertigstellen
 aetherhaven.ui.journalSettings.villagerReport=Dorfbewohner-Infotext erstellen
 aetherhaven.ui.journalSettings.plotModalTitle=Wähle ein Gebäude aus, das du fertigstellen möchtest.
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Füllen Sie das Kästchen aus
 aetherhaven.ui.journalSettings.villagerCopyHint=Markieren Sie den gesamten Text im Feld und kopieren Sie ihn anschließend mit Ihren üblichen Kopiertasten.
 aetherhaven.ui.journalSettings.villagerModalClose=Schließen
 aetherhaven.ui.journalSettings.innRepairDone=Gasthausliste korrigiert. Gesperrte Besucher (PH_0) befördert (PH_1). Fehlende Einträge (PH_2) entfernt.
+aetherhaven.ui.journalSettings.plotsRepairDone=Plotreparatur abgeschlossen. {scanned} gescannt, {relinked} neu verknüpft, {skipped} übersprungen, verwaiste Blöcke {orphans} übersprungen.
 aetherhaven.ui.innBell.notAllowed=Diese Glocke funktioniert nur für Mitglieder in ihrem Heimatgasthof.
 aetherhaven.ui.innBell.notOpen=Das Gasthaus ist noch nicht geöffnet.
 aetherhaven.ui.innBell.returned=Die Besucher kehrten in den Gästebereich zurück.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Nicht gestartet
 aetherhaven.ui.townJournal.plotStatusInProgress=Im Gange
 aetherhaven.ui.townJournal.plotStatusComplete=Vollständig
 aetherhaven.ui.townJournal.plotStatusUnknown=Unbekannt
+aetherhaven.ui.townJournal.plotHouseResident=Bewohner: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Bewohner: Nicht zugewiesen
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Mitarbeiter: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Mitarbeiter: Nicht zugewiesen
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Nicht zugewiesen
 aetherhaven.ui.townJournal.removePlot=Entfernen
 aetherhaven.ui.townJournal.removePlotTooltip=Halten Sie sich in der Nähe der Stadt auf, damit das Gebäude sicher geräumt werden kann.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Dieses Gebäude abreißen?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Markier
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytinys gemütliches Camper-Grundstückssymbol
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Markiert die Stellen, an denen Hytinys gemütliches Wohnmobil gebaut werden kann. Fertigbau von HytinyBuilds. Herstellbar am Stadtplanungsschalter. Kann bei einem Schrotthändler für fünf Goldmünzen zurückerhalten werden.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytinys Baumhaus-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warnung: Dies ist ein sehr großes Fertigbauteil, das Client und Server während des Aufbaus spürbar verlangsamen oder zum Absturz bringen kann. Platzieren Sie es erst, wenn Sie genügend Zeit haben, den Aufbau abzuschließen.</color> Markiert die Stelle, an der Hytinys Topfbaumhaus gebaut werden kann (nur dekorativ). Nach dem Bau wird es nicht als Stadtgrundstück registriert – entfernen oder versetzen Sie es, indem Sie die Blöcke selbst abbauen oder verschieben. Es kann nicht aus dem Stadtjournal aufgenommen werden. Fertigbauteil von HytinyBuilds. Nicht am Planungsschalter erhältlich. Kann bei einem Schrotthändler für fünf Goldmünzen zurückgesammelt werden.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warnung: Dies ist ein sehr großes Fertigbauteil, das Client und Server während des Aufbaus spürbar verlangsamen oder zum Absturz bringen kann. Platzieren Sie es erst, wenn Sie genügend Zeit haben, den Aufbau abzuschließen.</color> Markiert die Stelle, an der Hytinys Topfbaumhaus gebaut werden kann (nur dekorativ). Fertigbauteil von HytinyBuilds. Nicht am Planungsschalter erhältlich. Kann bei einem Schrotthändler für fünf Goldmünzen zurückgesammelt werden.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia-Altar-Plot-Token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Markiert die Stellen, an denen das Gaia-Altar-Fertigteil errichtet werden kann. Hergestellt am Stadtplanungstisch.

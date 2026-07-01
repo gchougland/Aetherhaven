@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=地块标记
 items.Aetherhaven_Plot_Token.description=从地块放置人员处放置自定义城镇建筑。每个标记对应一种建筑类型。
 items.Aetherhaven_Plot_Token.instance.name={building} 绘图标记
 items.Aetherhaven_Plot_Token.instance.description=需要根据场地布置人员的指示放置 {building} 足迹。
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=需要放置地块放置人员提供的{building}地块。建造完成后，此装饰物不会被登记为城镇地块。如需移除或重新定位，请自行破坏或移动方块——无法从城镇日志中拾取。
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=地块蓝图
 items.Aetherhaven_Plot_Token_Unlock_Page.description=一张特殊的蓝图页面。使用它可以在你的地块制作台上学习新的地块。

@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.VillagerTownResetService;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
+import com.hexvane.aetherhaven.town.CoreCitizenVillagerEligibility;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -51,6 +52,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new LocateSubCommand());
         this.addSubCommand(new FixInnSubCommand());
         this.addSubCommand(new ResetSubCommand());
+        this.addSubCommand(new RespawnSubCommand());
     }
 
     @Nonnull
@@ -295,6 +297,90 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 return;
             }
             playerRef.sendMessage(Message.translation("aetherhaven_commands_help.aetherhaven.villager.resetDone"));
+        }
+    }
+
+    private static final class RespawnSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final RequiredArg<String> villagerArg =
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.target.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
+
+        RespawnSubCommand() {
+            super("respawn", "aetherhaven_commands_help.commands.aetherhaven.villager.respawn.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            TownCommandResolution res = townTarget.resolve(context, world, store, ref, playerRef, true);
+            if (!res.isOk()) {
+                playerRef.sendMessage(res.error());
+                return;
+            }
+            TownRecord town = res.townOrThrow();
+            TownVillagerTargetResolver.Outcome target =
+                TownVillagerTargetResolver.resolve(town, world, store, context.get(villagerArg));
+            if (!target.isOk()) {
+                if (target.error() != null) {
+                    playerRef.sendMessage(Message.raw(target.error()));
+                } else {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_commands_help.aetherhaven.villager.respawnNotCitizen")
+                    );
+                }
+                return;
+            }
+            CoreCitizenVillagerEligibility.Outcome citizen =
+                CoreCitizenVillagerEligibility.resolveCoreCitizen(town, world, store, target.villagerUuid());
+            if (!citizen.isOk()) {
+                String reason = citizen.error();
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.respawnNotCitizen")
+                        .param("reason", reason != null ? reason : "")
+                );
+                return;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.respawnFailed")
+                        .param("reason", "No player position.")
+                );
+                return;
+            }
+            Vector3d base = new Vector3d(tc.getPosition());
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            String err = VillagerTownResetService.resetOneCoreCitizenNearPlayer(
+                world,
+                plugin,
+                town,
+                tm,
+                store,
+                target.villagerUuid(),
+                base
+            );
+            if (err != null) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.respawnFailed").param("reason", err)
+                );
+                return;
+            }
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_commands_help.aetherhaven.villager.respawnDone")
+                    .param("role", citizen.profile().roleId())
+            );
         }
     }
 

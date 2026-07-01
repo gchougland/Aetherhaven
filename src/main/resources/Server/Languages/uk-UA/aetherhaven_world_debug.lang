@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} ідентифікатор={id} власник={o
 aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=Не збирайте ділянки з активним завданням для вашого міста (завантажуйте фрагменти навколо будівель або спочатку починайте будівництво).
 aetherhaven.debug.plots.finishassemblyDone=Миттєво завершено {count} незавершене(і) створення(ння) сюжету(ів).
+aetherhaven.debug.plots.finishassemblySummary=Завершення складання: завершено {finished} не вдалося {failed} все ще збирається {still}
+aetherhaven.debug.plots.repairSummary=Виправлення графіка для {town}: скановано {scanned} повторно пов'язано {relinked} вже гаразд {ok} пропущено вивантажено {skipped} не вдалося {failed} сирітські блоки {orphans}
+aetherhaven.debug.plots.reconstructNoId=Вкажіть ідентифікатор будівництва (наприклад, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=У цьому місті немає сюжетної лінії, що відповідає "{id}". Перевірте орфографію або запустіть /ah список сюжетних ліній.
+aetherhaven.debug.plots.reconstructBadIndex=Індекс поза діапазоном. Використайте номер зі списку нижче.
+aetherhaven.debug.plots.reconstructAmbiguous=Кілька графіків відповідають "{id}". Запустіть ще раз з індексом:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Використання: /ah графіки реконструюють {id} <індекс>
+aetherhaven.debug.plots.reconstructOk=Реконструкція {construction} [{index}] у {x}, {y}, {z} (стійте поруч, поки не закінчиться паста).
+aetherhaven.debug.plots.reconstructChunks=Спочатку завантажте всі фрагменти навколо цієї будівлі, а потім спробуйте ще раз.
+aetherhaven.debug.plots.reconstructUnknown=Невідоме будівництво для цієї ділянки.
+aetherhaven.debug.plots.reconstructPrefab=Для цієї будівлі відсутній файл збірного проекту.
+aetherhaven.debug.plots.reconstructWall=Ділянки стін та декору неможливо реконструювати за допомогою цієї команди.
+aetherhaven.debug.plots.reconstructFailed=Не вдалося реконструювати. Перевірте журнал сервера.
+aetherhaven.debug.plots.diagnoseHeader=Діагностика зв'язку графіка для {town}:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} посилання={link}
 aetherhaven.debug.plots.removeBadUuid=Недійсний UUID графіка. Використайте ідентифікатор зі списку графіків /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=У вашому місті немає ділянки {plotId}.
 aetherhaven.debug.plots.removeDataFailed=Світ очищено, але видалити сюжетну ділянку з даних міста не вдалося (перевірте журнали).

@@ -1784,6 +1784,19 @@ public final class TownRecord {
         return null;
     }
 
+    @Nonnull
+    public List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> findAcceptedBoardQuestsForRole(@Nonnull String giverRoleId) {
+        migrateQuestBoardFieldsIfNeeded();
+        String role = giverRoleId.trim();
+        List<com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord> out = new ArrayList<>();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot : questBoardSlots) {
+            if (slot.isAccepted() && role.equalsIgnoreCase(slot.getGiverRoleId() != null ? slot.getGiverRoleId().trim() : "")) {
+                out.add(slot);
+            }
+        }
+        return out;
+    }
+
     @Nullable
     public com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord findBoardSlotByInstanceId(@Nonnull String instanceId) {
         migrateQuestBoardFieldsIfNeeded();

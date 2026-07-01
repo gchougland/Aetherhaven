@@ -149,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Not started
 aetherhaven.ui.townJournal.plotStatusInProgress=In progress
 aetherhaven.ui.townJournal.plotStatusComplete=Complete
 aetherhaven.ui.townJournal.plotStatusUnknown=Unknown
+aetherhaven.ui.townJournal.plotHouseResident=Resident: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Resident: Unassigned
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Worker: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Worker: Unassigned
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Unassigned
 aetherhaven.ui.townJournal.removePlot=Remove
 aetherhaven.ui.townJournal.removePlotTooltip=Stand near the town so the building can be cleared safely.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Remove this building?
@@ -215,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Marks w
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytiny's cozy camper plot token
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Marks where Hytiny's cozy camper can be built. Prefab by HytinyBuilds. Craft at the town planning desk. Salvage at a salvager for five gold coins back.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Hytiny's potted treehouse plot token
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). After it finishes building, it is not registered as a town plot—break or move the blocks yourself to remove or relocate it; it cannot be picked up from the town journal. Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Warning: this is a very large prefab and may noticeably slow down or hitch the client and server while it assembles. Place it when you have time to let it finish.</color> Marks where Hytiny's potted treehouse can be built (decorative only). Prefab by HytinyBuilds. Not sold at the planning desk. Salvage at a salvager for five gold coins back.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Marks where the Gaia altar prefab can be built. Craft at the town planning desk.

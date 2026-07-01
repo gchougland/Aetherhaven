@@ -36,6 +36,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -295,12 +296,19 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         int bz = (int) Math.floor(next.z);
         BlockType below = world.getBlockType(bx, by - 1, bz);
         if (below != null && below != BlockType.EMPTY) {
-            spawnRewardChest(world, gift.getGiftType(), bx, by, bz);
+            spawnRewardChest(world, gift.getGiftType(), gift.getOwnerPlayerUuid(), bx, by, bz);
             commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
         }
     }
 
-    private static void spawnRewardChest(@Nonnull World world, @Nonnull FloatingGiftType type, int x, int y, int z) {
+    private static void spawnRewardChest(
+        @Nonnull World world,
+        @Nonnull FloatingGiftType type,
+        @Nullable UUID ownerPlayerUuid,
+        int x,
+        int y,
+        int z
+    ) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
         if (chunk == null) {
             return;
@@ -326,7 +334,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         if (chest == null || chest.getItemContainer() == null) {
             return;
         }
-        fillChestLoot(chest.getItemContainer(), type);
+        fillChestLoot(chest.getItemContainer(), type, world, ownerPlayerUuid);
     }
 
     private static boolean isPlantGrassDecoration(@Nullable BlockType blockType) {
@@ -371,8 +379,22 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         }
     }
 
-    private static void fillChestLoot(@Nonnull SimpleItemContainer inv, @Nonnull FloatingGiftType type) {
-        FloatingGiftChestLoot.fill(inv, type);
+    private static void fillChestLoot(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull FloatingGiftType type,
+        @Nonnull World world,
+        @Nullable UUID ownerPlayerUuid
+    ) {
+        Ref<EntityStore> ownerRef = null;
+        Store<EntityStore> ownerStore = null;
+        if (ownerPlayerUuid != null) {
+            Ref<EntityStore> resolved = world.getEntityRef(ownerPlayerUuid);
+            if (resolved != null && resolved.isValid()) {
+                ownerRef = resolved;
+                ownerStore = world.getEntityStore().getStore();
+            }
+        }
+        FloatingGiftChestLoot.fill(inv, type, ownerRef, ownerStore);
     }
 
     public static int countActiveGifts(@Nonnull Store<EntityStore> store) {

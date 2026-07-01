@@ -149,6 +149,24 @@ public final class VillagerReputationService {
     }
 
     /**
+     * Whether the player has never completed a daily talk with this villager entity (read-only; does not create rows).
+     */
+    public static boolean isFirstEverTalk(
+        @Nonnull TownRecord town, @Nonnull UUID playerUuid, @Nonnull UUID villagerEntityUuid
+    ) {
+        java.util.Map<String, VillagerReputationEntry> inner =
+            town.getPlayerVillagerReputation().get(playerUuid.toString());
+        if (inner == null) {
+            return true;
+        }
+        VillagerReputationEntry e = inner.get(villagerEntityUuid.toString());
+        if (e == null) {
+            return true;
+        }
+        return e.getLastTalkGameEpochDay() == null;
+    }
+
+    /**
      * First dialogue open after dawn on a new in-world day grants a small bonus (once per dawn-day per villager).
      *
      * @param gameEpochDay value from {@link #currentGameEpochDay} (dawn-aligned, not raw calendar midnight)

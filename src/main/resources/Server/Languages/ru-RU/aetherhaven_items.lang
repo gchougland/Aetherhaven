@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Токен графика
 items.Aetherhaven_Plot_Token.description=Размещает созданное сотрудниками отдела размещения участков здание для города. Каждый жетон привязан к одному типу зданий.
 items.Aetherhaven_Plot_Token.instance.name={building} токен графика
 items.Aetherhaven_Plot_Token.instance.description=Необходимо разместить отметку {building} с помощью персонала, занимающегося размещением участков.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=Необходимо разместить макет {building} с помощью сотрудников отдела размещения участков. После завершения строительства этот макет не регистрируется как городской участок. Чтобы удалить или переместить его, сломайте или переместите блоки самостоятельно — его нельзя забрать из городского журнала.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Схема сюжета
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Специальная страница с чертежом. Используйте ее, чтобы изучить новый сюжет на своем верстаке для создания сюжетов.

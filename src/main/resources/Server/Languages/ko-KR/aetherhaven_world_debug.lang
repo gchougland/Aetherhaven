@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plot
 aetherhaven.debug.plots.line={plotId} {construction} {state} sign@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=마을에 활성 작업이 있는 상태에서는 부지를 조립할 수 없습니다(건물 주변의 청크를 로드하거나 먼저 건설을 시작하세요).
 aetherhaven.debug.plots.finishassemblyDone=진행 중이던 {count} 플롯 구축이 즉시 완료되었습니다.
+aetherhaven.debug.plots.finishassemblySummary=조립 완료: 완료됨 {finished} 실패됨 {failed} 조립 중 {still}
+aetherhaven.debug.plots.repairSummary={town}에 대한 플롯 복구: {scanned} 스캔됨, {relinked} 재연결됨, {ok} 건너뛰기, 언로드됨, {skipped} 실패, {failed} 고아 블록, {orphans}
+aetherhaven.debug.plots.reconstructNoId=건설 ID(예: plot_inn)를 제공하십시오.
+aetherhaven.debug.plots.reconstructNoMatch=해당 도시에 "{id}"와 일치하는 구역이 없습니다. 철자를 확인하거나 /ah plots list 명령어를 실행해 보세요.
+aetherhaven.debug.plots.reconstructBadIndex=인덱스가 범위를 벗어났습니다. 아래 목록에서 해당 번호를 사용하십시오.
+aetherhaven.debug.plots.reconstructAmbiguous=여러 그래프가 "{id}"와 일치합니다. 인덱스를 사용하여 다시 실행하세요.
+aetherhaven.debug.plots.reconstructAmbiguousUsage=사용법: /ah 플롯은 {id} <인덱스>를 재구성합니다.
+aetherhaven.debug.plots.reconstructOk={construction} [{index}]을 {x}, {y}, {z}에서 재구성합니다(붙여넣기가 완료될 때까지 근처에 서 계십시오).
+aetherhaven.debug.plots.reconstructChunks=먼저 해당 건물 주변의 모든 청크를 불러온 다음 다시 시도하세요.
+aetherhaven.debug.plots.reconstructUnknown=해당 부지의 건축 정보는 알려지지 않았습니다.
+aetherhaven.debug.plots.reconstructPrefab=해당 건물에 대한 프리팹 파일이 누락되었습니다.
+aetherhaven.debug.plots.reconstructWall=이 명령으로는 벽과 장식 영역을 재구성할 수 없습니다.
+aetherhaven.debug.plots.reconstructFailed=재구성 실패. 서버 로그를 확인하세요.
+aetherhaven.debug.plots.diagnoseHeader={town}에 대한 플롯 링크 진단:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} 링크={link}
 aetherhaven.debug.plots.removeBadUuid=잘못된 플롯 UUID입니다. /aetherhaven 플롯 목록에서 ID를 사용하십시오.
 aetherhaven.debug.plots.removeNotFound=귀하의 지역에는 {plotId}이라는 번호의 부지가 없습니다.
 aetherhaven.debug.plots.removeDataFailed=월드는 정리되었지만 마을 데이터에서 해당 구역을 삭제하는 데 실패했습니다(로그를 확인하세요).

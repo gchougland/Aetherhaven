@@ -2,7 +2,7 @@
   "id": "plot_jszzas_small_castle",
   "displayName": "Jszza's Small Castle",
   "description": "Made by Jszza",
-  "prefabPath": "jszza/plot_jszzas_small_castle.prefab.json",
+  "prefabPath": "Jszza/plot_jszzas_small_castle.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,
@@ -258,7 +258,6 @@
   ],
   "countsAsConstructionId": "plot_house",
   "tags": [
-    "decoration"
   ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,

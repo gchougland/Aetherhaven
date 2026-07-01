@@ -200,6 +200,126 @@ public final class VillagerTownResetService {
         return null;
     }
 
+    /**
+     * Debug/admin: remove duplicate loaded copies of one core story citizen and respawn a single NPC near {@code basePosition}
+     * while preserving town quest state and reputation (entity-UUID keys migrated).
+     *
+     * @return English diagnostic when reset cannot proceed safely, otherwise null
+     */
+    @Nullable
+    public static String resetOneCoreCitizenNearPlayer(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID targetEntityUuid,
+        @Nonnull Vector3d basePosition
+    ) {
+        CoreCitizenVillagerEligibility.Outcome eligibility =
+            CoreCitizenVillagerEligibility.resolveCoreCitizen(town, world, store, targetEntityUuid);
+        if (!eligibility.isOk()) {
+            return eligibility.error() != null ? eligibility.error() : "Not a core story citizen.";
+        }
+
+        LinkedHashMap<UUID, CapturedNpc> captured = new LinkedHashMap<>();
+        putNonVisitorFromTownData(captured, town, store, targetEntityUuid);
+        CapturedNpc c = captured.get(targetEntityUuid);
+        if (c == null) {
+            return "Could not capture villager state from town data.";
+        }
+        if (c.visitor) {
+            return "Inn visitors cannot be respawned with this command.";
+        }
+
+        String roleId = c.npcRoleId.trim();
+        if (roleId.isEmpty()) {
+            return "Could not resolve villager role.";
+        }
+
+        int dupesRemoved = removeLoadedDuplicatesForCitizenRole(store, town, roleId);
+        if (dupesRemoved > 0) {
+            LOGGER.atInfo().log(
+                "Single respawn: removed %s duplicate loaded NPC(s) for role %s in town %s",
+                dupesRemoved,
+                roleId,
+                town.getTownId()
+            );
+        }
+
+        Ref<EntityStore> oldRef = store.getExternalData().getRefFromUUID(targetEntityUuid);
+        if (oldRef != null && oldRef.isValid()) {
+            store.removeEntity(oldRef, RemoveReason.REMOVE);
+        }
+
+        PlotInstance innPlot =
+            InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
+        UUID newUuid = spawnResidentLikeNpc(store, town, tm, c, basePosition, innPlot);
+        if (newUuid == null) {
+            return "Failed to spawn villager NPC.";
+        }
+
+        VillagerReputationService.migrateVillagerEntityUuid(town, tm, c.previousEntityUuid, newUuid);
+        ResidentRegistryService.replaceEntityUuidEverywhere(town, tm, c.previousEntityUuid, newUuid);
+        tm.updateTown(town);
+
+        UUID spawnedUuid = newUuid;
+        world.execute(
+            () -> {
+                VillagerScheduleService.applyForWorld(world, store, plugin, true);
+                VillagerAutonomyTravelKick.kickTravelToSchedulePoi(plugin, world, store, spawnedUuid, false);
+            }
+        );
+        return null;
+    }
+
+    /**
+     * Removes every loaded NPC bound to {@code town} with the given NPC role id (including stray duplicates).
+     *
+     * @return number of entities removed
+     */
+    private static int removeLoadedDuplicatesForCitizenRole(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull String roleId
+    ) {
+        UUID townId = town.getTownId();
+        String wantedRole = roleId.trim();
+        if (wantedRole.isEmpty()) {
+            return 0;
+        }
+        Query<EntityStore> q = Query.and(NPCEntity.getComponentType(), TownVillagerBinding.getComponentType());
+        List<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                if (npcRef == null || !npcRef.isValid()) {
+                    continue;
+                }
+                TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId())) {
+                    continue;
+                }
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+                    continue;
+                }
+                if (wantedRole.equals(npc.getRoleName().trim())) {
+                    toRemove.add(npcRef);
+                }
+            }
+        });
+        int count = 0;
+        for (Ref<EntityStore> r : toRemove) {
+            if (r.isValid()) {
+                store.removeEntity(r, RemoveReason.REMOVE);
+                count++;
+            }
+        }
+        return count;
+    }
+
     private static int captureSortKey(@Nonnull CapturedNpc c) {
         if (c.visitor) {
             return 300;

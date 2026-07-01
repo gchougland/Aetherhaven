@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plot
 aetherhaven.debug.plots.line={plotId} {construction} {state} знак@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=Не следует объединять участки под застройку, если в вашем городе уже ведется работа (загружайте чанки вокруг построек или начинайте строительство первым).
 aetherhaven.debug.plots.finishassemblyDone=Мгновенно завершено создание (создания) текущего участка {count}.
+aetherhaven.debug.plots.finishassemblySummary=Завершение сборки: завершено {finished} не удалось {failed} сборка продолжается {still}
+aetherhaven.debug.plots.repairSummary=Восстановление графика для {town}: отсканировано {scanned}, повторно связано {relinked} уже в порядке {ok} пропущено, выгружено {skipped} не удалось {failed} блоки-сироты {orphans}
+aetherhaven.debug.plots.reconstructNoId=Укажите идентификатор постройки (например, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=В этом городе нет участка, соответствующего "{id}". Проверьте орфографию или выполните команду /ah plots list.
+aetherhaven.debug.plots.reconstructBadIndex=Индекс выходит за пределы допустимого диапазона. Используйте число из списка ниже.
+aetherhaven.debug.plots.reconstructAmbiguous=Несколько графиков соответствуют "{id}". Запустите программу еще раз с индексом:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Использование: /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk=Восстановление {construction} [{index}] на {x}, {y}, {z} (стойте рядом, пока не закончится паста).
+aetherhaven.debug.plots.reconstructChunks=Сначала загрузите все фрагменты вокруг этого здания, а затем попробуйте снова.
+aetherhaven.debug.plots.reconstructUnknown=Конструкция этого участка неизвестна.
+aetherhaven.debug.plots.reconstructPrefab=Для этого здания отсутствует файл префаба.
+aetherhaven.debug.plots.reconstructWall=С помощью этой команды невозможно восстановить участки стен и декоративных элементов.
+aetherhaven.debug.plots.reconstructFailed=Восстановление не удалось. Проверьте журнал сервера.
+aetherhaven.debug.plots.diagnoseHeader=Диагностика связи графика для {town}:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} ссылки={link}
 aetherhaven.debug.plots.removeBadUuid=Недопустимый UUID графика. Используйте идентификатор из списка графиков /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=В вашем городе нет участка {plotId}.
 aetherhaven.debug.plots.removeDataFailed=Мир был очищен, но удаление участка из данных города не удалось (проверьте логи).

@@ -1,0 +1,29 @@
+{
+  "Input": [
+    {
+      "ItemId": "Aetherhaven_Building_Staff_Cobalt",
+      "Quantity": 1
+    }
+  ],
+  "PrimaryOutput": {
+    "ItemId": "Ore_Cobalt",
+    "Quantity": 2
+  },
+  "Output": [
+    {
+      "ItemId": "Ore_Cobalt",
+      "Quantity": 2
+    },
+    {
+      "ItemId": "Ingredient_Fabric_Scrap_Shadoweave",
+      "Quantity": 1
+    }
+  ],
+  "BenchRequirement": [
+    {
+      "Type": "Processing",
+      "Id": "Salvagebench"
+    }
+  ],
+  "TimeSeconds": 4
+}

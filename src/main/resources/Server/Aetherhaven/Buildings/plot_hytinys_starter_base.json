@@ -1,7 +1,7 @@
-{
+﻿{
   "id": "plot_hytinys_starter_base",
   "displayName": "Hytiny's Starter Base",
-  "description": "By Hytiny After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "description": "By Hytiny",
   "prefabPath": "plot_hytinys_starter_base.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [

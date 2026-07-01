@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Перед продолжение
 
 aetherhaven.plotcreator.error.needKind=Откройте окно выбора типа здания, нажав клавишу F, и выберите тип, прежде чем продолжить.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Этот тип здания недоступен. Выберите «Декор» или «Вариант».
+
 aetherhaven.plotcreator.error.needVariantOf=Нажмите клавишу F и выберите, к какому главному зданию относится этот вариант, прежде чем продолжить.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Этот основной тип здания отсутствует в списке типов зданий, доступных в редакторе участков.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Посетители могут
 aetherhaven.plotcreator.field.touristDestination.hint=Включенный портал позволяет посетителям пройти к этому зданию пешком в течение дня.
 aetherhaven.plotcreator.field.plotTokenLocked=По умолчанию маркер графика заблокирован.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=В этом случае игрокам необходимо разблокировать этот участок на верстаке для создания участков (используя чертеж участка), прежде чем они смогут создавать для него жетоны участка.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Сборочные секции по осям (1–16)
+aetherhaven.plotcreator.field.styleId =Стиль
+aetherhaven.plotcreator.field.styleId.hint =Любое имя на ваш выбор
 
 aetherhaven.plotcreator.step.REVIEW.title=Обзор
 aetherhaven.plotcreator.step.REVIEW.hint=Сохраните здание. Вы получите жетон участка, чтобы разместить его в городе.

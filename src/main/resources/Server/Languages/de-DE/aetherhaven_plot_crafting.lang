@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Erstelltes {name}-Grundstückstoken.
 aetherhaven.ui.plotCrafting.unlockSuccess=Du hast das {building}-Plot freigeschaltet.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Diese Handlung kennst du bereits.
 aetherhaven.ui.plotCrafting.unlockInvalid=Dieser Bauplan ist unlesbar.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Stile

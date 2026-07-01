@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} proprietário={owner} carta={cx},{cy},{cz
 aetherhaven.debug.plots.line={plotId} {construction} {state} sinal@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=Não é possível montar lotes com uma atividade em andamento na sua cidade (carregue os blocos ao redor das construções ou inicie uma construção primeiro).
 aetherhaven.debug.plots.finishassemblyDone=Concluí instantaneamente a(s) construção(ões) de plotagem em andamento {count}.
+aetherhaven.debug.plots.finishassemblySummary=Finalizar montagem: concluído {finished} falhou {failed} ainda em montagem {still}
+aetherhaven.debug.plots.repairSummary=Reparo de plotagem para {town}: escaneado {scanned} religado {relinked} já ok {ok} ignorado descarregado {skipped} falhou {failed} blocos órfãos {orphans}
+aetherhaven.debug.plots.reconstructNoId=Forneça um ID de construção (por exemplo, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=Não há nenhum lote correspondente a "{id}" nessa cidade. Verifique a ortografia ou execute /ah plots list.
+aetherhaven.debug.plots.reconstructBadIndex=Índice fora do intervalo. Use o número da lista abaixo.
+aetherhaven.debug.plots.reconstructAmbiguous=Vários gráficos correspondem a "{id}". Execute novamente com um índice:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Uso: /ah plots reconstruct {id} <índice>
+aetherhaven.debug.plots.reconstructOk=Reconstruindo {construction} [{index}] em {x}, {y}, {z} (fique por perto até a pasta terminar).
+aetherhaven.debug.plots.reconstructChunks=Carregue primeiro todos os blocos ao redor daquele edifício e tente novamente.
+aetherhaven.debug.plots.reconstructUnknown=Construção desconhecida para esse terreno.
+aetherhaven.debug.plots.reconstructPrefab=Arquivo pré-fabricado ausente para esse edifício.
+aetherhaven.debug.plots.reconstructWall=Não é possível reconstruir muros e decorações com este comando.
+aetherhaven.debug.plots.reconstructFailed=A reconstrução falhou. Verifique o registro do servidor.
+aetherhaven.debug.plots.diagnoseHeader=Diagnóstico do link do gráfico para {town}:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} links={link}
 aetherhaven.debug.plots.removeBadUuid=UUID de plotagem inválido. Use o ID da lista de plotagens em /aetherhaven.
 aetherhaven.debug.plots.removeNotFound=Não há lote {plotId} em sua cidade.
 aetherhaven.debug.plots.removeDataFailed=O mundo foi limpo, mas a remoção do terreno dos dados da cidade falhou (verifique os registros).

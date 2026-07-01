@@ -51,6 +51,7 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     private long lastSwingNs;
     private transient int ticksSincePlotRescan;
     private transient boolean boostAppliedForTarget;
+    private transient int travelStuckTicks;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
         componentType =
@@ -103,6 +104,7 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
         if (plotId == null || !plotId.equals(prev)) {
             boostAppliedForTarget = false;
             ticksSincePlotRescan = 0;
+            travelStuckTicks = 0;
         }
     }
 
@@ -111,6 +113,19 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
         this.phase = PHASE_OFF;
         boostAppliedForTarget = false;
         ticksSincePlotRescan = 0;
+        travelStuckTicks = 0;
+    }
+
+    public int getTravelStuckTicks() {
+        return travelStuckTicks;
+    }
+
+    public void incrementTravelStuckTicks() {
+        travelStuckTicks++;
+    }
+
+    public void resetTravelStuckTicks() {
+        travelStuckTicks = 0;
     }
 
     public int getTicksSincePlotRescan() {

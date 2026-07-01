@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Token de parcela {name} creado.
 aetherhaven.ui.plotCrafting.unlockSuccess=Has desbloqueado la trama {building}.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Ya conoces esta trama.
 aetherhaven.ui.plotCrafting.unlockInvalid=Este plano no se puede leer.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Estilos

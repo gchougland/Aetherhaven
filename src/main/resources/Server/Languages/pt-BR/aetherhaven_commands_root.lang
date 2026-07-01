@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=Comandos de Aetherhaven (/ah)
 commands.aetherhaven.difficulty.desc=Criativo: dificuldade de mundo aberto para custos de construção
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=Modo Criativo: recarregar configuração e dados do mod a partir do disco.
 commands.aetherhaven.reload.success=Configuração e catálogos de recursos do Aetherhaven recarregados.
 commands.aetherhaven.reload.failure=Falha ao recarregar: {detail}

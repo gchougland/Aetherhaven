@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=サーバー設定を保存できませ�
 aetherhaven.ui.journalSettings.toolsHeading=修理ツール
 aetherhaven.ui.journalSettings.resetVillagers=町の人々をリセットする
 aetherhaven.ui.journalSettings.fixInn=宿の宿泊客リストを修正する
+aetherhaven.ui.journalSettings.repairPlots=修復区画リンク
 aetherhaven.ui.journalSettings.finishPlot=建物を1つ完成させよう
 aetherhaven.ui.journalSettings.villagerReport=村人の情報テキストを作成する
 aetherhaven.ui.journalSettings.plotModalTitle=完成させる建物を一つ選んでください。
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=箱に記入してくださ�
 aetherhaven.ui.journalSettings.villagerCopyHint=ボックス内のテキストをすべて選択し、通常のコピーキーでコピーしてください。
 aetherhaven.ui.journalSettings.villagerModalClose=近い
 aetherhaven.ui.journalSettings.innRepairDone=宿屋リストを修正しました。ロックされた訪問者 {locked} を昇格 {promoted} し、不要なエントリ {removed} を削除しました。
+aetherhaven.ui.journalSettings.plotsRepairDone=プロット修復完了。スキャン済み {scanned} 再リンク済み {relinked} スキップ済み アンロード済み {skipped} 孤立ブロック {orphans}
 aetherhaven.ui.innBell.notAllowed=このベルは、その町の宿屋の会員のみが使用できます。
 aetherhaven.ui.innBell.notOpen=その宿はまだ営業していません。
 aetherhaven.ui.innBell.returned=訪問者たちはゲストエリアに戻った。
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=開始されていません
 aetherhaven.ui.townJournal.plotStatusInProgress=進行中
 aetherhaven.ui.townJournal.plotStatusComplete=完了
 aetherhaven.ui.townJournal.plotStatusUnknown=未知
+aetherhaven.ui.townJournal.plotHouseResident=居住者: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=居住者：未割り当て
+aetherhaven.ui.townJournal.plotWorkplaceWorker=作業者: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=作業員：未割り当て
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: 未割り当て
 aetherhaven.ui.townJournal.removePlot=取り除く
 aetherhaven.ui.townJournal.removePlotTooltip=建物を安全に撤去できるよう、町の近くに立っていてください。
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=この建物を撤去しますか？
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Hytiny�
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Hytinyの居心地の良いキャンピングカーのプロットトークン
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Hytinyの居心地の良いキャンピングカーを建てられる場所を示します。HytinyBuildsによるプレハブです。都市計画デスクで製作できます。解体業者から5ゴールドコインで回収できます。
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=ヒティニーの鉢植えツリーハウス区画トークン
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">警告：これは非常に大きなプレハブであり、組み立て中にクライアントとサーバーの動作が著しく遅くなったり、停止したりする可能性があります。組み立てが完了するまで時間があるときに配置してください。</color> Hytiny の鉢植えツリーハウスを建設できる場所を示します (装飾のみ)。建設が完了すると、町の区画として登録されません。ブロックを自分で破壊または移動して削除または移動します。町のジャーナルから取得することはできません。HytinyBuilds によるプレハブ。計画デスクでは販売されていません。サルベージ業者から回収すると、5 ゴールド コインが戻ってきます。
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">警告：これは非常に大きなプレハブであり、組み立て中にクライアントとサーバーの動作が著しく遅くなったり、停止したりする可能性があります。組み立てが完了するまで時間があるときに配置してください。</color> Hytiny の鉢植えツリーハウスを建設できる場所を示します (装飾のみ)。HytinyBuilds によるプレハブ。計画デスクでは販売されていません。サルベージ業者から回収すると、5 ゴールド コインが戻ってきます。
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=ガイア祭壇区画トークン
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=ガイア祭壇のプレハブを設置できる場所を示すマーク。都市計画デスクでの工作。

@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=精心製作的 {name} 地塊標記。
 aetherhaven.ui.plotCrafting.unlockSuccess=你已解鎖{building}地塊。
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=你已經知道這個劇情了。
 aetherhaven.ui.plotCrafting.unlockInvalid=這份藍圖無法辨認。
+aetherhaven.ui.plotCrafting.styleFilterTitle =款式

@@ -5,6 +5,7 @@
     "main_hub": {
       "speaker": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.speaker",
       "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.root.body",
       "text": "aetherhaven_dialogue_blacksmith.aetherhaven.dialogue.aetherhaven_blacksmith.main_hub.fallback",
       "choices": [
         {

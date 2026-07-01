@@ -1029,8 +1029,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set(row + " #PlotTitle.TextSpans", title);
             String coords = p.getSignX() + " " + p.getSignY() + " " + p.getSignZ();
             commandBuilder.set(row + " #PlotCoords.TextSpans", Message.raw(coords));
-            PlotInstanceState pst = p.getState();
-            commandBuilder.set(row + " #PlotStatus.TextSpans", Message.translation(plotStatusLangKey(pst)));
+            commandBuilder.set(
+                row + " #PlotStatus.TextSpans",
+                JournalPlotAssigneeFormatter.plotStatusLine(plugin, store, town, plotCatalog, p)
+            );
             String constructionId = p.getConstructionId();
             if (constructionId != null && plotIconsEnsured.add(constructionId.trim())) {
                 ensurePlotTokenIconRegistered(plugin, constructionId);
@@ -1202,18 +1204,6 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             case VillagerScheduleResolver.LOC_SHOP ->
                 Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleShop");
             default -> Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleUnknown");
-        };
-    }
-
-    @Nonnull
-    private static String plotStatusLangKey(@Nullable PlotInstanceState state) {
-        if (state == null) {
-            return "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotStatusUnknown";
-        }
-        return switch (state) {
-            case BLUEPRINTING -> "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotStatusNotStarted";
-            case ASSEMBLING -> "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotStatusInProgress";
-            case COMPLETE -> "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.plotStatusComplete";
         };
     }
 

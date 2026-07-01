@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=作成された{name}プロットトーク�
 aetherhaven.ui.plotCrafting.unlockSuccess={building} の区画をアンロックしました。
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=この筋書きは既にご存知でしょう。
 aetherhaven.ui.plotCrafting.unlockInvalid=この設計図は判読できません。
+aetherhaven.ui.plotCrafting.styleFilterTitle =スタイル

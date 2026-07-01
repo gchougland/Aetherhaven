@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} sahibi={owner} kiralama={cx},{cy},{cz} ar
 aetherhaven.debug.plots.line={plotId} {construction} {state} işareti@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=Kasabanız için aktif bir işiniz varken arsa birleştirmeyin (yapıların etrafındaki blokları yükleyin veya önce bir yapı inşa etmeye başlayın).
 aetherhaven.debug.plots.finishassemblyDone=Devam eden {count} olay yeri oluşturma işlemi anında tamamlandı.
+aetherhaven.debug.plots.finishassemblySummary=Montaj tamamlandı: {finished} tamamlandı {failed} başarısız oldu {still} montajı devam ediyor
+aetherhaven.debug.plots.repairSummary={town} için grafik onarımı: tarandı {scanned} yeniden bağlandı {relinked} zaten tamam {ok} atlandı boşaltıldı {skipped} başarısız oldu {failed} yetim bloklar {orphans}
+aetherhaven.debug.plots.reconstructNoId=Bir yapı kimliği belirtin (örneğin, plot_inn).
+aetherhaven.debug.plots.reconstructNoMatch=Bu kasabada "{id}" ile eşleşen bir arsa bulunamadı. Yazımını kontrol edin veya /ah plots list komutunu çalıştırın.
+aetherhaven.debug.plots.reconstructBadIndex=İndeks aralık dışında. Lütfen aşağıdaki listeden bir numara kullanın.
+aetherhaven.debug.plots.reconstructAmbiguous=Birden fazla grafik "{id}" ile eşleşiyor. Lütfen bir indeks kullanarak tekrar çalıştırın:
+aetherhaven.debug.plots.reconstructAmbiguousUsage=Kullanım: /ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk={construction} [{index}]'i {x}, {y}, {z}'te yeniden oluşturuyoruz (macun bitene kadar yakında durun).
+aetherhaven.debug.plots.reconstructChunks=Önce o binanın etrafındaki tüm blokları yükleyin, sonra tekrar deneyin.
+aetherhaven.debug.plots.reconstructUnknown=Bu arsanın yapım şekli bilinmiyor.
+aetherhaven.debug.plots.reconstructPrefab=Bu bina için prefabrik dosya eksik.
+aetherhaven.debug.plots.reconstructWall=Bu komutla duvar ve dekorasyon planları yeniden oluşturulamaz.
+aetherhaven.debug.plots.reconstructFailed=Yeniden oluşturma başarısız oldu. Sunucu günlüklerini kontrol edin.
+aetherhaven.debug.plots.diagnoseHeader={town} için bağlantı teşhisini çiz:
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} bağlantılar={link}
 aetherhaven.debug.plots.removeBadUuid=Geçersiz harita UUID'si. Lütfen /aetherhaven harita listesindeki kimliği kullanın.
 aetherhaven.debug.plots.removeNotFound=Şehrinizde {plotId} numaralı arsa bulunmamaktadır.
 aetherhaven.debug.plots.removeDataFailed=Dünya temizlendi ancak kasaba verilerinden arsanın kaldırılması başarısız oldu (kayıtları kontrol edin).

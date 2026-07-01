@@ -58,6 +58,7 @@ aetherhaven.ui.journalSettings.saveFail=Não foi possível salvar as configuraç
 aetherhaven.ui.journalSettings.toolsHeading=Ferramentas de reparo
 aetherhaven.ui.journalSettings.resetVillagers=Reorganizar pessoas na cidade
 aetherhaven.ui.journalSettings.fixInn=Corrigir lista de visitantes da pousada
+aetherhaven.ui.journalSettings.repairPlots=Reparar ligações de enredo
 aetherhaven.ui.journalSettings.finishPlot=Termine um prédio agora
 aetherhaven.ui.journalSettings.villagerReport=Criar texto informativo sobre os aldeões
 aetherhaven.ui.journalSettings.plotModalTitle=Escolha um edifício para terminar.
@@ -74,6 +75,7 @@ aetherhaven.ui.journalSettings.villagerBuildReport=Preencha a caixa
 aetherhaven.ui.journalSettings.villagerCopyHint=Selecione todo o texto na caixa e copie usando as teclas de copiar habituais.
 aetherhaven.ui.journalSettings.villagerModalClose=Fechar
 aetherhaven.ui.journalSettings.innRepairDone=Lista de visitantes corrigida. Visitantes bloqueados {locked} promovidos {promoted} entradas perdidas removidas {removed}
+aetherhaven.ui.journalSettings.plotsRepairDone=Reparo do gráfico concluído. Escaneado {scanned}, religado {relinked}, ignorado, descarregado {skipped}, blocos órfãos {orphans}
 aetherhaven.ui.innBell.notAllowed=Este sino só funciona para os membros da taverna local.
 aetherhaven.ui.innBell.notOpen=A pousada ainda não está aberta.
 aetherhaven.ui.innBell.returned=Os visitantes retornaram à área reservada aos hóspedes.
@@ -147,6 +149,12 @@ aetherhaven.ui.townJournal.plotStatusNotStarted=Não iniciado
 aetherhaven.ui.townJournal.plotStatusInProgress=Em andamento
 aetherhaven.ui.townJournal.plotStatusComplete=Completo
 aetherhaven.ui.townJournal.plotStatusUnknown=Desconhecido
+aetherhaven.ui.townJournal.plotHouseResident=Residente: {name}
+aetherhaven.ui.townJournal.plotHouseUnassigned=Residente: Não atribuído
+aetherhaven.ui.townJournal.plotWorkplaceWorker=Trabalhador: {name}
+aetherhaven.ui.townJournal.plotWorkplaceUnassigned=Trabalhador: Não atribuído
+aetherhaven.ui.townJournal.plotRoleAssignee={role}: {name}
+aetherhaven.ui.townJournal.plotRoleUnassigned={role}: Não atribuído
 aetherhaven.ui.townJournal.removePlot=Remover
 aetherhaven.ui.townJournal.removePlotTooltip=Posicione-se perto da cidade para que o prédio possa ser removido com segurança.
 aetherhaven.ui.townJournal.plotRemoveConfirmTitle=Remover este edifício?
@@ -213,7 +221,7 @@ items.Aetherhaven_Plot_Token_House_Hytiny_Japanese_Tea_House.description=Indica 
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.name=Token de enredo de trailer aconchegante de Hytiny
 items.Aetherhaven_Plot_Token_House_Hytiny_Cozy_Camper.description=Indica onde a aconchegante caravana de Hytiny pode ser construída. Pré-fabricada por HytinyBuilds. Fabricada na mesa de planejamento urbano. Desmontada em um ferro-velho para receber cinco moedas de ouro de volta.
 items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.name=Ficha de lote da casa na árvore em vaso de Hytiny
-items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Aviso: este é um pré-fabricado muito grande e pode causar lentidão ou travamentos perceptíveis no cliente e no servidor durante a montagem. Coloque-o quando tiver tempo para aguardar a conclusão.</color> Marca o local onde a casa na árvore em vaso de Hytiny pode ser construída (apenas decorativa). Após a conclusão da construção, ela não é registrada como um lote urbano — quebre ou mova os blocos você mesmo para removê-la ou realocá-la; ela não pode ser selecionada no diário da cidade. Pré-fabricado por HytinyBuilds. Não é vendido na mesa de planejamento. Desmonte-o com um catador de sucata por cinco moedas de ouro.
+items.Aetherhaven_Plot_Token_Decoration_Hytiny_Potted_Treehouse.description=<color is="#e53935">Aviso: este é um pré-fabricado muito grande e pode causar lentidão ou travamentos perceptíveis no cliente e no servidor durante a montagem. Coloque-o quando tiver tempo para aguardar a conclusão.</color> Marca o local onde a casa na árvore em vaso de Hytiny pode ser construída (apenas decorativa). Pré-fabricado por HytinyBuilds. Não é vendido na mesa de planejamento. Desmonte-o com um catador de sucata por cinco moedas de ouro.
 
 items.Aetherhaven_Plot_Token_Gaia_Altar.name=Gaia altar plot token
 items.Aetherhaven_Plot_Token_Gaia_Altar.description=Indica onde o altar pré-fabricado de Gaia pode ser construído. Fabricado na mesa de planejamento urbano.

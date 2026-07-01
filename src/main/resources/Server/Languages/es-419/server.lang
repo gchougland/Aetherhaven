@@ -14,7 +14,8 @@
 #   aetherhaven_commands_root.lang   — reload, plot admin UI cmd, starter kit, export skin
 #   aetherhaven_items.lang           — items; path tool; commands.path; plot tokens through quest journal item
 #   aetherhaven_ui_journal_items_tail.lang — quest journal detail UI; npcRoles; more items
-#   aetherhaven_jewelry_geode.lang   — jewelry; Gaia statue panel; charter town UI; treasury panel; geode; mirror; appraisal; trait/rarity
+#   aetherhaven_jewelry_geode.lang   — jewelry; geode; mirror; appraisal; trait/rarity (optional Jewelry pack)
+#   aetherhaven_reputation_unlocks.lang — rep-gated reward items (optional ReputationUnlocks pack; under subplugin-assets)
 #   aetherhaven_plot_move.lang       — plot placement; move charter relocation UI
 #   aetherhaven_wall_placement.lang  — wall wand placement UI (en-US)
 #   aetherhaven_commands_help.lang — /aetherhaven subcommand descriptions (tab help)

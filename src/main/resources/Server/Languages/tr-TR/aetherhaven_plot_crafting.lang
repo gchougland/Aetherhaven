@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Oluşturulan {name} arsa belirteci.
 aetherhaven.ui.plotCrafting.unlockSuccess={building} arsasının kilidini açtınız.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Bu olay örgüsünü zaten biliyorsunuz.
 aetherhaven.ui.plotCrafting.unlockInvalid=Bu plan okunamıyor.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Stiller

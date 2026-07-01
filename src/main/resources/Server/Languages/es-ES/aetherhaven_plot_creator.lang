@@ -108,6 +108,8 @@ aetherhaven.plotcreator.error.needCornerSecond=Haz clic en la esquina opuesta an
 
 aetherhaven.plotcreator.error.needKind=Abra el selector de tipo de edificio con la tecla F y elija un tipo antes de continuar.
 
+aetherhaven.plotcreator.error.kindNotAllowed =Ese tipo de edificio no está disponible. Elija Decoración o Variante.
+
 aetherhaven.plotcreator.error.needVariantOf=Pulsa F y elige a qué edificio principal corresponde esta variante antes de continuar.
 
 aetherhaven.plotcreator.error.invalidVariantOf=Ese tipo de edificio principal no está en la lista del creador de parcelas.
@@ -208,9 +210,11 @@ aetherhaven.plotcreator.field.touristDestination=Los visitantes pueden detenerse
 aetherhaven.plotcreator.field.touristDestination.hint=Cuando está habilitado, los visitantes del portal pueden acceder a este edificio a pie durante el día.
 aetherhaven.plotcreator.field.plotTokenLocked=El token de parcela está bloqueado por defecto.
 aetherhaven.plotcreator.field.plotTokenLocked.hint=Cuando está activada, los jugadores deben desbloquear esta parcela en el banco de creación de parcelas (usando un plano de parcela) antes de poder crear fichas de parcela para ella.
-aetherhaven.plotcreator.field.floatingGiftBlueprint = Balloon plot blueprint
-aetherhaven.plotcreator.field.floatingGiftBlueprint.hint = When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
+aetherhaven.plotcreator.field.floatingGiftBlueprint= Balloon plot blueprint
+aetherhaven.plotcreator.field.floatingGiftBlueprint.hint= When on, regular (white) balloon gifts can drop a plot blueprint for this building. Requires plot token locked.
 aetherhaven.plotcreator.field.assemblySections=Secciones de ensamblaje por eje (1–16)
+aetherhaven.plotcreator.field.styleId =Estilo
+aetherhaven.plotcreator.field.styleId.hint =Cualquier nombre que te guste
 
 aetherhaven.plotcreator.step.REVIEW.title=Revisar
 aetherhaven.plotcreator.step.REVIEW.hint=Salva el edificio. Recibirás una ficha de parcela para colocarlo en la ciudad.

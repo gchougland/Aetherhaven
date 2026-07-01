@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=地塊標記
 items.Aetherhaven_Plot_Token.description=從地塊放置人員處放置自訂城鎮建築。每個標記對應一種建築類型。
 items.Aetherhaven_Plot_Token.instance.name={building} 繪圖標記
 items.Aetherhaven_Plot_Token.instance.description=需依照場地佈置人員的指示放置 {building} 足跡。
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration=需要放置地塊放置人員提供的{building}地塊。建造完成後，此裝飾物不會被登記為城鎮地塊。如需移除或重新定位，請自行破壞或移動方塊－無法從城鎮日誌中擷取。
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=地塊藍圖
 items.Aetherhaven_Plot_Token_Unlock_Page.description=一張特殊的藍圖頁面。使用它可以在你的地塊製作台上學習新的地塊。

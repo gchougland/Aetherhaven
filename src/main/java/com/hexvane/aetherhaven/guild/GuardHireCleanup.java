@@ -7,7 +7,6 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.AnimationSlot;
-import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -30,7 +29,7 @@ public final class GuardHireCleanup {
             npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
         }
 
-        standOffChairIfNeeded(npcRef, store);
+        VillagerBlockUtil.snapNpcToStandY(npcRef, store);
     }
 
     @Nonnull
@@ -44,20 +43,4 @@ public final class GuardHireCleanup {
         return new Vector3d(cx, y, cz);
     }
 
-    private static void standOffChairIfNeeded(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        TransformComponent tc = store.getComponent(npcRef, TransformComponent.getComponentType());
-        if (tc == null) {
-            return;
-        }
-        World world = store.getExternalData().getWorld();
-        Vector3d pos = tc.getPosition();
-        int bx = (int) Math.floor(pos.x);
-        int bz = (int) Math.floor(pos.z);
-        int standY = VillagerBlockUtil.findStandY(world, bx, bz, (int) Math.floor(pos.y) + 2);
-        if (standY == Integer.MIN_VALUE) {
-            return;
-        }
-        pos.y = standY + 0.02;
-        store.putComponent(npcRef, TransformComponent.getComponentType(), tc);
-    }
 }

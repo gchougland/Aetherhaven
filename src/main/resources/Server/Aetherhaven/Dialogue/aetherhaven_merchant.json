@@ -5,6 +5,7 @@
     "main_hub": {
       "speaker": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.speaker",
       "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.root.body",
       "text": "aetherhaven_dialogue_merchant.aetherhaven.dialogue.aetherhaven_merchant.main_hub.fallback",
       "choices": [
         {

@@ -1,39 +1,48 @@
 # Changelog
 
-## [2.1.0] - Unreleased
+## [2.1.0] - 7/1/2026
 
 ### Added
 
-- **Subplugins** — Aetherhaven loads as `Hexvane:Aetherhaven` (core) plus 17 optional feature subplugins. Disable features via the server `config.json` `Mods` section or `/plugin unload <id> --boot`
-- **Jszza Buildings** Lots of new buildings by Jszza
-- **Jimmy Buildings** Lots of new buildings by Jimmy G
-- **Debug town targeting** — Most town-scoped debug commands accept `--town=<name|uuid>` or `--player=<username|uuid>` so server staff in Creative or with `aetherhaven.town.admin` can fix another player's town without quest permissions on that town (examples: `/ah villager reset --player=Steve`, `/ah plots repair --town=Oakshire`).
-- **Balloon plot blueprints** — Regular (white) balloon gifts now include plot blueprint unlock pages for every building with `floatingGiftBlueprint: true` in its construction JSON. Manual blueprint rows in `floating_gift_loot.json` are no longer required. The Plot Creator configure panel includes a **Balloon plot blueprint** toggle (requires plot token locked).
-- **Plot crafting bench style filters** — A Styles panel beside the building list lets you tick checkboxes to show only certain building styles. Leave them all off to see every variant. The list is built from styles already used on your buildings.
-- **Plot creator building style** — Building settings in the plot creator staff include a Style field so you can tag custom buildings for the crafting bench filters.
-- **Bard song: Aetherhaven** — Elias can play **Aetherhaven by Dreadful Ditties**, a custom track bundled with the Bard subplugin asset pack.
+- **Subplugins** — Aetherhaven is split into a core mod plus optional feature packs you can turn on or off per server.
+- **Jszza Buildings** — Many new community buildings by Jszza.
+- **Jimmy Buildings** — Many new community buildings by Jimmy G.
+- **Debug town targeting** — Server staff can run most town debug commands on another player’s town or a town by name.
+- **Balloon plot blueprints** — White balloon gifts can drop plot blueprint pages for eligible buildings. Blueprints you already own are skipped; if you have them all, you may get a duplicate instead.
+- **Plot crafting bench style filters** — Filter the building list by style so you can browse variants more easily.
+- **Plot creator building style** — Tag custom buildings with a style in the plot creator for use with the new filters.
+- **Bard song: Aetherhaven** — Elias can play **Aetherhaven by Dreadful Ditties**.
+- **Building staff salvage** — Building staffs can be salvaged at the salvage bench like their matching pickaxe tier.
+- **Town Journal command** — `/ah journal` opens the Town Journal without needing the journal item.
+- **Single villager respawn** — `/ah villager respawn <villager>` (debug) brings one core story citizen back near you and clears duplicate copies.
 
 ### Changed
 
-- **Large plot assembly** Clearing and building on very large prefabs is much faster and smoother. Sectioned plots clear one section at a time, matching how construction already works section by section.
+- **Large plot assembly** — Clearing and building very large prefabs is much faster and smoother.
 
 ### Fixed
 
-- **Town map marker teleport** — Right-clicking a town on the world map in Creative no longer lands you with a broken rotation that could corrupt the charter chunk on reload (especially on busy modded servers).
-- **Prefab teleporter warps** — Teleporter blocks in community plot blueprints no longer leave malformed warp data that could destabilize nearby chunks; existing bad warps are repaired on server start and when those plots finish building.
-- **Inn visitor pool timing** — Inn guests now only arrive and reroll at dawn. Accepting a visitor’s building quest keeps that guest at the inn for the rest of the day instead of drawing a replacement. When a guest becomes a citizen, their spot stays empty until the next morning. The inn bell only calls back guests already staying at the inn; it no longer fills empty guest spots.
-- **Inn visitor duplicates** — Extra copies of the same inn guest (for example multiple merchants) could pile up when pool data and the world got out of sync. `/ah villager fixinn`, the inn bell, and `/ah villager reset` now clear stray duplicates for that town only (other towns’ guests are untouched), and the inn pool stops over-spawning when guests are already present.
-- **Duplicate POI spawn markers** — Buildings no longer accumulate extra spawn-marker entities when a prefab already includes POI markers or when markers were placed twice at the same spot. The POI staff also refuses to place a second marker on an occupied block, and its debug overlays are removed when you log out instead of lingering in the world.
-- **Wall wand height** Walls and towers now build at preview height; plot sign height is independent (same behavior as plot placement staff).
-- **Plot crafting bench preview** Survival players now see the rotatable 3D building preview in the plot crafting bench. The client only renders `PrefabPreviewComponent` data in Creative mode, so Adventure players get a temporary client-side Creative mode while the bench is open (server game mode unchanged).
-- **Large plot clearing lag** Severe server lag when starting or passively clearing big buildings (for example Hytiny's Potted Treehouse), while holding the building staff, or with a builder villager assisting on site.
-- **Building staff clearing preview** Destruction markers are capped lower on large footprints so holding the staff during clearing stays responsive instead of spawning hundreds of preview entities.
-- **Quest board item requirements** Several fetch quests asked for items that do not exist in the game (wrong meat, life essence, and wood types), so they could not be completed. Requirements now use valid item types.
-- **Quest board raid quests at high rank** Raid contracts stopped appearing once your town reached the highest quest ranks (including SSS). Raids are now available through the full rank range.
-- **Tourist portal visitors** Tourists now wander town and shop during the day, return through the portal at night, and are cleared out the next morning if any are still around so new visitors can arrive each day.
-- **Tourist dialogue** Tourists at the portal no longer stand idle with no name, portrait, or conversation when you talk to them.
-- **Town villager dialogue** Merchants, innkeepers, and other dialogue NPCs no longer get stuck after you close a conversation and refuse to chat again.
-- **Stuck villagers and tourists** Villagers and tourists who wedge on terrain or doorways can recover and continue walking instead of standing still indefinitely.
+- **Inn bed mount on building complete** — Villagers no longer stay stuck above their bed when their workplace finishes building.
+- **Villager activity interruptions** — When a villager is sent to a new job or their schedule changes, they stop eating, sitting, sleeping, and other POI animations instead of carrying them over.
+- **Prefab teleporter warps** — Teleporters in community plot blueprints no longer break nearby chunks; bad warps are repaired automatically.
+- **Inn visitor pool timing** — Inn guests arrive and reroll at dawn only. Accepting a guest’s quest keeps them for the day; the inn bell recalls guests already staying, not empty slots.
+- **Inn visitor duplicates** — Duplicate inn guests are cleaned up and the inn stops over-spawning when guests are already present.
+- **Duplicate POI spawn markers** — Buildings no longer pile up extra spawn markers; the POI staff won’t place a second marker on the same spot.
+- **Wall wand height** — Walls and towers build at preview height; plot sign height stays independent.
+- **Plot crafting bench preview** — Survival players can see the rotatable 3D building preview while the bench is open.
+- **Large plot clearing lag** — Less server lag when clearing big buildings, holding the building staff, or with a builder on site.
+- **Building staff clearing preview** — Clearing previews stay responsive on large footprints.
+- **Quest board item requirements** — Fetch quests no longer ask for items that don’t exist in the game.
+- **Quest board fetch turn-in** — Fetch jobs can be turned in to the villager who posted them, including when required items are in your backpack.
+- **Fetch quest journal details** — Active fetch jobs in the Town Journal now show the items you need to deliver.
+- **Quest board raid quests at high rank** — Raid contracts appear through the full quest rank range.
+- **Tourist portal visitors** — Tourists wander and shop by day, return at night, and refresh each morning.
+- **Tourist dialogue** — Tourists at the portal now have proper names, portraits, and conversation.
+- **Town villager dialogue** — Villagers no longer get stuck and refuse to chat after you close a conversation.
+- **Stuck villagers and tourists** — NPCs can recover when wedged on terrain or doorways.
+- **Villager first-meeting introductions** — Named residents introduce themselves the first time you talk to them.
+- **Builder clearing speed** — Rowan now breaks multiple blocks at once during clearing, same as when placing blocks.
+- **Plot token descriptions** — Plot tokens show each building’s own description in the tooltip instead of a generic line.
 
 ## [2.0.3] - 6/19/2026
 

@@ -2,7 +2,7 @@
   "id": "plot_jszzas_mine",
   "displayName": "Jszza's Mine",
   "description": "Made by Jszza",
-  "prefabPath": "jszza/plot_jszzas_mine.prefab.json",
+  "prefabPath": "Jszza/plot_jszzas_mine.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [
     0,

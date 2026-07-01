@@ -99,6 +99,21 @@ aetherhaven.towns.entry={name} id={id} owner={owner} charter={cx},{cy},{cz} plot
 aetherhaven.debug.plots.line={plotId} {construction} {state} 符号@{x},{y},{z}
 aetherhaven.debug.plots.finishassemblyNone=不要在城镇有活跃工作的情况下组装地块（加载建筑物周围的区块，或者先开始建造）。
 aetherhaven.debug.plots.finishassemblyDone=立即完成 {count} 进行中的地块构建。
+aetherhaven.debug.plots.finishassemblySummary=完成组装：{finished} 已完成，{failed} 失败，{still} 仍在组装中
+aetherhaven.debug.plots.repairSummary={town} 的图修复：已扫描 {scanned} 已重新链接 {relinked} 已正常 {ok} 已跳过 已卸载 {skipped} 失败 {failed} 孤立块 {orphans}
+aetherhaven.debug.plots.reconstructNoId=提供建筑 ID（例如 plot_inn）。
+aetherhaven.debug.plots.reconstructNoMatch=该城镇中没有与“{id}”匹配的地块。请检查拼写或运行 /ah plots list 命令。
+aetherhaven.debug.plots.reconstructBadIndex=索引超出范围。请使用下方列表中的数字。
+aetherhaven.debug.plots.reconstructAmbiguous=多个图表匹配“{id}”。请使用索引再次运行：
+aetherhaven.debug.plots.reconstructAmbiguousUsage=用法：/ah plots reconstruct {id} <index>
+aetherhaven.debug.plots.reconstructOk=在 {x}、{y}、{z} 处重建 {construction} [{index}]（请站在附近直到粘贴完成）。
+aetherhaven.debug.plots.reconstructChunks=先加载该建筑物周围的所有区块，然后再试一次。
+aetherhaven.debug.plots.reconstructUnknown=该地块的建筑结构未知。
+aetherhaven.debug.plots.reconstructPrefab=该建筑物的预制件文件缺失。
+aetherhaven.debug.plots.reconstructWall=此命令无法重建墙壁和装饰图案。
+aetherhaven.debug.plots.reconstructFailed=重建失败。请查看服务器日志。
+aetherhaven.debug.plots.diagnoseHeader=绘制 {town} 的链接诊断图：
+aetherhaven.debug.plots.diagnoseLine={construction} {state} @ {x},{y},{z} 链接={link}
 aetherhaven.debug.plots.removeBadUuid=无效的图块 UUID。请使用 /aetherhaven 图块列表中的 ID。
 aetherhaven.debug.plots.removeNotFound=您所在的城镇没有{plotId}地块。
 aetherhaven.debug.plots.removeDataFailed=世界已清除，但从城镇数据中移除地块失败（请查看日志）。

@@ -6,6 +6,9 @@ import com.hexvane.aetherhaven.construction.assembly.AssemblyPassiveBoostRegistr
 import com.hexvane.aetherhaven.construction.assembly.AssemblyWorldRegistry;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPhase;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyService;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.autonomy.VillagerDoorUtil;
+import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleDefinition;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -28,6 +31,8 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import com.hypixel.hytale.server.npc.movement.controllers.MotionController;
+import com.hypixel.hytale.server.npc.movement.NavState;
 import org.joml.Vector3d;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -42,6 +47,7 @@ import javax.annotation.Nullable;
 public final class BuilderConstructionAssistSystem extends EntityTickingSystem<EntityStore> {
     private static final long SWING_INTERVAL_NS = 900_000_000L;
     private static final int PLOT_RESCAN_INTERVAL_TICKS = 40;
+    private static final int DOOR_UNJAM_STUCK_TICKS = 30;
 
     private final AetherhavenPlugin plugin;
     @Nonnull
@@ -78,6 +84,9 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             return;
         }
         if (!AetherhavenConstants.NPC_BUILDER.equals(npc.getRoleName())) {
+            return;
+        }
+        if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
             return;
         }
 
@@ -152,8 +161,34 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
         assist.setPhase(BuilderConstructionAssistState.PHASE_TRAVEL);
         npc.setLeashPoint(new Vector3d(tx, ty, tz));
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        tickAssistTravel(world, npc, pos, npc.getLeashPoint(), assist);
         applyAutonomySeek(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, BuilderConstructionAssistState.getComponentType(), assist);
+    }
+
+    private static void tickAssistTravel(
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull Vector3d pos,
+        @Nonnull Vector3d leash,
+        @Nonnull BuilderConstructionAssistState assist
+    ) {
+        VillagerDoorUtil.tryOpenDoorsTowardLeash(world, pos, leash, null);
+        NavState nav = NavState.INIT;
+        if (npc.getRole() != null) {
+            MotionController mc = npc.getRole().getActiveMotionController();
+            if (mc != null) {
+                nav = mc.getNavState();
+            }
+        }
+        if (nav == NavState.BLOCKED || nav == NavState.DEFER) {
+            assist.incrementTravelStuckTicks();
+            if (assist.getTravelStuckTicks() >= DOOR_UNJAM_STUCK_TICKS) {
+                VillagerDoorUtil.tryUnjamDoorsAlongPath(world, pos, leash);
+            }
+        } else if (nav == NavState.PROGRESSING || nav == NavState.INIT) {
+            assist.resetTravelStuckTicks();
+        }
     }
 
     public static boolean shouldSkipAutonomy(@Nullable BuilderConstructionAssistState assist) {
@@ -189,6 +224,7 @@ public final class BuilderConstructionAssistSystem extends EntityTickingSystem<E
             BuilderConstructionVisuals.endAssist(ref, store, commandBuffer, npc);
         }
         assist.clearTarget();
+        VillagerAutonomySystem.clearAutonomySeekState(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, BuilderConstructionAssistState.getComponentType(), assist);
     }
 

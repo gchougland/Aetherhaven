@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Jeton de scénario {name} fabriqué.
 aetherhaven.ui.plotCrafting.unlockSuccess=Vous avez débloqué le scénario {building}.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Vous connaissez déjà cette intrigue.
 aetherhaven.ui.plotCrafting.unlockInvalid=Ce plan est illisible.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Styles

@@ -17,3 +17,4 @@ aetherhaven.ui.plotCrafting.crafted=Виготовлений жетон сюже
 aetherhaven.ui.plotCrafting.unlockSuccess=Ви розблокували сюжет {building}.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown=Ви вже знаєте цей сюжет.
 aetherhaven.ui.plotCrafting.unlockInvalid=Цей креслення неможливо прочитати.
+aetherhaven.ui.plotCrafting.styleFilterTitle =Стилі

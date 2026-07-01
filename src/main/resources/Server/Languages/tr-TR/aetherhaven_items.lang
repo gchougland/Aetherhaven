@@ -296,7 +296,6 @@ items.Aetherhaven_Plot_Token.name=Arsa belirteci
 items.Aetherhaven_Plot_Token.description=Parsel yerleştirme ekibinden özel bir kasaba binası yerleştirir. Her jeton bir bina türüne bağlıdır.
 items.Aetherhaven_Plot_Token.instance.name={building} grafik belirteci
 items.Aetherhaven_Plot_Token.instance.description=Parsel yerleştirme personeli tarafından {building} ayak izinin yerleştirilmesi gerekmektedir.
-items.Aetherhaven_Plot_Token.instance.descriptionDecoration={building} ayak izini, arsa yerleştirme personeli tarafından yerleştirmek gereklidir. İnşaatı tamamlandıktan sonra, bu dekorasyon kasaba arsası olarak kaydedilmez. Kaldırmak veya yerini değiştirmek için blokları kendiniz kırın veya taşıyın; kasaba günlüğünden alınamaz.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Arsa planı
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Özel bir plan sayfası. Bu sayfayı kullanarak plan oluşturma tezgahınızda yeni bir plan öğrenebilirsiniz.

@@ -1,7 +1,7 @@
-{
+﻿{
   "id": "plot_jtmessenger_s_warehouse",
   "displayName": "JTMessenger's Warehouse",
-  "description": "By JTMessenger After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "description": "By JTMessenger",
   "prefabPath": "plot_jtmessenger_s_warehouse.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [

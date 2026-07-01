@@ -4,6 +4,7 @@
 # === Commands: /aetherhaven (reload, starter kit, export skin) ===
 commands.aetherhaven.root.desc=Этерхейвен повелевает (/ах)
 commands.aetherhaven.difficulty.desc=Творческий режим: открытый мир, сложность строительства зависит от стоимости построек.
+commands.aetherhaven.journal.desc=Open the Town Journal
 commands.aetherhaven.reload.desc=Творческий режим: перезагрузка конфигурации и данных мода с диска.
 commands.aetherhaven.reload.success=Конфигурационные каталоги и каталоги ресурсов Aetherhaven перезагружены.
 commands.aetherhaven.reload.failure=Перезагрузка не удалась: {detail}

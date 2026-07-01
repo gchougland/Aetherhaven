@@ -65,10 +65,46 @@ public final class PlotAssemblyService {
     private static final int BREAK_SIGN_SETTINGS = 10;
     /** Passive assembly: at most one prefab cell per plot per {@link #tickPassive} invocation. */
     private static final int PASSIVE_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
-    /** Clearing breaks are heavier than placement; builder boost affects timer only, not break count. */
+    /** Passive clearing: base cells per tick; builder boost multiplies burst like the placing phase. */
     private static final int PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB = 1;
     private static final long REHYDRATE_SCAN_INTERVAL_MS = 3_000L;
     private static final ConcurrentHashMap<String, Long> LAST_REHYDRATE_SCAN_MS = new ConcurrentHashMap<>();
+
+    /** Clearing advance: {@code progressed} advances the passive burst; {@code brokeBlock} is true only when a solid was removed. */
+    public record ClearingAdvanceOutcome(boolean progressed, boolean brokeBlock) {
+        @Nonnull
+        public static ClearingAdvanceOutcome noProgress() {
+            return new ClearingAdvanceOutcome(false, false);
+        }
+
+        @Nonnull
+        public static ClearingAdvanceOutcome skipped() {
+            return new ClearingAdvanceOutcome(true, false);
+        }
+
+        @Nonnull
+        public static ClearingAdvanceOutcome blockBroken() {
+            return new ClearingAdvanceOutcome(true, true);
+        }
+    }
+
+    /** Placement advance: {@code progressed} advances the passive burst; {@code wroteBlock} is true when world state changed. */
+    public record PlacementAdvanceOutcome(boolean progressed, boolean wroteBlock) {
+        @Nonnull
+        public static PlacementAdvanceOutcome noProgress() {
+            return new PlacementAdvanceOutcome(false, false);
+        }
+
+        @Nonnull
+        public static PlacementAdvanceOutcome skipped() {
+            return new PlacementAdvanceOutcome(true, false);
+        }
+
+        @Nonnull
+        public static PlacementAdvanceOutcome committed() {
+            return new PlacementAdvanceOutcome(true, true);
+        }
+    }
 
     private PlotAssemblyService() {}
 
@@ -714,7 +750,7 @@ public final class PlotAssemblyService {
                 if (clearingRt != null && !clearingRt.isEmpty()) {
                     int boost = AssemblyPassiveBoostRegistry.boostFor(world, job.plotId());
                     long slot = Math.max(1L, job.slotWallMs() / boost);
-                    int maxBlocks = PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB;
+                    int maxBlocks = PASSIVE_CLEARING_BLOCKS_PER_WORLD_TICK_PER_JOB * boost;
                     Instant assemblyStart = resolvePassiveAssemblyStart(clearingPlot, simNow, tm, clearingTown);
                     long nextDue = resolvePassiveNextDue(clearingPlot, simNow, slot, assemblyStart, tm, clearingTown);
                     if (simNowMs >= nextDue) {
@@ -736,7 +772,13 @@ public final class PlotAssemblyService {
                             );
                         }
                         int burst = 0;
-                        while (burst < maxBlocks && clearingFrontierRt != null && !clearingFrontierRt.isEmpty()) {
+                        int clearingAttempts = 0;
+                        int maxClearingAttempts = Math.max(maxBlocks * 32, 32);
+                        while (burst < maxBlocks
+                            && clearingFrontierRt != null
+                            && !clearingFrontierRt.isEmpty()
+                            && clearingAttempts < maxClearingAttempts) {
+                            clearingAttempts++;
                             Vector3i cell = clearingFrontierRt.firstWorldCell();
                             if (cell == null) {
                                 break;
@@ -744,20 +786,22 @@ public final class PlotAssemblyService {
                             if (!isChunkLoadedForWorldCell(world, cell.x, cell.z)) {
                                 break;
                             }
-                            if (!advanceClearingAtCell(
-                                world,
-                                plugin,
-                                entityAccessor,
-                                entityStore,
-                                clearingTown,
-                                clearingPlot,
-                                job,
-                                cell,
-                                null,
-                                chunkAccessor,
-                                clearingFrontierRt
-                            )) {
-                                break;
+                            ClearingAdvanceOutcome outcome =
+                                advanceClearingAtCell(
+                                    world,
+                                    plugin,
+                                    entityAccessor,
+                                    entityStore,
+                                    clearingTown,
+                                    clearingPlot,
+                                    job,
+                                    cell,
+                                    null,
+                                    chunkAccessor,
+                                    clearingFrontierRt
+                                );
+                            if (!outcome.progressed()) {
+                                continue;
                             }
                             clearingPlot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
                             markAssemblyTownDirty(dirtyTowns, clearingTown);
@@ -799,7 +843,12 @@ public final class PlotAssemblyService {
                 continue;
             }
             int burst = 0;
-            while (burst < maxBlocks && placedCount < pending.size()) {
+            int placementAttempts = 0;
+            int maxPlacementAttempts = Math.max(maxBlocks * 32, 32);
+            while (burst < maxBlocks
+                && placedCount < pending.size()
+                && placementAttempts < maxPlacementAttempts) {
+                placementAttempts++;
                 PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
                 int pick = rt.smallestPlacementIndex();
                 if (pick < 0) {
@@ -813,8 +862,10 @@ public final class PlotAssemblyService {
                 if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(pick))) {
                     break;
                 }
-                if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, true)) {
-                    break;
+                PlacementAdvanceOutcome outcome =
+                    advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, true);
+                if (!outcome.progressed()) {
+                    continue;
                 }
                 plot.setAssemblyNextPassiveDueSimMs(simNowMs + slot);
                 markAssemblyTownDirty(dirtyTowns, town);
@@ -854,9 +905,10 @@ public final class PlotAssemblyService {
 
     /**
      * @param staffActor when non-null, permission is checked against this player for the plot's town.
-     * @return true if one block was committed (or finish was scheduled).
+     * @return whether the assembly queue advanced and whether world state was written.
      */
-    public static boolean advancePlacementAtIndex(
+    @Nonnull
+    public static PlacementAdvanceOutcome advancePlacementAtIndex(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Store<EntityStore> entityStore,
@@ -869,35 +921,40 @@ public final class PlotAssemblyService {
         boolean deferCompletionWhenFullyPlaced
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         if (fromStaff && staffActor != null && !town.playerCanManageConstructions(staffActor)) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         List<PendingBlock> pending = job.pendingBlocks();
         if (placementIndex < 0 || placementIndex >= pending.size()) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
         if (placedSet.contains(placementIndex)) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
         if (!rt.frontierContains(placementIndex)) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(placementIndex))) {
-            return false;
+            return PlacementAdvanceOutcome.noProgress();
         }
         LocalCachedChunkAccessor chunkAccessor = rt.getOrCreateChunkAccessor(world, job.anchor(), job.buffer());
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-        if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(placementIndex), true, chunkAccessor, blockTypeMap)) {
-            rt.clearChunkAccessor();
-            return false;
+        PendingBlock pb = pending.get(placementIndex);
+        boolean wroteBlock =
+            !ConstructionPasteOps.isAssemblyPlacementNoOp(job.anchor(), pb, chunkAccessor, blockTypeMap);
+        if (wroteBlock) {
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, chunkAccessor, blockTypeMap)) {
+                rt.clearChunkAccessor();
+                return PlacementAdvanceOutcome.noProgress();
+            }
         }
         plot.addAssemblyPlacedIndex(placementIndex);
         rt.onBlockPlaced(placementIndex, pending, plot);
@@ -909,7 +966,7 @@ public final class PlotAssemblyService {
                 rt.clearChunkAccessor();
             }
         }
-        if (fromStaff && staffActor != null) {
+        if (fromStaff && staffActor != null && wroteBlock) {
             PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
         }
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
@@ -919,9 +976,9 @@ public final class PlotAssemblyService {
             } else {
                 completeAssembly(world, plugin, entityStore, town, plot, job);
             }
-            return true;
+            return wroteBlock ? PlacementAdvanceOutcome.committed() : PlacementAdvanceOutcome.skipped();
         }
-        return true;
+        return wroteBlock ? PlacementAdvanceOutcome.committed() : PlacementAdvanceOutcome.skipped();
     }
 
     /**
@@ -1432,9 +1489,10 @@ public final class PlotAssemblyService {
     }
 
     /**
-     * @return true if one obstructing block was broken (or placing phase was entered when the last obstruction cleared).
+     * @return whether the clearing queue advanced and whether a solid block was broken.
      */
-    public static boolean advanceClearingAtCell(
+    @Nonnull
+    public static ClearingAdvanceOutcome advanceClearingAtCell(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor,
@@ -1465,7 +1523,8 @@ public final class PlotAssemblyService {
         );
     }
 
-    public static boolean advanceClearingAtCell(
+    @Nonnull
+    public static ClearingAdvanceOutcome advanceClearingAtCell(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor,
@@ -1479,64 +1538,65 @@ public final class PlotAssemblyService {
         @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRt
     ) {
         if (plot.getState() != PlotInstanceState.ASSEMBLING) {
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
         if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.CLEARING) {
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
         if (staffActor != null && !town.playerCanManageConstructions(staffActor)) {
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
         if (!resolveClearingFrontierCell(world, job, plot, cellWorld)) {
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
         PlotAssemblyClearingRuntime clearingRt = AssemblyWorldRegistry.clearingRuntime(world, job.plotId());
         if (clearingRt == null || !clearingRt.containsWorldCell(cellWorld.x, cellWorld.y, cellWorld.z)) {
             maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
         if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld, chunkAccessor)) {
-            clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
-            if (clearingFrontierRt != null) {
-                AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
-                int activeSection = plot.getAssemblyActiveSectionIndex();
-                clearingFrontierRt.onCellCleared(
-                    world,
-                    job,
-                    clearingRt,
-                    chunkAccessor,
-                    cellWorld.x,
-                    cellWorld.y,
-                    cellWorld.z,
-                    clearingMapper,
-                    activeSection
-                );
-            }
+            noteClearingCellCleared(
+                world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+            );
             maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
-            return false;
+            return ClearingAdvanceOutcome.skipped();
         }
         if (!AssemblyStaffClearBreak.breakWithLoot(world, cellWorld, entityAccessor)) {
             if (!AssemblyObstructionUtil.isObstructedFootprintCell(world, job, cellWorld, chunkAccessor)) {
-                clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
-                if (clearingFrontierRt != null) {
-                    AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
-                    int activeSection = plot.getAssemblyActiveSectionIndex();
-                    clearingFrontierRt.onCellCleared(
-                        world,
-                        job,
-                        clearingRt,
-                        chunkAccessor,
-                        cellWorld.x,
-                        cellWorld.y,
-                        cellWorld.z,
-                        clearingMapper,
-                        activeSection
-                    );
-                }
+                noteClearingCellCleared(
+                    world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+                );
                 maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+                return ClearingAdvanceOutcome.skipped();
             }
-            return false;
+            return ClearingAdvanceOutcome.noProgress();
         }
+        noteClearingCellCleared(
+            world, job, plot, clearingRt, clearingFrontierRt, chunkAccessor, cellWorld
+        );
+        if (staffActor != null) {
+            PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
+        }
+        HashMap<UUID, TownRecord> dirtyTowns = new HashMap<>();
+        AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
+        if (clearingMapper != null) {
+            TownManager tmAdv = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            maybeAdvanceClearingSection(tmAdv, town, plot, job, clearingRt, world, clearingMapper, dirtyTowns);
+            flushDirtyAssemblyTowns(tmAdv, dirtyTowns);
+        }
+        maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
+        return ClearingAdvanceOutcome.blockBroken();
+    }
+
+    private static void noteClearingCellCleared(
+        @Nonnull World world,
+        @Nonnull PlotAssemblyJob job,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyClearingRuntime clearingRt,
+        @Nullable PlotAssemblyClearingFrontierRuntime clearingFrontierRt,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        @Nonnull Vector3i cellWorld
+    ) {
         clearingRt.removeCell(cellWorld.x, cellWorld.y, cellWorld.z);
         if (clearingFrontierRt != null) {
             AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
@@ -1553,18 +1613,6 @@ public final class PlotAssemblyService {
                 activeSection
             );
         }
-        if (staffActor != null) {
-            PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
-        }
-        HashMap<UUID, TownRecord> dirtyTowns = new HashMap<>();
-        AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
-        if (clearingMapper != null) {
-            TownManager tmAdv = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            maybeAdvanceClearingSection(tmAdv, town, plot, job, clearingRt, world, clearingMapper, dirtyTowns);
-            flushDirtyAssemblyTowns(tmAdv, dirtyTowns);
-        }
-        maybeBeginPlacingAfterClear(world, plugin, entityStore, town, plot, job);
-        return true;
     }
 
     /**
@@ -1714,7 +1762,7 @@ public final class PlotAssemblyService {
                 );
                 break;
             }
-            if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, false)) {
+            if (!advancePlacementAtIndex(world, plugin, entityStore, town, plot, job, pick, false, null, false).progressed()) {
                 if (!bruteForcePlaceRemaining(world, plugin, town, plot, job)) {
                     break;
                 }

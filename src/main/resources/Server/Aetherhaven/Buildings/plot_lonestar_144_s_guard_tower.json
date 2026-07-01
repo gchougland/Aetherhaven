@@ -1,7 +1,7 @@
-{
+﻿{
   "id": "plot_lonestar_144_s_guard_tower",
   "displayName": "LoneStar_144's Guard Tower",
-  "description": "By LoneStar_144 After it finishes building, this decoration is not registered as a town plot. To remove or relocate it, break or move the blocks yourself—it cannot be picked up from the town journal.",
+  "description": "By LoneStar_144",
   "prefabPath": "plot_lonestar_144_s_guard_tower.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
   "plotAnchorOffset": [

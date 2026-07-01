@@ -1,0 +1,33 @@
+{
+  "Input": [
+    {
+      "ItemId": "Aetherhaven_Building_Staff_Iron",
+      "Quantity": 1
+    }
+  ],
+  "PrimaryOutput": {
+    "ItemId": "Ore_Iron",
+    "Quantity": 2
+  },
+  "Output": [
+    {
+      "ItemId": "Ore_Iron",
+      "Quantity": 2
+    },
+    {
+      "ItemId": "Ingredient_Hide_Light",
+      "Quantity": 1
+    },
+    {
+      "ItemId": "Ingredient_Fabric_Scrap_Linen",
+      "Quantity": 1
+    }
+  ],
+  "BenchRequirement": [
+    {
+      "Type": "Processing",
+      "Id": "Salvagebench"
+    }
+  ],
+  "TimeSeconds": 4
+}

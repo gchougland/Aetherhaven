@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.construction;
 
+import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Holder;
@@ -141,6 +143,59 @@ public final class ConstructionPasteOps {
     @Nonnull
     public static List<PendingBlock> withoutPureAirCells(@Nonnull List<PendingBlock> full) {
         return full.stream().filter(pb -> !isPureAirPrefabCell(pb)).collect(Collectors.toUnmodifiableList());
+    }
+
+    /**
+     * {@code true} when {@link #placeOne} would not change loaded block state (air-on-air, matching block already
+     * present, filler segment with no holder). Lets passive assembly and the builder skip empty frontier cells in one
+     * burst instead of pacing each no-op slot.
+     */
+    public static boolean isAssemblyPlacementNoOp(
+        @Nonnull Vector3i origin,
+        @Nonnull PendingBlock pb,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
+    ) {
+        if (isPureAirPrefabCell(pb)) {
+            return true;
+        }
+        if (pb.filler() != 0) {
+            return pb.holder() == null;
+        }
+        int wx = origin.x + pb.x();
+        int wy = origin.y + pb.y();
+        int wz = origin.z + pb.z();
+        BlockType worldBlock = blockTypeAt(chunkAccessor, wx, wy, wz);
+        if (worldBlock == null) {
+            return false;
+        }
+        if (pb.blockId() == 0) {
+            return worldBlock == BlockType.EMPTY;
+        }
+        BlockType target = blockTypeMap.getAsset(pb.blockId());
+        if (target == null) {
+            return false;
+        }
+        if (target == BlockType.EMPTY || target.getMaterial() == BlockMaterial.Empty) {
+            return worldBlock == BlockType.EMPTY || AssemblyObstructionUtil.isSoftClearingSkippedBlock(worldBlock);
+        }
+        String targetId = target.getId();
+        String worldId = worldBlock.getId();
+        return targetId != null && targetId.equals(worldId);
+    }
+
+    @Nullable
+    private static BlockType blockTypeAt(
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        int wx,
+        int wy,
+        int wz
+    ) {
+        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null || !chunk.getReference().isValid()) {
+            return null;
+        }
+        return BlockType.getAssetMap().getAsset(chunk.getBlock(wx, wy, wz));
     }
 
     /**
