@@ -1,15 +1,11 @@
 package com.hexvane.aetherhaven.map;
 
+import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
 import com.hypixel.hytale.builtin.teleport.TeleportPlugin;
-import com.hypixel.hytale.builtin.teleport.Warp;
 import com.hypixel.hytale.math.util.MathUtil;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Transform;
-import com.hypixel.hytale.server.core.universe.Universe;
-import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import org.joml.Vector3d;
 
 /** Repairs teleporter warp rotations that use partial NaN axes or runaway yaw. */
 public final class TeleporterWarpRotationUtil {
@@ -39,42 +35,28 @@ public final class TeleporterWarpRotationUtil {
     /**
      * @return {@code true} if the warp was updated in {@link TeleportPlugin}
      */
-    public static boolean repairWarpIfNeeded(@Nonnull Warp warp) {
-        Transform transform = warp.getTransform();
-        if (transform == null) {
-            return false;
-        }
-        Rotation3f rotation = transform.getRotation();
-        if (!rotationNeedsRepair(rotation)) {
-            return false;
-        }
-        World world = Universe.get().getWorld(warp.getWorld());
-        if (world == null) {
-            return false;
-        }
-        Rotation3f repaired = repairRotation(rotation);
-        Transform fixedTransform = new Transform(new Vector3d(transform.getPosition()), repaired);
-        Warp fixed = new Warp(fixedTransform, warp.getId(), world, warp.getCreator(), warp.getCreationDate());
+    public static boolean repairWarpIfNeeded(@Nonnull String warpId) {
         TeleportPlugin teleport = TeleportPlugin.get();
         if (teleport == null) {
             return false;
         }
-        return teleport.addWarp(fixed, true);
-    }
-
-    @Nullable
-    public static Warp repairedWarp(@Nonnull Warp warp) {
+        var warp = teleport.getWarps().get(warpId.toLowerCase());
+        if (warp == null || !Teleporter.CREATOR_IDENTIFIER.equals(warp.getCreator())) {
+            return false;
+        }
         Transform transform = warp.getTransform();
         if (transform == null || !rotationNeedsRepair(transform.getRotation())) {
-            return null;
+            return false;
         }
-        World world = Universe.get().getWorld(warp.getWorld());
-        if (world == null) {
-            return null;
-        }
-        Transform fixedTransform =
-            new Transform(new Vector3d(transform.getPosition()), repairRotation(transform.getRotation()));
-        return new Warp(fixedTransform, warp.getId(), world, warp.getCreator(), warp.getCreationDate());
+        applyRepairedRotation(transform.getRotation());
+        return teleport.addWarp(warp, true);
+    }
+
+    private static void applyRepairedRotation(@Nonnull Rotation3f rotation) {
+        Rotation3f repaired = repairRotation(rotation);
+        rotation.x = repaired.pitch();
+        rotation.y = repaired.yaw();
+        rotation.z = repaired.roll();
     }
 
     private static boolean approximatelyEqual(float a, float b) {

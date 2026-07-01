@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.map;
 
 import com.hypixel.hytale.builtin.adventure.teleporter.component.Teleporter;
 import com.hypixel.hytale.builtin.teleport.TeleportPlugin;
-import com.hypixel.hytale.builtin.teleport.Warp;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -11,7 +10,6 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
@@ -31,7 +29,7 @@ public final class TeleporterWarpSanitizer {
             LOGGER.atWarning().log("Skipping teleporter warp rotation sanitize: warps not loaded yet");
             return;
         }
-        int repaired = repairTeleporterWarps(teleport.getWarps());
+        int repaired = repairTeleporterWarps(teleport);
         if (repaired > 0) {
             LOGGER.atInfo().log("Repaired %s teleporter warp rotation(s) at startup", repaired);
         }
@@ -50,14 +48,10 @@ public final class TeleporterWarpSanitizer {
         if (ownedWarpNames.isEmpty()) {
             return;
         }
-        Map<String, Warp> warps = teleport.getWarps();
         int repaired = 0;
         for (String warpName : ownedWarpNames) {
-            Warp warp = warps.get(warpName.toLowerCase());
-            if (warp != null && Teleporter.CREATOR_IDENTIFIER.equals(warp.getCreator())) {
-                if (TeleporterWarpRotationUtil.repairWarpIfNeeded(warp)) {
-                    repaired++;
-                }
+            if (TeleporterWarpRotationUtil.repairWarpIfNeeded(warpName)) {
+                repaired++;
             }
         }
         if (repaired > 0) {
@@ -79,13 +73,10 @@ public final class TeleporterWarpSanitizer {
         world.execute(() -> world.execute(() -> sanitizePlotFootprint(world, footprint)));
     }
 
-    private static int repairTeleporterWarps(@Nonnull Map<String, Warp> warps) {
+    private static int repairTeleporterWarps(@Nonnull TeleportPlugin teleport) {
         int repaired = 0;
-        for (Warp warp : warps.values()) {
-            if (!Teleporter.CREATOR_IDENTIFIER.equals(warp.getCreator())) {
-                continue;
-            }
-            if (TeleporterWarpRotationUtil.repairWarpIfNeeded(warp)) {
+        for (String warpId : teleport.getWarps().keySet()) {
+            if (TeleporterWarpRotationUtil.repairWarpIfNeeded(warpId)) {
                 repaired++;
             }
         }
