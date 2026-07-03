@@ -2,10 +2,14 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
+import com.hexvane.aetherhaven.town.PlotInstance;
+import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
+import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
@@ -20,8 +24,18 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
 
 public final class PlotPlacementCommit {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     /** Bit 2 skips automatic block-entity attachment in {@code placeBlock}; we attach explicitly on the world thread. */
     private static final int PLACE_SETTINGS = 10;
+
+    public enum LinkRepairResult {
+        ALREADY_OK,
+        RELINKED,
+        PLACED,
+        SKIPPED_CHUNK_UNLOADED,
+        NOT_APPLICABLE,
+        FAILED
+    }
 
     private PlotPlacementCommit() {}
 
@@ -93,8 +107,8 @@ public final class PlotPlacementCommit {
     }
 
     /**
-     * Attaches {@link PlotSignBlock} via {@link BlockEntity#setBlockEntity} when missing (PLACE_SETTINGS skips
-     * automatic attachment), then writes plot metadata on the live ref or pending holder.
+     * Attaches {@link PlotSignBlock} via {@link BlockEntity#setBlockEntity} when the live block-entity ref is
+     * missing (PLACE_SETTINGS skips automatic attachment), then writes plot metadata on the live ref.
      */
     private static boolean attachPlotSignBlockEntity(
         @Nonnull World world,
@@ -108,8 +122,9 @@ public final class PlotPlacementCommit {
         @Nonnull String constructionId,
         @Nonnull String plotIdStr
     ) {
-        int index = ChunkUtil.indexBlockInColumn(x, y, z);
-        if (blockComponentChunk.getComponent(index, PlotSignBlock.getComponentType()) == null) {
+        chunk.setTicking(x, y, z, true);
+        Ref<ChunkStore> signRef = chunk.getBlockComponentEntity(x, y, z);
+        if (signRef == null || !signRef.isValid()) {
             Holder<ChunkStore> template = blockType.getBlockEntity();
             if (template == null) {
                 return false;
@@ -119,7 +134,7 @@ public final class PlotPlacementCommit {
                 PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotIdStr)
             );
             Ref<ChunkStore> chunkRef = chunk.getReference();
-            if (chunkRef == null) {
+            if (chunkRef == null || world.getChunkStore() == null) {
                 return false;
             }
             BlockEntity.setBlockEntity(
@@ -134,12 +149,109 @@ public final class PlotPlacementCommit {
                 holder
             );
         }
-        return writePlotSignMetadata(chunk, blockComponentChunk, x, y, z, constructionId, plotIdStr);
+        signRef = chunk.getBlockComponentEntity(x, y, z);
+        if (signRef == null || !signRef.isValid()) {
+            return false;
+        }
+        signRef.getStore()
+            .putComponent(signRef, PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotIdStr));
+        return true;
     }
 
-    private static boolean writePlotSignMetadata(
+    /**
+     * Re-links or re-places the plot sign for a {@link PlotInstanceState#BLUEPRINTING} plot. Used by
+     * {@code /ah plots repair}.
+     */
+    @Nonnull
+    public static LinkRepairResult repairPlotSignLink(@Nonnull World world, @Nonnull PlotInstance plot) {
+        if (plot.getState() != PlotInstanceState.BLUEPRINTING) {
+            return LinkRepairResult.NOT_APPLICABLE;
+        }
+        if (world.isInThread()) {
+            return repairPlotSignLinkOnWorldThread(world, plot);
+        }
+        return CompletableFuture.supplyAsync(() -> repairPlotSignLinkOnWorldThread(world, plot), world).join();
+    }
+
+    @Nonnull
+    private static LinkRepairResult repairPlotSignLinkOnWorldThread(
+        @Nonnull World world, @Nonnull PlotInstance plot
+    ) {
+        int x = plot.getSignX();
+        int y = plot.getSignY();
+        int z = plot.getSignZ();
+        String constructionId = plot.getConstructionId() != null ? plot.getConstructionId() : "";
+        String plotIdStr = plot.getPlotId().toString();
+        Rotation yaw = plot.resolvePrefabYaw();
+
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return LinkRepairResult.SKIPPED_CHUNK_UNLOADED;
+        }
+
+        BlockType atType = world.getBlockType(x, y, z);
+        boolean blockIsSign =
+            atType != null && AetherhavenConstants.PLOT_SIGN_ITEM_ID.equals(atType.getId());
+
+        if (blockIsSign) {
+            if (isPlotSignLinked(chunk, x, y, z, constructionId, plotIdStr)) {
+                return LinkRepairResult.ALREADY_OK;
+            }
+            BlockType blockType = atType;
+            BlockComponentChunk blockComponentChunk = chunk.getBlockComponentChunk();
+            if (blockComponentChunk == null) {
+                LOGGER.atWarning().log(
+                    "Plot sign link repair failed at %s,%s,%s plot=%s (no block component chunk)",
+                    x,
+                    y,
+                    z,
+                    plotIdStr
+                );
+                return LinkRepairResult.FAILED;
+            }
+            if (!attachPlotSignBlockEntity(
+                world,
+                chunk,
+                blockComponentChunk,
+                x,
+                y,
+                z,
+                blockType,
+                chunk.getRotationIndex(x, y, z),
+                constructionId,
+                plotIdStr
+            )) {
+                LOGGER.atWarning().log(
+                    "Plot sign link repair failed at %s,%s,%s plot=%s (block entity attach)",
+                    x,
+                    y,
+                    z,
+                    plotIdStr
+                );
+                return LinkRepairResult.FAILED;
+            }
+            return LinkRepairResult.RELINKED;
+        }
+
+        BlockType emptyCheck = atType;
+        if (emptyCheck != null && emptyCheck.getMaterial() != BlockMaterial.Empty) {
+            return LinkRepairResult.FAILED;
+        }
+        if (!placePlotSignOnWorldThread(world, x, y, z, yaw, constructionId, plot.getPlotId())) {
+            LOGGER.atWarning().log(
+                "Plot sign place/link repair failed at %s,%s,%s plot=%s",
+                x,
+                y,
+                z,
+                plotIdStr
+            );
+            return LinkRepairResult.FAILED;
+        }
+        return LinkRepairResult.PLACED;
+    }
+
+    private static boolean isPlotSignLinked(
         @Nonnull WorldChunk chunk,
-        @Nonnull BlockComponentChunk blockComponentChunk,
         int x,
         int y,
         int z,
@@ -147,21 +259,13 @@ public final class PlotPlacementCommit {
         @Nonnull String plotIdStr
     ) {
         Ref<ChunkStore> signRef = chunk.getBlockComponentEntity(x, y, z);
-        if (signRef != null && signRef.isValid()) {
-            signRef.getStore()
-                .putComponent(
-                    signRef, PlotSignBlock.getComponentType(), new PlotSignBlock(constructionId, plotIdStr)
-                );
-            return true;
+        if (signRef == null || !signRef.isValid()) {
+            return false;
         }
-        int index = ChunkUtil.indexBlockInColumn(x, y, z);
-        PlotSignBlock onHolder = blockComponentChunk.getComponent(index, PlotSignBlock.getComponentType());
-        if (onHolder != null) {
-            onHolder.setConstructionId(constructionId);
-            onHolder.setPlotId(plotIdStr);
-            return true;
-        }
-        return false;
+        PlotSignBlock existing = signRef.getStore().getComponent(signRef, PlotSignBlock.getComponentType());
+        return existing != null
+            && constructionId.equals(existing.getConstructionId())
+            && plotIdStr.equals(existing.getPlotId());
     }
 
     /** Replaces an existing plot sign (same cell) with a new construction id and placement yaw. */

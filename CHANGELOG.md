@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.2] - Unreleased
+
+### Fixed
+
+- **Charter and plot sign interaction** — Town charters and blueprinting plot signs that lost their block-entity link (visible but unusable) can be repaired with `/ah plots repair`. `/ah replace-charter` also re-attaches the charter entity correctly instead of failing with no server log.
+
 ## [2.1.0] - 7/1/2026
 
 ### Added

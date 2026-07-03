@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.placement.CharterRelocationService;
+import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockStamper;
@@ -24,7 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import org.joml.Vector3i;
 
-/** Repairs drift between {@code towns.json} plot rows and plot-linked block components. */
+/**
+ * Repairs drift between {@code towns.json} plot rows and plot-linked block components, including charter and
+ * blueprinting plot-sign block entities.
+ */
 public final class PlotLinkReconcileService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final long PERIODIC_SCAN_MS = 5 * 60_000L;
@@ -93,7 +98,9 @@ public final class PlotLinkReconcileService {
         Store<EntityStore> entityStore =
             world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
 
+        applyCharterRepair(report, world, town);
         for (PlotInstance plot : town.getPlotInstances()) {
+            applyPlotSignRepair(report, world, town, plot);
             if (plot.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
@@ -154,6 +161,63 @@ public final class PlotLinkReconcileService {
             tm.updateTown(town);
         }
         return report;
+    }
+
+    private static void applyCharterRepair(
+        @Nonnull TownRepairReport report, @Nonnull World world, @Nonnull TownRecord town
+    ) {
+        report.scanned++;
+        CharterRelocationService.LinkRepairResult result =
+            CharterRelocationService.repairCharterLink(world, town, Rotation.None);
+        switch (result) {
+            case ALREADY_OK -> report.alreadyOk++;
+            case RELINKED, PLACED -> {
+                report.relinked++;
+                LOGGER.atInfo().log(
+                    "Charter link repair town=%s at %s,%s,%s: %s",
+                    town.getTownId(),
+                    town.getCharterX(),
+                    town.getCharterY(),
+                    town.getCharterZ(),
+                    result.name()
+                );
+            }
+            case SKIPPED_CHUNK_UNLOADED -> report.skippedChunkUnloaded++;
+            case FAILED_BLOCKED, FAILED -> report.failed++;
+        }
+    }
+
+    private static void applyPlotSignRepair(
+        @Nonnull TownRepairReport report,
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot
+    ) {
+        PlotPlacementCommit.LinkRepairResult result = PlotPlacementCommit.repairPlotSignLink(world, plot);
+        if (result == PlotPlacementCommit.LinkRepairResult.NOT_APPLICABLE) {
+            return;
+        }
+        report.scanned++;
+        switch (result) {
+            case ALREADY_OK -> report.alreadyOk++;
+            case RELINKED, PLACED -> {
+                report.relinked++;
+                LOGGER.atInfo().log(
+                    "Plot sign link repair town=%s plot=%s at %s,%s,%s: %s",
+                    town.getTownId(),
+                    plot.getPlotId(),
+                    plot.getSignX(),
+                    plot.getSignY(),
+                    plot.getSignZ(),
+                    result.name()
+                );
+            }
+            case SKIPPED_CHUNK_UNLOADED -> report.skippedChunkUnloaded++;
+            case FAILED -> report.failed++;
+            case NOT_APPLICABLE -> {
+                // handled above
+            }
+        }
     }
 
     private static int countOrphanManagementBlocks(
