@@ -6,6 +6,8 @@ import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
+import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
+import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -83,6 +85,12 @@ public final class TownDissolutionService {
             reg.unregisterByPlotId(p.getPlotId());
             ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
             ShopSpotPlotRelocation.clearPlotSpots(world, plugin, entityStore, shopRegistry, p.getPlotId());
+            TouristPortalRegistry touristRegistry =
+                AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TouristPortalPlotRelocation.clearPlotPortals(
+                world, plugin, entityStore, touristRegistry, p.getPlotId(), town, tm
+            );
             PrefabFootprintClearUtil.removePrefabOnlyEntitiesInFootprint(entityStore, p.toFootprint(), town);
             PrefabFootprintClearUtil.clearFootprint(world, p.toFootprint());
         }

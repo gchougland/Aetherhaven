@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
+import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
+import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -114,6 +116,12 @@ public final class PlotBuildingRelocation {
 
         ShopSpotRegistry shopRegistry = AetherhavenWorldRegistries.getOrCreateShopSpotRegistry(world, plugin);
         ShopSpotPlotRelocation.beginPlotMove(world, plugin, store, shopRegistry, movePlotId, plot, def);
+
+        TouristPortalRegistry touristRegistry =
+            AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
+        TouristPortalPlotRelocation.beginPlotMove(
+            world, plugin, store, touristRegistry, movePlotId, plot, def, town
+        );
 
         relocateTownNpcsOutOfFootprint(store, town, oldFootprint);
 

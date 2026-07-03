@@ -19,7 +19,7 @@
       }
     ]
   },
-  "Categories": ["Items.Utility"],
+  "Categories": ["Items.Utility", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Weapon_Spellbook_Grimoire_Purple.png",
   "Quality": "Common",
   "Model": "Items/Weapons/Spellbook/Grimoire.blockymodel",

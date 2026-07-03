@@ -4,7 +4,7 @@
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Management_Block.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Bookcase.png",
-  "Categories": ["Furniture.Shelves"],
+  "Categories": ["Furniture.Shelves", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "BlockType": {
     "Material": "Solid",

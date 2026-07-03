@@ -8,7 +8,7 @@
   "Texture": "Items/Aetherhaven/Plot_Token_Sign_Texture.png",
   "MaxStack": 100,
   "PlayerAnimationsId": "Item",
-  "Categories": ["Items.Utility"],
+  "Categories": ["Items.Utility", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "Quality": "Rare",
   "Tags": {

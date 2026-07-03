@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -115,7 +116,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (tb == null || autonomy == null || npc == null || binding == null) {
             return;
         }
-        if (!TownsfolkAssignmentKinds.TOURIST.equals(tb.getAssignmentKind())) {
+        if (!TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind())) {
             return;
         }
         if (NpcFaceVisuals.isInInteractionDialogue(npc)) {
@@ -1307,9 +1308,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Action, null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Emote, null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Status, null, commandBuffer);
+        NpcAnimationPlayback.clearOverlaySlots(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 }

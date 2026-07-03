@@ -10,13 +10,13 @@ import com.hypixel.hytale.server.core.asset.AssetModule;
 import com.hypixel.hytale.assetstore.AssetPack;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,12 +25,19 @@ import javax.annotation.Nullable;
  * Optional subplugin assets ship inside the parent JAR under {@code subplugin-packs/<Sub>/} (not under root
  * {@code Server/}), so the core classpath pack does not load them. During parent {@code setup()}, enabled subs
  * register as separate asset packs before {@code LoadAssetEvent}.
+ *
+ * <p>Packs are registered in-place (exploded dir, classpath {@code file:} URL, or a directory path inside the
+ * parent mod archive). Nothing is copied or deleted on disk — avoids self-extract patterns that trip mod-store
+ * scanners.
  */
 public final class AetherhavenEmbeddedSubpluginPacks {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String PACKS_ROOT = "subplugin-packs";
-    /** Bump when embedded pack files change so extracted cache under plugin data is refreshed. */
-    private static final String PACK_EXTRACT_REVISION = "3";
+    /**
+     * Real pack metadata. Pack roots also ship a stub {@code manifest.json} (not a mod manifest) so Hytale's
+     * {@code AssetModule.validatePackExistsOnDisk} does not unregister packs during {@code /prefabedit load}.
+     */
+    private static final String PACK_MANIFEST_FILE = "asset-pack.json";
 
     private static final List<EmbeddedPack> PACKS =
         List.of(
@@ -49,6 +56,10 @@ public final class AetherhavenEmbeddedSubpluginPacks {
             new EmbeddedPack(AetherhavenPluginIds.GUILD, "Guild")
         );
 
+    /** Kept open for the process lifetime so in-archive pack paths remain readable. */
+    @Nullable
+    private static volatile FileSystem modArchiveFileSystem;
+
     private AetherhavenEmbeddedSubpluginPacks() {}
 
     public static void registerEnabled(@Nonnull AetherhavenPlugin plugin) {
@@ -66,13 +77,14 @@ public final class AetherhavenEmbeddedSubpluginPacks {
                 continue;
             }
             try {
-                Path packRoot = resolvePackRoot(plugin, modFile, pack.folderName());
+                Path packRoot = resolvePackRoot(modFile, pack.folderName());
                 if (packRoot == null) {
+                    LOGGER.atWarning().log("Embedded subplugin pack '%s' not found under %s", pack.folderName(), PACKS_ROOT);
                     continue;
                 }
                 PluginManifest manifest = loadPackManifest(packRoot);
                 if (manifest == null) {
-                    LOGGER.atWarning().log("Embedded subplugin pack '%s' has no manifest.json", pack.folderName());
+                    LOGGER.atWarning().log("Embedded subplugin pack '%s' has no %s", pack.folderName(), PACK_MANIFEST_FILE);
                     continue;
                 }
                 String packId = pack.subplugin().toString();
@@ -88,11 +100,10 @@ public final class AetherhavenEmbeddedSubpluginPacks {
     }
 
     @Nullable
-    private static Path resolvePackRoot(@Nonnull AetherhavenPlugin plugin, @Nonnull Path modFile, @Nonnull String folderName)
-        throws IOException {
+    private static Path resolvePackRoot(@Nonnull Path modFile, @Nonnull String folderName) throws IOException {
         String relative = PACKS_ROOT + "/" + folderName;
         Path direct = modFile.resolve(relative);
-        if (Files.isDirectory(direct.resolve("Server"))) {
+        if (isPackRoot(direct)) {
             return direct.normalize();
         }
         Path fromClasspath = resolveFromClasspathResource(relative);
@@ -102,7 +113,7 @@ public final class AetherhavenEmbeddedSubpluginPacks {
         if (!isArchive(modFile)) {
             return null;
         }
-        return extractPackFromArchive(plugin, modFile, relative, folderName);
+        return resolveFromModArchive(modFile, relative);
     }
 
     @Nullable
@@ -114,44 +125,62 @@ public final class AetherhavenEmbeddedSubpluginPacks {
         }
         try {
             Path serverDir = Path.of(url.toURI());
-            return serverDir.getParent();
+            Path packRoot = serverDir.getParent();
+            return packRoot != null && isPackRoot(packRoot) ? packRoot : null;
         } catch (Exception e) {
             LOGGER.atFine().withCause(e).log("Could not resolve embedded pack from classpath resource %s", marker);
             return null;
         }
     }
 
-    @Nonnull
-    private static Path extractPackFromArchive(
-        @Nonnull AetherhavenPlugin plugin,
-        @Nonnull Path archivePath,
-        @Nonnull String relativePackPath,
-        @Nonnull String folderName
-    ) throws IOException {
-        Path cacheRoot = plugin.getDataDirectory().resolve("embedded-packs").resolve(folderName);
-        Path stamp = cacheRoot.resolve(".extract-version");
-        String version = plugin.getManifest().getVersion().toString() + "|" + PACK_EXTRACT_REVISION;
-        if (Files.isDirectory(cacheRoot.resolve("Server")) && Files.exists(stamp) && version.contentEquals(Files.readString(stamp))) {
-            return cacheRoot;
-        }
-        if (Files.exists(cacheRoot)) {
-            deleteRecursive(cacheRoot);
-        }
-        Files.createDirectories(cacheRoot);
-        try (FileSystem fileSystem = FileSystems.newFileSystem(archivePath)) {
-            Path packInArchive = fileSystem.getPath(relativePackPath);
-            if (!Files.isDirectory(packInArchive)) {
-                throw new IOException("Missing embedded pack path in mod archive: " + relativePackPath);
+    /**
+     * Resolves a pack directory inside the parent mod archive without copying it to disk. The archive
+     * {@link FileSystem} is retained so asset reads keep working.
+     */
+    @Nullable
+    private static Path resolveFromModArchive(@Nonnull Path archivePath, @Nonnull String relativePackPath)
+        throws IOException {
+        FileSystem fileSystem = modArchiveFileSystem();
+        if (fileSystem == null) {
+            synchronized (AetherhavenEmbeddedSubpluginPacks.class) {
+                fileSystem = modArchiveFileSystem();
+                if (fileSystem == null) {
+                    fileSystem = openModArchive(archivePath);
+                    modArchiveFileSystem = fileSystem;
+                }
             }
-            copyTree(packInArchive, cacheRoot);
         }
-        Files.writeString(stamp, version);
-        return cacheRoot;
+        Path packInArchive = fileSystem.getPath(relativePackPath);
+        if (!isPackRoot(packInArchive)) {
+            // Some zip providers require a leading slash.
+            packInArchive = fileSystem.getPath("/" + relativePackPath);
+        }
+        return isPackRoot(packInArchive) ? packInArchive : null;
+    }
+
+    @Nonnull
+    private static FileSystem openModArchive(@Nonnull Path archivePath) throws IOException {
+        try {
+            return FileSystems.newFileSystem(archivePath);
+        } catch (FileSystemAlreadyExistsException ignored) {
+            URI uri = URI.create("jar:" + archivePath.toAbsolutePath().normalize().toUri());
+            return FileSystems.getFileSystem(uri);
+        }
+    }
+
+    @Nullable
+    private static FileSystem modArchiveFileSystem() {
+        FileSystem fs = modArchiveFileSystem;
+        return fs != null && fs.isOpen() ? fs : null;
+    }
+
+    private static boolean isPackRoot(@Nonnull Path packRoot) {
+        return Files.isDirectory(packRoot) && Files.isDirectory(packRoot.resolve("Server"));
     }
 
     @Nullable
     private static PluginManifest loadPackManifest(@Nonnull Path packRoot) throws IOException {
-        Path manifestPath = packRoot.resolve("manifest.json");
+        Path manifestPath = packRoot.resolve(PACK_MANIFEST_FILE);
         if (!Files.isRegularFile(manifestPath)) {
             return null;
         }
@@ -164,41 +193,6 @@ public final class AetherhavenEmbeddedSubpluginPacks {
             PluginManifest manifest = PluginManifest.CODEC.decodeJson(rawJsonReader, extraInfo);
             extraInfo.getValidationResults().logOrThrowValidatorExceptions(LOGGER);
             return manifest;
-        }
-    }
-
-    private static void copyTree(@Nonnull Path source, @Nonnull Path target) throws IOException {
-        Files.walk(source).forEach(src -> {
-            try {
-                Path relative = source.relativize(src);
-                // Jar/zip Path instances cannot be resolved on the host filesystem (ProviderMismatchException).
-                Path destination = target.resolve(relative.toString());
-                if (Files.isDirectory(src)) {
-                    Files.createDirectories(destination);
-                } else {
-                    Files.createDirectories(destination.getParent());
-                    Files.copy(src, destination, StandardCopyOption.REPLACE_EXISTING);
-                }
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        });
-    }
-
-    private static void deleteRecursive(@Nonnull Path root) throws IOException {
-        if (!Files.exists(root)) {
-            return;
-        }
-        try (var walk = Files.walk(root)) {
-            walk.sorted((a, b) -> b.compareTo(a)).forEach(path -> {
-                try {
-                    Files.deleteIfExists(path);
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            });
-        } catch (UncheckedIOException e) {
-            throw e.getCause();
         }
     }
 

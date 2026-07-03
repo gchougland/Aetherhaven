@@ -24,4 +24,9 @@ public final class TownsfolkAssignmentKinds {
     public static boolean isGuildHallAdventurer(@Nonnull String assignmentKind) {
         return GUILD_ADVENTURER.equals(assignmentKind.trim().toLowerCase());
     }
+
+    /** True when this townsfolk is a portal tourist (case-insensitive). */
+    public static boolean isTourist(@Nonnull String assignmentKind) {
+        return TOURIST.equalsIgnoreCase(assignmentKind.trim());
+    }
 }

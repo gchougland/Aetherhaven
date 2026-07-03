@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plugin;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
+import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -11,9 +13,8 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import javax.annotation.Nonnull;
 
 /**
- * Entity components queried by multiple Aetherhaven subplugins at setup time. Registered on the parent plugin so they
- * survive subplugin load order (Hytale uses dependency-based {@code Mod.calculateLoadOrder}, not {@code SubPlugins[]}
- * order) and are not torn down when a subplugin's setup fails.
+ * Entity components queried by multiple feature packs at setup time. Registered on the parent plugin so registration
+ * order between packs does not matter.
  */
 public final class AetherhavenSharedEntityComponents {
     private AetherhavenSharedEntityComponents() {}
@@ -26,6 +27,10 @@ public final class AetherhavenSharedEntityComponents {
         TownsfolkCharacterBinding.register(registry);
         VillagerAutonomyState.register(registry);
         TouristAutonomyState.register(registry);
+        // Villagers (doorway bypass) and Construction (builder assist) both need this at system register time.
+        BuilderConstructionAssistState.register(registry);
+        // Villagers (NPC model resync excludes statues) and Construction (monument) both need this.
+        FounderMonumentStatueSkin.register(registry);
         // Registered on core so /plugin unload of ReputationUnlocks does not unregister while players still have it.
         PurificationPowderPlayerComponent.register(registry);
     }

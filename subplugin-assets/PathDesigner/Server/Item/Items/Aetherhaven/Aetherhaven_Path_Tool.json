@@ -25,7 +25,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Tool_Shovel_Iron.png",
   "Categories": [
-    "Items.Tools"
+    "Items.Tools",
+    "Aetherhaven.All"
   ],
   "Model": "Items/Tools/Shovel/Iron.blockymodel",
   "Texture": "Items/Tools/Shovel/Iron_Texture.png",

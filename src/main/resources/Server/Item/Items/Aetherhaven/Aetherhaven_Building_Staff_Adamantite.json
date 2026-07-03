@@ -32,7 +32,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Building_Staff_Adamantite.png",
   "Categories": [
-    "Items.Tools"
+    "Items.Tools",
+    "Aetherhaven.All"
   ],
   "Model": "Items/Aetherhaven/Building_Staff/Building_Staff.blockymodel",
   "Texture": "Items/Aetherhaven/Building_Staff/Building_Staff_Adamantine.png",

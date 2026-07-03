@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.placement;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
+import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -317,7 +318,7 @@ public final class CharterRelocationService {
                 y,
                 z,
                 blockType,
-                chunk.getRotationIndex(x, y, z),
+                PlotBlockRotationUtil.readBlockRotationIndex(world, new Vector3i(x, y, z)),
                 holder
             );
         }

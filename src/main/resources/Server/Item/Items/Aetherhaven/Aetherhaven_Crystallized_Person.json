@@ -4,7 +4,8 @@
   },
   "PlayerAnimationsId": "Block",
   "Categories": [
-    "Blocks.Deco"
+    "Blocks.Deco",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "IconProperties": {

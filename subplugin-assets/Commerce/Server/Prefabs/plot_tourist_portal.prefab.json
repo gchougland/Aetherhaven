@@ -2998,7 +2998,16 @@
       "x": 6,
       "y": 3,
       "z": 3,
-      "name": "Empty"
+      "name": "Aetherhaven_Management_Block",
+      "components": {
+        "Components": {
+          "AetherhavenManagementBlock": {
+            "PlotId": "",
+            "TownId": ""
+          }
+        }
+      },
+      "rotation": 2
     },
     {
       "x": 6,

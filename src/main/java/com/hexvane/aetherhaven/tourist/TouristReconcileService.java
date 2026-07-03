@@ -15,10 +15,13 @@ import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolState;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -121,10 +124,18 @@ public final class TouristReconcileService {
 
                 if (TouristPortalTickService.shouldTouristLeaveNow(rec, store)) {
                     UUID entityUuid = rec.getEntityUuid();
-                    if (entityUuid != null && isLiveTouristEntity(town, store, liveByCharacter, rec)) {
-                        TouristPortalTickService.sendTouristHomeOrFinalize(
-                            world, plugin, tm, store, town, rec, entityUuid
-                        );
+                    Ref<EntityStore> leaveRef = refForRecord(town, store, liveByCharacter, rec);
+                    if (leaveRef != null && leaveRef.isValid() && entityUuid != null) {
+                        if (!repairTouristIdentity(leaveRef, store, plugin, town, rec)) {
+                            purgeBrokenTouristEntity(world, plugin, store, rec);
+                            it.remove();
+                            changed = true;
+                            released++;
+                        } else {
+                            TouristPortalTickService.sendTouristHomeOrFinalize(
+                                world, plugin, tm, store, town, rec, entityUuid
+                            );
+                        }
                     } else if (!rec.isInvitedToStay()) {
                         releaseStaleTouristRecord(world, plugin, rec);
                         it.remove();
@@ -134,9 +145,17 @@ public final class TouristReconcileService {
                     continue;
                 }
 
-                if (isLiveTouristEntity(town, store, liveByCharacter, rec)) {
-                    TownsfolkExistenceService.LiveTownsfolkEntity live = liveByCharacter.get(characterId);
-                    UUID liveUuid = live != null ? live.entityUuid() : rec.getEntityUuid();
+                Ref<EntityStore> ref = refForRecord(town, store, liveByCharacter, rec);
+                if (ref != null && ref.isValid()) {
+                    if (!repairTouristIdentity(ref, store, plugin, town, rec)) {
+                        purgeBrokenTouristEntity(world, plugin, store, rec);
+                        it.remove();
+                        changed = true;
+                        released++;
+                        continue;
+                    }
+                    UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+                    UUID liveUuid = uc != null ? uc.getUuid() : rec.getEntityUuid();
                     if (liveUuid != null) {
                         UUID recorded = rec.getEntityUuid();
                         if (recorded == null || !recorded.equals(liveUuid)) {
@@ -145,9 +164,8 @@ public final class TouristReconcileService {
                             synced++;
                         }
                     }
-                    Ref<EntityStore> ref = refForRecord(town, store, liveByCharacter, rec);
                     ensureAutonomyAfterBind(ref, store, plugin, town, world, rec);
-                    syncPoolCheckout(pool, town, rec, live);
+                    syncPoolCheckout(pool, town, rec, liveByCharacter.get(characterId));
                     continue;
                 }
 
@@ -221,7 +239,7 @@ public final class TouristReconcileService {
         TownsfolkExistenceService.LiveTownsfolkEntity live = liveByCharacter.get(characterId);
         if (live != null
             && town.getTownId().equals(live.townId())
-            && TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(live.assignmentKind().trim())) {
+            && TownsfolkAssignmentKinds.isTourist(live.assignmentKind())) {
             return true;
         }
         UUID recorded = rec.getEntityUuid();
@@ -229,7 +247,28 @@ public final class TouristReconcileService {
             return false;
         }
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(recorded);
-        return ref != null && ref.isValid();
+        return entityHasTouristComponents(store, ref, town);
+    }
+
+    /** True when the entity can run tourist autonomy and dialogue identity resolution. */
+    public static boolean entityHasTouristComponents(
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> ref,
+        @Nonnull TownRecord town
+    ) {
+        if (ref == null || !ref.isValid()) {
+            return false;
+        }
+        NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+        if (npc == null) {
+            return false;
+        }
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        if (tb == null || !TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind())) {
+            return false;
+        }
+        TownVillagerBinding vb = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        return vb != null && town.getTownId().equals(vb.getTownId());
     }
 
     @Nonnull
@@ -246,8 +285,7 @@ public final class TouristReconcileService {
             }
         }
         for (TownsfolkExistenceService.LiveTownsfolkEntity live : liveByCharacter.values()) {
-            if (town.getTownId().equals(live.townId())
-                && TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(live.assignmentKind().trim())) {
+            if (town.getTownId().equals(live.townId()) && TownsfolkAssignmentKinds.isTourist(live.assignmentKind())) {
                 out.add(live.characterId());
             }
         }
@@ -263,6 +301,87 @@ public final class TouristReconcileService {
         if (!characterId.isBlank()) {
             TownsfolkSpawnService.release(world, plugin, characterId);
         }
+    }
+
+    /**
+     * Rebuilds missing or incomplete tourist identity components from the catalog.
+     *
+     * @return false when the character id is unknown and the entity cannot be repaired
+     */
+    private static boolean repairTouristIdentity(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TouristRecord rec
+    ) {
+        String characterId = rec.getCharacterId();
+        if (characterId.isBlank()) {
+            return false;
+        }
+        TownsfolkCharacterDefinition def = plugin.getTownsfolkCharacterCatalog().byId(characterId);
+        if (def == null) {
+            return false;
+        }
+
+        TownsfolkCharacterBinding binding = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        boolean needsBinding =
+            binding == null
+                || !characterId.equals(binding.getCharacterId())
+                || !TownsfolkAssignmentKinds.isTourist(binding.getAssignmentKind())
+                || binding.getModelAssetId().isBlank()
+                || binding.getPersonalityIds().isEmpty();
+        if (needsBinding) {
+            String modelId =
+                binding != null && !binding.getModelAssetId().isBlank()
+                    ? binding.getModelAssetId()
+                    : def.getModelAssetId();
+            var personalities =
+                binding != null && !binding.getPersonalityIds().isEmpty()
+                    ? binding.getPersonalityIds()
+                    : def.getPersonalityIds();
+            String activePersonality =
+                binding != null ? binding.getActivePersonalityId() : "";
+            store.putComponent(
+                ref,
+                TownsfolkCharacterBinding.getComponentType(),
+                new TownsfolkCharacterBinding(
+                    characterId,
+                    activePersonality,
+                    TownsfolkAssignmentKinds.TOURIST,
+                    modelId,
+                    personalities
+                )
+            );
+        }
+
+        TownVillagerBinding villagerBinding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        if (villagerBinding == null || !town.getTownId().equals(villagerBinding.getTownId())) {
+            store.putComponent(
+                ref,
+                TownVillagerBinding.getComponentType(),
+                new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_TOWNSFOLK, null)
+            );
+        }
+
+        ensureDisplayName(ref, store, plugin, characterId);
+        return store.getComponent(ref, NPCEntity.getComponentType()) != null;
+    }
+
+    private static void purgeBrokenTouristEntity(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TouristRecord rec
+    ) {
+        UUID entityUuid = rec.getEntityUuid();
+        if (entityUuid != null) {
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+            if (ref != null && ref.isValid()) {
+                store.removeEntity(ref, RemoveReason.REMOVE);
+            }
+        }
+        releaseStaleTouristRecord(world, plugin, rec);
     }
 
     private static void ensureAutonomyAfterBind(
@@ -324,7 +443,7 @@ public final class TouristReconcileService {
             if (!town.getTownId().equals(live.townId())) {
                 continue;
             }
-            if (!TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(live.assignmentKind().trim())) {
+            if (!TownsfolkAssignmentKinds.isTourist(live.assignmentKind())) {
                 continue;
             }
             String characterId = live.characterId();
@@ -337,7 +456,9 @@ public final class TouristReconcileService {
                     && live.entityUuid() != null
                     && !live.entityUuid().equals(existing.getEntityUuid())) {
                     existing.setEntityUuid(live.entityUuid());
-                    ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, existing);
+                    if (repairTouristIdentity(live.ref(), store, plugin, town, existing)) {
+                        ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, existing);
+                    }
                     changed = true;
                 }
                 continue;
@@ -370,7 +491,9 @@ public final class TouristReconcileService {
                     )
                 );
             town.getTouristRecords().add(rec);
-            ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, rec);
+            if (repairTouristIdentity(live.ref(), store, plugin, town, rec)) {
+                ensureAutonomyAfterBind(live.ref(), store, plugin, town, world, rec);
+            }
             changed = true;
         }
         if (changed) {
@@ -513,7 +636,7 @@ public final class TouristReconcileService {
         if (!entityUuid.toString().equalsIgnoreCase(checkout.getEntityUuid())) {
             checkout.setEntityUuid(entityUuid.toString());
         }
-        if (!TownsfolkAssignmentKinds.TOURIST.equalsIgnoreCase(checkout.getAssignmentKind().trim())) {
+        if (!TownsfolkAssignmentKinds.isTourist(checkout.getAssignmentKind())) {
             checkout.setAssignmentKind(TownsfolkAssignmentKinds.TOURIST);
         }
         if (!town.getTownId().toString().equals(checkout.getTownId())) {

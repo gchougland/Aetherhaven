@@ -5,7 +5,8 @@
   },
   "PlayerAnimationsId": "Block",
   "Categories": [
-    "Furniture.Deco"
+    "Furniture.Deco",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Inn_Bell.png",

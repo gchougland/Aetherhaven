@@ -2,12 +2,10 @@ package com.hexvane.aetherhaven.npc;
 
 import com.hexvane.aetherhaven.marker.MarkerFacingYaw;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.protocol.AnimationSlot;
-import com.hypixel.hytale.server.core.entity.AnimationUtils;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
@@ -38,9 +36,9 @@ public final class NpcReputationWaveVisuals {
         faceToward(npcRef, playerPos, store, commandBuffer);
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc != null) {
-            npc.playAnimation(npcRef, AnimationSlot.Status, WAVE_ANIMATION_ID, commandBuffer);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, WAVE_ANIMATION_ID, commandBuffer);
         } else {
-            AnimationUtils.playAnimation(npcRef, AnimationSlot.Status, WAVE_ANIMATION_ID, commandBuffer);
+            NpcAnimationPlayback.play(npcRef, AnimationSlot.Status, WAVE_ANIMATION_ID, commandBuffer);
         }
     }
 
@@ -59,17 +57,17 @@ public final class NpcReputationWaveVisuals {
     public static void stopWave(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull NpcReputationWaveState waveState,
-        @Nonnull ComponentAccessor<EntityStore> accessor
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
         if (!npcRef.isValid()) {
             return;
         }
         waveState.clearWaveTarget();
-        NPCEntity npc = accessor.getComponent(npcRef, NPCEntity.getComponentType());
+        NPCEntity npc = commandBuffer.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc != null) {
-            npc.playAnimation(npcRef, AnimationSlot.Status, null, accessor);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, null, commandBuffer);
         } else {
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Status, accessor);
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Status, commandBuffer);
         }
     }
 

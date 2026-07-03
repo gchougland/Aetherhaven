@@ -15,7 +15,8 @@
     }
   },
   "Categories": [
-    "Items.Potions"
+    "Items.Potions",
+    "Aetherhaven.All"
   ],
   "Recipe": {
     "TimeSeconds": 0,

@@ -114,6 +114,8 @@ public final class AetherhavenCoreBootstrap {
 
         plugin.initAetherhavenCommand(new AetherhavenCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenJournalCommand());
+        // After shared components and the /ah command tree — feature packs register systems and subcommands.
+        AetherhavenFeatureBootstrap.registerEnabled(plugin);
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
     }
 

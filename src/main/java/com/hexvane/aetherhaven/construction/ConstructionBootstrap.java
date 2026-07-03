@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.charter.CharterPlaceEventSystem;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyMarkerSpawner;
@@ -24,7 +23,6 @@ import com.hexvane.aetherhaven.loot.PlayerBlockBreakBonusSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentBreakSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentPlaceSystem;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueRestoreSystem;
-import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.placement.PlotBlockPreviewCleanupSystem;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.plot.CharterBlock;
@@ -202,8 +200,7 @@ public final class ConstructionBootstrap {
         ManagementBlock.register(plugin.getChunkStoreRegistry());
         CharterBlock.register(plugin.getChunkStoreRegistry());
         FounderMonumentBlock.register(plugin.getChunkStoreRegistry());
-        FounderMonumentStatueSkin.register(plugin.getEntityStoreRegistry());
-        BuilderConstructionAssistState.register(plugin.getEntityStoreRegistry());
+        // FounderMonumentStatueSkin + BuilderConstructionAssistState: parent (AetherhavenSharedEntityComponents).
         BuildingStaffAssemblyChannelComponent.register(plugin.getEntityStoreRegistry());
         BuildingStaffFrontierTracerComponent.register(plugin.getEntityStoreRegistry());
         BuildingStaffPreviewPlayerComponent.register(plugin.getEntityStoreRegistry());

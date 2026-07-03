@@ -40,7 +40,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Plot_Creator_Staff.png",
   "Categories": [
-    "Items.Tools"
+    "Items.Tools",
+    "Aetherhaven.All"
   ],
   "Model": "Items/Aetherhaven/Building_Staff/Building_Staff.blockymodel",
   "Texture": "Items/Aetherhaven/Building_Staff/Plot_Creator_Staff.png",

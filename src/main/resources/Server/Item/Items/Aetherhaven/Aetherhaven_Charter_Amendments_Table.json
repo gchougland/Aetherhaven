@@ -32,7 +32,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Charter_Amendments_Table.png",
   "Categories": [
-    "Furniture.Benches"
+    "Furniture.Benches",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "BlockType": {

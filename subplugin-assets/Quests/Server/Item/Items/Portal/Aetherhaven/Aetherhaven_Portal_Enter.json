@@ -5,7 +5,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Portal_Return.png",
   "Categories": [
-    "Blocks.Portals"
+    "Blocks.Portals",
+    "Aetherhaven.All"
   ],
   "BlockType": {
     "AmbientSoundEventId": "SFX_Portal_Neutral",

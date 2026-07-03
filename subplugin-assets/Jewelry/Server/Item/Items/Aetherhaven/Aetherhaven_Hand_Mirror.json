@@ -31,7 +31,8 @@
     ]
   },
   "Categories": [
-    "Items.Utility"
+    "Items.Utility",
+    "Aetherhaven.All"
   ],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Hand_Mirror.png",
   "Model": "Items/Aetherhaven/Hand_Mirror.blockymodel",

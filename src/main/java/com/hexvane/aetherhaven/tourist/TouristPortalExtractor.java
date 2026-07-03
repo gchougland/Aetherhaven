@@ -1,7 +1,7 @@
 package com.hexvane.aetherhaven.tourist;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -10,6 +10,8 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,12 +33,15 @@ public final class TouristPortalExtractor {
     ) {
         PlotFootprintRecord fp = plot.toFootprint();
         TouristPortalRegistry registry = AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
         int activated = 0;
+        Set<UUID> reboundPortalIds = new HashSet<>();
 
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    if (!AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(world.getBlockType(x, y, z).getId())) {
+                    // Multi-block portals occupy a filler voxel with the same block type; only the base cell is a portal.
+                    if (!TouristPortalBlockUtil.isPortalBaseBlock(world, x, y, z)) {
                         continue;
                     }
                     Vector3i pos = new Vector3i(x, y, z);
@@ -49,10 +54,13 @@ public final class TouristPortalExtractor {
                             continue;
                         }
                     }
-                    activated += activatePortal(world, plugin, registry, town, plotId, pos, blockComp);
+                    activated +=
+                        activatePortal(world, plugin, registry, town, plotId, plot, def, pos, blockComp, reboundPortalIds);
                 }
             }
         }
+
+        TouristPortalPlotRelocation.finishPlotMove(world, plugin, store, town, plotId, reboundPortalIds);
 
         if (activated > 0) {
             TouristPortalPersistence.save(world, plugin, registry);
@@ -66,25 +74,31 @@ public final class TouristPortalExtractor {
         @Nonnull TouristPortalRegistry registry,
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
+        @Nonnull PlotInstance plot,
+        @Nullable ConstructionDefinition def,
         @Nonnull Vector3i pos,
-        @Nullable TouristPortalBlock blockComp
+        @Nullable TouristPortalBlock blockComp,
+        @Nonnull Set<UUID> reboundPortalIds
     ) {
         TouristPortalRecord existing = registry.getAtBlock(pos.x, pos.y, pos.z);
         if (existing != null) {
             registry.remove(existing.getPortalId());
         }
 
-        UUID portalId = UUID.randomUUID();
-        if (blockComp != null && !blockComp.getPortalId().isBlank()) {
-            try {
-                portalId = UUID.fromString(blockComp.getPortalId().trim());
-            } catch (IllegalArgumentException ignored) {
-                // use fresh id
+        TouristPortalRecord record =
+            def != null ? TouristPortalPlotRelocation.takeDetached(plotId, pos, plot, def) : null;
+        if (record == null) {
+            UUID portalId = UUID.randomUUID();
+            if (blockComp != null && !blockComp.getPortalId().isBlank()) {
+                try {
+                    portalId = UUID.fromString(blockComp.getPortalId().trim());
+                } catch (IllegalArgumentException ignored) {
+                    // use fresh id
+                }
             }
+            record = new TouristPortalRecord();
+            record.setPortalId(portalId);
         }
-
-        TouristPortalRecord record = new TouristPortalRecord();
-        record.setPortalId(portalId);
         record.setWorldName(world.getName());
         record.setBlockPosition(pos);
         record.setTownId(town.getTownId());
@@ -92,6 +106,7 @@ public final class TouristPortalExtractor {
 
         registry.put(record);
         TouristPortalBlockUtil.syncConfigToBlock(world, pos, record);
+        reboundPortalIds.add(record.getPortalId());
         return 1;
     }
 }

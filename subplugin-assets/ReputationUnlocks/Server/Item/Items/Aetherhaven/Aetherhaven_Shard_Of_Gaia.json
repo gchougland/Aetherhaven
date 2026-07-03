@@ -5,7 +5,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Shard_Of_Gaia.png",
   "Categories": [
-    "Items.Ingredients"
+    "Items.Ingredients",
+    "Aetherhaven.All"
   ],
   "Model": "Resources/Crystals/Crystal_Fragment.blockymodel",
   "Texture": "Resources/Crystals/Crystal_Fragment_Textures/Shard_of_Gaia.png",

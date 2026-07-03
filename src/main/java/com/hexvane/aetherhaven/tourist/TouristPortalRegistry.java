@@ -76,6 +76,17 @@ public final class TouristPortalRegistry {
         return out;
     }
 
+    @Nonnull
+    public List<TouristPortalRecord> listForPlot(@Nonnull UUID plotId) {
+        List<TouristPortalRecord> out = new ArrayList<>();
+        for (TouristPortalRecord r : byId.values()) {
+            if (plotId.equals(r.getPlotId())) {
+                out.add(r);
+            }
+        }
+        return out;
+    }
+
     private static long blockKey(int x, int y, int z) {
         return ((long) x & 0x3FFFFFFL) | (((long) y & 0xFFFL) << 26) | (((long) z & 0x3FFFFFFL) << 38);
     }

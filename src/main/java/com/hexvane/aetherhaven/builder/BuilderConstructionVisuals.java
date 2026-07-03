@@ -2,13 +2,13 @@ package com.hexvane.aetherhaven.builder;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.AnimationSlot;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.asset.type.itemanimation.config.ItemPlayerAnimations;
-import com.hypixel.hytale.server.core.entity.AnimationUtils;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import javax.annotation.Nonnull;
@@ -53,9 +53,9 @@ public final class BuilderConstructionVisuals {
         }
         ItemPlayerAnimations ipa = ItemPlayerAnimations.getAssetMap().getAsset(pid);
         if (ipa != null) {
-            AnimationUtils.playAnimation(npcRef, AnimationSlot.Action, ipa, "SwingLeft", store);
+            NpcAnimationPlayback.playItem(npcRef, AnimationSlot.Action, ipa, "SwingLeft", commandBuffer);
         } else {
-            npc.playAnimation(npcRef, AnimationSlot.Action, "SwingLeft", store);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Action, "SwingLeft", commandBuffer);
         }
         commandBuffer.putComponent(npcRef, NPCEntity.getComponentType(), npc);
     }
@@ -67,10 +67,10 @@ public final class BuilderConstructionVisuals {
         @Nullable NPCEntity npc
     ) {
         if (npc != null) {
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Action, store);
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Status, store);
-            npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
-            npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Action, commandBuffer);
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Status, commandBuffer);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Action, null, commandBuffer);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, null, commandBuffer);
             commandBuffer.putComponent(npcRef, NPCEntity.getComponentType(), npc);
         }
     }

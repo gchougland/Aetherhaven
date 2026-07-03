@@ -30,6 +30,22 @@ public final class TouristPortalBlockUtil {
         return type != null && AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(type.getId());
     }
 
+    /**
+     * True for the non-filler base cell of a multi-block portal. Filler voxels share the block type id but must not
+     * create their own {@link TouristPortalRecord}.
+     */
+    @SuppressWarnings({ "deprecation", "removal" })
+    public static boolean isPortalBaseBlock(@Nonnull World world, int x, int y, int z) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return false;
+        }
+        if (!isTouristPortalBlock(chunk.getBlockType(x, y, z))) {
+            return false;
+        }
+        return chunk.getFiller(x, y, z) == 0;
+    }
+
     @Nullable
     public static TouristPortalBlock getBlockComponent(@Nonnull World world, @Nonnull Vector3i pos) {
         WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));

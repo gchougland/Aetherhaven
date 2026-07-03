@@ -54,6 +54,9 @@ public final class BuilderConstructionAssistState implements Component<EntitySto
     private transient int travelStuckTicks;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType =
             registry.registerComponent(
                 BuilderConstructionAssistState.class,

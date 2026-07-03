@@ -27,7 +27,8 @@
   },
   "PlayerAnimationsId": "Block",
   "Categories": [
-    "Furniture.Decorative"
+    "Furniture.Decorative",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Interactions": {

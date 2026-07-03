@@ -31,7 +31,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Town_Planning_Desk.png",
   "Categories": [
-    "Furniture.Benches"
+    "Furniture.Benches",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "BlockType": {

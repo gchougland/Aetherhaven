@@ -4,7 +4,8 @@
     "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Ring_Large_Glow.description"
   },
   "Categories": [
-    "Items.Utility"
+    "Items.Utility",
+    "Aetherhaven.All"
   ],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Ring_Large_Glow.png",
   "Model": "Items/Aetherhaven/Jewelry/Ring.blockymodel",

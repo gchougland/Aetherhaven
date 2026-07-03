@@ -143,7 +143,7 @@ public final class DialogueResolver {
                         townsfolkBinding.getAssignmentKind()
                     )) {
                         kind = KIND_GUILD_ADVENTURER;
-                    } else if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.TOURIST.equals(
+                    } else if (com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds.isTourist(
                         townsfolkBinding.getAssignmentKind()
                     )) {
                         kind = KIND_TOURIST;

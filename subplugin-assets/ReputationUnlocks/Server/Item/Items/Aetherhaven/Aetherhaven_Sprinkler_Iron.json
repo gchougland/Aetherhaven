@@ -28,7 +28,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Sprinkler_Iron.png",
   "Categories": [
-    "Furniture.Decorative"
+    "Furniture.Decorative",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "BlockType": {

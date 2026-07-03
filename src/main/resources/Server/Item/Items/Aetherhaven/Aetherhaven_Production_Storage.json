@@ -4,7 +4,7 @@
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Production_Storage.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Tavern_Wardrobe.png",
-  "Categories": ["Furniture.Furniture"],
+  "Categories": ["Furniture.Furniture", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "IconProperties": {
     "Rotation": [22.5, 45, 22.5],

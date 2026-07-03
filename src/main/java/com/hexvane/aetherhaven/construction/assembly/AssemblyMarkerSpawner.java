@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -147,6 +148,11 @@ public final class AssemblyMarkerSpawner {
     /** World shutdown / load hygiene: drop every transient assembly preview marker in this world. */
     public static void purgeAllInWorld(@Nonnull World world) {
         if (!world.isAlive()) {
+            return;
+        }
+        // RemoveWorldEvent (e.g. prefab-editor exit) can run off the world thread; Store requires it.
+        if (!world.isInThread()) {
+            CompletableFuture.runAsync(() -> purgeAllInWorld(world), world).join();
             return;
         }
         Store<EntityStore> store = world.getEntityStore().getStore();

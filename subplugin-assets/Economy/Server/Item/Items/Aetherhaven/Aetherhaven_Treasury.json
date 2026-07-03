@@ -4,7 +4,7 @@
     "Description": "aetherhaven_items.items.Aetherhaven_Treasury.description"
   },
   "PlayerAnimationsId": "Block",
-  "Categories": ["Furniture.Containers"],
+  "Categories": ["Furniture.Containers", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Furniture_Dungeon_Chest_Epic.png",
   "BlockType": {

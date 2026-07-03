@@ -1,0 +1,12 @@
+{
+  "Name": "aetherhaven_items.creativeCategory.aetherhaven",
+  "Icon": "Icons/ItemCategories/house_icon_256.png",
+  "Order": 4,
+  "Children": [
+    {
+      "Id": "All",
+      "Name": "aetherhaven_items.creativeCategory.aetherhaven",
+      "Icon": "Icons/ItemCategories/house_icon_256.png"
+    }
+  ]
+}

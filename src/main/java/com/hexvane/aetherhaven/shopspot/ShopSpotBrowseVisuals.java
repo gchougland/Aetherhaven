@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -42,7 +43,7 @@ public final class ShopSpotBrowseVisuals {
     }
 
     private static void playPonder(@Nonnull Ref<EntityStore> npcRef, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
-        AnimationUtils.playAnimation(npcRef, AnimationSlot.Emote, null, PONDER_EMOTE_ID, false, commandBuffer);
+        NpcAnimationPlayback.play(npcRef, AnimationSlot.Emote, PONDER_EMOTE_ID, commandBuffer);
     }
 
     private static void playPonder(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
@@ -54,18 +55,17 @@ public final class ShopSpotBrowseVisuals {
         @Nonnull Store<EntityStore> store,
         @Nullable CommandBuffer<EntityStore> commandBuffer
     ) {
-        if (commandBuffer != null) {
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Emote, commandBuffer);
-        } else {
-            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Emote, store);
-        }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-        if (npc != null) {
-            if (commandBuffer != null) {
-                npc.playAnimation(npcRef, AnimationSlot.Emote, null, commandBuffer);
-            } else {
-                npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
+        if (commandBuffer != null) {
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Emote, commandBuffer);
+            if (npc != null) {
+                NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Emote, null, commandBuffer);
             }
+            return;
+        }
+        AnimationUtils.stopAnimation(npcRef, AnimationSlot.Emote, store);
+        if (npc != null) {
+            npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
         }
     }
 }

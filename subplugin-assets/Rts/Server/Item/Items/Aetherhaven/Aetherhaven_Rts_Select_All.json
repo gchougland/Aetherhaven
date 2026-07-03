@@ -3,7 +3,7 @@
     "Name": "aetherhaven_rts.items.Aetherhaven_Rts_Select_All.name",
     "Description": "aetherhaven_rts.items.Aetherhaven_Rts_Select_All.description"
   },
-  "Categories": ["Items.Weapons"],
+  "Categories": ["Items.Weapons", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Rts_Formation.png",
   "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
   "Texture": "Items/Aetherhaven/Patrol_Wand.png",

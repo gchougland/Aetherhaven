@@ -9,22 +9,18 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Checks whether an Aetherhaven subplugin is loaded and enabled. Subplugins call {@link #shouldSetup(JavaPlugin)}
- * at the start of {@code setup()} because Hytale does not run {@code canLoadOnBoot} per subplugin entry.
+ * Checks whether an Aetherhaven feature pack is enabled in server mod config.
+ * Feature packs are registered by the parent via {@link AetherhavenFeatureBootstrap} (not manifest SubPlugins).
  */
 public final class AetherhavenFeatures {
     private AetherhavenFeatures() {}
 
+    /**
+     * Whether a feature pack is active. Feature packs are registered by the parent plugin (not manifest
+     * {@code SubPlugins}), so this is config-gated only — see {@link AetherhavenFeatureBootstrap}.
+     */
     public static boolean isLoaded(@Nonnull PluginIdentifier id) {
-        if (!isEnabledInServerConfig(id)) {
-            return false;
-        }
-        PluginManager manager = PluginManager.get();
-        if (manager == null) {
-            return false;
-        }
-        PluginBase plugin = manager.getPlugin(id);
-        return plugin != null && plugin.isEnabled();
+        return isEnabledInServerConfig(id);
     }
 
     public static boolean isEnabledInServerConfig(@Nonnull PluginIdentifier id) {

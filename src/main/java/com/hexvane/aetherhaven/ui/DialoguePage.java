@@ -37,6 +37,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
+import com.hypixel.hytale.server.core.modules.entity.component.PersistentDisplayName;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -54,6 +55,9 @@ import javax.annotation.Nullable;
 
 /** Custom dialogue UI: full node text and choices in one build (no progressive reveal). */
 public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<DialoguePage.DialogueEventData> {
+    private static final String GREETING_FALLBACK_LANG =
+        "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.greeting_fallback";
+
     private static final String DIALOGUE_PANEL = "#DialoguePanel";
     private static final String DIALOGUE_FILL = DIALOGUE_PANEL + " #DialogueFill";
     private static final String HEADER_ROW = DIALOGUE_FILL + " #HeaderRow";
@@ -283,16 +287,35 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return Message.raw("");
         }
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
-            return Message.raw("");
+        if (plugin != null) {
+            TownsfolkCharacterBinding binding = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+            if (binding != null) {
+                TownsfolkCharacterDefinition character =
+                    plugin.getTownsfolkCharacterCatalog().byId(binding.getCharacterId());
+                String name = character != null ? character.getDisplayName() : null;
+                if (name != null && !name.isBlank()) {
+                    return Message.raw(name);
+                }
+            }
         }
-        TownsfolkCharacterBinding binding = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
-        if (binding == null) {
-            return Message.raw("");
+        PersistentDisplayName displayName = store.getComponent(npcRef, PersistentDisplayName.getComponentType());
+        if (displayName != null && displayName.getDisplayName() != null) {
+            String raw = displayName.getDisplayName().getRawText();
+            if (raw != null && !raw.isBlank()) {
+                return Message.raw(raw.trim());
+            }
         }
-        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(binding.getCharacterId());
-        String name = character != null ? character.getDisplayName() : null;
-        return name != null && !name.isBlank() ? Message.raw(name) : Message.raw("");
+        if (plugin != null) {
+            NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+            String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+            if (!roleId.isBlank()) {
+                String resolved = TownResidentDisplay.resolveFromEntity(store, npcRef, roleId, plugin).displayName();
+                if (resolved != null && !resolved.isBlank()) {
+                    return Message.raw(resolved);
+                }
+            }
+        }
+        return Message.raw("");
     }
 
     @Nonnull
@@ -332,6 +355,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                     }
                 }
             }
+            String body = node.getText() != null ? node.getText() : "";
+            if (!body.isBlank()) {
+                return dialogueMessage(body);
+            }
+            return Message.translation(GREETING_FALLBACK_LANG);
         }
         String body = node.getText() != null ? node.getText() : "";
         return dialogueMessage(body);

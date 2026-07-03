@@ -32,7 +32,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Geode_Anvil.png",
   "Categories": [
-    "Furniture.Benches"
+    "Furniture.Benches",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "BlockType": {

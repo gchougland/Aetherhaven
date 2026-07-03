@@ -159,7 +159,7 @@ public final class NpcFaceVisuals {
         VillagerNeeds needs = store.getComponent(npcRef, VillagerNeeds.getComponentType());
         NeedsMoodTier tier = resolveMoodTier(needs, config.lowThreshold(), config.highThreshold());
         boolean townsfolk = isTownsfolk(store, npcRef);
-        playFaceAnimation(npcRef, moodFaceAnimationId(tier, townsfolk), store);
+        playFaceAnimation(npcRef, moodFaceAnimationId(tier, townsfolk), commandBuffer);
         NpcFaceVisualState state = store.getComponent(npcRef, NpcFaceVisualState.getComponentType());
         if (state == null) {
             state = NpcFaceVisualState.fresh();
@@ -287,22 +287,43 @@ public final class NpcFaceVisuals {
     private static void playFaceAnimation(
         @Nonnull Ref<EntityStore> npcRef,
         @Nullable String animationId,
-        @Nonnull ComponentAccessor<EntityStore> componentAccessor
+        @Nonnull Store<EntityStore> store
     ) {
-        NPCEntity npc = componentAccessor.getComponent(npcRef, NPCEntity.getComponentType());
-        if (npc == null || componentAccessor.getComponent(npcRef, NetworkId.getComponentType()) == null) {
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null || store.getComponent(npcRef, NetworkId.getComponentType()) == null) {
             return;
         }
         if (animationId == null) {
-            ActiveAnimationComponent active = componentAccessor.getComponent(npcRef, ActiveAnimationComponent.getComponentType());
+            ActiveAnimationComponent active = store.getComponent(npcRef, ActiveAnimationComponent.getComponentType());
             if (active != null && active.getActiveAnimations()[AnimationSlot.Face.ordinal()] != null) {
-                npc.playAnimation(npcRef, AnimationSlot.Face, null, componentAccessor);
+                npc.playAnimation(npcRef, AnimationSlot.Face, null, store);
             } else {
-                AnimationUtils.stopAnimation(npcRef, AnimationSlot.Face, componentAccessor);
+                AnimationUtils.stopAnimation(npcRef, AnimationSlot.Face, store);
             }
             return;
         }
-        npc.playAnimation(npcRef, AnimationSlot.Face, animationId, componentAccessor);
+        npc.playAnimation(npcRef, AnimationSlot.Face, animationId, store);
+    }
+
+    private static void playFaceAnimation(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nullable String animationId,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        NPCEntity npc = commandBuffer.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null || commandBuffer.getComponent(npcRef, NetworkId.getComponentType()) == null) {
+            return;
+        }
+        if (animationId == null) {
+            ActiveAnimationComponent active = commandBuffer.getComponent(npcRef, ActiveAnimationComponent.getComponentType());
+            if (active != null && active.getActiveAnimations()[AnimationSlot.Face.ordinal()] != null) {
+                NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Face, null, commandBuffer);
+            } else {
+                NpcAnimationPlayback.stop(npcRef, AnimationSlot.Face, commandBuffer);
+            }
+            return;
+        }
+        NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Face, animationId, commandBuffer);
     }
 
     public record MoodConfig(float talkDurationSeconds, float lowThreshold, float highThreshold) {

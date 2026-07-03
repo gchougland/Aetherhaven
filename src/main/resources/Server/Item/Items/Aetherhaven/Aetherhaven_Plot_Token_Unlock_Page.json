@@ -5,7 +5,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Recipe_Page.png",
   "Categories": [
-    "Items.Recipes"
+    "Items.Recipes",
+    "Aetherhaven.All"
   ],
   "PlayerAnimationsId": "Item",
   "Model": "Items/Consumables/Recipes/Recipe.blockymodel",

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -22,6 +23,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nonnull;
+import org.joml.Vector3i;
 
 public final class PlotPlacementCommit {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -217,7 +219,7 @@ public final class PlotPlacementCommit {
                 y,
                 z,
                 blockType,
-                chunk.getRotationIndex(x, y, z),
+                PlotBlockRotationUtil.readBlockRotationIndex(world, new Vector3i(x, y, z)),
                 constructionId,
                 plotIdStr
             )) {

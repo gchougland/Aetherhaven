@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.equipment.VillagerEquipmentService;
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBrowseVisuals;
@@ -84,7 +85,7 @@ public final class PoiAutonomyVisuals {
         if (poi.getInteractionKind() == PoiInteractionKind.USE_BENCH && tags.contains("EAT")) {
             faceTowardBlock(npcRef, store, commandBuffer, poi);
             tryEquipCampfireHeldFood(npcRef, store, commandBuffer);
-            playCampfireConsumeAnim(npcRef, store);
+            playCampfireConsumeAnim(npcRef, commandBuffer);
             return;
         }
         if (poi.getInteractionKind() == PoiInteractionKind.SIT) {
@@ -94,7 +95,7 @@ public final class PoiAutonomyVisuals {
                 if (mountedNpc != null) {
                     String sitAnim = pickAnimationId(store, npcRef, PoiInteractionKind.SIT);
                     if (sitAnim != null) {
-                        mountedNpc.playAnimation(npcRef, AnimationSlot.Status, sitAnim, store);
+                        NpcAnimationPlayback.play(npcRef, mountedNpc, AnimationSlot.Status, sitAnim, commandBuffer);
                     }
                 }
                 return;
@@ -106,7 +107,7 @@ public final class PoiAutonomyVisuals {
                 if (mountedNpc != null) {
                     String sleepAnim = pickAnimationId(store, npcRef, PoiInteractionKind.SLEEP);
                     if (sleepAnim != null) {
-                        mountedNpc.playAnimation(npcRef, AnimationSlot.Status, sleepAnim, store);
+                        NpcAnimationPlayback.play(npcRef, mountedNpc, AnimationSlot.Status, sleepAnim, commandBuffer);
                     }
                 }
                 return;
@@ -141,7 +142,7 @@ public final class PoiAutonomyVisuals {
         }
         String anim = pickAnimationId(store, npcRef, poi.getInteractionKind());
         if (anim != null) {
-            npc.playAnimation(npcRef, AnimationSlot.Status, anim, store);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Status, anim, commandBuffer);
         }
     }
 
@@ -226,20 +227,19 @@ public final class PoiAutonomyVisuals {
         if (npc == null) {
             npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         }
-        stopCampfireConsumeVisuals(npcRef, store, npc);
-        AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
         if (commandBuffer != null) {
+            stopCampfireConsumeVisuals(npcRef, commandBuffer, npc);
+            NpcAnimationPlayback.stop(npcRef, AnimationSlot.Movement, commandBuffer);
             ShopSpotBrowseVisuals.endPonder(npcRef, store, commandBuffer);
-        } else {
-            ShopSpotBrowseVisuals.endPonder(npcRef, store);
-        }
-        if (npc != null) {
-            if (commandBuffer != null) {
-                npc.playAnimation(npcRef, AnimationSlot.Status, null, commandBuffer);
-                npc.playAnimation(npcRef, AnimationSlot.Action, null, commandBuffer);
-                npc.playAnimation(npcRef, AnimationSlot.Emote, null, commandBuffer);
+            if (npc != null) {
+                NpcAnimationPlayback.clearOverlaySlots(npcRef, npc, commandBuffer);
                 commandBuffer.putComponent(npcRef, NPCEntity.getComponentType(), npc);
-            } else {
+            }
+        } else {
+            stopCampfireConsumeVisuals(npcRef, store, npc);
+            AnimationUtils.stopAnimation(npcRef, AnimationSlot.Movement, store);
+            ShopSpotBrowseVisuals.endPonder(npcRef, store);
+            if (npc != null) {
                 npc.playAnimation(npcRef, AnimationSlot.Status, null, store);
                 npc.playAnimation(npcRef, AnimationSlot.Action, null, store);
                 npc.playAnimation(npcRef, AnimationSlot.Emote, null, store);
@@ -411,7 +411,10 @@ public final class PoiAutonomyVisuals {
         commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
     }
 
-    private static void playCampfireConsumeAnim(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+    private static void playCampfireConsumeAnim(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
         Item item = Item.getAssetMap().getAsset(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID);
         if (item == null) {
             return;
@@ -424,13 +427,31 @@ public final class PoiAutonomyVisuals {
         if (ipa == null) {
             return;
         }
-        AnimationUtils.playAnimation(npcRef, AnimationSlot.Action, ipa, "Consume", store);
+        NpcAnimationPlayback.playItem(npcRef, AnimationSlot.Action, ipa, "Consume", commandBuffer);
     }
 
     /**
      * Item “Consume” can leave client-side state on Action and/or Emote; also send an explicit clear with the same
      * item-animations id (matches interaction {@code ClearAnimationOnFinish} behaviour).
      */
+    private static void stopCampfireConsumeVisuals(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nullable NPCEntity npc
+    ) {
+        NpcAnimationPlayback.stop(npcRef, AnimationSlot.Action, commandBuffer);
+        NpcAnimationPlayback.stop(npcRef, AnimationSlot.Emote, commandBuffer);
+        Item item = Item.getAssetMap().getAsset(AetherhavenConstants.CAMPFIRE_EAT_ITEM_ID);
+        String pid = item != null ? item.getPlayerAnimationsId() : null;
+        if (pid != null && !pid.isBlank()) {
+            NpcAnimationPlayback.playItem(npcRef, AnimationSlot.Action, pid, null, commandBuffer);
+        }
+        if (npc != null) {
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Action, null, commandBuffer);
+            NpcAnimationPlayback.play(npcRef, npc, AnimationSlot.Emote, null, commandBuffer);
+        }
+    }
+
     private static void stopCampfireConsumeVisuals(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,

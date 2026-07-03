@@ -162,15 +162,23 @@
     },
     "gift_confirm": {
       "speaker": "aetherhaven_dialogue_bard.aetherhaven.dialogue.aetherhaven_bard.main_hub.speaker",
-      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirm",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.give",
-          "actions": [{ "type": "gift_villager" }],
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_villager",
+              "reactionNodeLove": "main_hub",
+              "reactionNodeLike": "main_hub",
+              "reactionNodeNeutral": "main_hub",
+              "reactionNodeDislike": "main_hub"
+            }
+          ],
           "next": "main_hub"
         },
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.cancel",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
           "next": "main_hub"
         }
       ]

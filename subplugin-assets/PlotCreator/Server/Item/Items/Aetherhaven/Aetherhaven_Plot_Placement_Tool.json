@@ -19,7 +19,7 @@
       }
     ]
   },
-  "Categories": ["Items.Weapons"],
+  "Categories": ["Items.Weapons", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
   "Quality": "Common",
   "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",

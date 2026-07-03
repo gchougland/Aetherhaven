@@ -4,7 +4,7 @@
     "Description": "aetherhaven_items.items.Aetherhaven_Founder_Monument.description"
   },
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Statue.png",
-  "Categories": ["Blocks.Rocks"],
+  "Categories": ["Blocks.Rocks", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "PlayerAnimationsId": "Block",
   "BlockType": {

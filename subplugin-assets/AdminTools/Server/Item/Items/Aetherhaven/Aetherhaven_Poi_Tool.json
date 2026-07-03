@@ -3,7 +3,7 @@
     "Name": "aetherhaven_items.items.Aetherhaven_Poi_Tool.name",
     "Description": "aetherhaven_items.items.Aetherhaven_Poi_Tool.description"
   },
-  "Categories": ["Items.Tools"],
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
   "Quality": "Tool",
   "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",

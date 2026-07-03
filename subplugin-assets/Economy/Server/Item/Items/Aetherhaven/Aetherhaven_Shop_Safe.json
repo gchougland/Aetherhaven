@@ -6,7 +6,7 @@
   "PlayerAnimationsId": "Block",
   "Categories": ["Furniture.Containers"],
   "Set": "Aetherhaven",
-  "Icon": "Icons/ItemsGenerated/Furniture_Dungeon_Chest_Epic.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Shop_Safe.png",
   "BlockType": {
     "BlockParticleSetId": "Wood",
     "BlockSoundSetId": "Wood",

@@ -4,7 +4,7 @@
     "Description": "aetherhaven_ui_journal_items_tail.items.Aetherhaven_Statue_Of_Gaia.description"
   },
   "PlayerAnimationsId": "Block",
-  "Categories": ["Furniture.Decorative"],
+  "Categories": ["Furniture.Decorative", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Furniture_Temple_Light_Statue.png",
   "BlockType": {

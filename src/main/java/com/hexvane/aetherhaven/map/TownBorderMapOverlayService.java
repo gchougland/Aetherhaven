@@ -154,17 +154,11 @@ public final class TownBorderMapOverlayService {
     WORLD_TICK_COUNTER.remove(world.getName());
     WORLD_PLAYER_CURSOR.remove(world.getName());
     GEOMETRY_CACHE.remove(world.getName());
+    // PlayerRef uuid is available off-thread; Store.getComponent is not (RemoveWorldEvent).
     for (PlayerRef pref : world.getPlayerRefs()) {
-      Ref<EntityStore> ref = pref.getReference();
-      if (ref == null || !ref.isValid()) {
-        continue;
-      }
-      UUIDComponent uc = ref.getStore().getComponent(ref, UUIDComponent.getComponentType());
-      if (uc != null) {
-        UUID uuid = uc.getUuid();
-        LAST_OVERLAY_CHUNKS.remove(uuid);
-        PAINT_CACHE.remove(uuid);
-      }
+      UUID uuid = pref.getUuid();
+      LAST_OVERLAY_CHUNKS.remove(uuid);
+      PAINT_CACHE.remove(uuid);
     }
     WORLD_BORDER_STATE.remove(world.getName());
   }

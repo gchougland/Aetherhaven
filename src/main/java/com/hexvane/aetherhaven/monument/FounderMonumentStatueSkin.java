@@ -30,6 +30,9 @@ public final class FounderMonumentStatueSkin implements Component<EntityStore> {
     private static volatile ComponentType<EntityStore, FounderMonumentStatueSkin> componentType;
 
     public static void register(@Nonnull ComponentRegistryProxy<EntityStore> registry) {
+        if (componentType != null) {
+            return;
+        }
         componentType = registry.registerComponent(
             FounderMonumentStatueSkin.class,
             "AetherhavenFounderMonumentStatueSkin",

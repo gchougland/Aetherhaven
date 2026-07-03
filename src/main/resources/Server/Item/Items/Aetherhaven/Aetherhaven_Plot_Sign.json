@@ -5,7 +5,8 @@
   },
   "PlayerAnimationsId": "Block",
   "Categories": [
-    "Furniture.Signs"
+    "Furniture.Signs",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Furniture_Lumberjack_Sign.png",

@@ -10,6 +10,7 @@
   "Quality": "Uncommon",
   "ItemLevel": 20,
   "Set": "Aetherhaven",
+  "Categories": ["Items.Weapons", "Aetherhaven.All"],
   "Recipe": {
     "TimeSeconds": 3.5,
     "KnowledgeRequired": true,

@@ -4,7 +4,8 @@
     "Description": "aetherhaven_jewelry_geode.items.Aetherhaven_Jewelry.genericDescription"
   },
   "Categories": [
-    "Items.Utility"
+    "Items.Utility",
+    "Aetherhaven.All"
   ],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Necklace_Gold_Emerald.png",
   "Model": "Items/Aetherhaven/Jewelry/Necklace.blockymodel",

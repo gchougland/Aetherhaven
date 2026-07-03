@@ -308,19 +308,23 @@
     },
     "gift_confirm": {
       "speaker": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.root.speaker",
-      "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.confirm",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.give",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
-              "type": "gift_villager"
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
             }
           ],
           "next": "main_hub"
         },
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.cancel",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
           "next": "main_hub"
         }
       ]
@@ -330,7 +334,7 @@
       "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.love",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
         }
       ]
@@ -340,7 +344,7 @@
       "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.like",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
         }
       ]
@@ -350,7 +354,7 @@
       "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.neutral",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
         }
       ]
@@ -360,7 +364,7 @@
       "text": "aetherhaven_dialogue_florist.aetherhaven.dialogue.aetherhaven_florist.gift.dislike",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
         }
       ]

@@ -5,7 +5,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Smokestack.png",
   "Categories": [
-    "Furniture.Deco"
+    "Furniture.Deco",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Recipe": {

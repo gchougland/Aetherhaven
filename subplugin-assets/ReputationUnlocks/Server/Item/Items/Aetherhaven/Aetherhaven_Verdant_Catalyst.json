@@ -5,7 +5,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Verdant_Catalyst.png",
   "Categories": [
-    "Items.Ingredients"
+    "Items.Ingredients",
+    "Aetherhaven.All"
   ],
   "Model": "Resources/Ingredients/Essence.blockymodel",
   "Texture": "Resources/Ingredients/Essence_Textures/Verdant_Catalyst_Texture.png",

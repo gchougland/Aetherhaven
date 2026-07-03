@@ -5,7 +5,8 @@
   },
   "PlayerAnimationsId": "Item",
   "Categories": [
-    "Items.Ingredients"
+    "Items.Ingredients",
+    "Aetherhaven.All"
   ],
   "Recipe": {
     "TimeSeconds": 0,

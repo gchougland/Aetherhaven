@@ -37,6 +37,7 @@ items.Aetherhaven_Smokestack.description=Place on chimneys and rooftops for a st
 
 benchCategories.aetherhaven.town_planning=Town planning
 benchCategories.aetherhaven.plot_tokens=Plot tokens
+creativeCategory.aetherhaven=Aetherhaven
 
 items.Aetherhaven_Plot_Placement_Tool.name=Plot placement staff
 items.Aetherhaven_Plot_Placement_Tool.description=Keep the matching plot token in your bags. Use this staff while aiming at the ground to see a ghost of the building. Nudge and turn it until it fits, then confirm to stake the plot. Cancel to clear the preview and use the staff again when you want a different spot.

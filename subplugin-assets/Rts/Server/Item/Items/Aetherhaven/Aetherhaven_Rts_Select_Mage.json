@@ -3,7 +3,7 @@
     "Name": "aetherhaven_rts.items.Aetherhaven_Rts_Select_Mage.name",
     "Description": "aetherhaven_rts.items.Aetherhaven_Rts_Select_Mage.description"
   },
-  "Categories": ["Items.Weapons"],
+  "Categories": ["Items.Weapons", "Aetherhaven.All"],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Rts_Select_Mage.png",
   "Model": "Items/Aetherhaven/Patrol_Wand.blockymodel",
   "Texture": "Items/Aetherhaven/Patrol_Wand.png",

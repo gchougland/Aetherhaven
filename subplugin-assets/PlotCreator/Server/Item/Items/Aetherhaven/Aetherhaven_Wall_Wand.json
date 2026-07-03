@@ -26,7 +26,8 @@
     ]
   },
   "Categories": [
-    "Items.Weapons"
+    "Items.Weapons",
+    "Aetherhaven.All"
   ],
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Wall_Wand.png",
   "Quality": "Common",

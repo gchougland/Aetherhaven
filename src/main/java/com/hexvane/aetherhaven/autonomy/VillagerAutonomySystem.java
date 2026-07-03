@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.ArrayList;
@@ -456,7 +457,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.clearTravelWaypoints();
                 npc.setLeashPoint(finalTarget);
                 closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, tc.getPosition(), maxArriveSq);
-                npc.playAnimation(ref, AnimationSlot.Movement, null, store);
+                NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
                 float dur = PoiEffectTable.useDurationSeconds(pick.getInteractionKind());
                 autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
                 autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
@@ -648,7 +649,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
             autonomy.setTravelStuckTicks(0);
-            npc.playAnimation(ref, AnimationSlot.Movement, null, store);
+            NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
             float dur = PoiEffectTable.useDurationSeconds(poi.getInteractionKind());
             autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
             autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
@@ -1037,9 +1038,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Action, null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Emote, null, commandBuffer);
-        npc.playAnimation(ref, AnimationSlot.Status, null, commandBuffer);
+        NpcAnimationPlayback.clearOverlaySlots(ref, npc, commandBuffer);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 

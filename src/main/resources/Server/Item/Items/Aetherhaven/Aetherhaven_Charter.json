@@ -20,7 +20,7 @@
     ]
   },
   "PlayerAnimationsId": "Block",
-  "Categories": ["Furniture.Beds"],
+  "Categories": ["Furniture.Beds", "Aetherhaven.All"],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Furniture_Village_Tombstone.png",
   "IconProperties": {

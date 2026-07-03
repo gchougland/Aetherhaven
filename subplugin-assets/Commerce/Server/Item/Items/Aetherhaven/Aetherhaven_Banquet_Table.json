@@ -32,7 +32,8 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Banquet_Table.png",
   "Categories": [
-    "Furniture.Furniture"
+    "Furniture.Furniture",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "BlockType": {

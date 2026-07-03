@@ -127,11 +127,11 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         @Nonnull BoundingBox giftBoundingBox
     ) {
         if (gift.consumeDeferredSpawnFloatAnimation()) {
-            FloatingGiftAnimationHelper.playAnimation(store, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
+            FloatingGiftAnimationHelper.playAnimation(commandBuffer, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
         }
         gift.addFloatClipRetriggerAccum(dt);
         if (gift.consumeFloatClipRetriggerAccum(FLOAT_CLIP_RETRIGGER_SEC)) {
-            FloatingGiftAnimationHelper.restartAnimation(store, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
+            FloatingGiftAnimationHelper.restartAnimation(commandBuffer, ref, FloatingGiftSpawnService.FLOAT_ANIMATION_SLOT, FloatingGiftSpawnService.FLOAT_ANIMATION);
         }
         gift.addAmbientCueAccum(dt);
         if (gift.consumeAmbientCueAccum(FloatingGiftSounds.NEARBY_AMBIENT_INTERVAL_SEC)) {
@@ -277,7 +277,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         if (plugin != null) {
             AetherhavenPluginConfig cfg = plugin.getConfig().get();
             if (!gift.isPopHoldClipApplied() && gift.getPopSeconds() >= cfg.getFloatingGiftPopHoldLatchSeconds()) {
-                FloatingGiftAnimationHelper.playAnimation(store, ref, AnimationSlot.Action, FloatingGiftSpawnService.POP_HOLD_ANIMATION);
+                FloatingGiftAnimationHelper.playAnimation(commandBuffer, ref, AnimationSlot.Action, FloatingGiftSpawnService.POP_HOLD_ANIMATION);
                 gift.markPopHoldClipApplied();
             }
         }

@@ -104,6 +104,10 @@ public final class TouristRecord {
         }
     }
 
+    public void setPortalId(@Nullable UUID portalId) {
+        this.portalId = portalId != null ? portalId.toString() : "";
+    }
+
     public boolean isInvitedToStay() {
         return invitedToStay;
     }

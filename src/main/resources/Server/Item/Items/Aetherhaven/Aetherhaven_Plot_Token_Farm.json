@@ -9,7 +9,8 @@
   "MaxStack": 100,
   "PlayerAnimationsId": "Item",
   "Categories": [
-    "Items.Utility"
+    "Items.Utility",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Quality": "Common",

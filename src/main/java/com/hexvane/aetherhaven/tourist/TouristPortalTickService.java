@@ -75,6 +75,7 @@ public final class TouristPortalTickService {
         TouristPortalRegistry registry = AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
         AetherhavenPluginConfig cfg = plugin.getConfig().get();
 
+        TouristPortalPlotRelocation.purgeFillerPortalRecords(world, plugin, store, registry, tm);
         dedupeTouristRecords(tm, world, plugin, store);
         releaseStaleTouristPoolCheckouts(world, plugin, tm, store);
 
@@ -616,19 +617,28 @@ public final class TouristPortalTickService {
             despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
             return;
         }
+        // Broken identity cannot run autonomy; force-remove instead of leaving a stuck NPC.
+        if (!TouristReconcileService.entityHasTouristComponents(store, ref, town)) {
+            despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
+            return;
+        }
         TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
+        long now = resolveNowMs(store);
         if (autonomy == null) {
-            autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
+            autonomy = TouristAutonomyState.fresh(now);
         }
         if (portalId != null) {
             autonomy.setHomePortalId(portalId);
         }
+        // Returning without autonomy ticks never completes — despawn once the travel budget elapses.
         if (TouristAutonomySystem.isReturningHome(autonomy)) {
+            if (now >= autonomy.getNextDecisionEpochMs()) {
+                despawnTourist(world, plugin, town, tm, store, entityUuid, portalId);
+            }
             return;
         }
         NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
         if (npc != null && portalId != null) {
-            long now = resolveNowMs(store);
             if (TouristAutonomySystem.beginReturnToPortalOnStore(
                 ref, store, plugin, npc, autonomy, now, town, world
             )) {

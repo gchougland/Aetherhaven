@@ -5,7 +5,8 @@
   },
   "PlayerAnimationsId": "Block",
   "Categories": [
-    "Furniture.Signs"
+    "Furniture.Signs",
+    "Aetherhaven.All"
   ],
   "Set": "Aetherhaven",
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Quest_Board.png",
