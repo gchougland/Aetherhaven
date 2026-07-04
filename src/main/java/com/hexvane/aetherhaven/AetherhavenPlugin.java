@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plugin.AetherhavenCoreBootstrap;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatureBootstrap;
+import com.hexvane.aetherhaven.plugin.DisabledFeatureItemPurge;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListenerRegistry;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
@@ -357,6 +358,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             }
         }
         this.config.get();
+        DisabledFeatureItemPurge.purgeDisabledFeatures();
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);

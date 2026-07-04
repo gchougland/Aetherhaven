@@ -2,9 +2,9 @@ package com.hexvane.aetherhaven.plugin;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
-import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
@@ -69,7 +69,6 @@ public final class AetherhavenCoreBootstrap {
             );
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
-        AetherhavenEmbeddedSubpluginPacks.registerEnabled(plugin);
 
         GameTimeTickListenerRegistry tickRegistry = plugin.getGameTimeTickListenerRegistry();
         AetherhavenGameTimeBridgeSubscriber bridgeSubscriber =

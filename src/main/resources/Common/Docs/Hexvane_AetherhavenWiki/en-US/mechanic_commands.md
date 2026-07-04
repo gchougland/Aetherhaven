@@ -253,6 +253,11 @@ Examples:
   - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.fixinn`
   - Access: Creative
 
+- **`/ah villager purge <role>`** — Emergency: remove **every loaded** NPC with that role in this world (no town-binding filter). Town save data is left alone so `respawn` / `reset` can bring the tracked villager back. Unloaded chunks may still hold copies; run again after those areas load.
+  - `<role>` — NPC role id (example `Aetherhaven_Florist`).
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.villager.purge`
+  - Access: Creative
+
 - **`/ah gift resetLimits`** — Reset gift limits for all players and villagers in the world.
   - Permission: `hexvane.aetherhaven.command.aetherhaven.gift.resetlimits`
   - Access: Creative

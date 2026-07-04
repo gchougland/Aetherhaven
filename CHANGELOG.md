@@ -6,6 +6,7 @@
 
 - **Creative menu tab** — Aetherhaven items appear under their own creative library tab (house icon).
 - **Tourist portal town records shelf** — The tourist portal prefab now includes a town records shelf so you can manage the plot after it is built.
+- **Villager role purge** — `/ah villager purge <role>` removes every loaded NPC of that role in the world (no town-binding filter). Town save data is preserved so `respawn` / `reset` can bring the tracked villager back.
 
 ### Fixed
 
@@ -16,8 +17,8 @@
 - **Crystal Keeper, Pyrotechnic, Florist, and Bard gifts** — Gift confirm choices used missing lang keys (`give` / `cancel`) and the gift action lacked reaction nodes, so buttons showed as raw keys and giving always failed with “You cannot give that gift right now.”
 - **Charter and plot sign interaction** — Town charters and blueprinting plot signs that lost their block-entity link (visible but unusable) can be repaired with `/ah plots repair`. `/ah replace-charter` also re-attaches the charter entity correctly instead of failing with no server log.
 - **Broken portal tourists** — Tourists that stood still with empty dialogue (no name, portrait, or greeting) and never left are repaired on load, or removed if they cannot be recovered. Stuck return-home tourists are force-despawned instead of lingering forever.
-- **CurseForge packaging** — Optional subplugin assets register in-place from the mod JAR (no disk extract/delete) and use `asset-pack.json` instead of extra `manifest.json` files, so uploads are less likely to fail automated processing.
-- **Patch versions with feature packs** — Feature packs are no longer manifest `SubPlugins` (Hytale rejected bare parent versions like `2.1.2`). They register from the parent plugin and stay toggleable via server mod config ids (`Hexvane:Quests`, etc.).
+- **CurseForge packaging** — Optional feature assets ship in the core pack (single `manifest.json`). Disabled features remove their items from the item registry at startup so they do not appear in creative or give.
+- **Patch versions with feature packs** — Features are no longer manifest `SubPlugins` (Hytale rejected bare parent versions like `2.1.2`). They register from the parent plugin and stay toggleable via server mod config ids (`Hexvane:Quests`, etc.).
 
 ## [2.1.0] - 7/1/2026
 

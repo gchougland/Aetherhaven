@@ -806,4 +806,60 @@ public final class VillagerTownResetService {
         tm.updateTown(town);
         return newUuid;
     }
+
+    /**
+     * Emergency staff tool: remove <em>every</em> loaded NPC in this world whose role name matches
+     * {@code roleId}, with no town-binding / mod-component filter. Town save data (resident registry, inn
+     * pool, elder/innkeeper UUIDs, etc.) is left untouched so {@code /ah villager respawn} / {@code reset}
+     * can bring the tracked villager back.
+     *
+     * <p>Only entities currently in the entity store are removed (same limit as {@code /npc clean}). Unloaded
+     * chunks may still hold copies — run again after those areas load.
+     *
+     * @return number of entities removed
+     */
+    public static int purgeAllLoadedNpcsByRole(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String roleId
+    ) {
+        String wanted = roleId.trim();
+        if (wanted.isEmpty()) {
+            return 0;
+        }
+        List<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(NPCEntity.getComponentType(), (archetypeChunk, commandBuffer) -> {
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                if (npcRef == null || !npcRef.isValid()) {
+                    continue;
+                }
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                if (npc == null || npc.getRoleName() == null || npc.getRoleName().isBlank()) {
+                    continue;
+                }
+                if (!wanted.equalsIgnoreCase(npc.getRoleName().trim())) {
+                    continue;
+                }
+                toRemove.add(npcRef);
+            }
+        });
+        int count = 0;
+        for (Ref<EntityStore> r : toRemove) {
+            if (r.isValid()) {
+                store.removeEntity(r, RemoveReason.REMOVE);
+                count++;
+            }
+        }
+        if (count > 0) {
+            LOGGER.atInfo().log(
+                "Purge: removed %s loaded NPC(s) with role %s in world %s (town save data unchanged)",
+                count,
+                wanted,
+                world.getName()
+            );
+        }
+        return count;
+    }
 }

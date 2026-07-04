@@ -53,6 +53,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new FixInnSubCommand());
         this.addSubCommand(new ResetSubCommand());
         this.addSubCommand(new RespawnSubCommand());
+        this.addSubCommand(new PurgeSubCommand());
     }
 
     @Nonnull
@@ -418,6 +419,49 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                     .param("locked", String.valueOf(report.getLockedQuestVisitors()))
                     .param("promoted", String.valueOf(report.getPromotedResidents()))
                     .param("removed", String.valueOf(report.getRemovedPoolEntries()))
+            );
+        }
+    }
+
+    /**
+     * Emergency: delete every loaded NPC of a role in this world (no binding filter). Town save data is
+     * unchanged so respawn/reset can restore the tracked villager.
+     */
+    private static final class PurgeSubCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final RequiredArg<String> roleArg =
+            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.villager.purge.role.desc", ArgTypes.STRING);
+
+        PurgeSubCommand() {
+            super("purge", "aetherhaven_commands_help.commands.aetherhaven.villager.purge.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            String roleId = context.get(roleArg);
+            if (roleId == null || roleId.isBlank()) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_commands_help.aetherhaven.villager.purgeFailed")
+                        .param("reason", "Role id is required (example Aetherhaven_Florist).")
+                );
+                return;
+            }
+            String role = roleId.trim();
+            int removed = VillagerTownResetService.purgeAllLoadedNpcsByRole(world, store, role);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_commands_help.aetherhaven.villager.purgeDone")
+                    .param("role", role)
+                    .param("count", String.valueOf(removed))
             );
         }
     }
