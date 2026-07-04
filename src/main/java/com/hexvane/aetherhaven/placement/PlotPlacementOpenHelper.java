@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -71,8 +72,15 @@ public final class PlotPlacementOpenHelper {
             playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.buildingCannotMove"));
             return null;
         }
-        Vector3i anchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
         Rotation yaw = plot.resolvePrefabYaw();
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        Vector3i anchor;
+        if (def != null) {
+            // Sign Y is terrain-snapped independently of building height; seed from stored prefab pose.
+            anchor = def.resolvePreviewSignAnchorWorld(plot.resolvePrefabAnchorWorld(def), yaw);
+        } else {
+            anchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
+        }
         int steps = PlotPlacementSession.rotationStepsFromPrefabYaw(yaw);
         PlotPlacementSession session =
             PlotPlacementSession.forRelocatingPlot(world, anchor, steps, plot.getConstructionId(), plotId);

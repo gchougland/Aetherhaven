@@ -38,7 +38,6 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3i;
 import com.hypixel.hytale.component.Store;
-import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -47,7 +46,6 @@ import javax.annotation.Nonnull;
 
 public final class ConstructionCompleter {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final int STRIP_BLOCK_SETTINGS = 10;
 
     private ConstructionCompleter() {}
 
@@ -69,9 +67,14 @@ public final class ConstructionCompleter {
             LOGGER.atWarning().log("Construction complete but no town owns plot %s", plotId);
             return;
         }
+        // Prefab is already fully written; do not gate bookkeeping on the starter's manage permission (members who
+        // staff-finish a build must still get COMPLETE, POIs, and linked blocks).
         if (!town.playerCanManageConstructions(ownerUuid)) {
-            LOGGER.atWarning().log("Construction complete but player %s cannot build for this town", ownerUuid);
-            return;
+            LOGGER.atInfo().log(
+                "Construction complete for plot %s by player %s without manage permission; applying town bookkeeping",
+                plotId,
+                ownerUuid
+            );
         }
         PlotInstance plot = town.findPlotById(plotId);
         if (plot == null) {
@@ -106,7 +109,8 @@ public final class ConstructionCompleter {
         }
 
         if (def != null && def.isDecorationPlot()) {
-            stripManagementBlocksInFootprint(world, plot.toFootprint());
+            // Keep prefab management shelves as inert props (e.g. Jimmy's School). The plot is not registered, so
+            // they are not town-linked; stripping them removed the furniture from decoration builds.
             town.removePlotInstance(plotId);
             tm.updateTown(town);
             return;
@@ -240,19 +244,6 @@ public final class ConstructionCompleter {
             // succeed here without requiring a separate fixinn run.
             if (entityStore != null) {
                 InnPoolService.repairInnPoolForTown(world, plugin, town, tm, entityStore, false);
-            }
-        }
-    }
-
-    private static void stripManagementBlocksInFootprint(@Nonnull World world, @Nonnull PlotFootprintRecord fp) {
-        for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
-            for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
-                for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    BlockType bt = world.getBlockType(x, y, z);
-                    if (bt != null && AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID.equals(bt.getId())) {
-                        world.breakBlock(x, y, z, STRIP_BLOCK_SETTINGS);
-                    }
-                }
             }
         }
     }

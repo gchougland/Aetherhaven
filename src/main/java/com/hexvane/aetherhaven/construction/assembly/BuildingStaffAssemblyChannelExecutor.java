@@ -92,6 +92,8 @@ public final class BuildingStaffAssemblyChannelExecutor {
         int brushRadiusBlocks = channel.getBrushChebyshevRadius();
         if (phase == PlotAssemblyPhase.PLACING) {
             if (PlotAssemblyService.resolveFrontierPlacementIndex(world, job, plot, activeCell) < 0) {
+                // No frontier cell under the brush — if growth is exhausted, finalize like finishassembly.
+                PlotAssemblyService.tryFinalizeWhenFrontierExhausted(world, plugin, town, plot, job);
                 channel.resetChargeSession();
                 return true;
             }

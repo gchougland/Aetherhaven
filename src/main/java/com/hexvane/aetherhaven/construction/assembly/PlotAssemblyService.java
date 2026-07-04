@@ -563,12 +563,16 @@ public final class PlotAssemblyService {
                 def.getId()
             );
         AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
-        if (clearingMapper != null) {
-            AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(
-                world, job, clearingMapper, plot.getAssemblyActiveSectionIndex()
-            );
-        } else {
-            AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(world, job);
+        // Never clear soft blocks when rehydrating mid-placement: those cells are already in the placed set and
+        // would not be written again (wall torches, plants, etc. would stay missing through completion).
+        if (!assemblyPastClearingPhase(plot)) {
+            if (clearingMapper != null) {
+                AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(
+                    world, job, clearingMapper, plot.getAssemblyActiveSectionIndex()
+                );
+            } else {
+                AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(world, job);
+            }
         }
         // Placed prefab cells are non-air; treating them as obstructions would restart CLEARING and break progress.
         if (!assemblyPastClearingPhase(plot)
@@ -855,7 +859,13 @@ public final class PlotAssemblyService {
                     rt.rebuildFrontierFromPlot(pending, plot);
                     pick = rt.smallestPlacementIndex();
                     if (pick < 0) {
-                        LOGGER.atWarning().log("Assembly frontier empty but plot %s incomplete (%d/%d)", job.plotId(), placedCount, pending.size());
+                        LOGGER.atWarning().log(
+                            "Assembly frontier empty but plot %s incomplete (%d/%d); finalizing",
+                            job.plotId(),
+                            placedCount,
+                            pending.size()
+                        );
+                        scheduleCompleteAssembly(world, plugin, town, plot, job);
                         break;
                     }
                 }
@@ -970,7 +980,13 @@ public final class PlotAssemblyService {
             PlotAssemblyPreviewSystem.markStaffAssemblyBlockPlaced(staffActor);
         }
         AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
-        if (plot.getAssemblyPlacedBlockCount() >= pending.size()) {
+        boolean fullyIndexed = plot.getAssemblyPlacedBlockCount() >= pending.size();
+        boolean frontierExhausted = !fullyIndexed && rt.smallestPlacementIndex() < 0;
+        if (frontierExhausted) {
+            rt.rebuildFrontierFromPlot(pending, plot);
+            frontierExhausted = rt.smallestPlacementIndex() < 0;
+        }
+        if (fullyIndexed || frontierExhausted) {
             if (deferCompletionWhenFullyPlaced) {
                 scheduleCompleteAssembly(world, plugin, town, plot, job);
             } else {
@@ -984,6 +1000,9 @@ public final class PlotAssemblyService {
     /**
      * {@link ConstructionPasteOps#finishFluidsAndEntities} spawns prefab entities via {@link Store#addEntity}, which
      * cannot run while the entity store is mid-tick (e.g. interaction systems). Defer to the next world task.
+     *
+     * <p>Resolves the job by plot id at run time so a rehydrated/replaced job still completes when the frontier is
+     * fully placed (reference equality on the scheduled job instance is not required).
      */
     private static void scheduleCompleteAssembly(
         @Nonnull World world,
@@ -992,16 +1011,26 @@ public final class PlotAssemblyService {
         @Nonnull PlotInstance plot,
         @Nonnull PlotAssemblyJob job
     ) {
+        UUID plotId = plot.getPlotId();
         world.execute(() -> {
-            PlotAssemblyJob registered = AssemblyWorldRegistry.get(world, plot.getPlotId());
-            if (registered != job) {
+            if (plot.getState() != PlotInstanceState.ASSEMBLING) {
                 return;
             }
-            if (plot.getAssemblyPlacedBlockCount() < job.pendingBlocks().size()) {
+            if (world.getEntityStore() == null) {
                 return;
             }
             Store<EntityStore> store = world.getEntityStore().getStore();
-            completeAssembly(world, plugin, store, town, plot, job);
+            PlotAssemblyJob toComplete = AssemblyWorldRegistry.get(world, plotId);
+            if (toComplete == null) {
+                // Prefer the instance that scheduled us (avoids a rehydrate pass that can wipe soft blocks).
+                toComplete = job;
+            }
+            if (toComplete == null) {
+                return;
+            }
+            // Do not require placedCount == pending.size(): empty-frontier leftovers (wall torches, etc.) are
+            // committed inside completeAssembly via bruteForcePlaceRemaining + placeMissingAssemblyBlocks.
+            completeAssembly(world, plugin, store, town, plot, toComplete);
         });
     }
 
@@ -1014,21 +1043,14 @@ public final class PlotAssemblyService {
         @Nonnull PlotAssemblyJob job
     ) {
         UUID plotId = plot.getPlotId();
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return;
+        }
         IPrefabBuffer completionBuffer = acquireCompletionPrefabBuffer(plugin, job);
         boolean borrowedCompletionBuffer = completionBuffer != job.buffer();
         try {
-            List<PendingBlock> deferredAssembly = job.assemblyDeferredBlocks();
-            if (!deferredAssembly.isEmpty()) {
-                LocalCachedChunkAccessor deferredAcc =
-                    ConstructionPasteOps.createAccessor(world, job.anchor(), completionBuffer);
-                BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
-                for (PendingBlock pb : deferredAssembly) {
-                    if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap)) {
-                        deferredAcc = ConstructionPasteOps.createAccessor(world, job.anchor(), completionBuffer);
-                        ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, deferredAcc, blockTypeMap);
-                    }
-                }
-            }
+            // PrefabUtil-style force setBlock of every solid from a fresh buffer read (wall torches included).
+            ConstructionPasteOps.forcePasteAllSolids(world, job.anchor(), job.yaw(), completionBuffer);
             ConstructionPasteOps.finishFluidsAndEntities(
                 world,
                 job.anchor(),
@@ -1038,18 +1060,63 @@ public final class PlotAssemblyService {
                 job.prefabEntitiesInOrder(),
                 entityStore
             );
+        } catch (RuntimeException e) {
+            // Still finish town bookkeeping below; missing props can be repaired, but an ASSEMBLING plot with no job
+            // would rehydrate and wipe soft blocks again.
+            LOGGER.atSevere().withCause(e).log(
+                "Assembly completion paste had errors for plot %s; applying town bookkeeping anyway",
+                plotId
+            );
         } finally {
             if (borrowedCompletionBuffer) {
                 AssemblyWorldRegistry.releasePrefabBufferQuietly(completionBuffer);
             }
         }
-        PrefabPasteEvent end = new PrefabPasteEvent(job.prefabId(), false);
-        entityStore.invoke(end);
+        try {
+            PrefabPasteEvent end = new PrefabPasteEvent(job.prefabId(), false);
+            entityStore.invoke(end);
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("PrefabPasteEvent end failed for plot %s", plotId);
+        }
         AssemblyWorldRegistry.remove(world, plotId);
         UUID finisher = plot.getAssemblyOwnerUuid() != null ? plot.getAssemblyOwnerUuid() : town.getOwnerUuid();
-        AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, finisher, plot);
+        UUID notifyUuid = town.playerCanManageConstructions(finisher) ? finisher : town.getOwnerUuid();
+        try {
+            AssemblyCompletionEffects.tryNotifyFinisher(world, plugin, entityStore, notifyUuid, plot);
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Assembly completion notify failed for plot %s", plotId);
+        }
         ConstructionCompleter.finishBuild(world, plugin, finisher, plotId, job.anchor(), job.yaw());
         verifyPlotBlockLinksAfterComplete(world, plugin, town, plot, job);
+    }
+
+    /**
+     * When the growth frontier is empty but the plot is still ASSEMBLING, run the same finalize path as
+     * {@code /ah plots finishassembly} (deferred via {@link #scheduleCompleteAssembly}).
+     */
+    public static void tryFinalizeWhenFrontierExhausted(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull PlotAssemblyJob job
+    ) {
+        if (plot.getState() != PlotInstanceState.ASSEMBLING) {
+            return;
+        }
+        if (AssemblyWorldRegistry.phase(world, job.plotId()) != PlotAssemblyPhase.PLACING) {
+            return;
+        }
+        List<PendingBlock> pending = job.pendingBlocks();
+        PlotAssemblyFrontierRuntime rt = frontierRuntimeOrRebuild(world, job, plot, pending);
+        if (rt.smallestPlacementIndex() >= 0) {
+            return;
+        }
+        rt.rebuildFrontierFromPlot(pending, plot);
+        if (rt.smallestPlacementIndex() >= 0) {
+            return;
+        }
+        scheduleCompleteAssembly(world, plugin, town, plot, job);
     }
 
     private static void verifyPlotBlockLinksAfterComplete(

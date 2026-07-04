@@ -64,17 +64,18 @@ public final class PlotPlacementSession {
     }
 
     /**
-     * Relocate preview: anchor starts at the plot sign coordinates stored on the {@link com.hexvane.aetherhaven.town.PlotInstance}.
+     * Relocate preview: {@code previewSignAnchor} is the session pose that reproduces the stored building height
+     * (inverse of prefab placement), not the terrain-snapped plot sign cell.
      */
     @Nonnull
     public static PlotPlacementSession forRelocatingPlot(
         @Nonnull World world,
-        @Nonnull Vector3i signAnchor,
+        @Nonnull Vector3i previewSignAnchor,
         int rotationSteps,
         @Nonnull String constructionId,
         @Nonnull UUID plotIdBeingMoved
     ) {
-        return new PlotPlacementSession(world, signAnchor, rotationSteps, constructionId, plotIdBeingMoved);
+        return new PlotPlacementSession(world, previewSignAnchor, rotationSteps, constructionId, plotIdBeingMoved);
     }
 
     public static int rotationStepsFromPrefabYaw(@Nonnull Rotation yaw) {

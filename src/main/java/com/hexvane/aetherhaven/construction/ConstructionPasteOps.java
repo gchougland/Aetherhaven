@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.construction;
 import com.hexvane.aetherhaven.construction.assembly.AssemblyObstructionUtil;
 import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
+import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -27,6 +28,7 @@ import com.hypixel.hytale.server.core.prefab.PrefabRotation;
 import com.hypixel.hytale.server.core.prefab.event.PrefabPlaceEntityEvent;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferCall;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
@@ -339,7 +341,8 @@ public final class ConstructionPasteOps {
             return false;
         }
         String blockKey = block.getId();
-        if (pb.filler != 0) {
+        // Multi-block companions: never write a second origin voxel (that floats a duplicate wardrobe/chest).
+        if (pb.filler != FillerBlockUtil.NO_FILLER) {
             if (pb.holder != null) {
                 setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
             }
@@ -356,8 +359,25 @@ public final class ConstructionPasteOps {
         if (PrefabFootprintClearUtil.isProductionStorageBlockTypeId(blockKey)) {
             PrefabFootprintClearUtil.forceClearProductionStorageAt(world, bx, by, bz);
         }
-        RotationTuple rot = RotationTuple.get(pb.blockRotation);
-        chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, !force);
+        // Match PrefabUtil force-paste: setBlock writes attachables (wall torches) reliably; placeBlock can no-op
+        // them when support/validation disagrees even with validatePlacement=false.
+        if (force) {
+            chunk.setBlock(
+                bx,
+                by,
+                bz,
+                pb.blockId,
+                block,
+                pb.blockRotation,
+                FillerBlockUtil.NO_FILLER,
+                SET_BLOCK_SETTINGS_PLACE
+            );
+        } else {
+            RotationTuple rot = RotationTuple.get(pb.blockRotation);
+            if (!chunk.placeBlock(bx, by, bz, blockKey, rot, SET_BLOCK_SETTINGS_PLACE, true)) {
+                return false;
+            }
+        }
         if (pb.supportValue != 0) {
             Ref<ChunkStore> ref = chunk.getReference();
             if (!ref.isValid()) {
@@ -371,6 +391,93 @@ public final class ConstructionPasteOps {
         }
         if (pb.holder != null) {
             setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation, pb.holder.clone());
+        }
+        return true;
+    }
+
+    /**
+     * Force-writes every non-air prefab solid using {@link WorldChunk#setBlock} (same as {@code PrefabUtil} force
+     * paste). Rebuilds placement order from {@code buffer} so completion does not depend on the incremental job list.
+     * Filler cells only attach holders — never a second origin voxel (avoids floating duplicate furniture).
+     */
+    public static void forcePasteAllSolids(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer bufferAccess
+    ) {
+        PrefabSequence seq = buildSequence(bufferAccess, yaw);
+        List<PendingBlock> cells = withoutPureAirCells(seq.pendingBlocks());
+        LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        for (int i = 0; i < cells.size(); i++) {
+            PendingBlock pb = cells.get(i);
+            if (!forceSetSolid(world, origin, pb, chunkAccessor, blockTypeMap)) {
+                chunkAccessor = createAccessor(world, origin, bufferAccess);
+                forceSetSolid(world, origin, pb, chunkAccessor, blockTypeMap);
+            }
+        }
+    }
+
+    private static boolean forceSetSolid(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull PendingBlock pb,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
+    ) {
+        int bx = origin.x + pb.x();
+        int by = origin.y + pb.y();
+        int bz = origin.z + pb.z();
+        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        if (chunk == null || !chunk.getReference().isValid()) {
+            return false;
+        }
+        applyPrefabFluidForCell(world, bx, by, bz, pb.fluidId(), pb.fluidLevel(), chunkAccessor);
+        if (!chunk.getReference().isValid()) {
+            return false;
+        }
+        if (pb.blockId() == 0) {
+            chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
+            return true;
+        }
+        BlockType block = blockTypeMap.getAsset(pb.blockId());
+        if (block == null) {
+            return false;
+        }
+        // PrefabUtil: filler cells never place a block voxel — only component state on the multi-block volume.
+        if (pb.filler() != FillerBlockUtil.NO_FILLER) {
+            if (pb.holder() != null) {
+                setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
+            }
+            return true;
+        }
+        String blockKey = block.getId();
+        if (PrefabFootprintClearUtil.isProductionStorageBlockTypeId(blockKey)) {
+            PrefabFootprintClearUtil.forceClearProductionStorageAt(world, bx, by, bz);
+        }
+        chunk.setBlock(
+            bx,
+            by,
+            bz,
+            pb.blockId(),
+            block,
+            pb.blockRotation(),
+            FillerBlockUtil.NO_FILLER,
+            SET_BLOCK_SETTINGS_PLACE
+        );
+        if (pb.supportValue() != 0) {
+            Ref<ChunkStore> ref = chunk.getReference();
+            if (ref.isValid()) {
+                Store<ChunkStore> store = ref.getStore();
+                Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+                if (section != null) {
+                    BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue());
+                }
+            }
+        }
+        if (pb.holder() != null) {
+            setBlockEntityHolder(world, chunk, bx, by, bz, block, pb.blockRotation(), pb.holder().clone());
         }
         return true;
     }
@@ -403,7 +510,15 @@ public final class ConstructionPasteOps {
         );
         for (int i = 0; i < prefabEntitiesInOrder.size(); i++) {
             Holder<EntityStore> source = prefabEntitiesInOrder.get(i);
-            spawnPrefabEntityLikePaste(world, origin, prefabRotation, prefabId, entityAccessor, source);
+            try {
+                spawnPrefabEntityLikePaste(world, origin, prefabRotation, prefabId, entityAccessor, source);
+            } catch (RuntimeException e) {
+                // One bad prefab prop must not abort the rest of the completion pass.
+                HytaleLogger.forEnclosingClass()
+                    .atWarning()
+                    .withCause(e)
+                    .log("Failed to spawn prefab entity %d for prefabId %s", i, prefabId);
+            }
         }
     }
 
@@ -506,6 +621,9 @@ public final class ConstructionPasteOps {
         }
         PrefabPlaceEntityEvent prefabPlaceEntityEvent = new PrefabPlaceEntityEvent(prefabId, clone);
         entityAccessor.invoke(prefabPlaceEntityEvent);
+        if (prefabPlaceEntityEvent.isCancelled()) {
+            return;
+        }
         clone.ensureComponent(FromPrefab.getComponentType());
         // Decorative prefab props (sign models, bench item props, etc.) are valid melee targets unless marked
         // Invulnerable. NPCs keep role-driven invulnerability; players must never be tagged here.

@@ -297,6 +297,22 @@ public final class ConstructionDefinition {
         return resolvePrefabAnchorWorld(signPos, Rotation.None);
     }
 
+    /**
+     * Inverse of {@link #resolvePrefabAnchorWorld(Vector3i, Rotation)}: session preview sign pose that reproduces
+     * {@code prefabAnchorWorld} (used when opening move mode from a stored building pose).
+     */
+    @Nonnull
+    public Vector3i resolvePreviewSignAnchorWorld(@Nonnull Vector3i prefabAnchorWorld, @Nonnull Rotation placementYaw) {
+        int[] o = getPlotAnchorOffset();
+        Vector3i off = new Vector3i(o[0], o[1], o[2]);
+        PrefabRotation.fromRotation(placementYaw).rotate(off);
+        return new Vector3i(
+            prefabAnchorWorld.x - off.x,
+            prefabAnchorWorld.y - off.y + AetherhavenConstants.PLOT_SIGN_BLOCK_Y_ABOVE_LOGICAL_ANCHOR,
+            prefabAnchorWorld.z - off.z
+        );
+    }
+
     @Nullable
     public String getPlotTokenItemId() {
         return plotTokenItemId;

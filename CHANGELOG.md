@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.2] - Unreleased
+## [2.1.2] - 7/3/2026
 
 ### Added
 
@@ -9,6 +9,8 @@
 
 ### Fixed
 
+- **Move building preview height** — Opening Move Building now starts the ghost at the building’s stored height, not the terrain-snapped plot sign height.
+- **Town member staff assembly finish** — When a second player finishes a build with the building staff, deferred plants/lights and prefab entities are placed and the plot is marked complete (no longer stuck assembling or stripped by rehydrate).
 - **Tourist portal demolish and move** — Demolishing or moving a tourist portal building now removes its registry entry so tourists no longer spawn or try to leave at the old location. Moves preserve portal ids and retarget tourists already walking home; demolish reassigns them to another portal when one remains, otherwise despawns them.
 - **Duplicate tourist portal registry entries** — The portal is a 2-block structure; only the base cell is registered now. Existing filler-voxel entries are purged on the next tourist tick.
 - **Crystal Keeper, Pyrotechnic, Florist, and Bard gifts** — Gift confirm choices used missing lang keys (`give` / `cancel`) and the gift action lacked reaction nodes, so buttons showed as raw keys and giving always failed with “You cannot give that gift right now.”
