@@ -27,6 +27,7 @@ public final class AetherhavenSubpluginContentCatalog {
             rule(AetherhavenPluginIds.PATH_DESIGNER, AetherhavenConstants.PATH_TOOL_ITEM_ID),
             rule(AetherhavenPluginIds.PATROL_ROUTES, AetherhavenConstants.PATROL_WAND_ITEM_ID),
             rule(AetherhavenPluginIds.ADMIN_TOOLS, AetherhavenConstants.POI_TOOL_ITEM_ID),
+            rule(AetherhavenPluginIds.ADMIN_TOOLS, AetherhavenConstants.NPC_DEBUG_STICK_ITEM_ID),
             rule(AetherhavenPluginIds.PLOT_CREATOR, AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID),
             rule(AetherhavenPluginIds.PLOT_CREATOR, AetherhavenConstants.PLOT_PLACEMENT_TOOL_ITEM_ID),
             rule(AetherhavenPluginIds.PLOT_CREATOR, AetherhavenConstants.WALL_WAND_ITEM_ID),

@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
@@ -121,6 +122,7 @@ public final class InnkeeperSpawnService {
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_INNKEEPER, plot.getPlotId(), plot.getPlotId())
         );
+        NpcSpawnOriginUtil.attach(store, ref, "INNKEEPER_QUEST", "townId=" + town.getTownId(), world, pos);
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uuidComp != null) {
             town.setInnkeeperEntityUuid(uuidComp.getUuid());

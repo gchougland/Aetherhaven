@@ -297,6 +297,10 @@ Examples:
   - Permission: `hexvane.aetherhaven.command.aetherhaven.tourist.targets`
   - Access: Creative
 
+- **`/ah tourist purge`** — Remove active visiting tourists in this world. Keeps invited, housed, and citizen tourists; never removes guards. Also removes unbound legacy townsfolk shells with no save-data linkage.
+  - Permission: `hexvane.aetherhaven.command.aetherhaven.tourist.purge`
+  - Access: Creative
+
 - **`/ah gift fillHistory <roleId>`** — Fill gift history preview rows for testing.
   - `<roleId>` — Villager role id (example `Aetherhaven_Merchant`).
   - Optional **`--town`** or **`--player`** — Another town (staff; see **Debug town targeting** above).

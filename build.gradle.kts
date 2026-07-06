@@ -56,18 +56,15 @@ tasks.named<Jar>("jar") {
         exclude("META-INF/*.SF")
         exclude("META-INF/*.DSA")
         exclude("META-INF/*.RSA")
-        exclude("META-INF/proguard/**")
     }
     // Mod Common/ + Server/ + manifest.json must win over anything merged from dependency jars.
-    from(sourceSets.main.get().output.resourcesDir!!) {
-        exclude("**/*.bak")
-    }
+    from(sourceSets.main.get().output.resourcesDir)
 }
 
 tasks.register("verifyReleaseJar") {
     group = "verification"
     description =
-        "Fails if the release jar bundles blocked packages, nested archives, extra manifests, or embedded-pack runtime."
+        "Fails if the release jar bundles blocked packages, nested archives, extra manifest.json files, or self-extract bytecode."
     dependsOn(tasks.jar)
     val releaseJar = tasks.named<Jar>("jar").flatMap { it.archiveFile }
     inputs.file(releaseJar)
@@ -81,17 +78,22 @@ tasks.register("verifyReleaseJar") {
                 "com/hypixel/hytale/Main.class",
                 "org/bouncycastle/",
                 "native/win-x64/quiche.dll",
-                "subplugin-packs/",
-                "com/hexvane/aetherhaven/plugin/AetherhavenEmbeddedSubpluginPacks.class",
-                "META-INF/proguard/",
             )
+        val blockedBytecodeStrings =
+            listOf(
+                "deleteRecursive",
+                "extractPackFromArchive",
+            )
+        val embeddedPacksClass = "com/hexvane/aetherhaven/plugin/AetherhavenEmbeddedSubpluginPacks.class"
 
         ZipFile(jarFile).use { zip ->
             val names = zip.entries().asSequence().map { it.name }.toList()
 
             for (pattern in blockedPackages) {
                 if (names.any { it.contains(pattern) }) {
-                    error("Release jar ${jarFile.name} contains blocked entry matching '$pattern'")
+                    error(
+                        "Release jar ${jarFile.name} contains $pattern — do not embed HytaleServer on modEmbed/runtimeClasspath merge"
+                    )
                 }
             }
 
@@ -105,33 +107,51 @@ tasks.register("verifyReleaseJar") {
                 )
             }
 
-            val manifests = names.filter { it == "manifest.json" || it.endsWith("/manifest.json") }
-            if (manifests != listOf("manifest.json")) {
-                error(
-                    "Release jar ${jarFile.name} must contain exactly one root manifest.json; found: $manifests"
-                )
+            if ("manifest.json" !in names) {
+                error("Release jar ${jarFile.name} missing root manifest.json")
             }
-
-            if (names.any { it.endsWith(".bak") }) {
-                error("Release jar ${jarFile.name} must not ship .bak files")
+            val packManifests =
+                names.filter { it.startsWith("subplugin-packs/") && it.endsWith("/manifest.json") }
+            val unexpectedManifests =
+                names.filter { it.endsWith("manifest.json") && it != "manifest.json" && it !in packManifests }
+            if (unexpectedManifests.isNotEmpty()) {
+                error("Release jar ${jarFile.name} has unexpected manifest.json entries: $unexpectedManifests")
             }
-
-            val pluginClasses =
-                names.filter {
-                    it.startsWith("com/hexvane/aetherhaven/") &&
-                        it.endsWith("Plugin.class") &&
-                        !it.contains("$")
+            // Pack manifest.json files are existence stubs for AssetModule.validatePackExistsOnDisk only.
+            // Real pack metadata is asset-pack.json — stubs must not look like full mod manifests (CurseForge).
+            for (path in packManifests) {
+                val entry = zip.getEntry(path) ?: continue
+                val text = zip.getInputStream(entry).use { it.readBytes().toString(Charsets.UTF_8) }
+                if (text.contains("\"Main\"") || text.contains("\"Group\"") || text.contains("\"Version\"")) {
+                    error(
+                        "Release jar ${jarFile.name} pack stub $path looks like a full mod manifest (CurseForge risk)"
+                    )
                 }
-            if (pluginClasses != listOf("com/hexvane/aetherhaven/AetherhavenPlugin.class")) {
+            }
+            val assetPackJsonCount = names.count { it.startsWith("subplugin-packs/") && it.endsWith("/asset-pack.json") }
+            if (assetPackJsonCount != packManifests.size) {
                 error(
-                    "Release jar ${jarFile.name} must contain only AetherhavenPlugin as JavaPlugin entry; found: $pluginClasses"
+                    "Release jar ${jarFile.name} expected matching asset-pack.json and manifest.json stubs under subplugin-packs/ (asset-pack=$assetPackJsonCount, stubs=${packManifests.size})"
                 )
+            }
+
+            val packsClassEntry =
+                zip.getEntry(embeddedPacksClass)
+                    ?: error("Release jar ${jarFile.name} missing $embeddedPacksClass")
+            val classBytes = zip.getInputStream(packsClassEntry).use { it.readBytes() }
+            val classText = classBytes.toString(Charsets.ISO_8859_1)
+            for (needle in blockedBytecodeStrings) {
+                if (classText.contains(needle)) {
+                    error(
+                        "Release jar ${jarFile.name} embeds self-extract bytecode '$needle' in $embeddedPacksClass"
+                    )
+                }
             }
         }
 
         val sizeMb = jarFile.length() / (1024.0 * 1024.0)
         logger.lifecycle(
-            "verifyReleaseJar: ${jarFile.name} OK (${"%.1f".format(sizeMb)} MB; single manifest, one JavaPlugin)"
+            "verifyReleaseJar: ${jarFile.name} OK (${"%.1f".format(sizeMb)} MB; no HytaleServer, no nested archives, no self-extract)"
         )
     }
 }
@@ -199,17 +219,14 @@ val generateHstatsBuildMetadata =
 
 sourceSets.named("main") {
     java.srcDir(layout.buildDirectory.dir("generated/sources/hstats/java"))
-    java.srcDir(layout.buildDirectory.dir("generated/sources/feature-items/java"))
 }
 
 tasks.named<JavaCompile>("compileJava") {
     dependsOn(generateHstatsBuildMetadata)
-    dependsOn("generateFeatureItemIds")
 }
 
 tasks.named<Jar>("sourcesJar") {
     dependsOn(generateHstatsBuildMetadata)
-    dependsOn("generateFeatureItemIds")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -218,8 +235,12 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.test {
     useJUnitPlatform {
-        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule")
+        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist")
     }
+    systemProperty(
+        "java.util.logging.manager",
+        "com.hypixel.hytale.logger.backend.HytaleLogManager"
+    )
     testLogging {
         events("passed", "failed", "skipped")
         showStandardStreams = true
@@ -275,10 +296,7 @@ tasks.register<Test>("wallPlacementTests") {
     }
 }
 
-/**
- * Optional feature assets live under subplugin-assets/ but ship merged into the core pack (single manifest).
- * Disabled features hide their items at runtime via [DisabledFeatureItemPurge] / generated FeatureItemIds.
- */
+/** Optional subplugin assets embedded in the JAR under subplugin-packs/ (not root Server/). */
 val subpluginAssetPackNames = listOf(
     "ReputationUnlocks",
     "Jewelry",
@@ -295,80 +313,27 @@ val subpluginAssetPackNames = listOf(
     "Guild"
 )
 
-val generateFeatureItemIds =
-    tasks.register("generateFeatureItemIds") {
-        group = "build"
-        description = "Generates FeatureItemIds from subplugin-assets Item JSON filenames."
-        val outDir = layout.buildDirectory.dir("generated/sources/feature-items/java")
-        val assetsRoot = layout.projectDirectory.dir("subplugin-assets")
-        inputs.dir(assetsRoot)
-        inputs.property("packNames", subpluginAssetPackNames)
+/**
+ * Hytale [AssetModule.validatePackExistsOnDisk] requires packRoot/manifest.json or it unregisters the pack
+ * (e.g. on `/prefabedit load`). Real pack metadata is asset-pack.json (avoids CurseForge treating packs as mods).
+ * These stubs are existence-only markers — not valid plugin manifests.
+ */
+val generateSubpluginManifestStubs =
+    tasks.register("generateSubpluginManifestStubs") {
+        val outDir = layout.buildDirectory.dir("generated/subplugin-manifest-stubs")
         outputs.dir(outDir)
-
         doLast {
-            val entries = LinkedHashMap<String, List<String>>()
+            val marker = "{\"AetherhavenEmbeddedAssetPack\":true}\n"
             subpluginAssetPackNames.forEach { packName ->
-                val itemsDir = assetsRoot.dir(packName).dir("Server/Item/Items").asFile
-                val ids =
-                    if (itemsDir.isDirectory) {
-                        itemsDir
-                            .walkTopDown()
-                            .filter { it.isFile && it.extension.equals("json", ignoreCase = true) }
-                            .map { it.nameWithoutExtension }
-                            .sorted()
-                            .toList()
-                    } else {
-                        emptyList()
-                    }
-                entries[packName] = ids
+                val file = outDir.get().asFile.resolve("$packName/manifest.json")
+                file.parentFile.mkdirs()
+                file.writeText(marker)
             }
-
-            val mapEntries =
-                entries.entries.joinToString(",\n") { (pack, ids) ->
-                    val idList = ids.joinToString(", ") { "\"$it\"" }
-                    "            Map.entry(\"$pack\", List.of($idList))"
-                }
-
-            val pkgDir = outDir.get().asFile.resolve("com/hexvane/aetherhaven/generated")
-            pkgDir.mkdirs()
-            pkgDir.resolve("FeatureItemIds.java").writeText(
-                """
-                package com.hexvane.aetherhaven.generated;
-
-                import java.util.Collections;
-                import java.util.List;
-                import java.util.Map;
-
-                /** Item asset ids per optional feature pack. Generated by Gradle - do not edit. */
-                public final class FeatureItemIds {
-                    private FeatureItemIds() {}
-
-                    private static final Map<String, List<String>> BY_PACK_FOLDER =
-                        Map.ofEntries(
-                $mapEntries
-                        );
-
-                    /** Item ids for a feature pack folder name (e.g. {@code ReputationUnlocks}), or empty. */
-                    public static List<String> forPackFolder(String packFolderName) {
-                        if (packFolderName == null || packFolderName.isBlank()) {
-                            return List.of();
-                        }
-                        List<String> ids = BY_PACK_FOLDER.get(packFolderName.trim());
-                        return ids != null ? ids : List.of();
-                    }
-
-                    public static Map<String, List<String>> all() {
-                        return Collections.unmodifiableMap(BY_PACK_FOLDER);
-                    }
-                }
-                """.trimIndent() + "\n"
-            )
         }
     }
 
 tasks.named<ProcessResources>("processResources") {
-    // Optional packs may overlap paths that still exist under src/main/resources during migration.
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn(generateSubpluginManifestStubs)
 
     var replaceProperties = mapOf(
         "plugin_group" to findProperty("plugin_group"),
@@ -388,17 +353,19 @@ tasks.named<ProcessResources>("processResources") {
         expand(replaceProperties)
     }
 
-    exclude("**/*.bak")
-
     inputs.properties(replaceProperties)
 
-    // Merge optional feature assets into the core pack (single manifest.json for CurseForge).
     subpluginAssetPackNames.forEach { packName ->
         from(layout.projectDirectory.dir("subplugin-assets/$packName")) {
-            exclude("asset-pack.json")
-            exclude("manifest.json")
+            into("subplugin-packs/$packName")
             exclude("Server/Languages/**")
-            exclude("**/*.bak")
+            // Real pack metadata (PluginManifest). Not named manifest.json — see generateSubpluginManifestStubs.
+            filesMatching("asset-pack.json") {
+                expand(replaceProperties)
+            }
+        }
+        from(layout.buildDirectory.dir("generated/subplugin-manifest-stubs/$packName")) {
+            into("subplugin-packs/$packName")
         }
     }
 }
@@ -448,6 +415,7 @@ val syncAssets = tasks.register<Copy>("syncAssets") {
 
     // IMPORTANT: Protect the manifest template from being overwritten
     exclude("manifest.json")
+    exclude("subplugin-packs/**")
 
     // If a file exists, overwrite it with the new version from the game
     duplicatesStrategy = DuplicatesStrategy.INCLUDE

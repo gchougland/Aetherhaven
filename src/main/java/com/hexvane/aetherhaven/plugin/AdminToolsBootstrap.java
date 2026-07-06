@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.command.AetherhavenRtsRecoverInventoryCommand;
 import com.hexvane.aetherhaven.command.AetherhavenTimeCommand;
 import com.hexvane.aetherhaven.command.AetherhavenTouristDebugCommand;
 import com.hexvane.aetherhaven.command.AetherhavenWallDebugCommand;
+import com.hexvane.aetherhaven.npctelemetry.NpcDebugStickSmackInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiDebugLabelEntity;
 import com.hexvane.aetherhaven.poi.tool.PoiToolModeCycleInteraction;
 import com.hexvane.aetherhaven.poi.tool.PoiToolMoveInteraction;
@@ -30,6 +31,9 @@ public final class AdminToolsBootstrap {
     private AdminToolsBootstrap() {}
 
     public static void registerAssetCodecs(@Nonnull AetherhavenPlugin core) {
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenNpcDebugStickSmack", NpcDebugStickSmackInteraction.class, NpcDebugStickSmackInteraction.CODEC);
         core
             .getCodecRegistry(Interaction.CODEC)
             .register("AetherhavenPoiToolSelect", PoiToolSelectInteraction.class, PoiToolSelectInteraction.CODEC);

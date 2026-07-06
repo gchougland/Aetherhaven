@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.tourist.TouristDestinationResolver;
 import com.hexvane.aetherhaven.tourist.TouristPlotVisit;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
@@ -29,6 +30,7 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
         super("tourist", "aetherhaven_commands_help.commands.aetherhaven.tourist.desc");
         this.setPermissionGroups("hytale:WorldEditor");
         this.addSubCommand(new TargetsCommand());
+        this.addSubCommand(new PurgeSubCommand());
     }
 
     private static final class TargetsCommand extends AbstractPlayerCommand {
@@ -109,6 +111,34 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
                     );
                 }
             }
+        }
+    }
+
+    private static final class PurgeSubCommand extends AbstractPlayerCommand {
+        PurgeSubCommand() {
+            super("purge", "aetherhaven_commands_help.commands.aetherhaven.tourist.purge.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin == null || !AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
+                return;
+            }
+            TouristPortalTickService.TouristPurgeResult result =
+                TouristPortalTickService.purgeActiveTouristsInWorld(world, plugin, store);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_commands_help.aetherhaven.tourist.purgeDone")
+                    .param("removed", String.valueOf(result.removed()))
+                    .param("skippedProtected", String.valueOf(result.skippedProtected()))
+                    .param("skippedGuards", String.valueOf(result.skippedGuards()))
+            );
         }
     }
 }

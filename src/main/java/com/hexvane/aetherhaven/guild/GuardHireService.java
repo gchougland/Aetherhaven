@@ -18,6 +18,7 @@ import java.util.List;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -369,6 +370,14 @@ public final class GuardHireService {
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_GUARD, jobPlot, jobPlot)
         );
         store.putComponent(guardRef, TownsfolkCharacterBinding.getComponentType(), tb);
+        NpcSpawnOriginUtil.attach(
+            store,
+            guardRef,
+            "GUARD_HIRE",
+            "characterId=" + tb.getCharacterId() + ",guardRole=" + guardRole,
+            world,
+            spawnPos
+        );
 
         NPCEntity npc = store.getComponent(guardRef, NPCEntity.getComponentType());
         if (npc != null) {

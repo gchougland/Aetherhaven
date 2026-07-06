@@ -59,6 +59,15 @@ public final class AetherhavenConstants {
     /** Debug POI visualization / move tool item id. */
     public static final String POI_TOOL_ITEM_ID = "Aetherhaven_Poi_Tool";
 
+    /** Staff that dumps NPC telemetry to the plugin data directory when smacking an entity. */
+    public static final String NPC_DEBUG_STICK_ITEM_ID = "Aetherhaven_Npc_Debug_Stick";
+
+    /** Hytale permission group required to use the NPC debug stick. */
+    public static final String PERMISSION_WORLD_EDITOR = "hytale:WorldEditor";
+
+    public static final String NPC_DEBUG_STICK_IMPACT_SOUND = "SFX_Club_Wood_Impact";
+    public static final String NPC_DEBUG_STICK_IMPACT_PARTICLE = "Impact_Blade_01";
+
     /** Purification powder: highlights mob spawn beacons/markers and can remove them. */
     public static final String ITEM_PURIFICATION_POWDER = "Aetherhaven_Purification_Powder";
 

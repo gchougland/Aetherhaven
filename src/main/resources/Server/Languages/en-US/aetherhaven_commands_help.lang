@@ -145,6 +145,8 @@ commands.aetherhaven.guild.status.ok=Guild hall active={active} epochDay={epochD
 
 commands.aetherhaven.tourist.desc=Debug: tourist portal visit targets
 commands.aetherhaven.tourist.targets.desc=Debug: list tourist destination plots and optional POIs in your town
+commands.aetherhaven.tourist.purge.desc=Emergency: remove active visiting tourists in this world (keeps invited, housed, and citizen tourists; never removes guards)
+aetherhaven.tourist.purgeDone=Removed {removed} active tourist(s). Kept {skippedProtected} protected (invited/housed/citizen). Left {skippedGuards} hired guard(s) untouched.
 commands.aetherhaven.guild.notActive=Your town does not have an active guild hall
 
 commands.aetherhaven.plotcreator.desc=Create custom town buildings

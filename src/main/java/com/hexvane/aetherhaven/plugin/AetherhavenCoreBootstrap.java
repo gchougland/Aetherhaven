@@ -69,6 +69,7 @@ public final class AetherhavenCoreBootstrap {
             );
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
+        AetherhavenEmbeddedSubpluginPacks.registerEnabled(plugin);
 
         GameTimeTickListenerRegistry tickRegistry = plugin.getGameTimeTickListenerRegistry();
         AetherhavenGameTimeBridgeSubscriber bridgeSubscriber =

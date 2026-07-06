@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.rescue;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
@@ -101,6 +102,14 @@ public final class RescueVillagerSpawnService {
             ref,
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), trigger.rescueBindingKind(), null)
+        );
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            "RESCUE_BLOCK",
+            "kind=" + trigger.rescueBindingKind() + ",block=" + brokenBlock.x + "," + brokenBlock.y + "," + brokenBlock.z,
+            world,
+            stand
         );
         NPCEntity npcEntity = store.getComponent(ref, NPCEntity.getComponentType());
         if (npcEntity != null) {

@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
 import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.villager.AetherhavenNpcSpawnOrigin;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -23,6 +24,7 @@ public final class AetherhavenSharedEntityComponents {
         var registry = plugin.getEntityStoreRegistry();
         VillagerNeeds.register(registry);
         AetherhavenVillagerHandle.register(registry);
+        AetherhavenNpcSpawnOrigin.register(registry);
         TownVillagerBinding.register(registry);
         TownsfolkCharacterBinding.register(registry);
         VillagerAutonomyState.register(registry);

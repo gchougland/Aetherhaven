@@ -1,12 +1,14 @@
 # Changelog
 
-## [2.1.2] - 7/3/2026
+## [2.1.2] - Unreleased
 
 ### Added
 
 - **Creative menu tab** — Aetherhaven items appear under their own creative library tab (house icon).
 - **Tourist portal town records shelf** — The tourist portal prefab now includes a town records shelf so you can manage the plot after it is built.
 - **Villager role purge** — `/ah villager purge <role>` removes every loaded NPC of that role in the world (no town-binding filter). Town save data is preserved so `respawn` / `reset` can bring the tracked villager back.
+- **Tourist purge** — `/ah tourist purge` removes active visiting tourists in every town in the world. Invited, housed, and citizen tourists are kept; hired guards and guild hall adventurers are not affected.
+- **Fixing Stick (NPC debug telemetry)** — World Editor staff can craft the Fixing Stick at the Town Planning Desk (1 stick). Bonk an NPC to write a JSON diagnostics dump to `npc_telemetry` under plugin data and get the filepath in chat. Tracks spawn origin, town and pool bindings, and issue flags. Bonk plays a short combat impact and the NPC’s hurt reaction.
 
 ### Fixed
 
@@ -17,8 +19,7 @@
 - **Crystal Keeper, Pyrotechnic, Florist, and Bard gifts** — Gift confirm choices used missing lang keys (`give` / `cancel`) and the gift action lacked reaction nodes, so buttons showed as raw keys and giving always failed with “You cannot give that gift right now.”
 - **Charter and plot sign interaction** — Town charters and blueprinting plot signs that lost their block-entity link (visible but unusable) can be repaired with `/ah plots repair`. `/ah replace-charter` also re-attaches the charter entity correctly instead of failing with no server log.
 - **Broken portal tourists** — Tourists that stood still with empty dialogue (no name, portrait, or greeting) and never left are repaired on load, or removed if they cannot be recovered. Stuck return-home tourists are force-despawned instead of lingering forever.
-- **CurseForge packaging** — Optional feature assets ship in the core pack (single `manifest.json`). Disabled features remove their items from the item registry at startup so they do not appear in creative or give.
-- **Patch versions with feature packs** — Features are no longer manifest `SubPlugins` (Hytale rejected bare parent versions like `2.1.2`). They register from the parent plugin and stay toggleable via server mod config ids (`Hexvane:Quests`, etc.).
+- **Tourist purge orphan shells** — `/ah tourist purge` now removes legacy unbound `Aetherhaven_Townsfolk` entities (no town/tourist components or save rows) left behind by older tourist bugs, and purges live tourists that lost their town binding.
 
 ## [2.1.0] - 7/1/2026
 

@@ -1,0 +1,47 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_items.items.Aetherhaven_Npc_Debug_Stick.name",
+    "Description": "aetherhaven_items.items.Aetherhaven_Npc_Debug_Stick.description"
+  },
+  "Recipe": {
+    "TimeSeconds": 0,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Stick",
+        "Quantity": 1
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": ["Aetherhaven_TownPlanning"]
+      }
+    ]
+  },
+  "Categories": ["Items.Tools", "Aetherhaven.All"],
+  "Icon": "Icons/ItemsGenerated/Weapon_Staff_Crystal_Purple.png",
+  "Quality": "Tool",
+  "Model": "Items/Weapons/Staff/Crystal_Purple.blockymodel",
+  "Texture": "Items/Weapons/Staff/Crystal_Purple_Texture.png",
+  "PlayerAnimationsId": "Staff",
+  "MaxStack": 1,
+  "Scale": 0.55,
+  "Interactions": {
+    "Primary": "Aetherhaven_Npc_Debug_Stick_Primary_Root"
+  },
+  "InteractionConfig": {
+    "DebugOutlines": true,
+    "UseDistance": {
+      "Adventure": 5,
+      "Creative": 6
+    },
+    "AllEntities": true,
+    "Creative": 6
+  },
+  "Tags": {
+    "Family": ["Aetherhaven"],
+    "Type": ["Tool"]
+  },
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

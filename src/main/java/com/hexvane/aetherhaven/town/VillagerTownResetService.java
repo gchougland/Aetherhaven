@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
@@ -791,6 +792,15 @@ public final class VillagerTownResetService {
             binding = new TownVillagerBinding(town.getTownId(), c.bindingKind, null);
         }
         store.putComponent(ref, TownVillagerBinding.getComponentType(), binding);
+        World world = store.getExternalData().getWorld();
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            "ADMIN_RESET",
+            "roleId=" + role + ",kind=" + c.bindingKind + ",previousUuid=" + c.previousEntityUuid,
+            world,
+            pos
+        );
 
         UUIDComponent nu = store.getComponent(ref, UUIDComponent.getComponentType());
         if (nu == null) {

@@ -165,7 +165,7 @@ public final class InnBellService {
                     : InnPoolService.visitorBindingKindForRole(plugin, roleId);
             UUID spawned =
                 InnPoolService.spawnInnVisitorAtSlot(
-                    world, plugin, town, store, innPlot, innDef, roleId, kind, snap.slotIndex()
+                    world, plugin, town, store, innPlot, innDef, roleId, kind, snap.slotIndex(), "INN_BELL"
                 );
             if (spawned == null) {
                 continue;

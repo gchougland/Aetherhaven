@@ -11,6 +11,7 @@ import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
@@ -186,6 +187,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_ELDER, null)
         );
+        NpcSpawnOriginUtil.attach(store, elderRef, "CHARTER_ELDER", "townId=" + town.getTownId(), world, p);
         UUIDComponent elderUuid = store.getComponent(elderRef, UUIDComponent.getComponentType());
         if (elderUuid != null) {
             town.setElderEntityUuid(elderUuid.getUuid());

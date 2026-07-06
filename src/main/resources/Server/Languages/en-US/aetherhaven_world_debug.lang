@@ -132,6 +132,13 @@ aetherhaven.debug.tourist.targetsEmpty=No completed plots with touristDestinatio
 aetherhaven.debug.tourist.plotLine=  {building} plot={plot} entry=({entryX},{entryY},{entryZ}) preferred={preferred} visitPois={poiCount}
 aetherhaven.debug.tourist.poiLine=    poi {x},{y},{z} kind={kind} tags={tags}
 
+aetherhaven.debug.npc_stick.success=NPC telemetry written to: {path}
+aetherhaven.debug.npc_stick.noPermission=NPC debug stick requires World Editor permission.
+aetherhaven.debug.npc_stick.noTarget=No valid NPC target in range.
+aetherhaven.debug.npc_stick.notNpc=Target is not an NPC.
+aetherhaven.debug.npc_stick.writeFailed=Failed to write NPC telemetry file (check server log).
+aetherhaven.debug.npc_stick.cooldown=NPC debug stick is on cooldown; wait a moment.
+
 # Wall wand placement debug (/ah walldebug)
 aetherhaven.debug.wall.on=Wall wand debug ON (chat + server log).
 aetherhaven.debug.wall.off=Wall wand debug OFF.

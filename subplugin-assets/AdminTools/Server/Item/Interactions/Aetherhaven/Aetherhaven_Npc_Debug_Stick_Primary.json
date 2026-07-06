@@ -1,0 +1,27 @@
+{
+  "Type": "Simple",
+  "Effects": {
+    "ItemAnimationId": "SwingLeft",
+    "WorldSoundEventId": "SFX_Light_Melee_T2_Swing",
+    "Trails": [
+      {
+        "PositionOffset": {
+          "X": 1.4,
+          "Y": 0,
+          "Z": 0
+        },
+        "RotationOffset": {
+          "Pitch": 0,
+          "Roll": 90,
+          "Yaw": 0
+        },
+        "TargetNodeName": "Handle",
+        "TrailId": "Small_Default"
+      }
+    ]
+  },
+  "RunTime": 0.22,
+  "Next": {
+    "Type": "AetherhavenNpcDebugStickSmack"
+  }
+}

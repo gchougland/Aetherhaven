@@ -18,6 +18,7 @@ import com.hexvane.aetherhaven.time.AetherhavenMorningWindow;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.data.InnPoolEntry;
@@ -1224,7 +1225,7 @@ public final class InnPoolService {
             if (local == null || local.length != 3) {
                 break;
             }
-            UUID spawned = spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, kind);
+            UUID spawned = spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, kind, "INN_MORNING_FILL", slotIndex);
             if (spawned == null) {
                 break;
             }
@@ -1379,7 +1380,9 @@ public final class InnPoolService {
         @Nonnull ConstructionDefinition innDef,
         @Nonnull int[] local,
         @Nonnull String roleId,
-        @Nonnull String villagerKind
+        @Nonnull String villagerKind,
+        @Nonnull String spawnSource,
+        int slotIndex
     ) {
         NPCPlugin npc = NPCPlugin.get();
         if (npc == null) {
@@ -1405,6 +1408,14 @@ public final class InnPoolService {
             ref,
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), villagerKind, innPlot.getPlotId())
+        );
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            spawnSource,
+            "roleId=" + roleId + ",kind=" + villagerKind + ",slot=" + slotIndex,
+            world,
+            pos
         );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         return uuidComp != null ? uuidComp.getUuid() : null;
@@ -1463,7 +1474,35 @@ public final class InnPoolService {
         if (local == null || local.length != 3) {
             return null;
         }
-        return spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, villagerKind);
+        return spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, villagerKind, "INN_MORNING_FILL", slotIndex);
+    }
+
+    /**
+     * Spawns an inn visitor at the spawn local for {@code slotIndex} with an explicit spawn-origin tag.
+     */
+    @Nullable
+    public static UUID spawnInnVisitorAtSlot(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotInstance innPlot,
+        @Nonnull ConstructionDefinition innDef,
+        @Nonnull String roleId,
+        @Nonnull String villagerKind,
+        int slotIndex,
+        @Nonnull String spawnSource
+    ) {
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length == 0) {
+            return null;
+        }
+        List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
+        int[] local = resolveSpawnLocal(pool, roleId, spawnLocals, slotIndex);
+        if (local == null || local.length != 3) {
+            return null;
+        }
+        return spawnVisitor(world, plugin, town, store, innPlot, innDef, local, roleId, villagerKind, spawnSource, slotIndex);
     }
 
     @Nonnull
@@ -1503,6 +1542,15 @@ public final class InnPoolService {
             ref,
             TownVillagerBinding.getComponentType(),
             new TownVillagerBinding(town.getTownId(), villagerKind, preferred)
+        );
+        World world = store.getExternalData().getWorld();
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            "INN_DEBUG_SPAWN",
+            "roleId=" + roleId + ",kind=" + villagerKind + ",caller=spawnVisitorAtWorldPosition",
+            world,
+            worldPosition
         );
         UUIDComponent uuidComp = store.getComponent(ref, UUIDComponent.getComponentType());
         return uuidComp != null ? uuidComp.getUuid() : null;

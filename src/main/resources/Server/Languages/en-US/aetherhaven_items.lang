@@ -57,6 +57,8 @@ items.Aetherhaven_Poi_Tool.legendTitle=POI tool
 items.Aetherhaven_Poi_Tool.legendPrimary=Primary: select nearest POI near the block
 items.Aetherhaven_Poi_Tool.legendSecondary=Secondary: move selected POI to the block
 items.Aetherhaven_Poi_Tool.legendUse=Use: set NPC path target for selected POI (Use on POI block clears)
+items.Aetherhaven_Npc_Debug_Stick.name=Fixing Stick
+items.Aetherhaven_Npc_Debug_Stick.description=Bonk an NPC with this stick to "fix" them. Writes a telemetry report to the plugin data folder (World Editor). Craft at the Town Planning Desk with 1 stick.
 
 aetherhaven.poiTool.legendTitle=POI tool
 aetherhaven.poiTool.legendModeCycle=Q: switch between POI spots and adventurer spots

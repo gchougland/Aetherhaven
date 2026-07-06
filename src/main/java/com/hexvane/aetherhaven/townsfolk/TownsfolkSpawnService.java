@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcModelSpawnUtil;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
@@ -224,6 +225,14 @@ public final class TownsfolkSpawnService {
                 character.getModelAssetId(),
                 personalities
             )
+        );
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            "TOWNSFOLK_POOL",
+            "assignmentKind=" + kind + ",characterId=" + characterId,
+            world,
+            spawnPos
         );
 
         if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {

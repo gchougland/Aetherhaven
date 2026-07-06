@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
+import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hypixel.hytale.component.Ref;
@@ -99,6 +100,15 @@ public final class VillagerRevivalService {
             binding = new TownVillagerBinding(town.getTownId(), kind, null);
         }
         store.putComponent(ref, TownVillagerBinding.getComponentType(), binding);
+        String revivalSource = record.isPendingDawnRevival() ? "DAWN_REVIVAL" : "GAIA_REVIVAL";
+        NpcSpawnOriginUtil.attach(
+            store,
+            ref,
+            revivalSource,
+            "roleId=" + roleId + ",kind=" + kind + ",oldUuid=" + oldUuid,
+            world,
+            spawnPos
+        );
         UUIDComponent nu = store.getComponent(ref, UUIDComponent.getComponentType());
         if (nu == null) {
             return false;
