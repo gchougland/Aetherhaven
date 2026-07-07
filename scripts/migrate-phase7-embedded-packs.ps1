@@ -218,6 +218,7 @@ Move-GlobToPack -Pack "Quests" -SearchRelative "Server\Item\Items" -Patterns @(
     "Aetherhaven_Portal_Exit.json"
 )
 Move-RelToPack -Pack "Quests" -RelativePath "Common\Icons\ItemsGenerated\Aetherhaven_Quest_Board.png"
+Move-RelToPack -Pack "Quests" -RelativePath "Server\Item\Block\Hitboxes\Quest_Board.json"
 Move-UiToPack -Pack "Quests" -UiPattern "QuestBoard*.ui"
 Move-RelToPack -Pack "Quests" -RelativePath "Server\Aetherhaven\quest_board.json"
 Move-DirToPack -Pack "Quests" -RelativeDir "Server\Aetherhaven\Quests"

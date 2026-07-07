@@ -20,6 +20,7 @@
 - **Charter and plot sign interaction** — Town charters and blueprinting plot signs that lost their block-entity link (visible but unusable) can be repaired with `/ah plots repair`. `/ah replace-charter` also re-attaches the charter entity correctly instead of failing with no server log.
 - **Broken portal tourists** — Tourists that stood still with empty dialogue (no name, portrait, or greeting) and never left are repaired on load, or removed if they cannot be recovered. Stuck return-home tourists are force-despawned instead of lingering forever.
 - **Tourist purge orphan shells** — `/ah tourist purge` now removes legacy unbound `Aetherhaven_Townsfolk` entities (no town/tourist components or save rows) left behind by older tourist bugs, and purges live tourists that lost their town binding.
+- **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.
 
 ## [2.1.0] - 7/1/2026
 
