@@ -38,7 +38,7 @@ public final class CommunityMarketplaceConfig {
             .build();
 
     private boolean enabled = false;
-    private String apiBaseUrl = "http://127.0.0.1:3847";
+    private String apiBaseUrl = "https://aetherhaven.net";
     private int manifestRefreshMinutes = 5;
     private boolean submitOnSaveDefault = false;
 
@@ -52,7 +52,7 @@ public final class CommunityMarketplaceConfig {
         if (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
-        return url.isBlank() ? "http://127.0.0.1:3847" : url;
+        return url.isBlank() ? "https://aetherhaven.net" : url;
     }
 
     public int getManifestRefreshMinutes() {

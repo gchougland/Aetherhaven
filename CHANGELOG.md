@@ -5,7 +5,7 @@
 ### Added
 
 - **Community marketplace Railway deployment** — API and website run on a single port for Railway; see `docs/RailwayDeployment.md`.
-- **Community API key from environment** — Mod submissions use `AETHERHAVEN_COMMUNITY_API_KEY` (or `_FILE`) instead of `config.json`; no secrets in the public repo.
+- **Community submissions without per-server API keys** — In-game uploads work out of the box; backend uses rate limits and admin moderation instead of a distributable mod secret.
 
 ### Fixed
 

@@ -20,12 +20,14 @@ import {
   readPrefabBlockIdVersion,
   validateBuildingDefinition,
 } from "./validation.js";
+import { createSubmissionRateLimit } from "./submissionRateLimit.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);
 const IS_PRODUCTION = process.env.NODE_ENV === "production" || Boolean(process.env.RAILWAY_ENVIRONMENT);
-const API_KEY = resolveRequiredSecret("API_KEY", IS_PRODUCTION);
 const SESSION_SECRET = resolveRequiredSecret("SESSION_SECRET", IS_PRODUCTION);
+/** Optional — only for machine-to-machine admin API; the mod does not use this. */
+const ADMIN_API_KEY = resolveOptionalSecret("API_KEY");
 const ADMIN_UUIDS = new Set(
   (process.env.ADMIN_HYTALE_UUIDS || "")
     .split(",")
@@ -75,6 +77,14 @@ function resolvePublicBaseUrl() {
   return `http://localhost:${PORT}`;
 }
 
+function resolveOptionalSecret(name) {
+  const value = process.env[name];
+  if (value && value.trim() && !isWeakPlaceholder(value)) {
+    return value.trim();
+  }
+  return "";
+}
+
 function resolveRequiredSecret(name, required) {
   const value = process.env[name];
   if (value && value.trim() && !isWeakPlaceholder(value)) {
@@ -83,9 +93,6 @@ function resolveRequiredSecret(name, required) {
   if (required) {
     console.error(`[startup] Missing or weak ${name}. Set it in Railway Variables (see docs/RailwayDeployment.md).`);
     process.exit(1);
-  }
-  if (name === "API_KEY") {
-    return "dev-only-local-api-key-not-for-production";
   }
   return "dev-only-local-session-secret-not-for-production";
 }
@@ -99,14 +106,25 @@ function isWeakPlaceholder(value) {
   );
 }
 
-function requireApiKey(req, res, next) {
+function requireAdminApiKey(req, res, next) {
+  if (!ADMIN_API_KEY) {
+    res.status(503).json({ error: "admin_api_disabled" });
+    return;
+  }
   const key = req.get("X-Api-Key");
-  if (!key || key !== API_KEY) {
+  if (!key || key !== ADMIN_API_KEY) {
     res.status(401).json({ error: "unauthorized" });
     return;
   }
   next();
 }
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+const submissionRateLimit = createSubmissionRateLimit({
+  maxPerPlayer: Number(process.env.SUBMISSION_MAX_PER_PLAYER_PER_DAY || 10),
+  maxPerIp: Number(process.env.SUBMISSION_MAX_PER_IP_PER_HOUR || 30),
+});
 
 function buildManifestEntry(id, meta, prefabBytes) {
   return {
@@ -256,7 +274,7 @@ app.get("/api/v1/buildings/:id/icon.png", (req, res) => {
 
 app.post(
   "/api/v1/submissions",
-  requireApiKey,
+  submissionRateLimit,
   upload.fields([
     { name: "building", maxCount: 1 },
     { name: "prefab", maxCount: 1 },
@@ -266,7 +284,7 @@ app.post(
     try {
       const creatorUuid = String(req.get("X-Player-Uuid") || "").trim().toLowerCase();
       const creatorName = String(req.get("X-Player-Name") || "Unknown").trim();
-      if (!creatorUuid) {
+      if (!creatorUuid || !UUID_RE.test(creatorUuid)) {
         res.status(400).json({ error: "player_uuid_required" });
         return;
       }
@@ -326,16 +344,16 @@ app.post(
   }
 );
 
-app.get("/api/v1/submissions/pending", requireApiKey, (_req, res) => {
+app.get("/api/v1/submissions/pending", requireAdminApiKey, (_req, res) => {
   res.json({ submissions: storage.listPending() });
 });
 
-app.post("/api/v1/submissions/:submissionId/approve", requireApiKey, (req, res) => {
+app.post("/api/v1/submissions/:submissionId/approve", requireAdminApiKey, (req, res) => {
   const result = approveSubmission(req.params.submissionId, req.body?.id);
   res.status(result.status).json(result.body);
 });
 
-app.post("/api/v1/submissions/:submissionId/reject", requireApiKey, (req, res) => {
+app.post("/api/v1/submissions/:submissionId/reject", requireAdminApiKey, (req, res) => {
   const result = rejectSubmission(req.params.submissionId, req.body?.reason);
   res.status(result.status).json(result.body);
 });

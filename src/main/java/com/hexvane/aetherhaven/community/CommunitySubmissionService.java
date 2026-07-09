@@ -29,7 +29,7 @@ public final class CommunitySubmissionService {
         @Nonnull String constructionId
     ) {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
-        if (!cfg.isEnabled() || !CommunityMarketplaceSecrets.hasApiKey()) {
+        if (!cfg.isEnabled()) {
             return "disabled";
         }
         Path dataDir = plugin.getDataDirectory();
@@ -59,7 +59,6 @@ public final class CommunitySubmissionService {
 
             byte[] body = buildMultipart(buildingBytes, prefabBytes, iconBytes);
             Map<String, String> headers = new LinkedHashMap<>();
-            headers.put("X-Api-Key", CommunityMarketplaceSecrets.resolveApiKey());
             headers.put("X-Player-Uuid", playerUuid.toString());
             headers.put("X-Player-Name", playerName);
 

@@ -8,7 +8,6 @@ import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.community.CommunityCatalogService;
 import com.hexvane.aetherhaven.community.CommunityIconRegistry;
-import com.hexvane.aetherhaven.community.CommunityMarketplaceSecrets;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsService;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
@@ -370,14 +369,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);
-        if (this.config.get().getCommunityMarketplace().isEnabled() && !CommunityMarketplaceSecrets.hasApiKey()) {
-            LOGGER
-                .atWarning()
-                .log(
-                    "Community marketplace is enabled but %s is not set; browse/download works but in-game submissions are disabled.",
-                    CommunityMarketplaceSecrets.API_KEY_ENV
-                );
-        }
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
