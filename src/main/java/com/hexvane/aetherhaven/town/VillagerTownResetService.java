@@ -16,7 +16,12 @@ import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileDefinition;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkSpawnService;
+import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
+import com.hexvane.aetherhaven.tourist.TouristRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -66,7 +71,11 @@ public final class VillagerTownResetService {
         @Nullable String guardCharacterId,
         @Nullable String guardEquipmentProfileId,
         @Nullable TownsfolkCharacterBinding guardCharacterBinding,
-        boolean guardCitizen
+        boolean guardCitizen,
+        @Nullable String poolCharacterId,
+        @Nullable TownsfolkCharacterBinding poolCharacterBinding,
+        @Nullable String poolAssignmentKind,
+        boolean poolTownsfolkCitizen
     ) {}
 
     private VillagerTownResetService() {}
@@ -88,6 +97,18 @@ public final class VillagerTownResetService {
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
         InnPoolService.reconcileInnVisitorEntities(world, town, tm, store, true);
+        purgeLoadedTouristCitizenDuplicates(world, store, captured);
+        int genericDupesPurged = 0;
+        if (townHasPromotedTouristCitizen(town)) {
+            genericDupesPurged = purgeDuplicateGenericTownsfolkResidents(store, town, captured.keySet());
+        }
+        if (genericDupesPurged > 0) {
+            LOGGER.atInfo().log(
+                "Reset: removed %s duplicate generic townsfolk NPC(s) for town %s",
+                genericDupesPurged,
+                town.getTownId()
+            );
+        }
         int straysPurged = purgeStrayLoadedVillagerNpcsForTownReset(store, town, tm, captured.keySet());
         if (straysPurged > 0) {
             LOGGER.atInfo().log("Reset: removed %s stray loaded villager NPC(s) for town %s", straysPurged, town.getTownId());
@@ -167,6 +188,51 @@ public final class VillagerTownResetService {
                 newUuid = spawned;
                 if (c.guardCitizen()) {
                     ResidentRegistryService.upsert(town, tm, c.npcRoleId(), c.bindingKind(), c.jobPlotId(), newUuid);
+                }
+            } else if (
+                c.poolTownsfolkCitizen()
+                    && c.poolCharacterId() != null
+                    && !c.poolCharacterId().isBlank()
+                    && c.poolCharacterBinding() != null
+                    && c.poolAssignmentKind() != null
+                    && !c.poolAssignmentKind().isBlank()
+            ) {
+                UUID spawned =
+                    TownsfolkSpawnService.respawnPoolCharacterAtPosition(
+                        world,
+                        plugin,
+                        town,
+                        store,
+                        c.poolCharacterId(),
+                        c.poolAssignmentKind(),
+                        c.poolCharacterBinding(),
+                        pos,
+                        "ADMIN_RESET",
+                        "assignmentKind="
+                            + c.poolAssignmentKind()
+                            + ",characterId="
+                            + c.poolCharacterId()
+                            + ",previousUuid="
+                            + c.previousEntityUuid
+                    );
+                if (spawned == null) {
+                    LOGGER.atWarning()
+                        .log(
+                            "Reset: failed to spawn tourist citizen %s for town %s",
+                            c.poolCharacterId(),
+                            town.getTownId()
+                        );
+                    continue;
+                }
+                newUuid = spawned;
+                for (TouristRecord rec : town.getTouristRecords()) {
+                    if (rec.isCitizen() && c.poolCharacterId().equalsIgnoreCase(rec.getCharacterId())) {
+                        rec.setEntityUuid(newUuid);
+                        break;
+                    }
+                }
+                if (townHasPromotedTouristCitizen(town)) {
+                    town.getResidentNpcRecords().removeIf(VillagerTownResetService::isGenericTownsfolkResidentRecord);
                 }
             } else {
                 UUID spawned = spawnResidentLikeNpc(store, town, tm, c, pos, innPlot);
@@ -334,6 +400,9 @@ public final class VillagerTownResetService {
         if (TownVillagerBinding.KIND_GUARD.equals(c.bindingKind)) {
             return 2;
         }
+        if (c.poolTownsfolkCitizen()) {
+            return 5;
+        }
         return 10;
     }
 
@@ -351,6 +420,10 @@ public final class VillagerTownResetService {
             }
             UUID old = r.getLastEntityUuid();
             if (old.equals(NIL_UUID)) {
+                continue;
+            }
+            if (isTrackedTouristCitizenUuid(town, old)
+                || (townHasPromotedTouristCitizen(town) && isGenericTownsfolkResidentRecord(r))) {
                 continue;
             }
             putNonVisitorFromTownData(map, town, store, old);
@@ -393,7 +466,7 @@ public final class VillagerTownResetService {
                 }
                 String role = npc.getRoleName().trim();
                 visitorRolesTaken.add(role);
-                map.put(old, new CapturedNpc(old, true, role, b.getKind(), b.getJobPlotId(), true, null, null, null, false));
+                map.put(old, new CapturedNpc(old, true, role, b.getKind(), b.getJobPlotId(), true, null, null, null, false, null, null, null, false));
             }
         }
 
@@ -431,12 +504,279 @@ public final class VillagerTownResetService {
                 continue;
             }
             String kind = InnPoolService.visitorBindingKindForRole(plugin, roleId);
-            map.put(old, new CapturedNpc(old, false, roleId, kind, null, true, null, null, null, false));
+            map.put(old, new CapturedNpc(old, false, roleId, kind, null, true, null, null, null, false, null, null, null, false));
         }
 
         captureHiredGuards(map, town, store, plugin);
+        captureTouristCitizens(map, town, store, plugin);
 
         return map;
+    }
+
+    /** Promoted tourist citizens are tracked in {@link TouristRecord}, not generic {@link ResidentNpcRecord} rows. */
+    private static void captureTouristCitizens(
+        @Nonnull LinkedHashMap<UUID, CapturedNpc> map,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        for (TouristRecord rec : town.getTouristRecords()) {
+            if (!rec.isCitizen()) {
+                continue;
+            }
+            String characterId = rec.getCharacterId().trim();
+            if (characterId.isEmpty()) {
+                continue;
+            }
+            UUID resolved = resolveTouristCitizenEntityUuid(store, town, rec);
+            if (resolved == null || NIL_UUID.equals(resolved)) {
+                continue;
+            }
+            UUID recorded = rec.getEntityUuid();
+            if (recorded != null && !recorded.equals(resolved)) {
+                rec.setEntityUuid(resolved);
+                if (map.containsKey(recorded)) {
+                    CapturedNpc stale = map.get(recorded);
+                    if (stale != null && isGenericTownsfolkResidentCapture(stale)) {
+                        map.remove(recorded);
+                    }
+                }
+            }
+            TownsfolkCharacterBinding binding = resolveTouristCitizenCharacterBinding(store, resolved, plugin, characterId);
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(resolved);
+            boolean loaded = ref != null && ref.isValid();
+            map.put(
+                resolved,
+                new CapturedNpc(
+                    resolved,
+                    loaded,
+                    AetherhavenConstants.NPC_TOWNSFOLK,
+                    TownVillagerBinding.KIND_TOWNSFOLK,
+                    null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    false,
+                    characterId,
+                    binding,
+                    TownsfolkAssignmentKinds.TOURIST,
+                    true
+                )
+            );
+        }
+    }
+
+    @Nullable
+    private static UUID resolveTouristCitizenEntityUuid(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull TouristRecord rec
+    ) {
+        String characterId = rec.getCharacterId().trim();
+        UUID recorded = rec.getEntityUuid();
+        if (recorded != null && !NIL_UUID.equals(recorded)) {
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(recorded);
+            if (ref != null && ref.isValid()) {
+                TownsfolkCharacterBinding live = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+                if (live != null && characterId.equalsIgnoreCase(live.getCharacterId().trim())) {
+                    return recorded;
+                }
+            }
+        }
+        UUID tid = town.getTownId();
+        UUID[] found = { null };
+        Query<EntityStore> q =
+            Query.and(
+                TownVillagerBinding.getComponentType(),
+                TownsfolkCharacterBinding.getComponentType(),
+                UUIDComponent.getComponentType()
+            );
+        store.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
+            if (found[0] != null) {
+                return;
+            }
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
+                UUIDComponent uc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                if (b == null || tb == null || uc == null) {
+                    continue;
+                }
+                if (!tid.equals(b.getTownId())) {
+                    continue;
+                }
+                if (!characterId.equalsIgnoreCase(tb.getCharacterId().trim())) {
+                    continue;
+                }
+                if (!TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind())) {
+                    continue;
+                }
+                found[0] = uc.getUuid();
+                return;
+            }
+        });
+        if (found[0] != null) {
+            return found[0];
+        }
+        return recorded;
+    }
+
+    @Nonnull
+    private static TownsfolkCharacterBinding resolveTouristCitizenCharacterBinding(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull String characterId
+    ) {
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+        if (ref != null && ref.isValid()) {
+            TownsfolkCharacterBinding live = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+            if (live != null && characterId.equalsIgnoreCase(live.getCharacterId())) {
+                return new TownsfolkCharacterBinding(
+                    live.getCharacterId(),
+                    live.getActivePersonalityId(),
+                    TownsfolkAssignmentKinds.TOURIST,
+                    live.getModelAssetId(),
+                    live.getPersonalityIds()
+                );
+            }
+        }
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(characterId);
+        if (character == null) {
+            return new TownsfolkCharacterBinding(characterId, "", TownsfolkAssignmentKinds.TOURIST, "", List.of());
+        }
+        return new TownsfolkCharacterBinding(
+            characterId,
+            "",
+            TownsfolkAssignmentKinds.TOURIST,
+            character.getModelAssetId(),
+            character.getPersonalityIds()
+        );
+    }
+
+    private static void purgeLoadedTouristCitizenDuplicates(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Map<UUID, CapturedNpc> captured
+    ) {
+        for (CapturedNpc c : captured.values()) {
+            if (!c.poolTownsfolkCitizen() || c.poolCharacterId() == null || c.poolCharacterId().isBlank()) {
+                continue;
+            }
+            TownsfolkExistenceService.purgeDuplicateEntities(world, store, c.poolCharacterId(), c.previousEntityUuid());
+        }
+    }
+
+    /**
+     * Removes loaded {@code Villager_townsfolk_*} shells left by prior admin resets when the town tracks a pool tourist
+     * citizen instead.
+     */
+    private static int purgeDuplicateGenericTownsfolkResidents(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull Set<UUID> allowedUuids
+    ) {
+        UUID townId = town.getTownId();
+        String genericHandle = genericTownsfolkVillagerHandle(townId);
+        Query<EntityStore> q =
+            Query.and(
+                NPCEntity.getComponentType(),
+                TownVillagerBinding.getComponentType(),
+                UUIDComponent.getComponentType()
+            );
+        List<Ref<EntityStore>> toRemove = new ArrayList<>();
+        store.forEachChunk(q, (archetypeChunk, commandBuffer) -> {
+            int n = archetypeChunk.size();
+            for (int i = 0; i < n; i++) {
+                Ref<EntityStore> npcRef = archetypeChunk.getReferenceTo(i);
+                if (npcRef == null || !npcRef.isValid()) {
+                    continue;
+                }
+                UUIDComponent uuc = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
+                if (uuc == null) {
+                    continue;
+                }
+                UUID uuid = uuc.getUuid();
+                if (NIL_UUID.equals(uuid) || allowedUuids.contains(uuid)) {
+                    continue;
+                }
+                TownVillagerBinding b = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                if (b == null || !townId.equals(b.getTownId()) || !TownVillagerBinding.KIND_TOWNSFOLK.equals(b.getKind())) {
+                    continue;
+                }
+                NPCEntity npc = archetypeChunk.getComponent(i, NPCEntity.getComponentType());
+                if (npc == null
+                    || npc.getRoleName() == null
+                    || !AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(npc.getRoleName().trim())) {
+                    continue;
+                }
+                TownsfolkCharacterBinding tb = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+                if (tb != null && TownsfolkAssignmentKinds.isTourist(tb.getAssignmentKind())) {
+                    continue;
+                }
+                AetherhavenVillagerHandle handle = store.getComponent(npcRef, AetherhavenVillagerHandle.getComponentType());
+                if (handle != null && genericHandle.equalsIgnoreCase(handle.getHandle().trim())) {
+                    toRemove.add(npcRef);
+                    continue;
+                }
+                if (handle == null && tb == null) {
+                    toRemove.add(npcRef);
+                }
+            }
+        });
+        int count = 0;
+        for (Ref<EntityStore> r : toRemove) {
+            if (r.isValid()) {
+                store.removeEntity(r, RemoveReason.REMOVE);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    static boolean isGenericTownsfolkResidentRecord(@Nonnull ResidentNpcRecord record) {
+        return TownVillagerBinding.KIND_TOWNSFOLK.equals(record.getKind())
+            && AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(record.getNpcRoleId().trim());
+    }
+
+    private static boolean isGenericTownsfolkResidentCapture(@Nonnull CapturedNpc capture) {
+        return !capture.visitor()
+            && !capture.poolTownsfolkCitizen()
+            && !capture.guardCitizen()
+            && (capture.guardCharacterId() == null || capture.guardCharacterId().isBlank())
+            && TownVillagerBinding.KIND_TOWNSFOLK.equals(capture.bindingKind())
+            && AetherhavenConstants.NPC_TOWNSFOLK.equalsIgnoreCase(capture.npcRoleId().trim());
+    }
+
+    private static boolean isTrackedTouristCitizenUuid(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        for (TouristRecord rec : town.getTouristRecords()) {
+            if (!rec.isCitizen()) {
+                continue;
+            }
+            UUID recorded = rec.getEntityUuid();
+            if (recorded != null && recorded.equals(entityUuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean townHasPromotedTouristCitizen(@Nonnull TownRecord town) {
+        for (TouristRecord rec : town.getTouristRecords()) {
+            if (rec.isCitizen()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nonnull
+    private static String genericTownsfolkVillagerHandle(@Nonnull UUID townId) {
+        String hex = townId.toString().replace("-", "");
+        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
+        return "Villager_" + TownVillagerBinding.KIND_TOWNSFOLK + "_" + suffix;
     }
 
     /** Hired guards are tracked in {@link HiredGuardRecord}, not only {@link ResidentNpcRecord}. */
@@ -502,7 +842,11 @@ public final class VillagerTownResetService {
                     characterId,
                     equipmentProfileId,
                     binding,
-                    rec.isCitizen()
+                    rec.isCitizen(),
+                    null,
+                    null,
+                    null,
+                    false
                 )
             );
         }
@@ -752,7 +1096,10 @@ public final class VillagerTownResetService {
                 return;
             }
         }
-        map.put(oldUuid, new CapturedNpc(oldUuid, loaded, roleId, kind, jobPlotId, false, null, null, null, false));
+        map.put(
+            oldUuid,
+            new CapturedNpc(oldUuid, loaded, roleId, kind, jobPlotId, false, null, null, null, false, null, null, null, false)
+        );
     }
 
     @Nullable

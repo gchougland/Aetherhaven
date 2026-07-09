@@ -262,6 +262,79 @@ public final class TownsfolkSpawnService {
         return Optional.of(new SpawnedTownsfolk(characterId, entityUuid, personalities, kind));
     }
 
+    /**
+     * Respawns a checked-out townsfolk pool character (tourist citizen, etc.) while preserving character identity and
+     * pool ledger ownership.
+     *
+     * @return new entity uuid, or null on failure
+     */
+    @Nullable
+    public static UUID respawnPoolCharacterAtPosition(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String characterId,
+        @Nonnull String assignmentKind,
+        @Nonnull TownsfolkCharacterBinding characterBinding,
+        @Nonnull Vector3d spawnPos,
+        @Nonnull String spawnSource,
+        @Nonnull String spawnDetail
+    ) {
+        String cid = characterId.trim();
+        if (cid.isEmpty()) {
+            return null;
+        }
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(cid);
+        if (character == null) {
+            LOGGER.atWarning().log("Cannot respawn townsfolk %s: unknown character id", cid);
+            return null;
+        }
+        String kind = assignmentKind.trim().toLowerCase();
+        Optional<SpawnedTownsfolk> spawned =
+            spawnTownsfolkEntity(
+                world,
+                plugin,
+                town,
+                store,
+                spawnPos,
+                kind,
+                cid,
+                character,
+                new Random(),
+                new Rotation3f(),
+                null,
+                null
+            );
+        if (spawned.isEmpty()) {
+            return null;
+        }
+        UUID newUuid = spawned.get().entityUuid();
+        Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(newUuid);
+        if (ref != null && ref.isValid()) {
+            NpcSpawnOriginUtil.attach(store, ref, spawnSource, spawnDetail, world, spawnPos);
+            String activePersonality = characterBinding.getActivePersonalityId();
+            String modelAssetId = characterBinding.getModelAssetId();
+            if (modelAssetId == null || modelAssetId.isBlank()) {
+                modelAssetId = character.getModelAssetId();
+            }
+            List<String> personalities =
+                characterBinding.getPersonalityIds().isEmpty()
+                    ? character.getPersonalityIds()
+                    : characterBinding.getPersonalityIds();
+            store.putComponent(
+                ref,
+                TownsfolkCharacterBinding.getComponentType(),
+                new TownsfolkCharacterBinding(cid, activePersonality != null ? activePersonality : "", kind, modelAssetId, personalities)
+            );
+        }
+        if (!TownsfolkExistenceService.transferInstanceOnHire(world, plugin, cid, newUuid, town.getTownId())) {
+            LOGGER.atFine().log("Respawned townsfolk %s without townsfolk ledger checkout update", cid);
+        }
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, cid, newUuid);
+        return newUuid;
+    }
+
     public static void release(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull String characterId) {
         TownsfolkExistenceService.releaseCharacter(world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.DESPAWN);
     }

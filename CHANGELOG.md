@@ -1,6 +1,12 @@
 # Changelog
 
-## [2.1.2] - Unreleased
+## [2.2.0] - Unreleased
+
+### Fixed
+
+- **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.
+
+## [2.1.2] - 7/7/2026
 
 ### Added
 

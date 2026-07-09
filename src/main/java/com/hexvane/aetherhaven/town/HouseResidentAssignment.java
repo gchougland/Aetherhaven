@@ -3,7 +3,6 @@ package com.hexvane.aetherhaven.town;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
-import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hypixel.hytale.component.Store;
@@ -68,7 +67,10 @@ public final class HouseResidentAssignment {
                 && residentUuid.equals(town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK))) {
                 TouristPortalTickService.promoteTouristToCitizen(town, tm, residentUuid);
             }
-            ResidentRegistryService.syncHouseAssignment(town, tm, store, residentUuid);
+            // Pool tourists (including promoted citizens) are tracked in touristRecords, not residentNpcRecords.
+            if (TouristPortalTickService.findTouristRecord(town, residentUuid) == null) {
+                ResidentRegistryService.syncHouseAssignment(town, tm, store, residentUuid);
+            }
         }
     }
 }
