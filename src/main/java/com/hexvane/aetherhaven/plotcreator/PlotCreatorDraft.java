@@ -87,6 +87,9 @@ public final class PlotCreatorDraft {
     /** When true, regular balloon gifts may drop a plot blueprint for this building (requires locked token). */
     private boolean floatingGiftBlueprint;
 
+    /** When true, save also uploads this building to the community marketplace for review. */
+    private boolean submitToCommunity;
+
     /** Crafting bench style filter id (core, jimmy, jszza, hytiny, misc). */
     @Nullable
     private String styleId;
@@ -422,6 +425,14 @@ public final class PlotCreatorDraft {
 
     public void setFloatingGiftBlueprint(boolean floatingGiftBlueprint) {
         this.floatingGiftBlueprint = floatingGiftBlueprint;
+    }
+
+    public boolean isSubmitToCommunity() {
+        return submitToCommunity;
+    }
+
+    public void setSubmitToCommunity(boolean submitToCommunity) {
+        this.submitToCommunity = submitToCommunity;
     }
 
     @Nullable

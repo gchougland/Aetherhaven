@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin — Aetherhaven Community</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <h1>Moderation</h1>
+        <nav>
+          <a href="/">Browse</a>
+          <a href="/dashboard.html">Dashboard</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <section class="card">
+        <h2>Pending submissions</h2>
+        <div id="adminQueue"></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+    <script>
+      loadAdminQueue();
+    </script>
+  </body>
+</html>

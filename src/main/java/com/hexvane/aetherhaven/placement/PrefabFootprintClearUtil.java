@@ -25,6 +25,8 @@ import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -172,7 +174,7 @@ public final class PrefabFootprintClearUtil {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                 for (int y = minY; y <= maxY; y++) {
-                    BlockType bt = world.getBlockType(x, y, z);
+                    BlockType bt = getBlockTypeIfChunkInMemory(world, x, y, z);
                     if (bt == null || !isProductionStorageBlockTypeId(bt.getId())) {
                         continue;
                     }
@@ -189,12 +191,28 @@ public final class PrefabFootprintClearUtil {
 
     /** Clears the wardrobe base (and attached filler voxels) at a world cell, if any production storage is present. */
     public static void forceClearProductionStorageAt(@Nonnull World world, int wx, int wy, int wz) {
-        BlockType bt = world.getBlockType(wx, wy, wz);
+        BlockType bt = getBlockTypeIfChunkInMemory(world, wx, wy, wz);
         if (bt == null || !isProductionStorageBlockTypeId(bt.getId())) {
             return;
         }
         BlockPosition base = productionStorageBaseBlock(world, wx, wy, wz);
         forceClearBlockCell(world, base.x, base.y, base.z);
+    }
+
+    /**
+     * Reads block type without promoting chunks to ticking. {@link World#getBlockType} uses {@code getChunk()}, which
+     * calls {@code loadChunkIfInMemory} and must not run from entity tick systems.
+     */
+    @Nullable
+    private static BlockType getBlockTypeIfChunkInMemory(@Nonnull World world, int x, int y, int z) {
+        if (y < 0 || y >= 320) {
+            return null;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return null;
+        }
+        return BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z));
     }
 
     public static boolean isProductionStorageBlockTypeId(@Nonnull String blockTypeId) {
@@ -214,9 +232,24 @@ public final class PrefabFootprintClearUtil {
     }
 
     @Nonnull
-    @SuppressWarnings({ "deprecation", "removal" })
     private static BlockPosition productionStorageBaseBlock(@Nonnull World world, int wx, int y, int wz) {
-        return world.getBaseBlock(new BlockPosition(wx, y, wz));
+        BlockPosition position = new BlockPosition(wx, y, wz);
+        if (y < 0 || y >= 320) {
+            return position;
+        }
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
+        if (chunk == null) {
+            return position;
+        }
+        int filler = chunk.getFiller(wx, y, wz);
+        if (filler == 0) {
+            return position;
+        }
+        return new BlockPosition(
+            wx - FillerBlockUtil.unpackX(filler),
+            y - FillerBlockUtil.unpackY(filler),
+            wz - FillerBlockUtil.unpackZ(filler)
+        );
     }
 
     private static long packBlockPos(int x, int y, int z) {

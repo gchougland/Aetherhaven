@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creator Dashboard — Aetherhaven Community</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <h1>Creator Dashboard</h1>
+        <nav>
+          <a href="/">Browse</a>
+          <a href="/auth/logout">Sign out</a>
+        </nav>
+      </div>
+    </header>
+    <main class="wrap">
+      <section id="profile" class="card"></section>
+      <section class="card">
+        <h2>Submit from the game</h2>
+        <p>
+          Use the plot creator in Aetherhaven and enable <strong>Submit to community</strong> on save.
+          Submissions appear here after moderator review.
+        </p>
+      </section>
+      <section class="card">
+        <h2>Your pending submissions</h2>
+        <div id="mySubmissions"></div>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+    <script>
+      loadDashboard();
+    </script>
+  </body>
+</html>

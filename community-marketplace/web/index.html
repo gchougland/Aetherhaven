@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aetherhaven Community Buildings</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <h1>Aetherhaven Community Buildings</h1>
+        <p class="tagline">Free player-made plot buildings for the Aetherhaven mod.</p>
+        <nav>
+          <a href="/">Browse</a>
+          <a href="/dashboard.html">Dashboard</a>
+          <a href="/admin.html">Admin</a>
+          <a href="/auth/login" id="loginLink">Sign in with Hytale</a>
+          <a href="/auth/logout" id="logoutLink" hidden>Sign out</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section id="status" class="status" hidden></section>
+      <section>
+        <h2>Approved builds</h2>
+        <div id="catalog" class="catalog-grid"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+    <script>
+      loadCatalog();
+      refreshAuthNav();
+    </script>
+  </body>
+</html>

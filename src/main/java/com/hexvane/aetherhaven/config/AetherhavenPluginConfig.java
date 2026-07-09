@@ -521,6 +521,13 @@ public final class AetherhavenPluginConfig {
         )
         .documentation("Seconds before the same villager may wave again.")
         .add()
+        .append(
+            new KeyedCodec<>("CommunityMarketplace", CommunityMarketplaceConfig.CODEC),
+            (o, v) -> o.communityMarketplace = v != null ? v : new CommunityMarketplaceConfig(),
+            o -> o.communityMarketplace
+        )
+        .documentation("Remote community building browser (manifest browse, on-demand download, optional submit).")
+        .add()
         .build();
 
     private int constructionBlocksPerTick = 8;
@@ -612,6 +619,13 @@ public final class AetherhavenPluginConfig {
     private float reputationWaveChancePerCheck = 0.12f;
     private float reputationWaveDurationSeconds = 2.5f;
     private float reputationWaveCooldownSeconds = 45f;
+
+    private CommunityMarketplaceConfig communityMarketplace = new CommunityMarketplaceConfig();
+
+    @Nonnull
+    public CommunityMarketplaceConfig getCommunityMarketplace() {
+        return communityMarketplace != null ? communityMarketplace : new CommunityMarketplaceConfig();
+    }
 
     public int getConstructionBlocksPerTick() {
         return constructionBlocksPerTick;
@@ -1455,6 +1469,7 @@ public final class AetherhavenPluginConfig {
         this.reputationWaveChancePerCheck = o.reputationWaveChancePerCheck;
         this.reputationWaveDurationSeconds = o.reputationWaveDurationSeconds;
         this.reputationWaveCooldownSeconds = o.reputationWaveCooldownSeconds;
+        this.communityMarketplace = o.communityMarketplace != null ? o.communityMarketplace : new CommunityMarketplaceConfig();
     }
 
     @Nonnull

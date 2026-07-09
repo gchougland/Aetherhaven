@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.community.CommunityBuildingsLoader;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -81,6 +82,7 @@ public final class ConstructionCatalog {
         Set<String> customIds = Set.of();
         if (dataDirectory != null) {
             customIds = CustomBuildingsLoader.overlayBuildingsFromDataDirectory(gson, dataDirectory, map);
+            CommunityBuildingsLoader.overlayBuildingsFromCommunityDirectory(gson, dataDirectory, map);
         }
         validateCountsAsAliases(map);
         return new ConstructionCatalog(Collections.unmodifiableMap(map), customIds);

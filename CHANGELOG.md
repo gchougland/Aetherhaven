@@ -2,9 +2,15 @@
 
 ## [2.2.0] - Unreleased
 
+### Added
+
+- **Community marketplace Railway deployment** — API and website run on a single port for Railway; see `docs/RailwayDeployment.md`.
+- **Community API key from environment** — Mod submissions use `AETHERHAVEN_COMMUNITY_API_KEY` (or `_FILE`) instead of `config.json`; no secrets in the public repo.
+
 ### Fixed
 
 - **Assembled plot chests and benches** — Prefab assembly no longer places chests and workbenches via force `setBlock` on non-ticking chunks (which left container block entities unusable until break-and-replace). Interactive block entities are deferred during incremental assembly and placed once at build completion on ticking chunks with explicit entity attachment.
+- **Passive assembly crash** — Placing production-storage blocks during passive plot assembly no longer calls `World.getBlockType()` (which promoted chunks to ticking mid–entity-store tick and crashed with “Store is currently processing”).
 - **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.
 
 ## [2.1.2] - 7/7/2026

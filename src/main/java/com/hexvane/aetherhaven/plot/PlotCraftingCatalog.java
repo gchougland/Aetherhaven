@@ -18,7 +18,8 @@ import javax.annotation.Nullable;
 public final class PlotCraftingCatalog {
     public enum Tab {
         CORE,
-        DECORATIONS
+        DECORATIONS,
+        COMMUNITY
     }
 
     public record VariantEntry(@Nonnull String constructionId, @Nonnull String displayName, @Nullable String prefabPathKey) {}

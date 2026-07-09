@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunitySubmissionService;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
@@ -405,6 +406,23 @@ public final class PlotCreatorService {
         Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), draft.getConstructionId().trim());
         if (Files.isRegularFile(iconFile)) {
             CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
+        }
+        if (draft.isSubmitToCommunity() && plugin.getConfig().get().getCommunityMarketplace().isEnabled()) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            String submitErr = CommunitySubmissionService.submitSavedBuilding(
+                plugin,
+                playerRef.getUuid(),
+                playerName,
+                draft.getConstructionId().trim()
+            );
+            if (submitErr == null) {
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity"));
+            } else if (!"disabled".equals(submitErr)) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit")
+                        .param("reason", Message.raw(submitErr))
+                );
+            }
         }
         World world = session.getWorld();
         String registerErr = PlotCreatorWorldRegistrar.registerInTown(world, plugin, playerRef.getUuid(), draft, store);

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.prefab;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
@@ -56,9 +57,33 @@ public final class PrefabResolveUtil {
         if (plugin == null) {
             return null;
         }
-        Path file = CustomBuildingsPaths.resolvePrefabFile(plugin.getDataDirectory(), key);
+        Path dataDir = plugin.getDataDirectory();
+        Path file = CustomBuildingsPaths.resolvePrefabFile(dataDir, key);
         if (file != null) {
             return file.toAbsolutePath().normalize();
+        }
+        file = CommunityPaths.resolveInstalledPrefab(dataDir, key);
+        if (file != null) {
+            return file.toAbsolutePath().normalize();
+        }
+        String constructionId = constructionIdFromPrefabKey(key);
+        if (constructionId != null) {
+            file = CommunityPaths.resolvePreviewPrefab(dataDir, constructionId);
+            if (file != null) {
+                return file.toAbsolutePath().normalize();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String constructionIdFromPrefabKey(@Nonnull String key) {
+        String baseName = lastPathSegment(key);
+        if (baseName.endsWith(".prefab.json")) {
+            return baseName.substring(0, baseName.length() - ".prefab.json".length());
+        }
+        if (!baseName.contains(".")) {
+            return baseName;
         }
         return null;
     }

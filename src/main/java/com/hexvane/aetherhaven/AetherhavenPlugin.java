@@ -6,6 +6,9 @@ import com.hexvane.aetherhaven.config.AetherhavenConfigJsonMigration;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.community.CommunityCatalogService;
+import com.hexvane.aetherhaven.community.CommunityIconRegistry;
+import com.hexvane.aetherhaven.community.CommunityMarketplaceSecrets;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsService;
 import com.hexvane.aetherhaven.dialogue.AetherhavenDialogueWorldView;
@@ -139,6 +142,8 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private PlotTokenIconPacketAdapter plotTokenIconPacketAdapter;
 
     private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
+
+    private final CommunityCatalogService communityCatalogService = new CommunityCatalogService(this);
 
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
@@ -306,6 +311,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public CommunityCatalogService getCommunityCatalogService() {
+        return communityCatalogService;
+    }
+
+    @Nonnull
     public DialogueWorldView createDialogueWorldView(@Nonnull World world) {
         return new AetherhavenDialogueWorldView(world, this);
     }
@@ -360,6 +370,14 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);
+        if (this.config.get().getCommunityMarketplace().isEnabled() && !CommunityMarketplaceSecrets.hasApiKey()) {
+            LOGGER
+                .atWarning()
+                .log(
+                    "Community marketplace is enabled but %s is not set; browse/download works but in-game submissions are disabled.",
+                    CommunityMarketplaceSecrets.API_KEY_ENV
+                );
+        }
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
     }
 
@@ -397,6 +415,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             return event;
         }
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
+        CommunityIconRegistry.syncFromCommunityDirectory(this);
         String packId = new PluginIdentifier(this.getManifest()).toString();
         List<CommonAsset> packAssets = CommonAssetRegistry.getCommonAssetsStartingWith(packId, "");
         if (packAssets.isEmpty()) {

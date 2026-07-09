@@ -243,6 +243,9 @@ aetherhaven.plotcreator.substep.ADVENTURER_SPAWN = Click an adventurer spawn spo
 aetherhaven.plotcreator.success.saved = Building saved as {id}. You received a plot token.
 aetherhaven.plotcreator.success.registered = Building saved as {id} and registered in your town at the spot you marked (already complete — no plot sign).
 aetherhaven.plotcreator.success.savedTokenFallback = Building file saved as {id}. Could not link it to your town in-world; use the plot token to place it.
+aetherhaven.plotcreator.success.submittedCommunity = Building submitted for community review.
+aetherhaven.plotcreator.error.communitySubmit = Community submission failed: {reason}
+aetherhaven.plotcreator.field.submitToCommunity = Submit to community marketplace for review
 
 aetherhaven.plotcreator.error.noTown = Place a town charter first, then finish the plot creator inside that town.
 aetherhaven.plotcreator.error.signBlocked = Could not place the plot sign at the spot you marked. The building file was saved; use the plot token if needed.

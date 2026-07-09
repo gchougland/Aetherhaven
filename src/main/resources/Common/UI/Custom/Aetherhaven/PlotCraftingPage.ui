@@ -106,6 +106,12 @@ $C.@PageOverlay {
             TooltipText: "Decorations";
             Id: "Decorations";
           }
+
+          TabButton {
+            Icon: "../group_icon_256.png";
+            TooltipText: "Community";
+            Id: "Community";
+          }
         }
 
         $C.@DecoratedContainer {
@@ -145,6 +151,30 @@ $C.@PageOverlay {
               Style: (...$C.@DefaultLabelStyle, TextColor: #8a8070, Wrap: true, FontSize: 15);
               Anchor: (Bottom: 10);
               Text: "";
+            }
+
+            Group #CommunityActionRow {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              Visible: false;
+
+              $C.@TextButton #LoadPreviewButton {
+                Anchor: (Height: 32, Right: 6);
+                FlexWeight: 1;
+                Text: "";
+              }
+
+              $C.@TextButton #DownloadButton {
+                Anchor: (Height: 32, Right: 6);
+                FlexWeight: 1;
+                Text: "";
+              }
+
+              $C.@TextButton #RemoveButton {
+                Anchor: (Height: 32);
+                FlexWeight: 1;
+                Text: "";
+              }
             }
 
             $C.@TextButton #CraftButton {
@@ -201,6 +231,13 @@ $C.@PageOverlay {
                 Anchor: (Width: 64, Height: 64);
                 AssetPath: "UI/Custom/padlock.png";
               }
+            }
+
+            Label #PreviewPlaceholder {
+              Visible: false;
+              Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, TextColor: #96a9be, FontSize: 15, Wrap: true);
+              Anchor: (Full: 0);
+              Text: "";
             }
           }
 

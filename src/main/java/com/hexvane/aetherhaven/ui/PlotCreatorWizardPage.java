@@ -131,6 +131,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value")
+                .append("@SubmitToCommunity", "#SubmitToCommunityToggle.Value")
                 .append("@AssemblySections", "#AssemblySectionsField.Value")
                 .append("@StyleId", "#StyleIdField.Value"),
             false
@@ -241,6 +242,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#SubmitToCommunityToggle",
+            EventData.of("@SubmitToCommunity", "#SubmitToCommunityToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#AssemblySectionsField",
             EventData.of("@AssemblySections", "#AssemblySectionsField.Value"),
             false
@@ -286,6 +293,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.TextSpans", Message.translation(MSG + ".field.plotTokenLocked.hint"));
         b.set("#FloatingGiftBlueprintLabel.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint"));
         b.set("#FloatingGiftBlueprintHint.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint.hint"));
+        b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
         b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
@@ -424,6 +432,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE) {
             b.set("#ReviewSummary.TextSpans", Message.raw(buildReviewText()));
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            boolean communityEnabled = plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+            b.set("#SubmitToCommunityRow.Visible", communityEnabled && step == PlotCreatorStep.REVIEW);
+        } else {
+            b.set("#SubmitToCommunityRow.Visible", false);
         }
     }
 
@@ -459,6 +472,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
         b.set("#FloatingGiftBlueprintToggle.Value", d.isFloatingGiftBlueprint());
+        b.set("#SubmitToCommunityToggle.Value", d.isSubmitToCommunity());
         if (d.getAssemblySectionsInput() != null) {
             b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
         } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
@@ -694,6 +708,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.floatingGiftBlueprint != null) {
             d.setFloatingGiftBlueprint(data.floatingGiftBlueprint);
         }
+        if (data.submitToCommunity != null) {
+            d.setSubmitToCommunity(data.submitToCommunity);
+        }
         if (data.assemblySections != null) {
             d.setAssemblySectionsInput(data.assemblySections);
         }
@@ -812,6 +829,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 d -> d.floatingGiftBlueprint
             )
             .add()
+            .append(
+                new KeyedCodec<>("@SubmitToCommunity", Codec.BOOLEAN),
+                (d, v) -> d.submitToCommunity = v,
+                d -> d.submitToCommunity
+            )
+            .add()
             .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
             .add()
             .append(new KeyedCodec<>("@StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
@@ -846,6 +869,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean plotTokenLocked;
         @Nullable
         private Boolean floatingGiftBlueprint;
+        @Nullable
+        private Boolean submitToCommunity;
         @Nullable
         private String assemblySections;
         @Nullable
