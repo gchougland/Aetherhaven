@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- **Assembled plot chests and benches** — Prefab assembly no longer places chests and workbenches via force `setBlock` on non-ticking chunks (which left container block entities unusable until break-and-replace). Interactive block entities are deferred during incremental assembly and placed once at build completion on ticking chunks with explicit entity attachment.
 - **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.
 
 ## [2.1.2] - 7/7/2026

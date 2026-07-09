@@ -1051,6 +1051,12 @@ public final class PlotAssemblyService {
         try {
             // PrefabUtil-style force setBlock of every solid from a fresh buffer read (wall torches included).
             ConstructionPasteOps.forcePasteAllSolids(world, job.anchor(), job.yaw(), completionBuffer);
+            ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
+                world,
+                job.anchor(),
+                job.yaw(),
+                completionBuffer
+            );
             ConstructionPasteOps.finishFluidsAndEntities(
                 world,
                 job.anchor(),

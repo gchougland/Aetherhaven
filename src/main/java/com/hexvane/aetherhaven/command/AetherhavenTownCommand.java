@@ -96,6 +96,11 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
         }
 
         @Override
+        protected boolean canGeneratePermission() {
+            return false;
+        }
+
+        @Override
         protected void execute(
             @Nonnull CommandContext context,
             @Nonnull Store<EntityStore> store,

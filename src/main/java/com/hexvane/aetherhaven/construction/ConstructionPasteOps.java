@@ -16,9 +16,11 @@ import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.RotationTuple;
+import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.blocktype.component.BlockPhysics;
 import com.hypixel.hytale.server.core.entity.entities.BlockEntity;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
 import com.hypixel.hytale.server.core.modules.entity.component.FromPrefab;
 import com.hypixel.hytale.server.core.modules.entity.component.HeadRotation;
 import com.hypixel.hytale.server.core.modules.entity.component.Invulnerable;
@@ -31,6 +33,7 @@ import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer
 import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.accessor.LocalCachedChunkAccessor;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
@@ -41,8 +44,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,6 +58,14 @@ import javax.annotation.Nullable;
  * Keeps ordering, RNG seed, and block settings aligned with the original animator.
  */
 public final class ConstructionPasteOps {
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
+    /**
+     * {@code placeBlock} settings for chests/benches at build completion: bit 2 skips automatic block-entity
+     * attachment; we attach explicitly on a ticking chunk (same as {@link com.hexvane.aetherhaven.placement.PlotPlacementCommit}).
+     */
+    private static final int INTERACTIVE_BLOCK_PLACE_SETTINGS = 10;
+
     /**
      * {@link com.hypixel.hytale.server.core.universe.world.accessor.BlockAccessor#placeBlock} settings for prefab
      * construction ({@link com.hypixel.hytale.server.core.util.PrefabUtil} uses {@code 0} for force paste).
@@ -161,6 +175,9 @@ public final class ConstructionPasteOps {
         if (isPureAirPrefabCell(pb)) {
             return true;
         }
+        if (isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+            return true;
+        }
         if (pb.filler() != 0) {
             return pb.holder() == null;
         }
@@ -183,7 +200,26 @@ public final class ConstructionPasteOps {
         }
         String targetId = target.getId();
         String worldId = worldBlock.getId();
-        return targetId != null && targetId.equals(worldId);
+        if (targetId == null || !targetId.equals(worldId)) {
+            return false;
+        }
+        if (blockTypeNeedsLiveBlockEntityRef(target)) {
+            WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(wx, wz));
+            if (chunk == null || !chunk.getReference().isValid()) {
+                return false;
+            }
+            BlockComponentChunk blockComponents = chunk.getBlockComponentChunk();
+            if (blockComponents == null) {
+                return false;
+            }
+            int index = ChunkUtil.indexBlockInColumn(wx, wy, wz);
+            if (target.getBench() != null) {
+                return chunk.getBlockComponentEntity(wx, wy, wz) != null;
+            }
+            return blockComponents.getComponent(index, ItemContainerBlock.getComponentType()) != null
+                || chunk.getBlockComponentEntity(wx, wy, wz) != null;
+        }
+        return true;
     }
 
     @Nullable
@@ -243,6 +279,201 @@ public final class ConstructionPasteOps {
             return new AssemblyDeferredPartition(nonAirPlacementOrder, List.of());
         }
         return new AssemblyDeferredPartition(List.copyOf(main), List.copyOf(deferred));
+    }
+
+    /**
+     * Origin voxels for chests, workbenches, and other blocks that need a live block-entity ref to open. These are
+     * deferred from {@link #placeOne} / {@link #forcePasteAllSolids} and written once at build completion via
+     * {@link #placeInteractiveBlockEntitiesFromPrefab}.
+     */
+    public static boolean isInteractiveBlockEntityOrigin(
+        @Nonnull PendingBlock pb,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
+    ) {
+        if (pb.filler() != FillerBlockUtil.NO_FILLER || pb.blockId() == 0) {
+            return false;
+        }
+        BlockType block = blockTypeMap.getAsset(pb.blockId());
+        if (block == null) {
+            return false;
+        }
+        if (holderHasItemContainerBlock(pb.holder())) {
+            return true;
+        }
+        return blockTypeNeedsLiveBlockEntityRef(block);
+    }
+
+    private static boolean holderHasItemContainerBlock(@Nullable Holder<ChunkStore> holder) {
+        return holder != null && holder.getComponent(ItemContainerBlock.getComponentType()) != null;
+    }
+
+    private static boolean blockTypeNeedsLiveBlockEntityRef(@Nonnull BlockType block) {
+        if (block.getBench() != null) {
+            return true;
+        }
+        Holder<ChunkStore> template = block.getBlockEntity();
+        if (template != null && template.getComponent(ItemContainerBlock.getComponentType()) != null) {
+            return true;
+        }
+        Map<InteractionType, String> interactions = block.getInteractions();
+        if (interactions == null || interactions.isEmpty()) {
+            return false;
+        }
+        String use = interactions.get(InteractionType.Use);
+        if (use == null) {
+            return false;
+        }
+        String lower = use.toLowerCase();
+        return lower.contains("open_container") || lower.contains("bench");
+    }
+
+    /**
+     * Places chests, workbenches, and other interactive block entities on ticking chunks with explicit entity
+     * attachment. Call once at build completion after {@link #forcePasteAllSolids}.
+     */
+    public static void placeInteractiveBlockEntitiesFromPrefab(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull Rotation yaw,
+        @Nonnull IPrefabBuffer bufferAccess
+    ) {
+        PrefabSequence seq = buildSequence(bufferAccess, yaw);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        int failed = 0;
+        int placed = 0;
+        for (PendingBlock pb : withoutPureAirCells(seq.pendingBlocks())) {
+            if (!isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+                continue;
+            }
+            if (placeInteractiveBlockEntityCell(world, origin, pb, blockTypeMap)) {
+                placed++;
+            } else {
+                failed++;
+            }
+        }
+        if (failed > 0) {
+            LOGGER.at(Level.WARNING).log(
+                "Interactive block-entity placement at %s: %d ok, %d failed",
+                origin,
+                placed,
+                failed
+            );
+        }
+    }
+
+    private static boolean placeInteractiveBlockEntityCell(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull PendingBlock pb,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
+    ) {
+        int bx = origin.x + pb.x();
+        int by = origin.y + pb.y();
+        int bz = origin.z + pb.z();
+        BlockType block = blockTypeMap.getAsset(pb.blockId());
+        if (block == null) {
+            return false;
+        }
+        WorldChunk chunk = resolveTickingChunk(world, bx, bz);
+        if (chunk == null || !chunk.getReference().isValid()) {
+            LOGGER.at(Level.WARNING).log(
+                "Interactive block placement: ticking chunk unavailable at %d,%d,%d (%s)",
+                bx,
+                by,
+                bz,
+                block.getId()
+            );
+            return false;
+        }
+        String blockKey = block.getId();
+        BlockType worldBlock = BlockType.getAssetMap().getAsset(chunk.getBlock(bx, by, bz));
+        boolean needsVoxel =
+            worldBlock == null
+                || worldBlock == BlockType.EMPTY
+                || worldBlock.getId() == null
+                || !blockKey.equals(worldBlock.getId());
+        if (needsVoxel) {
+            RotationTuple rot = RotationTuple.get(pb.blockRotation());
+            if (!chunk.placeBlock(bx, by, bz, blockKey, rot, INTERACTIVE_BLOCK_PLACE_SETTINGS, false)) {
+                LOGGER.at(Level.WARNING).log(
+                    "Interactive block placement: placeBlock failed at %d,%d,%d (%s)",
+                    bx,
+                    by,
+                    bz,
+                    blockKey
+                );
+                return false;
+            }
+        }
+        if (pb.supportValue() != 0) {
+            Ref<ChunkStore> columnRef = chunk.getReference();
+            if (columnRef.isValid()) {
+                Store<ChunkStore> store = columnRef.getStore();
+                Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+                if (section != null) {
+                    BlockPhysics.setSupportValue(store, section, bx, by, bz, pb.supportValue());
+                }
+            }
+        }
+        chunk.setTicking(bx, by, bz, true);
+        Ref<ChunkStore> existing = chunk.getBlockComponentEntity(bx, by, bz);
+        if (existing != null && existing.isValid()) {
+            return true;
+        }
+        BlockComponentChunk blockComponents = chunk.getBlockComponentChunk();
+        if (blockComponents == null) {
+            return false;
+        }
+        Holder<ChunkStore> entityHolder = null;
+        if (pb.holder() != null) {
+            entityHolder = pb.holder().clone();
+        } else if (block.getBlockEntity() != null) {
+            entityHolder = block.getBlockEntity().clone();
+        }
+        if (entityHolder == null) {
+            return false;
+        }
+        com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
+            world.getChunkStore().getStore(),
+            chunk.getReference(),
+            blockComponents,
+            bx,
+            by,
+            bz,
+            block,
+            pb.blockRotation(),
+            entityHolder
+        );
+        Ref<ChunkStore> attached = chunk.getBlockComponentEntity(bx, by, bz);
+        if (attached == null || !attached.isValid()) {
+            LOGGER.at(Level.WARNING).log(
+                "Interactive block placement: block entity missing after attach at %d,%d,%d (%s)",
+                bx,
+                by,
+                bz,
+                blockKey
+            );
+            return false;
+        }
+        return true;
+    }
+
+    @Nullable
+    private static WorldChunk resolveTickingChunk(@Nonnull World world, int bx, int bz) {
+        long chunkIndex = ChunkUtil.indexChunkFromBlock(bx, bz);
+        WorldChunk chunk = world.getChunk(chunkIndex);
+        if (chunk != null) {
+            return chunk;
+        }
+        if (!world.isInThread()) {
+            return CompletableFuture.supplyAsync(() -> resolveTickingChunk(world, bx, bz), world).join();
+        }
+        try {
+            return world.getChunkAsync(chunkIndex).join();
+        } catch (RuntimeException e) {
+            LOGGER.at(Level.WARNING).withCause(e).log("Failed to load ticking chunk %d for interactive block", chunkIndex);
+            return null;
+        }
     }
 
     @Nonnull
@@ -339,6 +570,9 @@ public final class ConstructionPasteOps {
         BlockType block = blockTypeMap.getAsset(pb.blockId);
         if (block == null) {
             return false;
+        }
+        if (pb.filler == FillerBlockUtil.NO_FILLER && pb.blockId != 0 && isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+            return true;
         }
         String blockKey = block.getId();
         // Multi-block companions: never write a second origin voxel (that floats a duplicate wardrobe/chest).
@@ -444,6 +678,9 @@ public final class ConstructionPasteOps {
         BlockType block = blockTypeMap.getAsset(pb.blockId());
         if (block == null) {
             return false;
+        }
+        if (pb.filler() == FillerBlockUtil.NO_FILLER && isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+            return true;
         }
         // PrefabUtil: filler cells never place a block voxel — only component state on the multi-block volume.
         if (pb.filler() != FillerBlockUtil.NO_FILLER) {

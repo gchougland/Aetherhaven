@@ -164,6 +164,12 @@ public final class ConstructionAnimator {
             plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
             return;
         }
+        ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
+            world,
+            origin,
+            prefabRotation.getRotation(),
+            bufferAccess
+        );
         ConstructionPasteOps.finishFluidsAndEntities(
             world,
             origin,
