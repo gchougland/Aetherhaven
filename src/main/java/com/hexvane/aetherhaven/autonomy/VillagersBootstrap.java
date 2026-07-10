@@ -25,6 +25,7 @@ import com.hexvane.aetherhaven.villager.NpcPersistentModelResyncSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerEnvironmentalDamageFilterSystem;
 import com.hexvane.aetherhaven.villager.TownVillagerNpcWorldSpawnSanitizeSystems;
 import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
+import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleportGuardSystem;
 import com.hexvane.aetherhaven.world.WorldSpawnStaleChunkRefCleanupSystem;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
@@ -111,6 +112,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new DoorwaySeparationBypassSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new AetherhavenNpcTeleportGuardSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PendingEntityRemovalSystem());
         plugin.getEntityStoreRegistry().registerSystem(new TownsfolkAssignmentSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerDeathHandlerSystem(core));

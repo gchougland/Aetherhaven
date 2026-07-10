@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
+import com.hexvane.aetherhaven.town.ElderReconcileService;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
 import com.hypixel.hytale.component.Ref;
@@ -188,6 +189,11 @@ public final class AetherhavenCoreBootstrap {
                                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                                 if (uc != null) {
                                     TouristReconcileService.onTownMemberPlayerReady(
+                                        player.getWorld(),
+                                        AetherhavenPlugin.get(),
+                                        uc.getUuid()
+                                    );
+                                    ElderReconcileService.onTownMemberPlayerReady(
                                         player.getWorld(),
                                         AetherhavenPlugin.get(),
                                         uc.getUuid()

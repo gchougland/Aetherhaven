@@ -19,6 +19,8 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
+import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -218,7 +220,7 @@ public final class AutonomyStuckTeleportRecovery {
     ) {
         Vector3d feet = VillagerBlockUtil.snapNpcFeetToStand(store.getExternalData().getWorld(), target);
         Rotation3f rotation = resolveBodyRotation(store, ref);
-        commandBuffer.putComponent(ref, Teleport.getComponentType(), Teleport.createExact(feet, rotation));
+        AetherhavenNpcTeleport.apply(ref, commandBuffer, Teleport.createExact(feet, rotation));
     }
 
     public static void applyPostTeleportTravel(

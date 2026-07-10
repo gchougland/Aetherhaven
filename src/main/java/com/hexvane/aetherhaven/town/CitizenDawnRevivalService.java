@@ -139,7 +139,7 @@ public final class CitizenDawnRevivalService {
                     tm.updateTown(town);
                     continue;
                 }
-                if (VillagerRevivalService.validateCanRevive(store, record) != null) {
+                if (VillagerRevivalService.validateCanRevive(store, town, record) != null) {
                     record.setPendingDawnRevival(false);
                     tm.updateTown(town);
                     continue;

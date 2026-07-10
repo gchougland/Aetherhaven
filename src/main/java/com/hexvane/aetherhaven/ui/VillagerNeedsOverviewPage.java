@@ -29,6 +29,7 @@ import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hexvane.aetherhaven.ui.AetherhavenInteractiveCustomUIPage;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -331,7 +332,7 @@ public final class VillagerNeedsOverviewPage extends AetherhavenInteractiveCusto
                 TransformComponent nTc = es.getComponent(npcRef, TransformComponent.getComponentType());
                 Rotation3f bodyRot =
                     nTc != null ? new Rotation3f(nTc.getRotation()) : new Rotation3f(0f, yaw, 0f);
-                es.addComponent(npcRef, Teleport.getComponentType(), Teleport.createExact(target, bodyRot));
+                AetherhavenNpcTeleport.apply(npcRef, es, Teleport.createExact(target, bodyRot));
                 long now = VillagerAutonomySystem.resolveAutonomyNowMs(es);
                 VillagerAutonomySystem.resetAutonomyForRescue(npcRef, es, now);
                 playerRef.sendMessage(Message.translation("aetherhaven_ui_town.aetherhaven.ui.villagerneeds.rescueDone"));

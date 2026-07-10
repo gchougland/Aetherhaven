@@ -4,6 +4,8 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hexvane.aetherhaven.guild.GuildHallDisplayAnchor;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.rts.RtsGuardDirectory;
@@ -13,6 +15,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownOnlinePresence;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryChunkUtil;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
@@ -87,6 +90,7 @@ public final class TouristPortalTickService {
         TouristPortalPlotRelocation.purgeFillerPortalRecords(world, plugin, store, registry, tm);
         dedupeTouristRecords(tm, world, plugin, store);
         releaseStaleTouristPoolCheckouts(world, plugin, tm, store);
+        purgeOrphanTownsfolkShellsWhenTownLoaded(world, plugin, tm, store);
 
         processDawnTouristLeave(world, plugin, tm, store, wtr, cfg);
         processTouristLeaveWindow(world, plugin, tm, store, wtr);
@@ -118,6 +122,28 @@ public final class TouristPortalTickService {
 
         if (portalRegistryDirty) {
             TouristPortalPersistence.save(world, plugin, registry);
+        }
+    }
+
+    /** @return true when a planned spawn slot should be marked executed (spawn succeeded). */
+    static boolean shouldConsumePlannedSpawnSlot(boolean spawnSucceeded) {
+        return spawnSucceeded;
+    }
+
+    private static void purgeOrphanTownsfolkShellsWhenTownLoaded(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        for (TownRecord town : tm.allTowns()) {
+            if (!world.getName().equals(town.getWorldName())) {
+                continue;
+            }
+            if (TownTerritoryChunkUtil.isAnyTownNpcChunkLoaded(world, plugin, town)) {
+                purgeOrphanTownsfolkShells(world, plugin, tm, store, new HashSet<>());
+                return;
+            }
         }
     }
 
@@ -222,7 +248,7 @@ public final class TouristPortalTickService {
         return true;
     }
 
-    /** @return true when a spawn was attempted */
+    /** @return true when a spawn was attempted and succeeded */
     private static boolean tryExecuteTownSpawn(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -252,9 +278,12 @@ public final class TouristPortalTickService {
             if (portal == null) {
                 continue;
             }
-            town.getTouristExecutedSpawnEpochMinutes().add(planned);
-            spawnOneTourist(world, plugin, tm, store, town, portal, epochDay);
-            return true;
+            if (shouldConsumePlannedSpawnSlot(
+                spawnOneTourist(world, plugin, tm, store, town, portal, epochDay)
+            )) {
+                town.getTouristExecutedSpawnEpochMinutes().add(planned);
+                return true;
+            }
         }
         return false;
     }
@@ -283,7 +312,8 @@ public final class TouristPortalTickService {
         return loaded.get(random.nextInt(loaded.size()));
     }
 
-    private static void spawnOneTourist(
+    /** @return true when a tourist was spawned and recorded successfully */
+    private static boolean spawnOneTourist(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownManager tm,
@@ -295,7 +325,7 @@ public final class TouristPortalTickService {
         Set<String> exclude = activeCharacterIdsInTown(town, store);
         String characterId = pickAvailableCharacter(plugin, world, exclude, portal, epochDay);
         if (characterId == null) {
-            return;
+            return false;
         }
 
         Vector3i blockPos = portal.getBlockPosition();
@@ -328,7 +358,7 @@ public final class TouristPortalTickService {
                 null
             );
         if (spawned.isEmpty()) {
-            return;
+            return false;
         }
 
         UUID entityUuid = spawned.get().entityUuid();
@@ -341,7 +371,7 @@ public final class TouristPortalTickService {
                 town.getTownId(),
                 entityUuid
             );
-            return;
+            return false;
         }
 
         long spawnDawnDay = VillagerReputationService.currentGameEpochDay(store);
@@ -373,7 +403,9 @@ public final class TouristPortalTickService {
         store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
 
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, characterId, entityUuid);
         playPortalBurst(world, store, blockPos);
+        return true;
     }
 
     @Nullable
@@ -508,16 +540,17 @@ public final class TouristPortalTickService {
                     continue;
                 }
                 Ref<EntityStore> leaveRef = store.getExternalData().getRefFromUUID(entityUuid);
-                if (leaveRef == null || !leaveRef.isValid()) {
+                EntityPresence presence = EntityPresenceUtil.resolve(store, entityUuid);
+                if (EntityPresenceUtil.isLoadedLive(presence) && leaveRef != null && leaveRef.isValid()) {
+                    if (isTouristOverstay(rec, dawnAlignedEpochDay)) {
+                        despawnTourist(world, plugin, town, tm, store, entityUuid, rec.getPortalId());
+                        continue;
+                    }
+                    sendTouristHomeOrFinalize(world, plugin, tm, store, town, rec, entityUuid);
+                } else if (EntityPresenceUtil.shouldFinalizeTouristLeaveForMissingEntity(presence)) {
                     finalizeTouristRecord(world, plugin, town, tm, rec, store);
                     changed = true;
-                    continue;
                 }
-                if (isTouristOverstay(rec, dawnAlignedEpochDay)) {
-                    despawnTourist(world, plugin, town, tm, store, entityUuid, rec.getPortalId());
-                    continue;
-                }
-                sendTouristHomeOrFinalize(world, plugin, tm, store, town, rec, entityUuid);
             }
             if (changed) {
                 tm.updateTown(town);

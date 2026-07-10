@@ -5,6 +5,8 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.math.vector.Vector3fUtil;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyTravelKick;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
@@ -45,8 +47,19 @@ public final class VillagerRevivalService {
         @Nonnull Vector3d spawnPos
     ) {
         UUID oldUuid = record.getLastEntityUuid();
-        Ref<EntityStore> existing = store.getExternalData().getRefFromUUID(oldUuid);
-        if (existing != null && existing.isValid()) {
+        EntityPresence presence = EntityPresenceUtil.resolve(store, oldUuid);
+        if (EntityPresenceUtil.isLoadedLive(presence)) {
+            return false;
+        }
+        if (appliesUnloadedRevivalGuard(record)
+            && ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record)) {
+            LOGGER.atInfo()
+                .log(
+                    "Revival blocked: saved uuid %s for role %s in town %s is likely in an unloaded chunk",
+                    oldUuid,
+                    record.getNpcRoleId(),
+                    town.getTownId()
+                );
             return false;
         }
         String roleId = record.getNpcRoleId().trim();
@@ -130,15 +143,43 @@ public final class VillagerRevivalService {
 
     /** @return null if revival is allowed, otherwise a short English message for the player */
     @Nullable
-    public static String validateCanRevive(@Nonnull Store<EntityStore> store, @Nonnull ResidentNpcRecord record) {
+    public static String validateCanRevive(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull ResidentNpcRecord record
+    ) {
         if (!ResidentRegistryService.isGaiaRevivalEligible(record.getKind(), record.getNpcRoleId())) {
             return "That villager cannot be revived at the Gaia statue.";
         }
         UUID oldUuid = record.getLastEntityUuid();
-        Ref<EntityStore> existing = store.getExternalData().getRefFromUUID(oldUuid);
-        if (existing != null && existing.isValid()) {
+        EntityPresence presence = EntityPresenceUtil.resolve(store, oldUuid);
+        if (EntityPresenceUtil.isLoadedLive(presence)) {
             return "That villager is already present in the world.";
         }
+        if (appliesUnloadedRevivalGuard(record)
+            && ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record)) {
+            return "That villager may still be in an unloaded part of your town. Return closer before reviving.";
+        }
         return null;
+    }
+
+    /** Package-visible for tests — dawn-confirmed deaths bypass the unloaded-chunk revival guard. */
+    static boolean appliesUnloadedRevivalGuard(@Nonnull ResidentNpcRecord record) {
+        return !record.isPendingDawnRevival();
+    }
+
+    /** Package-visible for tests — blocks revival when the saved uuid cannot be resolved (unloaded chunk). */
+    static boolean isRevivalBlockedForUnloadedEntity(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull ResidentNpcRecord record
+    ) {
+        if (EntityPresenceUtil.isLoadedLive(EntityPresenceUtil.resolve(store, record.getLastEntityUuid()))) {
+            return true;
+        }
+        if (record.isPendingDawnRevival()) {
+            return false;
+        }
+        return ResidentRegistryService.isRevivalRecordLikelyUnloadedNotDead(town, store, record);
     }
 }

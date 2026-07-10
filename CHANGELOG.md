@@ -8,6 +8,10 @@
 
 ### Fixed
 
+- **Crystal Keeper's shop build materials** — Construction now requires cyan (light blue) crystal shards instead of blue crystal shards.
+- **Villagers using teleporters** — Town NPCs (villagers, townsfolk, tourists) no longer warp when they walk across teleporter pads. Mod-authorized teleports (stuck recovery, rescue) still work.
+- **Duplicate tourists when town chunks unload** — Tourist leave and reconcile no longer drop save rows when NPCs are in unloaded chunks (common after long-range teleporter travel while still online). Spawn slots are only consumed after a successful spawn, duplicates are purged on spawn, and orphan shells are cleaned when town territory loads.
+- **Duplicate elders after revival** — Gaia and dawn revival block spawning a replacement when the saved villager uuid may still exist in an unloaded chunk. Extra loaded elder copies are removed on world load when the charter area is in memory.
 - **Assembled plot chests and benches** — Prefab assembly no longer places chests and workbenches via force `setBlock` on non-ticking chunks (which left container block entities unusable until break-and-replace). Interactive block entities are deferred during incremental assembly and placed once at build completion on ticking chunks with explicit entity attachment.
 - **Passive assembly crash** — Placing production-storage blocks during passive plot assembly no longer calls `World.getBlockType()` (which promoted chunks to ticking mid–entity-store tick and crashed with “Store is currently processing”).
 - **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.

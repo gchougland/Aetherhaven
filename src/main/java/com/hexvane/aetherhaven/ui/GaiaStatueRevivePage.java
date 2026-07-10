@@ -187,7 +187,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
         if (record == null) {
             return;
         }
-        String err = VillagerRevivalService.validateCanRevive(store, record);
+        String err = VillagerRevivalService.validateCanRevive(store, town, record);
         if (err != null) {
             if (pr != null) {
                 pr.sendMessage(Message.raw(err));
@@ -234,7 +234,7 @@ public final class GaiaStatueRevivePage extends AetherhavenInteractiveCustomUIPa
                 if (p == null) {
                     return;
                 }
-                String err2 = VillagerRevivalService.validateCanRevive(store, recordFinal);
+                String err2 = VillagerRevivalService.validateCanRevive(store, town, recordFinal);
                 if (err2 != null) {
                     p.giveItem(new ItemStack(AetherhavenConstants.ITEM_LIFE_ESSENCE, needFinal), ref, store);
                     if (pr2 != null) {

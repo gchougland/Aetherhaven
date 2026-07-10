@@ -2,11 +2,14 @@ package com.hexvane.aetherhaven.tourist;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownOnlinePresence;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryChunkUtil;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkPoolCheckoutRecord;
@@ -89,6 +92,8 @@ public final class TouristReconcileService {
                 continue;
             }
             boolean memberOnline = TownOnlinePresence.hasAffiliatedPlayerOnline(town, onlinePlayers);
+            boolean townNpcChunksLoaded =
+                TownTerritoryChunkUtil.isAnyTownNpcChunkLoaded(world, plugin, town);
             boolean changed = false;
             Set<String> seenCharacters = new HashSet<>();
             Iterator<TouristRecord> it = town.getTouristRecords().iterator();
@@ -137,10 +142,13 @@ public final class TouristReconcileService {
                             );
                         }
                     } else if (!rec.isInvitedToStay()) {
-                        releaseStaleTouristRecord(world, plugin, rec);
-                        it.remove();
-                        changed = true;
-                        released++;
+                        EntityPresence presence = EntityPresenceUtil.resolve(store, entityUuid);
+                        if (EntityPresenceUtil.shouldFinalizeTouristLeaveForMissingEntity(presence)) {
+                            releaseStaleTouristRecord(world, plugin, rec);
+                            it.remove();
+                            changed = true;
+                            released++;
+                        }
                     }
                     continue;
                 }
@@ -173,7 +181,12 @@ public final class TouristReconcileService {
                     continue;
                 }
 
-                if (releaseMissing) {
+                EntityPresence presence = EntityPresenceUtil.resolve(store, rec.getEntityUuid());
+                if (EntityPresenceUtil.shouldReleaseMissingTouristRecord(
+                    presence,
+                    releaseMissing,
+                    townNpcChunksLoaded
+                )) {
                     releaseStaleTouristRecord(world, plugin, rec);
                     it.remove();
                     changed = true;
@@ -184,7 +197,7 @@ public final class TouristReconcileService {
                 tm.updateTown(town);
                 townChanged = true;
             }
-            if (memberOnline) {
+            if (memberOnline && townNpcChunksLoaded) {
                 if (repairOrphanLiveTourists(world, plugin, tm, town, store, liveByCharacter, currentDawnEpochDay)) {
                     townChanged = true;
                 }

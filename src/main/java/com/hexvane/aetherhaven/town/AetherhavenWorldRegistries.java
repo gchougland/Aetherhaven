@@ -284,6 +284,7 @@ public final class AetherhavenWorldRegistries {
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
         TouristReconcileService.scheduleAfterWorldLoad(world, plugin);
+        ElderReconcileService.scheduleAfterWorldLoad(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);
         InnPoolService.reconcileAfterWorldLoad(world, plugin);
         TownsfolkSpawnService.reconcileAfterWorldLoad(world, plugin);
