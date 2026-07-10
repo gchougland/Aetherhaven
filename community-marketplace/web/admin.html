@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=11" />
+    <link rel="stylesheet" href="/styles.css?v=14" />
   </head>
   <body>
     <header class="site-header">
@@ -28,6 +28,8 @@
           <a href="/">Browse</a>
           <a href="/dashboard.html">Dashboard</a>
           <a href="/admin.html" aria-current="page">Admin</a>
+          <a href="/auth/login" id="loginLink">Sign in with Hytale</a>
+          <a href="/auth/logout" id="logoutLink" hidden>Sign out</a>
         </nav>
       </div>
     </header>
@@ -47,7 +49,7 @@
         <div id="adminCatalog" class="catalog-grid"></div>
       </section>
     </main>
-    <script src="/app.js?v=9"></script>
+    <script src="/app.js?v=12"></script>
     <script>
       loadAdminPage();
     </script>

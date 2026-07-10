@@ -136,13 +136,15 @@ function renderBuildingCard(entry, options = {}) {
         ${buildingIconHtml(entry.iconUrl)}
         ${upvoteControlHtml(entry, canVote)}
       </div>
-      <h3>${escapeHtml(entry.displayName)}</h3>
-      ${idMeta}
-      <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
-      <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
-      ${shotHint}
-      ${descriptionToggleHtml(entry)}
-      ${deleteBtn}
+      <div class="building-card-body">
+        <h3>${escapeHtml(entry.displayName)}</h3>
+        ${idMeta}
+        <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
+        <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
+        ${shotHint}
+        ${descriptionToggleHtml(entry)}
+        ${deleteBtn}
+      </div>
     </article>`;
 }
 
@@ -327,6 +329,7 @@ async function loadDashboard() {
     window.location.href = "/auth/login";
     return;
   }
+  updateAuthNav(me.user);
   const name = me.user.profile?.username || me.user.sub || "Player";
   const uuid = me.user.profile?.uuid || "";
   profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Submissions from the game are linked by profile UUID or your Hytale username (<strong>${escapeHtml(name)}</strong>). These can differ from your in-game session UUID.</p>`;
@@ -553,6 +556,7 @@ async function loadAdminPage() {
     window.location.href = "/auth/login";
     return;
   }
+  updateAuthNav(me.user);
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
 }
 
