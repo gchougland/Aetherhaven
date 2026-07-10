@@ -45,6 +45,9 @@ public final class CommunityManifestEntry {
     @SerializedName("upvoteCount")
     private int upvoteCount;
 
+    @SerializedName("downloadCount")
+    private int downloadCount;
+
     @Nonnull
     public String getId() {
         return id != null ? id : "";
@@ -99,6 +102,10 @@ public final class CommunityManifestEntry {
 
     public int getUpvoteCount() {
         return upvoteCount;
+    }
+
+    public int getDownloadCount() {
+        return downloadCount;
     }
 
     @Nonnull

@@ -22,7 +22,9 @@ import {
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
 import { createVoteRateLimit } from "./voteRateLimit.js";
+import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
+import { createDownloads } from "./downloads.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);
@@ -41,6 +43,7 @@ const publicBaseUrl = resolvePublicBaseUrl();
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
 const storage = createStorage(dataDir);
 const votes = createVotes(dataDir);
+const downloads = createDownloads(dataDir);
 const oidc = createOidc({
   issuer: process.env.HYTALE_OIDC_ISSUER || "https://connect.accounts.hytale.com",
   clientId: process.env.HYTALE_OIDC_CLIENT_ID || "",
@@ -154,6 +157,12 @@ const voteRateLimit = createVoteRateLimit({
   maxPerUser: Number(process.env.VOTE_MAX_PER_USER_PER_HOUR || 60),
 });
 
+const downloadRateLimit = createDownloadRateLimit({
+  maxPerIp: Number(process.env.DOWNLOAD_MAX_PER_IP_PER_HOUR || 120),
+  maxPerBuildingIp: Number(process.env.DOWNLOAD_MAX_PER_BUILDING_IP_PER_HOUR || 5),
+  maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 60),
+});
+
 function buildManifestEntry(id, meta, prefabBytes) {
   return {
     id,
@@ -248,6 +257,7 @@ function deleteApprovedBuilding(buildingId) {
   manifest.version = (manifest.version || 0) + 1;
   storage.writeManifest(manifest);
   votes.removeBuilding(id);
+  downloads.removeBuilding(id);
   return { status: 200, body: { id, status: "deleted" } };
 }
 
@@ -318,6 +328,8 @@ function listSubmissionsForCreator(webUser) {
       approvedAt: e.approvedAt,
       version: e.version || "1",
       prefabBytes: e.prefabBytes || 0,
+      upvoteCount: votes.getCount(e.id),
+      downloadCount: downloads.getCount(e.id),
       creatorUuid: e.creatorUuid,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
     }));
@@ -400,6 +412,7 @@ function sortCatalogEntries(entries) {
 
 function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = null) {
   const voteCounts = votes.getCounts();
+  const downloadCounts = downloads.getCounts();
   return (manifest.entries || []).map((e) => {
     const paths = storage.approvedPaths(e.id);
     let prefabBytes = e.prefabBytes || 0;
@@ -412,6 +425,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       prefabBytes,
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
+      downloadCount: downloadCounts[e.id] || 0,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
@@ -453,6 +467,19 @@ function toggleBuildingUpvote(buildingId, webUser) {
   }
   const result = votes.toggleVote(id, webUser.profileUuid);
   return { status: 200, body: result };
+}
+
+function recordBuildingDownload(buildingId) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  return { status: 200, body: downloads.increment(id) };
 }
 
 app.get("/api/v1/manifest", sendManifest);
@@ -739,6 +766,11 @@ app.post("/api/admin/delete/:buildingId", requireWebUser, requireAdmin, (req, re
 });
 
 app.get("/api/catalog", sendManifest);
+
+app.post("/api/v1/buildings/:id/download", downloadRateLimit, (req, res) => {
+  const result = recordBuildingDownload(req.params.id);
+  res.status(result.status).json(result.body);
+});
 
 app.post("/api/buildings/:id/upvote", requireWebUser, voteRateLimit, (req, res) => {
   const result = toggleBuildingUpvote(req.params.id, sessionWebUser(req));

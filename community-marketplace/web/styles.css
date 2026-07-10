@@ -437,6 +437,10 @@ main.wrap > section + section {
   font-variant-numeric: tabular-nums;
 }
 
+.download-count {
+  color: var(--text-muted);
+}
+
 .admin-building-card {
   display: flex;
   flex-direction: column;

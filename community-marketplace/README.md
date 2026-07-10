@@ -41,14 +41,15 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v1/health` | Health check |
-| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`) |
+| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`, `downloadCount`) |
 | `GET /api/catalog` | Website catalog (same as manifest; includes `userHasUpvoted` when signed in) |
 | `GET /api/v1/buildings/:id/prefab.json` | Prefab download |
 | `GET /api/v1/buildings/:id/building.json` | Building definition |
 | `GET /api/v1/buildings/:id/icon.png` | Icon thumbnail |
+| `POST /api/v1/buildings/:id/download` | Record an in-game install (rate limited; returns `{ downloadCount }`) |
 | `POST /api/v1/submissions` | Upload (`X-Player-Uuid` from game server; rate limited) |
 | `POST /api/buildings/:id/upvote` | Toggle upvote (Hytale OAuth session required; rate limited) |
 
-Catalog entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds.
+Catalog entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone).
 
 Approve/reject via admin website (Hytale OAuth) or optional `POST /api/v1/submissions/:id/approve` with `API_KEY`.

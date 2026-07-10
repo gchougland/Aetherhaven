@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.villager;
 
-import com.hypixel.hytale.builtin.adventure.teleporter.interaction.server.UsedTeleporter;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
@@ -11,6 +10,7 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefChangeSystem;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.TeleportSystems;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -23,6 +23,11 @@ import javax.annotation.Nonnull;
  * Blocks vanilla teleporter warps for Aetherhaven town NPCs. Teleporter blocks fire on {@link
  * com.hypixel.hytale.protocol.InteractionType#Collision}; without this guard, villagers and tourists can accidentally
  * warp when pathing across pads.
+ *
+ * <p>Must not {@code removeComponent(Teleport)} here: {@link TeleportSystems.MoveSystem} also removes {@link Teleport}
+ * after applying it. Queuing a second remove crashes the world thread with {@code Archetype doesn't contain
+ * ComponentType}. Instead rewrite the pending teleport to the NPC's current pose (no-op) before MoveSystem runs, and
+ * leave {@code UsedTeleporter} alone so {@link AetherhavenNpcUsedTeleporterGuardSystem} can retarget its clear-out.
  */
 public final class AetherhavenNpcTeleportGuardSystem extends RefChangeSystem<EntityStore, Teleport> {
     @Nonnull
@@ -69,7 +74,7 @@ public final class AetherhavenNpcTeleportGuardSystem extends RefChangeSystem<Ent
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        guard(ref, commandBuffer);
+        guard(ref, teleport, commandBuffer);
     }
 
     @Override
@@ -80,7 +85,7 @@ public final class AetherhavenNpcTeleportGuardSystem extends RefChangeSystem<Ent
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {
-        guard(ref, commandBuffer);
+        guard(ref, newComponent, commandBuffer);
     }
 
     @Override
@@ -91,14 +96,22 @@ public final class AetherhavenNpcTeleportGuardSystem extends RefChangeSystem<Ent
         @Nonnull CommandBuffer<EntityStore> commandBuffer
     ) {}
 
-    private static void guard(@Nonnull Ref<EntityStore> ref, @Nonnull CommandBuffer<EntityStore> commandBuffer) {
+    private static void guard(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Teleport teleport,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
         if (commandBuffer.getComponent(ref, AetherhavenAllowedTeleport.getComponentType()) != null) {
             commandBuffer.removeComponent(ref, AetherhavenAllowedTeleport.getComponentType());
             return;
         }
-        commandBuffer.removeComponent(ref, TELEPORT);
-        if (commandBuffer.getArchetype(ref).contains(UsedTeleporter.getComponentType())) {
-            commandBuffer.removeComponent(ref, UsedTeleporter.getComponentType());
+        TransformComponent transform = commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (transform == null) {
+            return;
         }
+        // Mutate in place before MoveSystem applies the component. Do not remove Teleport — MoveSystem owns that.
+        teleport.setPosition(transform.getPosition());
+        teleport.setRotation(transform.getRotation());
+        teleport.withoutVelocityReset();
     }
 }

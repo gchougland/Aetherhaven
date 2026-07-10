@@ -584,11 +584,43 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             }
             return;
         }
-        if (configPanelOnly || kindPanelOnly || configurePanelOnly) {
-            refreshPartial();
-            PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
-        } else {
-            refreshPartial();
+        // ValueChanged only: keep draft in sync without re-pushing the field being typed.
+        refreshDerivedFields(data);
+    }
+
+    /**
+     * After a live field edit, push only values that were mutated as side effects (never the field
+     * the user just typed). Avoids caret jumps / character resets from re-setting {@code .Value}.
+     */
+    private void refreshDerivedFields(@Nonnull PageData data) {
+        PlotCreatorDraft d = session.getDraft();
+        UICommandBuilder b = new UICommandBuilder();
+        boolean any = false;
+        if (data.displayName != null && !d.isConstructionIdUserEdited()) {
+            if (d.getConstructionId() != null) {
+                b.set("#ConstructionIdField.Value", d.getConstructionId());
+                any = true;
+            }
+            if (d.getPrefabFileName() != null) {
+                b.set("#PrefabNameField.Value", d.getPrefabFileName());
+                any = true;
+            }
+        }
+        if (data.constructionId != null && d.getPrefabFileName() != null) {
+            b.set("#PrefabNameField.Value", d.getPrefabFileName());
+            any = true;
+        }
+        if (data.kind != null && !data.kind.isBlank()) {
+            if (d.getBuildingTagsInput() != null) {
+                b.set("#TagsField.Value", d.getBuildingTagsInput());
+                any = true;
+            } else if (!d.getBuildingTags().isEmpty()) {
+                b.set("#TagsField.Value", String.join(", ", d.getBuildingTags()));
+                any = true;
+            }
+        }
+        if (any) {
+            sendUpdate(b, null, false);
         }
     }
 

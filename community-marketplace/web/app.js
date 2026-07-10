@@ -65,6 +65,14 @@ function upvoteControlHtml(entry, canVote) {
   return `<button type="button" class="upvote-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="toggleUpvote('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasUpvoted ? "true" : "false"}" aria-label="Upvote (${count})"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></button>`;
 }
 
+function formatDownloadCount(count) {
+  const n = Number(count) || 0;
+  if (n === 1) {
+    return "1 download";
+  }
+  return `${n} downloads`;
+}
+
 function renderBuildingCard(entry, options = {}) {
   const { canVote = false, adminDelete = false, showId = false } = options;
   const deleteBtn = adminDelete
@@ -85,7 +93,7 @@ function renderBuildingCard(entry, options = {}) {
       <h3>${escapeHtml(entry.displayName)}</h3>
       ${idMeta}
       <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
-      <p class="meta">${formatBytes(entry.prefabBytes || 0)} · v${escapeHtml(entry.version)}</p>
+      <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
       ${deleteBtn}
     </article>`;
 }
@@ -194,7 +202,7 @@ function renderMySubmissionItem(item) {
 
   let meta = "";
   if (item.kind === "approved") {
-    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · v${escapeHtml(item.version || "1")}</p>`;
+    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(item.downloadCount))} · v${escapeHtml(item.version || "1")}</p>`;
   } else {
     meta = `<p class="meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>`;
   }

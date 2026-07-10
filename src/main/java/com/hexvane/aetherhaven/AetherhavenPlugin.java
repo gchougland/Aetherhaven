@@ -412,6 +412,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (module == null) {
             return event;
         }
+        // Runtime PNGs (plot-creator + installed community) must be in the registry before we send.
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
         CommunityIconRegistry.syncFromCommunityDirectory(this);
         String packId = new PluginIdentifier(this.getManifest()).toString();
@@ -425,7 +426,9 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 );
             return event;
         }
-        module.sendAssetsToPlayer(event.getPacketHandler(), packAssets, false);
+        // forceRebuild=true: vanilla already rebuilt earlier in this event; runtime icons are added after
+        // that pass, so the client needs a second atlas rebuild or inventory shows missing textures.
+        module.sendAssetsToPlayer(event.getPacketHandler(), packAssets, true);
         return event;
     }
 
@@ -458,6 +461,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
             this.villagerDefinitionCatalog.allByNpcRoleId().keySet()
         );
         CustomBuildingIconAssetRegistry.syncFromDataDirectory(this);
+        CommunityIconRegistry.syncFromCommunityDirectory(this);
     }
 
     public void registerJewelryNativeTooltipHooks() {

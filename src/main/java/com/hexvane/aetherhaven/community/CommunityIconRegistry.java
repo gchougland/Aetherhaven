@@ -43,7 +43,16 @@ public final class CommunityIconRegistry {
         try (Stream<Path> files = Files.list(iconsDir)) {
             files.filter(Files::isRegularFile)
                 .filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".png"))
-                .forEach(p -> registerIconFile(module, packId, p, false, false));
+                .forEach(p -> {
+                    CommonAsset asset = registerIconFile(module, packId, p, false, false);
+                    if (asset == null) {
+                        return;
+                    }
+                    String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(p.getFileName().toString());
+                    if (constructionId != null) {
+                        PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+                    }
+                });
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to scan community icons at %s", iconsDir);
         }

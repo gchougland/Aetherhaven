@@ -149,8 +149,8 @@ public final class ConstructionPasteOps {
     /**
      * Prefab air with no fluid ({@code blockId == 0}, {@code filler == 0}, {@code fluidId == 0}). Assembly and batched
      * placement skip these so players do not spend ticks “building” empty cells; {@link #prepAssemblySite} still walks
-     * the full sequence so interiors are carved. Prefab fluids are not applied during prep — only in {@link #placeOne}
-     * when a cell is assembled (and filler fluids at {@link #finishFluidsAndEntities}).
+     * the full sequence so interiors are carved. Prefab fluids are not applied during prep or incremental placement —
+     * only at completion via {@link #finishFluidsAndEntities}.
      */
     public static boolean isPureAirPrefabCell(@Nonnull PendingBlock pb) {
         return pb.blockId == 0 && pb.filler == 0 && pb.fluidId == 0;
@@ -491,12 +491,12 @@ public final class ConstructionPasteOps {
     /**
      * Before assembly: clear the entire prefab footprint to air (including {@code filler != 0} furniture / multi-block
      * cells) so existing terrain does not float inside the volume until those indices reach the placement frontier.
-     * Does not place final prefab solids, fluids, or entities — prefab fluids are written when each cell is built
-     * ({@link #placeOne}) or at completion ({@link #finishFluidsAndEntities}).
+     * Does not place final prefab solids, fluids, or entities — prefab fluids are written at completion via
+     * {@link #finishFluidsAndEntities}.
      */
     /**
      * Clears world fluids in footprint cells whose prefab has no fluid, so interiors are not left flooded after the
-     * manual clearing phase.
+     * manual clearing phase. Prefab fluids themselves are applied later in {@link #finishFluidsAndEntities}.
      */
     public static void clearNonPrefabFluidsInFootprint(
         @Nonnull World world,
@@ -561,10 +561,6 @@ public final class ConstructionPasteOps {
         int bz = origin.z + pb.z;
         WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
         if (chunk == null || !chunk.getReference().isValid()) {
-            return false;
-        }
-        applyPrefabFluidForCell(world, bx, by, bz, pb.fluidId, pb.fluidLevel, chunkAccessor);
-        if (!chunk.getReference().isValid()) {
             return false;
         }
         BlockType block = blockTypeMap.getAsset(pb.blockId);
@@ -667,10 +663,6 @@ public final class ConstructionPasteOps {
         if (chunk == null || !chunk.getReference().isValid()) {
             return false;
         }
-        applyPrefabFluidForCell(world, bx, by, bz, pb.fluidId(), pb.fluidLevel(), chunkAccessor);
-        if (!chunk.getReference().isValid()) {
-            return false;
-        }
         if (pb.blockId() == 0) {
             chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
             return true;
@@ -719,6 +711,10 @@ public final class ConstructionPasteOps {
         return true;
     }
 
+    /**
+     * Final construction pass: write every prefab fluid cell, then spawn prefab entities. Fluids are deferred here
+     * (not written during {@link #placeOne} / {@link #forcePasteAllSolids}) so they appear when the build completes.
+     */
     public static void finishFluidsAndEntities(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -733,9 +729,6 @@ public final class ConstructionPasteOps {
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
             (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
-                if (filler == 0) {
-                    return;
-                }
                 int bx = origin.x + x;
                 int by = origin.y + y;
                 int bz = origin.z + z;

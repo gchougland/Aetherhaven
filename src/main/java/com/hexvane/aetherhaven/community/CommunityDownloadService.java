@@ -6,6 +6,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -76,11 +77,26 @@ public final class CommunityDownloadService {
             }
 
             plugin.reloadConfigsAndAssetCatalogs();
+            reportInstall(plugin, id);
             LOGGER.atInfo().log("Installed community building %s", id);
             return InstallResult.SUCCESS;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to install community building %s", id);
             return InstallResult.IO_ERROR;
+        }
+    }
+
+    /** Best-effort install counter for the marketplace website; never fails the local install. */
+    private static void reportInstall(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+        try {
+            String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
+            if (base == null || base.isBlank()) {
+                return;
+            }
+            String url = base.replaceAll("/+$", "") + "/api/v1/buildings/" + constructionId.trim() + "/download";
+            CommunityHttpClient.postJson(url, Map.of(), "{}");
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Failed to report community download for %s", constructionId);
         }
     }
 

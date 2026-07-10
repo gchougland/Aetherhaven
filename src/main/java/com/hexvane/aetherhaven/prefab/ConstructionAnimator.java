@@ -23,7 +23,8 @@ import javax.annotation.Nullable;
 /**
  * Places prefab blocks in bottom-up order (y, then x, z) like vanilla buffer column streams — not in two phases.
  * Two-phase (all primary y levels before any secondary) placed roof / air above before flowers at lower y and broke plants.
- * For each cell, applies fluid then block like vanilla prefab paste. Entities are applied once at the end.
+ * For each cell, places the block only; fluids and prefab entities are applied once at the end via
+ * {@link ConstructionPasteOps#finishFluidsAndEntities}.
  * Batches are spaced using {@link AetherhavenPlugin#scheduleOnWorld(World, Runnable, long)}.
  */
 public final class ConstructionAnimator {
