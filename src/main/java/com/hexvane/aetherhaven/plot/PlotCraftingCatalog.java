@@ -19,7 +19,8 @@ public final class PlotCraftingCatalog {
     public enum Tab {
         CORE,
         DECORATIONS,
-        COMMUNITY
+        COMMUNITY,
+        MODERATION
     }
 
     public record VariantEntry(@Nonnull String constructionId, @Nonnull String displayName, @Nullable String prefabPathKey) {}

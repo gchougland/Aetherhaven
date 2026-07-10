@@ -117,6 +117,31 @@ function requireAdminApiKey(req, res, next) {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
+/** In-game plot crafting moderation — trusted server-side mod sends the opening player's Hytale profile UUID. */
+function requireModerator(req, res, next) {
+  if (ADMIN_UUIDS.size === 0) {
+    res.status(503).json({ error: "moderation_disabled" });
+    return;
+  }
+  const uuid = String(req.get("X-Player-Uuid") || "")
+    .trim()
+    .toLowerCase();
+  if (!UUID_RE.test(uuid) || !ADMIN_UUIDS.has(uuid)) {
+    res.status(403).json({ error: "forbidden" });
+    return;
+  }
+  next();
+}
+
+function pendingSubmissionFile(submissionId, fileName) {
+  const dir = storage.submissionDir(submissionId, "pending");
+  const file = path.join(dir, fileName);
+  if (!fs.existsSync(dir) || !fs.existsSync(file)) {
+    return null;
+  }
+  return file;
+}
+
 const submissionRateLimit = createSubmissionRateLimit({
   maxPerPlayer: Number(process.env.SUBMISSION_MAX_PER_PLAYER_PER_DAY || 10),
   maxPerIp: Number(process.env.SUBMISSION_MAX_PER_IP_PER_HOUR || 30),
@@ -194,6 +219,26 @@ function rejectSubmission(submissionId, reason) {
   meta.reason = reason || "rejected";
   fs.writeFileSync(path.join(rejectedDir, "meta.json"), JSON.stringify(meta, null, 2));
   return { status: 200, body: { submissionId, status: "rejected" } };
+}
+
+function deleteApprovedBuilding(buildingId) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const hadEntry = manifest.entries.some((e) => e.id === id);
+  if (!hadEntry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const approvedDir = storage.approvedPaths(id).dir;
+  if (fs.existsSync(approvedDir)) {
+    fs.rmSync(approvedDir, { recursive: true, force: true });
+  }
+  manifest.entries = manifest.entries.filter((e) => e.id !== id);
+  manifest.version = (manifest.version || 0) + 1;
+  storage.writeManifest(manifest);
+  return { status: 200, body: { id, status: "deleted" } };
 }
 
 // --- Public API (mod + downloads) ---
@@ -350,6 +395,38 @@ app.post("/api/v1/submissions/:submissionId/reject", requireAdminApiKey, (req, r
   res.status(result.status).json(result.body);
 });
 
+app.get("/api/v1/moderation/pending", requireModerator, (_req, res) => {
+  res.json({ submissions: storage.listPending() });
+});
+
+app.get("/api/v1/moderation/submissions/:submissionId/prefab.json", requireModerator, (req, res) => {
+  const file = pendingSubmissionFile(req.params.submissionId, "prefab.prefab.json");
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/api/v1/moderation/submissions/:submissionId/icon.png", requireModerator, (req, res) => {
+  const file = pendingSubmissionFile(req.params.submissionId, "icon.png");
+  if (!file) {
+    res.status(404).end();
+    return;
+  }
+  res.type("image/png").send(fs.readFileSync(file));
+});
+
+app.post("/api/v1/moderation/approve/:submissionId", requireModerator, (req, res) => {
+  const result = approveSubmission(req.params.submissionId, req.body?.id);
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/v1/moderation/reject/:submissionId", requireModerator, (req, res) => {
+  const result = rejectSubmission(req.params.submissionId, req.body?.reason);
+  res.status(result.status).json(result.body);
+});
+
 // --- Website (same process / port — required for Railway) ---
 
 function requireWebUser(req, res, next) {
@@ -425,6 +502,16 @@ app.post("/api/admin/approve/:submissionId", requireWebUser, requireAdmin, (req,
 
 app.post("/api/admin/reject/:submissionId", requireWebUser, requireAdmin, (req, res) => {
   const result = rejectSubmission(req.params.submissionId, req.body?.reason);
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/admin/catalog", requireWebUser, requireAdmin, (_req, res) => {
+  const manifest = storage.readManifest();
+  res.json({ version: manifest.version, entries: manifest.entries });
+});
+
+app.post("/api/admin/delete/:buildingId", requireWebUser, requireAdmin, (req, res) => {
+  const result = deleteApprovedBuilding(req.params.buildingId);
   res.status(result.status).json(result.body);
 });
 

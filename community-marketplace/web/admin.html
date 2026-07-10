@@ -21,10 +21,16 @@
         <h2>Pending submissions</h2>
         <div id="adminQueue"></div>
       </section>
+      <section class="card">
+        <h2>Published buildings</h2>
+        <p class="meta">Remove a building from the public catalog. Players who already downloaded it keep their local copy.</p>
+        <div id="adminCatalog"></div>
+      </section>
     </main>
     <script src="/app.js"></script>
     <script>
       loadAdminQueue();
+      loadAdminCatalog();
     </script>
   </body>
 </html>

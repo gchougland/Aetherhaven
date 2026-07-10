@@ -112,6 +112,13 @@ $C.@PageOverlay {
             TooltipText: "Community";
             Id: "Community";
           }
+
+          TabButton {
+            Icon: "../star.png";
+            TooltipText: "Moderate";
+            Id: "Moderation";
+            Visible: false;
+          }
         }
 
         $C.@DecoratedContainer {
@@ -171,6 +178,30 @@ $C.@PageOverlay {
               }
 
               $C.@TextButton #RemoveButton {
+                Anchor: (Height: 32);
+                FlexWeight: 1;
+                Text: "";
+              }
+            }
+
+            Group #ModerationActionRow {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              Visible: false;
+
+              $C.@TextButton #ModerationLoadPreviewButton {
+                Anchor: (Height: 32, Right: 6);
+                FlexWeight: 1;
+                Text: "";
+              }
+
+              $C.@TextButton #ApproveButton {
+                Anchor: (Height: 32, Right: 6);
+                FlexWeight: 1;
+                Text: "";
+              }
+
+              $C.@TextButton #DenyButton {
                 Anchor: (Height: 32);
                 FlexWeight: 1;
                 Text: "";

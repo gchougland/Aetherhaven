@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 public final class CommunityPaths {
     public static final String ROOT = "Community";
     public static final String PREVIEW_DIR = ".preview";
+    public static final String MODERATION_PREVIEW_DIR = ".moderation-preview";
 
     private CommunityPaths() {}
 
@@ -40,6 +41,11 @@ public final class CommunityPaths {
     }
 
     @Nonnull
+    public static Path moderationPreviewDirectory(@Nonnull Path dataDirectory) {
+        return communityRoot(dataDirectory).resolve(MODERATION_PREVIEW_DIR);
+    }
+
+    @Nonnull
     public static Path buildingFile(@Nonnull Path dataDirectory, @Nonnull String constructionId) {
         return buildingsDirectory(dataDirectory).resolve(constructionId.trim() + ".json");
     }
@@ -52,6 +58,11 @@ public final class CommunityPaths {
     @Nonnull
     public static Path previewPrefabFile(@Nonnull Path dataDirectory, @Nonnull String constructionId) {
         return previewDirectory(dataDirectory).resolve(constructionId.trim() + ".prefab.json");
+    }
+
+    @Nonnull
+    public static Path moderationPreviewPrefabFile(@Nonnull Path dataDirectory, @Nonnull String submissionId) {
+        return moderationPreviewDirectory(dataDirectory).resolve(submissionId.trim() + ".prefab.json");
     }
 
     @Nonnull
@@ -79,6 +90,15 @@ public final class CommunityPaths {
             return null;
         }
         Path candidate = previewPrefabFile(dataDirectory, constructionId);
+        return Files.isRegularFile(candidate) ? candidate : null;
+    }
+
+    @Nullable
+    public static Path resolveModerationPreviewPrefab(@Nonnull Path dataDirectory, @Nullable String submissionId) {
+        if (submissionId == null || submissionId.isBlank()) {
+            return null;
+        }
+        Path candidate = moderationPreviewPrefabFile(dataDirectory, submissionId);
         return Files.isRegularFile(candidate) ? candidate : null;
     }
 

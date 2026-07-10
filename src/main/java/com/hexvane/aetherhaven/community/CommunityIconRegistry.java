@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.community;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.asset.common.CommonAsset;
@@ -53,7 +55,14 @@ public final class CommunityIconRegistry {
             return;
         }
         String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        registerIconFile(module, packId, iconFile, false);
+        CommonAsset asset = registerIconFile(module, packId, iconFile, false);
+        if (asset == null) {
+            return;
+        }
+        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
+        if (constructionId != null) {
+            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+        }
     }
 
     @Nullable

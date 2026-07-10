@@ -98,6 +98,11 @@ button.secondary {
   color: var(--text);
 }
 
+button.danger {
+  background: #6b2a2a;
+  color: #f5d0d0;
+}
+
 .queue-item {
   border-top: 1px solid var(--border);
   padding: 0.75rem 0;

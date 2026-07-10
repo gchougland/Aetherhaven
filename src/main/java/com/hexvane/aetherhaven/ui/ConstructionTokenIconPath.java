@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
@@ -17,11 +18,8 @@ public final class ConstructionTokenIconPath {
     @Nonnull
     public static String forConstruction(@Nonnull ConstructionDefinition def, @Nullable Path dataDirectory) {
         String id = def.getId().trim();
-        if (dataDirectory != null) {
-            Path customIcon = CustomBuildingsPaths.iconFile(dataDirectory, id);
-            if (Files.isRegularFile(customIcon)) {
-                return CustomBuildingsPaths.iconAssetPath(id);
-            }
+        if (hasRuntimeIconFile(dataDirectory, id)) {
+            return CustomBuildingsPaths.iconAssetPath(id);
         }
         String tokenItemId = def.getPlotTokenItemId();
         if (tokenItemId != null && AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(tokenItemId.trim())) {
@@ -54,13 +52,31 @@ public final class ConstructionTokenIconPath {
                 return forConstruction(def, dataDirectory);
             }
         }
-        if (dataDirectory != null) {
-            Path customIcon = CustomBuildingsPaths.iconFile(dataDirectory, id);
-            if (Files.isRegularFile(customIcon)) {
-                return CustomBuildingsPaths.iconAssetPath(id);
-            }
+        if (hasRuntimeIconFile(dataDirectory, id)) {
+            return CustomBuildingsPaths.iconAssetPath(id);
         }
         return CustomBuildingsPaths.iconAssetPath(id);
+    }
+
+    private static boolean hasRuntimeIconFile(@Nullable Path dataDirectory, @Nonnull String constructionId) {
+        return resolveRuntimeIconFile(dataDirectory, constructionId) != null;
+    }
+
+    @Nullable
+    private static Path resolveRuntimeIconFile(@Nullable Path dataDirectory, @Nonnull String constructionId) {
+        if (dataDirectory == null) {
+            return null;
+        }
+        String id = constructionId.trim();
+        Path customIcon = CustomBuildingsPaths.iconFile(dataDirectory, id);
+        if (Files.isRegularFile(customIcon)) {
+            return customIcon;
+        }
+        Path communityIcon = CommunityPaths.iconFile(dataDirectory, id);
+        if (Files.isRegularFile(communityIcon)) {
+            return communityIcon;
+        }
+        return null;
     }
 
     /**
@@ -78,7 +94,7 @@ public final class ConstructionTokenIconPath {
                 return isIconAvailable(def, dataDirectory);
             }
         }
-        if (dataDirectory != null && Files.isRegularFile(CustomBuildingsPaths.iconFile(dataDirectory, id))) {
+        if (hasRuntimeIconFile(dataDirectory, id)) {
             return true;
         }
         return hasBundledTokenIcon(id);
@@ -86,7 +102,7 @@ public final class ConstructionTokenIconPath {
 
     public static boolean isIconAvailable(@Nonnull ConstructionDefinition def, @Nullable Path dataDirectory) {
         String id = def.getId().trim();
-        if (dataDirectory != null && Files.isRegularFile(CustomBuildingsPaths.iconFile(dataDirectory, id))) {
+        if (hasRuntimeIconFile(dataDirectory, id)) {
             return true;
         }
         String tokenItemId = def.getPlotTokenItemId();

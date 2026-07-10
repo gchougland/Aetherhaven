@@ -21,8 +21,13 @@ public final class CommunityHttpClient {
 
     @Nullable
     public static byte[] getBytes(@Nonnull String url) {
+        return getBytes(url, Map.of());
+    }
+
+    @Nullable
+    public static byte[] getBytes(@Nonnull String url, @Nonnull Map<String, String> headers) {
         try {
-            HttpURLConnection http = open(url, "GET", null);
+            HttpURLConnection http = open(url, "GET", headers);
             int code = http.getResponseCode();
             InputStream in = code >= 200 && code < 300 ? http.getInputStream() : http.getErrorStream();
             if (in == null || code < 200 || code >= 300) {
@@ -42,6 +47,37 @@ public final class CommunityHttpClient {
     public static String getString(@Nonnull String url) {
         byte[] bytes = getBytes(url);
         return bytes != null ? new String(bytes, StandardCharsets.UTF_8) : null;
+    }
+
+    @Nullable
+    public static String getString(@Nonnull String url, @Nonnull Map<String, String> headers) {
+        byte[] bytes = getBytes(url, headers);
+        return bytes != null ? new String(bytes, StandardCharsets.UTF_8) : null;
+    }
+
+    @Nullable
+    public static String postJson(@Nonnull String url, @Nonnull Map<String, String> headers, @Nonnull String jsonBody) {
+        try {
+            HttpURLConnection http = open(url, "POST", headers);
+            http.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+            byte[] body = jsonBody.getBytes(StandardCharsets.UTF_8);
+            http.setFixedLengthStreamingMode(body.length);
+            try (OutputStream os = http.getOutputStream()) {
+                os.write(body);
+            }
+            int code = http.getResponseCode();
+            InputStream in = code >= 200 && code < 300 ? http.getInputStream() : http.getErrorStream();
+            String response = in != null ? new String(readAll(in), StandardCharsets.UTF_8) : "";
+            http.disconnect();
+            if (code < 200 || code >= 300) {
+                LOGGER.atWarning().log("Community POST %s failed: HTTP %s %s", url, code, response);
+                return null;
+            }
+            return response;
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Community POST %s failed", url);
+            return null;
+        }
     }
 
     @Nullable

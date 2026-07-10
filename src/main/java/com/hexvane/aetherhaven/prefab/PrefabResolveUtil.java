@@ -72,6 +72,10 @@ public final class PrefabResolveUtil {
             if (file != null) {
                 return file.toAbsolutePath().normalize();
             }
+            file = CommunityPaths.resolveModerationPreviewPrefab(dataDir, constructionId);
+            if (file != null) {
+                return file.toAbsolutePath().normalize();
+            }
         }
         return null;
     }

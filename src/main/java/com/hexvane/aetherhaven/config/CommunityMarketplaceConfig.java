@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven.config;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /** Remote community building marketplace (browse / download / submit). JSON key: {@code CommunityMarketplace}. */
@@ -35,12 +39,23 @@ public final class CommunityMarketplaceConfig {
             )
             .documentation("Default checked state for plot creator 'Submit to community' on save.")
             .add()
+            .append(
+                new KeyedCodec<>("ModeratorUuids", Codec.STRING),
+                (o, v) -> o.moderatorUuidsRaw = v != null ? v.trim() : "",
+                o -> o.moderatorUuidsRaw
+            )
+            .documentation(
+                "Comma-separated Hytale profile UUIDs that see the Moderation tab in the plot crafting bench. "
+                    + "Must match ADMIN_HYTALE_UUIDS on the marketplace server."
+            )
+            .add()
             .build();
 
     private boolean enabled = true;
     private String apiBaseUrl = "https://aetherhaven.net";
     private int manifestRefreshMinutes = 5;
     private boolean submitOnSaveDefault = true;
+    private String moderatorUuidsRaw = "";
 
     public boolean isEnabled() {
         return enabled;
@@ -62,5 +77,25 @@ public final class CommunityMarketplaceConfig {
 
     public boolean isSubmitOnSaveDefault() {
         return submitOnSaveDefault;
+    }
+
+    @Nonnull
+    public Set<String> getModeratorUuids() {
+        String raw = moderatorUuidsRaw != null ? moderatorUuidsRaw : "";
+        if (raw.isBlank()) {
+            return Set.of();
+        }
+        Set<String> parsed = new HashSet<>();
+        for (String part : raw.split(",")) {
+            String uuid = part.trim().toLowerCase(Locale.ROOT);
+            if (!uuid.isBlank()) {
+                parsed.add(uuid);
+            }
+        }
+        return Set.copyOf(parsed);
+    }
+
+    public boolean isModerator(@Nonnull UUID playerUuid) {
+        return getModeratorUuids().contains(playerUuid.toString().trim().toLowerCase(Locale.ROOT));
     }
 }

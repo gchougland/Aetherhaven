@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.community.CommunityCatalogService;
+import com.hexvane.aetherhaven.community.CommunityModerationService;
 import com.hexvane.aetherhaven.community.CommunityIconRegistry;
 import com.hexvane.aetherhaven.construction.PrefabMaterialsCatalog;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsService;
@@ -143,6 +144,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private ShopPriceCatalog shopPriceCatalog = ShopPriceCatalog.empty();
 
     private final CommunityCatalogService communityCatalogService = new CommunityCatalogService(this);
+    private final CommunityModerationService communityModerationService = new CommunityModerationService(this);
 
     public AetherhavenPlugin(JavaPluginInit init) {
         super(init);
@@ -312,6 +314,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public CommunityCatalogService getCommunityCatalogService() {
         return communityCatalogService;
+    }
+
+    @Nonnull
+    public CommunityModerationService getCommunityModerationService() {
+        return communityModerationService;
     }
 
     @Nonnull

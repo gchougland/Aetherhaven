@@ -117,6 +117,45 @@ async function rejectSubmission(submissionId) {
   loadAdminQueue();
 }
 
+async function loadAdminCatalog() {
+  const el = document.getElementById("adminCatalog");
+  if (!el) return;
+  const res = await fetch("/api/admin/catalog");
+  if (res.status === 403) {
+    el.innerHTML = "<p>Admin access required.</p>";
+    return;
+  }
+  const data = await res.json();
+  const entries = data.entries || [];
+  if (!entries.length) {
+    el.innerHTML = "<p class='meta'>No published buildings.</p>";
+    return;
+  }
+  el.innerHTML = entries
+    .map(
+      (e) => `
+    <div class="queue-item">
+      <strong>${escapeHtml(e.displayName)}</strong>
+      <p class="meta">${escapeHtml(e.id)} · by ${escapeHtml(e.creatorName || "Unknown")}</p>
+      <button class="secondary" onclick="deleteApprovedBuilding('${escapeAttr(e.id)}')">Remove from marketplace</button>
+    </div>`
+    )
+    .join("");
+}
+
+async function deleteApprovedBuilding(buildingId) {
+  if (!confirm(`Remove "${buildingId}" from the public marketplace?`)) {
+    return;
+  }
+  const res = await fetch(`/api/admin/delete/${encodeURIComponent(buildingId)}`, { method: "POST" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Delete failed");
+    return;
+  }
+  loadAdminCatalog();
+}
+
 function escapeHtml(s) {
   return String(s)
     .replace(/&/g, "&amp;")
