@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=11" />
+    <link rel="stylesheet" href="/styles.css?v=12" />
   </head>
   <body>
     <header class="site-header">
@@ -41,11 +41,42 @@
           <h2>Top community builds</h2>
           <div class="ornament-divider" aria-hidden="true"></div>
         </div>
+        <div class="catalog-toolbar" id="catalogToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search builds</span>
+            <input
+              type="search"
+              id="catalogSearch"
+              placeholder="Search by name, author, or tags…"
+              autocomplete="off"
+            />
+          </label>
+          <label class="catalog-filter">
+            <span>Author</span>
+            <select id="catalogAuthorFilter">
+              <option value="">All authors</option>
+            </select>
+          </label>
+          <label class="catalog-filter">
+            <span>Style</span>
+            <select id="catalogStyleFilter">
+              <option value="">All styles</option>
+            </select>
+          </label>
+          <label class="catalog-filter">
+            <span>Building type</span>
+            <select id="catalogTypeFilter">
+              <option value="">All types</option>
+            </select>
+          </label>
+          <button type="button" class="secondary" id="catalogClearFilters">Clear</button>
+          <p class="catalog-result-count" id="catalogResultCount" aria-live="polite"></p>
+        </div>
         <div id="catalog" class="catalog-grid"></div>
       </section>
     </main>
 
-    <script src="/app.js?v=9"></script>
+    <script src="/app.js?v=10"></script>
     <script>
       loadCatalog();
       refreshAuthNav();

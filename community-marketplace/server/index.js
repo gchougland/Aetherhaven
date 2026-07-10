@@ -213,6 +213,46 @@ function normalizeDescription(value) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+/**
+ * @param {unknown} value
+ * @returns {string[]}
+ */
+function normalizeTags(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const seen = new Set();
+  const tags = [];
+  for (const raw of value) {
+    if (typeof raw !== "string") {
+      continue;
+    }
+    const tag = raw.trim().toLowerCase();
+    if (!tag || seen.has(tag)) {
+      continue;
+    }
+    seen.add(tag);
+    tags.push(tag);
+  }
+  return tags;
+}
+
+/**
+ * @param {string} buildingPath
+ * @returns {string[]}
+ */
+function readBuildingTags(buildingPath) {
+  try {
+    if (!fs.existsSync(buildingPath)) {
+      return [];
+    }
+    const building = JSON.parse(fs.readFileSync(buildingPath, "utf8"));
+    return normalizeTags(building.tags);
+  } catch {
+    return [];
+  }
+}
+
 function buildManifestEntry(id, meta, prefabBytes) {
   const entry = {
     id,
@@ -220,6 +260,7 @@ function buildManifestEntry(id, meta, prefabBytes) {
     creatorUuid: meta.creatorUuid,
     creatorName: meta.creatorName,
     styleId: meta.styleId || "misc",
+    tags: normalizeTags(meta.tags),
     blockIdVersion: meta.blockIdVersion,
     prefabBytes,
     version: meta.version || "1",
@@ -258,10 +299,12 @@ function approveSubmission(submissionId, requestedId) {
   building.prefabPath = `${id}.prefab.json`;
   fs.writeFileSync(approved.building, JSON.stringify(building, null, 2));
 
+  const buildingTags = normalizeTags(building.tags);
   const approvedMeta = {
     ...meta,
     id,
     description: normalizeDescription(building.description) || normalizeDescription(meta.description),
+    tags: buildingTags.length ? buildingTags : normalizeTags(meta.tags),
     status: "approved",
     approvedAt: new Date().toISOString(),
     version: meta.version || "1",
@@ -522,8 +565,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     }
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
     const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
+    const entryTags = normalizeTags(e.tags);
+    const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
     const entry = {
       ...e,
+      tags,
       prefabBytes,
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
@@ -690,6 +736,7 @@ app.post(
         creatorUuid,
         creatorName,
         styleId: building.styleId || "misc",
+        tags: normalizeTags(building.tags),
         blockIdVersion,
         status: "pending",
         submittedAt: new Date().toISOString(),

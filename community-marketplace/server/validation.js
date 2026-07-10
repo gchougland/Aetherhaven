@@ -1,4 +1,4 @@
-/** @typedef {{ id: string, displayName: string, description?: string, creatorUuid: string, creatorName: string, styleId?: string, blockIdVersion: number, prefabBytes: number, version: string, approvedAt: string }} ApprovedEntry */
+/** @typedef {{ id: string, displayName: string, description?: string, creatorUuid: string, creatorName: string, styleId?: string, tags?: string[], blockIdVersion: number, prefabBytes: number, version: string, approvedAt: string }} ApprovedEntry */
 /** @typedef {ApprovedEntry & { upvoteCount?: number, downloadCount?: number, userHasUpvoted?: boolean, compatible?: boolean, iconUrl?: string, buildingUrl?: string, prefabUrl?: string }} CatalogEntry */
 
 export const MAX_PREFAB_BYTES = 32 * 1024 * 1024;

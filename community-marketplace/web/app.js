@@ -183,16 +183,140 @@ async function loadCatalog() {
     const user = await fetchMe();
     updateAuthNav(user);
     const data = await fetchCatalog();
-    catalogEntriesById = new Map((data.entries || []).map((e) => [e.id, e]));
-    if (!data.entries?.length) {
-      el.innerHTML = emptyStateHtml("No approved buildings yet.");
-      return;
-    }
-    el.innerHTML = data.entries.map((e) => renderBuildingCard(e, { canVote: Boolean(user), openDetail: true })).join("");
+    catalogCanVote = Boolean(user);
+    allCatalogEntries = data.entries || [];
+    catalogEntriesById = new Map(allCatalogEntries.map((e) => [e.id, e]));
+    setupCatalogFilters();
+    populateCatalogFilterOptions(allCatalogEntries);
+    applyCatalogFilters();
     ensureBuildingDetailModal();
   } catch (e) {
     showStatusError(status, "Could not load catalog.");
   }
+}
+
+let allCatalogEntries = [];
+let catalogCanVote = false;
+let catalogFiltersBound = false;
+
+function setupCatalogFilters() {
+  const toolbar = document.getElementById("catalogToolbar");
+  if (!toolbar) {
+    return;
+  }
+  toolbar.hidden = false;
+  if (catalogFiltersBound) {
+    return;
+  }
+  catalogFiltersBound = true;
+  const search = document.getElementById("catalogSearch");
+  const author = document.getElementById("catalogAuthorFilter");
+  const style = document.getElementById("catalogStyleFilter");
+  const type = document.getElementById("catalogTypeFilter");
+  const clear = document.getElementById("catalogClearFilters");
+  search?.addEventListener("input", applyCatalogFilters);
+  author?.addEventListener("change", applyCatalogFilters);
+  style?.addEventListener("change", applyCatalogFilters);
+  type?.addEventListener("change", applyCatalogFilters);
+  clear?.addEventListener("click", () => {
+    if (search) search.value = "";
+    if (author) author.value = "";
+    if (style) style.value = "";
+    if (type) type.value = "";
+    applyCatalogFilters();
+  });
+}
+
+function uniqueSortedValues(values) {
+  return [...new Set(values.filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" })
+  );
+}
+
+function fillSelectOptions(selectEl, values, allLabel) {
+  if (!selectEl) {
+    return;
+  }
+  const current = selectEl.value;
+  selectEl.innerHTML =
+    `<option value="">${escapeHtml(allLabel)}</option>` +
+    values.map((v) => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join("");
+  if (values.includes(current)) {
+    selectEl.value = current;
+  }
+}
+
+function populateCatalogFilterOptions(entries) {
+  const authors = uniqueSortedValues(entries.map((e) => e.creatorName || "Unknown"));
+  const styles = uniqueSortedValues(entries.map((e) => e.styleId || "misc"));
+  const tags = uniqueSortedValues(entries.flatMap((e) => (Array.isArray(e.tags) ? e.tags : [])));
+  fillSelectOptions(document.getElementById("catalogAuthorFilter"), authors, "All authors");
+  fillSelectOptions(document.getElementById("catalogStyleFilter"), styles, "All styles");
+  fillSelectOptions(document.getElementById("catalogTypeFilter"), tags, "All types");
+}
+
+function getCatalogFilterState() {
+  return {
+    query: String(document.getElementById("catalogSearch")?.value || "")
+      .trim()
+      .toLowerCase(),
+    author: String(document.getElementById("catalogAuthorFilter")?.value || ""),
+    style: String(document.getElementById("catalogStyleFilter")?.value || ""),
+    type: String(document.getElementById("catalogTypeFilter")?.value || ""),
+  };
+}
+
+function entryMatchesCatalogFilters(entry, filters) {
+  if (filters.author && (entry.creatorName || "Unknown") !== filters.author) {
+    return false;
+  }
+  if (filters.style && (entry.styleId || "misc") !== filters.style) {
+    return false;
+  }
+  const tags = Array.isArray(entry.tags) ? entry.tags : [];
+  if (filters.type && !tags.includes(filters.type)) {
+    return false;
+  }
+  if (!filters.query) {
+    return true;
+  }
+  const haystack = [entry.displayName || "", entry.creatorName || "", ...tags]
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(filters.query);
+}
+
+function updateCatalogResultCount(shown, total) {
+  const el = document.getElementById("catalogResultCount");
+  if (!el) {
+    return;
+  }
+  if (shown === total) {
+    el.textContent = total === 1 ? "1 build" : `${total} builds`;
+  } else {
+    el.textContent = `Showing ${shown} of ${total} builds`;
+  }
+}
+
+function applyCatalogFilters() {
+  const el = document.getElementById("catalog");
+  if (!el) {
+    return;
+  }
+  const filters = getCatalogFilterState();
+  const filtered = allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters));
+  updateCatalogResultCount(filtered.length, allCatalogEntries.length);
+  if (!allCatalogEntries.length) {
+    el.innerHTML = emptyStateHtml("No approved buildings yet.");
+    return;
+  }
+  if (!filtered.length) {
+    el.innerHTML = emptyStateHtml("No builds match your search or filters.");
+    return;
+  }
+  el.innerHTML = filtered
+    .map((e) => renderBuildingCard(e, { canVote: catalogCanVote, openDetail: true }))
+    .join("");
 }
 
 async function loadDashboard() {
@@ -659,9 +783,8 @@ async function openBuildingDetail(buildingId) {
   if (!entry) {
     try {
       const data = await fetchCatalog();
-      for (const e of data.entries || []) {
-        catalogEntriesById.set(e.id, e);
-      }
+      allCatalogEntries = data.entries || [];
+      catalogEntriesById = new Map(allCatalogEntries.map((e) => [e.id, e]));
       entry = catalogEntriesById.get(buildingId);
     } catch {
       entry = null;
