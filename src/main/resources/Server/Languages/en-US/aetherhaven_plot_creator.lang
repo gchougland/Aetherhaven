@@ -182,6 +182,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.title = Save shape
 aetherhaven.plotcreator.step.PREFAB_SAVE.hint = Export everything inside the bounds using your building settings from the previous step.
 
 aetherhaven.plotcreator.error.needIdentity = Set a display name and building id before exporting the prefab.
+aetherhaven.plotcreator.error.needConstructionId = Provide a building id.
 
 aetherhaven.plotcreator.error.selfBuildDays = Self-build days must be greater than zero.
 
@@ -198,7 +199,7 @@ aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open the build material
 aetherhaven.plotcreator.step.MATERIALS.detail = Use plus and minus to change counts. Add from inventory copies counts into the list and returns your items.
 
 aetherhaven.plotcreator.step.CONFIGURE.title = Building settings
-aetherhaven.plotcreator.step.CONFIGURE.hint = Set treasury gold cost, self build days, style, prefab empty spaces, plot token lock, and assembly sections.
+aetherhaven.plotcreator.step.CONFIGURE.hint = Set treasury gold cost, self build days, style, prefab empty spaces, plot token lock, assembly sections, and optionally submit to the community marketplace.
 
 aetherhaven.plotcreator.step.CONFIGURE.detail = Gold is paid from the town treasury when the plot is built. Self build days is how long the plot takes to finish without a building staff. Style groups your building in the plot crafting bench. Save empty spaces controls whether air in your footprint is saved to clear blocks when built. Plot token locked requires players to unlock this plot at the plot crafting bench before they can craft tokens. Assembly sections splits the build into an N×N×N grid (1 = off).
 
@@ -245,6 +246,8 @@ aetherhaven.plotcreator.success.registered = Building saved as {id} and register
 aetherhaven.plotcreator.success.savedTokenFallback = Building file saved as {id}. Could not link it to your town in-world; use the plot token to place it.
 aetherhaven.plotcreator.success.submittedCommunity = Building submitted for community review.
 aetherhaven.plotcreator.error.communitySubmit = Community submission failed: {reason}
+aetherhaven.plotcreator.error.communityDisabled = Community marketplace is disabled on this server.
+aetherhaven.plotcreator.error.communitySubmitNotFound = No locally saved building found with id {id}.
 aetherhaven.plotcreator.field.submitToCommunity = Submit to community marketplace for review
 
 aetherhaven.plotcreator.error.noTown = Place a town charter first, then finish the plot creator inside that town.

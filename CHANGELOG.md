@@ -6,6 +6,8 @@
 
 - **Community marketplace Railway deployment** — API and website run on a single port for Railway; see `docs/RailwayDeployment.md`.
 - **Community submissions without per-server API keys** — In-game uploads work out of the box; backend uses rate limits and admin moderation instead of a distributable mod secret.
+- **Community marketplace enabled by default** — Plot crafting Community tab and plot creator submit checkbox are on by default; submit option appears on Building settings.
+- **`/ah community submit`** — Upload an already saved local custom building to the marketplace for review.
 
 ### Fixed
 

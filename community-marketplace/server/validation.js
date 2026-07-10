@@ -42,18 +42,17 @@ export function proposeCommunityId(creatorUuid, slug) {
 }
 
 /**
+ * Validates an uploaded building before a community catalog id is assigned.
+ * Local plot creator ids (e.g. plot_my_house) are accepted here.
+ *
  * @param {unknown} building
  * @param {number} prefabBlockIdVersion
  */
-export function validateBuildingDefinition(building, prefabBlockIdVersion) {
+export function validateSubmissionBuilding(building, prefabBlockIdVersion) {
   if (!building || typeof building !== "object") {
     return "building_json_invalid";
   }
   const b = /** @type {Record<string, unknown>} */ (building);
-  const id = typeof b.id === "string" ? b.id.trim() : "";
-  if (!normalizeCommunityId(id)) {
-    return "id_invalid";
-  }
   if (typeof b.displayName !== "string" || !b.displayName.trim()) {
     return "display_name_missing";
   }
@@ -67,6 +66,46 @@ export function validateBuildingDefinition(building, prefabBlockIdVersion) {
     return "block_id_version_missing";
   }
   return null;
+}
+
+/**
+ * Validates a building that will be published under a community catalog id.
+ *
+ * @param {unknown} building
+ * @param {number} prefabBlockIdVersion
+ */
+export function validateBuildingDefinition(building, prefabBlockIdVersion) {
+  const submissionError = validateSubmissionBuilding(building, prefabBlockIdVersion);
+  if (submissionError) {
+    return submissionError;
+  }
+  const b = /** @type {Record<string, unknown>} */ (building);
+  const id = typeof b.id === "string" ? b.id.trim() : "";
+  if (!normalizeCommunityId(id)) {
+    return "id_invalid";
+  }
+  return null;
+}
+
+/**
+ * @param {Record<string, unknown>} building
+ * @param {string} creatorUuid
+ */
+export function assignCommunityCatalogId(building, creatorUuid) {
+  const existing = typeof building.id === "string" ? normalizeCommunityId(building.id) : null;
+  if (existing) {
+    building.id = existing;
+    return existing;
+  }
+  const displayName = typeof building.displayName === "string" ? building.displayName.trim() : "";
+  const localId = typeof building.id === "string" ? building.id.trim() : "";
+  const slugSource =
+    displayName ||
+    localId.replace(/^plot_/, "").replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "") ||
+    "building";
+  const id = proposeCommunityId(creatorUuid, slugSource);
+  building.id = id;
+  return id;
 }
 
 /**

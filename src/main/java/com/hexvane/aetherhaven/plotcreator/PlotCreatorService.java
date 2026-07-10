@@ -89,6 +89,7 @@ public final class PlotCreatorService {
         World world = store.getExternalData().getWorld();
         PlotCreatorSession session = new PlotCreatorSession(uuid, world);
         PlotCreatorDraftLoader.loadIntoDraft(session.getDraft(), def);
+        applyCommunityMarketplaceDefaults(session.getDraft());
         session.getDraft().setStep(PlotCreatorStep.REVIEW);
         PlotCreatorSessions.put(session);
         playerRef.sendMessage(
@@ -111,6 +112,7 @@ public final class PlotCreatorService {
         PlotCreatorSessions.remove(uuid);
         World world = store.getExternalData().getWorld();
         PlotCreatorSession session = new PlotCreatorSession(uuid, world);
+        applyCommunityMarketplaceDefaults(session.getDraft());
         PlotCreatorSessions.put(session);
         showSessionHud(playerRef, ref, store, session);
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.session.started"));
@@ -415,14 +417,7 @@ public final class PlotCreatorService {
                 playerName,
                 draft.getConstructionId().trim()
             );
-            if (submitErr == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity"));
-            } else if (!"disabled".equals(submitErr)) {
-                playerRef.sendMessage(
-                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit")
-                        .param("reason", Message.raw(submitErr))
-                );
-            }
+            CommunitySubmissionService.notifyPlayer(playerRef, submitErr);
         }
         World world = session.getWorld();
         String registerErr = PlotCreatorWorldRegistrar.registerInTown(world, plugin, playerRef.getUuid(), draft, store);
@@ -589,6 +584,18 @@ public final class PlotCreatorService {
             if (!t.isEmpty()) {
                 draft.getBuildingTags().add(t);
             }
+        }
+    }
+
+    /** Default plot creator community submit checkbox from {@code CommunityMarketplace.SubmitOnSaveDefault}. */
+    public static void applyCommunityMarketplaceDefaults(@Nonnull PlotCreatorDraft draft) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        var cfg = plugin.getConfig().get().getCommunityMarketplace();
+        if (cfg.isEnabled() && cfg.isSubmitOnSaveDefault()) {
+            draft.setSubmitToCommunity(true);
         }
     }
 }

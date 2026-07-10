@@ -3,7 +3,11 @@ package com.hexvane.aetherhaven.community;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,6 +21,7 @@ import javax.annotation.Nullable;
 /** Uploads plot creator saves to the community marketplace API. */
 public final class CommunitySubmissionService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final Gson GSON = new Gson();
     private static final String BOUNDARY = "----AetherhavenCommunityBoundary";
 
     private CommunitySubmissionService() {}
@@ -33,17 +38,11 @@ public final class CommunitySubmissionService {
             return "disabled";
         }
         Path dataDir = plugin.getDataDirectory();
-        Path buildingFile = CommunityPaths.buildingFile(dataDir, constructionId);
-        if (!Files.isRegularFile(buildingFile)) {
-            buildingFile = CustomBuildingsPaths.buildingFile(dataDir, constructionId);
-        }
-        if (!Files.isRegularFile(buildingFile)) {
+        Path buildingFile = resolveBuildingFile(dataDir, constructionId);
+        if (buildingFile == null) {
             return "building_missing";
         }
-        Path prefabFile = CustomBuildingsPaths.resolvePrefabFile(dataDir, constructionId + ".prefab.json");
-        if (prefabFile == null) {
-            prefabFile = CommunityPaths.installedPrefabFile(dataDir, constructionId);
-        }
+        Path prefabFile = resolvePrefabFile(dataDir, constructionId, buildingFile);
         if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
             return "prefab_missing";
         }
@@ -72,6 +71,68 @@ public final class CommunitySubmissionService {
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Community submission failed for %s", constructionId);
             return "io_error";
+        }
+    }
+
+    /** Sends chat feedback for a submission result ({@code err == null} is success). */
+    public static void notifyPlayer(@Nonnull PlayerRef playerRef, @Nullable String err) {
+        if (err == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity"));
+            return;
+        }
+        if ("disabled".equals(err)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityDisabled"));
+            return;
+        }
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit")
+                .param("reason", Message.raw(err))
+        );
+    }
+
+    @Nullable
+    private static Path resolveBuildingFile(@Nonnull Path dataDir, @Nonnull String constructionId) {
+        Path community = CommunityPaths.buildingFile(dataDir, constructionId);
+        if (Files.isRegularFile(community)) {
+            return community;
+        }
+        Path custom = CustomBuildingsPaths.buildingFile(dataDir, constructionId);
+        return Files.isRegularFile(custom) ? custom : null;
+    }
+
+    @Nullable
+    private static Path resolvePrefabFile(
+        @Nonnull Path dataDir,
+        @Nonnull String constructionId,
+        @Nonnull Path buildingFile
+    ) {
+        Path prefab = CustomBuildingsPaths.resolvePrefabFile(dataDir, constructionId + ".prefab.json");
+        if (prefab != null) {
+            return prefab;
+        }
+        prefab = CommunityPaths.installedPrefabFile(dataDir, constructionId);
+        if (Files.isRegularFile(prefab)) {
+            return prefab;
+        }
+        String prefabPathKey = readPrefabPathFromBuildingJson(buildingFile);
+        if (prefabPathKey != null) {
+            return CustomBuildingsPaths.resolvePrefabFile(dataDir, prefabPathKey);
+        }
+        return null;
+    }
+
+    @Nullable
+    private static String readPrefabPathFromBuildingJson(@Nonnull Path buildingFile) {
+        try {
+            JsonObject root = GSON.fromJson(Files.readString(buildingFile), JsonObject.class);
+            if (root == null || !root.has("prefabPath") || root.get("prefabPath").isJsonNull()) {
+                return null;
+            }
+            String prefabPath = root.get("prefabPath").getAsString();
+            return prefabPath != null && !prefabPath.isBlank() ? prefabPath.trim() : null;
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to read prefabPath from %s", buildingFile);
+            return null;
         }
     }
 

@@ -181,6 +181,19 @@ $C.@PageOverlay {
         Visible: false;
       }
 
+      Group #SubmitToCommunityRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+        Visible: false;
+
+        $C.@CheckBox #SubmitToCommunityToggle {}
+
+        Label #SubmitToCommunityLabel {
+          Style: (...@HintStyle, TextColor: #c8d0dc);
+          Text: "";
+        }
+      }
+
       Label #AssemblySectionsLabel {
         Style: $C.@DefaultLabelStyle;
         Text: "";
@@ -237,19 +250,6 @@ $C.@PageOverlay {
         Text: "";
         Anchor: (Bottom: 14);
         Visible: false;
-      }
-
-      Group #SubmitToCommunityRow {
-        LayoutMode: Left;
-        Anchor: (Bottom: 10);
-        Visible: false;
-
-        $C.@CheckBox #SubmitToCommunityToggle {}
-
-        Label #SubmitToCommunityLabel {
-          Style: (...@HintStyle, TextColor: #c8d0dc);
-          Text: "";
-        }
       }
 
       Group #ButtonRow {

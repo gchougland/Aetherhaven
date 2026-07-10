@@ -55,7 +55,7 @@ async function loadDashboard() {
   }
   const name = me.user.profile?.username || me.user.sub || "Player";
   const uuid = me.user.profile?.uuid || "";
-  profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">${escapeHtml(uuid)}</p>`;
+  profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Use this value for <code>ADMIN_HYTALE_UUIDS</code> on Railway if you are a moderator.</p>`;
 
   const pending = await fetch("/api/my-submissions").then((r) => r.json());
   const mine = (pending.submissions || []).filter((s) => s.creatorUuid === uuid);

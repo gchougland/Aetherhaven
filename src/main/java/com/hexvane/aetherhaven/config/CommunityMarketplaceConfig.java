@@ -37,10 +37,10 @@ public final class CommunityMarketplaceConfig {
             .add()
             .build();
 
-    private boolean enabled = false;
+    private boolean enabled = true;
     private String apiBaseUrl = "https://aetherhaven.net";
     private int manifestRefreshMinutes = 5;
-    private boolean submitOnSaveDefault = false;
+    private boolean submitOnSaveDefault = true;
 
     public boolean isEnabled() {
         return enabled;

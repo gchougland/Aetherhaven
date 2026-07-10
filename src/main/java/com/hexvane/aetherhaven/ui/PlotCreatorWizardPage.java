@@ -354,6 +354,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
+            b.set("#SubmitToCommunityRow.Visible", false);
             return;
         }
         if (configurePanelOnly) {
@@ -386,6 +387,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
+            b.set("#SubmitToCommunityRow.Visible", isCommunityMarketplaceEnabled());
             return;
         }
         b.set("#DisplayNameField.Visible", step == PlotCreatorStep.IDENTITY);
@@ -432,12 +434,13 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (step == PlotCreatorStep.REVIEW || step == PlotCreatorStep.DONE) {
             b.set("#ReviewSummary.TextSpans", Message.raw(buildReviewText()));
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            boolean communityEnabled = plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
-            b.set("#SubmitToCommunityRow.Visible", communityEnabled && step == PlotCreatorStep.REVIEW);
-        } else {
-            b.set("#SubmitToCommunityRow.Visible", false);
         }
+        b.set("#SubmitToCommunityRow.Visible", false);
+    }
+
+    private static boolean isCommunityMarketplaceEnabled() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        return plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
     }
 
     private void applyFields(@Nonnull UICommandBuilder b) {

@@ -5,9 +5,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import cookieParser from "cookie-parser";
 import express from "express";
-import session from "express-session";
 import multer from "multer";
 import { createOidc } from "./oauth.js";
+import { createSessionMiddleware } from "./sessionStore.js";
 import { createStorage } from "./storage.js";
 import {
   assertSize,
@@ -16,9 +16,9 @@ import {
   MAX_ICON_BYTES,
   MAX_PREFAB_BYTES,
   normalizeCommunityId,
-  proposeCommunityId,
   readPrefabBlockIdVersion,
-  validateBuildingDefinition,
+  assignCommunityCatalogId,
+  validateSubmissionBuilding,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
 
@@ -36,7 +36,8 @@ const ADMIN_UUIDS = new Set(
 );
 
 const publicBaseUrl = resolvePublicBaseUrl();
-const storage = createStorage(process.env.DATA_DIR || path.join(__dirname, "..", "data"));
+const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
+const storage = createStorage(dataDir);
 const oidc = createOidc({
   issuer: process.env.HYTALE_OIDC_ISSUER || "https://connect.accounts.hytale.com",
   clientId: process.env.HYTALE_OIDC_CLIENT_ID || "",
@@ -53,15 +54,10 @@ const app = express();
 app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(
-  session({
+  createSessionMiddleware({
     secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: IS_PRODUCTION,
-    },
+    isProduction: IS_PRODUCTION,
+    dataDir,
   })
 );
 app.use(express.json({ limit: "1mb" }));
@@ -303,17 +299,13 @@ app.post(
 
       const building = JSON.parse(buildingFile.buffer.toString("utf8"));
       const blockIdVersion = readPrefabBlockIdVersion(prefabFile.buffer);
-      const validationError = validateBuildingDefinition(building, blockIdVersion);
+      const validationError = validateSubmissionBuilding(building, blockIdVersion);
       if (validationError) {
         res.status(400).json({ error: validationError });
         return;
       }
 
-      let id = normalizeCommunityId(building.id);
-      if (!id) {
-        id = proposeCommunityId(creatorUuid, building.displayName);
-        building.id = id;
-      }
+      const id = assignCommunityCatalogId(building, creatorUuid);
 
       const submissionId = `${id}_${Date.now()}`;
       const dir = storage.submissionDir(submissionId, "pending");
