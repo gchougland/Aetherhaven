@@ -89,7 +89,6 @@ public final class CommunityDownloadService {
         try {
             Files.deleteIfExists(CommunityPaths.buildingFile(dataDir, constructionId));
             Files.deleteIfExists(CommunityPaths.installedPrefabFile(dataDir, constructionId));
-            Files.deleteIfExists(CommunityPaths.iconFile(dataDir, constructionId));
             CommunityPreviewCache.get().clearEntryPreview(plugin, constructionId);
             plugin.reloadConfigsAndAssetCatalogs();
             return InstallResult.SUCCESS;

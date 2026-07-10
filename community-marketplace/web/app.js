@@ -71,6 +71,16 @@ async function loadDashboard() {
     .join("");
 }
 
+async function loadAdminPage() {
+  const me = await fetch("/api/me").then((r) => r.json());
+  if (!me.user) {
+    window.location.href = "/auth/login";
+    return;
+  }
+  loadAdminQueue();
+  loadAdminCatalog();
+}
+
 async function loadAdminQueue() {
   const el = document.getElementById("adminQueue");
   if (!el) return;
@@ -121,8 +131,16 @@ async function loadAdminCatalog() {
   const el = document.getElementById("adminCatalog");
   if (!el) return;
   const res = await fetch("/api/admin/catalog");
+  if (res.status === 401 || res.status === 302) {
+    window.location.href = "/auth/login";
+    return;
+  }
   if (res.status === 403) {
-    el.innerHTML = "<p>Admin access required.</p>";
+    el.innerHTML = "<p>Admin access required. Add your profile UUID to <code>ADMIN_HYTALE_UUIDS</code> on Railway.</p>";
+    return;
+  }
+  if (!res.ok) {
+    el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
     return;
   }
   const data = await res.json();
@@ -134,17 +152,25 @@ async function loadAdminCatalog() {
   el.innerHTML = entries
     .map(
       (e) => `
-    <div class="queue-item">
-      <strong>${escapeHtml(e.displayName)}</strong>
-      <p class="meta">${escapeHtml(e.id)} · by ${escapeHtml(e.creatorName || "Unknown")}</p>
-      <button class="secondary" onclick="deleteApprovedBuilding('${escapeAttr(e.id)}')">Remove from marketplace</button>
-    </div>`
+    <article class="card building-card admin-building-card">
+      <img src="${escapeAttr(e.iconUrl)}" alt="" onerror="this.style.display='none'" />
+      <h3>${escapeHtml(e.displayName)}</h3>
+      <p class="meta">${escapeHtml(e.id)}</p>
+      <p class="meta">by ${escapeHtml(e.creatorName || "Unknown")}</p>
+      <p class="meta">${formatBytes(e.prefabBytes || 0)} · v${escapeHtml(e.version || "1")}</p>
+      <button
+        type="button"
+        class="danger admin-delete-btn"
+        onclick="deleteApprovedBuilding('${escapeAttr(e.id)}', '${escapeAttr(e.displayName)}')"
+      >Remove permanently</button>
+    </article>`
     )
     .join("");
 }
 
-async function deleteApprovedBuilding(buildingId) {
-  if (!confirm(`Remove "${buildingId}" from the public marketplace?`)) {
+async function deleteApprovedBuilding(buildingId, displayName) {
+  const label = displayName || buildingId;
+  if (!confirm(`Permanently remove "${label}" from the public marketplace?\n\nThis deletes the approved files and removes it from the catalog. It cannot be undone.`)) {
     return;
   }
   const res = await fetch(`/api/admin/delete/${encodeURIComponent(buildingId)}`, { method: "POST" });

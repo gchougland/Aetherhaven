@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -25,18 +26,53 @@ public final class CommunityModerationService {
     private static final String ICON_ID_PREFIX = "mod_";
 
     private final AetherhavenPlugin plugin;
+    private final ConcurrentHashMap<UUID, Boolean> apiModeratorAccess = new ConcurrentHashMap<>();
     private volatile List<CommunityPendingEntry> cachedPending = List.of();
 
     public CommunityModerationService(@Nonnull AetherhavenPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public boolean isEnabled() {
+    public boolean isMarketplaceEnabled() {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
-        return cfg.isEnabled() && !cfg.getApiBaseUrl().isBlank() && !cfg.getModeratorUuids().isEmpty();
+        return cfg.isEnabled() && !cfg.getApiBaseUrl().isBlank();
+    }
+
+    /**
+     * Checks Railway {@code ADMIN_HYTALE_UUIDS} via the moderation API using the opening player's in-game profile UUID.
+     * Optional {@code ModeratorUuids} in mod config is a fast-path override.
+     */
+    public void refreshModeratorAccess(@Nonnull UUID playerUuid) {
+        if (isConfigModerator(playerUuid)) {
+            apiModeratorAccess.put(playerUuid, true);
+            return;
+        }
+        if (!isMarketplaceEnabled()) {
+            apiModeratorAccess.put(playerUuid, false);
+            return;
+        }
+        String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
+        int code = CommunityHttpClient.getResponseCode(base + "/api/v1/moderation/pending", moderatorHeaders(playerUuid));
+        boolean allowed = code == 200;
+        apiModeratorAccess.put(playerUuid, allowed);
+        if (code == 403) {
+            LOGGER.atInfo().log(
+                "Player %s is not a marketplace moderator (add this in-game profile UUID to ADMIN_HYTALE_UUIDS on Railway)",
+                playerUuid
+            );
+        } else if (code != 200) {
+            LOGGER.atWarning().log("Moderation access probe for %s failed: HTTP %s", playerUuid, code);
+        }
     }
 
     public boolean isModerator(@Nonnull UUID playerUuid) {
+        if (isConfigModerator(playerUuid)) {
+            return true;
+        }
+        return Boolean.TRUE.equals(apiModeratorAccess.get(playerUuid));
+    }
+
+    public boolean isConfigModerator(@Nonnull UUID playerUuid) {
         return plugin.getConfig().get().getCommunityMarketplace().isModerator(playerUuid);
     }
 

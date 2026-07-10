@@ -247,10 +247,8 @@ app.get("/api/v1/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-function sendManifest(req, res) {
-  const clientBlockIdVersion = Number(req.query.blockIdVersion || 0);
-  const manifest = storage.readManifest();
-  const entries = manifest.entries.map((e) => {
+function enrichManifestEntries(manifest, clientBlockIdVersion = 0) {
+  return manifest.entries.map((e) => {
     const paths = storage.approvedPaths(e.id);
     let prefabBytes = e.prefabBytes || 0;
     if (!prefabBytes && fs.existsSync(paths.prefab)) {
@@ -266,7 +264,15 @@ function sendManifest(req, res) {
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
   });
-  res.json({ version: manifest.version, entries });
+}
+
+function sendManifest(req, res) {
+  const clientBlockIdVersion = Number(req.query.blockIdVersion || 0);
+  const manifest = storage.readManifest();
+  res.json({
+    version: manifest.version,
+    entries: enrichManifestEntries(manifest, clientBlockIdVersion),
+  });
 }
 
 app.get("/api/v1/manifest", sendManifest);
@@ -507,7 +513,10 @@ app.post("/api/admin/reject/:submissionId", requireWebUser, requireAdmin, (req, 
 
 app.get("/api/admin/catalog", requireWebUser, requireAdmin, (_req, res) => {
   const manifest = storage.readManifest();
-  res.json({ version: manifest.version, entries: manifest.entries });
+  res.json({
+    version: manifest.version,
+    entries: enrichManifestEntries(manifest, 0),
+  });
 });
 
 app.post("/api/admin/delete/:buildingId", requireWebUser, requireAdmin, (req, res) => {

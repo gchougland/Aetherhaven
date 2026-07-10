@@ -43,19 +43,23 @@ public final class CommunityIconRegistry {
         try (Stream<Path> files = Files.list(iconsDir)) {
             files.filter(Files::isRegularFile)
                 .filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".png"))
-                .forEach(p -> registerIconFile(module, packId, p, false));
+                .forEach(p -> registerIconFile(module, packId, p, false, false));
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to scan community icons at %s", iconsDir);
         }
     }
 
     public static void registerIconFile(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile) {
+        registerIconFile(plugin, iconFile, false);
+    }
+
+    public static void registerIconFile(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile, boolean force) {
         CommonAssetModule module = CommonAssetModule.get();
         if (module == null || !Files.isRegularFile(iconFile)) {
             return;
         }
         String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        CommonAsset asset = registerIconFile(module, packId, iconFile, false);
+        CommonAsset asset = registerIconFile(module, packId, iconFile, false, force);
         if (asset == null) {
             return;
         }
@@ -70,14 +74,15 @@ public final class CommunityIconRegistry {
         @Nonnull CommonAssetModule module,
         @Nonnull String packId,
         @Nonnull Path iconFile,
-        boolean log
+        boolean log,
+        boolean force
     ) {
         String assetName = "Icons/ItemsGenerated/" + iconFile.getFileName();
         String cacheKey = cacheKey(packId, assetName);
         try {
             long mtime = Files.getLastModifiedTime(iconFile).toMillis();
             Long registered = REGISTERED_MTIMES.get(cacheKey);
-            if (registered != null && registered == mtime) {
+            if (!force && registered != null && registered == mtime) {
                 return null;
             }
             byte[] bytes = Files.readAllBytes(iconFile);

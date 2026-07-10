@@ -23,14 +23,13 @@
       </section>
       <section class="card">
         <h2>Published buildings</h2>
-        <p class="meta">Remove a building from the public catalog. Players who already downloaded it keep their local copy.</p>
-        <div id="adminCatalog"></div>
+        <p class="meta">Browse approved builds and remove any from the public catalog. Players who already downloaded a build keep their local copy.</p>
+        <div id="adminCatalog" class="catalog-grid"></div>
       </section>
     </main>
     <script src="/app.js"></script>
     <script>
-      loadAdminQueue();
-      loadAdminCatalog();
+      loadAdminPage();
     </script>
   </body>
 </html>

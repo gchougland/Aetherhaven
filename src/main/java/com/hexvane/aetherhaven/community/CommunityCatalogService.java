@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
@@ -68,16 +69,25 @@ public final class CommunityCatalogService {
         fetchManifest();
     }
 
-    public void fetchManifest() {
+    /** Fetches manifest and icons from the API (plot crafting refresh button). */
+    public boolean refreshFromApi() {
+        if (!fetchManifest()) {
+            return false;
+        }
+        ensureIconsReady(true);
+        return true;
+    }
+
+    public boolean fetchManifest() {
         if (!isEnabled()) {
             cachedEntries.set(List.of());
-            return;
+            return false;
         }
         String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
         String json = CommunityHttpClient.getString(base + "/api/v1/manifest");
         if (json == null || json.isBlank()) {
             LOGGER.atWarning().log("Community manifest fetch failed from %s", base);
-            return;
+            return false;
         }
         try {
             ManifestResponse response = GSON.fromJson(json, ManifestResponse.class);
@@ -86,35 +96,75 @@ public final class CommunityCatalogService {
             lastFetchEpochMs = System.currentTimeMillis();
             LOGGER.atInfo().log("Community manifest loaded: %s entries", entries.size());
             for (CommunityManifestEntry entry : entries) {
-                ensureIconCached(entry);
+                ensureIconCached(entry, false);
             }
+            return true;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse community manifest");
+            return false;
         }
     }
 
-    private void ensureIconCached(@Nonnull CommunityManifestEntry entry) {
+    /**
+     * Downloads and registers any missing community icon PNGs before the crafting list renders.
+     *
+     * @return true when at least one icon was newly written and registered this call
+     */
+    public boolean ensureIconsReady() {
+        return ensureIconsReady(false);
+    }
+
+    /**
+     * Downloads and registers any missing community icon PNGs before the crafting list renders.
+     *
+     * @param forceRegister when true, re-sends icons to connected clients even if already cached locally
+     * @return true when at least one icon was newly written and registered this call
+     */
+    public boolean ensureIconsReady(boolean forceRegister) {
+        boolean anyNew = false;
+        for (CommunityManifestEntry entry : cachedEntries.get()) {
+            if (ensureIconCached(entry, forceRegister)) {
+                anyNew = true;
+            }
+        }
+        return anyNew;
+    }
+
+    private boolean ensureIconCached(@Nonnull CommunityManifestEntry entry) {
+        return ensureIconCached(entry, false);
+    }
+
+    private boolean ensureIconCached(@Nonnull CommunityManifestEntry entry, boolean forceRegister) {
         Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
         if (Files.isRegularFile(iconFile)) {
-            CommunityIconRegistry.registerIconFile(plugin, iconFile);
-            return;
+            registerCachedIcon(iconFile, forceRegister);
+            return false;
         }
         String iconUrl = entry.getIconUrl();
         if (iconUrl == null || iconUrl.isBlank()) {
-            return;
+            LOGGER.atWarning().log("Community entry %s has no icon URL in manifest", entry.getId());
+            return false;
         }
         String absolute = resolveUrl(iconUrl);
         byte[] png = CommunityHttpClient.getBytes(absolute);
         if (png == null || png.length == 0) {
-            return;
+            LOGGER.atWarning().log("Community icon download failed for %s from %s", entry.getId(), absolute);
+            return false;
         }
         try {
             Files.createDirectories(iconFile.getParent());
             Files.write(iconFile, png);
-            CommunityIconRegistry.registerIconFile(plugin, iconFile);
+            registerCachedIcon(iconFile, true);
+            return true;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to cache community icon for %s", entry.getId());
+            return false;
         }
+    }
+
+    private void registerCachedIcon(@Nonnull Path iconFile, boolean forceRegister) {
+        CommunityIconRegistry.registerIconFile(plugin, iconFile, forceRegister);
+        CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile, forceRegister);
     }
 
     @Nonnull

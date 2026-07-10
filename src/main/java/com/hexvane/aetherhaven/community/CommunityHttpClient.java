@@ -43,6 +43,23 @@ public final class CommunityHttpClient {
         }
     }
 
+    /** @return HTTP status code, or {@code -1} when the request could not be made */
+    public static int getResponseCode(@Nonnull String url, @Nonnull Map<String, String> headers) {
+        try {
+            HttpURLConnection http = open(url, "GET", headers);
+            int code = http.getResponseCode();
+            InputStream in = code >= 200 && code < 300 ? http.getInputStream() : http.getErrorStream();
+            if (in != null) {
+                readAll(in);
+            }
+            http.disconnect();
+            return code;
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Community GET %s failed", url);
+            return -1;
+        }
+    }
+
     @Nullable
     public static String getString(@Nonnull String url) {
         byte[] bytes = getBytes(url);

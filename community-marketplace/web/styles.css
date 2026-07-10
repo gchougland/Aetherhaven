@@ -70,6 +70,17 @@ nav a {
   font-size: 1rem;
 }
 
+.admin-building-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-building-card .admin-delete-btn {
+  margin-top: auto;
+  margin-right: 0;
+  width: 100%;
+}
+
 .meta {
   color: var(--muted);
   font-size: 0.85rem;

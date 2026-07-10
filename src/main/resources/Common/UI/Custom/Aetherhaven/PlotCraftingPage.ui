@@ -43,6 +43,14 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 
+@RefreshIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 $C.@PageOverlay {
   LayoutMode: Middle;
 
@@ -117,7 +125,6 @@ $C.@PageOverlay {
             Icon: "../star.png";
             TooltipText: "Moderate";
             Id: "Moderation";
-            Visible: false;
           }
         }
 
@@ -135,6 +142,19 @@ $C.@PageOverlay {
           #Content {
             LayoutMode: Top;
             Padding: (Full: 14);
+
+            Group #MarketplaceRefreshRow {
+              LayoutMode: Right;
+              Anchor: (Height: 40, Bottom: 4);
+              Visible: false;
+
+              TextButton #MarketplaceRefreshButton {
+                Style: @RefreshIconStyle;
+                Anchor: (Width: 40, Height: 40);
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Text: " ";
+              }
+            }
 
             Group #BuildingListScroll {
               LayoutMode: TopScrolling;

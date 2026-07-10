@@ -37,3 +37,7 @@ aetherhaven.ui.plotCrafting.moderationPreviewPlaceholder = Load preview to inspe
 aetherhaven.ui.plotCrafting.moderationApproved = Approved {name} for the community catalog.
 aetherhaven.ui.plotCrafting.moderationDenied = Denied {name}.
 aetherhaven.ui.plotCrafting.moderationFailed = Moderation action failed.
+aetherhaven.ui.plotCrafting.refreshMarketplaceTooltip = Refresh list
+aetherhaven.ui.plotCrafting.refreshMarketplaceDone = List updated.
+aetherhaven.ui.plotCrafting.refreshMarketplaceFailed = Refresh failed.
+aetherhaven.ui.plotCrafting.notModerator = You are not a marketplace moderator. Your in-game UUID is {uuid} — add it to ADMIN_HYTALE_UUIDS on Railway.
