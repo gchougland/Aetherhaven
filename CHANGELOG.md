@@ -4,12 +4,7 @@
 
 ### Added
 
-- **Community marketplace Railway deployment** — API and website run on a single port for Railway; see `docs/RailwayDeployment.md`.
-- **Community submissions without per-server API keys** — In-game uploads work out of the box; backend uses rate limits and admin moderation instead of a distributable mod secret.
-- **Community marketplace enabled by default** — Plot crafting Community tab and plot creator submit checkbox are on by default; submit option appears on Building settings.
-- **`/ah community submit`** — Upload an already saved local custom building to the marketplace for review.
-- **Community plot token icons** — Crafted tokens from downloaded community buildings use the correct thumbnail.
-- **Admin marketplace delete** — Remove published buildings from the catalog on aetherhaven.net.
+- **Community marketplace** — Browse and download player-made plot buildings from the **Community** tab on the plot crafting bench. Share your own builds by enabling **Submit to community** when saving in the plot creator, or with `/ah community submit`. Approved buildings appear in-game for everyone; visit [aetherhaven.net](https://aetherhaven.net) to browse the catalog, track your submissions, or remove a build you published.
 
 ### Fixed
 
