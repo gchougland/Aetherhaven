@@ -5,31 +5,32 @@
 :root {
   color-scheme: dark;
 
-  /* Backgrounds */
-  --bg-deep: #0a0a0c;
-  --bg: #101014;
-  --bg-elevated: #141418;
+  /* Backgrounds — warm stone, not blue-grey */
+  --bg-deep: #0c0808;
+  --bg: #120d0d;
+  --bg-elevated: #1a1212;
 
-  /* Stone panels */
-  --panel: #1e1e24;
-  --panel-light: #2a2a32;
+  /* Stone panels — warm brown-grey castle stone */
+  --panel: #221a18;
+  --panel-light: #2e2420;
 
   /* Text */
-  --text: #e8e4dc;
-  --text-muted: #9a9590;
+  --text: #f0e8dc;
+  --text-muted: #b0a090;
 
   /* Gold */
-  --gold: #c8a060;
-  --gold-bright: #e8c878;
-  --gold-dim: #9a7a40;
+  --gold: #d4af37;
+  --gold-bright: #f0d070;
+  --gold-dim: #a08030;
 
   /* Burgundy */
-  --burgundy: #7a1a3a;
-  --burgundy-bright: #a1045a;
+  --burgundy: #6b1530;
+  --burgundy-bright: #b82050;
+  --burgundy-deep: #3d0a1a;
 
   /* Borders & accents */
-  --border: #3d3a36;
-  --border-gold: rgba(200, 160, 96, 0.35);
+  --border: #4a3830;
+  --border-gold: rgba(212, 175, 55, 0.45);
 
   /* Semantic */
   --accent: var(--gold);
@@ -37,7 +38,7 @@
   --danger: #8b2a2a;
   --danger-bright: #b83c3c;
   --danger-text: #f5d0d0;
-  --secondary-btn: #3a3835;
+  --secondary-btn: #3d3028;
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -80,9 +81,10 @@ body {
   line-height: 1.6;
   color: var(--text);
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(122, 26, 58, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(200, 160, 96, 0.06), transparent),
-    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 40%, var(--bg-elevated) 100%);
+    radial-gradient(ellipse 90% 60% at 50% -15%, rgba(107, 21, 48, 0.22), transparent),
+    radial-gradient(ellipse 70% 50% at 10% 80%, rgba(61, 10, 26, 0.18), transparent),
+    radial-gradient(ellipse 50% 40% at 90% 60%, rgba(212, 175, 55, 0.08), transparent),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 35%, var(--bg-elevated) 100%);
 }
 
 h1,
@@ -153,12 +155,17 @@ main.wrap > section + section {
 
 .site-header {
   background:
-    linear-gradient(180deg, var(--panel-light) 0%, var(--panel) 100%);
-  border-bottom: 2px solid var(--gold-dim);
+    linear-gradient(
+      180deg,
+      rgba(61, 10, 26, 0.55) 0%,
+      var(--panel-light) 30%,
+      var(--panel) 100%
+    );
+  border-bottom: 2px solid var(--gold);
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.4),
-    inset 0 -1px 0 rgba(232, 200, 120, 0.15),
-    0 0 40px rgba(122, 26, 58, 0.08);
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(240, 208, 112, 0.12),
+    0 0 60px rgba(107, 21, 48, 0.15);
   position: relative;
 }
 
@@ -181,15 +188,15 @@ main.wrap > section + section {
 }
 
 .site-header .wrap {
-  padding-top: var(--space-lg);
-  padding-bottom: var(--space-lg);
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-md);
 }
 
 .site-header-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--space-sm);
   text-align: center;
 }
 
@@ -212,8 +219,11 @@ main.wrap > section + section {
 
 .site-logo {
   display: block;
-  max-width: min(520px, 90vw);
+  width: auto;
   height: auto;
+  max-height: 88px;
+  max-width: min(380px, 85vw);
+  object-fit: contain;
 }
 
 .page-subtitle {
@@ -266,8 +276,8 @@ main.wrap > section + section {
 .site-nav a[aria-current="page"] {
   color: var(--gold-bright);
   border-color: var(--gold);
-  background: linear-gradient(180deg, rgba(200, 160, 96, 0.15), rgba(200, 160, 96, 0.05));
-  box-shadow: inset 0 1px 0 rgba(232, 200, 120, 0.2);
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.2), rgba(107, 21, 48, 0.15));
+  box-shadow: inset 0 1px 0 rgba(240, 208, 112, 0.25);
 }
 
 /* ==========================================================================
@@ -315,7 +325,7 @@ main.wrap > section + section {
   padding: var(--space-lg);
   box-shadow:
     var(--shadow-card),
-    inset 0 1px 0 rgba(232, 200, 120, 0.06);
+    inset 0 1px 0 rgba(240, 208, 112, 0.08);
 }
 
 .building-card {
@@ -392,9 +402,9 @@ main.wrap > section + section {
   text-align: center;
   padding: var(--space-xl) var(--space-md);
   color: var(--text-muted);
-  border: 1px dashed var(--border);
+  border: 1px dashed var(--border-gold);
   border-radius: var(--radius);
-  background: rgba(30, 30, 36, 0.5);
+  background: rgba(34, 26, 24, 0.6);
 }
 
 .empty-state::before {
@@ -421,17 +431,17 @@ main.wrap > section + section {
    ========================================================================== */
 
 .status {
-  background: linear-gradient(135deg, rgba(42, 34, 24, 0.9), rgba(30, 30, 36, 0.9));
-  border: 1px solid var(--gold-dim);
+  background: linear-gradient(135deg, rgba(61, 10, 26, 0.5), rgba(34, 26, 24, 0.9));
+  border: 1px solid var(--gold);
   padding: var(--space-md) var(--space-lg);
   border-radius: var(--radius);
   margin-bottom: var(--space-md);
   color: var(--gold-bright);
-  box-shadow: inset 0 1px 0 rgba(232, 200, 120, 0.1);
+  box-shadow: inset 0 1px 0 rgba(240, 208, 112, 0.12);
 }
 
 .status--error {
-  background: linear-gradient(135deg, rgba(122, 26, 58, 0.25), rgba(30, 30, 36, 0.9));
+  background: linear-gradient(135deg, rgba(107, 21, 48, 0.45), rgba(34, 26, 24, 0.9));
   border-color: var(--burgundy-bright);
   color: var(--danger-text);
 }
@@ -574,7 +584,8 @@ button.danger:hover {
 
 @media (max-width: 600px) {
   .site-logo {
-    max-width: 95vw;
+    max-height: 64px;
+    max-width: 92vw;
   }
 
   .site-nav a {
