@@ -15,6 +15,7 @@
 - **Duplicate elders after revival** — Gaia and dawn revival block spawning a replacement when the saved villager uuid may still exist in an unloaded chunk. Extra loaded elder copies are removed on world load when the charter area is in memory.
 - **Assembled plot chests and benches** — Prefab assembly no longer places chests and workbenches via force `setBlock` on non-ticking chunks (which left container block entities unusable until break-and-replace). Interactive block entities are deferred during incremental assembly and placed once at build completion on ticking chunks with explicit entity attachment.
 - **Prefab fluids on assembled buildings** — Fluids from the prefab (e.g. Blacksmith Shop lava) are applied in the final construction pass instead of being skipped during incremental assembly.
+- **Plot creator prefab fluids** — Saving a custom building with the plot creator staff now keeps water/lava and other fluids in the exported prefab (vanilla `BlockSelection.relativize` was dropping them when the plot-sign anchor was not at the origin).
 - **Passive assembly crash** — Placing production-storage blocks during passive plot assembly no longer calls `World.getBlockType()` (which promoted chunks to ticking mid–entity-store tick and crashed with “Store is currently processing”).
 - **Quest board missing block** — The quest board hitbox now ships in the Quests subplugin pack with its block item, so the block registers reliably when other mod asset packs change load order.
 

@@ -43,8 +43,9 @@ import org.joml.Vector3i;
 /**
  * Exports the plot creator bounds using the same pipeline as the built-in builder tools
  * ({@link BuilderToolsPlugin} {@code saveFromSelection} / {@link com.hypixel.hytale.builtin.buildertools.prefabeditor.saving.PrefabSaver}):
- * world chunk copy via {@link BlockSelection#copyFromAtWorld}, optional entities, {@link PrefabSaveContributor}s, then
- * {@link BlockSelection#relativize()} and {@link PrefabStore#savePrefab}.
+ * world chunk copy via {@link BlockSelection#copyFromAtWorld}, explicit fluid layer copy, optional entities,
+ * {@link PrefabSaveContributor}s, then {@link BlockSelection#relativize()} (with a fluid re-apply workaround) and
+ * {@link PrefabStore#savePrefab}.
  */
 public final class PlotCreatorPrefabExporter {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -118,10 +119,12 @@ public final class PlotCreatorPrefabExporter {
                     }
 
                     int fluid = 0;
+                    byte fluidLevel = 0;
                     if (sectionRef != null && sectionRef.isValid()) {
                         FluidSection fluidSection = chunkStore.getComponent(sectionRef, FluidSection.getComponentType());
                         if (fluidSection != null) {
                             fluid = fluidSection.getFluidId(x, y, z);
+                            fluidLevel = fluidSection.getFluidLevel(x, y, z);
                         }
                     }
 
@@ -130,6 +133,12 @@ public final class PlotCreatorPrefabExporter {
                             selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
                         } else {
                             selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                        }
+                        // Match BuilderTools PrefabSaver: always write the fluid layer explicitly so fluid-only
+                        // cells and editor-air cells keep their fluids (copyFromAtWorld alone is not enough for
+                        // the editor-air branch).
+                        if (fluid != 0 || includeEmpty) {
+                            selection.addFluidAtWorldPos(x, y, z, fluid, fluidLevel);
                         }
                         blockCount++;
                     }
@@ -161,7 +170,16 @@ public final class PlotCreatorPrefabExporter {
 
         try {
             Files.createDirectories(outputFile.getParent());
+            // BlockSelection.relativize() copies blocks/entities but drops fluids when the anchor is not (0,0,0).
+            // Plot creator anchors at the plot sign, so re-apply fluids with the same origin offset.
+            int originX = selection.getAnchorX();
+            int originY = selection.getAnchorY();
+            int originZ = selection.getAnchorZ();
             BlockSelection prefab = selection.relativize();
+            if (originX != 0 || originY != 0 || originZ != 0) {
+                selection.forEachFluid((fx, fy, fz, fluidId, level) ->
+                    prefab.addFluidAtLocalPos(fx - originX, fy - originY, fz - originZ, fluidId, level));
+            }
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (plugin != null) {
                 PlotCreatorIconExporter.tryExportIcon(prefab, draft.getConstructionId(), plugin.getDataDirectory());

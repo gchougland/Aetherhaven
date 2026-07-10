@@ -73,6 +73,32 @@ function formatDownloadCount(count) {
   return `${n} downloads`;
 }
 
+function descriptionToggleHtml(entry) {
+  const desc = String(entry.description || "").trim();
+  if (!desc) {
+    return "";
+  }
+  return `
+    <button type="button" class="description-toggle" aria-expanded="false" onclick="toggleBuildingDescription(this)">
+      About this build
+    </button>
+    <p class="building-description" hidden>${escapeHtml(desc)}</p>`;
+}
+
+function toggleBuildingDescription(buttonEl) {
+  if (!buttonEl) {
+    return;
+  }
+  const desc = buttonEl.nextElementSibling;
+  if (!desc || !desc.classList.contains("building-description")) {
+    return;
+  }
+  const open = buttonEl.getAttribute("aria-expanded") === "true";
+  buttonEl.setAttribute("aria-expanded", open ? "false" : "true");
+  desc.hidden = open;
+  buttonEl.textContent = open ? "About this build" : "Hide description";
+}
+
 function renderBuildingCard(entry, options = {}) {
   const { canVote = false, adminDelete = false, showId = false } = options;
   const deleteBtn = adminDelete
@@ -94,6 +120,7 @@ function renderBuildingCard(entry, options = {}) {
       ${idMeta}
       <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
       <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
+      ${descriptionToggleHtml(entry)}
       ${deleteBtn}
     </article>`;
 }
@@ -308,16 +335,29 @@ async function loadAdminQueue() {
       return;
     }
     el.innerHTML = items
-      .map(
-        (s) => `
-    <div class="queue-item">
-      <strong>${escapeHtml(s.displayName)}</strong>
-      <p class="meta">${escapeHtml(s.submissionId)} by ${escapeHtml(s.creatorName)}</p>
-      <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
-      <button onclick="approveSubmission('${escapeAttr(s.submissionId)}', '${escapeAttr(s.proposedId)}')">Approve</button>
-      <button class="secondary" onclick="rejectSubmission('${escapeAttr(s.submissionId)}')">Reject</button>
-    </div>`
-      )
+      .map((s) => {
+        const icon = s.iconUrl
+          ? `<img class="submission-icon" src="${escapeAttr(s.iconUrl)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
+          : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
+        const description = String(s.description || "").trim();
+        const descriptionHtml = description
+          ? `<p class="building-description building-description--pending">${escapeHtml(description)}</p>`
+          : `<p class="meta">No description provided.</p>`;
+        return `
+    <div class="queue-item submission-item">
+      ${icon}
+      <div class="submission-body">
+        <strong>${escapeHtml(s.displayName)}</strong>
+        <p class="meta">${escapeHtml(s.submissionId)} by ${escapeHtml(s.creatorName)}</p>
+        <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
+        ${descriptionHtml}
+        <div class="queue-actions">
+          <button onclick="approveSubmission('${escapeAttr(s.submissionId)}', '${escapeAttr(s.proposedId)}')">Approve</button>
+          <button class="secondary" onclick="rejectSubmission('${escapeAttr(s.submissionId)}')">Reject</button>
+        </div>
+      </div>
+    </div>`;
+      })
       .join("");
   } catch {
     el.innerHTML = emptyStateHtml("Could not load pending submissions.");

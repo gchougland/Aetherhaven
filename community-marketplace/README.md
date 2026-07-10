@@ -41,7 +41,7 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v1/health` | Health check |
-| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`, `downloadCount`) |
+| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`, `downloadCount`, `description` when set) |
 | `GET /api/catalog` | Website catalog (same as manifest; includes `userHasUpvoted` when signed in) |
 | `GET /api/v1/buildings/:id/prefab.json` | Prefab download |
 | `GET /api/v1/buildings/:id/building.json` | Building definition |

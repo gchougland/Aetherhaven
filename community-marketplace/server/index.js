@@ -148,6 +148,30 @@ function pendingSubmissionFile(submissionId, fileName) {
   return file;
 }
 
+/** Enrich pending meta for website/admin review (icon URL + description). */
+function enrichPendingSubmission(meta) {
+  if (!meta || !meta.submissionId) {
+    return meta;
+  }
+  const submissionId = meta.submissionId;
+  const buildingPath = path.join(storage.submissionDir(submissionId, "pending"), "building.json");
+  const description =
+    normalizeDescription(meta.description) || readBuildingDescription(buildingPath);
+  const iconFile = pendingSubmissionFile(submissionId, "icon.png");
+  const enriched = { ...meta };
+  if (description) {
+    enriched.description = description;
+  }
+  if (iconFile) {
+    enriched.iconUrl = `/api/admin/submissions/${encodeURIComponent(submissionId)}/icon.png`;
+  }
+  return enriched;
+}
+
+function listEnrichedPending() {
+  return storage.listPending().map(enrichPendingSubmission);
+}
+
 const submissionRateLimit = createSubmissionRateLimit({
   maxPerPlayer: Number(process.env.SUBMISSION_MAX_PER_PLAYER_PER_DAY || 10),
   maxPerIp: Number(process.env.SUBMISSION_MAX_PER_IP_PER_HOUR || 30),
@@ -163,8 +187,24 @@ const downloadRateLimit = createDownloadRateLimit({
   maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 60),
 });
 
+function readBuildingDescription(buildingPath) {
+  try {
+    if (!fs.existsSync(buildingPath)) {
+      return "";
+    }
+    const building = JSON.parse(fs.readFileSync(buildingPath, "utf8"));
+    return typeof building.description === "string" ? building.description.trim() : "";
+  } catch {
+    return "";
+  }
+}
+
+function normalizeDescription(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 function buildManifestEntry(id, meta, prefabBytes) {
-  return {
+  const entry = {
     id,
     displayName: meta.displayName,
     creatorUuid: meta.creatorUuid,
@@ -175,6 +215,11 @@ function buildManifestEntry(id, meta, prefabBytes) {
     version: meta.version || "1",
     approvedAt: meta.approvedAt,
   };
+  const description = normalizeDescription(meta.description);
+  if (description) {
+    entry.description = description;
+  }
+  return entry;
 }
 
 function approveSubmission(submissionId, requestedId) {
@@ -206,6 +251,7 @@ function approveSubmission(submissionId, requestedId) {
   const approvedMeta = {
     ...meta,
     id,
+    description: normalizeDescription(building.description) || normalizeDescription(meta.description),
     status: "approved",
     approvedAt: new Date().toISOString(),
     version: meta.version || "1",
@@ -420,6 +466,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       prefabBytes = fs.statSync(paths.prefab).size;
     }
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
+    const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
     const entry = {
       ...e,
       prefabBytes,
@@ -430,6 +477,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
+    if (description) {
+      entry.description = description;
+    } else {
+      delete entry.description;
+    }
     if (userVotes) {
       entry.userHasUpvoted = userVotes.has(e.id);
     }
@@ -578,6 +630,7 @@ app.post(
         submissionId,
         proposedId: id,
         displayName: building.displayName,
+        description: normalizeDescription(building.description),
         creatorUuid,
         creatorName,
         styleId: building.styleId || "misc",
@@ -737,7 +790,16 @@ app.post("/api/my-buildings/:buildingId/remove", requireWebUser, (req, res) => {
 });
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {
-  res.json({ submissions: storage.listPending() });
+  res.json({ submissions: listEnrichedPending() });
+});
+
+app.get("/api/admin/submissions/:submissionId/icon.png", requireWebUser, requireAdmin, (req, res) => {
+  const file = pendingSubmissionFile(req.params.submissionId, "icon.png");
+  if (!file) {
+    res.status(404).end();
+    return;
+  }
+  res.type("image/png").send(fs.readFileSync(file));
 });
 
 app.post("/api/admin/approve/:submissionId", requireWebUser, requireAdmin, (req, res) => {
