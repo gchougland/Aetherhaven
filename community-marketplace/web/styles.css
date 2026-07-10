@@ -155,11 +155,13 @@ main.wrap > section + section {
    ========================================================================== */
 
 .site-header {
+  position: sticky;
+  top: 0;
   background:
     linear-gradient(
       180deg,
-      rgba(61, 10, 26, 0.55) 0%,
-      var(--panel-light) 30%,
+      #1a0c12 0%,
+      var(--panel-light) 35%,
       var(--panel) 100%
     );
   border-bottom: 2px solid var(--gold);
@@ -167,7 +169,6 @@ main.wrap > section + section {
     0 4px 24px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(240, 208, 112, 0.12),
     0 0 60px rgba(107, 21, 48, 0.15);
-  position: relative;
   z-index: 40;
 }
 

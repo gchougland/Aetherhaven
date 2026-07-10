@@ -92,10 +92,46 @@ public final class AetherhavenEmbeddedSubpluginPacks {
                     LOGGER.atWarning().log("Failed to register embedded asset pack %s from %s", packId, packRoot);
                     continue;
                 }
+                markImmutableIfNotDefaultFilesystem(assetModule, packId, packRoot);
                 LOGGER.atInfo().log("Registered embedded asset pack %s from %s", packId, packRoot);
             } catch (Exception e) {
                 LOGGER.atWarning().withCause(e).log("Failed to prepare embedded asset pack %s", pack.folderName());
             }
+        }
+    }
+
+    /**
+     * Packs registered as directories inside the parent JAR are ZipPaths. {@link AssetModule#registerPack} only
+     * marks {@code .jar}/{@code .zip} file paths immutable, so AssetMonitor would try to watch ZipPaths with the
+     * default filesystem WatchService and throw {@link java.nio.file.ProviderMismatchException}. Mark those packs
+     * immutable (same as real jar packs) so monitoring is skipped. Exploded/dev packs on the default FS stay mutable.
+     */
+    private static void markImmutableIfNotDefaultFilesystem(
+        @Nonnull AssetModule assetModule,
+        @Nonnull String packId,
+        @Nonnull Path packRoot
+    ) {
+        if (packRoot.getFileSystem().equals(FileSystems.getDefault())) {
+            return;
+        }
+        AssetPack registered = assetModule.getAssetPack(packId);
+        if (registered == null || registered.isImmutable()) {
+            return;
+        }
+        AssetPack immutable = new AssetPack(
+            registered.getPackLocation(),
+            registered.getName(),
+            registered.getRoot(),
+            registered.getFileSystem(),
+            true,
+            registered.getManifest(),
+            registered.getSource()
+        );
+        List<AssetPack> packs = assetModule.getAssetPacks();
+        int index = packs.indexOf(registered);
+        if (index >= 0) {
+            packs.set(index, immutable);
+            LOGGER.atInfo().log("Marked embedded asset pack %s immutable (non-default filesystem root)", packId);
         }
     }
 
