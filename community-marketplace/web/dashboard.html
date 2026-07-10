@@ -4,14 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Creator Dashboard — Aetherhaven Community</title>
+    <link rel="icon" href="/assets/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
-        <h1>Creator Dashboard</h1>
-        <nav>
+      <div class="wrap site-header-inner">
+        <a href="/" class="site-brand">
+          <img
+            src="/assets/logo.png"
+            alt="Aetherhaven: Foundations of Industry"
+            class="site-logo"
+          />
+        </a>
+        <p class="page-subtitle">Creator Dashboard</p>
+        <nav class="site-nav" aria-label="Main">
           <a href="/">Browse</a>
+          <a href="/dashboard.html" aria-current="page">Dashboard</a>
+          <a href="/admin.html">Admin</a>
           <a href="/auth/logout">Sign out</a>
         </nav>
       </div>
@@ -34,7 +50,7 @@
         <div id="mySubmissions" class="submission-list"></div>
       </section>
     </main>
-    <script src="/app.js"></script>
+    <script src="/app.js?v=2"></script>
     <script>
       loadDashboard();
     </script>

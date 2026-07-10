@@ -247,29 +247,59 @@ function sessionProfileUuid(req) {
     .toLowerCase();
 }
 
+function sessionProfileUsername(req) {
+  return String(req.session?.user?.profile?.username || req.session?.user?.sub || "")
+    .trim()
+    .toLowerCase();
+}
+
+function sessionWebUser(req) {
+  return {
+    profileUuid: sessionProfileUuid(req),
+    profileUsername: sessionProfileUsername(req),
+  };
+}
+
 function isOwnedByProfile(metaOrEntry, profileUuid) {
   if (!profileUuid) {
     return false;
   }
-  return String(metaOrEntry?.creatorUuid || "")
-    .trim()
-    .toLowerCase() === profileUuid;
+  return (
+    String(metaOrEntry?.creatorUuid || "")
+      .trim()
+      .toLowerCase() === profileUuid
+  );
 }
 
-function listSubmissionsForCreator(creatorUuid) {
+/** Matches OAuth profile UUID or Hytale username (in-game submissions use the game UUID). */
+function isOwnedByWebUser(metaOrEntry, webUser) {
+  if (isOwnedByProfile(metaOrEntry, webUser.profileUuid)) {
+    return true;
+  }
+  const creatorName = String(metaOrEntry?.creatorName || "")
+    .trim()
+    .toLowerCase();
+  return (
+    webUser.profileUsername.length > 0 &&
+    creatorName.length > 0 &&
+    creatorName === webUser.profileUsername
+  );
+}
+
+function listSubmissionsForCreator(webUser) {
   const pending = storage
     .listPending()
-    .filter((s) => isOwnedByProfile(s, creatorUuid))
+    .filter((s) => isOwnedByWebUser(s, webUser))
     .map((s) => ({ kind: "pending", ...s }));
 
   const rejected = storage
     .listRejected()
-    .filter((s) => isOwnedByProfile(s, creatorUuid))
+    .filter((s) => isOwnedByWebUser(s, webUser))
     .map((s) => ({ kind: "rejected", ...s }));
 
   const manifest = storage.readManifest();
   const approved = (manifest.entries || [])
-    .filter((e) => isOwnedByProfile(e, creatorUuid))
+    .filter((e) => isOwnedByWebUser(e, webUser))
     .map((e) => ({
       kind: "approved",
       id: e.id,
@@ -278,6 +308,7 @@ function listSubmissionsForCreator(creatorUuid) {
       approvedAt: e.approvedAt,
       version: e.version || "1",
       prefabBytes: e.prefabBytes || 0,
+      creatorUuid: e.creatorUuid,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
     }));
 
@@ -288,12 +319,12 @@ function listSubmissionsForCreator(creatorUuid) {
   });
 }
 
-function withdrawPendingSubmission(submissionId, profileUuid) {
+function withdrawPendingSubmission(submissionId, webUser) {
   const meta = storage.loadSubmissionMeta(submissionId, "pending");
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByProfile(meta, profileUuid)) {
+  if (!isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
   const dir = storage.submissionDir(submissionId, "pending");
@@ -303,12 +334,12 @@ function withdrawPendingSubmission(submissionId, profileUuid) {
   return { status: 200, body: { submissionId, status: "withdrawn" } };
 }
 
-function dismissRejectedSubmission(submissionId, profileUuid) {
+function dismissRejectedSubmission(submissionId, webUser) {
   const meta = storage.loadSubmissionMeta(submissionId, "rejected");
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByProfile(meta, profileUuid)) {
+  if (!isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
   const dir = storage.submissionDir(submissionId, "rejected");
@@ -318,7 +349,7 @@ function dismissRejectedSubmission(submissionId, profileUuid) {
   return { status: 200, body: { submissionId, status: "dismissed" } };
 }
 
-function removeOwnApprovedBuilding(buildingId, profileUuid) {
+function removeOwnApprovedBuilding(buildingId, webUser) {
   const id = normalizeCommunityId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -328,7 +359,7 @@ function removeOwnApprovedBuilding(buildingId, profileUuid) {
   if (!entry) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByProfile(entry, profileUuid)) {
+  if (!isOwnedByWebUser(entry, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
   return deleteApprovedBuilding(id);
@@ -599,26 +630,26 @@ app.get("/api/me", (req, res) => {
 });
 
 app.get("/api/my-submissions", requireWebUser, (req, res) => {
-  const profileUuid = sessionProfileUuid(req);
-  if (!profileUuid) {
-    res.status(400).json({ error: "profile_uuid_missing" });
+  const webUser = sessionWebUser(req);
+  if (!webUser.profileUuid && !webUser.profileUsername) {
+    res.status(400).json({ error: "profile_missing" });
     return;
   }
-  res.json({ submissions: listSubmissionsForCreator(profileUuid) });
+  res.json({ submissions: listSubmissionsForCreator(webUser) });
 });
 
 app.post("/api/my-submissions/:submissionId/withdraw", requireWebUser, (req, res) => {
-  const result = withdrawPendingSubmission(req.params.submissionId, sessionProfileUuid(req));
+  const result = withdrawPendingSubmission(req.params.submissionId, sessionWebUser(req));
   res.status(result.status).json(result.body);
 });
 
 app.post("/api/my-submissions/:submissionId/dismiss", requireWebUser, (req, res) => {
-  const result = dismissRejectedSubmission(req.params.submissionId, sessionProfileUuid(req));
+  const result = dismissRejectedSubmission(req.params.submissionId, sessionWebUser(req));
   res.status(result.status).json(result.body);
 });
 
 app.post("/api/my-buildings/:buildingId/remove", requireWebUser, (req, res) => {
-  const result = removeOwnApprovedBuilding(req.params.buildingId, sessionProfileUuid(req));
+  const result = removeOwnApprovedBuilding(req.params.buildingId, sessionWebUser(req));
   res.status(result.status).json(result.body);
 });
 

@@ -4,15 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aetherhaven Community Buildings</title>
+    <link rel="icon" href="/assets/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <header class="site-header">
-      <div class="wrap">
-        <h1>Aetherhaven Community Buildings</h1>
+      <div class="wrap site-header-inner">
+        <a href="/" class="site-brand">
+          <img
+            src="/assets/logo.png"
+            alt="Aetherhaven: Foundations of Industry"
+            class="site-logo"
+          />
+        </a>
         <p class="tagline">Free player-made plot buildings for the Aetherhaven mod.</p>
-        <nav>
-          <a href="/">Browse</a>
+        <nav class="site-nav" aria-label="Main">
+          <a href="/" aria-current="page">Browse</a>
           <a href="/dashboard.html">Dashboard</a>
           <a href="/admin.html">Admin</a>
           <a href="/auth/login" id="loginLink">Sign in with Hytale</a>
@@ -24,12 +37,15 @@
     <main class="wrap">
       <section id="status" class="status" hidden></section>
       <section>
-        <h2>Approved builds</h2>
+        <div class="section-title">
+          <h2>Approved builds</h2>
+          <div class="ornament-divider" aria-hidden="true"></div>
+        </div>
         <div id="catalog" class="catalog-grid"></div>
       </section>
     </main>
 
-    <script src="/app.js"></script>
+    <script src="/app.js?v=2"></script>
     <script>
       loadCatalog();
       refreshAuthNav();

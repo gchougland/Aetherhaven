@@ -58,7 +58,7 @@ public final class CommunitySubmissionService {
 
             byte[] body = buildMultipart(buildingBytes, prefabBytes, iconBytes);
             Map<String, String> headers = new LinkedHashMap<>();
-            headers.put("X-Player-Uuid", playerUuid.toString());
+            headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(java.util.Locale.ROOT));
             headers.put("X-Player-Name", playerName);
 
             String url = cfg.getApiBaseUrl() + "/api/v1/submissions";

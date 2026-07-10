@@ -1,73 +1,374 @@
+/* ==========================================================================
+   Aetherhaven Community Marketplace — Design Tokens
+   ========================================================================== */
+
 :root {
   color-scheme: dark;
-  --bg: #0f141c;
-  --panel: #1a2330;
-  --text: #e8edf4;
-  --muted: #8fa0b5;
-  --accent: #c8a060;
-  --border: #2a3545;
+
+  /* Backgrounds */
+  --bg-deep: #0a0a0c;
+  --bg: #101014;
+  --bg-elevated: #141418;
+
+  /* Stone panels */
+  --panel: #1e1e24;
+  --panel-light: #2a2a32;
+
+  /* Text */
+  --text: #e8e4dc;
+  --text-muted: #9a9590;
+
+  /* Gold */
+  --gold: #c8a060;
+  --gold-bright: #e8c878;
+  --gold-dim: #9a7a40;
+
+  /* Burgundy */
+  --burgundy: #7a1a3a;
+  --burgundy-bright: #a1045a;
+
+  /* Borders & accents */
+  --border: #3d3a36;
+  --border-gold: rgba(200, 160, 96, 0.35);
+
+  /* Semantic */
+  --accent: var(--gold);
+  --muted: var(--text-muted);
+  --danger: #8b2a2a;
+  --danger-bright: #b83c3c;
+  --danger-text: #f5d0d0;
+  --secondary-btn: #3a3835;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Typography */
+  --font-display: "Cinzel", "Times New Roman", serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+
+  /* Effects */
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--border-gold);
+  --radius: 8px;
+  --radius-sm: 4px;
+  --transition: 0.2s ease;
 }
 
-* {
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, sans-serif;
-  background: var(--bg);
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
   color: var(--text);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(122, 26, 58, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(200, 160, 96, 0.06), transparent),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg) 40%, var(--bg-elevated) 100%);
 }
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--gold-bright);
+}
+
+h2 {
+  font-size: 1.35rem;
+  margin: 0 0 var(--space-md);
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+a {
+  color: var(--gold);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--gold-bright);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+code {
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
 
 .wrap {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 1.25rem;
+  padding: var(--space-lg) var(--space-md);
 }
+
+main.wrap {
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+
+main.wrap > section + section {
+  margin-top: var(--space-xl);
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
 
 .site-header {
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, var(--panel-light) 0%, var(--panel) 100%);
+  border-bottom: 2px solid var(--gold-dim);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(232, 200, 120, 0.15),
+    0 0 40px rgba(122, 26, 58, 0.08);
+  position: relative;
 }
 
-.site-header h1 {
-  margin: 0 0 0.25rem;
+.site-header::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--burgundy-bright) 20%,
+    var(--gold-bright) 50%,
+    var(--burgundy-bright) 80%,
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.site-header .wrap {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+}
+
+.site-header-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.site-brand {
+  display: block;
+  line-height: 0;
+  transition: filter var(--transition), transform var(--transition);
+}
+
+.site-brand:hover {
+  filter: brightness(1.08);
+  transform: scale(1.01);
+}
+
+.site-brand:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.site-logo {
+  display: block;
+  max-width: min(520px, 90vw);
+  height: auto;
+}
+
+.page-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+  margin: calc(-1 * var(--space-sm)) 0 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .tagline {
-  color: var(--muted);
-  margin: 0 0 1rem;
+  color: var(--text-muted);
+  margin: calc(-1 * var(--space-sm)) 0 0;
+  font-size: 1.05rem;
+  max-width: 36rem;
 }
 
-nav a {
-  color: var(--accent);
-  margin-right: 1rem;
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-sm) var(--space-md);
+  padding-top: var(--space-xs);
 }
 
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
+.site-nav a {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition),
+    box-shadow var(--transition);
 }
+
+.site-nav a:hover {
+  color: var(--gold-bright);
+  border-color: var(--border-gold);
+  background: rgba(200, 160, 96, 0.08);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  background: linear-gradient(180deg, rgba(200, 160, 96, 0.15), rgba(200, 160, 96, 0.05));
+  box-shadow: inset 0 1px 0 rgba(232, 200, 120, 0.2);
+}
+
+/* ==========================================================================
+   Section titles & ornaments
+   ========================================================================== */
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.section-title h2 {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.ornament-divider {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold-dim), transparent);
+  position: relative;
+}
+
+.ornament-divider::after {
+  content: "◆";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  font-size: 0.55rem;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
 
 .card {
-  background: var(--panel);
+  background: linear-gradient(165deg, var(--panel-light) 0%, var(--panel) 100%);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 rgba(232, 200, 120, 0.06);
 }
 
-.building-card img {
+.building-card {
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.building-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold-dim);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.building-icon-wrap {
   width: 64px;
   height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.building-icon-wrap--placeholder {
+  border-color: var(--border-gold);
+  background: linear-gradient(135deg, var(--bg-deep), var(--panel));
+}
+
+.building-icon-wrap--placeholder::before {
+  content: "⛏";
+  font-size: 1.5rem;
+  opacity: 0.4;
+}
+
+.building-card img,
+.building-icon {
+  width: 100%;
+  height: 100%;
   image-rendering: pixelated;
-  background: #0a0d12;
-  border-radius: 4px;
+  display: block;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .building-card h3 {
-  margin: 0.5rem 0 0.25rem;
+  margin: var(--space-sm) 0 var(--space-xs);
   font-size: 1rem;
+  color: var(--text);
 }
 
 .admin-building-card {
@@ -82,46 +383,142 @@ nav a {
 }
 
 .meta {
-  color: var(--muted);
+  color: var(--text-muted);
   font-size: 0.85rem;
+  margin: 0.15rem 0;
 }
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: rgba(30, 30, 36, 0.5);
+}
+
+.empty-state::before {
+  content: "—";
+  display: block;
+  font-size: 1.5rem;
+  color: var(--gold-dim);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 0.5em;
+}
+
+/* ==========================================================================
+   Catalog grid
+   ========================================================================== */
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-md);
+}
+
+/* ==========================================================================
+   Status banners
+   ========================================================================== */
 
 .status {
-  background: #2a2218;
-  border: 1px solid var(--accent);
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(42, 34, 24, 0.9), rgba(30, 30, 36, 0.9));
+  border: 1px solid var(--gold-dim);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-md);
+  color: var(--gold-bright);
+  box-shadow: inset 0 1px 0 rgba(232, 200, 120, 0.1);
 }
 
+.status--error {
+  background: linear-gradient(135deg, rgba(122, 26, 58, 0.25), rgba(30, 30, 36, 0.9));
+  border-color: var(--burgundy-bright);
+  color: var(--danger-text);
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
 button {
-  background: var(--accent);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dim) 100%);
   color: #1a1208;
-  border: none;
-  border-radius: 4px;
-  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.9rem;
   cursor: pointer;
-  margin-right: 0.5rem;
+  margin-right: var(--space-sm);
+  margin-top: var(--space-xs);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition:
+    filter var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+button:active {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
 }
 
 button.secondary {
-  background: #3a4658;
+  background: linear-gradient(180deg, var(--secondary-btn), #2a2825);
   color: var(--text);
+  border-color: var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+button.secondary:hover {
+  border-color: var(--border-gold);
+  background: linear-gradient(180deg, #454240, var(--secondary-btn));
 }
 
 button.danger {
-  background: #6b2a2a;
-  color: #f5d0d0;
+  background: linear-gradient(180deg, var(--danger-bright), var(--danger));
+  color: var(--danger-text);
+  border-color: #5a1a1a;
 }
+
+button.danger:hover {
+  filter: brightness(1.12);
+}
+
+/* ==========================================================================
+   Lists — submissions & admin queue
+   ========================================================================== */
 
 .queue-item {
   border-top: 1px solid var(--border);
-  padding: 0.75rem 0;
+  padding: var(--space-md) 0;
+}
+
+.queue-item:first-child {
+  border-top: none;
+  padding-top: 0;
 }
 
 .submission-item {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-md);
   align-items: flex-start;
 }
 
@@ -130,8 +527,19 @@ button.danger {
   height: 48px;
   flex-shrink: 0;
   image-rendering: pixelated;
-  background: #0a0d12;
-  border-radius: 4px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.submission-icon--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: var(--border-gold);
+  background: linear-gradient(135deg, var(--bg-deep), var(--panel));
+  font-size: 1.2rem;
+  opacity: 0.5;
 }
 
 .submission-body {
@@ -140,5 +548,56 @@ button.danger {
 }
 
 .submission-status {
-  color: var(--accent);
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.submission-status--published {
+  color: #6ec96e;
+}
+
+.submission-status--rejected {
+  color: var(--danger-bright);
+}
+
+/* ==========================================================================
+   Profile card
+   ========================================================================== */
+
+#profile h2 {
+  margin-top: 0;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  .site-logo {
+    max-width: 95vw;
+  }
+
+  .site-nav a {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .catalog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-sm);
+  }
+
+  .card {
+    padding: var(--space-md);
+  }
+
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .ornament-divider {
+    width: 100%;
+  }
 }

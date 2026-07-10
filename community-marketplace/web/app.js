@@ -15,22 +15,51 @@ function formatBytes(n) {
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+async function fetchCatalog() {
+  const res = await fetch("/api/catalog", {
+    headers: { Accept: "application/json" },
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    throw new Error("catalog_fetch_failed");
+  }
+  return res.json();
+}
+
+function buildingIconHtml(iconUrl, sizeClass) {
+  const cls = sizeClass || "building-icon";
+  if (!iconUrl) {
+    return `<div class="building-icon-wrap building-icon-wrap--placeholder" aria-hidden="true"></div>`;
+  }
+  return `<div class="building-icon-wrap"><img class="${cls}" src="${escapeAttr(iconUrl)}" alt="" onerror="this.parentElement.classList.add('building-icon-wrap--placeholder');this.remove();" /></div>`;
+}
+
+function showStatusError(statusEl, message) {
+  if (!statusEl) return;
+  statusEl.hidden = false;
+  statusEl.classList.add("status--error");
+  statusEl.textContent = message;
+}
+
+function emptyStateHtml(message) {
+  return `<p class="empty-state">${escapeHtml(message)}</p>`;
+}
+
 async function loadCatalog() {
   const el = document.getElementById("catalog");
   const status = document.getElementById("status");
   if (!el) return;
   try {
-    const res = await fetch("/api/catalog");
-    const data = await res.json();
+    const data = await fetchCatalog();
     if (!data.entries?.length) {
-      el.innerHTML = "<p class='meta'>No approved buildings yet.</p>";
+      el.innerHTML = emptyStateHtml("No approved buildings yet.");
       return;
     }
     el.innerHTML = data.entries
       .map(
         (e) => `
       <article class="card building-card">
-        <img src="${e.iconUrl}" alt="" onerror="this.style.display='none'" />
+        ${buildingIconHtml(e.iconUrl)}
         <h3>${escapeHtml(e.displayName)}</h3>
         <p class="meta">by ${escapeHtml(e.creatorName || "Unknown")}</p>
         <p class="meta">${formatBytes(e.prefabBytes || 0)} · v${escapeHtml(e.version)}</p>
@@ -38,10 +67,7 @@ async function loadCatalog() {
       )
       .join("");
   } catch (e) {
-    if (status) {
-      status.hidden = false;
-      status.textContent = "Could not load catalog.";
-    }
+    showStatusError(status, "Could not load catalog.");
   }
 }
 
@@ -55,7 +81,7 @@ async function loadDashboard() {
   }
   const name = me.user.profile?.username || me.user.sub || "Player";
   const uuid = me.user.profile?.uuid || "";
-  profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Use this value for <code>ADMIN_HYTALE_UUIDS</code> on Railway if you are a moderator.</p>`;
+  profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Submissions from the game are linked by profile UUID or your Hytale username (<strong>${escapeHtml(name)}</strong>). These can differ from your in-game session UUID.</p>`;
 
   if (!list) return;
   try {
@@ -65,18 +91,18 @@ async function loadDashboard() {
       return;
     }
     if (!res.ok) {
-      list.innerHTML = "<p class='meta'>Could not load your submissions.</p>";
+      list.innerHTML = emptyStateHtml("Could not load your submissions.");
       return;
     }
     const data = await res.json();
     const items = data.submissions || [];
     if (!items.length) {
-      list.innerHTML = "<p class='meta'>No submissions yet.</p>";
+      list.innerHTML = emptyStateHtml("No submissions yet.");
       return;
     }
     list.innerHTML = items.map(renderMySubmissionItem).join("");
   } catch {
-    list.innerHTML = "<p class='meta'>Could not load your submissions.</p>";
+    list.innerHTML = emptyStateHtml("Could not load your submissions.");
   }
 }
 
@@ -86,13 +112,19 @@ function submissionStatusLabel(item) {
   return "Pending review";
 }
 
+function submissionStatusClass(item) {
+  if (item.kind === "approved" || item.status === "approved") return "submission-status--published";
+  if (item.kind === "rejected" || item.status === "rejected") return "submission-status--rejected";
+  return "";
+}
+
 function renderMySubmissionItem(item) {
   const status = submissionStatusLabel(item);
+  const statusClass = submissionStatusClass(item);
   const title = escapeHtml(item.displayName || "Untitled");
-  const icon =
-    item.iconUrl
-      ? `<img class="submission-icon" src="${escapeAttr(item.iconUrl)}" alt="" onerror="this.style.display='none'" />`
-      : "";
+  const icon = item.iconUrl
+    ? `<img class="submission-icon" src="${escapeAttr(item.iconUrl)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
+    : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
 
   let meta = "";
   if (item.kind === "approved") {
@@ -115,7 +147,7 @@ function renderMySubmissionItem(item) {
       ${icon}
       <div class="submission-body">
         <strong>${title}</strong>
-        <p class="meta"><span class="submission-status">${escapeHtml(status)}</span></p>
+        <p class="meta"><span class="submission-status ${statusClass}">${escapeHtml(status)}</span></p>
         ${meta}
         ${action}
       </div>
@@ -174,8 +206,7 @@ async function loadAdminPage() {
     window.location.href = "/auth/login";
     return;
   }
-  loadAdminQueue();
-  loadAdminCatalog();
+  await Promise.all([loadAdminQueue(), loadAdminCatalog()]);
 }
 
 async function loadAdminQueue() {
@@ -193,13 +224,13 @@ async function loadAdminQueue() {
       return;
     }
     if (!res.ok) {
-      el.innerHTML = "<p class='meta'>Could not load pending submissions.</p>";
+      el.innerHTML = emptyStateHtml("Could not load pending submissions.");
       return;
     }
     const data = await res.json();
     const items = data.submissions || [];
     if (!items.length) {
-      el.innerHTML = "<p class='meta'>Queue empty.</p>";
+      el.innerHTML = emptyStateHtml("Queue empty.");
       return;
     }
     el.innerHTML = items
@@ -215,7 +246,7 @@ async function loadAdminQueue() {
       )
       .join("");
   } catch {
-    el.innerHTML = "<p class='meta'>Could not load pending submissions.</p>";
+    el.innerHTML = emptyStateHtml("Could not load pending submissions.");
   }
 }
 
@@ -241,24 +272,19 @@ async function rejectSubmission(submissionId) {
 async function loadAdminCatalog() {
   const el = document.getElementById("adminCatalog");
   if (!el) return;
+  el.innerHTML = emptyStateHtml("Loading published buildings…");
   try {
-    // Same public manifest as the browse page — avoids admin-only fetch/auth edge cases.
-    const res = await fetch("/api/catalog");
-    if (!res.ok) {
-      el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
-      return;
-    }
-    const data = await res.json();
+    const data = await fetchCatalog();
     const entries = data.entries || [];
     if (!entries.length) {
-      el.innerHTML = "<p class='meta'>No published buildings.</p>";
+      el.innerHTML = emptyStateHtml("No published buildings.");
       return;
     }
     el.innerHTML = entries
       .map(
         (e) => `
     <article class="card building-card admin-building-card">
-      <img src="${escapeAttr(e.iconUrl)}" alt="" onerror="this.style.display='none'" />
+      ${buildingIconHtml(e.iconUrl)}
       <h3>${escapeHtml(e.displayName)}</h3>
       <p class="meta">${escapeHtml(e.id)}</p>
       <p class="meta">by ${escapeHtml(e.creatorName || "Unknown")}</p>
@@ -272,7 +298,7 @@ async function loadAdminCatalog() {
       )
       .join("");
   } catch {
-    el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
+    el.innerHTML = emptyStateHtml("Could not load published buildings.");
   }
 }
 
