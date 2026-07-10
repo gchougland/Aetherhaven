@@ -47,6 +47,17 @@ export function createStorage(dataDir) {
       .filter(Boolean);
   }
 
+  function listRejected() {
+    if (!fs.existsSync(dirs.rejected)) {
+      return [];
+    }
+    return fs
+      .readdirSync(dirs.rejected, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => loadSubmissionMeta(e.name, "rejected"))
+      .filter(Boolean);
+  }
+
   /**
    * @param {string} id
    * @param {"pending"|"approved"|"rejected"} status
@@ -84,6 +95,7 @@ export function createStorage(dataDir) {
     writeManifest,
     submissionDir,
     listPending,
+    listRejected,
     loadSubmissionMeta,
     approvedDir,
     approvedPaths,

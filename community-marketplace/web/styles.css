@@ -118,3 +118,27 @@ button.danger {
   border-top: 1px solid var(--border);
   padding: 0.75rem 0;
 }
+
+.submission-item {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.submission-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  background: #0a0d12;
+  border-radius: 4px;
+}
+
+.submission-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.submission-status {
+  color: var(--accent);
+}

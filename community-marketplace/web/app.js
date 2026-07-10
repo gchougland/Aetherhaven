@@ -57,18 +57,115 @@ async function loadDashboard() {
   const uuid = me.user.profile?.uuid || "";
   profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Use this value for <code>ADMIN_HYTALE_UUIDS</code> on Railway if you are a moderator.</p>`;
 
-  const pending = await fetch("/api/my-submissions").then((r) => r.json());
-  const mine = (pending.submissions || []).filter((s) => s.creatorUuid === uuid);
-  if (!mine.length) {
-    list.innerHTML = "<p class='meta'>No pending submissions.</p>";
+  if (!list) return;
+  try {
+    const res = await fetch("/api/my-submissions");
+    if (res.status === 401) {
+      window.location.href = "/auth/login";
+      return;
+    }
+    if (!res.ok) {
+      list.innerHTML = "<p class='meta'>Could not load your submissions.</p>";
+      return;
+    }
+    const data = await res.json();
+    const items = data.submissions || [];
+    if (!items.length) {
+      list.innerHTML = "<p class='meta'>No submissions yet.</p>";
+      return;
+    }
+    list.innerHTML = items.map(renderMySubmissionItem).join("");
+  } catch {
+    list.innerHTML = "<p class='meta'>Could not load your submissions.</p>";
+  }
+}
+
+function submissionStatusLabel(item) {
+  if (item.kind === "approved" || item.status === "approved") return "Published";
+  if (item.kind === "rejected" || item.status === "rejected") return "Rejected";
+  return "Pending review";
+}
+
+function renderMySubmissionItem(item) {
+  const status = submissionStatusLabel(item);
+  const title = escapeHtml(item.displayName || "Untitled");
+  const icon =
+    item.iconUrl
+      ? `<img class="submission-icon" src="${escapeAttr(item.iconUrl)}" alt="" onerror="this.style.display='none'" />`
+      : "";
+
+  let meta = "";
+  if (item.kind === "approved") {
+    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · v${escapeHtml(item.version || "1")}</p>`;
+  } else {
+    meta = `<p class="meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>`;
+  }
+
+  let action = "";
+  if (item.kind === "pending") {
+    action = `<button type="button" class="secondary" onclick="withdrawMySubmission('${escapeAttr(item.submissionId)}', '${escapeAttr(item.displayName || "")}')">Withdraw</button>`;
+  } else if (item.kind === "approved") {
+    action = `<button type="button" class="danger" onclick="removeMyBuilding('${escapeAttr(item.id)}', '${escapeAttr(item.displayName || "")}')">Remove from marketplace</button>`;
+  } else if (item.kind === "rejected") {
+    action = `<button type="button" class="secondary" onclick="dismissMySubmission('${escapeAttr(item.submissionId)}', '${escapeAttr(item.displayName || "")}')">Dismiss</button>`;
+  }
+
+  return `
+    <div class="queue-item submission-item">
+      ${icon}
+      <div class="submission-body">
+        <strong>${title}</strong>
+        <p class="meta"><span class="submission-status">${escapeHtml(status)}</span></p>
+        ${meta}
+        ${action}
+      </div>
+    </div>`;
+}
+
+async function withdrawMySubmission(submissionId, displayName) {
+  const label = displayName || submissionId;
+  if (!confirm(`Withdraw "${label}" from the review queue?`)) {
     return;
   }
-  list.innerHTML = mine
-    .map(
-      (s) => `<div class="queue-item"><strong>${escapeHtml(s.displayName)}</strong>
-      <p class="meta">${escapeHtml(s.submissionId)} · ${escapeHtml(s.status)}</p></div>`
+  const res = await fetch(`/api/my-submissions/${encodeURIComponent(submissionId)}/withdraw`, { method: "POST" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Withdraw failed");
+    return;
+  }
+  loadDashboard();
+}
+
+async function dismissMySubmission(submissionId, displayName) {
+  const label = displayName || submissionId;
+  if (!confirm(`Remove "${label}" from your rejected submissions list?`)) {
+    return;
+  }
+  const res = await fetch(`/api/my-submissions/${encodeURIComponent(submissionId)}/dismiss`, { method: "POST" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Dismiss failed");
+    return;
+  }
+  loadDashboard();
+}
+
+async function removeMyBuilding(buildingId, displayName) {
+  const label = displayName || buildingId;
+  if (
+    !confirm(
+      `Remove "${label}" from the public marketplace?\n\nThis deletes the published files. Players who already downloaded it keep their local copy.`
     )
-    .join("");
+  ) {
+    return;
+  }
+  const res = await fetch(`/api/my-buildings/${encodeURIComponent(buildingId)}/remove`, { method: "POST" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Remove failed");
+    return;
+  }
+  loadDashboard();
 }
 
 async function loadAdminPage() {
@@ -84,20 +181,30 @@ async function loadAdminPage() {
 async function loadAdminQueue() {
   const el = document.getElementById("adminQueue");
   if (!el) return;
-  const res = await fetch("/api/admin/pending");
-  if (res.status === 403) {
-    el.innerHTML = "<p>Admin access required. Set ADMIN_HYTALE_UUIDS in .env</p>";
-    return;
-  }
-  const data = await res.json();
-  const items = data.submissions || [];
-  if (!items.length) {
-    el.innerHTML = "<p class='meta'>Queue empty.</p>";
-    return;
-  }
-  el.innerHTML = items
-    .map(
-      (s) => `
+  try {
+    const res = await fetch("/api/admin/pending");
+    if (res.status === 401) {
+      window.location.href = "/auth/login";
+      return;
+    }
+    if (res.status === 403) {
+      el.innerHTML =
+        "<p>Admin access required. Add your profile UUID to <code>ADMIN_HYTALE_UUIDS</code> on Railway.</p>";
+      return;
+    }
+    if (!res.ok) {
+      el.innerHTML = "<p class='meta'>Could not load pending submissions.</p>";
+      return;
+    }
+    const data = await res.json();
+    const items = data.submissions || [];
+    if (!items.length) {
+      el.innerHTML = "<p class='meta'>Queue empty.</p>";
+      return;
+    }
+    el.innerHTML = items
+      .map(
+        (s) => `
     <div class="queue-item">
       <strong>${escapeHtml(s.displayName)}</strong>
       <p class="meta">${escapeHtml(s.submissionId)} by ${escapeHtml(s.creatorName)}</p>
@@ -105,8 +212,11 @@ async function loadAdminQueue() {
       <button onclick="approveSubmission('${escapeAttr(s.submissionId)}', '${escapeAttr(s.proposedId)}')">Approve</button>
       <button class="secondary" onclick="rejectSubmission('${escapeAttr(s.submissionId)}')">Reject</button>
     </div>`
-    )
-    .join("");
+      )
+      .join("");
+  } catch {
+    el.innerHTML = "<p class='meta'>Could not load pending submissions.</p>";
+  }
 }
 
 async function approveSubmission(submissionId, proposedId) {
@@ -116,6 +226,7 @@ async function approveSubmission(submissionId, proposedId) {
     body: JSON.stringify({ id: proposedId }),
   });
   loadAdminQueue();
+  loadAdminCatalog();
 }
 
 async function rejectSubmission(submissionId) {
@@ -130,28 +241,22 @@ async function rejectSubmission(submissionId) {
 async function loadAdminCatalog() {
   const el = document.getElementById("adminCatalog");
   if (!el) return;
-  const res = await fetch("/api/admin/catalog");
-  if (res.status === 401 || res.status === 302) {
-    window.location.href = "/auth/login";
-    return;
-  }
-  if (res.status === 403) {
-    el.innerHTML = "<p>Admin access required. Add your profile UUID to <code>ADMIN_HYTALE_UUIDS</code> on Railway.</p>";
-    return;
-  }
-  if (!res.ok) {
-    el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
-    return;
-  }
-  const data = await res.json();
-  const entries = data.entries || [];
-  if (!entries.length) {
-    el.innerHTML = "<p class='meta'>No published buildings.</p>";
-    return;
-  }
-  el.innerHTML = entries
-    .map(
-      (e) => `
+  try {
+    // Same public manifest as the browse page — avoids admin-only fetch/auth edge cases.
+    const res = await fetch("/api/catalog");
+    if (!res.ok) {
+      el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
+      return;
+    }
+    const data = await res.json();
+    const entries = data.entries || [];
+    if (!entries.length) {
+      el.innerHTML = "<p class='meta'>No published buildings.</p>";
+      return;
+    }
+    el.innerHTML = entries
+      .map(
+        (e) => `
     <article class="card building-card admin-building-card">
       <img src="${escapeAttr(e.iconUrl)}" alt="" onerror="this.style.display='none'" />
       <h3>${escapeHtml(e.displayName)}</h3>
@@ -164,8 +269,11 @@ async function loadAdminCatalog() {
         onclick="deleteApprovedBuilding('${escapeAttr(e.id)}', '${escapeAttr(e.displayName)}')"
       >Remove permanently</button>
     </article>`
-    )
-    .join("");
+      )
+      .join("");
+  } catch {
+    el.innerHTML = "<p class='meta'>Could not load published buildings.</p>";
+  }
 }
 
 async function deleteApprovedBuilding(buildingId, displayName) {

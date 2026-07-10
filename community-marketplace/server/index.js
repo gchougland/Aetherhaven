@@ -241,6 +241,99 @@ function deleteApprovedBuilding(buildingId) {
   return { status: 200, body: { id, status: "deleted" } };
 }
 
+function sessionProfileUuid(req) {
+  return String(req.session?.user?.profile?.uuid || "")
+    .trim()
+    .toLowerCase();
+}
+
+function isOwnedByProfile(metaOrEntry, profileUuid) {
+  if (!profileUuid) {
+    return false;
+  }
+  return String(metaOrEntry?.creatorUuid || "")
+    .trim()
+    .toLowerCase() === profileUuid;
+}
+
+function listSubmissionsForCreator(creatorUuid) {
+  const pending = storage
+    .listPending()
+    .filter((s) => isOwnedByProfile(s, creatorUuid))
+    .map((s) => ({ kind: "pending", ...s }));
+
+  const rejected = storage
+    .listRejected()
+    .filter((s) => isOwnedByProfile(s, creatorUuid))
+    .map((s) => ({ kind: "rejected", ...s }));
+
+  const manifest = storage.readManifest();
+  const approved = (manifest.entries || [])
+    .filter((e) => isOwnedByProfile(e, creatorUuid))
+    .map((e) => ({
+      kind: "approved",
+      id: e.id,
+      displayName: e.displayName,
+      status: "approved",
+      approvedAt: e.approvedAt,
+      version: e.version || "1",
+      prefabBytes: e.prefabBytes || 0,
+      iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
+    }));
+
+  return [...pending, ...approved, ...rejected].sort((a, b) => {
+    const dateA = a.submittedAt || a.approvedAt || a.rejectedAt || "";
+    const dateB = b.submittedAt || b.approvedAt || b.rejectedAt || "";
+    return dateB.localeCompare(dateA);
+  });
+}
+
+function withdrawPendingSubmission(submissionId, profileUuid) {
+  const meta = storage.loadSubmissionMeta(submissionId, "pending");
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByProfile(meta, profileUuid)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  const dir = storage.submissionDir(submissionId, "pending");
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+  return { status: 200, body: { submissionId, status: "withdrawn" } };
+}
+
+function dismissRejectedSubmission(submissionId, profileUuid) {
+  const meta = storage.loadSubmissionMeta(submissionId, "rejected");
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByProfile(meta, profileUuid)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  const dir = storage.submissionDir(submissionId, "rejected");
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+  return { status: 200, body: { submissionId, status: "dismissed" } };
+}
+
+function removeOwnApprovedBuilding(buildingId, profileUuid) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByProfile(entry, profileUuid)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  return deleteApprovedBuilding(id);
+}
+
 // --- Public API (mod + downloads) ---
 
 app.get("/api/v1/health", (_req, res) => {
@@ -248,7 +341,7 @@ app.get("/api/v1/health", (_req, res) => {
 });
 
 function enrichManifestEntries(manifest, clientBlockIdVersion = 0) {
-  return manifest.entries.map((e) => {
+  return (manifest.entries || []).map((e) => {
     const paths = storage.approvedPaths(e.id);
     let prefabBytes = e.prefabBytes || 0;
     if (!prefabBytes && fs.existsSync(paths.prefab)) {
@@ -435,8 +528,16 @@ app.post("/api/v1/moderation/reject/:submissionId", requireModerator, (req, res)
 
 // --- Website (same process / port — required for Railway) ---
 
+function isApiRequest(req) {
+  return req.originalUrl.startsWith("/api/");
+}
+
 function requireWebUser(req, res, next) {
   if (!req.session?.user) {
+    if (isApiRequest(req)) {
+      res.status(401).json({ error: "login_required" });
+      return;
+    }
     res.redirect("/?login=required");
     return;
   }
@@ -446,6 +547,10 @@ function requireWebUser(req, res, next) {
 function requireAdmin(req, res, next) {
   const uuid = req.session?.user?.profile?.uuid?.toLowerCase();
   if (!uuid || !ADMIN_UUIDS.has(uuid)) {
+    if (isApiRequest(req)) {
+      res.status(403).json({ error: "admin_required" });
+      return;
+    }
     res.status(403).send("Admin access required.");
     return;
   }
@@ -493,8 +598,28 @@ app.get("/api/me", (req, res) => {
   res.json({ user: req.session?.user || null });
 });
 
-app.get("/api/my-submissions", requireWebUser, (_req, res) => {
-  res.json({ submissions: storage.listPending() });
+app.get("/api/my-submissions", requireWebUser, (req, res) => {
+  const profileUuid = sessionProfileUuid(req);
+  if (!profileUuid) {
+    res.status(400).json({ error: "profile_uuid_missing" });
+    return;
+  }
+  res.json({ submissions: listSubmissionsForCreator(profileUuid) });
+});
+
+app.post("/api/my-submissions/:submissionId/withdraw", requireWebUser, (req, res) => {
+  const result = withdrawPendingSubmission(req.params.submissionId, sessionProfileUuid(req));
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/my-submissions/:submissionId/dismiss", requireWebUser, (req, res) => {
+  const result = dismissRejectedSubmission(req.params.submissionId, sessionProfileUuid(req));
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/my-buildings/:buildingId/remove", requireWebUser, (req, res) => {
+  const result = removeOwnApprovedBuilding(req.params.buildingId, sessionProfileUuid(req));
+  res.status(result.status).json(result.body);
 });
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {
