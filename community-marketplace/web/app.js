@@ -1,12 +1,23 @@
-async function refreshAuthNav() {
+async function fetchMe() {
   const res = await fetch("/api/me");
   const { user } = await res.json();
+  return user;
+}
+
+function updateAuthNav(user) {
   const login = document.getElementById("loginLink");
   const logout = document.getElementById("logoutLink");
   if (user) {
     if (login) login.hidden = true;
     if (logout) logout.hidden = false;
+  } else {
+    if (login) login.hidden = false;
+    if (logout) logout.hidden = true;
   }
+}
+
+async function refreshAuthNav() {
+  updateAuthNav(await fetchMe());
 }
 
 function formatBytes(n) {
@@ -45,27 +56,82 @@ function emptyStateHtml(message) {
   return `<p class="empty-state">${escapeHtml(message)}</p>`;
 }
 
+function upvoteControlHtml(entry, canVote) {
+  const count = entry.upvoteCount || 0;
+  const active = entry.userHasUpvoted ? " upvote-btn--active" : "";
+  if (!canVote) {
+    return `<a class="upvote-btn" href="/auth/login" title="Sign in to upvote" aria-label="Sign in to upvote (${count} upvotes)"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></a>`;
+  }
+  return `<button type="button" class="upvote-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="toggleUpvote('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasUpvoted ? "true" : "false"}" aria-label="Upvote (${count})"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></button>`;
+}
+
+function renderBuildingCard(entry, options = {}) {
+  const { canVote = false, adminDelete = false, showId = false } = options;
+  const deleteBtn = adminDelete
+    ? `<button
+        type="button"
+        class="danger admin-delete-btn"
+        onclick="deleteApprovedBuilding('${escapeAttr(entry.id)}', '${escapeAttr(entry.displayName)}')"
+      >Remove permanently</button>`
+    : "";
+  const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
+  const cardClass = adminDelete ? "card building-card admin-building-card" : "card building-card";
+  return `
+    <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}">
+      <div class="building-card-header">
+        ${buildingIconHtml(entry.iconUrl)}
+        ${upvoteControlHtml(entry, canVote)}
+      </div>
+      <h3>${escapeHtml(entry.displayName)}</h3>
+      ${idMeta}
+      <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
+      <p class="meta">${formatBytes(entry.prefabBytes || 0)} · v${escapeHtml(entry.version)}</p>
+      ${deleteBtn}
+    </article>`;
+}
+
+async function toggleUpvote(buildingId, buttonEl) {
+  if (!buttonEl || buttonEl.disabled) {
+    return;
+  }
+  buttonEl.disabled = true;
+  try {
+    const res = await fetch(`/api/buildings/${encodeURIComponent(buildingId)}/upvote`, { method: "POST" });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = "/auth/login";
+        return;
+      }
+      alert(body.error || "Upvote failed");
+      return;
+    }
+    const active = body.userHasUpvoted;
+    buttonEl.classList.toggle("upvote-btn--active", active);
+    buttonEl.setAttribute("aria-pressed", active ? "true" : "false");
+    const countEl = buttonEl.querySelector(".upvote-count");
+    if (countEl) {
+      countEl.textContent = String(body.upvoteCount ?? 0);
+    }
+    buttonEl.setAttribute("aria-label", `Upvote (${body.upvoteCount ?? 0})`);
+  } finally {
+    buttonEl.disabled = false;
+  }
+}
+
 async function loadCatalog() {
   const el = document.getElementById("catalog");
   const status = document.getElementById("status");
   if (!el) return;
   try {
+    const user = await fetchMe();
+    updateAuthNav(user);
     const data = await fetchCatalog();
     if (!data.entries?.length) {
       el.innerHTML = emptyStateHtml("No approved buildings yet.");
       return;
     }
-    el.innerHTML = data.entries
-      .map(
-        (e) => `
-      <article class="card building-card">
-        ${buildingIconHtml(e.iconUrl)}
-        <h3>${escapeHtml(e.displayName)}</h3>
-        <p class="meta">by ${escapeHtml(e.creatorName || "Unknown")}</p>
-        <p class="meta">${formatBytes(e.prefabBytes || 0)} · v${escapeHtml(e.version)}</p>
-      </article>`
-      )
-      .join("");
+    el.innerHTML = data.entries.map((e) => renderBuildingCard(e, { canVote: Boolean(user) })).join("");
   } catch (e) {
     showStatusError(status, "Could not load catalog.");
   }
@@ -281,21 +347,7 @@ async function loadAdminCatalog() {
       return;
     }
     el.innerHTML = entries
-      .map(
-        (e) => `
-    <article class="card building-card admin-building-card">
-      ${buildingIconHtml(e.iconUrl)}
-      <h3>${escapeHtml(e.displayName)}</h3>
-      <p class="meta">${escapeHtml(e.id)}</p>
-      <p class="meta">by ${escapeHtml(e.creatorName || "Unknown")}</p>
-      <p class="meta">${formatBytes(e.prefabBytes || 0)} · v${escapeHtml(e.version || "1")}</p>
-      <button
-        type="button"
-        class="danger admin-delete-btn"
-        onclick="deleteApprovedBuilding('${escapeAttr(e.id)}', '${escapeAttr(e.displayName)}')"
-      >Remove permanently</button>
-    </article>`
-      )
+      .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, showId: true }))
       .join("");
   } catch {
     el.innerHTML = emptyStateHtml("Could not load published buildings.");

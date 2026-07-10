@@ -182,7 +182,15 @@ public final class CommunityCatalogService {
     @Nonnull
     public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries() {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
-        for (CommunityManifestEntry entry : cachedEntries.get()) {
+        ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
+        entries.sort((a, b) -> {
+            int byVotes = Integer.compare(b.getUpvoteCount(), a.getUpvoteCount());
+            if (byVotes != 0) {
+                return byVotes;
+            }
+            return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
+        });
+        for (CommunityManifestEntry entry : entries) {
             groups.add(
                 new PlotCraftingCatalog.GroupEntry(
                     entry.getId(),
@@ -193,7 +201,6 @@ public final class CommunityCatalogService {
                 )
             );
         }
-        groups.sort((a, b) -> a.displayName().compareToIgnoreCase(b.displayName()));
         return groups;
     }
 

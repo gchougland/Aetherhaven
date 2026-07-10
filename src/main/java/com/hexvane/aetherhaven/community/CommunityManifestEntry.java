@@ -42,6 +42,9 @@ public final class CommunityManifestEntry {
     @SerializedName("prefabUrl")
     private String prefabUrl;
 
+    @SerializedName("upvoteCount")
+    private int upvoteCount;
+
     @Nonnull
     public String getId() {
         return id != null ? id : "";
@@ -92,6 +95,10 @@ public final class CommunityManifestEntry {
     @Nullable
     public String getPrefabUrl() {
         return prefabUrl;
+    }
+
+    public int getUpvoteCount() {
+        return upvoteCount;
     }
 
     @Nonnull

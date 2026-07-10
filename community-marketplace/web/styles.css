@@ -381,6 +381,62 @@ main.wrap > section + section {
   color: var(--text);
 }
 
+.building-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.upvote-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    color var(--transition),
+    border-color var(--transition),
+    background var(--transition);
+}
+
+.upvote-btn:hover {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+}
+
+.upvote-btn--active {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.upvote-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.upvote-arrow {
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.upvote-count {
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .admin-building-card {
   display: flex;
   flex-direction: column;

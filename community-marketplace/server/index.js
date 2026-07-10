@@ -21,6 +21,8 @@ import {
   validateSubmissionBuilding,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
+import { createVoteRateLimit } from "./voteRateLimit.js";
+import { createVotes } from "./votes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);
@@ -38,6 +40,7 @@ const ADMIN_UUIDS = new Set(
 const publicBaseUrl = resolvePublicBaseUrl();
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
 const storage = createStorage(dataDir);
+const votes = createVotes(dataDir);
 const oidc = createOidc({
   issuer: process.env.HYTALE_OIDC_ISSUER || "https://connect.accounts.hytale.com",
   clientId: process.env.HYTALE_OIDC_CLIENT_ID || "",
@@ -147,6 +150,10 @@ const submissionRateLimit = createSubmissionRateLimit({
   maxPerIp: Number(process.env.SUBMISSION_MAX_PER_IP_PER_HOUR || 30),
 });
 
+const voteRateLimit = createVoteRateLimit({
+  maxPerUser: Number(process.env.VOTE_MAX_PER_USER_PER_HOUR || 60),
+});
+
 function buildManifestEntry(id, meta, prefabBytes) {
   return {
     id,
@@ -238,6 +245,7 @@ function deleteApprovedBuilding(buildingId) {
   manifest.entries = manifest.entries.filter((e) => e.id !== id);
   manifest.version = (manifest.version || 0) + 1;
   storage.writeManifest(manifest);
+  votes.removeBuilding(id);
   return { status: 200, body: { id, status: "deleted" } };
 }
 
@@ -371,7 +379,25 @@ app.get("/api/v1/health", (_req, res) => {
   res.json({ ok: true });
 });
 
-function enrichManifestEntries(manifest, clientBlockIdVersion = 0) {
+function sortCatalogEntries(entries) {
+  return [...entries].sort((a, b) => {
+    const votesA = a.upvoteCount || 0;
+    const votesB = b.upvoteCount || 0;
+    if (votesB !== votesA) {
+      return votesB - votesA;
+    }
+    const nameA = String(a.displayName || "").toLowerCase();
+    const nameB = String(b.displayName || "").toLowerCase();
+    const byName = nameA.localeCompare(nameB);
+    if (byName !== 0) {
+      return byName;
+    }
+    return String(a.approvedAt || "").localeCompare(String(b.approvedAt || ""));
+  });
+}
+
+function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = null) {
+  const voteCounts = votes.getCounts();
   return (manifest.entries || []).map((e) => {
     const paths = storage.approvedPaths(e.id);
     let prefabBytes = e.prefabBytes || 0;
@@ -379,24 +405,52 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0) {
       prefabBytes = fs.statSync(paths.prefab).size;
     }
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
-    return {
+    const entry = {
       ...e,
       prefabBytes,
       compatible,
+      upvoteCount: voteCounts[e.id] || 0,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
+    if (userVotes) {
+      entry.userHasUpvoted = userVotes.has(e.id);
+    }
+    return entry;
   });
 }
 
 function sendManifest(req, res) {
   const clientBlockIdVersion = Number(req.query.blockIdVersion || 0);
   const manifest = storage.readManifest();
+  const voterUuid = sessionProfileUuid(req);
+  const userVotes = voterUuid ? votes.getUserVotes(voterUuid) : null;
+  const entries = sortCatalogEntries(enrichManifestEntries(manifest, clientBlockIdVersion, userVotes));
   res.json({
     version: manifest.version,
-    entries: enrichManifestEntries(manifest, clientBlockIdVersion),
+    entries,
   });
+}
+
+function toggleBuildingUpvote(buildingId, webUser) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (isOwnedByWebUser(entry, webUser)) {
+    return { status: 403, body: { error: "self_upvote_not_allowed" } };
+  }
+  if (!webUser.profileUuid) {
+    return { status: 400, body: { error: "profile_missing" } };
+  }
+  const result = votes.toggleVote(id, webUser.profileUuid);
+  return { status: 200, body: result };
 }
 
 app.get("/api/v1/manifest", sendManifest);
@@ -667,11 +721,13 @@ app.post("/api/admin/reject/:submissionId", requireWebUser, requireAdmin, (req, 
   res.status(result.status).json(result.body);
 });
 
-app.get("/api/admin/catalog", requireWebUser, requireAdmin, (_req, res) => {
+app.get("/api/admin/catalog", requireWebUser, requireAdmin, (req, res) => {
   const manifest = storage.readManifest();
+  const voterUuid = sessionProfileUuid(req);
+  const userVotes = voterUuid ? votes.getUserVotes(voterUuid) : null;
   res.json({
     version: manifest.version,
-    entries: enrichManifestEntries(manifest, 0),
+    entries: sortCatalogEntries(enrichManifestEntries(manifest, 0, userVotes)),
   });
 });
 
@@ -681,6 +737,11 @@ app.post("/api/admin/delete/:buildingId", requireWebUser, requireAdmin, (req, re
 });
 
 app.get("/api/catalog", sendManifest);
+
+app.post("/api/buildings/:id/upvote", requireWebUser, voteRateLimit, (req, res) => {
+  const result = toggleBuildingUpvote(req.params.id, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
 
 app.use(express.static(path.join(__dirname, "..", "web")));
 
