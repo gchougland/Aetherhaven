@@ -135,11 +135,12 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             moderationTab
                 ? moderation.buildGroupEntries()
                 : communityTab
-                    ? communityCatalog.buildGroupEntries()
+                    ? communityCatalog.buildGroupEntries(activeStyleFilters)
                     : PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
         ensureSelection(groups);
 
-        bindStyleFilters(commandBuilder, eventBuilder, catalog, marketplaceTab);
+        boolean showStyleFilters = !moderationTab;
+        bindStyleFilters(commandBuilder, eventBuilder, catalog, communityTab ? communityCatalog : null, showStyleFilters);
 
         commandBuilder.set("#PlotCraftTabs.SelectedTab", tabId(activeTab));
 
@@ -254,13 +255,14 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             pendingPreviewPrefabKey = null;
         }
 
-        commandBuilder.set("#StyleFilterColumn.Visible", !marketplaceTab);
+        commandBuilder.set("#StyleFilterColumn.Visible", showStyleFilters);
         commandBuilder.set("#MarketplaceRefreshRow.Visible", marketplaceTab);
         commandBuilder.set("#CommunityActionRow.Visible", communityTab);
         commandBuilder.set("#ModerationActionRow.Visible", moderationTab);
         commandBuilder.set("#CostLine.Visible", !moderationTab);
         commandBuilder.set("#FundsLine.Visible", !moderationTab);
         commandBuilder.set("#CraftButton.Visible", !moderationTab);
+        // Shorter list when marketplace action rows are visible (community / moderation).
         applyBuildingListHeight(commandBuilder, marketplaceTab);
         if (communityTab) {
             boolean hasSelection = variant != null;
@@ -518,7 +520,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             activeTab == Tab.MODERATION
                 ? plugin.getCommunityModerationService().buildGroupEntries()
                 : activeTab == Tab.COMMUNITY
-                    ? plugin.getCommunityCatalogService().buildGroupEntries()
+                    ? plugin.getCommunityCatalogService().buildGroupEntries(activeStyleFilters)
                     : PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
         GroupEntry group = findGroup(groups, selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
@@ -723,7 +725,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         CommunityCatalogService community = plugin.getCommunityCatalogService();
-        GroupEntry group = findGroup(community.buildGroupEntries(), selectedGroupKey);
+        GroupEntry group = findGroup(community.buildGroupEntries(activeStyleFilters), selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
             refresh(ref, store);
@@ -756,7 +758,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         CommunityCatalogService community = plugin.getCommunityCatalogService();
-        GroupEntry group = findGroup(community.buildGroupEntries(), selectedGroupKey);
+        GroupEntry group = findGroup(community.buildGroupEntries(activeStyleFilters), selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
             refresh(ref, store);
@@ -794,7 +796,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         VariantEntry variant =
-            selectedVariant(findGroup(plugin.getCommunityCatalogService().buildGroupEntries(), selectedGroupKey));
+            selectedVariant(
+                findGroup(plugin.getCommunityCatalogService().buildGroupEntries(activeStyleFilters), selectedGroupKey)
+            );
         if (variant == null) {
             refresh(ref, store);
             return;
@@ -1013,13 +1017,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
         @Nonnull ConstructionCatalog catalog,
-        boolean marketplaceTab
+        @Nullable CommunityCatalogService communityCatalog,
+        boolean showStyleFilters
     ) {
-        if (marketplaceTab) {
+        if (!showStyleFilters) {
             commandBuilder.clear(STYLE_ROWS);
             return;
         }
-        List<String> styleIds = PlotBuildingStyles.craftableStyleIds(catalog);
+        List<String> styleIds =
+            communityCatalog != null ? communityCatalog.listStyleIds() : PlotBuildingStyles.craftableStyleIds(catalog);
         activeStyleFilters.retainAll(styleIds);
         commandBuilder.clear(STYLE_ROWS);
         for (int i = 0; i < styleIds.size(); i++) {

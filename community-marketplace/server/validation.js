@@ -96,6 +96,8 @@ export function assignCommunityCatalogId(building, creatorUuid) {
   const existing = typeof building.id === "string" ? normalizeCommunityId(building.id) : null;
   if (existing) {
     building.id = existing;
+    // Installed prefabs are always {id}.prefab.json — keep building JSON in sync.
+    building.prefabPath = `${existing}.prefab.json`;
     return existing;
   }
   const displayName = typeof building.displayName === "string" ? building.displayName.trim() : "";
@@ -106,6 +108,7 @@ export function assignCommunityCatalogId(building, creatorUuid) {
     "building";
   const id = proposeCommunityId(creatorUuid, slugSource);
   building.id = id;
+  building.prefabPath = `${id}.prefab.json`;
   return id;
 }
 

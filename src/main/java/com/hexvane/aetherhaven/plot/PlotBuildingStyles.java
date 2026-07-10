@@ -3,9 +3,9 @@ package com.hexvane.aetherhaven.plot;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,6 +25,15 @@ public final class PlotBuildingStyles {
     @Nullable
     public static String styleIdOf(@Nonnull ConstructionDefinition def) {
         return normalize(def.getStyleId());
+    }
+
+    /** Empty filter set means show everything; otherwise require a matching normalized style id. */
+    public static boolean matchesFilter(@Nullable String styleId, @Nonnull Set<String> activeStyleFilters) {
+        if (activeStyleFilters.isEmpty()) {
+            return true;
+        }
+        String normalized = normalize(styleId);
+        return normalized != null && activeStyleFilters.contains(normalized);
     }
 
     @Nonnull

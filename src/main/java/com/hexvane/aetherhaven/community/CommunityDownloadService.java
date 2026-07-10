@@ -6,7 +6,6 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -58,6 +57,8 @@ public final class CommunityDownloadService {
                 }
                 Files.writeString(buildingFile, buildingJson);
             }
+            // Prefab is stored as {id}.prefab.json; rewrite creator-local prefabPath to match.
+            CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, id);
 
             Path iconFile = CommunityPaths.iconFile(dataDir, id);
             if (!Files.isRegularFile(iconFile)) {

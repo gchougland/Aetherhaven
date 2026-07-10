@@ -2,7 +2,6 @@ package com.hexvane.aetherhaven.community;
 
 import com.google.gson.Gson;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
-import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,6 +64,8 @@ public final class CommunityBuildingsLoader {
                 LOGGER.atWarning().log("Skipping community building with invalid id %s in %s", id, file);
                 return null;
             }
+            CommunityBuildingJsonNormalizer.normalizeDefinition(def, id);
+            CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(file, id);
             map.put(id, def);
             return id;
         } catch (Exception e) {

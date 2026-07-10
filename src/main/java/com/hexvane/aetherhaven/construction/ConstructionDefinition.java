@@ -267,6 +267,10 @@ public final class ConstructionDefinition {
         return prefabPath;
     }
 
+    public void setPrefabPath(@Nullable String prefabPath) {
+        this.prefabPath = prefabPath;
+    }
+
     public int[] getPlotAnchorOffset() {
         return plotAnchorOffset != null && plotAnchorOffset.length == 3 ? plotAnchorOffset : new int[] {0, 0, 0};
     }

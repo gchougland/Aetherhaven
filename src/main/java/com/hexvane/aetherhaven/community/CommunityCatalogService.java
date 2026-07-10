@@ -5,15 +5,19 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
+import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hypixel.hytale.logger.HytaleLogger;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -181,6 +185,11 @@ public final class CommunityCatalogService {
 
     @Nonnull
     public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries() {
+        return buildGroupEntries(Collections.emptySet());
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(@Nonnull Set<String> activeStyleFilters) {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
         entries.sort((a, b) -> {
@@ -191,6 +200,9 @@ public final class CommunityCatalogService {
             return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
         });
         for (CommunityManifestEntry entry : entries) {
+            if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
+                continue;
+            }
             groups.add(
                 new PlotCraftingCatalog.GroupEntry(
                     entry.getId(),
@@ -202,6 +214,19 @@ public final class CommunityCatalogService {
             );
         }
         return groups;
+    }
+
+    /** Distinct style ids present in the cached community manifest (for craft-bench filters). */
+    @Nonnull
+    public List<String> listStyleIds() {
+        TreeSet<String> ids = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        for (CommunityManifestEntry entry : cachedEntries.get()) {
+            String styleId = PlotBuildingStyles.normalize(entry.getStyleId());
+            if (styleId != null) {
+                ids.add(styleId);
+            }
+        }
+        return new ArrayList<>(ids);
     }
 
     private static final class ManifestResponse {

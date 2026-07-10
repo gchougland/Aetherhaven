@@ -95,11 +95,7 @@ public final class PlotCraftingCatalog {
     }
 
     private static boolean matchesStyleFilter(@Nonnull ConstructionDefinition def, @Nonnull Set<String> activeStyleFilters) {
-        if (activeStyleFilters.isEmpty()) {
-            return true;
-        }
-        String styleId = PlotBuildingStyles.styleIdOf(def);
-        return styleId != null && activeStyleFilters.contains(styleId);
+        return PlotBuildingStyles.matchesFilter(def.getStyleId(), activeStyleFilters);
     }
 
     @Nonnull

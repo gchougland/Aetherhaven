@@ -190,6 +190,8 @@ function approveSubmission(submissionId, requestedId) {
 
   const building = JSON.parse(fs.readFileSync(approved.building, "utf8"));
   building.id = id;
+  // Match client install layout: Community/.../Prefabs/{id}.prefab.json
+  building.prefabPath = `${id}.prefab.json`;
   fs.writeFileSync(approved.building, JSON.stringify(building, null, 2));
 
   const approvedMeta = {
