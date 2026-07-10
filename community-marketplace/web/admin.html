@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=8" />
+    <link rel="stylesheet" href="/styles.css?v=11" />
   </head>
   <body>
     <header class="site-header">
@@ -37,12 +37,17 @@
         <div id="adminQueue"></div>
       </section>
       <section class="card">
+        <h2>Pending screenshots</h2>
+        <p class="meta">Approve screenshots before they appear in the public build gallery.</p>
+        <div id="adminScreenshotQueue"></div>
+      </section>
+      <section class="card">
         <h2>Published buildings</h2>
         <p class="meta">Browse approved builds and remove any from the public catalog. Players who already downloaded a build keep their local copy.</p>
         <div id="adminCatalog" class="catalog-grid"></div>
       </section>
     </main>
-    <script src="/app.js?v=6"></script>
+    <script src="/app.js?v=9"></script>
     <script>
       loadAdminPage();
     </script>

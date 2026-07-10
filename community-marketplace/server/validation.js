@@ -4,7 +4,36 @@
 export const MAX_PREFAB_BYTES = 32 * 1024 * 1024;
 export const MAX_BUILDING_JSON_BYTES = 512 * 1024;
 export const MAX_ICON_BYTES = 2 * 1024 * 1024;
+export const MAX_SCREENSHOT_BYTES = 5 * 1024 * 1024;
+export const MAX_SCREENSHOTS_PER_OWNER = 6;
+export const ALLOWED_SCREENSHOT_MIME = Object.freeze(["image/jpeg", "image/png", "image/webp"]);
 export const COMMUNITY_ID_PREFIX = "plot_community_";
+
+const SCREENSHOT_EXT_BY_MIME = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+
+/**
+ * @param {string} mimeType
+ * @returns {string | null}
+ */
+export function screenshotExtForMime(mimeType) {
+  return SCREENSHOT_EXT_BY_MIME[String(mimeType || "").toLowerCase()] || null;
+}
+
+/**
+ * @param {string} mimeType
+ */
+export function isAllowedScreenshotMime(mimeType) {
+  return ALLOWED_SCREENSHOT_MIME.includes(String(mimeType || "").toLowerCase());
+}
+
+/** Human-readable max size for client/server error messages. */
+export function formatScreenshotMaxSizeLabel() {
+  return "5 MB";
+}
 
 const ID_PATTERN = /^plot_community_[a-z0-9_]{8,80}$/;
 

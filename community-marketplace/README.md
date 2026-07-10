@@ -49,7 +49,12 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | `POST /api/v1/buildings/:id/download` | Record an in-game install (rate limited; returns `{ downloadCount }`) |
 | `POST /api/v1/submissions` | Upload (`X-Player-Uuid` from game server; rate limited) |
 | `POST /api/buildings/:id/upvote` | Toggle upvote (Hytale OAuth session required; rate limited) |
+| `POST /api/my-submissions/:id/screenshots` | Upload screenshot for own pending submission (JPEG/PNG/WebP, max 5 MB, up to 6 per build) |
+| `POST /api/my-buildings/:id/screenshots` | Upload screenshot for own published build |
+| `DELETE /api/my-screenshots/:id` | Remove own screenshot |
+| `GET /api/buildings/:id/screenshots` | List approved screenshots for a published build |
+| `GET /api/admin/screenshots/pending` | Admin screenshot review queue |
 
-Catalog entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone).
+Catalog entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators can upload screenshots from the dashboard; screenshots require separate admin approval before appearing in the public gallery.
 
 Approve/reject via admin website (Hytale OAuth) or optional `POST /api/v1/submissions/:id/approve` with `API_KEY`.

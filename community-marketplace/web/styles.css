@@ -441,30 +441,74 @@ main.wrap > section + section {
   color: var(--text-muted);
 }
 
+.building-details {
+  margin-top: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(12, 8, 8, 0.35);
+  overflow: hidden;
+}
+
+.building-details--open {
+  border-color: var(--border-gold);
+}
+
 .description-toggle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  margin-top: var(--space-xs);
-  padding: 0;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  width: 100%;
+  margin: 0;
+  padding: 0.45rem 0.65rem;
   font-family: var(--font-body);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--gold);
-  background: none;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-align: left;
+  background: transparent;
   border: none;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
+  transition:
+    color var(--transition),
+    background var(--transition);
 }
 
 .description-toggle:hover {
-  color: var(--text);
+  color: var(--gold-bright);
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.description-toggle[aria-expanded="true"] {
+  color: var(--gold);
+  border-bottom: 1px solid var(--border);
+}
+
+.description-toggle-chevron {
+  width: 0.45rem;
+  height: 0.45rem;
+  flex-shrink: 0;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--transition);
+}
+
+.description-toggle[aria-expanded="true"] .description-toggle-chevron {
+  transform: rotate(-135deg);
+  margin-top: 0.15rem;
 }
 
 .building-description {
-  margin: var(--space-xs) 0 0;
+  margin: 0;
+  padding: 0.65rem 0.75rem 0.75rem;
+}
+
+.building-description p {
+  margin: 0;
   font-size: 0.9rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--text-muted);
   white-space: pre-wrap;
 }
@@ -472,7 +516,13 @@ main.wrap > section + section {
 .building-description--pending {
   margin-top: var(--space-sm);
   margin-bottom: var(--space-sm);
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--text);
+  white-space: pre-wrap;
 }
 
 .queue-actions {
@@ -672,6 +722,311 @@ button.danger:hover {
 }
 
 /* ==========================================================================
+   Screenshots — dashboard manager & admin queue
+   ========================================================================== */
+
+.screenshot-manager {
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+.screenshot-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.screenshot-empty {
+  margin: 0;
+}
+
+.screenshot-thumb {
+  position: relative;
+  width: 88px;
+  height: 66px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+.screenshot-thumb img,
+.screenshot-thumb-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.screenshot-thumb-placeholder {
+  background: linear-gradient(135deg, var(--bg-deep), var(--panel));
+}
+
+.screenshot-thumb-status {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.15rem 0.25rem;
+  font-size: 0.65rem;
+  line-height: 1.2;
+  text-align: center;
+  background: rgba(12, 8, 8, 0.82);
+  color: var(--gold);
+}
+
+.screenshot-thumb[data-status="approved"] .screenshot-thumb-status {
+  color: #6ec96e;
+}
+
+.screenshot-thumb-delete {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: rgba(12, 8, 8, 0.75);
+  color: var(--danger-text);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.screenshot-thumb-delete:hover {
+  background: var(--danger);
+}
+
+.screenshot-upload-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.screenshot-upload-label {
+  display: inline-flex;
+  width: fit-content;
+  cursor: pointer;
+}
+
+.screenshot-upload-label input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.screenshot-upload-label input[type="file"]:disabled + .screenshot-upload-btn {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.screenshot-upload-btn {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, #454240, var(--secondary-btn));
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.screenshot-queue-item {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.screenshot-queue-preview {
+  flex-shrink: 0;
+  width: 160px;
+  height: 100px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-deep);
+}
+
+.screenshot-queue-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   Browse detail modal & gallery
+   ========================================================================== */
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.building-card--clickable {
+  cursor: pointer;
+}
+
+.building-card--clickable:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.building-card-shots {
+  color: var(--gold);
+}
+
+.building-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+}
+
+.building-modal[hidden] {
+  display: none;
+}
+
+.building-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 5, 5, 0.72);
+}
+
+.building-modal-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 100%);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  padding: var(--space-lg);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(107, 21, 48, 0.18), transparent),
+    var(--panel);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.building-modal-close {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-deep);
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.building-modal-close:hover {
+  border-color: var(--border-gold);
+  color: var(--gold-bright);
+}
+
+.building-modal-header {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  padding-right: 2rem;
+  margin-bottom: var(--space-md);
+}
+
+.building-modal-header .building-icon-wrap {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+
+.building-modal-header h2 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1.4rem;
+}
+
+.building-modal-id {
+  word-break: break-all;
+}
+
+.building-modal-id code {
+  font-size: 0.85em;
+  color: var(--text-muted);
+}
+
+.building-icon--modal {
+  width: 100%;
+  height: 100%;
+}
+
+.building-modal-description {
+  margin-bottom: var(--space-md);
+  padding: var(--space-md);
+  border-left: 2px solid var(--border-gold);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.building-modal-description p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.building-gallery-main {
+  margin-bottom: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-deep);
+  min-height: 180px;
+}
+
+.building-gallery-main img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  background: var(--bg-deep);
+}
+
+.building-gallery-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.building-gallery-thumb {
+  width: 72px;
+  height: 54px;
+  padding: 0;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-deep);
+  cursor: pointer;
+}
+
+.building-gallery-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.building-gallery-thumb--active,
+.building-gallery-thumb:hover {
+  border-color: var(--gold);
+}
+
+/* ==========================================================================
    Profile card
    ========================================================================== */
 
@@ -711,5 +1066,22 @@ button.danger:hover {
 
   .ornament-divider {
     width: 100%;
+  }
+
+  .screenshot-queue-item {
+    flex-direction: column;
+  }
+
+  .screenshot-queue-preview {
+    width: 100%;
+    height: 160px;
+  }
+
+  .building-modal-dialog {
+    padding: var(--space-md);
+  }
+
+  .building-modal-header {
+    flex-direction: column;
   }
 }

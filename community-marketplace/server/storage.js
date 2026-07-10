@@ -13,6 +13,7 @@ export function createStorage(dataDir) {
     approved: path.join(root, "approved"),
     pending: path.join(root, "submissions", "pending"),
     rejected: path.join(root, "submissions", "rejected"),
+    screenshots: path.join(root, "screenshots"),
   };
   for (const d of Object.values(dirs)) {
     fs.mkdirSync(d, { recursive: true });
@@ -89,6 +90,113 @@ export function createStorage(dataDir) {
     };
   }
 
+  function screenshotDir(screenshotId) {
+    return path.join(dirs.screenshots, screenshotId);
+  }
+
+  function screenshotPaths(screenshotId, ext) {
+    const dir = screenshotDir(screenshotId);
+    return {
+      dir,
+      meta: path.join(dir, "meta.json"),
+      image: path.join(dir, `image.${ext}`),
+    };
+  }
+
+  function loadScreenshotMeta(screenshotId) {
+    const metaPath = path.join(screenshotDir(screenshotId), "meta.json");
+    if (!fs.existsSync(metaPath)) {
+      return null;
+    }
+    return JSON.parse(fs.readFileSync(metaPath, "utf8"));
+  }
+
+  function writeScreenshotMeta(meta) {
+    const dir = screenshotDir(meta.screenshotId);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "meta.json"), JSON.stringify(meta, null, 2));
+  }
+
+  function resolveScreenshotImagePath(meta) {
+    if (!meta?.screenshotId || !meta?.ext) {
+      return null;
+    }
+    const file = screenshotPaths(meta.screenshotId, meta.ext).image;
+    return fs.existsSync(file) ? file : null;
+  }
+
+  function listAllScreenshotMetas() {
+    if (!fs.existsSync(dirs.screenshots)) {
+      return [];
+    }
+    return fs
+      .readdirSync(dirs.screenshots, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => loadScreenshotMeta(e.name))
+      .filter(Boolean);
+  }
+
+  /**
+   * @param {"pending"|"approved"} ownerKind
+   * @param {string} ownerId
+   * @param {"pending"|"approved"|null} [status]
+   */
+  function listScreenshotsForOwner(ownerKind, ownerId, status = null) {
+    return listAllScreenshotMetas().filter((meta) => {
+      if (meta.ownerKind !== ownerKind || meta.ownerId !== ownerId) {
+        return false;
+      }
+      if (status && meta.status !== status) {
+        return false;
+      }
+      return true;
+    });
+  }
+
+  function listPendingScreenshots() {
+    return listAllScreenshotMetas()
+      .filter((meta) => meta.status === "pending")
+      .sort((a, b) => String(b.uploadedAt || "").localeCompare(String(a.uploadedAt || "")));
+  }
+
+  function deleteScreenshot(screenshotId) {
+    const dir = screenshotDir(screenshotId);
+    if (fs.existsSync(dir)) {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  }
+
+  /**
+   * @param {"pending"|"approved"} ownerKind
+   * @param {string} ownerId
+   */
+  function deleteScreenshotsForOwner(ownerKind, ownerId) {
+    for (const meta of listScreenshotsForOwner(ownerKind, ownerId)) {
+      deleteScreenshot(meta.screenshotId);
+    }
+  }
+
+  /**
+   * When a pending submission is approved, re-point its screenshots to the published building id.
+   * @param {string} submissionId
+   * @param {string} buildingId
+   */
+  function reassignScreenshotsToApproved(submissionId, buildingId) {
+    for (const meta of listScreenshotsForOwner("pending", submissionId)) {
+      meta.ownerKind = "approved";
+      meta.ownerId = buildingId;
+      writeScreenshotMeta(meta);
+    }
+  }
+
+  /**
+   * @param {"pending"|"approved"} ownerKind
+   * @param {string} ownerId
+   */
+  function countScreenshotsForOwner(ownerKind, ownerId) {
+    return listScreenshotsForOwner(ownerKind, ownerId).length;
+  }
+
   return {
     dirs,
     readManifest,
@@ -99,5 +207,17 @@ export function createStorage(dataDir) {
     loadSubmissionMeta,
     approvedDir,
     approvedPaths,
+    screenshotDir,
+    screenshotPaths,
+    loadScreenshotMeta,
+    writeScreenshotMeta,
+    resolveScreenshotImagePath,
+    listAllScreenshotMetas,
+    listScreenshotsForOwner,
+    listPendingScreenshots,
+    deleteScreenshot,
+    deleteScreenshotsForOwner,
+    reassignScreenshotsToApproved,
+    countScreenshotsForOwner,
   };
 }

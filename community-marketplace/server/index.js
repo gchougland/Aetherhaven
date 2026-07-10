@@ -11,13 +11,18 @@ import { createSessionMiddleware } from "./sessionStore.js";
 import { createStorage } from "./storage.js";
 import {
   assertSize,
+  formatScreenshotMaxSizeLabel,
+  isAllowedScreenshotMime,
   isBlockIdCompatible,
   MAX_BUILDING_JSON_BYTES,
   MAX_ICON_BYTES,
   MAX_PREFAB_BYTES,
+  MAX_SCREENSHOT_BYTES,
+  MAX_SCREENSHOTS_PER_OWNER,
   normalizeCommunityId,
   readPrefabBlockIdVersion,
   assignCommunityCatalogId,
+  screenshotExtForMime,
   validateSubmissionBuilding,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
@@ -54,6 +59,11 @@ const oidc = createOidc({
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_PREFAB_BYTES },
+});
+
+const screenshotUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_SCREENSHOT_BYTES },
 });
 
 const app = express();
@@ -266,6 +276,7 @@ function approveSubmission(submissionId, requestedId) {
   storage.writeManifest(manifest);
 
   fs.rmSync(pendingDir, { recursive: true, force: true });
+  storage.reassignScreenshotsToApproved(submissionId, id);
   return { status: 200, body: { id, status: "approved" } };
 }
 
@@ -274,6 +285,7 @@ function rejectSubmission(submissionId, reason) {
   if (!fs.existsSync(pendingDir)) {
     return { status: 404, body: { error: "not_found" } };
   }
+  storage.deleteScreenshotsForOwner("pending", submissionId);
   const rejectedDir = storage.submissionDir(submissionId, "rejected");
   fs.mkdirSync(path.dirname(rejectedDir), { recursive: true });
   fs.renameSync(pendingDir, rejectedDir);
@@ -299,6 +311,7 @@ function deleteApprovedBuilding(buildingId) {
   if (fs.existsSync(approvedDir)) {
     fs.rmSync(approvedDir, { recursive: true, force: true });
   }
+  storage.deleteScreenshotsForOwner("approved", id);
   manifest.entries = manifest.entries.filter((e) => e.id !== id);
   manifest.version = (manifest.version || 0) + 1;
   storage.writeManifest(manifest);
@@ -356,7 +369,11 @@ function listSubmissionsForCreator(webUser) {
   const pending = storage
     .listPending()
     .filter((s) => isOwnedByWebUser(s, webUser))
-    .map((s) => ({ kind: "pending", ...s }));
+    .map((s) => ({
+      kind: "pending",
+      ...s,
+      screenshots: enrichOwnerScreenshots("pending", s.submissionId, true),
+    }));
 
   const rejected = storage
     .listRejected()
@@ -378,6 +395,7 @@ function listSubmissionsForCreator(webUser) {
       downloadCount: downloads.getCount(e.id),
       creatorUuid: e.creatorUuid,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
+      screenshots: enrichOwnerScreenshots("approved", e.id, true),
     }));
 
   return [...pending, ...approved, ...rejected].sort((a, b) => {
@@ -385,6 +403,42 @@ function listSubmissionsForCreator(webUser) {
     const dateB = b.submittedAt || b.approvedAt || b.rejectedAt || "";
     return dateB.localeCompare(dateA);
   });
+}
+
+/**
+ * @param {"pending"|"approved"} ownerKind
+ * @param {string} ownerId
+ * @param {boolean} forOwner
+ */
+function enrichOwnerScreenshots(ownerKind, ownerId, forOwner) {
+  return storage.listScreenshotsForOwner(ownerKind, ownerId).map((meta) => {
+    const url =
+      forOwner || meta.status === "approved"
+        ? screenshotImageUrl(meta, forOwner)
+        : null;
+    return {
+      screenshotId: meta.screenshotId,
+      status: meta.status,
+      bytes: meta.bytes || 0,
+      mimeType: meta.mimeType,
+      uploadedAt: meta.uploadedAt,
+      url,
+    };
+  });
+}
+
+/**
+ * @param {object} meta
+ * @param {boolean} forOwner
+ */
+function screenshotImageUrl(meta, forOwner) {
+  if (forOwner && meta.status !== "approved") {
+    return `/api/my-screenshots/${encodeURIComponent(meta.screenshotId)}/image`;
+  }
+  if (meta.ownerKind === "approved") {
+    return `/api/buildings/${encodeURIComponent(meta.ownerId)}/screenshots/${encodeURIComponent(meta.screenshotId)}`;
+  }
+  return `/api/my-screenshots/${encodeURIComponent(meta.screenshotId)}/image`;
 }
 
 function withdrawPendingSubmission(submissionId, webUser) {
@@ -395,6 +449,7 @@ function withdrawPendingSubmission(submissionId, webUser) {
   if (!isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
+  storage.deleteScreenshotsForOwner("pending", submissionId);
   const dir = storage.submissionDir(submissionId, "pending");
   if (fs.existsSync(dir)) {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -473,6 +528,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       compatible,
       upvoteCount: voteCounts[e.id] || 0,
       downloadCount: downloadCounts[e.id] || 0,
+      screenshotCount: storage.listScreenshotsForOwner("approved", e.id, "approved").length,
       iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
@@ -787,6 +843,326 @@ app.post("/api/my-submissions/:submissionId/dismiss", requireWebUser, (req, res)
 app.post("/api/my-buildings/:buildingId/remove", requireWebUser, (req, res) => {
   const result = removeOwnApprovedBuilding(req.params.buildingId, sessionWebUser(req));
   res.status(result.status).json(result.body);
+});
+
+function multerScreenshotError(err, res) {
+  if (err instanceof multer.MulterError && err.code === "LIMIT_FILE_SIZE") {
+    res.status(400).json({
+      error: "screenshot_too_large",
+      message: `Screenshot too large (max ${formatScreenshotMaxSizeLabel()})`,
+      maxBytes: MAX_SCREENSHOT_BYTES,
+    });
+    return true;
+  }
+  return false;
+}
+
+/**
+ * @param {"pending"|"approved"} ownerKind
+ * @param {string} ownerId
+ * @param {object} ownerMeta
+ * @param {Express.Multer.File} file
+ * @param {{ profileUuid: string, profileUsername: string }} webUser
+ */
+function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser) {
+  if (!file) {
+    return { status: 400, body: { error: "screenshot_required", message: "Choose an image file to upload." } };
+  }
+  if (!isAllowedScreenshotMime(file.mimetype)) {
+    return {
+      status: 400,
+      body: {
+        error: "screenshot_type_invalid",
+        message: "Screenshots must be JPEG, PNG, or WebP.",
+      },
+    };
+  }
+  const ext = screenshotExtForMime(file.mimetype);
+  if (!ext) {
+    return {
+      status: 400,
+      body: {
+        error: "screenshot_type_invalid",
+        message: "Screenshots must be JPEG, PNG, or WebP.",
+      },
+    };
+  }
+  try {
+    assertSize(file.size, MAX_SCREENSHOT_BYTES, "screenshot");
+  } catch {
+    return {
+      status: 400,
+      body: {
+        error: "screenshot_too_large",
+        message: `Screenshot too large (max ${formatScreenshotMaxSizeLabel()})`,
+        maxBytes: MAX_SCREENSHOT_BYTES,
+      },
+    };
+  }
+  const existingCount = storage.countScreenshotsForOwner(ownerKind, ownerId);
+  if (existingCount >= MAX_SCREENSHOTS_PER_OWNER) {
+    return {
+      status: 400,
+      body: {
+        error: "screenshot_limit_reached",
+        message: `You can upload up to ${MAX_SCREENSHOTS_PER_OWNER} screenshots per build.`,
+        maxCount: MAX_SCREENSHOTS_PER_OWNER,
+      },
+    };
+  }
+
+  const screenshotId = crypto.randomUUID();
+  const paths = storage.screenshotPaths(screenshotId, ext);
+  fs.mkdirSync(paths.dir, { recursive: true });
+  fs.writeFileSync(paths.image, file.buffer);
+  const meta = {
+    screenshotId,
+    ownerKind,
+    ownerId,
+    creatorUuid: ownerMeta.creatorUuid || webUser.profileUuid,
+    creatorName: ownerMeta.creatorName || webUser.profileUsername || "Unknown",
+    status: "pending",
+    uploadedAt: new Date().toISOString(),
+    mimeType: file.mimetype.toLowerCase(),
+    ext,
+    bytes: file.size,
+  };
+  storage.writeScreenshotMeta(meta);
+  return {
+    status: 201,
+    body: {
+      screenshotId,
+      status: "pending",
+      bytes: file.size,
+      url: `/api/my-screenshots/${encodeURIComponent(screenshotId)}/image`,
+    },
+  };
+}
+
+function uploadPendingSubmissionScreenshot(submissionId, file, webUser) {
+  const meta = storage.loadSubmissionMeta(submissionId, "pending");
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByWebUser(meta, webUser)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  return saveOwnerScreenshot("pending", submissionId, meta, file, webUser);
+}
+
+function uploadApprovedBuildingScreenshot(buildingId, file, webUser) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByWebUser(entry, webUser)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  return saveOwnerScreenshot("approved", id, entry, file, webUser);
+}
+
+function deleteOwnScreenshot(screenshotId, webUser) {
+  const meta = storage.loadScreenshotMeta(screenshotId);
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!isOwnedByWebUser(meta, webUser)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  storage.deleteScreenshot(screenshotId);
+  return { status: 200, body: { screenshotId, status: "deleted" } };
+}
+
+function approveScreenshot(screenshotId) {
+  const meta = storage.loadScreenshotMeta(screenshotId);
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (meta.status !== "pending") {
+    return { status: 400, body: { error: "not_pending" } };
+  }
+  meta.status = "approved";
+  meta.approvedAt = new Date().toISOString();
+  storage.writeScreenshotMeta(meta);
+  return { status: 200, body: { screenshotId, status: "approved" } };
+}
+
+function rejectScreenshot(screenshotId) {
+  const meta = storage.loadScreenshotMeta(screenshotId);
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  storage.deleteScreenshot(screenshotId);
+  return { status: 200, body: { screenshotId, status: "rejected" } };
+}
+
+function enrichPendingScreenshotForAdmin(meta) {
+  let displayName = meta.ownerId;
+  let ownerLabel = meta.ownerId;
+  if (meta.ownerKind === "pending") {
+    const submission = storage.loadSubmissionMeta(meta.ownerId, "pending");
+    displayName = submission?.displayName || meta.ownerId;
+    ownerLabel = meta.ownerId;
+  } else {
+    const manifest = storage.readManifest();
+    const entry = (manifest.entries || []).find((e) => e.id === meta.ownerId);
+    displayName = entry?.displayName || meta.ownerId;
+    ownerLabel = meta.ownerId;
+  }
+  return {
+    ...meta,
+    displayName,
+    ownerLabel,
+    imageUrl: `/api/admin/screenshots/${encodeURIComponent(meta.screenshotId)}/image`,
+  };
+}
+
+function sendScreenshotImage(meta, res) {
+  const file = storage.resolveScreenshotImagePath(meta);
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type(meta.mimeType || "application/octet-stream").sendFile(file);
+}
+
+app.post(
+  "/api/my-submissions/:submissionId/screenshots",
+  requireWebUser,
+  (req, res, next) => {
+    screenshotUpload.single("screenshot")(req, res, (err) => {
+      if (err) {
+        if (multerScreenshotError(err, res)) {
+          return;
+        }
+        res.status(400).json({ error: err.message || "upload_failed" });
+        return;
+      }
+      next();
+    });
+  },
+  (req, res) => {
+    const result = uploadPendingSubmissionScreenshot(
+      req.params.submissionId,
+      req.file,
+      sessionWebUser(req)
+    );
+    res.status(result.status).json(result.body);
+  }
+);
+
+app.post(
+  "/api/my-buildings/:buildingId/screenshots",
+  requireWebUser,
+  (req, res, next) => {
+    screenshotUpload.single("screenshot")(req, res, (err) => {
+      if (err) {
+        if (multerScreenshotError(err, res)) {
+          return;
+        }
+        res.status(400).json({ error: err.message || "upload_failed" });
+        return;
+      }
+      next();
+    });
+  },
+  (req, res) => {
+    const result = uploadApprovedBuildingScreenshot(
+      req.params.buildingId,
+      req.file,
+      sessionWebUser(req)
+    );
+    res.status(result.status).json(result.body);
+  }
+);
+
+app.delete("/api/my-screenshots/:screenshotId", requireWebUser, (req, res) => {
+  const result = deleteOwnScreenshot(req.params.screenshotId, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/my-screenshots/:screenshotId/image", requireWebUser, (req, res) => {
+  const meta = storage.loadScreenshotMeta(req.params.screenshotId);
+  if (!meta) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  if (!isOwnedByWebUser(meta, sessionWebUser(req))) {
+    res.status(403).json({ error: "not_owner" });
+    return;
+  }
+  sendScreenshotImage(meta, res);
+});
+
+app.get("/api/admin/screenshots/pending", requireWebUser, requireAdmin, (_req, res) => {
+  res.json({
+    screenshots: storage.listPendingScreenshots().map(enrichPendingScreenshotForAdmin),
+  });
+});
+
+app.get("/api/admin/screenshots/:screenshotId/image", requireWebUser, requireAdmin, (req, res) => {
+  const meta = storage.loadScreenshotMeta(req.params.screenshotId);
+  if (!meta) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  sendScreenshotImage(meta, res);
+});
+
+app.post("/api/admin/screenshots/:screenshotId/approve", requireWebUser, requireAdmin, (req, res) => {
+  const result = approveScreenshot(req.params.screenshotId);
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/admin/screenshots/:screenshotId/reject", requireWebUser, requireAdmin, (req, res) => {
+  const result = rejectScreenshot(req.params.screenshotId);
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/buildings/:id/screenshots", (req, res) => {
+  const id = normalizeCommunityId(req.params.id);
+  if (!id) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  const screenshots = storage.listScreenshotsForOwner("approved", id, "approved").map((meta) => ({
+    screenshotId: meta.screenshotId,
+    bytes: meta.bytes || 0,
+    mimeType: meta.mimeType,
+    uploadedAt: meta.uploadedAt,
+    url: `/api/buildings/${encodeURIComponent(id)}/screenshots/${encodeURIComponent(meta.screenshotId)}`,
+  }));
+  res.json({ screenshots });
+});
+
+app.get("/api/buildings/:id/screenshots/:screenshotId", (req, res) => {
+  const id = normalizeCommunityId(req.params.id);
+  if (!id) {
+    res.status(400).json({ error: "invalid_id" });
+    return;
+  }
+  const meta = storage.loadScreenshotMeta(req.params.screenshotId);
+  if (
+    !meta ||
+    meta.ownerKind !== "approved" ||
+    meta.ownerId !== id ||
+    meta.status !== "approved"
+  ) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  sendScreenshotImage(meta, res);
 });
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {

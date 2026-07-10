@@ -60,9 +60,9 @@ function upvoteControlHtml(entry, canVote) {
   const count = entry.upvoteCount || 0;
   const active = entry.userHasUpvoted ? " upvote-btn--active" : "";
   if (!canVote) {
-    return `<a class="upvote-btn" href="/auth/login" title="Sign in to upvote" aria-label="Sign in to upvote (${count} upvotes)"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></a>`;
+    return `<a class="upvote-btn" href="/auth/login" title="Sign in to upvote" aria-label="Sign in to upvote (${count} upvotes)" onclick="event.stopPropagation()"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></a>`;
   }
-  return `<button type="button" class="upvote-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="toggleUpvote('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasUpvoted ? "true" : "false"}" aria-label="Upvote (${count})"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></button>`;
+  return `<button type="button" class="upvote-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleUpvote('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasUpvoted ? "true" : "false"}" aria-label="Upvote (${count})"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></button>`;
 }
 
 function formatDownloadCount(count) {
@@ -79,39 +79,59 @@ function descriptionToggleHtml(entry) {
     return "";
   }
   return `
-    <button type="button" class="description-toggle" aria-expanded="false" onclick="toggleBuildingDescription(this)">
-      About this build
-    </button>
-    <p class="building-description" hidden>${escapeHtml(desc)}</p>`;
+    <div class="building-details">
+      <button type="button" class="description-toggle" aria-expanded="false" onclick="event.stopPropagation(); toggleBuildingDescription(this)">
+        <span class="description-toggle-label">Description</span>
+        <span class="description-toggle-chevron" aria-hidden="true"></span>
+      </button>
+      <div class="building-description" hidden>
+        <p>${escapeHtml(desc)}</p>
+      </div>
+    </div>`;
 }
 
 function toggleBuildingDescription(buttonEl) {
   if (!buttonEl) {
     return;
   }
-  const desc = buttonEl.nextElementSibling;
-  if (!desc || !desc.classList.contains("building-description")) {
+  const details = buttonEl.closest(".building-details");
+  const desc = details?.querySelector(".building-description");
+  if (!details || !desc) {
     return;
   }
   const open = buttonEl.getAttribute("aria-expanded") === "true";
   buttonEl.setAttribute("aria-expanded", open ? "false" : "true");
+  details.classList.toggle("building-details--open", !open);
   desc.hidden = open;
-  buttonEl.textContent = open ? "About this build" : "Hide description";
 }
 
 function renderBuildingCard(entry, options = {}) {
-  const { canVote = false, adminDelete = false, showId = false } = options;
+  const { canVote = false, adminDelete = false, showId = false, openDetail = false } = options;
   const deleteBtn = adminDelete
     ? `<button
         type="button"
         class="danger admin-delete-btn"
-        onclick="deleteApprovedBuilding('${escapeAttr(entry.id)}', '${escapeAttr(entry.displayName)}')"
+        onclick="event.stopPropagation(); deleteApprovedBuilding('${escapeAttr(entry.id)}', '${escapeAttr(entry.displayName)}')"
       >Remove permanently</button>`
     : "";
   const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
-  const cardClass = adminDelete ? "card building-card admin-building-card" : "card building-card";
+  const cardClass = [
+    "card",
+    "building-card",
+    adminDelete ? "admin-building-card" : "",
+    openDetail ? "building-card--clickable" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const shotHint =
+    openDetail && entry.screenshotCount > 0
+      ? `<p class="meta building-card-shots">${escapeHtml(String(entry.screenshotCount))} screenshot${entry.screenshotCount === 1 ? "" : "s"}</p>`
+      : "";
+  const openAttrs = openDetail
+    ? `role="button" tabindex="0" onclick="openBuildingDetail('${escapeAttr(entry.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"`
+    : "";
   return `
-    <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}">
+    <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
         ${buildingIconHtml(entry.iconUrl)}
         ${upvoteControlHtml(entry, canVote)}
@@ -120,6 +140,7 @@ function renderBuildingCard(entry, options = {}) {
       ${idMeta}
       <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
       <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
+      ${shotHint}
       ${descriptionToggleHtml(entry)}
       ${deleteBtn}
     </article>`;
@@ -162,11 +183,13 @@ async function loadCatalog() {
     const user = await fetchMe();
     updateAuthNav(user);
     const data = await fetchCatalog();
+    catalogEntriesById = new Map((data.entries || []).map((e) => [e.id, e]));
     if (!data.entries?.length) {
       el.innerHTML = emptyStateHtml("No approved buildings yet.");
       return;
     }
-    el.innerHTML = data.entries.map((e) => renderBuildingCard(e, { canVote: Boolean(user) })).join("");
+    el.innerHTML = data.entries.map((e) => renderBuildingCard(e, { canVote: Boolean(user), openDetail: true })).join("");
+    ensureBuildingDetailModal();
   } catch (e) {
     showStatusError(status, "Could not load catalog.");
   }
@@ -219,6 +242,60 @@ function submissionStatusClass(item) {
   return "";
 }
 
+const MAX_SCREENSHOT_BYTES = 5 * 1024 * 1024;
+const MAX_SCREENSHOTS_PER_OWNER = 6;
+const SCREENSHOT_MAX_SIZE_LABEL = "5 MB";
+const ALLOWED_SCREENSHOT_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+function screenshotStatusLabel(status) {
+  if (status === "approved") return "Approved";
+  if (status === "rejected") return "Rejected";
+  return "Pending review";
+}
+
+function renderOwnerScreenshots(item) {
+  if (item.kind !== "pending" && item.kind !== "approved") {
+    return "";
+  }
+  const shots = Array.isArray(item.screenshots) ? item.screenshots : [];
+  const ownerKind = item.kind;
+  const ownerId = item.kind === "approved" ? item.id : item.submissionId;
+  const atLimit = shots.length >= MAX_SCREENSHOTS_PER_OWNER;
+  const thumbs = shots.length
+    ? shots
+        .map((shot) => {
+          const img = shot.url
+            ? `<img src="${escapeAttr(shot.url)}" alt="" />`
+            : `<div class="screenshot-thumb-placeholder" aria-hidden="true"></div>`;
+          return `
+      <div class="screenshot-thumb" data-status="${escapeAttr(shot.status || "pending")}">
+        ${img}
+        <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}</span>
+        <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}')">×</button>
+      </div>`;
+        })
+        .join("")
+    : `<p class="meta screenshot-empty">No screenshots yet.</p>`;
+
+  const uploadDisabled = atLimit ? "disabled" : "";
+  return `
+    <div class="screenshot-manager">
+      <div class="screenshot-strip">${thumbs}</div>
+      <div class="screenshot-upload-row">
+        <label class="screenshot-upload-label">
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+            ${uploadDisabled}
+            onchange="uploadMyScreenshot('${escapeAttr(ownerKind)}', '${escapeAttr(ownerId)}', this)"
+          />
+          <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
+        </label>
+        <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build. Screenshots need admin approval before they appear publicly.</p>
+      </div>
+    </div>`;
+}
+
 function renderMySubmissionItem(item) {
   const status = submissionStatusLabel(item);
   const statusClass = submissionStatusClass(item);
@@ -250,9 +327,54 @@ function renderMySubmissionItem(item) {
         <strong>${title}</strong>
         <p class="meta"><span class="submission-status ${statusClass}">${escapeHtml(status)}</span></p>
         ${meta}
+        ${renderOwnerScreenshots(item)}
         ${action}
       </div>
     </div>`;
+}
+
+async function uploadMyScreenshot(ownerKind, ownerId, inputEl) {
+  const file = inputEl?.files?.[0];
+  if (!file) {
+    return;
+  }
+  if (!ALLOWED_SCREENSHOT_TYPES.includes(file.type)) {
+    alert("Screenshots must be JPEG, PNG, or WebP.");
+    inputEl.value = "";
+    return;
+  }
+  if (file.size > MAX_SCREENSHOT_BYTES) {
+    alert(`Screenshot too large (max ${SCREENSHOT_MAX_SIZE_LABEL}).`);
+    inputEl.value = "";
+    return;
+  }
+  const endpoint =
+    ownerKind === "approved"
+      ? `/api/my-buildings/${encodeURIComponent(ownerId)}/screenshots`
+      : `/api/my-submissions/${encodeURIComponent(ownerId)}/screenshots`;
+  const form = new FormData();
+  form.append("screenshot", file);
+  const res = await fetch(endpoint, { method: "POST", body: form });
+  const body = await res.json().catch(() => ({}));
+  inputEl.value = "";
+  if (!res.ok) {
+    alert(body.message || body.error || "Upload failed");
+    return;
+  }
+  loadDashboard();
+}
+
+async function deleteMyScreenshot(screenshotId) {
+  if (!confirm("Remove this screenshot?")) {
+    return;
+  }
+  const res = await fetch(`/api/my-screenshots/${encodeURIComponent(screenshotId)}`, { method: "DELETE" });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Delete failed");
+    return;
+  }
+  loadDashboard();
 }
 
 async function withdrawMySubmission(submissionId, displayName) {
@@ -307,7 +429,83 @@ async function loadAdminPage() {
     window.location.href = "/auth/login";
     return;
   }
-  await Promise.all([loadAdminQueue(), loadAdminCatalog()]);
+  await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
+}
+
+async function loadAdminScreenshotQueue() {
+  const el = document.getElementById("adminScreenshotQueue");
+  if (!el) return;
+  try {
+    const res = await fetch("/api/admin/screenshots/pending");
+    if (res.status === 401) {
+      window.location.href = "/auth/login";
+      return;
+    }
+    if (res.status === 403) {
+      el.innerHTML =
+        "<p>Admin access required. Add your profile UUID to <code>ADMIN_HYTALE_UUIDS</code> on Railway.</p>";
+      return;
+    }
+    if (!res.ok) {
+      el.innerHTML = emptyStateHtml("Could not load pending screenshots.");
+      return;
+    }
+    const data = await res.json();
+    const items = data.screenshots || [];
+    if (!items.length) {
+      el.innerHTML = emptyStateHtml("No screenshots waiting for review.");
+      return;
+    }
+    el.innerHTML = items
+      .map((s) => {
+        const ownerKindLabel = s.ownerKind === "approved" ? "Published build" : "Pending submission";
+        return `
+    <div class="queue-item screenshot-queue-item">
+      <a class="screenshot-queue-preview" href="${escapeAttr(s.imageUrl)}" target="_blank" rel="noopener">
+        <img src="${escapeAttr(s.imageUrl)}" alt="Screenshot preview" />
+      </a>
+      <div class="submission-body">
+        <strong>${escapeHtml(s.displayName || "Untitled")}</strong>
+        <p class="meta">${escapeHtml(ownerKindLabel)} · ${escapeHtml(s.ownerLabel || s.ownerId || "")}</p>
+        <p class="meta">by ${escapeHtml(s.creatorName || "Unknown")} · ${formatBytes(s.bytes || 0)}</p>
+        <div class="queue-actions">
+          <button type="button" onclick="approveScreenshot('${escapeAttr(s.screenshotId)}')">Approve</button>
+          <button type="button" class="secondary" onclick="rejectScreenshot('${escapeAttr(s.screenshotId)}')">Reject</button>
+        </div>
+      </div>
+    </div>`;
+      })
+      .join("");
+  } catch {
+    el.innerHTML = emptyStateHtml("Could not load pending screenshots.");
+  }
+}
+
+async function approveScreenshot(screenshotId) {
+  const res = await fetch(`/api/admin/screenshots/${encodeURIComponent(screenshotId)}/approve`, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Approve failed");
+    return;
+  }
+  loadAdminScreenshotQueue();
+}
+
+async function rejectScreenshot(screenshotId) {
+  if (!confirm("Reject and delete this screenshot?")) {
+    return;
+  }
+  const res = await fetch(`/api/admin/screenshots/${encodeURIComponent(screenshotId)}/reject`, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.error || "Reject failed");
+    return;
+  }
+  loadAdminScreenshotQueue();
 }
 
 async function loadAdminQueue() {
@@ -414,6 +612,149 @@ async function deleteApprovedBuilding(buildingId, displayName) {
     return;
   }
   loadAdminCatalog();
+}
+
+let catalogEntriesById = new Map();
+let detailModalEscBound = false;
+
+function ensureBuildingDetailModal() {
+  if (document.getElementById("buildingDetailModal")) {
+    return;
+  }
+  const modal = document.createElement("div");
+  modal.id = "buildingDetailModal";
+  modal.className = "building-modal";
+  modal.hidden = true;
+  modal.innerHTML = `
+    <div class="building-modal-backdrop" data-close-modal="true"></div>
+    <div class="building-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="buildingDetailTitle">
+      <button type="button" class="building-modal-close" aria-label="Close" data-close-modal="true">×</button>
+      <div id="buildingDetailContent" class="building-modal-content"></div>
+    </div>`;
+  modal.addEventListener("click", (event) => {
+    if (event.target?.dataset?.closeModal === "true") {
+      closeBuildingDetail();
+    }
+  });
+  document.body.appendChild(modal);
+  if (!detailModalEscBound) {
+    detailModalEscBound = true;
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeBuildingDetail();
+      }
+    });
+  }
+}
+
+async function openBuildingDetail(buildingId) {
+  ensureBuildingDetailModal();
+  const modal = document.getElementById("buildingDetailModal");
+  const content = document.getElementById("buildingDetailContent");
+  if (!modal || !content) {
+    return;
+  }
+
+  let entry = catalogEntriesById.get(buildingId);
+  if (!entry) {
+    try {
+      const data = await fetchCatalog();
+      for (const e of data.entries || []) {
+        catalogEntriesById.set(e.id, e);
+      }
+      entry = catalogEntriesById.get(buildingId);
+    } catch {
+      entry = null;
+    }
+  }
+  if (!entry) {
+    alert("Could not load building details.");
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="building-modal-header">
+      ${buildingIconHtml(entry.iconUrl, "building-icon building-icon--modal")}
+      <div>
+        <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
+        <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
+        <p class="meta building-modal-id"><code>${escapeHtml(entry.id)}</code></p>
+        <p class="meta">${formatBytes(entry.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(entry.downloadCount))} · v${escapeHtml(entry.version)}</p>
+      </div>
+    </div>
+    ${
+      String(entry.description || "").trim()
+        ? `<div class="building-modal-description"><p>${escapeHtml(entry.description)}</p></div>`
+        : ""
+    }
+    <div class="building-gallery">
+      <p class="meta">Loading screenshots…</p>
+    </div>`;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+
+  try {
+    const res = await fetch(`/api/buildings/${encodeURIComponent(buildingId)}/screenshots`);
+    const data = await res.json().catch(() => ({}));
+    const shots = res.ok ? data.screenshots || [] : [];
+    const gallery = content.querySelector(".building-gallery");
+    if (!gallery) {
+      return;
+    }
+    if (!shots.length) {
+      gallery.innerHTML = `<p class="meta">No screenshots yet.</p>`;
+      return;
+    }
+    const first = shots[0];
+    gallery.innerHTML = `
+      <div class="building-gallery-main">
+        <img id="buildingGalleryMain" src="${escapeAttr(first.url)}" alt="Screenshot of ${escapeAttr(entry.displayName)}" />
+      </div>
+      <div class="building-gallery-thumbs" role="list">
+        ${shots
+          .map(
+            (shot, index) => `
+          <button
+            type="button"
+            class="building-gallery-thumb${index === 0 ? " building-gallery-thumb--active" : ""}"
+            role="listitem"
+            aria-label="Screenshot ${index + 1}"
+            onclick="selectBuildingGalleryImage(this, '${escapeAttr(shot.url)}')"
+          >
+            <img src="${escapeAttr(shot.url)}" alt="" />
+          </button>`
+          )
+          .join("")}
+      </div>`;
+  } catch {
+    const gallery = content.querySelector(".building-gallery");
+    if (gallery) {
+      gallery.innerHTML = `<p class="meta">Could not load screenshots.</p>`;
+    }
+  }
+}
+
+function selectBuildingGalleryImage(buttonEl, url) {
+  const main = document.getElementById("buildingGalleryMain");
+  if (main) {
+    main.src = url;
+  }
+  const thumbs = buttonEl?.closest(".building-gallery-thumbs");
+  if (thumbs) {
+    thumbs.querySelectorAll(".building-gallery-thumb").forEach((el) => {
+      el.classList.remove("building-gallery-thumb--active");
+    });
+  }
+  buttonEl?.classList.add("building-gallery-thumb--active");
+}
+
+function closeBuildingDetail() {
+  const modal = document.getElementById("buildingDetailModal");
+  if (!modal || modal.hidden) {
+    return;
+  }
+  modal.hidden = true;
+  document.body.classList.remove("modal-open");
 }
 
 function escapeHtml(s) {
