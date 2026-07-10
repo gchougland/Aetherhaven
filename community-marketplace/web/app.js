@@ -4,20 +4,127 @@ async function fetchMe() {
   return user;
 }
 
-function updateAuthNav(user) {
-  const login = document.getElementById("loginLink");
-  const logout = document.getElementById("logoutLink");
-  if (user) {
-    if (login) login.hidden = true;
-    if (logout) logout.hidden = false;
-  } else {
-    if (login) login.hidden = false;
-    if (logout) logout.hidden = true;
+function userDisplayName(user) {
+  return user?.profile?.username || user?.sub || "Player";
+}
+
+function userInitials(user) {
+  const name = String(userDisplayName(user)).trim();
+  if (!name) {
+    return "?";
+  }
+  const parts = name.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+}
+
+function currentAccountPath() {
+  const path = window.location.pathname || "/";
+  if (path.endsWith("/")) {
+    return path === "/" ? "/" : path.slice(0, -1);
+  }
+  return path;
+}
+
+function accountMenuLink(href, label) {
+  const current = currentAccountPath();
+  const path = href.startsWith("/") ? href : `/${href}`;
+  const isCurrent = current === path || current.endsWith(path);
+  const currentAttr = isCurrent ? ' aria-current="page"' : "";
+  return `<a href="${escapeAttr(href)}"${currentAttr}>${escapeHtml(label)}</a>`;
+}
+
+function closeAccountMenu() {
+  const root = document.getElementById("accountMenu");
+  if (!root) {
+    return;
+  }
+  const toggle = root.querySelector(".account-menu-toggle");
+  const dropdown = root.querySelector(".account-menu-dropdown");
+  if (dropdown) {
+    dropdown.hidden = true;
+  }
+  if (toggle) {
+    toggle.setAttribute("aria-expanded", "false");
   }
 }
 
+function toggleAccountMenu() {
+  const root = document.getElementById("accountMenu");
+  if (!root) {
+    return;
+  }
+  const toggle = root.querySelector(".account-menu-toggle");
+  const dropdown = root.querySelector(".account-menu-dropdown");
+  if (!toggle || !dropdown) {
+    return;
+  }
+  const open = dropdown.hidden;
+  dropdown.hidden = !open;
+  toggle.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+let accountMenuListenersBound = false;
+
+function setupAccountMenuListeners() {
+  if (accountMenuListenersBound) {
+    return;
+  }
+  accountMenuListenersBound = true;
+  document.addEventListener("click", (event) => {
+    const root = document.getElementById("accountMenu");
+    if (!root || root.contains(event.target)) {
+      return;
+    }
+    closeAccountMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAccountMenu();
+    }
+  });
+}
+
+function renderAccountMenu(user) {
+  const root = document.getElementById("accountMenu");
+  if (!root) {
+    return;
+  }
+  setupAccountMenuListeners();
+  if (!user) {
+    root.innerHTML = `
+      <button type="button" class="account-menu-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Account menu" onclick="event.stopPropagation(); toggleAccountMenu()">
+        <span class="account-avatar account-avatar--guest" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+      </button>
+      <div class="account-menu-dropdown" hidden role="menu">
+        <a href="/auth/login">Sign in with Hytale</a>
+      </div>`;
+    return;
+  }
+  const name = userDisplayName(user);
+  const initials = userInitials(user);
+  root.innerHTML = `
+    <button type="button" class="account-menu-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Account menu for ${escapeAttr(name)}" onclick="event.stopPropagation(); toggleAccountMenu()">
+      <span class="account-avatar" aria-hidden="true">${escapeHtml(initials)}</span>
+    </button>
+    <div class="account-menu-dropdown" hidden role="menu">
+      <div class="account-menu-label">${escapeHtml(name)}</div>
+      ${accountMenuLink("/account.html", "Account")}
+      ${accountMenuLink("/submissions.html", "Your submissions")}
+      ${accountMenuLink("/admin.html", "Admin")}
+      <a href="/auth/logout">Sign out</a>
+    </div>`;
+}
+
 async function refreshAuthNav() {
-  updateAuthNav(await fetchMe());
+  renderAccountMenu(await fetchMe());
 }
 
 function formatBytes(n) {
@@ -183,7 +290,7 @@ async function loadCatalog() {
   if (!el) return;
   try {
     const user = await fetchMe();
-    updateAuthNav(user);
+    renderAccountMenu(user);
     const data = await fetchCatalog();
     catalogCanVote = Boolean(user);
     allCatalogEntries = data.entries || [];
@@ -321,18 +428,14 @@ function applyCatalogFilters() {
     .join("");
 }
 
-async function loadDashboard() {
-  const profile = document.getElementById("profile");
+async function loadSubmissions() {
   const list = document.getElementById("mySubmissions");
   const me = await fetch("/api/me").then((r) => r.json());
   if (!me.user) {
     window.location.href = "/auth/login";
     return;
   }
-  updateAuthNav(me.user);
-  const name = me.user.profile?.username || me.user.sub || "Player";
-  const uuid = me.user.profile?.uuid || "";
-  profile.innerHTML = `<h2>Signed in as ${escapeHtml(name)}</h2><p class="meta">Profile UUID: <code>${escapeHtml(uuid)}</code></p><p class="meta">Submissions from the game are linked by profile UUID or your Hytale username (<strong>${escapeHtml(name)}</strong>). These can differ from your in-game session UUID.</p>`;
+  renderAccountMenu(me.user);
 
   if (!list) return;
   try {
@@ -354,6 +457,49 @@ async function loadDashboard() {
     list.innerHTML = items.map(renderMySubmissionItem).join("");
   } catch {
     list.innerHTML = emptyStateHtml("Could not load your submissions.");
+  }
+}
+
+async function loadAccountPage() {
+  const root = document.getElementById("accountDetails");
+  const me = await fetch("/api/me").then((r) => r.json());
+  if (!me.user) {
+    window.location.href = "/auth/login";
+    return;
+  }
+  renderAccountMenu(me.user);
+  if (!root) {
+    return;
+  }
+  const name = userDisplayName(me.user);
+  const uuid = me.user.profile?.uuid || "";
+  root.innerHTML = `
+    <h2>Account</h2>
+    <div class="account-field">
+      <span class="account-field-label">Username</span>
+      <div class="account-field-row"><code>${escapeHtml(name)}</code></div>
+    </div>
+    <div class="account-field">
+      <span class="account-field-label">Profile UUID</span>
+      <div class="account-field-row">
+        <code id="accountProfileUuid">${escapeHtml(uuid || "—")}</code>
+        <button type="button" class="secondary" ${uuid ? "" : "disabled "}onclick="copyAccountUuid()">Copy</button>
+      </div>
+    </div>
+    <p class="meta">Submissions are matched by this profile UUID or your Hytale username.</p>`;
+}
+
+async function copyAccountUuid() {
+  const el = document.getElementById("accountProfileUuid");
+  const uuid = el?.textContent?.trim();
+  if (!uuid || uuid === "—") {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(uuid);
+    alert("Profile UUID copied.");
+  } catch {
+    alert("Could not copy. Select the UUID and copy manually.");
   }
 }
 
@@ -488,7 +634,7 @@ async function uploadMyScreenshot(ownerKind, ownerId, inputEl) {
     alert(body.message || body.error || "Upload failed");
     return;
   }
-  loadDashboard();
+  loadSubmissions();
 }
 
 async function deleteMyScreenshot(screenshotId) {
@@ -501,7 +647,7 @@ async function deleteMyScreenshot(screenshotId) {
     alert(body.error || "Delete failed");
     return;
   }
-  loadDashboard();
+  loadSubmissions();
 }
 
 async function withdrawMySubmission(submissionId, displayName) {
@@ -515,7 +661,7 @@ async function withdrawMySubmission(submissionId, displayName) {
     alert(body.error || "Withdraw failed");
     return;
   }
-  loadDashboard();
+  loadSubmissions();
 }
 
 async function dismissMySubmission(submissionId, displayName) {
@@ -529,7 +675,7 @@ async function dismissMySubmission(submissionId, displayName) {
     alert(body.error || "Dismiss failed");
     return;
   }
-  loadDashboard();
+  loadSubmissions();
 }
 
 async function removeMyBuilding(buildingId, displayName) {
@@ -547,7 +693,7 @@ async function removeMyBuilding(buildingId, displayName) {
     alert(body.error || "Remove failed");
     return;
   }
-  loadDashboard();
+  loadSubmissions();
 }
 
 async function loadAdminPage() {
@@ -556,7 +702,7 @@ async function loadAdminPage() {
     window.location.href = "/auth/login";
     return;
   }
-  updateAuthNav(me.user);
+  renderAccountMenu(me.user);
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
 }
 

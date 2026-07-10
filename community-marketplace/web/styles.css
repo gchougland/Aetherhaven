@@ -167,6 +167,7 @@ main.wrap > section + section {
     inset 0 1px 0 rgba(240, 208, 112, 0.12),
     0 0 60px rgba(107, 21, 48, 0.15);
   position: relative;
+  z-index: 40;
 }
 
 .site-header::after {
@@ -188,16 +189,17 @@ main.wrap > section + section {
 }
 
 .site-header .wrap {
-  padding-top: var(--space-md);
-  padding-bottom: var(--space-md);
+  padding-top: var(--space-sm);
+  padding-bottom: var(--space-sm);
 }
 
 .site-header-inner {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: var(--space-sm);
-  text-align: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  text-align: left;
 }
 
 .site-brand {
@@ -221,67 +223,118 @@ main.wrap > section + section {
   display: block;
   width: auto;
   height: auto;
-  max-height: 130px;
-  max-width: min(480px, 90vw);
+  max-height: 56px;
+  max-width: min(220px, 55vw);
   object-fit: contain;
 }
 
-.page-subtitle {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: var(--gold);
-  margin: calc(-1 * var(--space-sm)) 0 0;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* ==========================================================================
+   Account menu
+   ========================================================================== */
+
+.account-menu {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.tagline {
-  color: var(--text-muted);
-  margin: calc(-1 * var(--space-sm)) 0 0;
-  font-size: 1.05rem;
-  max-width: 36rem;
-}
-
-.site-nav {
-  display: flex;
-  flex-wrap: wrap;
+.account-menu-toggle {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  gap: var(--space-sm) var(--space-md);
-  padding-top: var(--space-xs);
-}
-
-.site-nav a {
-  display: inline-block;
-  padding: 0.45rem 1rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--border-gold);
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--panel-light), var(--bg-deep));
+  color: var(--gold-bright);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   transition:
-    color var(--transition),
     border-color var(--transition),
     background var(--transition),
-    box-shadow var(--transition);
+    filter var(--transition);
 }
 
-.site-nav a:hover {
-  color: var(--gold-bright);
-  border-color: var(--border-gold);
-  background: rgba(200, 160, 96, 0.08);
-}
-
-.site-nav a[aria-current="page"] {
-  color: var(--gold-bright);
+.account-menu-toggle:hover {
+  filter: brightness(1.1);
   border-color: var(--gold);
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.2), rgba(107, 21, 48, 0.15));
-  box-shadow: inset 0 1px 0 rgba(240, 208, 112, 0.25);
 }
 
-.site-nav a[hidden] {
+.account-menu-toggle:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+.account-avatar {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  user-select: none;
+}
+
+.account-avatar--guest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+}
+
+.account-avatar--guest svg {
+  display: block;
+}
+
+.account-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  right: 0;
+  min-width: 12.5rem;
+  padding: var(--space-xs);
+  background: linear-gradient(165deg, var(--panel-light) 0%, var(--panel) 100%);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card-hover);
+  z-index: 50;
+}
+
+.account-menu-dropdown[hidden] {
   display: none;
+}
+
+.account-menu-label {
+  padding: var(--space-sm) var(--space-md) var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-xs);
+}
+
+.account-menu-dropdown a {
+  display: block;
+  padding: 0.55rem 0.85rem;
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: background var(--transition), color var(--transition);
+}
+
+.account-menu-dropdown a:hover {
+  background: rgba(212, 175, 55, 0.12);
+  color: var(--gold-bright);
+}
+
+.account-menu-dropdown a[aria-current="page"] {
+  color: var(--gold-bright);
+  background: rgba(212, 175, 55, 0.1);
 }
 
 /* ==========================================================================
@@ -1162,11 +1215,48 @@ body.modal-open {
 }
 
 /* ==========================================================================
-   Profile card
+   Account page
    ========================================================================== */
 
-#profile h2 {
+.account-card h2 {
   margin-top: 0;
+}
+
+.account-field {
+  margin: var(--space-md) 0;
+}
+
+.account-field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.account-field-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.account-field-row code {
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-all;
+  padding: 0.45rem 0.65rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.account-field-row button {
+  margin: 0;
+  flex: 0 0 auto;
 }
 
 /* ==========================================================================
@@ -1175,13 +1265,8 @@ body.modal-open {
 
 @media (max-width: 600px) {
   .site-logo {
-    max-height: 96px;
-    max-width: 92vw;
-  }
-
-  .site-nav a {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.8rem;
+    max-height: 48px;
+    max-width: 50vw;
   }
 
   .catalog-grid {

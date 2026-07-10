@@ -854,7 +854,7 @@ app.get("/auth/callback", async (req, res) => {
     req.session.user = profile;
     delete req.session.oauthState;
     delete req.session.pkceVerifier;
-    res.redirect("/dashboard.html");
+    res.redirect("/");
   } catch (e) {
     res.status(400).send(`Login failed: ${e.message}`);
   }

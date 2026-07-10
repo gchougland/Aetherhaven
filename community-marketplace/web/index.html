@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=14" />
+    <link rel="stylesheet" href="/styles.css?v=15" />
   </head>
   <body>
     <header class="site-header">
@@ -23,14 +23,7 @@
             class="site-logo"
           />
         </a>
-        <p class="tagline">Free player-made plot buildings for the Aetherhaven mod.</p>
-        <nav class="site-nav" aria-label="Main">
-          <a href="/" aria-current="page">Browse</a>
-          <a href="/dashboard.html">Dashboard</a>
-          <a href="/admin.html">Admin</a>
-          <a href="/auth/login" id="loginLink">Sign in with Hytale</a>
-          <a href="/auth/logout" id="logoutLink" hidden>Sign out</a>
-        </nav>
+        <div id="accountMenu" class="account-menu"></div>
       </div>
     </header>
 
@@ -76,7 +69,7 @@
       </section>
     </main>
 
-    <script src="/app.js?v=12"></script>
+    <script src="/app.js?v=13"></script>
     <script>
       loadCatalog();
       refreshAuthNav();

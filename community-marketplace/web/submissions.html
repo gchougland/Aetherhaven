@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin — Aetherhaven Community</title>
+    <title>Your Submissions — Aetherhaven Community</title>
     <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,23 +28,17 @@
     </header>
     <main class="wrap">
       <section class="card">
-        <h2>Pending submissions</h2>
-        <div id="adminQueue"></div>
-      </section>
-      <section class="card">
-        <h2>Pending screenshots</h2>
-        <p class="meta">Approve screenshots before they appear in the public build gallery.</p>
-        <div id="adminScreenshotQueue"></div>
-      </section>
-      <section class="card">
-        <h2>Published buildings</h2>
-        <p class="meta">Browse approved builds and remove any from the public catalog. Players who already downloaded a build keep their local copy.</p>
-        <div id="adminCatalog" class="catalog-grid"></div>
+        <h2>Your submissions</h2>
+        <p class="meta">
+          Pending builds can be withdrawn. Published builds can be removed from the marketplace.
+          Screenshots appear publicly after admin approval.
+        </p>
+        <div id="mySubmissions" class="submission-list"></div>
       </section>
     </main>
     <script src="/app.js?v=13"></script>
     <script>
-      loadAdminPage();
+      loadSubmissions();
     </script>
   </body>
 </html>
