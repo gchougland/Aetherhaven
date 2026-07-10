@@ -221,8 +221,8 @@ main.wrap > section + section {
   display: block;
   width: auto;
   height: auto;
-  max-height: 88px;
-  max-width: min(380px, 85vw);
+  max-height: 130px;
+  max-width: min(480px, 90vw);
   object-fit: contain;
 }
 
@@ -584,7 +584,7 @@ button.danger:hover {
 
 @media (max-width: 600px) {
   .site-logo {
-    max-height: 64px;
+    max-height: 96px;
     max-width: 92vw;
   }
 
