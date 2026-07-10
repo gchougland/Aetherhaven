@@ -31,7 +31,10 @@ function currentAccountPath() {
 function accountMenuLink(href, label) {
   const current = currentAccountPath();
   const path = href.startsWith("/") ? href : `/${href}`;
-  const isCurrent = current === path || current.endsWith(path);
+  const isCurrent =
+    path === "/"
+      ? current === "/" || current.endsWith("/index.html")
+      : current === path || current.endsWith(path);
   const currentAttr = isCurrent ? ' aria-current="page"' : "";
   return `<a href="${escapeAttr(href)}"${currentAttr}>${escapeHtml(label)}</a>`;
 }
@@ -117,7 +120,6 @@ function renderAccountMenu(user) {
     <div class="account-menu-dropdown" hidden role="menu">
       <div class="account-menu-label">${escapeHtml(name)}</div>
       ${accountMenuLink("/account.html", "Account")}
-      ${accountMenuLink("/submissions.html", "Your submissions")}
       ${accountMenuLink("/admin.html", "Admin")}
       <a href="/auth/logout">Sign out</a>
     </div>`;
@@ -144,12 +146,14 @@ async function fetchCatalog() {
   return res.json();
 }
 
-function buildingIconHtml(iconUrl, sizeClass) {
-  const cls = sizeClass || "building-icon";
+function buildingIconHtml(iconUrl, sizeClass, usesCoverImage = false) {
+  const cls = [sizeClass || "building-icon", usesCoverImage ? "building-icon--cover" : ""]
+    .filter(Boolean)
+    .join(" ");
   if (!iconUrl) {
     return `<div class="building-icon-wrap building-icon-wrap--placeholder" aria-hidden="true"></div>`;
   }
-  return `<div class="building-icon-wrap"><img class="${cls}" src="${escapeAttr(iconUrl)}" alt="" onerror="this.parentElement.classList.add('building-icon-wrap--placeholder');this.remove();" /></div>`;
+  return `<div class="building-icon-wrap${usesCoverImage ? " building-icon-wrap--cover" : ""}"><img class="${cls}" src="${escapeAttr(iconUrl)}" alt="" onerror="this.parentElement.classList.add('building-icon-wrap--placeholder');this.remove();" /></div>`;
 }
 
 function showStatusError(statusEl, message) {
@@ -240,7 +244,7 @@ function renderBuildingCard(entry, options = {}) {
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
-        ${buildingIconHtml(entry.iconUrl)}
+        ${buildingIconHtml(entry.iconUrl, null, Boolean(entry.usesCoverImage))}
         ${upvoteControlHtml(entry, canVote)}
       </div>
       <div class="building-card-body">
@@ -533,6 +537,7 @@ function renderOwnerScreenshots(item) {
   const shots = Array.isArray(item.screenshots) ? item.screenshots : [];
   const ownerKind = item.kind;
   const ownerId = item.kind === "approved" ? item.id : item.submissionId;
+  const coverId = item.coverScreenshotId || "";
   const atLimit = shots.length >= MAX_SCREENSHOTS_PER_OWNER;
   const thumbs = shots.length
     ? shots
@@ -540,10 +545,18 @@ function renderOwnerScreenshots(item) {
           const img = shot.url
             ? `<img src="${escapeAttr(shot.url)}" alt="" />`
             : `<div class="screenshot-thumb-placeholder" aria-hidden="true"></div>`;
+          const isCover = ownerKind === "approved" && shot.status === "approved" && shot.screenshotId === coverId;
+          const coverBtn =
+            ownerKind === "approved" && shot.status === "approved"
+              ? isCover
+                ? `<button type="button" class="secondary screenshot-cover-btn screenshot-cover-btn--active" onclick="setBuildingCover('${escapeAttr(ownerId)}', '')" title="Clear card image">Card image</button>`
+                : `<button type="button" class="secondary screenshot-cover-btn" onclick="setBuildingCover('${escapeAttr(ownerId)}', '${escapeAttr(shot.screenshotId)}')" title="Use as marketplace card image">Set card</button>`
+              : "";
           return `
-      <div class="screenshot-thumb" data-status="${escapeAttr(shot.status || "pending")}">
+      <div class="screenshot-thumb${isCover ? " screenshot-thumb--cover" : ""}" data-status="${escapeAttr(shot.status || "pending")}">
         ${img}
-        <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}</span>
+        <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}${isCover ? " · Card" : ""}</span>
+        ${coverBtn}
         <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}')">×</button>
       </div>`;
         })
@@ -564,7 +577,11 @@ function renderOwnerScreenshots(item) {
           />
           <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
         </label>
-        <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build. Screenshots need admin approval before they appear publicly.</p>
+        <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build. Screenshots need admin approval before they appear publicly.${
+          ownerKind === "approved"
+            ? " Use an approved screenshot as the marketplace card image."
+            : ""
+        }</p>
       </div>
     </div>`;
 }
@@ -645,6 +662,20 @@ async function deleteMyScreenshot(screenshotId) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     alert(body.error || "Delete failed");
+    return;
+  }
+  loadSubmissions();
+}
+
+async function setBuildingCover(buildingId, screenshotId) {
+  const res = await fetch(`/api/my-buildings/${encodeURIComponent(buildingId)}/cover`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ screenshotId: screenshotId || null }),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    alert(body.message || body.error || "Could not update card image");
     return;
   }
   loadSubmissions();
@@ -947,7 +978,7 @@ async function openBuildingDetail(buildingId) {
 
   content.innerHTML = `
     <div class="building-modal-header">
-      ${buildingIconHtml(entry.iconUrl, "building-icon building-icon--modal")}
+      ${buildingIconHtml(entry.iconUrl, "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
       <div>
         <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>

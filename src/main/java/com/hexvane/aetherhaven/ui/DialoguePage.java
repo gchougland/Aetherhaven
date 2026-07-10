@@ -772,7 +772,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 || batch.getOpenBarterShopAfterClose() != null
                 || batch.isOpenBlacksmithRepairAfterClose()
                 || batch.isOpenGeodePageAfterClose()
-                || batch.isOpenJewelryAppraisalAfterClose()) {
+                || batch.isOpenJewelryAppraisalAfterClose()
+                || batch.hasAfterClose()) {
                 finishClose(ref, store, world, batch);
                 return;
             }
@@ -783,7 +784,8 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             || batch.getOpenBarterShopAfterClose() != null
             || batch.isOpenBlacksmithRepairAfterClose()
             || batch.isOpenGeodePageAfterClose()
-            || batch.isOpenJewelryAppraisalAfterClose()) {
+            || batch.isOpenJewelryAppraisalAfterClose()
+            || batch.hasAfterClose()) {
             finishClose(ref, store, world, batch);
             return;
         }
@@ -864,6 +866,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                     return;
                 }
                 player.getPageManager().openCustomPage(pref, st, new JewelryAppraisalPage(pr, chargeGold));
+            });
+        } else if (world != null && batch.hasAfterClose()) {
+            Runnable after = batch.getAfterClose();
+            world.execute(() -> {
+                if (after != null) {
+                    after.run();
+                }
             });
         } else {
             close();

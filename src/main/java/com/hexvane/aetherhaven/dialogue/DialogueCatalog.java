@@ -57,6 +57,7 @@ public final class DialogueCatalog {
             }
             LOGGER.atInfo().log("Loaded %s dialogue tree(s) from classpath %s", map.size(), AetherhavenAssetPaths.dialoguePrefix());
         }
+        DialoguePatchApplier.applyAllPackPatches(gson, map);
         return new DialogueCatalog(map);
     }
 

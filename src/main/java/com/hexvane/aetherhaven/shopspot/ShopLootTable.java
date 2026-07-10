@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
@@ -72,16 +73,29 @@ public final class ShopLootTable {
         return new ShopLootTable(List.of());
     }
 
+    /** Parsed loot JSON including optional {@code replace} flag for pack merge layers. */
+    public record Parsed(@Nonnull ShopLootTable table, boolean replace) {}
+
     @Nonnull
     public static ShopLootTable parseJson(@Nonnull String json) {
+        return parseJsonWithFlags(json).table();
+    }
+
+    @Nonnull
+    public static Parsed parseJsonWithFlags(@Nonnull String json) {
         List<Entry> list = new ArrayList<>();
+        boolean replace = false;
         JsonElement root = JsonParser.parseString(json);
         if (!root.isJsonObject()) {
-            return new ShopLootTable(list);
+            return new Parsed(new ShopLootTable(list), false);
         }
-        JsonArray arr = root.getAsJsonObject().getAsJsonArray("entries");
+        JsonObject obj = root.getAsJsonObject();
+        if (obj.has("replace") && obj.get("replace").isJsonPrimitive()) {
+            replace = obj.get("replace").getAsBoolean();
+        }
+        JsonArray arr = obj.getAsJsonArray("entries");
         if (arr == null) {
-            return new ShopLootTable(list);
+            return new Parsed(new ShopLootTable(list), replace);
         }
         int defaultMin = AetherhavenConstants.SHOP_LOOT_DEFAULT_STOCK_MIN;
         int defaultMax = AetherhavenConstants.SHOP_LOOT_DEFAULT_STOCK_MAX;
@@ -98,7 +112,31 @@ public final class ShopLootTable {
                 list.add(new Entry(itemId.trim(), weight, stockMin, stockMax));
             }
         }
-        return new ShopLootTable(list);
+        return new Parsed(new ShopLootTable(list), replace);
+    }
+
+    /** Append another table's entries (pack merge without replace). */
+    @Nonnull
+    public ShopLootTable withAppended(@Nonnull ShopLootTable other) {
+        if (other.entries.isEmpty()) {
+            return this;
+        }
+        if (entries.isEmpty()) {
+            return other;
+        }
+        List<Entry> merged = new ArrayList<>(entries.size() + other.entries.size());
+        merged.addAll(entries);
+        merged.addAll(other.entries);
+        return new ShopLootTable(merged);
+    }
+
+    @Nonnull
+    public List<Entry> getEntries() {
+        return Collections.unmodifiableList(entries);
+    }
+
+    public int entryCount() {
+        return entries.size();
     }
 
     @Nonnull

@@ -53,6 +53,13 @@ public final class DialogueConditionEvaluator {
             LOGGER.atWarning().log("Dialogue condition missing type: %s", o);
             return false;
         }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            Boolean custom = plugin.getDialogueConditionRegistry().tryEvaluate(type, o, playerRef, store, npcRef);
+            if (custom != null) {
+                return custom;
+            }
+        }
         return switch (type) {
             case "literal" -> o.get("value") != null && o.get("value").isJsonPrimitive() && o.get("value").getAsBoolean();
             case "true" -> true;

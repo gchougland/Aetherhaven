@@ -2,6 +2,9 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardDefinitionJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardFetchEntryJson;
 import com.hexvane.aetherhaven.questboard.data.QuestBoardHuntEntryJson;
@@ -39,7 +42,9 @@ public final class QuestBoardCatalog {
     @Nonnull
     public static QuestBoardCatalog loadFromAssetPacksOrClasspath(@Nonnull ClassLoader classLoader) {
         Gson gson = new GsonBuilder().create();
-        QuestBoardDefinitionJson loaded = null;
+        QuestBoardDefinitionJson merged = null;
+        int boardFiles = 0;
+        int extensionFiles = 0;
         com.hypixel.hytale.server.core.asset.AssetModule module = com.hypixel.hytale.server.core.asset.AssetModule.get();
         if (module != null) {
             for (com.hypixel.hytale.assetstore.AssetPack pack : module.getAssetPacks()) {
@@ -47,39 +52,65 @@ public final class QuestBoardCatalog {
                 if (!Files.isRegularFile(file)) {
                     continue;
                 }
-                try (InputStream in = Files.newInputStream(file)) {
-                    loaded = gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), QuestBoardDefinitionJson.class);
-                } catch (Exception e) {
-                    LOGGER.atSevere().withCause(e).log("Failed to load quest board config %s", file);
+                QuestBoardDefinitionJson loaded = readDefinition(gson, file);
+                if (loaded == null) {
+                    continue;
                 }
+                merged = QuestBoardMerger.merge(merged, loaded);
+                boardFiles++;
+                LOGGER.atInfo().log("Merged quest board config from pack %s (%s)", pack.getName(), file);
             }
         }
-        if (loaded == null) {
+        if (merged == null) {
             try (InputStream in = classLoader.getResourceAsStream(CONFIG_PATH)) {
                 if (in != null) {
-                    loaded = gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), QuestBoardDefinitionJson.class);
+                    merged = gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), QuestBoardDefinitionJson.class);
+                    boardFiles++;
                 }
             } catch (Exception e) {
                 LOGGER.atSevere().withCause(e).log("Failed to load quest board config from classpath %s", CONFIG_PATH);
             }
         }
-        if (loaded == null) {
+        List<PackJsonFile> extensions =
+            AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.QUEST_BOARD_EXTENSIONS);
+        for (PackJsonFile f : extensions) {
+            QuestBoardDefinitionJson ext = readDefinition(gson, f.absolutePath());
+            if (ext == null) {
+                continue;
+            }
+            merged = QuestBoardMerger.merge(merged, ext);
+            extensionFiles++;
+            LOGGER.atInfo().log("Merged quest board extension from pack %s (%s)", f.packName(), f.absolutePath());
+        }
+        if (merged == null) {
             LOGGER.atWarning().log("No quest board config found; using empty defaults");
             return empty();
         }
-        if (loaded.schemaVersion() != QuestBoardDefinitionJson.SUPPORTED_SCHEMA_VERSION) {
+        if (merged.schemaVersion() != QuestBoardDefinitionJson.SUPPORTED_SCHEMA_VERSION) {
             LOGGER.atWarning().log(
                 "Quest board schemaVersion %s (expected %s)",
-                loaded.schemaVersion(),
+                merged.schemaVersion(),
                 QuestBoardDefinitionJson.SUPPORTED_SCHEMA_VERSION
             );
         }
         LOGGER.atInfo().log(
-            "Loaded quest board config (%s rank tiers, %s villager roles)",
-            loaded.ranksOrEmpty().size(),
-            loaded.villagersOrEmpty().size()
+            "Loaded quest board config (%s board file(s), %s extension(s), %s rank tiers, %s villager roles)",
+            boardFiles,
+            extensionFiles,
+            merged.ranksOrEmpty().size(),
+            merged.villagersOrEmpty().size()
         );
-        return new QuestBoardCatalog(loaded);
+        return new QuestBoardCatalog(merged);
+    }
+
+    @Nullable
+    private static QuestBoardDefinitionJson readDefinition(@Nonnull Gson gson, @Nonnull Path file) {
+        try (InputStream in = Files.newInputStream(file)) {
+            return gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), QuestBoardDefinitionJson.class);
+        } catch (Exception e) {
+            LOGGER.atSevere().withCause(e).log("Failed to load quest board config %s", file);
+            return null;
+        }
     }
 
     public int slotCount() {

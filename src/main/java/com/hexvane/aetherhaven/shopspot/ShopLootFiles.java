@@ -1,6 +1,9 @@
 package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
+import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +22,14 @@ import java.util.jar.JarFile;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
+/**
+ * Shop loot tables: embedded defaults under {@code defaults/shop_loot/}, optional pack contributions under
+ * {@link AetherhavenAssetPaths#SHOP_LOOT}, and optional full replacements in the plugin data {@code shop_loot/}
+ * folder.
+ *
+ * <p>Merge order per table id: embedded → pack layers (append, or replace when {@code "replace": true}) →
+ * data-folder file (full replace when present).
+ */
 public final class ShopLootFiles {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final String LOOT_DIR = "shop_loot";
@@ -39,16 +50,13 @@ public final class ShopLootFiles {
 
     @Nonnull
     public static Path lootTablePath(@Nonnull AetherhavenPlugin plugin, @Nonnull String tableId) {
-        String safe = tableId.replaceAll("[^a-zA-Z0-9_\\-]", "");
-        if (safe.isBlank()) {
-            safe = "default";
-        }
+        String safe = sanitizeTableId(tableId);
         return lootDir(plugin).resolve(safe + ".json");
     }
 
     @Nonnull
     public static String readEmbeddedLootJson(@Nonnull String tableId) throws IOException {
-        String safe = tableId.replaceAll("[^a-zA-Z0-9_\\-]", "");
+        String safe = sanitizeTableId(tableId);
         String resource = "/defaults/shop_loot/" + safe + ".json";
         try (InputStream in = ShopLootFiles.class.getResourceAsStream(resource)) {
             if (in == null) {
@@ -58,75 +66,94 @@ public final class ShopLootFiles {
         }
     }
 
+    /**
+     * Ensures the data {@code shop_loot} directory exists. Does not seed full table copies so pack merges can
+     * extend bundled tables; place a file in the data folder only when you want a full admin override.
+     */
     public static void ensureDefaultLootTables(@Nonnull AetherhavenPlugin plugin) {
-        Path dir = lootDir(plugin);
         try {
-            Files.createDirectories(dir);
-            for (String tableId : listEmbeddedDefaultTableIds()) {
-                ensureEmbeddedTable(plugin, tableId);
-            }
+            Files.createDirectories(lootDir(plugin));
         } catch (IOException e) {
-            LOGGER.atWarning().withCause(e).log("Failed to ensure shop loot tables");
+            LOGGER.atWarning().withCause(e).log("Failed to ensure shop loot directory");
         }
-    }
-
-    private static void ensureEmbeddedTable(@Nonnull AetherhavenPlugin plugin, @Nonnull String tableId) throws IOException {
-        Path path = lootTablePath(plugin, tableId);
-        String embedded = readEmbeddedLootJson(tableId);
-        if (!Files.isRegularFile(path)) {
-            Files.writeString(path, embedded, StandardCharsets.UTF_8);
-            return;
-        }
-        String onDisk = Files.readString(path, StandardCharsets.UTF_8);
-        if (isValidLootJson(onDisk)) {
-            return;
-        }
-        LOGGER.atWarning().log("Repairing invalid bundled shop loot table %s at %s", tableId, path);
-        Files.writeString(path, embedded, StandardCharsets.UTF_8);
     }
 
     @Nonnull
     public static ShopLootTable loadTable(@Nonnull AetherhavenPlugin plugin, @Nonnull String tableId) {
-        Path path = lootTablePath(plugin, tableId);
+        String safe = sanitizeTableId(tableId);
         try {
-            String fallback = readEmbeddedLootJson(tableId);
+            ShopLootTable merged = ShopLootTable.parseJson(readEmbeddedLootJson(safe));
+            merged = applyPackLayers(safe, merged);
+            Path path = lootTablePath(plugin, safe);
             if (!Files.isRegularFile(path)) {
-                return ShopLootTable.parseJson(fallback);
+                return merged;
             }
             String onDisk = Files.readString(path, StandardCharsets.UTF_8);
             try {
                 return ShopLootTable.parseJson(onDisk);
             } catch (RuntimeException parseError) {
-                if (isValidLootJson(fallback)) {
-                    LOGGER
-                        .atWarning()
-                        .withCause(parseError)
-                        .log("Invalid shop loot table %s at %s; using bundled default", tableId, path);
-                    try {
-                        Files.writeString(path, fallback, StandardCharsets.UTF_8);
-                    } catch (IOException writeError) {
-                        LOGGER.atWarning().withCause(writeError).log("Failed to repair shop loot table %s", tableId);
-                    }
-                    return ShopLootTable.parseJson(fallback);
-                }
-                throw parseError;
+                LOGGER
+                    .atWarning()
+                    .withCause(parseError)
+                    .log("Invalid shop loot table %s at %s; using embedded+pack merge", safe, path);
+                return merged;
             }
         } catch (IOException e) {
             try {
-                return ShopLootTable.parseJson(readEmbeddedLootJson(tableId));
+                return applyPackLayers(safe, ShopLootTable.parseJson(readEmbeddedLootJson(safe)));
             } catch (IOException e2) {
                 return ShopLootTable.empty();
             }
         }
     }
 
-    private static boolean isValidLootJson(@Nonnull String json) {
-        try {
-            ShopLootTable.parseJson(json);
-            return true;
-        } catch (RuntimeException e) {
-            return false;
+    @Nonnull
+    static ShopLootTable applyPackLayers(@Nonnull String tableId, @Nonnull ShopLootTable base) {
+        ShopLootTable merged = base;
+        for (PackJsonFile f : packFilesForTable(tableId)) {
+            try {
+                String json = Files.readString(f.absolutePath(), StandardCharsets.UTF_8);
+                ShopLootTable.Parsed parsed = ShopLootTable.parseJsonWithFlags(json);
+                if (parsed.replace()) {
+                    merged = parsed.table();
+                    LOGGER
+                        .atInfo()
+                        .log(
+                            "Shop loot table %s replaced by pack %s (%s entries)",
+                            tableId,
+                            f.packName(),
+                            merged.entryCount()
+                        );
+                } else {
+                    int before = merged.entryCount();
+                    merged = merged.withAppended(parsed.table());
+                    LOGGER
+                        .atInfo()
+                        .log(
+                            "Shop loot table %s appended %s entries from pack %s (now %s)",
+                            tableId,
+                            merged.entryCount() - before,
+                            f.packName(),
+                            merged.entryCount()
+                        );
+                }
+            } catch (Exception e) {
+                LOGGER.atWarning().withCause(e).log("Failed to merge shop loot from %s", f.absolutePath());
+            }
         }
+        return merged;
+    }
+
+    @Nonnull
+    private static List<PackJsonFile> packFilesForTable(@Nonnull String tableId) {
+        String want = tableId + ".json";
+        List<PackJsonFile> out = new ArrayList<>();
+        for (PackJsonFile f : AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.SHOP_LOOT)) {
+            if (want.equalsIgnoreCase(f.absolutePath().getFileName().toString())) {
+                out.add(f);
+            }
+        }
+        return out;
     }
 
     @Nonnull
@@ -135,10 +162,19 @@ public final class ShopLootFiles {
         return ids.toArray(String[]::new);
     }
 
-    /** All loot table ids from packaged defaults plus {@code shop_loot/*.json} in plugin data. */
+    /** All loot table ids from packaged defaults, asset packs, and {@code shop_loot/*.json} in plugin data. */
     @Nonnull
     public static List<String> listLootTableIds(@Nonnull AetherhavenPlugin plugin) {
         Set<String> ids = new LinkedHashSet<>(listEmbeddedDefaultTableIds());
+        for (PackJsonFile f : AetherhavenPackAssetScanner.listJsonFilesUnderAllPacks(AetherhavenAssetPaths.SHOP_LOOT)) {
+            String name = f.absolutePath().getFileName().toString();
+            if (name.endsWith(".json")) {
+                String id = name.substring(0, name.length() - 5);
+                if (!id.isBlank()) {
+                    ids.add(id);
+                }
+            }
+        }
         Path dir = lootDir(plugin);
         if (Files.isDirectory(dir)) {
             try (Stream<Path> stream = Files.list(dir)) {
@@ -154,6 +190,23 @@ public final class ShopLootFiles {
             }
         }
         return new ArrayList<>(ids);
+    }
+
+    /** Merge helper for tests: apply pack layer JSON strings in order onto a base table. */
+    @Nonnull
+    public static ShopLootTable mergeLayers(@Nonnull ShopLootTable base, @Nonnull List<String> layerJsons) {
+        ShopLootTable merged = base;
+        for (String json : layerJsons) {
+            ShopLootTable.Parsed parsed = ShopLootTable.parseJsonWithFlags(json);
+            merged = parsed.replace() ? parsed.table() : merged.withAppended(parsed.table());
+        }
+        return merged;
+    }
+
+    @Nonnull
+    private static String sanitizeTableId(@Nonnull String tableId) {
+        String safe = tableId.replaceAll("[^a-zA-Z0-9_\\-]", "");
+        return safe.isBlank() ? "default" : safe;
     }
 
     @Nonnull

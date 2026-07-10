@@ -270,7 +270,144 @@ function buildManifestEntry(id, meta, prefabBytes) {
   if (description) {
     entry.description = description;
   }
+  const coverScreenshotId = String(meta.coverScreenshotId || "").trim();
+  if (coverScreenshotId) {
+    entry.coverScreenshotId = coverScreenshotId;
+  }
   return entry;
+}
+
+/**
+ * @param {string} buildingId
+ * @returns {string}
+ */
+function readApprovedCoverScreenshotId(buildingId) {
+  try {
+    const paths = storage.approvedPaths(buildingId);
+    if (!fs.existsSync(paths.meta)) {
+      return "";
+    }
+    const meta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
+    return String(meta.coverScreenshotId || "").trim();
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * @param {string} buildingId
+ * @param {string} coverScreenshotId
+ */
+function isValidCoverScreenshot(buildingId, coverScreenshotId) {
+  if (!coverScreenshotId) {
+    return false;
+  }
+  const shot = storage.loadScreenshotMeta(coverScreenshotId);
+  return Boolean(
+    shot &&
+      shot.status === "approved" &&
+      shot.ownerKind === "approved" &&
+      shot.ownerId === buildingId
+  );
+}
+
+/**
+ * @param {string} buildingId
+ * @param {string} [coverScreenshotId]
+ */
+function resolveCardImage(buildingId, coverScreenshotId) {
+  const defaultIcon = `/api/v1/buildings/${encodeURIComponent(buildingId)}/icon.png`;
+  const coverId = String(coverScreenshotId || "").trim() || readApprovedCoverScreenshotId(buildingId);
+  if (!isValidCoverScreenshot(buildingId, coverId)) {
+    return { iconUrl: defaultIcon, coverScreenshotId: "", usesCoverImage: false };
+  }
+  return {
+    iconUrl: `/api/buildings/${encodeURIComponent(buildingId)}/screenshots/${encodeURIComponent(coverId)}`,
+    coverScreenshotId: coverId,
+    usesCoverImage: true,
+  };
+}
+
+/**
+ * @param {string} buildingId
+ * @param {string} coverScreenshotId empty string clears
+ * @param {{ profileUuid: string, profileUsername: string }} webUser
+ */
+function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const paths = storage.approvedPaths(id);
+  if (!fs.existsSync(paths.meta)) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const approvedMeta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
+  if (!isOwnedByWebUser(approvedMeta, webUser)) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+
+  const nextCover = String(coverScreenshotId || "").trim();
+  if (nextCover && !isValidCoverScreenshot(id, nextCover)) {
+    return {
+      status: 400,
+      body: { error: "invalid_cover", message: "Cover must be an approved screenshot for this build." },
+    };
+  }
+
+  if (nextCover) {
+    approvedMeta.coverScreenshotId = nextCover;
+  } else {
+    delete approvedMeta.coverScreenshotId;
+  }
+  fs.writeFileSync(paths.meta, JSON.stringify(approvedMeta, null, 2));
+
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (entry) {
+    if (nextCover) {
+      entry.coverScreenshotId = nextCover;
+    } else {
+      delete entry.coverScreenshotId;
+    }
+    storage.writeManifest(manifest);
+  }
+
+  return {
+    status: 200,
+    body: {
+      id,
+      coverScreenshotId: nextCover || null,
+      ...resolveCardImage(id, nextCover),
+    },
+  };
+}
+
+/**
+ * Clear cover references if the deleted/rejected screenshot was the cover.
+ * @param {object} shotMeta
+ */
+function clearCoverIfScreenshotRemoved(shotMeta) {
+  if (!shotMeta || shotMeta.ownerKind !== "approved" || !shotMeta.ownerId) {
+    return;
+  }
+  const buildingId = shotMeta.ownerId;
+  const paths = storage.approvedPaths(buildingId);
+  if (!fs.existsSync(paths.meta)) {
+    return;
+  }
+  const approvedMeta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
+  if (approvedMeta.coverScreenshotId !== shotMeta.screenshotId) {
+    return;
+  }
+  delete approvedMeta.coverScreenshotId;
+  fs.writeFileSync(paths.meta, JSON.stringify(approvedMeta, null, 2));
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === buildingId);
+  if (entry?.coverScreenshotId === shotMeta.screenshotId) {
+    delete entry.coverScreenshotId;
+    storage.writeManifest(manifest);
+  }
 }
 
 function approveSubmission(submissionId, requestedId) {
@@ -426,20 +563,25 @@ function listSubmissionsForCreator(webUser) {
   const manifest = storage.readManifest();
   const approved = (manifest.entries || [])
     .filter((e) => isOwnedByWebUser(e, webUser))
-    .map((e) => ({
-      kind: "approved",
-      id: e.id,
-      displayName: e.displayName,
-      status: "approved",
-      approvedAt: e.approvedAt,
-      version: e.version || "1",
-      prefabBytes: e.prefabBytes || 0,
-      upvoteCount: votes.getCount(e.id),
-      downloadCount: downloads.getCount(e.id),
-      creatorUuid: e.creatorUuid,
-      iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
-      screenshots: enrichOwnerScreenshots("approved", e.id, true),
-    }));
+    .map((e) => {
+      const card = resolveCardImage(e.id, e.coverScreenshotId);
+      return {
+        kind: "approved",
+        id: e.id,
+        displayName: e.displayName,
+        status: "approved",
+        approvedAt: e.approvedAt,
+        version: e.version || "1",
+        prefabBytes: e.prefabBytes || 0,
+        upvoteCount: votes.getCount(e.id),
+        downloadCount: downloads.getCount(e.id),
+        creatorUuid: e.creatorUuid,
+        coverScreenshotId: card.coverScreenshotId || null,
+        usesCoverImage: card.usesCoverImage,
+        iconUrl: card.iconUrl,
+        screenshots: enrichOwnerScreenshots("approved", e.id, true),
+      };
+    });
 
   return [...pending, ...approved, ...rejected].sort((a, b) => {
     const dateA = a.submittedAt || a.approvedAt || a.rejectedAt || "";
@@ -567,6 +709,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
     const entryTags = normalizeTags(e.tags);
     const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
+    const card = resolveCardImage(e.id, e.coverScreenshotId);
     const entry = {
       ...e,
       tags,
@@ -575,10 +718,15 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       upvoteCount: voteCounts[e.id] || 0,
       downloadCount: downloadCounts[e.id] || 0,
       screenshotCount: storage.listScreenshotsForOwner("approved", e.id, "approved").length,
-      iconUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/icon.png`,
+      coverScreenshotId: card.coverScreenshotId || undefined,
+      usesCoverImage: card.usesCoverImage,
+      iconUrl: card.iconUrl,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
+    if (!entry.coverScreenshotId) {
+      delete entry.coverScreenshotId;
+    }
     if (description) {
       entry.description = description;
     } else {
@@ -1021,6 +1169,7 @@ function deleteOwnScreenshot(screenshotId, webUser) {
   if (!isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
+  clearCoverIfScreenshotRemoved(meta);
   storage.deleteScreenshot(screenshotId);
   return { status: 200, body: { screenshotId, status: "deleted" } };
 }
@@ -1044,6 +1193,7 @@ function rejectScreenshot(screenshotId) {
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
+  clearCoverIfScreenshotRemoved(meta);
   storage.deleteScreenshot(screenshotId);
   return { status: 200, body: { screenshotId, status: "rejected" } };
 }
@@ -1130,6 +1280,16 @@ app.post(
 
 app.delete("/api/my-screenshots/:screenshotId", requireWebUser, (req, res) => {
   const result = deleteOwnScreenshot(req.params.screenshotId, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/my-buildings/:buildingId/cover", requireWebUser, (req, res) => {
+  const screenshotId = req.body?.screenshotId;
+  const result = setBuildingCoverScreenshot(
+    req.params.buildingId,
+    screenshotId == null ? "" : String(screenshotId),
+    sessionWebUser(req)
+  );
   res.status(result.status).json(result.body);
 });
 

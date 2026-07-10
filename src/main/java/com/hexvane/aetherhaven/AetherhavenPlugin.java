@@ -27,6 +27,7 @@ import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plugin.AetherhavenCoreBootstrap;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatureBootstrap;
 import com.hexvane.aetherhaven.plugin.DialogueActionRegistry;
+import com.hexvane.aetherhaven.plugin.DialogueConditionRegistry;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListenerRegistry;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.WorkplaceUnlockCatalog;
@@ -116,6 +117,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private final AetherhavenGameTimeHub gameTimeHub = new AetherhavenGameTimeHub();
     private final GameTimeTickListenerRegistry gameTimeTickListenerRegistry = new GameTimeTickListenerRegistry();
     private final DialogueActionRegistry dialogueActionRegistry = new DialogueActionRegistry();
+    private final DialogueConditionRegistry dialogueConditionRegistry = new DialogueConditionRegistry();
     /** Filled in {@link #setup}; used by {@link AetherhavenGameTimeCoordinatorSystem}. */
     @Nullable
     private ResourceType<EntityStore, AetherhavenGameTimeCursorResource> gameTimeCursorResourceType;
@@ -168,6 +170,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public DialogueActionRegistry getDialogueActionRegistry() {
         return dialogueActionRegistry;
+    }
+
+    @Nonnull
+    public DialogueConditionRegistry getDialogueConditionRegistry() {
+        return dialogueConditionRegistry;
     }
 
     public void initAetherhavenCommand(@Nonnull AetherhavenCommand command) {

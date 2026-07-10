@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.dialogue.data;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,5 +32,15 @@ public final class DialogueTreeDefinition {
     @Nullable
     public DialogueNodeDefinition getNode(@Nonnull String nodeId) {
         return getNodes().get(nodeId);
+    }
+
+    /** Ensures a mutable nodes map and puts/replaces a node (used by dialogue patches). */
+    public void putNode(@Nonnull String nodeId, @Nonnull DialogueNodeDefinition node) {
+        if (nodes == null || nodes == Collections.<String, DialogueNodeDefinition>emptyMap()) {
+            nodes = new LinkedHashMap<>();
+        } else if (!(nodes instanceof LinkedHashMap) && !(nodes instanceof java.util.HashMap)) {
+            nodes = new LinkedHashMap<>(nodes);
+        }
+        nodes.put(nodeId, node);
     }
 }

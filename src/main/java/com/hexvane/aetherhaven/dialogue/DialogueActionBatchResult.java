@@ -18,6 +18,9 @@ public final class DialogueActionBatchResult {
 
     private boolean jewelryAppraisalChargeGold = true;
 
+    @Nullable
+    private Runnable afterClose;
+
     public boolean isCloseDialogue() {
         return closeDialogue;
     }
@@ -74,5 +77,22 @@ public final class DialogueActionBatchResult {
 
     public void setJewelryAppraisalChargeGold(boolean jewelryAppraisalChargeGold) {
         this.jewelryAppraisalChargeGold = jewelryAppraisalChargeGold;
+    }
+
+    /**
+     * Optional work to run after dialogue closes (via {@code world.execute}), e.g. opening another mod's CustomUI.
+     * Prefer this over opening pages synchronously inside a dialogue action handler.
+     */
+    @Nullable
+    public Runnable getAfterClose() {
+        return afterClose;
+    }
+
+    public void setAfterClose(@Nullable Runnable afterClose) {
+        this.afterClose = afterClose;
+    }
+
+    public boolean hasAfterClose() {
+        return afterClose != null;
     }
 }

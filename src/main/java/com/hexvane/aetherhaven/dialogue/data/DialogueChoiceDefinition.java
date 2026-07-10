@@ -7,6 +7,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class DialogueChoiceDefinition {
+    /** Optional stable id for crossmod patches (replace vs append). */
+    @Nullable
+    private String id;
     @Nullable
     private String text;
     /** Target node id, or null to end without a follow-up node. */
@@ -34,6 +37,15 @@ public final class DialogueChoiceDefinition {
     private Boolean giftDisableWhenNotAllowed;
     @Nullable
     private List<JsonObject> actions;
+
+    @Nullable
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@Nullable String id) {
+        this.id = id;
+    }
 
     @Nullable
     public String getText() {

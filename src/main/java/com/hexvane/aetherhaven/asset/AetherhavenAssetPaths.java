@@ -34,6 +34,18 @@ public final class AetherhavenAssetPaths {
     /** Bard song catalog and related config. */
     public static final String BARD = "Server/Aetherhaven/Bard";
 
+    /** Crossmod shop price contribution JSON (merged into the price catalog). */
+    public static final String SHOP_PRICES = "Server/Aetherhaven/ShopPrices";
+
+    /** Crossmod shop loot tables (one JSON file per table id). */
+    public static final String SHOP_LOOT = "Server/Aetherhaven/ShopLoot";
+
+    /** Additive quest board pool extensions (partial quest_board shape). */
+    public static final String QUEST_BOARD_EXTENSIONS = "Server/Aetherhaven/QuestBoardExtensions";
+
+    /** Patches that inject nodes/choices into existing dialogue trees. */
+    public static final String DIALOGUE_PATCHES = "Server/Aetherhaven/DialoguePatches";
+
     private AetherhavenAssetPaths() {}
 
     @Nonnull
