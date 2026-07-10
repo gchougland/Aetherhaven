@@ -71,6 +71,7 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -200,6 +201,7 @@ main.wrap > section + section {
   justify-content: space-between;
   gap: var(--space-md);
   text-align: left;
+  width: 100%;
 }
 
 .site-header-start {
