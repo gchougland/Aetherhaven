@@ -11,6 +11,8 @@ import com.hypixel.hytale.server.core.universe.Universe;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -43,13 +45,20 @@ public final class CustomBuildingIconAssetRegistry {
         if (!Files.isDirectory(iconsDir)) {
             return;
         }
+        List<CommonAsset> newlyRegistered = new ArrayList<>();
         try (Stream<Path> files = Files.list(iconsDir)) {
             files.filter(Files::isRegularFile)
                 .filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".png"))
-                .forEach(p -> registerIconFile(module, packId, p, false, false));
+                .forEach(p -> {
+                    CommonAsset asset = registerIconFileLocal(module, packId, p, false, false);
+                    if (asset != null) {
+                        newlyRegistered.add(asset);
+                    }
+                });
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to scan custom building icons at %s", iconsDir);
         }
+        broadcastAssets(newlyRegistered);
     }
 
     public static void registerIconFile(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile) {
@@ -57,23 +66,45 @@ public final class CustomBuildingIconAssetRegistry {
     }
 
     public static void registerIconFile(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile, boolean force) {
-        CommonAssetModule module = CommonAssetModule.get();
-        if (module == null || !Files.isRegularFile(iconFile)) {
-            return;
-        }
-        String packId = new PluginIdentifier(plugin.getManifest()).toString();
-        CommonAsset asset = registerIconFile(module, packId, iconFile, false, force);
+        CommonAsset asset = registerIconFileNoSend(plugin, iconFile, force);
         if (asset == null) {
             return;
         }
+        broadcastAssets(List.of(asset));
         String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
         if (constructionId != null) {
             PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
         }
     }
 
+    /**
+     * Registers an icon into the common-asset module without broadcasting. Caller should
+     * {@link #broadcastAssets(List)} once for a batch so clients rebuild the atlas a single time.
+     */
     @Nullable
-    private static CommonAsset registerIconFile(
+    public static CommonAsset registerIconFileNoSend(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile, boolean force) {
+        CommonAssetModule module = CommonAssetModule.get();
+        if (module == null || !Files.isRegularFile(iconFile)) {
+            return null;
+        }
+        String packId = new PluginIdentifier(plugin.getManifest()).toString();
+        return registerIconFileLocal(module, packId, iconFile, false, force);
+    }
+
+    /** Broadcasts assets to all players and triggers one common-assets rebuild. */
+    public static void broadcastAssets(@Nonnull List<CommonAsset> assets) {
+        if (assets.isEmpty()) {
+            return;
+        }
+        CommonAssetModule module = CommonAssetModule.get();
+        if (module == null || Universe.get().getPlayerCount() <= 0) {
+            return;
+        }
+        module.sendAssets(assets, true);
+    }
+
+    @Nullable
+    private static CommonAsset registerIconFileLocal(
         @Nonnull CommonAssetModule module,
         @Nonnull String packId,
         @Nonnull Path iconFile,
@@ -92,10 +123,6 @@ public final class CustomBuildingIconAssetRegistry {
             FileCommonAsset asset = new FileCommonAsset(iconFile, assetName, bytes);
             module.addCommonAsset(packId, asset, log);
             REGISTERED_MTIMES.put(cacheKey, mtime);
-            if (Universe.get().getPlayerCount() > 0) {
-                // Force item-icon atlas rebuild so inventory slots pick up runtime PNGs (once per icon revision).
-                module.sendAsset(asset, true);
-            }
             return asset;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Failed to register custom building icon %s", iconFile);

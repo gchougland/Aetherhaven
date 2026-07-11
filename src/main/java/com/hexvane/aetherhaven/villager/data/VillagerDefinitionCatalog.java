@@ -78,6 +78,7 @@ public final class VillagerDefinitionCatalog {
             }
             LOGGER.atInfo().log("Loaded %s villager definition(s) from classpath %s", byRole.size(), AetherhavenAssetPaths.villagersPrefix());
         }
+        VillagerGiftPatchApplier.applyAllPackPatches(gson, byRole);
         return buildCatalog(byRole);
     }
 

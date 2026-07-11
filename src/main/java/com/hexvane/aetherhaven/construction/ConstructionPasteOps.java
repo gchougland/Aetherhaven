@@ -282,9 +282,13 @@ public final class ConstructionPasteOps {
     }
 
     /**
-     * Origin voxels for chests, workbenches, and other blocks that need a live block-entity ref to open. These are
+     * Origin voxels for chests, workbenches, aquariums, and other blocks with live block-entity state. These are
      * deferred from {@link #placeOne} / {@link #forcePasteAllSolids} and written once at build completion via
      * {@link #placeInteractiveBlockEntitiesFromPrefab}.
+     *
+     * <p>Placing them during incremental assembly and again in {@code forcePasteAllSolids} removes the first
+     * block entity ({@code RemoveReason.REMOVE}), which drops stored contents (vanilla item containers, modded
+     * aquariums, etc.) even though the replacement still has the prefab state.
      */
     public static boolean isInteractiveBlockEntityOrigin(
         @Nonnull PendingBlock pb,
@@ -297,14 +301,18 @@ public final class ConstructionPasteOps {
         if (block == null) {
             return false;
         }
-        if (holderHasItemContainerBlock(pb.holder())) {
+        if (holderHasSerializedBlockEntityState(pb.holder())) {
             return true;
         }
         return blockTypeNeedsLiveBlockEntityRef(block);
     }
 
-    private static boolean holderHasItemContainerBlock(@Nullable Holder<ChunkStore> holder) {
-        return holder != null && holder.getComponent(ItemContainerBlock.getComponentType()) != null;
+    /**
+     * Prefab cell carried a block-entity holder (chest inventory, aquarium contents, placement metadata, …).
+     * Always defer so force-paste does not destroy-and-recreate that entity mid-build.
+     */
+    private static boolean holderHasSerializedBlockEntityState(@Nullable Holder<ChunkStore> holder) {
+        return holder != null;
     }
 
     private static boolean blockTypeNeedsLiveBlockEntityRef(@Nonnull BlockType block) {
@@ -312,7 +320,8 @@ public final class ConstructionPasteOps {
             return true;
         }
         Holder<ChunkStore> template = block.getBlockEntity();
-        if (template != null && template.getComponent(ItemContainerBlock.getComponentType()) != null) {
+        // Any block-entity template (not only ItemContainerBlock): aquariums and similar drop on REMOVE.
+        if (template != null) {
             return true;
         }
         Map<InteractionType, String> interactions = block.getInteractions();
@@ -416,10 +425,6 @@ public final class ConstructionPasteOps {
             }
         }
         chunk.setTicking(bx, by, bz, true);
-        Ref<ChunkStore> existing = chunk.getBlockComponentEntity(bx, by, bz);
-        if (existing != null && existing.isValid()) {
-            return true;
-        }
         BlockComponentChunk blockComponents = chunk.getBlockComponentChunk();
         if (blockComponents == null) {
             return false;
@@ -431,8 +436,12 @@ public final class ConstructionPasteOps {
             entityHolder = block.getBlockEntity().clone();
         }
         if (entityHolder == null) {
-            return false;
+            // No prefab/template state to attach; keep whatever placeBlock already created.
+            Ref<ChunkStore> existing = chunk.getBlockComponentEntity(bx, by, bz);
+            return existing != null && existing.isValid();
         }
+        // Always apply the prefab holder. placeBlock may have already spawned an empty template
+        // entity (e.g. aquariums); returning early left stocked prefab contents unapplied.
         com.hypixel.hytale.server.core.modules.block.BlockEntity.setBlockEntity(
             world.getChunkStore().getStore(),
             chunk.getReference(),

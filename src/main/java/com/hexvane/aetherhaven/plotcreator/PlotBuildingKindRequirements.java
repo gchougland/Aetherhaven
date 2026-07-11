@@ -159,11 +159,37 @@ public final class PlotBuildingKindRequirements {
         if (AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(base.getGameplayConstructionId())) {
             return PlotBuildingKind.HOME;
         }
+        // Crossmod / tag-driven bases (fishing shop, etc.)
+        if (base.getShopSafeLocalPos() != null) {
+            return PlotBuildingKind.PLAYER_SHOP;
+        }
+        var buildingTags = base.getBuildingTags();
+        if (buildingTags.contains("home") || buildingTags.contains("house")) {
+            return PlotBuildingKind.HOME;
+        }
+        if (buildingTags.contains("inn")) {
+            return PlotBuildingKind.INN;
+        }
+        if (buildingTags.contains("amenity") || buildingTags.contains("park")) {
+            return PlotBuildingKind.AMENITY;
+        }
+        if (buildingTags.contains("player_shop") || buildingTags.contains("playershop")) {
+            return PlotBuildingKind.PLAYER_SHOP;
+        }
+        if (buildingTags.contains("shop")) {
+            return PlotBuildingKind.SHOP;
+        }
+        if (buildingTags.contains("work")) {
+            return PlotBuildingKind.WORK;
+        }
         if (base.getPois().stream().anyMatch(p -> p.getTags().contains("FUN") || p.getTags().contains("SIT"))) {
             return PlotBuildingKind.AMENITY;
         }
         if (base.getPois().stream().anyMatch(p -> p.getTags().contains("SHOP"))) {
             return PlotBuildingKind.SHOP;
+        }
+        if (base.getPois().stream().anyMatch(p -> p.getTags().contains("SLEEP"))) {
+            return PlotBuildingKind.HOME;
         }
         return PlotBuildingKind.WORK;
     }

@@ -8,8 +8,7 @@ import com.hexvane.aetherhaven.inn.GaiaAltarCompletion;
 import com.hexvane.aetherhaven.inn.BarnCompletion;
 import com.hexvane.aetherhaven.inn.LumbermillCompletion;
 import com.hexvane.aetherhaven.inn.InnPoolService;
-import com.hexvane.aetherhaven.inn.InnVisitorShopCompletion;
-import com.hexvane.aetherhaven.inn.ShopPromotionConfig;
+import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.inn.MerchantStallCompletion;
 import com.hexvane.aetherhaven.inn.MinerHutCompletion;
 import com.hexvane.aetherhaven.guild.GuildHallCompletion;
@@ -20,7 +19,6 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotExtractor;
 import com.hexvane.aetherhaven.tourist.TouristPortalExtractor;
 import com.hexvane.aetherhaven.plot.PlotBlockStamper;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
@@ -166,66 +164,17 @@ public final class ConstructionCompleter {
             if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gid)) {
                 GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plotId, tm);
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(gid)) {
-                InnVisitorShopCompletion.onShopBuilt(
-                    world,
-                    plugin,
-                    town,
-                    plotId,
-                    tm,
-                    new ShopPromotionConfig(
-                        AetherhavenConstants.QUEST_CRYSTAL_KEEPERS_SHOP,
-                        AetherhavenConstants.NPC_CRYSTAL_KEEPER,
-                        TownVillagerBinding.KIND_CRYSTAL_KEEPER,
-                        "Crystal Keeper"
-                    )
-                );
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(gid)) {
-                InnVisitorShopCompletion.onShopBuilt(
-                    world,
-                    plugin,
-                    town,
-                    plotId,
-                    tm,
-                    new ShopPromotionConfig(
-                        AetherhavenConstants.QUEST_PYROTECHNIC_SHOP,
-                        AetherhavenConstants.NPC_PYROTECHNIC,
-                        TownVillagerBinding.KIND_PYROTECHNIC,
-                        "Pyrotechnic"
-                    )
-                );
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(gid)) {
-                InnVisitorShopCompletion.onShopBuilt(
-                    world,
-                    plugin,
-                    town,
-                    plotId,
-                    tm,
-                    new ShopPromotionConfig(
-                        AetherhavenConstants.QUEST_FLORIST_SHOP,
-                        AetherhavenConstants.NPC_FLORIST,
-                        TownVillagerBinding.KIND_FLORIST,
-                        "Florist"
-                    )
-                );
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BUILDERS_HUT.equals(gid)) {
-                InnVisitorShopCompletion.onShopBuilt(
-                    world,
-                    plugin,
-                    town,
-                    plotId,
-                    tm,
-                    new ShopPromotionConfig(
-                        AetherhavenConstants.QUEST_BUILDERS_HUT,
-                        AetherhavenConstants.NPC_BUILDER,
-                        TownVillagerBinding.KIND_BUILDER,
-                        "Builder"
-                    )
-                );
-            }
+            // Catalog-driven: any inn-pool villager whose workConstructionId matches this plot
+            // (core shops and crossmod). Completing the quest alone does not promote; plot complete does.
+            InnVisitorShopPromotion.promoteForCompletedPlot(
+                world,
+                plugin,
+                town,
+                plotId,
+                tm,
+                def.getId(),
+                gid
+            );
             if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
                 ProductionCatalog.Entry eff =

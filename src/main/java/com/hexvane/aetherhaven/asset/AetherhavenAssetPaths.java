@@ -46,6 +46,30 @@ public final class AetherhavenAssetPaths {
     /** Patches that inject nodes/choices into existing dialogue trees. */
     public static final String DIALOGUE_PATCHES = "Server/Aetherhaven/DialoguePatches";
 
+    /** Patches that append gift loves/likes/dislikes onto existing villager defs. */
+    public static final String VILLAGER_GIFT_PATCHES = "Server/Aetherhaven/VillagerGiftPatches";
+
+    /**
+     * Crossmod journal guide markdown ({@code <locale>/<topicId>.md}), same front matter as
+     * {@code Common/Docs/Hexvane_AetherhavenWiki/}.
+     */
+    public static final String GUIDE_TOPICS = "Server/Aetherhaven/GuideTopics";
+
+    /** Patches that append {@code sub-topics} onto existing guide hub pages (e.g. {@code villagers}). */
+    public static final String GUIDE_PATCHES = "Server/Aetherhaven/GuidePatches";
+
+    /**
+     * Crossmod NPC role JSON (not auto-loaded by Hytale). Loaded by Aetherhaven after engine NPC roles and
+     * {@code OpenAetherhavenDialogue} exist. Role id = filename without {@code .json}.
+     */
+    public static final String NPC_ROLES = "Server/Aetherhaven/NpcRoles";
+
+    /**
+     * Optional model assets for crossmod NPCs (not under {@code Server/Models}). Loaded into the ModelAsset store
+     * before {@link #NPC_ROLES} from the same pack. Model id = filename without {@code .json}.
+     */
+    public static final String NPC_MODELS = "Server/Aetherhaven/NpcModels";
+
     private AetherhavenAssetPaths() {}
 
     @Nonnull

@@ -1,10 +1,11 @@
 # Changelog
 
-## [2.2.0] - Unreleased
+## [2.2.0] - 7/10/2026
 
 ### Added
 
 - **Community marketplace** — Browse and download player-made plot buildings from the **Community** tab on the plot crafting bench. Share your own builds by enabling **Submit to community** when saving in the plot creator, or with `/ah community submit`. Approved buildings appear in-game for everyone; visit [aetherhaven.net](https://aetherhaven.net) to browse the catalog, track your submissions, or remove a build you published.
+- **Other mods with Aetherhaven** - Compatible mods can add their own villagers, buildings, shops, quests, dialogue, and journal guide pages that work with your town when both mods are installed. The plot creator can make style variants of those buildings too, and gift likes from other mods can show up on villagers you already know.
 
 ### Fixed
 

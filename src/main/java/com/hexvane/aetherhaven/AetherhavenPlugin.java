@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueResolver;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.equipment.data.EquipmentProfileCatalog;
+import com.hexvane.aetherhaven.guide.GuideTopicRepository;
 import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
 import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
@@ -460,6 +461,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);
         this.workplaceUnlockCatalog = WorkplaceUnlockCatalog.loadFromClasspath(cl);
         this.bardSongCatalog = BardSongCatalog.loadFromAssetPacksOrClasspath(cl);
+        GuideTopicRepository.clearCache();
         LOGGER.atInfo().log(
             "Aetherhaven asset catalogs reloaded (constructions=%s, dialogue=%s, quests=%s, villagerDefs=%s, villagerSchedules=loaded)",
             this.constructionCatalog.ids(),

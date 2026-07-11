@@ -18,7 +18,12 @@ import javax.annotation.Nullable;
  * sub-topics for stable navigation order.
  *
  * <p>Display text ({@code name}, {@code description}, body) resolves per player locale; {@code sub-topics} order and
- * ids always come from the English canonical tree ({@code en-US/} or legacy flat path).
+ * ids always come from the English canonical tree ({@code en-US/} or legacy flat path), plus pack
+ * {@link com.hexvane.aetherhaven.asset.AetherhavenAssetPaths#GUIDE_PATCHES} extras and
+ * {@link com.hexvane.aetherhaven.asset.AetherhavenAssetPaths#GUIDE_TOPICS} overlays.
+ *
+ * <p>Crossmod: ship {@code Server/Aetherhaven/GuideTopics/<locale>/<id>.md} and a GuidePatches JSON that adds the id
+ * under an existing hub ({@code villagers}, {@code mechanics}, {@code welcome}, etc.).
  */
 public final class GuideTopicRepository {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -48,23 +53,38 @@ public final class GuideTopicRepository {
         return CACHE.computeIfAbsent(key, k -> load(classLoader, k));
     }
 
-    /** Test hook. */
+    /** Test hook / asset reload. */
     public static void clearCache() {
         CACHE.clear();
     }
 
     @Nonnull
     private static GuideTopicRepository load(@Nonnull ClassLoader cl, @Nonnull String locale) {
+        GuideTopicPackOverlay overlay = GuideTopicPackOverlay.loadFromAssetPacks();
+        Map<String, List<String>> subTopicExtras = GuidePatchApplier.loadMergedSubTopicExtras();
+        return load(cl, locale, overlay, subTopicExtras);
+    }
+
+    /** Visible for tests. */
+    @Nonnull
+    static GuideTopicRepository load(
+        @Nonnull ClassLoader cl,
+        @Nonnull String locale,
+        @Nonnull GuideTopicPackOverlay overlay,
+        @Nonnull Map<String, List<String>> subTopicExtras
+    ) {
         Map<String, GuideTopicFile> map = new LinkedHashMap<>();
         List<GuideNavEntry> nav = new ArrayList<>();
         Set<String> completed = new LinkedHashSet<>();
-        walk(cl, locale, "welcome", 0, map, nav, completed);
+        walk(cl, locale, overlay, subTopicExtras, "welcome", 0, map, nav, completed);
         return new GuideTopicRepository(map, nav);
     }
 
     private static void walk(
         @Nonnull ClassLoader cl,
         @Nonnull String locale,
+        @Nonnull GuideTopicPackOverlay overlay,
+        @Nonnull Map<String, List<String>> subTopicExtras,
         @Nonnull String topicId,
         int depth,
         @Nonnull Map<String, GuideTopicFile> map,
@@ -78,29 +98,41 @@ public final class GuideTopicRepository {
         if (!completed.add(id)) {
             return;
         }
-        GuideTopicFile file = loadDisplay(cl, id, locale);
+        GuideTopicFile file = loadDisplay(cl, id, locale, overlay, subTopicExtras);
         map.put(id, file);
         nav.add(new GuideNavEntry(id, depth, file.displayName()));
-        for (String child : canonicalSubTopicIds(cl, id)) {
-            walk(cl, locale, child, depth + 1, map, nav, completed);
+        for (String child : file.subTopicIds()) {
+            walk(cl, locale, overlay, subTopicExtras, child, depth + 1, map, nav, completed);
         }
     }
 
-    /** Navigation graph ids from the English canonical file only. */
+    /** Navigation graph ids from the English canonical file only, plus pack patches. */
     @Nonnull
-    private static List<String> canonicalSubTopicIds(@Nonnull ClassLoader cl, @Nonnull String id) {
-        return loadRaw(cl, id, canonicalResourcePaths(id)).subTopicIds();
+    private static List<String> canonicalSubTopicIds(
+        @Nonnull ClassLoader cl,
+        @Nonnull String id,
+        @Nonnull GuideTopicPackOverlay overlay,
+        @Nonnull Map<String, List<String>> subTopicExtras
+    ) {
+        List<String> base = loadRaw(cl, id, canonicalResourcePaths(id), overlay, DEFAULT_LOCALE).subTopicIds();
+        return GuidePatchApplier.mergeSubTopics(base, subTopicExtras, id);
     }
 
     @Nonnull
-    private static GuideTopicFile loadDisplay(@Nonnull ClassLoader cl, @Nonnull String id, @Nonnull String locale) {
-        GuideTopicFile localized = loadRaw(cl, id, displayResourcePaths(id, locale));
+    private static GuideTopicFile loadDisplay(
+        @Nonnull ClassLoader cl,
+        @Nonnull String id,
+        @Nonnull String locale,
+        @Nonnull GuideTopicPackOverlay overlay,
+        @Nonnull Map<String, List<String>> subTopicExtras
+    ) {
+        GuideTopicFile localized = loadRaw(cl, id, displayResourcePaths(id, locale), overlay, locale);
         return new GuideTopicFile(
             id,
             localized.displayName(),
             localized.description(),
             localized.npcRoleId(),
-            canonicalSubTopicIds(cl, id),
+            canonicalSubTopicIds(cl, id, overlay, subTopicExtras),
             localized.markdownBody()
         );
     }
@@ -128,8 +160,24 @@ public final class GuideTopicRepository {
         };
     }
 
+    /**
+     * Prefer pack overlay for the display locale (then en-US overlay), then classpath wiki paths.
+     */
     @Nonnull
-    private static GuideTopicFile loadRaw(@Nonnull ClassLoader cl, @Nonnull String id, @Nonnull String[] paths) {
+    private static GuideTopicFile loadRaw(
+        @Nonnull ClassLoader cl,
+        @Nonnull String id,
+        @Nonnull String[] paths,
+        @Nonnull GuideTopicPackOverlay overlay,
+        @Nonnull String preferredLocale
+    ) {
+        String packRaw = overlay.rawMarkdown(preferredLocale, id);
+        if (packRaw == null && !DEFAULT_LOCALE.equals(preferredLocale)) {
+            packRaw = overlay.rawMarkdown(DEFAULT_LOCALE, id);
+        }
+        if (packRaw != null) {
+            return GuideTopicFile.parse(id, packRaw);
+        }
         for (String path : paths) {
             try (InputStream in = cl.getResourceAsStream(path)) {
                 if (in == null) {
@@ -141,7 +189,7 @@ public final class GuideTopicRepository {
                 LOGGER.atSevere().withCause(e).log("Failed to read guide topic %s", path);
             }
         }
-        LOGGER.atWarning().log("Missing guide topic resource for id %s (tried %s)", id, String.join(", ", paths));
+        LOGGER.atWarning().log("Missing guide topic resource for id %s (tried packs + %s)", id, String.join(", ", paths));
         return GuideTopicFile.missing(id);
     }
 

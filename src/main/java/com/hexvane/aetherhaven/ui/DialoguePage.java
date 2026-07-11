@@ -365,15 +365,29 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return dialogueMessage(body);
     }
 
+    /**
+     * True for Hytale lang keys of the form {@code bundle.key} (any mod bundle).
+     * Rejects plain dialogue prose (spaces / no dotted path).
+     */
     private static boolean isTranslationKey(@Nullable String s) {
         if (s == null || s.isEmpty()) {
             return false;
         }
-        if (s.startsWith("aetherhaven_dialogue_")) {
-            return true;
+        int dot = s.indexOf('.');
+        if (dot <= 0 || dot >= s.length() - 1) {
+            return false;
         }
-        // Bundle-prefixed keys (e.g. aetherhaven_misc.aetherhaven.banner.*)
-        return s.startsWith("aetherhaven_") && s.indexOf('.') >= 0;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '.') {
+                continue;
+            }
+            if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == '_' || c == '-') {
+                continue;
+            }
+            return false;
+        }
+        return true;
     }
 
     @Nonnull

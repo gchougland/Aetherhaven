@@ -1,11 +1,15 @@
 package com.hexvane.aetherhaven.community;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,8 +76,15 @@ public final class CommunityDownloadService {
                 }
             }
             if (Files.isRegularFile(iconFile)) {
-                CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile);
-                CommunityIconRegistry.registerIconFile(plugin, iconFile);
+                CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, false);
+                CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, false);
+                if (asset != null) {
+                    CommunityIconRegistry.broadcastAssets(List.of(asset));
+                    String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
+                    if (constructionId != null) {
+                        PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+                    }
+                }
             }
 
             plugin.reloadConfigsAndAssetCatalogs();

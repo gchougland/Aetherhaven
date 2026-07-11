@@ -315,7 +315,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         b.set(
             "#VariantOfDropdown.Entries",
-            PlotCreatorMainConstructions.dropdownEntries(PlotCreatorMainConstructions.class.getClassLoader())
+            PlotCreatorMainConstructions.dropdownEntries(AetherhavenPlugin.get())
         );
         if (session.getDraft().getCountsAsConstructionId() != null) {
             b.set("#VariantOfDropdown.Value", session.getDraft().getCountsAsConstructionId());
@@ -676,7 +676,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
                 return false;
             }
-            if (!PlotCreatorMainConstructions.isKnownMainConstruction(base)) {
+            if (!PlotCreatorMainConstructions.isKnownMainConstruction(AetherhavenPlugin.get(), base)) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
                 return false;
             }

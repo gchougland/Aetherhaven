@@ -1,7 +1,6 @@
 package com.hexvane.aetherhaven.placement;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
-import com.hexvane.aetherhaven.construction.ConstructionPasteOps;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -19,9 +18,11 @@ import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.SetBlockSettings;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.ChunkColumn;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.chunk.section.BlockSection;
 import com.hypixel.hytale.server.core.universe.world.chunk.section.FluidSection;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -36,14 +37,19 @@ import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 
 /**
- * Clears an axis-aligned footprint: removes non-town entities inside the volume, breaks blocks, and clears fluid cells
- * (liquids are not always removed by {@link World#breakBlock} alone).
+ * Clears an axis-aligned footprint: removes non-town entities inside the volume, force-clears blocks, and clears
+ * fluid cells (liquids are not always removed by block clears alone).
  */
 public final class PrefabFootprintClearUtil {
-    private static final int BREAK_SETTINGS = 10;
     private static final UUID NIL_UUID = new UUID(0L, 0L);
     /** Wardrobe props can extend slightly above the stored plot AABB. */
     private static final int PRODUCTION_STORAGE_Y_PAD = 1;
+    /**
+     * Teardown clear must update block-entity state. Assembly's {@code SET_BLOCK_SETTINGS_CLEAR} (value 10) sets
+     * {@link SetBlockSettings#NO_UPDATE_STATE}, which leaves aquariums/chests ticking and restoring fluids/props.
+     */
+    private static final int FORCE_CLEAR_SETTINGS =
+        SetBlockSettings.NO_SEND_PARTICLES | SetBlockSettings.NO_DROP_ITEMS;
 
     private PrefabFootprintClearUtil() {}
 
@@ -112,10 +118,11 @@ public final class PrefabFootprintClearUtil {
         int bx = (int) Math.floor(x);
         int by = (int) Math.floor(y);
         int bz = (int) Math.floor(z);
+        // Pad Y slightly: aquarium display props can sit just above the stored AABB.
         return bx >= fp.getMinX()
             && bx <= fp.getMaxX()
-            && by >= fp.getMinY()
-            && by <= fp.getMaxY()
+            && by >= fp.getMinY() - 1
+            && by <= fp.getMaxY() + 2
             && bz >= fp.getMinZ()
             && bz <= fp.getMaxZ();
     }
@@ -152,7 +159,9 @@ public final class PrefabFootprintClearUtil {
         for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
             for (int y = fp.getMinY(); y <= fp.getMaxY(); y++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
-                    world.breakBlock(x, y, z, BREAK_SETTINGS);
+                    // Prefer setBlock over breakBlock so multi-block furniture (aquariums, etc.) always loses its
+                    // block-entity. Orphan block entities keep ticking and can restore fluids/props after teardown.
+                    forceClearBlockCell(world, x, y, z);
                     WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
                     if (chunk != null) {
                         clearFluidAtColumn(fluidStore, chunk, x, y, z);
@@ -234,15 +243,19 @@ public final class PrefabFootprintClearUtil {
     @Nonnull
     private static BlockPosition productionStorageBaseBlock(@Nonnull World world, int wx, int y, int wz) {
         BlockPosition position = new BlockPosition(wx, y, wz);
-        if (y < 0 || y >= 320) {
+        if (y < ChunkUtil.MIN_Y || y > ChunkUtil.HEIGHT_MINUS_1) {
             return position;
         }
-        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(wx, wz));
-        if (chunk == null) {
+        Ref<ChunkStore> sectionRef = world.getChunkStore().getChunkSectionReferenceAtBlock(wx, y, wz);
+        if (sectionRef == null || !sectionRef.isValid()) {
             return position;
         }
-        int filler = chunk.getFiller(wx, y, wz);
-        if (filler == 0) {
+        BlockSection section = world.getChunkStore().getStore().getComponent(sectionRef, BlockSection.getComponentType());
+        if (section == null) {
+            return position;
+        }
+        int filler = section.getFiller(wx, y, wz);
+        if (filler == FillerBlockUtil.NO_FILLER) {
             return position;
         }
         return new BlockPosition(
@@ -261,6 +274,9 @@ public final class PrefabFootprintClearUtil {
         if (chunk == null) {
             return;
         }
+        // Grab any block-entity before setBlock; some clears leave the chunk-store entity alive (aquarium heartbeat
+        // then restores fluid/fish after teardown).
+        Ref<ChunkStore> blockEntityRef = chunk.getBlockComponentEntity(x, y, z);
         chunk.setBlock(
             x,
             y,
@@ -269,7 +285,10 @@ public final class PrefabFootprintClearUtil {
             BlockType.EMPTY,
             0,
             0,
-            ConstructionPasteOps.SET_BLOCK_SETTINGS_CLEAR
+            FORCE_CLEAR_SETTINGS
         );
+        if (blockEntityRef != null && blockEntityRef.isValid()) {
+            world.getChunkStore().getStore().removeEntity(blockEntityRef, RemoveReason.REMOVE);
+        }
     }
 }

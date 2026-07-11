@@ -7,17 +7,25 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plot.PlotBuildingStyles;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,10 +34,21 @@ import javax.annotation.Nullable;
 public final class CommunityCatalogService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new GsonBuilder().create();
+    private static final int ICON_DOWNLOAD_PARALLELISM = 4;
 
     private final AetherhavenPlugin plugin;
     private final AtomicReference<List<CommunityManifestEntry>> cachedEntries = new AtomicReference<>(List.of());
     private volatile long lastFetchEpochMs;
+    private final AtomicInteger iconFetchSerial = new AtomicInteger();
+    private final ExecutorService iconExecutor =
+        Executors.newFixedThreadPool(
+            ICON_DOWNLOAD_PARALLELISM,
+            r -> {
+                Thread t = new Thread(r, "aetherhaven-community-icons");
+                t.setDaemon(true);
+                return t;
+            }
+        );
 
     public CommunityCatalogService(@Nonnull AetherhavenPlugin plugin) {
         this.plugin = plugin;
@@ -43,6 +62,21 @@ public final class CommunityCatalogService {
     @Nonnull
     public List<CommunityManifestEntry> getEntries() {
         return cachedEntries.get();
+    }
+
+    public boolean isCacheEmpty() {
+        return cachedEntries.get().isEmpty();
+    }
+
+    public boolean isCacheStale() {
+        if (!isEnabled()) {
+            return false;
+        }
+        if (cachedEntries.get().isEmpty()) {
+            return true;
+        }
+        long refreshMs = plugin.getConfig().get().getCommunityMarketplace().getManifestRefreshMinutes() * 60_000L;
+        return System.currentTimeMillis() - lastFetchEpochMs >= refreshMs;
     }
 
     @Nullable
@@ -60,26 +94,17 @@ public final class CommunityCatalogService {
         return CommunityPaths.isInstalled(plugin.getDataDirectory(), constructionId);
     }
 
-    /** Refreshes manifest if stale; downloads missing icon thumbnails. */
+    /** Refreshes manifest if stale; does not download icons (call {@link #ensureIconsForIds} for the visible page). */
     public void refreshIfStale() {
-        if (!isEnabled()) {
-            return;
-        }
-        long now = System.currentTimeMillis();
-        long refreshMs = plugin.getConfig().get().getCommunityMarketplace().getManifestRefreshMinutes() * 60_000L;
-        if (now - lastFetchEpochMs < refreshMs && !cachedEntries.get().isEmpty()) {
+        if (!isCacheStale()) {
             return;
         }
         fetchManifest();
     }
 
-    /** Fetches manifest and icons from the API (plot crafting refresh button). */
+    /** Fetches manifest metadata from the API (plot crafting refresh). Icons are loaded per visible page. */
     public boolean refreshFromApi() {
-        if (!fetchManifest()) {
-            return false;
-        }
-        ensureIconsReady(true);
-        return true;
+        return fetchManifest();
     }
 
     public boolean fetchManifest() {
@@ -99,9 +124,6 @@ public final class CommunityCatalogService {
             cachedEntries.set(List.copyOf(entries));
             lastFetchEpochMs = System.currentTimeMillis();
             LOGGER.atInfo().log("Community manifest loaded: %s entries", entries.size());
-            for (CommunityManifestEntry entry : entries) {
-                ensureIconCached(entry, false);
-            }
             return true;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse community manifest");
@@ -110,65 +132,136 @@ public final class CommunityCatalogService {
     }
 
     /**
-     * Downloads and registers any missing community icon PNGs before the crafting list renders.
+     * Downloads and registers missing icons for the given construction ids (typically one UI page).
+     * Newly registered assets are broadcast in a single atlas rebuild.
      *
-     * @return true when at least one icon was newly written and registered this call
+     * @return true when at least one icon was newly written or registered
      */
-    public boolean ensureIconsReady() {
-        return ensureIconsReady(false);
+    public boolean ensureIconsForIds(@Nonnull Collection<String> constructionIds) {
+        if (constructionIds.isEmpty()) {
+            return false;
+        }
+        List<CommunityManifestEntry> needed = new ArrayList<>();
+        for (String id : constructionIds) {
+            CommunityManifestEntry entry = findEntry(id);
+            if (entry != null) {
+                needed.add(entry);
+            }
+        }
+        if (needed.isEmpty()) {
+            return false;
+        }
+
+        List<CommunityManifestEntry> toDownload = new ArrayList<>();
+        List<Path> alreadyOnDisk = new ArrayList<>();
+        for (CommunityManifestEntry entry : needed) {
+            Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
+            if (Files.isRegularFile(iconFile)) {
+                alreadyOnDisk.add(iconFile);
+            } else {
+                toDownload.add(entry);
+            }
+        }
+
+        List<Path> downloaded = Collections.synchronizedList(new ArrayList<>());
+        if (!toDownload.isEmpty()) {
+            List<CompletableFuture<Void>> futures = new ArrayList<>(toDownload.size());
+            for (CommunityManifestEntry entry : toDownload) {
+                futures.add(
+                    CompletableFuture.runAsync(
+                        () -> {
+                            Path written = downloadIconToDisk(entry);
+                            if (written != null) {
+                                downloaded.add(written);
+                            }
+                        },
+                        iconExecutor
+                    )
+                );
+            }
+            CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
+        }
+
+        List<CommonAsset> toBroadcast = new ArrayList<>();
+        for (Path iconFile : alreadyOnDisk) {
+            CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, false);
+            CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, false);
+            if (asset != null) {
+                toBroadcast.add(asset);
+                notifyIconRegistered(iconFile);
+            }
+        }
+        for (Path iconFile : downloaded) {
+            CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, true);
+            CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, true);
+            if (asset != null) {
+                toBroadcast.add(asset);
+                notifyIconRegistered(iconFile);
+            }
+        }
+        CommunityIconRegistry.broadcastAssets(toBroadcast);
+        return !downloaded.isEmpty() || !toBroadcast.isEmpty();
     }
 
     /**
-     * Downloads and registers any missing community icon PNGs before the crafting list renders.
-     *
-     * @param forceRegister when true, re-sends icons to connected clients even if already cached locally
-     * @return true when at least one icon was newly written and registered this call
+     * Starts an async icon ensure for the given ids. Invokes {@code onIconsChanged} on a worker thread only when
+     * at least one icon was newly written or registered. Returns a serial used to ignore stale completions.
      */
-    public boolean ensureIconsReady(boolean forceRegister) {
-        boolean anyNew = false;
-        for (CommunityManifestEntry entry : cachedEntries.get()) {
-            if (ensureIconCached(entry, forceRegister)) {
-                anyNew = true;
-            }
-        }
-        return anyNew;
+    public int ensureIconsForIdsAsync(@Nonnull Collection<String> constructionIds, @Nonnull Runnable onIconsChanged) {
+        int serial = iconFetchSerial.incrementAndGet();
+        List<String> ids = List.copyOf(constructionIds);
+        CompletableFuture.runAsync(
+            () -> {
+                boolean changed = false;
+                try {
+                    changed = ensureIconsForIds(ids);
+                } finally {
+                    if (changed && serial == iconFetchSerial.get()) {
+                        onIconsChanged.run();
+                    }
+                }
+            },
+            iconExecutor
+        );
+        return serial;
     }
 
-    private boolean ensureIconCached(@Nonnull CommunityManifestEntry entry) {
-        return ensureIconCached(entry, false);
+    public int currentIconFetchSerial() {
+        return iconFetchSerial.get();
     }
 
-    private boolean ensureIconCached(@Nonnull CommunityManifestEntry entry, boolean forceRegister) {
+    @Nullable
+    private Path downloadIconToDisk(@Nonnull CommunityManifestEntry entry) {
         Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
         if (Files.isRegularFile(iconFile)) {
-            registerCachedIcon(iconFile, forceRegister);
-            return false;
+            return iconFile;
         }
         String iconUrl = entry.getIconUrl();
         if (iconUrl == null || iconUrl.isBlank()) {
             LOGGER.atWarning().log("Community entry %s has no icon URL in manifest", entry.getId());
-            return false;
+            return null;
         }
         String absolute = resolveUrl(iconUrl);
         byte[] png = CommunityHttpClient.getBytes(absolute);
         if (png == null || png.length == 0) {
             LOGGER.atWarning().log("Community icon download failed for %s from %s", entry.getId(), absolute);
-            return false;
+            return null;
         }
         try {
             Files.createDirectories(iconFile.getParent());
             Files.write(iconFile, png);
-            registerCachedIcon(iconFile, true);
-            return true;
+            return iconFile;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to cache community icon for %s", entry.getId());
-            return false;
+            return null;
         }
     }
 
-    private void registerCachedIcon(@Nonnull Path iconFile, boolean forceRegister) {
-        CommunityIconRegistry.registerIconFile(plugin, iconFile, forceRegister);
-        CustomBuildingIconAssetRegistry.registerIconFile(plugin, iconFile, forceRegister);
+    private void notifyIconRegistered(@Nonnull Path iconFile) {
+        String constructionId = CustomBuildingsPaths.constructionIdFromIconFileName(iconFile.getFileName().toString());
+        if (constructionId != null) {
+            PlotTokenIconSync.afterIconRegistered(plugin, constructionId);
+        }
     }
 
     @Nonnull

@@ -1836,6 +1836,7 @@ public final class InnPoolService {
     }
 
     @Nonnull
+    @SuppressWarnings("deprecation") // Store.isProcessing() is the only way to detect mid-tick writes
     public static RepairReport repairInnPoolForTown(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
@@ -1844,6 +1845,26 @@ public final class InnPoolService {
         @Nonnull Store<EntityStore> store,
         boolean fillOpenSlots
     ) {
+        // putComponent is illegal while EntityTickingSystem holds the store (e.g. plot-creator Use interaction).
+        if (store.isProcessing()) {
+            UUID townId = town.getTownId();
+            world.execute(
+                () -> {
+                    Store<EntityStore> liveStore =
+                        world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
+                    if (liveStore == null) {
+                        return;
+                    }
+                    TownManager liveTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    TownRecord liveTown = liveTm.getTown(townId);
+                    if (liveTown == null) {
+                        return;
+                    }
+                    repairInnPoolForTown(world, plugin, liveTown, liveTm, liveStore, fillOpenSlots);
+                }
+            );
+            return new RepairReport();
+        }
         RepairReport report = new RepairReport();
         List<InnPoolEntry> pool = innPoolOrLegacy(plugin);
         town.migrateInnFieldsIfNeeded();

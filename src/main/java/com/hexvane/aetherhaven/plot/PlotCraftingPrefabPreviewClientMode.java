@@ -13,15 +13,47 @@ import javax.annotation.Nonnull;
 public final class PlotCraftingPrefabPreviewClientMode {
     private PlotCraftingPrefabPreviewClientMode() {}
 
-    public static void ensureClientCreativeForPreview(@Nonnull PlayerRef playerRef, @Nonnull GameMode serverGameMode) {
-        if (serverGameMode != GameMode.Creative) {
-            playerRef.getPacketHandler().writeNoCache(new SetGameMode(GameMode.Creative));
+    /**
+     * Spoofs Creative on the client when needed for prefab preview.
+     *
+     * @return {@code true} when a {@link SetGameMode} packet was sent this call
+     */
+    public static boolean ensureClientCreativeForPreview(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull GameMode serverGameMode,
+        boolean alreadySpoofed
+    ) {
+        if (serverGameMode == GameMode.Creative || alreadySpoofed) {
+            return false;
         }
+        playerRef.getPacketHandler().writeNoCache(new SetGameMode(GameMode.Creative));
+        return true;
+    }
+
+    /** @deprecated Prefer {@link #ensureClientCreativeForPreview(PlayerRef, GameMode, boolean)} with sticky state. */
+    @Deprecated
+    public static void ensureClientCreativeForPreview(@Nonnull PlayerRef playerRef, @Nonnull GameMode serverGameMode) {
+        ensureClientCreativeForPreview(playerRef, serverGameMode, false);
+    }
+
+    /**
+     * Restores the real server game mode on the client after preview spoofing.
+     *
+     * @return {@code true} when a restore packet was sent
+     */
+    public static boolean restoreClientGameMode(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull GameMode serverGameMode,
+        boolean wasSpoofed
+    ) {
+        if (serverGameMode == GameMode.Creative || !wasSpoofed) {
+            return false;
+        }
+        playerRef.getPacketHandler().writeNoCache(new SetGameMode(serverGameMode));
+        return true;
     }
 
     public static void restoreClientGameMode(@Nonnull PlayerRef playerRef, @Nonnull GameMode serverGameMode) {
-        if (serverGameMode != GameMode.Creative) {
-            playerRef.getPacketHandler().writeNoCache(new SetGameMode(serverGameMode));
-        }
+        restoreClientGameMode(playerRef, serverGameMode, true);
     }
 }

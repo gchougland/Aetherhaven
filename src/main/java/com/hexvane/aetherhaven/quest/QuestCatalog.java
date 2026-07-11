@@ -48,6 +48,12 @@ public final class QuestCatalog {
         return new QuestCatalog(Collections.emptyMap());
     }
 
+    /** Builds a catalog from an explicit map (unit tests and tooling). */
+    @Nonnull
+    public static QuestCatalog of(@Nonnull Map<String, QuestDefinition> byId) {
+        return new QuestCatalog(Collections.unmodifiableMap(new LinkedHashMap<>(byId)));
+    }
+
     /**
      * Prefers {@link com.hypixel.hytale.server.core.asset.AssetModule} pack roots; falls back to the mod classpath when
      * no pack files are found (e.g. unit tests). Later packs in the module list override earlier definitions for the

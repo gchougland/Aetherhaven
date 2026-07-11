@@ -144,9 +144,33 @@ $C.@PageOverlay {
             Padding: (Full: 14);
 
             Group #MarketplaceRefreshRow {
-              LayoutMode: Right;
+              LayoutMode: Left;
               Anchor: (Height: 40, Bottom: 4);
               Visible: false;
+
+              TextButton #MarketplacePagePrev {
+                Style: @ArrowBackStyle;
+                Anchor: (Width: 36, Height: 36, Right: 6);
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Text: " ";
+              }
+
+              Label #MarketplacePageLabel {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 15, RenderBold: true, HorizontalAlignment: Center);
+                Anchor: (Width: 110, Height: 36, Right: 6);
+                Text: "";
+              }
+
+              TextButton #MarketplacePageNext {
+                Style: @ArrowForwardStyle;
+                Anchor: (Width: 36, Height: 36, Right: 8);
+                TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+                Text: " ";
+              }
+
+              Group {
+                FlexWeight: 1;
+              }
 
               TextButton #MarketplaceRefreshButton {
                 Style: @RefreshIconStyle;

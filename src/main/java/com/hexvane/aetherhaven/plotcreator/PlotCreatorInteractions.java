@@ -258,6 +258,10 @@ public final class PlotCreatorInteractions {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
                 return false;
             }
+            if (!PlotCreatorMainConstructions.isKnownMainConstruction(plugin, base)) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
+                return false;
+            }
             PlotCreatorService.advance(session, ref, store);
             return true;
         }

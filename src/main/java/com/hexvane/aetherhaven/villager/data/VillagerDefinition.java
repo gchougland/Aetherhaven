@@ -258,6 +258,34 @@ public final class VillagerDefinition {
         return listOrEmpty(giftDislikes);
     }
 
+    /** Appends item ids for crossmod gift patches (dedupes, case-sensitive ids). */
+    public void appendGiftLoves(@Nonnull List<String> ids) {
+        giftLoves = appendUnique(giftLoves, ids);
+    }
+
+    public void appendGiftLikes(@Nonnull List<String> ids) {
+        giftLikes = appendUnique(giftLikes, ids);
+    }
+
+    public void appendGiftDislikes(@Nonnull List<String> ids) {
+        giftDislikes = appendUnique(giftDislikes, ids);
+    }
+
+    @Nonnull
+    private static List<String> appendUnique(@Nullable List<String> existing, @Nonnull List<String> add) {
+        ArrayList<String> out = existing != null ? new ArrayList<>(existing) : new ArrayList<>();
+        for (String raw : add) {
+            if (raw == null || raw.isBlank()) {
+                continue;
+            }
+            String id = raw.trim();
+            if (!out.contains(id)) {
+                out.add(id);
+            }
+        }
+        return out;
+    }
+
     @Nonnull
     public List<String> getDialogueGreetingLangKeys() {
         return listOrEmpty(dialogueGreetingLangKeys);

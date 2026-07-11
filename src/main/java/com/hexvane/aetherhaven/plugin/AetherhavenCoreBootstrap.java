@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.command.AetherhavenCommunityCommand;
 import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
+import com.hexvane.aetherhaven.npc.AetherhavenNpcRoleLoader;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
 import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
@@ -71,6 +72,7 @@ public final class AetherhavenCoreBootstrap {
             );
         registerGaiaStatueOpenUi(plugin);
         AetherhavenSubpluginAssetCodecs.registerAll(plugin);
+        AetherhavenNpcRoleLoader.register(plugin);
         AetherhavenEmbeddedSubpluginPacks.registerEnabled(plugin);
 
         GameTimeTickListenerRegistry tickRegistry = plugin.getGameTimeTickListenerRegistry();
