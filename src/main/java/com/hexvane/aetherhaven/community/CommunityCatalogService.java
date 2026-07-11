@@ -156,7 +156,7 @@ public final class CommunityCatalogService {
         List<Path> alreadyOnDisk = new ArrayList<>();
         for (CommunityManifestEntry entry : needed) {
             Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
-            if (Files.isRegularFile(iconFile)) {
+            if (Files.isRegularFile(iconFile) && !isCachedIconStale(iconFile)) {
                 alreadyOnDisk.add(iconFile);
             } else {
                 toDownload.add(entry);
@@ -233,9 +233,6 @@ public final class CommunityCatalogService {
     @Nullable
     private Path downloadIconToDisk(@Nonnull CommunityManifestEntry entry) {
         Path iconFile = CommunityPaths.iconFile(plugin.getDataDirectory(), entry.getId());
-        if (Files.isRegularFile(iconFile)) {
-            return iconFile;
-        }
         String iconUrl = entry.getIconUrl();
         if (iconUrl == null || iconUrl.isBlank()) {
             LOGGER.atWarning().log("Community entry %s has no icon URL in manifest", entry.getId());
@@ -254,6 +251,19 @@ public final class CommunityCatalogService {
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to cache community icon for %s", entry.getId());
             return null;
+        }
+    }
+
+    /** True when the cached PNG is older than the last successful manifest fetch (e.g. was a cover screenshot). */
+    private boolean isCachedIconStale(@Nonnull Path iconFile) {
+        long fetchMs = lastFetchEpochMs;
+        if (fetchMs <= 0L) {
+            return false;
+        }
+        try {
+            return Files.getLastModifiedTime(iconFile).toMillis() < fetchMs;
+        } catch (Exception e) {
+            return true;
         }
     }
 

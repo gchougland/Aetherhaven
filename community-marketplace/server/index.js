@@ -314,15 +314,18 @@ function isValidCoverScreenshot(buildingId, coverScreenshotId) {
 /**
  * @param {string} buildingId
  * @param {string} [coverScreenshotId]
+ * @returns {{ iconUrl: string, coverImageUrl: string, coverScreenshotId: string, usesCoverImage: boolean }}
  */
 function resolveCardImage(buildingId, coverScreenshotId) {
-  const defaultIcon = `/api/v1/buildings/${encodeURIComponent(buildingId)}/icon.png`;
+  const iconUrl = `/api/v1/buildings/${encodeURIComponent(buildingId)}/icon.png`;
   const coverId = String(coverScreenshotId || "").trim() || readApprovedCoverScreenshotId(buildingId);
   if (!isValidCoverScreenshot(buildingId, coverId)) {
-    return { iconUrl: defaultIcon, coverScreenshotId: "", usesCoverImage: false };
+    return { iconUrl, coverImageUrl: "", coverScreenshotId: "", usesCoverImage: false };
   }
   return {
-    iconUrl: `/api/buildings/${encodeURIComponent(buildingId)}/screenshots/${encodeURIComponent(coverId)}`,
+    // In-game craft bench always uses the token icon; cover is website-only.
+    iconUrl,
+    coverImageUrl: `/api/buildings/${encodeURIComponent(buildingId)}/screenshots/${encodeURIComponent(coverId)}`,
     coverScreenshotId: coverId,
     usesCoverImage: true,
   };
@@ -579,6 +582,7 @@ function listSubmissionsForCreator(webUser) {
         coverScreenshotId: card.coverScreenshotId || null,
         usesCoverImage: card.usesCoverImage,
         iconUrl: card.iconUrl,
+        coverImageUrl: card.coverImageUrl || null,
         screenshots: enrichOwnerScreenshots("approved", e.id, true),
       };
     });
@@ -721,11 +725,15 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       coverScreenshotId: card.coverScreenshotId || undefined,
       usesCoverImage: card.usesCoverImage,
       iconUrl: card.iconUrl,
+      coverImageUrl: card.coverImageUrl || undefined,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
     if (!entry.coverScreenshotId) {
       delete entry.coverScreenshotId;
+    }
+    if (!entry.coverImageUrl) {
+      delete entry.coverImageUrl;
     }
     if (description) {
       entry.description = description;

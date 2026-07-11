@@ -156,6 +156,17 @@ function buildingIconHtml(iconUrl, sizeClass, usesCoverImage = false) {
   return `<div class="building-icon-wrap${usesCoverImage ? " building-icon-wrap--cover" : ""}"><img class="${cls}" src="${escapeAttr(iconUrl)}" alt="" onerror="this.parentElement.classList.add('building-icon-wrap--placeholder');this.remove();" /></div>`;
 }
 
+/** Website card image: cover screenshot when set, otherwise the in-game token icon. */
+function buildingCardImageUrl(entry) {
+  if (!entry) {
+    return "";
+  }
+  if (entry.usesCoverImage && entry.coverImageUrl) {
+    return entry.coverImageUrl;
+  }
+  return entry.iconUrl || "";
+}
+
 function showStatusError(statusEl, message) {
   if (!statusEl) return;
   statusEl.hidden = false;
@@ -244,7 +255,7 @@ function renderBuildingCard(entry, options = {}) {
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
-        ${buildingIconHtml(entry.iconUrl, null, Boolean(entry.usesCoverImage))}
+        ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
         ${upvoteControlHtml(entry, canVote)}
       </div>
       <div class="building-card-body">
@@ -590,8 +601,9 @@ function renderMySubmissionItem(item) {
   const status = submissionStatusLabel(item);
   const statusClass = submissionStatusClass(item);
   const title = escapeHtml(item.displayName || "Untitled");
-  const icon = item.iconUrl
-    ? `<img class="submission-icon" src="${escapeAttr(item.iconUrl)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
+  const cardImg = buildingCardImageUrl(item);
+  const icon = cardImg
+    ? `<img class="submission-icon" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
     : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
 
   let meta = "";
@@ -978,7 +990,7 @@ async function openBuildingDetail(buildingId) {
 
   content.innerHTML = `
     <div class="building-modal-header">
-      ${buildingIconHtml(entry.iconUrl, "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
+      ${buildingIconHtml(buildingCardImageUrl(entry), "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
       <div>
         <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>

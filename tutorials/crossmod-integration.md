@@ -1,0 +1,381 @@
+# Crossmod integration with Aetherhaven
+
+This guide explains how another mod can add villagers, buildings, dialogue, quests, quest board pools, shop stock, and prices using assets (and a little Java when you need custom UI or conditions).
+
+Aetherhaven scans every registered asset pack for files under `Server/Aetherhaven/`. Your mod should ship an asset pack (`IncludesAssetPack: true`) and list Aetherhaven as an optional or hard dependency so it loads in a sensible order.
+
+## Manifest
+
+```json
+{
+  "Group": "YourGroup",
+  "Name": "YourMod",
+  "IncludesAssetPack": true,
+  "OptionalDependencies": {
+    "Hexvane:Aetherhaven": "*"
+  }
+}
+```
+
+Use a hard `Dependencies` entry if your mod cannot run without Aetherhaven.
+
+## Folder map
+
+Place content under your pack root:
+
+
+| Path                                       | Purpose                                                             |
+| ------------------------------------------ | ------------------------------------------------------------------- |
+| `Server/Aetherhaven/Villagers/`            | Villager gameplay defs (dialogue trees, gifts, schedules, inn pool) |
+| `Server/Aetherhaven/VillagerGiftPatches/`  | Append gift loves/likes/dislikes onto an existing villager          |
+| `Server/Aetherhaven/VillagerSchedules/`    | Weekly schedules by NPC role id                                     |
+| `Server/Aetherhaven/GuideTopics/`          | Journal guide markdown pages (`<locale>/<topicId>.md`)              |
+| `Server/Aetherhaven/GuidePatches/`         | Append guide hub `sub-topics` (e.g. under `villagers`)              |
+| `Server/Aetherhaven/NpcRoles/`            | Engine NPC roles (only loaded when Aetherhaven is present)          |
+| `Server/Aetherhaven/NpcModels/`           | Optional NPC models for those roles (AH-gated)                      |
+| `Server/Aetherhaven/Dialogue/`             | Full dialogue trees (same id overrides earlier packs)               |
+| `Server/Aetherhaven/DialoguePatches/`      | Inject choices/nodes into an existing tree                          |
+| `Server/Aetherhaven/Quests/`               | Story / housing quests                                              |
+| `Server/Aetherhaven/QuestBoardExtensions/` | Extra quest board fetch/hunt/raid entries                           |
+| `Server/Aetherhaven/Buildings/`            | Construction definitions                                            |
+| `Server/Aetherhaven/ShopPrices/`           | Gold prices for shop spots                                          |
+| `Server/Aetherhaven/ShopLoot/`             | Shop spot loot tables (append or replace)                           |
+| `Server/Aetherhaven/Townsfolk/`            | Townsfolk character pool                                            |
+| `Server/Aetherhaven/Personalities/`        | Personality traits                                                  |
+| `Server/Prefabs/`                          | Building prefabs referenced by constructions                        |
+| `Server/Languages/en-US/`                  | English lang keys                                                   |
+
+
+Same content id from a later pack replaces an earlier pack for whole-file catalogs (villagers, dialogue trees, quests, buildings). Prices, loot, quest board pools, dialogue patches, and gift patches merge as described below.
+
+## Villagers and NPC roles
+
+Crossmod villagers should put **engine NPC roles** under `Server/Aetherhaven/NpcRoles/`, **not** under `Server/NPC/Roles/`. Hytale only auto-loads `Server/NPC/Roles/`; Aetherhaven scans `NpcRoles` after its dialogue action, attitude groups, and `Aetherhaven_Human` exist. If Aetherhaven is missing, those role files are ignored.
+
+1. Add role JSON under `Server/Aetherhaven/NpcRoles/` (role id = filename without `.json`). Interact should open Aetherhaven dialogue (`OpenAetherhavenDialogue`), same pattern as Aetherhaven’s own roles. Optional component files can live under `NpcRoles/.../Components/` (loaded before spawnable roles).
+2. Optional appearance models under `Server/Aetherhaven/NpcModels/` (model id = filename). You may still parent models to `Aetherhaven_Human` or reuse Aetherhaven villager models that already ship with Aetherhaven under `Server/Models/`.
+3. Add a villager definition under `Server/Aetherhaven/Villagers/` with matching `npcRoleId`, `residentTreeId` / `visitorTreeId`, gifts, schedule bindings, and so on.
+4. For a shop worker who starts in the inn pool: set `innPoolEligible`, `visitorBindingKind` (e.g. `visitor_angler`), `workConstructionId` to your shop building id, and `dialogueVillagerKind` (resident kind after promotion, e.g. `angler`). When that shop plot completes, Aetherhaven promotes the matching inn visitor if the shop quest is active or completed. Completing the quest alone does not move them; finishing the shop plot does. The shop quest should use `grantPlotTokenConstructionId` or `grantPlotBlueprintConstructionId` equal to that same `workConstructionId` (optionally also `assignNpcRoleId`).
+5. **Display name for Aetherhaven UI** (town journal, quest board, gift history, and similar): add a line to your pack’s `Server/Languages/en-US/aetherhaven_ui_journal_items_tail.lang`:
+
+```lang
+npcRoles.YourMod_Fisherman.name=Reed Castwell
+```
+
+Runtime id is `aetherhaven_ui_journal_items_tail.npcRoles.YourMod_Fisherman.name`. Aetherhaven looks up that key by role id. The NPC role’s own `NameTranslationKey` (for engine nametags) can use a different bundle; journal and quest UI do not use it.
+
+You can ship a brand new villager this way, or only contribute prices and dialogue patches for an existing Aetherhaven villager.
+
+### Gift list patches
+
+Same `npcRoleId` under `Villagers/` replaces the **whole** villager definition. To add loves/likes/dislikes onto someone like the Merchant without copying their file, use `Server/Aetherhaven/VillagerGiftPatches/`:
+
+```json
+{
+  "schemaVersion": 1,
+  "targetNpcRoleId": "Aetherhaven_Merchant",
+  "addGiftLoves": ["Fish_Salmon_Item"],
+  "addGiftLikes": ["CozyFishing_Wooden_Rod"],
+  "addGiftDislikes": ["Deco_Trash"]
+}
+```
+
+Item ids are appended (duplicates skipped). Put full gift lists on your own villager def when you own that role.
+
+## Journal guide pages
+
+The town journal **Guide** tab walks markdown topics from Aetherhaven’s wiki tree (`welcome` → hubs like `villagers` / `mechanics`). Crossmod pages do **not** go under `Common/Docs/`; use the namespaced folders below so you do not replace Aetherhaven’s hubs.
+
+1. Add a topic under `Server/Aetherhaven/GuideTopics/<locale>/<topicId>.md` (ship at least `en-US`). Same front matter as Aetherhaven wiki pages (`name`, `description`, optional `npcRoleId`, optional `sub-topics`).
+2. Add a patch under `Server/Aetherhaven/GuidePatches/` that appends your topic id onto an existing hub:
+
+```json
+{
+  "schemaVersion": 1,
+  "targetTopicId": "villagers",
+  "addSubTopics": ["villager_angler"]
+}
+```
+
+Common hubs: `welcome`, `getting_started`, `mechanics`, `villagers`, `faq`. Later packs append; duplicate ids are skipped. Same `locale` + `topicId` from a later pack replaces the markdown. Guide cache clears when Aetherhaven reloads asset catalogs.
+
+Example topic `Server/Aetherhaven/GuideTopics/en-US/villager_angler.md`:
+
+```markdown
+---
+name: "Reed Castwell"
+description: "Quests and gifts for Reed Castwell."
+npcRoleId: YourMod_Angler
+---
+
+Reed runs the fishing shop once it is built.
+
+### Quests
+
+#### Fishing shop
+1. Talk to Reed at the inn and accept the quest.
+2. Build the fishing shop.
+3. Find Reed at the shop and close the quest in dialogue.
+```
+
+Optional images can use the same `wiki/...` AssetImage paths as Aetherhaven pages, or rely on `npcRoleId` so villager hero art resolves from the NPC portrait.
+
+## Buildings
+
+Add a construction JSON under `Server/Aetherhaven/Buildings/` and the prefab it points at under `Server/Prefabs/`. Follow existing Aetherhaven building files for fields like `id`, `prefabPath`, materials, and plot tokens.
+
+### Variant Of (plot creator)
+
+The plot creator staff **Variant** kind lets players make a style variant that `countsAsConstructionId` points at a base building. The Variant Of dropdown is built from the live construction catalog:
+
+- Eligible bases: constructions with **no** `countsAsConstructionId` of their own, and that are not decoration plots or wall segments
+- Any mod's building under `Server/Aetherhaven/Buildings/` appears automatically when both mods are installed
+- Aetherhaven's `plot_creator_main_constructions.json` only sets preferred order and label lang keys for core buildings
+
+For shop-like bases (so the wizard asks for shop spots / shop POIs), set building `tags` to include `shop`, and/or add a POI with tag `SHOP`. Use `home` / `house`, `work`, `amenity`, or `player_shop` tags when you want those wizard substeps.
+
+Example fishing shop base (other players can then make variants of it):
+
+```json
+{
+  "id": "plot_fishing_shop",
+  "displayName": "Fishing Shop",
+  "displayNameLangKey": "example_mod.building.fishing_shop.name",
+  "prefabPath": "plot_fishing_shop.prefab.json",
+  "tags": ["shop", "work"],
+  "pois": [
+    {
+      "localX": 0,
+      "localY": 1,
+      "localZ": 0,
+      "tags": ["WORK", "SHOP"],
+      "capacity": 1,
+      "interactionKind": "WORK_SURFACE"
+    }
+  ]
+}
+```
+
+Do **not** set `countsAsConstructionId` on the base itself. Variants created in the plot creator will point at this id.
+
+## Dialogue trees vs patches
+
+
+
+### Full trees
+
+`Server/Aetherhaven/Dialogue/*.json` with `{ "id", "entry", "nodes" }`. Same `id` replaces the whole tree.
+
+### Patches (recommended for adding one option to a villager hub)
+
+`Server/Aetherhaven/DialoguePatches/*.json`:
+
+```json
+{
+  "schemaVersion": 1,
+  "targetTreeId": "aetherhaven_merchant",
+  "addNodes": {
+    "example_fish_hub": {
+      "speaker": "example_mod.dialogue.fish.speaker",
+      "text": "example_mod.dialogue.fish.body",
+      "choices": [
+        {
+          "text": "example_mod.dialogue.fish.openJournal",
+          "actions": [{ "type": "example_open_journal" }],
+          "next": null
+        },
+        {
+          "text": "example_mod.dialogue.fish.back",
+          "next": "main_hub"
+        }
+      ]
+    }
+  },
+  "nodePatches": [
+    {
+      "nodeId": "main_hub",
+      "addChoices": [
+        {
+          "id": "example_fish_talk",
+          "text": "example_mod.dialogue.fish.hubChoice",
+          "condition": { "type": "example_mod_ready" },
+          "whenFalse": "hide",
+          "next": "example_fish_hub"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Stable hub node ids in Aetherhaven trees are usually `main_hub`. Give patched choices an `id` so a later pack can replace the same choice instead of duplicating it.
+
+### Custom actions (open your own UI)
+
+Resolve Aetherhaven on enable and register action types:
+
+```java
+AetherhavenPlugin ah = AetherhavenPlugin.get();
+if (ah == null) {
+    return;
+}
+ah.getDialogueActionRegistry().register("example_open_journal", (action, playerRef, store, out, npcRef) -> {
+    out.setCloseDialogue(true);
+    out.setAfterClose(() -> {
+        Ref<EntityStore> pref = playerRef; // capture carefully; re-resolve from PlayerRef if needed
+        // Open your CustomUI page here (same world.execute pattern Aetherhaven uses for shops).
+    });
+});
+```
+
+`setAfterClose` runs after the dialogue page finishes, so you can open another UI without fighting page ack counters. Unregister on disable.
+
+Built-in action types still work in your JSON (`open_barter_shop`, `start_quest`, `give_item`, and so on).
+
+### Custom conditions
+
+```java
+ah.getDialogueConditionRegistry().register("example_mod_ready", (condition, playerRef, store, npcRef) -> {
+    return /* your check */;
+});
+```
+
+Unknown types fall through to Aetherhaven’s built-in conditions; registered types are checked first.
+
+## Quests
+
+Add quest JSON under `Server/Aetherhaven/Quests/`. Same quest `id` overrides. You can reference your items and constructions. Use `requiresSubplugin` only if you are tying into Aetherhaven’s optional feature packs.
+
+For an inn visitor shop arc, grant the shop with `grantPlotTokenConstructionId` or `grantPlotBlueprintConstructionId` matching the villager’s `workConstructionId`. The visitor is promoted when the shop plot completes (with that quest active or completed), not when the quest completes by itself.
+
+## Quest board extensions
+
+Do not copy the full `quest_board.json`. Add a small file under `Server/Aetherhaven/QuestBoardExtensions/`:
+
+```json
+{
+  "schemaVersion": 1,
+  "villagers": {
+    "Aetherhaven_Merchant": {
+      "fetchEntries": [
+        {
+          "id": "example_fish_haul",
+          "rank": "E",
+          "minRank": "E",
+          "maxRank": "C",
+          "weight": 8,
+          "daysLimit": 3,
+          "titleLangKey": "example_mod.questBoard.fish_haul.title",
+          "descriptionLangKey": "example_mod.questBoard.fish_haul.description",
+          "itemSets": [
+            {
+              "weight": 1,
+              "items": [{ "itemId": "Fish_Salmon_Item", "count": 5 }]
+            }
+          ],
+          "rewards": [
+            {
+              "kind": "item",
+              "itemId": "Aetherhaven_Gold_Coin",
+              "count": 25,
+              "grantTo": "player"
+            },
+            {
+              "kind": "reputation",
+              "amount": 5,
+              "npcRoleId": "Aetherhaven_Merchant",
+              "grantTo": "player"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+```
+
+Gold on the board is an **item** reward (`Aetherhaven_Gold_Coin`), not a `"type": "currency"` shorthand. Entries merge by `id` per villager role. Later packs replace the same id. Full `Server/Aetherhaven/quest_board.json` files from packs are also deep-merged the same way.
+
+## Shop prices
+
+`Server/Aetherhaven/ShopPrices/*.json`:
+
+```json
+{
+  "catalogRevision": 1,
+  "prices": {
+    "Fish_Salmon_Item": 8,
+    "CozyFishing_Wooden_Rod": { "gold": 40, "batchSize": 1 }
+  }
+}
+```
+
+Merge order: Aetherhaven bundled catalog → pack files (later pack wins on the same item id) → server data folder `shop_prices.json` overrides.
+
+## Shop loot tables
+
+`Server/Aetherhaven/ShopLoot/<tableId>.json` (file name is the table id):
+
+```json
+{
+  "entries": [
+    { "itemId": "Fish_Salmon_Item", "weight": 10, "stockMin": 2, "stockMax": 6 }
+  ]
+}
+```
+
+By default entries are appended to the existing table. Set `"replace": true` to replace the table for that pack layer. A file in the server’s plugin data `shop_loot/<tableId>.json` fully replaces the merged table (admin override). New installs no longer seed full default copies into that folder so pack merges can extend bundled tables; only add a data file when you want a full override.
+
+## Jewelry in other mods’ loot
+
+There is **no** pack/asset API for unidentified or rolled jewelry. Putting jewelry item ids in a normal drop list only gives plain stacks with no appraisal metadata.
+
+When Aetherhaven is present, soft-depend and call the Java helpers from your loot code, for example:
+
+- `UnidentifiedJewelry.rollEnchantedStack(random)` — random gem jewelry with rolled traits, still unappraised
+- `JewelryChestLoot.rollForChest(random, ah.getConfig().get())` — chest-style roll including rare artifacts
+- `JewelryMetadata.ensureRolled(stack)` — attach rolled meta to a specific jewelry item id
+
+If Aetherhaven is missing, skip those rolls or fall back to non-jewelry loot.
+
+## Languages
+
+Add English keys under `Server/Languages/en-US/*.lang`. Runtime keys are `filename.short.key`. Keep player facing text simple. Do not use dashes in player facing text. Do not mention implementation details.
+
+Lang files with the same filename as Aetherhaven’s (for example `aetherhaven_ui_journal_items_tail.lang` or `aetherhaven_buildings.lang`) merge by key. Ship only the keys you add; do not copy Aetherhaven’s full file.
+
+**Villager display names in Aetherhaven UI** must live in `aetherhaven_ui_journal_items_tail.lang` as `npcRoles.<NpcRoleId>.name` (see Villagers and NPC roles above). Without that line, the journal and quest board show the raw message id.
+
+**Dialogue trees:** speaker and choice strings passed to Aetherhaven dialogue must use a message id that starts with `aetherhaven_` (for example file `aetherhaven_dialogue_your_villager.lang`). Keys that do not match are treated as raw text and show as the id.
+
+## Worked example (fictional ExampleFish mod)
+
+1. Manifest depends on `Hexvane:Aetherhaven`, `IncludesAssetPack: true`.
+2. `Server/Aetherhaven/ShopPrices/example_fish.json` prices fish and rods.
+3. `Server/Aetherhaven/ShopLoot/merchant_food.json` appends fish to the merchant food table.
+4. `Server/Aetherhaven/DialoguePatches/merchant_fish.json` adds a hub choice on `aetherhaven_merchant` / `main_hub`.
+5. On plugin enable, register `example_open_journal` and `example_mod_ready`.
+6. `Server/Languages/en-US/example_mod.lang` holds the dialogue and quest board strings.
+7. Optional: `QuestBoardExtensions/merchant_fish.json` adds a fetch entry for salmon.
+
+
+
+## Reload and debugging
+
+Aetherhaven reloads catalogs when asset packs register and when configs reload. Check the server log for lines about merged shop prices, shop loot append/replace, quest board extensions, and applied dialogue patches.
+
+## Important engine notes
+
+- Dialogue action handlers run outside that restriction for normal UI flows, but still prefer `setAfterClose` when opening another page.
+- Prefer soft dependency: if Aetherhaven is missing, skip registration and skip shipping broken references.
+
+
+
+## Manual check
+
+1. Install Aetherhaven and your mod.
+2. Confirm log lines for your price keys, loot merge, and dialogue patch.
+3. Talk to the patched villager and confirm the new hub choice.
+4. Confirm the choice opens your UI when the custom action is registered.
+5. Confirm shop spot tooltips show your item prices.
+
