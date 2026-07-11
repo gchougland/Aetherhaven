@@ -2,6 +2,10 @@
 
 ## [2.2.1] - Unreleased
 
+### Fixed
+
+- **Villagers moving to workplaces** — If you finish a villager’s workplace before they arrive at the inn or before you accept their related quest, they now move there once the quest is accepted or they show up at the inn (including visitors from other compatible mods).
+
 ## [2.2.0] - 7/10/2026
 
 ### Added

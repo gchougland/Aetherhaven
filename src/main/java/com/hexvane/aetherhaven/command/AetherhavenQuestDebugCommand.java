@@ -2,11 +2,13 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.quest.QuestPlotBlueprintOnStart;
 import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownCommandResolution;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -133,7 +135,9 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
                 QuestPlotTokenOnStart.grantIfConfigured(plugin, def, ref, store);
                 QuestPlotBlueprintOnStart.grantIfConfigured(plugin, def, ref, store);
             }
-            AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
+            tm.updateTown(town);
             playerRef.sendMessage(
                 Message.translation("aetherhaven_quests_portals.aetherhaven.questdebug.granted")
                     .param("name", plugin.getQuestCatalog().displayName(qid))

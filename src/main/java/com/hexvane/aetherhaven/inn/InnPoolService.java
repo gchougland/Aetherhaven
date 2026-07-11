@@ -1235,6 +1235,7 @@ public final class InnPoolService {
             }
             presentRoles.add(roleId);
             tm.updateTown(town);
+            InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
         }
     }
 
@@ -1677,6 +1678,7 @@ public final class InnPoolService {
             }
             presentRoles.add(roleId);
             tm.updateTown(town);
+            InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
         }
     }
 

@@ -59,6 +59,11 @@ public final class InnVisitorShopCompletion {
             npcRef = findTownVisitorNpcRef(store, town, config.npcRoleId());
         }
         if (npcRef == null || !npcRef.isValid()) {
+            LOGGER.atFine().log(
+                "Shop promotion deferred for %s (quest ok, plot %s): visitor not in inn pool yet",
+                config.logLabel(),
+                shopPlotId
+            );
             return;
         }
         UUIDComponent uuidComp = store.getComponent(npcRef, UUIDComponent.getComponentType());

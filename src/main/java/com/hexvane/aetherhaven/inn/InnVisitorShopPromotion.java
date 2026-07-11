@@ -19,8 +19,9 @@ import javax.annotation.Nullable;
  * {@link VillagerDefinition#getWorkConstructionId()} and matching shop quests instead of hardcoded
  * construction/role pairs.
  *
- * <p>Completing the shop quest alone does not promote anyone; the visitor leaves the inn when the
- * matching shop plot finishes (and the quest is active or completed).
+ * <p>Promotion needs the shop plot complete, the shop quest active or completed, and the visitor present
+ * (inn pool or town visitor). If the player builds the shop first, accepting the quest or spawning the
+ * visitor later still promotes them via {@link #tryPromoteReadyWorkplaces}.
  */
 public final class InnVisitorShopPromotion {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
@@ -41,8 +42,6 @@ public final class InnVisitorShopPromotion {
         @Nonnull String completedConstructionId,
         @Nonnull String completedGameplayConstructionId
     ) {
-        ConstructionCatalog constructions = plugin.getConstructionCatalog();
-        QuestCatalog quests = plugin.getQuestCatalog();
         for (VillagerDefinition def : plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values()) {
             if (!def.isInnPoolEligible()) {
                 continue;
@@ -51,39 +50,88 @@ public final class InnVisitorShopPromotion {
             if (work == null) {
                 continue;
             }
-            if (!constructionMatchesWork(constructions, work, completedConstructionId, completedGameplayConstructionId)) {
+            if (!constructionMatchesWork(
+                plugin.getConstructionCatalog(),
+                work,
+                completedConstructionId,
+                completedGameplayConstructionId
+            )) {
                 continue;
             }
-            String residentKind = resolveResidentKind(def);
-            if (residentKind == null || residentKind.isBlank()) {
-                LOGGER.atWarning().log(
-                    "Skip shop promotion for %s: set dialogueVillagerKind or visitorBindingKind (visitor_*)",
-                    def.getNpcRoleId()
-                );
-                continue;
-            }
-            String questId = findShopQuestId(quests, constructions, def, work);
-            if (questId == null || questId.isBlank()) {
-                LOGGER.atWarning().log(
-                    "Skip shop promotion for %s: no quest grants workConstructionId %s",
-                    def.getNpcRoleId(),
-                    work
-                );
-                continue;
-            }
-            String label = def.getDisplayName();
-            if (label == null || label.isBlank()) {
-                label = def.getNpcRoleId();
-            }
-            InnVisitorShopCompletion.onShopBuilt(
-                world,
-                plugin,
-                town,
-                shopPlotId,
-                tm,
-                new ShopPromotionConfig(questId, def.getNpcRoleId(), residentKind, label)
-            );
+            tryPromoteVillager(world, plugin, town, tm, def, shopPlotId, work);
         }
+    }
+
+    /**
+     * Retries shop promotion for every inn-pool villager whose workplace plot is already complete and whose
+     * shop quest is active or completed. Use after quest accept or when a visitor joins the inn.
+     */
+    public static void tryPromoteReadyWorkplaces(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm
+    ) {
+        ConstructionCatalog constructions = plugin.getConstructionCatalog();
+        for (VillagerDefinition def : plugin.getVillagerDefinitionCatalog().allByNpcRoleId().values()) {
+            if (!def.isInnPoolEligible()) {
+                continue;
+            }
+            String work = def.getWorkConstructionId();
+            if (work == null) {
+                continue;
+            }
+            String workGameplay = constructions.resolveGameplayConstructionId(work);
+            if (workGameplay.isEmpty()) {
+                workGameplay = work;
+            }
+            var plot = town.findCompletePlotWithConstruction(constructions, workGameplay);
+            if (plot == null) {
+                continue;
+            }
+            tryPromoteVillager(world, plugin, town, tm, def, plot.getPlotId(), work);
+        }
+    }
+
+    private static void tryPromoteVillager(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull VillagerDefinition def,
+        @Nonnull UUID shopPlotId,
+        @Nonnull String workConstructionId
+    ) {
+        String residentKind = resolveResidentKind(def);
+        if (residentKind == null || residentKind.isBlank()) {
+            LOGGER.atWarning().log(
+                "Skip shop promotion for %s: set dialogueVillagerKind or visitorBindingKind (visitor_*)",
+                def.getNpcRoleId()
+            );
+            return;
+        }
+        String questId =
+            findShopQuestId(plugin.getQuestCatalog(), plugin.getConstructionCatalog(), def, workConstructionId);
+        if (questId == null || questId.isBlank()) {
+            LOGGER.atWarning().log(
+                "Skip shop promotion for %s: no quest grants workConstructionId %s",
+                def.getNpcRoleId(),
+                workConstructionId
+            );
+            return;
+        }
+        String label = def.getDisplayName();
+        if (label == null || label.isBlank()) {
+            label = def.getNpcRoleId();
+        }
+        InnVisitorShopCompletion.onShopBuilt(
+            world,
+            plugin,
+            town,
+            shopPlotId,
+            tm,
+            new ShopPromotionConfig(questId, def.getNpcRoleId(), residentKind, label)
+        );
     }
 
     /**

@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.inn.InnPoolService;
+import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
 import com.hexvane.aetherhaven.quest.QuestAvailability;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -235,6 +236,7 @@ public final class DialogueActionExecutor {
         if (npcUuid != null && town.isInnVisitorLocked(npcUuid)) {
             InnPoolService.ensureVisitorListedInInnPool(town, npcUuid);
         }
+        InnVisitorShopPromotion.tryPromoteReadyWorkplaces(world, plugin, town, tm);
         tm.updateTown(town);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
