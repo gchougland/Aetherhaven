@@ -239,6 +239,12 @@ $C.@PageOverlay {
                 Text: "";
               }
 
+              $C.@TextButton #ModerationCraftButton {
+                Anchor: (Height: 32, Right: 6);
+                FlexWeight: 1;
+                Text: "";
+              }
+
               $C.@TextButton #ApproveButton {
                 Anchor: (Height: 32, Right: 6);
                 FlexWeight: 1;

@@ -933,6 +933,15 @@ app.get("/api/v1/moderation/submissions/:submissionId/prefab.json", requireModer
   res.type("application/json").send(fs.readFileSync(file));
 });
 
+app.get("/api/v1/moderation/submissions/:submissionId/building.json", requireModerator, (req, res) => {
+  const file = pendingSubmissionFile(req.params.submissionId, "building.json");
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
 app.get("/api/v1/moderation/submissions/:submissionId/icon.png", requireModerator, (req, res) => {
   const file = pendingSubmissionFile(req.params.submissionId, "icon.png");
   if (!file) {

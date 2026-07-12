@@ -92,4 +92,9 @@ public final class CommunityPendingEntry {
     public String moderationIconUrl(@Nonnull String apiBaseUrl) {
         return apiBaseUrl + "/api/v1/moderation/submissions/" + getSubmissionId() + "/icon.png";
     }
+
+    @Nonnull
+    public String moderationBuildingUrl(@Nonnull String apiBaseUrl) {
+        return apiBaseUrl + "/api/v1/moderation/submissions/" + getSubmissionId() + "/building.json";
+    }
 }

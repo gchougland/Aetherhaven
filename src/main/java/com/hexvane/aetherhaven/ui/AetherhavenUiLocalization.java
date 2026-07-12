@@ -398,6 +398,7 @@ public final class AetherhavenUiLocalization {
         b.set("#DownloadButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.downloadButton"));
         b.set("#RemoveButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.removeButton"));
         b.set("#ModerationLoadPreviewButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.moderationLoadPreviewButton"));
+        b.set("#ModerationCraftButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.moderationCraftButton"));
         b.set("#ApproveButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.approveButton"));
         b.set("#DenyButton.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.denyButton"));
         b.set("#MarketplaceRefreshButton.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.refreshMarketplaceTooltip"));

@@ -6,16 +6,27 @@ import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
 import com.hexvane.aetherhaven.plot.PlotCraftingCatalog;
+import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.asset.common.CommonAsset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,10 +35,22 @@ public final class CommunityModerationService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new GsonBuilder().create();
     private static final String ICON_ID_PREFIX = "mod_";
+    private static final int ICON_DOWNLOAD_PARALLELISM = 4;
 
     private final AetherhavenPlugin plugin;
     private final ConcurrentHashMap<UUID, Boolean> apiModeratorAccess = new ConcurrentHashMap<>();
     private volatile List<CommunityPendingEntry> cachedPending = List.of();
+    private volatile long lastFetchEpochMs;
+    private final AtomicInteger iconFetchSerial = new AtomicInteger();
+    private final ExecutorService iconExecutor =
+        Executors.newFixedThreadPool(
+            ICON_DOWNLOAD_PARALLELISM,
+            r -> {
+                Thread t = new Thread(r, "aetherhaven-moderation-icons");
+                t.setDaemon(true);
+                return t;
+            }
+        );
 
     public CommunityModerationService(@Nonnull AetherhavenPlugin plugin) {
         this.plugin = plugin;
@@ -76,7 +99,11 @@ public final class CommunityModerationService {
         return plugin.getConfig().get().getCommunityMarketplace().isModerator(playerUuid);
     }
 
-    /** Refreshes the pending queue from the marketplace API (moderator auth). */
+    public boolean isQueueEmpty() {
+        return cachedPending.isEmpty();
+    }
+
+    /** Refreshes the pending queue metadata only (icons load per visible page). */
     public void refreshPending(@Nonnull UUID playerUuid) {
         if (!isModerator(playerUuid)) {
             cachedPending = List.of();
@@ -93,9 +120,8 @@ public final class CommunityModerationService {
             List<CommunityPendingEntry> entries =
                 response != null && response.submissions != null ? response.submissions : List.of();
             cachedPending = List.copyOf(entries);
-            for (CommunityPendingEntry entry : entries) {
-                ensureIconCached(entry, playerUuid);
-            }
+            lastFetchEpochMs = System.currentTimeMillis();
+            LOGGER.atInfo().log("Moderation pending loaded: %s submissions", entries.size());
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse moderation pending list");
         }
@@ -142,6 +168,90 @@ public final class CommunityModerationService {
     @Nullable
     public String loadPreview(@Nonnull CommunityPendingEntry entry, @Nonnull UUID playerUuid) {
         return CommunityModerationPreviewCache.get().loadPreview(plugin, entry, playerUuid.toString());
+    }
+
+    /**
+     * Stages a pending submission under its proposed community id so a plot token can be crafted and placed for review.
+     */
+    @Nonnull
+    public CommunityDownloadService.InstallResult installForReview(
+        @Nonnull CommunityPendingEntry entry,
+        @Nonnull UUID moderatorUuid
+    ) {
+        String proposedId = entry.getProposedId().trim();
+        if (!CommunityBuildingValidator.isValidCommunityId(proposedId)) {
+            LOGGER.atWarning().log(
+                "Moderation review install refused: invalid proposedId %s for %s",
+                proposedId,
+                entry.getSubmissionId()
+            );
+            return CommunityDownloadService.InstallResult.NOT_FOUND;
+        }
+        if (CommunityPaths.isInstalled(plugin.getDataDirectory(), proposedId)) {
+            return CommunityDownloadService.InstallResult.SUCCESS;
+        }
+        Path dataDir = plugin.getDataDirectory();
+        String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
+        Map<String, String> headers = moderatorHeaders(moderatorUuid);
+        try {
+            Files.createDirectories(CommunityPaths.buildingsDirectory(dataDir));
+            Files.createDirectories(CommunityPaths.prefabsDirectory(dataDir));
+            Files.createDirectories(CommunityPaths.iconsDirectory(dataDir));
+
+            Path destPrefab = CommunityPaths.installedPrefabFile(dataDir, proposedId);
+            Path previewPrefab = CommunityPaths.moderationPreviewPrefabFile(dataDir, entry.getSubmissionId());
+            if (Files.isRegularFile(previewPrefab)) {
+                Files.copy(previewPrefab, destPrefab, StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                byte[] prefab = CommunityHttpClient.getBytes(entry.moderationPrefabUrl(base), headers);
+                if (prefab == null || prefab.length == 0) {
+                    return CommunityDownloadService.InstallResult.DOWNLOAD_FAILED;
+                }
+                Files.write(destPrefab, prefab);
+            }
+
+            Path buildingFile = CommunityPaths.buildingFile(dataDir, proposedId);
+            String buildingJson = CommunityHttpClient.getString(entry.moderationBuildingUrl(base), headers);
+            if (buildingJson == null || buildingJson.isBlank()) {
+                return CommunityDownloadService.InstallResult.DOWNLOAD_FAILED;
+            }
+            Files.writeString(buildingFile, buildingJson);
+            CommunityBuildingJsonNormalizer.normalizeInstalledBuildingFile(buildingFile, proposedId);
+
+            Path iconFile = CommunityPaths.iconFile(dataDir, proposedId);
+            if (!Files.isRegularFile(iconFile)) {
+                Path modIcon = CustomBuildingsPaths.iconFile(dataDir, entry.iconConstructionId());
+                if (Files.isRegularFile(modIcon)) {
+                    Files.copy(modIcon, iconFile, StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    byte[] png = CommunityHttpClient.getBytes(entry.moderationIconUrl(base), headers);
+                    if (png != null && png.length > 0) {
+                        Files.write(iconFile, png);
+                    }
+                }
+            }
+            if (Files.isRegularFile(iconFile)) {
+                CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, true);
+                CustomBuildingIconAssetRegistry.registerIconFileNoSend(plugin, iconFile, true);
+                if (asset != null) {
+                    CommunityIconRegistry.broadcastAssets(List.of(asset));
+                    PlotTokenIconSync.afterIconRegistered(plugin, proposedId);
+                }
+            }
+
+            LOGGER.atInfo().log(
+                "Installed moderation review build %s (submission %s)",
+                proposedId,
+                entry.getSubmissionId()
+            );
+            return CommunityDownloadService.InstallResult.SUCCESS;
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log(
+                "Failed to install moderation review build for %s",
+                entry.getSubmissionId()
+            );
+            return CommunityDownloadService.InstallResult.IO_ERROR;
+        }
     }
 
     public boolean approve(@Nonnull UUID playerUuid, @Nonnull String submissionId) {
@@ -193,26 +303,128 @@ public final class CommunityModerationService {
         return CustomBuildingsPaths.iconAssetPath(iconConstructionId(submissionId));
     }
 
-    private void ensureIconCached(@Nonnull CommunityPendingEntry entry, @Nonnull UUID playerUuid) {
-        Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), entry.iconConstructionId());
-        if (Files.isRegularFile(iconFile)) {
-            CommunityIconRegistry.registerIconFile(plugin, iconFile);
-            return;
+    /**
+     * Downloads and registers list icons for the given submission ids (one UI page).
+     *
+     * @return true when at least one icon was newly written or registered
+     */
+    public boolean ensureIconsForSubmissionIds(@Nonnull Collection<String> submissionIds, @Nonnull UUID moderatorUuid) {
+        if (submissionIds.isEmpty()) {
+            return false;
         }
-        byte[] png =
-            CommunityHttpClient.getBytes(
-                entry.moderationIconUrl(plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl()),
-                moderatorHeaders(playerUuid)
-            );
+        List<CommunityPendingEntry> needed = new ArrayList<>();
+        for (String id : submissionIds) {
+            CommunityPendingEntry entry = findEntry(id);
+            if (entry != null) {
+                needed.add(entry);
+            }
+        }
+        if (needed.isEmpty()) {
+            return false;
+        }
+
+        List<CommunityPendingEntry> toDownload = new ArrayList<>();
+        List<Path> alreadyOnDisk = new ArrayList<>();
+        for (CommunityPendingEntry entry : needed) {
+            Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), entry.iconConstructionId());
+            if (Files.isRegularFile(iconFile) && !isCachedIconStale(iconFile)) {
+                alreadyOnDisk.add(iconFile);
+            } else {
+                toDownload.add(entry);
+            }
+        }
+
+        List<Path> downloaded = Collections.synchronizedList(new ArrayList<>());
+        if (!toDownload.isEmpty()) {
+            Map<String, String> headers = moderatorHeaders(moderatorUuid);
+            String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
+            List<CompletableFuture<Void>> futures = new ArrayList<>(toDownload.size());
+            for (CommunityPendingEntry entry : toDownload) {
+                futures.add(
+                    CompletableFuture.runAsync(
+                        () -> {
+                            Path written = downloadListIconToDisk(entry, base, headers);
+                            if (written != null) {
+                                downloaded.add(written);
+                            }
+                        },
+                        iconExecutor
+                    )
+                );
+            }
+            CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
+        }
+
+        List<CommonAsset> toBroadcast = new ArrayList<>();
+        for (Path iconFile : alreadyOnDisk) {
+            CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, false);
+            if (asset != null) {
+                toBroadcast.add(asset);
+            }
+        }
+        for (Path iconFile : downloaded) {
+            CommonAsset asset = CommunityIconRegistry.registerIconFileNoSend(plugin, iconFile, true);
+            if (asset != null) {
+                toBroadcast.add(asset);
+            }
+        }
+        CommunityIconRegistry.broadcastAssets(toBroadcast);
+        return !downloaded.isEmpty() || !toBroadcast.isEmpty();
+    }
+
+    public int ensureIconsForSubmissionIdsAsync(
+        @Nonnull Collection<String> submissionIds,
+        @Nonnull UUID moderatorUuid,
+        @Nonnull Runnable onIconsChanged
+    ) {
+        int serial = iconFetchSerial.incrementAndGet();
+        List<String> ids = List.copyOf(submissionIds);
+        CompletableFuture.runAsync(
+            () -> {
+                boolean changed = false;
+                try {
+                    changed = ensureIconsForSubmissionIds(ids, moderatorUuid);
+                } finally {
+                    if (changed && serial == iconFetchSerial.get()) {
+                        onIconsChanged.run();
+                    }
+                }
+            },
+            iconExecutor
+        );
+        return serial;
+    }
+
+    @Nullable
+    private Path downloadListIconToDisk(
+        @Nonnull CommunityPendingEntry entry,
+        @Nonnull String apiBaseUrl,
+        @Nonnull Map<String, String> headers
+    ) {
+        Path iconFile = CustomBuildingsPaths.iconFile(plugin.getDataDirectory(), entry.iconConstructionId());
+        byte[] png = CommunityHttpClient.getBytes(entry.moderationIconUrl(apiBaseUrl), headers);
         if (png == null || png.length == 0) {
-            return;
+            return null;
         }
         try {
             Files.createDirectories(iconFile.getParent());
             Files.write(iconFile, png);
-            CommunityIconRegistry.registerIconFile(plugin, iconFile);
+            return iconFile;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to cache moderation icon for %s", entry.getSubmissionId());
+            return null;
+        }
+    }
+
+    private boolean isCachedIconStale(@Nonnull Path iconFile) {
+        long fetchMs = lastFetchEpochMs;
+        if (fetchMs <= 0L) {
+            return false;
+        }
+        try {
+            return Files.getLastModifiedTime(iconFile).toMillis() < fetchMs;
+        } catch (Exception e) {
+            return true;
         }
     }
 

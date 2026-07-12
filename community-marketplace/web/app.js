@@ -233,7 +233,7 @@ function renderBuildingCard(entry, options = {}) {
     ? `<button
         type="button"
         class="danger admin-delete-btn"
-        onclick="event.stopPropagation(); deleteApprovedBuilding('${escapeAttr(entry.id)}', '${escapeAttr(entry.displayName)}')"
+        onclick="event.stopPropagation(); deleteApprovedBuilding(${jsString(entry.id)}, ${jsString(entry.displayName || '')})"
       >Remove permanently</button>`
     : "";
   const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
@@ -615,11 +615,11 @@ function renderMySubmissionItem(item) {
 
   let action = "";
   if (item.kind === "pending") {
-    action = `<button type="button" class="secondary" onclick="withdrawMySubmission('${escapeAttr(item.submissionId)}', '${escapeAttr(item.displayName || "")}')">Withdraw</button>`;
+    action = `<button type="button" class="secondary" onclick="withdrawMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Withdraw</button>`;
   } else if (item.kind === "approved") {
-    action = `<button type="button" class="danger" onclick="removeMyBuilding('${escapeAttr(item.id)}', '${escapeAttr(item.displayName || "")}')">Remove from marketplace</button>`;
+    action = `<button type="button" class="danger" onclick="removeMyBuilding(${jsString(item.id)}, ${jsString(item.displayName || "")})">Remove from marketplace</button>`;
   } else if (item.kind === "rejected") {
-    action = `<button type="button" class="secondary" onclick="dismissMySubmission('${escapeAttr(item.submissionId)}', '${escapeAttr(item.displayName || "")}')">Dismiss</button>`;
+    action = `<button type="button" class="secondary" onclick="dismissMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Dismiss</button>`;
   }
 
   return `
@@ -867,8 +867,8 @@ async function loadAdminQueue() {
         <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
         ${descriptionHtml}
         <div class="queue-actions">
-          <button onclick="approveSubmission('${escapeAttr(s.submissionId)}', '${escapeAttr(s.proposedId)}')">Approve</button>
-          <button class="secondary" onclick="rejectSubmission('${escapeAttr(s.submissionId)}')">Reject</button>
+          <button onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || '')})">Approve</button>
+          <button class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
         </div>
       </div>
     </div>`;
@@ -1083,4 +1083,13 @@ function escapeHtml(s) {
 
 function escapeAttr(s) {
   return escapeHtml(s).replace(/'/g, "&#39;");
+}
+
+/** JS string literal safe inside a double-quoted HTML attribute (e.g. onclick="fn(${jsString(name)})"). */
+function jsString(value) {
+  return JSON.stringify(String(value ?? ""))
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
 }
