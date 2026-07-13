@@ -86,10 +86,7 @@ public final class PatrolWandPreviewSystem extends EntityTickingSystem<EntitySto
                 && !hand.isEmpty()
                 && AetherhavenConstants.PATROL_WAND_ITEM_ID.equals(hand.getItemId());
         boolean customPageOpen = p.getPageManager().getCustomPage() != null;
-        boolean applicable =
-            holding
-                && pr.hasPermission(AetherhavenConstants.PERMISSION_PATROL_WAND)
-                && !customPageOpen;
+        boolean applicable = holding && !customPageOpen;
         if (!applicable) {
             if (PatrolWandHudSupport.isPatrolWandHudActive(p)) {
                 PatrolWandHudSupport.removePatrolWandHud(p, pr);

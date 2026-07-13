@@ -1,6 +1,6 @@
 # Crossmod integration with Aetherhaven
 
-This guide explains how another mod can add villagers, buildings, dialogue, quests, quest board pools, shop stock, and prices using assets (and a little Java when you need custom UI or conditions).
+This guide explains how another mod can add villagers, buildings, dialogue, quests, quest board pools, shop stock, prices, and field-rescue talk using assets (and a little Java when you need custom UI or conditions).
 
 Aetherhaven scans every registered asset pack for files under `Server/Aetherhaven/`. Your mod should ship an asset pack (`IncludesAssetPack: true`) and list Aetherhaven as an optional or hard dependency so it loads in a sensible order.
 
@@ -230,7 +230,29 @@ ah.getDialogueActionRegistry().register("example_open_journal", (action, playerR
 
 `setAfterClose` runs after the dialogue page finishes, so you can open another UI without fighting page ack counters. Unregister on disable.
 
-Built-in action types still work in your JSON (`open_barter_shop`, `start_quest`, `give_item`, and so on).
+Built-in action types still work in your JSON (`open_barter_shop`, `start_quest`, `complete_quest`, `despawn_npc`, `give_item`, and so on).
+
+### Field rescues (portal / instance dialogue)
+
+Field-rescue talk often runs inside a **portal instance** while the player’s town lives on the overworld. Aetherhaven resolves town state for dialogue **across all loaded worlds**, so you do **not** need a custom soft-dep action just to complete a town quest or check quest conditions in that instance.
+
+Typical rescue closer (stock actions only):
+
+```json
+{
+  "actions": [
+    { "type": "complete_quest", "id": "q_your_rescue" },
+    { "type": "despawn_npc" },
+    { "type": "close" }
+  ]
+}
+```
+
+- `complete_quest` / town quest conditions (`townQuestActive`, `townQuestCompleted`, and the other town checks) find the player’s town even when the dialogue world is a temporary instance.
+- `despawn_npc` always plays a vanish particle and sound. Default is the Crystal Keeper rescue poof (`Aetherhaven_Crystal_Keeper_Vanish`). If the NPC has an Aetherhaven rescue binding (Crystal Keeper / Pyrotechnic), that trigger’s FX is used instead. Soft mods without a `TownVillagerBinding` still get the default.
+- Optional overrides on `despawn_npc`: `particleSystemId` and/or `soundEventId` (non-blank values win over the trigger / default for the fields you set).
+
+You still need a quest JSON under `Server/Aetherhaven/Quests/`, a dialogue tree (or patch) that runs those actions, and an NPC interact that opens Aetherhaven dialogue. Spawning and quest-start wiring stay on your mod; Aetherhaven only needs the stock complete + despawn path for the talk-out in the instance.
 
 ### Custom conditions
 
@@ -378,4 +400,5 @@ Aetherhaven reloads catalogs when asset packs register and when configs reload. 
 3. Talk to the patched villager and confirm the new hub choice.
 4. Confirm the choice opens your UI when the custom action is registered.
 5. Confirm shop spot tooltips show your item prices.
+6. For a field rescue: talk to your rescue NPC inside a portal instance, complete dialogue, and confirm the town quest completes on the overworld and the NPC vanishes with particle/sound (no custom Java action required).
 

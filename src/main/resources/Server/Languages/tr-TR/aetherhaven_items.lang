@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=Yol tasarımcısı küreği
 items.Aetherhaven_Path_Tool.description=Kasabanız için yollar tasarlar. Q tuşu modu değiştirir. İkincil tuş düğüm ekler veya kaldırır. F tuşu moda bağlı olarak stil yöneticisini yerleştirir, kaldırır veya açar. E tuşu genişliği ayarlar. R tuşu stili ayarlar.
 
 items.Aetherhaven_Patrol_Wand.name=Devriye değneği
-items.Aetherhaven_Patrol_Wand.description=Kasabanız için güvenlik devriye güzergahlarını belirler (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Kasaba planlama masasında üretin. Elinizde tutarken ekrandaki açıklamayı görün.
+items.Aetherhaven_Patrol_Wand.description=Kasabanız için güvenlik devriye güzergahlarını belirler. Kasaba planlama masasında üretin. Elinizde tutarken ekrandaki açıklamayı görün.
 
 aetherhaven.patrolWand.legendPageTitle=Devriye değneği
 aetherhaven.patrolWand.legendBlurb=Devriye noktaları yerleştirin, bir rota kaydedin, ardından bir nöbetçi atayın. Mavi parıltılar, yalnızca bu asayı tuttuğunuz sürece rotaları gösterir.

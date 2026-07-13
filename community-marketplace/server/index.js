@@ -23,6 +23,7 @@ import {
   readPrefabBlockIdVersion,
   assignCommunityCatalogId,
   screenshotExtForMime,
+  validateBuildingEditPayload,
   validateSubmissionBuilding,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
@@ -30,6 +31,7 @@ import { createVoteRateLimit } from "./voteRateLimit.js";
 import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
 import { createDownloads } from "./downloads.js";
+import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);
@@ -197,15 +199,97 @@ const downloadRateLimit = createDownloadRateLimit({
   maxPerPlayer: Number(process.env.DOWNLOAD_MAX_PER_PLAYER_PER_HOUR || 60),
 });
 
-function readBuildingDescription(buildingPath) {
+function readBuildingJson(buildingPath) {
   try {
     if (!fs.existsSync(buildingPath)) {
-      return "";
+      return null;
     }
-    const building = JSON.parse(fs.readFileSync(buildingPath, "utf8"));
-    return typeof building.description === "string" ? building.description.trim() : "";
+    return JSON.parse(fs.readFileSync(buildingPath, "utf8"));
   } catch {
-    return "";
+    return null;
+  }
+}
+
+function readBuildingDescription(buildingPath) {
+  const building = readBuildingJson(buildingPath);
+  return typeof building?.description === "string" ? building.description.trim() : "";
+}
+
+/**
+ * @param {string} buildingPath
+ * @returns {number}
+ */
+function readBuildingGoldCost(buildingPath) {
+  const building = readBuildingJson(buildingPath);
+  const gold = Number(building?.treasuryGoldCoinCost);
+  return Number.isFinite(gold) && gold > 0 ? Math.floor(gold) : 0;
+}
+
+/**
+ * @param {string} buildingPath
+ * @returns {Array<{ resourceTypeId?: string, itemId?: string, count: number }>}
+ */
+function readBuildingMaterials(buildingPath) {
+  const building = readBuildingJson(buildingPath);
+  if (!Array.isArray(building?.materials)) {
+    return [];
+  }
+  /** @type {Array<{ resourceTypeId?: string, itemId?: string, count: number }>} */
+  const materials = [];
+  for (const row of building.materials) {
+    if (!row || typeof row !== "object") {
+      continue;
+    }
+    const count = Number(row.count);
+    if (!Number.isFinite(count) || count < 1) {
+      continue;
+    }
+    const resourceTypeId = typeof row.resourceTypeId === "string" ? row.resourceTypeId.trim() : "";
+    const itemId = typeof row.itemId === "string" ? row.itemId.trim() : "";
+    if (resourceTypeId && !itemId) {
+      materials.push({ resourceTypeId, count: Math.floor(count) });
+    } else if (itemId && !resourceTypeId) {
+      materials.push({ itemId, count: Math.floor(count) });
+    }
+  }
+  return materials;
+}
+
+/**
+ * Apply editable fields onto an in-memory building.json object.
+ * @param {Record<string, unknown>} building
+ * @param {{
+ *   displayName: string,
+ *   description: string,
+ *   treasuryGoldCoinCost: number,
+ *   materials: Array<{ resourceTypeId?: string, itemId?: string, count: number }>,
+ *   styleId?: string,
+ *   tags?: string[],
+ * }} edit
+ * @param {{ allowStyleAndTags?: boolean }} [options]
+ */
+function applyBuildingEditFields(building, edit, options = {}) {
+  building.displayName = edit.displayName;
+  if (edit.description) {
+    building.description = edit.description;
+  } else {
+    delete building.description;
+  }
+  if (edit.treasuryGoldCoinCost > 0) {
+    building.treasuryGoldCoinCost = edit.treasuryGoldCoinCost;
+  } else {
+    delete building.treasuryGoldCoinCost;
+  }
+  building.materials = edit.materials;
+  if (options.allowStyleAndTags) {
+    if (edit.styleId) {
+      building.styleId = edit.styleId;
+    }
+    if (edit.tags && edit.tags.length) {
+      building.tags = edit.tags;
+    } else {
+      delete building.tags;
+    }
   }
 }
 
@@ -335,8 +419,9 @@ function resolveCardImage(buildingId, coverScreenshotId) {
  * @param {string} buildingId
  * @param {string} coverScreenshotId empty string clears
  * @param {{ profileUuid: string, profileUsername: string }} webUser
+ * @param {{ asAdmin?: boolean }} [options]
  */
-function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser) {
+function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser, options = {}) {
   const id = normalizeCommunityId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -346,7 +431,7 @@ function setBuildingCoverScreenshot(buildingId, coverScreenshotId, webUser) {
     return { status: 404, body: { error: "not_found" } };
   }
   const approvedMeta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
-  if (!isOwnedByWebUser(approvedMeta, webUser)) {
+  if (!options.asAdmin && !isOwnedByWebUser(approvedMeta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
 
@@ -460,6 +545,17 @@ function approveSubmission(submissionId, requestedId) {
 
   fs.rmSync(pendingDir, { recursive: true, force: true });
   storage.reassignScreenshotsToApproved(submissionId, id);
+  notifyBuildingApproved({
+    publicBaseUrl,
+    id,
+    displayName: approvedMeta.displayName,
+    description: approvedMeta.description,
+    creatorName: approvedMeta.creatorName,
+    tags: approvedMeta.tags,
+    styleId: approvedMeta.styleId,
+    approvedAt: approvedMeta.approvedAt,
+    hasIcon: fs.existsSync(approved.icon),
+  }).catch(() => {});
   return { status: 200, body: { id, status: "approved" } };
 }
 
@@ -568,7 +664,9 @@ function listSubmissionsForCreator(webUser) {
     .filter((e) => isOwnedByWebUser(e, webUser))
     .map((e) => {
       const card = resolveCardImage(e.id, e.coverScreenshotId);
-      return {
+      const paths = storage.approvedPaths(e.id);
+      const goldCost = readBuildingGoldCost(paths.building);
+      const row = {
         kind: "approved",
         id: e.id,
         displayName: e.displayName,
@@ -585,6 +683,10 @@ function listSubmissionsForCreator(webUser) {
         coverImageUrl: card.coverImageUrl || null,
         screenshots: enrichOwnerScreenshots("approved", e.id, true),
       };
+      if (goldCost > 0) {
+        row.treasuryGoldCoinCost = goldCost;
+      }
+      return row;
     });
 
   return [...pending, ...approved, ...rejected].sort((a, b) => {
@@ -711,6 +813,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     }
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
     const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
+    const goldCost = readBuildingGoldCost(paths.building);
     const entryTags = normalizeTags(e.tags);
     const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
     const card = resolveCardImage(e.id, e.coverScreenshotId);
@@ -729,6 +832,11 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
     };
+    if (goldCost > 0) {
+      entry.treasuryGoldCoinCost = goldCost;
+    } else {
+      delete entry.treasuryGoldCoinCost;
+    }
     if (!entry.coverScreenshotId) {
       delete entry.coverScreenshotId;
     }
@@ -899,6 +1007,15 @@ app.post(
         version: "1",
       };
       fs.writeFileSync(path.join(dir, "meta.json"), JSON.stringify(meta, null, 2));
+      notifyBuildingPending({
+        publicBaseUrl,
+        submissionId,
+        proposedId: id,
+        displayName: meta.displayName,
+        description: meta.description,
+        creatorName: meta.creatorName,
+        submittedAt: meta.submittedAt,
+      }).catch(() => {});
       res.status(201).json({ submissionId, proposedId: id, status: "pending" });
     } catch (e) {
       res.status(400).json({ error: e.message || "submission_failed" });
@@ -1030,8 +1147,225 @@ app.get("/auth/logout", (req, res) => {
 });
 
 app.get("/api/me", (req, res) => {
-  res.json({ user: req.session?.user || null });
+  const user = req.session?.user || null;
+  const profileUuid = String(user?.profile?.uuid || "")
+    .trim()
+    .toLowerCase();
+  res.json({
+    user,
+    isAdmin: Boolean(profileUuid && ADMIN_UUIDS.has(profileUuid)),
+  });
 });
+
+/**
+ * @param {string} buildingId
+ * @param {{ asAdmin?: boolean }} [options]
+ * @param {{ profileUuid: string, profileUsername: string } | null} [webUser]
+ */
+function getPublishedBuildingEditPayload(buildingId, webUser, options = {}) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!options.asAdmin && (!webUser || !isOwnedByWebUser(entry, webUser))) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  const paths = storage.approvedPaths(id);
+  if (!fs.existsSync(paths.building)) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const building = readBuildingJson(paths.building) || {};
+  const card = resolveCardImage(id, entry.coverScreenshotId);
+  const description =
+    normalizeDescription(entry.description) ||
+    normalizeDescription(building.description) ||
+    "";
+  const materials = readBuildingMaterials(paths.building);
+  const goldCost = readBuildingGoldCost(paths.building);
+  const styleId =
+    String(entry.styleId || building.styleId || "misc").trim() || "misc";
+  const tags = normalizeTags(entry.tags).length
+    ? normalizeTags(entry.tags)
+    : normalizeTags(building.tags);
+  return {
+    status: 200,
+    body: {
+      kind: "approved",
+      id,
+      displayName: String(entry.displayName || building.displayName || "").trim(),
+      description,
+      treasuryGoldCoinCost: goldCost,
+      materials,
+      styleId,
+      tags,
+      version: entry.version || "1",
+      creatorUuid: entry.creatorUuid,
+      creatorName: entry.creatorName,
+      coverScreenshotId: card.coverScreenshotId || null,
+      usesCoverImage: card.usesCoverImage,
+      iconUrl: card.iconUrl,
+      coverImageUrl: card.coverImageUrl || null,
+      screenshots: enrichOwnerScreenshots("approved", id, true),
+    },
+  };
+}
+
+/**
+ * @param {string} buildingId
+ * @param {unknown} body
+ * @param {{ asAdmin?: boolean }} [options]
+ * @param {{ profileUuid: string, profileUsername: string } | null} [webUser]
+ */
+function patchPublishedBuilding(buildingId, body, webUser, options = {}) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!options.asAdmin && (!webUser || !isOwnedByWebUser(entry, webUser))) {
+    return { status: 403, body: { error: "not_owner" } };
+  }
+  const allowStyleAndTags = Boolean(options.asAdmin);
+  const validated = validateBuildingEditPayload(body, { allowStyleAndTags });
+  if (!validated.ok) {
+    return { status: 400, body: { error: validated.error, message: validated.message } };
+  }
+  const paths = storage.approvedPaths(id);
+  if (!fs.existsSync(paths.building)) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const building = readBuildingJson(paths.building);
+  if (!building || typeof building !== "object") {
+    return { status: 500, body: { error: "building_corrupt" } };
+  }
+  applyBuildingEditFields(building, validated.value, { allowStyleAndTags });
+  fs.writeFileSync(paths.building, JSON.stringify(building, null, 2));
+
+  entry.displayName = validated.value.displayName;
+  if (validated.value.description) {
+    entry.description = validated.value.description;
+  } else {
+    delete entry.description;
+  }
+  if (allowStyleAndTags) {
+    entry.styleId = validated.value.styleId || "misc";
+    entry.tags = validated.value.tags || [];
+  }
+  storage.writeManifest(manifest);
+
+  if (fs.existsSync(paths.meta)) {
+    try {
+      const approvedMeta = JSON.parse(fs.readFileSync(paths.meta, "utf8"));
+      approvedMeta.displayName = validated.value.displayName;
+      if (validated.value.description) {
+        approvedMeta.description = validated.value.description;
+      } else {
+        delete approvedMeta.description;
+      }
+      if (allowStyleAndTags) {
+        approvedMeta.styleId = validated.value.styleId || "misc";
+        approvedMeta.tags = validated.value.tags || [];
+      }
+      fs.writeFileSync(paths.meta, JSON.stringify(approvedMeta, null, 2));
+    } catch {
+      // meta is best-effort sync
+    }
+  }
+
+  return getPublishedBuildingEditPayload(id, webUser, options);
+}
+
+/**
+ * @param {string} submissionId
+ */
+function getPendingSubmissionEditPayload(submissionId) {
+  const meta = storage.loadSubmissionMeta(submissionId, "pending");
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const buildingPath = path.join(storage.submissionDir(submissionId, "pending"), "building.json");
+  const building = readBuildingJson(buildingPath) || {};
+  const description =
+    normalizeDescription(meta.description) ||
+    normalizeDescription(building.description) ||
+    "";
+  const materials = readBuildingMaterials(buildingPath);
+  const goldCost = readBuildingGoldCost(buildingPath);
+  const styleId =
+    String(meta.styleId || building.styleId || "misc").trim() || "misc";
+  const tags = normalizeTags(meta.tags).length
+    ? normalizeTags(meta.tags)
+    : normalizeTags(building.tags);
+  const iconFile = pendingSubmissionFile(submissionId, "icon.png");
+  return {
+    status: 200,
+    body: {
+      kind: "pending",
+      submissionId,
+      proposedId: meta.proposedId || null,
+      displayName: String(meta.displayName || building.displayName || "").trim(),
+      description,
+      treasuryGoldCoinCost: goldCost,
+      materials,
+      styleId,
+      tags,
+      version: meta.version || "1",
+      creatorUuid: meta.creatorUuid,
+      creatorName: meta.creatorName,
+      iconUrl: iconFile
+        ? `/api/admin/submissions/${encodeURIComponent(submissionId)}/icon.png`
+        : null,
+      coverScreenshotId: null,
+      usesCoverImage: false,
+      coverImageUrl: null,
+      screenshots: enrichOwnerScreenshots("pending", submissionId, true),
+    },
+  };
+}
+
+/**
+ * @param {string} submissionId
+ * @param {unknown} body
+ */
+function patchPendingSubmission(submissionId, body) {
+  const meta = storage.loadSubmissionMeta(submissionId, "pending");
+  if (!meta) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const validated = validateBuildingEditPayload(body, { allowStyleAndTags: true });
+  if (!validated.ok) {
+    return { status: 400, body: { error: validated.error, message: validated.message } };
+  }
+  const dir = storage.submissionDir(submissionId, "pending");
+  const buildingPath = path.join(dir, "building.json");
+  const building = readBuildingJson(buildingPath);
+  if (!building || typeof building !== "object") {
+    return { status: 500, body: { error: "building_corrupt" } };
+  }
+  applyBuildingEditFields(building, validated.value, { allowStyleAndTags: true });
+  fs.writeFileSync(buildingPath, JSON.stringify(building, null, 2));
+
+  meta.displayName = validated.value.displayName;
+  if (validated.value.description) {
+    meta.description = validated.value.description;
+  } else {
+    delete meta.description;
+  }
+  meta.styleId = validated.value.styleId || "misc";
+  meta.tags = validated.value.tags || [];
+  fs.writeFileSync(path.join(dir, "meta.json"), JSON.stringify(meta, null, 2));
+
+  return getPendingSubmissionEditPayload(submissionId);
+}
 
 app.get("/api/my-submissions", requireWebUser, (req, res) => {
   const webUser = sessionWebUser(req);
@@ -1040,6 +1374,40 @@ app.get("/api/my-submissions", requireWebUser, (req, res) => {
     return;
   }
   res.json({ submissions: listSubmissionsForCreator(webUser) });
+});
+
+app.get("/api/my-buildings/:buildingId", requireWebUser, (req, res) => {
+  const result = getPublishedBuildingEditPayload(req.params.buildingId, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
+
+app.patch("/api/my-buildings/:buildingId", requireWebUser, (req, res) => {
+  const result = patchPublishedBuilding(req.params.buildingId, req.body, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/admin/buildings/:buildingId", requireWebUser, requireAdmin, (req, res) => {
+  const result = getPublishedBuildingEditPayload(req.params.buildingId, sessionWebUser(req), {
+    asAdmin: true,
+  });
+  res.status(result.status).json(result.body);
+});
+
+app.patch("/api/admin/buildings/:buildingId", requireWebUser, requireAdmin, (req, res) => {
+  const result = patchPublishedBuilding(req.params.buildingId, req.body, sessionWebUser(req), {
+    asAdmin: true,
+  });
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/admin/submissions/:submissionId", requireWebUser, requireAdmin, (req, res) => {
+  const result = getPendingSubmissionEditPayload(req.params.submissionId);
+  res.status(result.status).json(result.body);
+});
+
+app.patch("/api/admin/submissions/:submissionId", requireWebUser, requireAdmin, (req, res) => {
+  const result = patchPendingSubmission(req.params.submissionId, req.body);
+  res.status(result.status).json(result.body);
 });
 
 app.post("/api/my-submissions/:submissionId/withdraw", requireWebUser, (req, res) => {
@@ -1075,8 +1443,9 @@ function multerScreenshotError(err, res) {
  * @param {object} ownerMeta
  * @param {Express.Multer.File} file
  * @param {{ profileUuid: string, profileUsername: string }} webUser
+ * @param {{ autoApprove?: boolean, uploadedByAdmin?: boolean }} [options]
  */
-function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser) {
+function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, options = {}) {
   if (!file) {
     return { status: 400, body: { error: "screenshot_required", message: "Choose an image file to upload." } };
   }
@@ -1127,42 +1496,58 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser) {
   const paths = storage.screenshotPaths(screenshotId, ext);
   fs.mkdirSync(paths.dir, { recursive: true });
   fs.writeFileSync(paths.image, file.buffer);
+  const autoApprove = Boolean(options.autoApprove);
   const meta = {
     screenshotId,
     ownerKind,
     ownerId,
     creatorUuid: ownerMeta.creatorUuid || webUser.profileUuid,
     creatorName: ownerMeta.creatorName || webUser.profileUsername || "Unknown",
-    status: "pending",
+    status: autoApprove ? "approved" : "pending",
     uploadedAt: new Date().toISOString(),
     mimeType: file.mimetype.toLowerCase(),
     ext,
     bytes: file.size,
   };
+  if (autoApprove) {
+    meta.approvedAt = new Date().toISOString();
+  }
+  if (options.uploadedByAdmin) {
+    meta.uploadedByAdmin = true;
+  }
   storage.writeScreenshotMeta(meta);
+  let url = `/api/my-screenshots/${encodeURIComponent(screenshotId)}/image`;
+  if (autoApprove && ownerKind === "approved") {
+    url = `/api/buildings/${encodeURIComponent(ownerId)}/screenshots/${encodeURIComponent(screenshotId)}`;
+  } else if (options.uploadedByAdmin) {
+    url = `/api/admin/screenshots/${encodeURIComponent(screenshotId)}/image`;
+  }
   return {
     status: 201,
     body: {
       screenshotId,
-      status: "pending",
+      status: meta.status,
       bytes: file.size,
-      url: `/api/my-screenshots/${encodeURIComponent(screenshotId)}/image`,
+      url,
     },
   };
 }
 
-function uploadPendingSubmissionScreenshot(submissionId, file, webUser) {
+function uploadPendingSubmissionScreenshot(submissionId, file, webUser, options = {}) {
   const meta = storage.loadSubmissionMeta(submissionId, "pending");
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByWebUser(meta, webUser)) {
+  if (!options.asAdmin && !isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
-  return saveOwnerScreenshot("pending", submissionId, meta, file, webUser);
+  return saveOwnerScreenshot("pending", submissionId, meta, file, webUser, {
+    autoApprove: Boolean(options.asAdmin),
+    uploadedByAdmin: Boolean(options.asAdmin),
+  });
 }
 
-function uploadApprovedBuildingScreenshot(buildingId, file, webUser) {
+function uploadApprovedBuildingScreenshot(buildingId, file, webUser, options = {}) {
   const id = normalizeCommunityId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -1172,18 +1557,21 @@ function uploadApprovedBuildingScreenshot(buildingId, file, webUser) {
   if (!entry) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByWebUser(entry, webUser)) {
+  if (!options.asAdmin && !isOwnedByWebUser(entry, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
-  return saveOwnerScreenshot("approved", id, entry, file, webUser);
+  return saveOwnerScreenshot("approved", id, entry, file, webUser, {
+    autoApprove: Boolean(options.asAdmin),
+    uploadedByAdmin: Boolean(options.asAdmin),
+  });
 }
 
-function deleteOwnScreenshot(screenshotId, webUser) {
+function deleteOwnScreenshot(screenshotId, webUser, options = {}) {
   const meta = storage.loadScreenshotMeta(screenshotId);
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
   }
-  if (!isOwnedByWebUser(meta, webUser)) {
+  if (!options.asAdmin && !isOwnedByWebUser(meta, webUser)) {
     return { status: 403, body: { error: "not_owner" } };
   }
   clearCoverIfScreenshotRemoved(meta);
@@ -1316,7 +1704,10 @@ app.get("/api/my-screenshots/:screenshotId/image", requireWebUser, (req, res) =>
     res.status(404).json({ error: "not_found" });
     return;
   }
-  if (!isOwnedByWebUser(meta, sessionWebUser(req))) {
+  const webUser = sessionWebUser(req);
+  const profileUuid = webUser.profileUuid;
+  const isAdmin = Boolean(profileUuid && ADMIN_UUIDS.has(profileUuid));
+  if (!isAdmin && !isOwnedByWebUser(meta, webUser)) {
     res.status(403).json({ error: "not_owner" });
     return;
   }
@@ -1347,6 +1738,67 @@ app.post("/api/admin/screenshots/:screenshotId/reject", requireWebUser, requireA
   const result = rejectScreenshot(req.params.screenshotId);
   res.status(result.status).json(result.body);
 });
+
+app.delete("/api/admin/screenshots/:screenshotId", requireWebUser, requireAdmin, (req, res) => {
+  const result = deleteOwnScreenshot(req.params.screenshotId, sessionWebUser(req), { asAdmin: true });
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/admin/buildings/:buildingId/cover", requireWebUser, requireAdmin, (req, res) => {
+  const screenshotId = req.body?.screenshotId;
+  const result = setBuildingCoverScreenshot(
+    req.params.buildingId,
+    screenshotId == null ? "" : String(screenshotId),
+    sessionWebUser(req),
+    { asAdmin: true }
+  );
+  res.status(result.status).json(result.body);
+});
+
+function handleScreenshotUploadMiddleware(req, res, next) {
+  screenshotUpload.single("screenshot")(req, res, (err) => {
+    if (err) {
+      if (multerScreenshotError(err, res)) {
+        return;
+      }
+      res.status(400).json({ error: err.message || "upload_failed" });
+      return;
+    }
+    next();
+  });
+}
+
+app.post(
+  "/api/admin/submissions/:submissionId/screenshots",
+  requireWebUser,
+  requireAdmin,
+  handleScreenshotUploadMiddleware,
+  (req, res) => {
+    const result = uploadPendingSubmissionScreenshot(
+      req.params.submissionId,
+      req.file,
+      sessionWebUser(req),
+      { asAdmin: true }
+    );
+    res.status(result.status).json(result.body);
+  }
+);
+
+app.post(
+  "/api/admin/buildings/:buildingId/screenshots",
+  requireWebUser,
+  requireAdmin,
+  handleScreenshotUploadMiddleware,
+  (req, res) => {
+    const result = uploadApprovedBuildingScreenshot(
+      req.params.buildingId,
+      req.file,
+      sessionWebUser(req),
+      { asAdmin: true }
+    );
+    res.status(result.status).json(result.body);
+  }
+);
 
 app.get("/api/buildings/:id/screenshots", (req, res) => {
   const id = normalizeCommunityId(req.params.id);

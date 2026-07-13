@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=Лопата дизайнера доріжок
 items.Aetherhaven_Path_Tool.description=Проєктує шляхи для вашого міста. Q перемикає режими. Secondary додає або видаляє вузли. F розміщує, видаляє або відкриває менеджер стилів залежно від режиму. E встановлює ширину. R встановлює стиль.
 
 items.Aetherhaven_Patrol_Wand.name=Патрульна паличка
-items.Aetherhaven_Patrol_Wand.description=Встановлює маршрути патрулювання охорони для вашого міста (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Створіть на столі міського планування. Дивіться легенду на екрані, тримаючи її в руках.
+items.Aetherhaven_Patrol_Wand.description=Встановлює маршрути патрулювання охорони для вашого міста. Створіть на столі міського планування. Дивіться легенду на екрані, тримаючи її в руках.
 
 aetherhaven.patrolWand.legendPageTitle=Патрульна паличка
 aetherhaven.patrolWand.legendBlurb=Розмістіть патрульні пункти, збережіть маршрут, а потім призначте охоронця. Сині блискітки показують маршрути лише тоді, коли ви тримаєте цю паличку.

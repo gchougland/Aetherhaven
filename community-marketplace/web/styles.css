@@ -903,6 +903,36 @@ button.secondary:hover {
   background: linear-gradient(180deg, #454240, var(--secondary-btn));
 }
 
+a.secondary,
+a.admin-edit-btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  background: linear-gradient(180deg, var(--secondary-btn), #2a2825);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.9rem;
+  margin-right: var(--space-sm);
+  margin-top: var(--space-xs);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    filter var(--transition),
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+a.secondary:hover,
+a.admin-edit-btn:hover {
+  border-color: var(--border-gold);
+  background: linear-gradient(180deg, #454240, var(--secondary-btn));
+  filter: brightness(1.05);
+}
+
 button.danger {
   background: linear-gradient(180deg, var(--danger-bright), var(--danger));
   color: var(--danger-text);
@@ -1410,5 +1440,176 @@ body.modal-open {
 
   .building-modal-header {
     flex-direction: column;
+  }
+}
+
+/* ==========================================================================
+   Gold cost badge
+   ========================================================================== */
+
+.gold-cost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  vertical-align: middle;
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+
+.gold-cost-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.gold-cost--inline {
+  margin-left: 0.1rem;
+}
+
+.gold-cost-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Edit page
+   ========================================================================== */
+
+.edit-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.edit-hero {
+  width: 100%;
+  margin: var(--space-md) 0 var(--space-lg);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  aspect-ratio: 16 / 9;
+}
+
+.edit-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.edit-hero--placeholder {
+  background:
+    linear-gradient(135deg, rgba(212, 175, 55, 0.08), transparent 50%),
+    var(--panel);
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.edit-field-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.edit-field input,
+.edit-field textarea,
+.material-row input,
+.material-row select {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.7rem;
+}
+
+.edit-field textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.edit-field input:focus,
+.edit-field textarea:focus,
+.material-row input:focus,
+.material-row select:focus {
+  outline: 2px solid var(--gold-dim);
+  outline-offset: 1px;
+  border-color: var(--border-gold);
+}
+
+.materials-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.material-row {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.9fr) minmax(0, 1.4fr) 5rem auto;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.edit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+a.edit-cancel {
+  display: inline-flex;
+  align-items: center;
+}
+
+.submission-item--clickable {
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.submission-item--clickable:hover {
+  border-color: var(--border-gold);
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
+}
+
+.screenshot-manager--edit .screenshot-strip--edit {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-sm);
+}
+
+.screenshot-thumb--large {
+  min-height: 120px;
+}
+
+.screenshot-thumb--large img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+@media (max-width: 900px) {
+  .edit-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .material-row {
+    grid-template-columns: 1fr;
   }
 }

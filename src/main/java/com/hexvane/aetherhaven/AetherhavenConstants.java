@@ -127,8 +127,6 @@ public final class AetherhavenConstants {
     /** Guard patrol route designer wand. */
     public static final String PATROL_WAND_ITEM_ID = "Aetherhaven_Patrol_Wand";
 
-    public static final String PERMISSION_PATROL_WAND = "aetherhaven.patrol.wand";
-
     public static final String PATROL_WAND_HUD_KEY = "AetherhavenPatrolWand";
 
     /** Route particle systems (Wayfinder style visuals). */

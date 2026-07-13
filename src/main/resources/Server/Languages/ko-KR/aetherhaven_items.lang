@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=경로 설계용 삽
 items.Aetherhaven_Path_Tool.description=마을의 경로를 디자인합니다. Q 키는 모드를 순환합니다. 보조 키는 노드를 추가하거나 제거합니다. F 키는 모드에 따라 스타일 관리자를 배치, 제거 또는 엽니다. E 키는 너비를 설정합니다. R 키는 스타일을 설정합니다.
 
 items.Aetherhaven_Patrol_Wand.name=순찰봉
-items.Aetherhaven_Patrol_Wand.description=마을 경비 순찰 경로를 설정합니다(<color is="#5AB5B5">aetherhaven.patrol.wand</color>). 마을 계획 데스크에서 제작할 수 있습니다. 지팡이를 들고 있으면 화면에 설명이 표시됩니다.
+items.Aetherhaven_Patrol_Wand.description=마을 경비 순찰 경로를 설정합니다. 마을 계획 데스크에서 제작할 수 있습니다. 지팡이를 들고 있으면 화면에 설명이 표시됩니다.
 
 aetherhaven.patrolWand.legendPageTitle=순찰봉
 aetherhaven.patrolWand.legendBlurb=순찰 지점을 설정하고, 경로를 저장한 다음, 경비원을 배정하세요. 파란색 반짝임은 이 지팡이를 들고 있을 때만 경로를 보여줍니다.

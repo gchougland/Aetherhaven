@@ -32,6 +32,17 @@ In `mods/Hexvane_Aetherhaven/config.json`:
 
 No API key is required on player machines or game servers. Submissions are rate-limited and require admin approval before appearing in the catalog.
 
+## Discord notifications (optional)
+
+Set webhook URLs in Railway Variables (or local `.env`):
+
+| Variable | Channel | Fires when |
+|----------|---------|------------|
+| `DISCORD_PENDING_WEBHOOK_URL` | Admin-only | A new building is submitted for review |
+| `DISCORD_APPROVED_WEBHOOK_URL` | Public announcements | A building is approved |
+
+Leave either unset to disable that notification. Webhook failures never block submit or approve.
+
 ## OAuth
 
 See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSetup.md).
@@ -49,12 +60,22 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | `POST /api/v1/buildings/:id/download` | Record an in-game install (rate limited; returns `{ downloadCount }`) |
 | `POST /api/v1/submissions` | Upload (`X-Player-Uuid` from game server; rate limited) |
 | `POST /api/buildings/:id/upvote` | Toggle upvote (Hytale OAuth session required; rate limited) |
+| `GET /api/my-buildings/:id` | Owner edit payload for a published build (name, description, gold, materials, screenshots) |
+| `PATCH /api/my-buildings/:id` | Owner update of published build metadata (applies immediately) |
 | `POST /api/my-submissions/:id/screenshots` | Upload screenshot for own pending submission (JPEG/PNG/WebP, max 5 MB, up to 6 per build) |
 | `POST /api/my-buildings/:id/screenshots` | Upload screenshot for own published build |
 | `DELETE /api/my-screenshots/:id` | Remove own screenshot |
 | `GET /api/buildings/:id/screenshots` | List approved screenshots for a published build |
+| `GET /api/admin/buildings/:id` | Admin edit payload for any published build |
+| `PATCH /api/admin/buildings/:id` | Admin update of published build (includes styleId/tags) |
+| `GET /api/admin/submissions/:id` | Admin edit payload for a pending submission |
+| `PATCH /api/admin/submissions/:id` | Admin update of pending submission metadata |
+| `POST /api/admin/buildings/:id/screenshots` | Admin upload screenshot for published build (auto-approved) |
+| `POST /api/admin/submissions/:id/screenshots` | Admin upload screenshot for pending submission (auto-approved) |
+| `DELETE /api/admin/screenshots/:id` | Admin delete any screenshot |
+| `POST /api/admin/buildings/:id/cover` | Admin set/clear marketplace card cover |
 | `GET /api/admin/screenshots/pending` | Admin screenshot review queue |
 
-Catalog entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators can upload screenshots from the dashboard; screenshots require separate admin approval before appearing in the public gallery.
+Catalog entries include `treasuryGoldCoinCost` when the building has a gold cost. Entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators edit published builds from **My Submissions**; admins can edit any pending or published submission from the admin page. Owner screenshots require admin approval before appearing in the public gallery; admin uploads are approved immediately.
 
 Approve/reject via admin website (Hytale OAuth) or optional `POST /api/v1/submissions/:id/approve` with `API_KEY`.

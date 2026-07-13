@@ -176,3 +176,167 @@ export function assertSize(bytes, max, label) {
     throw new Error(`${label}_too_large`);
   }
 }
+
+export const MAX_DISPLAY_NAME_LENGTH = 80;
+export const MAX_DESCRIPTION_LENGTH = 2000;
+export const MAX_STYLE_ID_LENGTH = 64;
+export const MAX_TAG_LENGTH = 32;
+export const MAX_TAGS = 16;
+export const MAX_MATERIALS = 64;
+export const MAX_MATERIAL_ID_LENGTH = 128;
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
+export function normalizeEditDescription(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string[]}
+ */
+export function normalizeEditTags(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const seen = new Set();
+  const tags = [];
+  for (const raw of value) {
+    if (typeof raw !== "string") {
+      continue;
+    }
+    const tag = raw.trim().toLowerCase().slice(0, MAX_TAG_LENGTH);
+    if (!tag || seen.has(tag)) {
+      continue;
+    }
+    seen.add(tag);
+    tags.push(tag);
+    if (tags.length >= MAX_TAGS) {
+      break;
+    }
+  }
+  return tags;
+}
+
+/**
+ * @param {unknown} value
+ * @returns {string}
+ */
+export function normalizeEditStyleId(value) {
+  const raw = typeof value === "string" ? value.trim().toLowerCase() : "";
+  if (!raw) {
+    return "misc";
+  }
+  return raw.replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "").slice(0, MAX_STYLE_ID_LENGTH) || "misc";
+}
+
+/**
+ * Validates a website edit payload for name/description/gold/materials (and optional style/tags).
+ *
+ * @param {unknown} body
+ * @param {{ allowStyleAndTags?: boolean }} [options]
+ * @returns {{ ok: true, value: {
+ *   displayName: string,
+ *   description: string,
+ *   treasuryGoldCoinCost: number,
+ *   materials: Array<{ resourceTypeId?: string, itemId?: string, count: number }>,
+ *   styleId?: string,
+ *   tags?: string[],
+ * } } | { ok: false, error: string, message?: string }}
+ */
+export function validateBuildingEditPayload(body, options = {}) {
+  const allowStyleAndTags = Boolean(options.allowStyleAndTags);
+  if (!body || typeof body !== "object") {
+    return { ok: false, error: "invalid_body", message: "Request body must be a JSON object." };
+  }
+  const b = /** @type {Record<string, unknown>} */ (body);
+
+  if (typeof b.displayName !== "string" || !b.displayName.trim()) {
+    return { ok: false, error: "display_name_missing", message: "Display name is required." };
+  }
+  const displayName = b.displayName.trim().slice(0, MAX_DISPLAY_NAME_LENGTH);
+  if (!displayName) {
+    return { ok: false, error: "display_name_missing", message: "Display name is required." };
+  }
+
+  const description = normalizeEditDescription(b.description).slice(0, MAX_DESCRIPTION_LENGTH);
+
+  let treasuryGoldCoinCost = 0;
+  if (b.treasuryGoldCoinCost != null && b.treasuryGoldCoinCost !== "") {
+    const gold = Number(b.treasuryGoldCoinCost);
+    if (!Number.isFinite(gold) || gold < 0 || !Number.isInteger(gold)) {
+      return {
+        ok: false,
+        error: "gold_invalid",
+        message: "Gold cost must be a non-negative integer.",
+      };
+    }
+    treasuryGoldCoinCost = gold;
+  }
+
+  if (!Array.isArray(b.materials)) {
+    return { ok: false, error: "materials_invalid", message: "Materials must be an array." };
+  }
+  if (b.materials.length > MAX_MATERIALS) {
+    return {
+      ok: false,
+      error: "materials_too_many",
+      message: `At most ${MAX_MATERIALS} material rows allowed.`,
+    };
+  }
+  /** @type {Array<{ resourceTypeId?: string, itemId?: string, count: number }>} */
+  const materials = [];
+  for (const row of b.materials) {
+    if (!row || typeof row !== "object") {
+      return { ok: false, error: "materials_invalid", message: "Each material row must be an object." };
+    }
+    const r = /** @type {Record<string, unknown>} */ (row);
+    const resourceTypeId =
+      typeof r.resourceTypeId === "string" ? r.resourceTypeId.trim().slice(0, MAX_MATERIAL_ID_LENGTH) : "";
+    const itemId = typeof r.itemId === "string" ? r.itemId.trim().slice(0, MAX_MATERIAL_ID_LENGTH) : "";
+    if ((resourceTypeId && itemId) || (!resourceTypeId && !itemId)) {
+      return {
+        ok: false,
+        error: "materials_invalid",
+        message: "Each material needs either resourceTypeId or itemId (not both).",
+      };
+    }
+    const count = Number(r.count);
+    if (!Number.isFinite(count) || !Number.isInteger(count) || count < 1) {
+      return {
+        ok: false,
+        error: "materials_invalid",
+        message: "Each material count must be an integer >= 1.",
+      };
+    }
+    if (resourceTypeId) {
+      materials.push({ resourceTypeId, count });
+    } else {
+      materials.push({ itemId, count });
+    }
+  }
+
+  /** @type {{
+   *   displayName: string,
+   *   description: string,
+   *   treasuryGoldCoinCost: number,
+   *   materials: Array<{ resourceTypeId?: string, itemId?: string, count: number }>,
+   *   styleId?: string,
+   *   tags?: string[],
+   * }} */
+  const value = {
+    displayName,
+    description,
+    treasuryGoldCoinCost,
+    materials,
+  };
+
+  if (allowStyleAndTags) {
+    value.styleId = normalizeEditStyleId(b.styleId);
+    value.tags = normalizeEditTags(b.tags);
+  }
+
+  return { ok: true, value };
+}

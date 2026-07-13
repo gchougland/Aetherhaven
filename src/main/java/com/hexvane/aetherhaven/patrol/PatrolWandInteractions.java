@@ -9,7 +9,6 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.ComponentAccessor;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Transform;
@@ -52,14 +51,6 @@ public final class PatrolWandInteractions {
             && AetherhavenConstants.PATROL_WAND_ITEM_ID.equals(stack.getItemId());
     }
 
-    public static boolean hasPatrolWandPermission(
-        @Nonnull Ref<EntityStore> playerRef,
-        @Nonnull ComponentAccessor<EntityStore> accessor
-    ) {
-        PlayerRef pr = accessor.getComponent(playerRef, PlayerRef.getComponentType());
-        return pr != null && pr.hasPermission(AetherhavenConstants.PERMISSION_PATROL_WAND);
-    }
-
     public static void ensureState(
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull CommandBuffer<EntityStore> commandBuffer
@@ -92,7 +83,7 @@ public final class PatrolWandInteractions {
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -161,7 +152,7 @@ public final class PatrolWandInteractions {
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -235,7 +226,7 @@ public final class PatrolWandInteractions {
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -260,7 +251,7 @@ public final class PatrolWandInteractions {
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
         @Nonnull InteractionContext context
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -285,7 +276,7 @@ public final class PatrolWandInteractions {
         @Nonnull World world,
         @Nonnull InteractionContext context
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }
@@ -315,7 +306,7 @@ public final class PatrolWandInteractions {
         @Nonnull InteractionContext context,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!hasPatrolWandPermission(playerRef, commandBuffer) || !isPatrolWandItem(getHand(commandBuffer, playerRef))) {
+        if (!isPatrolWandItem(getHand(commandBuffer, playerRef))) {
             context.getState().state = InteractionState.Failed;
             return;
         }

@@ -195,6 +195,15 @@ function formatDownloadCount(count) {
   return `${n} downloads`;
 }
 
+function goldCostHtml(entry, className = "") {
+  const gold = Number(entry?.treasuryGoldCoinCost) || 0;
+  if (gold <= 0) {
+    return "";
+  }
+  const cls = ["gold-cost", className].filter(Boolean).join(" ");
+  return `<span class="${cls}" title="Gold cost" aria-label="Gold cost ${gold}"><img class="gold-cost-icon" src="/assets/dollar_coin_icon_256.png" alt="" width="18" height="18" /><span class="gold-cost-value">${escapeHtml(String(gold))}</span></span>`;
+}
+
 function descriptionToggleHtml(entry) {
   const desc = String(entry.description || "").trim();
   if (!desc) {
@@ -228,13 +237,16 @@ function toggleBuildingDescription(buttonEl) {
 }
 
 function renderBuildingCard(entry, options = {}) {
-  const { canVote = false, adminDelete = false, showId = false, openDetail = false } = options;
+  const { canVote = false, adminDelete = false, showId = false, openDetail = false, adminEdit = false } = options;
   const deleteBtn = adminDelete
     ? `<button
         type="button"
         class="danger admin-delete-btn"
         onclick="event.stopPropagation(); deleteApprovedBuilding(${jsString(entry.id)}, ${jsString(entry.displayName || '')})"
       >Remove permanently</button>`
+    : "";
+  const editBtn = adminEdit
+    ? `<a class="secondary admin-edit-btn" href="/edit.html?id=${encodeURIComponent(entry.id)}" onclick="event.stopPropagation()">Edit</a>`
     : "";
   const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
   const cardClass = [
@@ -252,6 +264,7 @@ function renderBuildingCard(entry, options = {}) {
   const openAttrs = openDetail
     ? `role="button" tabindex="0" onclick="openBuildingDetail('${escapeAttr(entry.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"`
     : "";
+  const goldBadge = goldCostHtml(entry, "gold-cost--inline");
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
@@ -262,9 +275,10 @@ function renderBuildingCard(entry, options = {}) {
         <h3>${escapeHtml(entry.displayName)}</h3>
         ${idMeta}
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
-        <p class="meta">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}</p>
+        <p class="meta building-card-stats">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}${goldBadge ? ` · ${goldBadge}` : ""}</p>
         ${shotHint}
         ${descriptionToggleHtml(entry)}
+        ${editBtn}
         ${deleteBtn}
       </div>
     </article>`;
@@ -541,10 +555,13 @@ function screenshotStatusLabel(status) {
   return "Pending review";
 }
 
-function renderOwnerScreenshots(item) {
+function renderOwnerScreenshots(item, options = {}) {
   if (item.kind !== "pending" && item.kind !== "approved") {
     return "";
   }
+  const asAdmin = Boolean(options.asAdmin);
+  const compact = Boolean(options.compact);
+  const reloadFn = options.reloadFn || "loadSubmissions";
   const shots = Array.isArray(item.screenshots) ? item.screenshots : [];
   const ownerKind = item.kind;
   const ownerId = item.kind === "approved" ? item.id : item.submissionId;
@@ -552,43 +569,46 @@ function renderOwnerScreenshots(item) {
   const atLimit = shots.length >= MAX_SCREENSHOTS_PER_OWNER;
   const thumbs = shots.length
     ? shots
-        .map((shot) => {
+        .map((shot, index) => {
           const img = shot.url
-            ? `<img src="${escapeAttr(shot.url)}" alt="" />`
+            ? `<img src="${escapeAttr(shot.url)}" alt="" ${index === 0 && !compact ? `id="editGalleryMainPreview"` : ""} />`
             : `<div class="screenshot-thumb-placeholder" aria-hidden="true"></div>`;
           const isCover = ownerKind === "approved" && shot.status === "approved" && shot.screenshotId === coverId;
           const coverBtn =
             ownerKind === "approved" && shot.status === "approved"
               ? isCover
-                ? `<button type="button" class="secondary screenshot-cover-btn screenshot-cover-btn--active" onclick="setBuildingCover('${escapeAttr(ownerId)}', '')" title="Clear card image">Card image</button>`
-                : `<button type="button" class="secondary screenshot-cover-btn" onclick="setBuildingCover('${escapeAttr(ownerId)}', '${escapeAttr(shot.screenshotId)}')" title="Use as marketplace card image">Set card</button>`
+                ? `<button type="button" class="secondary screenshot-cover-btn screenshot-cover-btn--active" onclick="setBuildingCover('${escapeAttr(ownerId)}', '', ${asAdmin}, '${escapeAttr(reloadFn)}')" title="Clear card image">Card image</button>`
+                : `<button type="button" class="secondary screenshot-cover-btn" onclick="setBuildingCover('${escapeAttr(ownerId)}', '${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')" title="Use as marketplace card image">Set card</button>`
               : "";
           return `
-      <div class="screenshot-thumb${isCover ? " screenshot-thumb--cover" : ""}" data-status="${escapeAttr(shot.status || "pending")}">
+      <div class="screenshot-thumb${isCover ? " screenshot-thumb--cover" : ""}${!compact ? " screenshot-thumb--large" : ""}" data-status="${escapeAttr(shot.status || "pending")}">
         ${img}
         <span class="screenshot-thumb-status">${escapeHtml(screenshotStatusLabel(shot.status))}${isCover ? " · Card" : ""}</span>
         ${coverBtn}
-        <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}')">×</button>
+        <button type="button" class="screenshot-thumb-delete" title="Remove screenshot" aria-label="Remove screenshot" onclick="deleteMyScreenshot('${escapeAttr(shot.screenshotId)}', ${asAdmin}, '${escapeAttr(reloadFn)}')">×</button>
       </div>`;
         })
         .join("")
     : `<p class="meta screenshot-empty">No screenshots yet.</p>`;
 
   const uploadDisabled = atLimit ? "disabled" : "";
+  const approvalNote = asAdmin
+    ? " Admin uploads are approved immediately."
+    : " Screenshots need admin approval before they appear publicly.";
   return `
-    <div class="screenshot-manager">
-      <div class="screenshot-strip">${thumbs}</div>
+    <div class="screenshot-manager${compact ? "" : " screenshot-manager--edit"}">
+      <div class="screenshot-strip${compact ? "" : " screenshot-strip--edit"}">${thumbs}</div>
       <div class="screenshot-upload-row">
         <label class="screenshot-upload-label">
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
             ${uploadDisabled}
-            onchange="uploadMyScreenshot('${escapeAttr(ownerKind)}', '${escapeAttr(ownerId)}', this)"
+            onchange="uploadMyScreenshot('${escapeAttr(ownerKind)}', '${escapeAttr(ownerId)}', this, ${asAdmin}, '${escapeAttr(reloadFn)}')"
           />
           <span class="screenshot-upload-btn">${atLimit ? "Screenshot limit reached" : "Add screenshot"}</span>
         </label>
-        <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build. Screenshots need admin approval before they appear publicly.${
+        <p class="meta">JPEG, PNG, or WebP · max ${SCREENSHOT_MAX_SIZE_LABEL} · up to ${MAX_SCREENSHOTS_PER_OWNER} per build.${approvalNote}${
           ownerKind === "approved"
             ? " Use an approved screenshot as the marketplace card image."
             : ""
@@ -605,37 +625,55 @@ function renderMySubmissionItem(item) {
   const icon = cardImg
     ? `<img class="submission-icon" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
     : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
+  const goldBadge = goldCostHtml(item, "gold-cost--inline");
 
   let meta = "";
   if (item.kind === "approved") {
-    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(item.downloadCount))} · v${escapeHtml(item.version || "1")}</p>`;
+    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(item.downloadCount))} · v${escapeHtml(item.version || "1")}${goldBadge ? ` · ${goldBadge}` : ""}</p>`;
   } else {
     meta = `<p class="meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>`;
   }
 
   let action = "";
   if (item.kind === "pending") {
-    action = `<button type="button" class="secondary" onclick="withdrawMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Withdraw</button>`;
+    action = `<button type="button" class="secondary" onclick="event.stopPropagation(); withdrawMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Withdraw</button>`;
   } else if (item.kind === "approved") {
-    action = `<button type="button" class="danger" onclick="removeMyBuilding(${jsString(item.id)}, ${jsString(item.displayName || "")})">Remove from marketplace</button>`;
+    action = `<button type="button" class="danger" onclick="event.stopPropagation(); removeMyBuilding(${jsString(item.id)}, ${jsString(item.displayName || "")})">Remove from marketplace</button>`;
   } else if (item.kind === "rejected") {
-    action = `<button type="button" class="secondary" onclick="dismissMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Dismiss</button>`;
+    action = `<button type="button" class="secondary" onclick="event.stopPropagation(); dismissMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Dismiss</button>`;
   }
 
+  const isPublished = item.kind === "approved";
+  const clickAttrs = isPublished
+    ? `role="link" tabindex="0" onclick="window.location.href='/edit.html?id=${encodeURIComponent(item.id)}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='/edit.html?id=${encodeURIComponent(item.id)}';}"`
+    : "";
+
   return `
-    <div class="queue-item submission-item">
+    <div class="queue-item submission-item${isPublished ? " submission-item--clickable" : ""}" ${clickAttrs}>
       ${icon}
       <div class="submission-body">
         <strong>${title}</strong>
-        <p class="meta"><span class="submission-status ${statusClass}">${escapeHtml(status)}</span></p>
+        <p class="meta"><span class="submission-status ${statusClass}">${escapeHtml(status)}</span>${isPublished ? ' · <span class="meta">Click to edit</span>' : ""}</p>
         ${meta}
-        ${renderOwnerScreenshots(item)}
+        ${item.kind === "pending" ? renderOwnerScreenshots(item, { compact: true }) : ""}
         ${action}
       </div>
     </div>`;
 }
 
-async function uploadMyScreenshot(ownerKind, ownerId, inputEl) {
+async function reloadAfterScreenshotAction(reloadFn) {
+  if (reloadFn === "loadEditPage" && typeof loadEditPage === "function") {
+    await loadEditPage();
+    return;
+  }
+  if (reloadFn === "loadAdminPage" && typeof loadAdminPage === "function") {
+    await loadAdminPage();
+    return;
+  }
+  await loadSubmissions();
+}
+
+async function uploadMyScreenshot(ownerKind, ownerId, inputEl, asAdmin = false, reloadFn = "loadSubmissions") {
   const file = inputEl?.files?.[0];
   if (!file) {
     return;
@@ -650,10 +688,18 @@ async function uploadMyScreenshot(ownerKind, ownerId, inputEl) {
     inputEl.value = "";
     return;
   }
-  const endpoint =
-    ownerKind === "approved"
-      ? `/api/my-buildings/${encodeURIComponent(ownerId)}/screenshots`
-      : `/api/my-submissions/${encodeURIComponent(ownerId)}/screenshots`;
+  let endpoint;
+  if (asAdmin) {
+    endpoint =
+      ownerKind === "approved"
+        ? `/api/admin/buildings/${encodeURIComponent(ownerId)}/screenshots`
+        : `/api/admin/submissions/${encodeURIComponent(ownerId)}/screenshots`;
+  } else {
+    endpoint =
+      ownerKind === "approved"
+        ? `/api/my-buildings/${encodeURIComponent(ownerId)}/screenshots`
+        : `/api/my-submissions/${encodeURIComponent(ownerId)}/screenshots`;
+  }
   const form = new FormData();
   form.append("screenshot", file);
   const res = await fetch(endpoint, { method: "POST", body: form });
@@ -663,24 +709,30 @@ async function uploadMyScreenshot(ownerKind, ownerId, inputEl) {
     alert(body.message || body.error || "Upload failed");
     return;
   }
-  loadSubmissions();
+  await reloadAfterScreenshotAction(reloadFn);
 }
 
-async function deleteMyScreenshot(screenshotId) {
+async function deleteMyScreenshot(screenshotId, asAdmin = false, reloadFn = "loadSubmissions") {
   if (!confirm("Remove this screenshot?")) {
     return;
   }
-  const res = await fetch(`/api/my-screenshots/${encodeURIComponent(screenshotId)}`, { method: "DELETE" });
+  const endpoint = asAdmin
+    ? `/api/admin/screenshots/${encodeURIComponent(screenshotId)}`
+    : `/api/my-screenshots/${encodeURIComponent(screenshotId)}`;
+  const res = await fetch(endpoint, { method: "DELETE" });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     alert(body.error || "Delete failed");
     return;
   }
-  loadSubmissions();
+  await reloadAfterScreenshotAction(reloadFn);
 }
 
-async function setBuildingCover(buildingId, screenshotId) {
-  const res = await fetch(`/api/my-buildings/${encodeURIComponent(buildingId)}/cover`, {
+async function setBuildingCover(buildingId, screenshotId, asAdmin = false, reloadFn = "loadSubmissions") {
+  const endpoint = asAdmin
+    ? `/api/admin/buildings/${encodeURIComponent(buildingId)}/cover`
+    : `/api/my-buildings/${encodeURIComponent(buildingId)}/cover`;
+  const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({ screenshotId: screenshotId || null }),
@@ -690,7 +742,7 @@ async function setBuildingCover(buildingId, screenshotId) {
     alert(body.message || body.error || "Could not update card image");
     return;
   }
-  loadSubmissions();
+  await reloadAfterScreenshotAction(reloadFn);
 }
 
 async function withdrawMySubmission(submissionId, displayName) {
@@ -867,6 +919,7 @@ async function loadAdminQueue() {
         <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
         ${descriptionHtml}
         <div class="queue-actions">
+          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}">Edit</a>
           <button onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || '')})">Approve</button>
           <button class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
         </div>
@@ -910,7 +963,7 @@ async function loadAdminCatalog() {
       return;
     }
     el.innerHTML = entries
-      .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, showId: true }))
+      .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, adminEdit: true, showId: true }))
       .join("");
   } catch {
     el.innerHTML = emptyStateHtml("Could not load published buildings.");
@@ -988,6 +1041,7 @@ async function openBuildingDetail(buildingId) {
     return;
   }
 
+  const modalGold = goldCostHtml(entry, "gold-cost--inline");
   content.innerHTML = `
     <div class="building-modal-header">
       ${buildingIconHtml(buildingCardImageUrl(entry), "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
@@ -995,7 +1049,7 @@ async function openBuildingDetail(buildingId) {
         <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
         <p class="meta building-modal-id"><code>${escapeHtml(entry.id)}</code></p>
-        <p class="meta">${formatBytes(entry.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(entry.downloadCount))} · v${escapeHtml(entry.version)}</p>
+        <p class="meta">${formatBytes(entry.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(entry.downloadCount))} · v${escapeHtml(entry.version)}${modalGold ? ` · ${modalGold}` : ""}</p>
       </div>
     </div>
     ${
@@ -1071,6 +1125,245 @@ function closeBuildingDetail() {
   }
   modal.hidden = true;
   document.body.classList.remove("modal-open");
+}
+
+/** @type {{ isAdmin: boolean, kind: string, id: string, submissionId?: string } | null} */
+let editPageContext = null;
+
+const COMMON_RESOURCE_TYPES = ["Wood_All", "Rock", "Soils", "Rubble"];
+
+function materialRowHtml(row = {}, index = 0) {
+  const isItem = Boolean(row.itemId && !row.resourceTypeId);
+  const idValue = isItem ? row.itemId || "" : row.resourceTypeId || "";
+  const count = Number(row.count) > 0 ? Number(row.count) : 1;
+  return `
+    <div class="material-row" data-index="${index}">
+      <select class="material-kind" aria-label="Material kind">
+        <option value="resource"${isItem ? "" : " selected"}>Resource type</option>
+        <option value="item"${isItem ? " selected" : ""}>Item id</option>
+      </select>
+      <input class="material-id" type="text" list="resourceTypeDatalist" value="${escapeAttr(idValue)}" placeholder="${isItem ? "Item id" : "Resource type"}" aria-label="Material id" />
+      <input class="material-count" type="number" min="1" step="1" value="${escapeAttr(String(count))}" aria-label="Count" />
+      <button type="button" class="secondary" onclick="removeMaterialRow(this)">Remove</button>
+    </div>`;
+}
+
+function collectMaterialsFromForm() {
+  const rows = Array.from(document.querySelectorAll("#materialsEditor .material-row"));
+  return rows.map((row) => {
+    const kind = row.querySelector(".material-kind")?.value || "resource";
+    const id = String(row.querySelector(".material-id")?.value || "").trim();
+    const count = Number(row.querySelector(".material-count")?.value);
+    if (kind === "item") {
+      return { itemId: id, count };
+    }
+    return { resourceTypeId: id, count };
+  });
+}
+
+function addMaterialRow() {
+  const editor = document.getElementById("materialsEditor");
+  if (!editor) {
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.innerHTML = materialRowHtml({}, editor.querySelectorAll(".material-row").length);
+  editor.appendChild(wrap.firstElementChild);
+}
+
+function removeMaterialRow(buttonEl) {
+  const row = buttonEl?.closest(".material-row");
+  row?.remove();
+}
+
+function parseTagsInput(raw) {
+  return String(raw || "")
+    .split(",")
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+async function loadEditPage() {
+  const root = document.getElementById("editRoot");
+  if (!root) {
+    return;
+  }
+  const params = new URLSearchParams(window.location.search);
+  const buildingId = String(params.get("id") || "").trim();
+  const submissionId = String(params.get("submissionId") || "").trim();
+
+  const me = await fetch("/api/me").then((r) => r.json());
+  if (!me.user) {
+    window.location.href = "/auth/login";
+    return;
+  }
+  renderAccountMenu(me.user);
+  const isAdmin = Boolean(me.isAdmin);
+
+  if (!buildingId && !submissionId) {
+    root.innerHTML = emptyStateHtml("Missing building id.");
+    return;
+  }
+  if (submissionId && !isAdmin) {
+    root.innerHTML = emptyStateHtml("Admin access required to edit pending submissions.");
+    return;
+  }
+
+  let endpoint;
+  if (submissionId) {
+    endpoint = `/api/admin/submissions/${encodeURIComponent(submissionId)}`;
+    editPageContext = { isAdmin: true, kind: "pending", id: submissionId, submissionId };
+  } else if (isAdmin) {
+    endpoint = `/api/admin/buildings/${encodeURIComponent(buildingId)}`;
+    editPageContext = { isAdmin: true, kind: "approved", id: buildingId };
+  } else {
+    endpoint = `/api/my-buildings/${encodeURIComponent(buildingId)}`;
+    editPageContext = { isAdmin: false, kind: "approved", id: buildingId };
+  }
+
+  root.innerHTML = `<p class="meta">Loading…</p>`;
+  const res = await fetch(endpoint);
+  if (res.status === 401) {
+    window.location.href = "/auth/login";
+    return;
+  }
+  if (res.status === 403) {
+    root.innerHTML = emptyStateHtml("You do not have permission to edit this build.");
+    return;
+  }
+  if (res.status === 404) {
+    root.innerHTML = emptyStateHtml("Build not found.");
+    return;
+  }
+  if (!res.ok) {
+    root.innerHTML = emptyStateHtml("Could not load build for editing.");
+    return;
+  }
+  const data = await res.json();
+  const materials = Array.isArray(data.materials) ? data.materials : [];
+  const adminFields = isAdmin
+    ? `
+      <label class="edit-field">
+        <span class="edit-field-label">Style id</span>
+        <input id="editStyleId" type="text" value="${escapeAttr(data.styleId || "misc")}" />
+      </label>
+      <label class="edit-field">
+        <span class="edit-field-label">Tags (comma-separated)</span>
+        <input id="editTags" type="text" value="${escapeAttr((data.tags || []).join(", "))}" />
+      </label>`
+    : "";
+  const backHref = isAdmin && submissionId ? "/admin.html" : isAdmin ? "/admin.html" : "/submissions.html";
+  const heroImg = buildingCardImageUrl(data) || data.iconUrl || "";
+  const hero = heroImg
+    ? `<div class="edit-hero"><img src="${escapeAttr(heroImg)}" alt="" /></div>`
+    : `<div class="edit-hero edit-hero--placeholder" aria-hidden="true"></div>`;
+
+  root.innerHTML = `
+    <div class="edit-layout">
+      <div class="edit-main card">
+        <p class="meta"><a href="${escapeAttr(backHref)}">← Back</a>${data.creatorName ? ` · by ${escapeHtml(data.creatorName)}` : ""}</p>
+        <h2>${escapeHtml(data.displayName || "Edit build")}</h2>
+        ${hero}
+        <form id="editBuildingForm" class="edit-form" onsubmit="event.preventDefault(); saveEditPage();">
+          <label class="edit-field">
+            <span class="edit-field-label">Name</span>
+            <input id="editDisplayName" type="text" required maxlength="80" value="${escapeAttr(data.displayName || "")}" />
+          </label>
+          <label class="edit-field">
+            <span class="edit-field-label">Description</span>
+            <textarea id="editDescription" rows="5" maxlength="2000">${escapeHtml(data.description || "")}</textarea>
+          </label>
+          <label class="edit-field">
+            <span class="edit-field-label">Gold cost</span>
+            <input id="editGoldCost" type="number" min="0" step="1" value="${escapeAttr(String(data.treasuryGoldCoinCost || 0))}" />
+          </label>
+          ${adminFields}
+          <div class="edit-field">
+            <span class="edit-field-label">Resource costs</span>
+            <datalist id="resourceTypeDatalist">
+              ${COMMON_RESOURCE_TYPES.map((t) => `<option value="${escapeAttr(t)}"></option>`).join("")}
+            </datalist>
+            <div id="materialsEditor" class="materials-editor">
+              ${materials.length ? materials.map((m, i) => materialRowHtml(m, i)).join("") : materialRowHtml({}, 0)}
+            </div>
+            <button type="button" class="secondary" onclick="addMaterialRow()">Add material</button>
+          </div>
+          <div class="edit-actions">
+            <button type="submit">Save changes</button>
+            <a class="secondary edit-cancel" href="${escapeAttr(backHref)}">Cancel</a>
+            <span id="editStatus" class="meta" hidden></span>
+          </div>
+        </form>
+      </div>
+      <div class="edit-side card">
+        <h3>Screenshots</h3>
+        ${renderOwnerScreenshots(data, {
+          asAdmin: isAdmin,
+          compact: false,
+          reloadFn: "loadEditPage",
+        })}
+      </div>
+    </div>`;
+}
+
+async function saveEditPage() {
+  if (!editPageContext) {
+    return;
+  }
+  const statusEl = document.getElementById("editStatus");
+  const displayName = String(document.getElementById("editDisplayName")?.value || "").trim();
+  const description = String(document.getElementById("editDescription")?.value || "").trim();
+  const goldRaw = document.getElementById("editGoldCost")?.value;
+  const treasuryGoldCoinCost = goldRaw === "" ? 0 : Number(goldRaw);
+  const materials = collectMaterialsFromForm().filter((m) => {
+    const id = m.itemId || m.resourceTypeId;
+    return id && Number(m.count) >= 1;
+  });
+  if (!displayName) {
+    alert("Display name is required.");
+    return;
+  }
+  const body = {
+    displayName,
+    description,
+    treasuryGoldCoinCost,
+    materials,
+  };
+  if (editPageContext.isAdmin) {
+    body.styleId = String(document.getElementById("editStyleId")?.value || "misc").trim() || "misc";
+    body.tags = parseTagsInput(document.getElementById("editTags")?.value);
+  }
+
+  let endpoint;
+  if (editPageContext.kind === "pending") {
+    endpoint = `/api/admin/submissions/${encodeURIComponent(editPageContext.submissionId || editPageContext.id)}`;
+  } else if (editPageContext.isAdmin) {
+    endpoint = `/api/admin/buildings/${encodeURIComponent(editPageContext.id)}`;
+  } else {
+    endpoint = `/api/my-buildings/${encodeURIComponent(editPageContext.id)}`;
+  }
+
+  if (statusEl) {
+    statusEl.hidden = false;
+    statusEl.textContent = "Saving…";
+  }
+  const res = await fetch(endpoint, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    if (statusEl) {
+      statusEl.textContent = data.message || data.error || "Save failed";
+    }
+    alert(data.message || data.error || "Save failed");
+    return;
+  }
+  if (statusEl) {
+    statusEl.textContent = "Saved.";
+  }
+  await loadEditPage();
 }
 
 function escapeHtml(s) {

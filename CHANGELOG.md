@@ -2,8 +2,14 @@
 
 ## [2.2.1] - Unreleased
 
+### Added
+
+- **Logger production** — Sticks and tree sap are available as default lumbermill outputs (alongside fibre). Matching saplings for each wood type can be unlocked at the same gold/rarity tier as that wood (3 saplings + gold), with max storage of 10.
+- **Rancher production** — Milk buckets are available as a default barn output (alongside eggs, meat, and wool).
+
 ### Fixed
 
+- **Crossmod rescue dialogue in portal instances** — `complete_quest` and dialogue town checks resolve the player’s town across all loaded worlds (not only the portal/instance world), and `despawn_npc` plays Crystal Keeper–style vanish particle/sound by default (optional `particleSystemId` / `soundEventId` on the action), so soft mods can ship field-rescue dialogue with stock actions.
 - **Villagers moving to workplaces** — If you finish a villager’s workplace before they arrive at the inn or before you accept their related quest, they now move there once the quest is accepted or they show up at the inn (including visitors from other compatible mods).
 
 ## [2.2.0] - 7/10/2026

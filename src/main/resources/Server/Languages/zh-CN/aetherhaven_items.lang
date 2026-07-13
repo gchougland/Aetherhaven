@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=路径设计师铲子
 items.Aetherhaven_Path_Tool.description=为您的城镇设计道路。Q 键切换模式。Secondary 键添加或移除节点。F 键根据模式放置、移除或打开样式管理器。E 键设置宽度。R 键设置样式。
 
 items.Aetherhaven_Patrol_Wand.name=巡逻魔杖
-items.Aetherhaven_Patrol_Wand.description=设置城镇的守卫巡逻路线（<color is="#5AB5B5">aetherhaven.patrol.wand</color>）。在城镇规划台制作。持有此物品时，屏幕上会显示图例。
+items.Aetherhaven_Patrol_Wand.description=设置城镇的守卫巡逻路线。在城镇规划台制作。持有此物品时，屏幕上会显示图例。
 
 aetherhaven.patrolWand.legendPageTitle=巡逻魔杖
 aetherhaven.patrolWand.legendBlurb=设置巡逻点，保存路线，然后指派守卫。只有当你手持此魔杖时，蓝色闪光才会显示路线。

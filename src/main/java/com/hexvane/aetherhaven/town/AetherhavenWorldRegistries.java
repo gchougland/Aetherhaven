@@ -31,8 +31,10 @@ import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Holds {@link TownManager} and {@link PoiRegistry} per loaded world. */
 public final class AetherhavenWorldRegistries {
@@ -161,6 +163,61 @@ public final class AetherhavenWorldRegistries {
             throw new IllegalStateException("TownManager not loaded for world " + world.getName());
         }
         return m;
+    }
+
+    /**
+     * Finds the player's town across all loaded world managers. Tries {@code prefer} first when non-null
+     * (current-world affinity), then scans the rest. Temporary-instance managers are empty and skipped
+     * naturally.
+     */
+    @Nullable
+    public static TownRecord findTownForPlayerAcrossWorlds(
+        @Nonnull UUID playerUuid,
+        @Nullable TownManager prefer
+    ) {
+        if (prefer != null) {
+            TownRecord local = prefer.findTownForPlayerInWorld(playerUuid);
+            if (local != null) {
+                return local;
+            }
+        }
+        for (TownManager tm : TOWN_MANAGERS.values()) {
+            if (tm == prefer) {
+                continue;
+            }
+            TownRecord t = tm.findTownForPlayerInWorld(playerUuid);
+            if (t != null) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /** Looks up a town id in every loaded {@link TownManager}, preferring {@code prefer} when set. */
+    @Nullable
+    public static TownRecord getTownAcrossWorlds(@Nonnull UUID townId, @Nullable TownManager prefer) {
+        if (prefer != null) {
+            TownRecord local = prefer.getTown(townId);
+            if (local != null) {
+                return local;
+            }
+        }
+        for (TownManager tm : TOWN_MANAGERS.values()) {
+            if (tm == prefer) {
+                continue;
+            }
+            TownRecord t = tm.getTown(townId);
+            if (t != null) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    /** Manager that owns this town's persistence (keyed by {@link TownRecord#getWorldName()}). */
+    @Nullable
+    public static TownManager townManagerForTown(@Nonnull TownRecord town) {
+        return TOWN_MANAGERS.get(town.getWorldName());
     }
 
     @Nonnull

@@ -137,7 +137,7 @@ public final class DialogueActionExecutor {
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
             case "priestess_gold_heal" -> priestessGoldHeal(playerRef, store, npcRef);
             case "hire_guild_adventurer" -> hireGuildAdventurer(playerRef, store, npcRef, out);
-            case "despawn_npc" -> despawnNpc(playerRef, store, npcRef);
+            case "despawn_npc" -> despawnNpc(a, playerRef, store, npcRef);
             case "play_bard_song" -> playBardSong(a, playerRef, store, npcRef);
             case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
@@ -159,11 +159,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         if (pu == null || npcUuid == null) {
@@ -187,11 +188,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (pu == null || !town.playerCanAcceptQuests(pu.getUuid())) {
             return;
@@ -266,11 +268,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (pu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return;
@@ -444,11 +447,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         VillagerGiftService.GiftApplyResult res = VillagerGiftService.applyGiftFromDialogue(
             a, playerRef, store, npcRef, plugin, tm, town
         );
@@ -498,11 +502,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         if (pu == null || nu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
@@ -562,15 +567,16 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent puAb = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (puAb == null) {
             return;
         }
-        TownRecord town = tm.findTownForPlayerInWorld(puAb.getUuid());
+        TownRecord town = AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(puAb.getUuid(), localTm);
         if (town == null || !town.playerCanAbandonQuests(puAb.getUuid())) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         String qid = id.trim();
         town.clearActiveQuest(qid);
         QuestDefinition def = plugin.getQuestCatalog().get(qid);
@@ -602,14 +608,21 @@ public final class DialogueActionExecutor {
         if (npcRef != null && npcRef.isValid()) {
             TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             if (b != null) {
-                TownRecord t = tm.getTown(b.getTownId());
+                TownRecord t = AetherhavenWorldRegistries.getTownAcrossWorlds(b.getTownId(), tm);
                 if (t != null && t.hasMemberOrOwner(playerUuid)) {
                     return t;
                 }
                 return null;
             }
         }
-        return tm.findTownForPlayerInWorld(playerUuid);
+        return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(playerUuid, tm);
+    }
+
+    /** Prefer the town's home-world manager so updates persist when talking in a portal instance. */
+    @Nonnull
+    private static TownManager owningTownManager(@Nonnull TownRecord town, @Nonnull TownManager fallback) {
+        TownManager owning = AetherhavenWorldRegistries.townManagerForTown(town);
+        return owning != null ? owning : fallback;
     }
 
     private static void gaiaDraughtRefill(
@@ -622,12 +635,13 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (town == null || pu == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
         if (!s.isUnlocked()) {
             return;
@@ -647,12 +661,13 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (town == null || pu == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
         if (!s.canApplyShardUpgrade()) {
             return;
@@ -690,12 +705,13 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (town == null || pu == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
         if (!s.canApplyCatalystUpgrade()) {
             return;
@@ -733,12 +749,13 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (town == null || pu == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         float missing = PlayerHealUtil.missingHealth(playerRef, store);
         if (missing <= 0f) {
             return;
@@ -762,6 +779,7 @@ public final class DialogueActionExecutor {
     }
 
     private static void despawnNpc(
+        @Nonnull JsonObject a,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store,
         @Nullable Ref<EntityStore> npcRef
@@ -770,19 +788,26 @@ public final class DialogueActionExecutor {
         if (npcUuid == null) {
             return;
         }
-        if (npcRef != null && npcRef.isValid()) {
+        String particle = blankToNull(stringField(a, "particleSystemId"));
+        String sound = blankToNull(stringField(a, "soundEventId"));
+        if (particle == null && sound == null && npcRef != null && npcRef.isValid()) {
             TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             if (binding != null) {
                 var trigger = RescueVillagerTriggers.byBindingKind(binding.getKind());
                 if (trigger != null) {
-                    RescueVillagerDespawnEffects.playAtNpc(
-                        npcRef,
-                        store,
-                        trigger.vanishParticleSystemId(),
-                        trigger.vanishSoundEventId()
-                    );
+                    particle = trigger.vanishParticleSystemId();
+                    sound = trigger.vanishSoundEventId();
                 }
             }
+        }
+        if (particle == null) {
+            particle = AetherhavenConstants.CRYSTAL_KEEPER_RESCUE_VANISH_PARTICLE_SYSTEM_ID;
+        }
+        if (sound == null) {
+            sound = AetherhavenConstants.CRYSTAL_KEEPER_RESCUE_VANISH_SOUND_EVENT_ID;
+        }
+        if (npcRef != null && npcRef.isValid()) {
+            RescueVillagerDespawnEffects.playAtNpc(npcRef, store, particle, sound);
         }
         World world = store.getExternalData().getWorld();
         PendingEntityRemovalService.schedule(world, npcUuid);
@@ -893,6 +918,11 @@ public final class DialogueActionExecutor {
         return a.get(key).getAsString();
     }
 
+    @Nullable
+    private static String blankToNull(@Nullable String s) {
+        return s == null || s.isBlank() ? null : s.trim();
+    }
+
     private static void sendEventTitleBanner(
         @Nullable PlayerRef playerRef,
         @Nonnull Message primary,
@@ -934,11 +964,12 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, tm, npcRef);
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
+        TownManager tm = owningTownManager(town, localTm);
         if (GuardHireService.tryHire(world, plugin, town, tm, playerRef, npcRef, store)) {
             out.setCloseDialogue(true);
         } else {

@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=Pala de diseño de caminos
 items.Aetherhaven_Path_Tool.description=Diseña caminos para tu ciudad. Q cambia el modo. Secundaria agrega o elimina nodos. F coloca, elimina o abre el administrador de estilos según el modo. E establece el ancho. R establece el estilo.
 
 items.Aetherhaven_Patrol_Wand.name=Varita de patrulla
-items.Aetherhaven_Patrol_Wand.description=Establece las rutas de patrulla de la guardia para tu ciudad (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Créala en el escritorio de planificación urbana. Consulta la leyenda en pantalla mientras la sostienes.
+items.Aetherhaven_Patrol_Wand.description=Establece las rutas de patrulla de la guardia para tu ciudad. Créala en el escritorio de planificación urbana. Consulta la leyenda en pantalla mientras la sostienes.
 
 aetherhaven.patrolWand.legendPageTitle=Varita de patrulla
 aetherhaven.patrolWand.legendBlurb=Coloca puntos de patrulla, guarda una ruta y luego asigna un guardia. Los destellos azules solo muestran las rutas mientras sostienes esta varita.

@@ -67,14 +67,14 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (contextNpcRef != null && contextNpcRef.isValid()) {
             TownVillagerBinding b = store.getComponent(contextNpcRef, TownVillagerBinding.getComponentType());
             if (b != null) {
-                TownRecord nt = tm.getTown(b.getTownId());
+                TownRecord nt = AetherhavenWorldRegistries.getTownAcrossWorlds(b.getTownId(), tm);
                 if (nt != null && nt.hasMemberOrOwner(playerUuid)) {
                     return nt;
                 }
                 return null;
             }
         }
-        return tm.findTownForPlayerInWorld(playerUuid);
+        return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(playerUuid, tm);
     }
 
     @Override
@@ -256,15 +256,15 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (npcRef != null && npcRef.isValid()) {
             TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             if (b != null) {
-                TownRecord town = tm.getTown(b.getTownId());
+                TownRecord town = AetherhavenWorldRegistries.getTownAcrossWorlds(b.getTownId(), tm);
                 if (town == null || !town.hasMemberOrOwner(pu.getUuid())) {
                     return null;
                 }
                 return town;
             }
-            return tm.findTownForPlayerInWorld(pu.getUuid());
+            return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(pu.getUuid(), tm);
         }
-        return tm.findTownForPlayerInWorld(pu.getUuid());
+        return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(pu.getUuid(), tm);
     }
 
     @Override
@@ -288,7 +288,7 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         TownRecord t;
         TownVillagerBinding nb = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
         if (nb != null) {
-            t = tm.getTown(nb.getTownId());
+            t = AetherhavenWorldRegistries.getTownAcrossWorlds(nb.getTownId(), tm);
             if (t != null && !t.hasMemberOrOwner(playerUuid)) {
                 t = null;
             }

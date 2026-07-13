@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=パスデザイナーシャベル
 items.Aetherhaven_Path_Tool.description=街の経路をデザインします。Q キーでモードを切り替えます。セカンダリ キーでノードを追加または削除します。F キーで、モードに応じて配置、削除、またはスタイルマネージャを開きます。E キーで幅を設定します。R キーでスタイルを設定します。
 
 items.Aetherhaven_Patrol_Wand.name=パトロールワンド
-items.Aetherhaven_Patrol_Wand.description=町の警備隊の巡回ルートを設定します（<color is="#5AB5B5">aetherhaven.patrol.wand</color>）。町の計画デスクで作成できます。手に持っている間は画面上の凡例をご覧ください。
+items.Aetherhaven_Patrol_Wand.description=町の警備隊の巡回ルートを設定します。町の計画デスクで作成できます。手に持っている間は画面上の凡例をご覧ください。
 
 aetherhaven.patrolWand.legendPageTitle=パトロールワンド
 aetherhaven.patrolWand.legendBlurb=巡回地点を設定し、ルートを保存してから、警備員を割り当ててください。青い光は、この杖を持っている間だけルートを示します。

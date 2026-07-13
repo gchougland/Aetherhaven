@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=路徑設計師鏟子
 items.Aetherhaven_Path_Tool.description=為您的城鎮設計道路。 Q 鍵切換模式。 Secondary 鍵新增或移除節點。 F 鍵依模式放置、移除或開啟樣式管理器。 E 鍵設定寬度。 R 鍵設定樣式。
 
 items.Aetherhaven_Patrol_Wand.name=巡邏魔杖
-items.Aetherhaven_Patrol_Wand.description=設定城鎮的守衛巡邏路線（<color is="#5AB5B5">aetherhaven.patrol.wand</color>）。在城鎮規劃台製作。持有此物品時，螢幕上會顯示圖例。
+items.Aetherhaven_Patrol_Wand.description=設定城鎮的守衛巡邏路線。在城鎮規劃台製作。持有此物品時，螢幕上會顯示圖例。
 
 aetherhaven.patrolWand.legendPageTitle=巡邏魔杖
 aetherhaven.patrolWand.legendBlurb=設置巡邏點，儲存路線，然後指派守衛。只有當你手持這顆魔杖時，藍色閃光才會顯示路線。

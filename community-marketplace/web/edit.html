@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin — Aetherhaven Community</title>
+    <title>Edit Build — Aetherhaven Community</title>
     <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,24 +35,11 @@
       </div>
     </header>
     <main class="wrap">
-      <section class="card">
-        <h2>Pending submissions</h2>
-        <div id="adminQueue"></div>
-      </section>
-      <section class="card">
-        <h2>Pending screenshots</h2>
-        <p class="meta">Approve screenshots before they appear in the public build gallery. Admins can also edit any submission and upload screenshots from the Edit page (admin uploads skip review).</p>
-        <div id="adminScreenshotQueue"></div>
-      </section>
-      <section class="card">
-        <h2>Published buildings</h2>
-        <p class="meta">Browse approved builds, edit metadata and screenshots, or remove any from the public catalog. Players who already downloaded a build keep their local copy.</p>
-        <div id="adminCatalog" class="catalog-grid"></div>
-      </section>
+      <div id="editRoot"></div>
     </main>
     <script src="/app.js?v=17"></script>
     <script>
-      loadAdminPage();
+      loadEditPage();
     </script>
   </body>
 </html>

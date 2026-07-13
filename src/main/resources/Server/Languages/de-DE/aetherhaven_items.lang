@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=Wegplanerschaufel
 items.Aetherhaven_Path_Tool.description=Entwirft Wege für deine Stadt. Q wechselt den Modus. Mit der sekundären Taste werden Knoten hinzugefügt oder entfernt. F platziert, entfernt oder öffnet den Stilmanager (je nach Modus). E legt die Breite fest. R legt den Stil fest.
 
 items.Aetherhaven_Patrol_Wand.name=Patrouillenstab
-items.Aetherhaven_Patrol_Wand.description=Legt Wachpatrouillenrouten für eure Stadt fest (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Hergestellt am Stadtplanungstisch. Die Legende wird auf dem Bildschirm angezeigt, während ihr den Zauberstab in der Hand haltet.
+items.Aetherhaven_Patrol_Wand.description=Legt Wachpatrouillenrouten für eure Stadt fest. Hergestellt am Stadtplanungstisch. Die Legende wird auf dem Bildschirm angezeigt, während ihr den Zauberstab in der Hand haltet.
 
 aetherhaven.patrolWand.legendPageTitle=Patrouillenstab
 aetherhaven.patrolWand.legendBlurb=Platziere Patrouillenpunkte, speichere eine Route und weise ihr dann eine Wache zu. Blaue Glitzerpartikel zeigen Routen nur an, solange du diesen Zauberstab hältst.

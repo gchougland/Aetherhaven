@@ -217,7 +217,7 @@ items.Aetherhaven_Path_Tool.name=Path designer shovel
 items.Aetherhaven_Path_Tool.description=Designs paths for your town. Q cycles mode. Secondary adds or removes nodes. F places, removes, or opens the style manager depending on mode. E sets width. R sets style.
 
 items.Aetherhaven_Patrol_Wand.name=Patrol wand
-items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Craft at the town planning desk. See the on screen legend while holding it.
+items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town. Craft at the town planning desk. See the on screen legend while holding it.
 
 aetherhaven.patrolWand.legendPageTitle=Patrol wand
 aetherhaven.patrolWand.legendBlurb=Place patrol points, save a route, then assign a guard. Blue sparkles show routes only while you hold this wand.

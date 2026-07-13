@@ -214,7 +214,7 @@ items.Aetherhaven_Path_Tool.name=pá de designer de caminhos
 items.Aetherhaven_Path_Tool.description=Cria caminhos para sua cidade. Q alterna entre os modos. A tecla secundária adiciona ou remove nós. F insere, remove ou abre o gerenciador de estilos, dependendo do modo. E define a largura. R define o estilo.
 
 items.Aetherhaven_Patrol_Wand.name=varinha de patrulha
-items.Aetherhaven_Patrol_Wand.description=Define rotas de patrulha para a sua cidade (<color is="#5AB5B5">aetherhaven.patrol.wand</color>). Crie-a na mesa de planejamento da cidade. Veja a legenda na tela enquanto a segura.
+items.Aetherhaven_Patrol_Wand.description=Define rotas de patrulha para a sua cidade. Crie-a na mesa de planejamento da cidade. Veja a legenda na tela enquanto a segura.
 
 aetherhaven.patrolWand.legendPageTitle=varinha de patrulha
 aetherhaven.patrolWand.legendBlurb=Defina pontos de patrulha, salve uma rota e, em seguida, designe um guarda. Brilhos azuis indicam rotas apenas enquanto você estiver segurando esta varinha.
