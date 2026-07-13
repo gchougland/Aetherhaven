@@ -38,11 +38,23 @@ Group #PlotCraftingBuildingRow {
         }
       }
 
-      Label #BuildingName {
-        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 17, Wrap: true);
+      Group #BuildingText {
+        LayoutMode: Top;
         FlexWeight: 1;
         Anchor: (Vertical: 0);
-        Text: "";
+        HitTestVisible: false;
+
+        Label #BuildingName {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 17, Wrap: true);
+          Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Label #BuildingCreator {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 12, Wrap: true);
+          Visible: false;
+          Text: "";
+        }
       }
     }
   }

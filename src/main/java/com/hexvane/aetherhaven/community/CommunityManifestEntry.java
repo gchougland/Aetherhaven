@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.community;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -47,6 +48,9 @@ public final class CommunityManifestEntry {
 
     @SerializedName("downloadCount")
     private int downloadCount;
+
+    @SerializedName("requiredMods")
+    private List<CommunityRequiredMods.RequiredMod> requiredMods;
 
     @Nonnull
     public String getId() {
@@ -106,6 +110,11 @@ public final class CommunityManifestEntry {
 
     public int getDownloadCount() {
         return downloadCount;
+    }
+
+    @Nonnull
+    public List<CommunityRequiredMods.RequiredMod> getRequiredMods() {
+        return requiredMods != null ? requiredMods : List.of();
     }
 
     @Nonnull

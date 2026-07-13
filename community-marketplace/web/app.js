@@ -204,6 +204,28 @@ function goldCostHtml(entry, className = "") {
   return `<span class="${cls}" title="Gold cost" aria-label="Gold cost ${gold}"><img class="gold-cost-icon" src="/assets/Deco_Scrap_Treasure.png" alt="" width="14" height="14" /><span class="gold-cost-value">${escapeHtml(String(gold))}</span></span>`;
 }
 
+function requiredModsHtml(entry) {
+  const mods = Array.isArray(entry?.requiredMods) ? entry.requiredMods : [];
+  if (!mods.length) {
+    return "";
+  }
+  const labels = mods
+    .map((m) => {
+      const name = String(m?.name || m?.id || "").trim();
+      const id = String(m?.id || "").trim();
+      if (!name) {
+        return "";
+      }
+      const title = id && id !== name ? ` title="${escapeAttr(id)}"` : "";
+      return `<span class="required-mod"${title}>${escapeHtml(name)}</span>`;
+    })
+    .filter(Boolean);
+  if (!labels.length) {
+    return "";
+  }
+  return `<p class="meta building-modal-requires"><span class="building-modal-requires-label">Requires</span> ${labels.join(", ")}</p>`;
+}
+
 function descriptionToggleHtml(entry) {
   const desc = String(entry.description || "").trim();
   if (!desc) {
@@ -1050,6 +1072,7 @@ async function openBuildingDetail(buildingId) {
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
         <p class="meta building-modal-id"><code>${escapeHtml(entry.id)}</code></p>
         <p class="meta">${formatBytes(entry.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(entry.downloadCount))} · v${escapeHtml(entry.version)}${modalGold ? ` · ${modalGold}` : ""}</p>
+        ${requiredModsHtml(entry)}
       </div>
     </div>
     ${

@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.community.CommunityModerationService;
 import com.hexvane.aetherhaven.community.CommunityPendingEntry;
 import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.community.CommunityPreviewCache;
+import com.hexvane.aetherhaven.community.CommunityRequiredMods;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -198,6 +199,27 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             boolean selected = group.groupKey().equals(selectedGroupKey);
             commandBuilder.set(row + " #SelectHilite.Visible", selected);
             commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(group.displayName()));
+            if (communityTab) {
+                CommunityManifestEntry listEntry = communityCatalog.findEntry(group.groupKey());
+                String creator = listEntry != null ? listEntry.getCreatorName() : "";
+                commandBuilder.set(row + " #BuildingCreator.Visible", true);
+                commandBuilder.set(
+                    row + " #BuildingCreator.TextSpans",
+                    Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.communityListByCreator")
+                        .param("creator", Message.raw(creator))
+                );
+            } else if (moderationTab) {
+                CommunityPendingEntry listEntry = moderation.findEntry(group.groupKey());
+                String creator = listEntry != null ? listEntry.getCreatorName() : "";
+                commandBuilder.set(row + " #BuildingCreator.Visible", true);
+                commandBuilder.set(
+                    row + " #BuildingCreator.TextSpans",
+                    Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.communityListByCreator")
+                        .param("creator", Message.raw(creator))
+                );
+            } else {
+                commandBuilder.set(row + " #BuildingCreator.Visible", false);
+            }
             commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPathForGroup(catalog, group, plugin, communityTab, moderationTab));
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -945,6 +967,18 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         CommunityDownloadService.InstallResult result = CommunityDownloadService.install(plugin, entry);
+        if (result == CommunityDownloadService.InstallResult.MISSING_MODS) {
+            List<String> missing = CommunityRequiredMods.missingPackNames(entry.getRequiredMods());
+            String modsLabel = missing.isEmpty() ? "unknown" : String.join(", ", missing);
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.missingRequiredMods")
+                    .param("mods", Message.raw(modsLabel)),
+                NotificationStyle.Danger
+            );
+            refresh(ref, store);
+            return;
+        }
         if (result != CommunityDownloadService.InstallResult.SUCCESS) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),

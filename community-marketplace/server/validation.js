@@ -177,6 +177,40 @@ export function assertSize(bytes, max, label) {
   }
 }
 
+export const MAX_REQUIRED_MODS = 32;
+export const MAX_REQUIRED_MOD_ID_LENGTH = 128;
+export const MAX_REQUIRED_MOD_NAME_LENGTH = 80;
+
+/**
+ * @param {unknown} value
+ * @returns {Array<{ id: string, name: string }>}
+ */
+export function normalizeRequiredMods(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const seen = new Set();
+  /** @type {Array<{ id: string, name: string }>} */
+  const mods = [];
+  for (const raw of value) {
+    if (!raw || typeof raw !== "object") {
+      continue;
+    }
+    const row = /** @type {Record<string, unknown>} */ (raw);
+    const id = typeof row.id === "string" ? row.id.trim().slice(0, MAX_REQUIRED_MOD_ID_LENGTH) : "";
+    if (!id || seen.has(id.toLowerCase())) {
+      continue;
+    }
+    seen.add(id.toLowerCase());
+    const nameRaw = typeof row.name === "string" ? row.name.trim().slice(0, MAX_REQUIRED_MOD_NAME_LENGTH) : "";
+    mods.push({ id, name: nameRaw || id });
+    if (mods.length >= MAX_REQUIRED_MODS) {
+      break;
+    }
+  }
+  return mods;
+}
+
 export const MAX_DISPLAY_NAME_LENGTH = 80;
 export const MAX_DESCRIPTION_LENGTH = 2000;
 export const MAX_STYLE_ID_LENGTH = 64;

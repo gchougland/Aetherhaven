@@ -306,6 +306,9 @@ public final class CommunityCatalogService {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
+            if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+                continue;
+            }
             groups.add(
                 new PlotCraftingCatalog.GroupEntry(
                     entry.getId(),

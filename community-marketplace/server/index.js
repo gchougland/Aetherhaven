@@ -25,6 +25,7 @@ import {
   screenshotExtForMime,
   validateBuildingEditPayload,
   validateSubmissionBuilding,
+  normalizeRequiredMods,
 } from "./validation.js";
 import { createSubmissionRateLimit } from "./submissionRateLimit.js";
 import { createVoteRateLimit } from "./voteRateLimit.js";
@@ -256,6 +257,15 @@ function readBuildingMaterials(buildingPath) {
 }
 
 /**
+ * @param {string} buildingPath
+ * @returns {Array<{ id: string, name: string }>}
+ */
+function readBuildingRequiredMods(buildingPath) {
+  const building = readBuildingJson(buildingPath);
+  return normalizeRequiredMods(building?.requiredMods);
+}
+
+/**
  * Apply editable fields onto an in-memory building.json object.
  * @param {Record<string, unknown>} building
  * @param {{
@@ -357,6 +367,10 @@ function buildManifestEntry(id, meta, prefabBytes) {
   const coverScreenshotId = String(meta.coverScreenshotId || "").trim();
   if (coverScreenshotId) {
     entry.coverScreenshotId = coverScreenshotId;
+  }
+  const requiredMods = normalizeRequiredMods(meta.requiredMods);
+  if (requiredMods.length) {
+    entry.requiredMods = requiredMods;
   }
   return entry;
 }
@@ -525,15 +539,22 @@ function approveSubmission(submissionId, requestedId) {
   fs.writeFileSync(approved.building, JSON.stringify(building, null, 2));
 
   const buildingTags = normalizeTags(building.tags);
+  const buildingRequiredMods = normalizeRequiredMods(building.requiredMods);
   const approvedMeta = {
     ...meta,
     id,
     description: normalizeDescription(building.description) || normalizeDescription(meta.description),
     tags: buildingTags.length ? buildingTags : normalizeTags(meta.tags),
+    requiredMods: buildingRequiredMods.length
+      ? buildingRequiredMods
+      : normalizeRequiredMods(meta.requiredMods),
     status: "approved",
     approvedAt: new Date().toISOString(),
     version: meta.version || "1",
   };
+  if (!approvedMeta.requiredMods?.length) {
+    delete approvedMeta.requiredMods;
+  }
   fs.writeFileSync(approved.meta, JSON.stringify(approvedMeta, null, 2));
 
   const prefabBytes = fs.statSync(approved.prefab).size;
@@ -837,6 +858,15 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     } else {
       delete entry.treasuryGoldCoinCost;
     }
+    const requiredModsFromEntry = normalizeRequiredMods(e.requiredMods);
+    const requiredMods = requiredModsFromEntry.length
+      ? requiredModsFromEntry
+      : readBuildingRequiredMods(paths.building);
+    if (requiredMods.length) {
+      entry.requiredMods = requiredMods;
+    } else {
+      delete entry.requiredMods;
+    }
     if (!entry.coverScreenshotId) {
       delete entry.coverScreenshotId;
     }
@@ -982,6 +1012,8 @@ app.post(
       }
 
       const id = assignCommunityCatalogId(building, creatorUuid);
+      const requiredMods = normalizeRequiredMods(building.requiredMods);
+      building.requiredMods = requiredMods;
 
       const submissionId = `${id}_${Date.now()}`;
       const dir = storage.submissionDir(submissionId, "pending");
@@ -1006,6 +1038,9 @@ app.post(
         submittedAt: new Date().toISOString(),
         version: "1",
       };
+      if (requiredMods.length) {
+        meta.requiredMods = requiredMods;
+      }
       fs.writeFileSync(path.join(dir, "meta.json"), JSON.stringify(meta, null, 2));
       notifyBuildingPending({
         publicBaseUrl,

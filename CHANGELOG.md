@@ -6,6 +6,7 @@
 
 - **Logger production** — Sticks and tree sap are available as default lumbermill outputs (alongside fibre). Matching saplings for each wood type can be unlocked at the same gold/rarity tier as that wood (3 saplings + gold), with max storage of 10.
 - **Rancher production** — Milk buckets are available as a default barn output (alongside eggs, meat, and wool).
+- **Community marketplace list** — Each community (and moderation) entry on the plot crafting bench shows the creator name under the building title.
 
 ### Fixed
 

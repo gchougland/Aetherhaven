@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aetherhaven Wiki</title>
+    <link rel="icon" href="/assets/favicon.png?v=2" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css?v=25" />
+  </head>
+  <body class="wiki-page">
+    <header class="site-header">
+      <div class="wrap wrap--wiki">
+        <div class="site-header-inner">
+          <div class="site-header-start">
+            <a href="/" class="site-brand">
+              <img
+                src="/assets/logo.png?v=2"
+                alt="Aetherhaven: Foundations of Industry"
+                class="site-logo"
+              />
+            </a>
+            <nav class="site-primary-nav" aria-label="Main">
+              <a href="/">Community Builds</a>
+              <a href="/wiki.html" aria-current="page">Wiki</a>
+              <a href="/submissions.html">My Submissions</a>
+            </nav>
+          </div>
+          <div id="accountMenu" class="account-menu"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap wrap--wiki wiki-main">
+      <header class="wiki-banner">
+        <div class="section-title">
+          <h1>Aetherhaven Wiki</h1>
+          <div class="ornament-divider" aria-hidden="true"></div>
+        </div>
+        <p class="wiki-banner-note meta">
+          The same guide as the in-game Town Journal, plus Addons and a Crossmod guide for developers.
+        </p>
+      </header>
+
+      <div class="wiki-layout">
+        <aside class="wiki-sidebar" aria-label="Wiki directory">
+          <label class="wiki-search">
+            <span class="visually-hidden">Search wiki</span>
+            <input
+              type="search"
+              id="wikiSearch"
+              placeholder="Search pages…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <kbd class="wiki-search-hint" title="Press / to focus search">/</kbd>
+          </label>
+          <div id="wikiSearchResults" class="wiki-search-results" hidden></div>
+          <nav id="wikiDirectory" class="wiki-directory" aria-label="Directory"></nav>
+        </aside>
+
+        <div class="wiki-content">
+          <nav id="wikiBreadcrumbs" class="wiki-breadcrumbs" aria-label="Breadcrumb"></nav>
+          <div class="wiki-toolbar">
+            <button type="button" class="secondary wiki-toolbar-btn" id="wikiCopyLink">
+              Copy link
+            </button>
+          </div>
+          <article id="wikiArticle" class="wiki-article card" aria-live="polite">
+            <p class="meta">Loading…</p>
+          </article>
+          <nav id="wikiPageToc" class="wiki-page-toc card" hidden aria-label="On this page"></nav>
+          <nav id="wikiPrevNext" class="wiki-prev-next" aria-label="Nearby pages"></nav>
+        </div>
+      </div>
+
+      <button type="button" id="wikiBackToTop" class="wiki-back-top" hidden>
+        Back to top
+      </button>
+    </main>
+
+    <script src="/vendor/marked.umd.js"></script>
+    <script src="/app.js?v=19"></script>
+    <script src="/wiki.js?v=1"></script>
+  </body>
+</html>

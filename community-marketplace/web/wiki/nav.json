@@ -1,0 +1,637 @@
+{
+  "tree": [
+    {
+      "id": "welcome",
+      "name": "Welcome",
+      "depth": 0,
+      "children": [
+        {
+          "id": "getting_started",
+          "name": "Getting Started",
+          "depth": 1,
+          "children": []
+        },
+        {
+          "id": "mechanics",
+          "name": "Mechanics",
+          "depth": 1,
+          "children": [
+            {
+              "id": "mechanic_commands",
+              "name": "Commands",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_plot_placement_staff",
+              "name": "Plot placement staff",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_plot_creator_staff",
+              "name": "Plot creator staff",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_building_staff",
+              "name": "Building staff",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_charter",
+              "name": "Town charter",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_villager_needs",
+              "name": "Villager needs",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_reputation",
+              "name": "Reputation",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_town_records_shelf",
+              "name": "Town records shelf",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_production_wardrobe",
+              "name": "Production wardrobe",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_floating_gifts",
+              "name": "Floating gifts",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_geodes",
+              "name": "Geodes",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_jewelry",
+              "name": "Jewelry",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_purification_powder",
+              "name": "Purification powder",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_sprinklers",
+              "name": "Sprinklers",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_inn_pool_visitors",
+              "name": "Inn pool and visitors",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_treasury_taxes",
+              "name": "Treasury and taxes",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_plot_tokens",
+              "name": "Plot tokens",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_path_designer_shovel",
+              "name": "Path designer shovel",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_quest_board",
+              "name": "Quest board",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_guild_hall_and_guards",
+              "name": "Guild hall and guards",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_player_shop",
+              "name": "Player shop and shop spots",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "mechanic_tourist_portal",
+              "name": "Tourist portal",
+              "depth": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "villagers",
+          "name": "Villagers",
+          "depth": 1,
+          "children": [
+            {
+              "id": "villager_innkeeper",
+              "name": "Corin Mosscup",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_elder",
+              "name": "Elder Lyren",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_merchant",
+              "name": "Vex Sunderlane",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_blacksmith",
+              "name": "Garren Vale",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_priestess",
+              "name": "Serah Thornwell",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_farmer",
+              "name": "Irienne Mossmark",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_rancher",
+              "name": "Thalen Meadowrun",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_miner",
+              "name": "Gorruk Stonevein",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_logger",
+              "name": "Seren Fairhollow",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_guild_master",
+              "name": "Lyra Fairhollow",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_builder",
+              "name": "Rowan Ridgecraft",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_florist",
+              "name": "Ivy Bloomwell",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_pyrotechnic",
+              "name": "Grubble Sparkmatch",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_crystal_keeper",
+              "name": "Vaelith Prismshade",
+              "depth": 2,
+              "children": []
+            },
+            {
+              "id": "villager_bard",
+              "name": "Elias Thornwood",
+              "depth": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "faq",
+          "name": "FAQ",
+          "depth": 1,
+          "children": []
+        },
+        {
+          "id": "roadmap",
+          "name": "Roadmap",
+          "depth": 1,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "addons",
+      "name": "Addons",
+      "depth": 0,
+      "children": [
+        {
+          "id": "addon_machinaria",
+          "name": "Machinaria",
+          "depth": 1,
+          "children": [
+            {
+              "id": "villager_mechanic",
+              "name": "Rivet Cogsworth",
+              "depth": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "addon_cozy_tales_fishing",
+          "name": "Cozy Tales Fishing",
+          "depth": 1,
+          "children": [
+            {
+              "id": "villager_fisherman",
+              "name": "Reed Castwell",
+              "depth": 2,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "developers",
+      "name": "For developers",
+      "depth": 0,
+      "children": [
+        {
+          "id": "crossmod_integration",
+          "name": "Crossmod integration",
+          "depth": 1,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "flat": [
+    {
+      "id": "welcome",
+      "name": "Welcome",
+      "depth": 0
+    },
+    {
+      "id": "getting_started",
+      "name": "Getting Started",
+      "depth": 1
+    },
+    {
+      "id": "mechanics",
+      "name": "Mechanics",
+      "depth": 1
+    },
+    {
+      "id": "mechanic_commands",
+      "name": "Commands",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_plot_placement_staff",
+      "name": "Plot placement staff",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_plot_creator_staff",
+      "name": "Plot creator staff",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_building_staff",
+      "name": "Building staff",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_charter",
+      "name": "Town charter",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_villager_needs",
+      "name": "Villager needs",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_reputation",
+      "name": "Reputation",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_town_records_shelf",
+      "name": "Town records shelf",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_production_wardrobe",
+      "name": "Production wardrobe",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_floating_gifts",
+      "name": "Floating gifts",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_geodes",
+      "name": "Geodes",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_jewelry",
+      "name": "Jewelry",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_purification_powder",
+      "name": "Purification powder",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_sprinklers",
+      "name": "Sprinklers",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_inn_pool_visitors",
+      "name": "Inn pool and visitors",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_treasury_taxes",
+      "name": "Treasury and taxes",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_plot_tokens",
+      "name": "Plot tokens",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_path_designer_shovel",
+      "name": "Path designer shovel",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_quest_board",
+      "name": "Quest board",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_guild_hall_and_guards",
+      "name": "Guild hall and guards",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_player_shop",
+      "name": "Player shop and shop spots",
+      "depth": 2
+    },
+    {
+      "id": "mechanic_tourist_portal",
+      "name": "Tourist portal",
+      "depth": 2
+    },
+    {
+      "id": "villagers",
+      "name": "Villagers",
+      "depth": 1
+    },
+    {
+      "id": "villager_innkeeper",
+      "name": "Corin Mosscup",
+      "depth": 2
+    },
+    {
+      "id": "villager_elder",
+      "name": "Elder Lyren",
+      "depth": 2
+    },
+    {
+      "id": "villager_merchant",
+      "name": "Vex Sunderlane",
+      "depth": 2
+    },
+    {
+      "id": "villager_blacksmith",
+      "name": "Garren Vale",
+      "depth": 2
+    },
+    {
+      "id": "villager_priestess",
+      "name": "Serah Thornwell",
+      "depth": 2
+    },
+    {
+      "id": "villager_farmer",
+      "name": "Irienne Mossmark",
+      "depth": 2
+    },
+    {
+      "id": "villager_rancher",
+      "name": "Thalen Meadowrun",
+      "depth": 2
+    },
+    {
+      "id": "villager_miner",
+      "name": "Gorruk Stonevein",
+      "depth": 2
+    },
+    {
+      "id": "villager_logger",
+      "name": "Seren Fairhollow",
+      "depth": 2
+    },
+    {
+      "id": "villager_guild_master",
+      "name": "Lyra Fairhollow",
+      "depth": 2
+    },
+    {
+      "id": "villager_builder",
+      "name": "Rowan Ridgecraft",
+      "depth": 2
+    },
+    {
+      "id": "villager_florist",
+      "name": "Ivy Bloomwell",
+      "depth": 2
+    },
+    {
+      "id": "villager_pyrotechnic",
+      "name": "Grubble Sparkmatch",
+      "depth": 2
+    },
+    {
+      "id": "villager_crystal_keeper",
+      "name": "Vaelith Prismshade",
+      "depth": 2
+    },
+    {
+      "id": "villager_bard",
+      "name": "Elias Thornwood",
+      "depth": 2
+    },
+    {
+      "id": "faq",
+      "name": "FAQ",
+      "depth": 1
+    },
+    {
+      "id": "roadmap",
+      "name": "Roadmap",
+      "depth": 1
+    },
+    {
+      "id": "addons",
+      "name": "Addons",
+      "depth": 0
+    },
+    {
+      "id": "addon_machinaria",
+      "name": "Machinaria",
+      "depth": 1
+    },
+    {
+      "id": "villager_mechanic",
+      "name": "Rivet Cogsworth",
+      "depth": 2
+    },
+    {
+      "id": "addon_cozy_tales_fishing",
+      "name": "Cozy Tales Fishing",
+      "depth": 1
+    },
+    {
+      "id": "villager_fisherman",
+      "name": "Reed Castwell",
+      "depth": 2
+    },
+    {
+      "id": "developers",
+      "name": "For developers",
+      "depth": 0
+    },
+    {
+      "id": "crossmod_integration",
+      "name": "Crossmod integration",
+      "depth": 1
+    }
+  ],
+  "titleMap": {
+    "Addons": "addons",
+    "Cozy Tales Fishing": "addon_cozy_tales_fishing",
+    "Machinaria": "addon_machinaria",
+    "Crossmod integration": "crossmod_integration",
+    "For developers": "developers",
+    "FAQ": "faq",
+    "Getting Started": "getting_started",
+    "Mechanics": "mechanics",
+    "Building staff": "mechanic_building_staff",
+    "Town charter": "mechanic_charter",
+    "charter": "mechanic_charter",
+    "Commands": "mechanic_commands",
+    "Floating gifts": "mechanic_floating_gifts",
+    "Geodes": "mechanic_geodes",
+    "Guild hall and guards": "mechanic_guild_hall_and_guards",
+    "Inn pool and visitors": "mechanic_inn_pool_visitors",
+    "Jewelry": "mechanic_jewelry",
+    "Path designer shovel": "mechanic_path_designer_shovel",
+    "Player shop and shop spots": "mechanic_player_shop",
+    "Player shop": "mechanic_player_shop",
+    "shop spots": "mechanic_player_shop",
+    "Plot creator staff": "mechanic_plot_creator_staff",
+    "Plot placement staff": "mechanic_plot_placement_staff",
+    "Plot tokens": "mechanic_plot_tokens",
+    "Production wardrobe": "mechanic_production_wardrobe",
+    "Purification powder": "mechanic_purification_powder",
+    "Quest board": "mechanic_quest_board",
+    "Reputation": "mechanic_reputation",
+    "Sprinklers": "mechanic_sprinklers",
+    "Tourist portal": "mechanic_tourist_portal",
+    "Town records shelf": "mechanic_town_records_shelf",
+    "Treasury and taxes": "mechanic_treasury_taxes",
+    "Villager needs": "mechanic_villager_needs",
+    "Roadmap": "roadmap",
+    "Villagers": "villagers",
+    "Elias Thornwood": "villager_bard",
+    "Garren Vale": "villager_blacksmith",
+    "Rowan Ridgecraft": "villager_builder",
+    "Vaelith Prismshade": "villager_crystal_keeper",
+    "Elder Lyren": "villager_elder",
+    "Irienne Mossmark": "villager_farmer",
+    "Reed Castwell": "villager_fisherman",
+    "Ivy Bloomwell": "villager_florist",
+    "Lyra Fairhollow": "villager_guild_master",
+    "Corin Mosscup": "villager_innkeeper",
+    "Seren Fairhollow": "villager_logger",
+    "Rivet Cogsworth": "villager_mechanic",
+    "Vex Sunderlane": "villager_merchant",
+    "Gorruk Stonevein": "villager_miner",
+    "Serah Thornwell": "villager_priestess",
+    "Grubble Sparkmatch": "villager_pyrotechnic",
+    "Thalen Meadowrun": "villager_rancher",
+    "Welcome": "welcome"
+  },
+  "portraitRemap": {
+    "wiki/villager_bard.png": "/wiki/images/Aetherhaven_Bard.png",
+    "wiki/villager_blacksmith.png": "/wiki/images/Aetherhaven_Blacksmith.png",
+    "wiki/villager_builder.png": "/wiki/images/Aetherhaven_Builder.png",
+    "wiki/villager_crystal_keeper.png": "/wiki/images/Aetherhaven_Crystal_Keeper.png",
+    "wiki/villager_elder.png": "/wiki/images/Aetherhaven_Elder_Lyren.png",
+    "wiki/villager_farmer.png": "/wiki/images/Aetherhaven_Farmer.png",
+    "wiki/villager_fisherman.png": "/wiki/images/CozyFishing_Fisherman.png",
+    "wiki/villager_florist.png": "/wiki/images/Aetherhaven_Florist.png",
+    "wiki/villager_guild_master.png": "/wiki/images/Aetherhaven_Guild_Master.png",
+    "wiki/villager_innkeeper.png": "/wiki/images/Aetherhaven_Innkeeper.png",
+    "wiki/villager_logger.png": "/wiki/images/Aetherhaven_Logger.png",
+    "wiki/villager_mechanic.png": "/wiki/images/Machinaria_Mechanic.png",
+    "wiki/villager_merchant.png": "/wiki/images/Aetherhaven_Merchant.png",
+    "wiki/villager_miner.png": "/wiki/images/Aetherhaven_Miner.png",
+    "wiki/villager_priestess.png": "/wiki/images/Aetherhaven_Priestess.png",
+    "wiki/villager_pyrotechnic.png": "/wiki/images/Aetherhaven_Pyrotechnic.png",
+    "wiki/villager_rancher.png": "/wiki/images/Aetherhaven_Rancher.png"
+  }
+}

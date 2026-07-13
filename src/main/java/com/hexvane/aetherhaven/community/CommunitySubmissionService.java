@@ -55,6 +55,7 @@ public final class CommunitySubmissionService {
             byte[] buildingBytes = Files.readAllBytes(buildingFile);
             byte[] prefabBytes = Files.readAllBytes(prefabFile);
             byte[] iconBytes = Files.isRegularFile(iconFile) ? Files.readAllBytes(iconFile) : null;
+            buildingBytes = CommunityRequiredMods.injectIntoBuildingJson(buildingBytes, prefabBytes);
 
             byte[] body = buildMultipart(buildingBytes, prefabBytes, iconBytes);
             Map<String, String> headers = new LinkedHashMap<>();

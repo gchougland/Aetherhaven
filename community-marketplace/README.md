@@ -14,6 +14,26 @@ npm start
 
 Single server on **http://127.0.0.1:3847** (API + website).
 
+## Wiki
+
+Public mod wiki at **`/wiki.html`** (Town Journal guide mirror + Addons + Crossmod). Content lives under `web/wiki/` and is regenerated from the mod repo:
+
+```bash
+npm run sync-wiki
+```
+
+Sources:
+
+- Guide topics: `../src/main/resources/Common/Docs/Hexvane_AetherhavenWiki/en-US/`
+- Guide images: `../src/main/resources/Common/UI/Custom/Aetherhaven/wiki/`
+- Crossmod guide: `../tutorials/crossmod-integration.md`
+- Website-only pages: `web/wiki/site-pages/`
+- Optional sibling Addon GuideTopics (when present beside this repo):
+  - `../Machinaria/.../GuideTopics/en-US/villager_mechanic.md`
+  - `../CozyTales-Fishing/.../GuideTopics/en-US/villager_fisherman.md`
+
+Re-run `sync-wiki` after guide or addon guide edits, then commit the updated `web/wiki/topics`, `images`, `nav.json`, and `search-index.json`.
+
 ## Production (Railway)
 
 See **[docs/RailwayDeployment.md](../docs/RailwayDeployment.md)** for full setup.
@@ -52,7 +72,7 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v1/health` | Health check |
-| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`, `downloadCount`, `description` when set) |
+| `GET /api/v1/manifest` | Catalog metadata (sorted by upvote count; includes `upvoteCount`, `downloadCount`, `description`, `treasuryGoldCoinCost`, `requiredMods` when set) |
 | `GET /api/catalog` | Website catalog (same as manifest; includes `userHasUpvoted` when signed in) |
 | `GET /api/v1/buildings/:id/prefab.json` | Prefab download |
 | `GET /api/v1/buildings/:id/building.json` | Building definition |
@@ -76,6 +96,6 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | `POST /api/admin/buildings/:id/cover` | Admin set/clear marketplace card cover |
 | `GET /api/admin/screenshots/pending` | Admin screenshot review queue |
 
-Catalog entries include `treasuryGoldCoinCost` when the building has a gold cost. Entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators edit published builds from **My Submissions**; admins can edit any pending or published submission from the admin page. Owner screenshots require admin approval before appearing in the public gallery; admin uploads are approved immediately.
+Catalog entries include `treasuryGoldCoinCost` when the building has a gold cost, and `requiredMods` (`[{ id, name }]`) when the prefab uses blocks/items from other mods. Entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators edit published builds from **My Submissions**; admins can edit any pending or published submission from the admin page. Owner screenshots require admin approval before appearing in the public gallery; admin uploads are approved immediately. In-game, buildings with missing required mods are hidden from the Community tab.
 
 Approve/reject via admin website (Hytale OAuth) or optional `POST /api/v1/submissions/:id/approve` with `API_KEY`.

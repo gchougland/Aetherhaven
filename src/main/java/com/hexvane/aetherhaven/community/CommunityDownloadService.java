@@ -24,11 +24,15 @@ public final class CommunityDownloadService {
         SUCCESS,
         NOT_FOUND,
         DOWNLOAD_FAILED,
-        IO_ERROR
+        IO_ERROR,
+        MISSING_MODS
     }
 
     @Nonnull
     public static InstallResult install(@Nonnull AetherhavenPlugin plugin, @Nonnull CommunityManifestEntry entry) {
+        if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+            return InstallResult.MISSING_MODS;
+        }
         String id = entry.getId();
         Path dataDir = plugin.getDataDirectory();
         CommunityCatalogService catalog = plugin.getCommunityCatalogService();
