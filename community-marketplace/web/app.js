@@ -201,7 +201,7 @@ function goldCostHtml(entry, className = "") {
     return "";
   }
   const cls = ["gold-cost", className].filter(Boolean).join(" ");
-  return `<span class="${cls}" title="Gold cost" aria-label="Gold cost ${gold}"><img class="gold-cost-icon" src="/assets/dollar_coin_icon_256.png" alt="" width="18" height="18" /><span class="gold-cost-value">${escapeHtml(String(gold))}</span></span>`;
+  return `<span class="${cls}" title="Gold cost" aria-label="Gold cost ${gold}"><img class="gold-cost-icon" src="/assets/Deco_Scrap_Treasure.png" alt="" width="14" height="14" /><span class="gold-cost-value">${escapeHtml(String(gold))}</span></span>`;
 }
 
 function descriptionToggleHtml(entry) {

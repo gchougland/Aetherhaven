@@ -583,6 +583,15 @@ main.wrap > section + section {
   background: transparent;
 }
 
+.building-card .gold-cost-icon {
+  width: 1em;
+  height: 1em;
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
 .building-card .building-icon-wrap--cover .building-icon,
 .building-card .building-icon--cover {
   image-rendering: auto;
@@ -1457,10 +1466,13 @@ body.modal-open {
 }
 
 .gold-cost-icon {
-  width: 18px;
-  height: 18px;
+  width: 1em;
+  height: 1em;
   object-fit: contain;
+  image-rendering: pixelated;
   flex-shrink: 0;
+  display: inline-block;
+  vertical-align: -0.15em;
 }
 
 .gold-cost--inline {
