@@ -111,6 +111,7 @@ public final class VillagersBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new VillagerBlockMountSafetySystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new BlockMountDeathCleanupSystem());
         plugin.getEntityStoreRegistry().registerSystem(new VillagerAutonomySystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new VillagerFollowPlayerSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new VillagerMoodVisualSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new DoorwaySeparationBypassSystem());
         plugin.getEntityStoreRegistry().registerSystem(new AetherhavenNpcTeleportGuardSystem());

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.bard.BardPerformanceService;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
@@ -14,6 +15,7 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -179,6 +181,7 @@ public final class DialogueConditionEvaluator {
             case "npc_schedule_at_work" -> npcScheduleAtWork(store, npcRef);
             case "bard_can_offer_music" -> bardCanOfferMusic(store, npcRef);
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);
+            case "npc_following_this_player" -> npcFollowingThisPlayer(playerRef, store, npcRef);
             case "subplugin_enabled" -> subpluginEnabled(o);
             default -> {
                 LOGGER.atWarning().log("Unknown dialogue condition type: %s", type);
@@ -218,6 +221,18 @@ public final class DialogueConditionEvaluator {
         }
         TownVillagerBinding b = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
         return b != null && TownVillagerBinding.isVisitorKind(b.getKind());
+    }
+
+    private static boolean npcFollowingThisPlayer(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (playerUuid == null) {
+            return false;
+        }
+        return VillagerFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid());
     }
 
     private static boolean npcScheduleAtWork(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {

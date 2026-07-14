@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.schedule;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerState;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -102,6 +104,10 @@ public final class VillagerScheduleService {
             return;
         }
         if (TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+            return;
+        }
+        VillagerFollowPlayerState follow = store.getComponent(ref, VillagerFollowPlayerState.getComponentType());
+        if (VillagerFollowPlayerSystem.shouldSkipAutonomy(follow)) {
             return;
         }
         String roleId = npc.getRoleName();

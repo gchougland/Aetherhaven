@@ -197,6 +197,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (BuilderConstructionAssistSystem.shouldSkipAutonomy(assist)) {
             return;
         }
+        VillagerFollowPlayerState follow = store.getComponent(ref, VillagerFollowPlayerState.getComponentType());
+        if (VillagerFollowPlayerSystem.shouldSkipAutonomy(follow)) {
+            return;
+        }
 
         long now = resolveNowMs(store);
         VillagerAutonomyState autonomy = archetypeChunk.getComponent(index, VillagerAutonomyState.getComponentType());

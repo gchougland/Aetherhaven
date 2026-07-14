@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plugin;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.monument.FounderMonumentStatueSkin;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerComponent;
@@ -30,6 +31,7 @@ public final class AetherhavenSharedEntityComponents {
         TownVillagerBinding.register(registry);
         TownsfolkCharacterBinding.register(registry);
         VillagerAutonomyState.register(registry);
+        VillagerFollowPlayerState.register(registry);
         TouristAutonomyState.register(registry);
         // Villagers (doorway bypass) and Construction (builder assist) both need this at system register time.
         BuilderConstructionAssistState.register(registry);

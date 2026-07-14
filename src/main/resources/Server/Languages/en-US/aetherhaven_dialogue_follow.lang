@@ -1,0 +1,4 @@
+# Split from server.lang - dialogue bundle (aetherhaven_dialogue_follow)
+# Full translation keys are aetherhaven_dialogue_follow.<lineKey> (see Hytale I18nModule).
+aetherhaven.dialogue.follow.start=Follow Me
+aetherhaven.dialogue.follow.stop=Stop Following

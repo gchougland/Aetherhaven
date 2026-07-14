@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.bard.BardDialogueSongs;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
@@ -78,6 +79,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String ICON_BLACKSMITH_REPAIR = "UI/Custom/hammer.png";
     private static final String ICON_GEODE_OPEN = "UI/Custom/broken-egg.png";
     private static final String ICON_MUSICAL_NOTE = "UI/Custom/musical-note.png";
+    private static final String ICON_FOLLOW = "UI/Custom/man-walking.png";
+    private static final String LANG_FOLLOW_START =
+        "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.start";
+    private static final String LANG_FOLLOW_STOP =
+        "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.stop";
     private static final String LANG_GUILD_ADVENTURER_HIRE =
         "aetherhaven_dialogue_guild_adventurer.aetherhaven.dialogue.aetherhaven_guild_adventurer.main_hub.hire";
     private static final String LANG_PRIESTESS_DRAUGHT_SHARD =
@@ -459,7 +465,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.clear(CHOICES_ROOT);
         QuestBoardTurnInRow turnIn = resolveQuestBoardTurnIn(ref, store);
         int uiSlot = 0;
-        List<DialogueChoiceDefinition> choices = buildChoiceList(node);
+        List<DialogueChoiceDefinition> choices = buildChoiceList(node, ref, store);
         int lastChoiceIndex = choices.isEmpty() ? -1 : choices.size() - 1;
         for (int i = 0; i < choices.size(); i++) {
             if (i == lastChoiceIndex && turnIn != null) {
@@ -639,7 +645,11 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     @Nonnull
-    private static List<DialogueChoiceDefinition> buildChoiceList(@Nonnull DialogueNodeDefinition node) {
+    private List<DialogueChoiceDefinition> buildChoiceList(
+        @Nonnull DialogueNodeDefinition node,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
         List<DialogueChoiceDefinition> choices = new ArrayList<>();
         if (isBardSongListNode(node)) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
@@ -648,12 +658,50 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         choices.addAll(node.getChoices());
+        injectFollowChoice(choices, playerRef, store);
         return choices;
     }
 
+    private void injectFollowChoice(
+        @Nonnull List<DialogueChoiceDefinition> choices,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!"main_hub".equals(nodeId) || !VillagerFollowPlayerSystem.isEligibleCitizen(store, npcRef)) {
+            return;
+        }
+        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (playerUuid == null) {
+            return;
+        }
+        boolean following = VillagerFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid());
+        DialogueChoiceDefinition follow = new DialogueChoiceDefinition();
+        follow.setId(following ? "follow_stop" : "follow_start");
+        follow.setText(following ? LANG_FOLLOW_STOP : LANG_FOLLOW_START);
+        follow.setNext(null);
+        JsonObject action = new JsonObject();
+        action.addProperty("type", following ? "stop_follow_player" : "start_follow_player");
+        JsonObject close = new JsonObject();
+        close.addProperty("type", "close");
+        follow.setActions(List.of(action, close));
+        int insertAt = choices.size();
+        for (int i = 0; i < choices.size(); i++) {
+            DialogueChoiceDefinition ch = choices.get(i);
+            if (ch.closesDialogue() || ch.endsConversation()) {
+                insertAt = i;
+                break;
+            }
+        }
+        choices.add(insertAt, follow);
+    }
+
+    @Nullable
     private static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
         if (ch.isGiftChoice()) {
             return ICON_GIFT;
+        }
+        if (ch.hasAction("start_follow_player") || ch.hasAction("stop_follow_player")) {
+            return ICON_FOLLOW;
         }
         if (ch.hasAction("open_jewelry_appraisal")) {
             return ICON_JEWELRY_APPRAISAL;
@@ -720,7 +768,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return;
         }
         DialogueNodeDefinition node = tree != null ? tree.getNode(nodeId) : null;
-        List<DialogueChoiceDefinition> choices = node != null ? buildChoiceList(node) : List.of();
+        List<DialogueChoiceDefinition> choices = node != null ? buildChoiceList(node, ref, store) : List.of();
         if (node == null || choiceIndex < 0 || choiceIndex >= choices.size()) {
             return;
         }

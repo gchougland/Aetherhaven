@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
@@ -140,6 +141,8 @@ public final class DialogueActionExecutor {
             case "despawn_npc" -> despawnNpc(a, playerRef, store, npcRef);
             case "play_bard_song" -> playBardSong(a, playerRef, store, npcRef);
             case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
+            case "start_follow_player" -> startFollowPlayer(playerRef, store, npcRef);
+            case "stop_follow_player" -> stopFollowPlayer(store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -863,6 +866,31 @@ public final class DialogueActionExecutor {
             return;
         }
         BardPerformanceService.stopOnStore(store, npcRef);
+    }
+
+    private static void startFollowPlayer(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (playerUuid == null) {
+            return;
+        }
+        VillagerFollowPlayerSystem.startFollow(npcRef, store, playerUuid.getUuid());
+    }
+
+    private static void stopFollowPlayer(
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        VillagerFollowPlayerSystem.stopFollow(npcRef, store, true);
     }
 
     private static void giveItem(
