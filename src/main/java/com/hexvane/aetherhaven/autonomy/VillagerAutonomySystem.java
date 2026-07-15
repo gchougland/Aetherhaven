@@ -2,7 +2,9 @@ package com.hexvane.aetherhaven.autonomy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
+import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelWaypoints;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
@@ -315,21 +317,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (!daytime) {
             autonomy.setFillingHunger(false);
         }
-        // Do not commute back to the schedule plot while seeking food; that was yanking villagers off
-        // restaurant chairs before they could chain another meal.
-        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
-            && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
-                ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
-            )) {
-            return;
-        }
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        // Feast / dawn quest-board posts temporarily suspend schedule commute and hunger meals.
         if (tryBeginFeastGatherTravel(ref, store, commandBuffer, world, npc, reg, binding, autonomy, townRecord, now, plugin, tc)) {
             return;
         }
         if (tryBeginQuestBoardPostTravel(
             ref, store, commandBuffer, world, npc, binding, autonomy, townRecord, now, plugin, tc
         )) {
+            return;
+        }
+        // Do not commute back to the schedule plot while seeking food; that was yanking villagers off
+        // restaurant chairs before they could chain another meal.
+        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
+            && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
+                ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
+            )) {
             return;
         }
         if (now < autonomy.getNextDecisionEpochMs()) {
@@ -491,9 +494,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     }
 
     /**
-     * After dawn quest roll, OFFER givers walk to the guild hall quest board and ponder (flavor only).
+     * After dawn quest roll, OFFER givers temporarily leave their schedule, walk to the guild hall quest board
+     * (town roads when available), and ponder. Flavor only — the board already has the offers.
      */
-    private static boolean tryBeginQuestBoardPostTravel(
+    public static boolean tryBeginQuestBoardPostTravel(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
         @Nonnull CommandBuffer<EntityStore> commandBuffer,
@@ -522,12 +526,42 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return false;
         }
         PoiEntry boardPoi = QuestBoardPoiEnsure.findOrRegister(plugin, world, townRecord);
-        QuestBoardPostVisitQueue.consume(townId, npcUuid);
         if (boardPoi == null) {
+            // Keep queued — board chunk may be unloaded, or POI staff placement not visible yet.
+            autonomy.setNextDecisionEpochMs(now + 5000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return false;
         }
-        beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, townId, tc, boardPoi);
+        beginTravelToPoi(
+            ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, townId, tc, boardPoi, true
+        );
+        if (autonomy.getPhase() != VillagerAutonomyState.PHASE_TRAVEL
+            && autonomy.getPhase() != VillagerAutonomyState.PHASE_USE) {
+            // Travel setup failed (bad interaction target, etc.) — keep queued for a later idle tick.
+            return false;
+        }
+        QuestBoardPostVisitQueue.consume(townId, npcUuid);
         return true;
+    }
+
+    private static boolean isQuestBoardPoi(@Nullable PoiEntry poi) {
+        return poi != null && poi.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD);
+    }
+
+    private static boolean isQuestBoardPosterDue(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable TownRecord townRecord,
+        long now
+    ) {
+        if (townRecord == null) {
+            return false;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return false;
+        }
+        return QuestBoardPostVisitQueue.isDue(townRecord.getTownId(), uc.getUuid(), now);
     }
 
     private static void beginTravelToPoi(
@@ -543,6 +577,26 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull UUID pathNavTownId,
         @Nullable TransformComponent tc,
         @Nonnull PoiEntry pick
+    ) {
+        beginTravelToPoi(
+            ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, pathNavTownId, tc, pick, false
+        );
+    }
+
+    private static void beginTravelToPoi(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull VillagerAutonomyState autonomy,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TownRecord townRecord,
+        @Nonnull UUID pathNavTownId,
+        @Nullable TransformComponent tc,
+        @Nonnull PoiEntry pick,
+        boolean useTownPathNav
     ) {
         autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
         autonomy.resetAutonomyStallTracking();
@@ -619,8 +673,44 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
         }
+        if (useTownPathNav && tc != null && townRecord != null) {
+            AetherhavenWorldRegistries.getOrCreatePathToolRegistry(world, plugin);
+            PathNavGraphService.PathNavFindResult navResult =
+                AetherhavenWorldRegistries
+                    .getOrCreatePathNavGraphService(world)
+                    .findRouteResult(pathNavTownId, tc.getPosition(), finalTarget, plugin.getConfig().get());
+            PathNavGraphService.logPathfindingSkip(
+                plugin.getConfig().get(),
+                "quest_board_post",
+                pathNavTownId,
+                pick.getId(),
+                navResult
+            );
+            var route = navResult.waypoints();
+            if (!route.isEmpty()) {
+                route =
+                    PathNavTravelWaypoints.prepareForSeek(
+                        world,
+                        tc.getPosition(),
+                        route,
+                        finalTarget,
+                        (int) Math.floor(tc.getPosition().y),
+                        plugin.getConfig().get().getPathNavNodeSpacing()
+                    );
+            }
+            if (!route.isEmpty()) {
+                autonomy.setTravelWaypoints(route);
+                Vector3d first = autonomy.getCurrentTravelWaypoint();
+                npc.setLeashPoint(first != null ? first : finalTarget);
+                autonomy.setNextDecisionEpochMs(now + TRAVEL_PHASE_MAX_MS);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+                applyAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
+        }
         // Local POI travel (wander/work/use) should not pull villagers onto road nodes; path-nav is reserved for
-        // inter-location commute flows (SchedulePlotCommute).
+        // inter-location commute and dawn quest-board / similar cross-town trips.
         autonomy.clearTravelWaypoints();
         npc.setLeashPoint(finalTarget);
         autonomy.setNextDecisionEpochMs(now + TRAVEL_PHASE_MAX_MS);
@@ -655,7 +745,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
-        PoiEntry poiEarly = reg.get(poiId);
+        PoiEntry poiEarly = poiId != null ? reg.get(poiId) : null;
+        // Dawn quest-board posts preempt schedule commute / POI wander (not feast gather).
+        if (isQuestBoardPosterDue(ref, store, townRecord, now)
+            && !isQuestBoardPoi(poiEarly)
+            && (poiEarly == null || !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL))) {
+            failTravel(autonomy, now, "QUEST_BOARD", commandBuffer, ref, npc);
+            return;
+        }
         // Night: cancel hunger trips so they can sleep instead of arriving at the restaurant after dark.
         if (!ShopSpotOpenService.isGameDay(store)
             && poiEarly != null
@@ -979,8 +1076,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         UUID poiId = autonomy.getTargetPoiUuid();
         PoiEntry poi = poiId != null ? reg.get(poiId) : null;
         boolean daytime = ShopSpotOpenService.isGameDay(store);
+        boolean leaveForQuestBoard = isQuestBoardPosterDue(ref, store, townRecord, now) && !isQuestBoardPoi(poi);
         boolean hungerLeaveNonEat =
-            PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
+            !leaveForQuestBoard
+                && PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
                 && (poi == null || !PoiScoring.isEatPoi(poi));
         // Finish an eat session promptly once night falls so they can get to bed.
         boolean nightAbortEat =
@@ -991,7 +1090,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         if (nightAbortEat) {
             autonomy.setFillingHunger(false);
         }
-        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat && !nightAbortEat) {
+        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat && !nightAbortEat && !leaveForQuestBoard) {
             if (isNpcBlockMounted(store, commandBuffer, ref)) {
                 // Keep Seek off and refresh Sit/Sleep so Idle transitions cannot leave a standing T-pose in the chair.
                 pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
@@ -1002,7 +1101,10 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
-        if (poi != null && !hungerLeaveNonEat && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi, daytime)) {
+        if (poi != null
+            && !hungerLeaveNonEat
+            && !leaveForQuestBoard
+            && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi, daytime)) {
             float dur =
                 PoiEffectTable.useDurationSeconds(
                     poi,
@@ -1050,14 +1152,22 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setPathFailureReason("");
         autonomy.setTravelStuckTicks(0);
         autonomy.clearTravelWaypoints();
-        // After eating (or leaving for hunger), re-decide immediately so they can chain meals until full.
-        autonomy.setNextDecisionEpochMs(finishedEat || hungerLeaveNonEat || keepEating || nightAbortEat ? now : now + 2500L);
+        // After eating (or leaving for hunger/quest board), re-decide immediately so they can chain meals or post.
+        autonomy.setNextDecisionEpochMs(
+            finishedEat || hungerLeaveNonEat || keepEating || nightAbortEat || leaveForQuestBoard ? now : now + 2500L
+        );
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
-        if (keepEating || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
-            AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            if (plugin != null) {
-                TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null) {
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (leaveForQuestBoard
+                && tryBeginQuestBoardPostTravel(
+                    ref, store, commandBuffer, world, npc, binding, autonomy, townRecord, now, plugin, tc
+                )) {
+                return;
+            }
+            if (keepEating || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
                 List<PoiEntry> pois =
                     filterPoisForAutonomyScoring(townRecord, reg.listByTown(binding.getTownId()));
                 tryBeginNextHungerMeal(
@@ -1272,7 +1382,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     }
 
     /** Hired guards and other roles without an {@code AetherhavenAutonomy} instruction block must not enter POI travel. */
-    static boolean skipsPoiAutonomy(@Nonnull TownVillagerBinding binding, @Nonnull NPCEntity npc) {
+    public static boolean skipsPoiAutonomy(@Nonnull TownVillagerBinding binding, @Nonnull NPCEntity npc) {
         if (TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
             return true;
         }

@@ -94,6 +94,14 @@ public final class VillagerAutonomyTravelKick {
                     if (!daytime) {
                         autonomy.setFillingHunger(false);
                     }
+                    TownManager tmm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    TownRecord townRow = tmm.getTown(binding.getTownId());
+                    TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+                    if (VillagerAutonomySystem.tryBeginQuestBoardPostTravel(
+                        ref, store, commandBuffer, world, npc, binding, autonomy, townRow, now, plugin, tc
+                    )) {
+                        return true;
+                    }
                     if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
                         && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
                             ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
@@ -103,7 +111,6 @@ public final class VillagerAutonomyTravelKick {
                     PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
                     List<PoiEntry> pois = reg.listByTown(binding.getTownId());
                     Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
-                    TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
                     double npcX = tc != null ? tc.getPosition().x : Double.NaN;
                     double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
                     VillagerScheduleTickState schedTick =
@@ -127,8 +134,6 @@ public final class VillagerAutonomyTravelKick {
                     if (pick == null) {
                         return true;
                     }
-                    TownManager tmm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                    TownRecord townRow = tmm.getTown(binding.getTownId());
                     autonomy.setPhase(VillagerAutonomyState.PHASE_TRAVEL);
                     double tx;
                     double tz;

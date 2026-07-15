@@ -61,6 +61,12 @@ public final class QuestBoardPoiEnsure {
         List<PoiEntry> existing = reg.listByTownAndTag(town.getTownId(), AetherhavenConstants.POI_TAG_QUEST_BOARD);
         if (!existing.isEmpty()) {
             PoiEntry first = existing.get(0);
+            long chunkIndex =
+                com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(first.getX(), first.getZ());
+            if (world.getChunkIfInMemory(chunkIndex) == null) {
+                // Trust the registered POI while the board chunk is unloaded (do not delete staff placements).
+                return first;
+            }
             if (questBoardBlockPresent(world, first.getX(), first.getY(), first.getZ())) {
                 return first;
             }

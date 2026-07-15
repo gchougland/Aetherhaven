@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -92,7 +93,8 @@ public final class QuestBoardOnlineDawnService {
                 }
             }
             if (!posterUuids.isEmpty()) {
-                long nowMs = System.currentTimeMillis();
+                // Must match VillagerAutonomySystem decision clock (TimeResource), not wall-clock millis.
+                long nowMs = VillagerAutonomySystem.resolveAutonomyNowMs(store);
                 QuestBoardPostVisitQueue.enqueueOfferGiversForDawn(town.getTownId(), posterUuids, nowMs, currentDawn);
             }
 
@@ -114,5 +116,8 @@ public final class QuestBoardOnlineDawnService {
                 tm.updateTown(town);
             }
         }
+
+        // Rebase any wall-clock-skewed queues and start due posters even if autonomy was busy.
+        QuestBoardPostVisitKick.kickDuePosters(plugin, world, store);
     }
 }
