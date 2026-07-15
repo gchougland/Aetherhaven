@@ -362,6 +362,8 @@ const NEWEST_CAROUSEL_AUTOPLAY_MS = 5000;
 let newestCarouselBound = false;
 let newestCarouselAutoplayId = null;
 let newestCarouselRealCount = 0;
+/** Logical index into the real (non-cloned) slide list. */
+let newestCarouselIndex = 0;
 let newestCarouselNormalizing = false;
 let newestCarouselAnimating = false;
 let newestCarouselAnimTimer = null;
@@ -422,21 +424,24 @@ function getNewestCarouselCards(track) {
   return Array.from(track?.querySelectorAll(".newest-carousel-card") || []);
 }
 
-function getNewestCarouselSetWidth(track) {
-  const n = newestCarouselRealCount;
-  if (n < 2) {
-    return 0;
-  }
-  const cards = getNewestCarouselCards(track);
-  if (cards.length < n * 2) {
-    return 0;
-  }
-  return cards[n].offsetLeft - cards[0].offsetLeft;
-}
-
-function updateNewestCarouselFocus() {
+function setNewestCarouselActiveCard(absoluteIndex) {
   const track = document.getElementById("newestCarouselTrack");
   if (!track) {
+    return;
+  }
+  const cards = getNewestCarouselCards(track);
+  cards.forEach((card, i) => {
+    card.classList.toggle("is-active", i === absoluteIndex);
+  });
+}
+
+function middleAbsoluteIndex(realIndex) {
+  return newestCarouselRealCount + realIndex;
+}
+
+function syncNewestCarouselIndexFromScroll() {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track || newestCarouselRealCount < 1) {
     return;
   }
   const cards = getNewestCarouselCards(track);
@@ -445,86 +450,84 @@ function updateNewestCarouselFocus() {
   }
   const trackRect = track.getBoundingClientRect();
   const centerX = trackRect.left + trackRect.width / 2;
-  let best = cards[0];
+  let bestIndex = 0;
   let bestDist = Infinity;
-  for (const card of cards) {
+  cards.forEach((card, i) => {
     const rect = card.getBoundingClientRect();
     const dist = Math.abs(rect.left + rect.width / 2 - centerX);
     if (dist < bestDist) {
       bestDist = dist;
-      best = card;
+      bestIndex = i;
     }
-  }
-  for (const card of cards) {
-    card.classList.toggle("is-active", card === best);
-  }
+  });
+  newestCarouselIndex = bestIndex % newestCarouselRealCount;
+  setNewestCarouselActiveCard(bestIndex);
 }
 
-function normalizeNewestCarouselLoop() {
-  const track = document.getElementById("newestCarouselTrack");
-  if (
-    !track ||
-    newestCarouselRealCount < 2 ||
-    newestCarouselNormalizing ||
-    newestCarouselAnimating
-  ) {
-    return;
-  }
-  const setWidth = getNewestCarouselSetWidth(track);
-  if (setWidth <= 0) {
-    return;
-  }
-  const left = track.scrollLeft;
-  if (left >= setWidth && left < setWidth * 2) {
-    return;
-  }
-  newestCarouselNormalizing = true;
-  const prevBehavior = track.style.scrollBehavior;
-  track.style.scrollBehavior = "auto";
-  if (left < setWidth) {
-    track.scrollLeft = left + setWidth;
-  } else if (left >= setWidth * 2) {
-    track.scrollLeft = left - setWidth;
-  }
-  track.style.scrollBehavior = prevBehavior;
-  newestCarouselNormalizing = false;
-  updateNewestCarouselFocus();
-}
-
-function finishNewestCarouselAnimation() {
-  newestCarouselAnimating = false;
-  if (newestCarouselAnimTimer != null) {
-    clearTimeout(newestCarouselAnimTimer);
-    newestCarouselAnimTimer = null;
-  }
-  normalizeNewestCarouselLoop();
-}
-
-function scrollNewestCarouselToIndex(index, behavior = "smooth") {
+function jumpNewestCarouselToAbsolute(absoluteIndex) {
   const track = document.getElementById("newestCarouselTrack");
   if (!track) {
     return;
   }
   const cards = getNewestCarouselCards(track);
-  const card = cards[index];
+  const card = cards[absoluteIndex];
   if (!card) {
     return;
   }
-  const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+  newestCarouselNormalizing = true;
+  const trackRect = track.getBoundingClientRect();
+  const cardRect = card.getBoundingClientRect();
+  const delta = cardRect.left + cardRect.width / 2 - (trackRect.left + trackRect.width / 2);
+  track.scrollLeft += delta;
+  newestCarouselNormalizing = false;
+  setNewestCarouselActiveCard(absoluteIndex);
+}
+
+function normalizeNewestCarouselToMiddle() {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track || newestCarouselRealCount < 2 || newestCarouselAnimating) {
+    return;
+  }
+  jumpNewestCarouselToAbsolute(middleAbsoluteIndex(newestCarouselIndex));
+}
+
+function finishNewestCarouselAnimation() {
+  if (newestCarouselAnimTimer != null) {
+    clearTimeout(newestCarouselAnimTimer);
+    newestCarouselAnimTimer = null;
+  }
+  newestCarouselAnimating = false;
+  normalizeNewestCarouselToMiddle();
+}
+
+function scrollNewestCarouselToAbsolute(absoluteIndex, behavior = "smooth") {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track) {
+    return;
+  }
+  const cards = getNewestCarouselCards(track);
+  const card = cards[absoluteIndex];
+  if (!card) {
+    return;
+  }
+
+  setNewestCarouselActiveCard(absoluteIndex);
+
+  const trackRect = track.getBoundingClientRect();
+  const cardRect = card.getBoundingClientRect();
+  const delta = cardRect.left + cardRect.width / 2 - (trackRect.left + trackRect.width / 2);
+
   if (behavior === "smooth") {
     newestCarouselAnimating = true;
     if (newestCarouselAnimTimer != null) {
       clearTimeout(newestCarouselAnimTimer);
     }
-    // Fallback when scrollend is unavailable; longer than the smooth transition.
-    newestCarouselAnimTimer = setTimeout(finishNewestCarouselAnimation, 500);
+    newestCarouselAnimTimer = setTimeout(finishNewestCarouselAnimation, 450);
+    track.scrollBy({ left: delta, behavior: "smooth" });
   } else {
     newestCarouselAnimating = false;
-  }
-  track.scrollTo({ left: Math.max(0, left), behavior });
-  window.requestAnimationFrame(updateNewestCarouselFocus);
-  if (behavior !== "smooth") {
-    normalizeNewestCarouselLoop();
+    track.scrollBy({ left: delta, behavior: "auto" });
+    normalizeNewestCarouselToMiddle();
   }
 }
 
@@ -533,27 +536,34 @@ function scrollNewestCarousel(direction) {
   if (!track) {
     return;
   }
+  const n = newestCarouselRealCount;
   const cards = getNewestCarouselCards(track);
-  if (!cards.length) {
+  if (!cards.length || n < 1) {
     return;
   }
-  if (newestCarouselRealCount < 2) {
-    let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
-    if (activeIndex < 0) {
-      activeIndex = 0;
-    }
-    const nextIndex = Math.max(0, Math.min(cards.length - 1, activeIndex + direction));
-    scrollNewestCarouselToIndex(nextIndex);
+  if (newestCarouselAnimating) {
     return;
   }
 
-  // Resolve the focused card before normalizing so a boundary snap does not
-  // steal the current index (this was breaking the left arrow).
-  let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
-  if (activeIndex < 0) {
-    activeIndex = newestCarouselRealCount;
+  if (n < 2) {
+    newestCarouselIndex = 0;
+    scrollNewestCarouselToAbsolute(0, "smooth");
+    return;
   }
-  scrollNewestCarouselToIndex(activeIndex + direction);
+
+  const currentReal = ((newestCarouselIndex % n) + n) % n;
+  const nextReal = (currentReal + direction + n) % n;
+  let absoluteTarget = middleAbsoluteIndex(nextReal);
+
+  // Animate through a neighbor clone set when wrapping so peeks stay filled.
+  if (direction > 0 && nextReal < currentReal) {
+    absoluteTarget = 2 * n + nextReal;
+  } else if (direction < 0 && nextReal > currentReal) {
+    absoluteTarget = nextReal;
+  }
+
+  newestCarouselIndex = nextReal;
+  scrollNewestCarouselToAbsolute(absoluteTarget, "smooth");
 }
 
 function stopNewestCarouselAutoplay() {
@@ -591,31 +601,39 @@ function setupNewestCarouselControls() {
   if (!section || !carousel || !track) {
     return;
   }
-  prev?.addEventListener("click", () => {
+  prev?.addEventListener("click", (event) => {
+    event.preventDefault();
     scrollNewestCarousel(-1);
     startNewestCarouselAutoplay();
   });
-  next?.addEventListener("click", () => {
+  next?.addEventListener("click", (event) => {
+    event.preventDefault();
     scrollNewestCarousel(1);
     startNewestCarouselAutoplay();
   });
   track.addEventListener(
     "scroll",
     () => {
-      if (newestCarouselNormalizing) {
+      if (newestCarouselNormalizing || newestCarouselAnimating) {
         return;
       }
-      window.requestAnimationFrame(updateNewestCarouselFocus);
+      window.requestAnimationFrame(syncNewestCarouselIndexFromScroll);
     },
     { passive: true }
   );
   track.addEventListener("scrollend", () => {
-    finishNewestCarouselAnimation();
+    if (newestCarouselAnimating) {
+      finishNewestCarouselAnimation();
+      return;
+    }
+    if (!newestCarouselNormalizing) {
+      syncNewestCarouselIndexFromScroll();
+      normalizeNewestCarouselToMiddle();
+    }
   });
   window.addEventListener("resize", () => {
     newestCarouselAnimating = false;
-    normalizeNewestCarouselLoop();
-    updateNewestCarouselFocus();
+    normalizeNewestCarouselToMiddle();
   });
   const pause = () => stopNewestCarouselAutoplay();
   const resume = () => startNewestCarouselAutoplay();
@@ -645,6 +663,7 @@ function renderNewestCarousel() {
   const newest = getNewestCatalogEntries();
   if (!newest.length) {
     newestCarouselRealCount = 0;
+    newestCarouselIndex = 0;
     section.hidden = true;
     track.innerHTML = "";
     stopNewestCarouselAutoplay();
@@ -652,15 +671,15 @@ function renderNewestCarousel() {
   }
   section.hidden = false;
   newestCarouselRealCount = newest.length;
+  newestCarouselIndex = 0;
   newestCarouselAnimating = false;
   track.innerHTML = buildNewestCarouselHtml(newest);
   setupNewestCarouselControls();
   window.requestAnimationFrame(() => {
     if (newestCarouselRealCount >= 2) {
-      scrollNewestCarouselToIndex(newestCarouselRealCount, "auto");
+      jumpNewestCarouselToAbsolute(middleAbsoluteIndex(0));
     } else {
-      track.scrollLeft = 0;
-      updateNewestCarouselFocus();
+      jumpNewestCarouselToAbsolute(0);
     }
   });
   startNewestCarouselAutoplay();
@@ -1511,6 +1530,315 @@ async function loadAdminPage() {
   }
   renderAccountMenu(me.user);
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
+  updateAdminJumpCounts();
+}
+
+let adminPendingCache = [];
+let adminPendingFilters = { query: "", sort: "newest" };
+let adminPendingFiltersBound = false;
+
+let adminScreenshotsCache = [];
+let adminScreenshotsQuery = "";
+let adminScreenshotsFiltersBound = false;
+
+let adminPublishedCache = [];
+let adminPublishedFilters = { query: "", author: "", sort: "newest" };
+let adminPublishedFiltersBound = false;
+
+function updateAdminJumpCounts() {
+  const counts = {
+    pending: adminPendingCache.length,
+    screenshots: adminScreenshotsCache.length,
+    published: adminPublishedCache.length,
+  };
+  document.querySelectorAll("[data-admin-count]").forEach((el) => {
+    const key = el.getAttribute("data-admin-count");
+    el.textContent = String(counts[key] ?? 0);
+  });
+}
+
+function setAdminResultCount(elId, visible, total, emptyLabel) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  if (!total) {
+    el.textContent = emptyLabel || "";
+    return;
+  }
+  if (visible === total) {
+    el.textContent = `${total} item${total === 1 ? "" : "s"}`;
+    return;
+  }
+  el.textContent = `Showing ${visible} of ${total}`;
+}
+
+function adminPendingMatchesQuery(item, query) {
+  if (!query) return true;
+  const haystack = [item.displayName, item.creatorName, item.submissionId, item.proposedId, item.description]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function sortAdminPending(entries, sort) {
+  return [...entries].sort((a, b) => {
+    if (sort === "name-asc") {
+      return String(a.displayName || "").localeCompare(String(b.displayName || ""), undefined, {
+        sensitivity: "base",
+      });
+    }
+    if (sort === "name-desc") {
+      return String(b.displayName || "").localeCompare(String(a.displayName || ""), undefined, {
+        sensitivity: "base",
+      });
+    }
+    const byDate = String(b.submittedAt || "").localeCompare(String(a.submittedAt || ""));
+    if (byDate !== 0) return byDate;
+    return String(a.displayName || "").localeCompare(String(b.displayName || ""), undefined, {
+      sensitivity: "base",
+    });
+  });
+}
+
+function getFilteredAdminPending() {
+  const query = String(adminPendingFilters.query || "")
+    .trim()
+    .toLowerCase();
+  const filtered = adminPendingCache.filter((item) => adminPendingMatchesQuery(item, query));
+  return sortAdminPending(filtered, adminPendingFilters.sort || "newest");
+}
+
+function renderAdminPendingCard(s) {
+  const cardImg = s.iconUrl || buildingCardImageUrl(s) || "";
+  const icon = cardImg
+    ? `<img class="submission-card-thumb" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-card-thumb submission-card-thumb--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
+    : `<div class="submission-card-thumb submission-card-thumb--placeholder" aria-hidden="true"></div>`;
+  const dateLabel = formatRelativeDate(s.submittedAt);
+  const description = String(s.description || "").trim();
+  const descriptionHtml = description
+    ? `<p class="building-description building-description--pending">${escapeHtml(description)}</p>`
+    : `<p class="meta">No description provided.</p>`;
+  return `
+    <article class="submission-card">
+      ${icon}
+      <div class="submission-card-body">
+        <div class="submission-card-header">
+          <h4 class="submission-card-title">${escapeHtml(s.displayName || "Untitled")}</h4>
+          <span class="submission-status submission-status-badge">Pending review</span>
+        </div>
+        ${dateLabel ? `<p class="meta submission-card-date-row">${escapeHtml(dateLabel)}</p>` : ""}
+        <p class="meta submission-card-meta">${escapeHtml(s.submissionId)} · by ${escapeHtml(s.creatorName || "Unknown")}</p>
+        <p class="meta submission-card-meta">Proposed id: ${escapeHtml(s.proposedId || "—")}</p>
+        ${descriptionHtml}
+        <div class="submission-card-actions">
+          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin">Edit</a>
+          <button type="button" onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || "")})">Approve</button>
+          <button type="button" class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
+        </div>
+      </div>
+    </article>`;
+}
+
+function renderFilteredAdminPending() {
+  const el = document.getElementById("adminQueue");
+  const toolbar = document.getElementById("adminPendingToolbar");
+  if (!el) return;
+
+  if (toolbar) {
+    toolbar.hidden = adminPendingCache.length === 0;
+  }
+  updateAdminJumpCounts();
+
+  if (!adminPendingCache.length) {
+    el.innerHTML = emptyStateHtml("Queue empty.");
+    setAdminResultCount("adminPendingResultCount", 0, 0);
+    return;
+  }
+
+  const filtered = getFilteredAdminPending();
+  setAdminResultCount("adminPendingResultCount", filtered.length, adminPendingCache.length);
+  if (!filtered.length) {
+    el.innerHTML = emptyStateHtml("No pending submissions match your filters.");
+    return;
+  }
+  el.innerHTML = filtered.map(renderAdminPendingCard).join("");
+}
+
+function setupAdminPendingFilters() {
+  if (adminPendingFiltersBound) return;
+  const search = document.getElementById("adminPendingSearch");
+  const sort = document.getElementById("adminPendingSort");
+  const clear = document.getElementById("adminPendingClear");
+  if (!search || !sort) return;
+  adminPendingFiltersBound = true;
+  search.addEventListener("input", () => {
+    adminPendingFilters.query = search.value || "";
+    renderFilteredAdminPending();
+  });
+  sort.addEventListener("change", () => {
+    adminPendingFilters.sort = sort.value || "newest";
+    renderFilteredAdminPending();
+  });
+  clear?.addEventListener("click", () => {
+    adminPendingFilters = { query: "", sort: "newest" };
+    search.value = "";
+    sort.value = "newest";
+    renderFilteredAdminPending();
+  });
+}
+
+function adminScreenshotMatchesQuery(item, query) {
+  if (!query) return true;
+  const haystack = [
+    item.displayName,
+    item.creatorName,
+    item.ownerLabel,
+    item.ownerId,
+    item.screenshotId,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function renderAdminScreenshotItem(s) {
+  const ownerKindLabel = s.ownerKind === "approved" ? "Published build" : "Pending submission";
+  const fullUrl = s.imageUrl || "";
+  const previewUrl = s.cardUrl || fullUrl;
+  return `
+    <div class="queue-item screenshot-queue-item">
+      <a class="screenshot-queue-preview" href="${escapeAttr(fullUrl)}" target="_blank" rel="noopener">
+        <img src="${escapeAttr(previewUrl)}" alt="Screenshot preview" />
+      </a>
+      <div class="submission-body">
+        <strong>${escapeHtml(s.displayName || "Untitled")}</strong>
+        <p class="meta">${escapeHtml(ownerKindLabel)} · ${escapeHtml(s.ownerLabel || s.ownerId || "")}</p>
+        <p class="meta">by ${escapeHtml(s.creatorName || "Unknown")} · ${formatBytes(s.bytes || 0)}</p>
+        <div class="queue-actions">
+          <button type="button" onclick="approveScreenshot('${escapeAttr(s.screenshotId)}')">Approve</button>
+          <button type="button" class="secondary" onclick="rejectScreenshot('${escapeAttr(s.screenshotId)}')">Reject</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderFilteredAdminScreenshots() {
+  const el = document.getElementById("adminScreenshotQueue");
+  const toolbar = document.getElementById("adminScreenshotsToolbar");
+  if (!el) return;
+
+  if (toolbar) {
+    toolbar.hidden = adminScreenshotsCache.length === 0;
+  }
+  updateAdminJumpCounts();
+
+  if (!adminScreenshotsCache.length) {
+    el.innerHTML = emptyStateHtml("No screenshots waiting for review.");
+    setAdminResultCount("adminScreenshotsResultCount", 0, 0);
+    return;
+  }
+
+  const query = String(adminScreenshotsQuery || "")
+    .trim()
+    .toLowerCase();
+  const filtered = adminScreenshotsCache.filter((item) => adminScreenshotMatchesQuery(item, query));
+  setAdminResultCount("adminScreenshotsResultCount", filtered.length, adminScreenshotsCache.length);
+  if (!filtered.length) {
+    el.innerHTML = emptyStateHtml("No screenshots match your search.");
+    return;
+  }
+  el.innerHTML = filtered.map(renderAdminScreenshotItem).join("");
+}
+
+function setupAdminScreenshotsFilters() {
+  if (adminScreenshotsFiltersBound) return;
+  const search = document.getElementById("adminScreenshotsSearch");
+  const clear = document.getElementById("adminScreenshotsClear");
+  if (!search) return;
+  adminScreenshotsFiltersBound = true;
+  search.addEventListener("input", () => {
+    adminScreenshotsQuery = search.value || "";
+    renderFilteredAdminScreenshots();
+  });
+  clear?.addEventListener("click", () => {
+    adminScreenshotsQuery = "";
+    search.value = "";
+    renderFilteredAdminScreenshots();
+  });
+}
+
+function adminPublishedMatches(entry, filters) {
+  if (filters.author && (entry.creatorName || "Unknown") !== filters.author) {
+    return false;
+  }
+  const query = String(filters.query || "")
+    .trim()
+    .toLowerCase();
+  if (!query) return true;
+  const haystack = [entry.displayName, entry.id, entry.creatorName, entry.styleId, ...(entry.tags || [])]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function getFilteredAdminPublished() {
+  const filtered = adminPublishedCache.filter((e) => adminPublishedMatches(e, adminPublishedFilters));
+  return sortCatalogEntries(filtered, adminPublishedFilters.sort || "newest");
+}
+
+function renderFilteredAdminPublished() {
+  const el = document.getElementById("adminCatalog");
+  const toolbar = document.getElementById("adminPublishedToolbar");
+  if (!el) return;
+
+  if (toolbar) {
+    toolbar.hidden = adminPublishedCache.length === 0;
+  }
+  updateAdminJumpCounts();
+
+  if (!adminPublishedCache.length) {
+    el.innerHTML = emptyStateHtml("No published buildings.");
+    setAdminResultCount("adminPublishedResultCount", 0, 0);
+    return;
+  }
+
+  const filtered = getFilteredAdminPublished();
+  setAdminResultCount("adminPublishedResultCount", filtered.length, adminPublishedCache.length);
+  if (!filtered.length) {
+    el.innerHTML = emptyStateHtml("No published buildings match your filters.");
+    return;
+  }
+  el.innerHTML = filtered
+    .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, adminEdit: true, showId: true }))
+    .join("");
+}
+
+function setupAdminPublishedFilters() {
+  if (adminPublishedFiltersBound) return;
+  const search = document.getElementById("adminPublishedSearch");
+  const author = document.getElementById("adminPublishedAuthor");
+  const sort = document.getElementById("adminPublishedSort");
+  const clear = document.getElementById("adminPublishedClear");
+  if (!search || !sort) return;
+  adminPublishedFiltersBound = true;
+  const onChange = () => {
+    adminPublishedFilters.query = search.value || "";
+    adminPublishedFilters.author = author?.value || "";
+    adminPublishedFilters.sort = sort.value || "newest";
+    renderFilteredAdminPublished();
+  };
+  search.addEventListener("input", onChange);
+  author?.addEventListener("change", onChange);
+  sort.addEventListener("change", onChange);
+  clear?.addEventListener("click", () => {
+    adminPublishedFilters = { query: "", author: "", sort: "newest" };
+    search.value = "";
+    if (author) author.value = "";
+    sort.value = "newest";
+    renderFilteredAdminPublished();
+  });
 }
 
 async function loadAdminScreenshotQueue() {
@@ -1532,33 +1860,9 @@ async function loadAdminScreenshotQueue() {
       return;
     }
     const data = await res.json();
-    const items = data.screenshots || [];
-    if (!items.length) {
-      el.innerHTML = emptyStateHtml("No screenshots waiting for review.");
-      return;
-    }
-    el.innerHTML = items
-      .map((s) => {
-        const ownerKindLabel = s.ownerKind === "approved" ? "Published build" : "Pending submission";
-        const fullUrl = s.imageUrl || "";
-        const previewUrl = s.cardUrl || fullUrl;
-        return `
-    <div class="queue-item screenshot-queue-item">
-      <a class="screenshot-queue-preview" href="${escapeAttr(fullUrl)}" target="_blank" rel="noopener">
-        <img src="${escapeAttr(previewUrl)}" alt="Screenshot preview" />
-      </a>
-      <div class="submission-body">
-        <strong>${escapeHtml(s.displayName || "Untitled")}</strong>
-        <p class="meta">${escapeHtml(ownerKindLabel)} · ${escapeHtml(s.ownerLabel || s.ownerId || "")}</p>
-        <p class="meta">by ${escapeHtml(s.creatorName || "Unknown")} · ${formatBytes(s.bytes || 0)}</p>
-        <div class="queue-actions">
-          <button type="button" onclick="approveScreenshot('${escapeAttr(s.screenshotId)}')">Approve</button>
-          <button type="button" class="secondary" onclick="rejectScreenshot('${escapeAttr(s.screenshotId)}')">Reject</button>
-        </div>
-      </div>
-    </div>`;
-      })
-      .join("");
+    adminScreenshotsCache = data.screenshots || [];
+    setupAdminScreenshotsFilters();
+    renderFilteredAdminScreenshots();
   } catch {
     el.innerHTML = emptyStateHtml("Could not load pending screenshots.");
   }
@@ -1610,37 +1914,9 @@ async function loadAdminQueue() {
       return;
     }
     const data = await res.json();
-    const items = data.submissions || [];
-    if (!items.length) {
-      el.innerHTML = emptyStateHtml("Queue empty.");
-      return;
-    }
-    el.innerHTML = items
-      .map((s) => {
-        const icon = s.iconUrl
-          ? `<img class="submission-icon" src="${escapeAttr(s.iconUrl)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
-          : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
-        const description = String(s.description || "").trim();
-        const descriptionHtml = description
-          ? `<p class="building-description building-description--pending">${escapeHtml(description)}</p>`
-          : `<p class="meta">No description provided.</p>`;
-        return `
-    <div class="queue-item submission-item">
-      ${icon}
-      <div class="submission-body">
-        <strong>${escapeHtml(s.displayName)}</strong>
-        <p class="meta">${escapeHtml(s.submissionId)} by ${escapeHtml(s.creatorName)}</p>
-        <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
-        ${descriptionHtml}
-        <div class="queue-actions">
-          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin">Edit</a>
-          <button onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || '')})">Approve</button>
-          <button class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
-        </div>
-      </div>
-    </div>`;
-      })
-      .join("");
+    adminPendingCache = data.submissions || [];
+    setupAdminPendingFilters();
+    renderFilteredAdminPending();
   } catch {
     el.innerHTML = emptyStateHtml("Could not load pending submissions.");
   }
@@ -1684,14 +1960,11 @@ async function loadAdminCatalog() {
   el.innerHTML = emptyStateHtml("Loading published buildings…");
   try {
     const data = await fetchCatalog();
-    const entries = data.entries || [];
-    if (!entries.length) {
-      el.innerHTML = emptyStateHtml("No published buildings.");
-      return;
-    }
-    el.innerHTML = entries
-      .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, adminEdit: true, showId: true }))
-      .join("");
+    adminPublishedCache = data.entries || [];
+    const authors = uniqueSortedValues(adminPublishedCache.map((e) => e.creatorName || "Unknown"));
+    fillSelectOptions(document.getElementById("adminPublishedAuthor"), authors, "All authors");
+    setupAdminPublishedFilters();
+    renderFilteredAdminPublished();
   } catch {
     el.innerHTML = emptyStateHtml("Could not load published buildings.");
   }
@@ -1973,8 +2246,8 @@ async function loadEditPage() {
   const adminFields = isAdmin
     ? `
       <label class="edit-field">
-        <span class="edit-field-label">Style id</span>
-        <input id="editStyleId" type="text" value="${escapeAttr(data.styleId || "misc")}" />
+        <span class="edit-field-label">Style</span>
+        <input id="editStyleId" type="text" value="${escapeAttr(data.styleId || "misc")}" placeholder="e.g. Coastal Ruins" />
       </label>
       <label class="edit-field">
         <span class="edit-field-label">Tags (comma-separated)</span>

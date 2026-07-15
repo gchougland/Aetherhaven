@@ -3,6 +3,7 @@ builder = "nixpacks"
 # gcc-unwrapped for sharp is configured in nixpacks.toml (nixLibs)
 
 [deploy]
-startCommand = "npm start"
+# Run node directly so Railway's SIGTERM isn't reported as an npm script failure.
+startCommand = "node server/index.js"
 healthcheckPath = "/api/v1/health"
 healthcheckTimeout = 100

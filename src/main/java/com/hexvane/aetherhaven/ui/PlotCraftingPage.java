@@ -80,8 +80,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private static final long CRAFT_COST = AetherhavenConstants.PLOT_TOKEN_CRAFT_GOLD_COST;
     /** Matches {@code PlotCraftingPage.ui} list height for core/decoration tabs. */
     private static final int BUILDING_LIST_HEIGHT_NORMAL = 422;
-    /** Shorter list on Community / Moderation tabs (refresh row + action buttons + craft). */
+    /** Shorter list on Community tab (refresh row + action buttons + craft). */
     private static final int BUILDING_LIST_HEIGHT_MARKETPLACE = 334;
+    /** Shorter still on Moderation (refresh row + two action button rows). */
+    private static final int BUILDING_LIST_HEIGHT_MODERATION = 296;
     private static final int BUILDING_LIST_FOOTER_GAP = 8;
     /** Visible rows per page on Community / Moderation (Custom UI has no list virtualization). */
     private static final int MARKETPLACE_PAGE_SIZE = 12;
@@ -143,13 +145,16 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         UUIDComponent playerUuidComponent = store.getComponent(ref, UUIDComponent.getComponentType());
         UUID playerUuid = playerUuidComponent != null ? playerUuidComponent.getUuid() : null;
         CommunityModerationService moderation = plugin.getCommunityModerationService();
+        boolean knownModeratorAccess = playerUuid != null && moderation.hasModeratorAccessResult(playerUuid);
         boolean isModerator = playerUuid != null && moderation.isModerator(playerUuid);
-        if (activeTab == Tab.MODERATION && !isModerator) {
+        // Only kick when we know they are denied; unknown access stays on Moderation while probing async.
+        if (activeTab == Tab.MODERATION && knownModeratorAccess && !isModerator) {
             activeTab = Tab.CORE;
         }
         boolean communityTab = activeTab == Tab.COMMUNITY;
         boolean moderationTab = activeTab == Tab.MODERATION;
         boolean marketplaceTab = communityTab || moderationTab;
+        boolean marketplaceLoading = marketplaceTab && marketplaceRefreshInFlight.get();
         CommunityCatalogService communityCatalog = plugin.getCommunityCatalogService();
 
         List<GroupEntry> allGroups =
@@ -183,7 +188,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.SelectedTabChanged,
             "#PlotCraftTabs",
-            EventData.of("Action", "TabChange"),
+            new EventData()
+                .append("Action", "TabChange")
+                .append("@SelectedTab", "#PlotCraftTabs.SelectedTab"),
             false
         );
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#VariantPrev", EventData.of("Action", "VariantPrev"), false);
@@ -342,35 +349,44 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         commandBuilder.set("#FundsLine.Visible", !moderationTab);
         commandBuilder.set("#CraftButton.Visible", !moderationTab);
         if (marketplaceTab) {
-            int pageDisplay = marketplacePageIndex + 1;
-            commandBuilder.set(
-                "#MarketplacePageLabel.TextSpans",
-                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePageLabel")
-                    .param("page", Message.raw(String.valueOf(pageDisplay)))
-                    .param("pages", Message.raw(String.valueOf(marketplacePageCount)))
-            );
-            commandBuilder.set("#MarketplacePagePrev.Disabled", marketplacePageIndex <= 0);
-            commandBuilder.set("#MarketplacePageNext.Disabled", marketplacePageIndex >= marketplacePageCount - 1);
-            commandBuilder.set("#MarketplaceRefreshButton.Disabled", marketplaceRefreshInFlight.get());
+            if (marketplaceLoading) {
+                commandBuilder.set(
+                    "#MarketplacePageLabel.TextSpans",
+                    Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplaceLoading")
+                );
+                commandBuilder.set("#MarketplacePagePrev.Disabled", true);
+                commandBuilder.set("#MarketplacePageNext.Disabled", true);
+            } else {
+                int pageDisplay = marketplacePageIndex + 1;
+                commandBuilder.set(
+                    "#MarketplacePageLabel.TextSpans",
+                    Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePageLabel")
+                        .param("page", Message.raw(String.valueOf(pageDisplay)))
+                        .param("pages", Message.raw(String.valueOf(marketplacePageCount)))
+                );
+                commandBuilder.set("#MarketplacePagePrev.Disabled", marketplacePageIndex <= 0);
+                commandBuilder.set("#MarketplacePageNext.Disabled", marketplacePageIndex >= marketplacePageCount - 1);
+            }
+            commandBuilder.set("#MarketplaceRefreshButton.Disabled", marketplaceLoading);
         }
         // Shorter list when marketplace action rows are visible (community / moderation).
-        applyBuildingListHeight(commandBuilder, marketplaceTab);
+        applyBuildingListHeight(commandBuilder, communityTab, moderationTab);
         if (communityTab) {
             boolean hasSelection = variant != null;
             boolean previewReady =
                 variant != null
                     && communityPreviewConstructionId != null
                     && communityPreviewConstructionId.equalsIgnoreCase(variant.constructionId());
-            commandBuilder.set("#LoadPreviewButton.Disabled", !hasSelection || installed || previewReady);
-            commandBuilder.set("#DownloadButton.Disabled", !hasSelection || installed);
-            commandBuilder.set("#RemoveButton.Disabled", !hasSelection || !installed);
+            commandBuilder.set("#LoadPreviewButton.Disabled", marketplaceLoading || !hasSelection || installed || previewReady);
+            commandBuilder.set("#DownloadButton.Disabled", marketplaceLoading || !hasSelection || installed);
+            commandBuilder.set("#RemoveButton.Disabled", marketplaceLoading || !hasSelection || !installed);
         }
         if (moderationTab) {
             boolean hasSelection = variant != null;
-            commandBuilder.set("#ModerationLoadPreviewButton.Disabled", !hasSelection || moderationPreviewReady);
-            commandBuilder.set("#ModerationCraftButton.Disabled", !hasSelection);
-            commandBuilder.set("#ApproveButton.Disabled", !hasSelection);
-            commandBuilder.set("#DenyButton.Disabled", !hasSelection);
+            commandBuilder.set("#ModerationLoadPreviewButton.Disabled", marketplaceLoading || !hasSelection || moderationPreviewReady);
+            commandBuilder.set("#ModerationCraftButton.Disabled", marketplaceLoading || !hasSelection);
+            commandBuilder.set("#ApproveButton.Disabled", marketplaceLoading || !hasSelection);
+            commandBuilder.set("#DenyButton.Disabled", marketplaceLoading || !hasSelection);
         }
 
         CombinedItemContainer inv =
@@ -400,6 +416,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
         boolean canCraft =
             !moderationTab
+                && !marketplaceLoading
                 && variant != null
                 && (!communityTab || installed)
                 && !variantLocked
@@ -634,16 +651,11 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                     AetherhavenPlugin modPlugin = AetherhavenPlugin.get();
                     UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                     PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
-                    if (modPlugin != null && uc != null) {
-                        CommunityModerationService mod = modPlugin.getCommunityModerationService();
-                        mod.refreshModeratorAccess(uc.getUuid());
-                        if (!mod.isModerator(uc.getUuid())) {
-                            activeTab = Tab.CORE;
-                            notifyNotModerator(pr, uc.getUuid());
-                        } else if (mod.isQueueEmpty()) {
-                            maybeAutoRefreshModerationQueue(ref, store, pr, uc.getUuid());
-                        }
+                    if (modPlugin != null && uc != null && pr != null) {
+                        startModerationTabLoad(ref, store, pr, uc.getUuid());
+                        return;
                     }
+                    activeTab = Tab.CORE;
                 } else if (activeTab == Tab.COMMUNITY) {
                     maybeAutoRefreshCommunityCatalog(ref, store);
                 }
@@ -896,9 +908,19 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         return idx + 1;
     }
 
-    private static void applyBuildingListHeight(@Nonnull UICommandBuilder commandBuilder, boolean marketplaceTab) {
+    private static void applyBuildingListHeight(
+        @Nonnull UICommandBuilder commandBuilder,
+        boolean communityTab,
+        boolean moderationTab
+    ) {
+        int height = BUILDING_LIST_HEIGHT_NORMAL;
+        if (moderationTab) {
+            height = BUILDING_LIST_HEIGHT_MODERATION;
+        } else if (communityTab) {
+            height = BUILDING_LIST_HEIGHT_MARKETPLACE;
+        }
         Anchor anchor = new Anchor();
-        anchor.setHeight(Value.of(marketplaceTab ? BUILDING_LIST_HEIGHT_MARKETPLACE : BUILDING_LIST_HEIGHT_NORMAL));
+        anchor.setHeight(Value.of(height));
         anchor.setBottom(Value.of(BUILDING_LIST_FOOTER_GAP));
         commandBuilder.setObject("#BuildingListScroll.Anchor", anchor);
     }
@@ -1301,8 +1323,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
         if (activeTab == Tab.MODERATION && uc != null) {
             CommunityModerationService moderation = plugin.getCommunityModerationService();
-            moderation.refreshModeratorAccess(uc.getUuid());
-            if (!moderation.isModerator(uc.getUuid())) {
+            if (moderation.hasModeratorAccessResult(uc.getUuid()) && !moderation.isModerator(uc.getUuid())) {
                 notifyNotModerator(pr, uc.getUuid());
                 refresh(ref, store);
                 return;
@@ -1321,6 +1342,25 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             CompletableFuture.runAsync(
                 () -> {
                     try {
+                        if (!moderation.hasModeratorAccessResult(playerUuid)) {
+                            moderation.refreshModeratorAccess(playerUuid);
+                        }
+                        if (!moderation.isModerator(playerUuid)) {
+                            plugin.scheduleOnWorld(
+                                world,
+                                () -> {
+                                    marketplaceRefreshInFlight.set(false);
+                                    if (!ref.isValid() || isDismissed()) {
+                                        return;
+                                    }
+                                    activeTab = Tab.CORE;
+                                    notifyNotModerator(pr, playerUuid);
+                                    refresh(ref, store);
+                                },
+                                1L
+                            );
+                            return;
+                        }
                         moderation.refreshPending(playerUuid);
                         plugin.scheduleOnWorld(
                             world,
@@ -1382,6 +1422,92 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         startCommunityCatalogRefresh(ref, store, pr, false);
     }
 
+    /**
+     * Switches to the Moderation tab immediately, then probes moderator access / queue off-thread.
+     * Avoids freezing the client on the synchronous moderation API check.
+     */
+    private void startModerationTabLoad(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlayerRef pr,
+        @Nonnull UUID moderatorUuid
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            activeTab = Tab.CORE;
+            refresh(ref, store);
+            return;
+        }
+        CommunityModerationService moderation = plugin.getCommunityModerationService();
+        if (moderation.hasModeratorAccessResult(moderatorUuid)) {
+            if (!moderation.isModerator(moderatorUuid)) {
+                activeTab = Tab.CORE;
+                notifyNotModerator(pr, moderatorUuid);
+                refresh(ref, store);
+                return;
+            }
+            if (moderation.isQueueEmpty()) {
+                maybeAutoRefreshModerationQueue(ref, store, pr, moderatorUuid);
+            } else {
+                refresh(ref, store);
+            }
+            return;
+        }
+        if (!marketplaceRefreshInFlight.compareAndSet(false, true)) {
+            refresh(ref, store);
+            return;
+        }
+        refresh(ref, store);
+        World world = store.getExternalData().getWorld();
+        CompletableFuture.runAsync(
+            () -> {
+                try {
+                    moderation.refreshModeratorAccess(moderatorUuid);
+                    if (moderation.isModerator(moderatorUuid)) {
+                        moderation.refreshPending(moderatorUuid);
+                    }
+                    plugin.scheduleOnWorld(
+                        world,
+                        () -> {
+                            marketplaceRefreshInFlight.set(false);
+                            if (!ref.isValid() || isDismissed()) {
+                                return;
+                            }
+                            if (!moderation.isModerator(moderatorUuid)) {
+                                activeTab = Tab.CORE;
+                                notifyNotModerator(pr, moderatorUuid);
+                            } else {
+                                marketplacePageIndex = 0;
+                            }
+                            refresh(ref, store);
+                        },
+                        1L
+                    );
+                } catch (Exception e) {
+                    plugin.scheduleOnWorld(
+                        world,
+                        () -> {
+                            marketplaceRefreshInFlight.set(false);
+                            if (!ref.isValid() || isDismissed()) {
+                                return;
+                            }
+                            activeTab = Tab.CORE;
+                            NotificationUtil.sendNotification(
+                                pr.getPacketHandler(),
+                                Message.translation(
+                                    "aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.refreshMarketplaceFailed"
+                                ),
+                                NotificationStyle.Danger
+                            );
+                            refresh(ref, store);
+                        },
+                        1L
+                    );
+                }
+            }
+        );
+    }
+
     private void maybeAutoRefreshModerationQueue(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull Store<EntityStore> store,
@@ -1393,6 +1519,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             return;
         }
         if (!marketplaceRefreshInFlight.compareAndSet(false, true)) {
+            refresh(ref, store);
             return;
         }
         refresh(ref, store);
@@ -1646,7 +1773,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         if (styleId.isEmpty()) {
             return styleId;
         }
-        return styleId.substring(0, 1).toUpperCase(java.util.Locale.ROOT) + styleId.substring(1);
+        String[] parts = styleId.replace('_', ' ').trim().split("\\s+");
+        StringBuilder label = new StringBuilder();
+        for (String part : parts) {
+            if (part.isEmpty()) {
+                continue;
+            }
+            if (label.length() > 0) {
+                label.append(' ');
+            }
+            label.append(Character.toUpperCase(part.charAt(0)));
+            if (part.length() > 1) {
+                label.append(part.substring(1).toLowerCase(java.util.Locale.ROOT));
+            }
+        }
+        return label.length() > 0 ? label.toString() : styleId;
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -1668,6 +1809,8 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             .append(new KeyedCodec<>("GroupKey", Codec.STRING), (d, v) -> d.groupKey = v, d -> d.groupKey)
             .add()
             .append(new KeyedCodec<>("SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
+            .add()
+            .append(new KeyedCodec<>("@SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
             .add()
             .append(new KeyedCodec<>("StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
             .add()

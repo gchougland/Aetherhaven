@@ -88,6 +88,11 @@ public final class CommunityModerationService {
         }
     }
 
+    /** {@code true} when config grants access or a prior API probe has completed for this player. */
+    public boolean hasModeratorAccessResult(@Nonnull UUID playerUuid) {
+        return isConfigModerator(playerUuid) || apiModeratorAccess.containsKey(playerUuid);
+    }
+
     public boolean isModerator(@Nonnull UUID playerUuid) {
         if (isConfigModerator(playerUuid)) {
             return true;

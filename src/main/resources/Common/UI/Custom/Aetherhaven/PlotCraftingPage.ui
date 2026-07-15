@@ -62,10 +62,10 @@ $C.@PageOverlay {
 
       Group #StyleFilterColumn {
         LayoutMode: Top;
-        Anchor: (Width: 168, Right: 10);
+        Anchor: (Width: 240, Right: 10);
 
         $C.@Container {
-          Anchor: (Width: 168, Height: @PlotPanelHeight, Top: 56);
+          Anchor: (Width: 240, Height: @PlotPanelHeight, Top: 56);
 
           #Title {
             Label #StyleFilterTitle {
@@ -238,32 +238,41 @@ $C.@PageOverlay {
             }
 
             Group #ModerationActionRow {
-              LayoutMode: Left;
+              LayoutMode: Top;
               Anchor: (Bottom: 6);
               Visible: false;
 
-              $C.@TextButton #ModerationLoadPreviewButton {
-                Anchor: (Height: 32, Right: 6);
-                FlexWeight: 1;
-                Text: "";
+              Group #ModerationActionRowTop {
+                LayoutMode: Left;
+                Anchor: (Bottom: 6);
+
+                $C.@TextButton #ModerationLoadPreviewButton {
+                  Anchor: (Height: 32, Right: 6);
+                  FlexWeight: 1;
+                  Text: "";
+                }
+
+                $C.@TextButton #ModerationCraftButton {
+                  Anchor: (Height: 32);
+                  FlexWeight: 1;
+                  Text: "";
+                }
               }
 
-              $C.@TextButton #ModerationCraftButton {
-                Anchor: (Height: 32, Right: 6);
-                FlexWeight: 1;
-                Text: "";
-              }
+              Group #ModerationActionRowBottom {
+                LayoutMode: Left;
 
-              $C.@TextButton #ApproveButton {
-                Anchor: (Height: 32, Right: 6);
-                FlexWeight: 1;
-                Text: "";
-              }
+                $C.@TextButton #ApproveButton {
+                  Anchor: (Height: 32, Right: 6);
+                  FlexWeight: 1;
+                  Text: "";
+                }
 
-              $C.@TextButton #DenyButton {
-                Anchor: (Height: 32);
-                FlexWeight: 1;
-                Text: "";
+                $C.@TextButton #DenyButton {
+                  Anchor: (Height: 32);
+                  FlexWeight: 1;
+                  Text: "";
+                }
               }
             }
 

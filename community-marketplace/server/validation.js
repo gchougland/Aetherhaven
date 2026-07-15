@@ -255,15 +255,25 @@ export function normalizeEditTags(value) {
 }
 
 /**
+ * Normalizes a style label for marketplace edits.
+ * Preserves human-readable names (e.g. "Coastal Ruins"); only trims, collapses
+ * whitespace, and strips characters outside letters/digits/spaces/hyphens/underscores.
+ *
  * @param {unknown} value
  * @returns {string}
  */
 export function normalizeEditStyleId(value) {
-  const raw = typeof value === "string" ? value.trim().toLowerCase() : "";
+  const raw = typeof value === "string" ? value.trim() : "";
   if (!raw) {
     return "misc";
   }
-  return raw.replace(/[^a-z0-9_]+/g, "_").replace(/^_+|_+$/g, "").slice(0, MAX_STYLE_ID_LENGTH) || "misc";
+  return (
+    raw
+      .replace(/\s+/g, " ")
+      .replace(/[^a-zA-Z0-9 _-]+/g, "")
+      .trim()
+      .slice(0, MAX_STYLE_ID_LENGTH) || "misc"
+  );
 }
 
 /**

@@ -948,7 +948,8 @@ main.wrap > section + section {
   gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  /* Smooth scrolling is controlled in JS to avoid double-easing / snap fights. */
+  scroll-behavior: auto;
   padding-block: var(--space-lg);
   /* Side padding = peek lanes; cards fill the center slot (100% of content box). */
   padding-inline: var(--carousel-peek);
@@ -1278,6 +1279,46 @@ button.danger:hover {
 .submissions-page .submissions-intro {
   margin-top: 0;
   margin-bottom: var(--space-md);
+}
+
+.admin-page-intro .submissions-intro {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+}
+
+.admin-page .admin-section {
+  scroll-margin-top: var(--space-xl);
+}
+
+.admin-page .admin-section + .admin-section {
+  margin-top: var(--space-lg);
+}
+
+.admin-jump-chips {
+  margin-bottom: 0;
+}
+
+a.submissions-chip {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+a.submissions-chip:hover {
+  color: var(--text);
+}
+
+.admin-page #adminQueue.submissions-group-list {
+  margin-top: var(--space-md);
+}
+
+.admin-page #adminScreenshotQueue {
+  margin-top: var(--space-md);
+}
+
+.admin-page #adminCatalog.catalog-grid {
+  margin-top: var(--space-md);
 }
 
 .submissions-toolbar {

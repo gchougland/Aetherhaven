@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=30" />
+    <link rel="stylesheet" href="/styles.css?v=35" />
   </head>
   <body>
     <header class="site-header">
@@ -61,23 +61,114 @@
         </div>
       </div>
     </header>
-    <main class="wrap">
-      <section class="card">
-        <h2>Pending submissions</h2>
-        <div id="adminQueue"></div>
+    <main class="wrap admin-page">
+      <section class="card admin-page-intro">
+        <div class="section-title">
+          <h2>Admin</h2>
+          <div class="ornament-divider" aria-hidden="true"></div>
+        </div>
+        <p class="meta submissions-intro">
+          Review pending builds and screenshots, then search the published catalog to edit or remove listings.
+        </p>
+        <div class="submissions-status-chips admin-jump-chips" id="adminJumpChips" role="navigation" aria-label="Jump to section">
+          <a class="submissions-chip" href="#adminPendingSection">
+            Pending builds <span class="submissions-chip-count" data-admin-count="pending">0</span>
+          </a>
+          <a class="submissions-chip" href="#adminScreenshotsSection">
+            Screenshots <span class="submissions-chip-count" data-admin-count="screenshots">0</span>
+          </a>
+          <a class="submissions-chip" href="#adminPublishedSection">
+            Published <span class="submissions-chip-count" data-admin-count="published">0</span>
+          </a>
+        </div>
       </section>
-      <section class="card">
+
+      <section class="card admin-section" id="adminPendingSection">
+        <h2>Pending submissions</h2>
+        <div class="catalog-toolbar submissions-toolbar" id="adminPendingToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search pending submissions</span>
+            <input
+              type="search"
+              id="adminPendingSearch"
+              placeholder="Search by name, creator, or id…"
+              autocomplete="off"
+            />
+          </label>
+          <label class="catalog-filter">
+            <span>Sort</span>
+            <select id="adminPendingSort">
+              <option value="newest" selected>Newest</option>
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+            </select>
+          </label>
+          <button type="button" class="secondary" id="adminPendingClear">Clear</button>
+          <p class="catalog-result-count" id="adminPendingResultCount" aria-live="polite"></p>
+        </div>
+        <div id="adminQueue" class="submissions-group-list"></div>
+      </section>
+
+      <section class="card admin-section" id="adminScreenshotsSection">
         <h2>Pending screenshots</h2>
-        <p class="meta">Approve screenshots before they appear in the public build gallery. Admins can also edit any submission and upload screenshots from the Edit page (admin uploads skip review).</p>
+        <p class="meta">
+          Approve screenshots before they appear in the public build gallery. Admins can also edit any
+          submission and upload screenshots from the Edit page (admin uploads skip review).
+        </p>
+        <div class="catalog-toolbar submissions-toolbar" id="adminScreenshotsToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search pending screenshots</span>
+            <input
+              type="search"
+              id="adminScreenshotsSearch"
+              placeholder="Search by build name, creator, or id…"
+              autocomplete="off"
+            />
+          </label>
+          <button type="button" class="secondary" id="adminScreenshotsClear">Clear</button>
+          <p class="catalog-result-count" id="adminScreenshotsResultCount" aria-live="polite"></p>
+        </div>
         <div id="adminScreenshotQueue"></div>
       </section>
-      <section class="card">
+
+      <section class="card admin-section" id="adminPublishedSection">
         <h2>Published buildings</h2>
-        <p class="meta">Browse approved builds, edit metadata and screenshots, or remove any from the public catalog. Players who already downloaded a build keep their local copy.</p>
+        <p class="meta">
+          Browse approved builds, edit metadata and screenshots, or remove any from the public catalog.
+          Players who already downloaded a build keep their local copy.
+        </p>
+        <div class="catalog-toolbar submissions-toolbar" id="adminPublishedToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search published buildings</span>
+            <input
+              type="search"
+              id="adminPublishedSearch"
+              placeholder="Search by name, author, or id…"
+              autocomplete="off"
+            />
+          </label>
+          <label class="catalog-filter">
+            <span>Author</span>
+            <select id="adminPublishedAuthor">
+              <option value="">All authors</option>
+            </select>
+          </label>
+          <label class="catalog-filter">
+            <span>Sort</span>
+            <select id="adminPublishedSort">
+              <option value="newest" selected>Newest</option>
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+              <option value="downloads">Most downloads</option>
+            </select>
+          </label>
+          <button type="button" class="secondary" id="adminPublishedClear">Clear</button>
+          <p class="catalog-result-count" id="adminPublishedResultCount" aria-live="polite"></p>
+        </div>
         <div id="adminCatalog" class="catalog-grid"></div>
       </section>
     </main>
-    <script src="/app.js?v=24"></script>
+    <script src="/app.js?v=31"></script>
     <script>
       loadAdminPage();
     </script>

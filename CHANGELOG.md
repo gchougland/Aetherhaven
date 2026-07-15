@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.3.0] - Unreleased
+
+### Added
+
+- **Plot crafting search** — Search buildings by name on the plot crafting bench (all tabs). On Community and Moderation, search also matches creator names.
+- **Community marketplace sorting** — Sort community buildings by most upvotes, most downloads, latest, or name A–Z from a dropdown on the Community tab.
+
+### Changed
+
+- **Moderation review buttons** — Load Preview, Craft Test, Approve, and Deny are arranged in two rows so labels stay readable.
+- **Style filter panel** — The Styles column on the plot crafting bench is wider so longer style names fit.
+- **Community and moderation loading** — Switching to the Community or Moderation tab no longer freezes the UI; the tab opens right away and shows **Loading…** until the list is ready. Browsing community pages also batches icon updates so you get one brief reload notice instead of many.
+
 ## [2.2.1] - 7/13/2026
 
 ### Added

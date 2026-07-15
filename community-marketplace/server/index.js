@@ -2085,6 +2085,26 @@ if (ADSENSE_CLIENT_ID) {
 
 app.use(express.static(webRoot));
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Community marketplace listening on ${publicBaseUrl} (port ${PORT})`);
 });
+
+function shutdown(signal) {
+  console.log(`Received ${signal}, shutting down gracefully…`);
+  server.close((err) => {
+    if (err) {
+      console.error("Error during shutdown:", err);
+      process.exit(1);
+      return;
+    }
+    process.exit(0);
+  });
+  // Don't hang forever if open connections keep the server open.
+  setTimeout(() => {
+    console.warn("Forced shutdown after timeout");
+    process.exit(0);
+  }, 8_000).unref();
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
