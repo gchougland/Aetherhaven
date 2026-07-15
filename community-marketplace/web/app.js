@@ -361,6 +361,9 @@ const NEWEST_CAROUSEL_AUTOPLAY_MS = 5000;
 
 let newestCarouselBound = false;
 let newestCarouselAutoplayId = null;
+let newestCarouselRealCount = 0;
+let newestCarouselNormalizing = false;
+let newestCarouselNormalizeTimer = null;
 
 function getNewestCatalogEntries(limit = NEWEST_CAROUSEL_LIMIT) {
   return allCatalogEntries
@@ -375,14 +378,16 @@ function getNewestCatalogEntries(limit = NEWEST_CAROUSEL_LIMIT) {
     .slice(0, limit);
 }
 
-function renderNewestCarouselCard(entry) {
+function renderNewestCarouselCard(entry, options = {}) {
+  const clone = Boolean(options.clone);
   const goldBadge = goldCostHtml(entry, "gold-cost--inline");
   return `
     <article
       class="card newest-carousel-card building-card--clickable"
       role="listitem"
       data-building-id="${escapeAttr(entry.id)}"
-      tabindex="0"
+      tabindex="${clone ? "-1" : "0"}"
+      ${clone ? 'aria-hidden="true"' : ""}
       onclick="openBuildingDetail('${escapeAttr(entry.id)}')"
       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"
     >
@@ -398,8 +403,34 @@ function renderNewestCarouselCard(entry) {
     </article>`;
 }
 
+function buildNewestCarouselHtml(entries) {
+  if (entries.length < 2) {
+    return entries.map((entry) => renderNewestCarouselCard(entry)).join("");
+  }
+  const parts = [];
+  for (let copy = 0; copy < 3; copy++) {
+    const clone = copy !== 1;
+    for (const entry of entries) {
+      parts.push(renderNewestCarouselCard(entry, { clone }));
+    }
+  }
+  return parts.join("");
+}
+
 function getNewestCarouselCards(track) {
   return Array.from(track?.querySelectorAll(".newest-carousel-card") || []);
+}
+
+function getNewestCarouselSetWidth(track) {
+  const n = newestCarouselRealCount;
+  if (n < 2) {
+    return 0;
+  }
+  const cards = getNewestCarouselCards(track);
+  if (cards.length < n * 2) {
+    return 0;
+  }
+  return cards[n].offsetLeft - cards[0].offsetLeft;
 }
 
 function updateNewestCarouselFocus() {
@@ -428,6 +459,62 @@ function updateNewestCarouselFocus() {
   }
 }
 
+function normalizeNewestCarouselLoop() {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track || newestCarouselRealCount < 2 || newestCarouselNormalizing) {
+    return;
+  }
+  const setWidth = getNewestCarouselSetWidth(track);
+  if (setWidth <= 0) {
+    return;
+  }
+  const left = track.scrollLeft;
+  if (left >= setWidth && left < setWidth * 2) {
+    return;
+  }
+  newestCarouselNormalizing = true;
+  const prevBehavior = track.style.scrollBehavior;
+  track.style.scrollBehavior = "auto";
+  if (left < setWidth) {
+    track.scrollLeft = left + setWidth;
+  } else if (left >= setWidth * 2) {
+    track.scrollLeft = left - setWidth;
+  }
+  track.style.scrollBehavior = prevBehavior;
+  newestCarouselNormalizing = false;
+  updateNewestCarouselFocus();
+}
+
+function scheduleNewestCarouselNormalize() {
+  if (newestCarouselNormalizeTimer != null) {
+    clearTimeout(newestCarouselNormalizeTimer);
+  }
+  newestCarouselNormalizeTimer = setTimeout(() => {
+    newestCarouselNormalizeTimer = null;
+    normalizeNewestCarouselLoop();
+  }, 80);
+}
+
+function scrollNewestCarouselToIndex(index, behavior = "smooth") {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track) {
+    return;
+  }
+  const cards = getNewestCarouselCards(track);
+  const card = cards[index];
+  if (!card) {
+    return;
+  }
+  const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+  track.scrollTo({ left: Math.max(0, left), behavior });
+  window.requestAnimationFrame(updateNewestCarouselFocus);
+  if (behavior === "smooth") {
+    scheduleNewestCarouselNormalize();
+  } else {
+    normalizeNewestCarouselLoop();
+  }
+}
+
 function scrollNewestCarousel(direction) {
   const track = document.getElementById("newestCarouselTrack");
   if (!track) {
@@ -437,12 +524,22 @@ function scrollNewestCarousel(direction) {
   if (!cards.length) {
     return;
   }
+  if (newestCarouselRealCount < 2) {
+    let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
+    if (activeIndex < 0) {
+      activeIndex = 0;
+    }
+    const nextIndex = Math.max(0, Math.min(cards.length - 1, activeIndex + direction));
+    scrollNewestCarouselToIndex(nextIndex);
+    return;
+  }
+
+  normalizeNewestCarouselLoop();
   let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
   if (activeIndex < 0) {
-    activeIndex = 0;
+    activeIndex = newestCarouselRealCount;
   }
-  const nextIndex = Math.max(0, Math.min(cards.length - 1, activeIndex + direction));
-  cards[nextIndex].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  scrollNewestCarouselToIndex(activeIndex + direction);
 }
 
 function stopNewestCarouselAutoplay() {
@@ -456,23 +553,14 @@ function startNewestCarouselAutoplay() {
   stopNewestCarouselAutoplay();
   const track = document.getElementById("newestCarouselTrack");
   const section = document.getElementById("newestCarouselSection");
-  if (!track || !section || section.hidden || track.children.length < 2) {
+  if (!track || !section || section.hidden || newestCarouselRealCount < 2) {
     return;
   }
   newestCarouselAutoplayId = setInterval(() => {
     if (document.hidden) {
       return;
     }
-    const cards = getNewestCarouselCards(track);
-    if (cards.length < 2) {
-      return;
-    }
-    let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
-    if (activeIndex < 0) {
-      activeIndex = 0;
-    }
-    const nextIndex = activeIndex >= cards.length - 1 ? 0 : activeIndex + 1;
-    cards[nextIndex].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    scrollNewestCarousel(1);
   }, NEWEST_CAROUSEL_AUTOPLAY_MS);
 }
 
@@ -500,11 +588,19 @@ function setupNewestCarouselControls() {
   track.addEventListener(
     "scroll",
     () => {
+      if (newestCarouselNormalizing) {
+        return;
+      }
       window.requestAnimationFrame(updateNewestCarouselFocus);
+      scheduleNewestCarouselNormalize();
     },
     { passive: true }
   );
+  track.addEventListener("scrollend", () => {
+    normalizeNewestCarouselLoop();
+  });
   window.addEventListener("resize", () => {
+    normalizeNewestCarouselLoop();
     updateNewestCarouselFocus();
   });
   const pause = () => stopNewestCarouselAutoplay();
@@ -534,19 +630,21 @@ function renderNewestCarousel() {
   }
   const newest = getNewestCatalogEntries();
   if (!newest.length) {
+    newestCarouselRealCount = 0;
     section.hidden = true;
     track.innerHTML = "";
     stopNewestCarouselAutoplay();
     return;
   }
   section.hidden = false;
-  track.innerHTML = newest.map(renderNewestCarouselCard).join("");
+  newestCarouselRealCount = newest.length;
+  track.innerHTML = buildNewestCarouselHtml(newest);
   setupNewestCarouselControls();
   window.requestAnimationFrame(() => {
-    updateNewestCarouselFocus();
-    const cards = getNewestCarouselCards(track);
-    if (cards[0]) {
-      cards[0].scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+    if (newestCarouselRealCount >= 2) {
+      scrollNewestCarouselToIndex(newestCarouselRealCount, "auto");
+    } else {
+      track.scrollLeft = 0;
       updateNewestCarouselFocus();
     }
   });

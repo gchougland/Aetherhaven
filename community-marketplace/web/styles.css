@@ -943,16 +943,24 @@ main.wrap > section + section {
 }
 
 .newest-carousel-track {
-  --carousel-card-size: min(340px, 58%);
+  --carousel-peek: 18%;
   display: flex;
-  gap: var(--space-lg);
+  gap: var(--space-md);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  padding-block: var(--space-md);
-  padding-inline: calc((100% - var(--carousel-card-size)) / 2);
+  padding-block: var(--space-lg);
+  /* Side padding = peek lanes; cards fill the center slot (100% of content box). */
+  padding-inline: var(--carousel-peek);
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #000 6%,
+    #000 94%,
+    transparent 100%
+  );
 }
 
 .newest-carousel-track::-webkit-scrollbar {
@@ -984,15 +992,16 @@ main.wrap > section + section {
 }
 
 .newest-carousel-card {
-  flex: 0 0 var(--carousel-card-size);
+  flex: 0 0 100%;
+  max-width: 100%;
   scroll-snap-align: center;
   scroll-snap-stop: always;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
-  opacity: 0.4;
-  filter: brightness(0.72);
-  transform: scale(0.86);
+  opacity: 0.38;
+  filter: brightness(0.65);
+  transform: scale(0.88);
   transform-origin: center center;
   transition:
     transform 0.35s ease,
@@ -1012,8 +1021,8 @@ main.wrap > section + section {
 }
 
 .newest-carousel-card:not(.is-active):hover {
-  opacity: 0.55;
-  filter: brightness(0.82);
+  opacity: 0.5;
+  filter: brightness(0.78);
 }
 
 .newest-carousel-card.is-active:hover {
@@ -1940,8 +1949,9 @@ body.modal-open {
   }
 
   .newest-carousel-track {
-    --carousel-card-size: min(280px, 72%);
-    gap: var(--space-md);
+    --carousel-peek: 12%;
+    gap: var(--space-sm);
+    padding-block: var(--space-md);
   }
 
   .card {
