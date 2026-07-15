@@ -405,6 +405,7 @@ public final class AetherhavenUiLocalization {
         b.set("#MarketplacePagePrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePagePrevTooltip"));
         b.set("#MarketplacePageNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.marketplacePageNextTooltip"));
         b.set("#StyleFilterTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.styleFilterTitle"));
+        b.set("#SearchInput.PlaceholderText", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.searchPlaceholder"));
     }
 
     public static void applyQuestBoardPage(@Nonnull UICommandBuilder b) {

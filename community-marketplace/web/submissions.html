@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=28" />
+    <link rel="stylesheet" href="/styles.css?v=30" />
   </head>
   <body>
     <header class="site-header">
@@ -62,16 +62,54 @@
       </div>
     </header>
     <main class="wrap">
-      <section class="card">
-        <h2>Your submissions</h2>
-        <p class="meta">
+      <section class="card submissions-page">
+        <div class="section-title">
+          <h2>Your submissions</h2>
+          <div class="ornament-divider" aria-hidden="true"></div>
+        </div>
+        <p class="meta submissions-intro">
           Pending builds can be withdrawn. Published builds can be edited or removed from the marketplace.
           Click a published submission to edit its name, description, costs, and screenshots.
         </p>
+        <div class="catalog-toolbar submissions-toolbar" id="submissionsToolbar" hidden>
+          <label class="catalog-search">
+            <span class="visually-hidden">Search submissions</span>
+            <input
+              type="search"
+              id="submissionsSearch"
+              placeholder="Search by name or id…"
+              autocomplete="off"
+            />
+          </label>
+          <div class="submissions-status-chips" id="submissionsStatusChips" role="group" aria-label="Filter by status">
+            <button type="button" class="submissions-chip is-active" data-status="all" aria-pressed="true">
+              All <span class="submissions-chip-count" data-count-for="all">0</span>
+            </button>
+            <button type="button" class="submissions-chip" data-status="pending" aria-pressed="false">
+              Pending <span class="submissions-chip-count" data-count-for="pending">0</span>
+            </button>
+            <button type="button" class="submissions-chip" data-status="approved" aria-pressed="false">
+              Published <span class="submissions-chip-count" data-count-for="approved">0</span>
+            </button>
+            <button type="button" class="submissions-chip" data-status="rejected" aria-pressed="false">
+              Rejected <span class="submissions-chip-count" data-count-for="rejected">0</span>
+            </button>
+          </div>
+          <label class="catalog-filter">
+            <span>Sort</span>
+            <select id="submissionsSort">
+              <option value="newest" selected>Newest</option>
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+            </select>
+          </label>
+          <button type="button" class="secondary" id="submissionsClearFilters">Clear</button>
+          <p class="catalog-result-count" id="submissionsResultCount" aria-live="polite"></p>
+        </div>
         <div id="mySubmissions" class="submission-list"></div>
       </section>
     </main>
-    <script src="/app.js?v=21"></script>
+    <script src="/app.js?v=24"></script>
     <script>
       loadSubmissions();
     </script>

@@ -132,10 +132,14 @@ $C.@PageOverlay {
           Anchor: (Width: 500, Height: @PlotPanelHeight, Top: -10);
 
           #Title {
-            Label #PlotCraftTitleText {
-              Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
-              Padding: (Horizontal: 19);
-              Text: "";
+            Group {
+              Label #PlotCraftTitleText {
+                Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+                Padding: (Horizontal: 19);
+                Text: "";
+              }
+
+              $C.@HeaderSearch {}
             }
           }
 
@@ -170,6 +174,11 @@ $C.@PageOverlay {
 
               Group {
                 FlexWeight: 1;
+              }
+
+              $C.@DropdownBox #CommunitySort {
+                Anchor: (Width: 156, Height: 36, Right: 8);
+                Visible: false;
               }
 
               TextButton #MarketplaceRefreshButton {

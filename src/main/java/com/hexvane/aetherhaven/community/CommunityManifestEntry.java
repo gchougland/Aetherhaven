@@ -49,6 +49,9 @@ public final class CommunityManifestEntry {
     @SerializedName("downloadCount")
     private int downloadCount;
 
+    @SerializedName("approvedAt")
+    private String approvedAt;
+
     @SerializedName("requiredMods")
     private List<CommunityRequiredMods.RequiredMod> requiredMods;
 
@@ -110,6 +113,12 @@ public final class CommunityManifestEntry {
 
     public int getDownloadCount() {
         return downloadCount;
+    }
+
+    /** ISO-8601 approval time from the marketplace API; may be blank on older entries. */
+    @Nonnull
+    public String getApprovedAt() {
+        return approvedAt != null ? approvedAt : "";
     }
 
     @Nonnull

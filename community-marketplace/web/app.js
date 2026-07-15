@@ -268,7 +268,7 @@ function renderBuildingCard(entry, options = {}) {
       >Remove permanently</button>`
     : "";
   const editBtn = adminEdit
-    ? `<a class="secondary admin-edit-btn" href="/edit.html?id=${encodeURIComponent(entry.id)}" onclick="event.stopPropagation()">Edit</a>`
+    ? `<a class="secondary admin-edit-btn" href="/edit.html?id=${encodeURIComponent(entry.id)}&from=admin" onclick="event.stopPropagation()">Edit</a>`
     : "";
   const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
   const cardClass = [
@@ -398,14 +398,51 @@ function renderNewestCarouselCard(entry) {
     </article>`;
 }
 
+function getNewestCarouselCards(track) {
+  return Array.from(track?.querySelectorAll(".newest-carousel-card") || []);
+}
+
+function updateNewestCarouselFocus() {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track) {
+    return;
+  }
+  const cards = getNewestCarouselCards(track);
+  if (!cards.length) {
+    return;
+  }
+  const trackRect = track.getBoundingClientRect();
+  const centerX = trackRect.left + trackRect.width / 2;
+  let best = cards[0];
+  let bestDist = Infinity;
+  for (const card of cards) {
+    const rect = card.getBoundingClientRect();
+    const dist = Math.abs(rect.left + rect.width / 2 - centerX);
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = card;
+    }
+  }
+  for (const card of cards) {
+    card.classList.toggle("is-active", card === best);
+  }
+}
+
 function scrollNewestCarousel(direction) {
   const track = document.getElementById("newestCarouselTrack");
   if (!track) {
     return;
   }
-  const slide = track.querySelector(".newest-carousel-card");
-  const amount = slide ? slide.getBoundingClientRect().width + 16 : track.clientWidth * 0.8;
-  track.scrollBy({ left: direction * amount, behavior: "smooth" });
+  const cards = getNewestCarouselCards(track);
+  if (!cards.length) {
+    return;
+  }
+  let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
+  if (activeIndex < 0) {
+    activeIndex = 0;
+  }
+  const nextIndex = Math.max(0, Math.min(cards.length - 1, activeIndex + direction));
+  cards[nextIndex].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
 }
 
 function stopNewestCarouselAutoplay() {
@@ -426,15 +463,16 @@ function startNewestCarouselAutoplay() {
     if (document.hidden) {
       return;
     }
-    const maxScroll = track.scrollWidth - track.clientWidth;
-    if (maxScroll <= 4) {
+    const cards = getNewestCarouselCards(track);
+    if (cards.length < 2) {
       return;
     }
-    if (track.scrollLeft >= maxScroll - 4) {
-      track.scrollTo({ left: 0, behavior: "smooth" });
-    } else {
-      scrollNewestCarousel(1);
+    let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
+    if (activeIndex < 0) {
+      activeIndex = 0;
     }
+    const nextIndex = activeIndex >= cards.length - 1 ? 0 : activeIndex + 1;
+    cards[nextIndex].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
   }, NEWEST_CAROUSEL_AUTOPLAY_MS);
 }
 
@@ -458,6 +496,16 @@ function setupNewestCarouselControls() {
   next?.addEventListener("click", () => {
     scrollNewestCarousel(1);
     startNewestCarouselAutoplay();
+  });
+  track.addEventListener(
+    "scroll",
+    () => {
+      window.requestAnimationFrame(updateNewestCarouselFocus);
+    },
+    { passive: true }
+  );
+  window.addEventListener("resize", () => {
+    updateNewestCarouselFocus();
   });
   const pause = () => stopNewestCarouselAutoplay();
   const resume = () => startNewestCarouselAutoplay();
@@ -494,6 +542,14 @@ function renderNewestCarousel() {
   section.hidden = false;
   track.innerHTML = newest.map(renderNewestCarouselCard).join("");
   setupNewestCarouselControls();
+  window.requestAnimationFrame(() => {
+    updateNewestCarouselFocus();
+    const cards = getNewestCarouselCards(track);
+    if (cards[0]) {
+      cards[0].scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+      updateNewestCarouselFocus();
+    }
+  });
   startNewestCarouselAutoplay();
 }
 
@@ -783,6 +839,204 @@ function applyCatalogFilters({ resetPage = true } = {}) {
   renderCatalogPage();
 }
 
+let mySubmissionsCache = [];
+let mySubmissionsFilters = { query: "", status: "all", sort: "newest" };
+let mySubmissionsFiltersBound = false;
+
+function submissionKind(item) {
+  if (item.kind === "approved" || item.status === "approved") return "approved";
+  if (item.kind === "rejected" || item.status === "rejected") return "rejected";
+  return "pending";
+}
+
+function submissionDateValue(item) {
+  return item.submittedAt || item.approvedAt || item.rejectedAt || "";
+}
+
+function formatRelativeDate(iso) {
+  if (!iso) return "";
+  const then = new Date(iso);
+  if (Number.isNaN(then.getTime())) return "";
+  const diffMs = Date.now() - then.getTime();
+  const sec = Math.round(diffMs / 1000);
+  if (sec < 60) return "just now";
+  const min = Math.round(sec / 60);
+  if (min < 60) return `${min}m ago`;
+  const hr = Math.round(min / 60);
+  if (hr < 48) return `${hr}h ago`;
+  const day = Math.round(hr / 24);
+  if (day < 30) return `${day}d ago`;
+  return then.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+}
+
+function submissionDisplayName(item) {
+  return String(item?.displayName || "Untitled");
+}
+
+function submissionMatchesQuery(item, query) {
+  if (!query) return true;
+  const haystack = [
+    item.displayName,
+    item.id,
+    item.submissionId,
+    item.proposedId,
+    item.reason,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+  return haystack.includes(query);
+}
+
+function sortMySubmissions(entries, sort) {
+  return [...entries].sort((a, b) => {
+    if (sort === "name-asc") {
+      return submissionDisplayName(a).localeCompare(submissionDisplayName(b), undefined, {
+        sensitivity: "base",
+      });
+    }
+    if (sort === "name-desc") {
+      return submissionDisplayName(b).localeCompare(submissionDisplayName(a), undefined, {
+        sensitivity: "base",
+      });
+    }
+    const byDate = String(submissionDateValue(b)).localeCompare(String(submissionDateValue(a)));
+    if (byDate !== 0) return byDate;
+    return submissionDisplayName(a).localeCompare(submissionDisplayName(b), undefined, {
+      sensitivity: "base",
+    });
+  });
+}
+
+function getFilteredMySubmissions() {
+  const query = String(mySubmissionsFilters.query || "")
+    .trim()
+    .toLowerCase();
+  const status = mySubmissionsFilters.status || "all";
+  const filtered = mySubmissionsCache.filter((item) => {
+    if (status !== "all" && submissionKind(item) !== status) return false;
+    return submissionMatchesQuery(item, query);
+  });
+  return sortMySubmissions(filtered, mySubmissionsFilters.sort || "newest");
+}
+
+function countMySubmissionsByStatus() {
+  const counts = { all: mySubmissionsCache.length, pending: 0, approved: 0, rejected: 0 };
+  for (const item of mySubmissionsCache) {
+    counts[submissionKind(item)] += 1;
+  }
+  return counts;
+}
+
+function updateSubmissionsChipCounts() {
+  const counts = countMySubmissionsByStatus();
+  document.querySelectorAll("[data-count-for]").forEach((el) => {
+    const key = el.getAttribute("data-count-for");
+    el.textContent = String(counts[key] ?? 0);
+  });
+  document.querySelectorAll(".submissions-chip").forEach((btn) => {
+    const status = btn.getAttribute("data-status");
+    const active = status === mySubmissionsFilters.status;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function updateSubmissionsResultCount(visibleCount) {
+  const el = document.getElementById("submissionsResultCount");
+  if (!el) return;
+  const total = mySubmissionsCache.length;
+  if (!total) {
+    el.textContent = "";
+    return;
+  }
+  if (visibleCount === total && mySubmissionsFilters.status === "all" && !mySubmissionsFilters.query.trim()) {
+    el.textContent = `${total} submission${total === 1 ? "" : "s"}`;
+    return;
+  }
+  el.textContent = `Showing ${visibleCount} of ${total}`;
+}
+
+function renderMySubmissionSection(title, items) {
+  if (!items.length) return "";
+  return `
+    <section class="submissions-group">
+      <h3 class="submissions-group-title">${escapeHtml(title)} <span class="submissions-group-count">${items.length}</span></h3>
+      <div class="submissions-group-list">
+        ${items.map(renderMySubmissionItem).join("")}
+      </div>
+    </section>`;
+}
+
+function renderFilteredMySubmissions() {
+  const list = document.getElementById("mySubmissions");
+  if (!list) return;
+
+  updateSubmissionsChipCounts();
+
+  if (!mySubmissionsCache.length) {
+    list.innerHTML = emptyStateHtml("No submissions yet.");
+    updateSubmissionsResultCount(0);
+    return;
+  }
+
+  const filtered = getFilteredMySubmissions();
+  updateSubmissionsResultCount(filtered.length);
+
+  if (!filtered.length) {
+    list.innerHTML = emptyStateHtml("No submissions match your filters.");
+    return;
+  }
+
+  if (mySubmissionsFilters.status === "all") {
+    const pending = filtered.filter((i) => submissionKind(i) === "pending");
+    const approved = filtered.filter((i) => submissionKind(i) === "approved");
+    const rejected = filtered.filter((i) => submissionKind(i) === "rejected");
+    list.innerHTML = [
+      renderMySubmissionSection("Pending review", pending),
+      renderMySubmissionSection("Published", approved),
+      renderMySubmissionSection("Rejected", rejected),
+    ].join("");
+    return;
+  }
+
+  list.innerHTML = `<div class="submissions-group-list">${filtered.map(renderMySubmissionItem).join("")}</div>`;
+}
+
+function setupMySubmissionsFilters() {
+  if (mySubmissionsFiltersBound) return;
+  const toolbar = document.getElementById("submissionsToolbar");
+  const search = document.getElementById("submissionsSearch");
+  const sort = document.getElementById("submissionsSort");
+  const clear = document.getElementById("submissionsClearFilters");
+  const chips = document.getElementById("submissionsStatusChips");
+  if (!toolbar || !search || !sort) return;
+
+  mySubmissionsFiltersBound = true;
+  toolbar.hidden = false;
+
+  search.addEventListener("input", () => {
+    mySubmissionsFilters.query = search.value || "";
+    renderFilteredMySubmissions();
+  });
+  sort.addEventListener("change", () => {
+    mySubmissionsFilters.sort = sort.value || "newest";
+    renderFilteredMySubmissions();
+  });
+  chips?.addEventListener("click", (event) => {
+    const btn = event.target.closest(".submissions-chip");
+    if (!btn) return;
+    mySubmissionsFilters.status = btn.getAttribute("data-status") || "all";
+    renderFilteredMySubmissions();
+  });
+  clear?.addEventListener("click", () => {
+    mySubmissionsFilters = { query: "", status: "all", sort: "newest" };
+    search.value = "";
+    sort.value = "newest";
+    renderFilteredMySubmissions();
+  });
+}
+
 async function loadSubmissions() {
   const list = document.getElementById("mySubmissions");
   const me = await fetch("/api/me").then((r) => r.json());
@@ -804,12 +1058,13 @@ async function loadSubmissions() {
       return;
     }
     const data = await res.json();
-    const items = data.submissions || [];
-    if (!items.length) {
-      list.innerHTML = emptyStateHtml("No submissions yet.");
-      return;
+    mySubmissionsCache = data.submissions || [];
+    setupMySubmissionsFilters();
+    const toolbar = document.getElementById("submissionsToolbar");
+    if (toolbar) {
+      toolbar.hidden = mySubmissionsCache.length === 0;
     }
-    list.innerHTML = items.map(renderMySubmissionItem).join("");
+    renderFilteredMySubmissions();
   } catch {
     list.innerHTML = emptyStateHtml("Could not load your submissions.");
   }
@@ -945,47 +1200,64 @@ function renderOwnerScreenshots(item, options = {}) {
 }
 
 function renderMySubmissionItem(item) {
+  const kind = submissionKind(item);
   const status = submissionStatusLabel(item);
   const statusClass = submissionStatusClass(item);
   const title = escapeHtml(item.displayName || "Untitled");
   const cardImg = buildingCardImageUrl(item);
   const icon = cardImg
-    ? `<img class="submission-icon" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-icon submission-icon--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
-    : `<div class="submission-icon submission-icon--placeholder" aria-hidden="true"></div>`;
+    ? `<img class="submission-card-thumb" src="${escapeAttr(cardImg)}" alt="" onerror="this.outerHTML='<div class=\\'submission-card-thumb submission-card-thumb--placeholder\\' aria-hidden=\\'true\\'></div>';" />`
+    : `<div class="submission-card-thumb submission-card-thumb--placeholder" aria-hidden="true"></div>`;
   const goldBadge = goldCostHtml(item, "gold-cost--inline");
+  const dateLabel = formatRelativeDate(submissionDateValue(item));
+  const dateHtml = dateLabel ? `<span class="submission-card-date">${escapeHtml(dateLabel)}</span>` : "";
 
   let meta = "";
-  if (item.kind === "approved") {
-    meta = `<p class="meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(item.downloadCount))} · v${escapeHtml(item.version || "1")}${goldBadge ? ` · ${goldBadge}` : ""}</p>`;
+  if (kind === "approved") {
+    meta = `<p class="meta submission-card-meta">${escapeHtml(item.id)} · ${formatBytes(item.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(item.downloadCount))} · v${escapeHtml(item.version || "1")}${goldBadge ? ` · ${goldBadge}` : ""}</p>`;
+  } else if (kind === "rejected") {
+    const reason = String(item.reason || "").trim();
+    meta = `
+      <p class="meta submission-card-meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>
+      ${reason ? `<p class="submission-card-reason">${escapeHtml(reason)}</p>` : `<p class="meta">No rejection reason provided.</p>`}`;
   } else {
-    meta = `<p class="meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>`;
+    meta = `<p class="meta submission-card-meta">${escapeHtml(item.submissionId)}${item.proposedId ? ` · proposed id ${escapeHtml(item.proposedId)}` : ""}</p>`;
   }
 
-  let action = "";
-  if (item.kind === "pending") {
-    action = `<button type="button" class="secondary" onclick="event.stopPropagation(); withdrawMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Withdraw</button>`;
-  } else if (item.kind === "approved") {
-    action = `<button type="button" class="danger" onclick="event.stopPropagation(); removeMyBuilding(${jsString(item.id)}, ${jsString(item.displayName || "")})">Remove from marketplace</button>`;
-  } else if (item.kind === "rejected") {
-    action = `<button type="button" class="secondary" onclick="event.stopPropagation(); dismissMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Dismiss</button>`;
+  let actions = "";
+  if (kind === "pending") {
+    actions = `<button type="button" class="secondary" onclick="event.stopPropagation(); withdrawMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Withdraw</button>`;
+  } else if (kind === "approved") {
+    const editHref = `/edit.html?id=${encodeURIComponent(item.id)}&from=submissions`;
+    actions = `
+      <a class="secondary" href="${escapeAttr(editHref)}" onclick="event.stopPropagation()">Edit</a>
+      <button type="button" class="danger" onclick="event.stopPropagation(); removeMyBuilding(${jsString(item.id)}, ${jsString(item.displayName || "")})">Remove from marketplace</button>`;
+  } else if (kind === "rejected") {
+    actions = `<button type="button" class="secondary" onclick="event.stopPropagation(); dismissMySubmission(${jsString(item.submissionId)}, ${jsString(item.displayName || "")})">Dismiss</button>`;
   }
 
-  const isPublished = item.kind === "approved";
+  const isPublished = kind === "approved";
+  const editPath = isPublished
+    ? `/edit.html?id=${encodeURIComponent(item.id)}&from=submissions`
+    : "";
   const clickAttrs = isPublished
-    ? `role="link" tabindex="0" onclick="window.location.href='/edit.html?id=${encodeURIComponent(item.id)}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='/edit.html?id=${encodeURIComponent(item.id)}';}"`
+    ? `role="link" tabindex="0" onclick="window.location.href='${editPath}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location.href='${editPath}';}"`
     : "";
 
   return `
-    <div class="queue-item submission-item${isPublished ? " submission-item--clickable" : ""}" ${clickAttrs}>
+    <article class="submission-card${isPublished ? " submission-card--clickable" : ""}" ${clickAttrs}>
       ${icon}
-      <div class="submission-body">
-        <strong>${title}</strong>
-        <p class="meta"><span class="submission-status ${statusClass}">${escapeHtml(status)}</span>${isPublished ? ' · <span class="meta">Click to edit</span>' : ""}</p>
+      <div class="submission-card-body">
+        <div class="submission-card-header">
+          <h4 class="submission-card-title">${title}</h4>
+          <span class="submission-status submission-status-badge ${statusClass}">${escapeHtml(status)}</span>
+        </div>
+        ${dateHtml ? `<p class="meta submission-card-date-row">${dateHtml}</p>` : ""}
         ${meta}
-        ${item.kind === "pending" ? renderOwnerScreenshots(item, { compact: true }) : ""}
-        ${action}
+        ${kind === "pending" ? renderOwnerScreenshots(item, { compact: true }) : ""}
+        <div class="submission-card-actions" onclick="event.stopPropagation()">${actions}</div>
       </div>
-    </div>`;
+    </article>`;
 }
 
 async function reloadAfterScreenshotAction(reloadFn) {
@@ -1248,7 +1520,7 @@ async function loadAdminQueue() {
         <p class="meta">Proposed id: ${escapeHtml(s.proposedId)}</p>
         ${descriptionHtml}
         <div class="queue-actions">
-          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}">Edit</a>
+          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin">Edit</a>
           <button onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || '')})">Approve</button>
           <button class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
         </div>
@@ -1272,11 +1544,24 @@ async function approveSubmission(submissionId, proposedId) {
 }
 
 async function rejectSubmission(submissionId) {
-  await fetch(`/api/admin/reject/${encodeURIComponent(submissionId)}`, {
+  const reasonRaw = window.prompt("Reason for rejection (shown to the creator):");
+  if (reasonRaw === null) {
+    return;
+  }
+  const reason = String(reasonRaw).trim();
+  if (!reason) {
+    alert("Please enter a rejection reason.");
+    return;
+  }
+  const res = await fetch(`/api/admin/reject/${encodeURIComponent(submissionId)}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reason: "rejected" }),
+    body: JSON.stringify({ reason }),
   });
+  if (!res.ok) {
+    alert("Could not reject submission.");
+    return;
+  }
   loadAdminQueue();
 }
 
@@ -1521,6 +1806,7 @@ async function loadEditPage() {
   const params = new URLSearchParams(window.location.search);
   const buildingId = String(params.get("id") || "").trim();
   const submissionId = String(params.get("submissionId") || "").trim();
+  const fromParam = String(params.get("from") || "").trim().toLowerCase();
 
   const me = await fetch("/api/me").then((r) => r.json());
   if (!me.user) {
@@ -1582,7 +1868,12 @@ async function loadEditPage() {
         <input id="editTags" type="text" value="${escapeAttr((data.tags || []).join(", "))}" />
       </label>`
     : "";
-  const backHref = isAdmin && submissionId ? "/admin.html" : isAdmin ? "/admin.html" : "/submissions.html";
+  let backHref = "/submissions.html";
+  if (fromParam === "admin" || submissionId) {
+    backHref = "/admin.html";
+  } else if (fromParam === "submissions") {
+    backHref = "/submissions.html";
+  }
   const heroImg = buildingCardImageUrl(data) || data.iconUrl || "";
   const hero = heroImg
     ? `<div class="edit-hero"><img src="${escapeAttr(heroImg)}" alt="" /></div>`

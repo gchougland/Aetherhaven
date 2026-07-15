@@ -18,6 +18,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -288,20 +289,22 @@ public final class CommunityCatalogService {
 
     @Nonnull
     public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries() {
-        return buildGroupEntries(Collections.emptySet());
+        return buildGroupEntries(Collections.emptySet(), CommunityCatalogSort.UPVOTES);
     }
 
     @Nonnull
     public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(@Nonnull Set<String> activeStyleFilters) {
+        return buildGroupEntries(activeStyleFilters, CommunityCatalogSort.UPVOTES);
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull CommunityCatalogSort sort
+    ) {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
-        entries.sort((a, b) -> {
-            int byVotes = Integer.compare(b.getUpvoteCount(), a.getUpvoteCount());
-            if (byVotes != 0) {
-                return byVotes;
-            }
-            return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
-        });
+        entries.sort(comparatorFor(sort));
         for (CommunityManifestEntry entry : entries) {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
@@ -320,6 +323,23 @@ public final class CommunityCatalogService {
             );
         }
         return groups;
+    }
+
+    @Nonnull
+    private static Comparator<CommunityManifestEntry> comparatorFor(@Nonnull CommunityCatalogSort sort) {
+        Comparator<CommunityManifestEntry> byName =
+            Comparator.comparing(e -> e.getDisplayName().toLowerCase(Locale.ROOT));
+        return switch (sort) {
+            case DOWNLOADS -> Comparator.comparingInt(CommunityManifestEntry::getDownloadCount).reversed().thenComparing(byName);
+            case LATEST -> Comparator
+                .comparing(
+                    (CommunityManifestEntry e) -> e.getApprovedAt().isBlank() ? "" : e.getApprovedAt(),
+                    Comparator.reverseOrder()
+                )
+                .thenComparing(byName);
+            case NAME -> byName;
+            case UPVOTES -> Comparator.comparingInt(CommunityManifestEntry::getUpvoteCount).reversed().thenComparing(byName);
+        };
     }
 
     /** Distinct style ids present in the cached community manifest (for craft-bench filters). */

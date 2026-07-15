@@ -16,6 +16,7 @@ import com.hexvane.aetherhaven.plot.PlotCraftingPrefabPreviewClientMode;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockService;
 import com.hexvane.aetherhaven.community.CommunityCatalogService;
+import com.hexvane.aetherhaven.community.CommunityCatalogSort;
 import com.hexvane.aetherhaven.community.CommunityDownloadService;
 import com.hexvane.aetherhaven.community.CommunityManifestEntry;
 import com.hexvane.aetherhaven.community.CommunityModerationPreviewCache;
@@ -39,6 +40,8 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.ui.Anchor;
+import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
+import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -53,11 +56,13 @@ import com.hypixel.hytale.server.core.util.NotificationUtil;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -92,6 +97,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
     private boolean deferPreviewToSendUpdate;
     private int prefabPreviewSendSerial;
     private int marketplacePageIndex;
+    @Nonnull
+    private String searchQuery = "";
+    @Nonnull
+    private CommunityCatalogSort communitySort = CommunityCatalogSort.UPVOTES;
     private final AtomicBoolean marketplaceRefreshInFlight = new AtomicBoolean(false);
     private boolean clientCreativeSpoofed;
     @Nullable
@@ -147,8 +156,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             moderationTab
                 ? moderation.buildGroupEntries()
                 : communityTab
-                    ? communityCatalog.buildGroupEntries(activeStyleFilters)
+                    ? communityCatalog.buildGroupEntries(activeStyleFilters, communitySort)
                     : PlotCraftingCatalog.groupsForTab(catalog, activeTab, plugin.getClass().getClassLoader(), activeStyleFilters);
+        allGroups = filterGroupsBySearch(allGroups, communityCatalog, moderation, communityTab, moderationTab);
         int marketplacePageCount = 1;
         List<GroupEntry> groups = allGroups;
         if (marketplaceTab) {
@@ -189,6 +199,21 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplaceRefreshButton", EventData.of("Action", "RefreshMarketplace"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplacePagePrev", EventData.of("Action", "MarketplacePagePrev"), false);
         eventBuilder.addEventBinding(CustomUIEventBindingType.Activating, "#MarketplacePageNext", EventData.of("Action", "MarketplacePageNext"), false);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SearchInput",
+            EventData.of("@SearchQuery", "#SearchInput.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#CommunitySort",
+            EventData.of("@SortMode", "#CommunitySort.Value"),
+            false
+        );
+
+        commandBuilder.set("#SearchInput.Value", searchQuery);
+        bindCommunitySortDropdown(commandBuilder, communityTab);
 
         commandBuilder.clear(ROWS);
         List<String> pageIconIds = new ArrayList<>(groups.size());
@@ -574,6 +599,18 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
 
     @Override
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
+        if (data.searchQuery != null) {
+            searchQuery = data.searchQuery;
+            marketplacePageIndex = 0;
+            refresh(ref, store);
+            return;
+        }
+        if (data.sortMode != null) {
+            communitySort = CommunityCatalogSort.fromValue(data.sortMode);
+            marketplacePageIndex = 0;
+            refresh(ref, store);
+            return;
+        }
         if (data.action == null) {
             return;
         }
@@ -1501,6 +1538,76 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         }
     }
 
+    private void bindCommunitySortDropdown(@Nonnull UICommandBuilder commandBuilder, boolean communityTab) {
+        commandBuilder.set("#CommunitySort.Visible", communityTab);
+        if (!communityTab) {
+            return;
+        }
+        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        entries.add(
+            new DropdownEntryInfo(
+                LocalizableString.fromMessageId("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.sortUpvotes"),
+                CommunityCatalogSort.UPVOTES.value()
+            )
+        );
+        entries.add(
+            new DropdownEntryInfo(
+                LocalizableString.fromMessageId("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.sortDownloads"),
+                CommunityCatalogSort.DOWNLOADS.value()
+            )
+        );
+        entries.add(
+            new DropdownEntryInfo(
+                LocalizableString.fromMessageId("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.sortLatest"),
+                CommunityCatalogSort.LATEST.value()
+            )
+        );
+        entries.add(
+            new DropdownEntryInfo(
+                LocalizableString.fromMessageId("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.sortName"),
+                CommunityCatalogSort.NAME.value()
+            )
+        );
+        commandBuilder.set("#CommunitySort.Entries", entries);
+        commandBuilder.set("#CommunitySort.Value", communitySort.value());
+    }
+
+    @Nonnull
+    private List<GroupEntry> filterGroupsBySearch(
+        @Nonnull List<GroupEntry> groups,
+        @Nonnull CommunityCatalogService communityCatalog,
+        @Nonnull CommunityModerationService moderation,
+        boolean communityTab,
+        boolean moderationTab
+    ) {
+        if (searchQuery.isEmpty()) {
+            return groups;
+        }
+        String query = searchQuery.trim().toLowerCase(Locale.ROOT);
+        if (query.isEmpty()) {
+            return groups;
+        }
+        List<GroupEntry> filtered = new ArrayList<>(groups.size());
+        for (GroupEntry group : groups) {
+            if (group.displayName().toLowerCase(Locale.ROOT).contains(query)) {
+                filtered.add(group);
+                continue;
+            }
+            if (communityTab) {
+                CommunityManifestEntry entry = communityCatalog.findEntry(group.groupKey());
+                if (entry != null && entry.getCreatorName().toLowerCase(Locale.ROOT).contains(query)) {
+                    filtered.add(group);
+                }
+            } else if (moderationTab) {
+                CommunityPendingEntry entry = moderation.findEntry(group.groupKey());
+                if (entry != null && entry.getCreatorName().toLowerCase(Locale.ROOT).contains(query)) {
+                    filtered.add(group);
+                }
+            }
+        }
+        return filtered;
+    }
+
     private void bindStyleFilters(
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
@@ -1566,6 +1673,10 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
             .add()
             .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
+            .append(new KeyedCodec<>("@SearchQuery", Codec.STRING), (d, v) -> d.searchQuery = v, d -> d.searchQuery)
+            .add()
+            .append(new KeyedCodec<>("@SortMode", Codec.STRING), (d, v) -> d.sortMode = v, d -> d.sortMode)
+            .add()
             .build();
 
         @Nullable
@@ -1578,5 +1689,9 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         private String styleId;
         @Nullable
         private Boolean checked;
+        @Nullable
+        private String searchQuery;
+        @Nullable
+        private String sortMode;
     }
 }
