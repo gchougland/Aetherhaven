@@ -71,10 +71,18 @@ public final class PlotInstance {
     @SerializedName("prefabYaw")
     private String prefabYaw;
 
-    /** For residential plots: entity UUID of the villager assigned to this home (house management block). */
+    /**
+     * Legacy single home resident. Prefer {@link #homeResidentEntityUuids}; still read for migration when the list is
+     * empty.
+     */
     @Nullable
     @SerializedName("homeResidentEntityUuid")
     private String homeResidentEntityUuid;
+
+    /** Entity UUIDs of villagers assigned to this home (town records slots); index = slot. */
+    @Nullable
+    @SerializedName("homeResidentEntityUuids")
+    private ArrayList<String> homeResidentEntityUuids;
 
     /**
      * Legacy linear assembly: value was the next sequence index to place (equal to count of blocks already placed).
@@ -284,15 +292,158 @@ public final class PlotInstance {
         return x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ;
     }
 
+    /**
+     * Slot 0 resident (legacy convenience). Prefer {@link #getHomeResidentEntityUuids()} /
+     * {@link #getHomeResidentAt(int)}.
+     */
     @Nullable
     public UUID getHomeResidentEntityUuid() {
-        return homeResidentEntityUuid != null && !homeResidentEntityUuid.isBlank()
-            ? UUID.fromString(homeResidentEntityUuid.trim())
-            : null;
+        return getHomeResidentAt(0);
     }
 
+    /** Sets slot 0 only; prefer {@link #setHomeResidentAt(int, UUID)}. */
     public void setHomeResidentEntityUuid(@Nullable UUID uuid) {
-        this.homeResidentEntityUuid = uuid != null ? uuid.toString() : null;
+        setHomeResidentAt(0, uuid);
+    }
+
+    /** All assigned home residents in slot order (null/blank slots omitted from the returned list). */
+    @Nonnull
+    public List<UUID> getHomeResidentEntityUuids() {
+        ensureHomeResidentListMigrated();
+        if (homeResidentEntityUuids == null || homeResidentEntityUuids.isEmpty()) {
+            return List.of();
+        }
+        List<UUID> out = new ArrayList<>(homeResidentEntityUuids.size());
+        for (String raw : homeResidentEntityUuids) {
+            UUID u = parseUuidOrNull(raw);
+            if (u != null) {
+                out.add(u);
+            }
+        }
+        return Collections.unmodifiableList(out);
+    }
+
+    /** True when {@code entityUuid} is assigned to any home resident slot. */
+    public boolean hasHomeResident(@Nonnull UUID entityUuid) {
+        ensureHomeResidentListMigrated();
+        if (homeResidentEntityUuids == null) {
+            return false;
+        }
+        String want = entityUuid.toString();
+        for (String raw : homeResidentEntityUuids) {
+            if (raw != null && want.equalsIgnoreCase(raw.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nullable
+    public UUID getHomeResidentAt(int slot) {
+        if (slot < 0) {
+            return null;
+        }
+        ensureHomeResidentListMigrated();
+        if (homeResidentEntityUuids == null || slot >= homeResidentEntityUuids.size()) {
+            return null;
+        }
+        return parseUuidOrNull(homeResidentEntityUuids.get(slot));
+    }
+
+    /**
+     * Sets or clears the resident at {@code slot}. Grows the list with nulls as needed. Syncs legacy
+     * {@link #homeResidentEntityUuid} to slot 0.
+     */
+    public void setHomeResidentAt(int slot, @Nullable UUID uuid) {
+        if (slot < 0) {
+            return;
+        }
+        ensureHomeResidentListMigrated();
+        if (homeResidentEntityUuids == null) {
+            homeResidentEntityUuids = new ArrayList<>();
+        }
+        while (homeResidentEntityUuids.size() <= slot) {
+            homeResidentEntityUuids.add(null);
+        }
+        homeResidentEntityUuids.set(slot, uuid != null ? uuid.toString() : null);
+        trimTrailingEmptyHomeResidentSlots();
+        syncLegacyHomeResidentField();
+    }
+
+    /** Clears every home resident slot. */
+    public void clearHomeResidents() {
+        homeResidentEntityUuids = null;
+        homeResidentEntityUuid = null;
+    }
+
+    /** Removes {@code entityUuid} from any slot on this plot. */
+    public void clearHomeResidentUuid(@Nonnull UUID entityUuid) {
+        ensureHomeResidentListMigrated();
+        if (homeResidentEntityUuids == null) {
+            return;
+        }
+        String want = entityUuid.toString();
+        boolean changed = false;
+        for (int i = 0; i < homeResidentEntityUuids.size(); i++) {
+            String raw = homeResidentEntityUuids.get(i);
+            if (raw != null && want.equalsIgnoreCase(raw.trim())) {
+                homeResidentEntityUuids.set(i, null);
+                changed = true;
+            }
+        }
+        if (changed) {
+            trimTrailingEmptyHomeResidentSlots();
+            syncLegacyHomeResidentField();
+        }
+    }
+
+    private void ensureHomeResidentListMigrated() {
+        if (homeResidentEntityUuids != null && !homeResidentEntityUuids.isEmpty()) {
+            return;
+        }
+        if (homeResidentEntityUuid != null && !homeResidentEntityUuid.isBlank()) {
+            if (homeResidentEntityUuids == null) {
+                homeResidentEntityUuids = new ArrayList<>(1);
+            }
+            homeResidentEntityUuids.clear();
+            homeResidentEntityUuids.add(homeResidentEntityUuid.trim());
+        }
+    }
+
+    private void trimTrailingEmptyHomeResidentSlots() {
+        if (homeResidentEntityUuids == null) {
+            return;
+        }
+        while (!homeResidentEntityUuids.isEmpty()) {
+            String last = homeResidentEntityUuids.get(homeResidentEntityUuids.size() - 1);
+            if (last != null && !last.isBlank()) {
+                break;
+            }
+            homeResidentEntityUuids.remove(homeResidentEntityUuids.size() - 1);
+        }
+        if (homeResidentEntityUuids.isEmpty()) {
+            homeResidentEntityUuids = null;
+        }
+    }
+
+    private void syncLegacyHomeResidentField() {
+        UUID slot0 = null;
+        if (homeResidentEntityUuids != null && !homeResidentEntityUuids.isEmpty()) {
+            slot0 = parseUuidOrNull(homeResidentEntityUuids.get(0));
+        }
+        homeResidentEntityUuid = slot0 != null ? slot0.toString() : null;
+    }
+
+    @Nullable
+    private static UUID parseUuidOrNull(@Nullable String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(raw.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     /**

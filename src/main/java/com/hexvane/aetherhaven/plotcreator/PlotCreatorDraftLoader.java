@@ -24,6 +24,8 @@ public final class PlotCreatorDraftLoader {
         draft.setTreasuryGoldCoinCost(def.getTreasuryGoldCoinCost());
         draft.setSelfBuildGameDays(def.getSelfBuildGameDays());
         draft.setSelfBuildDaysInput(PlotCreatorService.formatSelfBuildDaysForField(def.getSelfBuildGameDays()));
+        draft.setMaxHomeResidents(def.getMaxHomeResidents());
+        draft.setMaxHomeResidentsInput(String.valueOf(def.getMaxHomeResidents()));
         draft.setAssemblyPrefabSectionsPerAxis(def.getAssemblyPrefabSectionsPerAxis());
         draft.setAssemblySectionsInput(
             def.getAssemblyPrefabSectionsPerAxis() > 1

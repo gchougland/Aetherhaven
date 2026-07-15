@@ -24,7 +24,7 @@ public final class PlotBuildingKindRequirements {
             case DECORATION -> List.of();
             case HOME -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 1)
+                new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, Math.max(1, draft.getMaxHomeResidents()))
             );
             case WORK -> workSubsteps(draft, plugin);
             case AMENITY -> List.of(

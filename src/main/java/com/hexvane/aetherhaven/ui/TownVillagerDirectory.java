@@ -193,11 +193,12 @@ public final class TownVillagerDirectory {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(plot.getConstructionId()))) {
                 continue;
             }
-            UUID home = plot.getHomeResidentEntityUuid();
-            if (home == null || byUuid.containsKey(home)) {
-                continue;
+            for (UUID home : plot.getHomeResidentEntityUuids()) {
+                if (byUuid.containsKey(home)) {
+                    continue;
+                }
+                addHousedEntityFallback(byUuid, town, store, plugin, catalog, home);
             }
-            addHousedEntityFallback(byUuid, town, store, plugin, catalog, home);
         }
         for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
             UUID guardUuid = guard.getEntityUuid();

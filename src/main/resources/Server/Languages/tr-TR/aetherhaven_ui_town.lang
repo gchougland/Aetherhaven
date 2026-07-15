@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Bu işçiyi gö
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Başka yerlerde barındırılan köylüleri gizle
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=Etkinleştirildiğinde, başka bir arsa üzerinde zaten evi olan köylüler listeden gizlenir.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Yerleşik seçin
+aetherhaven.ui.plotconstruction.houseResidentSlot=Sakin {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=İşçi seçin
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Ozanı seçin
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Bir sakin seçin

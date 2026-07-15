@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=この作業員
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=他の場所に避難している村人を隠してください
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=この機能を有効にすると、既に別の区画に家を持っている村人はリストから非表示になります。
 aetherhaven.ui.plotconstruction.chooseHouseResident=居住者を選択
+aetherhaven.ui.plotconstruction.houseResidentSlot=住人 {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=労働者を選択する
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=吟遊詩人を選ぶ
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=居住者を選択してください

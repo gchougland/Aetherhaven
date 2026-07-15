@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=使用上一步中的建築設置�
 aetherhaven.plotcreator.error.needIdentity=匯出預製件之前，請設定顯示名稱和建築 ID。
 
 aetherhaven.plotcreator.error.selfBuildDays=自建工期必須大於零天。
+aetherhaven.plotcreator.error.maxHomeResidents=最大居民數必須是 1 到 8 之間的整數。
 
 aetherhaven.plotcreator.error.assemblySections=每軸的組裝段數必須是 1 到 16 之間的整數（1 表示停用分段組裝）。
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=設定金庫黃金成本、自建天
 aetherhaven.plotcreator.step.CONFIGURE.detail=建造地塊時，城鎮金庫會支付金幣。 「自建天數」是指在沒有建築工人的情況下完成地塊建造所需的時間。 「節省空地」控制是否在建造時保留地塊空間以清除方塊。 「地塊代幣鎖定」要求玩家先在地塊製作台解鎖該地塊，然後才能製作代幣。 「組裝區域」將建造區域分割成 N×N×N 的網格（1 = 關閉）。
 
 aetherhaven.plotcreator.field.selfBuildDays=自建日（遊戲日）
+aetherhaven.plotcreator.field.maxHomeResidents=最大居民數 (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=節省預製件中的空餘空間
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=啟用此功能後，建築範圍內的空氣將被保存，並在建築組裝時清除這些方塊。停用此功能後，僅儲存實體方塊，並保留現有地形。編輯器中的空標記總是會清除方塊。

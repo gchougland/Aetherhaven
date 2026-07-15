@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleService;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
+import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -89,7 +90,11 @@ public final class VillagerAutonomyTravelKick {
                     if (autonomy == null) {
                         autonomy = VillagerAutonomyState.fresh(now);
                     }
-                    if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+                    boolean daytime = ShopSpotOpenService.isGameDay(store);
+                    if (!daytime) {
+                        autonomy.setFillingHunger(false);
+                    }
+                    if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
                         && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
                             ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
                         )) {
@@ -104,6 +109,8 @@ public final class VillagerAutonomyTravelKick {
                     VillagerScheduleTickState schedTick =
                         chunk.getComponent(i, VillagerScheduleTickState.getComponentType());
                     String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
+                    boolean filling =
+                        daytime && (autonomy.isFillingHunger() || PoiScoring.needsHungerBreak(needs, false, daytime));
                     PoiEntry pick =
                         PoiScoring.pickBest(
                             pois,
@@ -114,7 +121,8 @@ public final class VillagerAutonomyTravelKick {
                             npcZ,
                             scheduleSeg,
                             false,
-                            autonomy.isFillingHunger() || PoiScoring.needsHungerBreak(needs)
+                            filling,
+                            daytime
                         );
                     if (pick == null) {
                         return true;

@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exporte tudo dentro dos limites us
 aetherhaven.plotcreator.error.needIdentity=Defina um nome de exibição e um ID de construção antes de exportar o pré-fabricado.
 
 aetherhaven.plotcreator.error.selfBuildDays=Os dias de autoconstrução devem ser maiores que zero.
+aetherhaven.plotcreator.error.maxHomeResidents=O máximo de residentes deve ser um número inteiro de 1 a 8.
 
 aetherhaven.plotcreator.error.assemblySections=O número de seções de montagem por eixo deve ser um número inteiro de 1 a 16 (1 desativa a montagem seccionada).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=Defina o custo do ouro do tesouro, o
 aetherhaven.plotcreator.step.CONFIGURE.detail=O ouro é pago pelo tesouro da cidade quando o terreno é construído. Os dias de autoconstrução indicam quanto tempo leva para concluir o terreno sem a presença de funcionários. A opção "Salvar espaços vazios" controla se o espaço vazio na sua área de construção é usado para remover blocos durante a construção. A opção "Token de terreno bloqueado" exige que os jogadores desbloqueiem este terreno na bancada de criação de terrenos antes de poderem criar tokens. A opção "Seções de montagem" divide a construção em uma grade N×N×N (1 = desativado).
 
 aetherhaven.plotcreator.field.selfBuildDays=Dias de autoconstrução (dias de jogo)
+aetherhaven.plotcreator.field.maxHomeResidents=Residentes máx. (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=Economize espaços vazios em pré-fabricados
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=Quando ativado, o espaço vazio na sua área de construção é salvo e esses blocos são removidos quando o edifício é montado. Quando desativado, apenas os blocos sólidos são salvos e o terreno existente é mantido. Os marcadores de espaço vazio do editor sempre removem os blocos.

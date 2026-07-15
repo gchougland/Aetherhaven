@@ -138,10 +138,14 @@ public final class ResidentRegistryService {
             changed = true;
         }
         for (PlotInstance p : town.getPlotInstances()) {
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && h.equals(oldUuid)) {
-                p.setHomeResidentEntityUuid(newUuid);
-                changed = true;
+            if (!p.hasHomeResident(oldUuid)) {
+                continue;
+            }
+            for (int slot = 0; slot < 8; slot++) {
+                if (oldUuid.equals(p.getHomeResidentAt(slot))) {
+                    p.setHomeResidentAt(slot, newUuid);
+                    changed = true;
+                }
             }
         }
         String oldS = oldUuid.toString();
@@ -249,15 +253,13 @@ public final class ResidentRegistryService {
             if (plot.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            UUID home = plot.getHomeResidentEntityUuid();
-            if (home == null) {
-                continue;
+            for (UUID home : plot.getHomeResidentEntityUuids()) {
+                ResidentNpcRecord fromHome = recordFromHomeResident(store, town, home);
+                if (fromHome == null) {
+                    continue;
+                }
+                byRole.putIfAbsent(fromHome.getNpcRoleId().toLowerCase(Locale.ROOT), fromHome);
             }
-            ResidentNpcRecord fromHome = recordFromHomeResident(store, town, home);
-            if (fromHome == null) {
-                continue;
-            }
-            byRole.putIfAbsent(fromHome.getNpcRoleId().toLowerCase(Locale.ROOT), fromHome);
         }
         List<ResidentNpcRecord> out = new ArrayList<>(byRole.values());
         out.sort(
@@ -458,7 +460,7 @@ public final class ResidentRegistryService {
             return true;
         }
         for (PlotInstance plot : town.getPlotInstances()) {
-            if (uuid.equals(plot.getHomeResidentEntityUuid())) {
+            if (plot.hasHomeResident(uuid)) {
                 return true;
             }
         }

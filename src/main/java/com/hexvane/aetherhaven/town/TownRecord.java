@@ -785,9 +785,10 @@ public final class TownRecord {
             }
         }
         for (PlotInstance p : getPlotInstances()) {
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && !nil.equals(h)) {
-                out.add(h);
+            for (UUID h : p.getHomeResidentEntityUuids()) {
+                if (!nil.equals(h)) {
+                    out.add(h);
+                }
             }
         }
     }
@@ -1552,8 +1553,7 @@ public final class TownRecord {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && h.equals(npcEntityUuid)) {
+            if (p.hasHomeResident(npcEntityUuid)) {
                 return true;
             }
         }
@@ -1566,9 +1566,8 @@ public final class TownRecord {
             if (p.getPlotId().equals(exceptPlotId)) {
                 continue;
             }
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && h.equals(residentUuid)) {
-                p.setHomeResidentEntityUuid(null);
+            if (p.hasHomeResident(residentUuid)) {
+                p.clearHomeResidentUuid(residentUuid);
             }
         }
     }

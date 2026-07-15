@@ -298,8 +298,7 @@ public final class HouseResidentDirectory {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && h.equals(villagerUuid)) {
+            if (p.hasHomeResident(villagerUuid)) {
                 return true;
             }
         }

@@ -229,15 +229,15 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
             return;
         }
         for (var plot : town.getPlotInstances()) {
-            if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
-                plot.setHomeResidentEntityUuid(null);
+            if (plot.hasHomeResident(entityUuid)) {
+                plot.clearHomeResidentUuid(entityUuid);
             }
         }
     }
 
     private static boolean hasTownHouse(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
         for (var plot : town.getPlotInstances()) {
-            if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
+            if (plot.hasHomeResident(entityUuid)) {
                 return true;
             }
         }

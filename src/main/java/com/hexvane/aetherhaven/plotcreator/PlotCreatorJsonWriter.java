@@ -37,6 +37,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.getTreasuryGoldCoinCost() > 0L) {
             root.put("treasuryGoldCoinCost", draft.getTreasuryGoldCoinCost());
         }
+        if (PlotBuildingKindRequirements.effectiveKind(draft, null) == PlotBuildingKind.HOME) {
+            root.put("maxHomeResidents", draft.getMaxHomeResidents());
+        }
         if (draft.getAssemblyPrefabSectionsPerAxis() > 1) {
             root.put("assemblyPrefabSectionsPerAxis", draft.getAssemblyPrefabSectionsPerAxis());
         }

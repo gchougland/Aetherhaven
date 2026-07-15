@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleResolver;
 import com.hexvane.aetherhaven.schedule.VillagerScheduleTickState;
 import com.hexvane.aetherhaven.shopspot.NpcShopSpotBuyerService;
+import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPurchaseService;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
@@ -310,9 +311,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull AetherhavenPlugin plugin,
         @Nullable TownRecord townRecord
     ) {
+        boolean daytime = ShopSpotOpenService.isGameDay(store);
+        if (!daytime) {
+            autonomy.setFillingHunger(false);
+        }
         // Do not commute back to the schedule plot while seeking food; that was yanking villagers off
         // restaurant chairs before they could chain another meal.
-        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
             && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
                 ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
             )) {
@@ -331,7 +336,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         if (tryBeginNextHungerMeal(
-            ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc
+            ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc, daytime
         )) {
             return;
         }
@@ -343,9 +348,9 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         boolean townHasRestaurant =
             townRecord != null
                 && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
-        if (!PoiScoring.isHungerNotFull(needs)) {
+        if (!PoiScoring.isHungerNotFull(needs) || !daytime) {
             autonomy.setFillingHunger(false);
-        } else if (PoiScoring.needsHungerBreak(needs)) {
+        } else if (PoiScoring.needsHungerBreak(needs, false, daytime)) {
             autonomy.setFillingHunger(true);
         }
         PoiEntry pick =
@@ -358,7 +363,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 npcZ,
                 scheduleSeg,
                 townHasRestaurant,
-                autonomy.isFillingHunger()
+                autonomy.isFillingHunger(),
+                daytime
             );
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
@@ -370,7 +376,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return;
         }
-        if (PoiScoring.isEatPoi(pick) && PoiScoring.needsHungerBreak(needs, true)) {
+        if (PoiScoring.isEatPoi(pick) && PoiScoring.needsHungerBreak(needs, true, daytime)) {
             autonomy.setFillingHunger(true);
         }
         beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, pick);
@@ -378,6 +384,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
 
     /**
      * While a fill-hunger session is active (or hunger is below half), pick the next eat POI and travel immediately.
+     * Daytime only — nights are for sleep.
      */
     private static boolean tryBeginNextHungerMeal(
         @Nonnull Ref<EntityStore> ref,
@@ -393,13 +400,18 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         long now,
         @Nonnull AetherhavenPlugin plugin,
         @Nullable TownRecord townRecord,
-        @Nullable TransformComponent tc
+        @Nullable TransformComponent tc,
+        boolean daytime
     ) {
+        if (!daytime) {
+            autonomy.setFillingHunger(false);
+            return false;
+        }
         if (!PoiScoring.isHungerNotFull(needs)) {
             autonomy.setFillingHunger(false);
             return false;
         }
-        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())) {
+        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
             return false;
         }
         autonomy.setFillingHunger(true);
@@ -413,7 +425,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
         PoiEntry pick =
             PoiScoring.pickBest(
-                pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true
+                pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true, daytime
             );
         if (pick == null || !PoiScoring.isEatPoi(pick)) {
             autonomy.setNextDecisionEpochMs(now + 1500L);
@@ -643,6 +655,17 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
 
+        PoiEntry poiEarly = reg.get(poiId);
+        // Night: cancel hunger trips so they can sleep instead of arriving at the restaurant after dark.
+        if (!ShopSpotOpenService.isGameDay(store)
+            && poiEarly != null
+            && PoiScoring.isEatPoi(poiEarly)
+            && !poiEarly.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
+            autonomy.setFillingHunger(false);
+            failTravel(autonomy, now, "NIGHT", commandBuffer, ref, npc);
+            return;
+        }
+
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tc == null) {
             return;
@@ -658,7 +681,6 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         double dz = pos.z - leash.z;
         double horizSq = dx * dx + dz * dz;
 
-        PoiEntry poiEarly = reg.get(poiId);
         double maxArriveSq = ARRIVE_HORIZONTAL_SQ;
         boolean mountKind =
             poiEarly != null
@@ -956,10 +978,20 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
     ) {
         UUID poiId = autonomy.getTargetPoiUuid();
         PoiEntry poi = poiId != null ? reg.get(poiId) : null;
+        boolean daytime = ShopSpotOpenService.isGameDay(store);
         boolean hungerLeaveNonEat =
-            PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+            PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)
                 && (poi == null || !PoiScoring.isEatPoi(poi));
-        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat) {
+        // Finish an eat session promptly once night falls so they can get to bed.
+        boolean nightAbortEat =
+            !daytime
+                && poi != null
+                && PoiScoring.isEatPoi(poi)
+                && !poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST);
+        if (nightAbortEat) {
+            autonomy.setFillingHunger(false);
+        }
+        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat && !nightAbortEat) {
             if (isNpcBlockMounted(store, commandBuffer, ref)) {
                 // Keep Seek off and refresh Sit/Sleep so Idle transitions cannot leave a standing T-pose in the chair.
                 pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
@@ -970,7 +1002,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
-        if (poi != null && !hungerLeaveNonEat && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi)) {
+        if (poi != null && !hungerLeaveNonEat && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi, daytime)) {
             float dur =
                 PoiEffectTable.useDurationSeconds(
                     poi,
@@ -1005,12 +1037,12 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             }
         }
         boolean keepEating =
-            finishedEat && !hungerLeaveNonEat && PoiScoring.isHungerNotFull(needs);
+            daytime && finishedEat && !hungerLeaveNonEat && PoiScoring.isHungerNotFull(needs);
         if (keepEating) {
             autonomy.setFillingHunger(true);
-        } else if (finishedEat && !PoiScoring.isHungerNotFull(needs)) {
+        } else if (!daytime || (finishedEat && !PoiScoring.isHungerNotFull(needs))) {
             autonomy.setFillingHunger(false);
-        } else if (PoiScoring.needsHungerBreak(needs)) {
+        } else if (PoiScoring.needsHungerBreak(needs, false, daytime)) {
             autonomy.setFillingHunger(true);
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
@@ -1019,17 +1051,17 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setTravelStuckTicks(0);
         autonomy.clearTravelWaypoints();
         // After eating (or leaving for hunger), re-decide immediately so they can chain meals until full.
-        autonomy.setNextDecisionEpochMs(finishedEat || hungerLeaveNonEat || keepEating ? now : now + 2500L);
+        autonomy.setNextDecisionEpochMs(finishedEat || hungerLeaveNonEat || keepEating || nightAbortEat ? now : now + 2500L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
-        if (keepEating || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())) {
+        if (keepEating || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger(), daytime)) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (plugin != null) {
                 TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
                 List<PoiEntry> pois =
                     filterPoisForAutonomyScoring(townRecord, reg.listByTown(binding.getTownId()));
                 tryBeginNextHungerMeal(
-                    ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc
+                    ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc, daytime
                 );
             }
         }
@@ -1040,12 +1072,13 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nullable VillagerScheduleTickState schedTick,
         @Nonnull TownVillagerBinding binding,
         @Nonnull VillagerNeeds needs,
-        @Nonnull PoiEntry poi
+        @Nonnull PoiEntry poi,
+        boolean daytime
     ) {
         if (schedTick == null || !PoiScoring.isWorkScheduleSegment(schedTick.getLastAppliedScheduleSegment())) {
             return false;
         }
-        if (PoiScoring.needsBreakForSchedule(needs)) {
+        if (PoiScoring.needsBreakForSchedule(needs, daytime)) {
             return false;
         }
         UUID preferredPlot = binding.getPreferredPlotId();

@@ -118,6 +118,13 @@ public final class ConstructionDefinition {
     @SerializedName("touristDestination")
     private boolean touristDestination;
 
+    /**
+     * Max villagers assignable on a house plot (town records shelf slots). Used for {@code plot_house} gameplay
+     * constructions; omitted or {@code 0} means {@code 1}. Clamped to {@code 1..8}.
+     */
+    @SerializedName("maxHomeResidents")
+    private int maxHomeResidents = 1;
+
     /** Prefab-local position (same space as prefab `blocks[].x/y/z`) of the management block voxel to stamp after build. */
     @SerializedName("managementBlockLocalPos")
     @Nullable
@@ -362,6 +369,14 @@ public final class ConstructionDefinition {
 
     public double getSelfBuildGameDays() {
         return selfBuildGameDays > 0.0 ? selfBuildGameDays : 3.0;
+    }
+
+    /** House assignment slots; {@code 1} when unset. Clamped to {@code 1..8}. */
+    public int getMaxHomeResidents() {
+        if (maxHomeResidents <= 0) {
+            return 1;
+        }
+        return Math.min(8, maxHomeResidents);
     }
 
     @Nullable

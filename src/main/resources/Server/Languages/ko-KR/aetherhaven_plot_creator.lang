@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=이전 단계에서 설정한 건�
 aetherhaven.plotcreator.error.needIdentity=프리팹을 내보내기 전에 표시 이름과 건물 ID를 설정하세요.
 
 aetherhaven.plotcreator.error.selfBuildDays=자가 건축 일수는 0일보다 커야 합니다.
+aetherhaven.plotcreator.error.maxHomeResidents=최대 거주자는 1부터 8까지의 정수여야 합니다.
 
 aetherhaven.plotcreator.error.assemblySections=축별 조립 섹션 수는 1부터 16까지의 정수여야 합니다(1인 경우 섹션 조립이 비활성화됩니다).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=재무부 금 비용, 자가 건설 
 aetherhaven.plotcreator.step.CONFIGURE.detail=부지를 건설할 때 마을 금고에서 금이 지급됩니다. 자가 건설 일수는 건설 담당 직원 없이 부지를 완공하는 데 걸리는 시간입니다. 빈 공간 저장 기능은 건설 시 부지 내 빈 공간을 저장하여 블록을 제거할지 여부를 설정합니다. 부지 토큰 잠금은 플레이어가 토큰을 제작하기 전에 부지 제작대에서 해당 부지의 잠금을 해제해야 함을 의미합니다. 조립 구역은 건설 구역을 N×N×N 격자로 나눕니다(1 = 비활성화).
 
 aetherhaven.plotcreator.field.selfBuildDays=셀프 빌드 일수 (게임 일수)
+aetherhaven.plotcreator.field.maxHomeResidents=최대 거주자 (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=조립식 건물의 빈 공간을 저장하세요
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=이 기능을 켜면, 사용자의 발자국 내의 빈 공간이 저장되고 건물을 조립할 때 해당 블록이 제거됩니다. 이 기능을 끄면, 단단한 블록만 저장되고 기존 지형은 유지됩니다. 에디터에서 빈 공간을 표시하는 마커는 항상 블록을 제거합니다.

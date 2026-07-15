@@ -15,6 +15,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,15 +56,25 @@ public final class JournalPlotAssigneeFormatter {
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot
     ) {
-        UUID resident = plot.getHomeResidentEntityUuid();
-        if (resident == null) {
+        List<UUID> residents = plot.getHomeResidentEntityUuids();
+        if (residents.isEmpty()) {
             return Message.translation(TAIL + "plotHouseUnassigned");
         }
-        String name = resolveHouseResidentName(plugin, store, town, resident);
-        if (name == null || name.isBlank()) {
+        StringBuilder names = new StringBuilder();
+        for (UUID resident : residents) {
+            String name = resolveHouseResidentName(plugin, store, town, resident);
+            if (name == null || name.isBlank()) {
+                continue;
+            }
+            if (names.length() > 0) {
+                names.append(" · ");
+            }
+            names.append(name.trim());
+        }
+        if (names.length() == 0) {
             return Message.translation(TAIL + "plotHouseUnassigned");
         }
-        return Message.translation(TAIL + "plotHouseResident").param("name", Message.raw(name.trim()));
+        return Message.translation(TAIL + "plotHouseResident").param("name", Message.raw(names.toString()));
     }
 
     @Nonnull

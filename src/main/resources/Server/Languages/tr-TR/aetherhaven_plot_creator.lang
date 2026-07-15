@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Önceki adımda belirlediğiniz bi
 aetherhaven.plotcreator.error.needIdentity=Prefabrik dosyayı dışa aktarmadan önce bir görünen ad ve bina kimliği belirleyin.
 
 aetherhaven.plotcreator.error.selfBuildDays=Kendin inşa günlerinin sayısı sıfırdan büyük olmalıdır.
+aetherhaven.plotcreator.error.maxHomeResidents=Maksimum sakin sayısı 1 ile 8 arasında bir tam sayı olmalıdır.
 
 aetherhaven.plotcreator.error.assemblySections=Eksen başına montaj bölümlerinin sayısı 1 ile 16 arasında tam sayı olmalıdır (1, bölümlü montajı devre dışı bırakır).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=Hazine altın maliyetini, kendi kend
 aetherhaven.plotcreator.step.CONFIGURE.detail=Arsa inşa edildiğinde kasaba hazinesinden altın ödenir. Kendi kendine inşa günleri, arsanın inşaat personeli olmadan tamamlanması için geçen süreyi belirtir. Boş alanları kaydet, inşa edildiğinde blokları temizlemek için ayak izinizdeki havanın kaydedilip kaydedilmeyeceğini kontrol eder. Arsa jetonu kilitli, oyuncuların jeton üretmeden önce bu arsayı arsa üretim tezgahında kilidini açmasını gerektirir. Montaj bölümleri, yapıyı N×N×N'lik bir ızgaraya böler (1 = kapalı).
 
 aetherhaven.plotcreator.field.selfBuildDays=Kendin inşa günleri (oyun günleri)
+aetherhaven.plotcreator.field.maxHomeResidents=Maks. sakin (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=Prefabrik yapılarda boş alanlardan tasarruf edin.
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=Etkinleştirildiğinde, ayak izinizdeki hava kaydedilir ve bina monte edildiğinde bu bloklar temizlenir. Etkinleştirilmediğinde, yalnızca dolu bloklar kaydedilir ve mevcut arazi korunur. Editördeki boş işaretleyiciler her zaman blokları temizler.

@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=先安排另一
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=将村民藏匿在别处
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=启用此功能后，已在其他宅基地拥有房屋的村民将从列表中隐藏。
 aetherhaven.ui.plotconstruction.chooseHouseResident=选择居民
+aetherhaven.ui.plotconstruction.houseResidentSlot=居民 {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=工人
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=选择吟游诗人
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=选择一位居民

@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=이 작업자�
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=다른 곳에 거주하는 마을 사람들을 숨기세요
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=이 기능을 활성화하면 다른 주택 부지에 이미 집을 갖고 있는 마을 주민은 목록에서 숨겨집니다.
 aetherhaven.ui.plotconstruction.chooseHouseResident=거주자를 선택하세요
+aetherhaven.ui.plotconstruction.houseResidentSlot=거주자 {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=작업자를 선택하세요
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=음유시인을 선택하세요
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=거주자를 선택하세요

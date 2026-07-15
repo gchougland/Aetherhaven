@@ -129,11 +129,10 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
                 mergeVillagerNote(notes, r.getLastEntityUuid(), label);
             }
             for (PlotInstance pi : town.getPlotInstances()) {
-                UUID home = pi.getHomeResidentEntityUuid();
-                if (home != null) {
-                    String cid = pi.getConstructionId() != null && !pi.getConstructionId().isBlank()
-                        ? pi.getConstructionId()
-                        : "plot";
+                String cid = pi.getConstructionId() != null && !pi.getConstructionId().isBlank()
+                    ? pi.getConstructionId()
+                    : "plot";
+                for (UUID home : pi.getHomeResidentEntityUuids()) {
                     mergeVillagerNote(notes, home, "Home (" + cid + ")");
                 }
             }

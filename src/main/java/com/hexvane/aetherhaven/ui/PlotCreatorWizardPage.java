@@ -127,6 +127,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("Action", "Next")
                 .append("@GoldCost", "#GoldCostField.Value")
                 .append("@SelfBuildDays", "#SelfBuildDaysField.Value")
+                .append("@MaxHomeResidents", "#MaxHomeResidentsField.Value")
                 .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
@@ -218,6 +219,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#MaxHomeResidentsField",
+            EventData.of("@MaxHomeResidents", "#MaxHomeResidentsField.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#SaveEmptySpacesToggle",
             EventData.of("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value"),
             false
@@ -285,6 +292,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#GoldCostField.PlaceholderText", Message.translation(MSG + ".field.goldCost"));
         b.set("#SelfBuildDaysLabel.TextSpans", Message.translation(MSG + ".field.selfBuildDays"));
         b.set("#SelfBuildDaysField.PlaceholderText", Message.translation(MSG + ".field.selfBuildDays"));
+        b.set("#MaxHomeResidentsLabel.TextSpans", Message.translation(MSG + ".field.maxHomeResidents"));
+        b.set("#MaxHomeResidentsField.PlaceholderText", Message.translation(MSG + ".field.maxHomeResidents"));
         b.set("#SaveEmptySpacesLabel.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces"));
         b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
         b.set("#TouristDestinationLabel.TextSpans", Message.translation(MSG + ".field.touristDestination"));
@@ -336,6 +345,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#GoldCostField.Visible", false);
             b.set("#SelfBuildDaysLabel.Visible", false);
             b.set("#SelfBuildDaysField.Visible", false);
+            b.set("#MaxHomeResidentsLabel.Visible", false);
+            b.set("#MaxHomeResidentsField.Visible", false);
             b.set("#SaveEmptySpacesRow.Visible", false);
             b.set("#SaveEmptySpacesHint.Visible", false);
             b.set("#TouristDestinationRow.Visible", false);
@@ -358,6 +369,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         if (configurePanelOnly) {
+            boolean homeKind =
+                PlotBuildingKindRequirements.effectiveKind(session.getDraft(), AetherhavenPlugin.get())
+                    == PlotBuildingKind.HOME;
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
@@ -369,6 +383,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#GoldCostField.Visible", true);
             b.set("#SelfBuildDaysLabel.Visible", true);
             b.set("#SelfBuildDaysField.Visible", true);
+            b.set("#MaxHomeResidentsLabel.Visible", homeKind);
+            b.set("#MaxHomeResidentsField.Visible", homeKind);
             b.set("#SaveEmptySpacesRow.Visible", true);
             b.set("#SaveEmptySpacesHint.Visible", true);
             b.set("#TouristDestinationRow.Visible", true);
@@ -401,6 +417,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#GoldCostField.Visible", false);
         b.set("#SelfBuildDaysLabel.Visible", false);
         b.set("#SelfBuildDaysField.Visible", false);
+        b.set("#MaxHomeResidentsLabel.Visible", false);
+        b.set("#MaxHomeResidentsField.Visible", false);
         b.set("#SaveEmptySpacesRow.Visible", false);
         b.set("#SaveEmptySpacesHint.Visible", false);
         b.set("#TouristDestinationRow.Visible", false);
@@ -470,6 +488,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#SelfBuildDaysField.Value", d.getSelfBuildDaysInput());
         } else {
             b.set("#SelfBuildDaysField.Value", PlotCreatorService.formatSelfBuildDaysForField(d.getSelfBuildGameDays()));
+        }
+        if (d.getMaxHomeResidentsInput() != null) {
+            b.set("#MaxHomeResidentsField.Value", d.getMaxHomeResidentsInput());
+        } else {
+            b.set("#MaxHomeResidentsField.Value", String.valueOf(d.getMaxHomeResidents()));
         }
         b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
@@ -731,6 +754,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.selfBuildDays != null) {
             d.setSelfBuildDaysInput(data.selfBuildDays);
         }
+        if (data.maxHomeResidents != null) {
+            d.setMaxHomeResidentsInput(data.maxHomeResidents);
+        }
         if (data.saveEmptySpaces != null) {
             d.setSaveEmptySpaces(data.saveEmptySpaces);
         }
@@ -852,6 +878,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@SelfBuildDays", Codec.STRING), (d, v) -> d.selfBuildDays = v, d -> d.selfBuildDays)
             .add()
+            .append(
+                new KeyedCodec<>("@MaxHomeResidents", Codec.STRING),
+                (d, v) -> d.maxHomeResidents = v,
+                d -> d.maxHomeResidents
+            )
+            .add()
             .append(new KeyedCodec<>("@SaveEmptySpaces", Codec.BOOLEAN), (d, v) -> d.saveEmptySpaces = v, d -> d.saveEmptySpaces)
             .add()
             .append(new KeyedCodec<>("@TouristDestination", Codec.BOOLEAN), (d, v) -> d.touristDestination = v, d -> d.touristDestination)
@@ -896,6 +928,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String goldCost;
         @Nullable
         private String selfBuildDays;
+        @Nullable
+        private String maxHomeResidents;
         @Nullable
         private Boolean saveEmptySpaces;
         @Nullable

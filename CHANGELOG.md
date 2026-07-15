@@ -4,11 +4,14 @@
 
 ### Added
 
+- **Multi-resident houses** — House buildings can set `maxHomeResidents` (1–8) in their JSON. The plot creator staff configure step exposes that for home buildings and requires that many beds. The town records shelf shows one resident slot per capacity.
 - **Chef Pepper Ashford** — After you build the inn, Pepper can show up as a visitor. Talk with her to start her quest and get a restaurant plot token. Her page is in the town journal **Guide** under Villagers.
 - **Restaurant** — A new core building with a kitchen, seating, and shop counters. Finish the build and Pepper moves in as your town chef.
 - **Restaurant menu** — The restaurant restocks skewers, salads, and pies (plus a few produce sides) for villagers and tourists to buy.
 - **Better meals in town** — When hunger drops below half, townsfolk leave their schedule for eat spots and keep going until full (preferring the restaurant when it is open), then return to what they were doing.
 - **Restaurant upgrades** — On the restaurant’s town records page, spend gold and ingredients on **Full bellies** (townsfolk stay full longer) or **Quick service** (meals there finish faster and fill more hunger). Each path has three tiers you can buy independently.
+- **Chef quest board jobs** — After Pepper runs the restaurant, she can post food fetch jobs on the guild hall quest board. Ranks follow how hard the goods are to get: kebabs, then bread and cheese, berry and mushroom salads, then pies (with Caesar on high ranks). Crop jobs use farm unlock tiers. Turn them in by talking to her.
+- **More specialty board jobs** — Builder Rowan posts furniture fetch jobs (crude through tavern and lumberjack sets). Florist Ivy, Crystal Keeper Vaelith, and Pyrotechnic Grubble also post board jobs for flowers and planters, crystals and gems, and bombs and boom powder.
 - **Plot crafting search** — Search buildings by name on the plot crafting bench (all tabs). On Community and Moderation, search also matches creator names.
 - **Community marketplace sorting** — Sort community buildings by most upvotes, most downloads, latest, or name A–Z from a dropdown on the Community tab.
 - **Rancher production** — Poop and raw pork are available as default barn outputs. Withdrawing milk from barn storage consumes one empty wooden bucket per unit and gives a filled milk bucket.
@@ -16,6 +19,7 @@
 
 ### Changed
 
+- **Quest board gold rewards** — Fetch and hunt board jobs pay more useful gold by rank: about 18–28 for easy jobs, 50–80 for medium, and 130–260 for the hardest.
 - **Plot creator eating spots** — When making or editing a restaurant, the plot creator staff now asks you to mark dining seats, not only shop and tourist spots.
 - **Chairs and beds** — Villagers sit in any chair or bench and lie in any bed when they use that furniture, based on what the block is rather than a fixed list of spots.
 - **Eating spots** — Every eat spot uses the held food and eat animation. Dining chairs also have them sit while they eat.
@@ -31,7 +35,7 @@
 - **Barn milk production** — Milk now uses the real bucket state item id (`*Container_Bucket_State_Filled_Milk`), so production storage shows the correct name/icon and withdrawing gives a usable milk bucket.
 - **Guild hall quest board spot** — The basic guild hall now has a clear stop for the quest board. Custom guild halls without a board simply skip morning visits there instead of causing trouble.
 - **Dining chairs** — Same-tick villager picks no longer overbook one seat; arrival checks capacity again before sitting or mounting.
-- **Hunger meals** — Villagers start eating when hunger drops below 50%, keep eating (eat, leave, eat again) until full, prefer the restaurant, then resume their schedule.
+- **Hunger meals** — Villagers start eating when hunger drops below 50% during the day, keep eating until full (preferring the restaurant), then resume their schedule. They do not leave for food at night so they can sleep.
 
 ## [2.2.1] - 7/13/2026
 

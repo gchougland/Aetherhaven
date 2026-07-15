@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Признач�
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Приховувати жителів села, що проживають в інших місцях
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=Коли цю функцію ввімкнено, жителі села, які вже мають будинок на іншій прибудинковій ділянці, не відображаються у списку.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Виберіть мешканця
+aetherhaven.ui.plotconstruction.houseResidentSlot=Мешканець {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Виберіть працівника
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Виберіть барда
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Виберіть мешканця

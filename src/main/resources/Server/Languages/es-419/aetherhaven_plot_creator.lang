@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exporta todo lo que esté dentro d
 aetherhaven.plotcreator.error.needIdentity=Antes de exportar el prefab, establezca un nombre para mostrar y un ID de edificio.
 
 aetherhaven.plotcreator.error.selfBuildDays=Los días de autoconstrucción deben ser mayores que cero.
+aetherhaven.plotcreator.error.maxHomeResidents=Los residentes máximos deben ser un número entero del 1 al 8.
 
 aetherhaven.plotcreator.error.assemblySections=Las secciones de ensamblaje por eje deben ser un número entero del 1 al 16 (el 1 desactiva el ensamblaje seccionado).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=Establece el coste del oro del tesor
 aetherhaven.plotcreator.step.CONFIGURE.detail=El oro se paga con el tesoro de la ciudad cuando se construye la parcela. Los días de autoconstrucción indican cuánto tiempo tarda la parcela en terminarse sin personal de construcción. Guardar espacios vacíos controla si el aire en tu huella se guarda para despejar bloques al construir. La ficha de parcela bloqueada requiere que los jugadores desbloqueen esta parcela en el banco de creación de parcelas antes de poder crear fichas. Las secciones de ensamblaje dividen la construcción en una cuadrícula N×N×N (1 = desactivado).
 
 aetherhaven.plotcreator.field.selfBuildDays=Días de autoconstrucción (días de juego)
+aetherhaven.plotcreator.field.maxHomeResidents=Residentes máx. (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=Ahorra espacios vacíos en prefabricados
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=Cuando está activado, el espacio vacío en tu área de influencia se guarda y elimina esos bloques al ensamblar el edificio. Cuando está desactivado, solo se guardan los bloques sólidos y se conserva el terreno existente. Los marcadores de espacios vacíos del editor siempre eliminan los bloques.

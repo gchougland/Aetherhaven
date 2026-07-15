@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Перед уд
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Спрятать жителей деревни, размещенных в другом месте.
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=При включении этой функции жители деревни, которые уже имеют дом на другом участке, скрываются из списка.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Выберите резидента
+aetherhaven.ui.plotconstruction.houseResidentSlot=Житель {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Выберите работника
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Выберите барда
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Выберите жителя

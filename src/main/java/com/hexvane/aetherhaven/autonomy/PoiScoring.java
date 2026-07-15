@@ -53,17 +53,25 @@ public final class PoiScoring {
         return isWorkPoi(e);
     }
 
-    /** True when hunger is low enough to leave the current schedule for food (below 50%). */
+    /** True when hunger is low enough to leave the current schedule for food (below 50%), daytime only. */
     public static boolean needsHungerBreak(@Nonnull VillagerNeeds needs) {
-        return needsHungerBreak(needs, false);
+        return needsHungerBreak(needs, false, true);
     }
 
     /**
      * Hunger break: start when hunger is below 50%, or keep eating while a fill session is active until the meter
-     * is full.
+     * is full. Always false at night so villagers sleep instead of seeking meals.
      */
     public static boolean needsHungerBreak(@Nonnull VillagerNeeds needs, boolean fillingHungerSession) {
-        if (!isHungerNotFull(needs)) {
+        return needsHungerBreak(needs, fillingHungerSession, true);
+    }
+
+    public static boolean needsHungerBreak(
+        @Nonnull VillagerNeeds needs,
+        boolean fillingHungerSession,
+        boolean daytime
+    ) {
+        if (!daytime || !isHungerNotFull(needs)) {
             return false;
         }
         return fillingHungerSession || needs.getHunger() < HUNGER_EAT_START_THRESHOLD;
@@ -81,7 +89,12 @@ public final class PoiScoring {
 
     /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
     public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs) {
-        return needs.getHunger() < HUNGER_EAT_START_THRESHOLD
+        return needsBreakForSchedule(needs, true);
+    }
+
+    /** Night: ignore hunger for work breaks so they do not leave for food; energy/fun still apply. */
+    public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs, boolean daytime) {
+        return (daytime && needs.getHunger() < HUNGER_EAT_START_THRESHOLD)
             || needs.getEnergy() < NEEDS_BREAK_THRESHOLD
             || needs.getFun() < NEEDS_BREAK_THRESHOLD;
     }
@@ -255,11 +268,38 @@ public final class PoiScoring {
         boolean townHasRestaurant,
         boolean fillingHungerSession
     ) {
+        return pickBest(
+            candidates,
+            needs,
+            binding,
+            cellOccupancy,
+            npcX,
+            npcZ,
+            scheduleLocation,
+            townHasRestaurant,
+            fillingHungerSession,
+            true
+        );
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant,
+        boolean fillingHungerSession,
+        boolean daytime
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
         boolean atShop = isShopScheduleSegment(scheduleLocation);
-        boolean hungerBreak = needsHungerBreak(needs, fillingHungerSession);
-        boolean breakOverride = atWork && needsBreakForSchedule(needs);
+        boolean hungerBreak = needsHungerBreak(needs, fillingHungerSession, daytime);
+        boolean breakOverride = atWork && needsBreakForSchedule(needs, daytime);
         boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride && !hungerBreak;
         boolean shopBrowseShift = atShop && !hungerBreak;
         boolean allowTownWide =
@@ -270,6 +310,12 @@ public final class PoiScoring {
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
             if (e.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)) {
+                continue;
+            }
+            // Night is for sleep: do not leave for non-feast eat spots after dark.
+            if (!daytime
+                && isEatPoi(e)
+                && !e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
                 continue;
             }
             if (hungerBreak) {

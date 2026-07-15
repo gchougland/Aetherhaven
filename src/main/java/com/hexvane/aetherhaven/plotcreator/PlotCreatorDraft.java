@@ -73,6 +73,10 @@ public final class PlotCreatorDraft {
     private double selfBuildGameDays = 3.0;
     @Nullable
     private String selfBuildDaysInput;
+    /** House resident assignment slots (1–8); used when kind is HOME. */
+    private int maxHomeResidents = 1;
+    @Nullable
+    private String maxHomeResidentsInput;
     /** When true, natural air in the footprint is saved as empty cells in the prefab. */
     private boolean saveEmptySpaces;
     private int assemblyPrefabSectionsPerAxis = 1;
@@ -357,6 +361,30 @@ public final class PlotCreatorDraft {
 
     public void setSelfBuildDaysInput(@Nullable String selfBuildDaysInput) {
         this.selfBuildDaysInput = selfBuildDaysInput;
+    }
+
+    public int getMaxHomeResidents() {
+        if (maxHomeResidents <= 0) {
+            return 1;
+        }
+        return Math.min(8, maxHomeResidents);
+    }
+
+    public void setMaxHomeResidents(int maxHomeResidents) {
+        if (maxHomeResidents <= 0) {
+            this.maxHomeResidents = 1;
+        } else {
+            this.maxHomeResidents = Math.min(8, maxHomeResidents);
+        }
+    }
+
+    @Nullable
+    public String getMaxHomeResidentsInput() {
+        return maxHomeResidentsInput;
+    }
+
+    public void setMaxHomeResidentsInput(@Nullable String maxHomeResidentsInput) {
+        this.maxHomeResidentsInput = maxHomeResidentsInput;
     }
 
     public boolean isSaveEmptySpaces() {

@@ -12,6 +12,8 @@ VILLAGER_SLUGS: dict[str, str] = {
     "Aetherhaven_Innkeeper": "innkeeper",
     "Aetherhaven_Elder_Lyren": "elder",
     "Aetherhaven_Guild_Master": "guild_master",
+    "Aetherhaven_Builder": "builder",
+    "Aetherhaven_Chef": "chef",
 }
 
 

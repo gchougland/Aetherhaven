@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Atribua outro f
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Esconderam os aldeões alojados em outro lugar.
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=Quando ativada, essa opção oculta da lista os moradores que já possuem uma casa em outro terreno.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Escolha o residente
+aetherhaven.ui.plotconstruction.houseResidentSlot=Residente {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Escolha o trabalhador
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Escolha bardo
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Escolha um residente

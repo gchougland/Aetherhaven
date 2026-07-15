@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exportez tout ce qui se trouve à 
 aetherhaven.plotcreator.error.needIdentity=Définissez un nom d'affichage et un identifiant de bâtiment avant d'exporter le préfabriqué.
 
 aetherhaven.plotcreator.error.selfBuildDays=Le nombre de jours d'autoconstruction doit être supérieur à zéro.
+aetherhaven.plotcreator.error.maxHomeResidents=Le nombre max. de résidents doit être un entier de 1 à 8.
 
 aetherhaven.plotcreator.error.assemblySections=Le nombre de sections d'assemblage par axe doit être un nombre entier compris entre 1 et 16 (1 désactive l'assemblage sectionné).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=Définir le coût en or du trésor, 
 aetherhaven.plotcreator.step.CONFIGURE.detail=L'or est payé par la trésorerie de la ville lors de la construction du terrain. Le temps d'autoconstruction correspond à la durée nécessaire pour achever le terrain sans l'aide d'un employé du bâtiment. L'option « Sauvegarder les espaces vides » détermine si l'espace disponible sur votre terrain est conservé pour dégager les blocs lors de la construction. Le verrouillage du jeton de terrain exige que les joueurs déverrouillent ce terrain à l'établi de construction avant de pouvoir fabriquer des jetons. L'option « Sections d'assemblage » divise la construction en une grille N×N×N (1 = désactivé).
 
 aetherhaven.plotcreator.field.selfBuildDays=Journées d'autoconstruction (journées de jeu)
+aetherhaven.plotcreator.field.maxHomeResidents=Résidents max. (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=Sauvegarder les espaces vides dans le préfabriqué
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=Lorsque cette option est activée, l'air occupant votre empreinte est sauvegardé et les blocs correspondants sont libérés lors de l'assemblage du bâtiment. Lorsqu'elle est désactivée, seuls les blocs solides sont sauvegardés et le terrain existant est conservé. Les marqueurs vides de l'éditeur libèrent toujours les blocs.

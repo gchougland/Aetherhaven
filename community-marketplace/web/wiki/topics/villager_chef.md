@@ -37,3 +37,7 @@ On the restaurant's town records page you can spend gold and ingredients on two 
 ### What she sells
 
 The restaurant restocks **skewers**, **salads**, and **pies** (with a few produce sides) for villagers and tourists to buy from shop spots.
+
+### Quest board
+
+Once Pepper is a town resident, she can post **food fetch jobs** on the guild hall quest board. Bring the ingredients or cooked dishes she asks for and turn them in through her dialogue.

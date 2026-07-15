@@ -337,7 +337,7 @@ public final class NpcTelemetryCollector {
         }
 
         for (PlotInstance plot : town.getPlotInstances()) {
-            if (entityUuid.equals(plot.getHomeResidentEntityUuid())) {
+            if (plot.hasHomeResident(entityUuid)) {
                 hit.put("homePlotId", plot.getPlotId().toString());
                 any = true;
             }

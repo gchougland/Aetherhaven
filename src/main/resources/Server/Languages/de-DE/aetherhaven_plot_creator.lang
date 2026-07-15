@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=Exportiere alles innerhalb der Gre
 aetherhaven.plotcreator.error.needIdentity=Legen Sie vor dem Exportieren des Fertigbauteils einen Anzeigenamen und eine Gebäude-ID fest.
 
 aetherhaven.plotcreator.error.selfBuildDays=Die Anzahl der Tage für den Selbstbau muss größer als null sein.
+aetherhaven.plotcreator.error.maxHomeResidents=Max. Bewohner muss eine ganze Zahl von 1 bis 8 sein.
 
 aetherhaven.plotcreator.error.assemblySections=Die Anzahl der Baugruppenabschnitte pro Achse muss eine ganze Zahl von 1 bis 16 sein (1 deaktiviert die segmentierte Baugruppe).
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=Legen Sie die Goldkosten der Schatzk
 aetherhaven.plotcreator.step.CONFIGURE.detail=Gold wird aus der Stadtkasse bezahlt, sobald das Grundstück bebaut ist. Die Bauzeit (in Tagen) gibt an, wie lange der Bau ohne Bauarbeiter dauert. „Leere Felder sparen“ steuert, ob beim Bauen Platz zum Entfernen von Blöcken reserviert wird. Ist ein Grundstückstoken gesperrt, müssen Spieler dieses Grundstück an der Werkbank entsperren, bevor sie Token herstellen können. Die Montageabschnitte unterteilen den Bau in ein N×N×N-Raster (1 = deaktiviert).
 
 aetherhaven.plotcreator.field.selfBuildDays=Selbstbautage (Spieltage)
+aetherhaven.plotcreator.field.maxHomeResidents=Max. Bewohner (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=Platz sparen in Fertigbauweise
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=Wenn diese Option aktiviert ist, wird Luft im Bereich der Gebäudefläche eingespart und diese Blöcke werden beim Zusammenbau entfernt. Wenn sie deaktiviert ist, werden nur feste Blöcke eingespart und das bestehende Gelände bleibt erhalten. Leere Markierungen im Editor entfernen immer Blöcke.

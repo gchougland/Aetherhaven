@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Affectez un aut
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Cacher les villageois logés ailleurs
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=Lorsque cette option est activée, les villageois qui possèdent déjà une maison sur une autre parcelle sont masqués dans la liste.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Choisir un résident
+aetherhaven.ui.plotconstruction.houseResidentSlot=Résident {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Choisir un travailleur
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Choisissez barde
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Choisissez un résident

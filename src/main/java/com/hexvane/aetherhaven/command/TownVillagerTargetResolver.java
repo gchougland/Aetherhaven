@@ -90,8 +90,7 @@ public final class TownVillagerTargetResolver {
             }
         }
         for (PlotInstance p : town.getPlotInstances()) {
-            UUID h = p.getHomeResidentEntityUuid();
-            if (h != null && h.equals(npcUuid)) {
+            if (p.hasHomeResident(npcUuid)) {
                 return true;
             }
         }
@@ -130,10 +129,7 @@ public final class TownVillagerTargetResolver {
             }
         }
         for (PlotInstance pi : town.getPlotInstances()) {
-            UUID h = pi.getHomeResidentEntityUuid();
-            if (h != null) {
-                out.add(h);
-            }
+            out.addAll(pi.getHomeResidentEntityUuids());
         }
         return out;
     }

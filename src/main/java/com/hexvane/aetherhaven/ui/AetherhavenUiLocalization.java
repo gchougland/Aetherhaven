@@ -28,7 +28,6 @@ public final class AetherhavenUiLocalization {
     public static void applyPlotConstructionPage(@Nonnull UICommandBuilder b) {
         applyManagementTabTooltips(b);
         b.set("#MaterialsHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.materials"));
-        b.set("#ChooseHouseResidentButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseHouseResident"));
         b.set("#ChooseWorkplaceWorkerButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceWorker"));
         b.set("#ChooseWorkplaceBardButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseWorkplaceBard"));
         b.set("#HouseResidentPickerTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentPickerTitle"));

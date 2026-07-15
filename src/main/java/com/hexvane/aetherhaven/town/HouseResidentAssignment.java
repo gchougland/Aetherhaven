@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hypixel.hytale.component.Store;
@@ -12,13 +13,16 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** House management block: assign a villager to a residential plot. House quests finish when the player talks to that NPC. */
+/** House management block: assign villagers to residential plot slots. House quests finish when the player talks to that NPC. */
 public final class HouseResidentAssignment {
     private HouseResidentAssignment() {}
 
     /**
-     * Sets the plot's home resident (or clears when {@code residentUuid} is null). Updates town data.
+     * Sets slot 0's home resident (or clears when {@code residentUuid} is null). Updates town data.
+     *
+     * @deprecated Prefer {@link #assignResident(TownRecord, UUID, int, UUID, TownManager, World, Store, ConstructionCatalog)}.
      */
+    @Deprecated
     public static void assignResident(
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
@@ -26,16 +30,36 @@ public final class HouseResidentAssignment {
         @Nonnull TownManager tm,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
-        assignResident(town, plotId, residentUuid, tm, null, null, constructionCatalog);
+        assignResident(town, plotId, 0, residentUuid, tm, null, null, constructionCatalog);
     }
 
     /**
      * Same as {@link #assignResident(TownRecord, UUID, UUID, TownManager, ConstructionCatalog)}; when {@code world} and {@code store} are
      * non-null, updates the resident NPC registry for revival UI.
+     *
+     * @deprecated Prefer {@link #assignResident(TownRecord, UUID, int, UUID, TownManager, World, Store, ConstructionCatalog)}.
+     */
+    @Deprecated
+    public static void assignResident(
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        @Nullable UUID residentUuid,
+        @Nonnull TownManager tm,
+        @Nullable World world,
+        @Nullable Store<EntityStore> store,
+        @Nonnull ConstructionCatalog constructionCatalog
+    ) {
+        assignResident(town, plotId, 0, residentUuid, tm, world, store, constructionCatalog);
+    }
+
+    /**
+     * Sets the plot's home resident at {@code slotIndex} (or clears when {@code residentUuid} is null). Updates town data.
+     * When {@code world} and {@code store} are non-null, updates the resident NPC registry for revival UI.
      */
     public static void assignResident(
         @Nonnull TownRecord town,
         @Nonnull UUID plotId,
+        int slotIndex,
         @Nullable UUID residentUuid,
         @Nonnull TownManager tm,
         @Nullable World world,
@@ -50,10 +74,28 @@ public final class HouseResidentAssignment {
         if (pi.getState() != PlotInstanceState.COMPLETE) {
             return;
         }
+        if (slotIndex < 0) {
+            return;
+        }
+        ConstructionDefinition def = constructionCatalog.get(pi.getConstructionId());
+        int maxSlots = def != null ? def.getMaxHomeResidents() : 1;
+        if (slotIndex >= maxSlots) {
+            return;
+        }
         if (residentUuid != null) {
             town.clearHomeResidentFromOtherPlots(plotId, residentUuid);
+            // Same house: clear other slots so a villager occupies at most one bed.
+            for (int i = 0; i < maxSlots; i++) {
+                if (i == slotIndex) {
+                    continue;
+                }
+                UUID existing = pi.getHomeResidentAt(i);
+                if (residentUuid.equals(existing)) {
+                    pi.setHomeResidentAt(i, null);
+                }
+            }
         }
-        pi.setHomeResidentEntityUuid(residentUuid);
+        pi.setHomeResidentAt(slotIndex, residentUuid);
         tm.updateTown(town);
         if (residentUuid != null && world != null && store != null) {
             if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD)

@@ -484,12 +484,15 @@ public final class TownTaxService {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(plot.getConstructionId()))) {
                 continue;
             }
-            UUID home = plot.getHomeResidentEntityUuid();
-            if (home == null || countedEntityIds.contains(home)) {
-                continue;
+            for (UUID home : plot.getHomeResidentEntityUuids()) {
+                if (countedEntityIds.contains(home)) {
+                    continue;
+                }
+                added[0] +=
+                    appendOfflineTownsfolkTaxLine(
+                        town, store, plugin, catalog, countedEntityIds, outLines, simulatedResidentEntityCountOut, home, flatGold
+                    );
             }
-            added[0] +=
-                appendOfflineTownsfolkTaxLine(town, store, plugin, catalog, countedEntityIds, outLines, simulatedResidentEntityCountOut, home, flatGold);
         }
         for (HiredGuardRecord guard : town.getHiredGuardRecords()) {
             UUID guardUuid = guard.getEntityUuid();

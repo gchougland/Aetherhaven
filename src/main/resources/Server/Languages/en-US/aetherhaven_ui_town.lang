@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Assign another 
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Hide villagers housed elsewhere
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=When enabled, villagers who already have a home on another house plot are hidden from the list.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Choose resident
+aetherhaven.ui.plotconstruction.houseResidentSlot=Resident {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Choose worker
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Choose bard
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Choose a resident

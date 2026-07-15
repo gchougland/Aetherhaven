@@ -265,8 +265,7 @@ public final class VillagerScheduleResolver {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
-            UUID resident = p.getHomeResidentEntityUuid();
-            if (entityUuid.equals(resident)) {
+            if (p.hasHomeResident(entityUuid)) {
                 return "home: unexpected (plot exists)";
             }
         }
@@ -405,8 +404,7 @@ public final class VillagerScheduleResolver {
             if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
                 continue;
             }
-            UUID resident = p.getHomeResidentEntityUuid();
-            if (entityUuid.equals(resident)) {
+            if (p.hasHomeResident(entityUuid)) {
                 return new VillagerScheduleResolveOutcome(p.getPlotId(), null);
             }
         }

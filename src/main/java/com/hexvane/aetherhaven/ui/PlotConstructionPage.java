@@ -83,9 +83,11 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,6 +101,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private static final int MAX_MEMBER_ROWS = 24;
     private static final String HOUSE_RESIDENT_ROWS =
         "#HouseResidentPickerModal #HouseResidentListScroll #HouseResidentRows";
+    private static final String HOUSE_RESIDENT_SLOT_ROWS = "#HouseResidentSlotScroll #HouseResidentSlotRows";
     private static final String WORKPLACE_WORKER_ROWS =
         "#WorkplaceWorkerPickerModal #WorkplaceWorkerListScroll #WorkplaceWorkerRows";
 
@@ -133,12 +136,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     /** NPC role filter for the open workplace picker (guild hall bard vs guild master). */
     @Nullable
     private String workplacePickerFilterNpcRoleId;
-    /** Pending home resident selection before Set resident is pressed. */
-    @Nullable
-    private UUID pendingHouseResidentUuid;
-    /** Plot id {@link #pendingHouseResidentUuid} was initialized from. */
-    @Nullable
-    private UUID houseResidentStatePlotId;
+    /** Slot index for the open house resident picker. */
+    private int activeHouseResidentSlot;
     /** Persist house-resident hide toggle per player across page instances. */
     private static final Map<UUID, Boolean> HOUSE_RESIDENT_HIDE_ELSEWHERE_PREF = new LinkedHashMap<>();
 
@@ -724,12 +723,6 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
-            "#ChooseHouseResidentButton",
-            new EventData().append("Action", "OpenHouseResidentPicker"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.Activating,
             "#HouseResidentPickerCancelButton",
             new EventData().append("Action", "CloseHouseResidentPicker"),
             false
@@ -742,16 +735,21 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             unassignedLabel = "Unassigned";
         }
 
+        int maxSlots = 1;
+        PlotInstance plotInstance = null;
+        TownRecord town = null;
         List<HouseResidentDirectory.HouseResidentRow> assignable = List.of();
         if (plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
             World world = store.getExternalData().getWorld();
             TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugWork);
-            TownRecord town = townManager.getTown(townUuidMgmt);
+            town = townManager.getTown(townUuidMgmt);
             if (town != null) {
-                if (!plotUuidMgmt.equals(houseResidentStatePlotId)) {
-                    houseResidentStatePlotId = plotUuidMgmt;
-                    PlotInstance pi = town.findPlotById(plotUuidMgmt);
-                    pendingHouseResidentUuid = pi != null ? pi.getHomeResidentEntityUuid() : null;
+                plotInstance = town.findPlotById(plotUuidMgmt);
+                if (plotInstance != null) {
+                    ConstructionDefinition houseDef = plugWork.getConstructionCatalog().get(plotInstance.getConstructionId());
+                    if (houseDef != null) {
+                        maxSlots = houseDef.getMaxHomeResidents();
+                    }
                 }
                 assignable =
                     HouseResidentDirectory.listAssignable(
@@ -764,37 +762,68 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             }
         }
 
-        if (pendingHouseResidentUuid == null) {
-            commandBuilder.set("#HouseResidentSelection #PreviewPortrait.Visible", false);
-            commandBuilder.set("#HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
-            commandBuilder.set("#HouseResidentSelection #PreviewRoleLine.Visible", false);
-        } else {
-            HouseResidentDirectory.HouseResidentRow preview =
-                HouseResidentDirectory.findRow(assignable, pendingHouseResidentUuid);
-            if (preview == null && plotUuidMgmt != null && townUuidMgmt != null && plugWork != null) {
-                World worldPreview = store.getExternalData().getWorld();
-                TownManager tmPreview = AetherhavenWorldRegistries.getOrCreateTownManager(worldPreview, plugWork);
-                TownRecord townPreview = tmPreview.getTown(townUuidMgmt);
-                if (townPreview != null) {
-                    preview =
-                        HouseResidentDirectory.resolvePreviewRow(
-                            store,
-                            townPreview,
-                            plugWork,
-                            pendingHouseResidentUuid
-                        );
+        commandBuilder.clear(HOUSE_RESIDENT_SLOT_ROWS);
+        for (int slot = 0; slot < maxSlots; slot++) {
+            commandBuilder.append(HOUSE_RESIDENT_SLOT_ROWS, "Aetherhaven/HouseResidentSlotRow.ui");
+            String slotPath = HOUSE_RESIDENT_SLOT_ROWS + "[" + slot + "]";
+            commandBuilder.set(
+                slotPath + " #SlotLabel.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.houseResidentSlot")
+                    .param("n", String.valueOf(slot + 1))
+            );
+            commandBuilder.set(
+                slotPath + " #ChooseHouseResidentButton.TextSpans",
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.chooseHouseResident")
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                slotPath + " #ChooseHouseResidentButton",
+                new EventData().append("Action", "OpenHouseResidentPicker").append("HouseResidentSlot", String.valueOf(slot)),
+                false
+            );
+
+            UUID slotResident = plotInstance != null ? plotInstance.getHomeResidentAt(slot) : null;
+            if (slotResident == null) {
+                commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewPortrait.Visible", false);
+                commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
+                commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewRoleLine.Visible", false);
+            } else {
+                HouseResidentDirectory.HouseResidentRow preview =
+                    HouseResidentDirectory.findRow(assignable, slotResident);
+                if (preview == null && town != null && plugWork != null) {
+                    preview = HouseResidentDirectory.resolvePreviewRow(store, town, plugWork, slotResident);
+                }
+                if (preview != null) {
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewPortrait.Visible", true);
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewPortrait.AssetPath", preview.portraitPath());
+                    commandBuilder.set(
+                        slotPath + " #HouseResidentSelection #PreviewNameLine.TextSpans",
+                        Message.raw(preview.displayName())
+                    );
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewRoleLine.Visible", true);
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewRoleLine.TextSpans", preview.roleLine());
+                } else {
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewPortrait.Visible", false);
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
+                    commandBuilder.set(slotPath + " #HouseResidentSelection #PreviewRoleLine.Visible", false);
                 }
             }
-            if (preview != null) {
-                commandBuilder.set("#HouseResidentSelection #PreviewPortrait.Visible", true);
-                commandBuilder.set("#HouseResidentSelection #PreviewPortrait.AssetPath", preview.portraitPath());
-                commandBuilder.set("#HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(preview.displayName()));
-                commandBuilder.set("#HouseResidentSelection #PreviewRoleLine.Visible", true);
-                commandBuilder.set("#HouseResidentSelection #PreviewRoleLine.TextSpans", preview.roleLine());
-            } else {
-                commandBuilder.set("#HouseResidentSelection #PreviewPortrait.Visible", false);
-                commandBuilder.set("#HouseResidentSelection #PreviewNameLine.TextSpans", Message.raw(unassignedLabel));
-                commandBuilder.set("#HouseResidentSelection #PreviewRoleLine.Visible", false);
+        }
+
+        if (!houseResidentPickerOpen) {
+            return;
+        }
+
+        Set<UUID> occupiedOtherSlots = new HashSet<>();
+        if (plotInstance != null) {
+            for (int slot = 0; slot < maxSlots; slot++) {
+                if (slot == activeHouseResidentSlot) {
+                    continue;
+                }
+                UUID u = plotInstance.getHomeResidentAt(slot);
+                if (u != null) {
+                    occupiedOtherSlots.add(u);
+                }
             }
         }
 
@@ -814,6 +843,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         );
         rowIndex++;
         for (HouseResidentDirectory.HouseResidentRow row : assignable) {
+            if (occupiedOtherSlots.contains(row.entityUuid())) {
+                continue;
+            }
             commandBuilder.append(HOUSE_RESIDENT_ROWS, "Aetherhaven/HouseResidentAssignRow.ui");
             String rowPath = HOUSE_RESIDENT_ROWS + "[" + rowIndex + "]";
             AetherhavenUiLocalization.applyHouseResidentAssignRow(commandBuilder, rowPath);
@@ -848,6 +880,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (def == null || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(def.getGameplayConstructionId())) {
             return;
         }
+        if (activeHouseResidentSlot < 0 || activeHouseResidentSlot >= def.getMaxHomeResidents()) {
+            return;
+        }
         Store<ChunkStore> cs = blockRef.getStore();
         ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
         if (mb == null || mb.getPlotId().isBlank() || mb.getTownId().isBlank()) {
@@ -871,8 +906,16 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         if (town == null) {
             return;
         }
-        HouseResidentAssignment.assignResident(town, plotId, residentUuid, tm, world, store, plugin.getConstructionCatalog());
-        pendingHouseResidentUuid = residentUuid;
+        HouseResidentAssignment.assignResident(
+            town,
+            plotId,
+            activeHouseResidentSlot,
+            residentUuid,
+            tm,
+            world,
+            store,
+            plugin.getConstructionCatalog()
+        );
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(
@@ -925,6 +968,18 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("OpenHouseResidentPicker")) {
+            int slot = 0;
+            if (data.houseResidentSlot != null && !data.houseResidentSlot.isBlank()) {
+                try {
+                    slot = Integer.parseInt(data.houseResidentSlot.trim());
+                } catch (NumberFormatException e) {
+                    return;
+                }
+            }
+            if (slot < 0) {
+                return;
+            }
+            activeHouseResidentSlot = slot;
             houseResidentPickerOpen = true;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
@@ -2411,6 +2466,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             .add()
             .append(new KeyedCodec<>("HouseResidentUuid", Codec.STRING), (d, v) -> d.houseResidentUuid = v, d -> d.houseResidentUuid)
             .add()
+            .append(new KeyedCodec<>("HouseResidentSlot", Codec.STRING), (d, v) -> d.houseResidentSlot = v, d -> d.houseResidentSlot)
+            .add()
             .append(
                 new KeyedCodec<>("@HouseResidentHideElsewhere", Codec.BOOLEAN),
                 (d, v) -> d.houseResidentHideElsewhere = v,
@@ -2447,6 +2504,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         @Nullable
         private String inviteName;
         private String houseResidentUuid;
+        @Nullable
+        private String houseResidentSlot;
         @Nullable
         private Boolean houseResidentHideElsewhere;
         @Nullable

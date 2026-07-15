@@ -101,6 +101,19 @@ $C.@PageOverlay {
         PlaceholderText: "";
       }
 
+      Label #MaxHomeResidentsLabel {
+        Style: $C.@DefaultLabelStyle;
+        Text: "";
+        Anchor: (Bottom: 4);
+        Visible: false;
+      }
+
+      $C.@TextField #MaxHomeResidentsField {
+        Anchor: (Bottom: 10, Height: 36);
+        PlaceholderText: "";
+        Visible: false;
+      }
+
       Group #SaveEmptySpacesRow {
         LayoutMode: Left;
         Anchor: (Bottom: 10);

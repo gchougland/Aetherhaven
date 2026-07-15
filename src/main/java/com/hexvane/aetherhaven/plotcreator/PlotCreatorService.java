@@ -561,6 +561,23 @@ public final class PlotCreatorService {
                 return "assemblySections";
             }
         }
+
+        if (PlotBuildingKindRequirements.effectiveKind(draft, null) == PlotBuildingKind.HOME) {
+            String residentsRaw = draft.getMaxHomeResidentsInput();
+            if (residentsRaw == null || residentsRaw.isBlank()) {
+                draft.setMaxHomeResidents(Math.max(1, draft.getMaxHomeResidents()));
+            } else {
+                try {
+                    int residents = Integer.parseInt(residentsRaw.trim());
+                    if (residents < 1 || residents > 8) {
+                        return "maxHomeResidents";
+                    }
+                    draft.setMaxHomeResidents(residents);
+                } catch (NumberFormatException e) {
+                    return "maxHomeResidents";
+                }
+            }
+        }
         return null;
     }
 

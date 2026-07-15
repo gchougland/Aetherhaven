@@ -49,6 +49,7 @@ aetherhaven.ui.plotconstruction.workplaceCannotUnassignAlternate=Weisen Sie eine
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhere=Verstecken Sie die anderswo untergebrachten Dorfbewohner
 aetherhaven.ui.plotconstruction.hideHousedResidentsElsewhereTooltip=Wenn diese Option aktiviert ist, werden Dorfbewohner, die bereits ein Haus auf einem anderen Baugrundstück besitzen, aus der Liste ausgeblendet.
 aetherhaven.ui.plotconstruction.chooseHouseResident=Bewohner auswählen
+aetherhaven.ui.plotconstruction.houseResidentSlot=Bewohner {n}
 aetherhaven.ui.plotconstruction.chooseWorkplaceWorker=Wählen Sie einen Mitarbeiter aus
 aetherhaven.ui.plotconstruction.chooseWorkplaceBard=Wähle Barde
 aetherhaven.ui.plotconstruction.houseResidentPickerTitle=Wählen Sie einen Bewohner aus

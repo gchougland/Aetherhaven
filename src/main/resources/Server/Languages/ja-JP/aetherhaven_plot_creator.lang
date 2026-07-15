@@ -184,6 +184,7 @@ aetherhaven.plotcreator.step.PREFAB_SAVE.hint=前の手順で設定した建物�
 aetherhaven.plotcreator.error.needIdentity=プレハブをエクスポートする前に、表示名と建物IDを設定してください。
 
 aetherhaven.plotcreator.error.selfBuildDays=セルフビルド日数はゼロより大きくなければならない。
+aetherhaven.plotcreator.error.maxHomeResidents=最大住人は1から8の整数でなければなりません。
 
 aetherhaven.plotcreator.error.assemblySections=各軸の組立セクション数は、1～16の整数でなければなりません（1の場合はセクション組立が無効になります）。
 
@@ -203,6 +204,7 @@ aetherhaven.plotcreator.step.CONFIGURE.hint=国庫の金貨コスト、自己建
 aetherhaven.plotcreator.step.CONFIGURE.detail=区画が建設されると、町の財政から金が支払われます。セルフビルド日数は、建設スタッフなしで区画が完成するまでにかかる時間です。空きスペースの保存は、建設時にブロックをクリアするために、フットプリント内の空気を保存するかどうかを制御します。区画トークンロックは、トークンを作成する前に、プレイヤーが区画作成台でこの区画のロックを解除する必要があることを意味します。アセンブリセクションは、建設をN×N×Nグリッドに分割します（1 = オフ）。
 
 aetherhaven.plotcreator.field.selfBuildDays=セルフビルドデー（ゲームデー）
+aetherhaven.plotcreator.field.maxHomeResidents=最大住人 (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces=プレハブの空きスペースを節約
 aetherhaven.plotcreator.field.saveEmptySpaces.hint=オンにすると、フットプリント内の空気が保存され、建物の組み立て時にそれらのブロックがクリアされます。オフにすると、固体ブロックのみが保存され、既存の地形が保持されます。エディターの空のマーカーは常にブロックをクリアします。
