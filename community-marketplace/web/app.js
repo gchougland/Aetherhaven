@@ -363,7 +363,8 @@ let newestCarouselBound = false;
 let newestCarouselAutoplayId = null;
 let newestCarouselRealCount = 0;
 let newestCarouselNormalizing = false;
-let newestCarouselNormalizeTimer = null;
+let newestCarouselAnimating = false;
+let newestCarouselAnimTimer = null;
 
 function getNewestCatalogEntries(limit = NEWEST_CAROUSEL_LIMIT) {
   return allCatalogEntries
@@ -461,7 +462,12 @@ function updateNewestCarouselFocus() {
 
 function normalizeNewestCarouselLoop() {
   const track = document.getElementById("newestCarouselTrack");
-  if (!track || newestCarouselRealCount < 2 || newestCarouselNormalizing) {
+  if (
+    !track ||
+    newestCarouselRealCount < 2 ||
+    newestCarouselNormalizing ||
+    newestCarouselAnimating
+  ) {
     return;
   }
   const setWidth = getNewestCarouselSetWidth(track);
@@ -485,14 +491,13 @@ function normalizeNewestCarouselLoop() {
   updateNewestCarouselFocus();
 }
 
-function scheduleNewestCarouselNormalize() {
-  if (newestCarouselNormalizeTimer != null) {
-    clearTimeout(newestCarouselNormalizeTimer);
+function finishNewestCarouselAnimation() {
+  newestCarouselAnimating = false;
+  if (newestCarouselAnimTimer != null) {
+    clearTimeout(newestCarouselAnimTimer);
+    newestCarouselAnimTimer = null;
   }
-  newestCarouselNormalizeTimer = setTimeout(() => {
-    newestCarouselNormalizeTimer = null;
-    normalizeNewestCarouselLoop();
-  }, 80);
+  normalizeNewestCarouselLoop();
 }
 
 function scrollNewestCarouselToIndex(index, behavior = "smooth") {
@@ -506,11 +511,19 @@ function scrollNewestCarouselToIndex(index, behavior = "smooth") {
     return;
   }
   const left = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+  if (behavior === "smooth") {
+    newestCarouselAnimating = true;
+    if (newestCarouselAnimTimer != null) {
+      clearTimeout(newestCarouselAnimTimer);
+    }
+    // Fallback when scrollend is unavailable; longer than the smooth transition.
+    newestCarouselAnimTimer = setTimeout(finishNewestCarouselAnimation, 500);
+  } else {
+    newestCarouselAnimating = false;
+  }
   track.scrollTo({ left: Math.max(0, left), behavior });
   window.requestAnimationFrame(updateNewestCarouselFocus);
-  if (behavior === "smooth") {
-    scheduleNewestCarouselNormalize();
-  } else {
+  if (behavior !== "smooth") {
     normalizeNewestCarouselLoop();
   }
 }
@@ -534,7 +547,8 @@ function scrollNewestCarousel(direction) {
     return;
   }
 
-  normalizeNewestCarouselLoop();
+  // Resolve the focused card before normalizing so a boundary snap does not
+  // steal the current index (this was breaking the left arrow).
   let activeIndex = cards.findIndex((card) => card.classList.contains("is-active"));
   if (activeIndex < 0) {
     activeIndex = newestCarouselRealCount;
@@ -557,7 +571,7 @@ function startNewestCarouselAutoplay() {
     return;
   }
   newestCarouselAutoplayId = setInterval(() => {
-    if (document.hidden) {
+    if (document.hidden || newestCarouselAnimating) {
       return;
     }
     scrollNewestCarousel(1);
@@ -592,14 +606,14 @@ function setupNewestCarouselControls() {
         return;
       }
       window.requestAnimationFrame(updateNewestCarouselFocus);
-      scheduleNewestCarouselNormalize();
     },
     { passive: true }
   );
   track.addEventListener("scrollend", () => {
-    normalizeNewestCarouselLoop();
+    finishNewestCarouselAnimation();
   });
   window.addEventListener("resize", () => {
+    newestCarouselAnimating = false;
     normalizeNewestCarouselLoop();
     updateNewestCarouselFocus();
   });
@@ -638,6 +652,7 @@ function renderNewestCarousel() {
   }
   section.hidden = false;
   newestCarouselRealCount = newest.length;
+  newestCarouselAnimating = false;
   track.innerHTML = buildNewestCarouselHtml(newest);
   setupNewestCarouselControls();
   window.requestAnimationFrame(() => {
