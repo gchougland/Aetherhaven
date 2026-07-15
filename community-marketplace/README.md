@@ -82,10 +82,11 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | `POST /api/buildings/:id/upvote` | Toggle upvote (Hytale OAuth session required; rate limited) |
 | `GET /api/my-buildings/:id` | Owner edit payload for a published build (name, description, gold, materials, screenshots) |
 | `PATCH /api/my-buildings/:id` | Owner update of published build metadata (applies immediately) |
-| `POST /api/my-submissions/:id/screenshots` | Upload screenshot for own pending submission (JPEG/PNG/WebP, max 5 MB, up to 6 per build) |
+| `POST /api/my-submissions/:id/screenshots` | Upload screenshot for own pending submission (JPEG/PNG/WebP input, max 5 MB; stored as resized WebP full + card, up to 6 per build) |
 | `POST /api/my-buildings/:id/screenshots` | Upload screenshot for own published build |
 | `DELETE /api/my-screenshots/:id` | Remove own screenshot |
-| `GET /api/buildings/:id/screenshots` | List approved screenshots for a published build |
+| `GET /api/buildings/:id/screenshots` | List approved screenshots for a published build (`url` full, `cardUrl` with `?variant=card`) |
+| `GET /api/buildings/:id/screenshots/:screenshotId` | Serve screenshot image (`?variant=card` for card size; falls back to full if missing) |
 | `GET /api/admin/buildings/:id` | Admin edit payload for any published build |
 | `PATCH /api/admin/buildings/:id` | Admin update of published build (includes styleId/tags) |
 | `GET /api/admin/submissions/:id` | Admin edit payload for a pending submission |
@@ -96,6 +97,6 @@ See [docs/CommunityMarketplaceOAuthSetup.md](../docs/CommunityMarketplaceOAuthSe
 | `POST /api/admin/buildings/:id/cover` | Admin set/clear marketplace card cover |
 | `GET /api/admin/screenshots/pending` | Admin screenshot review queue |
 
-Catalog entries include `treasuryGoldCoinCost` when the building has a gold cost, and `requiredMods` (`[{ id, name }]`) when the prefab uses blocks/items from other mods. Entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators edit published builds from **My Submissions**; admins can edit any pending or published submission from the admin page. Owner screenshots require admin approval before appearing in the public gallery; admin uploads are approved immediately. In-game, buildings with missing required mods are hidden from the Community tab.
+Catalog entries include `treasuryGoldCoinCost` when the building has a gold cost, and `requiredMods` (`[{ id, name }]`) when the prefab uses blocks/items from other mods. Entries are sorted by `upvoteCount` (descending), then display name. Signed-in users can upvote published buildings on the website; creators cannot upvote their own builds. Download counts increment when a player installs a building from the in-game Community tab (not on preview or file GETs alone). Creators edit published builds from **My Submissions**; admins can edit any pending or published submission from the admin page. Owner screenshots require admin approval before appearing in the public gallery; admin uploads are approved immediately. Uploaded screenshots are resized and stored as WebP (full max edge 1920px, card max edge 800px); marketplace covers and thumbnails use `?variant=card`. In-game, buildings with missing required mods are hidden from the Community tab.
 
 Approve/reject via admin website (Hytale OAuth) or optional `POST /api/v1/submissions/:id/approve` with `API_KEY`.

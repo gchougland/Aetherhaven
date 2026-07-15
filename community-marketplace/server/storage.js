@@ -100,6 +100,7 @@ export function createStorage(dataDir) {
       dir,
       meta: path.join(dir, "meta.json"),
       image: path.join(dir, `image.${ext}`),
+      card: path.join(dir, "card.webp"),
     };
   }
 
@@ -117,12 +118,19 @@ export function createStorage(dataDir) {
     fs.writeFileSync(path.join(dir, "meta.json"), JSON.stringify(meta, null, 2));
   }
 
-  function resolveScreenshotImagePath(meta) {
+  /**
+   * @param {{ screenshotId?: string, ext?: string }} meta
+   * @param {"full"|"card"} [variant]
+   */
+  function resolveScreenshotImagePath(meta, variant = "full") {
     if (!meta?.screenshotId || !meta?.ext) {
       return null;
     }
-    const file = screenshotPaths(meta.screenshotId, meta.ext).image;
-    return fs.existsSync(file) ? file : null;
+    const paths = screenshotPaths(meta.screenshotId, meta.ext);
+    if (variant === "card" && fs.existsSync(paths.card)) {
+      return paths.card;
+    }
+    return fs.existsSync(paths.image) ? paths.image : null;
   }
 
   function listAllScreenshotMetas() {

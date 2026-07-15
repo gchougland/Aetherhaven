@@ -896,8 +896,9 @@ function renderOwnerScreenshots(item, options = {}) {
   const thumbs = shots.length
     ? shots
         .map((shot, index) => {
-          const img = shot.url
-            ? `<img src="${escapeAttr(shot.url)}" alt="" ${index === 0 && !compact ? `id="editGalleryMainPreview"` : ""} />`
+          const thumbSrc = shot.cardUrl || shot.url;
+          const img = thumbSrc
+            ? `<img src="${escapeAttr(thumbSrc)}" alt="" ${index === 0 && !compact ? `id="editGalleryMainPreview"` : ""} />`
             : `<div class="screenshot-thumb-placeholder" aria-hidden="true"></div>`;
           const isCover = ownerKind === "approved" && shot.status === "approved" && shot.screenshotId === coverId;
           const coverBtn =
@@ -1154,10 +1155,12 @@ async function loadAdminScreenshotQueue() {
     el.innerHTML = items
       .map((s) => {
         const ownerKindLabel = s.ownerKind === "approved" ? "Published build" : "Pending submission";
+        const fullUrl = s.imageUrl || "";
+        const previewUrl = s.cardUrl || fullUrl;
         return `
     <div class="queue-item screenshot-queue-item">
-      <a class="screenshot-queue-preview" href="${escapeAttr(s.imageUrl)}" target="_blank" rel="noopener">
-        <img src="${escapeAttr(s.imageUrl)}" alt="Screenshot preview" />
+      <a class="screenshot-queue-preview" href="${escapeAttr(fullUrl)}" target="_blank" rel="noopener">
+        <img src="${escapeAttr(previewUrl)}" alt="Screenshot preview" />
       </a>
       <div class="submission-body">
         <strong>${escapeHtml(s.displayName || "Untitled")}</strong>
@@ -1418,7 +1421,7 @@ async function openBuildingDetail(buildingId) {
             aria-label="Screenshot ${index + 1}"
             onclick="selectBuildingGalleryImage(this, '${escapeAttr(shot.url)}')"
           >
-            <img src="${escapeAttr(shot.url)}" alt="" />
+            <img src="${escapeAttr(shot.cardUrl || shot.url)}" alt="" />
           </button>`
           )
           .join("")}

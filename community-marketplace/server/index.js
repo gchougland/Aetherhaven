@@ -33,6 +33,7 @@ import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
 import { createDownloads } from "./downloads.js";
 import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
+import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);
@@ -429,7 +430,10 @@ function resolveCardImage(buildingId, coverScreenshotId) {
   return {
     // In-game craft bench always uses the token icon; cover is website-only.
     iconUrl,
-    coverImageUrl: `/api/buildings/${encodeURIComponent(buildingId)}/screenshots/${encodeURIComponent(coverId)}`,
+    coverImageUrl: withScreenshotVariant(
+      `/api/buildings/${encodeURIComponent(buildingId)}/screenshots/${encodeURIComponent(coverId)}`,
+      "card"
+    ),
     coverScreenshotId: coverId,
     usesCoverImage: true,
   };
@@ -741,8 +745,32 @@ function enrichOwnerScreenshots(ownerKind, ownerId, forOwner) {
       mimeType: meta.mimeType,
       uploadedAt: meta.uploadedAt,
       url,
+      cardUrl: url ? withScreenshotVariant(url, "card") : null,
     };
   });
+}
+
+/**
+ * @param {string} url
+ * @param {"full"|"card"} variant
+ */
+function withScreenshotVariant(url, variant) {
+  if (!url || variant !== "card") {
+    return url;
+  }
+  return `${url}${url.includes("?") ? "&" : "?"}variant=card`;
+}
+
+/**
+ * @param {import("express").Request} req
+ * @returns {"full"|"card"}
+ */
+function parseScreenshotVariant(req) {
+  return String(req.query?.variant || "")
+    .trim()
+    .toLowerCase() === "card"
+    ? "card"
+    : "full";
 }
 
 /**
@@ -1486,7 +1514,7 @@ function multerScreenshotError(err, res) {
  * @param {{ profileUuid: string, profileUsername: string }} webUser
  * @param {{ autoApprove?: boolean, uploadedByAdmin?: boolean }} [options]
  */
-function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, options = {}) {
+async function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, options = {}) {
   if (!file) {
     return { status: 400, body: { error: "screenshot_required", message: "Choose an image file to upload." } };
   }
@@ -1499,8 +1527,7 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, optio
       },
     };
   }
-  const ext = screenshotExtForMime(file.mimetype);
-  if (!ext) {
+  if (!screenshotExtForMime(file.mimetype)) {
     return {
       status: 400,
       body: {
@@ -1533,10 +1560,26 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, optio
     };
   }
 
+  let processed;
+  try {
+    processed = await processScreenshot(file.buffer);
+  } catch (err) {
+    if (err instanceof ScreenshotProcessingError) {
+      return { status: 400, body: { error: err.code, message: err.message } };
+    }
+    throw err;
+  }
+
   const screenshotId = crypto.randomUUID();
-  const paths = storage.screenshotPaths(screenshotId, ext);
+  const paths = storage.screenshotPaths(screenshotId, processed.ext);
   fs.mkdirSync(paths.dir, { recursive: true });
-  fs.writeFileSync(paths.image, file.buffer);
+  try {
+    fs.writeFileSync(paths.image, processed.fullBuffer);
+    fs.writeFileSync(paths.card, processed.cardBuffer);
+  } catch (err) {
+    storage.deleteScreenshot(screenshotId);
+    throw err;
+  }
   const autoApprove = Boolean(options.autoApprove);
   const meta = {
     screenshotId,
@@ -1546,9 +1589,10 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, optio
     creatorName: ownerMeta.creatorName || webUser.profileUsername || "Unknown",
     status: autoApprove ? "approved" : "pending",
     uploadedAt: new Date().toISOString(),
-    mimeType: file.mimetype.toLowerCase(),
-    ext,
-    bytes: file.size,
+    mimeType: processed.mimeType,
+    ext: processed.ext,
+    bytes: processed.fullBuffer.length,
+    cardBytes: processed.cardBuffer.length,
   };
   if (autoApprove) {
     meta.approvedAt = new Date().toISOString();
@@ -1556,7 +1600,12 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, optio
   if (options.uploadedByAdmin) {
     meta.uploadedByAdmin = true;
   }
-  storage.writeScreenshotMeta(meta);
+  try {
+    storage.writeScreenshotMeta(meta);
+  } catch (err) {
+    storage.deleteScreenshot(screenshotId);
+    throw err;
+  }
   let url = `/api/my-screenshots/${encodeURIComponent(screenshotId)}/image`;
   if (autoApprove && ownerKind === "approved") {
     url = `/api/buildings/${encodeURIComponent(ownerId)}/screenshots/${encodeURIComponent(screenshotId)}`;
@@ -1568,13 +1617,14 @@ function saveOwnerScreenshot(ownerKind, ownerId, ownerMeta, file, webUser, optio
     body: {
       screenshotId,
       status: meta.status,
-      bytes: file.size,
+      bytes: meta.bytes,
       url,
+      cardUrl: withScreenshotVariant(url, "card"),
     },
   };
 }
 
-function uploadPendingSubmissionScreenshot(submissionId, file, webUser, options = {}) {
+async function uploadPendingSubmissionScreenshot(submissionId, file, webUser, options = {}) {
   const meta = storage.loadSubmissionMeta(submissionId, "pending");
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
@@ -1588,7 +1638,7 @@ function uploadPendingSubmissionScreenshot(submissionId, file, webUser, options 
   });
 }
 
-function uploadApprovedBuildingScreenshot(buildingId, file, webUser, options = {}) {
+async function uploadApprovedBuildingScreenshot(buildingId, file, webUser, options = {}) {
   const id = normalizeCommunityId(buildingId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
@@ -1662,16 +1712,30 @@ function enrichPendingScreenshotForAdmin(meta) {
     displayName,
     ownerLabel,
     imageUrl: `/api/admin/screenshots/${encodeURIComponent(meta.screenshotId)}/image`,
+    cardUrl: withScreenshotVariant(
+      `/api/admin/screenshots/${encodeURIComponent(meta.screenshotId)}/image`,
+      "card"
+    ),
   };
 }
 
-function sendScreenshotImage(meta, res) {
-  const file = storage.resolveScreenshotImagePath(meta);
+/**
+ * @param {object} meta
+ * @param {import("express").Response} res
+ * @param {"full"|"card"} [variant]
+ * @param {{ cachePublic?: boolean }} [options]
+ */
+function sendScreenshotImage(meta, res, variant = "full", options = {}) {
+  const file = storage.resolveScreenshotImagePath(meta, variant);
   if (!file) {
     res.status(404).json({ error: "not_found" });
     return;
   }
-  res.type(meta.mimeType || "application/octet-stream").sendFile(file);
+  const isCardFile = path.basename(file) === "card.webp";
+  if (options.cachePublic) {
+    res.set("Cache-Control", "public, max-age=3600");
+  }
+  res.type(isCardFile ? "image/webp" : meta.mimeType || "application/octet-stream").sendFile(file);
 }
 
 app.post(
@@ -1689,13 +1753,17 @@ app.post(
       next();
     });
   },
-  (req, res) => {
-    const result = uploadPendingSubmissionScreenshot(
-      req.params.submissionId,
-      req.file,
-      sessionWebUser(req)
-    );
-    res.status(result.status).json(result.body);
+  async (req, res, next) => {
+    try {
+      const result = await uploadPendingSubmissionScreenshot(
+        req.params.submissionId,
+        req.file,
+        sessionWebUser(req)
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
@@ -1714,13 +1782,17 @@ app.post(
       next();
     });
   },
-  (req, res) => {
-    const result = uploadApprovedBuildingScreenshot(
-      req.params.buildingId,
-      req.file,
-      sessionWebUser(req)
-    );
-    res.status(result.status).json(result.body);
+  async (req, res, next) => {
+    try {
+      const result = await uploadApprovedBuildingScreenshot(
+        req.params.buildingId,
+        req.file,
+        sessionWebUser(req)
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
@@ -1752,7 +1824,7 @@ app.get("/api/my-screenshots/:screenshotId/image", requireWebUser, (req, res) =>
     res.status(403).json({ error: "not_owner" });
     return;
   }
-  sendScreenshotImage(meta, res);
+  sendScreenshotImage(meta, res, parseScreenshotVariant(req));
 });
 
 app.get("/api/admin/screenshots/pending", requireWebUser, requireAdmin, (_req, res) => {
@@ -1767,7 +1839,7 @@ app.get("/api/admin/screenshots/:screenshotId/image", requireWebUser, requireAdm
     res.status(404).json({ error: "not_found" });
     return;
   }
-  sendScreenshotImage(meta, res);
+  sendScreenshotImage(meta, res, parseScreenshotVariant(req));
 });
 
 app.post("/api/admin/screenshots/:screenshotId/approve", requireWebUser, requireAdmin, (req, res) => {
@@ -1814,14 +1886,18 @@ app.post(
   requireWebUser,
   requireAdmin,
   handleScreenshotUploadMiddleware,
-  (req, res) => {
-    const result = uploadPendingSubmissionScreenshot(
-      req.params.submissionId,
-      req.file,
-      sessionWebUser(req),
-      { asAdmin: true }
-    );
-    res.status(result.status).json(result.body);
+  async (req, res, next) => {
+    try {
+      const result = await uploadPendingSubmissionScreenshot(
+        req.params.submissionId,
+        req.file,
+        sessionWebUser(req),
+        { asAdmin: true }
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
@@ -1830,14 +1906,18 @@ app.post(
   requireWebUser,
   requireAdmin,
   handleScreenshotUploadMiddleware,
-  (req, res) => {
-    const result = uploadApprovedBuildingScreenshot(
-      req.params.buildingId,
-      req.file,
-      sessionWebUser(req),
-      { asAdmin: true }
-    );
-    res.status(result.status).json(result.body);
+  async (req, res, next) => {
+    try {
+      const result = await uploadApprovedBuildingScreenshot(
+        req.params.buildingId,
+        req.file,
+        sessionWebUser(req),
+        { asAdmin: true }
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
@@ -1853,13 +1933,17 @@ app.get("/api/buildings/:id/screenshots", (req, res) => {
     res.status(404).json({ error: "not_found" });
     return;
   }
-  const screenshots = storage.listScreenshotsForOwner("approved", id, "approved").map((meta) => ({
-    screenshotId: meta.screenshotId,
-    bytes: meta.bytes || 0,
-    mimeType: meta.mimeType,
-    uploadedAt: meta.uploadedAt,
-    url: `/api/buildings/${encodeURIComponent(id)}/screenshots/${encodeURIComponent(meta.screenshotId)}`,
-  }));
+  const screenshots = storage.listScreenshotsForOwner("approved", id, "approved").map((meta) => {
+    const url = `/api/buildings/${encodeURIComponent(id)}/screenshots/${encodeURIComponent(meta.screenshotId)}`;
+    return {
+      screenshotId: meta.screenshotId,
+      bytes: meta.bytes || 0,
+      mimeType: meta.mimeType,
+      uploadedAt: meta.uploadedAt,
+      url,
+      cardUrl: withScreenshotVariant(url, "card"),
+    };
+  });
   res.json({ screenshots });
 });
 
@@ -1879,7 +1963,7 @@ app.get("/api/buildings/:id/screenshots/:screenshotId", (req, res) => {
     res.status(404).json({ error: "not_found" });
     return;
   }
-  sendScreenshotImage(meta, res);
+  sendScreenshotImage(meta, res, parseScreenshotVariant(req), { cachePublic: true });
 });
 
 app.get("/api/admin/pending", requireWebUser, requireAdmin, (_req, res) => {
