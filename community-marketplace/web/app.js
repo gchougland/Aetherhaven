@@ -349,10 +349,152 @@ async function loadCatalog() {
     setupCatalogFilters();
     populateCatalogFilterOptions(allCatalogEntries);
     applyCatalogFilters();
+    renderNewestCarousel();
     ensureBuildingDetailModal();
   } catch (e) {
     showStatusError(status, "Could not load catalog.");
   }
+}
+
+const NEWEST_CAROUSEL_LIMIT = 8;
+const NEWEST_CAROUSEL_AUTOPLAY_MS = 5000;
+
+let newestCarouselBound = false;
+let newestCarouselAutoplayId = null;
+
+function getNewestCatalogEntries(limit = NEWEST_CAROUSEL_LIMIT) {
+  return allCatalogEntries
+    .slice()
+    .sort((a, b) => {
+      const byDate = String(b.approvedAt || "").localeCompare(String(a.approvedAt || ""));
+      if (byDate !== 0) {
+        return byDate;
+      }
+      return String(a.displayName || "").localeCompare(String(b.displayName || ""));
+    })
+    .slice(0, limit);
+}
+
+function renderNewestCarouselCard(entry) {
+  const goldBadge = goldCostHtml(entry, "gold-cost--inline");
+  return `
+    <article
+      class="card newest-carousel-card building-card--clickable"
+      role="listitem"
+      data-building-id="${escapeAttr(entry.id)}"
+      tabindex="0"
+      onclick="openBuildingDetail('${escapeAttr(entry.id)}')"
+      onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"
+    >
+      <div class="newest-carousel-card-media">
+        ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
+        ${upvoteControlHtml(entry, catalogCanVote)}
+      </div>
+      <div class="newest-carousel-card-body">
+        <h4>${escapeHtml(entry.displayName)}</h4>
+        <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
+        <p class="meta newest-carousel-card-stats">${formatBytes(entry.prefabBytes || 0)}${goldBadge ? ` · ${goldBadge}` : ""}</p>
+      </div>
+    </article>`;
+}
+
+function scrollNewestCarousel(direction) {
+  const track = document.getElementById("newestCarouselTrack");
+  if (!track) {
+    return;
+  }
+  const slide = track.querySelector(".newest-carousel-card");
+  const amount = slide ? slide.getBoundingClientRect().width + 16 : track.clientWidth * 0.8;
+  track.scrollBy({ left: direction * amount, behavior: "smooth" });
+}
+
+function stopNewestCarouselAutoplay() {
+  if (newestCarouselAutoplayId != null) {
+    clearInterval(newestCarouselAutoplayId);
+    newestCarouselAutoplayId = null;
+  }
+}
+
+function startNewestCarouselAutoplay() {
+  stopNewestCarouselAutoplay();
+  const track = document.getElementById("newestCarouselTrack");
+  const section = document.getElementById("newestCarouselSection");
+  if (!track || !section || section.hidden || track.children.length < 2) {
+    return;
+  }
+  newestCarouselAutoplayId = setInterval(() => {
+    if (document.hidden) {
+      return;
+    }
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    if (maxScroll <= 4) {
+      return;
+    }
+    if (track.scrollLeft >= maxScroll - 4) {
+      track.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      scrollNewestCarousel(1);
+    }
+  }, NEWEST_CAROUSEL_AUTOPLAY_MS);
+}
+
+function setupNewestCarouselControls() {
+  if (newestCarouselBound) {
+    return;
+  }
+  newestCarouselBound = true;
+  const section = document.getElementById("newestCarouselSection");
+  const carousel = document.getElementById("newestCarousel");
+  const track = document.getElementById("newestCarouselTrack");
+  const prev = document.getElementById("newestCarouselPrev");
+  const next = document.getElementById("newestCarouselNext");
+  if (!section || !carousel || !track) {
+    return;
+  }
+  prev?.addEventListener("click", () => {
+    scrollNewestCarousel(-1);
+    startNewestCarouselAutoplay();
+  });
+  next?.addEventListener("click", () => {
+    scrollNewestCarousel(1);
+    startNewestCarouselAutoplay();
+  });
+  const pause = () => stopNewestCarouselAutoplay();
+  const resume = () => startNewestCarouselAutoplay();
+  carousel.addEventListener("mouseenter", pause);
+  carousel.addEventListener("mouseleave", resume);
+  carousel.addEventListener("focusin", pause);
+  carousel.addEventListener("focusout", (event) => {
+    if (!carousel.contains(event.relatedTarget)) {
+      resume();
+    }
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      pause();
+    } else if (!section.hidden) {
+      resume();
+    }
+  });
+}
+
+function renderNewestCarousel() {
+  const section = document.getElementById("newestCarouselSection");
+  const track = document.getElementById("newestCarouselTrack");
+  if (!section || !track) {
+    return;
+  }
+  const newest = getNewestCatalogEntries();
+  if (!newest.length) {
+    section.hidden = true;
+    track.innerHTML = "";
+    stopNewestCarouselAutoplay();
+    return;
+  }
+  section.hidden = false;
+  track.innerHTML = newest.map(renderNewestCarouselCard).join("");
+  setupNewestCarouselControls();
+  startNewestCarouselAutoplay();
 }
 
 const CATALOG_PAGE_SIZE = 12;
@@ -377,17 +519,20 @@ function setupCatalogFilters() {
   const author = document.getElementById("catalogAuthorFilter");
   const style = document.getElementById("catalogStyleFilter");
   const type = document.getElementById("catalogTypeFilter");
+  const sort = document.getElementById("catalogSort");
   const clear = document.getElementById("catalogClearFilters");
   const onFilterChange = () => applyCatalogFilters({ resetPage: true });
   search?.addEventListener("input", onFilterChange);
   author?.addEventListener("change", onFilterChange);
   style?.addEventListener("change", onFilterChange);
   type?.addEventListener("change", onFilterChange);
+  sort?.addEventListener("change", onFilterChange);
   clear?.addEventListener("click", () => {
     if (search) search.value = "";
     if (author) author.value = "";
     if (style) style.value = "";
     if (type) type.value = "";
+    if (sort) sort.value = "upvotes";
     applyCatalogFilters({ resetPage: true });
   });
 }
@@ -429,6 +574,57 @@ function getCatalogFilterState() {
     style: String(document.getElementById("catalogStyleFilter")?.value || ""),
     type: String(document.getElementById("catalogTypeFilter")?.value || ""),
   };
+}
+
+function getCatalogSortMode() {
+  const value = String(document.getElementById("catalogSort")?.value || "upvotes");
+  const allowed = new Set(["upvotes", "downloads", "newest", "name-asc", "name-desc"]);
+  return allowed.has(value) ? value : "upvotes";
+}
+
+function catalogEntryDisplayName(entry) {
+  return String(entry?.displayName || "");
+}
+
+function compareCatalogEntryNames(a, b) {
+  return catalogEntryDisplayName(a).localeCompare(catalogEntryDisplayName(b), undefined, {
+    sensitivity: "base",
+  });
+}
+
+function sortCatalogEntries(entries, sortMode) {
+  const mode = sortMode || "upvotes";
+  return [...entries].sort((a, b) => {
+    if (mode === "downloads") {
+      const byDownloads = (b.downloadCount || 0) - (a.downloadCount || 0);
+      if (byDownloads !== 0) {
+        return byDownloads;
+      }
+      return compareCatalogEntryNames(a, b);
+    }
+    if (mode === "newest") {
+      const byDate = String(b.approvedAt || "").localeCompare(String(a.approvedAt || ""));
+      if (byDate !== 0) {
+        return byDate;
+      }
+      return compareCatalogEntryNames(a, b);
+    }
+    if (mode === "name-asc") {
+      return compareCatalogEntryNames(a, b);
+    }
+    if (mode === "name-desc") {
+      return compareCatalogEntryNames(b, a);
+    }
+    const byVotes = (b.upvoteCount || 0) - (a.upvoteCount || 0);
+    if (byVotes !== 0) {
+      return byVotes;
+    }
+    const byName = compareCatalogEntryNames(a, b);
+    if (byName !== 0) {
+      return byName;
+    }
+    return String(a.approvedAt || "").localeCompare(String(b.approvedAt || ""));
+  });
 }
 
 function entryMatchesCatalogFilters(entry, filters) {
@@ -577,7 +773,10 @@ function applyCatalogFilters({ resetPage = true } = {}) {
     return;
   }
   const filters = getCatalogFilterState();
-  filteredCatalogEntries = allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters));
+  filteredCatalogEntries = sortCatalogEntries(
+    allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters)),
+    getCatalogSortMode()
+  );
   if (resetPage) {
     catalogPage = 1;
   }

@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=28" />
+    <link rel="stylesheet" href="/styles.css?v=29" />
   </head>
   <body>
     <header class="site-header">
@@ -68,9 +68,39 @@
       <section id="status" class="status" hidden></section>
       <section>
         <div class="section-title">
-          <h2>Top community builds</h2>
+          <h2>Community builds</h2>
           <div class="ornament-divider" aria-hidden="true"></div>
         </div>
+        <section id="newestCarouselSection" class="newest-carousel-section" hidden>
+          <div class="newest-carousel-heading">
+            <h3>Newest builds</h3>
+          </div>
+          <div class="newest-carousel" id="newestCarousel">
+            <button
+              type="button"
+              class="newest-carousel-nav newest-carousel-nav--prev"
+              id="newestCarouselPrev"
+              aria-label="Previous newest builds"
+            >
+              &#8249;
+            </button>
+            <div
+              id="newestCarouselTrack"
+              class="newest-carousel-track"
+              tabindex="0"
+              role="list"
+              aria-label="Newest approved builds"
+            ></div>
+            <button
+              type="button"
+              class="newest-carousel-nav newest-carousel-nav--next"
+              id="newestCarouselNext"
+              aria-label="Next newest builds"
+            >
+              &#8250;
+            </button>
+          </div>
+        </section>
         <div class="catalog-toolbar" id="catalogToolbar" hidden>
           <label class="catalog-search">
             <span class="visually-hidden">Search builds</span>
@@ -99,6 +129,16 @@
               <option value="">All types</option>
             </select>
           </label>
+          <label class="catalog-filter">
+            <span>Sort</span>
+            <select id="catalogSort">
+              <option value="upvotes" selected>Most upvoted</option>
+              <option value="downloads">Most downloads</option>
+              <option value="newest">Newest</option>
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+            </select>
+          </label>
           <button type="button" class="secondary" id="catalogClearFilters">Clear</button>
           <p class="catalog-result-count" id="catalogResultCount" aria-live="polite"></p>
         </div>
@@ -108,7 +148,7 @@
       <p class="site-footer-meta"><a href="/privacy.html">Privacy</a></p>
     </main>
 
-    <script src="/app.js?v=20"></script>
+    <script src="/app.js?v=22"></script>
     <script src="/ads.js?v=1"></script>
     <script>
       loadCatalog();
