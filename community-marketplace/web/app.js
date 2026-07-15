@@ -355,9 +355,13 @@ async function loadCatalog() {
   }
 }
 
+const CATALOG_PAGE_SIZE = 12;
+
 let allCatalogEntries = [];
+let filteredCatalogEntries = [];
 let catalogCanVote = false;
 let catalogFiltersBound = false;
+let catalogPage = 1;
 
 function setupCatalogFilters() {
   const toolbar = document.getElementById("catalogToolbar");
@@ -374,16 +378,17 @@ function setupCatalogFilters() {
   const style = document.getElementById("catalogStyleFilter");
   const type = document.getElementById("catalogTypeFilter");
   const clear = document.getElementById("catalogClearFilters");
-  search?.addEventListener("input", applyCatalogFilters);
-  author?.addEventListener("change", applyCatalogFilters);
-  style?.addEventListener("change", applyCatalogFilters);
-  type?.addEventListener("change", applyCatalogFilters);
+  const onFilterChange = () => applyCatalogFilters({ resetPage: true });
+  search?.addEventListener("input", onFilterChange);
+  author?.addEventListener("change", onFilterChange);
+  style?.addEventListener("change", onFilterChange);
+  type?.addEventListener("change", onFilterChange);
   clear?.addEventListener("click", () => {
     if (search) search.value = "";
     if (author) author.value = "";
     if (style) style.value = "";
     if (type) type.value = "";
-    applyCatalogFilters();
+    applyCatalogFilters({ resetPage: true });
   });
 }
 
@@ -446,37 +451,137 @@ function entryMatchesCatalogFilters(entry, filters) {
   return haystack.includes(filters.query);
 }
 
-function updateCatalogResultCount(shown, total) {
+function updateCatalogResultCount(rangeStart, rangeEnd, filteredTotal, allTotal) {
   const el = document.getElementById("catalogResultCount");
   if (!el) {
     return;
   }
-  if (shown === total) {
-    el.textContent = total === 1 ? "1 build" : `${total} builds`;
+  if (!filteredTotal) {
+    el.textContent = allTotal ? `0 of ${allTotal} builds` : "0 builds";
+    return;
+  }
+  const range =
+    rangeStart === rangeEnd ? `${rangeStart}` : `${rangeStart}–${rangeEnd}`;
+  if (filteredTotal === allTotal) {
+    el.textContent =
+      filteredTotal === 1 ? "1 build" : `Showing ${range} of ${filteredTotal} builds`;
   } else {
-    el.textContent = `Showing ${shown} of ${total} builds`;
+    el.textContent = `Showing ${range} of ${filteredTotal} matches (${allTotal} total)`;
   }
 }
 
-function applyCatalogFilters() {
+function catalogPageWindow(current, totalPages) {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+  const pages = new Set([1, totalPages, current]);
+  for (let i = current - 1; i <= current + 1; i++) {
+    if (i >= 1 && i <= totalPages) {
+      pages.add(i);
+    }
+  }
+  if (current <= 3) {
+    pages.add(2);
+    pages.add(3);
+    pages.add(4);
+  }
+  if (current >= totalPages - 2) {
+    pages.add(totalPages - 1);
+    pages.add(totalPages - 2);
+    pages.add(totalPages - 3);
+  }
+  return [...pages].sort((a, b) => a - b);
+}
+
+function renderCatalogPagination(totalPages) {
+  const nav = document.getElementById("catalogPagination");
+  if (!nav) {
+    return;
+  }
+  if (totalPages <= 1 || !filteredCatalogEntries.length) {
+    nav.hidden = true;
+    nav.innerHTML = "";
+    return;
+  }
+  nav.hidden = false;
+  const windowPages = catalogPageWindow(catalogPage, totalPages);
+  let html = `<button type="button" class="secondary" ${
+    catalogPage <= 1 ? "disabled" : ""
+  } onclick="goToCatalogPage(${catalogPage - 1})" aria-label="Previous page">Prev</button>`;
+  let prev = 0;
+  for (const page of windowPages) {
+    if (prev && page - prev > 1) {
+      html += `<span class="catalog-pagination-ellipsis" aria-hidden="true">…</span>`;
+    }
+    const current = page === catalogPage;
+    html += `<button type="button" class="secondary" ${
+      current ? 'aria-current="page"' : ""
+    } onclick="goToCatalogPage(${page})" aria-label="Page ${page}">${page}</button>`;
+    prev = page;
+  }
+  html += `<button type="button" class="secondary" ${
+    catalogPage >= totalPages ? "disabled" : ""
+  } onclick="goToCatalogPage(${catalogPage + 1})" aria-label="Next page">Next</button>`;
+  nav.innerHTML = html;
+}
+
+function goToCatalogPage(page) {
+  const totalPages = Math.max(1, Math.ceil(filteredCatalogEntries.length / CATALOG_PAGE_SIZE));
+  const next = Math.min(Math.max(1, Number(page) || 1), totalPages);
+  if (next === catalogPage && document.getElementById("catalog")?.children.length) {
+    return;
+  }
+  catalogPage = next;
+  renderCatalogPage();
+  document.getElementById("catalogToolbar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderCatalogPage() {
+  const el = document.getElementById("catalog");
+  if (!el) {
+    return;
+  }
+  const allTotal = allCatalogEntries.length;
+  const filteredTotal = filteredCatalogEntries.length;
+  if (!allTotal) {
+    el.innerHTML = emptyStateHtml("No approved buildings yet.");
+    updateCatalogResultCount(0, 0, 0, 0);
+    renderCatalogPagination(0);
+    return;
+  }
+  if (!filteredTotal) {
+    el.innerHTML = emptyStateHtml("No builds match your search or filters.");
+    updateCatalogResultCount(0, 0, 0, allTotal);
+    renderCatalogPagination(0);
+    return;
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / CATALOG_PAGE_SIZE));
+  if (catalogPage > totalPages) {
+    catalogPage = totalPages;
+  }
+  if (catalogPage < 1) {
+    catalogPage = 1;
+  }
+  const start = (catalogPage - 1) * CATALOG_PAGE_SIZE;
+  const pageEntries = filteredCatalogEntries.slice(start, start + CATALOG_PAGE_SIZE);
+  updateCatalogResultCount(start + 1, start + pageEntries.length, filteredTotal, allTotal);
+  el.innerHTML = pageEntries
+    .map((e) => renderBuildingCard(e, { canVote: catalogCanVote, openDetail: true }))
+    .join("");
+  renderCatalogPagination(totalPages);
+}
+
+function applyCatalogFilters({ resetPage = true } = {}) {
   const el = document.getElementById("catalog");
   if (!el) {
     return;
   }
   const filters = getCatalogFilterState();
-  const filtered = allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters));
-  updateCatalogResultCount(filtered.length, allCatalogEntries.length);
-  if (!allCatalogEntries.length) {
-    el.innerHTML = emptyStateHtml("No approved buildings yet.");
-    return;
+  filteredCatalogEntries = allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters));
+  if (resetPage) {
+    catalogPage = 1;
   }
-  if (!filtered.length) {
-    el.innerHTML = emptyStateHtml("No builds match your search or filters.");
-    return;
-  }
-  el.innerHTML = filtered
-    .map((e) => renderBuildingCard(e, { canVote: catalogCanVote, openDetail: true }))
-    .join("");
+  renderCatalogPage();
 }
 
 async function loadSubmissions() {

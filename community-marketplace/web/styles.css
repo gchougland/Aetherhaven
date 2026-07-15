@@ -279,6 +279,46 @@ main.wrap > section + section {
    Account menu
    ========================================================================== */
 
+.site-header-end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.site-social-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.site-social-badges a {
+  line-height: 0;
+  border-radius: 4px;
+  opacity: 0.95;
+  transition: opacity var(--transition), transform var(--transition), filter var(--transition);
+}
+
+.site-social-badges a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.site-social-badges a:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+.site-social-badges img {
+  display: block;
+  height: 28px;
+  width: auto;
+  border-radius: 4px;
+}
+
 .account-menu {
   position: relative;
   flex-shrink: 0;
@@ -516,6 +556,44 @@ main.wrap > section + section {
   flex: 1 1 100%;
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+.catalog-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem;
+  margin: var(--space-lg) 0 var(--space-md);
+}
+
+.catalog-pagination[hidden] {
+  display: none;
+}
+
+.catalog-pagination button {
+  margin: 0;
+  min-width: 2.25rem;
+  padding: 0.45rem 0.7rem;
+}
+
+.catalog-pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.catalog-pagination button[aria-current="page"] {
+  color: #1a1208;
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dim) 100%);
+  border-color: var(--gold-dim);
+}
+
+.catalog-pagination-ellipsis {
+  padding: 0 0.25rem;
+  color: var(--text-muted);
+  user-select: none;
 }
 
 /* ==========================================================================
@@ -1421,6 +1499,18 @@ body.modal-open {
     font-size: 0.72rem;
   }
 
+  .site-header-end {
+    gap: 0.35rem;
+  }
+
+  .site-social-badges {
+    gap: 0.25rem;
+  }
+
+  .site-social-badges img {
+    height: 22px;
+  }
+
   .catalog-grid {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: var(--space-sm);
@@ -2161,43 +2251,13 @@ a.wiki-crumb:hover {
   color: var(--text-muted);
 }
 
-.site-social-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: var(--space-sm);
-}
-
-.site-social-badges a {
-  line-height: 0;
-  opacity: 0.92;
-  transition: opacity var(--transition), transform var(--transition);
-}
-
-.site-social-badges a:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-.site-social-badges img {
-  display: block;
-  height: 20px;
-  width: auto;
-}
-
-.site-footer-meta > p {
-  margin: 0;
-}
-
-.site-footer-meta > p a {
+.site-footer-meta a {
   color: var(--text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.site-footer-meta > p a:hover {
+.site-footer-meta a:hover {
   color: var(--gold-bright);
 }
 
