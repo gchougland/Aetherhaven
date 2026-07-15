@@ -1,0 +1,4 @@
+# Ensure sharp can load libstdc++ at runtime on Nixpacks/Railway.
+# See https://nixpacks.com/docs/guides/configuring-builds (nixLibs)
+[phases.setup]
+nixLibs = ["...", "gcc-unwrapped"]

@@ -1,5 +1,6 @@
 [build]
 builder = "nixpacks"
+# gcc-unwrapped for sharp is configured in nixpacks.toml (nixLibs)
 
 [deploy]
 startCommand = "npm start"

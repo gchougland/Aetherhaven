@@ -34,6 +34,8 @@ import { createVotes } from "./votes.js";
 import { createDownloads } from "./downloads.js";
 import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
+// sharp is loaded lazily inside processScreenshot so native-lib failures
+// do not crash startup before Railway's /api/v1/health check can succeed.
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = Number(process.env.PORT || 3847);

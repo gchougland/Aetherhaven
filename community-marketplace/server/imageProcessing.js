@@ -1,5 +1,3 @@
-import sharp from "sharp";
-
 export const SCREENSHOT_FULL_MAX_EDGE = 1920;
 export const SCREENSHOT_CARD_MAX_EDGE = 800;
 export const SCREENSHOT_FULL_WEBP_QUALITY = 82;
@@ -17,6 +15,31 @@ export class ScreenshotProcessingError extends Error {
   }
 }
 
+/** @type {typeof import("sharp") | null} */
+let sharpModule = null;
+
+/**
+ * Lazy-load sharp so a missing native binary does not crash process startup
+ * (Railway healthcheck runs before any upload).
+ * @returns {Promise<typeof import("sharp")>}
+ */
+async function loadSharp() {
+  if (sharpModule) {
+    return sharpModule;
+  }
+  try {
+    const mod = await import("sharp");
+    sharpModule = mod.default || mod;
+    return sharpModule;
+  } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
+    throw new ScreenshotProcessingError(
+      `Image processing unavailable on this server (${detail}).`,
+      "screenshot_processing_unavailable"
+    );
+  }
+}
+
 /**
  * Resize and encode an uploaded screenshot into full + card WebP variants.
  *
@@ -28,11 +51,16 @@ export async function processScreenshot(buffer) {
     throw new ScreenshotProcessingError("Screenshot file is empty or invalid.", "screenshot_invalid");
   }
 
+  const sharp = await loadSharp();
+
   let pipeline;
   try {
     pipeline = sharp(buffer, { failOn: "error" }).rotate();
     await pipeline.metadata();
-  } catch {
+  } catch (err) {
+    if (err instanceof ScreenshotProcessingError) {
+      throw err;
+    }
     throw new ScreenshotProcessingError(
       "Could not read screenshot. Use a valid JPEG, PNG, or WebP image.",
       "screenshot_invalid"
@@ -69,7 +97,10 @@ export async function processScreenshot(buffer) {
       mimeType: "image/webp",
       ext: "webp",
     };
-  } catch {
+  } catch (err) {
+    if (err instanceof ScreenshotProcessingError) {
+      throw err;
+    }
     throw new ScreenshotProcessingError(
       "Could not process screenshot. Use a valid JPEG, PNG, or WebP image.",
       "screenshot_invalid"
