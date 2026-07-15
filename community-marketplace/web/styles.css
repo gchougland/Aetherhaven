@@ -2120,3 +2120,81 @@ a.wiki-crumb:hover {
     justify-self: stretch;
   }
 }
+
+/* ==========================================================================
+   Ads (AdSense slots)
+   ========================================================================== */
+
+.ad-slot {
+  margin: var(--space-md) auto;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  max-width: 100%;
+  min-height: 90px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  text-align: center;
+  overflow: hidden;
+}
+
+.ad-slot[hidden] {
+  display: none !important;
+}
+
+.ad-label {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.ad-slot .adsbygoogle {
+  display: block;
+  margin: 0 auto;
+}
+
+.site-footer-meta {
+  margin: var(--space-xl) 0 var(--space-md);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.site-footer-meta a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.site-footer-meta a:hover {
+  color: var(--gold-bright);
+}
+
+.privacy-page h1 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--gold-bright);
+  margin: 0 0 var(--space-md);
+}
+
+.privacy-page h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+
+.privacy-page p,
+.privacy-page li {
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.privacy-page ul {
+  padding-left: 1.25rem;
+}
+
+.privacy-page a {
+  color: var(--gold-bright);
+}

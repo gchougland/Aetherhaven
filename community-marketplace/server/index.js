@@ -48,6 +48,12 @@ const ADMIN_UUIDS = new Set(
 );
 
 const publicBaseUrl = resolvePublicBaseUrl();
+const ADS_ENABLED = String(process.env.ADS_ENABLED || "")
+  .trim()
+  .toLowerCase() === "true";
+const ADSENSE_CLIENT_ID = (process.env.ADSENSE_CLIENT_ID || "").trim();
+const ADSENSE_SLOT_BROWSE = (process.env.ADSENSE_SLOT_BROWSE || "").trim();
+const ADSENSE_SLOT_WIKI = (process.env.ADSENSE_SLOT_WIKI || "").trim();
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
 const storage = createStorage(dataDir);
 const votes = createVotes(dataDir);
@@ -1916,6 +1922,36 @@ app.post("/api/admin/delete/:buildingId", requireWebUser, requireAdmin, (req, re
 
 app.get("/api/catalog", sendManifest);
 
+app.get("/api/site-config", (_req, res) => {
+  const slots = {};
+  if (ADSENSE_SLOT_BROWSE) {
+    slots.browseHeader = ADSENSE_SLOT_BROWSE;
+  }
+  if (ADSENSE_SLOT_WIKI) {
+    slots.wikiHeader = ADSENSE_SLOT_WIKI;
+  }
+  const enabled = ADS_ENABLED && Boolean(ADSENSE_CLIENT_ID);
+  res.json({
+    ads: {
+      enabled,
+      provider: "adsense",
+      clientId: ADSENSE_CLIENT_ID || null,
+      slots,
+    },
+  });
+});
+
+app.get("/ads.txt", (_req, res) => {
+  if (!ADSENSE_CLIENT_ID) {
+    res.status(404).type("text/plain").send("Not found\n");
+    return;
+  }
+  const publisherId = ADSENSE_CLIENT_ID.replace(/^ca-/, "");
+  res
+    .type("text/plain")
+    .send(`google.com, ${publisherId}, DIRECT, f08c47fec0942fa0\n`);
+});
+
 app.post("/api/v1/buildings/:id/download", downloadRateLimit, (req, res) => {
   const result = recordBuildingDownload(req.params.id);
   res.status(result.status).json(result.body);
@@ -1926,7 +1962,42 @@ app.post("/api/buildings/:id/upvote", requireWebUser, voteRateLimit, (req, res) 
   res.status(result.status).json(result.body);
 });
 
-app.use(express.static(path.join(__dirname, "..", "web")));
+const webRoot = path.join(__dirname, "..", "web");
+
+/** Inject AdSense site-verification script into HTML head when publisher ID is configured. */
+function sendHtmlWithAdSense(relativePath) {
+  return (_req, res) => {
+    const filePath = path.join(webRoot, relativePath);
+    let html;
+    try {
+      html = fs.readFileSync(filePath, "utf8");
+    } catch {
+      res.status(404).send("Not found");
+      return;
+    }
+    if (ADSENSE_CLIENT_ID && !html.includes("pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")) {
+      const snippet =
+        `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}" ` +
+        `crossorigin="anonymous"></script>\n`;
+      html = html.replace(/<\/head>/i, `${snippet}</head>`);
+    }
+    res.type("html").send(html);
+  };
+}
+
+if (ADSENSE_CLIENT_ID) {
+  app.get("/", sendHtmlWithAdSense("index.html"));
+  app.get("/index.html", sendHtmlWithAdSense("index.html"));
+  app.get("/wiki.html", sendHtmlWithAdSense("wiki.html"));
+  app.get("/privacy.html", sendHtmlWithAdSense("privacy.html"));
+  app.get("/account.html", sendHtmlWithAdSense("account.html"));
+  app.get("/submissions.html", sendHtmlWithAdSense("submissions.html"));
+  app.get("/edit.html", sendHtmlWithAdSense("edit.html"));
+  app.get("/admin.html", sendHtmlWithAdSense("admin.html"));
+  app.get("/dashboard.html", sendHtmlWithAdSense("dashboard.html"));
+}
+
+app.use(express.static(webRoot));
 
 app.listen(PORT, () => {
   console.log(`Community marketplace listening on ${publicBaseUrl} (port ${PORT})`);

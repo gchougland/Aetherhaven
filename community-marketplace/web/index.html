@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/styles.css?v=25" />
+    <link rel="stylesheet" href="/styles.css?v=26" />
   </head>
   <body>
     <header class="site-header">
@@ -35,6 +35,8 @@
         </div>
       </div>
     </header>
+
+    <aside id="ad-browse-header" class="ad-slot wrap" aria-label="Advertisement" hidden></aside>
 
     <main class="wrap">
       <section id="status" class="status" hidden></section>
@@ -76,9 +78,11 @@
         </div>
         <div id="catalog" class="catalog-grid"></div>
       </section>
+      <p class="site-footer-meta"><a href="/privacy.html">Privacy</a></p>
     </main>
 
     <script src="/app.js?v=19"></script>
+    <script src="/ads.js?v=1"></script>
     <script>
       loadCatalog();
       refreshAuthNav();
