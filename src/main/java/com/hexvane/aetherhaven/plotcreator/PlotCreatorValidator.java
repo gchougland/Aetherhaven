@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3i;
@@ -61,21 +62,26 @@ public final class PlotCreatorValidator {
             PlotBuildingKindRequirements.forDraft(draft, plugin);
         for (int i = 0; i < steps.size(); i++) {
             PlotBuildingKindRequirements.SubstepRequirement req = steps.get(i);
-            if (countForSubstep(draft, req.type()) < req.minCount()) {
+            if (countForRequirement(draft, req) < req.minCount()) {
                 return "substep_" + req.type().name();
             }
         }
         return null;
     }
 
-    private static int countForSubstep(@Nonnull PlotCreatorDraft draft, @Nonnull PlotCreatorSubstepType type) {
+    private static int countForRequirement(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
+    ) {
+        PlotCreatorSubstepType type = req.type();
         return switch (type) {
             case MANAGEMENT_BLOCK -> draft.getManagementBlockLocalPos() != null ? 1 : 0;
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;
             case SHOP_SAFE_BLOCK -> draft.getShopSafeLocalPos() != null ? 1 : 0;
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> draft.getPlacedSpecialBlocks().size();
-            case PLANNING_DESK_POI, WORK_POI, BARD_WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI -> countPoiSubstep(draft, type);
+            case PLANNING_DESK_POI, WORK_POI, BARD_WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI,
+                QUEST_BOARD_POI -> countPoiRequirement(draft, req);
             case INNKEEPER_SPAWN -> draft.getInnkeeperSpawnLocal() != null ? 1 : 0;
             case VISITOR_SPAWN -> draft.getVisitorSpawnLocals().size();
             case GUILD_MASTER_SPAWN -> draft.getGuildMasterSpawnLocal() != null ? 1 : 0;
@@ -83,20 +89,39 @@ public final class PlotCreatorValidator {
         };
     }
 
-    private static int countPoiSubstep(@Nonnull PlotCreatorDraft draft, @Nonnull PlotCreatorSubstepType type) {
+    private static int countPoiRequirement(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
+    ) {
         int n = 0;
         for (PlotCreatorPoiDraft p : draft.getPois()) {
-            if (matchesPoiSubstep(p, type)) {
+            if (matchesPoiRequirement(p, req)) {
                 n++;
             }
         }
         return n;
     }
 
-    private static boolean matchesPoiSubstep(@Nonnull PlotCreatorPoiDraft p, @Nonnull PlotCreatorSubstepType type) {
+    private static boolean matchesPoiRequirement(
+        @Nonnull PlotCreatorPoiDraft p,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
+    ) {
+        PlotCreatorSubstepType type = req.type();
         return switch (type) {
-            case WORK_POI -> p.getTags().contains("WORK") && !p.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
-            case BARD_WORK_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_BARD);
+            case WORK_POI -> {
+                if (!p.getTags().contains("WORK") || p.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
+                    yield false;
+                }
+                String want = req.workResidentKind();
+                if (want == null || want.isBlank()) {
+                    yield p.getWorkResidentKind() == null;
+                }
+                yield Objects.equals(want, p.getWorkResidentKind());
+            }
+            case BARD_WORK_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_BARD)
+                || com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(p.getWorkResidentKind());
+            case QUEST_BOARD_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)
+                || AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(p.getBlockTypeId());
             case SLEEP_POI -> p.getTags().contains("SLEEP") || p.getTags().contains("ENERGY");
             case EAT_POI -> p.getTags().contains("EAT");
             case FUN_POI -> p.getTags().contains("FUN") || p.getTags().contains("SIT");

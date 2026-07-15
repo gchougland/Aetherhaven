@@ -39,6 +39,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -119,7 +120,10 @@ public final class ConstructionCompleter {
         tm.updateTown(town);
 
         if (def != null) {
-            String gid = def.getGameplayConstructionId();
+            List<String> gameplayIds = plugin.getConstructionCatalog().resolveGameplayConstructionIds(def.getId());
+            if (gameplayIds.isEmpty()) {
+                gameplayIds = List.of(def.getGameplayConstructionId());
+            }
             Store<EntityStore> entityStore =
                 world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
             if (entityStore != null) {
@@ -140,48 +144,53 @@ public final class ConstructionCompleter {
             }
             PlotBlockStamper.stampAllLinkedBlocks(world, town, plot, def, prefabAnchorWorld, prefabYaw);
             TeleporterWarpSanitizer.schedulePlotFootprintSanitize(world, plot.toFootprint());
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(gid)) {
-                MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
+            for (String gid : gameplayIds) {
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(gid)) {
+                    MerchantStallCompletion.onStallBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gid)) {
+                    FarmerPlotCompletion.onFarmBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP.equals(gid)) {
+                    BlacksmithShopCompletion.onShopBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gid)) {
+                    GaiaAltarCompletion.onAltarBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(gid)) {
+                    MinerHutCompletion.onMinerHutBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gid)) {
+                    LumbermillCompletion.onLumbermillBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gid)) {
+                    BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
+                }
+                if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gid)) {
+                    GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plotId, tm);
+                }
+                InnVisitorShopPromotion.promoteForCompletedPlot(
+                    world,
+                    plugin,
+                    town,
+                    plotId,
+                    tm,
+                    def.getId(),
+                    gid
+                );
             }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_FARM.equals(gid)) {
-                FarmerPlotCompletion.onFarmBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP.equals(gid)) {
-                BlacksmithShopCompletion.onShopBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR.equals(gid)) {
-                GaiaAltarCompletion.onAltarBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT.equals(gid)) {
-                MinerHutCompletion.onMinerHutBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_LUMBERMILL.equals(gid)) {
-                LumbermillCompletion.onLumbermillBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_BARN.equals(gid)) {
-                BarnCompletion.onBarnBuilt(world, plugin, town, plotId, tm);
-            }
-            if (AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(gid)) {
-                GuildHallCompletion.onGuildHallBuilt(world, plugin, town, plotId, tm);
-            }
-            // Catalog-driven: any inn-pool villager whose workConstructionId matches this plot
-            // (core shops and crossmod). Completing the quest alone does not promote; plot complete does.
-            InnVisitorShopPromotion.promoteForCompletedPlot(
-                world,
-                plugin,
-                town,
-                plotId,
-                tm,
-                def.getId(),
-                gid
-            );
-            if (ProductionCatalog.isProductionWorkplaceConstruction(gid)) {
+            String productionGid =
+                gameplayIds.stream()
+                    .filter(ProductionCatalog::isProductionWorkplaceConstruction)
+                    .findFirst()
+                    .orElse(null);
+            if (productionGid != null) {
                 PlotProductionState pps = town.getOrCreatePlotProduction(plotId);
                 ProductionCatalog.Entry eff =
                     ProductionEffectiveCatalog.effective(
                         plugin.getProductionCatalog(),
                         plugin.getWorkplaceUnlockCatalog(),
-                        gid,
+                        productionGid,
                         pps
                     );
                 if (eff != null && eff.catalogSize() > 0) {

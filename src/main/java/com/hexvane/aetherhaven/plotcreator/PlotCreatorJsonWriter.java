@@ -37,7 +37,7 @@ public final class PlotCreatorJsonWriter {
         if (draft.getTreasuryGoldCoinCost() > 0L) {
             root.put("treasuryGoldCoinCost", draft.getTreasuryGoldCoinCost());
         }
-        if (PlotBuildingKindRequirements.effectiveKind(draft, null) == PlotBuildingKind.HOME) {
+        if (PlotBuildingKindRequirements.effectiveKinds(draft, null).contains(PlotBuildingKind.HOME)) {
             root.put("maxHomeResidents", draft.getMaxHomeResidents());
         }
         if (draft.getAssemblyPrefabSectionsPerAxis() > 1) {
@@ -49,7 +49,7 @@ public final class PlotCreatorJsonWriter {
         if (!draft.getPois().isEmpty()) {
             root.put("pois", draft.getPois());
         }
-        if (draft.getManagementBlockLocalPos() != null && draft.getKind() != PlotBuildingKind.DECORATION) {
+        if (draft.getManagementBlockLocalPos() != null && !draft.isDecorationOnly()) {
             root.put("managementBlockLocalPos", localPosList(draft.getManagementBlockLocalPos()));
         }
         if (draft.getTreasuryLocalPos() != null) {
@@ -81,8 +81,12 @@ public final class PlotCreatorJsonWriter {
             root.put("adventurerSpawnLocals", locals);
             root.put("adventurerSpawnYaws", yaws);
         }
-        if (draft.getCountsAsConstructionId() != null && !draft.getCountsAsConstructionId().isBlank()) {
-            root.put("countsAsConstructionId", draft.getCountsAsConstructionId());
+        if (draft.getCountsAsConstructionIds().isEmpty()) {
+            // no counts-as
+        } else if (draft.getCountsAsConstructionIds().size() == 1) {
+            root.put("countsAsConstructionId", draft.getCountsAsConstructionIds().get(0));
+        } else {
+            root.put("countsAsConstructionId", new ArrayList<>(draft.getCountsAsConstructionIds()));
         }
         if (draft.getStyleId() != null && !draft.getStyleId().isBlank()) {
             root.put("styleId", draft.getStyleId());
@@ -105,7 +109,7 @@ public final class PlotCreatorJsonWriter {
         if (draft.isExcludeFromTownJournal()) {
             root.put("excludeFromTownJournal", true);
         }
-        if (draft.getKind() == PlotBuildingKind.DECORATION) {
+        if (draft.isDecorationOnly()) {
             root.put("excludeFromTownJournal", true);
             root.put("decorationPlot", true);
         }

@@ -33,15 +33,35 @@ public final class PlotCreatorStatusHud extends CustomUIHud {
         if (step == PlotCreatorStep.SUBSTEP) {
             PlotBuildingKindRequirements.SubstepRequirement sub = PlotCreatorService.currentSubstep(session.getDraft());
             if (sub != null) {
-                b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));
+                if (sub.type() == PlotCreatorSubstepType.WORK_POI
+                    && sub.workResidentKind() != null
+                    && !sub.workResidentKind().isBlank()) {
+                    b.set(
+                        "#DetailLine.TextSpans",
+                        Message.translation(
+                            LANG_PREFIX
+                                + "spot.workRole."
+                                + sub.workResidentKind().toLowerCase(java.util.Locale.ROOT)
+                        )
+                    );
+                } else {
+                    b.set("#DetailLine.TextSpans", Message.translation(LANG_PREFIX + "substep." + sub.type().name()));
+                }
                 b.set("#DetailLine.Visible", true);
             } else {
                 b.set("#DetailLine.Visible", false);
             }
-        } else if (step == PlotCreatorStep.KIND && session.getDraft().getKind() != null) {
+        } else if (step == PlotCreatorStep.KIND && !session.getDraft().getKinds().isEmpty()) {
+            StringBuilder kinds = new StringBuilder();
+            for (int i = 0; i < session.getDraft().getKinds().size(); i++) {
+                if (i > 0) {
+                    kinds.append(", ");
+                }
+                kinds.append(session.getDraft().getKinds().get(i).name());
+            }
             b.set(
                 "#DetailLine.TextSpans",
-                Message.translation(LANG_PREFIX + "hud.kindSelected").param("kind", session.getDraft().getKind().name())
+                Message.translation(LANG_PREFIX + "hud.kindSelected").param("kind", kinds.toString())
             );
             b.set("#DetailLine.Visible", true);
         } else if (step == PlotCreatorStep.MATERIALS && PlotCreatorMaterialsHelper.pageCount(session.getDraft()) > 1) {

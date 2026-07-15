@@ -28,6 +28,7 @@ public final class RestaurantUpgradeTreeUi {
 
     public static void applyChrome(@Nonnull UICommandBuilder b) {
         b.set(ROOT + ".Visible", true);
+        b.set("#ProductionUpgradeTreeSlot #ProductionUpgradeTree.Visible", false);
         b.set(ROOT + " #RestaurantUpgradeHeading.TextSpans", t("aetherhaven.ui.restaurantUpgrades.heading"));
     }
 

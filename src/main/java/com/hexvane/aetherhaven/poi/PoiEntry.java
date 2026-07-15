@@ -31,6 +31,8 @@ public final class PoiEntry {
     private final Double interactionTargetZ;
     @Nullable
     private final Float interactionTargetYawRadians;
+    @Nullable
+    private final String workResidentKind;
 
     public PoiEntry(
         @Nonnull UUID id,
@@ -44,7 +46,7 @@ public final class PoiEntry {
         @Nullable String blockTypeId,
         @Nonnull PoiInteractionKind interactionKind
     ) {
-        this(id, townId, x, y, z, tags, capacity, plotId, blockTypeId, interactionKind, defaultMountOnUse(interactionKind), null, null, null, null, null);
+        this(id, townId, x, y, z, tags, capacity, plotId, blockTypeId, interactionKind, defaultMountOnUse(interactionKind), null, null, null, null, null, null);
     }
 
     public PoiEntry(
@@ -78,6 +80,7 @@ public final class PoiEntry {
             interactionTargetX,
             interactionTargetY,
             interactionTargetZ,
+            null,
             null
         );
     }
@@ -115,6 +118,7 @@ public final class PoiEntry {
             interactionTargetX,
             interactionTargetY,
             interactionTargetZ,
+            null,
             null
         );
     }
@@ -137,6 +141,46 @@ public final class PoiEntry {
         @Nullable Double interactionTargetZ,
         @Nullable Float interactionTargetYawRadians
     ) {
+        this(
+            id,
+            townId,
+            x,
+            y,
+            z,
+            tags,
+            capacity,
+            plotId,
+            blockTypeId,
+            interactionKind,
+            mountOnUse,
+            equipmentProfileId,
+            interactionTargetX,
+            interactionTargetY,
+            interactionTargetZ,
+            interactionTargetYawRadians,
+            null
+        );
+    }
+
+    public PoiEntry(
+        @Nonnull UUID id,
+        @Nonnull UUID townId,
+        int x,
+        int y,
+        int z,
+        @Nonnull Set<String> tags,
+        int capacity,
+        @Nullable UUID plotId,
+        @Nullable String blockTypeId,
+        @Nonnull PoiInteractionKind interactionKind,
+        boolean mountOnUse,
+        @Nullable String equipmentProfileId,
+        @Nullable Double interactionTargetX,
+        @Nullable Double interactionTargetY,
+        @Nullable Double interactionTargetZ,
+        @Nullable Float interactionTargetYawRadians,
+        @Nullable String workResidentKind
+    ) {
         this.id = id;
         this.townId = townId;
         this.x = x;
@@ -153,6 +197,8 @@ public final class PoiEntry {
         this.interactionTargetY = interactionTargetY;
         this.interactionTargetZ = interactionTargetZ;
         this.interactionTargetYawRadians = interactionTargetYawRadians;
+        this.workResidentKind =
+            workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
     }
 
     private static boolean defaultMountOnUse(@Nonnull PoiInteractionKind kind) {
@@ -238,6 +284,11 @@ public final class PoiEntry {
         return interactionTargetYawRadians;
     }
 
+    @Nullable
+    public String getWorkResidentKind() {
+        return workResidentKind;
+    }
+
     @Nonnull
     public PoiEntry copyWithPosition(int nx, int ny, int nz) {
         return new PoiEntry(
@@ -256,7 +307,8 @@ public final class PoiEntry {
             interactionTargetX,
             interactionTargetY,
             interactionTargetZ,
-            interactionTargetYawRadians
+            interactionTargetYawRadians,
+            workResidentKind
         );
     }
 
@@ -288,7 +340,8 @@ public final class PoiEntry {
             tx,
             ty,
             tz,
-            yawRadians
+            yawRadians,
+            workResidentKind
         );
     }
 }

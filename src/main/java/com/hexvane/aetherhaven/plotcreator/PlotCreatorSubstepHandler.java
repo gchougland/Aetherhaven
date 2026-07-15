@@ -237,13 +237,14 @@ public final class PlotCreatorSubstepHandler {
                 }
                 yield true;
             }
-            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI -> addPoiForSubstep(
+            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI,
+                QUEST_BOARD_POI -> addPoiForSubstep(
                 session.getWorld(),
                 draft,
                 targetBlock,
                 blockId,
                 local,
-                req.type(),
+                req,
                 playerRef
             );
         };
@@ -276,14 +277,21 @@ public final class PlotCreatorSubstepHandler {
         @Nonnull Vector3i targetBlock,
         @Nullable String blockId,
         @Nonnull int[] local,
-        @Nonnull PlotCreatorSubstepType type,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req,
         @Nonnull PlayerRef playerRef
     ) {
+        PlotCreatorSubstepType type = req.type();
+        if (type == PlotCreatorSubstepType.QUEST_BOARD_POI
+            && blockId != null
+            && !AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(blockId)) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
+            return true;
+        }
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         poi.setLocal(local[0], local[1], local[2]);
         poi.setBlockTypeId(blockId);
         poi.setCapacity(1);
-        applyPoiDefaults(poi, type, draft);
+        applyPoiDefaults(poi, type, draft, req.workResidentKind());
         PlotCreatorPoiInteractionTarget.applyFromBlockFacing(world, targetBlock, local, poi);
         draft.getPois().add(poi);
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiRecorded"));
@@ -293,17 +301,30 @@ public final class PlotCreatorSubstepHandler {
     private static void applyPoiDefaults(
         @Nonnull PlotCreatorPoiDraft poi,
         @Nonnull PlotCreatorSubstepType type,
-        @Nonnull PlotCreatorDraft draft
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable String workResidentKind
     ) {
         switch (type) {
             case WORK_POI -> {
                 poi.getTags().add("WORK");
                 poi.setInteractionKind("WORK_SURFACE");
+                if (workResidentKind != null && !workResidentKind.isBlank()) {
+                    poi.setWorkResidentKind(workResidentKind);
+                    if (com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(workResidentKind)) {
+                        poi.getTags().add(AetherhavenConstants.POI_TAG_BARD);
+                    }
+                }
             }
             case BARD_WORK_POI -> {
                 poi.getTags().add("WORK");
                 poi.getTags().add(AetherhavenConstants.POI_TAG_BARD);
                 poi.setInteractionKind("WORK_SURFACE");
+                poi.setWorkResidentKind(com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD);
+            }
+            case QUEST_BOARD_POI -> {
+                poi.getTags().add(AetherhavenConstants.POI_TAG_QUEST_BOARD);
+                poi.setInteractionKind("NONE");
+                poi.setBlockTypeId(AetherhavenConstants.QUEST_BOARD_ITEM_ID);
             }
             case SLEEP_POI -> {
                 poi.getTags().add("SLEEP");

@@ -99,36 +99,38 @@ public final class ConstructionCatalog {
 
     private static void validateCountsAsAliases(@Nonnull Map<String, ConstructionDefinition> map) {
         for (ConstructionDefinition def : map.values()) {
-            String raw = def.getCountsAsConstructionIdRaw();
-            if (raw == null || raw.isBlank()) {
-                continue;
-            }
-            String target = raw.trim();
-            if (target.equals(def.getId())) {
-                LOGGER.atWarning().log("Construction %s countsAsConstructionId points to itself", def.getId());
-                continue;
-            }
-            if (!map.containsKey(target)) {
-                LOGGER.atWarning().log("Construction %s countsAsConstructionId '%s' missing from catalog", def.getId(), target);
-                continue;
-            }
-            Set<String> chain = new HashSet<>();
-            String walk = def.getId();
-            int guard = 0;
-            while (walk != null && guard++ < 64) {
-                if (!chain.add(walk)) {
-                    LOGGER.atWarning().log("Construction countsAsConstructionId cycle involving %s", def.getId());
-                    break;
+            for (String target : def.getCountsAsConstructionIds()) {
+                if (target.equals(def.getId())) {
+                    LOGGER.atWarning().log("Construction %s countsAsConstructionId points to itself", def.getId());
+                    continue;
                 }
-                ConstructionDefinition step = map.get(walk);
-                if (step == null) {
-                    break;
+                if (!map.containsKey(target)) {
+                    LOGGER.atWarning().log(
+                        "Construction %s countsAsConstructionId '%s' missing from catalog",
+                        def.getId(),
+                        target
+                    );
+                    continue;
                 }
-                String next = step.getCountsAsConstructionIdRaw();
-                if (next == null || next.isBlank()) {
-                    break;
+                Set<String> chain = new HashSet<>();
+                String walk = def.getId();
+                int guard = 0;
+                while (walk != null && guard++ < 64) {
+                    if (!chain.add(walk)) {
+                        LOGGER.atWarning().log("Construction countsAsConstructionId cycle involving %s", def.getId());
+                        break;
+                    }
+                    ConstructionDefinition step = map.get(walk);
+                    if (step == null) {
+                        break;
+                    }
+                    List<String> nextAliases = step.getCountsAsConstructionIds();
+                    if (nextAliases.isEmpty()) {
+                        break;
+                    }
+                    // Follow primary alias for cycle detection.
+                    walk = nextAliases.get(0);
                 }
-                walk = next.trim();
             }
         }
     }
@@ -216,16 +218,66 @@ public final class ConstructionCatalog {
     }
 
     /**
-     * Resolves {@code plotStoredConstructionId} (variant or canonical) to the gameplay construction id used for
-     * production catalogs, quests, and workplace matching.
+     * Resolves {@code plotStoredConstructionId} (variant or canonical) to the primary gameplay construction id used for
+     * production catalogs and single-key callers. Prefer {@link #resolveGameplayConstructionIds} /
+     * {@link #matchesGameplayConstruction} when a building may count as multiple types.
      */
     @Nonnull
     public String resolveGameplayConstructionId(@Nullable String plotStoredConstructionId) {
+        List<String> ids = resolveGameplayConstructionIds(plotStoredConstructionId);
+        return ids.isEmpty() ? "" : ids.get(0);
+    }
+
+    /**
+     * All gameplay construction ids this stored plot id counts as. When the definition has no aliases, returns the
+     * definition id (or the input id when unknown). Each alias is followed through its own primary chain.
+     */
+    @Nonnull
+    public List<String> resolveGameplayConstructionIds(@Nullable String plotStoredConstructionId) {
         if (plotStoredConstructionId == null || plotStoredConstructionId.isBlank()) {
-            return "";
+            return List.of();
         }
+        String start = plotStoredConstructionId.trim();
+        ConstructionDefinition def = byId.get(start);
+        if (def == null) {
+            return List.of(start);
+        }
+        List<String> aliases = def.getCountsAsConstructionIds();
+        if (aliases.isEmpty()) {
+            String id = def.getId() != null ? def.getId() : start;
+            return List.of(id);
+        }
+        List<String> out = new ArrayList<>();
+        for (String alias : aliases) {
+            String resolved = resolveAliasChain(alias);
+            if (!resolved.isEmpty() && !out.contains(resolved)) {
+                out.add(resolved);
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /** True when {@code plotStoredConstructionId} resolves to {@code wantedGameplayConstructionId} (any alias). */
+    public boolean matchesGameplayConstruction(
+        @Nullable String plotStoredConstructionId,
+        @Nullable String wantedGameplayConstructionId
+    ) {
+        if (wantedGameplayConstructionId == null || wantedGameplayConstructionId.isBlank()) {
+            return false;
+        }
+        String wanted = wantedGameplayConstructionId.trim();
+        for (String id : resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (wanted.equals(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Nonnull
+    private String resolveAliasChain(@Nonnull String startId) {
         Set<String> visited = new HashSet<>();
-        String current = plotStoredConstructionId.trim();
+        String current = startId.trim();
         for (int i = 0; i < 64; i++) {
             if (!visited.add(current)) {
                 return current;
@@ -234,13 +286,13 @@ public final class ConstructionCatalog {
             if (def == null) {
                 return current;
             }
-            String alias = def.getCountsAsConstructionIdRaw();
-            if (alias == null || alias.isBlank()) {
+            List<String> aliases = def.getCountsAsConstructionIds();
+            if (aliases.isEmpty()) {
                 return def.getId() != null ? def.getId() : current;
             }
-            current = alias.trim();
+            current = aliases.get(0);
         }
-        return plotStoredConstructionId.trim();
+        return startId.trim();
     }
 
     /** True when the canonical definition for {@code gameplayConstructionId} opts into random multi-plot schedule picks. */

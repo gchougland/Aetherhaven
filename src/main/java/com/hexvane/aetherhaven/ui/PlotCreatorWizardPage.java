@@ -22,14 +22,13 @@ import com.hypixel.hytale.protocol.packets.interface_.CustomUIEventBindingType;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.entity.entities.player.pages.CustomUIPage;
-import com.hypixel.hytale.server.core.ui.DropdownEntryInfo;
-import com.hypixel.hytale.server.core.ui.LocalizableString;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -116,6 +115,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         applyLabels(commandBuilder);
         applyVisibility(commandBuilder);
         applyFields(commandBuilder);
+        applyCheckLists(commandBuilder, eventBuilder);
         PlotCreatorService.refreshWireframe(session, playerRef);
     }
 
@@ -165,12 +165,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            "#KindDropdown",
-            EventData.of("@Kind", "#KindDropdown.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
             "#DisplayNameField",
             EventData.of("@DisplayName", "#DisplayNameField.Value"),
             false
@@ -197,12 +191,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             CustomUIEventBindingType.ValueChanged,
             "#TagsField",
             EventData.of("@Tags", "#TagsField.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
-            "#VariantOfDropdown",
-            EventData.of("@VariantOf", "#VariantOfDropdown.Value"),
             false
         );
         eventBuilder.addEventBinding(
@@ -307,28 +295,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
-        ObjectArrayList<DropdownEntryInfo> kinds = new ObjectArrayList<>();
-        boolean playerTypesOnly = PlotCreatorService.limitBuildingTypesToPlayerKinds();
-        for (PlotBuildingKind k : PlotBuildingKind.selectableKinds(playerTypesOnly, session.getDraft().getKind())) {
-            String labelKey = MSG + ".kind." + k.name();
-            kinds.add(
-                new DropdownEntryInfo(
-                    LocalizableString.fromMessageId(labelKey),
-                    k.name()
-                )
-            );
-        }
-        b.set("#KindDropdown.Entries", kinds);
-        if (session.getDraft().getKind() != null) {
-            b.set("#KindDropdown.Value", session.getDraft().getKind().name());
-        }
-        b.set(
-            "#VariantOfDropdown.Entries",
-            PlotCreatorMainConstructions.dropdownEntries(AetherhavenPlugin.get())
-        );
-        if (session.getDraft().getCountsAsConstructionId() != null) {
-            b.set("#VariantOfDropdown.Value", session.getDraft().getCountsAsConstructionId());
-        }
     }
 
     private void applyVisibility(@Nonnull UICommandBuilder b) {
@@ -338,9 +304,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
             b.set("#PrefabNameField.Visible", false);
-            b.set("#KindDropdown.Visible", true);
+            b.set("#KindDropdown.Visible", false);
+            b.set("#KindCheckScroll.Visible", true);
             b.set("#TagsField.Visible", false);
             b.set("#VariantOfDropdown.Visible", false);
+            b.set("#VariantCheckScroll.Visible", false);
             b.set("#GoldCostLabel.Visible", false);
             b.set("#GoldCostField.Visible", false);
             b.set("#SelfBuildDaysLabel.Visible", false);
@@ -370,15 +338,17 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (configurePanelOnly) {
             boolean homeKind =
-                PlotBuildingKindRequirements.effectiveKind(session.getDraft(), AetherhavenPlugin.get())
-                    == PlotBuildingKind.HOME;
+                PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
+                    .contains(PlotBuildingKind.HOME);
             b.set("#DisplayNameField.Visible", false);
             b.set("#DescriptionField.Visible", false);
             b.set("#ConstructionIdField.Visible", false);
             b.set("#PrefabNameField.Visible", false);
             b.set("#KindDropdown.Visible", false);
+            b.set("#KindCheckScroll.Visible", false);
             b.set("#TagsField.Visible", false);
             b.set("#VariantOfDropdown.Visible", false);
+            b.set("#VariantCheckScroll.Visible", false);
             b.set("#GoldCostLabel.Visible", true);
             b.set("#GoldCostField.Visible", true);
             b.set("#SelfBuildDaysLabel.Visible", true);
@@ -410,9 +380,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#DescriptionField.Visible", step == PlotCreatorStep.IDENTITY);
         b.set("#ConstructionIdField.Visible", step == PlotCreatorStep.IDENTITY);
         b.set("#PrefabNameField.Visible", false);
-        b.set("#KindDropdown.Visible", step == PlotCreatorStep.KIND);
+        b.set("#KindDropdown.Visible", false);
+        b.set("#KindCheckScroll.Visible", step == PlotCreatorStep.KIND);
         b.set("#TagsField.Visible", step == PlotCreatorStep.TAGS);
-        b.set("#VariantOfDropdown.Visible", step == PlotCreatorStep.VARIANT);
+        b.set("#VariantOfDropdown.Visible", false);
+        b.set("#VariantCheckScroll.Visible", step == PlotCreatorStep.VARIANT);
         b.set("#GoldCostLabel.Visible", false);
         b.set("#GoldCostField.Visible", false);
         b.set("#SelfBuildDaysLabel.Visible", false);
@@ -480,9 +452,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         } else if (!d.getBuildingTags().isEmpty()) {
             b.set("#TagsField.Value", String.join(", ", d.getBuildingTags()));
         }
-        if (d.getCountsAsConstructionId() != null) {
-            b.set("#VariantOfDropdown.Value", d.getCountsAsConstructionId());
-        }
         b.set("#GoldCostField.Value", String.valueOf(d.getTreasuryGoldCoinCost()));
         if (d.getSelfBuildDaysInput() != null) {
             b.set("#SelfBuildDaysField.Value", d.getSelfBuildDaysInput());
@@ -520,8 +489,14 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         sb.append(d.getDisplayName()).append("\n");
         sb.append(d.getConstructionId()).append("\n");
         sb.append(d.getPrefabPath()).append("\n");
-        if (d.getKind() != null) {
-            sb.append(d.getKind().name()).append("\n");
+        if (!d.getKinds().isEmpty()) {
+            for (int i = 0; i < d.getKinds().size(); i++) {
+                if (i > 0) {
+                    sb.append(", ");
+                }
+                sb.append(d.getKinds().get(i).name());
+            }
+            sb.append('\n');
         }
         if (!d.getBuildingTags().isEmpty()) {
             sb.append(String.join(", ", d.getBuildingTags()));
@@ -544,10 +519,114 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         UICommandBuilder b = new UICommandBuilder();
+        UIEventBuilder events = new UIEventBuilder();
         applyLabels(b);
         applyVisibility(b);
         applyFields(b);
-        sendUpdate(b, null, false);
+        applyCheckLists(b, events);
+        sendUpdate(b, events, false);
+    }
+
+    private void applyCheckLists(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
+        PlotCreatorStep step = session.getDraft().getStep();
+        boolean showKind = kindPanelOnly || (!configurePanelOnly && step == PlotCreatorStep.KIND);
+        boolean showVariant = !kindPanelOnly && !configurePanelOnly && step == PlotCreatorStep.VARIANT;
+        b.clear("#KindCheckList");
+        b.clear("#VariantCheckList");
+        if (showKind) {
+            appendKindRows(b, eventBuilder);
+        }
+        if (showVariant) {
+            appendVariantRows(b, eventBuilder);
+        }
+    }
+
+    private void appendKindRows(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
+        boolean playerTypesOnly = PlotCreatorService.limitBuildingTypesToPlayerKinds();
+        List<PlotBuildingKind> selectable =
+            PlotBuildingKind.selectableKinds(playerTypesOnly, session.getDraft().getKinds());
+        List<PlotBuildingKind> selected = session.getDraft().getKinds();
+        for (int i = 0; i < selectable.size(); i++) {
+            PlotBuildingKind kind = selectable.get(i);
+            b.append("#KindCheckList", "Aetherhaven/PlotCreatorToggleRow.ui");
+            String row = "#KindCheckList[" + i + "]";
+            b.set(row + " #Label.TextSpans", Message.translation(MSG + ".kind." + kind.name()));
+            b.set(row + " #Toggle.Value", selected.contains(kind));
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                row + " #Toggle",
+                new EventData()
+                    .append("Action", "ToggleKind")
+                    .append("Kind", kind.name())
+                    .append("@Checked", row + " #Toggle.Value"),
+                false
+            );
+        }
+    }
+
+    private void appendVariantRows(@Nonnull UICommandBuilder b, @Nonnull UIEventBuilder eventBuilder) {
+        List<String> selected = session.getDraft().getCountsAsConstructionIds();
+        List<PlotCreatorMainConstructions.Entry> entries =
+            PlotCreatorMainConstructions.variantBaseEntries(AetherhavenPlugin.get());
+        for (int i = 0; i < entries.size(); i++) {
+            PlotCreatorMainConstructions.Entry entry = entries.get(i);
+            b.append("#VariantCheckList", "Aetherhaven/PlotCreatorToggleRow.ui");
+            String row = "#VariantCheckList[" + i + "]";
+            if (entry.labelLang() != null) {
+                b.set(row + " #Label.TextSpans", Message.translation(entry.labelLang()));
+            } else {
+                b.set(row + " #Label.TextSpans", Message.raw(entry.fallbackLabel()));
+            }
+            b.set(row + " #Toggle.Value", selected.contains(entry.id()));
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                row + " #Toggle",
+                new EventData()
+                    .append("Action", "ToggleVariant")
+                    .append("VariantOf", entry.id())
+                    .append("@Checked", row + " #Toggle.Value"),
+                false
+            );
+        }
+    }
+
+    private void applyToggleKind(@Nonnull String kindName, boolean checked) {
+        PlotBuildingKind kind = PlotBuildingKind.fromSerialized(kindName);
+        if (kind == null) {
+            return;
+        }
+        List<PlotBuildingKind> kinds = new ArrayList<>(session.getDraft().getKinds());
+        if (checked) {
+            if (kind == PlotBuildingKind.DECORATION) {
+                kinds.clear();
+                kinds.add(PlotBuildingKind.DECORATION);
+            } else {
+                kinds.remove(PlotBuildingKind.DECORATION);
+                if (!kinds.contains(kind)) {
+                    kinds.add(kind);
+                }
+            }
+        } else {
+            kinds.remove(kind);
+        }
+        session.getDraft().setKinds(kinds);
+        PlotCreatorService.applyDefaultTagsForKind(session.getDraft());
+    }
+
+    private void applyToggleVariant(@Nonnull String constructionId, boolean checked) {
+        String id = constructionId.trim();
+        if (id.isEmpty()) {
+            return;
+        }
+        List<String> ids = new ArrayList<>(session.getDraft().getCountsAsConstructionIds());
+        if (checked) {
+            if (!ids.contains(id)) {
+                ids.add(id);
+            }
+        } else {
+            ids.remove(id);
+        }
+        session.getDraft().setCountsAsConstructionIds(ids);
     }
 
     @Override
@@ -561,6 +640,16 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         @Nonnull Store<EntityStore> store,
         @Nonnull PageData data
     ) {
+        if ("ToggleKind".equals(data.action) && data.kind != null && !data.kind.isBlank()) {
+            applyToggleKind(data.kind, Boolean.TRUE.equals(data.checked));
+            refreshPartial();
+            return;
+        }
+        if ("ToggleVariant".equals(data.action) && data.variantOf != null && !data.variantOf.isBlank()) {
+            applyToggleVariant(data.variantOf, Boolean.TRUE.equals(data.checked));
+            refreshPartial();
+            return;
+        }
         applyIncomingFields(data);
         if ("FillFromBuildShape".equals(data.action)) {
             PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef);
@@ -633,15 +722,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#PrefabNameField.Value", d.getPrefabFileName());
             any = true;
         }
-        if (data.kind != null && !data.kind.isBlank()) {
-            if (d.getBuildingTagsInput() != null) {
-                b.set("#TagsField.Value", d.getBuildingTagsInput());
-                any = true;
-            } else if (!d.getBuildingTags().isEmpty()) {
-                b.set("#TagsField.Value", String.join(", ", d.getBuildingTags()));
-                any = true;
-            }
-        }
         if (any) {
             sendUpdate(b, null, false);
         }
@@ -663,6 +743,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
             return false;
         }
+        PlotCreatorService.applyDefaultTagsForKind(session.getDraft());
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
         return true;
     }
@@ -694,14 +775,15 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             PlotCreatorService.applyTagsInput(session.getDraft());
         }
         if (step == PlotCreatorStep.VARIANT) {
-            String base = session.getDraft().getCountsAsConstructionId();
-            if (base == null || base.isBlank()) {
+            if (session.getDraft().getCountsAsConstructionIds().isEmpty()) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
                 return false;
             }
-            if (!PlotCreatorMainConstructions.isKnownMainConstruction(AetherhavenPlugin.get(), base)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
-                return false;
+            for (String base : session.getDraft().getCountsAsConstructionIds()) {
+                if (!PlotCreatorMainConstructions.isKnownMainConstruction(AetherhavenPlugin.get(), base)) {
+                    playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
+                    return false;
+                }
             }
         }
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
@@ -718,10 +800,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
 
     private void applyIncomingFields(@Nonnull PageData data) {
         PlotCreatorDraft d = session.getDraft();
-        if (data.kind != null && !data.kind.isBlank()) {
-            d.setKind(PlotBuildingKind.fromSerialized(data.kind));
-            PlotCreatorService.applyDefaultTagsForKind(d);
-        }
         if (data.displayName != null) {
             d.setDisplayName(data.displayName);
             if (!d.isConstructionIdUserEdited()) {
@@ -741,9 +819,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         }
         if (data.tags != null) {
             d.setBuildingTagsInput(data.tags);
-        }
-        if (data.variantOf != null && !data.variantOf.isBlank()) {
-            d.setCountsAsConstructionId(data.variantOf.trim());
         }
         if (data.goldCost != null) {
             try {
@@ -820,6 +895,26 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
                 return;
             }
+            PlotCreatorService.applyDefaultTagsForKind(d);
+            PlotCreatorService.advance(session, ref, store);
+            return;
+        }
+        if (step == PlotCreatorStep.VARIANT) {
+            if (d.getCountsAsConstructionIds().isEmpty()) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
+                return;
+            }
+            for (String base : d.getCountsAsConstructionIds()) {
+                if (!PlotCreatorMainConstructions.isKnownMainConstruction(plugin, base)) {
+                    playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
+                    return;
+                }
+            }
+            PlotCreatorService.advance(session, ref, store);
+            return;
+        }
+        if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
+            PlotCreatorService.confirmImportantSpots(d);
             PlotCreatorService.advance(session, ref, store);
             return;
         }
@@ -860,7 +955,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         public static final BuilderCodec<PageData> CODEC = BuilderCodec.builder(PageData.class, PageData::new)
             .append(new KeyedCodec<>("Action", Codec.STRING), (d, v) -> d.action = v, d -> d.action)
             .add()
-            .append(new KeyedCodec<>("@Kind", Codec.STRING), (d, v) -> d.kind = v, d -> d.kind)
+            .append(new KeyedCodec<>("Kind", Codec.STRING), (d, v) -> d.kind = v, d -> d.kind)
+            .add()
+            .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
             .append(new KeyedCodec<>("@DisplayName", Codec.STRING), (d, v) -> d.displayName = v, d -> d.displayName)
             .add()
@@ -872,7 +969,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@Tags", Codec.STRING), (d, v) -> d.tags = v, d -> d.tags)
             .add()
-            .append(new KeyedCodec<>("@VariantOf", Codec.STRING), (d, v) -> d.variantOf = v, d -> d.variantOf)
+            .append(new KeyedCodec<>("VariantOf", Codec.STRING), (d, v) -> d.variantOf = v, d -> d.variantOf)
             .add()
             .append(new KeyedCodec<>("@GoldCost", Codec.STRING), (d, v) -> d.goldCost = v, d -> d.goldCost)
             .add()
@@ -912,6 +1009,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String action;
         @Nullable
         private String kind;
+        @Nullable
+        private Boolean checked;
         @Nullable
         private String displayName;
         @Nullable

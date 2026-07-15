@@ -40,8 +40,8 @@ aetherhaven.plotcreator.hint.touristPortalRecorded = Tourist portal saved.
 aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded = That tourist portal is already saved for this step.
 aetherhaven.plotcreator.hint.spawnRecorded = Spawn spot saved.
 aetherhaven.plotcreator.hint.adventurerSpawnRemoved = Adventurer spawn spot removed.
-aetherhaven.plotcreator.hint.visitorSpawnRemoved = Visitor spawn spot removed.
-aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded = That visitor spawn spot is already saved.
+aetherhaven.plotcreator.hint.visitorSpawnRemoved = Inn visitor spawn spot removed.
+aetherhaven.plotcreator.hint.visitorSpawnAlreadyRecorded = That inn visitor spawn spot is already saved.
 aetherhaven.plotcreator.hint.poiRecorded = Activity spot saved.
 
 aetherhaven.plotcreator.button.save = Save building
@@ -85,10 +85,11 @@ aetherhaven.plotcreator.hud.PREFAB_SAVE.f = Export the build shape inside the bo
 aetherhaven.plotcreator.hud.KIND.f = Open the building type picker
 aetherhaven.plotcreator.hud.IDENTITY.f = Enter the display name, description, and building id
 aetherhaven.plotcreator.hud.TAGS.f = Edit tags (comma separated)
-aetherhaven.plotcreator.hud.VARIANT.f = Pick which main building type this variant counts as
+aetherhaven.plotcreator.hud.VARIANT.f = Pick which main building types this counts as
+aetherhaven.plotcreator.hud.IMPORTANT_SPOTS.f = Open important spots picker
 aetherhaven.plotcreator.hud.SUBSTEP.primary = Click the required block or spot inside the footprint
 aetherhaven.plotcreator.hud.SUBSTEP.secondaryAdventurer = Remove an adventurer spawn marker
-aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor = Remove a visitor spawn marker
+aetherhaven.plotcreator.hud.SUBSTEP.secondaryVisitor = Remove an inn visitor spawn marker
 aetherhaven.plotcreator.hud.SUBSTEP.q = Go back (extra placement blocks from the step you leave are removed)
 aetherhaven.plotcreator.hud.MATERIALS.f = Open build materials menu
 aetherhaven.plotcreator.hud.CONFIGURE.f = Open building settings
@@ -106,11 +107,13 @@ aetherhaven.plotcreator.error.needCornerFirst = Click the first corner before co
 
 aetherhaven.plotcreator.error.needCornerSecond = Click the opposite corner before continuing.
 
-aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose a type before continuing.
+aetherhaven.plotcreator.error.needKind = Open the building type picker with F and choose at least one type before continuing.
+
+aetherhaven.plotcreator.error.decorationExclusive = Decorations cannot be mixed with other building types.
 
 aetherhaven.plotcreator.error.kindNotAllowed = That building type is not available. Choose Decoration or Variant.
 
-aetherhaven.plotcreator.error.needVariantOf = Press F and choose which main building this variant counts as before continuing.
+aetherhaven.plotcreator.error.needVariantOf = Press F and choose at least one main building this should count as before continuing.
 
 aetherhaven.plotcreator.error.invalidVariantOf = That main building type is not in the plot creator list.
 
@@ -160,7 +163,7 @@ aetherhaven.plotcreator.step.ANCHOR.title = Plot sign spot
 aetherhaven.plotcreator.step.ANCHOR.hint = Mark one of the four outside corners of the footprint (one block beyond the bounds on both X and Z). The sign must not be inside the build area.
 
 aetherhaven.plotcreator.step.KIND.title = Building type
-aetherhaven.plotcreator.step.KIND.hint = Choose a building type that fits your build. For what each type means, open your town journal Guide → Mechanics → Plot creator staff.
+aetherhaven.plotcreator.step.KIND.hint = Pick one or more building types that fit your build. Decoration cannot be mixed with other types. A tourist portal can be added to another type. For what each type means, open your town journal Guide then Mechanics then Plot creator staff.
 aetherhaven.plotcreator.kind.DECORATION = Decoration
 aetherhaven.plotcreator.kind.VARIANT = Variant of another building
 aetherhaven.plotcreator.kind.HOME = Home
@@ -190,11 +193,14 @@ aetherhaven.plotcreator.error.maxHomeResidents = Max residents must be a whole n
 
 aetherhaven.plotcreator.error.assemblySections = Assembly sections per axis must be a whole number from 1 to 16 (1 disables sectioned assembly).
 
-aetherhaven.plotcreator.step.VARIANT.title = Variant of
-aetherhaven.plotcreator.step.VARIANT.hint = Pick which main building type this variant counts as.
+aetherhaven.plotcreator.step.VARIANT.title = Counts as
+aetherhaven.plotcreator.step.VARIANT.hint = Pick one or more main building types this build should count as.
 
-aetherhaven.plotcreator.step.SUBSTEP.title = Important spots
-aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each substep. Place or click the required blocks and spots inside the footprint.
+aetherhaven.plotcreator.step.IMPORTANT_SPOTS.title = Important spots
+aetherhaven.plotcreator.step.IMPORTANT_SPOTS.hint = Press F to choose which important spots this building needs. The town records shelf stays on. Next steps only ask you to place the spots you picked.
+
+aetherhaven.plotcreator.step.SUBSTEP.title = Place spots
+aetherhaven.plotcreator.step.SUBSTEP.hint = Placement blocks are added to your inventory for each step. Place or click the needed blocks and spots inside the footprint.
 
 aetherhaven.plotcreator.step.MATERIALS.title = Build materials
 aetherhaven.plotcreator.step.MATERIALS.hint = Press F to open the build materials menu. Prefab fill adds costs without giving you items.
@@ -243,6 +249,45 @@ aetherhaven.plotcreator.substep.INNKEEPER_SPAWN = Click where the innkeeper shou
 aetherhaven.plotcreator.substep.VISITOR_SPAWN = Click where each inn visitor should stand (two spots). Right-click a teal marker to remove it.
 aetherhaven.plotcreator.substep.GUILD_MASTER_SPAWN = Click where the guild master should stand.
 aetherhaven.plotcreator.substep.ADVENTURER_SPAWN = Click an adventurer spawn spot. Right-click a purple marker to remove it.
+aetherhaven.plotcreator.substep.QUEST_BOARD_POI = Click the quest board.
+
+aetherhaven.plotcreator.spot.MANAGEMENT_BLOCK = Town records shelf
+aetherhaven.plotcreator.spot.PRODUCTION_STORAGE = Production chest
+aetherhaven.plotcreator.spot.TREASURY_BLOCK = Treasury
+aetherhaven.plotcreator.spot.SHOP_SAFE_BLOCK = Shop safe
+aetherhaven.plotcreator.spot.PLANNING_DESK_POI = Planning desk
+aetherhaven.plotcreator.spot.WORK_POI = Work spot
+aetherhaven.plotcreator.spot.SLEEP_POI = Sleep spot
+aetherhaven.plotcreator.spot.EAT_POI = Eat spot
+aetherhaven.plotcreator.spot.FUN_POI = Fun spot
+aetherhaven.plotcreator.spot.SHOP_SPOT = Shop stall
+aetherhaven.plotcreator.spot.TOURIST_PORTAL_BLOCK = Tourist portal
+aetherhaven.plotcreator.spot.TOURIST_VISIT_POI = Tourist visit spot
+aetherhaven.plotcreator.spot.SHOP_POI = Shop browse spot
+aetherhaven.plotcreator.spot.INNKEEPER_SPAWN = Innkeeper stand
+aetherhaven.plotcreator.spot.VISITOR_SPAWN = Inn Visitor Spawn
+aetherhaven.plotcreator.spot.GUILD_MASTER_SPAWN = Guild master stand
+aetherhaven.plotcreator.spot.ADVENTURER_SPAWN = Adventurer posts
+aetherhaven.plotcreator.spot.BARD_WORK_POI = Bard work spot
+aetherhaven.plotcreator.spot.QUEST_BOARD_POI = Quest board
+aetherhaven.plotcreator.spot.workRole.innkeeper = Innkeeper work spot
+aetherhaven.plotcreator.spot.workRole.guild_master = Guild master work spot
+aetherhaven.plotcreator.spot.workRole.bard = Bard work spot
+aetherhaven.plotcreator.spot.workRole.elder = Elder work spot
+aetherhaven.plotcreator.spot.workRole.farmer = Farmer work spot
+aetherhaven.plotcreator.spot.workRole.miner = Miner work spot
+aetherhaven.plotcreator.spot.workRole.logger = Logger work spot
+aetherhaven.plotcreator.spot.workRole.rancher = Rancher work spot
+aetherhaven.plotcreator.spot.workRole.blacksmith = Blacksmith work spot
+aetherhaven.plotcreator.spot.workRole.merchant = Merchant work spot
+aetherhaven.plotcreator.spot.workRole.builder = Builder work spot
+aetherhaven.plotcreator.spot.workRole.florist = Florist work spot
+aetherhaven.plotcreator.spot.workRole.pyrotechnic = Pyrotechnic work spot
+aetherhaven.plotcreator.spot.workRole.crystal_keeper = Crystal keeper work spot
+aetherhaven.plotcreator.spot.workRole.chef = Chef work spot
+aetherhaven.plotcreator.spot.workRole.priestess = Priestess work spot
+aetherhaven.plotcreator.spot.confirm = Save spot choices
+aetherhaven.plotcreator.spot.hint = Turn on the spots you want. Town records shelf stays on.
 
 aetherhaven.plotcreator.success.saved = Building saved as {id}. You received a plot token.
 aetherhaven.plotcreator.success.registered = Building saved as {id} and registered in your town at the spot you marked (already complete — no plot sign).

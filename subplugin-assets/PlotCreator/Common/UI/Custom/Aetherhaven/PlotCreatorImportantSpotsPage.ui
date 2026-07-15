@@ -1,0 +1,60 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 560);
+
+    #Title {
+      Label #ImportantSpotsTitleText {
+        Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+        Padding: (Horizontal: 19);
+        Text: "";
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #StepHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #SpotListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 320, Bottom: 12);
+
+        Group #SpotRows {
+          LayoutMode: Top;
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        $C.@TextButton #ConfirmButton {
+          FlexWeight: 1;
+          Anchor: (Right: 8, Height: 40);
+          Text: "";
+        }
+
+        $C.@CancelTextButton #CloseButton {
+          Anchor: (Height: 40, Width: 110);
+          Text: "";
+        }
+      }
+    }
+  }
+}

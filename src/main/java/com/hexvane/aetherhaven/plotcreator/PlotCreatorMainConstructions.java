@@ -133,8 +133,7 @@ public final class PlotCreatorMainConstructions {
         if (def.isDecorationPlot() || def.isWallSegment()) {
             return false;
         }
-        String countsAs = def.getCountsAsConstructionIdRaw();
-        return countsAs == null || countsAs.isBlank();
+        return def.getCountsAsConstructionIds().isEmpty();
     }
 
     @Nonnull

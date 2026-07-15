@@ -117,10 +117,10 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         ConstructionCatalog ccat = plugin.getConstructionCatalog();
-        String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
-        if (!expectedConstruction.equals(gameplayPlotId)) {
+        if (!ccat.matchesGameplayConstruction(plot.getConstructionId(), expectedConstruction)) {
             return;
         }
+        String gameplayPlotId = ccat.resolveGameplayConstructionId(plot.getConstructionId());
         String roleId = npc.getRoleName();
         if (roleId == null || roleId.isBlank()) {
             return;
@@ -130,7 +130,17 @@ public final class ProductionTickSystem extends EntityTickingSystem<EntityStore>
             return;
         }
         String workConstructionId = vdef.getWorkConstructionId();
-        if (workConstructionId == null || !workConstructionId.equals(gameplayPlotId)) {
+        if (workConstructionId == null) {
+            return;
+        }
+        boolean workMatches = false;
+        for (String gid : ccat.resolveGameplayConstructionIds(plot.getConstructionId())) {
+            if (workConstructionId.equals(gid) || ccat.matchesGameplayConstruction(workConstructionId, gid)) {
+                workMatches = true;
+                break;
+            }
+        }
+        if (!workMatches) {
             return;
         }
         ProductionCatalog catalog = plugin.getProductionCatalog();

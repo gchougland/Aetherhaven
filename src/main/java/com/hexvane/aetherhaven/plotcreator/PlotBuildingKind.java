@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,14 +32,25 @@ public enum PlotBuildingKind {
         boolean playerTypesOnly,
         @Nullable PlotBuildingKind includeExisting
     ) {
-        List<PlotBuildingKind> base = playerTypesOnly ? PLAYER_KINDS : List.of(values());
-        if (includeExisting == null || base.contains(includeExisting)) {
-            return base;
+        return selectableKinds(
+            playerTypesOnly,
+            includeExisting == null ? List.of() : List.of(includeExisting)
+        );
+    }
+
+    @Nonnull
+    public static List<PlotBuildingKind> selectableKinds(
+        boolean playerTypesOnly,
+        @Nonnull Collection<PlotBuildingKind> includeExisting
+    ) {
+        List<PlotBuildingKind> base =
+            playerTypesOnly ? new ArrayList<>(PLAYER_KINDS) : new ArrayList<>(List.of(values()));
+        for (PlotBuildingKind existing : includeExisting) {
+            if (existing != null && !base.contains(existing)) {
+                base.add(existing);
+            }
         }
-        List<PlotBuildingKind> extended = new ArrayList<>(base.size() + 1);
-        extended.addAll(base);
-        extended.add(includeExisting);
-        return extended;
+        return base;
     }
 
     @Nullable

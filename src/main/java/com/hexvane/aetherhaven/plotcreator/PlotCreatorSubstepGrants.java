@@ -38,6 +38,7 @@ public final class PlotCreatorSubstepGrants {
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
             case SHOP_SPOT -> List.of(new ItemStack(AetherhavenConstants.SHOP_SPOT_ITEM_ID, qty));
             case TOURIST_PORTAL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TOURIST_PORTAL_ITEM_ID, qty));
+            case QUEST_BOARD_POI -> List.of(new ItemStack(AetherhavenConstants.QUEST_BOARD_ITEM_ID, qty));
             default -> List.of();
         };
     }

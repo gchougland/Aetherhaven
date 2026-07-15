@@ -32,6 +32,8 @@ public final class PlotCreatorDraft {
 
     @Nullable
     private PlotBuildingKind kind;
+    @Nonnull
+    private final List<PlotBuildingKind> kinds = new ArrayList<>();
     @Nullable
     private String constructionId;
     @Nullable
@@ -45,6 +47,13 @@ public final class PlotCreatorDraft {
     private String buildingTagsInput;
     @Nullable
     private String countsAsConstructionId;
+    @Nonnull
+    private final List<String> countsAsConstructionIds = new ArrayList<>();
+    /** Chosen important spots for the SUBSTEP loop; empty until IMPORTANT_SPOTS is committed. */
+    @Nonnull
+    private final List<PlotCreatorSpotEntry> selectedSpots = new ArrayList<>();
+    /** True after the player confirmed the important spots chooser at least once this session. */
+    private boolean importantSpotsConfirmed;
 
     @Nonnull
     private final List<PlotCreatorPoiDraft> pois = new ArrayList<>();
@@ -198,11 +207,48 @@ public final class PlotCreatorDraft {
 
     @Nullable
     public PlotBuildingKind getKind() {
+        if (!kinds.isEmpty()) {
+            return kinds.get(0);
+        }
         return kind;
     }
 
     public void setKind(@Nullable PlotBuildingKind kind) {
         this.kind = kind;
+        kinds.clear();
+        if (kind != null) {
+            kinds.add(kind);
+        }
+    }
+
+    @Nonnull
+    public List<PlotBuildingKind> getKinds() {
+        if (!kinds.isEmpty()) {
+            return kinds;
+        }
+        if (kind != null) {
+            return List.of(kind);
+        }
+        return List.of();
+    }
+
+    public void setKinds(@Nonnull List<PlotBuildingKind> next) {
+        kinds.clear();
+        for (PlotBuildingKind k : next) {
+            if (k != null && !kinds.contains(k)) {
+                kinds.add(k);
+            }
+        }
+        kind = kinds.isEmpty() ? null : kinds.get(0);
+    }
+
+    public boolean hasKind(@Nonnull PlotBuildingKind want) {
+        return getKinds().contains(want);
+    }
+
+    public boolean isDecorationOnly() {
+        List<PlotBuildingKind> ks = getKinds();
+        return ks.size() == 1 && ks.get(0) == PlotBuildingKind.DECORATION;
     }
 
     @Nullable
@@ -248,11 +294,52 @@ public final class PlotCreatorDraft {
 
     @Nullable
     public String getCountsAsConstructionId() {
+        if (!countsAsConstructionIds.isEmpty()) {
+            return countsAsConstructionIds.get(0);
+        }
         return countsAsConstructionId;
     }
 
     public void setCountsAsConstructionId(@Nullable String countsAsConstructionId) {
         this.countsAsConstructionId = countsAsConstructionId;
+        countsAsConstructionIds.clear();
+        if (countsAsConstructionId != null && !countsAsConstructionId.isBlank()) {
+            countsAsConstructionIds.add(countsAsConstructionId.trim());
+        }
+    }
+
+    @Nonnull
+    public List<String> getCountsAsConstructionIds() {
+        if (!countsAsConstructionIds.isEmpty()) {
+            return countsAsConstructionIds;
+        }
+        if (countsAsConstructionId != null && !countsAsConstructionId.isBlank()) {
+            return List.of(countsAsConstructionId.trim());
+        }
+        return List.of();
+    }
+
+    public void setCountsAsConstructionIds(@Nonnull List<String> ids) {
+        countsAsConstructionIds.clear();
+        for (String id : ids) {
+            if (id != null && !id.isBlank() && !countsAsConstructionIds.contains(id.trim())) {
+                countsAsConstructionIds.add(id.trim());
+            }
+        }
+        countsAsConstructionId = countsAsConstructionIds.isEmpty() ? null : countsAsConstructionIds.get(0);
+    }
+
+    @Nonnull
+    public List<PlotCreatorSpotEntry> getSelectedSpots() {
+        return selectedSpots;
+    }
+
+    public boolean isImportantSpotsConfirmed() {
+        return importantSpotsConfirmed;
+    }
+
+    public void setImportantSpotsConfirmed(boolean importantSpotsConfirmed) {
+        this.importantSpotsConfirmed = importantSpotsConfirmed;
     }
 
     @Nonnull

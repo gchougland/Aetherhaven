@@ -207,12 +207,24 @@ public final class InnVisitorShopPromotion {
         if (workConstructionId.equals(completedConstructionId) || workConstructionId.equals(completedGameplayConstructionId)) {
             return true;
         }
-        String workGameplay = constructions.resolveGameplayConstructionId(workConstructionId);
-        String completedGameplay = constructions.resolveGameplayConstructionId(completedGameplayConstructionId);
-        if (completedGameplay.isEmpty()) {
-            completedGameplay = constructions.resolveGameplayConstructionId(completedConstructionId);
+        if (constructions.matchesGameplayConstruction(completedConstructionId, workConstructionId)) {
+            return true;
         }
-        return !workGameplay.isEmpty() && workGameplay.equals(completedGameplay);
+        if (constructions.matchesGameplayConstruction(completedGameplayConstructionId, workConstructionId)) {
+            return true;
+        }
+        String workGameplay = constructions.resolveGameplayConstructionId(workConstructionId);
+        for (String completedGameplay : constructions.resolveGameplayConstructionIds(completedConstructionId)) {
+            if (!workGameplay.isEmpty() && workGameplay.equals(completedGameplay)) {
+                return true;
+            }
+        }
+        for (String completedGameplay : constructions.resolveGameplayConstructionIds(completedGameplayConstructionId)) {
+            if (!workGameplay.isEmpty() && workGameplay.equals(completedGameplay)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean questGrantsConstruction(

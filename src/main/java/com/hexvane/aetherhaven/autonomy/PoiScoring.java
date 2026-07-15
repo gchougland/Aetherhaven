@@ -42,6 +42,22 @@ public final class PoiScoring {
     }
 
     static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
+        String role = e.getWorkResidentKind();
+        if (role != null && !role.isBlank()) {
+            String want = bindingKind.trim();
+            if (role.equals(want)) {
+                return isWorkPoi(e);
+            }
+            // Visitor kinds match permanent desks when tagged for the permanent role.
+            if (TownVillagerBinding.KIND_VISITOR_BARD.equals(want) && TownVillagerBinding.KIND_BARD.equals(role)) {
+                return isWorkPoi(e);
+            }
+            if (TownVillagerBinding.KIND_VISITOR_GUILD_MASTER.equals(want)
+                && TownVillagerBinding.KIND_GUILD_MASTER.equals(role)) {
+                return isWorkPoi(e);
+            }
+            return false;
+        }
         if (TownVillagerBinding.KIND_BARD.equals(bindingKind)
             || TownVillagerBinding.KIND_VISITOR_BARD.equals(bindingKind)) {
             return isBardWorkPoi(e);

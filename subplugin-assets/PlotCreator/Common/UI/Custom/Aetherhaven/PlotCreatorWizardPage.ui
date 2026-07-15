@@ -10,7 +10,7 @@ $C.@PageOverlay {
   LayoutMode: Middle;
 
   $C.@DecoratedContainer {
-    Anchor: (Width: 520);
+    Anchor: (Width: 560);
 
     #Title {
       Label #PlotCreatorTitleText {
@@ -63,6 +63,18 @@ $C.@PageOverlay {
 
       $C.@DropdownBox #VariantOfDropdown {
         Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
+        Visible: false;
+      }
+
+      Group #VariantCheckScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 10);
+        Visible: false;
+
+        Group #VariantCheckList {
+          LayoutMode: Top;
+        }
       }
 
       Label #StyleIdLabel {
@@ -256,6 +268,18 @@ $C.@PageOverlay {
 
       $C.@DropdownBox #KindDropdown {
         Anchor: (Bottom: 10, Height: $C.@DropdownBoxHeight);
+        Visible: false;
+      }
+
+      Group #KindCheckScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        Anchor: (Height: 280, Bottom: 10);
+        Visible: false;
+
+        Group #KindCheckList {
+          LayoutMode: Top;
+        }
       }
 
       Label #ReviewSummary {

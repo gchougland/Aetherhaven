@@ -1495,7 +1495,8 @@ public final class TownRecord {
             return false;
         }
         for (PlotInstance p : getPlotInstances()) {
-            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (p.getState() == PlotInstanceState.COMPLETE
+                && constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), c)) {
                 return true;
             }
         }
@@ -1512,7 +1513,8 @@ public final class TownRecord {
             return null;
         }
         for (PlotInstance p : getPlotInstances()) {
-            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (p.getState() == PlotInstanceState.COMPLETE
+                && constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), c)) {
                 return p;
             }
         }
@@ -1533,7 +1535,8 @@ public final class TownRecord {
             return out;
         }
         for (PlotInstance p : getPlotInstances()) {
-            if (p.getState() == PlotInstanceState.COMPLETE && c.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (p.getState() == PlotInstanceState.COMPLETE
+                && constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), c)) {
                 out.add(p);
             }
         }
@@ -1542,15 +1545,18 @@ public final class TownRecord {
 
     /**
      * True if this villager NPC is listed as home resident on any complete residential plot in this town
-     * (used for house-quest dialogue completion after assignment). Uses {@link ConstructionCatalog#resolveGameplayConstructionId}
-     * so variant houses ({@code countsAsConstructionId}: {@link AetherhavenConstants#CONSTRUCTION_PLOT_HOUSE}) count.
+     * (used for house-quest dialogue completion after assignment). Uses {@link ConstructionCatalog#matchesGameplayConstruction}
+     * so variant houses ({@code countsAsConstructionId} including {@link AetherhavenConstants#CONSTRUCTION_PLOT_HOUSE}) count.
      */
     public boolean isNpcHomeResidentOnHousePlot(@Nonnull UUID npcEntityUuid, @Nonnull ConstructionCatalog constructionCatalog) {
         for (PlotInstance p : getPlotInstances()) {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (!constructionCatalog.matchesGameplayConstruction(
+                p.getConstructionId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )) {
                 continue;
             }
             if (p.hasHomeResident(npcEntityUuid)) {

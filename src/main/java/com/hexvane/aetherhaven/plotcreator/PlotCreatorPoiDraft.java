@@ -42,6 +42,10 @@ public final class PlotCreatorPoiDraft {
     @SerializedName("interactionTargetLocalZ")
     private Integer interactionTargetLocalZ;
 
+    @Nullable
+    @SerializedName("workResidentKind")
+    private String workResidentKind;
+
     public int getLocalX() {
         return localX;
     }
@@ -91,5 +95,15 @@ public final class PlotCreatorPoiDraft {
         this.interactionTargetLocalX = x;
         this.interactionTargetLocalY = y;
         this.interactionTargetLocalZ = z;
+    }
+
+    @Nullable
+    public String getWorkResidentKind() {
+        return workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
+    }
+
+    public void setWorkResidentKind(@Nullable String workResidentKind) {
+        this.workResidentKind =
+            workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
     }
 }

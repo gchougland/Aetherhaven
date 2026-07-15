@@ -1,10 +1,12 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,6 +59,7 @@ public final class PlotCreatorDraftLoader {
                     row.getInteractionTargetLocalZ()
                 );
             }
+            p.setWorkResidentKind(row.getWorkResidentKind());
             draft.getPois().add(p);
         }
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);
@@ -84,19 +87,75 @@ public final class PlotCreatorDraftLoader {
                 }
             }
         }
-        String countsAs = def.getCountsAsConstructionIdRaw();
-        if (countsAs != null && !countsAs.isBlank()) {
-            draft.setCountsAsConstructionId(countsAs.trim());
+        draft.setCountsAsConstructionIds(def.getCountsAsConstructionIds());
+        draft.setKinds(inferKinds(def));
+        seedSelectedSpotsFromDefinition(draft, def);
+    }
+
+    private static void seedSelectedSpotsFromDefinition(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull ConstructionDefinition def
+    ) {
+        draft.getSelectedSpots().clear();
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        List<PlotBuildingKindRequirements.SubstepRequirement> defaults =
+            PlotBuildingKindRequirements.defaultRequirements(draft, plugin);
+        for (PlotBuildingKindRequirements.SubstepRequirement req : defaults) {
+            draft.getSelectedSpots().add(req.toSpotEntry());
         }
-        draft.setKind(inferKind(def));
+        // Ensure recorded work roles are represented even if defaults missed them.
+        for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
+            String role = row.getWorkResidentKind();
+            if (role == null || role.isBlank()) {
+                if (row.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
+                    role = com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD;
+                } else {
+                    continue;
+                }
+            }
+            PlotCreatorSpotEntry entry =
+                com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(role)
+                    ? PlotCreatorSpotEntry.bard(1)
+                    : PlotCreatorSpotEntry.work(role, 1);
+            if (!draft.getSelectedSpots().contains(entry)) {
+                draft.getSelectedSpots().add(entry);
+            }
+        }
+        if (!draft.getSelectedSpots().isEmpty()) {
+            draft.setImportantSpotsConfirmed(true);
+        }
     }
 
     @Nonnull
-    private static PlotBuildingKind inferKind(@Nonnull ConstructionDefinition def) {
-        String countsAs = def.getCountsAsConstructionIdRaw();
-        if (countsAs != null && !countsAs.isBlank() && !countsAs.trim().equals(def.getId())) {
-            return PlotBuildingKind.VARIANT;
+    private static List<PlotBuildingKind> inferKinds(@Nonnull ConstructionDefinition def) {
+        java.util.LinkedHashSet<PlotBuildingKind> kinds = new java.util.LinkedHashSet<>();
+        List<String> countsAs = def.getCountsAsConstructionIds();
+        if (!countsAs.isEmpty()) {
+            kinds.add(PlotBuildingKind.VARIANT);
+            for (String baseId : countsAs) {
+                PlotBuildingKind base = PlotBuildingKindRequirements.resolveBaseKind(baseId, AetherhavenPlugin.get());
+                // VARIANT alone is enough for authoring; tourist portal add-on from spots.
+            }
+        } else {
+            kinds.add(inferPrimaryKind(def));
         }
+        if (def.getPois().stream().anyMatch(p ->
+            AetherhavenConstants.TOURIST_PORTAL_BLOCK_TYPE_ID.equals(p.getBlockTypeId()))) {
+            kinds.add(PlotBuildingKind.TOURIST_PORTAL);
+        }
+        // Tourist portal block on definition fields is only the portal kind itself.
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL.equals(def.getId())
+            || countsAs.contains(AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL)) {
+            kinds.add(PlotBuildingKind.TOURIST_PORTAL);
+        }
+        if (kinds.isEmpty()) {
+            kinds.add(PlotBuildingKind.WORK);
+        }
+        return new ArrayList<>(kinds);
+    }
+
+    @Nonnull
+    private static PlotBuildingKind inferPrimaryKind(@Nonnull ConstructionDefinition def) {
         String id = def.getId();
         if (AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL.equals(id)) {
             return PlotBuildingKind.TOWN_HALL;

@@ -481,7 +481,7 @@ public final class TownTaxService {
             if (plot.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(plot.getConstructionId()))) {
+            if (!catalog.matchesGameplayConstruction(plot.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE)) {
                 continue;
             }
             for (UUID home : plot.getHomeResidentEntityUuids()) {

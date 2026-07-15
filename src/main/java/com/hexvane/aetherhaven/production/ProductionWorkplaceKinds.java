@@ -7,6 +7,9 @@ import com.hexvane.aetherhaven.inn.InnVisitorShopPromotion;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -25,9 +28,56 @@ public final class ProductionWorkplaceKinds {
             || isMultiRoleWorkplace(gameplayConstructionId);
     }
 
+    /** True when any resolved gameplay id for the stored construction supports worker assignment. */
+    public static boolean supportsWorkerAssignmentForPlot(
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable String plotStoredConstructionId
+    ) {
+        return !residentBindingKindsForPlot(catalog, plotStoredConstructionId).isEmpty();
+    }
+
+    /**
+     * All distinct workplace resident kinds this plot can assign (including bard when any id is guild hall).
+     */
+    @Nonnull
+    public static List<String> residentBindingKindsForPlot(
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable String plotStoredConstructionId
+    ) {
+        LinkedHashSet<String> out = new LinkedHashSet<>();
+        for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (isMultiRoleWorkplace(gid)) {
+                String gm = residentBindingKindForGameplayConstruction(gid);
+                if (gm != null) {
+                    out.add(gm);
+                }
+                out.add(TownVillagerBinding.KIND_BARD);
+                continue;
+            }
+            String kind = residentBindingKindForGameplayConstruction(gid);
+            if (kind != null) {
+                out.add(kind);
+            }
+        }
+        return new ArrayList<>(out);
+    }
+
     /** Guild hall staffs a guild master and a bard at separate work stations. */
     public static boolean isMultiRoleWorkplace(@Nullable String gameplayConstructionId) {
         return AetherhavenConstants.CONSTRUCTION_PLOT_GUILD_HALL.equals(trimOrNull(gameplayConstructionId));
+    }
+
+    /** True when any resolved gameplay id for the plot is a multi-role (guild hall) workplace. */
+    public static boolean isMultiRoleWorkplacePlot(
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable String plotStoredConstructionId
+    ) {
+        for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            if (isMultiRoleWorkplace(gid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -65,6 +115,7 @@ public final class ProductionWorkplaceKinds {
                 case AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP -> TownVillagerBinding.KIND_FLORIST;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP -> TownVillagerBinding.KIND_PYROTECHNIC;
                 case AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP -> TownVillagerBinding.KIND_CRYSTAL_KEEPER;
+                case AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT -> TownVillagerBinding.KIND_CHEF;
                 default -> null;
             };
         if (known != null) {

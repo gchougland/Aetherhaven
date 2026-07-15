@@ -78,7 +78,10 @@ public final class WorkplacePlotAssignment {
             return "Plot is not ready.";
         }
         String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(
+            plugin.getConstructionCatalog(),
+            plot.getConstructionId()
+        )) {
             return "This building is not a workplace.";
         }
 
@@ -244,7 +247,10 @@ public final class WorkplacePlotAssignment {
             return "Plot is not ready.";
         }
         String gameplayId = plugin.getConstructionCatalog().resolveGameplayConstructionId(plot.getConstructionId());
-        if (!ProductionWorkplaceKinds.supportsWorkerAssignment(gameplayId)) {
+        if (!ProductionWorkplaceKinds.supportsWorkerAssignmentForPlot(
+            plugin.getConstructionCatalog(),
+            plot.getConstructionId()
+        )) {
             return "This building is not a workplace.";
         }
 
@@ -265,7 +271,18 @@ public final class WorkplacePlotAssignment {
             return "Unknown villager role.";
         }
         String workId = vdef.getWorkConstructionId();
-        if (workId == null || !workId.equals(gameplayId)) {
+        if (workId == null) {
+            return "That villager does not work at this building type.";
+        }
+        boolean workMatches = false;
+        for (String gid : plugin.getConstructionCatalog().resolveGameplayConstructionIds(plot.getConstructionId())) {
+            if (workId.equals(gid)
+                || plugin.getConstructionCatalog().matchesGameplayConstruction(workId, gid)) {
+                workMatches = true;
+                break;
+            }
+        }
+        if (!workMatches) {
             return "That villager does not work at this building type.";
         }
 

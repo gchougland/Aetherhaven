@@ -60,6 +60,14 @@ public final class BuildingPoisDefinition {
         @SerializedName("interactionTargetLocalZ")
         private Integer interactionTargetLocalZ;
 
+        /**
+         * Optional resident binding kind this work desk is for (e.g. innkeeper, guild_master). Used when a building
+         * has multiple workplace roles.
+         */
+        @Nullable
+        @SerializedName("workResidentKind")
+        private String workResidentKind;
+
         public int getLocalX() {
             return localX;
         }
@@ -113,6 +121,11 @@ public final class BuildingPoisDefinition {
 
         public int getInteractionTargetLocalZ() {
             return interactionTargetLocalZ != null ? interactionTargetLocalZ : 0;
+        }
+
+        @Nullable
+        public String getWorkResidentKind() {
+            return workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
         }
     }
 }

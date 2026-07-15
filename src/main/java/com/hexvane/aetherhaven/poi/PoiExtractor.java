@@ -174,9 +174,14 @@ public final class PoiExtractor {
                 plotId,
                 expectedType,
                 row.getInteractionKind(),
+                row.getInteractionKind() == PoiInteractionKind.SIT
+                    || row.getInteractionKind() == PoiInteractionKind.SLEEP,
+                null,
                 itx,
                 ity,
-                itz
+                itz,
+                null,
+                row.getWorkResidentKind()
             );
         }
         return new PoiEntry(
@@ -189,7 +194,15 @@ public final class PoiExtractor {
             row.getCapacity(),
             plotId,
             expectedType,
-            row.getInteractionKind()
+            row.getInteractionKind(),
+            row.getInteractionKind() == PoiInteractionKind.SIT
+                || row.getInteractionKind() == PoiInteractionKind.SLEEP,
+            null,
+            null,
+            null,
+            null,
+            null,
+            row.getWorkResidentKind()
         );
     }
 

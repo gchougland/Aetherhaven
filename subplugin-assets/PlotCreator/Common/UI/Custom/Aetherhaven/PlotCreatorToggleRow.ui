@@ -1,0 +1,15 @@
+$C = "../Common.ui";
+
+Group #PlotCreatorToggleRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 8);
+
+  $C.@CheckBox #Toggle {}
+
+  Label #Label {
+    Text: "";
+    Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+    Anchor: (Left: 11);
+    FlexWeight: 1;
+  }
+}

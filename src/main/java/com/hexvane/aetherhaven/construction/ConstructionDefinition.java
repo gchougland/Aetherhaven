@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.construction;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
@@ -100,12 +102,13 @@ public final class ConstructionDefinition {
     private String styleId;
 
     /**
-     * When set, this variant counts as the canonical construction for quests, production keys, workplace matching, and
-     * schedule resolution ({@code plotInstance.constructionId} stays this definition's {@link #id}).
+     * When set, this variant counts as one or more canonical constructions for quests, production keys, workplace
+     * matching, and schedule resolution ({@code plotInstance.constructionId} stays this definition's {@link #id}).
+     * JSON may be a string or an array of strings.
      */
     @SerializedName("countsAsConstructionId")
     @Nullable
-    private String countsAsConstructionId;
+    private JsonElement countsAsConstructionId;
 
     /**
      * When true on the <em>canonical</em> gameplay definition (and variants inheriting via {@link #countsAsConstructionId}),
@@ -395,20 +398,79 @@ public final class ConstructionDefinition {
     }
 
     /**
-     * Canonical gameplay construction id: {@link #countsAsConstructionId} if set, otherwise {@link #getId}.
+     * Primary gameplay construction id: first {@link #getCountsAsConstructionIds()} entry if any, otherwise {@link #getId}.
      */
     @Nonnull
     public String getGameplayConstructionId() {
-        String alias = countsAsConstructionId;
-        if (alias != null && !alias.isBlank()) {
-            return alias.trim();
+        List<String> aliases = getCountsAsConstructionIds();
+        if (!aliases.isEmpty()) {
+            return aliases.get(0);
         }
         return id != null ? id : "";
     }
 
+    /**
+     * Alias targets declared on this definition (legacy string or array). Empty when this definition is canonical.
+     */
+    @Nonnull
+    public List<String> getCountsAsConstructionIds() {
+        if (countsAsConstructionId == null || countsAsConstructionId.isJsonNull()) {
+            return List.of();
+        }
+        List<String> out = new ArrayList<>();
+        if (countsAsConstructionId.isJsonPrimitive() && countsAsConstructionId.getAsJsonPrimitive().isString()) {
+            String s = countsAsConstructionId.getAsString();
+            if (s != null && !s.isBlank()) {
+                out.add(s.trim());
+            }
+            return List.copyOf(out);
+        }
+        if (countsAsConstructionId.isJsonArray()) {
+            JsonArray arr = countsAsConstructionId.getAsJsonArray();
+            for (JsonElement el : arr) {
+                if (el == null || !el.isJsonPrimitive() || !el.getAsJsonPrimitive().isString()) {
+                    continue;
+                }
+                String s = el.getAsString();
+                if (s != null && !s.isBlank() && !out.contains(s.trim())) {
+                    out.add(s.trim());
+                }
+            }
+        }
+        return List.copyOf(out);
+    }
+
+    /** First alias, or null when none (legacy single-value callers). */
     @Nullable
     public String getCountsAsConstructionIdRaw() {
-        return countsAsConstructionId;
+        List<String> aliases = getCountsAsConstructionIds();
+        return aliases.isEmpty() ? null : aliases.get(0);
+    }
+
+    public void setCountsAsConstructionIds(@Nullable List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            this.countsAsConstructionId = null;
+            return;
+        }
+        List<String> cleaned = new ArrayList<>();
+        for (String idVal : ids) {
+            if (idVal != null && !idVal.isBlank() && !cleaned.contains(idVal.trim())) {
+                cleaned.add(idVal.trim());
+            }
+        }
+        if (cleaned.isEmpty()) {
+            this.countsAsConstructionId = null;
+            return;
+        }
+        if (cleaned.size() == 1) {
+            this.countsAsConstructionId = new com.google.gson.JsonPrimitive(cleaned.get(0));
+            return;
+        }
+        JsonArray arr = new JsonArray();
+        for (String s : cleaned) {
+            arr.add(s);
+        }
+        this.countsAsConstructionId = arr;
     }
 
     /** True when this definition participates in multi-plot random schedule targeting (inn, park, Gaia altar, …). */

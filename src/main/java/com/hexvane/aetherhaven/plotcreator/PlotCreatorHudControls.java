@@ -66,6 +66,12 @@ public final class PlotCreatorHudControls {
                 row("E", "hud.common.e"),
                 row("R", "hud.common.r")
             );
+            case IMPORTANT_SPOTS -> List.of(
+                row("F", "hud.IMPORTANT_SPOTS.f"),
+                row("Q", "hud.common.q"),
+                row("E", "hud.common.e"),
+                row("R", "hud.common.r")
+            );
             case SUBSTEP -> substepRows(session);
             case MATERIALS -> List.of(
                 row("F", "hud.MATERIALS.f"),

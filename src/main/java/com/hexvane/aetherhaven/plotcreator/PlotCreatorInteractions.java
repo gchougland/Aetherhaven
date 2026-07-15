@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.ui.PlotCreatorCancelConfirmPage;
+import com.hexvane.aetherhaven.ui.PlotCreatorImportantSpotsPage;
 import com.hexvane.aetherhaven.ui.PlotCreatorWizardPage;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -179,6 +180,20 @@ public final class PlotCreatorInteractions {
         player.getPageManager().openCustomPage(ref, store, PlotCreatorWizardPage.configurePanel(playerRef, session));
     }
 
+    public static void openImportantSpotsPanel(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotCreatorSession session
+    ) {
+        Player player = store.getComponent(ref, Player.getComponentType());
+        if (player == null) {
+            return;
+        }
+        PlotCreatorService.seedImportantSpotsIfEmpty(session.getDraft());
+        player.getPageManager().openCustomPage(ref, store, new PlotCreatorImportantSpotsPage(playerRef, session));
+    }
+
     public static boolean tryAdvanceForward(
         @Nonnull PlotCreatorSession session,
         @Nonnull PlayerRef playerRef,
@@ -236,6 +251,7 @@ public final class PlotCreatorInteractions {
                 playerRef.sendMessage(Message.translation(MSG + ".error." + kindErr));
                 return false;
             }
+            PlotCreatorService.applyDefaultTagsForKind(d);
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
@@ -253,15 +269,21 @@ public final class PlotCreatorInteractions {
             return true;
         }
         if (step == PlotCreatorStep.VARIANT) {
-            String base = d.getCountsAsConstructionId();
-            if (base == null || base.isBlank()) {
+            if (d.getCountsAsConstructionIds().isEmpty()) {
                 playerRef.sendMessage(Message.translation(MSG + ".error.needVariantOf"));
                 return false;
             }
-            if (!PlotCreatorMainConstructions.isKnownMainConstruction(plugin, base)) {
-                playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
-                return false;
+            for (String base : d.getCountsAsConstructionIds()) {
+                if (!PlotCreatorMainConstructions.isKnownMainConstruction(plugin, base)) {
+                    playerRef.sendMessage(Message.translation(MSG + ".error.invalidVariantOf"));
+                    return false;
+                }
             }
+            PlotCreatorService.advance(session, ref, store);
+            return true;
+        }
+        if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
+            PlotCreatorService.confirmImportantSpots(d);
             PlotCreatorService.advance(session, ref, store);
             return true;
         }
@@ -318,6 +340,10 @@ public final class PlotCreatorInteractions {
             case PREFAB_SAVE -> exportPrefab(session, playerRef, commandBuffer);
             case KIND -> {
                 openKindPanel(playerRef, ref, store, session);
+                yield true;
+            }
+            case IMPORTANT_SPOTS -> {
+                openImportantSpotsPanel(playerRef, ref, store, session);
                 yield true;
             }
             case IDENTITY, TAGS, VARIANT -> {

@@ -47,12 +47,19 @@ public final class PlotCreatorService {
     /** @return plot creator error lang suffix ({@code aetherhaven.plotcreator.error.<suffix>}), or null if valid */
     @Nullable
     public static String validateKindSelection(@Nonnull PlotCreatorDraft draft) {
-        PlotBuildingKind kind = draft.getKind();
-        if (kind == null) {
+        List<PlotBuildingKind> kinds = draft.getKinds();
+        if (kinds.isEmpty()) {
             return "needKind";
         }
-        if (limitBuildingTypesToPlayerKinds() && !kind.isPlayerKind()) {
-            return "kindNotAllowed";
+        if (kinds.contains(PlotBuildingKind.DECORATION) && kinds.size() > 1) {
+            return "decorationExclusive";
+        }
+        if (limitBuildingTypesToPlayerKinds()) {
+            for (PlotBuildingKind kind : kinds) {
+                if (!kind.isPlayerKind() && kind != PlotBuildingKind.TOURIST_PORTAL) {
+                    return "kindNotAllowed";
+                }
+            }
         }
         return null;
     }
@@ -207,13 +214,16 @@ public final class PlotCreatorService {
         steps.add(PlotCreatorStep.CORNER_SECOND);
         steps.add(PlotCreatorStep.ANCHOR);
         steps.add(PlotCreatorStep.KIND);
-        if (draft.getKind() == PlotBuildingKind.VARIANT) {
+        if (draft.hasKind(PlotBuildingKind.VARIANT)) {
             steps.add(PlotCreatorStep.VARIANT);
         }
-        List<PlotBuildingKindRequirements.SubstepRequirement> subs =
-            PlotBuildingKindRequirements.forDraft(draft, AetherhavenPlugin.get());
-        if (!subs.isEmpty()) {
-            steps.add(PlotCreatorStep.SUBSTEP);
+        if (!draft.isDecorationOnly()) {
+            steps.add(PlotCreatorStep.IMPORTANT_SPOTS);
+            List<PlotBuildingKindRequirements.SubstepRequirement> subs =
+                PlotBuildingKindRequirements.forDraft(draft, AetherhavenPlugin.get());
+            if (!subs.isEmpty()) {
+                steps.add(PlotCreatorStep.SUBSTEP);
+            }
         }
         steps.add(PlotCreatorStep.IDENTITY);
         steps.add(PlotCreatorStep.TAGS);
@@ -323,9 +333,45 @@ public final class PlotCreatorService {
         if (step == PlotCreatorStep.KIND) {
             PlotCreatorInteractions.openKindPanel(playerRef, ref, store, session);
         }
+        if (step == PlotCreatorStep.IMPORTANT_SPOTS) {
+            seedImportantSpotsIfEmpty(session.getDraft());
+            PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
+        }
         if (step == PlotCreatorStep.CONFIGURE) {
             PlotCreatorInteractions.openConfigurePanel(playerRef, ref, store, session);
         }
+    }
+
+    /** Seeds {@link PlotCreatorDraft#getSelectedSpots()} from defaults when empty (before the chooser). */
+    public static void seedImportantSpotsIfEmpty(@Nonnull PlotCreatorDraft draft) {
+        if (!draft.getSelectedSpots().isEmpty()) {
+            ensureManagementSpot(draft);
+            return;
+        }
+        for (PlotBuildingKindRequirements.SubstepRequirement req :
+            PlotBuildingKindRequirements.defaultRequirements(draft, AetherhavenPlugin.get())) {
+            draft.getSelectedSpots().add(req.toSpotEntry());
+        }
+        ensureManagementSpot(draft);
+    }
+
+    /** Town records shelf is always required for non-decoration builds that reach important spots. */
+    public static void ensureManagementSpot(@Nonnull PlotCreatorDraft draft) {
+        for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
+            if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
+                return;
+            }
+        }
+        draft.getSelectedSpots().add(0, PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+    }
+
+    /**
+     * Commits important-spot choices: seed defaults if needed, force management, mark confirmed.
+     */
+    public static void confirmImportantSpots(@Nonnull PlotCreatorDraft draft) {
+        seedImportantSpotsIfEmpty(draft);
+        ensureManagementSpot(draft);
+        draft.setImportantSpotsConfirmed(true);
     }
 
     @Nullable
@@ -382,7 +428,7 @@ public final class PlotCreatorService {
     ) {
         PlotCreatorDraft draft = session.getDraft();
         applyConfigureInput(draft);
-        if (draft.getKind() == PlotBuildingKind.DECORATION && !draft.getBuildingTags().contains("decoration")) {
+        if (draft.isDecorationOnly() && !draft.getBuildingTags().contains("decoration")) {
             draft.getBuildingTags().add("decoration");
         }
         if (draft.getPlotAnchor() != null) {
@@ -464,35 +510,39 @@ public final class PlotCreatorService {
         if (!draft.getBuildingTags().isEmpty() || draft.getBuildingTagsInput() != null) {
             return;
         }
-        PlotBuildingKind kind = draft.getKind();
-        if (kind == null) {
-            return;
-        }
-        switch (kind) {
-            case AMENITY -> {
-                draft.getBuildingTags().add("amenity");
-                draft.getBuildingTags().add("fun");
-                draft.setScheduleSharedUtilityPick(true);
-                draft.setTouristDestination(true);
+        for (PlotBuildingKind kind : draft.getKinds()) {
+            switch (kind) {
+                case AMENITY -> {
+                    addTagOnce(draft, "amenity");
+                    addTagOnce(draft, "fun");
+                    draft.setScheduleSharedUtilityPick(true);
+                    draft.setTouristDestination(true);
+                }
+                case HOME -> addTagOnce(draft, "home");
+                case WORK -> addTagOnce(draft, "work");
+                case SHOP, PLAYER_SHOP -> {
+                    addTagOnce(draft, "shop");
+                    addTagOnce(draft, "work");
+                    draft.setTouristDestination(true);
+                }
+                case INN -> {
+                    addTagOnce(draft, "civic");
+                    draft.setTouristDestination(true);
+                }
+                case TOWN_HALL, GUILD_HALL -> addTagOnce(draft, "civic");
+                case TOURIST_PORTAL -> addTagOnce(draft, "civic");
+                case DECORATION -> addTagOnce(draft, "decoration");
+                default -> {}
             }
-            case HOME -> draft.getBuildingTags().add("home");
-            case WORK -> draft.getBuildingTags().add("work");
-            case SHOP, PLAYER_SHOP -> {
-                draft.getBuildingTags().add("shop");
-                draft.getBuildingTags().add("work");
-                draft.setTouristDestination(true);
-            }
-            case INN -> {
-                draft.getBuildingTags().add("civic");
-                draft.setTouristDestination(true);
-            }
-            case TOWN_HALL, GUILD_HALL -> draft.getBuildingTags().add("civic");
-            case TOURIST_PORTAL -> draft.getBuildingTags().add("civic");
-            case DECORATION -> draft.getBuildingTags().add("decoration");
-            default -> {}
         }
         if (!draft.getBuildingTags().isEmpty()) {
             draft.setBuildingTagsInput(String.join(", ", draft.getBuildingTags()));
+        }
+    }
+
+    private static void addTagOnce(@Nonnull PlotCreatorDraft draft, @Nonnull String tag) {
+        if (!draft.getBuildingTags().contains(tag)) {
+            draft.getBuildingTags().add(tag);
         }
     }
 
@@ -513,7 +563,7 @@ public final class PlotCreatorService {
             slug = slug.substring(0, slug.length() - 1);
         }
         if (!slug.isEmpty()) {
-            String prefix = draft.getKind() == PlotBuildingKind.DECORATION ? "plot_decoration_" : "plot_";
+            String prefix = draft.isDecorationOnly() ? "plot_decoration_" : "plot_";
             draft.setConstructionId(prefix + slug);
             syncPrefabFileNameFromConstructionId(draft);
         }
@@ -562,7 +612,7 @@ public final class PlotCreatorService {
             }
         }
 
-        if (PlotBuildingKindRequirements.effectiveKind(draft, null) == PlotBuildingKind.HOME) {
+        if (PlotBuildingKindRequirements.effectiveKinds(draft, null).contains(PlotBuildingKind.HOME)) {
             String residentsRaw = draft.getMaxHomeResidentsInput();
             if (residentsRaw == null || residentsRaw.isBlank()) {
                 draft.setMaxHomeResidents(Math.max(1, draft.getMaxHomeResidents()));

@@ -262,7 +262,10 @@ public final class VillagerScheduleResolver {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (!constructionCatalog.matchesGameplayConstruction(
+                p.getConstructionId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )) {
                 continue;
             }
             if (p.hasHomeResident(entityUuid)) {
@@ -319,7 +322,7 @@ public final class VillagerScheduleResolver {
             return false;
         }
         for (PlotInstance p : town.getPlotInstances()) {
-            if (g.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (constructionCatalog.matchesGameplayConstruction(p.getConstructionId(), g)) {
                 return true;
             }
         }
@@ -388,7 +391,7 @@ public final class VillagerScheduleResolver {
         if (expected.isEmpty()) {
             return false;
         }
-        return expected.equals(constructionCatalog.resolveGameplayConstructionId(plot.getConstructionId()));
+        return constructionCatalog.matchesGameplayConstruction(plot.getConstructionId(), expected);
     }
 
     @Nonnull
@@ -401,7 +404,10 @@ public final class VillagerScheduleResolver {
             if (p.getState() != PlotInstanceState.COMPLETE) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (!constructionCatalog.matchesGameplayConstruction(
+                p.getConstructionId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )) {
                 continue;
             }
             if (p.hasHomeResident(entityUuid)) {

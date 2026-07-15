@@ -68,7 +68,10 @@ public final class HouseResidentAssignment {
     ) {
         PlotInstance pi = town.findPlotById(plotId);
         if (pi == null
-            || !AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(constructionCatalog.resolveGameplayConstructionId(pi.getConstructionId()))) {
+            || !constructionCatalog.matchesGameplayConstruction(
+                pi.getConstructionId(),
+                AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE
+            )) {
             return;
         }
         if (pi.getState() != PlotInstanceState.COMPLETE) {

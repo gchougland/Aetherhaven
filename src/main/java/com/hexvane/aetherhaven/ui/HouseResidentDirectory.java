@@ -295,7 +295,7 @@ public final class HouseResidentDirectory {
             if (p.getPlotId().equals(exceptPlotId)) {
                 continue;
             }
-            if (!AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE.equals(catalog.resolveGameplayConstructionId(p.getConstructionId()))) {
+            if (!catalog.matchesGameplayConstruction(p.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_HOUSE)) {
                 continue;
             }
             if (p.hasHomeResident(villagerUuid)) {
