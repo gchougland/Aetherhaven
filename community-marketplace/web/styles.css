@@ -2161,13 +2161,43 @@ a.wiki-crumb:hover {
   color: var(--text-muted);
 }
 
-.site-footer-meta a {
+.site-social-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--space-sm);
+}
+
+.site-social-badges a {
+  line-height: 0;
+  opacity: 0.92;
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.site-social-badges a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.site-social-badges img {
+  display: block;
+  height: 20px;
+  width: auto;
+}
+
+.site-footer-meta > p {
+  margin: 0;
+}
+
+.site-footer-meta > p a {
   color: var(--text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.site-footer-meta a:hover {
+.site-footer-meta > p a:hover {
   color: var(--gold-bright);
 }
 
