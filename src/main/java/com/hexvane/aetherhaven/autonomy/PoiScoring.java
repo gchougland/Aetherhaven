@@ -17,8 +17,10 @@ import javax.annotation.Nullable;
 
 public final class PoiScoring {
     private static final float SCORE_EPS = 1e-4f;
-    /** When any need meter falls below this (0..{@link VillagerNeeds#MAX}), work shift allows break POIs town-wide. */
+    /** When energy/fun fall below this (0..{@link VillagerNeeds#MAX}), work shift allows break POIs town-wide. */
     private static final float NEEDS_BREAK_THRESHOLD = 40f;
+    /** Start a meal trip when hunger is below half of {@link VillagerNeeds#MAX}. */
+    private static final float HUNGER_EAT_START_THRESHOLD = 50f;
 
     private PoiScoring() {}
 
@@ -51,14 +53,40 @@ public final class PoiScoring {
         return isWorkPoi(e);
     }
 
+    /** True when hunger is low enough to leave the current schedule for food (below 50%). */
+    public static boolean needsHungerBreak(@Nonnull VillagerNeeds needs) {
+        return needsHungerBreak(needs, false);
+    }
+
+    /**
+     * Hunger break: start when hunger is below 50%, or keep eating while a fill session is active until the meter
+     * is full.
+     */
+    public static boolean needsHungerBreak(@Nonnull VillagerNeeds needs, boolean fillingHungerSession) {
+        if (!isHungerNotFull(needs)) {
+            return false;
+        }
+        return fillingHungerSession || needs.getHunger() < HUNGER_EAT_START_THRESHOLD;
+    }
+
+    /** Hunger bar is not yet full (used to chain another eat POI trip). */
+    public static boolean isHungerNotFull(@Nonnull VillagerNeeds needs) {
+        return needs.getHunger() < VillagerNeeds.MAX - 0.25f;
+    }
+
+    /** Eat / feast spots used for hunger breaks. */
+    public static boolean isEatPoi(@Nonnull PoiEntry e) {
+        return e.getTags().contains("EAT") || e.getTags().contains(AetherhavenConstants.POI_TAG_FEAST);
+    }
+
     /** True when the villager should temporarily override a work shift to satisfy a low meter (eat / rest / fun). */
     public static boolean needsBreakForSchedule(@Nonnull VillagerNeeds needs) {
-        return needs.getHunger() < NEEDS_BREAK_THRESHOLD
+        return needs.getHunger() < HUNGER_EAT_START_THRESHOLD
             || needs.getEnergy() < NEEDS_BREAK_THRESHOLD
             || needs.getFun() < NEEDS_BREAK_THRESHOLD;
     }
 
-    static boolean isWorkScheduleSegment(@Nullable String scheduleLocation) {
+    public static boolean isWorkScheduleSegment(@Nullable String scheduleLocation) {
         return scheduleLocation != null && VillagerScheduleResolver.LOC_WORK.equalsIgnoreCase(scheduleLocation.trim());
     }
 
@@ -71,6 +99,10 @@ public final class PoiScoring {
     }
 
     public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {
+        return score(needs, poi, false);
+    }
+
+    public static float score(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi, boolean townHasRestaurant) {
         float hungerDef = VillagerNeeds.MAX - needs.getHunger();
         float energyDef = VillagerNeeds.MAX - needs.getEnergy();
         float funDef = VillagerNeeds.MAX - needs.getFun();
@@ -94,6 +126,11 @@ public final class PoiScoring {
         }
         if (k == PoiInteractionKind.NONE && s < 0.01f) {
             s = funDef * 0.2f + hungerDef * 0.1f;
+        }
+        if (townHasRestaurant
+            && poi.getTags().contains(com.hexvane.aetherhaven.AetherhavenConstants.POI_TAG_RESTAURANT)
+            && hungerDef > 0.01f) {
+            s *= 2.5f;
         }
         return s;
     }
@@ -189,18 +226,57 @@ public final class PoiScoring {
         double npcZ,
         @Nullable String scheduleLocation
     ) {
+        return pickBest(candidates, needs, binding, cellOccupancy, npcX, npcZ, scheduleLocation, false, false);
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant
+    ) {
+        return pickBest(candidates, needs, binding, cellOccupancy, npcX, npcZ, scheduleLocation, townHasRestaurant, false);
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant,
+        boolean fillingHungerSession
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
         boolean atShop = isShopScheduleSegment(scheduleLocation);
+        boolean hungerBreak = needsHungerBreak(needs, fillingHungerSession);
         boolean breakOverride = atWork && needsBreakForSchedule(needs);
-        boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride;
-        boolean shopBrowseShift = atShop;
+        boolean workOnlyShift = preferredPlot != null && atWork && !breakOverride && !hungerBreak;
+        boolean shopBrowseShift = atShop && !hungerBreak;
+        boolean allowTownWide =
+            hungerBreak || (atWork && breakOverride);
         PoiEntry best = null;
         float bestScore = 0f;
         int bestUsed = Integer.MAX_VALUE;
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
-            if (shopBrowseShift) {
+            if (e.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)) {
+                continue;
+            }
+            if (hungerBreak) {
+                if (!isEatPoi(e)) {
+                    continue;
+                }
+            } else if (shopBrowseShift) {
                 if (!isShopPoi(e)) {
                     continue;
                 }
@@ -211,7 +287,7 @@ public final class PoiScoring {
                 if (!matchesWorkPoiForBindingKind(e, binding.getKind())) {
                     continue;
                 }
-            } else if (preferredPlot != null && !(atWork && breakOverride) && !atShop) {
+            } else if (preferredPlot != null && !allowTownWide && !atShop) {
                 if (e.getPlotId() != null && !preferredPlot.equals(e.getPlotId())) {
                     continue;
                 }
@@ -222,7 +298,7 @@ public final class PoiScoring {
             if (used >= cap) {
                 continue;
             }
-            float sc = score(needs, e);
+            float sc = score(needs, e, townHasRestaurant);
             double distSq = distSqToPoi(e, npcX, npcZ);
             if (best == null) {
                 best = e;
@@ -270,7 +346,8 @@ public final class PoiScoring {
         // Idle discretionary visits: require some unmet need so villagers do not crisscross town when already satisfied.
         // When the weekly schedule sets preferredPlotId, we must still pick a POI in that plot even if needs are full
         // (scores near zero); otherwise they never enter TRAVEL and stay on local wander (e.g. near Gaia after revival).
-        if (preferredPlot == null && !shopBrowseShift && bestScore < 8f) {
+        // Hunger breaks always allow a scored eat POI even without preferredPlot.
+        if (preferredPlot == null && !shopBrowseShift && !hungerBreak && bestScore < 8f) {
             return null;
         }
         return best;

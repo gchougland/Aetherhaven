@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.AutonomyStuckTeleportRecovery;
 import com.hexvane.aetherhaven.autonomy.PoiAutonomyVisuals;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomySystem;
 import com.hexvane.aetherhaven.autonomy.VillagerDoorUtil;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavGraphService;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
@@ -804,7 +805,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         autonomy.setPhaseEndEpochMs(now + dur);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
-        applyAutonomyRoleState(ref, npc, commandBuffer);
+        VillagerAutonomySystem.afterBeginPoiUseMotion(ref, store, commandBuffer, npc);
     }
 
     private void beginShopSpotBrowse(
@@ -982,6 +983,9 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull PoiRegistry poiRegistry
     ) {
         if (now < autonomy.getPhaseEndEpochMs()) {
+            if (VillagerAutonomySystem.isNpcBlockMounted(store, commandBuffer, ref)) {
+                return;
+            }
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return;
         }

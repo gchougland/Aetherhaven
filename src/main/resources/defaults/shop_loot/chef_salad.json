@@ -1,0 +1,7 @@
+{
+  "entries": [
+    { "itemId": "Food_Salad_Caesar", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Salad_Mushroom", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Salad_Berry", "weight": 2, "stockMin": 5, "stockMax": 10 }
+  ]
+}

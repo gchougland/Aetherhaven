@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.villager;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.feast.FeastService;
+import com.hexvane.aetherhaven.restaurant.RestaurantBenefitService;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
@@ -79,6 +80,7 @@ public final class VillagerNeedsDecaySystem extends EntityTickingSystem<EntitySt
                 if (FeastService.isHearthglassDecayActive(townRecord, dawn)) {
                     rate *= cfg.getFeastNeedsDecayScalePermille() / 1000f;
                 }
+                rate *= RestaurantBenefitService.satietyDecayMultiplier(townRecord, plugin.getConstructionCatalog());
             }
         }
         needs.applyDecay(nowMs, rate);

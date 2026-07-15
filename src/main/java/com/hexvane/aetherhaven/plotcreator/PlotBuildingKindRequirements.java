@@ -31,8 +31,8 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.FUN_POI, 1)
             );
-            case SHOP -> shopSubsteps(false);
-            case PLAYER_SHOP -> shopSubsteps(true);
+            case SHOP -> shopSubsteps(draft, plugin, false);
+            case PLAYER_SHOP -> shopSubsteps(draft, plugin, true);
             case TOURIST_PORTAL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.TOURIST_PORTAL_BLOCK, 1)
             );
@@ -86,7 +86,11 @@ public final class PlotBuildingKindRequirements {
     }
 
     @Nonnull
-    private static List<SubstepRequirement> shopSubsteps(boolean requireSafe) {
+    private static List<SubstepRequirement> shopSubsteps(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable AetherhavenPlugin plugin,
+        boolean requireSafe
+    ) {
         List<SubstepRequirement> out = new ArrayList<>();
         out.add(new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         if (requireSafe) {
@@ -95,7 +99,55 @@ public final class PlotBuildingKindRequirements {
         out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_SPOT, 1));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.SHOP_POI, 1));
         out.add(new SubstepRequirement(PlotCreatorSubstepType.TOURIST_VISIT_POI, 1));
+        if (requiresEatPoi(draft, plugin)) {
+            out.add(new SubstepRequirement(PlotCreatorSubstepType.EAT_POI, 1));
+        }
         return out;
+    }
+
+    /** Restaurant and other eat-tagged shops need dining POIs; plain market stalls do not. */
+    public static boolean requiresEatPoi(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        if (draft.getBuildingTags().contains("eat") || draft.getBuildingTags().contains("restaurant")) {
+            return true;
+        }
+        String id = draft.getCountsAsConstructionId();
+        if (id == null || id.isBlank()) {
+            id = draft.getConstructionId();
+        }
+        if (id != null && AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(id.trim())) {
+            return true;
+        }
+        if (id == null || id.isBlank() || plugin == null) {
+            return false;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(id.trim());
+        if (def == null) {
+            return false;
+        }
+        var tags = def.getBuildingTags();
+        return tags.contains("eat") || tags.contains("restaurant");
+    }
+
+    public static boolean usesRestaurantEatTag(@Nonnull PlotCreatorDraft draft, @Nullable AetherhavenPlugin plugin) {
+        if (draft.getBuildingTags().contains("restaurant")) {
+            return true;
+        }
+        String id = draft.getCountsAsConstructionId();
+        if (id == null || id.isBlank()) {
+            id = draft.getConstructionId();
+        }
+        if (id == null || id.isBlank()) {
+            return false;
+        }
+        String trimmed = id.trim();
+        if (AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(trimmed)) {
+            return true;
+        }
+        if (plugin == null) {
+            return false;
+        }
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(trimmed);
+        return def != null && def.getBuildingTags().contains("restaurant");
     }
 
     @Nonnull
@@ -147,7 +199,8 @@ public final class PlotBuildingKindRequirements {
         if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(baseId)
             || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(baseId)
             || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(baseId)
-            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(baseId)) {
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(baseId)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(baseId)) {
             return PlotBuildingKind.SHOP;
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(baseId)) {

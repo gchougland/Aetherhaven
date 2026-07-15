@@ -12,6 +12,8 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -78,6 +80,21 @@ public final class QuestBoardOnlineDawnService {
             Random rng = new Random(currentDawn ^ playerUuid.getMostSignificantBits());
             QuestBoardService.refreshUnacceptedSlots(town, store, catalog, rng);
             town.setQuestBoardLastRefreshOnlineDawnDay(currentDawn);
+
+            List<String> posterUuids = new ArrayList<>();
+            for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
+                if (slot.stateEnum() != QuestBoardSlotState.OFFER) {
+                    continue;
+                }
+                String giver = slot.getGiverEntityUuid();
+                if (giver != null && !giver.isBlank()) {
+                    posterUuids.add(giver);
+                }
+            }
+            if (!posterUuids.isEmpty()) {
+                long nowMs = System.currentTimeMillis();
+                QuestBoardPostVisitQueue.enqueueOfferGiversForDawn(town.getTownId(), posterUuids, nowMs, currentDawn);
+            }
 
             boolean townChanged = true;
             for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {

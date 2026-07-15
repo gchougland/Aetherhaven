@@ -68,7 +68,7 @@ public final class AetherhavenPluginConfig {
         )
         .documentation(
             "Hunger points (0..100 scale) removed per second of game time at full rate; energy/fun use slightly lower "
-                + "multipliers. Default 0.04 (~42 min from 100 to 0 for hunger). Config values below 0.002 are assumed "
+                + "multipliers. Default 0.07 (~24 min from 100 to 0 for hunger). Config values below 0.002 are assumed "
                 + "to be legacy 0..1-scale rates and are multiplied by 100. Values >= 20 are capped to the default."
         )
         .add()
@@ -537,7 +537,7 @@ public final class AetherhavenPluginConfig {
     private boolean ignoreVillagerRequirement = false;
     private int defaultTerritoryChunkRadius = 8;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
-    private float villagerNeedsDecayPerSecond = 0.04f;
+    private float villagerNeedsDecayPerSecond = 0.07f;
 
     /** Inclusive start hour for the daily morning inn refresh (game clock, {@link com.hypixel.hytale.server.core.modules.time.WorldTimeResource}). */
     private int innPoolMorningStartHour = 5;
@@ -685,12 +685,12 @@ public final class AetherhavenPluginConfig {
     }
 
     public float getVillagerNeedsDecayPerSecond() {
-        float v = villagerNeedsDecayPerSecond > 0f ? villagerNeedsDecayPerSecond : 0.04f;
+        float v = villagerNeedsDecayPerSecond > 0f ? villagerNeedsDecayPerSecond : 0.07f;
         if (v > 0f && v < 0.002f) {
             v *= 100f;
         }
         if (v >= 20f) {
-            return 0.04f;
+            return 0.07f;
         }
         return v;
     }

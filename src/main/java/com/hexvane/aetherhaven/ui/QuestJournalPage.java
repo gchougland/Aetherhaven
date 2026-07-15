@@ -1,6 +1,9 @@
 package com.hexvane.aetherhaven.ui;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.autonomy.PoiScoring;
+import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
 import com.hexvane.aetherhaven.difficulty.DifficultyPreset;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
@@ -15,6 +18,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.config.PluginConfigMerge;
+import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRecord;
 import com.hexvane.aetherhaven.patrol.PatrolRouteRegistry;
@@ -1000,12 +1004,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 int rep = VillagerReputationService.getOrCreateEntry(town, uc.getUuid(), r.entityUuid()).getReputation();
                 ReputationHeartUi.applyHearts(commandBuilder, heartsPath, rep);
             }
-            commandBuilder.set(row + " #ScheduleLocation.TextSpans", townJournalSecondaryLineMessage(plugin, world, r, gameNow));
-            commandBuilder.set(
-                row + " #ScheduleLocation.Visible",
-                !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
-                    || TownVillagerBinding.KIND_GUARD.equals(r.bindingKind())
-            );
+            commandBuilder.set(row + " #ScheduleLocation.TextSpans", townJournalSecondaryLineMessage(plugin, world, store, r, gameNow));
+            boolean showSchedule =
+                TownVillagerBinding.KIND_GUARD.equals(r.bindingKind())
+                    || !TownResidentEligibility.isTownsfolkPoolKind(r.bindingKind(), r.roleId(), plugin)
+                    || liveEatingActivityMessage(plugin, world, store, r.entityUuid()) != null;
+            commandBuilder.set(row + " #ScheduleLocation.Visible", showSchedule);
         }
 
         commandBuilder.clear(TOWN_PLOT_ROWS);
@@ -1136,16 +1140,68 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static Message townJournalSecondaryLineMessage(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
         @Nonnull TownVillagerRow row,
         @Nullable LocalDateTime gameNow
     ) {
         if (TownVillagerBinding.KIND_GUARD.equals(row.bindingKind())) {
             return guardPatrolRouteMessage(world, plugin, row.entityUuid());
         }
+        Message eating = liveEatingActivityMessage(plugin, world, store, row.entityUuid());
+        if (eating != null) {
+            return eating;
+        }
         if (TownResidentEligibility.isTownsfolkPoolKind(row.bindingKind(), row.roleId(), plugin)) {
             return Message.raw("");
         }
         return scheduleLocationMessage(plugin, row.roleId(), gameNow);
+    }
+
+    /**
+     * When a villager is traveling to or using an eat / feast POI (hunger break), override the schedule line so the
+     * journal shows that meal instead of work / home / inn.
+     */
+    @Nullable
+    private static Message liveEatingActivityMessage(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UUID entityUuid
+    ) {
+        Ref<EntityStore> npcRef = store.getExternalData().getRefFromUUID(entityUuid);
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        VillagerAutonomyState autonomy = store.getComponent(npcRef, VillagerAutonomyState.getComponentType());
+        if (autonomy == null) {
+            return null;
+        }
+        int phase = autonomy.getPhase();
+        if (phase != VillagerAutonomyState.PHASE_TRAVEL && phase != VillagerAutonomyState.PHASE_USE) {
+            return null;
+        }
+        UUID poiId = autonomy.getTargetPoiUuid();
+        if (poiId == null || AetherhavenConstants.isScheduleZoneCommutePoi(poiId)) {
+            return null;
+        }
+        PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        PoiEntry poi = reg.get(poiId);
+        if (poi == null || !PoiScoring.isEatPoi(poi)) {
+            return null;
+        }
+        boolean atRestaurant = poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT);
+        if (phase == VillagerAutonomyState.PHASE_TRAVEL) {
+            return Message.translation(
+                atRestaurant
+                    ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToRestaurant"
+                    : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleGoingToEat"
+            );
+        }
+        return Message.translation(
+            atRestaurant
+                ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEatingRestaurant"
+                : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.scheduleEating"
+        );
     }
 
     @Nonnull

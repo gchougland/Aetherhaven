@@ -48,8 +48,10 @@
         { "itemId": "Food_Wildmeat_Raw", "ticks": 1728, "maxStorage": 25 },
         { "itemId": "Food_Chicken_Raw", "ticks": 1728, "maxStorage": 25 },
         { "itemId": "Food_Beef_Raw", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Food_Pork_Raw", "ticks": 1728, "maxStorage": 25 },
         { "itemId": "Food_Egg", "ticks": 1728, "maxStorage": 25 },
-        { "itemId": "Container_Bucket_State_Filled_Milk", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "*Container_Bucket_State_Filled_Milk", "ticks": 1728, "maxStorage": 25 },
+        { "itemId": "Ingredient_Poop", "ticks": 1728, "maxStorage": 25 },
         { "itemId": "Ingredient_Fabric_Scrap_Wool", "ticks": 1728, "maxStorage": 25 }
       ]
     }

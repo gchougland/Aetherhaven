@@ -26,6 +26,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(AetherhavenConstants.NPC_CRYSTAL_KEEPER, "Vaelith Prismshade"),
         Map.entry(AetherhavenConstants.NPC_PYROTECHNIC, "Grubble Sparkmatch"),
         Map.entry(AetherhavenConstants.NPC_FLORIST, "Ivy Bloomwell"),
+        Map.entry(AetherhavenConstants.NPC_CHEF, "Pepper Ashford"),
         Map.entry(AetherhavenConstants.NPC_BUILDER, "Rowan Ridgecraft"),
         Map.entry(AetherhavenConstants.GUILD_MASTER_NPC_ROLE_ID, "Lyra Fairhollow")
     );
@@ -34,6 +35,7 @@ public final class AetherhavenRoleLabels {
         Map.entry(TownVillagerBinding.KIND_ELDER, "Elder"),
         Map.entry(TownVillagerBinding.KIND_INNKEEPER, "Innkeeper"),
         Map.entry(TownVillagerBinding.KIND_MERCHANT, "Merchant"),
+        Map.entry(TownVillagerBinding.KIND_CHEF, "Chef"),
         Map.entry(TownVillagerBinding.KIND_BLACKSMITH, "Blacksmith"),
         Map.entry(TownVillagerBinding.KIND_FARMER, "Farmer"),
         Map.entry(TownVillagerBinding.KIND_PRIESTESS, "Priestess"),
@@ -231,6 +233,9 @@ public final class AetherhavenRoleLabels {
         }
         if (AetherhavenConstants.NPC_FLORIST.equals(roleId)) {
             return TownVillagerBinding.KIND_FLORIST;
+        }
+        if (AetherhavenConstants.NPC_CHEF.equals(roleId)) {
+            return TownVillagerBinding.KIND_CHEF;
         }
         if (AetherhavenConstants.NPC_BUILDER.equals(roleId)) {
             return TownVillagerBinding.KIND_BUILDER;

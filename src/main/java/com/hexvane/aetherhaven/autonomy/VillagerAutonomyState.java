@@ -83,6 +83,12 @@ public final class VillagerAutonomyState
                 v -> v.travelWaypointStartedIndex
             )
             .add()
+            .append(
+                new KeyedCodec<>("FillingHunger", Codec.BOOLEAN),
+                (v, x) -> v.fillingHunger = x != null && x,
+                v -> v.fillingHunger
+            )
+            .add()
             .build();
 
     @Nullable
@@ -128,6 +134,10 @@ public final class VillagerAutonomyState
     private int travelWaypointIndex;
     private long travelWaypointStartedMs;
     private int travelWaypointStartedIndex;
+    /**
+     * Once hunger drops below half, stay on eat trips until the hunger meter is full (eat, leave, eat again).
+     */
+    private boolean fillingHunger;
     /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
     @Nonnull
     private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
@@ -513,6 +523,14 @@ public final class VillagerAutonomyState
         this.lastFeastGatherDeadlineAttended = lastFeastGatherDeadlineAttended;
     }
 
+    public boolean isFillingHunger() {
+        return fillingHunger;
+    }
+
+    public void setFillingHunger(boolean fillingHunger) {
+        this.fillingHunger = fillingHunger;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
@@ -530,6 +548,7 @@ public final class VillagerAutonomyState
         c.travelWaypointIndex = travelWaypointIndex;
         c.travelWaypointStartedMs = travelWaypointStartedMs;
         c.travelWaypointStartedIndex = travelWaypointStartedIndex;
+        c.fillingHunger = fillingHunger;
         c.travelWaypoints.addAll(travelWaypoints);
         for (int[] d : pendingOpenDoors) {
             c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });

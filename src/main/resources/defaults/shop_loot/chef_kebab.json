@@ -1,0 +1,8 @@
+{
+  "entries": [
+    { "itemId": "Food_Kebab_Meat", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Mushroom", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Vegetable", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Kebab_Fruit", "weight": 2, "stockMin": 5, "stockMax": 10 }
+  ]
+}

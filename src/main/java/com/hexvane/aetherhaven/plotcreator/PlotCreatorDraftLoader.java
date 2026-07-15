@@ -112,7 +112,8 @@ public final class PlotCreatorDraftLoader {
         if (AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_BOMB_SHOP.equals(id)
             || AetherhavenConstants.CONSTRUCTION_PLOT_CRYSTAL_KEEPERS_SHOP.equals(id)
-            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(id)) {
+            || AetherhavenConstants.CONSTRUCTION_PLOT_FLOWER_SHOP.equals(id)
+            || AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT.equals(id)) {
             return PlotBuildingKind.SHOP;
         }
         if (AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(id)) {

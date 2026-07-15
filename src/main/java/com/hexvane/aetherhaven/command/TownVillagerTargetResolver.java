@@ -199,7 +199,7 @@ public final class TownVillagerTargetResolver {
         List<UUID> matches = new ArrayList<>();
         for (UUID id : distinctVillagerEntityUuids(town)) {
             String roleId = roleIdForTownVillager(town, world, store, id);
-            if (roleId != null && roleId.equals(wanted)) {
+            if (roleId != null && roleId.equalsIgnoreCase(wanted)) {
                 matches.add(id);
             }
         }

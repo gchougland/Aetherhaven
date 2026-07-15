@@ -80,8 +80,8 @@ aetherhaven.debug.gift.fillDone=Added {added} gift log line(s) for {role} (skipp
 aetherhaven.debug.needs.whichInvalid=which must be hunger, energy, or fun (values are 0..{max}).
 aetherhaven.debug.needs.elderNoTown=No town for you in this world (needed for Elder).
 aetherhaven.debug.needs.noElderUuid=Town has no saved elder UUID yet.
-aetherhaven.debug.needs.noMatch=No matching villager (try needs inspect for handle, Elder, or full uuid).
-aetherhaven.debug.needs.multipleMatch=Multiple NPCs matched that handle; use full uuid from inspect.
+aetherhaven.debug.needs.noMatch=No matching villager (try NPC role id like Aetherhaven_Elder, Elder, handle, or full UUID from inspect).
+aetherhaven.debug.needs.multipleMatch=Several NPCs matched that target; use a full UUID from inspect instead.
 aetherhaven.debug.needs.entityNotLoaded=Entity not loaded or has no VillagerNeeds: {id}
 aetherhaven.debug.needs.set=Set {which}={value} on {label} ({id})
 aetherhaven.debug.needs.inspectIntro=Villagers with needs (loaded chunks). Set with: /aetherhaven needs set <handle|Elder|uuid> <hunger|energy|fun> <0..100>

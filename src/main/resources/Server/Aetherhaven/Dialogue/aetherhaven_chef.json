@@ -1,0 +1,237 @@
+{
+  "id": "aetherhaven_chef",
+  "entry": "main_hub",
+  "nodes": {
+    "main_hub": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "bodyMode": "villager_greeting",
+      "introText": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.body",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.fallback",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.offer",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "npc_binding_is_visitor"
+                }
+              },
+              {
+                "type": "player_holds_any_item"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "giftDisableWhenNotAllowed": true,
+          "next": "gift_confirm"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c5",
+          "condition": {
+            "type": "town_quest_completed",
+            "questId": "q_chef_restaurant"
+          },
+          "whenFalse": "hide",
+          "next": "pepper_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c6",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_chef_restaurant"
+              },
+              {
+                "type": "town_has_complete_plot",
+                "constructionId": "plot_restaurant"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "actions": [
+            {
+              "type": "complete_quest",
+              "id": "q_chef_restaurant"
+            }
+          ],
+          "next": "pepper_done"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c7",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "town_quest_active",
+                "questId": "q_chef_restaurant"
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_has_complete_plot",
+                  "constructionId": "plot_restaurant"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "pepper_building"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c8",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_completed",
+                  "questId": "q_chef_restaurant"
+                }
+              },
+              {
+                "type": "not",
+                "condition": {
+                  "type": "town_quest_active",
+                  "questId": "q_chef_restaurant"
+                }
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "pepper_quest_restaurant"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.c9",
+          "actions": [
+            {
+              "type": "close"
+            }
+          ],
+          "next": null
+        }
+      ]
+    },
+    "pepper_quest_restaurant": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_quest_restaurant.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_quest_restaurant.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_quest_restaurant.c0",
+          "actions": [
+            {
+              "type": "start_quest",
+              "id": "q_chef_restaurant"
+            }
+          ],
+          "next": "pepper_accepted"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_quest_restaurant.c1",
+          "next": null
+        }
+      ]
+    },
+    "pepper_accepted": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_accepted.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_accepted.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_accepted.c0",
+          "next": null
+        }
+      ]
+    },
+    "pepper_building": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_building.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_building.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_building.c0",
+          "actions": [
+            {
+              "type": "abandon_quest",
+              "id": "q_chef_restaurant"
+            }
+          ],
+          "next": "pepper_abandoned"
+        },
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_building.c1",
+          "next": null
+        }
+      ]
+    },
+    "pepper_abandoned": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_abandoned.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_abandoned.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_abandoned.c0",
+          "next": null
+        }
+      ]
+    },
+    "pepper_done": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_done.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_done.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.pepper_done.c0",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.chef.50",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_chef_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_confirm": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmPrompt",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
+          "actions": [
+            {
+              "type": "gift_give"
+            }
+          ],
+          "next": "gift_result"
+        },
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_result": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "bodyMode": "gift_result",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.fallback",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "next": "main_hub"
+        }
+      ]
+    }
+  }
+}

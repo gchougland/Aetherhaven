@@ -53,6 +53,10 @@
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_flower_shop"
     },
     {
+      "id": "plot_restaurant",
+      "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_restaurant"
+    },
+    {
       "id": "plot_builders_hut",
       "labelLang": "aetherhaven_plot_creator.aetherhaven.plotcreator.mainType.plot_builders_hut"
     },

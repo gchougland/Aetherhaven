@@ -15,8 +15,11 @@ import javax.annotation.Nullable;
 public final class TownVillagerBinding implements Component<EntityStore> {
     public static final String KIND_ELDER = "elder";
     public static final String KIND_INNKEEPER = "innkeeper";
-    /** Permanent stall / resident merchant (not an inn visitor). */
+    /** Permanent merchant at the market stall (after build). */
     public static final String KIND_MERCHANT = "merchant";
+
+    /** Permanent chef at the restaurant (after build). */
+    public static final String KIND_CHEF = "chef";
 
     /** Resident farmer tied to a completed farm plot. */
     public static final String KIND_FARMER = "farmer";
@@ -37,6 +40,7 @@ public final class TownVillagerBinding implements Component<EntityStore> {
     public static final String KIND_RANCHER = "rancher";
 
     public static final String KIND_VISITOR_MERCHANT = "visitor_merchant";
+    public static final String KIND_VISITOR_CHEF = "visitor_chef";
     public static final String KIND_VISITOR_BLACKSMITH = "visitor_blacksmith";
     public static final String KIND_VISITOR_FARMER = "visitor_farmer";
 

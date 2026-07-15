@@ -59,6 +59,20 @@
       "interactionTargetLocalX": -4,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -6
+    },
+    {
+      "localX": -4,
+      "localY": 2,
+      "localZ": -6,
+      "blockTypeId": "Aetherhaven_Quest_Board",
+      "interactionKind": "NONE",
+      "tags": [
+        "QUEST_BOARD"
+      ],
+      "capacity": 1,
+      "interactionTargetLocalX": -4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -5
     }
   ],
   "bardWorkPoiLocal": [

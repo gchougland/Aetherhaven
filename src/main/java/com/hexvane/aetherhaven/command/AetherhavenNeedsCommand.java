@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import com.hexvane.aetherhaven.villager.VillagerNeedsTargetResolver;
@@ -132,32 +134,63 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
             Store<EntityStore> es = world.getEntityStore().getStore();
             world.execute(
                 () -> {
-                    VillagerNeedsTargetResolver.Result res =
-                        VillagerNeedsTargetResolver.resolve(targetToken, store, ref, world, plugin, es);
-                    switch (res.problem()) {
-                        case NO_TOWN -> {
-                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.elderNoTown"));
+                    UUID target = null;
+                    UUIDComponent playerUc = store.getComponent(ref, UUIDComponent.getComponentType());
+                    TownRecord town =
+                        playerUc != null
+                            ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin)
+                                .findTownForPlayerInWorld(playerUc.getUuid())
+                            : null;
+                    // Prefer NPC role id / town villager resolution (same as other /ah commands).
+                    if (town != null && !targetToken.equalsIgnoreCase("Elder")) {
+                        TownVillagerTargetResolver.Outcome roleOutcome =
+                            TownVillagerTargetResolver.resolve(town, world, es, targetToken);
+                        if (roleOutcome.isOk()) {
+                            target = roleOutcome.villagerUuid();
+                        } else if (roleOutcome.error() != null && roleOutcome.error().startsWith("Multiple")) {
+                            playerRef.sendMessage(
+                                Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.multipleMatch")
+                            );
                             return;
-                        }
-                        case NO_ELDER -> {
-                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noElderUuid"));
-                            return;
-                        }
-                        case NOT_FOUND -> {
-                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noMatch"));
-                            return;
-                        }
-                        case AMBIGUOUS -> {
-                            playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.multipleMatch"));
-                            return;
-                        }
-                        default -> {
                         }
                     }
-                    UUID target = res.entityUuid();
+                    if (target == null) {
+                        VillagerNeedsTargetResolver.Result res =
+                            VillagerNeedsTargetResolver.resolve(targetToken, store, ref, world, plugin, es);
+                        switch (res.problem()) {
+                            case NO_TOWN -> {
+                                playerRef.sendMessage(
+                                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.elderNoTown")
+                                );
+                                return;
+                            }
+                            case NO_ELDER -> {
+                                playerRef.sendMessage(
+                                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noElderUuid")
+                                );
+                                return;
+                            }
+                            case NOT_FOUND -> {
+                                playerRef.sendMessage(
+                                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.noMatch")
+                                );
+                                return;
+                            }
+                            case AMBIGUOUS -> {
+                                playerRef.sendMessage(
+                                    Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.multipleMatch")
+                                );
+                                return;
+                            }
+                            default -> {
+                            }
+                        }
+                        target = res.entityUuid();
+                    }
                     if (target == null) {
                         return;
                     }
+                    final UUID resolvedTarget = target;
                     AtomicReference<Ref<EntityStore>> foundRef = new AtomicReference<>();
                     AtomicReference<VillagerNeeds> updated = new AtomicReference<>();
                     es.forEachChunk(
@@ -168,7 +201,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                             }
                             for (int i = 0; i < archetypeChunk.size(); i++) {
                                 UUIDComponent id = archetypeChunk.getComponent(i, UUIDComponent.getComponentType());
-                                if (id == null || !target.equals(id.getUuid())) {
+                                if (id == null || !resolvedTarget.equals(id.getUuid())) {
                                     continue;
                                 }
                                 VillagerNeeds vn = archetypeChunk.getComponent(i, VillagerNeeds.getComponentType());
@@ -193,7 +226,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                     if (foundRef.get() == null || updated.get() == null) {
                         playerRef.sendMessage(
                             Message.translation("aetherhaven_world_debug.aetherhaven.debug.needs.entityNotLoaded")
-                                .param("id", String.valueOf(target))
+                                .param("id", String.valueOf(resolvedTarget))
                         );
                         return;
                     }
@@ -203,7 +236,7 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                             .param("which", which)
                             .param("value", String.valueOf(v))
                             .param("label", targetToken)
-                            .param("id", String.valueOf(target))
+                            .param("id", String.valueOf(resolvedTarget))
                     );
                 }
             );

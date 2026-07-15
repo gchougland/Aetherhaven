@@ -124,6 +124,7 @@ aetherhaven.plotcreator.mainType.plot_house = House
 aetherhaven.plotcreator.mainType.plot_inn = Inn
 aetherhaven.plotcreator.mainType.plot_lumbermill = Lumbermill
 aetherhaven.plotcreator.mainType.plot_market_stall = Market stall
+aetherhaven.plotcreator.mainType.plot_restaurant = Restaurant
 aetherhaven.plotcreator.mainType.plot_player_shop = Player shop
 aetherhaven.plotcreator.mainType.plot_bomb_shop = Bomb shop
 aetherhaven.plotcreator.mainType.plot_crystal_keepers_shop = Crystal Keeper's shop

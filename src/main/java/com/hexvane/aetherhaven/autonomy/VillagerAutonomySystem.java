@@ -5,6 +5,8 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.pathnav.PathNavTravelSupport;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistSystem;
+import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
+import com.hexvane.aetherhaven.restaurant.RestaurantBenefitService;
 import com.hexvane.aetherhaven.poi.PoiEffectTable;
 import com.hexvane.aetherhaven.poi.PoiEntry;
 import com.hexvane.aetherhaven.poi.PoiInteractionKind;
@@ -15,6 +17,8 @@ import com.hexvane.aetherhaven.shopspot.NpcShopSpotBuyerService;
 import com.hexvane.aetherhaven.shopspot.ShopSpotPurchaseService;
 import com.hexvane.aetherhaven.villager.AetherhavenRoleLabels;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
+import com.hexvane.aetherhaven.questboard.QuestBoardPoiEnsure;
+import com.hexvane.aetherhaven.questboard.QuestBoardPostVisitQueue;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
@@ -35,6 +39,7 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import org.joml.Vector3d;
 import com.hypixel.hytale.protocol.AnimationSlot;
+import com.hypixel.hytale.server.core.modules.entity.component.ModelComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
@@ -120,7 +125,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             if (poi != null) {
                 PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi, false);
                 if (applyNeedEffects && needs != null) {
-                    PoiEffectTable.applyUseComplete(needs, poi);
+                    PlotRestaurantState restaurantState = RestaurantBenefitService.restaurantStateForPoi(null, poi);
+                    PoiEffectTable.applyUseComplete(needs, poi, restaurantState);
                     if (commandBuffer != null) {
                         commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
                     } else {
@@ -236,7 +242,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         switch (autonomy.getPhase()) {
             case VillagerAutonomyState.PHASE_USE ->
                 tickUse(ref, store, commandBuffer, npc, reg, needs, autonomy, now, townRecord, binding, world);
-            case VillagerAutonomyState.PHASE_TRAVEL -> tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now);
+            case VillagerAutonomyState.PHASE_TRAVEL ->
+                tickTravel(ref, store, commandBuffer, npc, reg, autonomy, now, townRecord);
             default ->
                 tickIdle(
                     ref,
@@ -303,14 +310,29 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull AetherhavenPlugin plugin,
         @Nullable TownRecord townRecord
     ) {
-        if (SchedulePlotCommute.tryBeginIfOffSchedulePlot(ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin)) {
+        // Do not commute back to the schedule plot while seeking food; that was yanking villagers off
+        // restaurant chairs before they could chain another meal.
+        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+            && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
+                ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
+            )) {
             return;
         }
         TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
         if (tryBeginFeastGatherTravel(ref, store, commandBuffer, world, npc, reg, binding, autonomy, townRecord, now, plugin, tc)) {
             return;
         }
+        if (tryBeginQuestBoardPostTravel(
+            ref, store, commandBuffer, world, npc, binding, autonomy, townRecord, now, plugin, tc
+        )) {
+            return;
+        }
         if (now < autonomy.getNextDecisionEpochMs()) {
+            return;
+        }
+        if (tryBeginNextHungerMeal(
+            ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc
+        )) {
             return;
         }
         Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
@@ -318,13 +340,93 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
         VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
         String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
-        PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg);
+        boolean townHasRestaurant =
+            townRecord != null
+                && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
+        if (!PoiScoring.isHungerNotFull(needs)) {
+            autonomy.setFillingHunger(false);
+        } else if (PoiScoring.needsHungerBreak(needs)) {
+            autonomy.setFillingHunger(true);
+        }
+        PoiEntry pick =
+            PoiScoring.pickBest(
+                pois,
+                needs,
+                binding,
+                cellOcc,
+                npcX,
+                npcZ,
+                scheduleSeg,
+                townHasRestaurant,
+                autonomy.isFillingHunger()
+            );
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             return;
         }
+        if (!PoiOccupancy.tryClaim(cellOcc, pick)) {
+            autonomy.setNextDecisionEpochMs(now + 1500L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return;
+        }
+        if (PoiScoring.isEatPoi(pick) && PoiScoring.needsHungerBreak(needs, true)) {
+            autonomy.setFillingHunger(true);
+        }
         beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, pick);
+    }
+
+    /**
+     * While a fill-hunger session is active (or hunger is below half), pick the next eat POI and travel immediately.
+     */
+    private static boolean tryBeginNextHungerMeal(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull PoiRegistry reg,
+        @Nonnull List<PoiEntry> pois,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull VillagerAutonomyState autonomy,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TownRecord townRecord,
+        @Nullable TransformComponent tc
+    ) {
+        if (!PoiScoring.isHungerNotFull(needs)) {
+            autonomy.setFillingHunger(false);
+            return false;
+        }
+        if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())) {
+            return false;
+        }
+        autonomy.setFillingHunger(true);
+        Map<String, Integer> cellOcc = PoiOccupancy.cellOccupancyForTown(world, binding.getTownId(), store, reg);
+        double npcX = tc != null ? tc.getPosition().x : Double.NaN;
+        double npcZ = tc != null ? tc.getPosition().z : Double.NaN;
+        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
+        boolean townHasRestaurant =
+            townRecord != null
+                && RestaurantBenefitService.townHasCompleteRestaurant(townRecord, plugin.getConstructionCatalog());
+        PoiEntry pick =
+            PoiScoring.pickBest(
+                pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg, townHasRestaurant, true
+            );
+        if (pick == null || !PoiScoring.isEatPoi(pick)) {
+            autonomy.setNextDecisionEpochMs(now + 1500L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return true;
+        }
+        if (!PoiOccupancy.tryClaim(cellOcc, pick)) {
+            autonomy.setNextDecisionEpochMs(now + 1000L);
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            return true;
+        }
+        beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, pick);
+        return true;
     }
 
     /**
@@ -373,6 +475,46 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return false;
         }
         beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, binding.getTownId(), tc, feastPoi);
+        return true;
+    }
+
+    /**
+     * After dawn quest roll, OFFER givers walk to the guild hall quest board and ponder (flavor only).
+     */
+    private static boolean tryBeginQuestBoardPostTravel(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull VillagerAutonomyState autonomy,
+        @Nullable TownRecord townRecord,
+        long now,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable TransformComponent tc
+    ) {
+        if (townRecord == null || TownVillagerBinding.isScheduleSuppressedKind(binding.getKind())) {
+            return false;
+        }
+        if (autonomy.getPhase() != VillagerAutonomyState.PHASE_IDLE) {
+            return false;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return false;
+        }
+        UUID npcUuid = uc.getUuid();
+        UUID townId = townRecord.getTownId();
+        if (!QuestBoardPostVisitQueue.isDue(townId, npcUuid, now)) {
+            return false;
+        }
+        PoiEntry boardPoi = QuestBoardPoiEnsure.findOrRegister(plugin, world, townRecord);
+        QuestBoardPostVisitQueue.consume(townId, npcUuid);
+        if (boardPoi == null) {
+            return false;
+        }
+        beginTravelToPoi(ref, store, commandBuffer, world, npc, autonomy, now, plugin, townRecord, townId, tc, boardPoi);
         return true;
     }
 
@@ -461,14 +603,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 autonomy.clearTravelWaypoints();
                 npc.setLeashPoint(finalTarget);
                 closePendingDoorsAfterTravelArrival(ref, store, world, autonomy, tc.getPosition(), maxArriveSq);
-                NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
-                float dur = PoiEffectTable.useDurationSeconds(pick.getInteractionKind());
-                autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
-                autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
-                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-                commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
-                PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, pick);
-                applyAutonomyRoleState(ref, npc, commandBuffer);
+                tryEnterPoiUse(ref, store, commandBuffer, world, npc, autonomy, now, townRecord, pathNavTownId, pick);
                 return;
             }
         }
@@ -489,7 +624,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull NPCEntity npc,
         @Nonnull PoiRegistry reg,
         @Nonnull VillagerAutonomyState autonomy,
-        long now
+        long now,
+        @Nullable TownRecord townRecord
     ) {
         UUID poiId = autonomy.getTargetPoiUuid();
         if (poiId == null) {
@@ -653,18 +789,72 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 return;
             }
             autonomy.setTravelStuckTicks(0);
-            NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
-            float dur = PoiEffectTable.useDurationSeconds(poi.getInteractionKind());
-            autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
-            autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
-            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
-            PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
-            applyAutonomyRoleState(ref, npc, commandBuffer);
+            TownVillagerBinding arriveBinding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+            UUID arriveTownId = arriveBinding != null ? arriveBinding.getTownId() : null;
+            if (arriveTownId == null) {
+                failTravel(autonomy, now, "NO_TOWN", commandBuffer, ref, npc);
+                return;
+            }
+            tryEnterPoiUse(ref, store, commandBuffer, world, npc, autonomy, now, townRecord, arriveTownId, poi);
             return;
         }
 
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    /**
+     * Capacity recheck + seat mountability before USE. Soft claims can still race until TRAVEL lands; if the seat is
+     * full, fail travel instead of mounting / overlapping Sit overlays.
+     */
+    private static boolean tryEnterPoiUse(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull World world,
+        @Nonnull NPCEntity npc,
+        @Nonnull VillagerAutonomyState autonomy,
+        long now,
+        @Nullable TownRecord townRecord,
+        @Nonnull UUID townId,
+        @Nonnull PoiEntry poi
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        PoiRegistry reg = plugin != null ? AetherhavenWorldRegistries.getPoiRegistry(world) : null;
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID selfUuid = uc != null ? uc.getUuid() : null;
+        if (reg == null
+            || !PoiOccupancy.canBeginUse(store, townId, reg, poi, selfUuid)) {
+            failTravel(autonomy, now, "OCCUPIED", commandBuffer, ref, npc);
+            return false;
+        }
+        boolean mountKind =
+            poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP;
+        if (mountKind && !poi.hasInteractionTarget()) {
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null
+                || !VillagerBlockUtil.canNpcMountBlockPoi(
+                    world,
+                    tc.getPosition().x,
+                    tc.getPosition().y,
+                    tc.getPosition().z,
+                    poi.getX(),
+                    poi.getY(),
+                    poi.getZ()
+                )) {
+                failTravel(autonomy, now, "MOUNT_FULL", commandBuffer, ref, npc);
+                return false;
+            }
+        }
+        NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
+        float dur = PoiEffectTable.useDurationSeconds(poi, RestaurantBenefitService.restaurantStateForPoi(townRecord, poi));
+        autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
+        autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
+        commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+        PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
+        afterBeginPoiUseMotion(ref, store, commandBuffer, npc);
+        return true;
     }
 
     private static boolean tryStallTeleportRecovery(
@@ -764,39 +954,85 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull TownVillagerBinding binding,
         @Nonnull World world
     ) {
-        if (now < autonomy.getPhaseEndEpochMs()) {
-            applyAutonomyRoleState(ref, npc, commandBuffer);
-            return;
-        }
         UUID poiId = autonomy.getTargetPoiUuid();
         PoiEntry poi = poiId != null ? reg.get(poiId) : null;
-        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
-        if (poi != null && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi)) {
-            float dur = PoiEffectTable.useDurationSeconds(poi.getInteractionKind());
-            autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
-            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+        boolean hungerLeaveNonEat =
+            PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+                && (poi == null || !PoiScoring.isEatPoi(poi));
+        if (now < autonomy.getPhaseEndEpochMs() && !hungerLeaveNonEat) {
+            if (isNpcBlockMounted(store, commandBuffer, ref)) {
+                // Keep Seek off and refresh Sit/Sleep so Idle transitions cannot leave a standing T-pose in the chair.
+                pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
+                reaffirmMountedPose(ref, store, commandBuffer, npc);
+                return;
+            }
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return;
         }
+        VillagerScheduleTickState schedTick = store.getComponent(ref, VillagerScheduleTickState.getComponentType());
+        if (poi != null && !hungerLeaveNonEat && shouldHoldWorkShiftAtStation(schedTick, binding, needs, poi)) {
+            float dur =
+                PoiEffectTable.useDurationSeconds(
+                    poi,
+                    RestaurantBenefitService.restaurantStateForPoi(townRecord, poi)
+                );
+            autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
+            commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+            if (!isNpcBlockMounted(store, commandBuffer, ref)) {
+                applyAutonomyRoleState(ref, npc, commandBuffer);
+            }
+            return;
+        }
+        boolean finishedEat = false;
         if (poi != null) {
+            finishedEat = PoiScoring.isEatPoi(poi);
             PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
-            PoiEffectTable.applyUseComplete(needs, poi);
-            commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+            if (!hungerLeaveNonEat) {
+                PoiEffectTable.applyUseComplete(
+                    needs,
+                    poi,
+                    RestaurantBenefitService.restaurantStateForPoi(townRecord, poi)
+                );
+                commandBuffer.putComponent(ref, VillagerNeeds.getComponentType(), needs);
+            }
             if (townRecord != null
                 && poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST_EPHEMERAL)
                 && townRecord.getFeastGatherDeadlineEpochMs() > 0L) {
                 autonomy.setLastFeastGatherDeadlineAttended(townRecord.getFeastGatherDeadlineEpochMs());
             }
-            tryPlayerShopPurchase(ref, store, commandBuffer, npc, poi, townRecord, binding, world);
+            if (!hungerLeaveNonEat) {
+                tryPlayerShopPurchase(ref, store, commandBuffer, npc, poi, townRecord, binding, world);
+            }
+        }
+        boolean keepEating =
+            finishedEat && !hungerLeaveNonEat && PoiScoring.isHungerNotFull(needs);
+        if (keepEating) {
+            autonomy.setFillingHunger(true);
+        } else if (finishedEat && !PoiScoring.isHungerNotFull(needs)) {
+            autonomy.setFillingHunger(false);
+        } else if (PoiScoring.needsHungerBreak(needs)) {
+            autonomy.setFillingHunger(true);
         }
         autonomy.setPhase(VillagerAutonomyState.PHASE_IDLE);
         autonomy.setTargetPoiUuid(null);
         autonomy.setPathFailureReason("");
         autonomy.setTravelStuckTicks(0);
         autonomy.clearTravelWaypoints();
-        autonomy.setNextDecisionEpochMs(now + 2500L);
+        // After eating (or leaving for hunger), re-decide immediately so they can chain meals until full.
+        autonomy.setNextDecisionEpochMs(finishedEat || hungerLeaveNonEat || keepEating ? now : now + 2500L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
+        if (keepEating || PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())) {
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            if (plugin != null) {
+                TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+                List<PoiEntry> pois =
+                    filterPoisForAutonomyScoring(townRecord, reg.listByTown(binding.getTownId()));
+                tryBeginNextHungerMeal(
+                    ref, store, commandBuffer, world, npc, reg, pois, needs, binding, autonomy, now, plugin, townRecord, tc
+                );
+            }
+        }
     }
 
     /** During a {@code work} schedule segment, stay at the role's work POI instead of cycling back to plot wander. */
@@ -1015,6 +1251,99 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return false;
         }
         return npc.getRole().getStateSupport().getStateHelper().getStateIndex(AetherhavenConstants.NPC_STATE_AUTONOMY_POI) >= 0;
+    }
+
+    /**
+     * After {@link PoiAutonomyVisuals#beginPoiUse}: while block-mounted, stop Seek (role Idle) so they stay in the seat,
+     * then re-apply Sit/Sleep — Idle StateTransitions clear Status, so overlays must be restored.
+     */
+    public static void afterBeginPoiUseMotion(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc
+    ) {
+        if (isNpcBlockMounted(store, commandBuffer, ref)) {
+            pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
+            stopSeekThenRestoreMountedPose(ref, store, commandBuffer, npc);
+            return;
+        }
+        applyAutonomyRoleState(ref, npc, commandBuffer);
+    }
+
+    public static boolean isNpcBlockMounted(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull Ref<EntityStore> ref
+    ) {
+        MountedComponent mounted = commandBuffer.getComponent(ref, MountedComponent.getComponentType());
+        if (mounted == null) {
+            mounted = store.getComponent(ref, MountedComponent.getComponentType());
+        }
+        return mounted != null && mounted.getControllerType() == MountController.BlockMount;
+    }
+
+    private static void pinLeashToCurrentFeet(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc
+    ) {
+        TransformComponent tc =
+            commandBuffer.getComponent(ref, TransformComponent.getComponentType());
+        if (tc == null) {
+            tc = store.getComponent(ref, TransformComponent.getComponentType());
+        }
+        if (tc == null) {
+            return;
+        }
+        Vector3d p = tc.getPosition();
+        npc.setLeashPoint(new Vector3d(p.x, p.y, p.z));
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
+    /**
+     * Exit autonomy Seek (Idle) without leaving the seat: rebuild Sit/Sleep Status after Idle clears overlays.
+     */
+    private static void stopSeekThenRestoreMountedPose(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc
+    ) {
+        if (npc.getRole() != null) {
+            String state = npc.getRole().getStateSupport().getStateName();
+            if (state.startsWith(AetherhavenConstants.NPC_STATE_AUTONOMY_POI)) {
+                npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
+            }
+        }
+        NpcAnimationPlayback.play(ref, npc, AnimationSlot.Movement, null, commandBuffer);
+        reaffirmMountedPose(ref, store, commandBuffer, npc);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
+    }
+
+    private static void reaffirmMountedPose(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc
+    ) {
+        MountedComponent mounted = commandBuffer.getComponent(ref, MountedComponent.getComponentType());
+        if (mounted == null) {
+            mounted = store.getComponent(ref, MountedComponent.getComponentType());
+        }
+        String pose = "Sit";
+        if (mounted != null && mounted.getBlockMountType() == com.hypixel.hytale.protocol.BlockMountType.Bed) {
+            pose = "Sleep";
+            ModelComponent mc = store.getComponent(ref, ModelComponent.getComponentType());
+            if (mc != null
+                && mc.getModel() != null
+                && !mc.getModel().getAnimationSetMap().containsKey("Sleep")
+                && mc.getModel().getAnimationSetMap().containsKey("Sit")) {
+                pose = "Sit";
+            }
+        }
+        NpcAnimationPlayback.play(ref, npc, AnimationSlot.Status, pose, commandBuffer);
     }
 
     static void applyAutonomyRoleState(

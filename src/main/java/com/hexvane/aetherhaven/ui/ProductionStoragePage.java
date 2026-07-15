@@ -1,12 +1,12 @@
 package com.hexvane.aetherhaven.ui;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.production.ProductionTimeScaling;
+import com.hexvane.aetherhaven.production.ProductionWithdrawal;
 import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -24,8 +24,6 @@ import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
-import com.hypixel.hytale.server.core.inventory.ItemStack;
-import com.hypixel.hytale.server.core.inventory.transaction.ItemStackTransaction;
 import com.hypixel.hytale.server.core.ui.Anchor;
 import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.EventData;
@@ -36,7 +34,6 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -437,39 +434,12 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             refresh(ref, store);
             return;
         }
-        List<Map.Entry<String, Long>> removals = new ArrayList<>();
+        ProductionWithdrawal.ResultSink result = new ProductionWithdrawal.ResultSink();
         for (var row : toTake.entrySet()) {
-            long removed = state.removeAmountUpTo(row.getKey(), row.getValue());
-            if (removed > 0L) {
-                removals.add(Map.entry(row.getKey(), removed));
-            }
-        }
-        boolean anyPartial = false;
-        for (var row : removals) {
-            long take = row.getValue();
-            String itemId = row.getKey();
-            ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
-            ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
-            if (!giveTx.succeeded()) {
-                state.addAmount(itemId, take, WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId));
-                anyPartial = true;
-                continue;
-            }
-            ItemStack remainder = giveTx.getRemainder();
-            long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
-            if (notAdded > 0L) {
-                state.addAmount(itemId, notAdded, WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId));
-                anyPartial = true;
-            }
+            ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, row.getKey(), row.getValue(), result);
         }
         tm.updateTown(town);
-        if (anyPartial) {
-            NotificationUtil.sendNotification(
-                pr.getPacketHandler(),
-                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryPartial"),
-                NotificationStyle.Warning
-            );
-        }
+        notifyWithdrawResult(pr, result);
         refresh(ref, store);
     }
 
@@ -490,43 +460,39 @@ public final class ProductionStoragePage extends AetherhavenInteractiveCustomUIP
             refresh(ref, store);
             return;
         }
-        long maxCap = WorkplaceProductionUpgrades.effectiveMaxStorage(state, entry, itemId);
-        long have = state.getAmount(itemId);
-        long take = Math.min(have, want);
-        if (take <= 0L) {
-            refresh(ref, store);
+        ProductionWithdrawal.ResultSink result = new ProductionWithdrawal.ResultSink();
+        ProductionWithdrawal.withdrawToPlayer(ref, store, player, state, entry, itemId, want, result);
+        tm.updateTown(town);
+        notifyWithdrawResult(pr, result);
+        refresh(ref, store);
+    }
+
+    private static void notifyWithdrawResult(@Nonnull PlayerRef pr, @Nonnull ProductionWithdrawal.ResultSink result) {
+        if (result.needEmptyBuckets) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.needEmptyBucket")
+                    .param("need", String.valueOf(result.emptyBucketsRequired))
+                    .param("have", String.valueOf(result.emptyBucketsHeld)),
+                NotificationStyle.Warning
+            );
             return;
         }
-        state.removeAmountUpTo(itemId, take);
-        ItemStack grant = new ItemStack(itemId, (int) Math.min(take, Integer.MAX_VALUE));
-        ItemStackTransaction giveTx = player.giveItem(grant, ref, store);
-        if (!giveTx.succeeded()) {
-            state.addAmount(itemId, take, maxCap);
+        if (result.inventoryFull) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
                 Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"),
                 NotificationStyle.Warning
             );
-            tm.updateTown(town);
-            refresh(ref, store);
             return;
         }
-        ItemStack remainder = giveTx.getRemainder();
-        long notAdded = ItemStack.isEmpty(remainder) ? 0L : Math.min(take, remainder.getQuantity());
-        if (notAdded > 0L) {
-            state.addAmount(itemId, notAdded, maxCap);
+        if (result.inventoryPartial) {
             NotificationUtil.sendNotification(
                 pr.getPacketHandler(),
-                Message.translation(
-                    notAdded == take
-                        ? "aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryFull"
-                        : "aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryPartial"
-                ),
+                Message.translation("aetherhaven_feasts_production.aetherhaven.ui.production.err.inventoryPartial"),
                 NotificationStyle.Warning
             );
         }
-        tm.updateTown(town);
-        refresh(ref, store);
     }
 
     private static int parseSlot(@Nullable String slotStr) {

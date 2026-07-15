@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "q_chef_restaurant",
+  "category": "town",
+  "assignNpcRoleId": "Aetherhaven_Chef",
+  "grantPlotTokenConstructionId": "plot_restaurant",
+  "title": "Pepper's Restaurant",
+  "description": "Give Pepper a real kitchen so the town can eat somewhere better than the inn hearth.",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the restaurant plot token from Pepper.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_chef_restaurant.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the restaurant prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_chef_restaurant.objective.build"
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Pepper at the restaurant and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_chef_restaurant.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Chef",
+      "amount": 14,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 14,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [
+      {
+        "effect": "lock_inn_visitor_for_npc",
+        "params": {}
+      }
+    ],
+    "onComplete": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ],
+    "onAbandon": [
+      {
+        "effect": "clear_inn_visitor_locks",
+        "params": {}
+      }
+    ]
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_chef_restaurant.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_chef_restaurant.description"
+}

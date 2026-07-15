@@ -1,0 +1,148 @@
+{
+  "id": "plot_restaurant",
+  "displayName": "Restaurant",
+  "description": "A place for people to gather to eat.",
+  "prefabPath": "plot_restaurant.prefab.json",
+  "plotTokenItemId": "Aetherhaven_Plot_Token_Restaurant",
+  "plotAnchorOffset": [
+    0,
+    1,
+    0
+  ],
+  "rotationYaw": "None",
+  "autonomyNavFloorYAboveMinY": 1,
+  "autonomyNavMaxStandYSpanAboveMinY": 2,
+  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "selfBuildGameDays": 1.0,
+  "treasuryGoldCoinCost": 56,
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 400
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 150
+    }
+  ],
+  "pois": [
+    {
+      "localX": 4,
+      "localY": 1,
+      "localZ": -7,
+      "tags": [
+        "WORK",
+        "SHOP"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -8
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -6,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -7
+    },
+    {
+      "localX": 8,
+      "localY": 2,
+      "localZ": -9,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -10
+    },
+    {
+      "localX": 9,
+      "localY": 2,
+      "localZ": -6,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -5
+    },
+    {
+      "localX": 10,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8
+    },
+    {
+      "localX": 12,
+      "localY": 2,
+      "localZ": -5,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 12,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -4
+    },
+    {
+      "localX": 13,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "EAT",
+        "RESTAURANT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -9
+    }
+  ],
+  "managementBlockLocalPos": [
+    13,
+    3,
+    -3
+  ],
+  "styleId": "core",
+  "tags": [
+    "work",
+    "eat",
+    "shop",
+    "restaurant"
+  ],
+  "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_restaurant.displayName",
+  "touristDestination": true
+}

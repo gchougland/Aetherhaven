@@ -9,18 +9,6 @@
     },
     {
       "dayOfWeek": "MONDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "MONDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "MONDAY",
       "hour": 15,
       "minute": 0,
       "location": "park"
@@ -40,18 +28,6 @@
     {
       "dayOfWeek": "TUESDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "TUESDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "TUESDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -81,12 +57,6 @@
     },
     {
       "dayOfWeek": "WEDNESDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "WEDNESDAY",
       "hour": 13,
       "minute": 0,
       "location": "work"
@@ -112,18 +82,6 @@
     {
       "dayOfWeek": "THURSDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "THURSDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "THURSDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -148,18 +106,6 @@
     {
       "dayOfWeek": "FRIDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "FRIDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "FRIDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -184,18 +130,6 @@
     {
       "dayOfWeek": "SATURDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "SATURDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "SATURDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -237,18 +171,6 @@
     },
     {
       "dayOfWeek": "SUNDAY",
-      "hour": 12,
-      "minute": 20,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "SUNDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "SUNDAY",
       "hour": 15,
       "minute": 0,
       "location": "park"
@@ -270,12 +192,6 @@
       "hour": 11,
       "minute": 45,
       "location": "shop"
-    },
-    {
-      "dayOfWeek": "WEDNESDAY",
-      "hour": 12,
-      "minute": 45,
-      "location": "work"
     },
     {
       "dayOfWeek": "SATURDAY",

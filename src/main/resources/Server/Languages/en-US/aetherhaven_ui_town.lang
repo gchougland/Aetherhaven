@@ -134,6 +134,7 @@ aetherhaven.reputation.reward.farmer.75=Cobalt holds pressure better. This page 
 aetherhaven.reputation.reward.farmer.100=Adamantite and essence: the last sheet in the set. Place them with care. The town's fields will drink at dawn.
 aetherhaven.reputation.reward.blacksmith.25=Stone for mortar, stone for patience. You have both, and it shows.
 aetherhaven.reputation.reward.blacksmith.50=You've earned the forge's trust. Here is the schematic for a geode anvil. Craft it at your town planning desk when you have the bars and stone.
+aetherhaven.reputation.reward.chef.50=You know good food when you taste it. Here is the schematic for a cooking bench. Craft it at your town planning desk when you have the parts.
 aetherhaven.reputation.reward.logger.50=You have helped me keep timber moving. I will show you how I dry logs for a long slow burn. Craft the bundles at your town planning desk once you know the pattern.
 aetherhaven.reputation.reward.logger.100=You know how to read a stump. I will show you how to mix root remover at the town planning desk.
 aetherhaven.reputation.reward.miner.50=You have dug beside me long enough. Take this glow ring. Wear it from your hand mirror and the dark will not crowd you so close.
@@ -161,6 +162,19 @@ aetherhaven.ui.productionUpgrades.notify.needGold=You need more gold for this up
 aetherhaven.ui.productionUpgrades.notify.locked=Unlock the earlier upgrades first.
 aetherhaven.ui.productionUpgrades.notify.maxed=This upgrade is already fully bought.
 aetherhaven.ui.productionUpgrades.notify.failed=Could not apply that upgrade.
+aetherhaven.ui.restaurantUpgrades.heading=Restaurant upgrades
+aetherhaven.ui.restaurantUpgrades.satiety.name=Full bellies
+aetherhaven.ui.restaurantUpgrades.satiety.desc=Townsfolk stay full longer between meals.
+aetherhaven.ui.restaurantUpgrades.service.name=Quick service
+aetherhaven.ui.restaurantUpgrades.service.desc=Meals here finish faster and fill hunger more.
+aetherhaven.ui.restaurantUpgrades.tooltip.maxed=Fully upgraded.
+aetherhaven.ui.restaurantUpgrades.tooltip.ingredientNeed={item}: {held} / {need}
+aetherhaven.ui.restaurantUpgrades.tooltip.goldNeed=Gold held: {held} / {need}
+aetherhaven.ui.restaurantUpgrades.notify.purchased=Upgrade applied.
+aetherhaven.ui.restaurantUpgrades.notify.needIngredient=You need more ingredients for this upgrade.
+aetherhaven.ui.restaurantUpgrades.notify.needGold=You need more gold for this upgrade.
+aetherhaven.ui.restaurantUpgrades.notify.maxed=This upgrade is already fully bought.
+aetherhaven.ui.restaurantUpgrades.notify.failed=Could not apply that upgrade.
 
 # === UI: town charter (held item: name, dissolve, relocate) ===
 aetherhaven.ui.chartertown.title=Town charter

@@ -4,14 +4,34 @@
 
 ### Added
 
+- **Chef Pepper Ashford** — After you build the inn, Pepper can show up as a visitor. Talk with her to start her quest and get a restaurant plot token. Her page is in the town journal **Guide** under Villagers.
+- **Restaurant** — A new core building with a kitchen, seating, and shop counters. Finish the build and Pepper moves in as your town chef.
+- **Restaurant menu** — The restaurant restocks skewers, salads, and pies (plus a few produce sides) for villagers and tourists to buy.
+- **Better meals in town** — When hunger drops below half, townsfolk leave their schedule for eat spots and keep going until full (preferring the restaurant when it is open), then return to what they were doing.
+- **Restaurant upgrades** — On the restaurant’s town records page, spend gold and ingredients on **Full bellies** (townsfolk stay full longer) or **Quick service** (meals there finish faster and fill more hunger). Each path has three tiers you can buy independently.
 - **Plot crafting search** — Search buildings by name on the plot crafting bench (all tabs). On Community and Moderation, search also matches creator names.
 - **Community marketplace sorting** — Sort community buildings by most upvotes, most downloads, latest, or name A–Z from a dropdown on the Community tab.
+- **Rancher production** — Poop and raw pork are available as default barn outputs. Withdrawing milk from barn storage consumes one empty wooden bucket per unit and gives a filled milk bucket.
+- **Quest board morning visits** — After today’s jobs refresh at dawn, the villagers who posted those jobs walk to the guild hall quest board and look it over (they just stand and think; the board already has the offers).
 
 ### Changed
 
+- **Plot creator eating spots** — When making or editing a restaurant, the plot creator staff now asks you to mark dining seats, not only shop and tourist spots.
+- **Chairs and beds** — Villagers sit in any chair or bench and lie in any bed when they use that furniture, based on what the block is rather than a fixed list of spots.
+- **Eating spots** — Every eat spot uses the held food and eat animation. Dining chairs also have them sit while they eat.
+- **Midday schedule** — Removed the midday inn lunch block from all villager schedules. Eating is hunger-driven (restaurant preferred when open); schedule `inn` resolution remains for compatibility.
+- **Hunger decay** — Base villager needs decay is faster (0.07 hunger points/sec; about 24 minutes from full to empty).
 - **Moderation review buttons** — Load Preview, Craft Test, Approve, and Deny are arranged in two rows so labels stay readable.
 - **Style filter panel** — The Styles column on the plot crafting bench is wider so longer style names fit.
 - **Community and moderation loading** — Switching to the Community or Moderation tab no longer freezes the UI; the tab opens right away and shows **Loading…** until the list is ready. Browsing community pages also batches icon updates so you get one brief reload notice instead of many.
+- **Logger sapling production** — Saplings take 3× as long to produce as matching wood (600 ticks vs 200).
+
+### Fixed
+
+- **Barn milk production** — Milk now uses the real bucket state item id (`*Container_Bucket_State_Filled_Milk`), so production storage shows the correct name/icon and withdrawing gives a usable milk bucket.
+- **Guild hall quest board spot** — The basic guild hall now has a clear stop for the quest board. Custom guild halls without a board simply skip morning visits there instead of causing trouble.
+- **Dining chairs** — Same-tick villager picks no longer overbook one seat; arrival checks capacity again before sitting or mounting.
+- **Hunger meals** — Villagers start eating when hunger drops below 50%, keep eating (eat, leave, eat again) until full, prefer the restaurant, then resume their schedule.
 
 ## [2.2.1] - 7/13/2026
 

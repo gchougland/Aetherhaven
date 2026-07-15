@@ -358,6 +358,7 @@ public final class VillagerScheduleResolver {
         return switch (kind) {
             case TownVillagerBinding.KIND_FARMER -> AetherhavenConstants.CONSTRUCTION_PLOT_FARM;
             case TownVillagerBinding.KIND_MERCHANT -> AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL;
+            case TownVillagerBinding.KIND_CHEF -> AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT;
             case TownVillagerBinding.KIND_BLACKSMITH -> AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP;
             case TownVillagerBinding.KIND_PRIESTESS -> AetherhavenConstants.CONSTRUCTION_PLOT_GAIA_ALTAR;
             case TownVillagerBinding.KIND_MINER -> AetherhavenConstants.CONSTRUCTION_PLOT_MINERS_HUT;
@@ -454,6 +455,8 @@ public final class VillagerScheduleResolver {
             case TownVillagerBinding.KIND_FARMER -> plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_FARM, constructionCatalog);
             case TownVillagerBinding.KIND_MERCHANT ->
                 plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_MARKET_STALL, constructionCatalog);
+            case TownVillagerBinding.KIND_CHEF ->
+                plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT, constructionCatalog);
             case TownVillagerBinding.KIND_BLACKSMITH ->
                 plotIdIfComplete(town, AetherhavenConstants.CONSTRUCTION_PLOT_BLACKSMITH_SHOP, constructionCatalog);
             case TownVillagerBinding.KIND_PRIESTESS ->

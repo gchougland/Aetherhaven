@@ -1,0 +1,7 @@
+{
+  "entries": [
+    { "itemId": "Food_Pie_Meat", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Pie_Apple", "weight": 2, "stockMin": 5, "stockMax": 10 },
+    { "itemId": "Food_Pie_Pumpkin", "weight": 2, "stockMin": 5, "stockMax": 10 }
+  ]
+}

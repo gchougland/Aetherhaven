@@ -1,8 +1,11 @@
 package com.hexvane.aetherhaven.poi;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
+import com.hexvane.aetherhaven.restaurant.RestaurantUpgrades;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Need restoration and USE duration by {@link PoiInteractionKind}. */
 public final class PoiEffectTable {
@@ -18,18 +21,47 @@ public final class PoiEffectTable {
         };
     }
 
+    public static float useDurationSeconds(@Nonnull PoiEntry poi, @Nullable PlotRestaurantState restaurantState) {
+        if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
+            return RestaurantUpgrades.serviceEatDurationSeconds(restaurantState.getServiceLevel());
+        }
+        return useDurationSeconds(poi.getInteractionKind());
+    }
+
     /** Apply a single USE completion tick to needs (called once when USE phase ends). */
     public static void applyUseComplete(@Nonnull VillagerNeeds needs, @Nonnull PoiEntry poi) {
+        applyUseComplete(needs, poi, null);
+    }
+
+    public static void applyUseComplete(
+        @Nonnull VillagerNeeds needs,
+        @Nonnull PoiEntry poi,
+        @Nullable PlotRestaurantState restaurantState
+    ) {
         PoiInteractionKind k = poi.getInteractionKind();
         switch (k) {
             case SLEEP -> {
                 needs.setEnergy(Math.min(VillagerNeeds.MAX, needs.getEnergy() + 28f));
                 needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 6f));
             }
-            case SIT -> needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));
+            case SIT -> {
+                if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
+                    needs.setHunger(VillagerNeeds.MAX);
+                } else if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
+                    float restore = RestaurantUpgrades.serviceHungerRestore(restaurantState.getServiceLevel());
+                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + restore));
+                } else if (poi.getTags().contains("EAT")) {
+                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 30f));
+                } else {
+                    needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));
+                }
+            }
             case USE_BENCH -> {
                 if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
                     needs.setHunger(VillagerNeeds.MAX);
+                } else if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
+                    float restore = RestaurantUpgrades.serviceHungerRestore(restaurantState.getServiceLevel());
+                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + restore));
                 } else if (poi.getTags().contains("EAT")) {
                     needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 30f));
                 } else {

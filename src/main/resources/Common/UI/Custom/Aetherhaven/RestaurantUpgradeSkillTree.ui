@@ -1,0 +1,196 @@
+$C = "../Common.ui";
+
+@TreeWidth = 284;
+@ColWidth = 132;
+@ColGap = 20;
+@BtnWidth = 110;
+@IconSize = 44;
+
+@NodeTitle = (
+  ...$C.@DefaultLabelStyle,
+  FontSize: 11,
+  HorizontalAlignment: Center,
+  Wrap: true,
+  TextColor: #e4dfd4
+);
+
+@NodeBtnStyle = (
+  Default: (Background: #252b38(0.98)),
+  Hovered: (Background: #323a4c(0.98)),
+  Pressed: (Background: #1c2230(0.98)),
+  Disabled: (Background: #141820(0.96))
+);
+
+@TreeLineColor = #7a6c5a;
+@DotEmpty = #5a5a5a;
+@DotFilled = #d8ccb4;
+
+@SatietyInnerBg = #3a4838;
+@ServiceInnerBg = #483a30;
+
+Group #RestaurantUpgradeTree {
+  LayoutMode: Top;
+  Visible: false;
+
+  Label #RestaurantUpgradeHeading {
+    Anchor: (Bottom: 10);
+    Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #d8ccb4);
+    Text: "";
+  }
+
+  Group #RestaurantUpgradeTreeFrame {
+    LayoutMode: Center;
+
+    Group #RestaurantUpgradeCanvas {
+      LayoutMode: Top;
+      Anchor: (Width: @TreeWidth);
+
+      Group #RestaurantTier2Row {
+        LayoutMode: Left;
+        Anchor: (Width: @TreeWidth);
+
+        Group #RestaurantLeftCol {
+          LayoutMode: Top;
+          Anchor: (Width: @ColWidth);
+
+          Group #RestaurantLeftBtnWrap {
+            LayoutMode: Center;
+
+            Button #UpgSatiety {
+              LayoutMode: Top;
+              Style: @NodeBtnStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: @BtnWidth);
+              Padding: (Horizontal: 8, Vertical: 8);
+
+              Label #UpgSatietyTitle {
+                Anchor: (Bottom: 4);
+                Style: (...@NodeTitle);
+                Text: "";
+              }
+
+              Group #UpgSatietyIconOuter {
+                LayoutMode: Full;
+                Anchor: (Width: @IconSize, Height: @IconSize);
+                Padding: (Full: 2);
+                Background: #5a5468;
+
+                Group #UpgSatietyIconInner {
+                  LayoutMode: Full;
+                  Anchor: (Full: 0);
+                  Padding: (Full: 4);
+                  Background: @SatietyInnerBg;
+
+                  AssetImage #UpgSatietyIcon {
+                    Anchor: (Full: 0);
+                    AssetPath: "UI/Custom/food_icon_256.png";
+                  }
+
+                  Group #UpgSatietyDim {
+                    LayoutMode: Full;
+                    Anchor: (Full: 0);
+                    Visible: false;
+                    Background: #000000(0.55);
+                  }
+                }
+              }
+
+              Group #UpgSatietyDots {
+                LayoutMode: Center;
+                Anchor: (Top: 6);
+                Group {
+                  LayoutMode: Left;
+                  Group #UpgSatietyDot0 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgSatietyDot1 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgSatietyDot2 {
+                    Anchor: (Width: 7, Height: 7);
+                    Background: @DotEmpty;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        Group #RestaurantMidGap {
+          Anchor: (Width: @ColGap);
+        }
+
+        Group #RestaurantRightCol {
+          LayoutMode: Top;
+          Anchor: (Width: @ColWidth);
+
+          Group #RestaurantRightBtnWrap {
+            LayoutMode: Center;
+
+            Button #UpgService {
+              LayoutMode: Top;
+              Style: @NodeBtnStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: @BtnWidth);
+              Padding: (Horizontal: 8, Vertical: 8);
+
+              Label #UpgServiceTitle {
+                Anchor: (Bottom: 4);
+                Style: (...@NodeTitle);
+                Text: "";
+              }
+
+              Group #UpgServiceIconOuter {
+                LayoutMode: Full;
+                Anchor: (Width: @IconSize, Height: @IconSize);
+                Padding: (Full: 2);
+                Background: #5a5468;
+
+                Group #UpgServiceIconInner {
+                  LayoutMode: Full;
+                  Anchor: (Full: 0);
+                  Padding: (Full: 4);
+                  Background: @ServiceInnerBg;
+
+                  AssetImage #UpgServiceIcon {
+                    Anchor: (Full: 0);
+                    AssetPath: "UI/Custom/food-tray.png";
+                  }
+
+                  Group #UpgServiceDim {
+                    LayoutMode: Full;
+                    Anchor: (Full: 0);
+                    Visible: false;
+                    Background: #000000(0.55);
+                  }
+                }
+              }
+
+              Group #UpgServiceDots {
+                LayoutMode: Center;
+                Anchor: (Top: 6);
+                Group {
+                  LayoutMode: Left;
+                  Group #UpgServiceDot0 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgServiceDot1 {
+                    Anchor: (Width: 7, Height: 7, Right: 5);
+                    Background: @DotEmpty;
+                  }
+                  Group #UpgServiceDot2 {
+                    Anchor: (Width: 7, Height: 7);
+                    Background: @DotEmpty;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

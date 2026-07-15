@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.production.PlotProductionState;
+import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
 import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades;
@@ -348,6 +349,11 @@ public final class TownRecord {
     @SerializedName("plotProductionByPlotId")
     private Map<String, PlotProductionState> plotProductionByPlotId;
 
+    /** Restaurant plot upgrade tiers: key plot UUID string. */
+    @Nullable
+    @SerializedName("plotRestaurantByPlotId")
+    private Map<String, PlotRestaurantState> plotRestaurantByPlotId;
+
     /**
      * Per player Gaia's Draught shared progression (charges, capacity, heal tier). Key: player UUID string.
      */
@@ -534,6 +540,23 @@ public final class TownRecord {
     public PlotProductionState getOrCreatePlotProduction(@Nonnull UUID plotId) {
         migratePlotProductionIfNeeded();
         return plotProductionByPlotId.computeIfAbsent(plotId.toString(), k -> PlotProductionState.empty());
+    }
+
+    private void migratePlotRestaurantIfNeeded() {
+        if (plotRestaurantByPlotId == null) {
+            plotRestaurantByPlotId = new LinkedHashMap<>();
+        }
+        for (PlotRestaurantState s : plotRestaurantByPlotId.values()) {
+            if (s != null) {
+                s.migrateIfNeeded();
+            }
+        }
+    }
+
+    @Nonnull
+    public PlotRestaurantState getOrCreatePlotRestaurant(@Nonnull UUID plotId) {
+        migratePlotRestaurantIfNeeded();
+        return plotRestaurantByPlotId.computeIfAbsent(plotId.toString(), k -> PlotRestaurantState.empty());
     }
 
     @Nonnull

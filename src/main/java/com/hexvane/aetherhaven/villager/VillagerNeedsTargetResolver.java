@@ -27,7 +27,8 @@ public final class VillagerNeedsTargetResolver {
     public record Result(@Nullable UUID entityUuid, @Nonnull ResolveProblem problem) {}
 
     /**
-     * @param token {@code Elder} = your town's saved elder entity; full UUID; or {@link AetherhavenVillagerHandle} string (case-insensitive).
+     * @param token {@code Elder} = your town's saved elder entity; full UUID; or {@link AetherhavenVillagerHandle}
+     *     string (case-insensitive).
      */
     @Nonnull
     public static Result resolve(

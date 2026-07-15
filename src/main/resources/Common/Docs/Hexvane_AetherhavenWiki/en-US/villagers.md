@@ -6,6 +6,7 @@ sub-topics:
   - villager_innkeeper
   - villager_elder
   - villager_merchant
+  - villager_chef
   - villager_blacksmith
   - villager_priestess
   - villager_farmer

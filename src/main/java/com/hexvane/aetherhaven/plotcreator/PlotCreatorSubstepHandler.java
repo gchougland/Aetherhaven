@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
@@ -282,14 +283,18 @@ public final class PlotCreatorSubstepHandler {
         poi.setLocal(local[0], local[1], local[2]);
         poi.setBlockTypeId(blockId);
         poi.setCapacity(1);
-        applyPoiDefaults(poi, type);
+        applyPoiDefaults(poi, type, draft);
         PlotCreatorPoiInteractionTarget.applyFromBlockFacing(world, targetBlock, local, poi);
         draft.getPois().add(poi);
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiRecorded"));
         return true;
     }
 
-    private static void applyPoiDefaults(@Nonnull PlotCreatorPoiDraft poi, @Nonnull PlotCreatorSubstepType type) {
+    private static void applyPoiDefaults(
+        @Nonnull PlotCreatorPoiDraft poi,
+        @Nonnull PlotCreatorSubstepType type,
+        @Nonnull PlotCreatorDraft draft
+    ) {
         switch (type) {
             case WORK_POI -> {
                 poi.getTags().add("WORK");
@@ -307,6 +312,9 @@ public final class PlotCreatorSubstepHandler {
             }
             case EAT_POI -> {
                 poi.getTags().add("EAT");
+                if (PlotBuildingKindRequirements.usesRestaurantEatTag(draft, AetherhavenPlugin.get())) {
+                    poi.getTags().add(AetherhavenConstants.POI_TAG_RESTAURANT);
+                }
                 poi.setInteractionKind("USE_BENCH");
             }
             case FUN_POI -> {

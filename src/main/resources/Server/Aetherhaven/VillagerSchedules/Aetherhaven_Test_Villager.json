@@ -9,18 +9,6 @@
     },
     {
       "dayOfWeek": "MONDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "MONDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "MONDAY",
       "hour": 17,
       "minute": 30,
       "location": "park"
@@ -40,18 +28,6 @@
     {
       "dayOfWeek": "TUESDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "TUESDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "TUESDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -81,18 +57,6 @@
     },
     {
       "dayOfWeek": "WEDNESDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "WEDNESDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "WEDNESDAY",
       "hour": 17,
       "minute": 30,
       "location": "park"
@@ -112,18 +76,6 @@
     {
       "dayOfWeek": "THURSDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "THURSDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "THURSDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -148,18 +100,6 @@
     {
       "dayOfWeek": "FRIDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "FRIDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "FRIDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -184,18 +124,6 @@
     {
       "dayOfWeek": "SATURDAY",
       "hour": 6,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "SATURDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "SATURDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },
@@ -232,18 +160,6 @@
     {
       "dayOfWeek": "SUNDAY",
       "hour": 9,
-      "minute": 0,
-      "location": "work"
-    },
-    {
-      "dayOfWeek": "SUNDAY",
-      "hour": 13,
-      "minute": 0,
-      "location": "inn"
-    },
-    {
-      "dayOfWeek": "SUNDAY",
-      "hour": 13,
       "minute": 0,
       "location": "work"
     },

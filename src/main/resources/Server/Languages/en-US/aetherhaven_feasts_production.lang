@@ -40,6 +40,7 @@ aetherhaven.ui.production.err.plot=This block is not inside a completed workplac
 aetherhaven.ui.production.err.catalog=No production catalog is configured for this building.
 aetherhaven.ui.production.err.inventoryFull=Your inventory is too full to take that much.
 aetherhaven.ui.production.err.inventoryPartial=Your inventory filled up before everything could move. The rest stayed in this workplace storage.
+aetherhaven.ui.production.err.needEmptyBucket=You need an empty wooden bucket for each milk you take (need {need}, have {have} in your inventory).
 aetherhaven.ui.production.unlockButton=Unlocks
 aetherhaven.ui.production.unlockTooltip=View and purchase locked workplace outputs for this building.
 aetherhaven.ui.production.pickTooltip=Choose what this line makes

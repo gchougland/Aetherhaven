@@ -254,6 +254,7 @@ public final class PlotProductionState {
         return new PlotProductionState();
     }
 
+
     /** Gson may set amounts null on old saves. Applies one time legacy slot upgrade migration. */
     public void migrateIfNeeded() {
         if (amounts == null) {
@@ -262,6 +263,7 @@ public final class PlotProductionState {
         if (workplaceUnlockedOutputIds == null) {
             workplaceUnlockedOutputIds = new ArrayList<>();
         }
+        remapLegacyMilkBucketAmounts();
         tickAccum = 0;
         ironUpgrade = Math.max(0, Math.min(1, ironUpgrade));
         thoriumLevel = Math.max(0, Math.min(WorkplaceProductionUpgrades.MAX_BRANCH_LEVEL, thoriumLevel));
@@ -274,6 +276,18 @@ public final class PlotProductionState {
             }
             legacySlotUpgradesApplied = true;
         }
+    }
+
+    /** Pre-asterisk milk bucket id was not a real Item asset; fold stored counts into the real state item. */
+    private void remapLegacyMilkBucketAmounts() {
+        Long legacy = amounts.remove("Container_Bucket_State_Filled_Milk");
+        if (legacy == null || legacy <= 0L) {
+            return;
+        }
+        amounts.put(
+            ProductionWithdrawal.MILK_BUCKET_ITEM_ID,
+            amounts.getOrDefault(ProductionWithdrawal.MILK_BUCKET_ITEM_ID, 0L) + legacy
+        );
     }
 
     private boolean looksLikeLegacyThreeSlotPlot() {

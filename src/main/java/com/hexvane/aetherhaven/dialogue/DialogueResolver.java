@@ -80,6 +80,7 @@ public final class DialogueResolver {
         kindToVisitorTree.put(KIND_CRYSTAL_KEEPER, VISITOR_DEFAULT);
         kindToVisitorTree.put(KIND_PYROTECHNIC, VISITOR_DEFAULT);
         kindToVisitorTree.put("florist", VISITOR_DEFAULT);
+        kindToVisitorTree.put("chef", VISITOR_DEFAULT);
         kindToVisitorTree.put("builder", VISITOR_DEFAULT);
         registerNonVillagerDialogueKinds();
     }

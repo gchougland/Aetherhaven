@@ -1,0 +1,14 @@
+{
+  "constructionId": "plot_restaurant",
+  "prefabPath": "plot_restaurant.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 400
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 150
+    }
+  ]
+}

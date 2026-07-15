@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.poi;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
@@ -109,14 +110,28 @@ public final class PoiExtractor {
             if (anchor == null) {
                 BlockType at = world.getBlockType(wx, wy, wz);
                 String actual = at != null ? at.getId() : null;
-                LOGGER.atWarning().log(
-                    "Skipping POI near %s,%s,%s: no blockTypeId %s in search volume (center was %s)",
-                    wx,
-                    wy,
-                    wz,
-                    expectedType,
-                    actual
-                );
+                // Community guild halls may list a quest board POI without placing the block — skip quietly.
+                boolean optionalQuestBoard =
+                    AetherhavenConstants.QUEST_BOARD_ITEM_ID.equals(expectedType)
+                        || row.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD);
+                if (optionalQuestBoard) {
+                    LOGGER.atFine().log(
+                        "Skipping optional quest board POI near %s,%s,%s (no board block; center was %s)",
+                        wx,
+                        wy,
+                        wz,
+                        actual
+                    );
+                } else {
+                    LOGGER.atWarning().log(
+                        "Skipping POI near %s,%s,%s: no blockTypeId %s in search volume (center was %s)",
+                        wx,
+                        wy,
+                        wz,
+                        expectedType,
+                        actual
+                    );
+                }
                 return null;
             }
             wx = anchor.x;

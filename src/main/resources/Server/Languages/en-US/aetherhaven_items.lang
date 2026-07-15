@@ -289,6 +289,8 @@ items.Aetherhaven_Plot_Token_Inn.description=Required in inventory to use the pl
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Market stall plot token
 items.Aetherhaven_Plot_Token_Market_Stall.description=Required to place the market stall footprint from the plot placement staff.
+items.Aetherhaven_Plot_Token_Restaurant.name=Restaurant plot token
+items.Aetherhaven_Plot_Token_Restaurant.description=Required to place the restaurant footprint from the plot placement staff.
 items.Aetherhaven_Plot_Token_Player_Shop.name=Player shop plot token
 items.Aetherhaven_Plot_Token_Player_Shop.description=Required to place the player shop footprint from the plot placement staff.
 

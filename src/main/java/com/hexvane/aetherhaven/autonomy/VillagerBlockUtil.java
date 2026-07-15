@@ -254,16 +254,45 @@ public final class VillagerBlockUtil {
         return tryMountBlockAt(world, npcX, npcYFeet, npcZ, markerBx, markerBy, markerBz);
     }
 
-    /** True when the block at {@code (bx, by, bz)} has seat or bed mount points. */
-    public static boolean isBlockMountSeat(@Nonnull World world, int bx, int by, int bz) {
+    /** Furniture mount shape for POI visuals: seats vs beds vs neither. */
+    public enum FurnitureMountKind {
+        NONE,
+        SEAT,
+        BED
+    }
+
+    /**
+     * Prefers beds over seats if a block somehow defines both; otherwise seats, then none.
+     */
+    @Nonnull
+    public static FurnitureMountKind furnitureMountKind(@Nonnull World world, int bx, int by, int bz) {
         if (by < 0 || by >= 320) {
-            return false;
+            return FurnitureMountKind.NONE;
         }
         BlockType blockType = world.getBlockType(bx, by, bz);
         if (blockType == null || blockType == BlockType.EMPTY) {
-            return false;
+            return FurnitureMountKind.NONE;
         }
-        return blockType.getSeats() != null || blockType.getBeds() != null;
+        if (blockType.getBeds() != null) {
+            return FurnitureMountKind.BED;
+        }
+        if (blockType.getSeats() != null) {
+            return FurnitureMountKind.SEAT;
+        }
+        return FurnitureMountKind.NONE;
+    }
+
+    public static boolean hasSeats(@Nonnull World world, int bx, int by, int bz) {
+        return furnitureMountKind(world, bx, by, bz) == FurnitureMountKind.SEAT;
+    }
+
+    public static boolean hasBeds(@Nonnull World world, int bx, int by, int bz) {
+        return furnitureMountKind(world, bx, by, bz) == FurnitureMountKind.BED;
+    }
+
+    /** True when the block at {@code (bx, by, bz)} has seat or bed mount points. */
+    public static boolean isBlockMountSeat(@Nonnull World world, int bx, int by, int bz) {
+        return furnitureMountKind(world, bx, by, bz) != FurnitureMountKind.NONE;
     }
 
     /** True when the chunk for an adventurer spawn marker column is loaded (seat lookup and mount need this). */

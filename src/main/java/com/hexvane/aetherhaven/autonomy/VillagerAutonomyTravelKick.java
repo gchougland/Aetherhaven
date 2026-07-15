@@ -89,7 +89,10 @@ public final class VillagerAutonomyTravelKick {
                     if (autonomy == null) {
                         autonomy = VillagerAutonomyState.fresh(now);
                     }
-                    if (SchedulePlotCommute.tryBeginIfOffSchedulePlot(ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin)) {
+                    if (!PoiScoring.needsHungerBreak(needs, autonomy.isFillingHunger())
+                        && SchedulePlotCommute.tryBeginIfOffSchedulePlot(
+                            ref, store, commandBuffer, world, npc, binding, autonomy, now, plugin
+                        )) {
                         return true;
                     }
                     PoiRegistry reg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
@@ -101,7 +104,18 @@ public final class VillagerAutonomyTravelKick {
                     VillagerScheduleTickState schedTick =
                         chunk.getComponent(i, VillagerScheduleTickState.getComponentType());
                     String scheduleSeg = schedTick != null ? schedTick.getLastAppliedScheduleSegment() : null;
-                    PoiEntry pick = PoiScoring.pickBest(pois, needs, binding, cellOcc, npcX, npcZ, scheduleSeg);
+                    PoiEntry pick =
+                        PoiScoring.pickBest(
+                            pois,
+                            needs,
+                            binding,
+                            cellOcc,
+                            npcX,
+                            npcZ,
+                            scheduleSeg,
+                            false,
+                            autonomy.isFillingHunger() || PoiScoring.needsHungerBreak(needs)
+                        );
                     if (pick == null) {
                         return true;
                     }

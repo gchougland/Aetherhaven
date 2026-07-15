@@ -258,6 +258,9 @@ public final class AetherhavenConstants {
     /** Market stall plot construction id (Week 4). */
     public static final String CONSTRUCTION_PLOT_MARKET_STALL = "plot_market_stall";
 
+    /** Restaurant workplace; definition in {@code Server/Aetherhaven/Buildings/plot_restaurant.json}. */
+    public static final String CONSTRUCTION_PLOT_RESTAURANT = "plot_restaurant";
+
     public static final String CONSTRUCTION_PLOT_PLAYER_SHOP = "plot_player_shop";
 
     public static final String CONSTRUCTION_PLOT_FARM = "plot_farm";
@@ -330,6 +333,8 @@ public final class AetherhavenConstants {
     public static final String QUEST_HOUSE_BARD = "q_house_bard";
 
     public static final String QUEST_MERCHANT_STALL = "q_merchant_stall";
+
+    public static final String QUEST_CHEF_RESTAURANT = "q_chef_restaurant";
 
     public static final String QUEST_PLAYER_SHOP = "q_player_shop";
 
@@ -411,6 +416,7 @@ public final class AetherhavenConstants {
     public static final String NPC_BUILDER = "Aetherhaven_Builder";
 
     public static final String NPC_MERCHANT = "Aetherhaven_Merchant";
+    public static final String NPC_CHEF = "Aetherhaven_Chef";
     public static final String NPC_BLACKSMITH = "Aetherhaven_Blacksmith";
     public static final String NPC_FARMER = "Aetherhaven_Farmer";
 
@@ -591,6 +597,9 @@ public final class AetherhavenConstants {
     /** POI tag for the bard's guild hall performance spot. */
     public static final String POI_TAG_BARD = "BARD";
 
+    /** POI tag for the guild hall quest board (morning post visits / ponder). */
+    public static final String POI_TAG_QUEST_BOARD = "QUEST_BOARD";
+
     /** Hired guard NPC role (combat + large patrol wander). Appearance set from townsfolk model at spawn. */
     public static final String NPC_GUARD_KNIGHT = "Aetherhaven_Guard_Knight";
     public static final String NPC_GUARD_ARCHER = "Aetherhaven_Guard_Archer";
@@ -634,6 +643,9 @@ public final class AetherhavenConstants {
 
     /** Feast table POI: reuse EAT bench visuals; {@link com.hexvane.aetherhaven.feast.FeastService} sets hunger to max on completion. */
     public static final String POI_TAG_FEAST = "FEAST";
+
+    /** Dining POI on a completed restaurant plot. */
+    public static final String POI_TAG_RESTAURANT = "RESTAURANT";
 
     /** {@link com.hypixel.hytale.server.core.inventory.ItemStack.Metadata#BLOCK_HOLDER} key for plot sign items. */
     public static final String ITEM_METADATA_BLOCK_HOLDER = "BlockHolder";
