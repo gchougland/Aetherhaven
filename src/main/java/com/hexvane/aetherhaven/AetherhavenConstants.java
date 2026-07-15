@@ -336,6 +336,8 @@ public final class AetherhavenConstants {
 
     public static final String QUEST_CHEF_RESTAURANT = "q_chef_restaurant";
 
+    public static final String QUEST_HOUSE_CHEF = "q_house_chef";
+
     public static final String QUEST_PLAYER_SHOP = "q_player_shop";
 
     public static final String QUEST_FARM_PLOT = "q_farm_plot";

@@ -5,7 +5,7 @@
 ### Added
 
 - **Multi-resident houses** — House buildings can set `maxHomeResidents` (1–8) in their JSON. The plot creator staff configure step exposes that for home buildings and requires that many beds. The town records shelf shows one resident slot per capacity.
-- **Chef Pepper Ashford** — After you build the inn, Pepper can show up as a visitor. Talk with her to start her quest and get a restaurant plot token. Her page is in the town journal **Guide** under Villagers.
+- **Chef Pepper Ashford** — After you build the inn, Pepper can show up as a visitor. Talk with her to start her quest and get a restaurant plot token. After the restaurant is done she can ask for a house like other shopkeepers. Her page is in the town journal **Guide** under Villagers.
 - **Restaurant** — A new core building with a kitchen, seating, and shop counters. Finish the build and Pepper moves in as your town chef.
 - **Restaurant menu** — The restaurant restocks skewers, salads, and pies (plus a few produce sides) for villagers and tourists to buy.
 - **Better meals in town** — When hunger drops below half, townsfolk leave their schedule for eat spots and keep going until full (preferring the restaurant when it is open), then return to what they were doing.

@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "id": "q_house_chef",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "title": "Pepper's home",
+  "description": "The restaurant is her kitchen. She still wants a door that closes on someone else's dinner chatter.",
+  "assignNpcRoleId": "Aetherhaven_Chef",
+  "prerequisites": {
+    "completedQuestIds": [],
+    "anyCompletedQuestIds": []
+  },
+  "objectives": [
+    {
+      "id": "token",
+      "kind": "journal",
+      "text": "Take the house plot token from Pepper.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.objective.token"
+    },
+    {
+      "id": "build",
+      "kind": "journal",
+      "text": "Stake and build the house prefab.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.objective.build"
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "Aetherhaven_Chef",
+      "text": "Assign Pepper as resident on the house management block.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.objective.assign"
+    },
+    {
+      "id": "talk",
+      "kind": "journal",
+      "text": "Find Pepper and close the quest in dialogue.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.objective.talk"
+    }
+  ],
+  "rewards": [
+    {
+      "kind": "reputation",
+      "npcRoleId": "Aetherhaven_Chef",
+      "amount": 10,
+      "grantTo": "quest_beneficiary_npc"
+    },
+    {
+      "kind": "item",
+      "itemId": "Aetherhaven_Gold_Coin",
+      "count": 16,
+      "grantTo": "player"
+    }
+  ],
+  "lifecycle": {
+    "onStart": [],
+    "onComplete": [],
+    "onAbandon": []
+  },
+  "repeat": {
+    "mode": "none"
+  },
+  "titleLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.title",
+  "descriptionLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_chef.description"
+}
