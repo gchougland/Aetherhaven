@@ -34,6 +34,13 @@ import { createVotes } from "./votes.js";
 import { createDownloads } from "./downloads.js";
 import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
+import {
+  AdminRawFileError,
+  applyAdminRawMetadata,
+  atomicWriteText,
+  projectAdminRawMetadata,
+  validateAdminRawFilePair,
+} from "./adminRawFiles.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -76,6 +83,11 @@ const upload = multer({
 const screenshotUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_SCREENSHOT_BYTES },
+});
+
+const adminRawJsonUpload = express.text({
+  type: "text/plain",
+  limit: MAX_PREFAB_BYTES,
 });
 
 const app = express();
@@ -1450,6 +1462,134 @@ function patchPendingSubmission(submissionId, body) {
   return getPendingSubmissionEditPayload(submissionId);
 }
 
+function parseAdminRawJson(req, res, next) {
+  adminRawJsonUpload(req, res, (err) => {
+    if (!err) {
+      next();
+      return;
+    }
+    if (err.type === "entity.too.large") {
+      res.status(413).json({
+        error: "prefab_json_too_large",
+        message: "Raw file exceeds the 32 MB prefab limit.",
+      });
+      return;
+    }
+    res.status(400).json({ error: "raw_file_invalid", message: err.message || "Invalid raw file." });
+  });
+}
+
+function resolveAdminRawFiles(ownerKind, rawOwnerId) {
+  if (ownerKind === "approved") {
+    const id = normalizeCommunityId(rawOwnerId);
+    if (!id) return null;
+    const manifest = storage.readManifest();
+    const entry = (manifest.entries || []).find((candidate) => candidate.id === id);
+    if (!entry) return null;
+    const paths = storage.approvedPaths(id);
+    if (!fs.existsSync(paths.building) || !fs.existsSync(paths.prefab)) return null;
+    return { ownerKind, ownerId: id, paths, entry, manifest };
+  }
+
+  const ownerId = String(rawOwnerId || "");
+  const meta = storage.listPending().find((candidate) => candidate.submissionId === ownerId);
+  if (!meta) return null;
+  const dir = storage.submissionDir(ownerId, "pending");
+  const paths = {
+    dir,
+    building: path.join(dir, "building.json"),
+    prefab: path.join(dir, "prefab.prefab.json"),
+    meta: path.join(dir, "meta.json"),
+  };
+  if (!fs.existsSync(paths.building) || !fs.existsSync(paths.prefab)) return null;
+  return { ownerKind, ownerId, paths, meta };
+}
+
+function readAdminRawFile(ownerKind, ownerId, fileKind) {
+  if (fileKind !== "building" && fileKind !== "prefab") {
+    return { status: 400, body: { error: "raw_file_kind_invalid" } };
+  }
+  const resolved = resolveAdminRawFiles(ownerKind, ownerId);
+  if (!resolved) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const file = fileKind === "building" ? resolved.paths.building : resolved.paths.prefab;
+  return { status: 200, text: fs.readFileSync(file, "utf8") };
+}
+
+function writeAdminRawFile(ownerKind, ownerId, fileKind, replacementText) {
+  if (fileKind !== "building" && fileKind !== "prefab") {
+    return { status: 400, body: { error: "raw_file_kind_invalid" } };
+  }
+  const resolved = resolveAdminRawFiles(ownerKind, ownerId);
+  if (!resolved) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  const buildingText =
+    fileKind === "building"
+      ? replacementText
+      : fs.readFileSync(resolved.paths.building, "utf8");
+  const prefabText =
+    fileKind === "prefab"
+      ? replacementText
+      : fs.readFileSync(resolved.paths.prefab, "utf8");
+
+  try {
+    const validated = validateAdminRawFilePair({
+      buildingText,
+      prefabText,
+      publishedId: ownerKind === "approved" ? resolved.ownerId : "",
+    });
+    const metadata = projectAdminRawMetadata(
+      validated.building,
+      validated.blockIdVersion,
+      validated.prefabBytes,
+    );
+    const target = fileKind === "building" ? resolved.paths.building : resolved.paths.prefab;
+    atomicWriteText(target, replacementText);
+
+    if (ownerKind === "pending") {
+      const meta = applyAdminRawMetadata({ ...resolved.meta }, metadata);
+      atomicWriteText(resolved.paths.meta, JSON.stringify(meta, null, 2));
+    } else {
+      const entry = resolved.entry;
+      applyAdminRawMetadata(entry, metadata, { includePrefabBytes: true });
+      resolved.manifest.version = (resolved.manifest.version || 0) + 1;
+      storage.writeManifest(resolved.manifest);
+
+      let approvedMeta = {};
+      if (fs.existsSync(resolved.paths.meta)) {
+        approvedMeta = JSON.parse(fs.readFileSync(resolved.paths.meta, "utf8"));
+      }
+      applyAdminRawMetadata(approvedMeta, metadata);
+      atomicWriteText(resolved.paths.meta, JSON.stringify(approvedMeta, null, 2));
+    }
+
+    return {
+      status: 200,
+      body: {
+        ok: true,
+        fileKind,
+        bytes: fileKind === "building" ? validated.buildingBytes : validated.prefabBytes,
+        blockIdVersion: validated.blockIdVersion,
+      },
+    };
+  } catch (err) {
+    if (err instanceof AdminRawFileError) {
+      return { status: 400, body: { error: err.code, message: err.message } };
+    }
+    throw err;
+  }
+}
+
+function sendAdminRawFile(result, res) {
+  if (result.status !== 200) {
+    res.status(result.status).json(result.body);
+    return;
+  }
+  res.status(200).type("text/plain").send(result.text);
+}
+
 app.get("/api/my-submissions", requireWebUser, (req, res) => {
   const webUser = sessionWebUser(req);
   if (!webUser.profileUuid && !webUser.profileUsername) {
@@ -1492,6 +1632,70 @@ app.patch("/api/admin/submissions/:submissionId", requireWebUser, requireAdmin, 
   const result = patchPendingSubmission(req.params.submissionId, req.body);
   res.status(result.status).json(result.body);
 });
+
+app.get(
+  "/api/admin/submissions/:submissionId/files/:fileKind",
+  requireWebUser,
+  requireAdmin,
+  (req, res) => {
+    sendAdminRawFile(
+      readAdminRawFile("pending", req.params.submissionId, req.params.fileKind),
+      res,
+    );
+  },
+);
+
+app.put(
+  "/api/admin/submissions/:submissionId/files/:fileKind",
+  requireWebUser,
+  requireAdmin,
+  parseAdminRawJson,
+  (req, res, next) => {
+    try {
+      const result = writeAdminRawFile(
+        "pending",
+        req.params.submissionId,
+        req.params.fileKind,
+        req.body,
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+app.get(
+  "/api/admin/buildings/:buildingId/files/:fileKind",
+  requireWebUser,
+  requireAdmin,
+  (req, res) => {
+    sendAdminRawFile(
+      readAdminRawFile("approved", req.params.buildingId, req.params.fileKind),
+      res,
+    );
+  },
+);
+
+app.put(
+  "/api/admin/buildings/:buildingId/files/:fileKind",
+  requireWebUser,
+  requireAdmin,
+  parseAdminRawJson,
+  (req, res, next) => {
+    try {
+      const result = writeAdminRawFile(
+        "approved",
+        req.params.buildingId,
+        req.params.fileKind,
+        req.body,
+      );
+      res.status(result.status).json(result.body);
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 app.post("/api/my-submissions/:submissionId/withdraw", requireWebUser, (req, res) => {
   const result = withdrawPendingSubmission(req.params.submissionId, sessionWebUser(req));

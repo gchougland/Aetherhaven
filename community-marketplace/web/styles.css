@@ -2212,6 +2212,66 @@ a.edit-cancel {
   align-items: center;
 }
 
+.edit-raw-files {
+  grid-column: 1 / -1;
+}
+
+.edit-raw-files > h3 {
+  margin-top: 0;
+}
+
+.raw-file-editor {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--bg-elevated) 65%, transparent);
+}
+
+.raw-file-editor summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+
+.raw-json-textarea {
+  width: 100%;
+  min-height: 28rem;
+  resize: vertical;
+  box-sizing: border-box;
+  padding: var(--space-sm);
+  font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  tab-size: 2;
+}
+
+.raw-json-textarea:focus {
+  outline: 2px solid var(--gold-dim);
+  outline-offset: 1px;
+  border-color: var(--border-gold);
+}
+
+.raw-file-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.raw-file-actions button {
+  margin: 0;
+}
+
+.raw-file-status--error {
+  color: var(--danger);
+}
+
 .submission-item--clickable {
   cursor: pointer;
   transition: border-color var(--transition), box-shadow var(--transition);

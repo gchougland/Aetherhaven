@@ -1,0 +1,19 @@
+{
+  "id": "mekhi",
+  "displayName": "Mekhi",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Mekhi",
+  "personalityIds": [
+    "adventurer",
+    "cheerful",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer"
+}

@@ -272,7 +272,7 @@ function renderBuildingCard(entry, options = {}) {
       >Remove permanently</button>`
     : "";
   const editBtn = adminEdit
-    ? `<a class="secondary admin-edit-btn" href="/edit.html?id=${encodeURIComponent(entry.id)}&from=admin" onclick="event.stopPropagation()">Edit</a>`
+    ? `<a class="secondary admin-edit-btn" href="/edit.html?id=${encodeURIComponent(entry.id)}&from=admin" onclick="rememberAdminPosition(); event.stopPropagation()">Edit</a>`
     : "";
   const idMeta = showId ? `<p class="meta">${escapeHtml(entry.id)}</p>` : "";
   const cardClass = [
@@ -1534,9 +1534,18 @@ async function loadAdminPage() {
     return;
   }
   renderAccountMenu(me.user);
+  const restoredState = restoreAdminViewState();
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
   updateAdminJumpCounts();
+  if (restoredState) {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: restoredState.scrollY, behavior: "auto" });
+    });
+  }
 }
+
+const ADMIN_VIEW_STATE_KEY = "aetherhaven.adminViewState";
+const ADMIN_PUBLISHED_PAGE_SIZE = 12;
 
 let adminPendingCache = [];
 let adminPendingFilters = { query: "", sort: "newest" };
@@ -1549,6 +1558,47 @@ let adminScreenshotsFiltersBound = false;
 let adminPublishedCache = [];
 let adminPublishedFilters = { query: "", author: "", sort: "newest" };
 let adminPublishedFiltersBound = false;
+let adminPublishedPage = 1;
+
+function rememberAdminPosition() {
+  const state = {
+    scrollY: Math.max(0, window.scrollY || 0),
+    pendingFilters: adminPendingFilters,
+    screenshotsQuery: adminScreenshotsQuery,
+    publishedFilters: adminPublishedFilters,
+    publishedPage: adminPublishedPage,
+  };
+  try {
+    sessionStorage.setItem(ADMIN_VIEW_STATE_KEY, JSON.stringify(state));
+  } catch {
+    // Navigation still works when session storage is unavailable.
+  }
+}
+
+function restoreAdminViewState() {
+  let state;
+  try {
+    state = JSON.parse(sessionStorage.getItem(ADMIN_VIEW_STATE_KEY) || "null");
+    sessionStorage.removeItem(ADMIN_VIEW_STATE_KEY);
+  } catch {
+    state = null;
+  }
+  if (!state || typeof state !== "object") {
+    return null;
+  }
+  adminPendingFilters = {
+    query: String(state.pendingFilters?.query || ""),
+    sort: String(state.pendingFilters?.sort || "newest"),
+  };
+  adminScreenshotsQuery = String(state.screenshotsQuery || "");
+  adminPublishedFilters = {
+    query: String(state.publishedFilters?.query || ""),
+    author: String(state.publishedFilters?.author || ""),
+    sort: String(state.publishedFilters?.sort || "newest"),
+  };
+  adminPublishedPage = Math.max(1, Number(state.publishedPage) || 1);
+  return { scrollY: Math.max(0, Number(state.scrollY) || 0) };
+}
 
 function updateAdminJumpCounts() {
   const counts = {
@@ -1637,7 +1687,7 @@ function renderAdminPendingCard(s) {
         ${requiredModsHtml(s)}
         ${descriptionHtml}
         <div class="submission-card-actions">
-          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin">Edit</a>
+          <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin" onclick="rememberAdminPosition()">Edit</a>
           <button type="button" onclick="approveSubmission(${jsString(s.submissionId)}, ${jsString(s.proposedId || "")})">Approve</button>
           <button type="button" class="secondary" onclick="rejectSubmission(${jsString(s.submissionId)})">Reject</button>
         </div>
@@ -1671,11 +1721,13 @@ function renderFilteredAdminPending() {
 }
 
 function setupAdminPendingFilters() {
-  if (adminPendingFiltersBound) return;
   const search = document.getElementById("adminPendingSearch");
   const sort = document.getElementById("adminPendingSort");
   const clear = document.getElementById("adminPendingClear");
   if (!search || !sort) return;
+  search.value = adminPendingFilters.query || "";
+  sort.value = adminPendingFilters.sort || "newest";
+  if (adminPendingFiltersBound) return;
   adminPendingFiltersBound = true;
   search.addEventListener("input", () => {
     adminPendingFilters.query = search.value || "";
@@ -1758,10 +1810,11 @@ function renderFilteredAdminScreenshots() {
 }
 
 function setupAdminScreenshotsFilters() {
-  if (adminScreenshotsFiltersBound) return;
   const search = document.getElementById("adminScreenshotsSearch");
   const clear = document.getElementById("adminScreenshotsClear");
   if (!search) return;
+  search.value = adminScreenshotsQuery || "";
+  if (adminScreenshotsFiltersBound) return;
   adminScreenshotsFiltersBound = true;
   search.addEventListener("input", () => {
     adminScreenshotsQuery = search.value || "";
@@ -1794,6 +1847,43 @@ function getFilteredAdminPublished() {
   return sortCatalogEntries(filtered, adminPublishedFilters.sort || "newest");
 }
 
+function renderAdminPublishedPagination(totalPages) {
+  const nav = document.getElementById("adminPublishedPagination");
+  if (!nav) return;
+  if (totalPages <= 1) {
+    nav.hidden = true;
+    nav.innerHTML = "";
+    return;
+  }
+  nav.hidden = false;
+  const pages = catalogPageWindow(adminPublishedPage, totalPages);
+  let html = `<button type="button" class="secondary" ${
+    adminPublishedPage <= 1 ? "disabled" : ""
+  } onclick="goToAdminPublishedPage(${adminPublishedPage - 1})">Prev</button>`;
+  let previous = 0;
+  for (const page of pages) {
+    if (previous && page - previous > 1) {
+      html += `<span class="catalog-pagination-ellipsis" aria-hidden="true">…</span>`;
+    }
+    html += `<button type="button" class="secondary" ${
+      page === adminPublishedPage ? 'aria-current="page"' : ""
+    } onclick="goToAdminPublishedPage(${page})" aria-label="Page ${page}">${page}</button>`;
+    previous = page;
+  }
+  html += `<button type="button" class="secondary" ${
+    adminPublishedPage >= totalPages ? "disabled" : ""
+  } onclick="goToAdminPublishedPage(${adminPublishedPage + 1})">Next</button>`;
+  nav.innerHTML = html;
+}
+
+function goToAdminPublishedPage(page) {
+  const filteredTotal = getFilteredAdminPublished().length;
+  const totalPages = Math.max(1, Math.ceil(filteredTotal / ADMIN_PUBLISHED_PAGE_SIZE));
+  adminPublishedPage = Math.min(Math.max(1, Number(page) || 1), totalPages);
+  renderFilteredAdminPublished();
+  document.getElementById("adminPublishedToolbar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function renderFilteredAdminPublished() {
   const el = document.getElementById("adminCatalog");
   const toolbar = document.getElementById("adminPublishedToolbar");
@@ -1807,32 +1897,51 @@ function renderFilteredAdminPublished() {
   if (!adminPublishedCache.length) {
     el.innerHTML = emptyStateHtml("No published buildings.");
     setAdminResultCount("adminPublishedResultCount", 0, 0);
+    renderAdminPublishedPagination(0);
     return;
   }
 
   const filtered = getFilteredAdminPublished();
-  setAdminResultCount("adminPublishedResultCount", filtered.length, adminPublishedCache.length);
   if (!filtered.length) {
     el.innerHTML = emptyStateHtml("No published buildings match your filters.");
+    setAdminResultCount("adminPublishedResultCount", 0, adminPublishedCache.length);
+    renderAdminPublishedPagination(0);
     return;
   }
-  el.innerHTML = filtered
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_PUBLISHED_PAGE_SIZE));
+  adminPublishedPage = Math.min(Math.max(1, adminPublishedPage), totalPages);
+  const start = (adminPublishedPage - 1) * ADMIN_PUBLISHED_PAGE_SIZE;
+  const pageEntries = filtered.slice(start, start + ADMIN_PUBLISHED_PAGE_SIZE);
+  const resultCount = document.getElementById("adminPublishedResultCount");
+  if (resultCount) {
+    const range = pageEntries.length === 1 ? `${start + 1}` : `${start + 1}–${start + pageEntries.length}`;
+    resultCount.textContent =
+      filtered.length === adminPublishedCache.length
+        ? `Showing ${range} of ${filtered.length}`
+        : `Showing ${range} of ${filtered.length} matches (${adminPublishedCache.length} total)`;
+  }
+  el.innerHTML = pageEntries
     .map((e) => renderBuildingCard(e, { canVote: false, adminDelete: true, adminEdit: true, showId: true }))
     .join("");
+  renderAdminPublishedPagination(totalPages);
 }
 
 function setupAdminPublishedFilters() {
-  if (adminPublishedFiltersBound) return;
   const search = document.getElementById("adminPublishedSearch");
   const author = document.getElementById("adminPublishedAuthor");
   const sort = document.getElementById("adminPublishedSort");
   const clear = document.getElementById("adminPublishedClear");
   if (!search || !sort) return;
+  search.value = adminPublishedFilters.query || "";
+  if (author) author.value = adminPublishedFilters.author || "";
+  sort.value = adminPublishedFilters.sort || "newest";
+  if (adminPublishedFiltersBound) return;
   adminPublishedFiltersBound = true;
   const onChange = () => {
     adminPublishedFilters.query = search.value || "";
     adminPublishedFilters.author = author?.value || "";
     adminPublishedFilters.sort = sort.value || "newest";
+    adminPublishedPage = 1;
     renderFilteredAdminPublished();
   };
   search.addEventListener("input", onChange);
@@ -1840,6 +1949,7 @@ function setupAdminPublishedFilters() {
   sort.addEventListener("change", onChange);
   clear?.addEventListener("click", () => {
     adminPublishedFilters = { query: "", author: "", sort: "newest" };
+    adminPublishedPage = 1;
     search.value = "";
     if (author) author.value = "";
     sort.value = "newest";
@@ -2190,6 +2300,149 @@ function parseTagsInput(raw) {
     .filter(Boolean);
 }
 
+let adminRawEditorLoaded = { building: false, prefab: false };
+
+function adminRawEditorIds(fileKind) {
+  const name = fileKind === "prefab" ? "Prefab" : "Building";
+  return {
+    editor: `raw${name}Editor`,
+    load: `raw${name}Load`,
+    save: `raw${name}Save`,
+    status: `raw${name}Status`,
+  };
+}
+
+function adminRawFileEndpoint(fileKind) {
+  if (!editPageContext?.isAdmin) return "";
+  if (editPageContext.kind === "pending") {
+    const id = editPageContext.submissionId || editPageContext.id;
+    return `/api/admin/submissions/${encodeURIComponent(id)}/files/${fileKind}`;
+  }
+  return `/api/admin/buildings/${encodeURIComponent(editPageContext.id)}/files/${fileKind}`;
+}
+
+function setAdminRawStatus(fileKind, message, isError = false) {
+  const el = document.getElementById(adminRawEditorIds(fileKind).status);
+  if (!el) return;
+  el.hidden = false;
+  el.textContent = message;
+  el.classList.toggle("raw-file-status--error", isError);
+}
+
+async function loadAdminRawFile(fileKind) {
+  if (adminRawEditorLoaded[fileKind]) return;
+  const ids = adminRawEditorIds(fileKind);
+  const editor = document.getElementById(ids.editor);
+  const loadButton = document.getElementById(ids.load);
+  const saveButton = document.getElementById(ids.save);
+  const endpoint = adminRawFileEndpoint(fileKind);
+  if (!editor || !endpoint) return;
+  if (loadButton) loadButton.disabled = true;
+  setAdminRawStatus(fileKind, "Loading…");
+  try {
+    const res = await fetch(endpoint, { headers: { Accept: "text/plain" } });
+    const text = await res.text();
+    if (!res.ok) {
+      let message = text || "Could not load file.";
+      try {
+        const body = JSON.parse(text);
+        message = body.message || body.error || message;
+      } catch {
+        // Use response text.
+      }
+      throw new Error(message);
+    }
+    editor.value = text;
+    adminRawEditorLoaded[fileKind] = true;
+    editor.disabled = false;
+    if (saveButton) saveButton.disabled = false;
+    setAdminRawStatus(fileKind, `${formatBytes(new Blob([text]).size)} loaded.`);
+  } catch (err) {
+    if (loadButton) loadButton.disabled = false;
+    setAdminRawStatus(fileKind, err.message || "Could not load file.", true);
+  }
+}
+
+function formatAdminRawFile(fileKind) {
+  const editor = document.getElementById(adminRawEditorIds(fileKind).editor);
+  if (!editor || !adminRawEditorLoaded[fileKind]) return;
+  try {
+    const parsed = JSON.parse(editor.value);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("File must contain a JSON object.");
+    }
+    editor.value = `${JSON.stringify(parsed, null, 2)}\n`;
+    setAdminRawStatus(fileKind, "JSON formatted. Save to apply it.");
+  } catch (err) {
+    setAdminRawStatus(fileKind, err.message || "Invalid JSON.", true);
+  }
+}
+
+async function saveAdminRawFile(fileKind) {
+  const ids = adminRawEditorIds(fileKind);
+  const editor = document.getElementById(ids.editor);
+  const saveButton = document.getElementById(ids.save);
+  const endpoint = adminRawFileEndpoint(fileKind);
+  if (!editor || !endpoint || !adminRawEditorLoaded[fileKind]) return;
+  try {
+    const parsed = JSON.parse(editor.value);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      throw new Error("File must contain a JSON object.");
+    }
+  } catch (err) {
+    setAdminRawStatus(fileKind, err.message || "Invalid JSON.", true);
+    return;
+  }
+  const fileName = fileKind === "prefab" ? "prefab.prefab.json" : "building.json";
+  if (!confirm(`Replace ${fileName} with the text in this editor?`)) return;
+
+  if (saveButton) saveButton.disabled = true;
+  setAdminRawStatus(fileKind, "Saving…");
+  try {
+    const res = await fetch(endpoint, {
+      method: "PUT",
+      headers: { "Content-Type": "text/plain; charset=utf-8", Accept: "application/json" },
+      body: editor.value,
+    });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(body.message || body.error || "Save failed.");
+    }
+    setAdminRawStatus(fileKind, "Saved. Refreshing build data…");
+    const scrollY = window.scrollY;
+    await loadEditPage();
+    requestAnimationFrame(() => window.scrollTo({ top: scrollY, behavior: "auto" }));
+  } catch (err) {
+    if (saveButton) saveButton.disabled = false;
+    setAdminRawStatus(fileKind, err.message || "Save failed.", true);
+  }
+}
+
+function adminRawEditorsHtml() {
+  const editor = (fileKind, fileName, description) => {
+    const ids = adminRawEditorIds(fileKind);
+    return `
+      <details class="raw-file-editor" ontoggle="if(this.open) loadAdminRawFile('${fileKind}')">
+        <summary>${fileName}</summary>
+        <p class="meta">${description}</p>
+        <textarea id="${ids.editor}" class="raw-json-textarea" aria-label="${fileName} JSON" spellcheck="false" wrap="off" disabled></textarea>
+        <div class="raw-file-actions">
+          <button type="button" class="secondary" id="${ids.load}" onclick="loadAdminRawFile('${fileKind}')">Load file</button>
+          <button type="button" class="secondary" onclick="formatAdminRawFile('${fileKind}')">Format JSON</button>
+          <button type="button" id="${ids.save}" onclick="saveAdminRawFile('${fileKind}')" disabled>Save raw file</button>
+          <span id="${ids.status}" class="meta raw-file-status" hidden></span>
+        </div>
+      </details>`;
+  };
+  return `
+    <section class="edit-raw-files card">
+      <h3>Raw files</h3>
+      <p class="meta">Admin only. Invalid files are rejected, but valid changes take effect immediately.</p>
+      ${editor("building", "building.json", "Building definition and marketplace metadata. Published id and prefabPath cannot be changed.")}
+      ${editor("prefab", "prefab.prefab.json", "Full prefab block and entity data. Large files may take a moment to load or format.")}
+    </section>`;
+}
+
 async function loadEditPage() {
   const root = document.getElementById("editRoot");
   if (!root) {
@@ -2270,6 +2523,7 @@ async function loadEditPage() {
   const hero = heroImg
     ? `<div class="edit-hero"><img src="${escapeAttr(heroImg)}" alt="" /></div>`
     : `<div class="edit-hero edit-hero--placeholder" aria-hidden="true"></div>`;
+  adminRawEditorLoaded = { building: false, prefab: false };
 
   root.innerHTML = `
     <div class="edit-layout">
@@ -2316,6 +2570,7 @@ async function loadEditPage() {
           reloadFn: "loadEditPage",
         })}
       </div>
+      ${isAdmin ? adminRawEditorsHtml() : ""}
     </div>`;
 }
 
