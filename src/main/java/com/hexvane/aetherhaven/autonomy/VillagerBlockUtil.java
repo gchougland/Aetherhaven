@@ -153,6 +153,10 @@ public final class VillagerBlockUtil {
         return findStandY(world, bx, bz, start);
     }
 
+    /**
+     * Reads an already-resident chunk without changing its ticking state. Unlike {@link World#getBlockType(int, int,
+     * int)}, this is safe to call from an entity tick system because it never routes through {@code getChunk()}.
+     */
     @Nullable
     private static BlockType blockTypeNoLoad(@Nonnull World world, int x, int y, int z) {
         if (y < 0 || y >= 320) {
@@ -269,7 +273,7 @@ public final class VillagerBlockUtil {
         if (by < 0 || by >= 320) {
             return FurnitureMountKind.NONE;
         }
-        BlockType blockType = world.getBlockType(bx, by, bz);
+        BlockType blockType = blockTypeNoLoad(world, bx, by, bz);
         if (blockType == null || blockType == BlockType.EMPTY) {
             return FurnitureMountKind.NONE;
         }
@@ -340,7 +344,7 @@ public final class VillagerBlockUtil {
     /** World-space seat point for a chair/stool block, or null when the block has no seat mount points. */
     @Nullable
     public static Vector3d seatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
-        BlockType blockType = world.getBlockType(mountBlock.x, mountBlock.y, mountBlock.z);
+        BlockType blockType = blockTypeNoLoad(world, mountBlock.x, mountBlock.y, mountBlock.z);
         if (blockType == null || blockType.getSeats() == null) {
             return null;
         }

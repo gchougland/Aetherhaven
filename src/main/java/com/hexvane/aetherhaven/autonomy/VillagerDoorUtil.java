@@ -365,7 +365,7 @@ public final class VillagerDoorUtil {
                 continue;
             }
             activateDoor(world, blockType, pos, doorState, DoorState.CLOSED, interactionState);
-            BlockType afterType = world.getBlockType(pos);
+            BlockType afterType = chunk.getBlockType(pos.x, pos.y, pos.z);
             if (afterType != null && DoorState.fromBlockState(afterType.getStateForBlock(afterType)) == DoorState.CLOSED) {
                 return true;
             }
@@ -711,7 +711,7 @@ public final class VillagerDoorUtil {
         int rotationIndex = VillagerBlockUtil.rotationIndexForLoadedChunk(chunk, blockPosition.x, blockPosition.y, blockPosition.z);
         BlockBoundingBoxes oldHitbox = BlockBoundingBoxes.getAssetMap().getAsset(blockType.getHitboxTypeIndex());
         world.setBlockInteractionState(blockPosition, blockType, interactionStateToSend);
-        BlockType currentBlockType = world.getBlockType(blockPosition);
+        BlockType currentBlockType = chunk.getBlockType(blockPosition.x, blockPosition.y, blockPosition.z);
         if (currentBlockType == null) {
             return false;
         }
