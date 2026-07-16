@@ -1,0 +1,19 @@
+{
+  "id": "joszael_greenleaf",
+  "displayName": "Joszael Greenleaf",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Joszael_Greenleaf",
+  "personalityIds": [
+    "adventurer",
+    "sporty",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer"
+}
