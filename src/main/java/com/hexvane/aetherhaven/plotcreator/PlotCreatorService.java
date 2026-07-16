@@ -345,32 +345,42 @@ public final class PlotCreatorService {
     /** Seeds {@link PlotCreatorDraft#getSelectedSpots()} from defaults when empty (before the chooser). */
     public static void seedImportantSpotsIfEmpty(@Nonnull PlotCreatorDraft draft) {
         if (!draft.getSelectedSpots().isEmpty()) {
-            ensureManagementSpot(draft);
+            ensureRequiredSpots(draft);
             return;
         }
         for (PlotBuildingKindRequirements.SubstepRequirement req :
             PlotBuildingKindRequirements.defaultRequirements(draft, AetherhavenPlugin.get())) {
             draft.getSelectedSpots().add(req.toSpotEntry());
         }
-        ensureManagementSpot(draft);
+        ensureRequiredSpots(draft);
     }
 
-    /** Town records shelf is always required for non-decoration builds that reach important spots. */
-    public static void ensureManagementSpot(@Nonnull PlotCreatorDraft draft) {
+    /** Restores spots that cannot be deselected for the draft's effective building kinds. */
+    public static void ensureRequiredSpots(@Nonnull PlotCreatorDraft draft) {
+        boolean hasManagement = false;
+        boolean hasInnBell = false;
         for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
             if (entry.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
-                return;
+                hasManagement = true;
+            } else if (entry.type() == PlotCreatorSubstepType.INN_BELL_BLOCK) {
+                hasInnBell = true;
             }
         }
-        draft.getSelectedSpots().add(0, PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+        if (!hasManagement) {
+            draft.getSelectedSpots().add(0, PlotCreatorSpotEntry.of(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
+        }
+        if (!hasInnBell
+            && PlotBuildingKindRequirements.effectiveKinds(draft, AetherhavenPlugin.get()).contains(PlotBuildingKind.INN)) {
+            draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.INN_BELL_BLOCK, 1));
+        }
     }
 
     /**
-     * Commits important-spot choices: seed defaults if needed, force management, mark confirmed.
+     * Commits important-spot choices: seed defaults if needed, restore required spots, mark confirmed.
      */
     public static void confirmImportantSpots(@Nonnull PlotCreatorDraft draft) {
         seedImportantSpotsIfEmpty(draft);
-        ensureManagementSpot(draft);
+        ensureRequiredSpots(draft);
         draft.setImportantSpotsConfirmed(true);
     }
 
@@ -436,7 +446,10 @@ public final class PlotCreatorService {
         }
         String err = PlotCreatorValidator.validateBeforeSave(draft, plugin);
         if (err != null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + err));
+            String messageKey = err.startsWith("substep_")
+                ? "aetherhaven_plot_creator.aetherhaven.plotcreator.substep." + err.substring("substep_".length())
+                : "aetherhaven_plot_creator.aetherhaven.plotcreator.error." + err;
+            playerRef.sendMessage(Message.translation(messageKey));
             return false;
         }
         Path buildingFile = CustomBuildingsPaths.buildingFile(plugin.getDataDirectory(), draft.getConstructionId().trim());

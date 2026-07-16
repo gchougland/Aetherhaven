@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.community;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.CommunityMarketplaceConfig;
@@ -183,6 +184,9 @@ public final class CommunityModerationService {
         @Nonnull CommunityPendingEntry entry,
         @Nonnull UUID moderatorUuid
     ) {
+        if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+            return CommunityDownloadService.InstallResult.MISSING_MODS;
+        }
         String proposedId = entry.getProposedId().trim();
         if (!CommunityBuildingValidator.isValidCommunityId(proposedId)) {
             LOGGER.atWarning().log(
@@ -193,7 +197,15 @@ public final class CommunityModerationService {
             return CommunityDownloadService.InstallResult.NOT_FOUND;
         }
         if (CommunityPaths.isInstalled(plugin.getDataDirectory(), proposedId)) {
-            return CommunityDownloadService.InstallResult.SUCCESS;
+            Path installed = CommunityPaths.installedPrefabFile(plugin.getDataDirectory(), proposedId);
+            try {
+                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(Files.readAllBytes(installed));
+                return safety.isSafe()
+                    ? CommunityDownloadService.InstallResult.SUCCESS
+                    : CommunityDownloadService.InstallResult.UNSAFE_PREFAB;
+            } catch (Exception e) {
+                return CommunityDownloadService.InstallResult.IO_ERROR;
+            }
         }
         Path dataDir = plugin.getDataDirectory();
         String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
@@ -206,11 +218,30 @@ public final class CommunityModerationService {
             Path destPrefab = CommunityPaths.installedPrefabFile(dataDir, proposedId);
             Path previewPrefab = CommunityPaths.moderationPreviewPrefabFile(dataDir, entry.getSubmissionId());
             if (Files.isRegularFile(previewPrefab)) {
+                CommunityPrefabSafety.Result safety =
+                    CommunityPrefabSafety.validate(Files.readAllBytes(previewPrefab));
+                if (!safety.isSafe()) {
+                    LOGGER.atWarning().log(
+                        "Moderation review install refused for %s: %s",
+                        entry.getSubmissionId(),
+                        safety.detail()
+                    );
+                    return CommunityDownloadService.InstallResult.UNSAFE_PREFAB;
+                }
                 Files.copy(previewPrefab, destPrefab, StandardCopyOption.REPLACE_EXISTING);
             } else {
                 byte[] prefab = CommunityHttpClient.getBytes(entry.moderationPrefabUrl(base), headers);
                 if (prefab == null || prefab.length == 0) {
                     return CommunityDownloadService.InstallResult.DOWNLOAD_FAILED;
+                }
+                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+                if (!safety.isSafe()) {
+                    LOGGER.atWarning().log(
+                        "Moderation review install refused for %s: %s",
+                        entry.getSubmissionId(),
+                        safety.detail()
+                    );
+                    return CommunityDownloadService.InstallResult.UNSAFE_PREFAB;
                 }
                 Files.write(destPrefab, prefab);
             }
@@ -264,8 +295,25 @@ public final class CommunityModerationService {
         if (entry == null) {
             return false;
         }
+        if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+            LOGGER.atWarning().log("Moderation approval refused for %s: required mods are missing", submissionId);
+            return false;
+        }
+        Path preview = CommunityPaths.moderationPreviewPrefabFile(plugin.getDataDirectory(), entry.getSubmissionId());
+        try {
+            if (!Files.isRegularFile(preview) || !CommunityPrefabSafety.validate(Files.readAllBytes(preview)).isSafe()) {
+                LOGGER.atWarning().log("Moderation approval refused for %s: no validated preview", submissionId);
+                return false;
+            }
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Moderation approval validation failed for %s", submissionId);
+            return false;
+        }
         String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
-        String body = GSON.toJson(Map.of("id", entry.getProposedId()));
+        JsonObject approval = new JsonObject();
+        approval.addProperty("id", entry.getProposedId());
+        approval.add("requiredMods", GSON.toJsonTree(entry.getRequiredMods()));
+        String body = GSON.toJson(approval);
         String response =
             CommunityHttpClient.postJson(
                 base + "/api/v1/moderation/approve/" + submissionId,

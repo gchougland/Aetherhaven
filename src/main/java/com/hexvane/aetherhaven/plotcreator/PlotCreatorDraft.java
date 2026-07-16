@@ -66,6 +66,8 @@ public final class PlotCreatorDraft {
     @Nullable
     private int[] shopSafeLocalPos;
     @Nullable
+    private int[] innBellLocalPos;
+    @Nullable
     private int[] innkeeperSpawnLocal;
     @Nonnull
     private final List<int[]> visitorSpawnLocals = new ArrayList<>();
@@ -381,6 +383,15 @@ public final class PlotCreatorDraft {
 
     public void setShopSafeLocalPos(@Nullable int[] shopSafeLocalPos) {
         this.shopSafeLocalPos = shopSafeLocalPos;
+    }
+
+    @Nullable
+    public int[] getInnBellLocalPos() {
+        return innBellLocalPos;
+    }
+
+    public void setInnBellLocalPos(@Nullable int[] innBellLocalPos) {
+        this.innBellLocalPos = innBellLocalPos;
     }
 
     @Nullable

@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +52,17 @@ class PlotCreatorMainConstructionsTest {
             ConstructionDefinition.class
         );
         assertFalse(PlotCreatorMainConstructions.isEligibleVariantBase(decoration));
+    }
+
+    @Test
+    void innVariant_requiresInnBellStep() {
+        PlotCreatorDraft draft = new PlotCreatorDraft();
+        draft.setKinds(List.of(PlotBuildingKind.VARIANT));
+        draft.setCountsAsConstructionIds(List.of(AetherhavenConstants.CONSTRUCTION_PLOT_INN));
+
+        assertTrue(
+            PlotBuildingKindRequirements.defaultRequirements(draft, null).stream()
+                .anyMatch(requirement -> requirement.type() == PlotCreatorSubstepType.INN_BELL_BLOCK)
+        );
     }
 }

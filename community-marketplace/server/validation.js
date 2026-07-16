@@ -95,6 +95,16 @@ export function validateSubmissionBuilding(building, prefabBlockIdVersion) {
   if (prefabBlockIdVersion < 1) {
     return "block_id_version_missing";
   }
+  if (!Array.isArray(b.requiredMods)) {
+    return "required_mods_missing";
+  }
+  if (b.requiredMods.length > MAX_REQUIRED_MODS) {
+    return "required_mods_invalid";
+  }
+  const normalizedRequiredMods = normalizeRequiredMods(b.requiredMods);
+  if (normalizedRequiredMods.length !== b.requiredMods.length) {
+    return "required_mods_invalid";
+  }
   return null;
 }
 

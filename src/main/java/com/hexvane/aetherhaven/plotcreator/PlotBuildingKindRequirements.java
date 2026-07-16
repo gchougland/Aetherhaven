@@ -280,6 +280,7 @@ public final class PlotBuildingKindRequirements {
             );
             case INN -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
+                new SubstepRequirement(PlotCreatorSubstepType.INN_BELL_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, TownVillagerBinding.KIND_INNKEEPER),
                 new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 2),
                 new SubstepRequirement(PlotCreatorSubstepType.EAT_POI, 1),

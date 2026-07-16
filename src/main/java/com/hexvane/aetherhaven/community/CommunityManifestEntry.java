@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.community;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,6 +55,15 @@ public final class CommunityManifestEntry {
 
     @SerializedName("requiredMods")
     private List<CommunityRequiredMods.RequiredMod> requiredMods;
+
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("treasuryGoldCoinCost")
+    private long treasuryGoldCoinCost;
+
+    @SerializedName("materials")
+    private List<MaterialRequirement> materials;
 
     @Nonnull
     public String getId() {
@@ -124,6 +134,20 @@ public final class CommunityManifestEntry {
     @Nonnull
     public List<CommunityRequiredMods.RequiredMod> getRequiredMods() {
         return requiredMods != null ? requiredMods : List.of();
+    }
+
+    @Nonnull
+    public String getDescription() {
+        return description != null ? description : "";
+    }
+
+    public long getTreasuryGoldCoinCost() {
+        return Math.max(0L, treasuryGoldCoinCost);
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> getMaterials() {
+        return materials != null ? materials : List.of();
     }
 
     @Nonnull

@@ -83,7 +83,9 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
         }
 
         PlotInstance plot = blockTown.findCompletePlotContaining(targetBlock.x, targetBlock.y, targetBlock.z);
-        if (plot == null || !AetherhavenConstants.CONSTRUCTION_PLOT_INN.equals(plot.getConstructionId())) {
+        if (plot == null
+            || !plugin.getConstructionCatalog()
+                .matchesGameplayConstruction(plot.getConstructionId(), AetherhavenConstants.CONSTRUCTION_PLOT_INN)) {
             sendFeedback(playerEntityRef, commandBuffer, "notAllowed");
             context.getState().state = InteractionState.Failed;
             return;

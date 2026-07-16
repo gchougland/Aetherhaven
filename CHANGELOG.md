@@ -1,5 +1,26 @@
 # Changelog
 
+## [2.3.1] - Unreleased
+
+### Added
+
+- **Community building mod requirements** — Marketplace cards, building details, and pending-submission reviews clearly list required external mods and their asset-pack ids.
+
+### Changed
+
+- **Plot creator Inn Bells** — Inn buildings and variants now require an Inn Bell. The plot creator staff provides one and asks you to place and confirm it before saving.
+- **Plot crafting building details** — A new scrollable panel beside the prefab preview appears on every tab and shows the selected building’s name, creator/id, description, plot-token and construction gold costs, required mods, and required materials with icons and quantities.
+- **Community moderation safety** — Selecting a pending building no longer loads its prefab automatically. Preview downloads, installs, test crafting, approvals, and denials run without blocking the world/UI thread, and approval requires a successfully validated preview with all required mods installed.
+- **Community dependency detection** — Required mods are derived from the prefab’s actual block and fluid assets. Mods that merely override an existing vanilla or Aetherhaven asset are no longer treated as hard dependencies, and moderation previews recalculate and repair dependency metadata before approval.
+
+### Fixed
+
+- **Inn Bells in building variants** — Bells inside community and other Inn variants now recognize that the building counts as an Inn instead of rejecting it because its plot id is not exactly `plot_inn`.
+- **Plot crafting search header** — The menu title now reserves space for the expanding search field instead of overlapping it.
+- **Modded community prefab freeze** — Missing modded blocks are detected through a read-only prefab preflight before Hytale deserializes the prefab, preventing the asset-lock deadlock that could freeze the game indefinitely.
+- **Unsafe community downloads** — Malformed prefabs, unresolved blocks or fluids, synthetic unknown assets, and buildings with missing required mods are refused before preview, download, installation, test crafting, placement, or approval.
+- **Incorrect required-mod lists** — Community submissions no longer silently publish empty or inflated dependency lists, and required-mod metadata is preserved through submission, moderation, approval, and the public marketplace API.
+
 ## [2.3.0] - 7/15/2026
 
 ### Added

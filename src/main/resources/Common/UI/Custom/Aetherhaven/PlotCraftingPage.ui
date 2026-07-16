@@ -134,8 +134,8 @@ $C.@PageOverlay {
           #Title {
             Group {
               Label #PlotCraftTitleText {
-                Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
-                Padding: (Horizontal: 19);
+                Style: (...$C.@TitleStyle, HorizontalAlignment: Start);
+                Padding: (Left: 19, Right: 220);
                 Text: "";
               }
 
@@ -285,7 +285,7 @@ $C.@PageOverlay {
       }
 
       $C.@Container #PreviewBackdrop {
-        Anchor: (Width: 580, Height: @PlotPanelHeight, Top: 56);
+        Anchor: (Width: 480, Height: @PlotPanelHeight, Top: 56, Right: 10);
 
         #Title {
           Label #PreviewTitle {
@@ -387,6 +387,103 @@ $C.@PageOverlay {
                 Anchor: (Width: 40, Height: 40, Left: 8);
                 TextTooltipStyle: $C.@DefaultTextTooltipStyle;
                 Text: " ";
+              }
+            }
+          }
+        }
+      }
+
+      $C.@Container #BuildingInfoPanel {
+        Anchor: (Width: 350, Height: @PlotPanelHeight, Top: 56);
+
+        #Title {
+          Label #BuildingInfoTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 16);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 12);
+
+          Group #BuildingInfoEmpty {
+            LayoutMode: Center;
+            FlexWeight: 1;
+
+            Label #BuildingInfoEmptyText {
+              Style: (...$C.@DefaultLabelStyle, HorizontalAlignment: Center, TextColor: #7a8e9c, FontSize: 15, Wrap: true);
+              Anchor: (Horizontal: 14);
+              Text: "";
+            }
+          }
+
+          Group #BuildingInfoScroll {
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            FlexWeight: 1;
+            Visible: false;
+
+            Group #BuildingInfoRows {
+              LayoutMode: Top;
+              Padding: (Right: 8, Bottom: 12);
+
+              Label #InfoBuildingName {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 22, RenderBold: true, Wrap: true);
+                Anchor: (Bottom: 5);
+                Text: "";
+              }
+
+              Label #InfoBuildingMeta {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #96a9be, FontSize: 13, Wrap: true);
+                Anchor: (Bottom: 10);
+                Text: "";
+              }
+
+              Label #InfoDescription {
+                Style: (...$C.@DefaultLabelStyle, TextColor: #c5d0dc, FontSize: 14, Wrap: true);
+                Anchor: (Bottom: 12);
+                Text: "";
+              }
+
+              Group #InfoGoldCard {
+                LayoutMode: Top;
+                Padding: (Full: 9);
+                Anchor: (Bottom: 12);
+                Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #30291d(0.72));
+
+                Label #InfoGoldTitle {
+                  Style: (...@SectionTitle, TextColor: #c8a060);
+                  Anchor: (Bottom: 4);
+                  Text: "";
+                }
+
+                Label #InfoGoldValue {
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #f1cf75, FontSize: 16, RenderBold: true, Wrap: true);
+                  Text: "";
+                }
+              }
+
+              Label #InfoRequiredModsTitle {
+                Style: (...@SectionTitle);
+                Anchor: (Bottom: 6);
+                Text: "";
+              }
+
+              Group #InfoRequiredModsRows {
+                LayoutMode: Top;
+                Anchor: (Bottom: 12);
+              }
+
+              Label #InfoMaterialsTitle {
+                Style: (...@SectionTitle);
+                Anchor: (Bottom: 6);
+                Text: "";
+              }
+
+              Group #InfoMaterialRows {
+                LayoutMode: Top;
               }
             }
           }

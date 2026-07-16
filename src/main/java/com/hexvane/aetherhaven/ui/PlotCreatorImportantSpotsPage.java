@@ -109,7 +109,7 @@ public final class PlotCreatorImportantSpotsPage
             PlotCreatorSpotEntry spot = choosable.get(i);
             b.append(SPOT_ROWS, "Aetherhaven/PlotCreatorToggleRow.ui");
             String row = SPOT_ROWS + "[" + i + "]";
-            boolean locked = spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK;
+            boolean locked = isLockedSpot(spot);
             boolean checked = locked || containsSpot(working, spot);
             b.set(row + " #Label.TextSpans", Message.translation(labelKey(spot)));
             b.set(row + " #Toggle.Value", checked);
@@ -187,7 +187,7 @@ public final class PlotCreatorImportantSpotsPage
     public void handleDataEvent(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull PageData data) {
         if ("ToggleSpot".equals(data.action) && data.spotKey != null) {
             PlotCreatorSpotEntry spot = parseSpotKey(data.spotKey);
-            if (spot != null && spot.type() != PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
+            if (spot != null && !isLockedSpot(spot)) {
                 boolean checked = Boolean.TRUE.equals(data.checked);
                 if (checked) {
                     if (!containsSpot(working, spot)) {
@@ -215,10 +215,19 @@ public final class PlotCreatorImportantSpotsPage
         PlotCreatorDraft draft = session.getDraft();
         draft.getSelectedSpots().clear();
         draft.getSelectedSpots().addAll(working);
-        PlotCreatorService.ensureManagementSpot(draft);
+        PlotCreatorService.ensureRequiredSpots(draft);
         draft.setImportantSpotsConfirmed(true);
         close(ref, store);
         PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+    }
+
+    private boolean isLockedSpot(@Nonnull PlotCreatorSpotEntry spot) {
+        if (spot.type() == PlotCreatorSubstepType.MANAGEMENT_BLOCK) {
+            return true;
+        }
+        return spot.type() == PlotCreatorSubstepType.INN_BELL_BLOCK
+            && PlotBuildingKindRequirements.effectiveKinds(session.getDraft(), AetherhavenPlugin.get())
+                .contains(com.hexvane.aetherhaven.plotcreator.PlotBuildingKind.INN);
     }
 
     private void refreshIfOpen(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {

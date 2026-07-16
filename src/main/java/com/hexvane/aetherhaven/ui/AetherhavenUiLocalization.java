@@ -389,6 +389,11 @@ public final class AetherhavenUiLocalization {
     public static void applyPlotCraftingPage(@Nonnull UICommandBuilder b) {
         b.set("#PlotCraftTitleText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.title"));
         b.set("#PreviewTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.previewTitle"));
+        b.set("#BuildingInfoTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoTitle"));
+        b.set("#BuildingInfoEmptyText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoEmpty"));
+        b.set("#InfoGoldTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoGoldTitle"));
+        b.set("#InfoRequiredModsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoRequiredModsTitle"));
+        b.set("#InfoMaterialsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoMaterialsTitle"));
         b.set("#VariantSectionTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantSectionTitle"));
         b.set("#VariantPrev.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantPrevTooltip"));
         b.set("#VariantNext.TooltipTextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantNextTooltip"));

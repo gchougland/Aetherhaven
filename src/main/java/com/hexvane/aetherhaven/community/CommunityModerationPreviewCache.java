@@ -44,6 +44,9 @@ public final class CommunityModerationPreviewCache {
         Path dataDir = plugin.getDataDirectory();
         Path previewFile = CommunityPaths.moderationPreviewPrefabFile(dataDir, submissionId);
         if (Files.isRegularFile(previewFile)) {
+            if (!validateAndRefreshDependencies(previewFile, entry)) {
+                return null;
+            }
             trackSessionSubmission(submissionId);
             return entry.prefabPathKey();
         }
@@ -52,6 +55,12 @@ public final class CommunityModerationPreviewCache {
         if (prefab == null || prefab.length == 0) {
             return null;
         }
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+        if (!safety.isSafe()) {
+            LOGGER.atWarning().log("Refused unsafe moderation preview %s: %s", submissionId, safety.detail());
+            return null;
+        }
+        entry.setRequiredMods(CommunityRequiredMods.computeFromPrefabBytes(prefab));
         try {
             Files.createDirectories(previewFile.getParent());
             Files.write(previewFile, prefab);
@@ -61,6 +70,30 @@ public final class CommunityModerationPreviewCache {
             LOGGER.atWarning().withCause(e).log("Failed to write moderation preview prefab for %s", submissionId);
             return null;
         }
+    }
+
+    private boolean validateAndRefreshDependencies(
+        @Nonnull Path prefabFile,
+        @Nonnull CommunityPendingEntry entry
+    ) {
+        String submissionId = entry.getSubmissionId();
+        try {
+            byte[] prefab = Files.readAllBytes(prefabFile);
+            CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+            if (safety.isSafe()) {
+                entry.setRequiredMods(CommunityRequiredMods.computeFromPrefabBytes(prefab));
+                return true;
+            }
+            LOGGER.atWarning().log("Refused unsafe cached moderation preview %s: %s", submissionId, safety.detail());
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to validate cached moderation preview %s", submissionId);
+        }
+        try {
+            Files.deleteIfExists(prefabFile);
+        } catch (IOException ignored) {
+            // Best effort; the file will never be handed to Hytale after this failure.
+        }
+        return false;
     }
 
     public void clearSession(@Nonnull AetherhavenPlugin plugin) {

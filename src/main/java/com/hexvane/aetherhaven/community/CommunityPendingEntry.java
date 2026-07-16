@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.community;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -32,6 +34,18 @@ public final class CommunityPendingEntry {
 
     @SerializedName("status")
     private String status;
+
+    @SerializedName("requiredMods")
+    private volatile List<CommunityRequiredMods.RequiredMod> requiredMods;
+
+    @SerializedName("description")
+    private String description;
+
+    @SerializedName("treasuryGoldCoinCost")
+    private long treasuryGoldCoinCost;
+
+    @SerializedName("materials")
+    private List<MaterialRequirement> materials;
 
     @Nonnull
     public String getSubmissionId() {
@@ -70,6 +84,29 @@ public final class CommunityPendingEntry {
     @Nonnull
     public String getStatus() {
         return status != null ? status : "pending";
+    }
+
+    @Nonnull
+    public List<CommunityRequiredMods.RequiredMod> getRequiredMods() {
+        return requiredMods != null ? requiredMods : List.of();
+    }
+
+    public void setRequiredMods(@Nonnull List<CommunityRequiredMods.RequiredMod> requiredMods) {
+        this.requiredMods = List.copyOf(requiredMods);
+    }
+
+    @Nonnull
+    public String getDescription() {
+        return description != null ? description : "";
+    }
+
+    public long getTreasuryGoldCoinCost() {
+        return Math.max(0L, treasuryGoldCoinCost);
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> getMaterials() {
+        return materials != null ? materials : List.of();
     }
 
     /** Synthetic construction id for moderation preview icons (avoids catalog id collisions). */

@@ -35,6 +35,7 @@ public final class PlotCreatorSubstepGrants {
             case PRODUCTION_STORAGE -> List.of(new ItemStack(AetherhavenConstants.BLOCK_PRODUCTION_STORAGE, qty));
             case TREASURY_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TREASURY_BLOCK_TYPE_ID, qty));
             case SHOP_SAFE_BLOCK -> List.of(new ItemStack(AetherhavenConstants.SHOP_SAFE_ITEM_ID, qty));
+            case INN_BELL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID, qty));
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
             case SHOP_SPOT -> List.of(new ItemStack(AetherhavenConstants.SHOP_SPOT_ITEM_ID, qty));
             case TOURIST_PORTAL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TOURIST_PORTAL_ITEM_ID, qty));

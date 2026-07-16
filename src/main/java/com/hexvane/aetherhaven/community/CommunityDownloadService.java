@@ -25,7 +25,8 @@ public final class CommunityDownloadService {
         NOT_FOUND,
         DOWNLOAD_FAILED,
         IO_ERROR,
-        MISSING_MODS
+        MISSING_MODS,
+        UNSAFE_PREFAB
     }
 
     @Nonnull
@@ -51,7 +52,20 @@ public final class CommunityDownloadService {
                 if (prefab == null || prefab.length == 0) {
                     return InstallResult.DOWNLOAD_FAILED;
                 }
+                CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+                if (!safety.isSafe()) {
+                    LOGGER.atWarning().log("Refused unsafe community download %s: %s", id, safety.detail());
+                    return InstallResult.UNSAFE_PREFAB;
+                }
                 Files.write(CommunityPaths.installedPrefabFile(dataDir, id), prefab);
+            }
+            Path installedPrefab = CommunityPaths.installedPrefabFile(dataDir, id);
+            CommunityPrefabSafety.Result installedSafety =
+                CommunityPrefabSafety.validate(Files.readAllBytes(installedPrefab));
+            if (!installedSafety.isSafe()) {
+                Files.deleteIfExists(installedPrefab);
+                LOGGER.atWarning().log("Refused unsafe installed community prefab %s: %s", id, installedSafety.detail());
+                return InstallResult.UNSAFE_PREFAB;
             }
 
             Path buildingFile = CommunityPaths.buildingFile(dataDir, id);

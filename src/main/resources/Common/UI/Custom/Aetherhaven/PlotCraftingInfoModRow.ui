@@ -1,0 +1,19 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Top;
+  Anchor: (Bottom: 5);
+  Padding: (Horizontal: 8, Vertical: 6);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #262132(0.75));
+
+  Label #Name {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #e1d7ee, FontSize: 14, RenderBold: true, Wrap: true);
+    Anchor: (Bottom: 2);
+    Text: "";
+  }
+
+  Label #Id {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #968aa6, FontSize: 11, Wrap: true);
+    Text: "";
+  }
+}

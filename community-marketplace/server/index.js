@@ -181,6 +181,12 @@ function enrichPendingSubmission(meta) {
     normalizeDescription(meta.description) || readBuildingDescription(buildingPath);
   const iconFile = pendingSubmissionFile(submissionId, "icon.png");
   const enriched = { ...meta };
+  const requiredModsFromMeta = normalizeRequiredMods(meta.requiredMods);
+  enriched.requiredMods = requiredModsFromMeta.length
+    ? requiredModsFromMeta
+    : readBuildingRequiredMods(buildingPath);
+  enriched.materials = readBuildingMaterials(buildingPath);
+  enriched.treasuryGoldCoinCost = readBuildingGoldCost(buildingPath);
   if (description) {
     enriched.description = description;
   }
@@ -524,7 +530,7 @@ function clearCoverIfScreenshotRemoved(shotMeta) {
   }
 }
 
-function approveSubmission(submissionId, requestedId) {
+function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   const meta = storage.loadSubmissionMeta(submissionId, "pending");
   if (!meta) {
     return { status: 404, body: { error: "not_found" } };
@@ -533,6 +539,13 @@ function approveSubmission(submissionId, requestedId) {
   const id = normalizeCommunityId(requestedId || meta.proposedId);
   if (!id) {
     return { status: 400, body: { error: "invalid_id" } };
+  }
+  let normalizedRequiredModsOverride = null;
+  if (requiredModsOverride !== undefined) {
+    normalizedRequiredModsOverride = normalizeRequiredMods(requiredModsOverride);
+    if (!Array.isArray(requiredModsOverride) || normalizedRequiredModsOverride.length !== requiredModsOverride.length) {
+      return { status: 400, body: { error: "required_mods_invalid" } };
+    }
   }
 
   const approved = storage.approvedPaths(id);
@@ -548,6 +561,9 @@ function approveSubmission(submissionId, requestedId) {
   building.id = id;
   // Match client install layout: Community/.../Prefabs/{id}.prefab.json
   building.prefabPath = `${id}.prefab.json`;
+  if (normalizedRequiredModsOverride !== null) {
+    building.requiredMods = normalizedRequiredModsOverride;
+  }
   fs.writeFileSync(approved.building, JSON.stringify(building, null, 2));
 
   const buildingTags = normalizeTags(building.tags);
@@ -564,9 +580,7 @@ function approveSubmission(submissionId, requestedId) {
     approvedAt: new Date().toISOString(),
     version: meta.version || "1",
   };
-  if (!approvedMeta.requiredMods?.length) {
-    delete approvedMeta.requiredMods;
-  }
+  approvedMeta.requiredMods = normalizeRequiredMods(approvedMeta.requiredMods);
   fs.writeFileSync(approved.meta, JSON.stringify(approvedMeta, null, 2));
 
   const prefabBytes = fs.statSync(approved.prefab).size;
@@ -871,6 +885,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const compatible = isBlockIdCompatible(e.blockIdVersion, clientBlockIdVersion);
     const description = normalizeDescription(e.description) || readBuildingDescription(paths.building);
     const goldCost = readBuildingGoldCost(paths.building);
+    const materials = readBuildingMaterials(paths.building);
     const entryTags = normalizeTags(e.tags);
     const tags = entryTags.length ? entryTags : readBuildingTags(paths.building);
     const card = resolveCardImage(e.id, e.coverScreenshotId);
@@ -888,6 +903,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
       coverImageUrl: card.coverImageUrl || undefined,
       buildingUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/building.json`,
       prefabUrl: `/api/v1/buildings/${encodeURIComponent(e.id)}/prefab.json`,
+      materials,
     };
     if (goldCost > 0) {
       entry.treasuryGoldCoinCost = goldCost;
@@ -898,11 +914,7 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     const requiredMods = requiredModsFromEntry.length
       ? requiredModsFromEntry
       : readBuildingRequiredMods(paths.building);
-    if (requiredMods.length) {
-      entry.requiredMods = requiredMods;
-    } else {
-      delete entry.requiredMods;
-    }
+    entry.requiredMods = requiredMods;
     if (!entry.coverScreenshotId) {
       delete entry.coverScreenshotId;
     }
@@ -1095,11 +1107,11 @@ app.post(
 );
 
 app.get("/api/v1/submissions/pending", requireAdminApiKey, (_req, res) => {
-  res.json({ submissions: storage.listPending() });
+  res.json({ submissions: listEnrichedPending() });
 });
 
 app.post("/api/v1/submissions/:submissionId/approve", requireAdminApiKey, (req, res) => {
-  const result = approveSubmission(req.params.submissionId, req.body?.id);
+  const result = approveSubmission(req.params.submissionId, req.body?.id, req.body?.requiredMods);
   res.status(result.status).json(result.body);
 });
 
@@ -1109,7 +1121,7 @@ app.post("/api/v1/submissions/:submissionId/reject", requireAdminApiKey, (req, r
 });
 
 app.get("/api/v1/moderation/pending", requireModerator, (_req, res) => {
-  res.json({ submissions: storage.listPending() });
+  res.json({ submissions: listEnrichedPending() });
 });
 
 app.get("/api/v1/moderation/submissions/:submissionId/prefab.json", requireModerator, (req, res) => {
@@ -1140,7 +1152,7 @@ app.get("/api/v1/moderation/submissions/:submissionId/icon.png", requireModerato
 });
 
 app.post("/api/v1/moderation/approve/:submissionId", requireModerator, (req, res) => {
-  const result = approveSubmission(req.params.submissionId, req.body?.id);
+  const result = approveSubmission(req.params.submissionId, req.body?.id, req.body?.requiredMods);
   res.status(result.status).json(result.body);
 });
 
@@ -1982,7 +1994,7 @@ app.get("/api/admin/submissions/:submissionId/icon.png", requireWebUser, require
 });
 
 app.post("/api/admin/approve/:submissionId", requireWebUser, requireAdmin, (req, res) => {
-  const result = approveSubmission(req.params.submissionId, req.body?.id);
+  const result = approveSubmission(req.params.submissionId, req.body?.id, req.body?.requiredMods);
   res.status(result.status).json(result.body);
 });
 

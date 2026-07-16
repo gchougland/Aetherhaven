@@ -204,10 +204,13 @@ function goldCostHtml(entry, className = "") {
   return `<span class="${cls}" title="Gold cost" aria-label="Gold cost ${gold}"><img class="gold-cost-icon" src="/assets/Deco_Scrap_Treasure.png" alt="" width="14" height="14" /><span class="gold-cost-value">${escapeHtml(String(gold))}</span></span>`;
 }
 
-function requiredModsHtml(entry) {
-  const mods = Array.isArray(entry?.requiredMods) ? entry.requiredMods : [];
+function requiredModsHtml(entry, compact = false) {
+  if (!Array.isArray(entry?.requiredMods)) {
+    return `<p class="meta building-requires building-requires--invalid">Dependency metadata unavailable</p>`;
+  }
+  const mods = entry.requiredMods;
   if (!mods.length) {
-    return "";
+    return `<p class="meta building-requires building-requires--none">No external mods required</p>`;
   }
   const labels = mods
     .map((m) => {
@@ -216,14 +219,15 @@ function requiredModsHtml(entry) {
       if (!name) {
         return "";
       }
-      const title = id && id !== name ? ` title="${escapeAttr(id)}"` : "";
-      return `<span class="required-mod"${title}>${escapeHtml(name)}</span>`;
+      const idLabel = id && id !== name ? ` <code>${escapeHtml(id)}</code>` : "";
+      return `<span class="required-mod">${escapeHtml(name)}${idLabel}</span>`;
     })
     .filter(Boolean);
   if (!labels.length) {
-    return "";
+    return `<p class="meta building-requires building-requires--invalid">Invalid dependency metadata</p>`;
   }
-  return `<p class="meta building-modal-requires"><span class="building-modal-requires-label">Requires</span> ${labels.join(", ")}</p>`;
+  const classes = compact ? "building-requires building-requires--compact" : "building-modal-requires building-requires";
+  return `<div class="${classes}"><span class="building-modal-requires-label">Requires mods</span><span class="required-mod-list">${labels.join("")}</span></div>`;
 }
 
 function descriptionToggleHtml(entry) {
@@ -298,6 +302,7 @@ function renderBuildingCard(entry, options = {}) {
         ${idMeta}
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
         <p class="meta building-card-stats">${formatBytes(entry.prefabBytes || 0)} · <span class="download-count">${escapeHtml(formatDownloadCount(entry.downloadCount))}</span> · v${escapeHtml(entry.version)}${goldBadge ? ` · ${goldBadge}` : ""}</p>
+        ${requiredModsHtml(entry, true)}
         ${shotHint}
         ${descriptionToggleHtml(entry)}
         ${editBtn}
@@ -1629,6 +1634,7 @@ function renderAdminPendingCard(s) {
         ${dateLabel ? `<p class="meta submission-card-date-row">${escapeHtml(dateLabel)}</p>` : ""}
         <p class="meta submission-card-meta">${escapeHtml(s.submissionId)} · by ${escapeHtml(s.creatorName || "Unknown")}</p>
         <p class="meta submission-card-meta">Proposed id: ${escapeHtml(s.proposedId || "—")}</p>
+        ${requiredModsHtml(s)}
         ${descriptionHtml}
         <div class="submission-card-actions">
           <a class="secondary" href="/edit.html?submissionId=${encodeURIComponent(s.submissionId)}&from=admin">Edit</a>

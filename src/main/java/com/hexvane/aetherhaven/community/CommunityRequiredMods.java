@@ -85,28 +85,38 @@ public final class CommunityRequiredMods {
      */
     @Nonnull
     public static List<RequiredMod> computeFromPrefabBytes(@Nonnull byte[] prefabBytes) {
-        try {
-            JsonObject root = GSON.fromJson(new String(prefabBytes, StandardCharsets.UTF_8), JsonObject.class);
-            if (root == null) {
-                return List.of();
-            }
-            return computeFromPrefabJson(root);
-        } catch (RuntimeException e) {
-            return List.of();
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefabBytes);
+        if (!safety.isSafe()) {
+            throw new IllegalArgumentException(safety.detail());
         }
+        JsonObject root = GSON.fromJson(new String(prefabBytes, StandardCharsets.UTF_8), JsonObject.class);
+        return computeFromPrefabJson(root, safety.referencedBlocks(), safety.referencedFluids());
     }
 
     @Nonnull
     public static List<RequiredMod> computeFromPrefabJson(@Nonnull JsonObject root) {
+        return computeFromPrefabJson(root, List.of(), List.of());
+    }
+
+    @Nonnull
+    private static List<RequiredMod> computeFromPrefabJson(
+        @Nonnull JsonObject root,
+        @Nonnull Collection<String> migratedBlocks,
+        @Nonnull Collection<String> validatedFluids
+    ) {
         Set<String> candidateKeys = new LinkedHashSet<>();
         collectNamedAssets(root.get("blocks"), candidateKeys);
         collectNamedAssets(root.get("fluids"), candidateKeys);
         collectEntityAssetStrings(root.get("entities"), candidateKeys);
+        candidateKeys.addAll(migratedBlocks);
+        candidateKeys.addAll(validatedFluids);
 
         LinkedHashMap<String, String> packNamesById = new LinkedHashMap<>();
         for (String key : candidateKeys) {
-            String packId = resolvePackId(key);
-            if (packId == null || isExcludedPack(packId) || packNamesById.containsKey(packId)) {
+            AssetSource source = resolveAssetSource(key);
+            String packId = source != null ? source.packId() : null;
+            if (!shouldRequirePack(packId, isProvidedByExcludedPack(key, source))
+                || packNamesById.containsKey(packId)) {
                 continue;
             }
             packNamesById.put(packId, displayNameForPack(packId));
@@ -198,7 +208,7 @@ public final class CommunityRequiredMods {
             if (nameEl != null && nameEl.isJsonPrimitive() && nameEl.getAsJsonPrimitive().isString()) {
                 String name = nameEl.getAsString().trim();
                 if (!name.isEmpty()) {
-                    out.add(name);
+                    out.add(CommunityPrefabSafety.normalizeChanceName(name));
                 }
             }
         }
@@ -262,18 +272,18 @@ public final class CommunityRequiredMods {
     }
 
     @Nullable
-    private static String resolvePackId(@Nonnull String assetKey) {
+    private static AssetSource resolveAssetSource(@Nonnull String assetKey) {
         String pack = BlockType.getAssetMap().getAssetPack(assetKey);
         if (pack != null && !pack.isBlank()) {
-            return pack.trim();
+            return new AssetSource(pack.trim(), AssetKind.BLOCK);
         }
         pack = Item.getAssetMap().getAssetPack(assetKey);
         if (pack != null && !pack.isBlank()) {
-            return pack.trim();
+            return new AssetSource(pack.trim(), AssetKind.ITEM);
         }
         pack = Fluid.getAssetMap().getAssetPack(assetKey);
         if (pack != null && !pack.isBlank()) {
-            return pack.trim();
+            return new AssetSource(pack.trim(), AssetKind.FLUID);
         }
         return null;
     }
@@ -281,6 +291,43 @@ public final class CommunityRequiredMods {
     private static boolean isExcludedPack(@Nonnull String packId) {
         return EXCLUDED_PACK_IDS.contains(packId);
     }
+
+    static boolean shouldRequirePack(@Nullable String activePackId, boolean providedByExcludedPack) {
+        return activePackId != null
+            && !activePackId.isBlank()
+            && !isExcludedPack(activePackId)
+            && !providedByExcludedPack;
+    }
+
+    /**
+     * An external pack may patch a vanilla/Aetherhaven asset and become the active provider. That
+     * does not make the patching pack a hard dependency because the underlying asset still exists
+     * when the patch is absent.
+     */
+    private static boolean isProvidedByExcludedPack(@Nonnull String assetKey, @Nullable AssetSource source) {
+        if (source == null) {
+            return false;
+        }
+        for (String packId : EXCLUDED_PACK_IDS) {
+            Set<String> keys = switch (source.kind()) {
+                case BLOCK -> BlockType.getAssetMap().getKeysForPack(packId);
+                case ITEM -> Item.getAssetMap().getKeysForPack(packId);
+                case FLUID -> Fluid.getAssetMap().getKeysForPack(packId);
+            };
+            if (keys != null && keys.contains(assetKey)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private enum AssetKind {
+        BLOCK,
+        ITEM,
+        FLUID
+    }
+
+    private record AssetSource(@Nonnull String packId, @Nonnull AssetKind kind) {}
 
     @Nonnull
     private static String displayNameForPack(@Nonnull String packId) {

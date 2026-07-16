@@ -1,0 +1,30 @@
+$C = "../Common.ui";
+
+Group {
+  LayoutMode: Left;
+  Anchor: (Height: 48, Bottom: 5);
+  Padding: (Full: 6);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.72));
+
+  Group #IconBox {
+    LayoutMode: Center;
+    Anchor: (Width: 36, Height: 36, Right: 8);
+    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #111722(0.8));
+
+    AssetImage #Icon {
+      Anchor: (Width: 28, Height: 28);
+    }
+  }
+
+  Label #Name {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #d8e0e8, FontSize: 14, Wrap: true, VerticalAlignment: Center);
+    FlexWeight: 1;
+    Text: "";
+  }
+
+  Label #Count {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8a060, FontSize: 15, RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
+    Anchor: (Width: 58, Left: 6);
+    Text: "";
+  }
+}

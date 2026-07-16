@@ -1,11 +1,13 @@
 package com.hexvane.aetherhaven.prefab;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityPrefabSafety;
 import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.PrefabBufferUtil;
 import com.hypixel.hytale.server.core.prefab.selection.buffer.impl.IPrefabBuffer;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,20 +66,30 @@ public final class PrefabResolveUtil {
         }
         file = CommunityPaths.resolveInstalledPrefab(dataDir, key);
         if (file != null) {
-            return file.toAbsolutePath().normalize();
+            return safeCommunityPath(file);
         }
         String constructionId = constructionIdFromPrefabKey(key);
         if (constructionId != null) {
             file = CommunityPaths.resolvePreviewPrefab(dataDir, constructionId);
             if (file != null) {
-                return file.toAbsolutePath().normalize();
+                return safeCommunityPath(file);
             }
             file = CommunityPaths.resolveModerationPreviewPrefab(dataDir, constructionId);
             if (file != null) {
-                return file.toAbsolutePath().normalize();
+                return safeCommunityPath(file);
             }
         }
         return null;
+    }
+
+    @Nullable
+    private static Path safeCommunityPath(@Nonnull Path file) {
+        Path normalized = file.toAbsolutePath().normalize();
+        try {
+            return CommunityPrefabSafety.validate(Files.readAllBytes(normalized)).isSafe() ? normalized : null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Nullable

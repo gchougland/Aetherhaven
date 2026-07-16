@@ -79,6 +79,7 @@ public final class PlotCreatorValidator {
             case PRODUCTION_STORAGE -> draft.getProductionStorageLocalPos() != null ? 1 : 0;
             case TREASURY_BLOCK -> draft.getTreasuryLocalPos() != null ? 1 : 0;
             case SHOP_SAFE_BLOCK -> draft.getShopSafeLocalPos() != null ? 1 : 0;
+            case INN_BELL_BLOCK -> draft.getInnBellLocalPos() != null ? 1 : 0;
             case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> draft.getPlacedSpecialBlocks().size();
             case PLANNING_DESK_POI, WORK_POI, BARD_WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI,
                 QUEST_BOARD_POI -> countPoiRequirement(draft, req);

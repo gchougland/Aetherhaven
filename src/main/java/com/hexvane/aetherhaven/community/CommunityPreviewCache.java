@@ -40,6 +40,9 @@ public final class CommunityPreviewCache {
         Path dataDir = plugin.getDataDirectory();
         Path previewFile = CommunityPaths.previewPrefabFile(dataDir, id);
         if (Files.isRegularFile(previewFile)) {
+            if (!isSafe(previewFile, id)) {
+                return null;
+            }
             trackSessionPreview(id);
             return entry.prefabPathKey();
         }
@@ -52,6 +55,11 @@ public final class CommunityPreviewCache {
         if (prefab == null || prefab.length == 0) {
             return null;
         }
+        CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(prefab);
+        if (!safety.isSafe()) {
+            LOGGER.atWarning().log("Refused unsafe community preview %s: %s", id, safety.detail());
+            return null;
+        }
         try {
             Files.createDirectories(previewFile.getParent());
             Files.write(previewFile, prefab);
@@ -61,6 +69,24 @@ public final class CommunityPreviewCache {
             LOGGER.atWarning().withCause(e).log("Failed to write preview prefab for %s", id);
             return null;
         }
+    }
+
+    private boolean isSafe(@Nonnull Path prefabFile, @Nonnull String constructionId) {
+        try {
+            CommunityPrefabSafety.Result safety = CommunityPrefabSafety.validate(Files.readAllBytes(prefabFile));
+            if (safety.isSafe()) {
+                return true;
+            }
+            LOGGER.atWarning().log("Refused unsafe cached community preview %s: %s", constructionId, safety.detail());
+        } catch (IOException e) {
+            LOGGER.atWarning().withCause(e).log("Failed to validate cached community preview %s", constructionId);
+        }
+        try {
+            Files.deleteIfExists(prefabFile);
+        } catch (IOException ignored) {
+            // Best effort; the file will never be handed to Hytale after this failure.
+        }
+        return false;
     }
 
     public void clearEntryPreview(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {

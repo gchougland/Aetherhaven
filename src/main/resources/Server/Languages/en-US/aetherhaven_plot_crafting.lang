@@ -2,6 +2,11 @@
 
 aetherhaven.ui.plotCrafting.title = Plot crafting bench
 aetherhaven.ui.plotCrafting.previewTitle = Preview
+aetherhaven.ui.plotCrafting.infoTitle = Building details
+aetherhaven.ui.plotCrafting.infoEmpty = Select a building to view its details.
+aetherhaven.ui.plotCrafting.infoGoldTitle = Gold costs
+aetherhaven.ui.plotCrafting.infoRequiredModsTitle = Required mods
+aetherhaven.ui.plotCrafting.infoMaterialsTitle = Required materials
 aetherhaven.ui.plotCrafting.variantSectionTitle = Variants
 aetherhaven.ui.plotCrafting.variantIndex = {current}/{total}
 aetherhaven.ui.plotCrafting.tabCoreTooltip = Core buildings
@@ -26,6 +31,7 @@ aetherhaven.ui.plotCrafting.previewPlaceholder = Load preview to inspect this bu
 aetherhaven.ui.plotCrafting.communityMeta = by {creator} · {size}
 aetherhaven.ui.plotCrafting.communityListByCreator = by {creator}
 aetherhaven.ui.plotCrafting.previewFailed = Could not load preview.
+aetherhaven.ui.plotCrafting.previewRequired = Load and validate the preview before testing or approving.
 aetherhaven.ui.plotCrafting.downloadFailed = Download failed.
 aetherhaven.ui.plotCrafting.missingRequiredMods = Missing required mods: {mods}
 aetherhaven.ui.plotCrafting.downloaded = Downloaded {name}. You can craft it now.

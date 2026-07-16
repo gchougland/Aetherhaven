@@ -1824,14 +1824,53 @@ body.modal-open {
   margin-top: 0.35rem;
 }
 
+.building-requires {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+  align-items: center;
+  margin: 0.55rem 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--gold-bright) 45%, transparent);
+  border-radius: 0.45rem;
+  background: color-mix(in srgb, var(--gold-bright) 8%, transparent);
+}
+
+.building-requires--compact {
+  font-size: 0.82rem;
+}
+
+.building-requires--none {
+  color: var(--muted);
+  margin: 0.4rem 0;
+}
+
+.building-requires--invalid {
+  color: var(--danger);
+  font-weight: 600;
+}
+
 .building-modal-requires-label {
   color: var(--gold-bright);
   font-weight: 600;
-  margin-right: 0.25rem;
+}
+
+.required-mod-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
 .required-mod {
   color: var(--text);
+  padding: 0.18rem 0.4rem;
+  border-radius: 0.3rem;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+}
+
+.required-mod code {
+  color: var(--muted);
+  font-size: 0.88em;
 }
 
 .building-gallery-main {
