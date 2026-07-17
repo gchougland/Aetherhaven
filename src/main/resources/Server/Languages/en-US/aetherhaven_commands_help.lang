@@ -84,6 +84,7 @@ commands.aetherhaven.villager.respawn.desc=Debug: respawn one core story citizen
 commands.aetherhaven.villager.fixinn.desc=Debug: repair inn visitor pool for your town
 commands.aetherhaven.villager.purge.desc=Emergency: remove ALL loaded NPCs of a role in this world (no binding filter)
 commands.aetherhaven.villager.purge.role.desc=NPC role id (example Aetherhaven_Florist)
+commands.aetherhaven.villager.stone_test.desc=Debug: spawn transient stone previews of every villager model
 aetherhaven.villager.resetDone=Town villagers were reset and respawned near you.
 aetherhaven.villager.resetFailed=Could not reset town villagers: {reason}
 aetherhaven.villager.respawnDone=Respawned {role} near you.

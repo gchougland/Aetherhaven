@@ -19,6 +19,7 @@
 
 ### Fixed
 
+- **Founder monument statues** — Founder monuments now consistently show the placing player’s full outfit and features as solid stone. Random, stretched, missing, or mismatched textures no longer appear on statues or nearby villagers.
 - **Inn Bells in building variants** — Bells inside community and other Inn variants now recognize that the building counts as an Inn instead of rejecting it because its plot id is not exactly `plot_inn`.
 - **Plot crafting search header** — The menu title now reserves space for the expanding search field instead of overlapping it.
 - **Modded community prefab freeze** — Missing modded blocks are detected through a read-only prefab preflight before Hytale deserializes the prefab, preventing the asset-lock deadlock that could freeze the game indefinitely.

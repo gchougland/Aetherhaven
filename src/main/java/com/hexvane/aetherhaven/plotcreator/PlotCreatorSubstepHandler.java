@@ -185,21 +185,22 @@ public final class PlotCreatorSubstepHandler {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
                     yield true;
                 }
-                TouristPortalBlock blockComp = TouristPortalBlockUtil.getBlockComponent(session.getWorld(), targetBlock);
+                Vector3i portalBase = TouristPortalBlockUtil.resolvePortalBaseBlock(session.getWorld(), targetBlock);
+                TouristPortalBlock blockComp = TouristPortalBlockUtil.getBlockComponent(session.getWorld(), portalBase);
                 if (blockComp == null) {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
                     yield true;
                 }
                 for (Vector3i recorded : draft.getPlacedSpecialBlocks()) {
-                    if (recorded.x == targetBlock.x && recorded.y == targetBlock.y && recorded.z == targetBlock.z) {
+                    if (recorded.x == portalBase.x && recorded.y == portalBase.y && recorded.z == portalBase.z) {
                         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.touristPortalAlreadyRecorded"));
                         yield true;
                     }
                 }
                 TouristPortalBlock confirmed =
                     new TouristPortalBlock(blockComp.getPortalId(), blockComp.getTownId(), blockComp.getPlotId(), true);
-                TouristPortalBlockUtil.writeBlockComponent(session.getWorld(), targetBlock, confirmed);
-                draft.getPlacedSpecialBlocks().add(new Vector3i(targetBlock));
+                TouristPortalBlockUtil.writeBlockComponent(session.getWorld(), portalBase, confirmed);
+                draft.getPlacedSpecialBlocks().add(portalBase);
                 playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.touristPortalRecorded"));
                 yield true;
             }

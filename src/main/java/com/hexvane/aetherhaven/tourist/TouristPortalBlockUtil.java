@@ -9,6 +9,7 @@ import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -44,6 +45,27 @@ public final class TouristPortalBlockUtil {
             return false;
         }
         return chunk.getFiller(x, y, z) == 0;
+    }
+
+    /**
+     * Resolves any clicked voxel of the multi-block portal to the base voxel that owns its block component.
+     */
+    @Nonnull
+    @SuppressWarnings({ "deprecation", "removal" })
+    public static Vector3i resolvePortalBaseBlock(@Nonnull World world, @Nonnull Vector3i pos) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(pos.x, pos.z));
+        if (chunk == null) {
+            return new Vector3i(pos);
+        }
+        int filler = chunk.getFiller(pos.x, pos.y, pos.z);
+        if (filler == FillerBlockUtil.NO_FILLER) {
+            return new Vector3i(pos);
+        }
+        return new Vector3i(
+            pos.x - FillerBlockUtil.unpackX(filler),
+            pos.y - FillerBlockUtil.unpackY(filler),
+            pos.z - FillerBlockUtil.unpackZ(filler)
+        );
     }
 
     @Nullable

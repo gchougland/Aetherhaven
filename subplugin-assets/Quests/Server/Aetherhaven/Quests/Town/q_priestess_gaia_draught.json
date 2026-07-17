@@ -23,6 +23,8 @@
     {
       "id": "purge_undead",
       "kind": "entity_kills",
+      "text": "Defeat undead on the roads.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_priestess_gaia_draught.objective.purge",
       "killCount": 12,
       "entityTagsAny": [
         "Undead"

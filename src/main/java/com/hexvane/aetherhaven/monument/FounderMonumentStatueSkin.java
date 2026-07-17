@@ -60,13 +60,19 @@ public final class FounderMonumentStatueSkin implements Component<EntityStore> {
         return c;
     }
 
-    @Nonnull
-    public PlayerSkin toProtocol() {
+    /**
+     * @return the stored skin, or {@code null} when persisted data is missing or malformed
+     */
+    @Nullable
+    public PlayerSkin tryToProtocol() {
         if (skinJson == null || skinJson.isEmpty()) {
-            return new PlayerSkin();
+            return null;
         }
-        PlayerSkin s = GSON.fromJson(skinJson, PlayerSkin.class);
-        return s != null ? s : new PlayerSkin();
+        try {
+            return GSON.fromJson(skinJson, PlayerSkin.class);
+        } catch (RuntimeException ignored) {
+            return null;
+        }
     }
 
     @Nonnull

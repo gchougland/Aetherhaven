@@ -111,6 +111,14 @@ public final class RuntimeCommonIconBroadcast {
         );
     }
 
+    /** Invalidates the required-assets snapshot without sending packets or rebuilding connected clients. */
+    public static void invalidateRequiredAssetsCache() {
+        CommonAssetModule module = CommonAssetModule.get();
+        if (module != null) {
+            invalidateRequiredAssetsCache(module);
+        }
+    }
+
     private static void invalidateRequiredAssetsCache(@Nonnull CommonAssetModule module) {
         if (ASSETS_CACHE_FIELD == null) {
             return;

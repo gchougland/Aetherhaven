@@ -54,6 +54,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
         this.addSubCommand(new ResetSubCommand());
         this.addSubCommand(new RespawnSubCommand());
         this.addSubCommand(new PurgeSubCommand());
+        this.addSubCommand(new AetherhavenStoneStatueTestCommand());
     }
 
     @Nonnull

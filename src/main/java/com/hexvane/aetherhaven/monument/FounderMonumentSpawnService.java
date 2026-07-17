@@ -23,6 +23,7 @@ import com.hypixel.hytale.server.core.modules.entity.component.PersistentModel;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -31,13 +32,20 @@ import javax.annotation.Nullable;
 /**
  * Spawns a frozen NPC whose mesh matches the placer's cosmetics. {@link CosmeticsModule#createModel(PlayerSkin)} only
  * validates the skin and loads the base {@code Player} asset — it does not attach clothing; {@link PlayerSkinModelExporter}
- * resolves the full attachment list from the registry. Stone is applied by swapping every attachment (and base) to
- * {@link AetherhavenConstants#FOUNDER_MONUMENT_STATUE_TEXTURE} with no gradient tinting.
+ * resolves the full attachment list from the registry. Stone is applied with textures matching each source texture's
+ * native canvas dimensions; one shared attachment texture corrupts pixel-space UV sampling in the entity atlas.
  */
 public final class FounderMonumentSpawnService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+    private static final String DETACHED_FACE_MODEL =
+        "Characters/Body_Attachments/Faces/Player_Face_Detached.blockymodel";
 
     private FounderMonumentSpawnService() {}
+
+    /** Registers all required stone texture canvas sizes before any client builds its initial entity atlas. */
+    public static void prewarmStoneTextures() {
+        FounderMonumentStoneTextures.prewarm();
+    }
 
     /**
      * {@link com.hypixel.hytale.server.core.asset.type.model.config.Model.ModelReference#toModel()} requires a positive scale;
@@ -48,6 +56,25 @@ public final class FounderMonumentSpawnService {
             return 1.0f;
         }
         return scale;
+    }
+
+    /** Stone player-body fallback used before dynamic cosmetics are restored, or when persisted skin data is invalid. */
+    @Nullable
+    public static Model buildFallbackModel() {
+        ModelAsset asset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
+        return asset != null ? toStaticModel(Model.createScaledModel(asset, 1.0f, null, null, true)) : null;
+    }
+
+    @Nonnull
+    public static PersistentModel toPersistentModel(@Nonnull Model model) {
+        return new PersistentModel(
+            new Model.ModelReference(
+                AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID,
+                safePersistScale(model.getScale()),
+                model.getRandomAttachmentIds(),
+                true
+            )
+        );
     }
 
     /**
@@ -76,25 +103,76 @@ public final class FounderMonumentSpawnService {
             LOGGER.atWarning().log("Founder monument: skin resolved to no attachments");
             return null;
         }
-        ModelAsset playerAsset = ModelAsset.getAssetMap().getAsset("Player");
-        if (playerAsset == null) {
+        return buildStoneAttachmentModel(skinAttachments);
+    }
+
+    /**
+     * Builds a transient stone preview from a configured villager model asset. The base player mesh is supplied by the
+     * dedicated statue model, so duplicate Player.blockymodel attachments are omitted.
+     */
+    @Nullable
+    public static Model buildStonePreviewModel(@Nonnull ModelAsset appearanceAsset) {
+        ModelAttachment[] attachments = appearanceAsset.getDefaultAttachments();
+        if (attachments == null) {
+            attachments = new ModelAttachment[0];
+        } else {
+            attachments = Arrays.stream(attachments)
+                .filter(attachment -> !"Characters/Player.blockymodel".equals(attachment.getModel()))
+                .toArray(ModelAttachment[]::new);
+        }
+        if (!"Characters/Player.blockymodel".equals(appearanceAsset.getModel())) {
+            return buildStoneModel(
+                appearanceAsset,
+                FounderMonumentStoneTextures.ensureIsolatedModel(appearanceAsset.getModel()),
+                appearanceAsset.getTexture(),
+                attachments
+            );
+        }
+        return buildStoneAttachmentModel(attachments);
+    }
+
+    @Nullable
+    private static Model buildStoneAttachmentModel(@Nonnull ModelAttachment[] attachments) {
+        ModelAsset statueAsset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
+        if (statueAsset == null) {
+            LOGGER.atWarning()
+                .log("Founder monument: missing model asset %s", AetherhavenConstants.FOUNDER_MONUMENT_STATUE_MODEL_ID);
             return null;
         }
-        String baseMesh = PlayerSkinModelExporter.findPlayerBodyModel(skin, cos.getRegistry());
-        if (baseMesh == null) {
-            baseMesh = playerAsset.getModel();
+        ModelAttachment[] withoutIntegratedFace = Arrays.stream(attachments)
+            .filter(attachment -> !DETACHED_FACE_MODEL.equals(attachment.getModel()))
+            .toArray(ModelAttachment[]::new);
+        return buildStoneModel(
+            statueAsset,
+            statueAsset.getModel(),
+            statueAsset.getTexture(),
+            withoutIntegratedFace
+        );
+    }
+
+    @Nullable
+    private static Model buildStoneModel(
+        @Nonnull ModelAsset templateAsset,
+        @Nonnull String modelPath,
+        @Nonnull String baseTexture,
+        @Nonnull ModelAttachment[] attachments
+    ) {
+        Model template = Model.createScaledModel(templateAsset, 1.0f, null, null, true);
+        FounderMonumentStoneTextures.Prepared stone;
+        try {
+            stone = FounderMonumentStoneTextures.prepare(baseTexture, attachments);
+        } catch (RuntimeException e) {
+            LOGGER.atWarning().withCause(e).log("Founder monument: failed to prepare dimension-matched stone textures");
+            return null;
         }
-        Model template = Model.createScaledModel(playerAsset, 1.0f, null, null, true);
-        String stone = AetherhavenConstants.FOUNDER_MONUMENT_STATUE_TEXTURE;
-        ModelAttachment[] stoneAttachments = stoneifyAttachments(skinAttachments, stone);
         Model merged = new Model(
             template.getModelAssetId(),
             safePersistScale(template.getScale()),
             template.getRandomAttachmentIds(),
-            stoneAttachments,
+            stone.attachments(),
             template.getBoundingBox(),
-            baseMesh,
-            stone,
+            modelPath,
+            stone.baseTexture(),
             null,
             null,
             template.getEyeHeight(),
@@ -112,16 +190,6 @@ public final class FounderMonumentSpawnService {
             template.getPhobiaModelAssetId()
         );
         return toStaticModel(merged);
-    }
-
-    @Nonnull
-    private static ModelAttachment[] stoneifyAttachments(@Nonnull ModelAttachment[] src, @Nonnull String stoneTexturePath) {
-        ModelAttachment[] out = new ModelAttachment[src.length];
-        for (int i = 0; i < src.length; i++) {
-            ModelAttachment a = src[i];
-            out[i] = new ModelAttachment(a.getModel(), stoneTexturePath, null, null, a.getWeight());
-        }
-        return out;
     }
 
     /**
@@ -168,12 +236,7 @@ public final class FounderMonumentSpawnService {
         }
         Ref<EntityStore> ref = pair.first();
         store.putComponent(ref, ModelComponent.getComponentType(), new ModelComponent(monumentModel));
-        float persistScale = safePersistScale(monumentModel.getScale());
-        store.putComponent(
-            ref,
-            PersistentModel.getComponentType(),
-            new PersistentModel(new Model.ModelReference("Player", persistScale, monumentModel.getRandomAttachmentIds(), true))
-        );
+        store.putComponent(ref, PersistentModel.getComponentType(), toPersistentModel(monumentModel));
         store.ensureComponent(ref, Frozen.getComponentType());
         store.putComponent(ref, Invulnerable.getComponentType(), Invulnerable.INSTANCE);
         store.putComponent(

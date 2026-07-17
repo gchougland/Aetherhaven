@@ -21,6 +21,7 @@ import com.hexvane.aetherhaven.jewelry.JewelryInventoryTooltipSync;
 import com.hexvane.aetherhaven.jewelry.JewelryNativeTooltipManager;
 import com.hexvane.aetherhaven.jewelry.JewelryTooltipPacketAdapter;
 import com.hexvane.aetherhaven.jewelry.JewelryVirtualItemRegistry;
+import com.hexvane.aetherhaven.monument.FounderMonumentSpawnService;
 import com.hexvane.aetherhaven.pathtool.PathNavViz;
 import com.hexvane.aetherhaven.plot.PlotTokenIconPacketAdapter;
 import com.hexvane.aetherhaven.plot.PlotTokenVirtualItemRegistry;
@@ -359,6 +360,10 @@ public final class AetherhavenPlugin extends JavaPlugin {
         if (this.aetherhavenCommand != null) {
             this.getCommandRegistry().registerCommand(this.aetherhavenCommand);
         }
+        // Stone-model prewarming needs the complete townsfolk catalog so custom meshes (for example Prowl) are
+        // isolated before any client receives the Common asset set.
+        this.config.get();
+        this.reloadAetherhavenAssetCatalogs();
         // Mod packs register in setup0() before LoadAssetEvent, so AssetPackRegisterEvent is not fired then;
         // Asset Editor only sees packs from that event or its early setup() pass. Re-dispatch after assets load.
         if (this.getManifest().includesAssetPack()) {
@@ -372,6 +377,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 CommonAssetModule commonAssets = CommonAssetModule.get();
                 if (commonAssets != null) {
                     commonAssets.loadCommonAssets(pack, System.nanoTime());
+                    try {
+                        FounderMonumentSpawnService.prewarmStoneTextures();
+                    } catch (RuntimeException e) {
+                        LOGGER.atWarning().withCause(e).log("Could not prewarm founder monument stone textures");
+                    }
                     if (Universe.get().getPlayerCount() > 0) {
                         Universe.get().broadcastPacketNoCache(new RequestCommonAssetsRebuild());
                     }
@@ -380,8 +390,6 @@ public final class AetherhavenPlugin extends JavaPlugin {
                 LOGGER.atWarning().log("Asset pack %s not found in AssetModule; Asset Editor may not list this mod", packId);
             }
         }
-        this.config.get();
-        this.reloadAetherhavenAssetCatalogs();
         this.getEventRegistry().register(AssetPackRegisterEvent.class, e -> this.reloadAetherhavenAssetCatalogs());
         AetherhavenFeatureBootstrap.startEnabled(this);
         LOGGER.atInfo().log("Aetherhaven constructions loaded: %s", this.constructionCatalog.ids());
