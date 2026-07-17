@@ -16,13 +16,14 @@ test("normalizes and deduplicates required mods", () => {
   );
 });
 
-test("submission requires explicit valid dependency metadata", () => {
+test("submission accepts omitted or valid dependency metadata", () => {
   const base = {
     displayName: "Safe build",
     prefabPath: "safe.prefab.json",
     plotTokenItemId: "Aetherhaven:PlotToken",
   };
-  assert.equal(validateSubmissionBuilding(base, 8), "required_mods_missing");
+  assert.equal(validateSubmissionBuilding(base, 8), null);
+  assert.equal(validateSubmissionBuilding({ ...base, requiredMods: null }, 8), "required_mods_invalid");
   assert.equal(validateSubmissionBuilding({ ...base, requiredMods: [{ name: "No id" }] }, 8), "required_mods_invalid");
   assert.equal(
     validateSubmissionBuilding(

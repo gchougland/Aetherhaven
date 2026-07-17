@@ -51,6 +51,18 @@ test("validates a published raw building and prefab pair", () => {
   assert.ok(result.prefabBytes > 0);
 });
 
+test("validates raw files when required mods are omitted", () => {
+  const rawBuilding = building();
+  delete rawBuilding.requiredMods;
+  const result = validateAdminRawFilePair({
+    buildingText: JSON.stringify(rawBuilding),
+    prefabText: JSON.stringify(prefab()),
+    publishedId: PUBLISHED_ID,
+  });
+  assert.deepEqual(result.building.requiredMods, undefined);
+  assert.deepEqual(projectAdminRawMetadata(result.building, result.blockIdVersion, result.prefabBytes).requiredMods, []);
+});
+
 test("rejects malformed and oversized raw JSON", () => {
   expectRawError(
     () =>
