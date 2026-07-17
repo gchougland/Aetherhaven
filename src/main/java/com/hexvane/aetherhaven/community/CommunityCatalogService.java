@@ -302,6 +302,15 @@ public final class CommunityCatalogService {
         @Nonnull Set<String> activeStyleFilters,
         @Nonnull CommunityCatalogSort sort
     ) {
+        return buildGroupEntries(activeStyleFilters, sort, false);
+    }
+
+    @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildGroupEntries(
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull CommunityCatalogSort sort,
+        boolean includeMissingMods
+    ) {
         ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
         ObjectArrayList<CommunityManifestEntry> entries = new ObjectArrayList<>(cachedEntries.get());
         entries.sort(comparatorFor(sort));
@@ -309,7 +318,7 @@ public final class CommunityCatalogService {
             if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
                 continue;
             }
-            if (!CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
+            if (!includeMissingMods && !CommunityRequiredMods.isSatisfied(entry.getRequiredMods())) {
                 continue;
             }
             groups.add(

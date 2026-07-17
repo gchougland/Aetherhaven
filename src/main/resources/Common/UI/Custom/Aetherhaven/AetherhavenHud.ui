@@ -1,0 +1,193 @@
+$C = "../Common.ui";
+
+Group #AetherhavenHudRoot {
+  LayoutMode: Full;
+  Anchor: (Full: 0);
+  HitTestVisible: false;
+
+  Group #StatusPanel {
+    LayoutMode: Full;
+    Anchor: (Right: 20, Top: 20, Width: 286, Height: 132);
+    HitTestVisible: false;
+
+    Group #StatusContent {
+      LayoutMode: Top;
+      Anchor: (Full: 0);
+      Padding: (Left: 18, Right: 18, Top: 10, Bottom: 12);
+
+      Group #TimeRow {
+        LayoutMode: Full;
+        Anchor: (Height: 30);
+
+        Label #ClockText {
+          Anchor: (Full: 0);
+          Text: "12:00 am";
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 24, LetterSpacing: 0.5, TextColor: #f3e5c5, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+        }
+      }
+
+      Group #DividerTime {
+        LayoutMode: Middle;
+        Anchor: (Height: 7);
+
+        Group {
+          Anchor: (Horizontal: 0, Height: 1);
+          Background: #9caec0(0.35);
+        }
+      }
+
+      Group #DateRow {
+        LayoutMode: Full;
+        Anchor: (Height: 22);
+
+        Label #DateText {
+          Anchor: (Full: 0);
+          Text: "Spring 1, Year 1";
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 14, LetterSpacing: 0.7, TextColor: #c9d4df, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+        }
+      }
+
+      Group #DividerDate {
+        LayoutMode: Middle;
+        Anchor: (Height: 7);
+
+        Group {
+          Anchor: (Horizontal: 0, Height: 1);
+          Background: #9caec0(0.28);
+        }
+      }
+
+      Group #GoldRow {
+        LayoutMode: Full;
+        Anchor: (Height: 44);
+
+        Group #GoldLeftContent {
+          LayoutMode: Left;
+          Anchor: (Full: 0);
+
+          ItemIcon #GoldIconLeft {
+            Anchor: (Width: 44, Height: 44, Right: -4, Bottom: 5);
+          }
+
+          Label #CoinTextLeft {
+            FlexWeight: 1;
+            Text: "0";
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
+          }
+        }
+
+        Group #GoldRightContent {
+          LayoutMode: Left;
+          Anchor: (Full: 0);
+          Visible: false;
+
+          Label #CoinTextRight {
+            FlexWeight: 1;
+            Text: "0";
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
+          }
+
+          ItemIcon #GoldIconRight {
+            Anchor: (Width: 44, Height: 44, Left: -4, Bottom: 5);
+          }
+        }
+      }
+    }
+  }
+
+  Group #QuestPanel {
+    LayoutMode: Full;
+    Anchor: (Right: 20, Top: 150, Width: 370, Height: 557);
+    Visible: false;
+    HitTestVisible: false;
+
+    Group #QuestContent {
+      LayoutMode: Top;
+      Anchor: (Full: 0);
+
+      Group #QuestHeader {
+        LayoutMode: Full;
+        Anchor: (Height: 26);
+
+        Label #QuestHeading {
+          Anchor: (Full: 0);
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 1.2, TextColor: #e4edf3, OutlineColor: #000000(0.9), RenderBold: true, RenderUppercase: true, VerticalAlignment: Center);
+        }
+      }
+
+      Group #QuestHeaderDivider {
+        LayoutMode: Middle;
+        Anchor: (Height: 7);
+
+        Group {
+          Anchor: (Horizontal: 0, Height: 1);
+          Background: #9db7ca(0.48);
+        }
+      }
+
+      Group #QuestRow1 {
+        LayoutMode: Full;
+        Anchor: (Height: 170, Bottom: 7);
+        Visible: false;
+
+        Group #RowContent {
+          LayoutMode: Top;
+          Anchor: (Full: 0);
+          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Label #QuestTitle {
+            Text: "";
+            Anchor: (Bottom: 3);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+          }
+          Label #QuestObjectives {
+            Text: "";
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+          }
+        }
+      }
+
+      Group #QuestRow2 {
+        LayoutMode: Full;
+        Anchor: (Height: 170, Bottom: 7);
+        Visible: false;
+
+        Group #RowContent {
+          LayoutMode: Top;
+          Anchor: (Full: 0);
+          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Label #QuestTitle {
+            Text: "";
+            Anchor: (Bottom: 3);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+          }
+          Label #QuestObjectives {
+            Text: "";
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+          }
+        }
+      }
+
+      Group #QuestRow3 {
+        LayoutMode: Full;
+        Anchor: (Height: 170);
+        Visible: false;
+
+        Group #RowContent {
+          LayoutMode: Top;
+          Anchor: (Full: 0);
+          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Label #QuestTitle {
+            Text: "";
+            Anchor: (Bottom: 3);
+            Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 15, LetterSpacing: 0.3, TextColor: #f0dfba, OutlineColor: #000000(0.9), RenderBold: true, Wrap: true);
+          }
+          Label #QuestObjectives {
+            Text: "";
+            Style: (...$C.@DefaultLabelStyle, FontSize: 13, TextColor: #d7e0e7, OutlineColor: #000000(0.9), Wrap: true);
+          }
+        }
+      }
+    }
+  }
+}

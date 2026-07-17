@@ -23,6 +23,7 @@ aetherhaven.ui.plotCrafting.unlockSuccess = You unlocked the {building} plot.
 aetherhaven.ui.plotCrafting.unlockAlreadyKnown = You already know this plot.
 aetherhaven.ui.plotCrafting.unlockInvalid = This blueprint cannot be read.
 aetherhaven.ui.plotCrafting.styleFilterTitle = Styles
+aetherhaven.ui.plotCrafting.showMissingModsFilter = Show builds with missing mods
 aetherhaven.ui.plotCrafting.tabCommunityTooltip = Community buildings
 aetherhaven.ui.plotCrafting.loadPreviewButton = Load preview
 aetherhaven.ui.plotCrafting.downloadButton = Download

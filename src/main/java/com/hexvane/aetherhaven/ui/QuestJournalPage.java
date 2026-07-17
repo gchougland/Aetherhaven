@@ -523,6 +523,29 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     false
                 );
             }
+            boolean pinned = stateForTabs.isQuestPinned(sel);
+            boolean pinLimitReached =
+                !pinned && stateForTabs.getPinnedQuestIds().size() >= PlayerTownJournalState.MAX_PINNED_QUESTS;
+            commandBuilder.set("#PinQuestButton.Visible", true);
+            commandBuilder.set("#PinQuestButton.Disabled", pinLimitReached);
+            commandBuilder.set(
+                "#PinQuestButton.TextSpans",
+                Message.translation(
+                    pinned
+                        ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.unpinQuest"
+                        : pinLimitReached
+                            ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.pinLimit"
+                            : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.pinQuest"
+                )
+            );
+            if (!pinLimitReached) {
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#PinQuestButton",
+                    new EventData().append("Action", "ToggleQuestPin").append("QuestId", sel),
+                    false
+                );
+            }
             return;
         }
 
@@ -781,6 +804,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
         }
         commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        commandBuilder.set("#SettingsHudTimeCheck #CheckBox.Value", journalPrefs.isHudShowTime());
+        commandBuilder.set("#SettingsHudDateCheck #CheckBox.Value", journalPrefs.isHudShowDate());
+        commandBuilder.set("#SettingsHudGoldCheck #CheckBox.Value", journalPrefs.isHudShowGold());
+        commandBuilder.set("#SettingsHudQuestsCheck #CheckBox.Value", journalPrefs.isHudShowQuests());
+        commandBuilder.set("#SettingsHudStatusPlacement #Input.Entries", hudPlacementEntries());
+        commandBuilder.set("#SettingsHudStatusPlacement #Input.Value", journalPrefs.getHudStatusPlacement());
+        commandBuilder.set("#SettingsHudStatusXField.Value", String.valueOf(journalPrefs.getHudStatusX()));
+        commandBuilder.set("#SettingsHudStatusYField.Value", String.valueOf(journalPrefs.getHudStatusY()));
+        commandBuilder.set("#SettingsHudQuestPlacement #Input.Entries", hudPlacementEntries());
+        commandBuilder.set("#SettingsHudQuestPlacement #Input.Value", journalPrefs.getHudQuestPlacement());
+        commandBuilder.set("#SettingsHudQuestXField.Value", String.valueOf(journalPrefs.getHudQuestX()));
+        commandBuilder.set("#SettingsHudQuestYField.Value", String.valueOf(journalPrefs.getHudQuestY()));
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
             "#SettingsShowBordersCheck #CheckBox",
@@ -796,7 +831,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData()
                 .append("Action", "PersonalSettingsSave")
                 .append("@RtsFov", "#SettingsRtsPickFovField.Value")
-                .append("@RtsAspect", "#SettingsRtsPickAspectField.Value"),
+                .append("@RtsAspect", "#SettingsRtsPickAspectField.Value")
+                .append("@HudTime", "#SettingsHudTimeCheck #CheckBox.Value")
+                .append("@HudDate", "#SettingsHudDateCheck #CheckBox.Value")
+                .append("@HudGold", "#SettingsHudGoldCheck #CheckBox.Value")
+                .append("@HudQuests", "#SettingsHudQuestsCheck #CheckBox.Value")
+                .append("@HudStatusPlacement", "#SettingsHudStatusPlacement #Input.Value")
+                .append("@HudStatusX", "#SettingsHudStatusXField.Value")
+                .append("@HudStatusY", "#SettingsHudStatusYField.Value")
+                .append("@HudQuestPlacement", "#SettingsHudQuestPlacement #Input.Value")
+                .append("@HudQuestX", "#SettingsHudQuestXField.Value")
+                .append("@HudQuestY", "#SettingsHudQuestYField.Value"),
             false
         );
         eventBuilder.addEventBinding(
@@ -805,6 +850,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             new EventData().append("Action", "PersonalSettingsReset"),
             false
         );
+    }
+
+    @Nonnull
+    private static ObjectArrayList<DropdownEntryInfo> hudPlacementEntries() {
+        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        String base = "aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.place.";
+        entries.add(new DropdownEntryInfo(LocalizableString.fromMessageId(base + "topLeft"), "TOP_LEFT"));
+        entries.add(new DropdownEntryInfo(LocalizableString.fromMessageId(base + "topRight"), "TOP_RIGHT"));
+        entries.add(new DropdownEntryInfo(LocalizableString.fromMessageId(base + "bottomLeft"), "BOTTOM_LEFT"));
+        entries.add(new DropdownEntryInfo(LocalizableString.fromMessageId(base + "bottomRight"), "BOTTOM_RIGHT"));
+        entries.add(new DropdownEntryInfo(LocalizableString.fromMessageId(base + "custom"), "CUSTOM"));
+        return entries;
     }
 
     private void buildJournalSettingsServerTab(
@@ -1757,6 +1814,23 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             }
             st.setLastTab(tab);
+            if (tab == PlayerTownJournalState.JournalTab.QUESTS) {
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                UUIDComponent uuid = store.getComponent(ref, UUIDComponent.getComponentType());
+                if (plugin != null && uuid != null) {
+                    TownRecord town =
+                        AetherhavenWorldRegistries
+                            .getOrCreateTownManager(store.getExternalData().getWorld(), plugin)
+                            .findTownForPlayerInWorld(uuid.getUuid());
+                    if (town != null) {
+                        Set<String> activeIds = new HashSet<>(town.getActiveQuestIdsSnapshot());
+                        for (QuestBoardSlotRecord slot : town.acceptedBoardQuestsSnapshot()) {
+                            activeIds.add(QuestBoardService.journalRowId(slot.instanceIdOrEmpty()));
+                        }
+                        st.retainPinnedQuests(activeIds);
+                    }
+                }
+            }
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             abandonConfirmOpen = false;
             pendingAbandonQuestId = null;
@@ -1782,6 +1856,42 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (qid != null && !qid.isBlank()) {
                 selectedQuestId = qid.trim();
             }
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("ToggleQuestPin")) {
+            String qid = data.questId;
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (qid == null || qid.isBlank() || plugin == null || uc == null) {
+                return;
+            }
+            TownRecord town =
+                AetherhavenWorldRegistries
+                    .getOrCreateTownManager(store.getExternalData().getWorld(), plugin)
+                    .findTownForPlayerInWorld(uc.getUuid());
+            String id = qid.trim();
+            if (town == null || !QuestBoardService.isActiveJournalQuest(town, id)) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            Set<String> activeIds = new HashSet<>(town.getActiveQuestIdsSnapshot());
+            for (QuestBoardSlotRecord slot : town.acceptedBoardQuestsSnapshot()) {
+                activeIds.add(QuestBoardService.journalRowId(slot.instanceIdOrEmpty()));
+            }
+            st.retainPinnedQuests(activeIds);
+            if (st.isQuestPinned(id)) {
+                st.unpinQuest(id);
+            } else {
+                st.pinQuest(id);
+            }
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -2000,6 +2110,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             float fov = (float) parseDoubleSafe(data.rtsFov, 30.0, 120.0, fovDef);
             float aspect = (float) parseDoubleSafe(data.rtsAspect, 0.5, 3.0, aspectDef);
             st.setRtsPickOverrides(fov, aspect);
+            st.setHudPreferences(
+                Boolean.TRUE.equals(data.hudTime),
+                Boolean.TRUE.equals(data.hudDate),
+                Boolean.TRUE.equals(data.hudGold),
+                Boolean.TRUE.equals(data.hudQuests),
+                data.hudStatusPlacement,
+                parseIntSafe(data.hudStatusX, 0, 4000, st.getHudStatusX()),
+                parseIntSafe(data.hudStatusY, 0, 4000, st.getHudStatusY()),
+                data.hudQuestPlacement,
+                parseIntSafe(data.hudQuestX, 0, 4000, st.getHudQuestX()),
+                parseIntSafe(data.hudQuestY, 0, 4000, st.getHudQuestY())
+            );
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             refreshActiveRtsPickTuning(ref, store);
             journalSettingsPersonalStatus =
@@ -2016,6 +2138,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 st = new PlayerTownJournalState();
             }
             st.clearRtsPickOverrides();
+            st.resetHudPreferences();
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             refreshActiveRtsPickTuning(ref, store);
             journalSettingsPersonalStatus =
@@ -2620,6 +2743,26 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@Checked", Codec.BOOLEAN), (d, v) -> d.checked = v, d -> d.checked)
             .add()
+            .append(new KeyedCodec<>("@HudTime", Codec.BOOLEAN), (d, v) -> d.hudTime = v, d -> d.hudTime)
+            .add()
+            .append(new KeyedCodec<>("@HudDate", Codec.BOOLEAN), (d, v) -> d.hudDate = v, d -> d.hudDate)
+            .add()
+            .append(new KeyedCodec<>("@HudGold", Codec.BOOLEAN), (d, v) -> d.hudGold = v, d -> d.hudGold)
+            .add()
+            .append(new KeyedCodec<>("@HudQuests", Codec.BOOLEAN), (d, v) -> d.hudQuests = v, d -> d.hudQuests)
+            .add()
+            .append(new KeyedCodec<>("@HudStatusPlacement", Codec.STRING), (d, v) -> d.hudStatusPlacement = v, d -> d.hudStatusPlacement)
+            .add()
+            .append(new KeyedCodec<>("@HudStatusX", Codec.STRING), (d, v) -> d.hudStatusX = v, d -> d.hudStatusX)
+            .add()
+            .append(new KeyedCodec<>("@HudStatusY", Codec.STRING), (d, v) -> d.hudStatusY = v, d -> d.hudStatusY)
+            .add()
+            .append(new KeyedCodec<>("@HudQuestPlacement", Codec.STRING), (d, v) -> d.hudQuestPlacement = v, d -> d.hudQuestPlacement)
+            .add()
+            .append(new KeyedCodec<>("@HudQuestX", Codec.STRING), (d, v) -> d.hudQuestX = v, d -> d.hudQuestX)
+            .add()
+            .append(new KeyedCodec<>("@HudQuestY", Codec.STRING), (d, v) -> d.hudQuestY = v, d -> d.hudQuestY)
+            .add()
             .build();
 
         @Nullable
@@ -2676,5 +2819,25 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String rtsAspect;
         @Nullable
         private Boolean checked;
+        @Nullable
+        private Boolean hudTime;
+        @Nullable
+        private Boolean hudDate;
+        @Nullable
+        private Boolean hudGold;
+        @Nullable
+        private Boolean hudQuests;
+        @Nullable
+        private String hudStatusPlacement;
+        @Nullable
+        private String hudStatusX;
+        @Nullable
+        private String hudStatusY;
+        @Nullable
+        private String hudQuestPlacement;
+        @Nullable
+        private String hudQuestX;
+        @Nullable
+        private String hudQuestY;
     }
 }

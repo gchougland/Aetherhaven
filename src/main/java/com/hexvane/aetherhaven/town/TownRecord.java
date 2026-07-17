@@ -743,8 +743,8 @@ public final class TownRecord {
     }
 
     /**
-     * Elder, innkeeper, inn visitors, locked visitors, resident registry rows, and house assignments — every NPC entity
-     * UUID the town persists. Used when stripping prefab volumes so these are never removed as debris.
+     * Every NPC entity UUID persisted by this town. Used for dissolution cleanup, building relocation, telemetry, and
+     * protecting town NPCs when stripping prefab volumes.
      */
     public void collectTrackedNpcEntityUuids(@Nonnull Set<UUID> out) {
         UUID nil = new UUID(0L, 0L);
@@ -755,27 +755,32 @@ public final class TownRecord {
             out.add(getInnkeeperEntityUuid());
         }
         for (String s : getInnPoolNpcIds()) {
-            if (s == null || s.isBlank()) {
-                continue;
-            }
-            try {
-                UUID u = UUID.fromString(s.trim());
-                if (!nil.equals(u)) {
-                    out.add(u);
-                }
-            } catch (IllegalArgumentException ignored) {
-            }
+            addTrackedNpcUuid(out, s, nil);
         }
         for (String s : getInnLockedEntityUuids()) {
-            if (s == null || s.isBlank()) {
-                continue;
+            addTrackedNpcUuid(out, s, nil);
+        }
+        UUID guildMasterUuid = getGuildMasterEntityUuid();
+        if (guildMasterUuid != null && !nil.equals(guildMasterUuid)) {
+            out.add(guildMasterUuid);
+        }
+        for (String s : getGuildHallAdventurerNpcIds()) {
+            addTrackedNpcUuid(out, s, nil);
+        }
+        // Include the slot-map keys as a fallback for partially inconsistent legacy saves.
+        for (String s : getGuildHallAdventurerSlotByNpcId().keySet()) {
+            addTrackedNpcUuid(out, s, nil);
+        }
+        for (HiredGuardRecord guard : getHiredGuardRecords()) {
+            UUID u = guard != null ? guard.getEntityUuid() : null;
+            if (u != null && !nil.equals(u)) {
+                out.add(u);
             }
-            try {
-                UUID u = UUID.fromString(s.trim());
-                if (!nil.equals(u)) {
-                    out.add(u);
-                }
-            } catch (IllegalArgumentException ignored) {
+        }
+        for (com.hexvane.aetherhaven.tourist.TouristRecord tourist : getTouristRecords()) {
+            UUID u = tourist != null ? tourist.getEntityUuid() : null;
+            if (u != null && !nil.equals(u)) {
+                out.add(u);
             }
         }
         for (ResidentNpcRecord r : getResidentNpcRecords()) {
@@ -790,6 +795,19 @@ public final class TownRecord {
                     out.add(h);
                 }
             }
+        }
+    }
+
+    private static void addTrackedNpcUuid(@Nonnull Set<UUID> out, @Nullable String raw, @Nonnull UUID nil) {
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        try {
+            UUID u = UUID.fromString(raw.trim());
+            if (!nil.equals(u)) {
+                out.add(u);
+            }
+        } catch (IllegalArgumentException ignored) {
         }
     }
 

@@ -8,11 +8,17 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /** Last opened tab in the Town Journal UI, persisted on the player entity. */
 public final class PlayerTownJournalState implements Component<EntityStore> {
+    public static final int MAX_PINNED_QUESTS = 3;
+
     public enum JournalTab {
         TOWN,
         GUIDE,
@@ -99,6 +105,28 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 },
                 c -> c.rtsPickAspectOverride)
             .add()
+            .append(new KeyedCodec<>("HudShowTime", Codec.BOOLEAN), (c, v) -> c.hudShowTime = valueOr(v, true), c -> c.hudShowTime)
+            .add()
+            .append(new KeyedCodec<>("HudShowDate", Codec.BOOLEAN), (c, v) -> c.hudShowDate = valueOr(v, true), c -> c.hudShowDate)
+            .add()
+            .append(new KeyedCodec<>("HudShowGold", Codec.BOOLEAN), (c, v) -> c.hudShowGold = valueOr(v, true), c -> c.hudShowGold)
+            .add()
+            .append(new KeyedCodec<>("HudShowQuests", Codec.BOOLEAN), (c, v) -> c.hudShowQuests = valueOr(v, true), c -> c.hudShowQuests)
+            .add()
+            .append(new KeyedCodec<>("HudStatusPlacement", Codec.STRING), (c, v) -> c.hudStatusPlacement = placement(v, "TOP_RIGHT"), c -> c.hudStatusPlacement)
+            .add()
+            .append(new KeyedCodec<>("HudStatusX", Codec.INTEGER), (c, v) -> c.hudStatusX = offset(v, 0), c -> c.hudStatusX)
+            .add()
+            .append(new KeyedCodec<>("HudStatusY", Codec.INTEGER), (c, v) -> c.hudStatusY = offset(v, 0), c -> c.hudStatusY)
+            .add()
+            .append(new KeyedCodec<>("HudQuestPlacement", Codec.STRING), (c, v) -> c.hudQuestPlacement = placement(v, "TOP_RIGHT"), c -> c.hudQuestPlacement)
+            .add()
+            .append(new KeyedCodec<>("HudQuestX", Codec.INTEGER), (c, v) -> c.hudQuestX = offset(v, 0), c -> c.hudQuestX)
+            .add()
+            .append(new KeyedCodec<>("HudQuestY", Codec.INTEGER), (c, v) -> c.hudQuestY = offset(v, 130), c -> c.hudQuestY)
+            .add()
+            .append(new KeyedCodec<>("HudPinnedQuests", Codec.STRING), (c, v) -> c.decodePinnedQuests(v), PlayerTownJournalState::encodePinnedQuests)
+            .add()
             .build();
 
     @Nullable
@@ -131,6 +159,21 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     private float rtsPickAspectOverride;
 
+    private boolean hudShowTime = true;
+    private boolean hudShowDate = true;
+    private boolean hudShowGold = true;
+    private boolean hudShowQuests = true;
+    @Nonnull
+    private String hudStatusPlacement = "TOP_RIGHT";
+    private int hudStatusX;
+    private int hudStatusY;
+    @Nonnull
+    private String hudQuestPlacement = "TOP_RIGHT";
+    private int hudQuestX;
+    private int hudQuestY = 130;
+    @Nonnull
+    private final List<String> hudPinnedQuests = new ArrayList<>();
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -142,6 +185,17 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.lastSettingsSubTab = lastSettingsSubTab;
         c.rtsPickFovOverride = rtsPickFovOverride;
         c.rtsPickAspectOverride = rtsPickAspectOverride;
+        c.hudShowTime = hudShowTime;
+        c.hudShowDate = hudShowDate;
+        c.hudShowGold = hudShowGold;
+        c.hudShowQuests = hudShowQuests;
+        c.hudStatusPlacement = hudStatusPlacement;
+        c.hudStatusX = hudStatusX;
+        c.hudStatusY = hudStatusY;
+        c.hudQuestPlacement = hudQuestPlacement;
+        c.hudQuestX = hudQuestX;
+        c.hudQuestY = hudQuestY;
+        c.hudPinnedQuests.addAll(hudPinnedQuests);
         return c;
     }
 
@@ -187,5 +241,148 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     public float effectiveRtsPickAspectRatio() {
         return rtsPickAspectOverride > 0f ? rtsPickAspectOverride : AetherhavenConstants.RTS_COMMAND_PICK_ASPECT_RATIO;
+    }
+
+    public boolean isHudShowTime() {
+        return hudShowTime;
+    }
+
+    public boolean isHudShowDate() {
+        return hudShowDate;
+    }
+
+    public boolean isHudShowGold() {
+        return hudShowGold;
+    }
+
+    public boolean isHudShowQuests() {
+        return hudShowQuests;
+    }
+
+    @Nonnull
+    public String getHudStatusPlacement() {
+        return hudStatusPlacement;
+    }
+
+    public int getHudStatusX() {
+        return hudStatusX;
+    }
+
+    public int getHudStatusY() {
+        return hudStatusY;
+    }
+
+    @Nonnull
+    public String getHudQuestPlacement() {
+        return hudQuestPlacement;
+    }
+
+    public int getHudQuestX() {
+        return hudQuestX;
+    }
+
+    public int getHudQuestY() {
+        return hudQuestY;
+    }
+
+    public void setHudPreferences(
+        boolean showTime,
+        boolean showDate,
+        boolean showGold,
+        boolean showQuests,
+        @Nullable String statusPlacement,
+        int statusX,
+        int statusY,
+        @Nullable String questPlacement,
+        int questX,
+        int questY
+    ) {
+        hudShowTime = showTime;
+        hudShowDate = showDate;
+        hudShowGold = showGold;
+        hudShowQuests = showQuests;
+        hudStatusPlacement = placement(statusPlacement, "TOP_RIGHT");
+        hudStatusX = offset(statusX, 0);
+        hudStatusY = offset(statusY, 0);
+        hudQuestPlacement = placement(questPlacement, "TOP_RIGHT");
+        hudQuestX = offset(questX, 0);
+        hudQuestY = offset(questY, 130);
+    }
+
+    public void resetHudPreferences() {
+        setHudPreferences(true, true, true, true, "TOP_RIGHT", 0, 0, "TOP_RIGHT", 0, 130);
+    }
+
+    @Nonnull
+    public List<String> getPinnedQuestIds() {
+        return Collections.unmodifiableList(hudPinnedQuests);
+    }
+
+    public boolean isQuestPinned(@Nullable String questId) {
+        return questId != null && hudPinnedQuests.contains(questId.trim());
+    }
+
+    public boolean pinQuest(@Nullable String questId) {
+        if (questId == null) {
+            return false;
+        }
+        String id = questId.trim();
+        if (id.isEmpty() || hudPinnedQuests.contains(id) || hudPinnedQuests.size() >= MAX_PINNED_QUESTS) {
+            return false;
+        }
+        hudPinnedQuests.add(id);
+        return true;
+    }
+
+    public boolean unpinQuest(@Nullable String questId) {
+        return questId != null && hudPinnedQuests.remove(questId.trim());
+    }
+
+    public boolean retainPinnedQuests(@Nonnull Set<String> activeQuestIds) {
+        return hudPinnedQuests.removeIf(id -> !activeQuestIds.contains(id));
+    }
+
+    private void decodePinnedQuests(@Nullable String encoded) {
+        hudPinnedQuests.clear();
+        if (encoded == null || encoded.isBlank()) {
+            return;
+        }
+        for (String line : encoded.split("\n")) {
+            if (hudPinnedQuests.size() >= MAX_PINNED_QUESTS) {
+                break;
+            }
+            pinQuest(line);
+        }
+    }
+
+    @Nonnull
+    private String encodePinnedQuests() {
+        return String.join("\n", hudPinnedQuests);
+    }
+
+    private static boolean valueOr(@Nullable Boolean value, boolean fallback) {
+        return value != null ? value : fallback;
+    }
+
+    @Nonnull
+    private static String placement(@Nullable String value, @Nonnull String fallback) {
+        if (value == null) {
+            return fallback;
+        }
+        return switch (value.trim().toUpperCase()) {
+            case "TOP_LEFT", "TOP_RIGHT", "BOTTOM_LEFT", "BOTTOM_RIGHT", "CUSTOM" -> value.trim().toUpperCase();
+            default -> fallback;
+        };
+    }
+
+    private static int offset(@Nullable Integer value, int fallback) {
+        return value != null ? offset(value.intValue(), fallback) : fallback;
+    }
+
+    private static int offset(int value, int fallback) {
+        if (value < 0) {
+            return 0;
+        }
+        return Math.min(value, 4000);
     }
 }

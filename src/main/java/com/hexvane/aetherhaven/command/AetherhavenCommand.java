@@ -10,6 +10,7 @@ public final class AetherhavenCommand extends AbstractCommandCollection {
         this.setPermissionGroups("hytale:Adventurer");
         this.addAliases("ah");
         this.addSubCommand(new AetherhavenStarterKitCommand());
+        this.addSubCommand(new AetherhavenStarterTownCommand());
         this.addSubCommand(new AetherhavenTownsCommand());
         this.addSubCommand(new AetherhavenReplaceCharterCommand());
         this.addSubCommand(new AetherhavenTownCommand());

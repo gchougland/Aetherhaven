@@ -173,3 +173,18 @@ commands.aetherhaven.plottoken.list.desc=List all building ids
 
 commands.aetherhaven.debug.townFlag.desc=Target town by display name or UUID (creative / town admin)
 commands.aetherhaven.debug.playerFlag.desc=Target the town of an online player or UUID (creative / town admin)
+
+commands.aetherhaven.startertown.desc=Instantly build a terrain-aware starter town for testing
+commands.aetherhaven.startertown.preset=Building preset: minimal or full (default minimal)
+commands.aetherhaven.startertown.layout=Layout: line or generated (default generated)
+commands.aetherhaven.startertown.seed=Optional signed integer seed for a reproducible layout
+commands.aetherhaven.startertown.temporary=Starter towns cannot be created in temporary instance worlds
+commands.aetherhaven.startertown.badPreset=Preset must be minimal or full
+commands.aetherhaven.startertown.badLayout=Layout must be line or generated
+commands.aetherhaven.startertown.badSeed=Seed must be a signed integer
+commands.aetherhaven.startertown.chunkMissing=The terrain chunk at your position is unavailable
+commands.aetherhaven.startertown.preflightFailed=Starter-town preflight failed: {reason}
+commands.aetherhaven.startertown.foundFailed=Could not place and link a charter at your position
+commands.aetherhaven.startertown.started=Building {count} structures with {layout} layout (seed {seed})
+commands.aetherhaven.startertown.done=Starter town complete: {buildings} buildings, {paths} paths, {quests} building quests, {villagers} villagers ({skipped} without a new villager). Seed: {seed}
+commands.aetherhaven.startertown.failed=Starter-town construction stopped: {reason}

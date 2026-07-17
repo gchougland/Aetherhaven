@@ -116,6 +116,20 @@ public final class TownsfolkExistenceService {
         }
     }
 
+    /** Releases all pooled characters assigned to a dissolved town and persists the ledger once. */
+    public static int releaseForTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId
+    ) {
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        int released = pool.releaseForTown(townId);
+        if (released > 0) {
+            TownsfolkPoolPersistence.save(world, plugin, pool);
+        }
+        return released;
+    }
+
     @Nullable
     public static TownsfolkPoolCheckoutRecord checkoutForCharacter(
         @Nonnull World world,

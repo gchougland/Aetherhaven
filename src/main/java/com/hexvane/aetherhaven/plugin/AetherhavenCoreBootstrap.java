@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenCommunityCommand;
 import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
+import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
+import com.hexvane.aetherhaven.hud.AetherhavenHudSupport;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.npc.AetherhavenNpcRoleLoader;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
@@ -94,7 +96,11 @@ public final class AetherhavenCoreBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
 
-        registerCorePlayerLifecycleHooks(plugin);
+        AetherhavenHudRefreshSystem hudRefreshSystem = new AetherhavenHudRefreshSystem(plugin);
+        plugin.getEntityStoreRegistry().registerSystem(hudRefreshSystem);
+        plugin.getGameTimeHub().register(hudRefreshSystem);
+
+        registerCorePlayerLifecycleHooks(plugin, hudRefreshSystem);
 
         plugin
             .getEventRegistry()
@@ -104,7 +110,13 @@ public final class AetherhavenCoreBootstrap {
             .registerGlobal(AddWorldEvent.class, e -> AetherhavenWorldRegistries.bootstrapWorld(e.getWorld(), plugin));
         plugin
             .getEventRegistry()
-            .registerGlobal(RemoveWorldEvent.class, e -> AetherhavenWorldRegistries.unloadWorld(e.getWorld()));
+            .registerGlobal(
+                RemoveWorldEvent.class,
+                e -> {
+                    hudRefreshSystem.clearWorld(e.getWorld().getName());
+                    AetherhavenWorldRegistries.unloadWorld(e.getWorld());
+                }
+            );
         plugin
             .getEventRegistry()
             .registerGlobal(AllWorldsLoadedEvent.class, e -> scheduleTeleporterWarpSanitizeAfterLoad());
@@ -171,7 +183,10 @@ public final class AetherhavenCoreBootstrap {
         }
     }
 
-    private static void registerCorePlayerLifecycleHooks(@Nonnull AetherhavenPlugin plugin) {
+    private static void registerCorePlayerLifecycleHooks(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenHudRefreshSystem hudRefreshSystem
+    ) {
         plugin
             .getEventRegistry()
             .registerGlobal(
@@ -187,6 +202,10 @@ public final class AetherhavenCoreBootstrap {
                             () -> {
                                 Ref<EntityStore> ref = player.getReference();
                                 Store<EntityStore> store = ref.getStore();
+                                PlayerRef readyPlayerRef = store.getComponent(ref, PlayerRef.getComponentType());
+                                if (readyPlayerRef != null) {
+                                    AetherhavenHudSupport.obtain(player, readyPlayerRef);
+                                }
                                 QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());
                                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                                 if (uc != null) {
@@ -221,6 +240,7 @@ public final class AetherhavenCoreBootstrap {
                         plugin.getPlotTokenIconPacketAdapter().onPlayerLeave(event.getPlayerRef().getUuid());
                     }
                     QuestBoardOnlineDawnService.clearPlayer(event.getPlayerRef().getUuid());
+                    hudRefreshSystem.clearPlayer(event.getPlayerRef().getUuid());
                 }
             );
     }

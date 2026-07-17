@@ -1,15 +1,18 @@
 # Changelog
 
-## [2.3.1] - Unreleased
+## [2.4.0] - Unreleased
 
 ### Added
 
 - **Community building mod requirements** — Marketplace cards, building details, and pending-submission reviews clearly list required external mods and their asset-pack ids.
+- **Custom town HUD** — The screen can now show the current time and date, your total gold, and up to three quests pinned from the town journal. Each section can be hidden or moved from the journal settings.
+- **Starter town testing command** — `/ah startertown` can instantly create a minimal or full town in either a straight line or a generated layout. It follows the terrain, lays wide connecting paths, completes the matching building quests, and moves in the appropriate villagers. The full preset includes every core building, including the guild hall and tourist portal.
 
 ### Changed
 
 - **Plot creator Inn Bells** — Inn buildings and variants now require an Inn Bell. The plot creator staff provides one and asks you to place and confirm it before saving.
 - **Plot crafting building details** — A new scrollable panel beside the prefab preview appears on every tab and shows the selected building’s name, creator/id, description, plot-token and construction gold costs, required mods, and required materials with icons and quantities.
+- **Community missing-mod filter** — The Community tab’s Styles panel has a toggle to reveal buildings that require mods not installed on the server. Building Details lists the missing packs, while preview and download remain disabled until every dependency is installed.
 - **Community moderation safety** — Selecting a pending building no longer loads its prefab automatically. Preview downloads, installs, test crafting, approvals, and denials run without blocking the world/UI thread, and approval requires a successfully validated preview with all required mods installed.
 - **Community dependency detection** — Required mods are derived from the prefab’s actual block and fluid assets. Mods that merely override an existing vanilla or Aetherhaven asset are no longer treated as hard dependencies, and moderation previews recalculate and repair dependency metadata before approval.
 

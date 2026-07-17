@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.villager;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -12,6 +15,7 @@ import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.systems.NPCPreTickSystem;
@@ -21,6 +25,25 @@ import javax.annotation.Nonnull;
 /** Keeps town villagers out of the base game's NPC despawn checks and clears stray spawn linkage on load or tick. */
 public final class TownVillagerNpcWorldSpawnSanitizeSystems {
     private TownVillagerNpcWorldSpawnSanitizeSystems() {}
+
+    private static boolean removeIfTownWasDissolved(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (binding == null || plugin == null) {
+            return false;
+        }
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        if (tm.getTown(binding.getTownId()) != null) {
+            return false;
+        }
+        commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
+        return true;
+    }
 
     public static final class OnAdd extends RefSystem<EntityStore> {
         @Nonnull
@@ -48,6 +71,9 @@ public final class TownVillagerNpcWorldSpawnSanitizeSystems {
             @Nonnull Store<EntityStore> store,
             @Nonnull CommandBuffer<EntityStore> commandBuffer
         ) {
+            if (removeIfTownWasDissolved(ref, store, commandBuffer)) {
+                return;
+            }
             NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
             if (npc == null) {
                 return;
@@ -95,6 +121,9 @@ public final class TownVillagerNpcWorldSpawnSanitizeSystems {
             @Nonnull CommandBuffer<EntityStore> commandBuffer
         ) {
             Ref<EntityStore> ref = archetypeChunk.getReferenceTo(index);
+            if (removeIfTownWasDissolved(ref, store, commandBuffer)) {
+                return;
+            }
             NPCEntity npc = archetypeChunk.getComponent(index, NPCEntity.getComponentType());
             if (npc == null) {
                 return;

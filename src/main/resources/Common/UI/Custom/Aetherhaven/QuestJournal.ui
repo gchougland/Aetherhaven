@@ -242,6 +242,11 @@ $C.@PageOverlay {
                     LayoutMode: Left;
                     Anchor: (Bottom: 8);
 
+                    $C.@TextButton #PinQuestButton {
+                      Text: "";
+                      Anchor: (Right: 8);
+                    }
+
                     $C.@CancelTextButton #AbandonQuestButton {
                       Text: "";
                       Anchor: (Right: 8);
@@ -474,6 +479,116 @@ $C.@PageOverlay {
                           Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
                           Text: "";
                         }
+                      }
+
+                      Label #SettingsHudHeading {
+                        Anchor: (Top: 8, Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsHudHint {
+                        Anchor: (Bottom: 10);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group #SettingsHudTimeRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 6);
+                        Group #SettingsHudTimeCheck { LayoutMode: Left; $C.@CheckBox #CheckBox {} }
+                        Label #SettingsHudTimeLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Group #SettingsHudDateRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 6);
+                        Group #SettingsHudDateCheck { LayoutMode: Left; $C.@CheckBox #CheckBox {} }
+                        Label #SettingsHudDateLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Group #SettingsHudGoldRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 6);
+                        Group #SettingsHudGoldCheck { LayoutMode: Left; $C.@CheckBox #CheckBox {} }
+                        Label #SettingsHudGoldLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Group #SettingsHudQuestsRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 10);
+                        Group #SettingsHudQuestsCheck { LayoutMode: Left; $C.@CheckBox #CheckBox {} }
+                        Label #SettingsHudQuestsLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Label #SettingsHudStatusPositionLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsHudStatusPositionRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 8);
+                        Group #SettingsHudStatusPlacement {
+                          LayoutMode: Left;
+                          Anchor: (Width: 250, Right: 10);
+                          $C.@DropdownBox #Input { @Anchor = (Left: 0, Right: 0); }
+                        }
+                        Label #SettingsHudStatusXLabel {
+                          Anchor: (Top: 10, Right: 6, Width: 18);
+                          Style: $C.@DefaultLabelStyle;
+                          Text: "";
+                        }
+                        $C.@TextField #SettingsHudStatusXField { Anchor: (Width: 80, Height: 40, Right: 10); }
+                        Label #SettingsHudStatusYLabel {
+                          Anchor: (Top: 10, Right: 6, Width: 18);
+                          Style: $C.@DefaultLabelStyle;
+                          Text: "";
+                        }
+                        $C.@TextField #SettingsHudStatusYField { Anchor: (Width: 80, Height: 40); }
+                      }
+
+                      Label #SettingsHudQuestPositionLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsHudQuestPositionRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 12);
+                        Group #SettingsHudQuestPlacement {
+                          LayoutMode: Left;
+                          Anchor: (Width: 250, Right: 10);
+                          $C.@DropdownBox #Input { @Anchor = (Left: 0, Right: 0); }
+                        }
+                        Label #SettingsHudQuestXLabel {
+                          Anchor: (Top: 10, Right: 6, Width: 18);
+                          Style: $C.@DefaultLabelStyle;
+                          Text: "";
+                        }
+                        $C.@TextField #SettingsHudQuestXField { Anchor: (Width: 80, Height: 40, Right: 10); }
+                        Label #SettingsHudQuestYLabel {
+                          Anchor: (Top: 10, Right: 6, Width: 18);
+                          Style: $C.@DefaultLabelStyle;
+                          Text: "";
+                        }
+                        $C.@TextField #SettingsHudQuestYField { Anchor: (Width: 80, Height: 40); }
                       }
 
                       Label #SettingsRtsPickHeading {

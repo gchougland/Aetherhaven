@@ -97,6 +97,14 @@ public final class TownsfolkPoolState {
         return checkouts.remove(characterId.trim()) != null;
     }
 
+    /** Releases every character checkout owned by a town. */
+    public int releaseForTown(@Nonnull UUID townId) {
+        String id = townId.toString();
+        int before = checkouts.size();
+        checkouts.entrySet().removeIf(e -> id.equalsIgnoreCase(e.getValue().getTownId().trim()));
+        return before - checkouts.size();
+    }
+
     public int clearAllCheckouts() {
         int n = checkouts.size();
         checkouts.clear();

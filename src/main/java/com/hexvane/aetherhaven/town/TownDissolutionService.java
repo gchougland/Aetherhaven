@@ -8,9 +8,12 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotPlotRelocation;
 import com.hexvane.aetherhaven.shopspot.ShopSpotRegistry;
 import com.hexvane.aetherhaven.tourist.TouristPortalPlotRelocation;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
-import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.component.RemoveReason;
+import com.hexvane.aetherhaven.townsfolk.PendingEntityRemovalService;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkExistenceService;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
@@ -40,17 +43,11 @@ public final class TownDissolutionService {
 
         LinkedHashSet<UUID> npcUuids = new LinkedHashSet<>();
         town.collectTrackedNpcEntityUuids(npcUuids);
+        collectLoadedBoundNpcUuids(entityStore, townId, npcUuids);
         UUID nil = new UUID(0L, 0L);
-        for (UUID u : npcUuids) {
-            if (u == null || nil.equals(u)) {
-                continue;
-            }
-            Ref<EntityStore> er = entityStore.getExternalData().getRefFromUUID(u);
-            if (er == null || !er.isValid()) {
-                continue;
-            }
-            entityStore.removeEntity(er, RemoveReason.REMOVE);
-        }
+        npcUuids.remove(nil);
+        PendingEntityRemovalService.scheduleAll(world, new ArrayList<>(npcUuids));
+        TownsfolkExistenceService.releaseForTown(world, plugin, townId);
 
         List<PlotInstance> plots = new ArrayList<>(town.getPlotInstances());
         for (PlotInstance p : plots) {
@@ -60,6 +57,25 @@ public final class TownDissolutionService {
         reg.unregisterAllForTown(townId);
         tm.removeTown(townId);
         world.breakBlock(town.getCharterX(), town.getCharterY(), town.getCharterZ(), BREAK_SETTINGS);
+    }
+
+    private static void collectLoadedBoundNpcUuids(
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull UUID townId,
+        @Nonnull LinkedHashSet<UUID> out
+    ) {
+        entityStore.forEachChunk(
+            Query.and(TownVillagerBinding.getComponentType(), UUIDComponent.getComponentType()),
+            (chunk, commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    TownVillagerBinding binding = chunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    UUIDComponent uuid = chunk.getComponent(i, UUIDComponent.getComponentType());
+                    if (binding != null && uuid != null && townId.equals(binding.getTownId())) {
+                        out.add(uuid.getUuid());
+                    }
+                }
+            }
+        );
     }
 
     /**

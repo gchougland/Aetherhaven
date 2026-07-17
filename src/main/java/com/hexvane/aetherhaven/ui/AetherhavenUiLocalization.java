@@ -302,6 +302,18 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsTabServer.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.tab.server"));
         b.set("#SettingsPersonalHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHeading"));
         b.set("#SettingsPersonalHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHint"));
+        b.set("#SettingsHudHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.heading"));
+        b.set("#SettingsHudHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.hint"));
+        b.set("#SettingsHudTimeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showTime"));
+        b.set("#SettingsHudDateLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showDate"));
+        b.set("#SettingsHudGoldLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showGold"));
+        b.set("#SettingsHudQuestsLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showQuests"));
+        b.set("#SettingsHudStatusPositionLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.statusPosition"));
+        b.set("#SettingsHudQuestPositionLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.questPosition"));
+        b.set("#SettingsHudStatusXLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.x"));
+        b.set("#SettingsHudStatusYLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.y"));
+        b.set("#SettingsHudQuestXLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.x"));
+        b.set("#SettingsHudQuestYLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.y"));
         b.set("#SettingsRtsPickHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.rtsPickHeading"));
         b.set(
             "#SettingsRtsPickFovLabel.TextSpans",

@@ -1,20 +1,11 @@
 package com.hexvane.aetherhaven.charter;
 
-import com.hypixel.hytale.math.vector.Rotation3f;
-
-import com.hypixel.hytale.math.vector.Vector3fUtil;
-
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plot.CharterBlock;
 import com.hexvane.aetherhaven.difficulty.WorldDifficultyState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.ui.DifficultyPage;
-import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
-import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
-import com.hexvane.aetherhaven.villager.TownVillagerBinding;
-import com.hexvane.aetherhaven.villager.VillagerNeeds;
-import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
@@ -26,8 +17,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
-import org.joml.Vector3d;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -40,7 +29,6 @@ import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
-import com.hypixel.hytale.server.npc.NPCPlugin;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -124,37 +112,19 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             return;
         }
 
-        UUID townId = UUID.randomUUID();
-        int radius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());
-        TownRecord record = new TownRecord(
-            townId,
-            owner,
-            world.getName(),
-            pos.x,
-            pos.y,
-            pos.z,
-            0,
-            radius,
-            System.currentTimeMillis()
-        );
-
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        record.setDisplayName(plugin.getTownNameCatalog().pickUniqueDisplayName(tm, ThreadLocalRandom.current()));
-        tm.putTown(record);
-
-        charter.setTownId(townId.toString());
-        cstore.putComponent(blockRef, CharterBlock.getComponentType(), charter);
-
-        if (!record.isElderSpawned()) {
-            spawnElder(world, record, tm);
-            record.setElderSpawned(true);
-            tm.updateTown(record);
+        TownRecord record =
+            TownFoundingService.foundFromPlacedCharter(world, plugin, owner, pos, ThreadLocalRandom.current());
+        if (record == null) {
+            return;
         }
+
+        charter.setTownId(record.getTownId().toString());
+        cstore.putComponent(blockRef, CharterBlock.getComponentType(), charter);
 
         playerRef.sendMessage(
             Message.translation("aetherhaven_common.aetherhaven.charter.townFounded").param("name", record.getDisplayName())
         );
-        LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", townId, owner, pos);
+        LOGGER.atInfo().log("Aetherhaven town %s created for %s at %s", record.getTownId(), owner, pos);
 
         WorldDifficultyState difficulty = AetherhavenWorldRegistries.getOrLoadWorldDifficulty(world, plugin);
         if (!difficulty.isDifficultyChosen()) {
@@ -166,53 +136,10 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
     }
 
-    private static void spawnElder(@Nonnull World world, @Nonnull TownRecord town, @Nonnull TownManager tm) {
-        NPCPlugin npc = NPCPlugin.get();
-        if (npc == null) {
-            return;
-        }
-        Vector3d p = new Vector3d(town.getCharterX() + 2.5, town.getCharterY(), town.getCharterZ() + 0.5);
-        Store<EntityStore> store = world.getEntityStore().getStore();
-        var pair = npc.spawnNPC(store, AetherhavenConstants.ELDER_NPC_ROLE_ID, null, p, Rotation3f.ZERO);
-        if (pair == null) {
-            LOGGER.atWarning().log("Failed to spawn elder NPC for town %s", town.getTownId());
-            return;
-        }
-        Ref<EntityStore> elderRef = pair.first();
-        store.putComponent(elderRef, VillagerNeeds.getComponentType(), VillagerNeeds.full());
-        String handle = elderDebugHandle(town.getTownId());
-        store.putComponent(elderRef, AetherhavenVillagerHandle.getComponentType(), new AetherhavenVillagerHandle(handle));
-        store.putComponent(
-            elderRef,
-            TownVillagerBinding.getComponentType(),
-            new TownVillagerBinding(town.getTownId(), TownVillagerBinding.KIND_ELDER, null)
-        );
-        NpcSpawnOriginUtil.attach(store, elderRef, "CHARTER_ELDER", "townId=" + town.getTownId(), world, p);
-        UUIDComponent elderUuid = store.getComponent(elderRef, UUIDComponent.getComponentType());
-        if (elderUuid != null) {
-            town.setElderEntityUuid(elderUuid.getUuid());
-            ResidentRegistryService.upsert(
-                town,
-                tm,
-                AetherhavenConstants.ELDER_NPC_ROLE_ID,
-                TownVillagerBinding.KIND_ELDER,
-                null,
-                elderUuid.getUuid()
-            );
-            tm.updateTown(town);
-        }
-    }
-
     @Nullable
     @Override
     public Query<EntityStore> getQuery() {
         return Archetype.empty();
     }
 
-    @Nonnull
-    private static String elderDebugHandle(@Nonnull UUID townId) {
-        String hex = townId.toString().replace("-", "");
-        String suffix = hex.length() >= 8 ? hex.substring(0, 8) : hex;
-        return "Villager_Elder_" + suffix;
-    }
 }

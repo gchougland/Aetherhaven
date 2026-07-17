@@ -41,13 +41,27 @@ public final class PathCementService {
         int pathStyleIndex,
         int pathWidthBlocks
     ) {
+        return tryCement(world, cfg, plan, pathStyleIndex, pathWidthBlocks, ThreadLocalRandom.current());
+    }
+
+    /**
+     * Seedable variant used by generated towns and other reproducible world-building tools.
+     */
+    @Nullable
+    public static PathCommitRecord tryCement(
+        @Nonnull World world,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull List<PathPlannedCell.Planned> plan,
+        int pathStyleIndex,
+        int pathWidthBlocks,
+        @Nonnull Random random
+    ) {
         if (plan.isEmpty()) {
             return null;
         }
         List<PathToolUndoCell> undos = new ArrayList<>();
         @Nonnull
         Set<String> grassCleared = new HashSet<>();
-        Random r = ThreadLocalRandom.current();
         for (PathPlannedCell.Planned p : plan) {
             int x = p.pos.x();
             int y = p.pos.y();
@@ -66,7 +80,7 @@ public final class PathCementService {
                 continue;
             }
             int oldRot = chunkRotationIndex(ch, x, y, z);
-            String placeId = pickPlaceId(p.lateralIndex, r, pathStyleIndex, pathWidthBlocks, cfg);
+            String placeId = pickPlaceId(p.lateralIndex, random, pathStyleIndex, pathWidthBlocks, cfg);
             if (!ch.placeBlock(x, y, z, placeId, FLAT, PLACE, false)) {
                 continue;
             }

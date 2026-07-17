@@ -68,7 +68,7 @@ public final class InnkeeperSpawnService {
         );
     }
 
-    private static void spawnInnkeeperIfPossible(
+    public static void spawnInnkeeperIfPossible(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownManager tm,
