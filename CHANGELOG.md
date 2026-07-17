@@ -6,6 +6,7 @@
 
 - **Community building mod requirements** — Marketplace cards, building details, and pending-submission reviews clearly list required external mods and their asset-pack ids.
 - **Custom town HUD** — The screen can now show the current time and date, your total gold, and up to three quests pinned from the town journal. Each section can be hidden or moved from the journal settings.
+- **Step-by-step quest tracking** — Building and housing quests now advance one objective at a time. The town journal shows every step and marks completed ones, while pinned quests show only what you need to do next.
 - **Starter town testing command** — `/ah startertown` can instantly create a minimal or full town in either a straight line or a generated layout. It follows the terrain, lays wide connecting paths, completes the matching building quests, and moves in the appropriate villagers. The full preset includes every core building, including the guild hall and tourist portal.
 
 ### Changed
