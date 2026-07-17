@@ -102,7 +102,12 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
             if (def == null) {
                 continue;
             }
+            changed |= QuestProgressionService.reconcile(plugin, town, qid);
+            QuestObjective currentObjective = QuestProgressionService.currentObjective(plugin, town, qid);
             for (QuestObjective obj : def.objectivesOrEmpty()) {
+                if (obj != currentObjective) {
+                    continue;
+                }
                 if (obj.id() == null || obj.kind() == null) {
                     continue;
                 }

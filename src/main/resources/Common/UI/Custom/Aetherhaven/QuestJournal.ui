@@ -537,6 +537,33 @@ $C.@PageOverlay {
                         }
                       }
 
+                      Label #SettingsHudOpacityLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsHudOpacityRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 12, Height: 30);
+
+                        Group {
+                          LayoutMode: Middle;
+                          Anchor: (Width: 360, Height: 30, Right: 12);
+                          $C.@Slider #SettingsHudOpacitySlider {
+                            @Anchor = (Width: 340);
+                            Value: 0;
+                            Min: 0;
+                            Max: 100;
+                          }
+                        }
+
+                        Label #SettingsHudOpacityValue {
+                          Anchor: (Width: 70, Top: 5);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
                       Label #SettingsHudStatusPositionLabel {
                         Anchor: (Bottom: 4);
                         Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);

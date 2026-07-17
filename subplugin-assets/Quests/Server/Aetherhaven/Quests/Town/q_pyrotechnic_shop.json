@@ -12,26 +12,28 @@
   "objectives": [
     {
       "id": "blueprint",
-      "kind": "journal",
+      "kind": "plot_blueprint_received",
       "text": "Take the shop blueprint from Grubble.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.blueprint"
     },
     {
       "id": "learn",
-      "kind": "journal",
+      "kind": "plot_blueprint_learned",
+      "constructionId": "plot_bomb_shop",
       "text": "Use the blueprint to learn the bomb shop at your plot crafting bench.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.learn"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_bomb_shop",
       "text": "Craft a shop plot token and build the bomb shop prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Grubble at the shop and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Grubble.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_pyrotechnic_shop.objective.talk"
     }
   ],

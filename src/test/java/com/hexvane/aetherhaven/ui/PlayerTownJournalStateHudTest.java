@@ -37,6 +37,18 @@ final class PlayerTownJournalStateHudTest {
     }
 
     @Test
+    void completedQuestsDoNotConsumePinCapacity() {
+        PlayerTownJournalState state = new PlayerTownJournalState();
+        state.pinQuest("completed");
+        state.pinQuest("active");
+        state.pinQuest("also_completed");
+
+        assertEquals(1, state.activePinnedQuestCount(Set.of("active", "new_quest")));
+        state.retainPinnedQuests(Set.of("active", "new_quest"));
+        assertTrue(state.pinQuest("new_quest"));
+    }
+
+    @Test
     void resetRestoresSafeDefaultPanels() {
         PlayerTownJournalState state = new PlayerTownJournalState();
         state.setHudPreferences(false, false, false, false, "CUSTOM", 9000, -4, "BOTTOM_LEFT", 50, 60);
@@ -52,6 +64,19 @@ final class PlayerTownJournalStateHudTest {
         assertEquals(0, state.getHudStatusY());
         assertEquals("TOP_RIGHT", state.getHudQuestPlacement());
         assertEquals(0, state.getHudQuestX());
-        assertEquals(130, state.getHudQuestY());
+        assertEquals(164, state.getHudQuestY());
+        assertEquals(0f, state.getHudBackgroundOpacity());
+    }
+
+    @Test
+    void backgroundOpacityIsClamped() {
+        PlayerTownJournalState state = new PlayerTownJournalState();
+
+        state.setHudBackgroundOpacity(0.45f);
+        assertEquals(0.45f, state.getHudBackgroundOpacity());
+        state.setHudBackgroundOpacity(2f);
+        assertEquals(1f, state.getHudBackgroundOpacity());
+        state.setHudBackgroundOpacity(-1f);
+        assertEquals(0f, state.getHudBackgroundOpacity());
     }
 }

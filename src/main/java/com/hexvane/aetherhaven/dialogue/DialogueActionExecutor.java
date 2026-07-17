@@ -25,6 +25,7 @@ import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.quest.QuestLifecycleEffects;
 import com.hexvane.aetherhaven.quest.QuestPlotBlueprintOnStart;
 import com.hexvane.aetherhaven.quest.QuestPlotTokenOnStart;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.quest.QuestRewardService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -227,11 +228,24 @@ public final class DialogueActionExecutor {
             if (bindTarget && npcUuid != null) {
                 town.setQuestTargetEntityUuid(qid, npcUuid);
             }
-            town.initQuestObjectiveProgress(qid, qdef.trackableObjectiveIds());
-            town.initQuestKillProgress(qid, qdef.entityKillObjectiveIds());
+            QuestProgressionService.initialize(plugin, town, qid);
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
-            QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
-            QuestPlotBlueprintOnStart.grantIfConfigured(plugin, qdef, playerRef, store);
+            if (QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+                QuestProgressionService.markStartGrant(
+                    plugin,
+                    town,
+                    qid,
+                    QuestProgressionService.PLOT_TOKEN_RECEIVED
+                );
+            }
+            if (QuestPlotBlueprintOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+                QuestProgressionService.markStartGrant(
+                    plugin,
+                    town,
+                    qid,
+                    QuestProgressionService.PLOT_BLUEPRINT_RECEIVED
+                );
+            }
         }
         if (a.has("lockInnVisitor") && a.get("lockInnVisitor").isJsonPrimitive() && a.get("lockInnVisitor").getAsBoolean()
             && npcUuid != null) {
@@ -284,6 +298,13 @@ public final class DialogueActionExecutor {
         String qid = id.trim();
         QuestDefinition precheck = plugin.getQuestCatalog().get(qid);
         if (precheck != null && !QuestAvailability.isEnabled(precheck)) {
+            return;
+        }
+        if (!town.hasQuestActive(qid)) {
+            return;
+        }
+        if (precheck != null && !QuestProgressionService.advanceDialogueTurnIn(plugin, town, qid)) {
+            tm.updateTown(town);
             return;
         }
         UUID npcUuid = npcUuidFromRef(store, npcRef);

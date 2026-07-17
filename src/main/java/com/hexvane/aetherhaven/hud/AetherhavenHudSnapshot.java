@@ -9,6 +9,7 @@ public record AetherhavenHudSnapshot(
     boolean showDate,
     boolean showGold,
     boolean showQuests,
+    float backgroundOpacity,
     @Nonnull String dateText,
     @Nonnull String clockText,
     long inventoryCoins,

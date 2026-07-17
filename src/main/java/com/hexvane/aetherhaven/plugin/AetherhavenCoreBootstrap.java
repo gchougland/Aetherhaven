@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.HStats;
 import com.hexvane.aetherhaven.command.AetherhavenCommand;
 import com.hexvane.aetherhaven.command.AetherhavenCommunityCommand;
+import com.hexvane.aetherhaven.command.AetherhavenHudCommand;
 import com.hexvane.aetherhaven.command.AetherhavenJournalCommand;
 import com.hexvane.aetherhaven.generated.HstatsBuildMetadata;
 import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
@@ -130,6 +131,7 @@ public final class AetherhavenCoreBootstrap {
 
         plugin.initAetherhavenCommand(new AetherhavenCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenJournalCommand());
+        plugin.registerAetherhavenSubcommand(new AetherhavenHudCommand());
         plugin.registerAetherhavenSubcommand(new AetherhavenCommunityCommand());
         // After shared components and the /ah command tree — feature packs register systems and subcommands.
         AetherhavenFeatureBootstrap.registerEnabled(plugin);
@@ -203,7 +205,12 @@ public final class AetherhavenCoreBootstrap {
                                 Ref<EntityStore> ref = player.getReference();
                                 Store<EntityStore> store = ref.getStore();
                                 PlayerRef readyPlayerRef = store.getComponent(ref, PlayerRef.getComponentType());
-                                if (readyPlayerRef != null) {
+                                PlayerTownJournalState hudPreferences =
+                                    store.getComponent(ref, PlayerTownJournalState.getComponentType());
+                                if (
+                                    readyPlayerRef != null
+                                        && (hudPreferences == null || hudPreferences.isHudEnabled())
+                                ) {
                                     AetherhavenHudSupport.obtain(player, readyPlayerRef);
                                 }
                                 QuestBoardOnlineDawnService.onPlayerReady(ref, store, AetherhavenPlugin.get());

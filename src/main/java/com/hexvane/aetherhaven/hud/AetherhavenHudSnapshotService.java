@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Builds immutable HUD state by reading current inventory and town data. This service never mutates the ECS
- * {@link Store}, inventory, or town record.
+ * Builds immutable HUD state by reading current inventory and town data. It never mutates ECS or inventory; story
+ * objective rendering may lazily reconcile persisted quest progress from durable town state for old saves.
  */
 public final class AetherhavenHudSnapshotService {
     public static final int MAX_QUESTS = 3;
@@ -62,6 +62,7 @@ public final class AetherhavenHudSnapshotService {
             preferences.isHudShowDate(),
             preferences.isHudShowGold(),
             preferences.isHudShowQuests(),
+            preferences.getHudBackgroundOpacity(),
             AetherhavenCalendar.formatDate(gameTime),
             AetherhavenCalendar.formatClock(gameTime),
             inventoryCoins,
@@ -106,7 +107,7 @@ public final class AetherhavenHudSnapshotService {
                         HudQuestEntry.Source.STORY,
                         questId,
                         storyCatalog.journalTitle(questId, town, store, plugin),
-                        storyCatalog.objectivesMessage(questId, town, store, plugin)
+                        storyCatalog.currentObjectiveMessage(questId, town, store, plugin)
                     )
                 );
             }

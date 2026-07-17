@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -1458,7 +1459,7 @@ public final class TownRecord {
         clearQuestTarget(q);
     }
 
-    /** Initializes tracking entries for objectives that are not {@code journal} kind (future hooks). */
+    /** Initializes persisted objective entries without replacing progress from an existing save. */
     public void initQuestObjectiveProgress(@Nonnull String questId, @Nonnull List<String> trackableObjectiveIds) {
         if (trackableObjectiveIds.isEmpty()) {
             return;
@@ -1472,6 +1473,47 @@ public final class TownRecord {
                 m.putIfAbsent(oid.trim(), Boolean.FALSE);
             }
         }
+    }
+
+    public boolean isQuestObjectiveComplete(@Nonnull String questId, @Nonnull String objectiveId) {
+        if (questObjectiveProgress == null) {
+            return false;
+        }
+        Map<String, Boolean> objectives = questObjectiveProgress.get(questId.trim());
+        if (objectives == null) {
+            return false;
+        }
+        return Boolean.TRUE.equals(objectives.get(objectiveId.trim()));
+    }
+
+    /**
+     * Marks an objective complete.
+     *
+     * @return true only when persisted state changed
+     */
+    public boolean completeQuestObjective(@Nonnull String questId, @Nonnull String objectiveId) {
+        String qid = questId.trim();
+        String oid = objectiveId.trim();
+        if (qid.isEmpty() || oid.isEmpty()) {
+            return false;
+        }
+        if (questObjectiveProgress == null) {
+            questObjectiveProgress = new LinkedHashMap<>();
+        }
+        Map<String, Boolean> objectives =
+            questObjectiveProgress.computeIfAbsent(qid, ignored -> new LinkedHashMap<>());
+        return !Boolean.TRUE.equals(objectives.put(oid, Boolean.TRUE));
+    }
+
+    @Nonnull
+    public Map<String, Boolean> getQuestObjectiveProgressSnapshot(@Nonnull String questId) {
+        if (questObjectiveProgress == null) {
+            return Map.of();
+        }
+        Map<String, Boolean> objectives = questObjectiveProgress.get(questId.trim());
+        return objectives != null
+            ? Collections.unmodifiableMap(new LinkedHashMap<>(objectives))
+            : Map.of();
     }
 
     public void clearQuestObjectiveProgress(@Nonnull String questId) {

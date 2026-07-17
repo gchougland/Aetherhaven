@@ -15,20 +15,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the park plot token from Corin.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_park",
       "text": "Stake and build the park.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Corin at the inn and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Corin.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_park_plot.objective.talk"
     }
   ],

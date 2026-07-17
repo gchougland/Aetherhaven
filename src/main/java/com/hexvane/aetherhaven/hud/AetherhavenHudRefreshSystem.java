@@ -84,6 +84,12 @@ public final class AetherhavenHudRefreshSystem
         if (player == null || playerRef == null || uuid == null || preferences == null) {
             return;
         }
+        if (!preferences.isHudEnabled()) {
+            if (AetherhavenHudSupport.isActive(player)) {
+                AetherhavenHudSupport.remove(player, playerRef);
+            }
+            return;
+        }
 
         World world = store.getExternalData().getWorld();
         String worldName = world.getName();

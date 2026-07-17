@@ -15,19 +15,20 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the tourist portal plot token from Lyren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_tourist_portal",
       "text": "Stake and build the tourist portal.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
+      "kind": "dialogue_turn_in",
       "text": "Tell Lyren in person when the portal is complete.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_tourist_portal.objective.talk"
     }

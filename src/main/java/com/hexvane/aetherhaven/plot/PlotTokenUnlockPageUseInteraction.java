@@ -3,6 +3,10 @@ package com.hexvane.aetherhaven.plot;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.UiSoundEffects;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -11,6 +15,7 @@ import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.protocol.packets.interface_.NotificationStyle;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
@@ -95,6 +100,17 @@ public final class PlotTokenUnlockPageUseInteraction extends SimpleInstantIntera
         }
 
         PlotTokenUnlockService.unlock(ref, commandBuffer, constructionId);
+        UUIDComponent playerUuid = commandBuffer.getComponent(ref, UUIDComponent.getComponentType());
+        if (plugin != null && playerUuid != null) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(
+                commandBuffer.getStore().getExternalData().getWorld(),
+                plugin
+            );
+            TownRecord town = tm.findTownForPlayerInWorld(playerUuid.getUuid());
+            if (town != null && QuestProgressionService.onBlueprintLearned(plugin, town, constructionId)) {
+                tm.updateTown(town);
+            }
+        }
         UiSoundEffects.play2dUi(ref, commandBuffer.getStore(), AetherhavenConstants.SFX_WORKBENCH_UPGRADE_COMPLETE);
         NotificationUtil.sendNotification(
             pr.getPacketHandler(),

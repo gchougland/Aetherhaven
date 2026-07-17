@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the farm plot token from Irienne.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_farm",
       "text": "Stake and build the farm plot prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Irienne at the farming bench and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Irienne.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_farm_plot.objective.talk"
     }
   ],

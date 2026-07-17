@@ -14,19 +14,20 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the town hall plot token from Lyren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.token"
     },
     {
       "id": "place_build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_town_hall",
       "text": "Stake and build the town hall prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.place_build"
     },
     {
       "id": "tell_elder",
-      "kind": "journal",
+      "kind": "dialogue_turn_in",
       "text": "Tell Lyren in person when construction is complete.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_town_hall.objective.tell_elder"
     }

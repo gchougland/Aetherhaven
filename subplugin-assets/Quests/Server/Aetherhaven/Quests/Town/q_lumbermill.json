@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the lumbermill plot token from Seren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_lumbermill",
       "text": "Stake and build the lumbermill prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Seren at the desk and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Seren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_lumbermill.objective.talk"
     }
   ],

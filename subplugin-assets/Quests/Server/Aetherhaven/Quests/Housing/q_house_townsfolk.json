@@ -14,25 +14,26 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Talk to the visitor and take a house plot token.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
       "text": "Stake and build the house.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.build"
     },
     {
       "id": "assign",
-      "kind": "custom",
+      "kind": "assign_house_resident",
       "text": "Assign this visitor on the house sign.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.assign"
     },
     {
       "id": "talk",
-      "kind": "journal",
+      "kind": "dialogue_turn_in",
       "text": "Talk to the visitor again when they are living there.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.talk"
     }

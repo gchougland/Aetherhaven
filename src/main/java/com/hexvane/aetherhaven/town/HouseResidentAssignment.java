@@ -5,10 +5,13 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -99,11 +102,23 @@ public final class HouseResidentAssignment {
             }
         }
         pi.setHomeResidentAt(slotIndex, residentUuid);
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (residentUuid != null && plugin != null) {
+            String roleId = null;
+            if (store != null) {
+                Ref<EntityStore> residentRef = store.getExternalData().getRefFromUUID(residentUuid);
+                NPCEntity npc =
+                    residentRef != null && residentRef.isValid()
+                        ? store.getComponent(residentRef, NPCEntity.getComponentType())
+                        : null;
+                roleId = npc != null ? npc.getRoleName() : null;
+            }
+            QuestProgressionService.onResidentAssigned(plugin, town, residentUuid, roleId);
+        }
         tm.updateTown(town);
         if (residentUuid != null && world != null && store != null) {
             if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_GUARD)
                 && residentUuid.equals(town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_GUARD))) {
-                AetherhavenPlugin plugin = AetherhavenPlugin.get();
                 if (plugin != null) {
                     VillagerDeathHandlerSystem.promoteGuardToCitizen(world, plugin, town, tm, residentUuid, store);
                 }

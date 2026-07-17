@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the blacksmith shop plot token from Garren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_blacksmith_shop",
       "text": "Stake and build the blacksmith shop prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Garren at the weapon bench and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Garren.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_blacksmith_shop.objective.talk"
     }
   ],

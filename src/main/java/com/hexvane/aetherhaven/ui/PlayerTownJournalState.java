@@ -107,6 +107,14 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("HudShowTime", Codec.BOOLEAN), (c, v) -> c.hudShowTime = valueOr(v, true), c -> c.hudShowTime)
             .add()
+            .append(new KeyedCodec<>("HudEnabled", Codec.BOOLEAN), (c, v) -> c.hudEnabled = valueOr(v, true), c -> c.hudEnabled)
+            .add()
+            .append(
+                new KeyedCodec<>("HudBackgroundOpacity", Codec.FLOAT),
+                (c, v) -> c.hudBackgroundOpacity = clampOpacity(v != null ? v : 0f),
+                c -> c.hudBackgroundOpacity
+            )
+            .add()
             .append(new KeyedCodec<>("HudShowDate", Codec.BOOLEAN), (c, v) -> c.hudShowDate = valueOr(v, true), c -> c.hudShowDate)
             .add()
             .append(new KeyedCodec<>("HudShowGold", Codec.BOOLEAN), (c, v) -> c.hudShowGold = valueOr(v, true), c -> c.hudShowGold)
@@ -123,7 +131,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("HudQuestX", Codec.INTEGER), (c, v) -> c.hudQuestX = offset(v, 0), c -> c.hudQuestX)
             .add()
-            .append(new KeyedCodec<>("HudQuestY", Codec.INTEGER), (c, v) -> c.hudQuestY = offset(v, 130), c -> c.hudQuestY)
+            .append(new KeyedCodec<>("HudQuestY", Codec.INTEGER), (c, v) -> c.hudQuestY = questYOffset(v, c.hudQuestPlacement), c -> c.hudQuestY)
             .add()
             .append(new KeyedCodec<>("HudPinnedQuests", Codec.STRING), (c, v) -> c.decodePinnedQuests(v), PlayerTownJournalState::encodePinnedQuests)
             .add()
@@ -160,6 +168,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     private float rtsPickAspectOverride;
 
     private boolean hudShowTime = true;
+    private boolean hudEnabled = true;
+    private float hudBackgroundOpacity;
     private boolean hudShowDate = true;
     private boolean hudShowGold = true;
     private boolean hudShowQuests = true;
@@ -170,7 +180,7 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     @Nonnull
     private String hudQuestPlacement = "TOP_RIGHT";
     private int hudQuestX;
-    private int hudQuestY = 130;
+    private int hudQuestY = 164;
     @Nonnull
     private final List<String> hudPinnedQuests = new ArrayList<>();
 
@@ -186,6 +196,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.rtsPickFovOverride = rtsPickFovOverride;
         c.rtsPickAspectOverride = rtsPickAspectOverride;
         c.hudShowTime = hudShowTime;
+        c.hudEnabled = hudEnabled;
+        c.hudBackgroundOpacity = hudBackgroundOpacity;
         c.hudShowDate = hudShowDate;
         c.hudShowGold = hudShowGold;
         c.hudShowQuests = hudShowQuests;
@@ -247,6 +259,22 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         return hudShowTime;
     }
 
+    public boolean isHudEnabled() {
+        return hudEnabled;
+    }
+
+    public void setHudEnabled(boolean hudEnabled) {
+        this.hudEnabled = hudEnabled;
+    }
+
+    public float getHudBackgroundOpacity() {
+        return hudBackgroundOpacity;
+    }
+
+    public void setHudBackgroundOpacity(float hudBackgroundOpacity) {
+        this.hudBackgroundOpacity = clampOpacity(hudBackgroundOpacity);
+    }
+
     public boolean isHudShowDate() {
         return hudShowDate;
     }
@@ -306,11 +334,12 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         hudStatusY = offset(statusY, 0);
         hudQuestPlacement = placement(questPlacement, "TOP_RIGHT");
         hudQuestX = offset(questX, 0);
-        hudQuestY = offset(questY, 130);
+        hudQuestY = questYOffset(questY, hudQuestPlacement);
     }
 
     public void resetHudPreferences() {
-        setHudPreferences(true, true, true, true, "TOP_RIGHT", 0, 0, "TOP_RIGHT", 0, 130);
+        setHudPreferences(true, true, true, true, "TOP_RIGHT", 0, 0, "TOP_RIGHT", 0, 164);
+        hudBackgroundOpacity = 0f;
     }
 
     @Nonnull
@@ -340,6 +369,16 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
 
     public boolean retainPinnedQuests(@Nonnull Set<String> activeQuestIds) {
         return hudPinnedQuests.removeIf(id -> !activeQuestIds.contains(id));
+    }
+
+    public int activePinnedQuestCount(@Nonnull Set<String> activeQuestIds) {
+        int count = 0;
+        for (String id : hudPinnedQuests) {
+            if (activeQuestIds.contains(id)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private void decodePinnedQuests(@Nullable String encoded) {
@@ -384,5 +423,18 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             return 0;
         }
         return Math.min(value, 4000);
+    }
+
+    private static int questYOffset(@Nullable Integer value, @Nonnull String placement) {
+        int resolved = offset(value, 164);
+        // Move the old preset default far enough below the full status panel.
+        return (resolved == 130 || resolved == 144) && !"CUSTOM".equals(placement) ? 164 : resolved;
+    }
+
+    private static float clampOpacity(float value) {
+        if (!Float.isFinite(value)) {
+            return 0f;
+        }
+        return Math.max(0f, Math.min(1f, value));
     }
 }

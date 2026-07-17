@@ -8,6 +8,7 @@ import com.hypixel.hytale.server.core.ui.Value;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import java.util.List;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -97,6 +98,11 @@ public final class AetherhavenHud extends CustomUIHud {
         boolean changed = false;
         AetherhavenHudSnapshot old = previous;
 
+        if (old == null || Float.compare(old.backgroundOpacity(), snapshot.backgroundOpacity()) != 0) {
+            applyBackground(commands, "#StatusBackgroundHost", snapshot.backgroundOpacity());
+            applyBackground(commands, "#QuestBackgroundHost", snapshot.backgroundOpacity());
+            changed = true;
+        }
         if (
             old == null
                 || old.showTime() != snapshot.showTime()
@@ -175,7 +181,7 @@ public final class AetherhavenHud extends CustomUIHud {
     }
 
     static int statusHeight(boolean showTime, boolean showDate, boolean showGold) {
-        int height = 22;
+        int height = 10;
         if (showTime) {
             height += 30;
         }
@@ -183,7 +189,7 @@ public final class AetherhavenHud extends CustomUIHud {
             height += 22;
         }
         if (showGold) {
-            height += 44;
+            height += 41;
         }
         if (showTime && (showDate || showGold)) {
             height += 7;
@@ -196,7 +202,7 @@ public final class AetherhavenHud extends CustomUIHud {
 
     static int questHeight(int questCount) {
         int count = Math.max(0, Math.min(AetherhavenHudSnapshotService.MAX_QUESTS, questCount));
-        return 33 + (170 * count) + (7 * Math.min(count, 2));
+        return 33 + (84 * count) + (7 * Math.min(count, 2));
     }
 
     private static int questHeight(@Nonnull List<HudQuestEntry> quests) {
@@ -211,7 +217,7 @@ public final class AetherhavenHud extends CustomUIHud {
     static int questRowHeight(@Nonnull HudQuestEntry quest) {
         int titleLines = estimatedWrappedLines(quest.title().getAnsiMessage(), 40);
         int objectiveLines = estimatedWrappedLines(quest.objectives().getAnsiMessage(), 48);
-        return Math.max(170, 21 + (18 * titleLines) + (16 * objectiveLines));
+        return Math.max(84, 21 + (18 * titleLines) + (16 * objectiveLines));
     }
 
     private static int estimatedWrappedLines(@Nullable String text, int charactersPerLine) {
@@ -245,6 +251,8 @@ public final class AetherhavenHud extends CustomUIHud {
         boolean right = isRightSide(placement);
         String alignment = right ? "End" : "Start";
         commands.set("#QuestHeading.Style.HorizontalAlignment", alignment);
+        commands.set("#QuestDividerLeft.Visible", !right);
+        commands.set("#QuestDividerRight.Visible", right);
         for (int i = 1; i <= AetherhavenHudSnapshotService.MAX_QUESTS; i++) {
             String row = "#QuestRow" + i;
             commands.set(row + " #QuestTitle.Style.HorizontalAlignment", alignment);
@@ -255,6 +263,27 @@ public final class AetherhavenHud extends CustomUIHud {
     private static boolean isRightSide(@Nonnull HudPanelPlacement placement) {
         return placement.placement() == HudPlacement.TOP_RIGHT
             || placement.placement() == HudPlacement.BOTTOM_RIGHT;
+    }
+
+    @Nonnull
+    private static void applyBackground(
+        @Nonnull UICommandBuilder commands,
+        @Nonnull String host,
+        float opacity
+    ) {
+        float clamped = Math.max(0f, Math.min(1f, opacity));
+        commands.clear(host);
+        if (clamped <= 0f) {
+            return;
+        }
+        commands.appendInline(
+            host,
+            String.format(
+                Locale.ROOT,
+                "Group { Anchor: (Full: 0); Background: #000000(%.3f); }",
+                clamped
+            )
+        );
     }
 
     private static boolean sameQuests(@Nonnull List<HudQuestEntry> left, @Nonnull List<HudQuestEntry> right) {

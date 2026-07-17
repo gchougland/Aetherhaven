@@ -20,18 +20,18 @@ public final class QuestPlotTokenOnStart {
 
     private QuestPlotTokenOnStart() {}
 
-    public static void grantIfConfigured(
+    public static boolean grantIfConfigured(
         @Nullable AetherhavenPlugin plugin,
         @Nullable QuestDefinition def,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
         if (plugin == null || def == null) {
-            return;
+            return false;
         }
         String cid = def.grantPlotTokenConstructionId();
         if (cid == null || cid.isBlank()) {
-            return;
+            return false;
         }
         ConstructionDefinition cdef = plugin.getConstructionCatalog().get(cid.trim());
         if (cdef == null) {
@@ -40,19 +40,20 @@ public final class QuestPlotTokenOnStart {
                 cid,
                 def.idOrEmpty()
             );
-            return;
+            return false;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player == null) {
-            return;
+            return false;
         }
         String legacyTokenId = cdef.getPlotTokenItemId();
         if (legacyTokenId != null
             && !legacyTokenId.isBlank()
             && !AetherhavenConstants.PLOT_TOKEN_UNIFIED.equals(legacyTokenId.trim())) {
             player.giveItem(new ItemStack(legacyTokenId.trim(), 1), playerRef, store);
-            return;
+            return true;
         }
         PlotTokenInventory.giveToPlayer(player, cdef.getId(), 1, cdef.getDisplayName(), playerRef, store);
+        return true;
     }
 }

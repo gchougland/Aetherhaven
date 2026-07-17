@@ -14,20 +14,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the guild hall plot token from Lyra.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_guild_hall",
       "text": "Stake and build the guild hall prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Lyra at the guild hall and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Lyra.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_guild_hall.objective.talk"
     }
   ],

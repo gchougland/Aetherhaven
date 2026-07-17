@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the Gaia altar plot token from Serah.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_gaia_altar",
       "text": "Stake and build the Gaia altar prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Serah at the statue and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Serah.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_gaia_altar.objective.talk"
     }
   ],

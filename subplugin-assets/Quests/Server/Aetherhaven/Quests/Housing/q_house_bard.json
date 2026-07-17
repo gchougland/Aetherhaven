@@ -15,13 +15,14 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the house plot token from Elias.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
       "text": "Stake and build the house prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.build"
     },
@@ -34,8 +35,8 @@
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Elias and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Elias.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_bard.objective.talk"
     }
   ],

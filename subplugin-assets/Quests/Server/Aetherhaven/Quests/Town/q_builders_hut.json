@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the builder's hut plot token from Rowan.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_builders_hut",
       "text": "Stake and build the builder's hut prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Rowan at the hut and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Rowan.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_builders_hut.objective.talk"
     }
   ],

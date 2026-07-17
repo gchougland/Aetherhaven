@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the barn plot token from Thalen.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_barn",
       "text": "Stake and build the barn prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Thalen at the farming bench and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Thalen.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_barn.objective.talk"
     }
   ],

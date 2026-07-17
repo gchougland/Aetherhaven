@@ -21,6 +21,7 @@ aetherhaven.ui.journalSettings.hud.showTime=Show time
 aetherhaven.ui.journalSettings.hud.showDate=Show date
 aetherhaven.ui.journalSettings.hud.showGold=Show total gold
 aetherhaven.ui.journalSettings.hud.showQuests=Show pinned quests
+aetherhaven.ui.journalSettings.hud.opacity=HUD background opacity
 aetherhaven.ui.journalSettings.hud.statusPosition=Time date and gold position with X and Y
 aetherhaven.ui.journalSettings.hud.questPosition=Pinned quest position with X and Y
 aetherhaven.ui.journalSettings.hud.x=X

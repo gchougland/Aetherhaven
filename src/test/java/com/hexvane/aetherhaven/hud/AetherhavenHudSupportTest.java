@@ -32,13 +32,13 @@ final class AetherhavenHudSupportTest {
     @Test
     void panelsShrinkToTheirVisibleContent() {
         int fullStatus = AetherhavenHud.statusHeight(true, true, true);
-        assertEquals(132, fullStatus);
-        assertEquals(52, AetherhavenHud.statusHeight(true, false, false));
-        assertEquals(66, AetherhavenHud.statusHeight(false, false, true));
+        assertEquals(117, fullStatus);
+        assertEquals(46, AetherhavenHud.statusHeight(true, false, false));
+        assertEquals(51, AetherhavenHud.statusHeight(false, false, true));
 
         assertEquals(33, AetherhavenHud.questHeight(0));
-        assertEquals(210, AetherhavenHud.questHeight(1));
-        assertEquals(557, AetherhavenHud.questHeight(3));
+        assertEquals(124, AetherhavenHud.questHeight(1));
+        assertEquals(299, AetherhavenHud.questHeight(3));
     }
 
     @Test
@@ -58,7 +58,7 @@ final class AetherhavenHudSupportTest {
             )
         );
 
-        assertEquals(170, AetherhavenHud.questRowHeight(shortQuest));
+        assertEquals(84, AetherhavenHud.questRowHeight(shortQuest));
         org.junit.jupiter.api.Assertions.assertTrue(
             AetherhavenHud.questRowHeight(longQuest) >= AetherhavenHud.questRowHeight(shortQuest)
         );

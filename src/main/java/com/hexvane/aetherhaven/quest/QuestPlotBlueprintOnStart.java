@@ -19,18 +19,18 @@ public final class QuestPlotBlueprintOnStart {
 
     private QuestPlotBlueprintOnStart() {}
 
-    public static void grantIfConfigured(
+    public static boolean grantIfConfigured(
         @Nullable AetherhavenPlugin plugin,
         @Nullable QuestDefinition def,
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
         if (plugin == null || def == null) {
-            return;
+            return false;
         }
         String cid = def.grantPlotBlueprintConstructionId();
         if (cid == null || cid.isBlank()) {
-            return;
+            return false;
         }
         ConstructionDefinition cdef = plugin.getConstructionCatalog().get(cid.trim());
         if (cdef == null) {
@@ -39,13 +39,14 @@ public final class QuestPlotBlueprintOnStart {
                 cid,
                 def.idOrEmpty()
             );
-            return;
+            return false;
         }
         Player player = store.getComponent(playerRef, Player.getComponentType());
         if (player == null) {
-            return;
+            return false;
         }
         ItemStack stack = PlotTokenUnlockPageMetadata.createStack(cdef.getId());
         player.giveItem(stack, playerRef, store);
+        return true;
     }
 }

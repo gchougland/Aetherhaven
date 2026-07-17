@@ -2,6 +2,9 @@
 # Bundle: /aetherhaven subcommand help (tab completion)
 
 # === Commands: /aetherhaven subcommands (help text; /aetherhaven <tab>) ===
+commands.aetherhaven.hud.desc=Show or hide the Aetherhaven HUD
+aetherhaven.hud.enabled=Aetherhaven HUD shown.
+aetherhaven.hud.disabled=Aetherhaven HUD hidden.
 commands.aetherhaven.towns.desc=Debug: list every town in this world
 
 commands.aetherhaven.replace_charter.desc=Put the charter block back at your town's saved spot

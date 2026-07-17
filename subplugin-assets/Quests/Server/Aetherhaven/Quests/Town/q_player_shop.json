@@ -14,20 +14,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the player shop plot token from Vex.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_player_shop",
       "text": "Stake and build the player shop prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Vex and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Vex.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_player_shop.objective.talk"
     }
   ],

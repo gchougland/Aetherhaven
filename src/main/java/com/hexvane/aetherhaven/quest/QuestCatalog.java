@@ -192,7 +192,16 @@ public final class QuestCatalog {
 
     private static boolean isKnownObjectiveKind(@Nonnull String kind) {
         return switch (kind) {
-            case "journal", "construction_built", "dialogue_turn_in", "assign_house_resident", "custom", "entity_kills" -> true;
+            case "journal",
+                "plot_token_received",
+                "plot_blueprint_received",
+                "plot_blueprint_learned",
+                "construction_placed",
+                "construction_built",
+                "dialogue_turn_in",
+                "assign_house_resident",
+                "custom",
+                "entity_kills" -> true;
             default -> false;
         };
     }
@@ -207,6 +216,11 @@ public final class QuestCatalog {
     @Nullable
     public QuestDefinition get(@Nonnull String questId) {
         return byId.get(questId.trim());
+    }
+
+    public boolean hasObjectives(@Nonnull String questId) {
+        QuestDefinition def = get(questId);
+        return def != null && !def.objectivesOrEmpty().isEmpty();
     }
 
     @Nonnull
@@ -382,6 +396,9 @@ public final class QuestCatalog {
             return Message.raw("");
         }
         String qid = questId.trim();
+        if (town != null && plugin != null) {
+            QuestProgressionService.reconcile(plugin, town, qid);
+        }
         String targetName = null;
         if (town != null && plugin != null && def.assignByEntity()) {
             targetName = QuestAssigneeDisplay.targetName(def, town, store, plugin);
@@ -393,7 +410,12 @@ public final class QuestCatalog {
             }
             QuestObjective o = lines.get(i);
             Message lineMsg = objectiveLineMessage(o, targetName);
-            out = out.insert(Message.raw(String.valueOf(i + 1))).insert(Message.raw(". ")).insert(lineMsg);
+            boolean complete = town != null && QuestProgressionService.isObjectiveComplete(town, qid, o);
+            out = out
+                .insert(Message.raw(objectiveStatusMarker(complete)))
+                .insert(Message.raw(String.valueOf(i + 1)))
+                .insert(Message.raw(". "))
+                .insert(lineMsg);
             if (town != null
                 && o.kind() != null
                 && "entity_kills".equalsIgnoreCase(o.kind().trim())
@@ -405,6 +427,44 @@ public final class QuestCatalog {
                     Message.raw(" (" + Math.min(cur, need) + "/" + need + ")")
                 );
             }
+        }
+        return out;
+    }
+
+    @Nonnull
+    static String objectiveStatusMarker(boolean complete) {
+        // The client journal font does not contain the Unicode checkbox glyphs.
+        return complete ? "[x] " : "[ ] ";
+    }
+
+    /** Renders only the first incomplete objective for the compact pinned-quest HUD. */
+    @Nonnull
+    public Message currentObjectiveMessage(
+        @Nonnull String questId,
+        @Nonnull TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null) {
+            return objectivesMessage(questId, town, store, null);
+        }
+        QuestProgressionService.reconcile(plugin, town, questId);
+        QuestDefinition def = get(questId);
+        QuestObjective objective = QuestProgressionService.currentObjective(plugin, town, questId);
+        if (def == null || objective == null) {
+            return Message.raw("");
+        }
+        String targetName = def.assignByEntity()
+            ? QuestAssigneeDisplay.targetName(def, town, store, plugin)
+            : null;
+        Message out = objectiveLineMessage(objective, targetName);
+        if (objective.kind() != null
+            && "entity_kills".equalsIgnoreCase(objective.kind().trim())
+            && objective.id() != null
+            && !objective.id().isBlank()) {
+            int current = town.getQuestKillCount(questId, objective.id());
+            int required = Math.max(1, objective.killCount());
+            out = out.insert(Message.raw(" (" + Math.min(current, required) + "/" + required + ")"));
         }
         return out;
     }

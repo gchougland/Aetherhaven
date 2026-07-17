@@ -12,15 +12,22 @@
   "objectives": [
     {
       "id": "place_plot",
-      "kind": "journal",
+      "kind": "construction_placed",
+      "constructionId": "plot_inn",
       "text": "Stake the inn plot with your placement staff.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.objective.place_plot"
     },
     {
       "id": "build_prefab",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_inn",
       "text": "Gather materials and finish construction at the plot sign.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_build_inn.objective.build_prefab"
+    },
+    {
+      "id": "talk",
+      "kind": "dialogue_turn_in",
+      "text": "Tell the innkeeper the inn is complete."
     }
   ],
   "rewards": [

@@ -492,8 +492,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
                 commandBuilder.set("#QuestDetailDescription.TextSpans", quests.journalDescription(sel, town, entityStore, plugin));
 
-                String steps = quests.objectivesText(sel, town, entityStore, plugin);
-                boolean hasSteps = !steps.isEmpty();
+                boolean hasSteps = quests.hasObjectives(sel);
                 commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
                 commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
                 if (hasSteps) {
@@ -524,8 +523,9 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 );
             }
             boolean pinned = stateForTabs.isQuestPinned(sel);
+            int activePinnedCount = stateForTabs.activePinnedQuestCount(new HashSet<>(active));
             boolean pinLimitReached =
-                !pinned && stateForTabs.getPinnedQuestIds().size() >= PlayerTownJournalState.MAX_PINNED_QUESTS;
+                !pinned && activePinnedCount >= PlayerTownJournalState.MAX_PINNED_QUESTS;
             commandBuilder.set("#PinQuestButton.Visible", true);
             commandBuilder.set("#PinQuestButton.Disabled", pinLimitReached);
             commandBuilder.set(
@@ -808,6 +808,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         commandBuilder.set("#SettingsHudDateCheck #CheckBox.Value", journalPrefs.isHudShowDate());
         commandBuilder.set("#SettingsHudGoldCheck #CheckBox.Value", journalPrefs.isHudShowGold());
         commandBuilder.set("#SettingsHudQuestsCheck #CheckBox.Value", journalPrefs.isHudShowQuests());
+        commandBuilder.set(
+            "#SettingsHudOpacitySlider.Value",
+            Math.round(journalPrefs.getHudBackgroundOpacity() * 100f)
+        );
+        commandBuilder.set(
+            "#SettingsHudOpacityValue.TextSpans",
+            Message.raw(Math.round(journalPrefs.getHudBackgroundOpacity() * 100f) + "%")
+        );
         commandBuilder.set("#SettingsHudStatusPlacement #Input.Entries", hudPlacementEntries());
         commandBuilder.set("#SettingsHudStatusPlacement #Input.Value", journalPrefs.getHudStatusPlacement());
         commandBuilder.set("#SettingsHudStatusXField.Value", String.valueOf(journalPrefs.getHudStatusX()));
@@ -826,6 +834,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         );
 
         eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SettingsHudOpacitySlider",
+            new EventData()
+                .append("Action", "HudOpacityPreview")
+                .append("@HudOpacity", "#SettingsHudOpacitySlider.Value"),
+            false
+        );
+
+        eventBuilder.addEventBinding(
             CustomUIEventBindingType.Activating,
             "#SettingsPersonalSaveButton",
             new EventData()
@@ -836,6 +853,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("@HudDate", "#SettingsHudDateCheck #CheckBox.Value")
                 .append("@HudGold", "#SettingsHudGoldCheck #CheckBox.Value")
                 .append("@HudQuests", "#SettingsHudQuestsCheck #CheckBox.Value")
+                .append("@HudOpacity", "#SettingsHudOpacitySlider.Value")
                 .append("@HudStatusPlacement", "#SettingsHudStatusPlacement #Input.Value")
                 .append("@HudStatusX", "#SettingsHudStatusXField.Value")
                 .append("@HudStatusY", "#SettingsHudStatusYField.Value")
@@ -2100,6 +2118,15 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             sendUpdate(cmd, ev, false);
             return;
         }
+        if (action.equalsIgnoreCase("HudOpacityPreview")) {
+            int opacityPercent = data.hudOpacityPercent != null
+                ? Math.max(0, Math.min(100, data.hudOpacityPercent))
+                : 0;
+            UICommandBuilder cmd = new UICommandBuilder();
+            cmd.set("#SettingsHudOpacityValue.TextSpans", Message.raw(opacityPercent + "%"));
+            sendUpdate(cmd, new UIEventBuilder(), false);
+            return;
+        }
         if (action.equalsIgnoreCase("PersonalSettingsSave")) {
             PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
             if (st == null) {
@@ -2121,6 +2148,11 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 data.hudQuestPlacement,
                 parseIntSafe(data.hudQuestX, 0, 4000, st.getHudQuestX()),
                 parseIntSafe(data.hudQuestY, 0, 4000, st.getHudQuestY())
+            );
+            st.setHudBackgroundOpacity(
+                data.hudOpacityPercent != null
+                    ? data.hudOpacityPercent / 100f
+                    : st.getHudBackgroundOpacity()
             );
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             refreshActiveRtsPickTuning(ref, store);
@@ -2751,6 +2783,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@HudQuests", Codec.BOOLEAN), (d, v) -> d.hudQuests = v, d -> d.hudQuests)
             .add()
+            .append(
+                new KeyedCodec<>("@HudOpacity", Codec.INTEGER),
+                (d, v) -> d.hudOpacityPercent = v,
+                d -> d.hudOpacityPercent
+            )
+            .add()
             .append(new KeyedCodec<>("@HudStatusPlacement", Codec.STRING), (d, v) -> d.hudStatusPlacement = v, d -> d.hudStatusPlacement)
             .add()
             .append(new KeyedCodec<>("@HudStatusX", Codec.STRING), (d, v) -> d.hudStatusX = v, d -> d.hudStatusX)
@@ -2827,6 +2865,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private Boolean hudGold;
         @Nullable
         private Boolean hudQuests;
+        @Nullable
+        private Integer hudOpacityPercent;
         @Nullable
         private String hudStatusPlacement;
         @Nullable

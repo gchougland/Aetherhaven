@@ -12,20 +12,21 @@
   "objectives": [
     {
       "id": "token",
-      "kind": "journal",
+      "kind": "plot_token_received",
       "text": "Take the miners hut plot token from Gorruk.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_miners_hut.objective.token"
     },
     {
       "id": "build",
-      "kind": "journal",
+      "kind": "construction_built",
+      "constructionId": "plot_miners_hut",
       "text": "Stake and build the miners hut prefab.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_miners_hut.objective.build"
     },
     {
       "id": "talk",
-      "kind": "journal",
-      "text": "Find Gorruk at the workbench and close the quest in dialogue.",
+      "kind": "dialogue_turn_in",
+      "text": "Talk to Gorruk.",
       "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_miners_hut.objective.talk"
     }
   ],

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.placement.PlotPlacementHeights;
@@ -712,7 +713,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     );
                 inst.setPrefabWorldPlacement(prefabOrigin.x, prefabOrigin.y, prefabOrigin.z, session.getPrefabYaw());
                 town.addPlotInstance(inst);
-                tm.updateTown(town);
             } finally {
             }
         } else {
@@ -743,8 +743,9 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 session.getPrefabYaw()
             );
             town.addPlotInstance(miniPlot);
-            tm.updateTown(town);
         }
+        QuestProgressionService.onConstructionPlaced(plugin, town, session.getConstructionId());
+        tm.updateTown(town);
         PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         if (pr != null) {
             pr.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.plotSign.placed"));

@@ -7,13 +7,18 @@ Group #AetherhavenHudRoot {
 
   Group #StatusPanel {
     LayoutMode: Full;
-    Anchor: (Right: 20, Top: 20, Width: 286, Height: 132);
+    Anchor: (Right: 20, Top: 20, Width: 286, Height: 117);
     HitTestVisible: false;
+
+    Group #StatusBackgroundHost {
+      LayoutMode: Full;
+      Anchor: (Full: 0);
+    }
 
     Group #StatusContent {
       LayoutMode: Top;
       Anchor: (Full: 0);
-      Padding: (Left: 18, Right: 18, Top: 10, Bottom: 12);
+      Padding: (Left: 18, Right: 18, Top: 10, Bottom: 0);
 
       Group #TimeRow {
         LayoutMode: Full;
@@ -59,11 +64,11 @@ Group #AetherhavenHudRoot {
 
       Group #GoldRow {
         LayoutMode: Full;
-        Anchor: (Height: 44);
+        Anchor: (Height: 41);
 
         Group #GoldLeftContent {
           LayoutMode: Left;
-          Anchor: (Full: 0);
+          Anchor: (Left: -8, Right: 0, Top: 0, Bottom: 0);
 
           ItemIcon #GoldIconLeft {
             Anchor: (Width: 44, Height: 44, Right: -4, Bottom: 5);
@@ -78,7 +83,7 @@ Group #AetherhavenHudRoot {
 
         Group #GoldRightContent {
           LayoutMode: Left;
-          Anchor: (Full: 0);
+          Anchor: (Left: 0, Right: -8, Top: 0, Bottom: 0);
           Visible: false;
 
           Label #CoinTextRight {
@@ -97,13 +102,19 @@ Group #AetherhavenHudRoot {
 
   Group #QuestPanel {
     LayoutMode: Full;
-    Anchor: (Right: 20, Top: 150, Width: 370, Height: 557);
+    Anchor: (Right: 20, Top: 150, Width: 370, Height: 299);
     Visible: false;
     HitTestVisible: false;
+
+    Group #QuestBackgroundHost {
+      LayoutMode: Full;
+      Anchor: (Full: 0);
+    }
 
     Group #QuestContent {
       LayoutMode: Top;
       Anchor: (Full: 0);
+      Padding: (Horizontal: 18);
 
       Group #QuestHeader {
         LayoutMode: Full;
@@ -117,24 +128,38 @@ Group #AetherhavenHudRoot {
       }
 
       Group #QuestHeaderDivider {
-        LayoutMode: Middle;
+        LayoutMode: Full;
         Anchor: (Height: 7);
 
-        Group {
-          Anchor: (Horizontal: 0, Height: 1);
-          Background: #9db7ca(0.48);
+        Group #QuestDividerLeft {
+          LayoutMode: Middle;
+          Anchor: (Left: 0, Width: 250, Height: 7);
+          Visible: false;
+          Group {
+            Anchor: (Horizontal: 0, Height: 1);
+            Background: #9db7ca(0.48);
+          }
+        }
+
+        Group #QuestDividerRight {
+          LayoutMode: Middle;
+          Anchor: (Right: 0, Width: 250, Height: 7);
+          Group {
+            Anchor: (Horizontal: 0, Height: 1);
+            Background: #9db7ca(0.48);
+          }
         }
       }
 
       Group #QuestRow1 {
         LayoutMode: Full;
-        Anchor: (Height: 170, Bottom: 7);
+        Anchor: (Height: 84, Bottom: 7);
         Visible: false;
 
         Group #RowContent {
           LayoutMode: Top;
           Anchor: (Full: 0);
-          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Padding: (Top: 9, Bottom: 9);
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);
@@ -149,13 +174,13 @@ Group #AetherhavenHudRoot {
 
       Group #QuestRow2 {
         LayoutMode: Full;
-        Anchor: (Height: 170, Bottom: 7);
+        Anchor: (Height: 84, Bottom: 7);
         Visible: false;
 
         Group #RowContent {
           LayoutMode: Top;
           Anchor: (Full: 0);
-          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Padding: (Top: 9, Bottom: 9);
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);
@@ -170,13 +195,13 @@ Group #AetherhavenHudRoot {
 
       Group #QuestRow3 {
         LayoutMode: Full;
-        Anchor: (Height: 170);
+        Anchor: (Height: 84);
         Visible: false;
 
         Group #RowContent {
           LayoutMode: Top;
           Anchor: (Full: 0);
-          Padding: (Left: 13, Right: 13, Top: 9, Bottom: 9);
+          Padding: (Top: 9, Bottom: 9);
           Label #QuestTitle {
             Text: "";
             Anchor: (Bottom: 3);

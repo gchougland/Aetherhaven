@@ -34,4 +34,8 @@ public final class AetherhavenHudSupport {
     public static void remove(@Nonnull Player player, @Nonnull PlayerRef playerRef) {
         player.getHudManager().removeCustomHud(playerRef, AetherhavenHud.HUD_KEY);
     }
+
+    public static boolean isActive(@Nonnull Player player) {
+        return player.getHudManager().getCustomHud(AetherhavenHud.HUD_KEY) instanceof AetherhavenHud;
+    }
 }

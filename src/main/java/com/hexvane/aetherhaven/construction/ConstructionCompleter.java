@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import com.hexvane.aetherhaven.production.PlotProductionState;
 import com.hexvane.aetherhaven.production.ProductionCatalog;
 import com.hexvane.aetherhaven.production.ProductionEffectiveCatalog;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.logger.HytaleLogger;
 import org.joml.Vector3i;
@@ -117,6 +118,7 @@ public final class ConstructionCompleter {
 
         plot.setState(PlotInstanceState.COMPLETE);
         plot.setLastStateChangeEpochMs(now);
+        QuestProgressionService.onConstructionBuilt(plugin, town, plot.getConstructionId());
         tm.updateTown(town);
 
         if (def != null) {
