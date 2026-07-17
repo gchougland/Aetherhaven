@@ -1,7 +1,6 @@
 async function fetchMe() {
   const res = await fetch("/api/me");
-  const { user } = await res.json();
-  return user;
+  return res.json();
 }
 
 function userDisplayName(user) {
@@ -90,7 +89,7 @@ function setupAccountMenuListeners() {
   });
 }
 
-function renderAccountMenu(user) {
+function renderAccountMenu(user, isAdmin = false) {
   const root = document.getElementById("accountMenu");
   if (!root) {
     return;
@@ -120,13 +119,14 @@ function renderAccountMenu(user) {
     <div class="account-menu-dropdown" hidden role="menu">
       <div class="account-menu-label">${escapeHtml(name)}</div>
       ${accountMenuLink("/account.html", "Account")}
-      ${accountMenuLink("/admin.html", "Admin")}
+      ${isAdmin ? accountMenuLink("/admin.html", "Admin") : ""}
       <a href="/auth/logout">Sign out</a>
     </div>`;
 }
 
 async function refreshAuthNav() {
-  renderAccountMenu(await fetchMe());
+  const me = await fetchMe();
+  renderAccountMenu(me.user, me.isAdmin);
 }
 
 function formatBytes(n) {
@@ -345,8 +345,9 @@ async function loadCatalog() {
   const status = document.getElementById("status");
   if (!el) return;
   try {
-    const user = await fetchMe();
-    renderAccountMenu(user);
+    const me = await fetchMe();
+    const user = me.user;
+    renderAccountMenu(user, me.isAdmin);
     const data = await fetchCatalog();
     catalogCanVote = Boolean(user);
     allCatalogEntries = data.entries || [];
@@ -1181,7 +1182,7 @@ async function loadSubmissions() {
     window.location.href = "/auth/login";
     return;
   }
-  renderAccountMenu(me.user);
+  renderAccountMenu(me.user, me.isAdmin);
 
   if (!list) return;
   try {
@@ -1214,7 +1215,7 @@ async function loadAccountPage() {
     window.location.href = "/auth/login";
     return;
   }
-  renderAccountMenu(me.user);
+  renderAccountMenu(me.user, me.isAdmin);
   if (!root) {
     return;
   }
@@ -1533,7 +1534,11 @@ async function loadAdminPage() {
     window.location.href = "/auth/login";
     return;
   }
-  renderAccountMenu(me.user);
+  if (!me.isAdmin) {
+    window.location.href = "/";
+    return;
+  }
+  renderAccountMenu(me.user, me.isAdmin);
   const restoredState = restoreAdminViewState();
   await Promise.all([loadAdminQueue(), loadAdminScreenshotQueue(), loadAdminCatalog()]);
   updateAdminJumpCounts();
@@ -2458,7 +2463,7 @@ async function loadEditPage() {
     window.location.href = "/auth/login";
     return;
   }
-  renderAccountMenu(me.user);
+  renderAccountMenu(me.user, me.isAdmin);
   const isAdmin = Boolean(me.isAdmin);
 
   if (!buildingId && !submissionId) {

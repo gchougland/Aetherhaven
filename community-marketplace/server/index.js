@@ -2287,6 +2287,8 @@ function sendHtmlWithAdSense(relativePath) {
   };
 }
 
+app.get("/admin.html", requireWebUser, requireAdmin, sendHtmlWithAdSense("admin.html"));
+
 if (ADSENSE_CLIENT_ID) {
   app.get("/", sendHtmlWithAdSense("index.html"));
   app.get("/index.html", sendHtmlWithAdSense("index.html"));
@@ -2295,7 +2297,6 @@ if (ADSENSE_CLIENT_ID) {
   app.get("/account.html", sendHtmlWithAdSense("account.html"));
   app.get("/submissions.html", sendHtmlWithAdSense("submissions.html"));
   app.get("/edit.html", sendHtmlWithAdSense("edit.html"));
-  app.get("/admin.html", sendHtmlWithAdSense("admin.html"));
   app.get("/dashboard.html", sendHtmlWithAdSense("dashboard.html"));
 }
 
