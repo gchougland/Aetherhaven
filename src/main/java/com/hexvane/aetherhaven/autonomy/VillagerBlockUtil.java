@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.autonomy;
 
+import com.hypixel.hytale.builtin.mounts.BlockMountComponent;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.BlockMaterial;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
@@ -11,8 +12,11 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
@@ -341,19 +345,100 @@ public final class VillagerBlockUtil {
         return null;
     }
 
-    /** World-space seat point for a chair/stool block, or null when the block has no seat mount points. */
+    /**
+     * Multi-block furniture (village benches, etc.) stores secondary voxels with non-zero filler pointing at the
+     * origin cell. Seats/beds are defined relative to that origin — mounting a filler cell shifts the side seat into
+     * empty air for some rotations.
+     */
+    @Nonnull
+    @SuppressWarnings({ "deprecation", "removal" })
+    public static Vector3i resolveMountBaseBlock(@Nonnull World world, int x, int y, int z) {
+        WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
+        if (chunk == null) {
+            return new Vector3i(x, y, z);
+        }
+        int filler = chunk.getFiller(x, y, z);
+        if (filler == FillerBlockUtil.NO_FILLER) {
+            return new Vector3i(x, y, z);
+        }
+        return new Vector3i(
+            x - FillerBlockUtil.unpackX(filler),
+            y - FillerBlockUtil.unpackY(filler),
+            z - FillerBlockUtil.unpackZ(filler)
+        );
+    }
+
+    /** World-space seat point for a chair/stool block, or null when the block has no free seat mount points. */
     @Nullable
     public static Vector3d seatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
-        BlockType blockType = blockTypeNoLoad(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        return preferredAvailableSeatWorldPosition(world, mountBlock);
+    }
+
+    /** True when the furniture block still has an open seat mount point (players/tourists/villagers count). */
+    public static boolean hasAvailableSeat(@Nonnull World world, int bx, int by, int bz) {
+        Vector3i base = resolveMountBaseBlock(world, bx, by, bz);
+        return preferredAvailableSeatWorldPosition(world, base) != null;
+    }
+
+    /**
+     * Picks an empty seat for multi-seat furniture (e.g. village benches). Uses vanilla
+     * {@link BlockMountComponent#findAvailableSeat} so occupancy matches what {@code mountOnBlock} checks (identity of
+     * rotated mount points), not entity feet — feet positions lag command-buffer mounts and blocked the second seat.
+     * Always resolves filler voxels to the furniture origin first.
+     */
+    @Nullable
+    public static Vector3d preferredAvailableSeatWorldPosition(@Nonnull World world, @Nonnull Vector3i mountBlock) {
+        Vector3i base = resolveMountBaseBlock(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        BlockType blockType = blockTypeNoLoad(world, base.x, base.y, base.z);
         if (blockType == null || blockType.getSeats() == null) {
             return null;
         }
-        int rotationIndex = blockRotationIndexNoLoad(world, mountBlock.x, mountBlock.y, mountBlock.z);
+        int rotationIndex = blockRotationIndexNoLoad(world, base.x, base.y, base.z);
         BlockMountPoint[] points = blockType.getSeats().getRotated(rotationIndex);
         if (points == null || points.length == 0) {
             return null;
         }
-        return points[0].computeWorldSpacePosition(mountBlock);
+        Vector3d blockCenter = new Vector3d(base.x + 0.5, base.y + 0.5, base.z + 0.5);
+        BlockMountComponent seatComp = blockMountComponentNoLoad(world, base);
+        if (seatComp != null) {
+            BlockMountPoint picked = seatComp.findAvailableSeat(base, points, blockCenter);
+            return picked != null ? picked.computeWorldSpacePosition(base) : null;
+        }
+        BlockMountPoint best = null;
+        double bestDistSq = Double.POSITIVE_INFINITY;
+        for (BlockMountPoint point : points) {
+            Vector3d seatPos = point.computeWorldSpacePosition(base);
+            double distSq = seatPos.distanceSquared(blockCenter);
+            if (distSq < bestDistSq) {
+                bestDistSq = distSq;
+                best = point;
+            }
+        }
+        return best != null ? best.computeWorldSpacePosition(base) : null;
+    }
+
+    @Nullable
+    private static BlockMountComponent blockMountComponentNoLoad(@Nonnull World world, @Nonnull Vector3i mountBlock) {
+        try {
+            WorldChunk chunk = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(mountBlock.x, mountBlock.z));
+            if (chunk == null || chunk.getReference() == null) {
+                return null;
+            }
+            Store<ChunkStore> chunkStore = world.getChunkStore().getStore();
+            BlockComponentChunk blockComponentChunk =
+                chunkStore.getComponent(chunk.getReference(), BlockComponentChunk.getComponentType());
+            if (blockComponentChunk == null) {
+                return null;
+            }
+            int blockIndex = ChunkUtil.indexBlockInColumn(mountBlock.x, mountBlock.y, mountBlock.z);
+            Ref<ChunkStore> blockRef = blockComponentChunk.getEntityReference(blockIndex);
+            if (blockRef == null || !blockRef.isValid()) {
+                return null;
+            }
+            return chunkStore.getComponent(blockRef, BlockMountComponent.getComponentType());
+        } catch (RuntimeException ignored) {
+            return null;
+        }
     }
 
     /**

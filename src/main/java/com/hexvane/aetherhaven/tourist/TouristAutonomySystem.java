@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.npc.NpcAnimationPlayback;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.poi.PoiEntry;
+import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -46,6 +47,7 @@ import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import com.hypixel.hytale.server.npc.movement.NavState;
 import com.hypixel.hytale.server.npc.movement.controllers.MotionController;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -55,7 +57,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore> {
-    private static final double ARRIVE_HORIZONTAL_SQ = 0.5 * 0.5;
+    /** Seek leash is ~0.5; stop arrival earlier so shoppers do not jog into counters/stalls. */
+    private static final double ARRIVE_HORIZONTAL_SQ = 1.25 * 1.25;
     private static final double RETURN_ARRIVE_HORIZONTAL_SQ = 2.75 * 2.75;
     private static final long TRAVEL_PHASE_MAX_MS = 120_000L;
     private static final int BLOCKED_FAIL_TICKS = 100;
@@ -66,6 +69,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     private static final long SHOP_VISIT_MIN_MS = 20_000L;
     private static final long SHOP_VISIT_MAX_MS = 40_000L;
     private static final int SHOP_SPOTS_PER_VISIT_MAX = 2;
+    /** Chance a tourist buys one player listing after browsing a player shop (0–100). */
+    private static final int PLAYER_SHOP_BUY_CHANCE_PERCENT = 60;
     private static final long POI_USE_MIN_MS = 15_000L;
     private static final long POI_USE_MAX_MS = 35_000L;
     private static final long SHOP_SPOT_BROWSE_MIN_MS = 5_000L;
@@ -234,7 +239,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             Double.isFinite(leash.x) ? leash.x : autonomy.getTargetX(),
             Double.isFinite(leash.z) ? leash.z : autonomy.getTargetZ()
         );
-        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(autonomy)) {
+        if (!AutonomyStuckTeleportRecovery.isStallTeleportDue(
+            autonomy,
+            AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS
+        )) {
             return false;
         }
 
@@ -444,9 +452,24 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull World world,
         @Nonnull PoiEntry poi
     ) {
-        double tx = poi.hasInteractionTarget() ? poi.getInteractionTargetX() + 0.5 : poi.getX() + 0.5;
-        double ty = poi.hasInteractionTarget() ? poi.getInteractionTargetY() + 0.02 : poi.getY() + 0.02;
-        double tz = poi.hasInteractionTarget() ? poi.getInteractionTargetZ() + 0.5 : poi.getZ() + 0.5;
+        double tx;
+        double ty;
+        double tz;
+        if (poi.hasInteractionTarget()) {
+            Double tpx = poi.getInteractionTargetX();
+            Double tpy = poi.getInteractionTargetY();
+            Double tpz = poi.getInteractionTargetZ();
+            if (tpx == null || tpy == null || tpz == null) {
+                return;
+            }
+            tx = tpx;
+            ty = tpy;
+            tz = tpz;
+        } else {
+            tx = poi.getX() + 0.5;
+            ty = poi.getY() + 0.02;
+            tz = poi.getZ() + 0.5;
+        }
         beginTravelTo(autonomy, now, tx, ty, tz, poi.getId());
         routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(tx, ty, tz), false);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
@@ -730,11 +753,6 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
 
             PoiEntry poi = targetId != null ? poiRegistry.get(targetId) : null;
             if (poi != null && visitPlotId != null && visitPlotId.equals(poi.getPlotId())) {
-                ConstructionCatalog catalog = plugin.getConstructionCatalog();
-                if (TouristDestinationResolver.isTouristShopPlot(town, catalog, visitPlotId)) {
-                    beginPlotWanderVisit(ref, store, commandBuffer, npc, autonomy, now, ref.hashCode(), town, world);
-                    return;
-                }
                 beginPlotPoiUse(ref, store, commandBuffer, npc, autonomy, now, poi);
                 return;
             }
@@ -798,6 +816,21 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         long now,
         @Nonnull PoiEntry poi
     ) {
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        UUID selfUuid = uc != null ? uc.getUuid() : null;
+        TownVillagerBinding binding = store.getComponent(ref, TownVillagerBinding.getComponentType());
+        UUID townId = binding != null ? binding.getTownId() : null;
+        if (townId != null) {
+            PoiRegistry poiRegistry =
+                AetherhavenWorldRegistries.getOrCreatePoiRegistry(store.getExternalData().getWorld(), plugin);
+            if (!PoiOccupancy.canBeginUse(store, townId, poiRegistry, poi, selfUuid)) {
+                autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+                autonomy.setNextDecisionEpochMs(now + 2000L);
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                clearAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
+        }
         autonomy.setPhase(TouristAutonomyState.PHASE_POI);
         autonomy.clearTravelWaypoints();
         autonomy.setLastPlotPoiId(poi.getId());
@@ -840,11 +873,46 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         @Nonnull World world,
         @Nonnull ShopSpotRecord spot
     ) {
-        double[] stand = TouristShopSpotBrowse.customerStandWorld(world, spot);
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        Vector3d preferNear = tc != null ? tc.getPosition() : null;
+        PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        Map<String, Integer> occupancy = PoiOccupancy.cellOccupancyForTown(world, town.getTownId(), store, poiRegistry);
+        double[] stand = TouristShopSpotBrowse.customerStandWorld(
+            world,
+            spot,
+            poiRegistry,
+            preferNear,
+            occupancy
+        );
         if (stand == null) {
             return;
         }
+        beginTravelToShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world, spot, stand, preferNear);
+    }
+
+    private void beginTravelToShopSpot(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer,
+        @Nonnull NPCEntity npc,
+        @Nonnull TouristAutonomyState autonomy,
+        long now,
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull ShopSpotRecord spot,
+        @Nonnull double[] stand,
+        @Nullable Vector3d preferNear
+    ) {
         beginTravelTo(autonomy, now, stand[0], stand[1], stand[2], spot.getSpotId());
+        if (preferNear != null) {
+            double dx = preferNear.x - stand[0];
+            double dz = preferNear.z - stand[2];
+            if (dx * dx + dz * dz <= ARRIVE_HORIZONTAL_SQ) {
+                // Already at the customer stand — browse now instead of Seek jittering in place.
+                beginShopSpotBrowse(ref, store, commandBuffer, npc, autonomy, now, spot);
+                return;
+            }
+        }
         routeNpcToTarget(ref, store, plugin, npc, autonomy, town, world, new Vector3d(stand[0], stand[1], stand[2]), false);
         commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
@@ -878,11 +946,21 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (spot == null) {
             return false;
         }
-        double[] stand = TouristShopSpotBrowse.customerStandWorld(world, spot);
+        TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+        Vector3d preferNear = tc != null ? tc.getPosition() : null;
+        PoiRegistry poiRegistry = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
+        Map<String, Integer> occupancy = PoiOccupancy.cellOccupancyForTown(world, town.getTownId(), store, poiRegistry);
+        double[] stand = TouristShopSpotBrowse.customerStandWorld(
+            world,
+            spot,
+            poiRegistry,
+            preferNear,
+            occupancy
+        );
         if (stand == null) {
             return false;
         }
-        beginTravelToShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world, spot);
+        beginTravelToShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world, spot, stand, preferNear);
         return true;
     }
 
@@ -938,7 +1016,30 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                 if (tryTravelToNextShopSpot(ref, store, commandBuffer, npc, autonomy, now, town, world)) {
                     return;
                 }
+                // No shop spot to walk to — use authored tourist stands instead of standing at the counter.
+                Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode() ^ 0x51A7L);
+                int npcFeetY = tc != null ? (int) Math.floor(tc.getPosition().y) : 64;
+                Map<String, Integer> occupancy =
+                    PoiOccupancy.cellOccupancyForTown(world, town.getTownId(), store, poiRegistry);
+                PoiEntry poi =
+                    TouristDestinationResolver.pickVisitPoiOnPlot(
+                        town,
+                        poiRegistry,
+                        catalog,
+                        plotId,
+                        autonomy.getLastPlotPoiUuid(),
+                        random,
+                        world,
+                        plugin,
+                        npcFeetY,
+                        store,
+                        occupancy
+                    );
                 scheduleNextShopSpotPick(autonomy, now, ref.hashCode());
+                if (poi != null) {
+                    beginTravelToPoi(ref, store, commandBuffer, npc, autonomy, now, town, world, poi);
+                    return;
+                }
                 commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
             }
             applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -948,6 +1049,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (now >= autonomy.getNextPoiPickEpochMs()) {
             Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
             int npcFeetY = tc != null ? (int) Math.floor(tc.getPosition().y) : 64;
+            Map<String, Integer> occupancy =
+                PoiOccupancy.cellOccupancyForTown(world, town.getTownId(), store, poiRegistry);
             PoiEntry poi =
                 TouristDestinationResolver.pickVisitPoiOnPlot(
                     town,
@@ -958,7 +1061,9 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                     random,
                     world,
                     plugin,
-                    npcFeetY
+                    npcFeetY,
+                    store,
+                    occupancy
                 );
             scheduleNextPoiPick(autonomy, now, ref.hashCode());
             if (poi != null) {
@@ -1009,6 +1114,8 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         UUID visitPlotId = autonomy.getVisitPlotUuid();
         ConstructionCatalog catalog = plugin.getConstructionCatalog();
         if (visitPlotId != null && TouristDestinationResolver.isTouristShopPlot(town, catalog, visitPlotId)) {
+            // Also try a buy after tourist-visit stands — shoppers often linger there without a stall browse.
+            tryTouristPlayerShopPurchase(ref, store, autonomy, town, world, visitPlotId, now);
             autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
             scheduleNextShopSpotPick(autonomy, now, ref.hashCode());
             commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
@@ -1048,7 +1155,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
-        if (random.nextInt(100) >= 40) {
+        if (random.nextInt(100) >= PLAYER_SHOP_BUY_CHANCE_PERCENT) {
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -1063,14 +1170,19 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
                 buyerName = ch.getDisplayName().trim();
             }
         }
-        NpcShopSpotBuyerService.scheduleBuyOneListing(
-            world,
-            town.getTownId(),
-            plotId,
-            buyerName,
-            uc.getUuid()
-        );
-        autonomy.setShopPurchaseDoneThisVisit(true);
+        // Run on this tick (tourist systems already run on the world thread). Only mark done on success so a
+        // missed/empty listing can retry later in the same visit.
+        boolean bought =
+            NpcShopSpotBuyerService.tryBuyOneListingOnWorldThread(
+                world,
+                town.getTownId(),
+                plotId,
+                buyerName,
+                uc.getUuid()
+            );
+        if (bought) {
+            autonomy.setShopPurchaseDoneThisVisit(true);
+        }
     }
 
     @Nullable

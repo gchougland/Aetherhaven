@@ -15,7 +15,10 @@ public final class PlotCreatorValidator {
     private PlotCreatorValidator() {}
 
     @Nullable
-    public static String validateId(@Nonnull String raw, @Nonnull ConstructionCatalog catalog, @Nullable String editingId) {
+    public static String validateId(@Nullable String raw, @Nonnull ConstructionCatalog catalog, @Nullable String editingId) {
+        if (raw == null) {
+            return "id_empty";
+        }
         String id = raw.trim().toLowerCase(Locale.ROOT);
         if (id.isEmpty()) {
             return "id_empty";

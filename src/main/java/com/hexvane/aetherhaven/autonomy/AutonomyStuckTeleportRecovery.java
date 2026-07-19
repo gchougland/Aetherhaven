@@ -21,7 +21,6 @@ import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleport;
 import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
-import com.hypixel.hytale.server.core.modules.entity.teleport.Teleport;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
@@ -101,7 +100,11 @@ public final class AutonomyStuckTeleportRecovery {
     }
 
     public static boolean isStallTeleportDue(@Nonnull AutonomyStallTrackable state) {
-        return state.getAutonomyStallTicks() >= AetherhavenConstants.AUTONOMY_STALL_TELEPORT_TICKS;
+        return isStallTeleportDue(state, AetherhavenConstants.AUTONOMY_STALL_TELEPORT_TICKS);
+    }
+
+    public static boolean isStallTeleportDue(@Nonnull AutonomyStallTrackable state, int stallTicksThreshold) {
+        return state.getAutonomyStallTicks() >= Math.max(1, stallTicksThreshold);
     }
 
     public static void resetAfterRecovery(@Nonnull AutonomyStallTrackable state) {
@@ -112,7 +115,10 @@ public final class AutonomyStuckTeleportRecovery {
         if (leaveDue) {
             return true;
         }
-        if (phase == TouristAutonomyState.PHASE_POI || phase == TouristAutonomyState.PHASE_IDLE) {
+        // Standing in a plot between shop/POI picks is intentional idle — not stuck travel.
+        if (phase == TouristAutonomyState.PHASE_POI
+            || phase == TouristAutonomyState.PHASE_IDLE
+            || phase == TouristAutonomyState.PHASE_VISIT) {
             return false;
         }
         return true;

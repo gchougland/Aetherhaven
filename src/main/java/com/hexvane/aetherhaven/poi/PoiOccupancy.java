@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.poi;
 
 import com.hexvane.aetherhaven.autonomy.VillagerAutonomyState;
+import com.hexvane.aetherhaven.tourist.TouristAutonomyState;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
@@ -13,12 +14,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Counts how many town villagers are already traveling to or using each <strong>world cell</strong> targeted by a POI,
- * so {@link com.hexvane.aetherhaven.autonomy.PoiScoring} does not overfill a bed (capacity 1) even when two registry
- * entries accidentally share the same block coordinates.
+ * Counts how many town NPCs (villagers and tourists) are already traveling to or using each <strong>world cell</strong>
+ * targeted by a POI, so capacity-1 spots are not overfilled.
  * <p>
  * Cached per world tick + town. The returned map is <strong>mutable</strong> so same-tick pickers can soft-claim cells
- * after {@code pickBest} before TRAVEL is visible in the store.
+ * after a pick before TRAVEL is visible in the store.
  */
 public final class PoiOccupancy {
     private static final ConcurrentHashMap<String, Map<String, Integer>> CACHE = new ConcurrentHashMap<>();
@@ -28,8 +28,8 @@ public final class PoiOccupancy {
     private PoiOccupancy() {}
 
     /**
-     * @return mutable map key {@code "x,y,z"} of the target POI's anchor cell → number of town NPCs traveling to or using
-     *         a POI at that cell (plus same-tick soft claims)
+     * @return mutable map key {@code "x,y,z"} of the target stand cell → number of town NPCs traveling to or using
+     *         that cell (plus same-tick soft claims)
      */
     @Nonnull
     public static Map<String, Integer> cellOccupancyForTown(
@@ -59,13 +59,44 @@ public final class PoiOccupancy {
         return cellKey(poi.getX(), poi.getY(), poi.getZ());
     }
 
+    /** Stand cell tourists/villagers walk to (interaction target when set, else POI block). */
+    @Nonnull
+    public static String standCellKey(@Nonnull PoiEntry poi) {
+        if (poi.hasInteractionTarget()) {
+            Double tx = poi.getInteractionTargetX();
+            Double ty = poi.getInteractionTargetY();
+            Double tz = poi.getInteractionTargetZ();
+            if (tx != null && ty != null && tz != null) {
+                return cellKey((int) Math.floor(tx), (int) Math.floor(ty), (int) Math.floor(tz));
+            }
+        }
+        return cellKey(poi);
+    }
+
+    @Nonnull
+    public static String standCellKey(double x, double y, double z) {
+        return cellKey((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
+    }
+
     /**
      * Soft-claim a capacity slot for {@code poi} if under capacity. Returns false when full (does not increment).
-     * Safe for concurrent same-tick pickers.
+     * Safe for concurrent same-tick pickers. Uses the POI block cell (matches villager {@code PoiScoring}).
      */
     public static boolean tryClaim(@Nonnull Map<String, Integer> cellOccupancy, @Nonnull PoiEntry poi) {
-        int cap = Math.max(1, poi.getCapacity());
-        String cell = cellKey(poi);
+        return tryClaimCell(cellOccupancy, cellKey(poi), Math.max(1, poi.getCapacity()));
+    }
+
+    /** Soft-claim the stand cell tourists actually walk to (interaction target when set). */
+    public static boolean tryClaimStand(@Nonnull Map<String, Integer> cellOccupancy, @Nonnull PoiEntry poi) {
+        return tryClaimCell(cellOccupancy, standCellKey(poi), Math.max(1, poi.getCapacity()));
+    }
+
+    public static boolean tryClaimCell(
+        @Nonnull Map<String, Integer> cellOccupancy,
+        @Nonnull String cell,
+        int capacity
+    ) {
+        int cap = Math.max(1, capacity);
         if (!(cellOccupancy instanceof ConcurrentHashMap)) {
             int used = cellOccupancy.getOrDefault(cell, 0);
             if (used >= cap) {
@@ -94,8 +125,17 @@ public final class PoiOccupancy {
         }
     }
 
+    public static boolean isCellAvailable(
+        @Nonnull Map<String, Integer> cellOccupancy,
+        @Nonnull String cell,
+        int capacity
+    ) {
+        return cellOccupancy.getOrDefault(cell, 0) < Math.max(1, capacity);
+    }
+
     /**
-     * Live store count of town villagers (TRAVEL/USE) targeting {@code poi}'s cell, excluding {@code excludeEntityUuid}.
+     * Live store count of town villagers/tourists targeting {@code poi}'s stand cell, excluding
+     * {@code excludeEntityUuid}.
      */
     public static int liveOccupancyExcluding(
         @Nonnull Store<EntityStore> store,
@@ -104,15 +144,17 @@ public final class PoiOccupancy {
         @Nonnull PoiEntry poi,
         @Nullable UUID excludeEntityUuid
     ) {
-        String cell = cellKey(poi);
+        // Villagers claim the POI block cell; tourists often leash to the interaction-target stand — count both.
+        String poiCell = cellKey(poi);
+        String standCell = standCellKey(poi);
         int[] count = {0};
-        Query<EntityStore> q =
+        Query<EntityStore> villagerQ =
             Query.and(
                 VillagerAutonomyState.getComponentType(),
                 TownVillagerBinding.getComponentType(),
                 UUIDComponent.getComponentType()
             );
-        store.forEachEntityParallel(q, (index, chunk, commandBuffer) -> {
+        store.forEachEntityParallel(villagerQ, (index, chunk, commandBuffer) -> {
             TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
             if (b == null || !townId.equals(b.getTownId())) {
                 return;
@@ -129,15 +171,30 @@ public final class PoiOccupancy {
             if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
                 return;
             }
-            UUID pid = a.getTargetPoiUuid();
-            if (pid == null) {
+            if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
+                count[0]++;
+            }
+        });
+        Query<EntityStore> touristQ =
+            Query.and(
+                TouristAutonomyState.getComponentType(),
+                TownVillagerBinding.getComponentType(),
+                UUIDComponent.getComponentType()
+            );
+        store.forEachEntityParallel(touristQ, (index, chunk, commandBuffer) -> {
+            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !townId.equals(b.getTownId())) {
                 return;
             }
-            PoiEntry target = registry.get(pid);
-            if (target == null) {
+            UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
+            if (uc != null && excludeEntityUuid != null && excludeEntityUuid.equals(uc.getUuid())) {
                 return;
             }
-            if (cell.equals(cellKey(target))) {
+            TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
+            if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
+                return;
+            }
+            if (occupiesCell(a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry, poiCell, standCell)) {
                 count[0]++;
             }
         });
@@ -145,7 +202,7 @@ public final class PoiOccupancy {
     }
 
     /**
-     * True when this villager may begin USE at {@code poi}: other NPCs targeting the cell stay under capacity.
+     * True when this NPC may begin USE at {@code poi}: other NPCs targeting the stand cell stay under capacity.
      */
     public static boolean canBeginUse(
         @Nonnull Store<EntityStore> store,
@@ -158,6 +215,36 @@ public final class PoiOccupancy {
         return others < Math.max(1, poi.getCapacity());
     }
 
+    private static boolean isTouristOccupyingPhase(int phase) {
+        return phase == TouristAutonomyState.PHASE_TRAVEL
+            || phase == TouristAutonomyState.PHASE_POI
+            || phase == TouristAutonomyState.PHASE_VISIT
+            || phase == TouristAutonomyState.PHASE_RETURNING;
+    }
+
+    private static boolean occupiesCell(
+        @Nullable UUID targetId,
+        double targetX,
+        double targetY,
+        double targetZ,
+        @Nonnull PoiRegistry registry,
+        @Nonnull String poiCell,
+        @Nonnull String standCell
+    ) {
+        if (targetId != null) {
+            PoiEntry target = registry.get(targetId);
+            if (target != null) {
+                String key = standCellKey(target);
+                return poiCell.equals(cellKey(target)) || standCell.equals(key) || poiCell.equals(key);
+            }
+        }
+        if (!Double.isFinite(targetX) || !Double.isFinite(targetY) || !Double.isFinite(targetZ)) {
+            return false;
+        }
+        String key = standCellKey(targetX, targetY, targetZ);
+        return poiCell.equals(key) || standCell.equals(key);
+    }
+
     @Nonnull
     private static ConcurrentHashMap<String, Integer> buildCellCounts(
         @Nonnull Store<EntityStore> store,
@@ -165,8 +252,9 @@ public final class PoiOccupancy {
         @Nonnull PoiRegistry registry
     ) {
         ConcurrentHashMap<String, Integer> counts = new ConcurrentHashMap<>();
-        Query<EntityStore> q = Query.and(VillagerAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
-        store.forEachEntityParallel(q, (index, chunk, commandBuffer) -> {
+        Query<EntityStore> villagerQ =
+            Query.and(VillagerAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
+        store.forEachEntityParallel(villagerQ, (index, chunk, commandBuffer) -> {
             TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
             if (b == null || !townId.equals(b.getTownId())) {
                 return;
@@ -179,17 +267,46 @@ public final class PoiOccupancy {
             if (ph != VillagerAutonomyState.PHASE_TRAVEL && ph != VillagerAutonomyState.PHASE_USE) {
                 return;
             }
-            UUID pid = a.getTargetPoiUuid();
-            if (pid == null) {
+            mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
+        });
+        Query<EntityStore> touristQ =
+            Query.and(TouristAutonomyState.getComponentType(), TownVillagerBinding.getComponentType());
+        store.forEachEntityParallel(touristQ, (index, chunk, commandBuffer) -> {
+            TownVillagerBinding b = chunk.getComponent(index, TownVillagerBinding.getComponentType());
+            if (b == null || !townId.equals(b.getTownId())) {
                 return;
             }
-            PoiEntry target = registry.get(pid);
-            if (target == null) {
+            TouristAutonomyState a = chunk.getComponent(index, TouristAutonomyState.getComponentType());
+            if (a == null || !isTouristOccupyingPhase(a.getPhase())) {
                 return;
             }
-            String cell = cellKey(target.getX(), target.getY(), target.getZ());
-            counts.merge(cell, 1, Integer::sum);
+            mergeOccupancy(counts, a.getTargetPoiUuid(), a.getTargetX(), a.getTargetY(), a.getTargetZ(), registry);
         });
         return counts;
+    }
+
+    private static void mergeOccupancy(
+        @Nonnull ConcurrentHashMap<String, Integer> counts,
+        @Nullable UUID targetId,
+        double targetX,
+        double targetY,
+        double targetZ,
+        @Nonnull PoiRegistry registry
+    ) {
+        if (targetId != null) {
+            PoiEntry target = registry.get(targetId);
+            if (target != null) {
+                // Count both the POI block and stand (may differ when an interaction target is set).
+                counts.merge(cellKey(target), 1, Integer::sum);
+                String stand = standCellKey(target);
+                if (!stand.equals(cellKey(target))) {
+                    counts.merge(stand, 1, Integer::sum);
+                }
+                return;
+            }
+        }
+        if (Double.isFinite(targetX) && Double.isFinite(targetY) && Double.isFinite(targetZ)) {
+            counts.merge(standCellKey(targetX, targetY, targetZ), 1, Integer::sum);
+        }
     }
 }

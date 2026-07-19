@@ -70,13 +70,17 @@ Group #AetherhavenHudRoot {
           LayoutMode: Left;
           Anchor: (Left: -8, Right: 0, Top: 0, Bottom: 0);
 
-          ItemIcon #GoldIconLeft {
+          AssetImage #GoldIconLeft {
             Anchor: (Width: 44, Height: 44, Right: -4, Bottom: 5);
+            AssetPath: "Icons/ItemsGenerated/Deco_Scrap_Treasure.png";
+            FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+            HitTestVisible: false;
           }
 
           Label #CoinTextLeft {
             FlexWeight: 1;
             Text: "0";
+            Anchor: (Bottom: 4);
             Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, VerticalAlignment: Center);
           }
         }
@@ -89,11 +93,15 @@ Group #AetherhavenHudRoot {
           Label #CoinTextRight {
             FlexWeight: 1;
             Text: "0";
+            Anchor: (Bottom: 4);
             Style: (...$C.@DefaultLabelStyle, FontName: "Secondary", FontSize: 16, LetterSpacing: 0.5, TextColor: #f3ca63, OutlineColor: #000000(0.9), RenderBold: true, HorizontalAlignment: End, VerticalAlignment: Center);
           }
 
-          ItemIcon #GoldIconRight {
+          AssetImage #GoldIconRight {
             Anchor: (Width: 44, Height: 44, Left: -4, Bottom: 5);
+            AssetPath: "Icons/ItemsGenerated/Deco_Scrap_Treasure.png";
+            FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+            HitTestVisible: false;
           }
         }
       }

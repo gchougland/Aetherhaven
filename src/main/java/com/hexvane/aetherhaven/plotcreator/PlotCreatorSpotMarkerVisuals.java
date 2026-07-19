@@ -80,7 +80,7 @@ public final class PlotCreatorSpotMarkerVisuals {
             case SHOP_SPOT -> "Shop stall";
             case TOURIST_PORTAL_BLOCK -> "Tourist portal";
             case TOURIST_VISIT_POI -> "Tourist visit spot";
-            case SHOP_POI -> "Shop browse spot";
+            case SHOP_POI -> "Merchant work spot";
             case INNKEEPER_SPAWN -> "Innkeeper stand";
             case VISITOR_SPAWN -> "Inn Visitor Spawn";
             case GUILD_MASTER_SPAWN -> "Guild master stand";

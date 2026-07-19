@@ -46,6 +46,29 @@ public final class VillagerEquipmentService {
         applyOffhand(npcRef, store, commandBuffer, def.getOffhandItemId());
     }
 
+    /** Clears all hotbar slots (drops held work tools after leaving a work POI). */
+    public static void clearHotbar(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        InventoryComponent.Hotbar hb = store.getComponent(npcRef, InventoryComponent.Hotbar.getComponentType());
+        if (hb == null) {
+            return;
+        }
+        try {
+            short capacity = hb.getInventory().getCapacity();
+            for (short s = 0; s < capacity; s++) {
+                hb.getInventory().setItemStackForSlot(s, ItemStack.EMPTY);
+            }
+            hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
+            markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer);
+            putHotbar(npcRef, store, commandBuffer, hb);
+        } catch (RuntimeException ex) {
+            LOGGER.at(Level.FINE).withCause(ex).log("Could not clear NPC hotbar");
+        }
+    }
+
     private static void applyArmor(
         @Nonnull Ref<EntityStore> npcRef,
         @Nonnull Store<EntityStore> store,

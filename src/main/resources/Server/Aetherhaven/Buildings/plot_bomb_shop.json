@@ -29,36 +29,24 @@
   "pois": [
     {
       "localX": 7,
-      "localY": 2,
-      "localZ": -5,
+      "localY": 0,
+      "localZ": -6,
       "tags": [
         "WORK",
-        "SHOP"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Human_Ruins_Desk",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -5
-    },
-    {
-      "localX": 10,
-      "localY": 1,
-      "localZ": -4,
-      "tags": [
-        "TOURIST_VISIT"
+        "SHOP",
+        "workActivity:craft"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 9,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -7,
+      "interactionTargetYawDegrees": -177.00612
     },
     {
       "localX": 5,
-      "localY": 1,
+      "localY": 0,
       "localZ": -4,
       "tags": [
         "TOURIST_VISIT"
@@ -67,19 +55,30 @@
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
       "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": 35.31128
+    },
+    {
+      "localX": 10,
+      "localY": 0,
+      "localZ": -4,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 9,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": -39.236725
     }
   ],
   "managementBlockLocalPos": [
     8,
-    3,
+    2,
     -7
-  ],
-  "tags": [
-    "shop",
-    "work",
-    "bomb"
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,

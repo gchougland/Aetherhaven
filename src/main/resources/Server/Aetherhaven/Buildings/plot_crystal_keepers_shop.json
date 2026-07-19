@@ -1,6 +1,6 @@
 {
   "id": "plot_crystal_keepers_shop",
-  "displayName": "Crystal Keeper's Shop",
+  "displayName": "Crystal Keeper\u0027s Shop",
   "description": "A shop for selling gems and crystals.",
   "prefabPath": "plot_crystal_keepers_shop.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -41,19 +41,37 @@
       "localY": 2,
       "localZ": -3,
       "tags": [
-        "WORK",
-        "SHOP"
+        "SHOP",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 5,
       "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
+      "interactionTargetLocalZ": -4,
+      "workResidentKind": "crystal_keeper"
     },
     {
       "localX": 5,
-      "localY": 1,
+      "localY": 0,
+      "localZ": -4,
+      "tags": [
+        "WORK",
+        "SHOP",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Lightwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": 151.09961
+    },
+    {
+      "localX": 5,
+      "localY": 0,
       "localZ": -2,
       "tags": [
         "TOURIST_VISIT"
@@ -61,27 +79,14 @@
       "capacity": 1,
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
-      "interactionTargetLocalX": 4,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -1
-    },
-    {
-      "localX": 2,
-      "localY": 1,
-      "localZ": -5,
-      "tags": [
-        "TOURIST_VISIT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "SIT",
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -6
+      "interactionTargetLocalX": 5,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": 20.262207
     },
     {
       "localX": 6,
-      "localY": 1,
+      "localY": 0,
       "localZ": -2,
       "tags": [
         "TOURIST_VISIT"
@@ -90,19 +95,30 @@
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "SIT",
       "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -1
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -1,
+      "interactionTargetYawDegrees": 7.4386077
+    },
+    {
+      "localX": 2,
+      "localY": 0,
+      "localZ": -5,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 1,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": -70.87809
     }
   ],
   "managementBlockLocalPos": [
     5,
-    2,
+    1,
     -7
-  ],
-  "tags": [
-    "shop",
-    "work",
-    "crystals"
   ],
   "touristDestination": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_crystal_keepers_shop.displayName",

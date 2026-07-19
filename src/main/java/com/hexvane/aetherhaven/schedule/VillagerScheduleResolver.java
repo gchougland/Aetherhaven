@@ -140,7 +140,7 @@ public final class VillagerScheduleResolver {
             return "empty or invalid location symbol";
         }
         return switch (loc) {
-            case LOC_HOME -> describeHomeUnresolved(town, entityUuid, constructionCatalog);
+            case LOC_HOME -> describeHomeUnresolved(town, binding, entityUuid, villagerDef, constructionCatalog);
             case LOC_WORK -> describeWorkUnresolved(town, binding, villagerDef, constructionCatalog);
             case LOC_INN ->
                 describeSharedUnresolved(town, sharedConstructionId(loc, villagerDef), constructionCatalog);
@@ -196,7 +196,7 @@ public final class VillagerScheduleResolver {
             return VillagerScheduleResolveOutcome.skip();
         }
         return switch (loc) {
-            case LOC_HOME -> resolveHome(town, entityUuid, constructionCatalog);
+            case LOC_HOME -> resolveHome(town, binding, entityUuid, villagerDef, constructionCatalog);
             case LOC_WORK -> resolveWork(town, binding, villagerDef, constructionCatalog);
             case LOC_INN ->
                 resolveSharedBuilding(
@@ -255,7 +255,9 @@ public final class VillagerScheduleResolver {
     @Nonnull
     private static String describeHomeUnresolved(
         @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
         @Nonnull UUID entityUuid,
+        @Nullable VillagerDefinition def,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
         for (PlotInstance p : town.getPlotInstances()) {
@@ -269,10 +271,21 @@ public final class VillagerScheduleResolver {
                 continue;
             }
             if (p.hasHomeResident(entityUuid)) {
-                return "home: unexpected (plot exists)";
+                return "home: unexpected (house plot exists)";
             }
         }
-        return "home: no COMPLETE house plot with homeResidentEntityUuid=" + entityUuid;
+        UUID job = binding.getJobPlotId();
+        if (job != null) {
+            PlotInstance pi = town.findPlotById(job);
+            if (pi != null && pi.getState() == PlotInstanceState.COMPLETE) {
+                return "home: unexpected (no house but job plot " + job + " could roost)";
+            }
+        }
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def, constructionCatalog);
+        if (inferred != null) {
+            return "home: unexpected (no house but workplace " + inferred + " could roost)";
+        }
+        return "home: no COMPLETE house and no COMPLETE workplace to roost at for uuid=" + entityUuid;
     }
 
     @Nonnull
@@ -394,10 +407,16 @@ public final class VillagerScheduleResolver {
         return constructionCatalog.matchesGameplayConstruction(plot.getConstructionId(), expected);
     }
 
+    /**
+     * Prefer the assigned house. If none exists yet, roost at the workplace plot so the schedule segment still
+     * advances to {@code home} (they must not keep claiming WORK spots overnight — see {@code PoiScoring}).
+     */
     @Nonnull
     private static VillagerScheduleResolveOutcome resolveHome(
         @Nonnull TownRecord town,
+        @Nonnull TownVillagerBinding binding,
         @Nonnull UUID entityUuid,
+        @Nullable VillagerDefinition def,
         @Nonnull ConstructionCatalog constructionCatalog
     ) {
         for (PlotInstance p : town.getPlotInstances()) {
@@ -413,6 +432,17 @@ public final class VillagerScheduleResolver {
             if (p.hasHomeResident(entityUuid)) {
                 return new VillagerScheduleResolveOutcome(p.getPlotId(), null);
             }
+        }
+        UUID job = binding.getJobPlotId();
+        if (job != null) {
+            PlotInstance pi = town.findPlotById(job);
+            if (pi != null && pi.getState() == PlotInstanceState.COMPLETE) {
+                return new VillagerScheduleResolveOutcome(job, null);
+            }
+        }
+        UUID inferred = inferJobPlotFromTown(town, binding.getKind(), def, constructionCatalog);
+        if (inferred != null) {
+            return new VillagerScheduleResolveOutcome(inferred, inferred);
         }
         return VillagerScheduleResolveOutcome.skip();
     }

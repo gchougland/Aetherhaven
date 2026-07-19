@@ -1,13 +1,13 @@
 # Changelog
 
-## [2.4.0] - Unreleased
+## [2.4.0] - 7/19/2026
 
 ### Added
 
-- **Building editor staff** — Creative mode only. Opens a searchable list of existing buildings, loads one nearby, and lets you walk the plot creator steps starting at important spots. Saves over that building’s files (writable pack or config root when available, otherwise the server data folder) while keeping the building id and extra fields like the plot token.
-- **Lively villager work** — Workers at their job now look busy: miners swing pickaxes at rock, loggers chop wood, farmers water and till fields, and ranchers keep busy at pens and benches. They move between several work spots and play the usual swing sounds and hit effects. On park and church benches, villagers pause to rest and look around. The plot creator staff saves facing from the way you look when placing activity spots, shows a facing arrow on markers, and picks the right work activity for each job.
+- **Lively villager work** — Workers at their job now look busy: miners swing pickaxes at rock, loggers chop wood, farmers water and till fields, and ranchers keep busy at pens and benches. They move between several work spots and play the usual swing sounds and hit effects. On park and church benches, villagers pause to rest and look around. Existing towns need buildings rebuilt for the new work spots to register: move a building to the same position, or run `/ah plots reconstruct <plot id>`.
+- **Building editor staff** — Creative mode only. Opens a searchable list of existing buildings, loads one nearby, and lets you walk the plot creator steps starting at important spots. Saves over that building’s files (writable pack or config root when available, otherwise the server data folder) while keeping the building id and extra fields like the plot token. (Mostly a Dev Tool, but feel free to play with it)
 - **Community building mod requirements** — Marketplace cards, building details, and pending-submission reviews clearly list required external mods and their asset-pack ids.
-- **Dialogue speech blips** — While a villager’s mouth Talk animation runs in dialogue, short speech blips play for the listening player (pitched per villager/voice profile, with light pitch/rate/volume jitter and occasional skips). Optional `speechVoiceId` on villager/townsfolk JSON; profiles live under `Server/Aetherhaven/SpeechVoices/`. Toggle with `DialogueSpeechEnabled`. Long lines only speak the first ~6 words. Personal mute and volume are under Town Journal → Settings.
+- **Dialogue speech blips** — While a villager’s mouth Talk animation runs in dialogue, short speech blips play for the listening player (pitched per villager/voice profile, with light pitch/rate/volume jitter and occasional skips). Personal mute and volume are under Town Journal → Settings.
 - **Custom town HUD** — The screen can now show the current time and date, your total gold, and up to three quests pinned from the town journal. Each section can be hidden or moved from the journal settings.
 - **Step-by-step quest tracking** — Building and housing quests now advance one objective at a time. The town journal shows every step and marks completed ones, while pinned quests show only what you need to do next.
 - **Starter town testing command** — `/ah startertown` can instantly create a minimal or full town in either a straight line or a generated layout. It follows the terrain, lays wide connecting paths, completes the matching building quests, and moves in the appropriate villagers. The full preset includes every core building, including the guild hall and tourist portal.
@@ -18,6 +18,8 @@
 
 ### Changed
 
+- **Tourist player-shop purchases** — After browsing a player-owned shop, tourists buy a listing about 75% of the time (was 40%).
+- **Tourist player-shop visits** — Tourists pick the player shop as their next stop about 45% of the time when one is built (ahead of inn/town hall and other destinations).
 - **Villagers walking to spots** — Townsfolk walk closer to their chairs, beds, and work stand points instead of stopping about a block short.
 - **Plot creator Inn Bells** — Inn buildings and variants now require an Inn Bell. The plot creator staff provides one and asks you to place and confirm it before saving.
 - **Plot creator Inn spots** — Inns no longer ask for a guild master stand unless the building also counts as a guild hall.
@@ -29,12 +31,12 @@
 
 ### Fixed
 
-- **Building editor Important Spots menu** — Done and Close now close the menu after loading a building (Escape was required before). Selecting a building no longer closes the list page in a way that left UI click events ignored.
-- **Building editor cleanup** — Ending an editing session (cancel or save) now removes the temporary pasted building and its prefab entities from the world.
+- **Tourist shop browsing** — Tourists stay on the customer side of stalls: they keep nearby tourist visit stands, never step to the merchant/back side of a shop spot, and never treat merchant work desks as browse targets. Plot creator labels that desk as a merchant work spot (not “shop browse”).
+- **Tourists sitting on the floor** — Inn tourist visit spots use `NONE` instead of Sit on non-bench blocks. Sit without a real seat mount no longer plays a standing Sit animation (benches still seat NPCs normally).
+- **Plot creator empty name step** — Continuing past the name/id step with the plot creator staff without setting a building id no longer crashes; it shows the usual empty-id error instead.
 - **Community locked plot tokens** — Downloaded community buildings marked locked by default can no longer be crafted from the Community tab until unlocked with a plot blueprint (same as Core/Decorations).
 - **Founder monument statues** — Founder monuments now consistently show the placing player’s full outfit and features as solid stone. Random, stretched, missing, or mismatched textures no longer appear on statues or nearby villagers.
 - **Inn Bells in building variants** — Bells inside community and other Inn variants now recognize that the building counts as an Inn instead of rejecting it because its plot id is not exactly `plot_inn`.
-- **Plot crafting search header** — The menu title now reserves space for the expanding search field instead of overlapping it.
 - **Modded community prefab freeze** — Missing modded blocks are detected through a read-only prefab preflight before Hytale deserializes the prefab, preventing the asset-lock deadlock that could freeze the game indefinitely.
 - **Unsafe community downloads** — Malformed prefabs, unresolved blocks or fluids, synthetic unknown assets, and buildings with missing required mods are refused before preview, download, installation, test crafting, placement, or approval.
 - **Incorrect required-mod lists** — Community submissions no longer silently publish empty or inflated dependency lists, and required-mod metadata is preserved through submission, moderation, approval, and the public marketplace API.

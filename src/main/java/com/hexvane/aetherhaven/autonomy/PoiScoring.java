@@ -230,7 +230,8 @@ public final class PoiScoring {
      * @param npcZ world Z of NPC
      * @param scheduleLocation last applied schedule segment (e.g. {@link VillagerScheduleResolver#LOC_WORK}); when {@code
      *     work} and needs are satisfied, only {@link #isWorkPoi} on the preferred plot are considered; when needs are
-     *     low, break POIs are allowed town-wide.
+     *     low, break POIs are allowed town-wide. Outside {@code work}, work stations are never claimed (homeless
+     *     roosting at a workplace can still use sleep/fun/sit on that plot).
      */
     @Nullable
     public static PoiEntry pickBest(
@@ -361,6 +362,10 @@ public final class PoiScoring {
             if (TownVillagerBinding.isVisitorKind(binding.getKind()) && isWorkPoi(e)) {
                 continue;
             }
+            // Job stations only during the scheduled work segment (homeless roosting at the workplace must idle).
+            if (!atWork && !hungerBreak && isWorkPoi(e)) {
+                continue;
+            }
             // Night is for sleep: do not leave for non-feast eat spots after dark.
             if (!daytime
                 && isEatPoi(e)
@@ -418,15 +423,32 @@ public final class PoiScoring {
             if (sc + SCORE_EPS < bestScore) {
                 continue;
             }
-            if (used < bestUsed) {
-                best = e;
-                bestScore = sc;
-                bestUsed = used;
-                bestDistSq = distSq;
-                continue;
-            }
-            if (used > bestUsed) {
-                continue;
+            // Equal score: multi-capacity POIs prefer packing (join a half-full bench) so capacity > 1 is usable;
+            // single-slot POIs prefer spreading to empty cells.
+            boolean packMulti =
+                cap > 1 || Math.max(1, best.getCapacity()) > 1;
+            if (packMulti) {
+                if (used > bestUsed) {
+                    best = e;
+                    bestScore = sc;
+                    bestUsed = used;
+                    bestDistSq = distSq;
+                    continue;
+                }
+                if (used < bestUsed) {
+                    continue;
+                }
+            } else {
+                if (used < bestUsed) {
+                    best = e;
+                    bestScore = sc;
+                    bestUsed = used;
+                    bestDistSq = distSq;
+                    continue;
+                }
+                if (used > bestUsed) {
+                    continue;
+                }
             }
             if (!Double.isNaN(distSq) && distSq < bestDistSq - 1e-9) {
                 best = e;

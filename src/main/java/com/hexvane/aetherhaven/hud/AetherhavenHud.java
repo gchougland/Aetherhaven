@@ -1,6 +1,5 @@
 package com.hexvane.aetherhaven.hud;
 
-import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.Anchor;
@@ -51,8 +50,6 @@ public final class AetherhavenHud extends CustomUIHud {
             "#QuestHeading.TextSpans",
             Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.hud.quests")
         );
-        commandBuilder.set("#GoldIconLeft.ItemId", AetherhavenConstants.ITEM_GOLD_COIN);
-        commandBuilder.set("#GoldIconRight.ItemId", AetherhavenConstants.ITEM_GOLD_COIN);
         applyAnchor(commandBuilder, "#StatusPanel", statusPlacement, STATUS_WIDTH, statusHeight);
         applyAnchor(commandBuilder, "#QuestPanel", questPlacement, QUEST_WIDTH, questHeight);
         applyStatusAlignment(commandBuilder, statusPlacement);

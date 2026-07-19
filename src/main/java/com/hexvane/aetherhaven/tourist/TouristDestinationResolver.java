@@ -7,16 +7,21 @@ import com.hexvane.aetherhaven.autonomy.VillagerBlockUtil;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.PrefabLocalOffset;
+import com.hexvane.aetherhaven.poi.BuildingPoisDefinition;
 import com.hexvane.aetherhaven.poi.PoiEntry;
+import com.hexvane.aetherhaven.poi.PoiOccupancy;
 import com.hexvane.aetherhaven.poi.PoiRegistry;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -27,6 +32,8 @@ public final class TouristDestinationResolver {
     private static final int PLOT_EDGE_PADDING = 2;
     /** When inn/town hall exist, they are picked this often; other {@code touristDestination} plots share the rest. */
     private static final int CIVIC_PLOT_VISIT_WEIGHT_PERCENT = 30;
+    /** Prefer the player's shop over other destinations when one exists. */
+    private static final int PLAYER_SHOP_VISIT_WEIGHT_PERCENT = 40;
 
     private TouristDestinationResolver() {}
 
@@ -51,11 +58,17 @@ public final class TouristDestinationResolver {
         if (pool.isEmpty()) {
             pool = candidates;
         }
+        List<TouristPlotVisit> playerShops = new ArrayList<>();
         List<TouristPlotVisit> civic = new ArrayList<>();
         for (TouristPlotVisit plot : pool) {
-            if (isPreferredPlot(town, catalog, plot.plotId())) {
+            if (isPlayerShopPlot(town, catalog, plot.plotId())) {
+                playerShops.add(plot);
+            } else if (isPreferredPlot(town, catalog, plot.plotId())) {
                 civic.add(plot);
             }
+        }
+        if (!playerShops.isEmpty() && random.nextInt(100) < PLAYER_SHOP_VISIT_WEIGHT_PERCENT) {
+            return playerShops.get(random.nextInt(playerShops.size()));
         }
         if (!civic.isEmpty() && random.nextInt(100) < CIVIC_PLOT_VISIT_WEIGHT_PERCENT) {
             return civic.get(random.nextInt(civic.size()));
@@ -103,20 +116,49 @@ public final class TouristDestinationResolver {
         @Nonnull AetherhavenPlugin plugin,
         int npcFeetY
     ) {
+        return pickVisitPoiOnPlot(town, poiRegistry, catalog, plotId, excludePoiId, random, world, plugin, npcFeetY, null, null);
+    }
+
+    @Nullable
+    public static PoiEntry pickVisitPoiOnPlot(
+        @Nonnull TownRecord town,
+        @Nonnull PoiRegistry poiRegistry,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID plotId,
+        @Nullable UUID excludePoiId,
+        @Nonnull Random random,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        int npcFeetY,
+        @Nullable Store<EntityStore> store,
+        @Nullable Map<String, Integer> occupancy
+    ) {
         List<PoiEntry> candidates = listVisitPoisOnPlot(town, poiRegistry, catalog, plotId, world, plugin, npcFeetY);
         if (candidates.isEmpty()) {
             return null;
         }
         List<PoiEntry> pool = new ArrayList<>();
         for (PoiEntry poi : candidates) {
-            if (excludePoiId == null || !excludePoiId.equals(poi.getId())) {
-                pool.add(poi);
+            if (excludePoiId != null && excludePoiId.equals(poi.getId())) {
+                continue;
             }
+            if (occupancy != null && !PoiOccupancy.isCellAvailable(occupancy, PoiOccupancy.standCellKey(poi), poi.getCapacity())) {
+                continue;
+            }
+            if (store != null
+                && !PoiOccupancy.canBeginUse(store, town.getTownId(), poiRegistry, poi, null)) {
+                continue;
+            }
+            pool.add(poi);
         }
         if (pool.isEmpty()) {
-            pool = candidates;
+            return null;
         }
-        return pool.get(random.nextInt(pool.size()));
+        PoiEntry pick = pool.get(random.nextInt(pool.size()));
+        if (occupancy != null) {
+            PoiOccupancy.tryClaimStand(occupancy, pick);
+        }
+        return pick;
     }
 
     @Nonnull
@@ -176,9 +218,9 @@ public final class TouristDestinationResolver {
             if (tx == null || ty == null || tz == null) {
                 return false;
             }
-            columnX = tx.intValue();
-            columnZ = tz.intValue();
-            poiBlockY = ty.intValue();
+            columnX = (int) Math.floor(tx);
+            columnZ = (int) Math.floor(tz);
+            poiBlockY = (int) Math.floor(ty);
         } else {
             columnX = poi.getX();
             columnZ = poi.getZ();
@@ -228,18 +270,35 @@ public final class TouristDestinationResolver {
         return isPreferredPlot(town, catalog, plotId);
     }
 
-    /** Shop plots: tourists browse shop spots only (no POI wandering inside the building). */
+    /** Shop plots: tourists browse shop spots (and stand at tourist visit spots), not merchant WORK desks. */
     public static boolean isTouristShopPlot(
         @Nonnull TownRecord town,
         @Nonnull ConstructionCatalog catalog,
         @Nonnull UUID plotId
     ) {
+        // Player shops must count even if an older building JSON omitted the shop tag.
+        if (isPlayerShopPlot(town, catalog, plotId)) {
+            return true;
+        }
         PlotInstance plot = findVisitPlot(town, plotId);
         if (plot == null) {
             return false;
         }
         ConstructionDefinition def = catalog.get(plot.getConstructionId());
         return def != null && def.getBuildingTags().contains("shop");
+    }
+
+    public static boolean isPlayerShopPlot(
+        @Nonnull TownRecord town,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull UUID plotId
+    ) {
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot == null) {
+            return false;
+        }
+        String gid = catalog.resolveGameplayConstructionId(plot.getConstructionId());
+        return AetherhavenConstants.CONSTRUCTION_PLOT_PLAYER_SHOP.equals(gid);
     }
 
     private static boolean isPreferredPlot(
@@ -269,6 +328,12 @@ public final class TouristDestinationResolver {
         Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
         Rotation yaw = plot.resolvePrefabYaw();
 
+        // Customer-facing tourist spots first — management/center dumps shoppers behind counters.
+        double[] touristEntry = firstTouristVisitStandFromDef(world, anchor, yaw, def);
+        if (touristEntry != null) {
+            return touristEntry;
+        }
+
         int[][] visitorLocals = def.getVisitorSpawnLocals();
         if (visitorLocals != null && visitorLocals.length > 0) {
             int[] local = visitorLocals[0];
@@ -288,6 +353,37 @@ public final class TouristDestinationResolver {
         int standY = VillagerBlockUtil.findStandY(world, cx, cz, footprint.getMinY() + 3);
         double y = standY != Integer.MIN_VALUE ? standY + 0.02 : footprint.getMinY() + 1.02;
         return new double[] {cx + 0.5, y, cz + 0.5};
+    }
+
+    @Nullable
+    private static double[] firstTouristVisitStandFromDef(
+        @Nonnull World world,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw,
+        @Nonnull ConstructionDefinition def
+    ) {
+        for (BuildingPoisDefinition.PoiRow row : def.getPois()) {
+            if (row == null || !row.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT)) {
+                continue;
+            }
+            int lx;
+            int ly;
+            int lz;
+            if (row.hasInteractionTargetLocal()) {
+                lx = row.getInteractionTargetLocalX();
+                ly = row.getInteractionTargetLocalY();
+                lz = row.getInteractionTargetLocalZ();
+            } else {
+                lx = row.getLocalX();
+                ly = row.getLocalY();
+                lz = row.getLocalZ();
+            }
+            double[] stand = standFromLocal(world, anchor, yaw, lx, ly, lz);
+            if (stand != null) {
+                return stand;
+            }
+        }
+        return null;
     }
 
     @Nullable
@@ -326,7 +422,12 @@ public final class TouristDestinationResolver {
         if (def == null || !def.isTouristDestination()) {
             return false;
         }
+        // Shops: only customer tourist stands — never merchant WORK desks behind the counter.
         if (isTouristShopPlot(town, catalog, plotId)) {
+            return poi.getTags().contains(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
+        }
+        // Merchant work desks are never tourist destinations (even if the plot lacks the shop tag).
+        if (poi.getTags().contains("SHOP") && poi.getTags().contains("WORK")) {
             return false;
         }
         if (poi.getTags().contains("SLEEP") && !poi.getTags().contains("EAT") && !poi.getTags().contains("FUN")) {

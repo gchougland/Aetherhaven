@@ -15,7 +15,9 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
+import com.hypixel.hytale.server.core.util.FillerBlockUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -225,12 +227,14 @@ public final class PoiExtractor {
     ) {
         BlockType center = world.getBlockType(cx, cy, cz);
         if (center != null && blockTypeIdMatches(expectedType, center.getId())) {
-            return new Vector3i(cx, cy, cz);
+            // Prefer furniture origin: seats/beds are relative to the non-filler base cell.
+            return VillagerBlockUtil.resolveMountBaseBlock(world, cx, cy, cz);
         }
         int bestX = 0;
         int bestY = 0;
         int bestZ = 0;
         long bestD2 = Long.MAX_VALUE;
+        int bestFillerPenalty = Integer.MAX_VALUE;
         boolean found = false;
         for (int dy = -ANCHOR_SEARCH_Y; dy <= ANCHOR_SEARCH_Y; dy++) {
             for (int dx = -ANCHOR_SEARCH_XY; dx <= ANCHOR_SEARCH_XY; dx++) {
@@ -242,20 +246,40 @@ public final class PoiExtractor {
                     int y = cy + dy;
                     int z = cz + dz;
                     BlockType bt = world.getBlockType(x, y, z);
-                    if (bt != null && blockTypeIdMatches(expectedType, bt.getId())) {
-                        long d2 = (long) dx * dx + (long) dy * dy + (long) dz * dz;
-                        if (!found || d2 < bestD2) {
-                            found = true;
-                            bestD2 = d2;
-                            bestX = x;
-                            bestY = y;
-                            bestZ = z;
-                        }
+                    if (bt == null || !blockTypeIdMatches(expectedType, bt.getId())) {
+                        continue;
+                    }
+                    Vector3i base = VillagerBlockUtil.resolveMountBaseBlock(world, x, y, z);
+                    int bdx = base.x - cx;
+                    int bdy = base.y - cy;
+                    int bdz = base.z - cz;
+                    long d2 = (long) bdx * bdx + (long) bdy * bdy + (long) bdz * bdz;
+                    int fillerPenalty = isFillerVoxel(world, x, y, z) ? 1 : 0;
+                    if (!found
+                        || fillerPenalty < bestFillerPenalty
+                        || (fillerPenalty == bestFillerPenalty && d2 < bestD2)) {
+                        found = true;
+                        bestFillerPenalty = fillerPenalty;
+                        bestD2 = d2;
+                        bestX = base.x;
+                        bestY = base.y;
+                        bestZ = base.z;
                     }
                 }
             }
         }
         return found ? new Vector3i(bestX, bestY, bestZ) : null;
+    }
+
+    @SuppressWarnings({ "deprecation", "removal" })
+    private static boolean isFillerVoxel(@Nonnull World world, int x, int y, int z) {
+        WorldChunk chunk = world.getChunkIfInMemory(
+            com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)
+        );
+        if (chunk == null) {
+            return false;
+        }
+        return chunk.getFiller(x, y, z) != FillerBlockUtil.NO_FILLER;
     }
 
     private static boolean blockTypeIdMatches(@Nonnull String expectedId, @Nonnull String actualId) {

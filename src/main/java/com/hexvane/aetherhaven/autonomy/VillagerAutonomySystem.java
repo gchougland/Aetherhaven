@@ -948,6 +948,14 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             failTravel(autonomy, now, "OCCUPIED", commandBuffer, ref, npc);
             return false;
         }
+        // Physical seat slots (benches have 2) — independently of POI capacity / village TRAVEL counts.
+        VillagerBlockUtil.FurnitureMountKind furniture =
+            VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
+        if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT
+            && !VillagerBlockUtil.hasAvailableSeat(world, poi.getX(), poi.getY(), poi.getZ())) {
+            failTravel(autonomy, now, "MOUNT_FULL", commandBuffer, ref, npc);
+            return false;
+        }
         boolean mountKind =
             poi.getInteractionKind() == PoiInteractionKind.SIT || poi.getInteractionKind() == PoiInteractionKind.SLEEP;
         if (mountKind && !poi.hasInteractionTarget()) {

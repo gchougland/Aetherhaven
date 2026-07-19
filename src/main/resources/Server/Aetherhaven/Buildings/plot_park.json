@@ -37,7 +37,7 @@
   ],
   "pois": [
     {
-      "localX": -6,
+      "localX": -5,
       "localY": 1,
       "localZ": -2,
       "blockTypeId": "Furniture_Village_Bench",
@@ -47,8 +47,8 @@
         "SIT",
         "workActivity:read"
       ],
-      "capacity": 1,
-      "interactionTargetLocalX": -6,
+      "capacity": 2,
+      "interactionTargetLocalX": -5,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": -1
     },
@@ -63,7 +63,7 @@
         "SIT",
         "workActivity:read"
       ],
-      "capacity": 1,
+      "capacity": 2,
       "interactionTargetLocalX": 7,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": 3

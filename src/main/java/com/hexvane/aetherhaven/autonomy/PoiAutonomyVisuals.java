@@ -51,6 +51,7 @@ public final class PoiAutonomyVisuals {
         @Nonnull PoiEntry poi
     ) {
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        boolean equippedHeldItems = false;
         if (plugin != null) {
             String poiProfile = poi.getEquipmentProfileId();
             if (poiProfile != null) {
@@ -61,7 +62,9 @@ public final class PoiAutonomyVisuals {
                     plugin.getEquipmentProfileCatalog(),
                     poiProfile
                 );
-            } else if (poi.getInteractionKind() == PoiInteractionKind.WORK_SURFACE) {
+                equippedHeldItems = true;
+            } else if (poi.getInteractionKind() == PoiInteractionKind.WORK_SURFACE
+                || poi.getTags().contains("WORK")) {
                 NPCEntity roleNpc = store.getComponent(npcRef, NPCEntity.getComponentType());
                 if (roleNpc != null && roleNpc.getRoleName() != null) {
                     var villagerDef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(roleNpc.getRoleName());
@@ -75,10 +78,15 @@ public final class PoiAutonomyVisuals {
                                 plugin.getEquipmentProfileCatalog(),
                                 workProfile
                             );
+                            equippedHeldItems = true;
                         }
                     }
                 }
             }
+        }
+        // Leisure / sleep / shop: never keep watering cans, picks, etc. from a prior work USE.
+        if (!equippedHeldItems) {
+            VillagerEquipmentService.clearHotbar(npcRef, store, commandBuffer);
         }
         Set<String> tags = poi.getTags();
         World world = store.getExternalData().getWorld();
@@ -95,6 +103,11 @@ public final class PoiAutonomyVisuals {
         if (shouldMount) {
             if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
                 playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
+                return;
+            }
+            if (furniture == VillagerBlockUtil.FurnitureMountKind.SEAT) {
+                // Failed to attach to a seat — do not play a standing Sit beside the furniture.
+                faceTowardBlock(npcRef, store, commandBuffer, poi);
                 return;
             }
             if (furniture == VillagerBlockUtil.FurnitureMountKind.BED) {
@@ -197,7 +210,15 @@ public final class PoiAutonomyVisuals {
         } else if (!restoreEquipmentAfterEat) {
             tryClearCampfireHeldFood(npcRef, store, commandBuffer);
         }
+        // Leaving a work station: drop tools so park / home / leisure do not keep the watering can, etc.
+        if (poi != null && isWorkTaggedPoi(poi)) {
+            VillagerEquipmentService.clearHotbar(npcRef, store, commandBuffer);
+        }
         stopAllUseOverlayAnimations(npcRef, store, commandBuffer, npc);
+    }
+
+    private static boolean isWorkTaggedPoi(@Nonnull PoiEntry poi) {
+        return poi.getInteractionKind() == PoiInteractionKind.WORK_SURFACE || poi.getTags().contains("WORK");
     }
 
     /** Clears sit / sleep / eat / shop / emote overlays regardless of POI interaction kind. */
@@ -259,28 +280,19 @@ public final class PoiAutonomyVisuals {
         @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull PoiEntry poi
     ) {
+        // Only re-equip if the eat POI itself defines a profile — never fall back to the role's work tools
+        // (that left farmers holding watering cans after lunch at the park).
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin != null) {
-            String profileId = poi.getEquipmentProfileId();
-            if (profileId == null) {
-                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-                if (npc != null && npc.getRoleName() != null) {
-                    var villagerDef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName());
-                    if (villagerDef != null) {
-                        profileId = villagerDef.getWorkEquipmentProfileId();
-                    }
-                }
-            }
-            if (profileId != null) {
-                VillagerEquipmentService.applyProfile(
-                    npcRef,
-                    store,
-                    commandBuffer,
-                    plugin.getEquipmentProfileCatalog(),
-                    profileId
-                );
-                return;
-            }
+        String profileId = poi.getEquipmentProfileId();
+        if (plugin != null && profileId != null) {
+            VillagerEquipmentService.applyProfile(
+                npcRef,
+                store,
+                commandBuffer,
+                plugin.getEquipmentProfileCatalog(),
+                profileId
+            );
+            return;
         }
         tryClearCampfireHeldFood(npcRef, store, commandBuffer);
     }
@@ -365,7 +377,7 @@ public final class PoiAutonomyVisuals {
         @Nonnull PoiEntry poi
     ) {
         World world = store.getExternalData().getWorld();
-        Vector3i block = new Vector3i(poi.getX(), poi.getY(), poi.getZ());
+        Vector3i block = VillagerBlockUtil.resolveMountBaseBlock(world, poi.getX(), poi.getY(), poi.getZ());
         TransformComponent tc = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
         if (tc == null) {
             tc = store.getComponent(npcRef, TransformComponent.getComponentType());
@@ -379,23 +391,19 @@ public final class PoiAutonomyVisuals {
             return false;
         }
         try {
-            Vector3d seatPos = VillagerBlockUtil.seatWorldPosition(world, block);
-            // Snap onto the seat mount point before BlockMountAPI so Transform is on the command buffer.
+            // Prefer the best free seat (center first on multi-seat benches). Never hit from the approach cell first —
+            // that biases village benches onto their sideways offset seat. Always mount the furniture origin, never a
+            // filler voxel — filler origin shifts the side seat into empty air for some orientations.
+            Vector3d seatPos = VillagerBlockUtil.preferredAvailableSeatWorldPosition(world, block);
+            Vector3d blockCenter = new Vector3d(block.x + 0.5, block.y + 0.5, block.z + 0.5);
             if (seatPos != null) {
                 TransformComponentUtil.replacePreservingChunk(npcRef, store, commandBuffer, seatPos, tc.getRotation());
             } else {
                 commandBuffer.putComponent(npcRef, TransformComponent.getComponentType(), tc);
             }
-            TransformComponent afterAlign = commandBuffer.getComponent(npcRef, TransformComponent.getComponentType());
-            if (afterAlign == null) {
-                afterAlign = store.getComponent(npcRef, TransformComponent.getComponentType());
-            }
-            Vector3d feet = afterAlign != null ? afterAlign.getPosition() : p;
-            Vector3d feetPick = new Vector3d(feet.x, feet.y + 0.5, feet.z);
-            Vector3d blockCenter = new Vector3d(block.x + 0.5, block.y + 0.5, block.z + 0.5);
-            Vector3d primary = seatPos != null ? seatPos : feetPick;
+            Vector3d primary = seatPos != null ? seatPos : blockCenter;
             BlockMountAPI.BlockMountResult result =
-                tryMountWithHits(npcRef, commandBuffer, block, feetPick, primary, blockCenter);
+                tryMountWithHits(npcRef, commandBuffer, block, primary, blockCenter);
             if (!(result instanceof BlockMountAPI.Mounted)) {
                 return false;
             }
@@ -628,8 +636,8 @@ public final class PoiAutonomyVisuals {
     }
 
     /**
-     * Status anim for non-furniture POIs (benches without seat mount points, etc.). Sit/sleep kinds no longer drive
-     * mount choice; furniture blocks are handled earlier.
+     * Status anim for non-furniture POIs. Sit/sleep only apply when a seat/bed was mounted earlier — never play a
+     * standing Sit on the floor for {@code SIT}/{@code USE_BENCH} on ordinary blocks.
      */
     @Nullable
     private static String pickNonFurnitureAnimationId(
@@ -639,7 +647,7 @@ public final class PoiAutonomyVisuals {
     ) {
         String primary =
             switch (kind) {
-                case SIT, USE_BENCH -> "Sit";
+                case SIT, USE_BENCH -> null;
                 case SLEEP -> "Sleep";
                 case WORK_SURFACE, USE_CONTAINER, NONE -> null;
             };

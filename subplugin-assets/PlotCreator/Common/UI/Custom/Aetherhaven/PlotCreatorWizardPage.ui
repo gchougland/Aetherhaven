@@ -214,8 +214,9 @@ $C.@PageOverlay {
         $C.@CheckBox #SubmitToCommunityToggle {}
 
         Label #SubmitToCommunityLabel {
-          Style: (...@HintStyle, TextColor: #c8d0dc);
           Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
         }
       }
 

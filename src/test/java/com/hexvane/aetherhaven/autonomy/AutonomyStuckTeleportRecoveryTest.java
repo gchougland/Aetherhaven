@@ -77,6 +77,26 @@ class AutonomyStuckTeleportRecoveryTest {
     }
 
     @Test
+    void stallTeleportDueRespectsCustomThreshold() {
+        TouristAutonomyState state = TouristAutonomyState.fresh(0L);
+        state.setAutonomyStallTicks(100);
+        assertTrue(AutonomyStuckTeleportRecovery.isStallTeleportDue(state));
+        assertFalse(
+            AutonomyStuckTeleportRecovery.isStallTeleportDue(
+                state,
+                AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS
+            )
+        );
+        state.setAutonomyStallTicks(AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS);
+        assertTrue(
+            AutonomyStuckTeleportRecovery.isStallTeleportDue(
+                state,
+                AetherhavenConstants.TOURIST_STALL_TELEPORT_TICKS
+            )
+        );
+    }
+
+    @Test
     void stallTeleportDueAtConfiguredThreshold() {
         TouristAutonomyState state = TouristAutonomyState.fresh(0L);
         state.setAutonomyStallTicks(AetherhavenConstants.AUTONOMY_STALL_TELEPORT_TICKS);
@@ -96,18 +116,24 @@ class AutonomyStuckTeleportRecoveryTest {
     }
 
     @Test
-    void shouldTrackTouristStallSkipsPoiAndIdleUnlessLeaveDue() {
+    void shouldTrackTouristStallSkipsPoiIdleAndVisitUnlessLeaveDue() {
         assertFalse(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_POI, false)
         );
         assertFalse(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_IDLE, false)
         );
+        assertFalse(
+            AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_VISIT, false)
+        );
         assertTrue(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_POI, true)
         );
         assertTrue(
             AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_TRAVEL, false)
+        );
+        assertTrue(
+            AutonomyStuckTeleportRecovery.shouldTrackTouristStall(TouristAutonomyState.PHASE_RETURNING, false)
         );
     }
 

@@ -47,9 +47,10 @@ public final class NpcShopSpotBuyerService {
             return false;
         }
         Store<EntityStore> store = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
-        if (store == null || !ShopSpotOpenService.isGameDay(store)) {
+        if (store == null) {
             return false;
         }
+        // Player listings stay open at night; only NPC shops are daylight-gated elsewhere.
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = tm.getTown(townId);
         if (town == null) {
@@ -61,6 +62,9 @@ public final class NpcShopSpotBuyerService {
             return false;
         }
         ShopSpotRecord record = listings.get(ThreadLocalRandom.current().nextInt(listings.size()));
+        if (!ShopSpotOpenService.isOpen(record, town, world, store)) {
+            return false;
+        }
         String itemId = record.getItemId();
         if (itemId == null || record.getStock() <= 0) {
             return false;

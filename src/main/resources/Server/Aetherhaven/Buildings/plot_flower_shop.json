@@ -29,26 +29,52 @@
       "localY": 2,
       "localZ": -7,
       "tags": [
-        "WORK",
-        "SHOP"
+        "SHOP",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 6,
       "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -8
+      "interactionTargetLocalZ": -8,
+      "workResidentKind": "florist"
+    },
+    {
+      "localX": 4,
+      "localY": 1,
+      "localZ": -5,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Brick",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -4,
+      "interactionTargetYawDegrees": 1.8342577
+    },
+    {
+      "localX": 7,
+      "localY": 1,
+      "localZ": -5,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Brick",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": -5,
+      "interactionTargetYawDegrees": -30.524378
     }
   ],
   "managementBlockLocalPos": [
     3,
     2,
     -9
-  ],
-  "tags": [
-    "shop",
-    "work",
-    "flowers"
   ],
   "touristDestination": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_flower_shop.displayName",

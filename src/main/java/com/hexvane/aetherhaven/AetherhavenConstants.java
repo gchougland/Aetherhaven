@@ -807,6 +807,8 @@ public final class AetherhavenConstants {
 
     /** Ticks without meaningful progress before autonomy teleports to the current destination. */
     public static final int AUTONOMY_STALL_TELEPORT_TICKS = 90;
+    /** Tourists path around town more slowly; require longer stall before teleport recovery. */
+    public static final int TOURIST_STALL_TELEPORT_TICKS = 200;
     /** Horizontal displacement from the stall anchor required to count as real progress. NPCs wedged in a small area
      * can jitter without exceeding this radius.
      */

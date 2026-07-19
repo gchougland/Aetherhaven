@@ -47,7 +47,7 @@
     {
       "localX": -12,
       "localY": 1,
-      "localZ": 10,
+      "localZ": 9,
       "tags": [
         "TOURIST_VISIT"
       ],
@@ -56,13 +56,12 @@
       "interactionKind": "SIT",
       "interactionTargetLocalX": -13,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 10,
-      "interactionTargetYawDegrees": -94.31848
+      "interactionTargetLocalZ": 9
     },
     {
       "localX": -8,
       "localY": 1,
-      "localZ": 9,
+      "localZ": 10,
       "tags": [
         "TOURIST_VISIT"
       ],
@@ -71,25 +70,24 @@
       "interactionKind": "SIT",
       "interactionTargetLocalX": -7,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 9,
-      "interactionTargetYawDegrees": 112.35474
+      "interactionTargetLocalZ": 10
     },
     {
-      "localX": -12,
+      "localX": -15,
       "localY": 1,
-      "localZ": 9,
+      "localZ": 8,
       "tags": [
         "WORK",
         "workActivity:read"
       ],
       "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bench",
+      "blockTypeId": "Furniture_Village_Chair",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -13,
+      "interactionTargetLocalX": -16,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": 9,
+      "interactionTargetLocalZ": 8,
       "workResidentKind": "elder",
-      "interactionTargetYawDegrees": -93.435425
+      "interactionTargetYawDegrees": -53.003998
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_town_hall.displayName",
