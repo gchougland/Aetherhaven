@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_large_house",
-  "displayName": "Jimmy's Large House",
+  "displayName": "Jimmy\u0027s Large House",
   "description": "By Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_large_house.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -31,7 +31,7 @@
   "pois": [
     {
       "localX": 16,
-      "localY": 3,
+      "localY": 2,
       "localZ": -10,
       "tags": [
         "SLEEP",
@@ -41,19 +41,48 @@
       "blockTypeId": "Furniture_Village_Bed",
       "interactionKind": "SLEEP",
       "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 3,
+      "interactionTargetLocalY": 2,
       "interactionTargetLocalZ": -10
+    },
+    {
+      "localX": 16,
+      "localY": 2,
+      "localZ": -8,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": -8,
+      "interactionTargetYawDegrees": -144.75964
+    },
+    {
+      "localX": 5,
+      "localY": 0,
+      "localZ": -9,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Drywood_Planks",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 4,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": -9,
+      "interactionTargetYawDegrees": -32.071777
     }
   ],
   "managementBlockLocalPos": [
     10,
-    3,
+    2,
     -9
   ],
   "countsAsConstructionId": "plot_house",
-  "tags": [
-    "house"
-  ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_jimmys_large_house.displayName",
-  "styleId": "jimmy"
+  "styleId": "jimmy",
+  "maxHomeResidents": 2
 }

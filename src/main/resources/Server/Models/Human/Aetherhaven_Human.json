@@ -64,6 +64,30 @@
           "Looping": false
         }
       ]
+    },
+    "PonderDismissive": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Ponder_Dismissive.blockyanim",
+          "Looping": false
+        }
+      ]
+    },
+    "Yawn": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Emote/Yawn.blockyanim",
+          "Looping": false
+        }
+      ]
+    },
+    "Laugh": {
+      "Animations": [
+        {
+          "Animation": "Characters/Animations/Taunt/Laugh.blockyanim",
+          "Looping": false
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,122 @@
+{
+  "constructionId": "plot_jszzas_mine",
+  "prefabPath": "Jszza/plot_jszzas_mine.prefab.json",
+  "materials": [
+    {
+      "resourceTypeId": "Soils",
+      "count": 209
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 206
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 109
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 104
+    },
+    {
+      "itemId": "Rock_Stone",
+      "count": 67
+    },
+    {
+      "itemId": "Ingredient_Fibre",
+      "count": 52
+    },
+    {
+      "itemId": "Rock_Basalt",
+      "count": 36
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 35
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 32
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 29
+    },
+    {
+      "resourceTypeId": "Rubble",
+      "count": 20
+    },
+    {
+      "itemId": "Furniture_Crude_Platform",
+      "count": 18
+    },
+    {
+      "itemId": "Wood_Softwood_Beam",
+      "count": 12
+    },
+    {
+      "itemId": "Rock_Basalt_Cobble",
+      "count": 10
+    },
+    {
+      "itemId": "Furniture_Crude_Stool",
+      "count": 9
+    },
+    {
+      "itemId": "Wood_Beech_Trunk_Full",
+      "count": 9
+    },
+    {
+      "itemId": "Deco_Rope_Diagonal",
+      "count": 8
+    },
+    {
+      "itemId": "Wood_Softwood_Fence",
+      "count": 8
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Half",
+      "count": 6
+    },
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 5
+    },
+    {
+      "itemId": "Furniture_Lumberjack_Lantern",
+      "count": 4
+    },
+    {
+      "itemId": "Rock_Stone_Mossy",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 2
+    },
+    {
+      "itemId": "Ore_Iron_Basalt",
+      "count": 2
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Scroll",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Crude_Bed",
+      "count": 1
+    },
+    {
+      "itemId": "Halloween_Wagon",
+      "count": 1
+    },
+    {
+      "itemId": "Lobby_Wall_Poster01",
+      "count": 1
+    }
+  ]
+}

@@ -189,6 +189,9 @@ public final class PlotCreatorDraftLoader {
 
     @Nonnull
     private static PlotBuildingKind inferPrimaryKind(@Nonnull ConstructionDefinition def) {
+        if (def.isDecorationPlot()) {
+            return PlotBuildingKind.DECORATION;
+        }
         String id = def.getId();
         if (AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL.equals(id)) {
             return PlotBuildingKind.TOWN_HALL;

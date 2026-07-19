@@ -1,17 +1,6 @@
 {
-  "id": "plot_jszzas_tavern",
-  "displayName": "Jszza\u0027s Tavern",
-  "description": "Made by Jszza",
+  "constructionId": "plot_jszzas_tavern",
   "prefabPath": "Jszza/plot_jszzas_tavern.prefab.json",
-  "plotTokenItemId": "Aetherhaven_Plot_Token",
-  "plotAnchorOffset": [
-    0,
-    1,
-    0
-  ],
-  "rotationYaw": "None",
-  "selfBuildGameDays": 1.0,
-  "treasuryGoldCoinCost": 50,
   "materials": [
     {
       "resourceTypeId": "Soils",
@@ -218,11 +207,19 @@
       "count": 4
     },
     {
+      "itemId": "Deco_Bone_Skulls_Feran_Large",
+      "count": 3
+    },
+    {
       "itemId": "Furniture_Tavern_Table",
       "count": 3
     },
     {
       "itemId": "Furniture_Village_Ladder",
+      "count": 3
+    },
+    {
+      "itemId": "Lobby_Wall_Poster01",
       "count": 3
     },
     {
@@ -262,6 +259,10 @@
       "count": 2
     },
     {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
       "itemId": "Bench_Arcane",
       "count": 1
     },
@@ -278,11 +279,23 @@
       "count": 1
     },
     {
+      "itemId": "Deco_Inkwell",
+      "count": 1
+    },
+    {
       "itemId": "Deco_Mug",
       "count": 1
     },
     {
       "itemId": "Deco_Tankard",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Treasure",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Wallchain",
       "count": 1
     },
     {
@@ -305,170 +318,5 @@
       "itemId": "Ingredient_Leather_Light",
       "count": 1
     }
-  ],
-  "pois": [
-    {
-      "localX": 25,
-      "localY": 1,
-      "localZ": -10,
-      "tags": [
-        "workActivity:read",
-        "WORK"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Banyan_Trunk",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 24,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -10,
-      "workResidentKind": "innkeeper"
-    },
-    {
-      "localX": 21,
-      "localY": 12,
-      "localZ": -5,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 12,
-      "interactionTargetLocalZ": -5
-    },
-    {
-      "localX": 14,
-      "localY": 10,
-      "localZ": -9,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 15,
-      "interactionTargetLocalY": 10,
-      "interactionTargetLocalZ": -9
-    },
-    {
-      "localX": 16,
-      "localY": 10,
-      "localZ": -8,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Bench",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 16,
-      "interactionTargetLocalY": 10,
-      "interactionTargetLocalZ": -9
-    },
-    {
-      "localX": 13,
-      "localY": 3,
-      "localZ": -10,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 14,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -10
-    },
-    {
-      "localX": 11,
-      "localY": 3,
-      "localZ": -9,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 12,
-      "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": -9
-    },
-    {
-      "localX": 21,
-      "localY": 2,
-      "localZ": -7,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 22,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -7
-    },
-    {
-      "localX": 23,
-      "localY": 2,
-      "localZ": -5,
-      "tags": [
-        "EAT"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Stool",
-      "interactionKind": "USE_BENCH",
-      "interactionTargetLocalX": 23,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": -4
-    },
-    {
-      "localX": 27,
-      "localY": 12,
-      "localZ": -11,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": 27,
-      "interactionTargetLocalY": 12,
-      "interactionTargetLocalZ": -10,
-      "interactionTargetYawDegrees": -18.952393
-    }
-  ],
-  "managementBlockLocalPos": [
-    25,
-    3,
-    -5
-  ],
-  "innkeeperSpawnLocal": [
-    25,
-    1,
-    -10
-  ],
-  "visitorSpawnLocals": [
-    [
-      22,
-      1,
-      -9
-    ],
-    [
-      26,
-      1,
-      -7
-    ]
-  ],
-  "countsAsConstructionId": "plot_inn",
-  "touristDestination": true,
-  "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
-  "styleId": "jszza",
-  "innBellLocalPos": [
-    24,
-    3,
-    -9
   ]
 }

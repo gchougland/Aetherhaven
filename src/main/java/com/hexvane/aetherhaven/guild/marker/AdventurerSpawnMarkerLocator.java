@@ -19,13 +19,15 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 
-/** Resolves guild hall adventurer spawn positions from prefab marker entities (or JSON fallback). */
+/** Resolves guild hall adventurer spawn positions from building JSON, with prefab marker fallback. */
 public final class AdventurerSpawnMarkerLocator {
     private AdventurerSpawnMarkerLocator() {}
 
     /**
-     * World spawn positions for guild hall adventurers. Prefers marker entities inside the plot footprint; falls back
-     * to {@link ConstructionDefinition#getAdventurerSpawnLocals()} when no markers exist.
+     * World spawn positions for guild hall adventurers. Prefers
+     * {@link ConstructionDefinition#getAdventurerSpawnLocals()} when present; falls back to
+     * {@link AdventurerSpawnMarkerEntity} markers in the plot footprint for older prefabs that never
+     * wrote JSON locals.
      */
     @Nonnull
     public static List<Vector3d> resolveSpawnPositions(
@@ -49,20 +51,24 @@ public final class AdventurerSpawnMarkerLocator {
     ) {
         Vector3i anchor = hallPlot.resolvePrefabAnchorWorld(hallDef);
         Rotation yaw = hallPlot.resolvePrefabYaw();
-        List<MarkerSortRow> markers = collectMarkersInFootprint(store, hallPlot.toFootprint(), anchor, yaw);
-        if (!markers.isEmpty()) {
-            markers.sort(
-                Comparator.comparingInt((MarkerSortRow r) -> r.localX)
-                    .thenComparingInt(r -> r.localZ)
-                    .thenComparingInt(r -> r.localY)
-            );
-            List<AdventurerSpawnSlot> out = new ArrayList<>(markers.size());
-            for (MarkerSortRow row : markers) {
-                out.add(new AdventurerSpawnSlot(new Vector3d(row.position), row.yawRadians));
-            }
-            return out;
+        List<AdventurerSpawnSlot> fromJson = slotsFromJsonLocals(hallDef, anchor, yaw);
+        if (!fromJson.isEmpty()) {
+            return fromJson;
         }
-        return slotsFromJsonLocals(hallDef, anchor, yaw);
+        List<MarkerSortRow> markers = collectMarkersInFootprint(store, hallPlot.toFootprint(), anchor, yaw);
+        if (markers.isEmpty()) {
+            return List.of();
+        }
+        markers.sort(
+            Comparator.comparingInt((MarkerSortRow r) -> r.localX)
+                .thenComparingInt(r -> r.localZ)
+                .thenComparingInt(r -> r.localY)
+        );
+        List<AdventurerSpawnSlot> out = new ArrayList<>(markers.size());
+        for (MarkerSortRow row : markers) {
+            out.add(new AdventurerSpawnSlot(new Vector3d(row.position), row.yawRadians));
+        }
+        return out;
     }
 
     @Nonnull

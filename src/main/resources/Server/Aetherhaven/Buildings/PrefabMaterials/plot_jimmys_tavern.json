@@ -1,0 +1,174 @@
+{
+  "constructionId": "plot_jimmys_tavern",
+  "prefabPath": "Jimmys/plot_jimmys_tavern.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 631
+    },
+    {
+      "itemId": "Rock_Quartzite",
+      "count": 455
+    },
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 410
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 200
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 200
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 150
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 127
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 89
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 87
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 76
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 40
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 26
+    },
+    {
+      "itemId": "Soil_Clay",
+      "count": 20
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 17
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 15
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 9
+    },
+    {
+      "itemId": "Ingredient_Leather_Light",
+      "count": 9
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 7
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 7
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 6
+    },
+    {
+      "itemId": "Furniture_Tavern_Bed",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Shelf_Full",
+      "count": 4
+    },
+    {
+      "itemId": "Furniture_Village_Stool",
+      "count": 3
+    },
+    {
+      "itemId": "Furniture_Village_Wardrobe",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_Cooking",
+      "count": 2
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Salad_Mushroom",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Shelf",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Small",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Village_Table",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 2
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Container_Bucket",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Meat",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Pie_Pumpkin",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Sign",
+      "count": 1
+    }
+  ]
+}

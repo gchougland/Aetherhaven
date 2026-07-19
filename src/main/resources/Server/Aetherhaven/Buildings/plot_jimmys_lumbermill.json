@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_lumbermill",
-  "displayName": "Jimmy's Lumbermill",
+  "displayName": "Jimmy\u0027s Lumbermill",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_lumbermill.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -153,22 +153,6 @@
   ],
   "pois": [
     {
-      "localX": -6,
-      "localY": 2,
-      "localZ": 13,
-      "tags": [
-        "WORK",
-        "workActivity:chop"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Rock_Stone_Cobble",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -6,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12,
-      "interactionTargetYawDegrees": 0
-    },
-    {
       "localX": -3,
       "localY": 2,
       "localZ": 13,
@@ -181,22 +165,75 @@
       "interactionTargetLocalX": -3,
       "interactionTargetLocalY": 2,
       "interactionTargetLocalZ": 12,
-      "interactionTargetYawDegrees": 0
+      "workResidentKind": "logger"
     },
     {
-      "localX": -9,
-      "localY": 2,
-      "localZ": 13,
+      "localX": -13,
+      "localY": 3,
+      "localZ": 18,
       "tags": [
         "WORK",
-        "workActivity:craft"
+        "workActivity:chop"
       ],
       "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks_Half",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -9,
+      "interactionTargetLocalX": -12,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": 18,
+      "workResidentKind": "logger",
+      "interactionTargetYawDegrees": 67.89691
+    },
+    {
+      "localX": -24,
+      "localY": 2,
+      "localZ": 22,
+      "tags": [
+        "WORK",
+        "workActivity:chop"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -24,
       "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12,
-      "interactionTargetYawDegrees": 0
+      "interactionTargetLocalZ": 23,
+      "workResidentKind": "logger",
+      "interactionTargetYawDegrees": 10.524414
+    },
+    {
+      "localX": -24,
+      "localY": 2,
+      "localZ": 15,
+      "tags": [
+        "WORK",
+        "workActivity:chop"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -23,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 15,
+      "workResidentKind": "logger",
+      "interactionTargetYawDegrees": 59.42932
+    },
+    {
+      "localX": -18,
+      "localY": 3,
+      "localZ": 18,
+      "tags": [
+        "WORK",
+        "workActivity:chop"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks_Half",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -19,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": 18,
+      "workResidentKind": "logger",
+      "interactionTargetYawDegrees": -121.41028
     }
   ],
   "managementBlockLocalPos": [
@@ -210,10 +247,6 @@
     29
   ],
   "countsAsConstructionId": "plot_lumbermill",
-  "tags": [
-    "lumbermill",
-    "work"
-  ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
   "styleId": "jimmy"

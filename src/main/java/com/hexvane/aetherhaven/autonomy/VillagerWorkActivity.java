@@ -126,10 +126,10 @@ public enum VillagerWorkActivity {
                 case TownVillagerBinding.KIND_LOGGER -> CHOP;
                 case TownVillagerBinding.KIND_FARMER -> WATER;
                 case TownVillagerBinding.KIND_RANCHER, TownVillagerBinding.KIND_BUILDER -> CRAFT;
-                default -> CRAFT;
+                default -> LEISURE;
             };
         }
-        return CRAFT;
+        return LEISURE;
     }
 
     private static boolean isBardBinding(@Nullable String bindingKind) {

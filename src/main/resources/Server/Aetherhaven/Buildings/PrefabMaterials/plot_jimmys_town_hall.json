@@ -1,17 +1,6 @@
 {
-  "id": "plot_jimmys_town_hall",
-  "displayName": "Jimmy\u0027s Town Hall",
-  "description": "Made by Jimmy G",
+  "constructionId": "plot_jimmys_town_hall",
   "prefabPath": "Jimmys/plot_jimmys_town_hall.prefab.json",
-  "plotTokenItemId": "Aetherhaven_Plot_Token",
-  "plotAnchorOffset": [
-    0,
-    1,
-    0
-  ],
-  "rotationYaw": "None",
-  "selfBuildGameDays": 1.0,
-  "treasuryGoldCoinCost": 35,
   "materials": [
     {
       "itemId": "Wood_Softwood_Planks",
@@ -78,6 +67,10 @@
       "count": 7
     },
     {
+      "itemId": "Ingredient_Flour",
+      "count": 5
+    },
+    {
       "itemId": "Wood_Hardwood_Fence",
       "count": 5
     },
@@ -91,6 +84,10 @@
     },
     {
       "itemId": "Bench_Furnace",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Tavern_Chest_Large",
       "count": 2
     },
     {
@@ -114,6 +111,10 @@
       "count": 1
     },
     {
+      "itemId": "Deco_Treasure",
+      "count": 1
+    },
+    {
       "itemId": "Furniture_Tavern_Wardrobe",
       "count": 1
     },
@@ -128,44 +129,6 @@
     {
       "itemId": "Furniture_Village_Stool",
       "count": 1
-    },
-    {
-      "itemId": "Furniture_Tavern_Chest_Small",
-      "count": 4
     }
-  ],
-  "pois": [
-    {
-      "localX": -16,
-      "localY": 2,
-      "localZ": 12,
-      "tags": [
-        "WORK",
-        "workActivity:read"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Village_Chair",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -17,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12,
-      "workResidentKind": "elder",
-      "interactionTargetYawDegrees": -141.919
-    }
-  ],
-  "managementBlockLocalPos": [
-    -18,
-    2,
-    13
-  ],
-  "treasuryLocalPos": [
-    -18,
-    1,
-    13
-  ],
-  "countsAsConstructionId": "plot_town_hall",
-  "touristDestination": true,
-  "plotTokenLockedByDefault": true,
-  "floatingGiftBlueprint": true,
-  "styleId": "jimmy"
+  ]
 }

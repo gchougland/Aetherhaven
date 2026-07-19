@@ -72,7 +72,7 @@ public final class PlotCreatorWorkActivityTags {
                 TownVillagerBinding.KIND_CRYSTAL_KEEPER,
                 TownVillagerBinding.KIND_ELDER,
                 TownVillagerBinding.KIND_PRIESTESS -> "read";
-            default -> "craft";
+            default -> "leisure";
         };
     }
 

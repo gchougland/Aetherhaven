@@ -1,6 +1,6 @@
 {
   "id": "plot_jimmys_tavern",
-  "displayName": "Jimmy's Tavern",
+  "displayName": "Jimmy\u0027s Tavern",
   "description": "Made by Jimmy G",
   "prefabPath": "Jimmys/plot_jimmys_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -148,68 +148,6 @@
   ],
   "pois": [
     {
-      "localX": -12,
-      "localY": 2,
-      "localZ": 12,
-      "tags": [
-        "WORK",
-        "workActivity:read"
-      ],
-      "capacity": 1,
-      "workResidentKind": "innkeeper",
-      "blockTypeId": "Editor_Empty",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -12,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 11
-    },
-    {
-      "localX": -13,
-      "localY": 0,
-      "localZ": 13,
-      "tags": [
-        "WORK",
-        "workActivity:read"
-      ],
-      "capacity": 1,
-      "workResidentKind": "innkeeper",
-      "blockTypeId": "Wood_Softwood_Planks",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": -13,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 12
-    },
-    {
-      "localX": -22,
-      "localY": 2,
-      "localZ": 12,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -22,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 13
-    },
-    {
-      "localX": -27,
-      "localY": 2,
-      "localZ": 12,
-      "tags": [
-        "SLEEP",
-        "ENERGY"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Furniture_Tavern_Bed",
-      "interactionKind": "SLEEP",
-      "interactionTargetLocalX": -27,
-      "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 13
-    },
-    {
       "localX": -13,
       "localY": 1,
       "localZ": 10,
@@ -320,6 +258,105 @@
       "interactionTargetLocalX": -18,
       "interactionTargetLocalY": 1,
       "interactionTargetLocalZ": 8
+    },
+    {
+      "localX": -13,
+      "localY": 0,
+      "localZ": 13,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -12,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 13,
+      "workResidentKind": "innkeeper",
+      "interactionTargetYawDegrees": 90.56606
+    },
+    {
+      "localX": -27,
+      "localY": 2,
+      "localZ": 13,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": -27,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 12,
+      "interactionTargetYawDegrees": 152.0144
+    },
+    {
+      "localX": -23,
+      "localY": 2,
+      "localZ": 13,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": -24,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 13,
+      "interactionTargetYawDegrees": -103.227356
+    },
+    {
+      "localX": -16,
+      "localY": 2,
+      "localZ": 6,
+      "tags": [
+        "QUEST_BOARD"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Aetherhaven_Quest_Board",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": -15,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 6,
+      "interactionTargetYawDegrees": 89.56966
+    },
+    {
+      "localX": -13,
+      "localY": 1,
+      "localZ": 6,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Leather_Flat",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 7,
+      "workResidentKind": "guild_master",
+      "interactionTargetYawDegrees": -1.5777588
+    },
+    {
+      "localX": -16,
+      "localY": 0,
+      "localZ": 8,
+      "tags": [
+        "WORK",
+        "BARD",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Softwood_Planks",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -17,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 8,
+      "workResidentKind": "bard",
+      "interactionTargetYawDegrees": -133.72168
     }
   ],
   "managementBlockLocalPos": [
@@ -344,15 +381,81 @@
       9
     ]
   ],
-  "countsAsConstructionId": "plot_inn",
+  "countsAsConstructionId": [
+    "plot_inn",
+    "plot_guild_hall"
+  ],
   "tags": [
     "inn",
     "tavern",
     "work",
-    "eat"
+    "eat",
+    "guild"
   ],
   "touristDestination": true,
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
-  "styleId": "jimmy"
+  "styleId": "jimmy",
+  "innBellLocalPos": [
+    -13,
+    2,
+    11
+  ],
+  "guildMasterSpawnLocal": [
+    -13,
+    1,
+    6
+  ],
+  "adventurerSpawnLocals": [
+    [
+      -13,
+      2,
+      10
+    ],
+    [
+      -18,
+      3,
+      9
+    ],
+    [
+      -19,
+      3,
+      11
+    ],
+    [
+      -19,
+      3,
+      14
+    ],
+    [
+      -17,
+      3,
+      13
+    ],
+    [
+      -17,
+      2,
+      16
+    ],
+    [
+      -15,
+      2,
+      14
+    ],
+    [
+      -15,
+      2,
+      12
+    ]
+  ],
+  "adventurerSpawnYaws": [
+    6.204422950744629,
+    0.11270283907651901,
+    1.4550795555114746,
+    1.5364501476287842,
+    6.1256103515625,
+    2.9953153133392334,
+    1.5463123321533203,
+    1.581623911857605
+  ]
 }

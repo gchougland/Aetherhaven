@@ -61,79 +61,60 @@
       "workResidentKind": "rancher"
     },
     {
-      "localX": 12,
+      "localX": 5,
       "localY": 0,
-      "localZ": 9,
+      "localZ": 12,
       "tags": [
         "workActivity:craft",
         "WORK"
       ],
       "capacity": 1,
-      "blockTypeId": "Furniture_Village_Crate",
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
+      "interactionTargetLocalX": 6,
       "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 9,
+      "interactionTargetLocalZ": 12,
+      "workResidentKind": "rancher"
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 5,
+      "workResidentKind": "rancher"
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 12,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 12,
       "workResidentKind": "rancher"
     },
     {
       "localX": 5,
       "localY": 0,
-      "localZ": 12,
-      "tags": [
-        "WORK",
-        "workActivity:craft"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Hardwood_Fence_Gate",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 6,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 12,
-      "workResidentKind": "rancher",
-      "interactionTargetYawDegrees": 49.572754
-    },
-    {
-      "localX": 8,
-      "localY": 0,
       "localZ": 5,
       "tags": [
-        "WORK",
-        "workActivity:craft"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Hardwood_Fence_Gate",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 5,
-      "workResidentKind": "rancher",
-      "interactionTargetYawDegrees": -86.81506
-    },
-    {
-      "localX": 8,
-      "localY": 0,
-      "localZ": 12,
-      "tags": [
-        "WORK",
-        "workActivity:craft"
-      ],
-      "capacity": 1,
-      "blockTypeId": "Wood_Hardwood_Fence_Gate",
-      "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 7,
-      "interactionTargetLocalY": 0,
-      "interactionTargetLocalZ": 12,
-      "workResidentKind": "rancher",
-      "interactionTargetYawDegrees": -129.20447
-    },
-    {
-      "localX": 5,
-      "localY": 0,
-      "localZ": 5,
-      "tags": [
-        "WORK",
-        "workActivity:craft"
+        "workActivity:craft",
+        "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Wood_Hardwood_Fence_Gate",
@@ -141,8 +122,7 @@
       "interactionTargetLocalX": 6,
       "interactionTargetLocalY": 0,
       "interactionTargetLocalZ": 5,
-      "workResidentKind": "rancher",
-      "interactionTargetYawDegrees": 64.95972
+      "workResidentKind": "rancher"
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn.displayName",

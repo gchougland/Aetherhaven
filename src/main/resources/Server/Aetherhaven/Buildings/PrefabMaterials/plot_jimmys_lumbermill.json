@@ -1,0 +1,154 @@
+{
+  "constructionId": "plot_jimmys_lumbermill",
+  "prefabPath": "Jimmys/plot_jimmys_lumbermill.prefab.json",
+  "materials": [
+    {
+      "itemId": "Wood_Oak_Trunk",
+      "count": 579
+    },
+    {
+      "itemId": "Rock_Stone_Cobble",
+      "count": 554
+    },
+    {
+      "itemId": "Wood_Softwood_Planks_Half",
+      "count": 208
+    },
+    {
+      "itemId": "Wood_Softwood_Planks",
+      "count": 198
+    },
+    {
+      "itemId": "Wood_Softwood_Stairs",
+      "count": 192
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Shallow",
+      "count": 173
+    },
+    {
+      "itemId": "Wood_Softwood_Roof",
+      "count": 141
+    },
+    {
+      "itemId": "Wood_Hardwood_Fence",
+      "count": 86
+    },
+    {
+      "itemId": "Rock_Quartzite",
+      "count": 84
+    },
+    {
+      "itemId": "Rock_Stone_Brick",
+      "count": 78
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Flat",
+      "count": 76
+    },
+    {
+      "itemId": "Wood_Beech_Trunk",
+      "count": 52
+    },
+    {
+      "itemId": "Wood_Hardwood_Planks",
+      "count": 46
+    },
+    {
+      "resourceTypeId": "Wood_All",
+      "count": 43
+    },
+    {
+      "itemId": "Wood_Softwood_Roof_Steep",
+      "count": 41
+    },
+    {
+      "itemId": "Wood_Ash_Trunk",
+      "count": 39
+    },
+    {
+      "itemId": "Cloth_Block_Wool_White",
+      "count": 32
+    },
+    {
+      "itemId": "Wood_Sticks",
+      "count": 20
+    },
+    {
+      "resourceTypeId": "Soils",
+      "count": 18
+    },
+    {
+      "itemId": "Rock_Stone_Cobble_Stairs",
+      "count": 11
+    },
+    {
+      "itemId": "Wood_Hardwood_Beam",
+      "count": 11
+    },
+    {
+      "itemId": "Furniture_Tavern_Window",
+      "count": 8
+    },
+    {
+      "itemId": "Furniture_Crude_Torch",
+      "count": 7
+    },
+    {
+      "itemId": "Metal_Iron_Pipe_Large",
+      "count": 6
+    },
+    {
+      "itemId": "Rock_Stone_Brick_Smooth_Half",
+      "count": 3
+    },
+    {
+      "itemId": "Bench_WorkBench",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Lantern",
+      "count": 2
+    },
+    {
+      "itemId": "Deco_Rope",
+      "count": 2
+    },
+    {
+      "itemId": "Furniture_Crude_Candle",
+      "count": 2
+    },
+    {
+      "resourceTypeId": "Rock",
+      "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
+    },
+    {
+      "itemId": "Bench_Furnace",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Inkwell",
+      "count": 1
+    },
+    {
+      "itemId": "Deco_Map",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Chair",
+      "count": 1
+    },
+    {
+      "itemId": "Furniture_Village_Door",
+      "count": 1
+    },
+    {
+      "itemId": "Recipe_Book_Magic_Air",
+      "count": 1
+    }
+  ]
+}

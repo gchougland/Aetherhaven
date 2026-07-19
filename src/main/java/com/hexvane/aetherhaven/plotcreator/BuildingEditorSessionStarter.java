@@ -3,13 +3,19 @@ package com.hexvane.aetherhaven.plotcreator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.construction.PrefabYaw;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.placement.PlotFootprintUtil;
 import com.hexvane.aetherhaven.prefab.ConstructionAnimator;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
+import com.hypixel.hytale.component.ArchetypeChunk;
+import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.protocol.GameMode;
+import com.hypixel.hytale.protocol.packets.interface_.Page;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.entity.entities.Player;
@@ -19,6 +25,9 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import javax.annotation.Nonnull;
@@ -157,7 +166,9 @@ public final class BuildingEditorSessionStarter {
         convertPrefabLocalsToSignSpace(draft, def.getPlotAnchorOffset());
         snapPlotSignToOutsideCorner(draft);
         seedSpecialBlocksFromPois(draft);
-        draft.setStep(PlotCreatorStep.IMPORTANT_SPOTS);
+        seedAdventurerSpawnsFromWorldMarkers(world, draft, fp);
+        PlotCreatorStep startStep = editorStartStep(draft);
+        draft.setStep(startStep);
         PlotCreatorService.seedImportantSpotsIfEmpty(draft);
         PlotCreatorSessions.put(session);
 
@@ -170,7 +181,29 @@ public final class BuildingEditorSessionStarter {
         playerRef.sendMessage(
             Message.translation(MSG + ".hint.loaded").param("name", displayName(def)).param("id", def.getId())
         );
-        PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
+        if (startStep == PlotCreatorStep.IMPORTANT_SPOTS) {
+            // Replaces the building list page without setPage(None) (avoids PageManager ACK race).
+            PlotCreatorInteractions.openImportantSpotsPanel(playerRef, ref, store, session);
+        } else if (player != null) {
+            // Decoration start at Identity with no follow-up panel — dismiss the picker here.
+            player.getPageManager().setPage(ref, store, Page.None);
+        }
+    }
+
+    /**
+     * Decoration/placements skip important spots in the wizard order. Landing on that missing step makes progress show
+     * Welcome and blocks E/Q advance — start at Identity instead.
+     */
+    @Nonnull
+    private static PlotCreatorStep editorStartStep(@Nonnull PlotCreatorDraft draft) {
+        List<PlotCreatorStep> order = PlotCreatorService.stepOrder(draft);
+        if (order.contains(PlotCreatorStep.IMPORTANT_SPOTS)) {
+            return PlotCreatorStep.IMPORTANT_SPOTS;
+        }
+        if (order.contains(PlotCreatorStep.IDENTITY)) {
+            return PlotCreatorStep.IDENTITY;
+        }
+        return PlotCreatorStep.IDENTITY;
     }
 
     /**
@@ -340,6 +373,72 @@ public final class BuildingEditorSessionStarter {
             draft.getPlacedSpecialBlocks().add(world);
         }
     }
+
+    /**
+     * Guild halls (and similar) often keep adventurer posts as prefab marker entities with an empty JSON list.
+     * After paste, copy those world markers into the draft so editor spot markers and checklist counts work.
+     */
+    private static void seedAdventurerSpawnsFromWorldMarkers(
+        @Nonnull World world,
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        if (!draft.getAdventurerSpawns().isEmpty() || draft.getPlotAnchor() == null) {
+            return;
+        }
+        Store<EntityStore> store = world.getEntityStore().getStore();
+        List<SeededAdventurer> found = new ArrayList<>();
+        store.forEachChunk(
+            Query.and(AdventurerSpawnMarkerEntity.getComponentType(), TransformComponent.getComponentType()),
+            (ArchetypeChunk<EntityStore> chunk, CommandBuffer<EntityStore> commandBuffer) -> {
+                for (int i = 0; i < chunk.size(); i++) {
+                    TransformComponent tc = chunk.getComponent(i, TransformComponent.getComponentType());
+                    if (tc == null) {
+                        continue;
+                    }
+                    Vector3d p = tc.getPosition();
+                    int bx = (int) Math.floor(p.x);
+                    int by = (int) Math.floor(p.y);
+                    int bz = (int) Math.floor(p.z);
+                    if (bx < fp.getMinX()
+                        || bx > fp.getMaxX()
+                        || by < fp.getMinY()
+                        || by > fp.getMaxY()
+                        || bz < fp.getMinZ()
+                        || bz > fp.getMaxZ()) {
+                        continue;
+                    }
+                    int[] local = PlotCreatorLocalCoords.toLocal(draft, new Vector3i(bx, by, bz));
+                    float prefabYaw =
+                        PrefabYaw.prefabFromWorld(PlotCreatorPrefabCoords.placementYaw(draft), tc.getRotation().yaw());
+                    found.add(new SeededAdventurer(local[0], local[1], local[2], prefabYaw));
+                }
+            }
+        );
+        if (found.isEmpty()) {
+            return;
+        }
+        found.sort(
+            Comparator.comparingInt((SeededAdventurer a) -> a.x)
+                .thenComparingInt(a -> a.z)
+                .thenComparingInt(a -> a.y)
+        );
+        for (SeededAdventurer a : found) {
+            draft.getAdventurerSpawns().add(new PlotCreatorAdventurerSpawnEntry(a.x, a.y, a.z, a.yaw));
+        }
+        ensureAdventurerSpotSelected(draft, found.size());
+    }
+
+    private static void ensureAdventurerSpotSelected(@Nonnull PlotCreatorDraft draft, int count) {
+        for (PlotCreatorSpotEntry entry : draft.getSelectedSpots()) {
+            if (entry.type() == PlotCreatorSubstepType.ADVENTURER_SPAWN) {
+                return;
+            }
+        }
+        draft.getSelectedSpots().add(PlotCreatorSpotEntry.of(PlotCreatorSubstepType.ADVENTURER_SPAWN, Math.max(1, count)));
+    }
+
+    private record SeededAdventurer(int x, int y, int z, float yaw) {}
 
     @Nonnull
     private static Vector3i pasteSignNearPlayer(@Nonnull Vector3d pos, float yawRad) {

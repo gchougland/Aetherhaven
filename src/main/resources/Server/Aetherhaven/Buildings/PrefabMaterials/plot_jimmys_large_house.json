@@ -1,6 +1,6 @@
 {
   "constructionId": "plot_jimmys_large_house",
-  "prefabPath": "plot_jimmys_large_house.prefab.json",
+  "prefabPath": "Jimmys/plot_jimmys_large_house.prefab.json",
   "materials": [
     {
       "itemId": "Wood_Softwood_Roof",
@@ -109,6 +109,10 @@
     {
       "resourceTypeId": "Rock",
       "count": 2
+    },
+    {
+      "itemId": "Aetherhaven_Smokestack",
+      "count": 1
     },
     {
       "itemId": "Bench_Cooking",

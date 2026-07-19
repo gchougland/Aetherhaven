@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.guild.marker.AdventurerSpawnMarkerEntity;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hexvane.aetherhaven.shopspot.ShopSpotDisplayService;
 import com.hypixel.hytale.assetstore.map.BlockTypeAssetMap;
@@ -150,7 +151,19 @@ public final class PlotCreatorPrefabExporter {
 
         Store<EntityStore> entityStore = world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
         if (entityStore != null) {
-            copyEntitiesInBounds(world, entityStore, selection, xMin, yMin, zMin, width, height, depth);
+            boolean omitAdventurerMarkers = !draft.getAdventurerSpawns().isEmpty();
+            copyEntitiesInBounds(
+                world,
+                entityStore,
+                selection,
+                xMin,
+                yMin,
+                zMin,
+                width,
+                height,
+                depth,
+                omitAdventurerMarkers
+            );
         }
 
         BuilderToolsPlugin builderTools = BuilderToolsPlugin.get();
@@ -201,19 +214,25 @@ public final class PlotCreatorPrefabExporter {
         int zMin,
         int width,
         int height,
-        int depth
+        int depth,
+        boolean omitAdventurerSpawnMarkers
     ) {
         Set<UUID> addedEntityUuids = new HashSet<>();
         ComponentRegistry.Data<EntityStore> registryData = EntityStore.REGISTRY.getData();
         ComponentType<EntityStore, PrefabCopyableComponent> prefabCopyableType = PrefabCopyableComponent.getComponentType();
         ComponentType<EntityStore, TransformComponent> transformType = TransformComponent.getComponentType();
         ComponentType<EntityStore, BlockEntity> blockEntityType = BlockEntity.getComponentType();
+        ComponentType<EntityStore, AdventurerSpawnMarkerEntity> adventurerMarkerType =
+            AdventurerSpawnMarkerEntity.getComponentType();
 
         BuilderToolsPlugin.forEachCopyableInSelection(world, xMin, yMin, zMin, width, height, depth, e -> {
             if (ShopSpotDisplayService.isRuntimeShopDisplayProp(entityStore, e)) {
                 return;
             }
             if (isEditorBlockEntity(entityStore.getComponent(e, blockEntityType))) {
+                return;
+            }
+            if (omitAdventurerSpawnMarkers && entityStore.getComponent(e, adventurerMarkerType) != null) {
                 return;
             }
             Holder<EntityStore> holder = entityStore.copyEntity(e);
@@ -246,6 +265,9 @@ public final class PlotCreatorPrefabExporter {
                         continue;
                     }
                     if (isEditorBlockEntity(holder.getComponent(blockEntityType))) {
+                        continue;
+                    }
+                    if (omitAdventurerSpawnMarkers && holder.getComponent(adventurerMarkerType) != null) {
                         continue;
                     }
                     TransformComponent transform = holder.getComponent(transformType);
