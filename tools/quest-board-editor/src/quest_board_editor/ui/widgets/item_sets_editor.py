@@ -5,7 +5,6 @@ from typing import Callable, List, Optional
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QAbstractItemView,
     QGroupBox,
     QHBoxLayout,
     QHeaderView,
@@ -20,9 +19,14 @@ from PySide6.QtWidgets import (
 
 
 class ItemSetsEditor(QWidget):
-    def __init__(self, on_change: Optional[Callable[[], None]] = None) -> None:
+    def __init__(
+        self,
+        on_change: Optional[Callable[[], None]] = None,
+        browse_item: Optional[Callable[[], Optional[str]]] = None,
+    ) -> None:
         super().__init__()
         self._on_change = on_change
+        self._browse_item = browse_item
         self._loading = False
         self._sets: List[dict] = []
         self._current_set = 0
@@ -62,15 +66,21 @@ class ItemSetsEditor(QWidget):
         btn_row = QHBoxLayout()
         add_item = QPushButton("Add item")
         add_item.clicked.connect(self._add_item)
+        browse_btn = QPushButton("Browse…")
+        browse_btn.clicked.connect(self._browse_add_or_replace)
         rem_item = QPushButton("Remove item")
         rem_item.clicked.connect(self._remove_item)
         btn_row.addWidget(add_item)
+        btn_row.addWidget(browse_btn)
         btn_row.addWidget(rem_item)
         btn_row.addStretch()
         box_layout.addLayout(btn_row)
         layout.addWidget(box)
 
         self.table.cellChanged.connect(self._cell_changed)
+
+    def set_browse_item(self, browse_item: Optional[Callable[[], Optional[str]]]) -> None:
+        self._browse_item = browse_item
 
     def set_item_sets(self, item_sets: List[dict]) -> None:
         self._loading = True
@@ -156,6 +166,21 @@ class ItemSetsEditor(QWidget):
     def _add_item(self) -> None:
         items = self._current().setdefault("items", [])
         items.append({"itemId": "Rock_Stone", "count": 1})
+        self._refresh_table()
+        self._emit_change()
+
+    def _browse_add_or_replace(self) -> None:
+        if not self._browse_item:
+            return
+        picked = self._browse_item()
+        if not picked:
+            return
+        items = self._current().setdefault("items", [])
+        rows = sorted({i.row() for i in self.table.selectedIndexes()})
+        if rows and 0 <= rows[0] < len(items):
+            items[rows[0]]["itemId"] = picked
+        else:
+            items.append({"itemId": picked, "count": 1})
         self._refresh_table()
         self._emit_change()
 

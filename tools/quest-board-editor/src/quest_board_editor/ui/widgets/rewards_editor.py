@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 from typing import Callable, List, Optional
 
 from PySide6.QtCore import Qt
@@ -18,7 +17,6 @@ from PySide6.QtWidgets import (
 
 from ...rewards_util import (
     GRANT_TO_PLAYER,
-    GRANT_TO_QUEST_GIVER,
     apply_kind_change,
     apply_primary_value,
     apply_secondary_value,
@@ -37,10 +35,12 @@ class RewardsEditor(QWidget):
         self,
         on_change: Optional[Callable[[], None]] = None,
         default_npc_role_id: str = "",
+        browse_item: Optional[Callable[[], Optional[str]]] = None,
     ) -> None:
         super().__init__()
         self._on_change = on_change
         self._default_npc_role_id = default_npc_role_id
+        self._browse_item = browse_item
         self._loading = False
         self._data: List[dict] = []
 
@@ -61,17 +61,23 @@ class RewardsEditor(QWidget):
         row = QHBoxLayout()
         add_item = QPushButton("Add item reward")
         add_item.clicked.connect(self._add_item)
+        browse_btn = QPushButton("Browse item…")
+        browse_btn.clicked.connect(self._browse_primary)
         add_rep = QPushButton("Add reputation reward")
         add_rep.clicked.connect(self._add_reputation)
         rem_btn = QPushButton("Remove selected")
         rem_btn.clicked.connect(self._remove_selected)
         row.addWidget(add_item)
+        row.addWidget(browse_btn)
         row.addWidget(add_rep)
         row.addWidget(rem_btn)
         row.addStretch()
         layout.addLayout(row)
 
         self.table.cellChanged.connect(self._cell_changed)
+
+    def set_browse_item(self, browse_item: Optional[Callable[[], Optional[str]]]) -> None:
+        self._browse_item = browse_item
 
     def set_default_npc_role_id(self, npc_role_id: str) -> None:
         self._default_npc_role_id = npc_role_id
@@ -143,6 +149,31 @@ class RewardsEditor(QWidget):
     def _add_item(self) -> None:
         self._data.append(default_item_reward())
         self._append_row(self._data[-1])
+        self._emit_change()
+
+    def _browse_primary(self) -> None:
+        if not self._browse_item:
+            return
+        picked = self._browse_item()
+        if not picked:
+            return
+        rows = sorted({i.row() for i in self.table.selectedIndexes()})
+        if rows and 0 <= rows[0] < len(self._data):
+            reward = self._data[rows[0]]
+            kind = str(reward.get("kind", "item"))
+            if kind == "learn_recipe":
+                apply_primary_value(reward, picked)
+            else:
+                if kind != "item":
+                    self._data[rows[0]] = apply_kind_change(reward, "item")
+                    reward = self._data[rows[0]]
+                apply_primary_value(reward, picked)
+            self._rewrite_row(rows[0])
+        else:
+            reward = default_item_reward()
+            reward["itemId"] = picked
+            self._data.append(reward)
+            self._append_row(reward)
         self._emit_change()
 
     def _add_reputation(self) -> None:

@@ -31,6 +31,9 @@ public final class AetherhavenAssetPaths {
     /** Townsfolk personality traits. */
     public static final String PERSONALITIES = "Server/Aetherhaven/Personalities";
 
+    /** Dialogue speech blip voice profiles (pitch/cadence). */
+    public static final String SPEECH_VOICES = "Server/Aetherhaven/SpeechVoices";
+
     /** Bard song catalog and related config. */
     public static final String BARD = "Server/Aetherhaven/Bard";
 
@@ -42,6 +45,9 @@ public final class AetherhavenAssetPaths {
 
     /** Additive quest board pool extensions (partial quest_board shape). */
     public static final String QUEST_BOARD_EXTENSIONS = "Server/Aetherhaven/QuestBoardExtensions";
+
+    /** Per-player world quest board profiles (hub / server boards). */
+    public static final String WORLD_QUEST_BOARDS = "Server/Aetherhaven/WorldQuestBoards";
 
     /** Patches that inject nodes/choices into existing dialogue trees. */
     public static final String DIALOGUE_PATCHES = "Server/Aetherhaven/DialoguePatches";
@@ -110,5 +116,10 @@ public final class AetherhavenAssetPaths {
     @Nonnull
     public static String personalitiesPrefix() {
         return PERSONALITIES + "/";
+    }
+
+    @Nonnull
+    public static String speechVoicesPrefix() {
+        return SPEECH_VOICES + "/";
     }
 }

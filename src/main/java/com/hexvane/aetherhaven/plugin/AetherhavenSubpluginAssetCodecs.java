@@ -17,6 +17,7 @@ import com.hexvane.aetherhaven.quest.QuestsBootstrap;
 import com.hexvane.aetherhaven.reputation.ReputationBootstrap;
 import com.hexvane.aetherhaven.rts.RtsBootstrap;
 import com.hexvane.aetherhaven.shopspot.CommerceBootstrap;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcsBootstrap;
 import javax.annotation.Nonnull;
 
 /**
@@ -41,6 +42,7 @@ public final class AetherhavenSubpluginAssetCodecs {
         ProductionBootstrap.registerAssetCodecs(core);
         VillagersBootstrap.registerAssetCodecs(core);
         DialogueBootstrap.registerAssetCodecs(core);
+        WorldNpcsBootstrap.registerAssetCodecs(core);
 
         // No asset-pack interaction/UI registrations; kept for symmetry if added later.
         FloatingGiftsBootstrap.registerAssetCodecs(core);

@@ -1,0 +1,20 @@
+$C = "../Common.ui";
+
+Group #ChecklistRow {
+  LayoutMode: Left;
+  HitTestVisible: false;
+  Anchor: (Bottom: 4);
+
+  $C.@CheckBox #CheckBox {
+    Disabled: true;
+    HitTestVisible: false;
+    Anchor: (Right: 8, Width: 22, Height: 22);
+  }
+
+  Label #ItemLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 13, Wrap: true, VerticalAlignment: Center);
+    HitTestVisible: false;
+    FlexWeight: 1;
+    Text: "";
+  }
+}

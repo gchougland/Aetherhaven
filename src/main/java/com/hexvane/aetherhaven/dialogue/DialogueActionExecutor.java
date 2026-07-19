@@ -37,6 +37,11 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.reputation.ReputationRewardCatalog;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
+import com.hexvane.aetherhaven.ui.WorldQuestBoardPage;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlacementRecord;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcReputationService;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestProgressionService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
 import com.hypixel.hytale.builtin.audio.components.ForcedMusicTracker;
 import com.hypixel.hytale.component.Ref;
@@ -131,9 +136,10 @@ public final class DialogueActionExecutor {
             case "set_main_hub_opener" -> setMainHubOpener(a, playerRef, store, npcRef);
             case "start_quest" -> startQuest(a, playerRef, store, npcRef);
             case "complete_quest" -> completeQuest(a, playerRef, store, npcRef);
-            case "abandon_quest" -> abandonQuest(a, playerRef, store);
+            case "abandon_quest" -> abandonQuest(a, playerRef, store, npcRef);
             case "reputation_reward_grant" -> reputationRewardGrant(a, playerRef, store, npcRef);
             case "gift_villager" -> giftVillager(a, playerRef, store, out, npcRef);
+            case "open_world_quest_board" -> openWorldQuestBoard(a, playerRef, store, out, npcRef);
             case "gaia_draught_refill" -> gaiaDraughtRefill(playerRef, store, npcRef);
             case "gaia_draught_upgrade_shard" -> gaiaDraughtUpgradeShard(playerRef, store, npcRef);
             case "gaia_draught_upgrade_catalyst" -> gaiaDraughtUpgradeCatalyst(playerRef, store, npcRef);
@@ -163,13 +169,24 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        WorldNpcBinding worldBinding = worldBinding(store, npcRef);
+        if (worldBinding != null && pu != null) {
+            WorldNpcReputationService.setPendingMainHubBody(
+                world,
+                plugin,
+                pu.getUuid(),
+                worldBinding.getPlacementId(),
+                langKey.trim()
+            );
+            return;
+        }
         TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
         TownManager tm = owningTownManager(town, localTm);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         if (pu == null || npcUuid == null) {
             return;
@@ -192,20 +209,40 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
-        if (town == null) {
-            return;
-        }
-        TownManager tm = owningTownManager(town, localTm);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (pu == null || !town.playerCanAcceptQuests(pu.getUuid())) {
+        if (pu == null) {
             return;
         }
         String qid = id.trim();
         QuestCatalog quests = plugin.getQuestCatalog();
         QuestDefinition qdef = quests.get(qid);
         if (qdef != null && !QuestAvailability.isEnabled(qdef)) {
+            return;
+        }
+        if (worldBinding(store, npcRef) != null || WorldQuestProgressionService.isWorldQuest(qdef)) {
+            if (!WorldQuestProgressionService.startQuest(plugin, world, pu.getUuid(), qid)) {
+                return;
+            }
+            PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                sendEventTitleBanner(
+                    pr,
+                    Message.translation("aetherhaven_misc.aetherhaven.banner.quest.started.secondary")
+                        .param("name", quests.displayName(qid)),
+                    Message.translation("aetherhaven_misc.aetherhaven.banner.quest.started.primary"),
+                    true
+                );
+                playBannerSound(playerRef, store);
+            }
+            return;
+        }
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
+        if (town == null) {
+            return;
+        }
+        TownManager tm = owningTownManager(town, localTm);
+        if (!town.playerCanAcceptQuests(pu.getUuid())) {
             return;
         }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
@@ -285,19 +322,46 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return;
+        }
+        String qid = id.trim();
+        QuestDefinition precheck = plugin.getQuestCatalog().get(qid);
+        if (precheck != null && !QuestAvailability.isEnabled(precheck)) {
+            return;
+        }
+        if (worldBinding(store, npcRef) != null || WorldQuestProgressionService.isWorldQuest(precheck)) {
+            if (!WorldQuestProgressionService.advanceDialogueTurnIn(plugin, world, pu.getUuid(), qid)) {
+                return;
+            }
+            if (!WorldQuestProgressionService.completeQuest(plugin, world, pu.getUuid(), qid)) {
+                return;
+            }
+            PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                sendEventTitleBanner(
+                    pr,
+                    Message.translation("aetherhaven_misc.aetherhaven.banner.quest.completed.secondary")
+                        .param("name", plugin.getQuestCatalog().displayName(qid)),
+                    Message.translation("aetherhaven_misc.aetherhaven.banner.quest.completed.primary"),
+                    true
+                );
+                playBannerSound(playerRef, store);
+                pr.sendMessage(
+                    Message.translation("aetherhaven_quests_portals.aetherhaven.quest.completed")
+                        .param("name", plugin.getQuestCatalog().displayName(qid))
+                );
+            }
+            return;
+        }
         TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
         TownManager tm = owningTownManager(town, localTm);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (pu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
-            return;
-        }
-        String qid = id.trim();
-        QuestDefinition precheck = plugin.getQuestCatalog().get(qid);
-        if (precheck != null && !QuestAvailability.isEnabled(precheck)) {
+        if (!town.playerCanCompleteQuests(pu.getUuid())) {
             return;
         }
         if (!town.hasQuestActive(qid)) {
@@ -472,6 +536,11 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
+        WorldNpcBinding worldBinding = worldBinding(store, npcRef);
+        if (worldBinding != null) {
+            giftWorldNpc(a, playerRef, store, out, worldBinding, plugin, world);
+            return;
+        }
         TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
@@ -494,6 +563,75 @@ public final class DialogueActionExecutor {
         }
         String msgKey = giftFailKey(res.failReason());
         pr.sendMessage(Message.translation(msgKey));
+    }
+
+    private static void giftWorldNpc(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nonnull WorldNpcBinding worldBinding,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world
+    ) {
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (pu == null || player == null) {
+            return;
+        }
+        var hotbar = store.getComponent(playerRef, InventoryComponent.Hotbar.getComponentType());
+        ItemStack hand = hotbar != null ? hotbar.getActiveItem() : null;
+        if (ItemStack.isEmpty(hand)) {
+            if (pr != null) {
+                pr.sendMessage(Message.translation("aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.emptyHand"));
+            }
+            return;
+        }
+        String itemId = hand.getItemId();
+        var def = plugin.getVillagerDefinitionCatalog().byNpcRoleId(worldBinding.getNpcRoleId());
+        int delta = 5;
+        String gotoNode = stringField(a, "gotoLike");
+        if (def != null) {
+            if (def.getGiftLoves().contains(itemId)) {
+                delta = 15;
+                gotoNode = stringField(a, "gotoLove");
+            } else if (def.getGiftLikes().contains(itemId)) {
+                delta = 10;
+                gotoNode = stringField(a, "gotoLike");
+            } else if (def.getGiftDislikes().contains(itemId)) {
+                delta = -5;
+                gotoNode = stringField(a, "gotoDislike");
+            }
+        }
+        if (!WorldNpcReputationService.tryGift(
+            world,
+            plugin,
+            store,
+            pu.getUuid(),
+            worldBinding.getPlacementId(),
+            delta
+        )) {
+            if (pr != null) {
+                pr.sendMessage(Message.translation("aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.fail.weeklyLimit"));
+            }
+            return;
+        }
+        if (hotbar != null) {
+            byte slot = hotbar.getActiveSlot();
+            if (slot >= 0) {
+                var container = hotbar.getInventory();
+                int q = hand.getQuantity();
+                ItemStack replacement =
+                    q <= 1
+                        ? ItemStack.EMPTY
+                        : (hand.withQuantity(q - 1) != null ? hand.withQuantity(q - 1) : ItemStack.EMPTY);
+                container.replaceItemStackInSlot(slot, hand, replacement);
+            }
+        }
+        if (gotoNode != null && !gotoNode.isBlank()) {
+            out.setGotoNodeId(gotoNode.trim());
+        }
     }
 
     @Nonnull
@@ -527,27 +665,50 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        Player player = store.getComponent(playerRef, Player.getComponentType());
+        if (pu == null || player == null) {
+            return;
+        }
+        WorldNpcBinding worldBinding = worldBinding(store, npcRef);
+        if (worldBinding != null) {
+            if (!WorldNpcReputationService.claimPendingReward(
+                world,
+                plugin,
+                pu.getUuid(),
+                worldBinding.getPlacementId(),
+                def.rewardId()
+            )) {
+                return;
+            }
+            grantReputationRewardItems(def, playerRef, store, player);
+            return;
+        }
         TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
         if (town == null) {
             return;
         }
         TownManager tm = owningTownManager(town, localTm);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
-        if (pu == null || nu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
+        if (nu == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return;
         }
         if (!com.hexvane.aetherhaven.villager.VillagerBefriendableResolver.isBefriendable(store, npcRef, plugin)) {
             return;
         }
-        Player player = store.getComponent(playerRef, Player.getComponentType());
-        if (player == null) {
-            return;
-        }
         if (!VillagerReputationService.claimPendingReward(town, tm, pu.getUuid(), nu.getUuid(), def.rewardId())) {
             return;
         }
+        grantReputationRewardItems(def, playerRef, store, player);
+    }
+
+    private static void grantReputationRewardItems(
+        @Nonnull ReputationRewardCatalog.ReputationRewardDefinition def,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Player player
+    ) {
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         String learnId = def.learnRecipeItemId();
         if (learnId != null && !learnId.isBlank()) {
@@ -582,7 +743,12 @@ public final class DialogueActionExecutor {
         playBannerSound(playerRef, store);
     }
 
-    private static void abandonQuest(@Nonnull JsonObject a, @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+    private static void abandonQuest(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
         String id = stringField(a, "id");
         if (id == null || id.isBlank()) {
             return;
@@ -592,19 +758,32 @@ public final class DialogueActionExecutor {
             return;
         }
         World world = store.getExternalData().getWorld();
-        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent puAb = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (puAb == null) {
             return;
         }
+        String qid = id.trim();
+        QuestDefinition def = plugin.getQuestCatalog().get(qid);
+        if (worldBinding(store, npcRef) != null || WorldQuestProgressionService.isWorldQuest(def)) {
+            if (!WorldQuestProgressionService.abandonQuest(plugin, world, puAb.getUuid(), qid)) {
+                return;
+            }
+            PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                pr.sendMessage(
+                    Message.translation("aetherhaven_quests_portals.aetherhaven.quest.abandoned")
+                        .param("name", plugin.getQuestCatalog().displayName(qid))
+                );
+            }
+            return;
+        }
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         TownRecord town = AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(puAb.getUuid(), localTm);
         if (town == null || !town.playerCanAbandonQuests(puAb.getUuid())) {
             return;
         }
         TownManager tm = owningTownManager(town, localTm);
-        String qid = id.trim();
         town.clearActiveQuest(qid);
-        QuestDefinition def = plugin.getQuestCatalog().get(qid);
         if (def != null) {
             QuestLifecycleEffects.runOnAbandon(world, plugin, town, tm, def, null);
         }
@@ -616,6 +795,60 @@ public final class DialogueActionExecutor {
                     .param("name", plugin.getQuestCatalog().displayName(qid))
             );
         }
+    }
+
+    private static void openWorldQuestBoard(
+        @Nonnull JsonObject a,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull DialogueActionBatchResult out,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        String profileId = stringField(a, "profileId");
+        if (profileId == null || profileId.isBlank()) {
+            WorldNpcBinding binding = worldBinding(store, npcRef);
+            if (binding != null) {
+                WorldNpcPlacementRecord placement =
+                    AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(
+                            store.getExternalData().getWorld(),
+                            plugin
+                        )
+                        .findPlacement(binding.getPlacementId());
+                if (placement != null) {
+                    profileId = placement.boardProfileIdOrEmpty();
+                }
+            }
+        }
+        if (profileId == null || profileId.isBlank()) {
+            profileId = "hub_default";
+        }
+        String resolvedProfile = profileId.trim();
+        out.setCloseDialogue(true);
+        out.setAfterClose(() -> {
+            Ref<EntityStore> pref = playerRef;
+            if (!pref.isValid()) {
+                return;
+            }
+            Store<EntityStore> st = pref.getStore();
+            Player player = st.getComponent(pref, Player.getComponentType());
+            PlayerRef pr = st.getComponent(pref, PlayerRef.getComponentType());
+            if (player == null || pr == null) {
+                return;
+            }
+            player.getPageManager().openCustomPage(pref, st, new WorldQuestBoardPage(pr, resolvedProfile));
+        });
+    }
+
+    @Nullable
+    private static WorldNpcBinding worldBinding(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return null;
+        }
+        return store.getComponent(npcRef, WorldNpcBinding.getComponentType());
     }
 
     @Nullable

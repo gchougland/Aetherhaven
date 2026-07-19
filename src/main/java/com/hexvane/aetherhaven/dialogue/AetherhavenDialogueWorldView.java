@@ -16,6 +16,8 @@ import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -103,6 +105,13 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     public boolean townQuestActive(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
     ) {
+        // Hub speakers only match world-category progress for town_quest_* conditions.
+        if (talkingToWorldNpc(store)) {
+            return worldQuestActive(playerRef, store, questId);
+        }
+        if (worldQuestActive(playerRef, store, questId)) {
+            return true;
+        }
         TownRecord t = townFor(playerRef, store);
         return t != null && t.hasQuestActive(questId.trim());
     }
@@ -111,8 +120,48 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     public boolean townQuestCompleted(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
     ) {
+        if (talkingToWorldNpc(store)) {
+            return worldQuestCompleted(playerRef, store, questId);
+        }
+        if (worldQuestCompleted(playerRef, store, questId)) {
+            return true;
+        }
         TownRecord t = townFor(playerRef, store);
         return t != null && t.hasQuestCompleted(questId.trim());
+    }
+
+    @Override
+    public boolean worldQuestActive(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        WorldNpcPlayerProgress progress = worldProgress(playerRef, store);
+        return progress != null && progress.hasQuestActive(questId.trim());
+    }
+
+    @Override
+    public boolean worldQuestCompleted(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        WorldNpcPlayerProgress progress = worldProgress(playerRef, store);
+        return progress != null && progress.hasQuestCompleted(questId.trim());
+    }
+
+    @Nullable
+    private WorldNpcPlayerProgress worldProgress(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
+    ) {
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return null;
+        }
+        return AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+            .getOrCreatePlayerProgress(pu.getUuid());
+    }
+
+    private boolean talkingToWorldNpc(@Nonnull Store<EntityStore> store) {
+        return contextNpcRef != null
+            && contextNpcRef.isValid()
+            && store.getComponent(contextNpcRef, WorldNpcBinding.getComponentType()) != null;
     }
 
     @Override
@@ -132,6 +181,9 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     public boolean aetherhavenPlayerCanAcceptQuests(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store
     ) {
+        if (talkingToWorldNpc(store)) {
+            return true;
+        }
         TownRecord t = townFor(playerRef, store);
         UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
         return t != null && pu != null && t.playerCanAcceptQuests(pu.getUuid());

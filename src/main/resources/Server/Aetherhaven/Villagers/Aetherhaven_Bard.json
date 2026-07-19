@@ -6,6 +6,7 @@
   "workConstructionId": "plot_guild_hall",
   "displayName": "Elias Thornwood",
   "portraitIcon": "Aetherhaven_Bard.png",
+  "speechVoiceId": "high",
   "uiSortOrder": 13,
   "innPoolEligible": true,
   "innPoolOrder": 8,

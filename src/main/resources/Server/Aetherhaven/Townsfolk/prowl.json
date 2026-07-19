@@ -14,5 +14,6 @@
     "tourist",
     "guard"
   ],
-  "befriendable": false
+  "befriendable": false,
+  "speechVoiceId": "low"
 }

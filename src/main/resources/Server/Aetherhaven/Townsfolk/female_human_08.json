@@ -1,19 +1,20 @@
 {
-    "id":  "female_human_08",
-    "displayName":  "Fiona Greystone",
-    "gender":  "female",
-    "race":  "human",
-    "modelAssetId":  "Female_Human_08",
-    "personalityIds":  [
-                           "mischievous",
-                           "adventurer",
-                           "gossipy"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "female_human_08",
+  "displayName": "Fiona Greystone",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_08",
+  "personalityIds": [
+    "mischievous",
+    "adventurer",
+    "gossipy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "high"
 }

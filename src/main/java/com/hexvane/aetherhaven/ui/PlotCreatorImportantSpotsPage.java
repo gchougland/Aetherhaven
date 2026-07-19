@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.plotcreator.PlotBuildingKind;
 import com.hexvane.aetherhaven.plotcreator.PlotBuildingKindRequirements;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorInteractions;
@@ -141,6 +142,10 @@ public final class PlotCreatorImportantSpotsPage
                 continue;
             }
             if (type == PlotCreatorSubstepType.BARD_WORK_POI) {
+                continue;
+            }
+            if (type == PlotCreatorSubstepType.GUILD_MASTER_SPAWN
+                && !includesInnWithGuildHall(session.getDraft())) {
                 continue;
             }
             out.add(PlotCreatorSpotEntry.of(type, 1));
@@ -292,6 +297,12 @@ public final class PlotCreatorImportantSpotsPage
             }
         }
         return false;
+    }
+
+    private static boolean includesInnWithGuildHall(@Nonnull PlotCreatorDraft draft) {
+        List<PlotBuildingKind> kinds =
+            PlotBuildingKindRequirements.effectiveKinds(draft, AetherhavenPlugin.get());
+        return kinds.contains(PlotBuildingKind.INN) && kinds.contains(PlotBuildingKind.GUILD_HALL);
     }
 
     public static final class PageData {

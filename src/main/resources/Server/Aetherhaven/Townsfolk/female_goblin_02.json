@@ -1,18 +1,19 @@
 {
-    "id":  "female_goblin_02",
-    "displayName":  "Wizzle Thornpick",
-    "gender":  "female",
-    "race":  "goblin",
-    "modelAssetId":  "Female_Goblin_02",
-    "personalityIds":  [
-                           "musical",
-                           "impatient",
-                           "dramatic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "female_goblin_02",
+  "displayName": "Wizzle Thornpick",
+  "gender": "female",
+  "race": "goblin",
+  "modelAssetId": "Female_Goblin_02",
+  "personalityIds": [
+    "musical",
+    "impatient",
+    "dramatic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "sharp"
 }

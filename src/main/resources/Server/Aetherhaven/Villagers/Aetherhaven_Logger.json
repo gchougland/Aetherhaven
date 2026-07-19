@@ -293,5 +293,6 @@
     "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.main_hub.hint.dislike.2",
     "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_logger.aetherhaven.dialogue.aetherhaven_logger.main_hub.hint.dislike.4"
-  ]
+  ],
+  "speechVoiceId": "soft"
 }

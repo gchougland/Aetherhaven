@@ -5,13 +5,20 @@
 ### Added
 
 - **Community building mod requirements** — Marketplace cards, building details, and pending-submission reviews clearly list required external mods and their asset-pack ids.
+- **Dialogue speech blips** — While a villager’s mouth Talk animation runs in dialogue, short speech blips play for the listening player (pitched per villager/voice profile, with light pitch/rate/volume jitter and occasional skips). Optional `speechVoiceId` on villager/townsfolk JSON; profiles live under `Server/Aetherhaven/SpeechVoices/`. Toggle with `DialogueSpeechEnabled`. Long lines only speak the first ~6 words. Personal mute and volume are under Town Journal → Settings.
 - **Custom town HUD** — The screen can now show the current time and date, your total gold, and up to three quests pinned from the town journal. Each section can be hidden or moved from the journal settings.
 - **Step-by-step quest tracking** — Building and housing quests now advance one objective at a time. The town journal shows every step and marks completed ones, while pinned quests show only what you need to do next.
 - **Starter town testing command** — `/ah startertown` can instantly create a minimal or full town in either a straight line or a generated layout. It follows the terrain, lays wide connecting paths, completes the matching building quests, and moves in the appropriate villagers. The full preset includes every core building, including the guild hall and tourist portal.
+- **Plot creator progress bar** — While using the plot creator staff, a step tracker along the top of the screen shows where you are in the flow. Finished steps light up, and while placing important spots a second row tracks each spot.
+- **Plot creator requirements checklist** — A checklist on the right shows what the building still needs (corners, sign, name, materials, and each important spot), with checkmarks as you complete them.
+- **Important spot markers** — Placed spots show floating markers with labels while you work. Only the current spot type appears during placement; review shows them all, colored by type.
+- **Typed material counts** — In the build materials menu you can type an amount between the − and + buttons instead of only tapping them.
 
 ### Changed
 
 - **Plot creator Inn Bells** — Inn buildings and variants now require an Inn Bell. The plot creator staff provides one and asks you to place and confirm it before saving.
+- **Plot creator Inn spots** — Inns no longer ask for a guild master stand unless the building also counts as a guild hall.
+- **Removing placed spots** — Right-click a placed important spot with the plot creator staff to remove it and place it again.
 - **Plot crafting building details** — A new scrollable panel beside the prefab preview appears on every tab and shows the selected building’s name, creator/id, description, plot-token and construction gold costs, required mods, and required materials with icons and quantities.
 - **Community missing-mod filter** — The Community tab’s Styles panel has a toggle to reveal buildings that require mods not installed on the server. Building Details lists the missing packs, while preview and download remain disabled until every dependency is installed.
 - **Community moderation safety** — Selecting a pending building no longer loads its prefab automatically. Preview downloads, installs, test crafting, approvals, and denials run without blocking the world/UI thread, and approval requires a successfully validated preview with all required mods installed.
@@ -19,6 +26,7 @@
 
 ### Fixed
 
+- **Community locked plot tokens** — Downloaded community buildings marked locked by default can no longer be crafted from the Community tab until unlocked with a plot blueprint (same as Core/Decorations).
 - **Founder monument statues** — Founder monuments now consistently show the placing player’s full outfit and features as solid stone. Random, stretched, missing, or mismatched textures no longer appear on statues or nearby villagers.
 - **Inn Bells in building variants** — Bells inside community and other Inn variants now recognize that the building counts as an Inn instead of rejecting it because its plot id is not exactly `plot_inn`.
 - **Plot crafting search header** — The menu title now reserves space for the expanding search field instead of overlapping it.

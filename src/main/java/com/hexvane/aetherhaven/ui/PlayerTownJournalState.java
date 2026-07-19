@@ -135,6 +135,18 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("HudPinnedQuests", Codec.STRING), (c, v) -> c.decodePinnedQuests(v), PlayerTownJournalState::encodePinnedQuests)
             .add()
+            .append(
+                new KeyedCodec<>("DialogueSpeechEnabled", Codec.BOOLEAN),
+                (c, v) -> c.dialogueSpeechEnabled = valueOr(v, true),
+                c -> c.dialogueSpeechEnabled
+            )
+            .add()
+            .append(
+                new KeyedCodec<>("DialogueSpeechVolumePercent", Codec.INTEGER),
+                (c, v) -> c.dialogueSpeechVolumePercent = clampSpeechVolume(v != null ? v : 70),
+                c -> c.dialogueSpeechVolumePercent
+            )
+            .add()
             .build();
 
     @Nullable
@@ -184,6 +196,10 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     @Nonnull
     private final List<String> hudPinnedQuests = new ArrayList<>();
 
+    private boolean dialogueSpeechEnabled = true;
+    /** 0–100; default 70. */
+    private int dialogueSpeechVolumePercent = 70;
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -208,6 +224,8 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.hudQuestX = hudQuestX;
         c.hudQuestY = hudQuestY;
         c.hudPinnedQuests.addAll(hudPinnedQuests);
+        c.dialogueSpeechEnabled = dialogueSpeechEnabled;
+        c.dialogueSpeechVolumePercent = dialogueSpeechVolumePercent;
         return c;
     }
 
@@ -340,6 +358,34 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     public void resetHudPreferences() {
         setHudPreferences(true, true, true, true, "TOP_RIGHT", 0, 0, "TOP_RIGHT", 0, 164);
         hudBackgroundOpacity = 0f;
+        dialogueSpeechEnabled = true;
+        dialogueSpeechVolumePercent = 70;
+    }
+
+    public boolean isDialogueSpeechEnabled() {
+        return dialogueSpeechEnabled;
+    }
+
+    public void setDialogueSpeechEnabled(boolean dialogueSpeechEnabled) {
+        this.dialogueSpeechEnabled = dialogueSpeechEnabled;
+    }
+
+    public int getDialogueSpeechVolumePercent() {
+        return dialogueSpeechVolumePercent;
+    }
+
+    public void setDialogueSpeechVolumePercent(int percent) {
+        dialogueSpeechVolumePercent = clampSpeechVolume(percent);
+    }
+
+    /** Linear gain 0..1 for SoundUtil volumeModifier. */
+    public float getDialogueSpeechVolumeLinear() {
+        return dialogueSpeechVolumePercent / 100f;
+    }
+
+    public void setDialogueSpeechPreferences(boolean enabled, int volumePercent) {
+        dialogueSpeechEnabled = enabled;
+        dialogueSpeechVolumePercent = clampSpeechVolume(volumePercent);
     }
 
     @Nonnull
@@ -436,5 +482,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
             return 0f;
         }
         return Math.max(0f, Math.min(1f, value));
+    }
+
+    private static int clampSpeechVolume(int value) {
+        return Math.max(0, Math.min(100, value));
     }
 }

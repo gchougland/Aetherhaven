@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_07",
-    "displayName":  "Aldric Mosswick",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_07",
-    "personalityIds":  [
-                           "gardener",
-                           "adventurer",
-                           "dramatic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "male_human_07",
+  "displayName": "Aldric Mosswick",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_07",
+  "personalityIds": [
+    "gardener",
+    "adventurer",
+    "dramatic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "soft"
 }

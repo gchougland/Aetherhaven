@@ -1,19 +1,20 @@
 {
-    "id":  "male_elf_04",
-    "displayName":  "Thalen Oakspire",
-    "gender":  "male",
-    "race":  "sylvian",
-    "modelAssetId":  "Male_Elf_04",
-    "personalityIds":  [
-                           "foodie",
-                           "adventurer",
-                           "stoic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "male_elf_04",
+  "displayName": "Thalen Oakspire",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_04",
+  "personalityIds": [
+    "foodie",
+    "adventurer",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "mid"
 }

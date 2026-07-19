@@ -13,6 +13,7 @@ import com.hexvane.aetherhaven.villager.AetherhavenNpcSpawnOrigin;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
 import javax.annotation.Nonnull;
 
 /**
@@ -29,6 +30,7 @@ public final class AetherhavenSharedEntityComponents {
         AetherhavenAllowedTeleport.register(registry);
         AetherhavenNpcSpawnOrigin.register(registry);
         TownVillagerBinding.register(registry);
+        WorldNpcBinding.register(registry);
         TownsfolkCharacterBinding.register(registry);
         VillagerAutonomyState.register(registry);
         VillagerFollowPlayerState.register(registry);

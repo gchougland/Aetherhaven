@@ -1,19 +1,20 @@
 {
-    "id":  "female_human_10",
-    "displayName":  "Nico Stormlass",
-    "gender":  "female",
-    "race":  "human",
-    "modelAssetId":  "Female_Human_10",
-    "personalityIds":  [
-                           "blunt",
-                           "stoic",
-                           "stingy"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "female_human_10",
+  "displayName": "Nico Stormlass",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_10",
+  "personalityIds": [
+    "blunt",
+    "stoic",
+    "stingy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "low"
 }

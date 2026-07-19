@@ -1,19 +1,20 @@
 {
-    "id":  "female_human_06",
-    "displayName":  "Brenna Fairrow",
-    "gender":  "female",
-    "race":  "human",
-    "modelAssetId":  "Female_Human_06",
-    "personalityIds":  [
-                           "gloomy",
-                           "grumpy",
-                           "stoic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "female_human_06",
+  "displayName": "Brenna Fairrow",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_06",
+  "personalityIds": [
+    "gloomy",
+    "grumpy",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "low"
 }

@@ -1,19 +1,20 @@
 {
-    "id":  "male_elf_03",
-    "displayName":  "Lirien Moonfern",
-    "gender":  "male",
-    "race":  "sylvian",
-    "modelAssetId":  "Male_Elf_03",
-    "personalityIds":  [
-                           "gloomy",
-                           "musical",
-                           "blunt"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "male_elf_03",
+  "displayName": "Lirien Moonfern",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_03",
+  "personalityIds": [
+    "gloomy",
+    "musical",
+    "blunt"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "low"
 }

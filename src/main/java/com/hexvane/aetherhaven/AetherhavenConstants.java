@@ -121,6 +121,10 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_CREATOR_HUD_KEY = "AetherhavenPlotCreator";
 
+    public static final String PLOT_CREATOR_PROGRESS_HUD_KEY = "AetherhavenPlotCreatorProgress";
+
+    public static final String PLOT_CREATOR_CHECKLIST_HUD_KEY = "AetherhavenPlotCreatorChecklist";
+
     /** Survival path spline designer item id (shovel visuals; see item JSON). */
     public static final String PATH_TOOL_ITEM_ID = "Aetherhaven_Path_Tool";
 
@@ -128,6 +132,14 @@ public final class AetherhavenConstants {
     public static final String PATROL_WAND_ITEM_ID = "Aetherhaven_Patrol_Wand";
 
     public static final String PATROL_WAND_HUD_KEY = "AetherhavenPatrolWand";
+
+    public static final String PERMISSION_WORLD_NPC = "aetherhaven.worldnpc";
+
+    public static final String PAGE_WORLD_QUEST_BOARD = "AetherhavenWorldQuestBoard";
+
+    public static final String WORLD_QUEST_JOURNAL_PREFIX = "world:";
+
+    public static final String WORLD_BOARD_JOURNAL_PREFIX = "wboard:";
 
     /** Route particle systems (Wayfinder style visuals). */
     public static final String ROUTE_PARTICLE_TRAIL_ID = "Aetherhaven_Route_Trail";

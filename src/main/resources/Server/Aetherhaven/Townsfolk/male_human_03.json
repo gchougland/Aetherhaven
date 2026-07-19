@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_03",
-    "displayName":  "Finn Harrowbay",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_03",
-    "personalityIds":  [
-                           "impatient",
-                           "rude",
-                           "crafty"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "male_human_03",
+  "displayName": "Finn Harrowbay",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_03",
+  "personalityIds": [
+    "impatient",
+    "rude",
+    "crafty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "sharp"
 }

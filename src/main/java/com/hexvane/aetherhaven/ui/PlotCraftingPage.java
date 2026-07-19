@@ -278,7 +278,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         Player player = store.getComponent(ref, Player.getComponentType());
         boolean installed = variant != null && communityCatalog.isInstalled(variant.constructionId());
         boolean variantLocked = false;
-        if (variant != null && !marketplaceTab) {
+        if (variant != null && !moderationTab) {
             variantLocked = !PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId());
         }
         boolean moderationPreviewReady =
@@ -824,6 +824,15 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         GroupEntry group = findGroup(groups, selectedGroupKey);
         VariantEntry variant = selectedVariant(group);
         if (variant == null) {
+            refresh(ref, store);
+            return;
+        }
+        if (!PlotTokenUnlockService.isUnlocked(ref, store, variant.constructionId())) {
+            NotificationUtil.sendNotification(
+                pr.getPacketHandler(),
+                Message.translation("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.craftLocked"),
+                NotificationStyle.Warning
+            );
             refresh(ref, store);
             return;
         }

@@ -6,6 +6,7 @@ $C = "../Common.ui";
 @RepLabelStyle = (...$C.@DefaultLabelStyle, FontSize: 16, TextColor: #c4b8a8, RenderBold: true, VerticalAlignment: Center);
 
 $C.@PageOverlay {
+  Background: #000000(0);
   LayoutMode: Bottom;
 
   Group #DialoguePanel {

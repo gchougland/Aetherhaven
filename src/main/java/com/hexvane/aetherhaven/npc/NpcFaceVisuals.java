@@ -169,10 +169,27 @@ public final class NpcFaceVisuals {
     }
 
     public static void playTalkBurst(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
-        playTalkBurst(npcRef, store, readConfig());
+        playTalkBurst(npcRef, null, store, readConfig());
+    }
+
+    public static void playTalkBurst(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nullable Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        playTalkBurst(npcRef, playerEntityRef, store, readConfig());
     }
 
     public static void playTalkBurst(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, @Nonnull MoodConfig config) {
+        playTalkBurst(npcRef, null, store, config);
+    }
+
+    public static void playTalkBurst(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nullable Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull MoodConfig config
+    ) {
         if (!npcRef.isValid()) {
             return;
         }
@@ -191,10 +208,10 @@ public final class NpcFaceVisuals {
             faceState = NpcFaceVisualState.fresh();
         }
         faceState.setTalkUntilMs(untilMs);
-        final NpcFaceVisualState stateToSave = faceState;
+        store.putComponent(npcRef, NpcFaceVisualState.getComponentType(), faceState);
         World world = store.getExternalData().getWorld();
-        world.execute(() -> store.putComponent(npcRef, NpcFaceVisualState.getComponentType(), stateToSave));
         scheduleTalkRestore(npcRef, world, config, config.talkDurationSeconds());
+        // Speech blips are started from DialoguePage with the resolved body text (letter-mapped).
     }
 
     public static void clearDialogueFace(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
@@ -213,9 +230,17 @@ public final class NpcFaceVisuals {
     }
 
     public static void onDialogueOpened(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+        onDialogueOpened(npcRef, null, store);
+    }
+
+    public static void onDialogueOpened(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nullable Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
+    ) {
         MoodConfig config = readConfig();
         applyMoodFace(npcRef, store, config);
-        playTalkBurst(npcRef, store, config);
+        playTalkBurst(npcRef, playerEntityRef, store, config);
     }
 
     @Nonnull

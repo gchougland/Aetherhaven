@@ -87,6 +87,29 @@ public final class PlotCreatorMaterialsHelper {
         materials.set(materialIndex, copyWithCount(current, next));
     }
 
+    /**
+     * Sets an absolute material count. Empty/invalid input is ignored. Count {@code <= 0} removes the row.
+     *
+     * @return {@code true} if the materials list changed (including removal)
+     */
+    public static boolean setMaterialCount(@Nonnull PlotCreatorSession session, int materialIndex, int count) {
+        List<MaterialRequirement> materials = session.getDraft().getMaterials();
+        if (materialIndex < 0 || materialIndex >= materials.size()) {
+            return false;
+        }
+        if (count <= 0) {
+            materials.remove(materialIndex);
+            clampPageIndex(session);
+            return true;
+        }
+        MaterialRequirement current = materials.get(materialIndex);
+        if (current.getCount() == count) {
+            return false;
+        }
+        materials.set(materialIndex, copyWithCount(current, count));
+        return true;
+    }
+
     public static void removeMaterial(@Nonnull PlotCreatorSession session, int materialIndex) {
         List<MaterialRequirement> materials = session.getDraft().getMaterials();
         if (materialIndex < 0 || materialIndex >= materials.size()) {

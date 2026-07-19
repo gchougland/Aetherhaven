@@ -35,6 +35,20 @@ public interface DialogueWorldView {
         return false;
     }
 
+    /** World-NPC-scoped quest active. Default: false. */
+    default boolean worldQuestActive(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        return false;
+    }
+
+    /** World-NPC-scoped quest completed. Default: false. */
+    default boolean worldQuestCompleted(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String questId
+    ) {
+        return false;
+    }
+
     /** True if the player's town has a COMPLETE plot with this construction id. */
     default boolean townHasCompletePlot(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nonnull String constructionId

@@ -45,7 +45,7 @@ public final class PlotCreatorInteractions {
     ) {
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null && session.getDraft().getStep() != PlotCreatorStep.DONE) {
-            PlotCreatorHudSupport.obtainHud(player, playerRef).refresh(session);
+            PlotCreatorHudSupport.refreshAll(player, playerRef, session);
         }
         PlotCreatorService.refreshWireframe(session, playerRef);
         PlotCreatorService.refreshSpawnMarkers(session, playerRef);

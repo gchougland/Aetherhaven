@@ -1,0 +1,88 @@
+$C = "../Common.ui";
+
+Group #ProgressNode {
+  LayoutMode: Top;
+  FlexWeight: 1;
+  HitTestVisible: false;
+  Anchor: (Bottom: 0);
+
+  Group #DotArea {
+    LayoutMode: Full;
+    HitTestVisible: false;
+    Anchor: (Bottom: 2, Height: 28);
+
+    Group #LineRow {
+      LayoutMode: Left;
+      HitTestVisible: false;
+      Anchor: (Top: 12, Left: 0, Right: 0, Height: 4);
+
+      Group #LineLeadSpacer {
+        FlexWeight: 1;
+        HitTestVisible: false;
+        Visible: false;
+      }
+
+      Group #LineLeadGold {
+        FlexWeight: 1;
+        HitTestVisible: false;
+        Visible: false;
+        Background: #c2a054(0.85);
+      }
+
+      Group #LineBody {
+        FlexWeight: 1;
+        HitTestVisible: false;
+        Background: #c2a054(0.85);
+      }
+
+      Group #LineTrailGold {
+        FlexWeight: 1;
+        HitTestVisible: false;
+        Visible: false;
+        Background: #c2a054(0.85);
+      }
+
+      Group #LineTrailSpacer {
+        FlexWeight: 1;
+        HitTestVisible: false;
+        Visible: false;
+      }
+    }
+
+    // Bridges the 1–2px gap between adjacent flex cells (bleeds into the next node).
+    Group #LineSeam {
+      HitTestVisible: false;
+      Visible: false;
+      Anchor: (Top: 12, Right: -2, Width: 4, Height: 4);
+      Background: #c2a054(0.85);
+    }
+
+    Group #DotRow {
+      LayoutMode: Center;
+      HitTestVisible: false;
+      Anchor: (Full: 0);
+
+      AssetImage #NodeIconNormal {
+        HitTestVisible: false;
+        Anchor: (Width: 18, Height: 18);
+        AssetPath: "UI/Custom/NodeEmpty.png";
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      }
+
+      AssetImage #NodeIconCurrent {
+        HitTestVisible: false;
+        Visible: false;
+        Anchor: (Width: 26, Height: 26);
+        AssetPath: "UI/Custom/NodeFull.png";
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      }
+    }
+  }
+
+  Label #NodeLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 11, HorizontalAlignment: Center, Wrap: true);
+    HitTestVisible: false;
+    Text: "";
+    Anchor: (Horizontal: 2);
+  }
+}

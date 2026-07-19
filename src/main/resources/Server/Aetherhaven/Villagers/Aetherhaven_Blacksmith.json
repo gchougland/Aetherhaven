@@ -6,6 +6,7 @@
   "workConstructionId": "plot_blacksmith_shop",
   "displayName": "Garren Vale",
   "portraitIcon": "Aetherhaven_Blacksmith.png",
+  "speechVoiceId": "low",
   "uiSortOrder": 3,
   "innPoolEligible": true,
   "innPoolOrder": 1,

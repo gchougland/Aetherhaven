@@ -52,6 +52,10 @@ import com.google.gson.JsonObject;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestBoardService;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestIds;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestProgressionService;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import org.joml.Vector3d;
@@ -200,10 +204,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
 
         boolean abandonModalBlocking = false;
         if (abandonConfirmOpen && pendingAbandonQuestId != null && plugin != null && uc != null) {
-            TownRecord townModal = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (townModal != null
-                && townModal.playerCanAbandonQuests(uc.getUuid())
-                && QuestBoardService.isActiveJournalQuest(townModal, pendingAbandonQuestId)) {
+            String pendingId = pendingAbandonQuestId.trim();
+            WorldNpcPlayerProgress worldProgressModal =
+                AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                    .getOrCreatePlayerProgress(uc.getUuid());
+            boolean worldPending =
+                isActiveWorldJournalQuest(worldProgressModal, pendingId);
+            TownRecord townModal =
+                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            boolean townPending =
+                townModal != null
+                    && townModal.playerCanAbandonQuests(uc.getUuid())
+                    && QuestBoardService.isActiveJournalQuest(townModal, pendingId);
+            if (worldPending || townPending) {
                 abandonModalBlocking = true;
             } else {
                 abandonConfirmOpen = false;
@@ -395,23 +408,18 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null) {
-                setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
-                selectedQuestId = null;
-                return;
-            }
-            if (!town.playerHasQuestPermission(uc.getUuid())) {
-                setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noPermission"));
-                selectedQuestId = null;
-                return;
-            }
-
-            List<String> active = new ArrayList<>(town.getActiveQuestIdsSnapshot());
-            for (QuestBoardSlotRecord boardSlot : town.acceptedBoardQuestsSnapshot()) {
-                active.add(QuestBoardService.journalRowId(boardSlot.instanceIdOrEmpty()));
-            }
+            WorldNpcPlayerProgress worldProgress =
+                AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                    .getOrCreatePlayerProgress(uc.getUuid());
+            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress);
             if (active.isEmpty()) {
-                setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noActive"));
+                if (town == null) {
+                    setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
+                } else if (!town.playerHasQuestPermission(uc.getUuid())) {
+                    setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noPermission"));
+                } else {
+                    setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.noActive"));
+                }
                 selectedQuestId = null;
                 return;
             }
@@ -433,17 +441,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 String qid = active.get(i);
                 commandBuilder.append(QUEST_ROWS, "Aetherhaven/QuestJournalRow.ui");
                 String row = QUEST_ROWS + "[" + i + "]";
-                Message titleMsg;
-                if (QuestBoardService.isBoardJournalRow(qid)) {
-                    String instanceId = QuestBoardService.parseJournalInstanceId(qid);
-                    QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
-                    titleMsg =
-                        boardSlot != null
-                            ? QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
-                            : Message.raw("");
-                } else {
-                    titleMsg = quests.journalTitle(qid, town, entityStore, plugin);
-                }
+                Message titleMsg = journalQuestTitle(qid, town, worldProgress, quests, boardCatalog, entityStore, plugin);
                 commandBuilder.set(row + " #Select #QuestTitle.TextSpans", titleMsg);
                 boolean sel = qid.equals(selectedQuestId);
                 commandBuilder.set(row + " #QuestTitle.Style.TextColor", sel ? "#f4e8c8" : "#e8dcc8");
@@ -456,63 +454,21 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
 
             String sel = selectedQuestId != null ? selectedQuestId : active.get(0);
-            if (QuestBoardService.isBoardJournalRow(sel)) {
-                String instanceId = QuestBoardService.parseJournalInstanceId(sel);
-                QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
-                if (boardSlot != null) {
-                    String questRank = boardSlot.getQuestRank() != null ? boardSlot.getQuestRank() : "E";
-                    commandBuilder.set(
-                        "#QuestDetailTitle.TextSpans",
-                        QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
-                            .insert(Message.raw("  "))
-                            .insert(Message.raw("[" + questRank + "]"))
-                    );
-                    commandBuilder.set(
-                        "#QuestDetailDescription.TextSpans",
-                        QuestBoardService.displayDescription(boardSlot, town, entityStore, boardCatalog)
-                            .insert(Message.raw("\n\n"))
-                            .insert(
-                                Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.daysLeft")
-                                    .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
-                            )
-                    );
-                    commandBuilder.set("#QuestStepsHeading.Visible", true);
-                    commandBuilder.set("#QuestStepsBody.Visible", true);
-                    commandBuilder.set(
-                        "#QuestStepsHeading.TextSpans",
-                        Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
-                    );
-                    commandBuilder.set(
-                        "#QuestStepsBody.TextSpans",
-                        QuestBoardService.objectivesText(boardSlot, town, entityStore, boardCatalog)
-                    );
-                    applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
-                }
-            } else {
-                commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
-                commandBuilder.set("#QuestDetailDescription.TextSpans", quests.journalDescription(sel, town, entityStore, plugin));
+            applyJournalQuestDetail(
+                commandBuilder,
+                sel,
+                town,
+                worldProgress,
+                quests,
+                boardCatalog,
+                entityStore,
+                plugin
+            );
 
-                boolean hasSteps = quests.hasObjectives(sel);
-                commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
-                commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
-                if (hasSteps) {
-                    commandBuilder.set(
-                        "#QuestStepsHeading.TextSpans",
-                        Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
-                    );
-                    commandBuilder.set(
-                        "#QuestStepsBody.TextSpans",
-                        quests.objectivesMessage(sel, town, entityStore, plugin)
-                    );
-                } else {
-                    commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-                    commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
-                }
-
-                applyQuestRewardPreview(commandBuilder, quests, sel);
-            }
-
-            boolean canAbandon = town.playerCanAbandonQuests(uc.getUuid());
+            boolean canAbandon =
+                WorldQuestIds.isWorldQuestRow(sel)
+                    || WorldQuestIds.isWorldBoardRow(sel)
+                    || (town != null && town.playerCanAbandonQuests(uc.getUuid()));
             commandBuilder.set("#AbandonQuestButton.Visible", canAbandon);
             if (canAbandon) {
                 eventBuilder.addEventBinding(
@@ -804,6 +760,12 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             );
         }
         commandBuilder.set("#SettingsShowBordersCheck #CheckBox.Value", journalPrefs.isShowTownBordersOnMap());
+        commandBuilder.set("#SettingsSpeechEnableCheck #CheckBox.Value", journalPrefs.isDialogueSpeechEnabled());
+        commandBuilder.set("#SettingsSpeechVolumeSlider.Value", journalPrefs.getDialogueSpeechVolumePercent());
+        commandBuilder.set(
+            "#SettingsSpeechVolumeValue.TextSpans",
+            Message.raw(journalPrefs.getDialogueSpeechVolumePercent() + "%")
+        );
         commandBuilder.set("#SettingsHudTimeCheck #CheckBox.Value", journalPrefs.isHudShowTime());
         commandBuilder.set("#SettingsHudDateCheck #CheckBox.Value", journalPrefs.isHudShowDate());
         commandBuilder.set("#SettingsHudGoldCheck #CheckBox.Value", journalPrefs.isHudShowGold());
@@ -835,6 +797,23 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
 
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#SettingsSpeechEnableCheck #CheckBox",
+            new EventData()
+                .append("Action", "DialogueSpeechToggle")
+                .append("@Checked", "#SettingsSpeechEnableCheck #CheckBox.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#SettingsSpeechVolumeSlider",
+            new EventData()
+                .append("Action", "DialogueSpeechVolumePreview")
+                .append("@SpeechVolume", "#SettingsSpeechVolumeSlider.Value"),
+            false
+        );
+
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#SettingsHudOpacitySlider",
             new EventData()
                 .append("Action", "HudOpacityPreview")
@@ -849,6 +828,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 .append("Action", "PersonalSettingsSave")
                 .append("@RtsFov", "#SettingsRtsPickFovField.Value")
                 .append("@RtsAspect", "#SettingsRtsPickAspectField.Value")
+                .append("@SpeechEnabled", "#SettingsSpeechEnableCheck #CheckBox.Value")
+                .append("@SpeechVolume", "#SettingsSpeechVolumeSlider.Value")
                 .append("@HudTime", "#SettingsHudTimeCheck #CheckBox.Value")
                 .append("@HudDate", "#SettingsHudDateCheck #CheckBox.Value")
                 .append("@HudGold", "#SettingsHudGoldCheck #CheckBox.Value")
@@ -1622,6 +1603,218 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         return bi;
     }
 
+    @Nonnull
+    private static List<String> collectActiveJournalQuestIds(
+        @Nullable TownRecord town,
+        @Nonnull UUID playerUuid,
+        @Nonnull WorldNpcPlayerProgress worldProgress
+    ) {
+        List<String> active = new ArrayList<>();
+        if (town != null && town.playerHasQuestPermission(playerUuid)) {
+            active.addAll(town.getActiveQuestIdsSnapshot());
+            for (QuestBoardSlotRecord boardSlot : town.acceptedBoardQuestsSnapshot()) {
+                active.add(QuestBoardService.journalRowId(boardSlot.instanceIdOrEmpty()));
+            }
+        }
+        for (String questId : worldProgress.activeQuestIdsSnapshot()) {
+            active.add(WorldQuestIds.worldRow(questId));
+        }
+        for (QuestBoardSlotRecord boardSlot : worldProgress.acceptedBoardSlotsSnapshot()) {
+            active.add(WorldQuestIds.boardRow(boardSlot.instanceIdOrEmpty()));
+        }
+        return active;
+    }
+
+    private static boolean isActiveWorldJournalQuest(
+        @Nonnull WorldNpcPlayerProgress progress, @Nonnull String rowId
+    ) {
+        if (WorldQuestIds.isWorldQuestRow(rowId)) {
+            String questId = WorldQuestIds.parseWorldQuestId(rowId);
+            return questId != null && progress.hasQuestActive(questId);
+        }
+        if (WorldQuestIds.isWorldBoardRow(rowId)) {
+            String instanceId = WorldQuestIds.parseWorldBoardInstanceId(rowId);
+            return instanceId != null && WorldQuestBoardService.findAcceptedSlot(progress, instanceId) != null;
+        }
+        return false;
+    }
+
+    @Nonnull
+    private static Message journalQuestTitle(
+        @Nonnull String rowId,
+        @Nullable TownRecord town,
+        @Nonnull WorldNpcPlayerProgress worldProgress,
+        @Nonnull QuestCatalog quests,
+        @Nonnull QuestBoardCatalog boardCatalog,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (WorldQuestIds.isWorldQuestRow(rowId)) {
+            String questId = WorldQuestIds.parseWorldQuestId(rowId);
+            return questId != null ? quests.titleMessage(questId) : Message.raw("");
+        }
+        if (WorldQuestIds.isWorldBoardRow(rowId)) {
+            String instanceId = WorldQuestIds.parseWorldBoardInstanceId(rowId);
+            QuestBoardSlotRecord slot =
+                instanceId != null ? WorldQuestBoardService.findAcceptedSlot(worldProgress, instanceId) : null;
+            if (slot == null) {
+                return Message.raw("");
+            }
+            return slot.getTitleLangKey() != null && !slot.getTitleLangKey().isBlank()
+                ? Message.translation(slot.getTitleLangKey())
+                : Message.raw(rowId);
+        }
+        if (QuestBoardService.isBoardJournalRow(rowId) && town != null) {
+            String instanceId = QuestBoardService.parseJournalInstanceId(rowId);
+            QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
+            return boardSlot != null
+                ? QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
+                : Message.raw("");
+        }
+        if (town != null) {
+            return quests.journalTitle(rowId, town, entityStore, plugin);
+        }
+        return quests.titleMessage(rowId);
+    }
+
+    private static void applyJournalQuestDetail(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull String sel,
+        @Nullable TownRecord town,
+        @Nonnull WorldNpcPlayerProgress worldProgress,
+        @Nonnull QuestCatalog quests,
+        @Nonnull QuestBoardCatalog boardCatalog,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        if (WorldQuestIds.isWorldQuestRow(sel)) {
+            String questId = WorldQuestIds.parseWorldQuestId(sel);
+            if (questId == null) {
+                clearQuestDetailPane(commandBuilder);
+                return;
+            }
+            commandBuilder.set("#QuestDetailTitle.TextSpans", quests.titleMessage(questId));
+            commandBuilder.set("#QuestDetailDescription.TextSpans", quests.descriptionMessage(questId));
+            boolean hasSteps = quests.hasObjectives(questId);
+            commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
+            commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
+            if (hasSteps) {
+                commandBuilder.set(
+                    "#QuestStepsHeading.TextSpans",
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
+                );
+                commandBuilder.set(
+                    "#QuestStepsBody.TextSpans",
+                    quests.objectivesMessage(questId, null, entityStore, plugin)
+                );
+            } else {
+                commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
+                commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+            }
+            applyQuestRewardPreview(commandBuilder, quests, questId);
+            return;
+        }
+        if (WorldQuestIds.isWorldBoardRow(sel)) {
+            String instanceId = WorldQuestIds.parseWorldBoardInstanceId(sel);
+            QuestBoardSlotRecord boardSlot =
+                instanceId != null ? WorldQuestBoardService.findAcceptedSlot(worldProgress, instanceId) : null;
+            if (boardSlot == null) {
+                clearQuestDetailPane(commandBuilder);
+                return;
+            }
+            String questRank = boardSlot.getQuestRank() != null ? boardSlot.getQuestRank() : "E";
+            Message title =
+                boardSlot.getTitleLangKey() != null && !boardSlot.getTitleLangKey().isBlank()
+                    ? Message.translation(boardSlot.getTitleLangKey())
+                    : Message.raw(sel);
+            Message desc =
+                boardSlot.getDescriptionLangKey() != null && !boardSlot.getDescriptionLangKey().isBlank()
+                    ? Message.translation(boardSlot.getDescriptionLangKey())
+                    : Message.raw("");
+            commandBuilder.set(
+                "#QuestDetailTitle.TextSpans",
+                title.insert(Message.raw("  ")).insert(Message.raw("[" + questRank + "]"))
+            );
+            commandBuilder.set(
+                "#QuestDetailDescription.TextSpans",
+                desc.insert(Message.raw("\n\n"))
+                    .insert(
+                        Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.daysLeft")
+                            .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
+                    )
+            );
+            commandBuilder.set("#QuestStepsHeading.Visible", false);
+            commandBuilder.set("#QuestStepsBody.Visible", false);
+            commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
+            commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+            if (town != null) {
+                applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
+            } else {
+                commandBuilder.set("#RewardRow.Visible", false);
+                commandBuilder.set("#RewardReputationLine.Visible", false);
+                commandBuilder.set("#RewardFallback.Visible", false);
+            }
+            return;
+        }
+        if (QuestBoardService.isBoardJournalRow(sel) && town != null) {
+            String instanceId = QuestBoardService.parseJournalInstanceId(sel);
+            QuestBoardSlotRecord boardSlot = instanceId != null ? town.findBoardSlotByInstanceId(instanceId) : null;
+            if (boardSlot != null) {
+                String questRank = boardSlot.getQuestRank() != null ? boardSlot.getQuestRank() : "E";
+                commandBuilder.set(
+                    "#QuestDetailTitle.TextSpans",
+                    QuestBoardService.displayTitle(boardSlot, town, entityStore, boardCatalog)
+                        .insert(Message.raw("  "))
+                        .insert(Message.raw("[" + questRank + "]"))
+                );
+                commandBuilder.set(
+                    "#QuestDetailDescription.TextSpans",
+                    QuestBoardService.displayDescription(boardSlot, town, entityStore, boardCatalog)
+                        .insert(Message.raw("\n\n"))
+                        .insert(
+                            Message.translation("aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.daysLeft")
+                                .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
+                        )
+                );
+                commandBuilder.set("#QuestStepsHeading.Visible", true);
+                commandBuilder.set("#QuestStepsBody.Visible", true);
+                commandBuilder.set(
+                    "#QuestStepsHeading.TextSpans",
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
+                );
+                commandBuilder.set(
+                    "#QuestStepsBody.TextSpans",
+                    QuestBoardService.objectivesText(boardSlot, town, entityStore, boardCatalog)
+                );
+                applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
+            }
+            return;
+        }
+        if (town == null) {
+            clearQuestDetailPane(commandBuilder);
+            return;
+        }
+        commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
+        commandBuilder.set("#QuestDetailDescription.TextSpans", quests.journalDescription(sel, town, entityStore, plugin));
+        boolean hasSteps = quests.hasObjectives(sel);
+        commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
+        commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
+        if (hasSteps) {
+            commandBuilder.set(
+                "#QuestStepsHeading.TextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
+            );
+            commandBuilder.set(
+                "#QuestStepsBody.TextSpans",
+                quests.objectivesMessage(sel, town, entityStore, plugin)
+            );
+        } else {
+            commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
+            commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+        }
+        applyQuestRewardPreview(commandBuilder, quests, sel);
+    }
+
     private static void setQuestsBlocked(@Nonnull UICommandBuilder commandBuilder, @Nonnull Message msg) {
         commandBuilder.set("#QuestsBlocked.Visible", true);
         commandBuilder.set("#QuestsBlocked.TextSpans", msg);
@@ -1823,6 +2016,33 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
             return;
         }
+        if (action.equalsIgnoreCase("DialogueSpeechToggle")) {
+            if (data.checked == null) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.setDialogueSpeechEnabled(data.checked);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            return;
+        }
+        if (action.equalsIgnoreCase("DialogueSpeechVolumePreview")) {
+            int volumePercent = data.speechVolumePercent != null
+                ? Math.max(0, Math.min(100, data.speechVolumePercent))
+                : 70;
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.setDialogueSpeechVolumePercent(volumePercent);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            UICommandBuilder cmd = new UICommandBuilder();
+            cmd.set("#SettingsSpeechVolumeValue.TextSpans", Message.raw(volumePercent + "%"));
+            sendUpdate(cmd, new UIEventBuilder(), false);
+            return;
+        }
         if (action.equalsIgnoreCase("Tab")) {
             String tabId = data.tabId;
             PlayerTownJournalState.JournalTab tab = parseTab(tabId);
@@ -1836,17 +2056,16 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 AetherhavenPlugin plugin = AetherhavenPlugin.get();
                 UUIDComponent uuid = store.getComponent(ref, UUIDComponent.getComponentType());
                 if (plugin != null && uuid != null) {
+                    World w = store.getExternalData().getWorld();
                     TownRecord town =
                         AetherhavenWorldRegistries
-                            .getOrCreateTownManager(store.getExternalData().getWorld(), plugin)
+                            .getOrCreateTownManager(w, plugin)
                             .findTownForPlayerInWorld(uuid.getUuid());
-                    if (town != null) {
-                        Set<String> activeIds = new HashSet<>(town.getActiveQuestIdsSnapshot());
-                        for (QuestBoardSlotRecord slot : town.acceptedBoardQuestsSnapshot()) {
-                            activeIds.add(QuestBoardService.journalRowId(slot.instanceIdOrEmpty()));
-                        }
-                        st.retainPinnedQuests(activeIds);
-                    }
+                    WorldNpcPlayerProgress worldProgress =
+                        AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(w, plugin)
+                            .getOrCreatePlayerProgress(uuid.getUuid());
+                    Set<String> activeIds = new HashSet<>(collectActiveJournalQuestIds(town, uuid.getUuid(), worldProgress));
+                    st.retainPinnedQuests(activeIds);
                 }
             }
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
@@ -1887,23 +2106,24 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (qid == null || qid.isBlank() || plugin == null || uc == null) {
                 return;
             }
+            World world = store.getExternalData().getWorld();
             TownRecord town =
                 AetherhavenWorldRegistries
-                    .getOrCreateTownManager(store.getExternalData().getWorld(), plugin)
+                    .getOrCreateTownManager(world, plugin)
                     .findTownForPlayerInWorld(uc.getUuid());
+            WorldNpcPlayerProgress worldProgress =
+                AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                    .getOrCreatePlayerProgress(uc.getUuid());
             String id = qid.trim();
-            if (town == null || !QuestBoardService.isActiveJournalQuest(town, id)) {
+            List<String> active = collectActiveJournalQuestIds(town, uc.getUuid(), worldProgress);
+            if (!active.contains(id)) {
                 return;
             }
             PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
             if (st == null) {
                 st = new PlayerTownJournalState();
             }
-            Set<String> activeIds = new HashSet<>(town.getActiveQuestIdsSnapshot());
-            for (QuestBoardSlotRecord slot : town.acceptedBoardQuestsSnapshot()) {
-                activeIds.add(QuestBoardService.journalRowId(slot.instanceIdOrEmpty()));
-            }
-            st.retainPinnedQuests(activeIds);
+            st.retainPinnedQuests(new HashSet<>(active));
             if (st.isQuestPinned(id)) {
                 st.unpinQuest(id);
             } else {
@@ -1978,11 +2198,17 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
+            String sel = selectedQuestId.trim();
+            WorldNpcPlayerProgress worldProgress =
+                AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                    .getOrCreatePlayerProgress(uc.getUuid());
+            boolean worldOk = isActiveWorldJournalQuest(worldProgress, sel);
             TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
-                return;
-            }
-            if (!QuestBoardService.isActiveJournalQuest(town, selectedQuestId)) {
+            boolean townOk =
+                town != null
+                    && town.playerCanAbandonQuests(uc.getUuid())
+                    && QuestBoardService.isActiveJournalQuest(town, sel);
+            if (!worldOk && !townOk) {
                 return;
             }
             pendingAbandonQuestId = selectedQuestId;
@@ -2153,6 +2379,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 data.hudOpacityPercent != null
                     ? data.hudOpacityPercent / 100f
                     : st.getHudBackgroundOpacity()
+            );
+            st.setDialogueSpeechPreferences(
+                data.speechEnabled == null || Boolean.TRUE.equals(data.speechEnabled),
+                data.speechVolumePercent != null ? data.speechVolumePercent : st.getDialogueSpeechVolumePercent()
             );
             store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
             refreshActiveRtsPickTuning(ref, store);
@@ -2566,36 +2796,49 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-            if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
-                abandonConfirmOpen = false;
-                pendingAbandonQuestId = null;
-                return;
-            }
-            JsonObject a = new JsonObject();
-            if (QuestBoardService.isBoardJournalRow(qid.trim())) {
-                String instanceId = QuestBoardService.parseJournalInstanceId(qid.trim());
-                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                if (
-                    instanceId != null
-                        && QuestBoardService.abandonByInstanceId(
-                            town,
-                            uc.getUuid(),
-                            instanceId,
-                            plugin.getQuestBoardCatalog(),
-                            world,
-                            store
-                        )
-                ) {
-                    tm.updateTown(town);
+            String id = qid.trim();
+            if (WorldQuestIds.isWorldQuestRow(id)) {
+                String worldQuestId = WorldQuestIds.parseWorldQuestId(id);
+                if (worldQuestId != null) {
+                    WorldQuestProgressionService.abandonQuest(plugin, world, uc.getUuid(), worldQuestId);
+                }
+            } else if (WorldQuestIds.isWorldBoardRow(id)) {
+                String instanceId = WorldQuestIds.parseWorldBoardInstanceId(id);
+                if (instanceId != null) {
+                    WorldQuestBoardService.abandonByInstanceId(world, plugin, uc.getUuid(), instanceId);
                 }
             } else {
-                a.addProperty("type", "abandon_quest");
-                a.addProperty("id", qid.trim());
-                DialogueActionExecutor ex = new DialogueActionExecutor();
-                ex.runBatch(List.of(a), ref, store, new DialogueActionBatchResult());
+                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+                if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
+                    abandonConfirmOpen = false;
+                    pendingAbandonQuestId = null;
+                    return;
+                }
+                JsonObject a = new JsonObject();
+                if (QuestBoardService.isBoardJournalRow(id)) {
+                    String instanceId = QuestBoardService.parseJournalInstanceId(id);
+                    TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    if (
+                        instanceId != null
+                            && QuestBoardService.abandonByInstanceId(
+                                town,
+                                uc.getUuid(),
+                                instanceId,
+                                plugin.getQuestBoardCatalog(),
+                                world,
+                                store
+                            )
+                    ) {
+                        tm.updateTown(town);
+                    }
+                } else {
+                    a.addProperty("type", "abandon_quest");
+                    a.addProperty("id", id);
+                    DialogueActionExecutor ex = new DialogueActionExecutor();
+                    ex.runBatch(List.of(a), ref, store, new DialogueActionBatchResult());
+                }
             }
-            if (qid.trim().equals(selectedQuestId)) {
+            if (id.equals(selectedQuestId)) {
                 selectedQuestId = null;
             }
             abandonConfirmOpen = false;
@@ -2789,6 +3032,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 d -> d.hudOpacityPercent
             )
             .add()
+            .append(new KeyedCodec<>("@SpeechEnabled", Codec.BOOLEAN), (d, v) -> d.speechEnabled = v, d -> d.speechEnabled)
+            .add()
+            .append(
+                new KeyedCodec<>("@SpeechVolume", Codec.INTEGER),
+                (d, v) -> d.speechVolumePercent = v,
+                d -> d.speechVolumePercent
+            )
+            .add()
             .append(new KeyedCodec<>("@HudStatusPlacement", Codec.STRING), (d, v) -> d.hudStatusPlacement = v, d -> d.hudStatusPlacement)
             .add()
             .append(new KeyedCodec<>("@HudStatusX", Codec.STRING), (d, v) -> d.hudStatusX = v, d -> d.hudStatusX)
@@ -2867,6 +3118,10 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private Boolean hudQuests;
         @Nullable
         private Integer hudOpacityPercent;
+        @Nullable
+        private Boolean speechEnabled;
+        @Nullable
+        private Integer speechVolumePercent;
         @Nullable
         private String hudStatusPlacement;
         @Nullable

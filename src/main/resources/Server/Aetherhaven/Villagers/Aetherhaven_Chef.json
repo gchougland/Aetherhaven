@@ -93,5 +93,6 @@
     "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.0",
     "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.1",
     "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.hint.dislike.2"
-  ]
+  ],
+  "speechVoiceId": "high"
 }

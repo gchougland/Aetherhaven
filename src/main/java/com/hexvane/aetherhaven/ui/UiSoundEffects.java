@@ -13,10 +13,31 @@ public final class UiSoundEffects {
     private UiSoundEffects() {}
 
     public static void play2dUi(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store, @Nonnull String soundEventId) {
+        play2d(ref, store, soundEventId, SoundCategory.UI, 1f, 1f);
+    }
+
+    public static void play2dUi(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String soundEventId,
+        float volumeModifier,
+        float pitchModifier
+    ) {
+        play2d(ref, store, soundEventId, SoundCategory.UI, volumeModifier, pitchModifier);
+    }
+
+    public static void play2d(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String soundEventId,
+        @Nonnull SoundCategory category,
+        float volumeModifier,
+        float pitchModifier
+    ) {
         int idx = SoundEvent.getAssetMap().getIndex(soundEventId);
         if (idx == Integer.MIN_VALUE || idx == SoundEvent.EMPTY_ID) {
             return;
         }
-        SoundUtil.playSoundEvent2d(ref, idx, SoundCategory.UI, store);
+        SoundUtil.playSoundEvent2d(ref, idx, category, volumeModifier, pitchModifier, store);
     }
 }

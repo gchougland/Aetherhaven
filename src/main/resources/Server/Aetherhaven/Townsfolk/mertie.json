@@ -1,19 +1,20 @@
 {
-    "id":  "mertie",
-    "displayName":  "Mertie",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Mertie",
-    "personalityIds":  [
-                           "adventurer",
-                           "shy",
-                           "silly"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "mertie",
+  "displayName": "Mertie",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Mertie",
+  "personalityIds": [
+    "adventurer",
+    "shy",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "sharp"
 }

@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_06",
-    "displayName":  "Ewan Thatch",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_06",
-    "personalityIds":  [
-                           "grumpy",
-                           "blunt",
-                           "stoic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "male_human_06",
+  "displayName": "Ewan Thatch",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_06",
+  "personalityIds": [
+    "grumpy",
+    "blunt",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "low"
 }

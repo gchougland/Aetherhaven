@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_02",
-    "displayName":  "Jonas Reefson",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_02",
-    "personalityIds":  [
-                           "shy",
-                           "bitter",
-                           "sporty"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "male_human_02",
+  "displayName": "Jonas Reefson",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_02",
+  "personalityIds": [
+    "shy",
+    "bitter",
+    "sporty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "low"
 }

@@ -91,6 +91,16 @@ SAMPLE_BOARD = {
 def _repo_quest_board() -> Path:
     here = Path(__file__).resolve()
     root = here.parents[3]
+    sub = (
+        root
+        / "subplugin-assets"
+        / "Quests"
+        / "Server"
+        / "Aetherhaven"
+        / "quest_board.json"
+    )
+    if sub.is_file():
+        return sub
     return root / "src" / "main" / "resources" / "Server" / "Aetherhaven" / "quest_board.json"
 
 

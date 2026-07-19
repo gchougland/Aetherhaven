@@ -21,6 +21,7 @@ import com.hexvane.aetherhaven.quest.QuestsBootstrap;
 import com.hexvane.aetherhaven.reputation.ReputationBootstrap;
 import com.hexvane.aetherhaven.rts.RtsBootstrap;
 import com.hexvane.aetherhaven.shopspot.CommerceBootstrap;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcsBootstrap;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
@@ -95,6 +96,10 @@ public final class AetherhavenFeatureBootstrap {
         });
         register(AetherhavenPluginIds.PRODUCTION, () -> ProductionBootstrap.register(core, host));
         register(AetherhavenPluginIds.DIALOGUE, () -> DialogueBootstrap.register(core, host));
+        register(AetherhavenPluginIds.WORLD_NPCS, () -> {
+            WorldNpcsBootstrap.register(core, host);
+            registerTick(core, WorldNpcsBootstrap.createScheduleListener(core));
+        });
     }
 
     public static void startEnabled(@Nonnull AetherhavenPlugin core) {

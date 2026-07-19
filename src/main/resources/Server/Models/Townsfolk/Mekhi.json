@@ -79,5 +79,18 @@
       "Model": "Cosmetics/Gloves/LongDetail_Gloves.blockymodel",
       "Texture": "Cosmetics/Gloves/LongDetail_Gloves_Textures/TombAdventurerGloves_Texture.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Mekhi.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
 }

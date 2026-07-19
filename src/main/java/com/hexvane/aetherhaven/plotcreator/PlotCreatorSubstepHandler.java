@@ -46,6 +46,142 @@ public final class PlotCreatorSubstepHandler {
         return true;
     }
 
+    /** Right-click: remove the placement for the current important-spot substep near {@code targetBlock}. */
+    public static boolean tryRemoveCurrentSubstepAt(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        PlotCreatorDraft draft = session.getDraft();
+        PlotBuildingKindRequirements.SubstepRequirement req = PlotCreatorService.currentSubstep(draft);
+        if (req == null) {
+            return false;
+        }
+        return switch (req.type()) {
+            case VISITOR_SPAWN -> tryRemoveVisitorSpawnAt(session, targetBlock, playerRef);
+            case ADVENTURER_SPAWN -> tryRemoveAdventurerSpawnAt(session, targetBlock, playerRef, commandBuffer);
+            case MANAGEMENT_BLOCK -> clearLocalIfNear(
+                draft,
+                draft.getManagementBlockLocalPos(),
+                targetBlock,
+                () -> draft.setManagementBlockLocalPos(null),
+                playerRef
+            );
+            case PRODUCTION_STORAGE -> clearLocalIfNear(
+                draft,
+                draft.getProductionStorageLocalPos(),
+                targetBlock,
+                () -> draft.setProductionStorageLocalPos(null),
+                playerRef
+            );
+            case TREASURY_BLOCK -> clearLocalIfNear(
+                draft,
+                draft.getTreasuryLocalPos(),
+                targetBlock,
+                () -> draft.setTreasuryLocalPos(null),
+                playerRef
+            );
+            case SHOP_SAFE_BLOCK -> clearLocalIfNear(
+                draft,
+                draft.getShopSafeLocalPos(),
+                targetBlock,
+                () -> draft.setShopSafeLocalPos(null),
+                playerRef
+            );
+            case INN_BELL_BLOCK -> clearLocalIfNear(
+                draft,
+                draft.getInnBellLocalPos(),
+                targetBlock,
+                () -> draft.setInnBellLocalPos(null),
+                playerRef
+            );
+            case INNKEEPER_SPAWN -> clearLocalIfNear(
+                draft,
+                draft.getInnkeeperSpawnLocal(),
+                targetBlock,
+                () -> draft.setInnkeeperSpawnLocal(null),
+                playerRef
+            );
+            case GUILD_MASTER_SPAWN -> clearLocalIfNear(
+                draft,
+                draft.getGuildMasterSpawnLocal(),
+                targetBlock,
+                () -> draft.setGuildMasterSpawnLocal(null),
+                playerRef
+            );
+            case SHOP_SPOT, TOURIST_PORTAL_BLOCK -> tryRemoveSpecialBlockNear(draft, targetBlock, playerRef);
+            case WORK_POI, SLEEP_POI, EAT_POI, FUN_POI, SHOP_POI, TOURIST_VISIT_POI, PLANNING_DESK_POI, BARD_WORK_POI,
+                QUEST_BOARD_POI -> tryRemoveMatchingPoiNear(draft, targetBlock, req, playerRef);
+        };
+    }
+
+    private static boolean clearLocalIfNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nullable int[] local,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull Runnable clear,
+        @Nonnull PlayerRef playerRef
+    ) {
+        if (local == null || local.length < 3) {
+            return false;
+        }
+        Vector3i world = PlotCreatorLocalCoords.toWorldBlock(draft, local);
+        if (!sameOrAdjacent(world, targetBlock)) {
+            return false;
+        }
+        clear.run();
+        playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spotRemoved"));
+        return true;
+    }
+
+    private static boolean tryRemoveSpecialBlockNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlayerRef playerRef
+    ) {
+        List<Vector3i> list = draft.getPlacedSpecialBlocks();
+        for (int i = 0; i < list.size(); i++) {
+            Vector3i pos = list.get(i);
+            if (sameOrAdjacent(pos, targetBlock)) {
+                list.remove(i);
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spotRemoved"));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean tryRemoveMatchingPoiNear(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull Vector3i targetBlock,
+        @Nonnull PlotBuildingKindRequirements.SubstepRequirement req,
+        @Nonnull PlayerRef playerRef
+    ) {
+        List<PlotCreatorPoiDraft> pois = draft.getPois();
+        for (int i = 0; i < pois.size(); i++) {
+            PlotCreatorPoiDraft poi = pois.get(i);
+            if (!PlotCreatorValidator.matchesPoiRequirement(poi, req)) {
+                continue;
+            }
+            int[] local = new int[] {poi.getLocalX(), poi.getLocalY(), poi.getLocalZ()};
+            Vector3i world = PlotCreatorLocalCoords.toWorldBlock(draft, local);
+            if (sameOrAdjacent(world, targetBlock)) {
+                pois.remove(i);
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.spotRemoved"));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean sameOrAdjacent(@Nonnull Vector3i a, @Nonnull Vector3i b) {
+        int dx = Math.abs(a.x - b.x);
+        int dy = Math.abs(a.y - b.y);
+        int dz = Math.abs(a.z - b.z);
+        return dx <= 1 && dy <= 1 && dz <= 1;
+    }
+
     public static boolean handleBlockClick(
         @Nonnull PlotCreatorSession session,
         @Nonnull Vector3i targetBlock,

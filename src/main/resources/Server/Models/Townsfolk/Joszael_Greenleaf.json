@@ -91,5 +91,18 @@
       "Model": "Cosmetics/Capes/Cape_Mossy.blockymodel",
       "Texture": "Cosmetics/Capes/Cape_Mossy_Textures/Cape_Mossy_Texture.png"
     }
-  ]
+  ],
+  "Icon": "Icons/ModelsGenerated/Joszael_Greenleaf.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
 }

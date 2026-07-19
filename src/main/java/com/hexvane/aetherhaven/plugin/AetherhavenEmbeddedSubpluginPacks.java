@@ -53,7 +53,8 @@ public final class AetherhavenEmbeddedSubpluginPacks {
             new EmbeddedPack(AetherhavenPluginIds.QUESTS, "Quests"),
             new EmbeddedPack(AetherhavenPluginIds.ECONOMY, "Economy"),
             new EmbeddedPack(AetherhavenPluginIds.COMMERCE, "Commerce"),
-            new EmbeddedPack(AetherhavenPluginIds.GUILD, "Guild")
+            new EmbeddedPack(AetherhavenPluginIds.GUILD, "Guild"),
+            new EmbeddedPack(AetherhavenPluginIds.WORLD_NPCS, "WorldNpcs")
         );
 
     /** Kept open for the process lifetime so in-archive pack paths remain readable. */

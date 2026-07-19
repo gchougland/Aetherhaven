@@ -69,7 +69,8 @@ public final class PlotCreatorValidator {
         return null;
     }
 
-    private static int countForRequirement(
+    /** Count of placed items matching this important-spot requirement. */
+    public static int countForRequirement(
         @Nonnull PlotCreatorDraft draft,
         @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
     ) {
@@ -103,7 +104,8 @@ public final class PlotCreatorValidator {
         return n;
     }
 
-    private static boolean matchesPoiRequirement(
+    /** Whether a draft POI row satisfies the given important-spot requirement. */
+    public static boolean matchesPoiRequirement(
         @Nonnull PlotCreatorPoiDraft p,
         @Nonnull PlotBuildingKindRequirements.SubstepRequirement req
     ) {

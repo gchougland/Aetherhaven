@@ -49,6 +49,11 @@ public final class TownsfolkCharacterDefinition {
     @Nullable
     private Float modelScale;
 
+    /** Optional dialogue speech voice profile id (see {@code Server/Aetherhaven/SpeechVoices/}). */
+    @SerializedName("speechVoiceId")
+    @Nullable
+    private String speechVoiceId;
+
     @Nonnull
     public String getId() {
         return id != null ? id.trim() : "";
@@ -100,6 +105,11 @@ public final class TownsfolkCharacterDefinition {
             return null;
         }
         return modelScale;
+    }
+
+    @Nullable
+    public String getSpeechVoiceId() {
+        return speechVoiceId != null && !speechVoiceId.isBlank() ? speechVoiceId.trim() : null;
     }
 
     public boolean supportsAssignment(@Nonnull String assignmentKind) {

@@ -1,0 +1,12 @@
+{
+  "id": "mid",
+  "soundEventId": "Aetherhaven_Speech_Blip",
+  "basePitch": 0.7,
+  "intervalMs": 88,
+  "pitchJitterMin": 0.98,
+  "pitchJitterMax": 1.02,
+  "rateJitterMin": 0.97,
+  "rateJitterMax": 1.03,
+  "volumeJitterDb": 1.0,
+  "skipChance": 0.05
+}

@@ -279,5 +279,6 @@
     "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.1",
     "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.main_hub.greeting.2"
   ],
-  "dialogueGiftHintLangKeys": []
+  "dialogueGiftHintLangKeys": [],
+  "speechVoiceId": "soft"
 }

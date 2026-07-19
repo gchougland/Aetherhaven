@@ -1,0 +1,53 @@
+$C = "../Common.ui";
+
+Group #PlotCreatorProgressRoot {
+  LayoutMode: Top;
+  HitTestVisible: false;
+  Anchor: (Top: 52);
+
+  Group {
+    LayoutMode: Left;
+    HitTestVisible: false;
+
+    Group {
+      FlexWeight: 1;
+      HitTestVisible: false;
+    }
+
+    Group #ProgressPanel {
+      LayoutMode: Top;
+      HitTestVisible: false;
+      Anchor: (Width: 900);
+
+      Group #MainStrip {
+        LayoutMode: Full;
+        HitTestVisible: false;
+        Anchor: (Height: 56);
+
+        Group #ProgressNodes {
+          LayoutMode: Left;
+          HitTestVisible: false;
+          Anchor: (Full: 0);
+        }
+      }
+
+      Group #SubProgressPanel {
+        LayoutMode: Full;
+        HitTestVisible: false;
+        Visible: false;
+        Anchor: (Top: 4, Height: 48);
+
+        Group #SubProgressNodes {
+          LayoutMode: Left;
+          HitTestVisible: false;
+          Anchor: (Full: 0);
+        }
+      }
+    }
+
+    Group {
+      FlexWeight: 1;
+      HitTestVisible: false;
+    }
+  }
+}

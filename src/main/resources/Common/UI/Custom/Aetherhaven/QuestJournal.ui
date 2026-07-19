@@ -481,6 +481,56 @@ $C.@PageOverlay {
                         }
                       }
 
+                      Label #SettingsSpeechHeading {
+                        Anchor: (Top: 4, Bottom: 6);
+                        Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);
+                        Text: "";
+                      }
+
+                      Label #SettingsSpeechHint {
+                        Anchor: (Bottom: 8);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, Wrap: true);
+                        Text: "";
+                      }
+
+                      Group #SettingsSpeechEnableRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 8);
+                        Group #SettingsSpeechEnableCheck { LayoutMode: Left; $C.@CheckBox #CheckBox {} }
+                        Label #SettingsSpeechEnableLabel {
+                          Anchor: (Left: 10, Top: 4);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
+                      Label #SettingsSpeechVolumeLabel {
+                        Anchor: (Bottom: 4);
+                        Style: (...$C.@DefaultLabelStyle, TextColor: #c8c2b0, RenderBold: true);
+                        Text: "";
+                      }
+                      Group #SettingsSpeechVolumeRow {
+                        LayoutMode: Left;
+                        Anchor: (Bottom: 14, Height: 30);
+
+                        Group {
+                          LayoutMode: Middle;
+                          Anchor: (Width: 360, Height: 30, Right: 12);
+                          $C.@Slider #SettingsSpeechVolumeSlider {
+                            @Anchor = (Width: 340);
+                            Value: 70;
+                            Min: 0;
+                            Max: 100;
+                          }
+                        }
+
+                        Label #SettingsSpeechVolumeValue {
+                          Anchor: (Width: 70, Top: 5);
+                          Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8);
+                          Text: "";
+                        }
+                      }
+
                       Label #SettingsHudHeading {
                         Anchor: (Top: 8, Bottom: 6);
                         Style: (...$C.@DefaultLabelStyle, RenderBold: true, TextColor: #f0e6d2, FontSize: 16);

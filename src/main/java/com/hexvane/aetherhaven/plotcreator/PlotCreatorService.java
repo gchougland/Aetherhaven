@@ -133,7 +133,7 @@ public final class PlotCreatorService {
     ) {
         Player player = store.getComponent(ref, Player.getComponentType());
         if (player != null && session.getDraft().getStep() != PlotCreatorStep.DONE) {
-            PlotCreatorHudSupport.obtainHud(player, playerRef).refresh(session);
+            PlotCreatorHudSupport.refreshAll(player, playerRef, session);
         }
     }
 
@@ -177,11 +177,10 @@ public final class PlotCreatorService {
         }
         PlotPlacementWireframeOverlay.sendWithoutClear(playerRef, fp, true, null);
         PLOT_CREATOR_WIREFRAME_ACTIVE.put(uuid, Boolean.TRUE);
-        refreshSpawnMarkers(session, playerRef);
     }
 
     public static void refreshSpawnMarkers(@Nonnull PlotCreatorSession session, @Nonnull PlayerRef playerRef) {
-        PlotCreatorSpawnMarkerOverlay.refresh(session, playerRef);
+        // Important-spot markers are entity-based (PlotCreatorSpotMarkerSync); debug spheres retired.
     }
 
     private static void restoreOtherDebugOverlays(@Nonnull PlayerRef playerRef, @Nullable World world) {

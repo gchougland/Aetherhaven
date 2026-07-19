@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_05",
-    "displayName":  "Julian Highspire",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_05",
-    "personalityIds":  [
-                           "curious",
-                           "cheerful",
-                           "mischievous"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "male_human_05",
+  "displayName": "Julian Highspire",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_05",
+  "personalityIds": [
+    "curious",
+    "cheerful",
+    "mischievous"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "high"
 }

@@ -1,19 +1,20 @@
 {
-    "id":  "female_darkelf_02",
-    "displayName":  "Nyssara Voidlace",
-    "gender":  "female",
-    "race":  "darkelf",
-    "modelAssetId":  "Female_DarkElf_02",
-    "personalityIds":  [
-                           "adventurer",
-                           "stoic",
-                           "mischievous"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_knight"
+  "id": "female_darkelf_02",
+  "displayName": "Nyssara Voidlace",
+  "gender": "female",
+  "race": "darkelf",
+  "modelAssetId": "Female_DarkElf_02",
+  "personalityIds": [
+    "adventurer",
+    "stoic",
+    "mischievous"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "high"
 }

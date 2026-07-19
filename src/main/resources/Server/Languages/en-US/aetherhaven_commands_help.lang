@@ -192,3 +192,22 @@ commands.aetherhaven.startertown.foundFailed=Could not place and link a charter 
 commands.aetherhaven.startertown.started=Building {count} structures with {layout} layout (seed {seed})
 commands.aetherhaven.startertown.done=Starter town complete: {buildings} buildings, {paths} paths, {quests} building quests, {villagers} villagers ({skipped} without a new villager). Seed: {seed}
 commands.aetherhaven.startertown.failed=Starter-town construction stopped: {reason}
+
+commands.aetherhaven.worldnpc.desc=Spawn and move town independent world NPCs
+commands.aetherhaven.worldnpc.id.desc=Stable placement id
+commands.aetherhaven.worldnpc.role.desc=Logical NPC role id (for example Aetherhaven_Blacksmith)
+commands.aetherhaven.worldnpc.place.desc=Place or update a world NPC at your feet
+commands.aetherhaven.worldnpc.ensure.desc=Respawn a placement if the entity is missing
+commands.aetherhaven.worldnpc.remove.desc=Despawn and delete a placement
+commands.aetherhaven.worldnpc.list.desc=List world NPC placements in this world
+commands.aetherhaven.worldnpc.tp.desc=Teleport to a placement
+commands.aetherhaven.worldnpc.setpose.desc=Move a placement pose to your position
+aetherhaven.worldnpc.noPermission=You need permission to use world NPC commands.
+aetherhaven.worldnpc.placed=Placed world NPC {id} as {role}.
+aetherhaven.worldnpc.ensured=Ensured world NPC {id} is spawned ({uuid}).
+aetherhaven.worldnpc.removed=Removed world NPC {id}.
+aetherhaven.worldnpc.listHeader=World NPCs ({count}):
+aetherhaven.worldnpc.listLine={id} role={role} mode={mode} at {xyz}
+aetherhaven.worldnpc.missing=That world NPC was not found.
+aetherhaven.worldnpc.teleported=Teleported to {id}.
+aetherhaven.worldnpc.poseSet=Updated pose for {id}.

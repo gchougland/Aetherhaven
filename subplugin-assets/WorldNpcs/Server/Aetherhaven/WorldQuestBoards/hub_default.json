@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "profileId": "hub_default",
+  "slotCount": 3,
+  "ranks": [
+    {
+      "id": "E",
+      "xpRequired": 0,
+      "xpReward": 5
+    },
+    {
+      "id": "D",
+      "xpRequired": 30,
+      "xpReward": 8
+    },
+    {
+      "id": "C",
+      "xpRequired": 80,
+      "xpReward": 12
+    },
+    {
+      "id": "B",
+      "xpRequired": 160,
+      "xpReward": 18
+    },
+    {
+      "id": "A",
+      "xpRequired": 300,
+      "xpReward": 25
+    }
+  ],
+  "pool": [
+    {
+      "id": "hub_welcome_supplies",
+      "weight": 10,
+      "titleLangKey": "aetherhaven_world_quest_board.aetherhaven.worldQuestBoard.hub_welcome_supplies.title",
+      "descriptionLangKey": "aetherhaven_world_quest_board.aetherhaven.worldQuestBoard.hub_welcome_supplies.description",
+      "minRank": "E",
+      "maxRank": "C",
+      "rankXpReward": 10,
+      "daysLimit": 3,
+      "questType": "fetch",
+      "rewards": [
+        {
+          "kind": "item",
+          "itemId": "Aetherhaven_Gold_Coin",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "id": "hub_scout_roads",
+      "weight": 8,
+      "titleLangKey": "aetherhaven_world_quest_board.aetherhaven.worldQuestBoard.hub_scout_roads.title",
+      "descriptionLangKey": "aetherhaven_world_quest_board.aetherhaven.worldQuestBoard.hub_scout_roads.description",
+      "minRank": "E",
+      "maxRank": "B",
+      "rankXpReward": 12,
+      "daysLimit": 2,
+      "questType": "fetch",
+      "rewards": [
+        {
+          "kind": "item",
+          "itemId": "Aetherhaven_Gold_Coin",
+          "count": 8
+        }
+      ]
+    }
+  ]
+}

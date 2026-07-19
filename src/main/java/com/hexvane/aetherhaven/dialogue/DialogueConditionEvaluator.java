@@ -111,6 +111,8 @@ public final class DialogueConditionEvaluator {
             case "villagerInTown" -> worldView.isVillagerInTown(stringOrEmpty(o, "id"));
             case "town_quest_active" -> worldView.townQuestActive(playerRef, store, stringOrEmpty(o, "questId"));
             case "town_quest_completed" -> worldView.townQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
+            case "world_quest_active" -> worldView.worldQuestActive(playerRef, store, stringOrEmpty(o, "questId"));
+            case "world_quest_completed" -> worldView.worldQuestCompleted(playerRef, store, stringOrEmpty(o, "questId"));
             case "town_has_complete_plot" -> worldView.townHasCompletePlot(playerRef, store, stringOrEmpty(o, "constructionId"));
             case "aetherhaven_has_town" -> worldView.aetherhavenHasTown(playerRef, store);
             case "aetherhaven_player_can_accept_quests" -> worldView.aetherhavenPlayerCanAcceptQuests(playerRef, store);

@@ -6,6 +6,7 @@
   "workConstructionId": "plot_gaia_altar",
   "displayName": "Serah Thornwell",
   "portraitIcon": "Aetherhaven_Priestess.png",
+  "speechVoiceId": "soft",
   "uiSortOrder": 5,
   "innPoolEligible": true,
   "innPoolOrder": 3,

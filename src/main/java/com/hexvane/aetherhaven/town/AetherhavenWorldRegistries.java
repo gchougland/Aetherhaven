@@ -29,6 +29,10 @@ import com.hexvane.aetherhaven.tourist.TouristPortalPersistence;
 import com.hexvane.aetherhaven.tourist.TouristPortalRegistry;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.world.PersistentWorldSupport;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcExistenceReconcile;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPersistence;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcRegistry;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcSpawnService;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.UUID;
@@ -47,6 +51,7 @@ public final class AetherhavenWorldRegistries {
     private static final ConcurrentHashMap<String, ShopSpotRegistry> SHOP_SPOT_REGISTRIES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<String, TouristPortalRegistry> TOURIST_PORTAL_REGISTRIES =
         new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, WorldNpcRegistry> WORLD_NPC_REGISTRIES = new ConcurrentHashMap<>();
 
     private AetherhavenWorldRegistries() {}
 
@@ -157,6 +162,24 @@ public final class AetherhavenWorldRegistries {
     }
 
     @Nonnull
+    public static WorldNpcRegistry getOrCreateWorldNpcRegistry(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin
+    ) {
+        return WORLD_NPC_REGISTRIES.computeIfAbsent(world.getName(), n -> {
+            WorldNpcRegistry r = new WorldNpcRegistry(world);
+            WorldNpcPersistence.load(world, plugin, r);
+            return r;
+        });
+    }
+
+    /** Existing world NPC registry only; does not load or create. Safe for HUD tick reads. */
+    @Nullable
+    public static WorldNpcRegistry getWorldNpcRegistry(@Nonnull World world) {
+        return WORLD_NPC_REGISTRIES.get(world.getName());
+    }
+
+    @Nonnull
     public static TownManager getTownManager(@Nonnull World world) {
         TownManager m = TOWN_MANAGERS.get(world.getName());
         if (m == null) {
@@ -244,6 +267,8 @@ public final class AetherhavenWorldRegistries {
             PATROL_ROUTE_REGISTRIES.remove(world.getName());
             SHOP_SPOT_REGISTRIES.remove(world.getName());
             TOURIST_PORTAL_REGISTRIES.remove(world.getName());
+            WORLD_NPC_REGISTRIES.remove(world.getName());
+            WorldNpcExistenceReconcile.clearWorld(world.getName());
             WorldDifficultyPersistence.unloadWorld(world);
             TownsfolkPoolPersistence.unloadWorld(world);
             return;
@@ -289,6 +314,14 @@ public final class AetherhavenWorldRegistries {
                 TouristPortalPersistence.save(world, p5, touristReg);
             }
         }
+        WorldNpcRegistry worldNpcReg = WORLD_NPC_REGISTRIES.remove(world.getName());
+        if (worldNpcReg != null) {
+            AetherhavenPlugin p6 = AetherhavenPlugin.get();
+            if (p6 != null) {
+                WorldNpcPersistence.save(world, p6, worldNpcReg);
+            }
+        }
+        WorldNpcExistenceReconcile.clearWorld(world.getName());
         WorldDifficultyPersistence.unloadWorld(world);
         TownsfolkPoolPersistence.unloadWorld(world);
     }
@@ -321,6 +354,10 @@ public final class AetherhavenWorldRegistries {
                 World w = e.getValue().getWorld();
                 TouristPortalPersistence.save(w, p, e.getValue());
             }
+            for (var e : WORLD_NPC_REGISTRIES.entrySet()) {
+                World w = e.getValue().getWorld();
+                WorldNpcPersistence.save(w, p, e.getValue());
+            }
         }
         WorldDifficultyPersistence.saveAll();
         TownsfolkPoolPersistence.saveAll();
@@ -338,8 +375,10 @@ public final class AetherhavenWorldRegistries {
         getOrCreatePatrolRouteRegistry(world, plugin);
         getOrCreateShopSpotRegistry(world, plugin);
         getOrCreateTouristPortalRegistry(world, plugin);
+        getOrCreateWorldNpcRegistry(world, plugin);
         getOrCreatePathNavGraphService(world);
         TownNpcMigration.ensureElderBindingsOnWorldThread(world, plugin);
+        WorldNpcSpawnService.reconcileAfterWorldLoad(world, plugin);
         TouristReconcileService.scheduleAfterWorldLoad(world, plugin);
         ElderReconcileService.scheduleAfterWorldLoad(world, plugin);
         InnkeeperSpawnService.reconcileAfterWorldLoad(world, plugin);

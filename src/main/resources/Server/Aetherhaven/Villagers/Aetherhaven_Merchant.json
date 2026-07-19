@@ -6,6 +6,7 @@
   "workConstructionId": "plot_market_stall",
   "displayName": "Vex Sunderlane",
   "portraitIcon": "Aetherhaven_Merchant.png",
+  "speechVoiceId": "sharp",
   "uiSortOrder": 2,
   "innPoolEligible": true,
   "innPoolOrder": 0,

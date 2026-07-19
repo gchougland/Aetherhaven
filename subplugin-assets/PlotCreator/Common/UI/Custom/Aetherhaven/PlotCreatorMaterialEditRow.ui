@@ -27,9 +27,9 @@ Group #Row {
     Anchor: (Width: 36, Right: 4);
   }
 
-  Label #Count {
-    Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, HorizontalAlignment: Center, VerticalAlignment: Center);
-    Anchor: (Width: 48);
+  $C.@TextField #CountField {
+    Anchor: (Width: 52, Height: 32, Right: 4);
+    PlaceholderText: "";
   }
 
   $C.@SmallSecondaryTextButton #PlusButton {

@@ -110,6 +110,12 @@ public final class NpcPortraitProvider {
         return AetherhavenRoleLabels.displayNameForRoleId(roleId);
     }
 
+    /** Known portrait filenames under {@code Icons/ModelsGenerated/} for admin pickers. */
+    @Nonnull
+    public static java.util.Set<String> knownPortraitFilenames() {
+        return new java.util.TreeSet<>(ROLE_ID_TO_FILE.values());
+    }
+
     /**
      * Lang key {@code aetherhaven_town.aetherhaven.profession.kind.&lt;slug&gt;} for UI lines such as {@code Name (Profession)}.
      */

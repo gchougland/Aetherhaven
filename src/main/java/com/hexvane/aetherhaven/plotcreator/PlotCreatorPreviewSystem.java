@@ -11,19 +11,19 @@ import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
-import org.joml.Vector3i;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.joml.Vector3i;
 
 /** Keeps the plot creator step HUD visible for the whole session while a draft is active. */
 public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntityStore> {
-    private static final ConcurrentHashMap<UUID, PlotCreatorStep> LAST_STEP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Long> LAST_GUIDE_SIG = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<UUID, Long> LAST_WIREFRAME_SIG = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<UUID, Long> LAST_SPAWN_MARKER_SIG = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<UUID, Long> LAST_SPAWN_MARKER_RESEND_MS = new ConcurrentHashMap<>();
-    private static final long SPAWN_MARKER_RESEND_INTERVAL_MS = 2000L;
+    private static final ConcurrentHashMap<UUID, Long> LAST_SPOT_MARKER_SIG = new ConcurrentHashMap<>();
 
     @SuppressWarnings("unused")
     private final AetherhavenPlugin plugin;
@@ -63,29 +63,26 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             if (PlotCreatorHudSupport.isActive(player)) {
                 PlotCreatorHudSupport.removeHud(player, pr);
             }
-            LAST_STEP.remove(uuid);
+            LAST_GUIDE_SIG.remove(uuid);
             LAST_WIREFRAME_SIG.remove(uuid);
-            LAST_SPAWN_MARKER_SIG.remove(uuid);
-            LAST_SPAWN_MARKER_RESEND_MS.remove(uuid);
             PlotCreatorService.clearPlotCreatorWireframe(pr, world);
+            clearSpotMarkers(world, store, ref, commandBuffer);
             return;
         }
         PlotCreatorStep step = session.getDraft().getStep();
         if (step == PlotCreatorStep.DONE) {
             PlotCreatorHudSupport.removeHud(player, pr);
-            LAST_STEP.remove(uuid);
+            LAST_GUIDE_SIG.remove(uuid);
             LAST_WIREFRAME_SIG.remove(uuid);
-            LAST_SPAWN_MARKER_SIG.remove(uuid);
-            LAST_SPAWN_MARKER_RESEND_MS.remove(uuid);
             PlotCreatorService.clearPlotCreatorWireframe(pr, world);
+            clearSpotMarkers(world, store, ref, commandBuffer);
             return;
         }
-        PlotCreatorStep prev = LAST_STEP.get(uuid);
-        if (prev != step) {
-            LAST_STEP.put(uuid, step);
-            PlotCreatorHudSupport.obtainHud(player, pr).refresh(session);
-        } else if (!PlotCreatorHudSupport.isActive(player)) {
-            PlotCreatorHudSupport.obtainHud(player, pr).refresh(session);
+        long guideSig = PlotCreatorProgressModel.guideSignature(session.getDraft());
+        Long prevGuide = LAST_GUIDE_SIG.get(uuid);
+        if (prevGuide == null || prevGuide != guideSig || !PlotCreatorHudSupport.isActive(player)) {
+            LAST_GUIDE_SIG.put(uuid, guideSig);
+            PlotCreatorHudSupport.refreshAll(player, pr, session);
         }
         long sig = wireframeSignature(session.getDraft());
         Long prevSig = LAST_WIREFRAME_SIG.get(uuid);
@@ -93,19 +90,53 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
             LAST_WIREFRAME_SIG.put(uuid, sig);
             PlotCreatorService.refreshWireframe(session, pr);
         }
-        long spawnSig = PlotCreatorSpawnMarkerOverlay.signature(session.getDraft());
-        Long prevSpawnSig = LAST_SPAWN_MARKER_SIG.get(uuid);
-        if (prevSpawnSig == null || prevSpawnSig != spawnSig) {
-            LAST_SPAWN_MARKER_SIG.put(uuid, spawnSig);
-            PlotCreatorService.refreshSpawnMarkers(session, pr);
-            LAST_SPAWN_MARKER_RESEND_MS.put(uuid, System.currentTimeMillis());
-        } else if (!session.getDraft().getAdventurerSpawns().isEmpty() || !session.getDraft().getVisitorSpawnLocals().isEmpty()) {
-            long now = System.currentTimeMillis();
-            Long lastResend = LAST_SPAWN_MARKER_RESEND_MS.get(uuid);
-            if (lastResend == null || now - lastResend >= SPAWN_MARKER_RESEND_INTERVAL_MS) {
-                LAST_SPAWN_MARKER_RESEND_MS.put(uuid, now);
-                PlotCreatorService.refreshSpawnMarkers(session, pr);
-            }
+        syncImportantSpotMarkers(session, world, store, ref, commandBuffer);
+    }
+
+    private static void syncImportantSpotMarkers(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        UUID ownerUuid = PlotCreatorSpotMarkerSync.requireOwnerEntityUuid(store, playerRef);
+        PlotCreatorDraft draft = session.getDraft();
+        PlotCreatorStep step = draft.getStep();
+        long spotSig = PlotCreatorSpotMarkerCollector.signature(draft, world);
+        Long prevSpotSig = LAST_SPOT_MARKER_SIG.get(ownerUuid);
+        if (prevSpotSig != null && prevSpotSig == spotSig) {
+            return;
+        }
+        LAST_SPOT_MARKER_SIG.put(ownerUuid, spotSig);
+
+        if (step != PlotCreatorStep.SUBSTEP && step != PlotCreatorStep.REVIEW) {
+            PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
+            return;
+        }
+
+        @Nullable
+        PlotBuildingKindRequirements.SubstepRequirement filter =
+            step == PlotCreatorStep.SUBSTEP ? PlotCreatorService.currentSubstep(draft) : null;
+        List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desired =
+            filter == null && step == PlotCreatorStep.SUBSTEP
+                ? Collections.emptyList()
+                : PlotCreatorSpotMarkerCollector.collect(draft, world, filter);
+        PlotCreatorSpotMarkerSync.sync(world, ownerUuid, desired, commandBuffer);
+    }
+
+    private static void clearSpotMarkers(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        try {
+            UUID ownerUuid = PlotCreatorSpotMarkerSync.requireOwnerEntityUuid(store, playerRef);
+            LAST_SPOT_MARKER_SIG.remove(ownerUuid);
+            PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
+        } catch (IllegalStateException ignored) {
+            // Player missing UUID — nothing to clear.
         }
     }
 

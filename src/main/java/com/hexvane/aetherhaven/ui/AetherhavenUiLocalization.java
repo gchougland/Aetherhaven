@@ -304,6 +304,10 @@ public final class AetherhavenUiLocalization {
         b.set("#SettingsPersonalHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.personalHint"));
         b.set("#SettingsHudHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.heading"));
         b.set("#SettingsHudHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.hint"));
+        b.set("#SettingsSpeechHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.heading"));
+        b.set("#SettingsSpeechHint.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.hint"));
+        b.set("#SettingsSpeechEnableLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.enable"));
+        b.set("#SettingsSpeechVolumeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.speech.volume"));
         b.set("#SettingsHudTimeLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showTime"));
         b.set("#SettingsHudDateLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showDate"));
         b.set("#SettingsHudGoldLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.journalSettings.hud.showGold"));

@@ -314,5 +314,6 @@
     "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.2",
     "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.3",
     "aetherhaven_dialogue_miner.aetherhaven.dialogue.aetherhaven_miner.main_hub.hint.dislike.4"
-  ]
+  ],
+  "speechVoiceId": "low"
 }

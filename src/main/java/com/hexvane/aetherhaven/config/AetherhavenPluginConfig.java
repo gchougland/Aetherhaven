@@ -466,6 +466,13 @@ public final class AetherhavenPluginConfig {
         .documentation("Seconds villagers play a talking mouth animation when dialogue opens or a choice is picked.")
         .add()
         .append(
+            new KeyedCodec<>("DialogueSpeechEnabled", Codec.BOOLEAN),
+            (o, v) -> o.dialogueSpeechEnabled = v != null ? v : true,
+            o -> o.dialogueSpeechEnabled
+        )
+        .documentation("When true (default), play Animal Crossing–style speech blips while the dialogue talk mouth animation runs.")
+        .add()
+        .append(
             new KeyedCodec<>("NeedsMoodLowThreshold", Codec.FLOAT),
             (o, v) -> o.needsMoodLowThreshold = v != null ? v : 40f,
             o -> o.needsMoodLowThreshold
@@ -610,6 +617,7 @@ public final class AetherhavenPluginConfig {
     private boolean pathNavPathfindingLog = false;
 
     private float dialogueTalkDurationSeconds = 3f;
+    private boolean dialogueSpeechEnabled = true;
     private float needsMoodLowThreshold = 40f;
     private float needsMoodHighThreshold = 70f;
 
@@ -698,6 +706,10 @@ public final class AetherhavenPluginConfig {
     public float getDialogueTalkDurationSeconds() {
         float v = dialogueTalkDurationSeconds;
         return v > 0f ? v : 3f;
+    }
+
+    public boolean isDialogueSpeechEnabled() {
+        return dialogueSpeechEnabled;
     }
 
     public float getNeedsMoodLowThreshold() {
@@ -1461,6 +1473,7 @@ public final class AetherhavenPluginConfig {
         this.pathNavPreferIfShorterOnly = o.pathNavPreferIfShorterOnly;
         this.pathNavPathfindingLog = o.pathNavPathfindingLog;
         this.dialogueTalkDurationSeconds = o.dialogueTalkDurationSeconds;
+        this.dialogueSpeechEnabled = o.dialogueSpeechEnabled;
         this.needsMoodLowThreshold = o.needsMoodLowThreshold;
         this.needsMoodHighThreshold = o.needsMoodHighThreshold;
         this.reputationWaveMinReputation = o.reputationWaveMinReputation;

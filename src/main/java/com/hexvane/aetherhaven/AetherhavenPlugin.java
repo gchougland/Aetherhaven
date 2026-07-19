@@ -49,7 +49,10 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownNameCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterCatalog;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkPersonalityCatalog;
+import com.hexvane.aetherhaven.speech.data.SpeechVoiceCatalog;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcService;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestBoardCatalog;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.common.plugin.PluginIdentifier;
 import com.hypixel.hytale.component.Ref;
@@ -100,10 +103,13 @@ public final class AetherhavenPlugin extends JavaPlugin {
     private DialogueCatalog dialogueCatalog = DialogueCatalog.empty();
     private QuestCatalog questCatalog = QuestCatalog.empty();
     private QuestBoardCatalog questBoardCatalog = QuestBoardCatalog.empty();
+    private WorldQuestBoardCatalog worldQuestBoardCatalog = WorldQuestBoardCatalog.empty();
+    private final WorldNpcService worldNpcService = new WorldNpcService(this);
     private VillagerScheduleRegistry villagerScheduleRegistry = VillagerScheduleRegistry.empty();
     private VillagerDefinitionCatalog villagerDefinitionCatalog = VillagerDefinitionCatalog.empty();
     private TownsfolkPersonalityCatalog townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.empty();
     private TownsfolkCharacterCatalog townsfolkCharacterCatalog = TownsfolkCharacterCatalog.empty();
+    private SpeechVoiceCatalog speechVoiceCatalog = SpeechVoiceCatalog.empty();
     private EquipmentProfileCatalog equipmentProfileCatalog = EquipmentProfileCatalog.empty();
     private ProductionCatalog productionCatalog = ProductionCatalog.empty();
     private WorkplaceUnlockCatalog workplaceUnlockCatalog = WorkplaceUnlockCatalog.empty();
@@ -266,6 +272,20 @@ public final class AetherhavenPlugin extends JavaPlugin {
     }
 
     @Nonnull
+    public WorldQuestBoardCatalog getWorldQuestBoardCatalog() {
+        return worldQuestBoardCatalog;
+    }
+
+    public void reloadWorldQuestBoardCatalog() {
+        this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
+    }
+
+    @Nonnull
+    public WorldNpcService getWorldNpcService() {
+        return worldNpcService;
+    }
+
+    @Nonnull
     public DialogueResolver getDialogueResolver() {
         return dialogueResolver;
     }
@@ -293,6 +313,11 @@ public final class AetherhavenPlugin extends JavaPlugin {
     @Nonnull
     public TownsfolkCharacterCatalog getTownsfolkCharacterCatalog() {
         return townsfolkCharacterCatalog;
+    }
+
+    @Nonnull
+    public SpeechVoiceCatalog getSpeechVoiceCatalog() {
+        return speechVoiceCatalog;
     }
 
     @Nonnull
@@ -454,6 +479,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.townsfolkPersonalityCatalog = TownsfolkPersonalityCatalog.loadFromAssetPacksOrClasspath(cl);
         this.townsfolkCharacterCatalog =
             TownsfolkCharacterCatalog.loadFromAssetPacksOrClasspath(cl, this.townsfolkPersonalityCatalog);
+        this.speechVoiceCatalog = SpeechVoiceCatalog.loadFromAssetPacksOrClasspath(cl);
         this.equipmentProfileCatalog = EquipmentProfileCatalog.loadFromAssetPacksOrClasspath(cl);
         ReputationRewardCatalog.refreshFromVillagerCatalog(this.villagerDefinitionCatalog);
         this.dialogueResolver.reloadFromVillagerCatalog(this.villagerDefinitionCatalog);
@@ -464,6 +490,7 @@ public final class AetherhavenPlugin extends JavaPlugin {
         this.dialogueCatalog = DialogueCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questCatalog = QuestCatalog.loadFromAssetPacksOrClasspath(cl);
         this.questBoardCatalog = QuestBoardCatalog.loadFromAssetPacksOrClasspath(cl);
+        this.worldQuestBoardCatalog = WorldQuestBoardCatalog.loadFromAssetPacks();
         this.villagerScheduleRegistry = VillagerScheduleRegistry.loadFromAssetPacksOrClasspath(cl);
         this.townNameCatalog = TownNameCatalog.loadFromClasspath();
         this.productionCatalog = ProductionCatalog.loadFromClasspath(cl);

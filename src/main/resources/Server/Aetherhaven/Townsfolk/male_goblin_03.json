@@ -13,5 +13,6 @@
     "idle",
     "tourist"
   ],
-  "befriendable": false
+  "befriendable": false,
+  "speechVoiceId": "sharp"
 }

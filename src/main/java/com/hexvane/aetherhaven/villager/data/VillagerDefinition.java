@@ -122,6 +122,11 @@ public final class VillagerDefinition {
     @Nullable
     private Boolean befriendable;
 
+    /** Optional dialogue speech voice profile id (see {@code Server/Aetherhaven/SpeechVoices/}). */
+    @SerializedName("speechVoiceId")
+    @Nullable
+    private String speechVoiceId;
+
     @Nonnull
     public String getNpcRoleId() {
         return npcRoleId != null ? npcRoleId.trim() : "";
@@ -299,6 +304,11 @@ public final class VillagerDefinition {
     /** True when omitted (essential villagers stay befriendable by default). */
     public boolean isBefriendable() {
         return befriendable == null || befriendable;
+    }
+
+    @Nullable
+    public String getSpeechVoiceId() {
+        return speechVoiceId != null && !speechVoiceId.isBlank() ? speechVoiceId.trim() : null;
     }
 
     @Nonnull

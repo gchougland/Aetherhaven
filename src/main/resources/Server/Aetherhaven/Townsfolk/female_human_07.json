@@ -1,19 +1,20 @@
 {
-    "id":  "female_human_07",
-    "displayName":  "Delia Bramble",
-    "gender":  "female",
-    "race":  "human",
-    "modelAssetId":  "Female_Human_07",
-    "personalityIds":  [
-                           "foodie",
-                           "bitter",
-                           "dramatic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "female_human_07",
+  "displayName": "Delia Bramble",
+  "gender": "female",
+  "race": "human",
+  "modelAssetId": "Female_Human_07",
+  "personalityIds": [
+    "foodie",
+    "bitter",
+    "dramatic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "soft"
 }

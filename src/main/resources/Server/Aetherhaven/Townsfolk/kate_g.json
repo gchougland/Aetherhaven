@@ -15,5 +15,6 @@
     "guard"
   ],
   "befriendable": false,
-  "equipmentProfileId": "guard_knight"
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "high"
 }

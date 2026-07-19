@@ -135,6 +135,20 @@ public final class PlotCreatorMaterialsActions {
         });
     }
 
+    public static void setMaterialCount(
+        @Nonnull PlotCreatorSession session,
+        int materialIndex,
+        int count,
+        @Nullable Runnable afterChange
+    ) {
+        session.getWorld().execute(() -> {
+            boolean changed = PlotCreatorMaterialsHelper.setMaterialCount(session, materialIndex, count);
+            if (changed && afterChange != null) {
+                afterChange.run();
+            }
+        });
+    }
+
     public static void removeMaterial(
         @Nonnull PlotCreatorSession session,
         int materialIndex,

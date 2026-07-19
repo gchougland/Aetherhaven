@@ -6,6 +6,7 @@
   "workConstructionId": "plot_crystal_keepers_shop",
   "displayName": "Vaelith Prismshade",
   "portraitIcon": "Aetherhaven_Crystal_Keeper.png",
+  "speechVoiceId": "soft",
   "uiSortOrder": 13,
   "innPoolEligible": true,
   "innPoolOrder": 8,

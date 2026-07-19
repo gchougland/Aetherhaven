@@ -14,6 +14,8 @@ import com.hexvane.aetherhaven.dialogue.data.DialogueNodeDefinition;
 import com.hexvane.aetherhaven.dialogue.data.DialogueTreeDefinition;
 import com.hexvane.aetherhaven.npc.NpcDialogueCleanup;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
+import com.hexvane.aetherhaven.speech.DialogueMessagePlainText;
+import com.hexvane.aetherhaven.speech.NpcDialogueSpeech;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -25,6 +27,11 @@ import com.hexvane.aetherhaven.townsfolk.data.TownsfolkGreetingPicker;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcDialogueChoiceFilter;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcDisplay;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlacementRecord;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcSpawnRoles;
 import com.hypixel.hytale.builtin.adventure.shop.barter.BarterPage;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -80,6 +87,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     private static final String ICON_GEODE_OPEN = "UI/Custom/broken-egg.png";
     private static final String ICON_MUSICAL_NOTE = "UI/Custom/musical-note.png";
     private static final String ICON_FOLLOW = "UI/Custom/man-walking.png";
+    private static final String ICON_TELEPORT = "UI/Custom/teleport.png";
     private static final String LANG_FOLLOW_START =
         "aetherhaven_dialogue_follow.aetherhaven.dialogue.follow.start";
     private static final String LANG_FOLLOW_STOP =
@@ -121,6 +129,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     @Nullable
     private String nodeEnterAppliedForNodeId;
 
+    /** Last node id that started letter speech (avoid restarting on unrelated rebuilds). */
+    @Nullable
+    private String speechStartedForNodeId;
+
     public DialoguePage(
         @Nonnull PlayerRef playerRef,
         @Nonnull DialogueCatalog catalog,
@@ -142,6 +154,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
         super.onDismiss(ref, store);
+        UUIDComponent pu = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (pu != null) {
+            NpcDialogueSpeech.cancelForPlayer(pu.getUuid());
+        }
         NpcDialogueCleanup.scheduleReturnToIdle(npcRef, store);
     }
 
@@ -281,10 +297,36 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         commandBuilder.set(BODY_TEXT_SPANS, bodyMsg);
         setChoicesFrameVisible(commandBuilder, true);
         appendChoices(ref, store, commandBuilder, eventBuilder, node);
+        maybeStartLetterSpeech(ref, store, bodyMsg);
+    }
+
+    private void maybeStartLetterSpeech(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message bodyMsg
+    ) {
+        if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        if (java.util.Objects.equals(speechStartedForNodeId, nodeId)) {
+            return;
+        }
+        speechStartedForNodeId = nodeId;
+        String plain = DialogueMessagePlainText.resolve(bodyMsg, playerRef.getLanguage());
+        NpcDialogueSpeech.startTalkSpeech(ref, npcRef, store, plain);
     }
 
     @Nonnull
     private Message resolveSpeakerMessage(@Nonnull Store<EntityStore> store, @Nonnull DialogueNodeDefinition node) {
+        if (npcRef != null && npcRef.isValid()) {
+            WorldNpcBinding worldBinding = store.getComponent(npcRef, WorldNpcBinding.getComponentType());
+            if (worldBinding != null) {
+                Message override = resolveWorldNpcSpeakerOverride(store, worldBinding);
+                if (override != null) {
+                    return override;
+                }
+            }
+        }
         String speaker = node.getSpeaker() != null ? node.getSpeaker() : "";
         if (!speaker.isBlank()) {
             return dialogueMessage(speaker);
@@ -324,6 +366,35 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return Message.raw("");
     }
 
+    @Nullable
+    private Message resolveWorldNpcSpeakerOverride(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull WorldNpcBinding worldBinding
+    ) {
+        PersistentDisplayName displayName = store.getComponent(npcRef, PersistentDisplayName.getComponentType());
+        if (displayName != null && displayName.getDisplayName() != null) {
+            String raw = displayName.getDisplayName().getRawText();
+            if (raw != null && !raw.isBlank()) {
+                return Message.raw(raw.trim());
+            }
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        WorldNpcPlacementRecord placement =
+            AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                .findPlacement(worldBinding.getPlacementId());
+        if (placement != null) {
+            String override = placement.displayNameOrEmpty();
+            if (!override.isEmpty()) {
+                return Message.raw(override);
+            }
+        }
+        return null;
+    }
+
     @Nonnull
     private Message resolveDialogueBody(
         @Nonnull Ref<EntityStore> ref,
@@ -350,7 +421,18 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                         if (townsfolkGreeting != null) {
                             return townsfolkGreeting;
                         }
-                        VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(npc.getRoleName().trim());
+                        String greetingRole = npc.getRoleName().trim();
+                        WorldNpcBinding worldBinding =
+                            store.getComponent(npcRef, WorldNpcBinding.getComponentType());
+                        if (worldBinding != null) {
+                            String logical = WorldNpcSpawnRoles.toLogicalRoleId(worldBinding.getNpcRoleId());
+                            if (!logical.isEmpty()) {
+                                greetingRole = logical;
+                            } else {
+                                greetingRole = WorldNpcSpawnRoles.toLogicalRoleId(greetingRole);
+                            }
+                        }
+                        VillagerDefinition vdef = plugin.getVillagerDefinitionCatalog().byNpcRoleId(greetingRole);
                         if (vdef != null) {
                             long day = VillagerReputationService.currentGameEpochDay(store);
                             Message picked = VillagerGreetingPicker.pickMessage(vdef, pu.getUuid(), nu.getUuid(), day);
@@ -444,12 +526,33 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         String portrait = NpcPortraitProvider.portraitPathForRoleId("");
         if (npcRef != null && npcRef.isValid()) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
-            NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
-            String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
-            if (plugin != null && !roleId.isBlank()) {
-                portrait = TownResidentDisplay.resolveFromEntity(store, npcRef, roleId, plugin).portraitPath();
-            } else if (!roleId.isBlank()) {
-                portrait = NpcPortraitProvider.portraitPathForRoleId(roleId);
+            WorldNpcBinding worldBinding = store.getComponent(npcRef, WorldNpcBinding.getComponentType());
+            if (plugin != null && worldBinding != null) {
+                World world = store.getExternalData().getWorld();
+                WorldNpcPlacementRecord placement =
+                    AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                        .findPlacement(worldBinding.getPlacementId());
+                if (placement != null) {
+                    portrait = WorldNpcDisplay.portraitPath(placement);
+                } else {
+                    String logical = WorldNpcSpawnRoles.toLogicalRoleId(worldBinding.getNpcRoleId());
+                    if (logical.isEmpty()) {
+                        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                        logical =
+                            npc != null && npc.getRoleName() != null
+                                ? WorldNpcSpawnRoles.toLogicalRoleId(npc.getRoleName())
+                                : "";
+                    }
+                    portrait = NpcPortraitProvider.portraitPathForRoleId(logical);
+                }
+            } else {
+                NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                String roleId = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+                if (plugin != null && !roleId.isBlank()) {
+                    portrait = TownResidentDisplay.resolveFromEntity(store, npcRef, roleId, plugin).portraitPath();
+                } else if (!roleId.isBlank()) {
+                    portrait = NpcPortraitProvider.portraitPathForRoleId(roleId);
+                }
             }
         }
         commandBuilder.set(PORTRAIT_ASSET, portrait);
@@ -488,6 +591,14 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         int choiceIndex,
         int uiSlot
     ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null
+            && npcRef != null
+            && npcRef.isValid()
+            && store.getComponent(npcRef, WorldNpcBinding.getComponentType()) != null
+            && WorldNpcDialogueChoiceFilter.shouldHideForWorldNpc(ch, plugin)) {
+            return uiSlot;
+        }
         boolean baseOk = conditions.evaluate(ch.getCondition(), ref, store, npcRef);
         String wf = ch.whenFalseOrDefault();
         JsonObject visOnly = ch.getVisibilityCondition();
@@ -697,6 +808,10 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
 
     @Nullable
     private static String choiceIconPath(@Nonnull DialogueChoiceDefinition ch) {
+        String explicit = resolveChoiceIcon(ch.getIcon());
+        if (explicit != null) {
+            return explicit;
+        }
         if (ch.isGiftChoice()) {
             return ICON_GIFT;
         }
@@ -718,6 +833,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         if (ch.getNext() != null && "music_pick".equalsIgnoreCase(ch.getNext().trim())) {
             return ICON_MUSICAL_NOTE;
         }
+        if (ch.hasAction("teleport_world")) {
+            return ICON_TELEPORT;
+        }
         if (ch.isQuestProgressChoice()) {
             return ICON_QUEST_PROGRESS;
         }
@@ -728,6 +846,34 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return ICON_EXIT;
         }
         return null;
+    }
+
+    /**
+     * Resolves an authored choice {@code icon} value: known aliases map to bundled UI assets; paths containing
+     * {@code /} or ending in {@code .png} are used as-is.
+     */
+    @Nullable
+    private static String resolveChoiceIcon(@Nullable String icon) {
+        if (icon == null || icon.isBlank()) {
+            return null;
+        }
+        String trimmed = icon.trim();
+        if (trimmed.contains("/") || trimmed.toLowerCase().endsWith(".png")) {
+            return trimmed;
+        }
+        return switch (trimmed.toLowerCase()) {
+            case "teleport" -> ICON_TELEPORT;
+            case "gift" -> ICON_GIFT;
+            case "quest" -> ICON_QUEST;
+            case "quest_progress" -> ICON_QUEST_PROGRESS;
+            case "exit" -> ICON_EXIT;
+            case "follow" -> ICON_FOLLOW;
+            case "jewelry" -> ICON_JEWELRY_APPRAISAL;
+            case "repair" -> ICON_BLACKSMITH_REPAIR;
+            case "geode" -> ICON_GEODE_OPEN;
+            case "music" -> ICON_MUSICAL_NOTE;
+            default -> trimmed;
+        };
     }
 
     private static void applyChoiceIcon(
@@ -788,8 +934,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         DialogueActionBatchResult batch = new DialogueActionBatchResult();
         actions.runBatch(choice.getActions(), ref, store, batch, npcRef);
         if (npcRef != null && npcRef.isValid()) {
-            NpcFaceVisuals.playTalkBurst(npcRef, store);
+            NpcFaceVisuals.playTalkBurst(npcRef, ref, store);
         }
+        speechStartedForNodeId = null;
         applyBatchNavigation(ref, store, batch, choice.getNext());
     }
 
@@ -931,6 +1078,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             });
         } else if (world != null && batch.hasAfterClose()) {
             Runnable after = batch.getAfterClose();
+            // Must dismiss the page so onDismiss returns the NPC to Idle. Without close(),
+            // roles that gate OpenAetherhavenDialogue on Not $Interaction stay uninteractable.
+            close();
             world.execute(() -> {
                 if (after != null) {
                     after.run();

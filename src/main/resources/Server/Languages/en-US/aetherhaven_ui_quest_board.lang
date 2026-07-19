@@ -48,3 +48,6 @@ aetherhaven.ui.questBoard.rankUpToast=Your town rank is now {rank}.
 aetherhaven.ui.questBoard.completedBanner=Completed
 aetherhaven.ui.questBoard.completedRefreshHint=New quests arrive at dawn.
 
+
+aetherhaven.ui.worldQuestBoard.missingProfile=World quest board profile {id} is missing.
+aetherhaven.ui.worldQuestBoard.rankLabel=Hub rank {rank} ({xp} XP)

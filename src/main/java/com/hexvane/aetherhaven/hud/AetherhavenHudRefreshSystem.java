@@ -106,6 +106,9 @@ public final class AetherhavenHudRefreshSystem
         WorldTimeResource time = store.getResource(WorldTimeResource.getResourceType());
         TownManager townManager = AetherhavenWorldRegistries.getTownManager(world);
         TownRecord town = townManager.findTownForPlayerInWorld(uuid.getUuid());
+        var worldNpcRegistry = AetherhavenWorldRegistries.getWorldNpcRegistry(world);
+        var worldProgress =
+            worldNpcRegistry != null ? worldNpcRegistry.findPlayerProgress(uuid.getUuid()) : null;
         AetherhavenHud hud = AetherhavenHudSupport.obtain(player, playerRef);
         hud.setStatusPlacement(
             placement(
@@ -123,7 +126,7 @@ public final class AetherhavenHudRefreshSystem
                 HudPlacement.TOP_RIGHT
             )
         );
-        hud.refresh(snapshots.capture(playerRef, store, time.getGameDateTime(), town, preferences));
+        hud.refresh(snapshots.capture(playerRef, store, time.getGameDateTime(), town, worldProgress, preferences));
     }
 
     @Override

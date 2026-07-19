@@ -1,19 +1,20 @@
 {
-    "id":  "male_darkelf_01",
-    "displayName":  "Draelis Nightweave",
-    "gender":  "male",
-    "race":  "darkelf",
-    "modelAssetId":  "Male_DarkElf_01",
-    "personalityIds":  [
-                           "mischievous",
-                           "lazy",
-                           "crafty"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "male_darkelf_01",
+  "displayName": "Draelis Nightweave",
+  "gender": "male",
+  "race": "darkelf",
+  "modelAssetId": "Male_DarkElf_01",
+  "personalityIds": [
+    "mischievous",
+    "lazy",
+    "crafty"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "sharp"
 }

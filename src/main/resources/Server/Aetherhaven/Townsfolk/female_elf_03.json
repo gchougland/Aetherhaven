@@ -1,19 +1,20 @@
 {
-    "id":  "female_elf_03",
-    "displayName":  "Elowen Mistvale",
-    "gender":  "female",
-    "race":  "sylvian",
-    "modelAssetId":  "Female_Elf_03",
-    "personalityIds":  [
-                           "gardener",
-                           "impatient",
-                           "dramatic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "female_elf_03",
+  "displayName": "Elowen Mistvale",
+  "gender": "female",
+  "race": "sylvian",
+  "modelAssetId": "Female_Elf_03",
+  "personalityIds": [
+    "gardener",
+    "impatient",
+    "dramatic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "soft"
 }

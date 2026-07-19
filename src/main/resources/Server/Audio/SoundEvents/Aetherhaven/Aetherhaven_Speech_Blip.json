@@ -1,0 +1,41 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/SpeechBlips/A.ogg",
+        "Sounds/SpeechBlips/B.ogg",
+        "Sounds/SpeechBlips/C.ogg",
+        "Sounds/SpeechBlips/D.ogg",
+        "Sounds/SpeechBlips/E.ogg",
+        "Sounds/SpeechBlips/F.ogg",
+        "Sounds/SpeechBlips/G.ogg",
+        "Sounds/SpeechBlips/H.ogg",
+        "Sounds/SpeechBlips/I.ogg",
+        "Sounds/SpeechBlips/J.ogg",
+        "Sounds/SpeechBlips/K.ogg",
+        "Sounds/SpeechBlips/L.ogg",
+        "Sounds/SpeechBlips/M.ogg",
+        "Sounds/SpeechBlips/N.ogg",
+        "Sounds/SpeechBlips/O.ogg",
+        "Sounds/SpeechBlips/P.ogg",
+        "Sounds/SpeechBlips/Q.ogg",
+        "Sounds/SpeechBlips/R.ogg",
+        "Sounds/SpeechBlips/S.ogg",
+        "Sounds/SpeechBlips/T.ogg",
+        "Sounds/SpeechBlips/U.ogg",
+        "Sounds/SpeechBlips/V.ogg",
+        "Sounds/SpeechBlips/W.ogg",
+        "Sounds/SpeechBlips/X.ogg",
+        "Sounds/SpeechBlips/Y.ogg",
+        "Sounds/SpeechBlips/Z.ogg"
+      ],
+      "StartDelay": 0,
+      "Volume": 0
+    }
+  ],
+  "Volume": -6.0,
+  "MaxInstance": 5,
+  "PreventSoundInterruption": true,
+  "SpatialBlend": 0,
+  "Parent": "SFX_Attn_Moderate"
+}

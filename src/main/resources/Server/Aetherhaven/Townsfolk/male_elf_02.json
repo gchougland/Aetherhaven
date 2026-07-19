@@ -1,19 +1,20 @@
 {
-    "id":  "male_elf_02",
-    "displayName":  "Faelar Silverbough",
-    "gender":  "male",
-    "race":  "sylvian",
-    "modelAssetId":  "Male_Elf_02",
-    "personalityIds":  [
-                           "musical",
-                           "adventurer",
-                           "stoic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_archer"
+  "id": "male_elf_02",
+  "displayName": "Faelar Silverbough",
+  "gender": "male",
+  "race": "sylvian",
+  "modelAssetId": "Male_Elf_02",
+  "personalityIds": [
+    "musical",
+    "adventurer",
+    "stoic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "high"
 }

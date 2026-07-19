@@ -118,7 +118,7 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
                 b.set(row + " #Icon.AssetPath", iconPath);
             }
             b.set(row + " #Name.TextSpans", Message.raw(UiMaterialLabels.displayLabelFor(line)));
-            b.set(row + " #Count.TextSpans", Message.raw(String.valueOf(line.getCount())));
+            b.set(row + " #CountField.Value", String.valueOf(line.getCount()));
             b.set(row + " #MinusButton.Text", "-");
             b.set(row + " #PlusButton.Text", "+");
             b.set(row + " #RemoveButton.Text", Message.translation(MSG + ".button.materialRemove"));
@@ -126,6 +126,14 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
             bindRow(eventBuilder, row + " #MinusButton", "AdjustCount", materialIndex, -1);
             bindRow(eventBuilder, row + " #PlusButton", "AdjustCount", materialIndex, 1);
             bindRow(eventBuilder, row + " #RemoveButton", "RemoveMaterial", materialIndex, 0);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                row + " #CountField",
+                EventData.of("Action", "SetCount")
+                    .append("MaterialIndex", String.valueOf(materialIndex))
+                    .append("@Count", row + " #CountField.Value"),
+                false
+            );
         }
     }
 
@@ -189,6 +197,24 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
             }
             return;
         }
+        if ("SetCount".equals(data.action) && data.materialIndex != null && data.count != null) {
+            String raw = data.count.trim();
+            if (raw.isEmpty()) {
+                return;
+            }
+            int index = parseInt(data.materialIndex, -1);
+            Integer parsed = parsePositiveIntOrNull(raw);
+            if (index < 0 || parsed == null) {
+                return;
+            }
+            // ValueChanged only: keep draft in sync without re-pushing the field being typed.
+            PlotCreatorMaterialsActions.setMaterialCount(session, index, parsed, () -> {
+                if (parsed <= 0) {
+                    refreshIfOpen(ref, store);
+                }
+            });
+            return;
+        }
         if ("RemoveMaterial".equals(data.action) && data.materialIndex != null) {
             int index = parseInt(data.materialIndex, -1);
             if (index >= 0) {
@@ -203,9 +229,18 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
 
     private static int parseInt(@Nonnull String value, int fallback) {
         try {
-            return Integer.parseInt(value);
+            return Integer.parseInt(value.trim());
         } catch (NumberFormatException e) {
             return fallback;
+        }
+    }
+
+    @Nullable
+    private static Integer parsePositiveIntOrNull(@Nonnull String value) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 
@@ -235,6 +270,8 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
             .add()
             .append(new KeyedCodec<>("Delta", Codec.STRING), (d, v) -> d.delta = v, d -> d.delta)
             .add()
+            .append(new KeyedCodec<>("@Count", Codec.STRING), (d, v) -> d.count = v, d -> d.count)
+            .add()
             .build();
 
         @Nullable
@@ -243,5 +280,7 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
         private String materialIndex;
         @Nullable
         private String delta;
+        @Nullable
+        private String count;
     }
 }

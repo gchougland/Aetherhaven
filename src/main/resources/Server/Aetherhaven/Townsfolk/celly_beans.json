@@ -15,5 +15,6 @@
     "guard"
   ],
   "befriendable": false,
-  "equipmentProfileId": "guard_rogue"
+  "equipmentProfileId": "guard_rogue",
+  "speechVoiceId": "high"
 }

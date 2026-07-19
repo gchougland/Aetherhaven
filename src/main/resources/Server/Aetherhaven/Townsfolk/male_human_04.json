@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_04",
-    "displayName":  "Edmund Crestfall",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_04",
-    "personalityIds":  [
-                           "cheerful",
-                           "fisher",
-                           "adventurer"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "male_human_04",
+  "displayName": "Edmund Crestfall",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_04",
+  "personalityIds": [
+    "cheerful",
+    "fisher",
+    "adventurer"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "high"
 }

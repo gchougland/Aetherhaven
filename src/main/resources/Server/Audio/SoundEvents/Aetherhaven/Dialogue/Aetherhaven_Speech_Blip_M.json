@@ -1,0 +1,16 @@
+{
+  "Layers": [
+    {
+      "Files": [
+        "Sounds/SpeechBlips/M.ogg"
+      ],
+      "StartDelay": 0,
+      "Volume": 0
+    }
+  ],
+  "Volume": -6.0,
+  "MaxInstance": 4,
+  "PreventSoundInterruption": true,
+  "SpatialBlend": 0,
+  "Parent": "SFX_Attn_Moderate"
+}

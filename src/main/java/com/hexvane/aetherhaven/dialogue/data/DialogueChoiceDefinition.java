@@ -35,6 +35,12 @@ public final class DialogueChoiceDefinition {
      */
     @Nullable
     private Boolean giftDisableWhenNotAllowed;
+    /**
+     * Optional choice row icon. Alias ({@code teleport}, {@code gift}, …) or full asset path
+     * ({@code UI/Custom/teleport.png}). When set, overrides action-based icon heuristics in the dialogue UI.
+     */
+    @Nullable
+    private String icon;
     @Nullable
     private List<JsonObject> actions;
 
@@ -79,6 +85,15 @@ public final class DialogueChoiceDefinition {
 
     public boolean isGiftDisableWhenNotAllowed() {
         return giftDisableWhenNotAllowed != null && giftDisableWhenNotAllowed;
+    }
+
+    @Nullable
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(@Nullable String icon) {
+        this.icon = icon;
     }
 
     @Nonnull

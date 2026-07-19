@@ -1,0 +1,24 @@
+$C = "../Common.ui";
+
+Group #PlotCreatorChecklistRoot {
+  LayoutMode: Top;
+  HitTestVisible: false;
+
+  Group #ChecklistPanel {
+    LayoutMode: Top;
+    HitTestVisible: false;
+    Anchor: (Top: 120, Right: 16, Width: 280);
+
+    Label #ChecklistTitle {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #f4e8c8, FontSize: 16, RenderBold: true, HorizontalAlignment: Start);
+      HitTestVisible: false;
+      Text: "";
+      Anchor: (Bottom: 8);
+    }
+
+    Group #ChecklistRows {
+      LayoutMode: Top;
+      HitTestVisible: false;
+    }
+  }
+}

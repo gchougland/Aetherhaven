@@ -12,6 +12,10 @@ import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinitionCatalog;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcReputationService;
+import com.hexvane.aetherhaven.worldnpc.WorldQuestDialogueEntry;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
@@ -179,6 +183,45 @@ public final class DialogueResolver {
             World world = store.getExternalData().getWorld();
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+            WorldNpcBinding worldBinding = store.getComponent(npcRef, WorldNpcBinding.getComponentType());
+            if (worldBinding != null && pu != null) {
+                // World NPCs always use the resident tree (no outsider visitor gate).
+                String pendingEntry = WorldNpcReputationService.peekPendingRewardEntryNode(
+                    world,
+                    plugin,
+                    pu.getUuid(),
+                    worldBinding.getPlacementId()
+                );
+                if (pendingEntry != null && !pendingEntry.isBlank()) {
+                    entry = pendingEntry.trim();
+                }
+                if ("root".equals(entry)) {
+                    WorldNpcPlayerProgress progress =
+                        AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
+                            .getOrCreatePlayerProgress(pu.getUuid());
+                    String role = worldBinding.getNpcRoleId();
+                    if (role.isEmpty()) {
+                        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+                        role = npc != null && npc.getRoleName() != null ? npc.getRoleName().trim() : "";
+                    }
+                    String qEntry = WorldQuestDialogueEntry.resolveOfferEntryNodeId(
+                        plugin.getQuestCatalog(),
+                        progress,
+                        role
+                    );
+                    if (qEntry != null && !qEntry.isBlank()) {
+                        entry = qEntry.trim();
+                    }
+                }
+                WorldNpcReputationService.applyDailyTalkBonus(
+                    world,
+                    plugin,
+                    store,
+                    pu.getUuid(),
+                    worldBinding.getPlacementId()
+                );
+                return new ResolvedDialogue(tree, entry);
+            }
             TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
             if (binding != null) {
                 var rescueTrigger = RescueVillagerTriggers.byBindingKind(binding.getKind());

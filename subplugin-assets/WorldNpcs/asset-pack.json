@@ -1,0 +1,9 @@
+{
+  "Group": "Hexvane",
+  "Name": "WorldNpcs",
+  "Version": "${plugin_version}",
+  "Description": "Aetherhaven town independent world NPCs and hub quest boards (optional subplugin asset pack).",
+  "ServerVersion": "${server_version}",
+  "IncludesAssetPack": true,
+  "DisabledByDefault": false
+}

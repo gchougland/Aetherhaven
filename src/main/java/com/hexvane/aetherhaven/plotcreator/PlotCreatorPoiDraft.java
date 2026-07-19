@@ -50,6 +50,14 @@ public final class PlotCreatorPoiDraft {
         return localX;
     }
 
+    public int getLocalY() {
+        return localY;
+    }
+
+    public int getLocalZ() {
+        return localZ;
+    }
+
     public void setLocal(int x, int y, int z) {
         this.localX = x;
         this.localY = y;

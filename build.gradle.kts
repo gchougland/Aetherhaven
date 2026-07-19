@@ -235,7 +235,7 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.test {
     useJUnitPlatform {
-        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod")
+        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc")
     }
     systemProperty(
         "java.util.logging.manager",
@@ -310,7 +310,8 @@ val subpluginAssetPackNames = listOf(
     "Quests",
     "Economy",
     "Commerce",
-    "Guild"
+    "Guild",
+    "WorldNpcs"
 )
 
 /**

@@ -1,19 +1,20 @@
 {
-    "id":  "male_human_01",
-    "displayName":  "Harlan Tidewalk",
-    "gender":  "male",
-    "race":  "human",
-    "modelAssetId":  "Male_Human_01",
-    "personalityIds":  [
-                           "adventurer",
-                           "gossipy",
-                           "dramatic"
-                       ],
-    "allowedAssignmentKinds":  [
-                                   "idle",
-                                   "tourist",
-                                   "guard"
-                               ],
-    "befriendable":  false,
-    "equipmentProfileId":  "guard_mage"
+  "id": "male_human_01",
+  "displayName": "Harlan Tidewalk",
+  "gender": "male",
+  "race": "human",
+  "modelAssetId": "Male_Human_01",
+  "personalityIds": [
+    "adventurer",
+    "gossipy",
+    "dramatic"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "high"
 }

@@ -10,9 +10,11 @@ import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.ui.PlotPlacementPage;
 import com.hexvane.aetherhaven.ui.WallPlacementPage;
+import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.Interaction;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.server.OpenCustomUIInteraction;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
+import com.hypixel.hytale.server.core.universe.world.World;
 import javax.annotation.Nonnull;
 
 public final class PlotCreatorBootstrap {
@@ -76,8 +78,31 @@ public final class PlotCreatorBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        plugin
+            .getEntityRegistry()
+            .registerEntity(
+                "AetherhavenPlotCreatorSpotMarker",
+                PlotCreatorSpotMarkerEntity.class,
+                world -> {
+                    PlotCreatorSpotMarkerEntity e = new PlotCreatorSpotMarkerEntity();
+                    if (world != null) {
+                        e.loadIntoWorld(world);
+                    }
+                    return e;
+                },
+                PlotCreatorSpotMarkerEntity.CODEC
+            );
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorBreakAllowSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PlotCreatorPreviewSystem(core));
         core.registerAetherhavenSubcommand(new AetherhavenPlotCreatorCommand());
+        plugin
+            .getEventRegistry()
+            .registerGlobal(
+                StartWorldEvent.class,
+                event -> {
+                    World world = event.getWorld();
+                    world.execute(() -> PlotCreatorSpotMarkerSpawner.purgeAllInWorld(world));
+                }
+            );
     }
 }

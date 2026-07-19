@@ -88,6 +88,10 @@ public final class PlotBuildingKindRequirements {
         if (needManagement) {
             ensureFirst(merged, new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1));
         }
+        // Guild-master stand is an inn add-on only when the build also counts as a guild hall.
+        if (kinds.contains(PlotBuildingKind.INN) && kinds.contains(PlotBuildingKind.GUILD_HALL)) {
+            merged.add(new SubstepRequirement(PlotCreatorSubstepType.GUILD_MASTER_SPAWN, 0));
+        }
         expandWorkRoles(merged, draft, plugin);
         return new ArrayList<>(merged);
     }
@@ -285,8 +289,7 @@ public final class PlotBuildingKindRequirements {
                 new SubstepRequirement(PlotCreatorSubstepType.SLEEP_POI, 2),
                 new SubstepRequirement(PlotCreatorSubstepType.EAT_POI, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.INNKEEPER_SPAWN, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.VISITOR_SPAWN, 2),
-                new SubstepRequirement(PlotCreatorSubstepType.GUILD_MASTER_SPAWN, 0)
+                new SubstepRequirement(PlotCreatorSubstepType.VISITOR_SPAWN, 2)
             );
             case TOWN_HALL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
