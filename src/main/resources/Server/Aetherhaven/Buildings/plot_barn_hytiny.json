@@ -57,12 +57,44 @@
       "blockTypeId": "Bench_Farming",
       "interactionKind": "WORK_SURFACE",
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:craft"
       ],
       "capacity": 1,
       "interactionTargetLocalX": -6,
       "interactionTargetLocalY": 3,
-      "interactionTargetLocalZ": 10
+      "interactionTargetLocalZ": 10,
+      "interactionTargetYawDegrees": -45
+    },
+    {
+      "localX": -2,
+      "localY": 2,
+      "localZ": 5,
+      "interactionKind": "WORK_SURFACE",
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "interactionTargetLocalX": -2,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 6,
+      "interactionTargetYawDegrees": 0
+    },
+    {
+      "localX": 1,
+      "localY": 2,
+      "localZ": 8,
+      "interactionKind": "WORK_SURFACE",
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "interactionTargetLocalX": 0,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 8,
+      "interactionTargetYawDegrees": 90
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn_hytiny.displayName",

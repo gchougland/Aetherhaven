@@ -48,6 +48,37 @@ public final class PlotCreatorBootstrap {
                 PlotCreatorCancelInteraction.class,
                 PlotCreatorCancelInteraction.CODEC
             );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register("AetherhavenBuildingEditorUse", BuildingEditorUseInteraction.class, BuildingEditorUseInteraction.CODEC);
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingEditorBlock",
+                BuildingEditorBlockInteraction.class,
+                BuildingEditorBlockInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingEditorStepBack",
+                BuildingEditorStepBackInteraction.class,
+                BuildingEditorStepBackInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingEditorStepForward",
+                BuildingEditorStepForwardInteraction.class,
+                BuildingEditorStepForwardInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBuildingEditorCancel",
+                BuildingEditorCancelInteraction.class,
+                BuildingEditorCancelInteraction.CODEC
+            );
         OpenCustomUIInteraction.registerCustomPageSupplier(
             core,
             PlotPlacementPage.class,

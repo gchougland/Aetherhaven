@@ -33,6 +33,11 @@ public final class PlotCreatorInteractions {
             && AetherhavenConstants.PLOT_CREATOR_STAFF_ITEM_ID.equals(stack.getItemId());
     }
 
+    /** Plot creator staff or building editor staff (wizard keybinds while a session is active). */
+    public static boolean isWizardStaff(@Nullable ItemStack stack) {
+        return isPlotCreatorStaff(stack) || BuildingEditorInteractions.isBuildingEditorStaff(stack);
+    }
+
     public static boolean hasPlotCreatorPermission(@Nonnull PlayerRef playerRef) {
         return PlotCreatorService.hasPermission(playerRef);
     }
@@ -386,20 +391,38 @@ public final class PlotCreatorInteractions {
             return;
         }
         PlotCreatorDraft d = session.getDraft();
-        String fileName = PlotCreatorPrefabExporter.prefabPathKeyFromConstructionId(d.getConstructionId());
-        if (fileName == null) {
-            playerRef.sendMessage(Message.translation(MSG + ".error.needIdentity"));
-            return;
+        String fileName;
+        Path out;
+        if (d.isBuildingEditorMode()) {
+            String locked = d.getLockedPrefabPathKey() != null ? d.getLockedPrefabPathKey() : d.getPrefabPath();
+            fileName = BuildingEditorSavePaths.prefabFileName(locked);
+            Path writeRoot = BuildingEditorSavePaths.resolveWriteRoot(
+                plugin,
+                d.getConstructionId() != null ? d.getConstructionId() : ""
+            );
+            out = BuildingEditorSavePaths.prefabFile(writeRoot, locked);
+        } else {
+            fileName = PlotCreatorPrefabExporter.prefabPathKeyFromConstructionId(d.getConstructionId());
+            if (fileName == null) {
+                playerRef.sendMessage(Message.translation(MSG + ".error.needIdentity"));
+                return;
+            }
+            out = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory()).resolve(fileName);
         }
-        Path out = CustomBuildingsPaths.prefabsDirectory(plugin.getDataDirectory()).resolve(fileName);
-        boolean ok = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, d.getEditingConstructionId() != null);
+        boolean overwrite = d.getEditingConstructionId() != null || d.isBuildingEditorMode();
+        boolean ok = PlotCreatorPrefabExporter.export(session.getWorld(), d, out, overwrite);
         if (!ok) {
             playerRef.sendMessage(Message.translation(MSG + ".error.prefabExport"));
             return;
         }
-        d.setPrefabPath(fileName);
-        d.setPrefabFileName(fileName);
-        com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(fileName);
+        if (d.isBuildingEditorMode() && d.getLockedPrefabPathKey() != null) {
+            d.setPrefabPath(d.getLockedPrefabPathKey());
+            d.setPrefabFileName(d.getLockedPrefabPathKey());
+        } else {
+            d.setPrefabPath(fileName);
+            d.setPrefabFileName(fileName);
+        }
+        com.hexvane.aetherhaven.prefab.PrefabResolveUtil.resolvePrefabBuffer(d.getPrefabPath());
         playerRef.sendMessage(Message.translation(MSG + ".hint.prefabSaved").param("file", fileName));
     }
 
@@ -413,12 +436,24 @@ public final class PlotCreatorInteractions {
         @Nonnull InteractionContext context
     ) {
         ItemStack hand = context.getHeldItem();
-        if (!isPlotCreatorStaff(hand)) {
+        if (!isWizardStaff(hand)) {
             context.getState().state = InteractionState.Failed;
             return false;
         }
         PlayerRef playerRef = commandBuffer.getComponent(ref, PlayerRef.getComponentType());
-        if (playerRef == null || !hasPlotCreatorPermission(playerRef)) {
+        if (playerRef == null) {
+            context.getState().state = InteractionState.Failed;
+            return false;
+        }
+        if (BuildingEditorInteractions.isBuildingEditorStaff(hand)) {
+            PlotCreatorSession session = PlotCreatorSessions.get(playerRef.getUuid());
+            if (session == null || !session.getDraft().isBuildingEditorMode()) {
+                context.getState().state = InteractionState.Failed;
+                return false;
+            }
+            return true;
+        }
+        if (!hasPlotCreatorPermission(playerRef)) {
             context.getState().state = InteractionState.Failed;
             return false;
         }

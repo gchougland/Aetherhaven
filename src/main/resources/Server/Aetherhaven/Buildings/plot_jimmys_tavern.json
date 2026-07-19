@@ -152,9 +152,11 @@
       "localY": 2,
       "localZ": 12,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
+      "workResidentKind": "innkeeper",
       "blockTypeId": "Editor_Empty",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": -12,
@@ -166,9 +168,11 @@
       "localY": 0,
       "localZ": 13,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
+      "workResidentKind": "innkeeper",
       "blockTypeId": "Wood_Softwood_Planks",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": -13,

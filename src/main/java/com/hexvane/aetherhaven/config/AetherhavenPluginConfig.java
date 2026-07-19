@@ -459,6 +459,17 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("BuildingEditorWriteRoot", Codec.STRING),
+            (o, v) -> o.buildingEditorWriteRoot = v != null ? v : "",
+            o -> o.buildingEditorWriteRoot
+        )
+        .documentation(
+            "Optional filesystem root for the Creative building editor staff saves (must contain Server/Aetherhaven/Buildings "
+                + "and Server/Prefabs). When blank, saves prefer a writable asset pack that already has the building file "
+                + "(e.g. Gradle build/resources/main), otherwise the plugin data directory."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("DialogueTalkDurationSeconds", Codec.FLOAT),
             (o, v) -> o.dialogueTalkDurationSeconds = v != null ? v : 3f,
             o -> o.dialogueTalkDurationSeconds
@@ -559,6 +570,9 @@ public final class AetherhavenPluginConfig {
 
     /** When true, plot creator building type picker only offers decoration and variant. */
     private boolean plotCreatorPlayerBuildingTypesOnly = true;
+
+    /** Optional root for building editor staff overwrites (blank = auto pack root / data dir). */
+    private String buildingEditorWriteRoot = "";
 
     /** Max gold coins per resident per morning tax tick (needs-scaled). */
     private int treasuryMaxGoldTaxPerVillagerPerDay = 10;
@@ -949,6 +963,11 @@ public final class AetherhavenPluginConfig {
 
     public boolean isPlotCreatorPlayerBuildingTypesOnly() {
         return plotCreatorPlayerBuildingTypesOnly;
+    }
+
+    @Nonnull
+    public String getBuildingEditorWriteRoot() {
+        return buildingEditorWriteRoot != null ? buildingEditorWriteRoot : "";
     }
 
     public int getShopSpotPlayerListingPricePercent() {
@@ -1432,6 +1451,7 @@ public final class AetherhavenPluginConfig {
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
         this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
         this.plotCreatorPlayerBuildingTypesOnly = o.plotCreatorPlayerBuildingTypesOnly;
+        this.buildingEditorWriteRoot = o.buildingEditorWriteRoot != null ? o.buildingEditorWriteRoot : "";
         this.treasuryMaxGoldTaxPerVillagerPerDay = o.treasuryMaxGoldTaxPerVillagerPerDay;
         this.geodeDropChancePerOreBreak = o.geodeDropChancePerOreBreak;
         this.geodeOreUseBlocksOresCategory = o.geodeOreUseBlocksOresCategory;

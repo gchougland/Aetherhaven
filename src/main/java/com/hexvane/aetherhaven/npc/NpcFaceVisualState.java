@@ -19,6 +19,12 @@ public final class NpcFaceVisualState implements Component<EntityStore> {
             .add()
             .append(new KeyedCodec<>("TalkUntilMs", Codec.LONG), (v, x) -> v.talkUntilMs = x != null ? x : 0L, v -> v.talkUntilMs)
             .add()
+            .append(
+                new KeyedCodec<>("LastMoodApplyEpochMs", Codec.LONG),
+                (v, x) -> v.lastMoodApplyEpochMs = x != null ? x : 0L,
+                v -> v.lastMoodApplyEpochMs
+            )
+            .add()
             .build();
 
     @Nullable
@@ -39,6 +45,7 @@ public final class NpcFaceVisualState implements Component<EntityStore> {
 
     private int lastMoodTier = -1;
     private long talkUntilMs;
+    private long lastMoodApplyEpochMs;
 
     public NpcFaceVisualState() {}
 
@@ -63,6 +70,14 @@ public final class NpcFaceVisualState implements Component<EntityStore> {
         this.talkUntilMs = talkUntilMs;
     }
 
+    public long getLastMoodApplyEpochMs() {
+        return lastMoodApplyEpochMs;
+    }
+
+    public void setLastMoodApplyEpochMs(long lastMoodApplyEpochMs) {
+        this.lastMoodApplyEpochMs = lastMoodApplyEpochMs;
+    }
+
     public boolean isTalkBurstActive(long nowMs) {
         return talkUntilMs > nowMs;
     }
@@ -73,6 +88,7 @@ public final class NpcFaceVisualState implements Component<EntityStore> {
         NpcFaceVisualState c = new NpcFaceVisualState();
         c.lastMoodTier = lastMoodTier;
         c.talkUntilMs = talkUntilMs;
+        c.lastMoodApplyEpochMs = lastMoodApplyEpochMs;
         return c;
     }
 }

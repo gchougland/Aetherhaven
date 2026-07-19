@@ -444,6 +444,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (d.getConstructionId() != null) {
             b.set("#ConstructionIdField.Value", d.getConstructionId());
         }
+        // Building editor keeps the id locked in Java; TextField has no Disabled markup property.
         if (d.getPrefabFileName() != null) {
             b.set("#PrefabNameField.Value", d.getPrefabFileName());
         }
@@ -810,9 +811,11 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             d.setDescription(data.description);
         }
         if (data.constructionId != null) {
-            d.setConstructionId(data.constructionId.trim().toLowerCase(Locale.ROOT));
-            d.setConstructionIdUserEdited(true);
-            PlotCreatorService.syncPrefabFileNameFromConstructionId(d);
+            if (!d.isBuildingEditorMode()) {
+                d.setConstructionId(data.constructionId.trim().toLowerCase(Locale.ROOT));
+                d.setConstructionIdUserEdited(true);
+                PlotCreatorService.syncPrefabFileNameFromConstructionId(d);
+            }
         }
         if (data.prefabName != null) {
             d.setPrefabFileName(data.prefabName);

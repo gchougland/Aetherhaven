@@ -12,11 +12,16 @@ import com.hexvane.aetherhaven.villager.VillagerNeeds;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PoiScoring {
     private static final float SCORE_EPS = 1e-4f;
+    /** Soft penalty so workers rotate among multiple work spots on the same plot. */
+    private static final float LAST_USED_POI_PENALTY = 14f;
+    /** Tiny random boost among equal work candidates. */
+    private static final float WORK_POI_JITTER = 2.5f;
     /** When energy/fun fall below this (0..{@link VillagerNeeds#MAX}), work shift allows break POIs town-wide. */
     private static final float NEEDS_BREAK_THRESHOLD = 40f;
     /** Start a meal trip when hunger is below half of {@link VillagerNeeds#MAX}. */
@@ -42,28 +47,22 @@ public final class PoiScoring {
     }
 
     static boolean matchesWorkPoiForBindingKind(@Nonnull PoiEntry e, @Nonnull String bindingKind) {
+        // Inn-pool / temporary visitors never claim workplace desks; only assigned residents work there.
+        if (TownVillagerBinding.isVisitorKind(bindingKind)) {
+            return false;
+        }
         String role = e.getWorkResidentKind();
         if (role != null && !role.isBlank()) {
             String want = bindingKind.trim();
             if (role.equals(want)) {
                 return isWorkPoi(e);
             }
-            // Visitor kinds match permanent desks when tagged for the permanent role.
-            if (TownVillagerBinding.KIND_VISITOR_BARD.equals(want) && TownVillagerBinding.KIND_BARD.equals(role)) {
-                return isWorkPoi(e);
-            }
-            if (TownVillagerBinding.KIND_VISITOR_GUILD_MASTER.equals(want)
-                && TownVillagerBinding.KIND_GUILD_MASTER.equals(role)) {
-                return isWorkPoi(e);
-            }
             return false;
         }
-        if (TownVillagerBinding.KIND_BARD.equals(bindingKind)
-            || TownVillagerBinding.KIND_VISITOR_BARD.equals(bindingKind)) {
+        if (TownVillagerBinding.KIND_BARD.equals(bindingKind)) {
             return isBardWorkPoi(e);
         }
-        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(bindingKind)
-            || TownVillagerBinding.KIND_VISITOR_GUILD_MASTER.equals(bindingKind)) {
+        if (TownVillagerBinding.KIND_GUILD_MASTER.equals(bindingKind)) {
             return isNonBardWorkPoi(e);
         }
         return isWorkPoi(e);
@@ -294,7 +293,8 @@ public final class PoiScoring {
             scheduleLocation,
             townHasRestaurant,
             fillingHungerSession,
-            true
+            true,
+            null
         );
     }
 
@@ -311,6 +311,35 @@ public final class PoiScoring {
         boolean fillingHungerSession,
         boolean daytime
     ) {
+        return pickBest(
+            candidates,
+            needs,
+            binding,
+            cellOccupancy,
+            npcX,
+            npcZ,
+            scheduleLocation,
+            townHasRestaurant,
+            fillingHungerSession,
+            daytime,
+            null
+        );
+    }
+
+    @Nullable
+    public static PoiEntry pickBest(
+        @Nonnull List<PoiEntry> candidates,
+        @Nonnull VillagerNeeds needs,
+        @Nonnull TownVillagerBinding binding,
+        @Nonnull Map<String, Integer> cellOccupancy,
+        double npcX,
+        double npcZ,
+        @Nullable String scheduleLocation,
+        boolean townHasRestaurant,
+        boolean fillingHungerSession,
+        boolean daytime,
+        @Nullable UUID lastUsedPoiId
+    ) {
         UUID preferredPlot = binding.getPreferredPlotId();
         boolean atWork = isWorkScheduleSegment(scheduleLocation);
         boolean atShop = isShopScheduleSegment(scheduleLocation);
@@ -326,6 +355,10 @@ public final class PoiScoring {
         double bestDistSq = Double.POSITIVE_INFINITY;
         for (PoiEntry e : candidates) {
             if (e.getTags().contains(AetherhavenConstants.POI_TAG_QUEST_BOARD)) {
+                continue;
+            }
+            // Visitors may live at the inn plot but must not use workplace desks.
+            if (TownVillagerBinding.isVisitorKind(binding.getKind()) && isWorkPoi(e)) {
                 continue;
             }
             // Night is for sleep: do not leave for non-feast eat spots after dark.
@@ -361,6 +394,12 @@ public final class PoiScoring {
                 continue;
             }
             float sc = score(needs, e, townHasRestaurant);
+            if (lastUsedPoiId != null && lastUsedPoiId.equals(e.getId())) {
+                sc -= LAST_USED_POI_PENALTY;
+            }
+            if (workOnlyShift && isWorkPoi(e)) {
+                sc += ThreadLocalRandom.current().nextFloat() * WORK_POI_JITTER;
+            }
             double distSq = distSqToPoi(e, npcX, npcZ);
             if (best == null) {
                 best = e;

@@ -770,8 +770,8 @@
       "fetchEntries": [
         {
           "id": "life_essence",
-          "rank": "C",
-          "minRank": "C",
+          "rank": "B",
+          "minRank": "B",
           "maxRank": "S",
           "weight": 8,
           "daysLimit": 5,
@@ -783,7 +783,7 @@
               "items": [
                 {
                   "itemId": "Ingredient_Life_Essence",
-                  "count": 8
+                  "count": 50
                 }
               ]
             }
@@ -816,8 +816,12 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Ingredient_Life_Essence",
-                  "count": 12
+                  "itemId": "Ingredient_Life_Essence_Concentrated",
+                  "count": 5
+                },
+                {
+                  "itemId": "Ingredient_Bar_Gold",
+                  "count": 15
                 }
               ]
             }
@@ -826,7 +830,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 190,
+              "count": 250,
               "grantTo": "player"
             },
             {
@@ -1370,7 +1374,7 @@
               "items": [
                 {
                   "itemId": "Rock_Stone",
-                  "count": 32
+                  "count": 25
                 }
               ]
             }
@@ -1765,12 +1769,20 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Rock_Stone",
-                  "count": 16
+                  "itemId": "Armor_Copper_Chest",
+                  "count": 1
                 },
                 {
-                  "itemId": "Ingredient_Charcoal",
-                  "count": 12
+                  "itemId": "Armor_Copper_Hands",
+                  "count": 1
+                },
+                {
+                  "itemId": "Armor_Copper_Head",
+                  "count": 1
+                },
+                {
+                  "itemId": "Armor_Copper_Legs",
+                  "count": 1
                 }
               ]
             }
@@ -1803,8 +1815,16 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Ore_Copper",
-                  "count": 14
+                  "itemId": "Weapon_Shield_Copper",
+                  "count": 1
+                },
+                {
+                  "itemId": "Weapon_Shortbow_Copper",
+                  "count": 1
+                },
+                {
+                  "itemId": "Weapon_Sword_Copper",
+                  "count": 1
                 }
               ]
             }
@@ -2045,7 +2065,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 260,
+              "count": 500,
               "grantTo": "player"
             },
             {
@@ -2617,16 +2637,16 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Furniture_Tavern_Chest_Large",
-                  "count": 2
-                },
-                {
                   "itemId": "Furniture_Village_Bookcase",
                   "count": 2
                 },
                 {
                   "itemId": "Furniture_Tavern_Chandelier",
                   "count": 1
+                },
+                {
+                  "itemId": "Furniture_Tavern_Chest_Small",
+                  "count": 4
                 }
               ]
             }
@@ -2671,8 +2691,8 @@
                   "count": 2
                 },
                 {
-                  "itemId": "Furniture_Tavern_Chest_Large",
-                  "count": 2
+                  "itemId": "Furniture_Tavern_Chest_Small",
+                  "count": 4
                 }
               ]
             }
@@ -3241,11 +3261,11 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Plant_Seeds_Crystal",
-                  "count": 6
+                  "itemId": "Rock_Crystal_Blue_Small",
+                  "count": 4
                 },
                 {
-                  "itemId": "Rock_Crystal_Blue_Small",
+                  "itemId": "Rock_Crystal_Red_Small",
                   "count": 4
                 }
               ]
@@ -3355,20 +3375,28 @@
               "weight": 1,
               "items": [
                 {
-                  "itemId": "Plant_Bush_Crystal",
-                  "count": 4
-                },
-                {
-                  "itemId": "Plant_Sapling_Crystal",
-                  "count": 4
-                },
-                {
                   "itemId": "Ingredient_Crystal_Cyan",
                   "count": 8
                 },
                 {
                   "itemId": "Ingredient_Crystal_Yellow",
                   "count": 8
+                },
+                {
+                  "itemId": "Rock_Gem_Sapphire",
+                  "count": 1
+                },
+                {
+                  "itemId": "Rock_Gem_Zephyr",
+                  "count": 1
+                },
+                {
+                  "itemId": "Rock_Gem_Emerald",
+                  "count": 1
+                },
+                {
+                  "itemId": "Rock_Gem_Ruby",
+                  "count": 1
                 }
               ]
             }
@@ -3466,272 +3494,6 @@
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
               "count": 18,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "basic_bombs",
-          "rank": "D",
-          "minRank": "D",
-          "maxRank": "B",
-          "weight": 11,
-          "daysLimit": 3,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.basic_bombs.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.basic_bombs.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb",
-                  "count": 8
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 28,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "fire_charges",
-          "rank": "C",
-          "minRank": "C",
-          "maxRank": "A",
-          "weight": 10,
-          "daysLimit": 4,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.fire_charges.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.fire_charges.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb_Fire",
-                  "count": 6
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 50,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "boomshrooms",
-          "rank": "B",
-          "minRank": "B",
-          "maxRank": "S",
-          "weight": 10,
-          "daysLimit": 4,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.boomshrooms.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.boomshrooms.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Plant_Crop_Mushroom_Boomshroom_Small",
-                  "count": 10
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 65,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "stun_and_pop",
-          "rank": "A",
-          "minRank": "A",
-          "maxRank": "SSS",
-          "weight": 10,
-          "daysLimit": 5,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.stun_and_pop.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.stun_and_pop.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb_Stun",
-                  "count": 4
-                },
-                {
-                  "itemId": "Weapon_Bomb_Popberry",
-                  "count": 4
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 80,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "large_fire",
-          "rank": "S",
-          "minRank": "S",
-          "maxRank": "SSS",
-          "weight": 8,
-          "daysLimit": 5,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.large_fire.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.large_fire.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb_Large_Fire",
-                  "count": 4
-                },
-                {
-                  "itemId": "Ingredient_Powder_Boom",
-                  "count": 16
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 130,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "arsenal",
-          "rank": "SS",
-          "minRank": "SS",
-          "maxRank": "SSS",
-          "weight": 6,
-          "daysLimit": 6,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.arsenal.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.arsenal.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb",
-                  "count": 6
-                },
-                {
-                  "itemId": "Weapon_Bomb_Fire",
-                  "count": 4
-                },
-                {
-                  "itemId": "Weapon_Bomb_Continuous",
-                  "count": 3
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 190,
-              "grantTo": "player"
-            },
-            {
-              "kind": "reputation",
-              "amount": 5,
-              "grantTo": "quest_giver_npc"
-            }
-          ]
-        },
-        {
-          "id": "sparkmatch_special",
-          "rank": "SSS",
-          "minRank": "SSS",
-          "maxRank": "SSS",
-          "weight": 4,
-          "daysLimit": 6,
-          "titleLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.sparkmatch_special.title",
-          "descriptionLangKey": "aetherhaven_quest_board.aetherhaven.questBoard.pyrotechnic.sparkmatch_special.description",
-          "itemSets": [
-            {
-              "weight": 1,
-              "items": [
-                {
-                  "itemId": "Weapon_Bomb_Large_Fire",
-                  "count": 4
-                },
-                {
-                  "itemId": "Ingredient_Powder_Boom",
-                  "count": 24
-                },
-                {
-                  "itemId": "Plant_Crop_Mushroom_Boomshroom_Large",
-                  "count": 6
-                },
-                {
-                  "itemId": "Plant_Seeds_Fire",
-                  "count": 8
-                }
-              ]
-            }
-          ],
-          "rewards": [
-            {
-              "kind": "item",
-              "itemId": "Aetherhaven_Gold_Coin",
-              "count": 260,
               "grantTo": "player"
             },
             {
@@ -4096,7 +3858,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 190,
+              "count": 250,
               "grantTo": "player"
             },
             {
@@ -4150,7 +3912,7 @@
             {
               "kind": "item",
               "itemId": "Aetherhaven_Gold_Coin",
-              "count": 260,
+              "count": 350,
               "grantTo": "player"
             },
             {

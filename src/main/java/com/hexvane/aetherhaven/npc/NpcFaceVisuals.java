@@ -141,6 +141,7 @@ public final class NpcFaceVisuals {
         NpcFaceVisualState state = store.getComponent(npcRef, NpcFaceVisualState.getComponentType());
         if (state != null) {
             state.setLastMoodTier(tier.ordinal());
+            state.setLastMoodApplyEpochMs(System.currentTimeMillis());
         }
     }
 
@@ -165,6 +166,7 @@ public final class NpcFaceVisuals {
             state = NpcFaceVisualState.fresh();
         }
         state.setLastMoodTier(tier.ordinal());
+        state.setLastMoodApplyEpochMs(System.currentTimeMillis());
         commandBuffer.putComponent(npcRef, NpcFaceVisualState.getComponentType(), state);
     }
 

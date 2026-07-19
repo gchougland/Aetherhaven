@@ -157,14 +157,46 @@
       "localY": 2,
       "localZ": 13,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:chop"
       ],
       "capacity": 1,
       "blockTypeId": "Rock_Stone_Cobble",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": -6,
       "interactionTargetLocalY": 2,
-      "interactionTargetLocalZ": 12
+      "interactionTargetLocalZ": 12,
+      "interactionTargetYawDegrees": 0
+    },
+    {
+      "localX": -3,
+      "localY": 2,
+      "localZ": 13,
+      "tags": [
+        "WORK",
+        "workActivity:chop"
+      ],
+      "capacity": 1,
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -3,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 12,
+      "interactionTargetYawDegrees": 0
+    },
+    {
+      "localX": -9,
+      "localY": 2,
+      "localZ": 13,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -9,
+      "interactionTargetLocalY": 2,
+      "interactionTargetLocalZ": 12,
+      "interactionTargetYawDegrees": 0
     }
   ],
   "managementBlockLocalPos": [

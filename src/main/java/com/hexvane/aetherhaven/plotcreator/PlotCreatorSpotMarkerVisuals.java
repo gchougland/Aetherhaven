@@ -35,10 +35,36 @@ public final class PlotCreatorSpotMarkerVisuals {
         @Nonnull PlotCreatorSubstepType type,
         @Nullable String workResidentKind
     ) {
+        return nameplateText(type, workResidentKind, null);
+    }
+
+    @Nonnull
+    public static String nameplateText(
+        @Nonnull PlotCreatorSubstepType type,
+        @Nullable String workResidentKind,
+        @Nullable String workActivityId
+    ) {
+        String activityLabel = PlotCreatorWorkActivityTags.activityLabel(workActivityId);
+        if (type == PlotCreatorSubstepType.FUN_POI && activityLabel != null) {
+            return activityLabel;
+        }
         if (type == PlotCreatorSubstepType.WORK_POI
-            && workResidentKind != null
-            && !workResidentKind.isBlank()) {
-            return workRoleLabel(workResidentKind);
+            || type == PlotCreatorSubstepType.BARD_WORK_POI
+            || type == PlotCreatorSubstepType.SHOP_POI
+            || type == PlotCreatorSubstepType.PLANNING_DESK_POI) {
+            if (workResidentKind != null && !workResidentKind.isBlank()) {
+                String role = workRoleLabel(workResidentKind);
+                if (activityLabel != null && !"Work spot".equals(role)) {
+                    return role;
+                }
+                if (activityLabel != null) {
+                    return activityLabel;
+                }
+                return role;
+            }
+            if (activityLabel != null) {
+                return activityLabel;
+            }
         }
         return switch (type) {
             case MANAGEMENT_BLOCK -> "Town records shelf";

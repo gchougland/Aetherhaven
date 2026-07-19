@@ -63,8 +63,8 @@ import javax.annotation.Nullable;
  * Role {@code StateTransitions} clear Status when leaving {@link AetherhavenConstants#NPC_STATE_AUTONOMY_POI} for Idle.
  */
 public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStore> {
-    /** Keep in sync with {@code Component_Instruction_Aetherhaven_Autonomy_Poi_Travel} Leash {@code Range: 1.5}. */
-    private static final double ARRIVE_HORIZONTAL_SQ = 1.5 * 1.5;
+    /** Keep in sync with {@code Component_Instruction_Aetherhaven_Autonomy_Poi_Travel} Leash {@code Range: 0.5}. */
+    private static final double ARRIVE_HORIZONTAL_SQ = 0.5 * 0.5;
     /** Tighter leash arrival for SIT/SLEEP when there is no interaction target (leash is the POI block). */
     private static final double MOUNT_ARRIVE_HORIZONTAL_SQ = 0.88 * 0.88;
     /**
@@ -367,7 +367,8 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 scheduleSeg,
                 townHasRestaurant,
                 autonomy.isFillingHunger(),
-                daytime
+                daytime,
+                autonomy.getLastUsedPoiUuid()
             );
         if (pick == null) {
             autonomy.setNextDecisionEpochMs(now + 4000L);
@@ -969,6 +970,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         float dur = PoiEffectTable.useDurationSeconds(poi, RestaurantBenefitService.restaurantStateForPoi(townRecord, poi));
         autonomy.setPhase(VillagerAutonomyState.PHASE_USE);
         autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
+        autonomy.setLastWorkHitEpochMs(0L);
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
         PoiAutonomyVisuals.beginPoiUse(ref, store, commandBuffer, poi);
@@ -1095,7 +1097,35 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                 // Keep Seek off and refresh Sit/Sleep so Idle transitions cannot leave a standing T-pose in the chair.
                 pinLeashToCurrentFeet(ref, store, commandBuffer, npc);
                 reaffirmMountedPose(ref, store, commandBuffer, npc);
+                if (poi != null
+                    && VillagerWorkVisuals.tickHit(
+                        ref,
+                        store,
+                        commandBuffer,
+                        npc,
+                        poi,
+                        binding.getKind(),
+                        now,
+                        autonomy.getLastWorkHitEpochMs()
+                    )) {
+                    autonomy.setLastWorkHitEpochMs(now);
+                    commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
+                }
                 return;
+            }
+            if (poi != null
+                && VillagerWorkVisuals.tickHit(
+                    ref,
+                    store,
+                    commandBuffer,
+                    npc,
+                    poi,
+                    binding.getKind(),
+                    now,
+                    autonomy.getLastWorkHitEpochMs()
+                )) {
+                autonomy.setLastWorkHitEpochMs(now);
+                commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             }
             applyAutonomyRoleState(ref, npc, commandBuffer);
             return;
@@ -1111,6 +1141,7 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
                     RestaurantBenefitService.restaurantStateForPoi(townRecord, poi)
                 );
             autonomy.setPhaseEndEpochMs(now + (long) (dur * 1000L));
+            autonomy.setLastWorkHitEpochMs(0L);
             commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
             if (!isNpcBlockMounted(store, commandBuffer, ref)) {
                 applyAutonomyRoleState(ref, npc, commandBuffer);
@@ -1118,8 +1149,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
             return;
         }
         boolean finishedEat = false;
+        boolean finishedWork = false;
         if (poi != null) {
             finishedEat = PoiScoring.isEatPoi(poi);
+            finishedWork = PoiScoring.isWorkPoi(poi);
+            autonomy.setLastUsedPoiUuid(poi.getId());
             PoiAutonomyVisuals.cleanupAfterPoiUse(ref, store, commandBuffer, poi);
             if (!hungerLeaveNonEat) {
                 PoiEffectTable.applyUseComplete(
@@ -1152,9 +1186,16 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         autonomy.setPathFailureReason("");
         autonomy.setTravelStuckTicks(0);
         autonomy.clearTravelWaypoints();
-        // After eating (or leaving for hunger/quest board), re-decide immediately so they can chain meals or post.
+        // After eating / work, re-decide quickly so they can chain meals or rotate work spots.
         autonomy.setNextDecisionEpochMs(
-            finishedEat || hungerLeaveNonEat || keepEating || nightAbortEat || leaveForQuestBoard ? now : now + 2500L
+            finishedEat
+                    || finishedWork
+                    || hungerLeaveNonEat
+                    || keepEating
+                    || nightAbortEat
+                    || leaveForQuestBoard
+                ? now
+                : now + 2500L
         );
         commandBuffer.putComponent(ref, VillagerAutonomyState.getComponentType(), autonomy);
         clearAutonomyRoleState(ref, npc, commandBuffer);
@@ -1185,6 +1226,11 @@ public final class VillagerAutonomySystem extends EntityTickingSystem<EntityStor
         @Nonnull PoiEntry poi,
         boolean daytime
     ) {
+        // Work surfaces finish each USE so the villager can travel to another work spot on the same plot.
+        // (Production still accrues for every USE window.)
+        if (PoiScoring.isWorkPoi(poi)) {
+            return false;
+        }
         if (schedTick == null || !PoiScoring.isWorkScheduleSegment(schedTick.getLastAppliedScheduleSegment())) {
             return false;
         }

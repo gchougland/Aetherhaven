@@ -65,6 +65,7 @@ public final class PlotCreatorDraftLoader {
         copyPos(def.getManagementBlockLocalPos(), draft::setManagementBlockLocalPos);
         copyPos(def.getTreasuryLocalPos(), draft::setTreasuryLocalPos);
         copyPos(def.getShopSafeLocalPos(), draft::setShopSafeLocalPos);
+        copyPos(def.getProductionStorageLocalPos(), draft::setProductionStorageLocalPos);
         copyPos(def.getInnkeeperSpawnLocal(), draft::setInnkeeperSpawnLocal);
         copyPos(def.getGuildMasterSpawnLocal(), draft::setGuildMasterSpawnLocal);
         draft.getVisitorSpawnLocals().clear();
@@ -89,6 +90,7 @@ public final class PlotCreatorDraftLoader {
         }
         draft.setCountsAsConstructionIds(def.getCountsAsConstructionIds());
         draft.setKinds(inferKinds(def));
+        stampWorkResidentKinds(draft);
         seedSelectedSpotsFromDefinition(draft, def);
     }
 
@@ -123,6 +125,37 @@ public final class PlotCreatorDraftLoader {
         }
         if (!draft.getSelectedSpots().isEmpty()) {
             draft.setImportantSpotsConfirmed(true);
+        }
+    }
+
+    /**
+     * Shipped WORK POIs often omit {@code workResidentKind}. Stamp the workplace role so markers, checklist counts,
+     and the miner (etc.) substep treat them as already placed.
+     */
+    private static void stampWorkResidentKinds(@Nonnull PlotCreatorDraft draft) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        List<String> roles = PlotBuildingKindRequirements.workplaceRolesForDraft(draft, plugin);
+        String primary =
+            roles.stream()
+                .filter(r -> r != null && !r.isBlank() && !com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(r))
+                .findFirst()
+                .orElse(roles.isEmpty() ? null : roles.get(0));
+        if (primary == null || primary.isBlank()) {
+            return;
+        }
+        for (PlotCreatorPoiDraft poi : draft.getPois()) {
+            if (!poi.getTags().contains("WORK")) {
+                continue;
+            }
+            if (poi.getTags().contains(AetherhavenConstants.POI_TAG_BARD)) {
+                if (poi.getWorkResidentKind() == null) {
+                    poi.setWorkResidentKind(com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD);
+                }
+                continue;
+            }
+            if (poi.getWorkResidentKind() == null || poi.getWorkResidentKind().isBlank()) {
+                poi.setWorkResidentKind(primary);
+            }
         }
     }
 

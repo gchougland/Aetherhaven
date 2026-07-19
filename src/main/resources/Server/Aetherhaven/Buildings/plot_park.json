@@ -44,7 +44,8 @@
       "interactionKind": "SIT",
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "interactionTargetLocalX": -6,
@@ -59,7 +60,8 @@
       "interactionKind": "SIT",
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "interactionTargetLocalX": 7,

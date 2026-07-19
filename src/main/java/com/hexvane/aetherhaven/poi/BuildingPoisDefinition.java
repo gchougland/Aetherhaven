@@ -68,6 +68,19 @@ public final class BuildingPoisDefinition {
         @SerializedName("workResidentKind")
         private String workResidentKind;
 
+        /**
+         * Optional facing in prefab-local degrees (yaw around Y). Added to the building's paste yaw at registration so
+         * the villager faces the work surface correctly when {@link #interactionTarget} alone is ambiguous.
+         */
+        @Nullable
+        @SerializedName("interactionTargetYawDegrees")
+        private Float interactionTargetYawDegrees;
+
+        /** Optional equipment applied when entering this POI (overrides villager work profile). */
+        @Nullable
+        @SerializedName("equipmentProfileId")
+        private String equipmentProfileId;
+
         public int getLocalX() {
             return localX;
         }
@@ -126,6 +139,16 @@ public final class BuildingPoisDefinition {
         @Nullable
         public String getWorkResidentKind() {
             return workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
+        }
+
+        @Nullable
+        public Float getInteractionTargetYawDegrees() {
+            return interactionTargetYawDegrees;
+        }
+
+        @Nullable
+        public String getEquipmentProfileId() {
+            return equipmentProfileId != null && !equipmentProfileId.isBlank() ? equipmentProfileId.trim() : null;
         }
     }
 }

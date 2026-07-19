@@ -54,9 +54,15 @@ public final class PlotCreatorValidator {
         if (idErr != null) {
             return idErr;
         }
-        var prefabFile = CustomBuildingsPaths.resolvePrefabFile(plugin.getDataDirectory(), draft.getPrefabPath());
-        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
-            return "prefab_missing";
+        if (draft.isBuildingEditorMode()) {
+            if (!BuildingEditorSavePaths.prefabExistsForEditor(plugin, draft)) {
+                return "prefab_missing";
+            }
+        } else {
+            var prefabFile = CustomBuildingsPaths.resolvePrefabFile(plugin.getDataDirectory(), draft.getPrefabPath());
+            if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+                return "prefab_missing";
+            }
         }
         List<PlotBuildingKindRequirements.SubstepRequirement> steps =
             PlotBuildingKindRequirements.forDraft(draft, plugin);
@@ -116,10 +122,15 @@ public final class PlotCreatorValidator {
                     yield false;
                 }
                 String want = req.workResidentKind();
+                String have = p.getWorkResidentKind();
                 if (want == null || want.isBlank()) {
-                    yield p.getWorkResidentKind() == null;
+                    yield have == null || have.isBlank();
                 }
-                yield Objects.equals(want, p.getWorkResidentKind());
+                // Untyped WORK spots (common in shipped buildings) match any role requirement.
+                if (have == null || have.isBlank()) {
+                    yield true;
+                }
+                yield Objects.equals(want, have);
             }
             case BARD_WORK_POI -> p.getTags().contains(AetherhavenConstants.POI_TAG_BARD)
                 || com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD.equals(p.getWorkResidentKind());

@@ -312,9 +312,11 @@
       "localY": 1,
       "localZ": -10,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
+      "workResidentKind": "innkeeper",
       "blockTypeId": "Wood_Banyan_Trunk",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 24,

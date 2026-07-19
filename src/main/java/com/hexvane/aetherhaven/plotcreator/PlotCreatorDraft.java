@@ -118,6 +118,14 @@ public final class PlotCreatorDraft {
     private String editingConstructionId;
     /** When true, display name changes no longer auto-update the construction id. */
     private boolean constructionIdUserEdited;
+    /** Creative building-editor staff session (edit existing catalog buildings, merge-save). */
+    private boolean buildingEditorMode;
+    /** Snapshot of the original building JSON for merge-save (keys not managed by the wizard are kept). */
+    @Nonnull
+    private final java.util.Map<String, Object> originalBuildingJsonSnapshot = new java.util.LinkedHashMap<>();
+    /** Locked prefab file name for editor saves (do not rename to construction id). */
+    @Nullable
+    private String lockedPrefabPathKey;
 
     public boolean isConstructionIdUserEdited() {
         return constructionIdUserEdited;
@@ -595,6 +603,33 @@ public final class PlotCreatorDraft {
 
     public void setEditingConstructionId(@Nullable String editingConstructionId) {
         this.editingConstructionId = editingConstructionId;
+    }
+
+    public boolean isBuildingEditorMode() {
+        return buildingEditorMode;
+    }
+
+    public void setBuildingEditorMode(boolean buildingEditorMode) {
+        this.buildingEditorMode = buildingEditorMode;
+    }
+
+    @Nonnull
+    public java.util.Map<String, Object> getOriginalBuildingJsonSnapshot() {
+        return originalBuildingJsonSnapshot;
+    }
+
+    public void setOriginalBuildingJsonSnapshot(@Nonnull java.util.Map<String, Object> snapshot) {
+        originalBuildingJsonSnapshot.clear();
+        originalBuildingJsonSnapshot.putAll(snapshot);
+    }
+
+    @Nullable
+    public String getLockedPrefabPathKey() {
+        return lockedPrefabPathKey;
+    }
+
+    public void setLockedPrefabPathKey(@Nullable String lockedPrefabPathKey) {
+        this.lockedPrefabPathKey = lockedPrefabPathKey;
     }
 
     @Nonnull

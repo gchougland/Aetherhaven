@@ -4,6 +4,7 @@
   "residentTreeId": "aetherhaven_blacksmith",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_blacksmith_shop",
+  "workEquipmentProfileId": "work_blacksmith",
   "displayName": "Garren Vale",
   "portraitIcon": "Aetherhaven_Blacksmith.png",
   "speechVoiceId": "low",

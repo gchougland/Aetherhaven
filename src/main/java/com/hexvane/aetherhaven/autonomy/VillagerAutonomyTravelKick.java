@@ -129,7 +129,8 @@ public final class VillagerAutonomyTravelKick {
                             scheduleSeg,
                             false,
                             filling,
-                            daytime
+                            daytime,
+                            autonomy.getLastUsedPoiUuid()
                         );
                     if (pick == null) {
                         return true;

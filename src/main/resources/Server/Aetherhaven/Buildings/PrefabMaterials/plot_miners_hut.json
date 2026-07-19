@@ -3,10 +3,6 @@
   "prefabPath": "MinersHut.prefab.json",
   "materials": [
     {
-      "resourceTypeId": "Soils",
-      "count": 221
-    },
-    {
       "itemId": "Wood_Softwood_Roof",
       "count": 56
     },
@@ -27,8 +23,12 @@
       "count": 30
     },
     {
+      "resourceTypeId": "Soils",
+      "count": 28
+    },
+    {
       "itemId": "Rock_Stone",
-      "count": 27
+      "count": 26
     },
     {
       "itemId": "Wood_Softwood_Planks",

@@ -4,6 +4,7 @@
   "residentTreeId": "aetherhaven_farmer",
   "visitorTreeId": "aetherhaven_visitor_generic",
   "workConstructionId": "plot_farm",
+  "workEquipmentProfileId": "work_farmer",
   "displayName": "Irienne Mossmark",
   "portraitIcon": "Aetherhaven_Farmer.png",
   "uiSortOrder": 4,

@@ -60,21 +60,25 @@ public final class PlotCreatorImportantSpotsPage
         if (!templateAppended) {
             commandBuilder.append("Aetherhaven/PlotCreatorImportantSpotsPage.ui");
             templateAppended = true;
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#ConfirmButton",
-                EventData.of("Action", "Confirm"),
-                false
-            );
-            eventBuilder.addEventBinding(
-                CustomUIEventBindingType.Activating,
-                "#CloseButton",
-                EventData.of("Action", "Close"),
-                false
-            );
         }
+        bindFooterButtons(eventBuilder);
         ensureWorking();
         applyContent(commandBuilder, eventBuilder);
+    }
+
+    private void bindFooterButtons(@Nonnull UIEventBuilder eventBuilder) {
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#ConfirmButton",
+            EventData.of("Action", "Confirm"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.Activating,
+            "#CloseButton",
+            EventData.of("Action", "Close"),
+            false
+        );
     }
 
     private void ensureWorking() {
@@ -142,6 +146,10 @@ public final class PlotCreatorImportantSpotsPage
                 continue;
             }
             if (type == PlotCreatorSubstepType.BARD_WORK_POI) {
+                continue;
+            }
+            // Older drafts could mark a planning desk POI; town halls now use elder work instead.
+            if (type == PlotCreatorSubstepType.PLANNING_DESK_POI) {
                 continue;
             }
             if (type == PlotCreatorSubstepType.GUILD_MASTER_SPAWN
@@ -242,6 +250,7 @@ public final class PlotCreatorImportantSpotsPage
         }
         UICommandBuilder b = new UICommandBuilder();
         UIEventBuilder events = new UIEventBuilder();
+        bindFooterButtons(events);
         applyContent(b, events);
         sendUpdate(b, events, false);
     }

@@ -128,14 +128,46 @@
       "localY": 5,
       "localZ": -21,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:craft"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Crude_Stool",
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 15,
       "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -22
+      "interactionTargetLocalZ": -22,
+      "interactionTargetYawDegrees": 0
+    },
+    {
+      "localX": 12,
+      "localY": 5,
+      "localZ": -18,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 12,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -19,
+      "interactionTargetYawDegrees": 0
+    },
+    {
+      "localX": 18,
+      "localY": 5,
+      "localZ": -18,
+      "tags": [
+        "WORK",
+        "workActivity:mine"
+      ],
+      "capacity": 1,
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 17,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -18,
+      "interactionTargetYawDegrees": 90
     }
   ],
   "managementBlockLocalPos": [

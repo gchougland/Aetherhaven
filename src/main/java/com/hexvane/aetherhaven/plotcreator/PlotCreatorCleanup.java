@@ -1,5 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
+import com.hexvane.aetherhaven.placement.PrefabFootprintClearUtil;
+import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
 import com.hypixel.hytale.component.Ref;
@@ -31,11 +33,35 @@ public final class PlotCreatorCleanup {
         }
         World world = session.getWorld();
         PlotCreatorDraft draft = session.getDraft();
-        for (Vector3i pos : draft.getPlacedSpecialBlocks()) {
-            breakBlock(world, pos);
+        if (draft.isBuildingEditorMode()) {
+            clearBuildingEditorPaste(world, draft);
+        } else {
+            for (Vector3i pos : draft.getPlacedSpecialBlocks()) {
+                breakBlock(world, pos);
+            }
         }
         draft.getPlacedSpecialBlocks().clear();
         session.setMaterialsContainer(null);
+    }
+
+    /** Clears the temporary building-editor paste (full footprint) on the world thread. */
+    private static void clearBuildingEditorPaste(@Nonnull World world, @Nonnull PlotCreatorDraft draft) {
+        Vector3i min = draft.boundsMin();
+        Vector3i max = draft.boundsMax();
+        if (min == null || max == null) {
+            for (Vector3i pos : draft.getPlacedSpecialBlocks()) {
+                breakBlock(world, pos);
+            }
+            return;
+        }
+        PlotFootprintRecord fp = new PlotFootprintRecord(min.x, min.y, min.z, max.x, max.y, max.z);
+        world.execute(
+            () -> {
+                Store<EntityStore> entityStore = world.getEntityStore().getStore();
+                PrefabFootprintClearUtil.removeEntitiesInFootprint(entityStore, fp);
+                PrefabFootprintClearUtil.clearFootprint(world, fp);
+            }
+        );
     }
 
     private static void returnDepositChestIfOpen(

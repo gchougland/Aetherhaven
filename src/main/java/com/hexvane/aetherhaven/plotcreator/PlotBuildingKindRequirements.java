@@ -294,7 +294,8 @@ public final class PlotBuildingKindRequirements {
             case TOWN_HALL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),
                 new SubstepRequirement(PlotCreatorSubstepType.TREASURY_BLOCK, 1),
-                new SubstepRequirement(PlotCreatorSubstepType.PLANNING_DESK_POI, 1)
+                // Elder works here (often the chair at the planning desk); desk item is granted for that substep.
+                new SubstepRequirement(PlotCreatorSubstepType.WORK_POI, 1, TownVillagerBinding.KIND_ELDER)
             );
             case GUILD_HALL -> List.of(
                 new SubstepRequirement(PlotCreatorSubstepType.MANAGEMENT_BLOCK, 1),

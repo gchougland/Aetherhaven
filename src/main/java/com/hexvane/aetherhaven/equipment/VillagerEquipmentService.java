@@ -77,14 +77,21 @@ public final class VillagerEquipmentService {
         @Nullable CommandBuffer<EntityStore> commandBuffer,
         @Nonnull EquipmentProfileDefinition def
     ) {
-        if (def.getHotbarSlots().isEmpty()) {
-            return;
-        }
         InventoryComponent.Hotbar hb = store.getComponent(npcRef, InventoryComponent.Hotbar.getComponentType());
         if (hb == null) {
             return;
         }
         try {
+            if (def.getHotbarSlots().isEmpty()) {
+                short capacity = hb.getInventory().getCapacity();
+                for (short s = 0; s < capacity; s++) {
+                    hb.getInventory().setItemStackForSlot(s, ItemStack.EMPTY);
+                }
+                hb.setActiveSlot((byte) 0, npcRef, commandBuffer);
+                markHotbarEquipmentDirty(hb, (byte) 0, npcRef, commandBuffer);
+                putHotbar(npcRef, store, commandBuffer, hb);
+                return;
+            }
             byte active = 0;
             for (EquipmentProfileDefinition.HotbarSlot slot : def.getHotbarSlots()) {
                 String itemId = slot.getItemId();

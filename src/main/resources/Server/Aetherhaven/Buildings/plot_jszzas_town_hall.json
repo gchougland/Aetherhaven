@@ -341,11 +341,13 @@
       "localY": 2,
       "localZ": -12,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Aetherhaven_Town_Planning_Desk",
       "interactionKind": "WORK_SURFACE",
+      "workResidentKind": "elder",
       "interactionTargetLocalX": 21,
       "interactionTargetLocalY": 2,
       "interactionTargetLocalZ": -12

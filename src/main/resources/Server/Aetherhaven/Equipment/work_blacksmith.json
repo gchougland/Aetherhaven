@@ -1,0 +1,8 @@
+{
+  "id": "work_blacksmith",
+  "displayName": "Blacksmith tools",
+  "hireGoldCost": 0,
+  "hotbar": [
+    { "slot": 0, "itemId": "Tool_Hammer_Iron" }
+  ]
+}

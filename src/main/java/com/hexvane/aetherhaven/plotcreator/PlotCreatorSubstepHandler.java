@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.shopspot.ShopSpotBlock;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockUtil;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlock;
 import com.hexvane.aetherhaven.tourist.TouristPortalBlockUtil;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -219,6 +220,14 @@ public final class PlotCreatorSubstepHandler {
                     playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.anchorNotCorner"));
                     yield true;
                 }
+                Vector3i previousAnchor = draft.getPlotAnchor();
+                if (draft.isBuildingEditorMode() && previousAnchor != null) {
+                    BuildingEditorSessionStarter.rebaseLocalsForNewPlotSign(
+                        draft,
+                        previousAnchor,
+                        targetBlock
+                    );
+                }
                 draft.setPlotAnchor(targetBlock);
                 draft.setPrefabOriginMin(new Vector3i(draft.boundsMin()));
                 PlotCreatorLocalCoords.recomputeAnchorOffset(draft);
@@ -391,7 +400,9 @@ public final class PlotCreatorSubstepHandler {
                 blockId,
                 local,
                 req,
-                playerRef
+                playerRef,
+                playerEntityRef,
+                store
             );
         };
     }
@@ -424,7 +435,9 @@ public final class PlotCreatorSubstepHandler {
         @Nullable String blockId,
         @Nonnull int[] local,
         @Nonnull PlotBuildingKindRequirements.SubstepRequirement req,
-        @Nonnull PlayerRef playerRef
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> playerEntityRef,
+        @Nonnull Store<EntityStore> store
     ) {
         PlotCreatorSubstepType type = req.type();
         if (type == PlotCreatorSubstepType.QUEST_BOARD_POI
@@ -433,12 +446,31 @@ public final class PlotCreatorSubstepHandler {
             playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.wrongBlock"));
             return true;
         }
+        for (PlotCreatorPoiDraft existing : draft.getPois()) {
+            if (existing.getLocalX() == local[0]
+                && existing.getLocalY() == local[1]
+                && existing.getLocalZ() == local[2]
+                && PlotCreatorValidator.matchesPoiRequirement(existing, req)) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiAlreadyRecorded")
+                );
+                return true;
+            }
+        }
         PlotCreatorPoiDraft poi = new PlotCreatorPoiDraft();
         poi.setLocal(local[0], local[1], local[2]);
         poi.setBlockTypeId(blockId);
         poi.setCapacity(1);
         applyPoiDefaults(poi, type, draft, req.workResidentKind());
-        PlotCreatorPoiInteractionTarget.applyFromBlockFacing(world, targetBlock, local, poi);
+        PlotCreatorPoiInteractionTarget.applyFromPlayerFacing(
+            draft,
+            playerEntityRef,
+            store,
+            world,
+            targetBlock,
+            local,
+            poi
+        );
         draft.getPois().add(poi);
         playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.hint.poiRecorded"));
         return true;
@@ -460,12 +492,14 @@ public final class PlotCreatorSubstepHandler {
                         poi.getTags().add(AetherhavenConstants.POI_TAG_BARD);
                     }
                 }
+                PlotCreatorWorkActivityTags.applyDefault(poi, type, workResidentKind);
             }
             case BARD_WORK_POI -> {
                 poi.getTags().add("WORK");
                 poi.getTags().add(AetherhavenConstants.POI_TAG_BARD);
                 poi.setInteractionKind("WORK_SURFACE");
                 poi.setWorkResidentKind(com.hexvane.aetherhaven.villager.TownVillagerBinding.KIND_BARD);
+                PlotCreatorWorkActivityTags.applyDefault(poi, type, TownVillagerBinding.KIND_BARD);
             }
             case QUEST_BOARD_POI -> {
                 poi.getTags().add(AetherhavenConstants.POI_TAG_QUEST_BOARD);
@@ -488,11 +522,13 @@ public final class PlotCreatorSubstepHandler {
                 poi.getTags().add("FUN");
                 poi.getTags().add("SIT");
                 poi.setInteractionKind("SIT");
+                PlotCreatorWorkActivityTags.applyDefault(poi, type, null);
             }
             case SHOP_POI -> {
                 poi.getTags().add("WORK");
                 poi.getTags().add("SHOP");
                 poi.setInteractionKind("WORK_SURFACE");
+                PlotCreatorWorkActivityTags.applyDefault(poi, type, null);
             }
             case TOURIST_VISIT_POI -> {
                 poi.getTags().add(AetherhavenConstants.POI_TAG_TOURIST_VISIT);
@@ -502,6 +538,7 @@ public final class PlotCreatorSubstepHandler {
                 poi.getTags().add("WORK");
                 poi.setInteractionKind("WORK_SURFACE");
                 poi.setBlockTypeId("Aetherhaven_Town_Planning_Desk");
+                PlotCreatorWorkActivityTags.applyDefault(poi, type, null);
             }
             default -> {}
         }

@@ -162,6 +162,15 @@ public final class PoiExtractor {
             ity = standY != Integer.MIN_VALUE ? standY + 0.02 : twy + 0.5;
         }
 
+        Float yawRadians = null;
+        Float localYawDeg = row.getInteractionTargetYawDegrees();
+        if (localYawDeg != null) {
+            double worldDeg = localYawDeg + prefabYaw.getDegrees();
+            // Normalize to [-180, 180) then convert; matches Transform body yaw units.
+            worldDeg = ((worldDeg + 180.0) % 360.0 + 360.0) % 360.0 - 180.0;
+            yawRadians = (float) Math.toRadians(worldDeg);
+        }
+
         if (itx != null && ity != null && itz != null) {
             return new PoiEntry(
                 UUID.randomUUID(),
@@ -176,11 +185,11 @@ public final class PoiExtractor {
                 row.getInteractionKind(),
                 row.getInteractionKind() == PoiInteractionKind.SIT
                     || row.getInteractionKind() == PoiInteractionKind.SLEEP,
-                null,
+                row.getEquipmentProfileId(),
                 itx,
                 ity,
                 itz,
-                null,
+                yawRadians,
                 row.getWorkResidentKind()
             );
         }
@@ -197,11 +206,11 @@ public final class PoiExtractor {
             row.getInteractionKind(),
             row.getInteractionKind() == PoiInteractionKind.SIT
                 || row.getInteractionKind() == PoiInteractionKind.SLEEP,
+            row.getEquipmentProfileId(),
             null,
             null,
             null,
-            null,
-            null,
+            yawRadians,
             row.getWorkResidentKind()
         );
     }

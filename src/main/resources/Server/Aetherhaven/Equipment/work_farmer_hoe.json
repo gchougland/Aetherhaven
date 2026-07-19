@@ -1,0 +1,8 @@
+{
+  "id": "work_farmer_hoe",
+  "displayName": "Farmer hoe",
+  "hireGoldCost": 0,
+  "hotbar": [
+    { "slot": 0, "itemId": "Tool_Hoe_Iron" }
+  ]
+}

@@ -4,22 +4,22 @@
   "description": "A forge and counter for Garren to work metal in town.",
   "touristDestination": true,
   "prefabPath": "Blacksmith_Shop.prefab.json",
-  "selfBuildGameDays": 1,
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Blacksmith_Shop",
   "plotAnchorOffset": [
-    5,
     0,
-    5
+    1,
+    0
   ],
   "managementBlockLocalPos": [
-    2,
-    1,
-    5
+    7,
+    0,
+    13
   ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 2,
-  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 2.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "treasuryGoldCoinCost": 58,
   "materials": [
     {
@@ -41,20 +41,26 @@
   ],
   "pois": [
     {
-      "localX": 2,
-      "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Bench_Weapon",
-      "interactionKind": "WORK_SURFACE",
+      "localX": 8,
+      "localY": 0,
+      "localZ": 8,
       "tags": [
-        "WORK"
+        "WORK",
+        "workActivity:smith"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 2,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "blockTypeId": "Bench_Weapon",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 8,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 7,
+      "workResidentKind": "blacksmith",
+      "interactionTargetYawDegrees": -162.99109
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_blacksmith_shop.displayName",
-  "styleId": "core"
+  "styleId": "core",
+  "tags": [
+    "work"
+  ]
 }

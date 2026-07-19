@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
@@ -37,6 +38,13 @@ public final class PlotCreatorSubstepGrants {
             case SHOP_SAFE_BLOCK -> List.of(new ItemStack(AetherhavenConstants.SHOP_SAFE_ITEM_ID, qty));
             case INN_BELL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.INN_BELL_BLOCK_TYPE_ID, qty));
             case PLANNING_DESK_POI -> List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
+            case WORK_POI -> {
+                // Town hall elder work: give the planning desk to place in the build; the work spot can be their chair.
+                if (TownVillagerBinding.KIND_ELDER.equals(requirement.workResidentKind())) {
+                    yield List.of(new ItemStack("Aetherhaven_Town_Planning_Desk", qty));
+                }
+                yield List.of();
+            }
             case SHOP_SPOT -> List.of(new ItemStack(AetherhavenConstants.SHOP_SPOT_ITEM_ID, qty));
             case TOURIST_PORTAL_BLOCK -> List.of(new ItemStack(AetherhavenConstants.TOURIST_PORTAL_ITEM_ID, qty));
             case QUEST_BOARD_POI -> List.of(new ItemStack(AetherhavenConstants.QUEST_BOARD_ITEM_ID, qty));

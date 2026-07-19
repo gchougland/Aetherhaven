@@ -3,27 +3,27 @@
   "displayName": "Barn",
   "description": "A barn with pens, a farming bench, and storage for Thalen to bring hides, meat, eggs, and wool back to town.",
   "prefabPath": "Barn.prefab.json",
-  "selfBuildGameDays": 1,
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Barn",
   "plotAnchorOffset": [
-    9,
     0,
-    9
-  ],
-  "managementBlockLocalPos": [
-    4,
-    2,
-    0
-  ],
-  "productionStorageLocalPos": [
-    -3,
     1,
     0
   ],
+  "managementBlockLocalPos": [
+    10,
+    1,
+    8
+  ],
+  "productionStorageLocalPos": [
+    3,
+    0,
+    8
+  ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 3,
-  "autonomyNavRoofExclusionYBelowMaxY": 6,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 3.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 6.0,
   "treasuryGoldCoinCost": 56,
   "materials": [
     {
@@ -45,18 +45,104 @@
   ],
   "pois": [
     {
-      "localX": 1,
-      "localY": 1,
-      "localZ": -5,
-      "blockTypeId": "Bench_Farming",
-      "interactionKind": "WORK_SURFACE",
+      "localX": 7,
+      "localY": 0,
+      "localZ": 3,
       "tags": [
+        "workActivity:craft",
         "WORK"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": 1,
-      "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -4
+      "blockTypeId": "Bench_Farming",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 4,
+      "workResidentKind": "rancher"
+    },
+    {
+      "localX": 12,
+      "localY": 0,
+      "localZ": 9,
+      "tags": [
+        "workActivity:craft",
+        "WORK"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Crate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 9,
+      "workResidentKind": "rancher"
+    },
+    {
+      "localX": 5,
+      "localY": 0,
+      "localZ": 12,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 12,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": 49.572754
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 5,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": -86.81506
+    },
+    {
+      "localX": 8,
+      "localY": 0,
+      "localZ": 12,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 7,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 12,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": -129.20447
+    },
+    {
+      "localX": 5,
+      "localY": 0,
+      "localZ": 5,
+      "tags": [
+        "WORK",
+        "workActivity:craft"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Wood_Hardwood_Fence_Gate",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 6,
+      "interactionTargetLocalY": 0,
+      "interactionTargetLocalZ": 5,
+      "workResidentKind": "rancher",
+      "interactionTargetYawDegrees": 64.95972
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_barn.displayName",

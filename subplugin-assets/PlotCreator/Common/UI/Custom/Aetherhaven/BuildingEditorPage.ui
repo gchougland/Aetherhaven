@@ -1,0 +1,66 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+@IdStyle = (
+  FontSize: 11,
+  TextColor: #7a8e9c,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Middle;
+
+  $C.@DecoratedContainer {
+    Anchor: (Width: 560, Height: 620);
+
+    #Title {
+      Group {
+        LayoutMode: Left;
+        Label #EditorTitleText {
+          Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+          Padding: (Horizontal: 19);
+          Text: "";
+          FlexWeight: 1;
+        }
+        $C.@HeaderSearch {}
+      }
+    }
+
+    #Content {
+      LayoutMode: Top;
+      Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+      Label #StepHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
+      Group #BuildingListScroll {
+        LayoutMode: TopScrolling;
+        ScrollbarStyle: $C.@DefaultScrollbarStyle;
+        FlexWeight: 1;
+        Anchor: (Bottom: 12);
+
+        Group #BuildingRows {
+          LayoutMode: Top;
+        }
+      }
+
+      Group #ButtonRow {
+        LayoutMode: Left;
+        Anchor: (Top: 8);
+
+        $C.@CancelTextButton #CloseButton {
+          Anchor: (Height: 40, Width: 110);
+          Text: "";
+        }
+      }
+    }
+  }
+}

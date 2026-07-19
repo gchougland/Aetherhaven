@@ -45,7 +45,7 @@ public final class PlotCreatorSpotMarkerSpawner {
         @Nonnull UUID ownerPlayerEntityUuid,
         @Nonnull PlotCreatorSpotMarkerCollector.DesiredSpotMarker desired
     ) {
-        Model model = modelForTexture(desired.texturePath());
+        Model model = modelForTexture(desired.texturePath(), MARKER_SCALE);
         if (model == null) {
             return null;
         }
@@ -55,7 +55,8 @@ public final class PlotCreatorSpotMarkerSpawner {
         }
         ent.loadIntoWorld(world);
         ent.setOwnerPlayerUuid(ownerPlayerEntityUuid);
-        Rotation3f rot = new Rotation3f(0.0F, 0.0F, 0.0F);
+        float yaw = desired.facingYawWorldRadians() != null ? desired.facingYawWorldRadians() : 0.0F;
+        Rotation3f rot = new Rotation3f(0.0F, yaw, 0.0F);
         ent.unloadFromWorld();
         Holder<EntityStore> holder = ent.toHolder();
         Vector3d pos = new Vector3d(desired.x() + 0.5, desired.y() + 0.5, desired.z() + 0.5);
@@ -63,11 +64,14 @@ public final class PlotCreatorSpotMarkerSpawner {
         holder.ensureComponent(UUIDComponent.getComponentType());
         holder.addComponent(EntityStore.REGISTRY.getNonSerializedComponentType(), NonSerialized.get());
         holder.addComponent(Intangible.getComponentType(), Intangible.INSTANCE);
-        holder.putComponent(Nameplate.getComponentType(), new Nameplate(desired.nameplateText()));
-        holder.putComponent(
-            DisplayNameComponent.getComponentType(),
-            new DisplayNameComponent(Message.raw(desired.nameplateText()))
-        );
+        String plate = desired.nameplateText();
+        if (plate != null && !plate.isBlank()) {
+            holder.putComponent(Nameplate.getComponentType(), new Nameplate(plate));
+            holder.putComponent(
+                DisplayNameComponent.getComponentType(),
+                new DisplayNameComponent(Message.raw(plate))
+            );
+        }
         Store<EntityStore> wstore = world.getEntityStore().getStore();
         wstore.addEntity(holder, AddReason.SPAWN);
         Ref<EntityStore> markerRef = ent.getReference();
@@ -86,6 +90,11 @@ public final class PlotCreatorSpotMarkerSpawner {
 
     @Nullable
     public static Model modelForTexture(@Nullable String texturePath) {
+        return modelForTexture(texturePath, MARKER_SCALE);
+    }
+
+    @Nullable
+    public static Model modelForTexture(@Nullable String texturePath, float scale) {
         ModelAsset asset = ModelAsset.getAssetMap().getAsset(AetherhavenConstants.MODEL_ASSET_BUILDING_MARKER);
         if (asset == null) {
             return null;
@@ -95,7 +104,7 @@ public final class PlotCreatorSpotMarkerSpawner {
             AssemblyMarkerTextureResolver.entitySafeTexture(
                 texturePath != null && !texturePath.isBlank() ? texturePath.trim() : template.getTexture()
             );
-        return copyWithTextureAndScale(template, tex, MARKER_SCALE);
+        return copyWithTextureAndScale(template, tex, scale);
     }
 
     @Nonnull

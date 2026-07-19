@@ -1,0 +1,60 @@
+$C = "../Common.ui";
+
+Group #BuildingEditorRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 4);
+
+  Group #SelectShell {
+    LayoutMode: Full;
+
+    Group #SelectHilite {
+      Anchor: (Full: 0);
+      LayoutMode: Full;
+      Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #3d4a5c(0.55));
+      Visible: false;
+      HitTestVisible: false;
+    }
+
+    Button #Select {
+      LayoutMode: Left;
+      Padding: (Horizontal: 8, Vertical: 6);
+      Style: (
+        Default: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.75))),
+        Hovered: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #2a3344(0.92))),
+        Pressed: (Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #141820(0.95)))
+      );
+
+      Group #IconBox {
+        LayoutMode: Full;
+        Anchor: (Width: 48, Height: 48, Right: 10);
+        Background: #1a2530;
+        Padding: 2;
+        HitTestVisible: false;
+
+        AssetImage #BuildingIcon {
+          Anchor: (Full: 0);
+          FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+          HitTestVisible: false;
+        }
+      }
+
+      Group #BuildingText {
+        LayoutMode: Top;
+        FlexWeight: 1;
+        Anchor: (Vertical: 0);
+        HitTestVisible: false;
+
+        Label #BuildingName {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 17, Wrap: true);
+          Anchor: (Bottom: 2);
+          Text: "";
+        }
+
+        Label #BuildingId {
+          Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 12, Wrap: true);
+          Text: "";
+        }
+      }
+    }
+  }
+}

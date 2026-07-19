@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.poi.tool.PoiDebugLineHelper;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -8,6 +9,7 @@ import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
 import com.hypixel.hytale.server.core.entity.entities.Player;
+import com.hypixel.hytale.server.core.modules.debug.DebugUtils;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -105,24 +107,72 @@ public final class PlotCreatorPreviewSystem extends EntityTickingSystem<EntitySt
         PlotCreatorStep step = draft.getStep();
         long spotSig = PlotCreatorSpotMarkerCollector.signature(draft, world);
         Long prevSpotSig = LAST_SPOT_MARKER_SIG.get(ownerUuid);
-        if (prevSpotSig != null && prevSpotSig == spotSig) {
+        boolean showAllInEditorChooser =
+            step == PlotCreatorStep.IMPORTANT_SPOTS && draft.isBuildingEditorMode();
+        boolean showingSpots =
+            step == PlotCreatorStep.SUBSTEP || step == PlotCreatorStep.REVIEW || showAllInEditorChooser;
+
+        if (prevSpotSig == null || prevSpotSig != spotSig) {
+            LAST_SPOT_MARKER_SIG.put(ownerUuid, spotSig);
+            if (!showingSpots) {
+                PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
+                return;
+            }
+            @Nullable
+            PlotBuildingKindRequirements.SubstepRequirement filter =
+                step == PlotCreatorStep.SUBSTEP ? PlotCreatorService.currentSubstep(draft) : null;
+            List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desired =
+                filter == null && step == PlotCreatorStep.SUBSTEP
+                    ? Collections.emptyList()
+                    : PlotCreatorSpotMarkerCollector.collect(draft, world, filter);
+            PlotCreatorSpotMarkerSync.sync(world, ownerUuid, desired, commandBuffer);
+        } else if (!showingSpots) {
             return;
         }
-        LAST_SPOT_MARKER_SIG.put(ownerUuid, spotSig);
 
-        if (step != PlotCreatorStep.SUBSTEP && step != PlotCreatorStep.REVIEW) {
-            PlotCreatorSpotMarkerSync.clearAll(world, ownerUuid, commandBuffer);
-            return;
+        PlayerRef playerRefComp = store.getComponent(playerRef, PlayerRef.getComponentType());
+        if (playerRefComp != null && showingSpots) {
+            drawFacingHintLines(draft, world, playerRefComp, step);
         }
+    }
 
+    private static void drawFacingHintLines(
+        @Nonnull PlotCreatorDraft draft,
+        @Nonnull World world,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PlotCreatorStep step
+    ) {
         @Nullable
         PlotBuildingKindRequirements.SubstepRequirement filter =
             step == PlotCreatorStep.SUBSTEP ? PlotCreatorService.currentSubstep(draft) : null;
-        List<PlotCreatorSpotMarkerCollector.DesiredSpotMarker> desired =
-            filter == null && step == PlotCreatorStep.SUBSTEP
-                ? Collections.emptyList()
-                : PlotCreatorSpotMarkerCollector.collect(draft, world, filter);
-        PlotCreatorSpotMarkerSync.sync(world, ownerUuid, desired, commandBuffer);
+        if (filter == null && step == PlotCreatorStep.SUBSTEP) {
+            return;
+        }
+        for (PlotCreatorSpotMarkerCollector.DesiredSpotMarker m :
+            PlotCreatorSpotMarkerCollector.collect(draft, world, filter)) {
+            if (m.facingYawWorldRadians() == null) {
+                continue;
+            }
+            float yaw = m.facingYawWorldRadians();
+            double sx = m.x() + 0.5;
+            double sy = m.y() + 1.05;
+            double sz = m.z() + 0.5;
+            double ex = sx + (-Math.sin(yaw)) * 1.35;
+            double ez = sz + (-Math.cos(yaw)) * 1.35;
+            PoiDebugLineHelper.addLineToPlayer(
+                playerRef,
+                sx,
+                sy,
+                sz,
+                ex,
+                sy,
+                ez,
+                DebugUtils.COLOR_YELLOW,
+                0.07,
+                1.25F,
+                0
+            );
+        }
     }
 
     private static void clearSpotMarkers(

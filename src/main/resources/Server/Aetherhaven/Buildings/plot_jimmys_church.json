@@ -149,7 +149,8 @@
       "localZ": -4,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -164,7 +165,8 @@
       "localZ": -4,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -179,7 +181,8 @@
       "localZ": -9,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -194,7 +197,8 @@
       "localZ": -9,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -209,7 +213,8 @@
       "localZ": -5,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",
@@ -224,7 +229,8 @@
       "localZ": -5,
       "tags": [
         "FUN",
-        "SIT"
+        "SIT",
+        "workActivity:read"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Bench",

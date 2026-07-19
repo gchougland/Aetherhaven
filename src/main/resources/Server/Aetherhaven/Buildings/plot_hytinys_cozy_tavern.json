@@ -1,6 +1,6 @@
 {
   "id": "plot_hytinys_cozy_tavern",
-  "displayName": "Hytiny's Cozy Tavern",
+  "displayName": "Hytiny\u0027s Cozy Tavern",
   "description": "By HytinyBuilds",
   "prefabPath": "plot_hytinys_cozy_tavern.prefab.json",
   "plotTokenItemId": "Aetherhaven_Plot_Token",
@@ -53,24 +53,27 @@
   ],
   "pois": [
     {
-      "localX": 11,
+      "localX": 14,
       "localY": 4,
       "localZ": -19,
       "tags": [
+        "workActivity:read",
         "WORK"
       ],
       "capacity": 1,
       "blockTypeId": "Furniture_Village_Counter",
       "interactionKind": "WORK_SURFACE",
-      "interactionTargetLocalX": 11,
+      "interactionTargetLocalX": 14,
       "interactionTargetLocalY": 4,
-      "interactionTargetLocalZ": -18
+      "interactionTargetLocalZ": -18,
+      "workResidentKind": "guild_master"
     },
     {
       "localX": 8,
       "localY": 5,
       "localZ": -18,
       "tags": [
+        "workActivity:leisure",
         "WORK",
         "BARD"
       ],
@@ -79,18 +82,178 @@
       "interactionKind": "WORK_SURFACE",
       "interactionTargetLocalX": 8,
       "interactionTargetLocalY": 5,
-      "interactionTargetLocalZ": -17
+      "interactionTargetLocalZ": -17,
+      "workResidentKind": "bard"
+    },
+    {
+      "localX": 20,
+      "localY": 5,
+      "localZ": -15,
+      "tags": [
+        "QUEST_BOARD"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Aetherhaven_Quest_Board",
+      "interactionKind": "NONE",
+      "interactionTargetLocalX": 19,
+      "interactionTargetLocalY": 5,
+      "interactionTargetLocalZ": -15,
+      "interactionTargetYawDegrees": -125.835266
+    },
+    {
+      "localX": 10,
+      "localY": 10,
+      "localZ": -21,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Bed",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 10,
+      "interactionTargetLocalZ": -21,
+      "interactionTargetYawDegrees": 66.29901
+    },
+    {
+      "localX": 18,
+      "localY": 4,
+      "localZ": -20,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 18,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -19,
+      "interactionTargetYawDegrees": -12.352417
+    },
+    {
+      "localX": 14,
+      "localY": 4,
+      "localZ": -20,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -20,
+      "interactionTargetYawDegrees": 90.37021
+    },
+    {
+      "localX": 9,
+      "localY": 4,
+      "localZ": -18,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 10,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -18,
+      "interactionTargetYawDegrees": 41.400696
+    },
+    {
+      "localX": 14,
+      "localY": 4,
+      "localZ": -23,
+      "tags": [
+        "EAT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "USE_BENCH",
+      "interactionTargetLocalX": 15,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -23,
+      "interactionTargetYawDegrees": 43.23459
+    },
+    {
+      "localX": 22,
+      "localY": 4,
+      "localZ": -21,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Stool",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 23,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -21,
+      "workResidentKind": "guild_master",
+      "interactionTargetYawDegrees": 87.08627
+    },
+    {
+      "localX": 14,
+      "localY": 3,
+      "localZ": -16,
+      "tags": [
+        "WORK",
+        "BARD",
+        "workActivity:leisure"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Rock_Stone_Cobble",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 13,
+      "interactionTargetLocalY": 3,
+      "interactionTargetLocalZ": -16,
+      "workResidentKind": "bard",
+      "interactionTargetYawDegrees": -68.51364
+    },
+    {
+      "localX": 11,
+      "localY": 4,
+      "localZ": -20,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Cloth_Roof_Red_Flat",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -21,
+      "workResidentKind": "innkeeper",
+      "interactionTargetYawDegrees": -179.85136
+    },
+    {
+      "localX": 10,
+      "localY": 4,
+      "localZ": -15,
+      "tags": [
+        "SLEEP",
+        "ENERGY"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Tavern_Chair",
+      "interactionKind": "SLEEP",
+      "interactionTargetLocalX": 11,
+      "interactionTargetLocalY": 4,
+      "interactionTargetLocalZ": -15,
+      "interactionTargetYawDegrees": 135.48077
     }
   ],
   "bardWorkPoiLocal": [
-    8,
-    5,
-    -18
+    8.0,
+    5.0,
+    -18.0
   ],
   "bardWorkPoiInteractionTargetLocal": [
-    8,
-    5,
-    -17
+    8.0,
+    5.0,
+    -17.0
   ],
   "managementBlockLocalPos": [
     14,
@@ -149,14 +312,39 @@
     0.18423643708229065,
     6.269322872161865
   ],
-  "countsAsConstructionId": "plot_guild_hall",
-  "tags": [
-    "work",
-    "guild",
-    "cozy"
+  "countsAsConstructionId": [
+    "plot_guild_hall",
+    "plot_inn"
   ],
   "plotTokenLockedByDefault": true,
   "floatingGiftBlueprint": true,
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_hytinys_cozy_tavern.displayName",
-  "styleId": "hytiny"
+  "styleId": "hytiny",
+  "innBellLocalPos": [
+    11,
+    5,
+    -19
+  ],
+  "innkeeperSpawnLocal": [
+    10,
+    4,
+    -20
+  ],
+  "guildMasterSpawnLocal": [
+    22,
+    4,
+    -21
+  ],
+  "visitorSpawnLocals": [
+    [
+      18,
+      3,
+      -17
+    ],
+    [
+      16,
+      3,
+      -23
+    ]
+  ]
 }

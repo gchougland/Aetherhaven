@@ -68,7 +68,25 @@ public final class PrefabFootprintClearUtil {
     ) {
         Set<UUID> npcAllowlist = new HashSet<>();
         townForNpcAllowlist.collectTrackedNpcEntityUuids(npcAllowlist);
+        removeEntitiesInFootprint(store, fp, npcAllowlist);
+    }
 
+    /**
+     * Same as {@link #removePrefabOnlyEntitiesInFootprint(Store, PlotFootprintRecord, TownRecord)} but with no town
+     * NPC allowlist (players and town-bound NPCs are still spared). For temporary pastes such as building editor.
+     */
+    public static void removeEntitiesInFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp
+    ) {
+        removeEntitiesInFootprint(store, fp, Set.of());
+    }
+
+    private static void removeEntitiesInFootprint(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull PlotFootprintRecord fp,
+        @Nonnull Set<UUID> npcAllowlist
+    ) {
         List<Ref<EntityStore>> toRemove = new ArrayList<>();
         BiConsumer<ArchetypeChunk<EntityStore>, CommandBuffer<EntityStore>> collectFootprintEntities =
             (archetypeChunk, commandBuffer) -> {

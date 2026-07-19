@@ -67,6 +67,10 @@
       "count": 6
     },
     {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 5
+    },
+    {
       "itemId": "Furniture_Village_Ladder",
       "count": 4
     },
@@ -88,10 +92,6 @@
     },
     {
       "itemId": "Furniture_Village_Door",
-      "count": 3
-    },
-    {
-      "itemId": "Ingredient_Bar_Iron",
       "count": 3
     },
     {

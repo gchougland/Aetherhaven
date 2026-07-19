@@ -4,34 +4,27 @@
   "description": "A civic hall with a town records shelf, planning desk, and treasury.",
   "touristDestination": true,
   "prefabPath": "Townhall.prefab.json",
-  "selfBuildGameDays": 1,
+  "selfBuildGameDays": 1.0,
   "plotTokenItemId": "Aetherhaven_Plot_Token_Town_Hall",
   "plotAnchorOffset": [
-    9,
     0,
-    7
-  ],
-  "visitorSpawnLocals": [
-    [
-      -5,
-      1,
-      -2
-    ]
+    1,
+    0
   ],
   "managementBlockLocalPos": [
-    -7,
+    -17,
     2,
-    3
+    11
   ],
   "treasuryLocalPos": [
-    7,
+    -3,
     1,
-    2
+    10
   ],
   "rotationYaw": "None",
-  "autonomyNavFloorYAboveMinY": 1,
-  "autonomyNavMaxStandYSpanAboveMinY": 1,
-  "autonomyNavRoofExclusionYBelowMaxY": 5,
+  "autonomyNavFloorYAboveMinY": 1.0,
+  "autonomyNavMaxStandYSpanAboveMinY": 1.0,
+  "autonomyNavRoofExclusionYBelowMaxY": 5.0,
   "materials": [
     {
       "resourceTypeId": "Wood_All",
@@ -52,19 +45,51 @@
   ],
   "pois": [
     {
-      "localX": -4,
+      "localX": -12,
       "localY": 1,
-      "localZ": 0,
-      "blockTypeId": "Aetherhaven_Town_Planning_Desk",
-      "interactionKind": "WORK_SURFACE",
+      "localZ": 10,
       "tags": [
-        "WORK",
-        "FUN"
+        "TOURIST_VISIT"
       ],
       "capacity": 1,
-      "interactionTargetLocalX": -5,
+      "blockTypeId": "Furniture_Village_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -13,
       "interactionTargetLocalY": 1,
-      "interactionTargetLocalZ": -1
+      "interactionTargetLocalZ": 10,
+      "interactionTargetYawDegrees": -94.31848
+    },
+    {
+      "localX": -8,
+      "localY": 1,
+      "localZ": 9,
+      "tags": [
+        "TOURIST_VISIT"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bench",
+      "interactionKind": "SIT",
+      "interactionTargetLocalX": -7,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 9,
+      "interactionTargetYawDegrees": 112.35474
+    },
+    {
+      "localX": -12,
+      "localY": 1,
+      "localZ": 9,
+      "tags": [
+        "WORK",
+        "workActivity:read"
+      ],
+      "capacity": 1,
+      "blockTypeId": "Furniture_Village_Bench",
+      "interactionKind": "WORK_SURFACE",
+      "interactionTargetLocalX": -13,
+      "interactionTargetLocalY": 1,
+      "interactionTargetLocalZ": 9,
+      "workResidentKind": "elder",
+      "interactionTargetYawDegrees": -93.435425
     }
   ],
   "displayNameLangKey": "aetherhaven_buildings.aetherhaven.buildings.plot_town_hall.displayName",

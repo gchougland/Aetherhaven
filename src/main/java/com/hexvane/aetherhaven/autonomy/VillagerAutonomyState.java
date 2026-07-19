@@ -89,6 +89,12 @@ public final class VillagerAutonomyState
                 v -> v.fillingHunger
             )
             .add()
+            .append(
+                new KeyedCodec<>("LastUsedPoiId", Codec.STRING),
+                (v, x) -> v.lastUsedPoiId = x,
+                v -> v.lastUsedPoiId
+            )
+            .add()
             .build();
 
     @Nullable
@@ -138,9 +144,14 @@ public final class VillagerAutonomyState
      * Once hunger drops below half, stay on eat trips until the hunger meter is full (eat, leave, eat again).
      */
     private boolean fillingHunger;
+    /** Last finished POI id; scoring soft-penalizes re-picking so workers rotate between work spots. */
+    @Nullable
+    private String lastUsedPoiId;
     /** Doors opened by autonomy this trip; closed when the NPC passes through toward the leash. */
     @Nonnull
     private final ArrayList<int[]> pendingOpenDoors = new ArrayList<>();
+    /** Wall-clock ms of last work/leisure hit beat during USE (not persisted). */
+    private transient long lastWorkHitEpochMs;
     private transient double travelSampleX = Double.NaN;
     private transient double travelSampleZ = Double.NaN;
     private transient int travelProgressStallTicks;
@@ -532,6 +543,30 @@ public final class VillagerAutonomyState
     }
 
     @Nullable
+    public UUID getLastUsedPoiUuid() {
+        if (lastUsedPoiId == null || lastUsedPoiId.isBlank()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(lastUsedPoiId);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setLastUsedPoiUuid(@Nullable UUID id) {
+        this.lastUsedPoiId = id != null ? id.toString() : null;
+    }
+
+    public long getLastWorkHitEpochMs() {
+        return lastWorkHitEpochMs;
+    }
+
+    public void setLastWorkHitEpochMs(long lastWorkHitEpochMs) {
+        this.lastWorkHitEpochMs = lastWorkHitEpochMs;
+    }
+
+    @Nullable
     @Override
     public Component<EntityStore> clone() {
         VillagerAutonomyState c = new VillagerAutonomyState();
@@ -549,6 +584,8 @@ public final class VillagerAutonomyState
         c.travelWaypointStartedMs = travelWaypointStartedMs;
         c.travelWaypointStartedIndex = travelWaypointStartedIndex;
         c.fillingHunger = fillingHunger;
+        c.lastUsedPoiId = lastUsedPoiId;
+        c.lastWorkHitEpochMs = lastWorkHitEpochMs;
         c.travelWaypoints.addAll(travelWaypoints);
         for (int[] d : pendingOpenDoors) {
             c.pendingOpenDoors.add(new int[] { d[0], d[1], d[2] });

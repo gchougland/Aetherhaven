@@ -309,6 +309,8 @@ items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Read this to perma
 
 items.Aetherhaven_Plot_Creator_Staff.name=Plot creator staff
 items.Aetherhaven_Plot_Creator_Staff.description=Turn a build into a custom town building. See the town journal Guide. F starts or acts on the current step. Primary-click blocks for bounds and spots. Q/E previous/next. R cancels.
+items.Aetherhaven_Building_Editor_Staff.name=Building editor staff
+items.Aetherhaven_Building_Editor_Staff.description=Creative only. Pick an existing building, load it nearby, and edit its blocks and important spots. Saves over the building files when you finish.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Blacksmith shop plot token
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Required to place the blacksmith shop footprint from the plot placement staff.

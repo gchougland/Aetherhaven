@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
+import com.hexvane.aetherhaven.construction.PrefabYaw;
+import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +21,15 @@ public final class PlotCreatorSpotMarkerCollector {
         @Nonnull PlotCreatorSubstepType type,
         @Nullable String workResidentKind,
         @Nonnull String nameplateText,
-        @Nonnull String texturePath
+        @Nonnull String texturePath,
+        /** World-space body yaw for facing; null when the spot has no authored facing. */
+        @Nullable Float facingYawWorldRadians
     ) {
         public long key() {
             long cell = packCell(x, y, z);
             int role = workResidentKind == null ? 0 : workResidentKind.toLowerCase(Locale.ROOT).hashCode();
-            return cell * 31L + type.ordinal() * 17L + (role & 0xffff);
+            int yawBits = facingYawWorldRadians == null ? 0 : Float.floatToIntBits(facingYawWorldRadians);
+            return cell * 31L + type.ordinal() * 17L + (role & 0xffff) + (yawBits & 0xffffffffL);
         }
     }
 
@@ -43,7 +48,10 @@ public final class PlotCreatorSpotMarkerCollector {
         long h = 17L;
         h = 31 * h + step.ordinal();
         h = 31 * h + draft.getSubstepIndex();
-        if (step != PlotCreatorStep.SUBSTEP && step != PlotCreatorStep.REVIEW) {
+        h = 31 * h + (draft.isBuildingEditorMode() ? 1 : 0);
+        boolean showAllInEditorChooser =
+            step == PlotCreatorStep.IMPORTANT_SPOTS && draft.isBuildingEditorMode();
+        if (step != PlotCreatorStep.SUBSTEP && step != PlotCreatorStep.REVIEW && !showAllInEditorChooser) {
             return h;
         }
         @Nullable
@@ -53,6 +61,9 @@ public final class PlotCreatorSpotMarkerCollector {
             h = 31 * h + m.key();
             h = 31 * h + m.nameplateText().hashCode();
             h = 31 * h + m.texturePath().hashCode();
+            if (m.facingYawWorldRadians() != null) {
+                h = 31 * h + Float.floatToIntBits(m.facingYawWorldRadians());
+            }
         }
         return h;
     }
@@ -111,7 +122,7 @@ public final class PlotCreatorSpotMarkerCollector {
             return;
         }
         Vector3i block = PlotCreatorLocalCoords.toWorldBlock(draft, local);
-        out.add(desired(block.x, block.y, block.z, type, workResidentKind));
+        out.add(desired(block.x, block.y, block.z, type, workResidentKind, null, null));
     }
 
     private static void addPoi(
@@ -132,7 +143,20 @@ public final class PlotCreatorSpotMarkerCollector {
         }
         int[] local = new int[] {poi.getLocalX(), poi.getLocalY(), poi.getLocalZ()};
         Vector3i block = PlotCreatorLocalCoords.toWorldBlock(draft, local);
-        out.add(desired(block.x, block.y, block.z, type, workKind));
+        Float worldYaw = worldYawForPoi(draft, poi);
+        String activityId =
+            PlotCreatorWorkActivityTags.resolveActivityId(type, poi.getWorkResidentKind(), poi.getTags());
+        out.add(desired(block.x, block.y, block.z, type, workKind, activityId, worldYaw));
+    }
+
+    @Nullable
+    private static Float worldYawForPoi(@Nonnull PlotCreatorDraft draft, @Nonnull PlotCreatorPoiDraft poi) {
+        Float deg = poi.getInteractionTargetYawDegrees();
+        if (deg == null) {
+            return null;
+        }
+        Rotation placement = PlotCreatorPrefabCoords.placementYaw(draft);
+        return PrefabYaw.worldFromPrefabLocal(placement, (float) Math.toRadians(deg));
     }
 
     private static void addSpecialBlock(
@@ -145,7 +169,7 @@ public final class PlotCreatorSpotMarkerCollector {
         if (!passesTypeFilter(filter, type, null)) {
             return;
         }
-        out.add(desired(worldPos.x, worldPos.y, worldPos.z, type, null));
+        out.add(desired(worldPos.x, worldPos.y, worldPos.z, type, null, null, null));
     }
 
     @Nonnull
@@ -223,7 +247,9 @@ public final class PlotCreatorSpotMarkerCollector {
         int y,
         int z,
         @Nonnull PlotCreatorSubstepType type,
-        @Nullable String workResidentKind
+        @Nullable String workResidentKind,
+        @Nullable String activityId,
+        @Nullable Float facingYawWorldRadians
     ) {
         return new DesiredSpotMarker(
             x,
@@ -231,8 +257,9 @@ public final class PlotCreatorSpotMarkerCollector {
             z,
             type,
             workResidentKind,
-            PlotCreatorSpotMarkerVisuals.nameplateText(type, workResidentKind),
-            PlotCreatorSpotMarkerVisuals.textureFor(type)
+            PlotCreatorSpotMarkerVisuals.nameplateText(type, workResidentKind, activityId),
+            PlotCreatorSpotMarkerVisuals.textureFor(type),
+            facingYawWorldRadians
         );
     }
 }

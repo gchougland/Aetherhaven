@@ -23,6 +23,9 @@ import javax.annotation.Nonnull;
 
 /** Applies needs-based face mood to town NPCs while they are not in dialogue. */
 public final class VillagerMoodVisualSystem extends EntityTickingSystem<EntityStore> {
+    /** Re-send grin/frown so work Action/Emote overlays cannot leave the face stuck neutral. */
+    private static final long MOOD_FACE_KEEPALIVE_MS = 4500L;
+
     private final AetherhavenPlugin plugin;
     @Nonnull
     private final Set<Dependency<EntityStore>> dependencies = RootDependency.firstSet();
@@ -98,7 +101,12 @@ public final class VillagerMoodVisualSystem extends EntityTickingSystem<EntitySt
         boolean townsfolk = binding != null && TownVillagerBinding.KIND_TOWNSFOLK.equals(binding.getKind());
         String desiredFace = NpcFaceVisuals.moodFaceAnimationId(tier, townsfolk);
         String currentFace = active != null ? active.getActiveAnimations()[AnimationSlot.Face.ordinal()] : null;
-        if (tier.ordinal() == faceState.getLastMoodTier() && java.util.Objects.equals(desiredFace, currentFace)) {
+        boolean needsKeepalive =
+            faceState.getLastMoodApplyEpochMs() <= 0L
+                || nowMs - faceState.getLastMoodApplyEpochMs() >= MOOD_FACE_KEEPALIVE_MS;
+        if (tier.ordinal() == faceState.getLastMoodTier()
+            && java.util.Objects.equals(desiredFace, currentFace)
+            && !needsKeepalive) {
             return;
         }
         NpcFaceVisuals.applyMoodFace(ref, commandBuffer, store, moodConfig);

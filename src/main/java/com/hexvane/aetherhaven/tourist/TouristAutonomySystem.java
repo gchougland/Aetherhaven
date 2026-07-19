@@ -55,7 +55,7 @@ import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore> {
-    private static final double ARRIVE_HORIZONTAL_SQ = 1.5 * 1.5;
+    private static final double ARRIVE_HORIZONTAL_SQ = 0.5 * 0.5;
     private static final double RETURN_ARRIVE_HORIZONTAL_SQ = 2.75 * 2.75;
     private static final long TRAVEL_PHASE_MAX_MS = 120_000L;
     private static final int BLOCKED_FAIL_TICKS = 100;

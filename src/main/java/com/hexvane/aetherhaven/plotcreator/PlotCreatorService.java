@@ -55,6 +55,9 @@ public final class PlotCreatorService {
             return "decorationExclusive";
         }
         if (limitBuildingTypesToPlayerKinds()) {
+            if (draft.isBuildingEditorMode()) {
+                return null;
+            }
             for (PlotBuildingKind kind : kinds) {
                 if (!kind.isPlayerKind() && kind != PlotBuildingKind.TOURIST_PORTAL) {
                     return "kindNotAllowed";
@@ -451,6 +454,9 @@ public final class PlotCreatorService {
             playerRef.sendMessage(Message.translation(messageKey));
             return false;
         }
+        if (draft.isBuildingEditorMode()) {
+            return saveAndFinishBuildingEditor(plugin, session, playerRef, draft);
+        }
         Path buildingFile = CustomBuildingsPaths.buildingFile(plugin.getDataDirectory(), draft.getConstructionId().trim());
         try {
             PlotCreatorJsonWriter.writeBuilding(buildingFile, draft);
@@ -513,9 +519,55 @@ public final class PlotCreatorService {
         return true;
     }
 
+    private static boolean saveAndFinishBuildingEditor(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull PlotCreatorDraft draft
+    ) {
+        String id = draft.getConstructionId().trim();
+        if (draft.getEditingConstructionId() != null && !id.equals(draft.getEditingConstructionId())) {
+            draft.setConstructionId(draft.getEditingConstructionId());
+            id = draft.getEditingConstructionId();
+        }
+        String lockedPrefab = draft.getLockedPrefabPathKey() != null ? draft.getLockedPrefabPathKey() : draft.getPrefabPath();
+        Path writeRoot = BuildingEditorSavePaths.resolveWriteRoot(plugin, id);
+        Path prefabOut = BuildingEditorSavePaths.prefabFile(writeRoot, lockedPrefab);
+        boolean exported = PlotCreatorPrefabExporter.export(session.getWorld(), draft, prefabOut, true);
+        if (!exported) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.prefabExport"));
+            return false;
+        }
+        if (lockedPrefab != null) {
+            draft.setPrefabPath(lockedPrefab);
+            draft.setPrefabFileName(lockedPrefab);
+        }
+        Path buildingFile = BuildingEditorSavePaths.buildingFile(writeRoot, id);
+        try {
+            BuildingEditorJsonWriter.writeMerged(buildingFile, draft, draft.getOriginalBuildingJsonSnapshot());
+        } catch (Exception e) {
+            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+            return false;
+        }
+        String prefabPath = draft.getPrefabPath();
+        if (prefabPath != null && !prefabPath.isBlank()) {
+            plugin.getPrefabMaterialsService().generateOne(id, prefabPath, writeRoot);
+        }
+        plugin.reloadConfigsAndAssetCatalogs();
+        draft.setStep(PlotCreatorStep.DONE);
+        playerRef.sendMessage(
+            Message.translation("aetherhaven_building_editor.aetherhaven.buildingeditor.success.saved")
+                .param("id", id)
+        );
+        endSessionAfterSave(playerRef, session);
+        return true;
+    }
+
     private static void endSessionAfterSave(@Nonnull PlayerRef playerRef, @Nonnull PlotCreatorSession session) {
         PlotCreatorSessions.remove(playerRef.getUuid());
-        PlotCreatorCleanup.endSession(session, playerRef, false);
+        // Building editor pastes temporary blocks; clear them after save as well as cancel.
+        boolean removeWorldArtifacts = session.getDraft().isBuildingEditorMode();
+        PlotCreatorCleanup.endSession(session, playerRef, removeWorldArtifacts);
     }
 
     public static void applyDefaultTagsForKind(@Nonnull PlotCreatorDraft draft) {
@@ -583,6 +635,14 @@ public final class PlotCreatorService {
 
     /** Sets the export file name from the building id (used after identity, before prefab save). */
     public static void syncPrefabFileNameFromConstructionId(@Nonnull PlotCreatorDraft draft) {
+        if (draft.isBuildingEditorMode()) {
+            String locked = draft.getLockedPrefabPathKey();
+            if (locked != null && !locked.isBlank()) {
+                draft.setPrefabPath(locked);
+                draft.setPrefabFileName(locked);
+            }
+            return;
+        }
         String file = PlotCreatorPrefabExporter.prefabPathKeyFromConstructionId(draft.getConstructionId());
         if (file != null) {
             draft.setPrefabFileName(file);

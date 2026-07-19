@@ -88,7 +88,11 @@ public final class PoiAutonomyVisuals {
         }
         VillagerBlockUtil.FurnitureMountKind furniture =
             VillagerBlockUtil.furnitureMountKind(world, poi.getX(), poi.getY(), poi.getZ());
-        if (furniture != VillagerBlockUtil.FurnitureMountKind.NONE && poi.isMountOnUse()) {
+        // Chairs always seat the NPC, even for WORK / desk POIs (mountOnUse only defaults true for SIT/SLEEP).
+        boolean shouldMount =
+            furniture != VillagerBlockUtil.FurnitureMountKind.NONE
+                && (poi.isMountOnUse() || furniture == VillagerBlockUtil.FurnitureMountKind.SEAT);
+        if (shouldMount) {
             if (tryMountBlockPoi(npcRef, store, commandBuffer, poi)) {
                 playMountedFurnitureAnim(npcRef, store, commandBuffer, furniture);
                 return;

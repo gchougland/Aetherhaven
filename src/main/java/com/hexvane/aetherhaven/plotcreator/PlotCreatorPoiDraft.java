@@ -46,6 +46,10 @@ public final class PlotCreatorPoiDraft {
     @SerializedName("workResidentKind")
     private String workResidentKind;
 
+    @Nullable
+    @SerializedName("interactionTargetYawDegrees")
+    private Float interactionTargetYawDegrees;
+
     public int getLocalX() {
         return localX;
     }
@@ -106,6 +110,21 @@ public final class PlotCreatorPoiDraft {
     }
 
     @Nullable
+    public Integer getInteractionTargetLocalX() {
+        return interactionTargetLocalX;
+    }
+
+    @Nullable
+    public Integer getInteractionTargetLocalY() {
+        return interactionTargetLocalY;
+    }
+
+    @Nullable
+    public Integer getInteractionTargetLocalZ() {
+        return interactionTargetLocalZ;
+    }
+
+    @Nullable
     public String getWorkResidentKind() {
         return workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
     }
@@ -113,5 +132,14 @@ public final class PlotCreatorPoiDraft {
     public void setWorkResidentKind(@Nullable String workResidentKind) {
         this.workResidentKind =
             workResidentKind != null && !workResidentKind.isBlank() ? workResidentKind.trim() : null;
+    }
+
+    @Nullable
+    public Float getInteractionTargetYawDegrees() {
+        return interactionTargetYawDegrees;
+    }
+
+    public void setInteractionTargetYawDegrees(@Nullable Float interactionTargetYawDegrees) {
+        this.interactionTargetYawDegrees = interactionTargetYawDegrees;
     }
 }

@@ -119,6 +119,11 @@ public final class AetherhavenConstants {
 
     public static final String PLOT_CREATOR_STAFF_ITEM_ID = "Aetherhaven_Plot_Creator_Staff";
 
+    /** Creative-only staff for editing existing buildings (PlotCreator subplugin). */
+    public static final String BUILDING_EDITOR_STAFF_ITEM_ID = "Aetherhaven_Building_Editor_Staff";
+
+    public static final String PAGE_BUILDING_EDITOR = "AetherhavenBuildingEditor";
+
     public static final String PLOT_CREATOR_HUD_KEY = "AetherhavenPlotCreator";
 
     public static final String PLOT_CREATOR_PROGRESS_HUD_KEY = "AetherhavenPlotCreatorProgress";
