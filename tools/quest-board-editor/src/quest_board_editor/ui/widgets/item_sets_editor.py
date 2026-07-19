@@ -4,12 +4,15 @@ import copy
 from typing import Callable, List, Optional
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QGroupBox,
     QHBoxLayout,
     QHeaderView,
     QLabel,
     QPushButton,
+    QScrollArea,
+    QSizePolicy,
     QSpinBox,
     QTableWidget,
     QTableWidgetItem,
@@ -23,10 +26,12 @@ class ItemSetsEditor(QWidget):
         self,
         on_change: Optional[Callable[[], None]] = None,
         browse_item: Optional[Callable[[], Optional[str]]] = None,
+        icon_for_item: Optional[Callable[[str], QIcon]] = None,
     ) -> None:
         super().__init__()
         self._on_change = on_change
         self._browse_item = browse_item
+        self._icon_for_item = icon_for_item
         self._loading = False
         self._sets: List[dict] = []
         self._current_set = 0
@@ -57,11 +62,30 @@ class ItemSetsEditor(QWidget):
         weight_row.addStretch()
         layout.addLayout(weight_row)
 
+        preview_box = QGroupBox("Required items preview")
+        preview_layout = QVBoxLayout(preview_box)
+        self._preview_scroll = QScrollArea()
+        self._preview_scroll.setWidgetResizable(True)
+        self._preview_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self._preview_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self._preview_scroll.setFixedHeight(88)
+        self._preview_host = QWidget()
+        self._preview_row = QHBoxLayout(self._preview_host)
+        self._preview_row.setContentsMargins(4, 4, 4, 4)
+        self._preview_row.setSpacing(10)
+        self._preview_row.addStretch()
+        self._preview_scroll.setWidget(self._preview_host)
+        preview_layout.addWidget(self._preview_scroll)
+        layout.addWidget(preview_box)
+
         box = QGroupBox("Items in set")
         box_layout = QVBoxLayout(box)
-        self.table = QTableWidget(0, 2)
-        self.table.setHorizontalHeaderLabels(["itemId", "count"])
-        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.table = QTableWidget(0, 3)
+        self.table.setHorizontalHeaderLabels(["", "itemId", "count"])
+        self.table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Fixed)
+        self.table.setColumnWidth(0, 48)
+        self.table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.table.verticalHeader().setDefaultSectionSize(48)
         box_layout.addWidget(self.table)
         btn_row = QHBoxLayout()
         add_item = QPushButton("Add item")
@@ -81,6 +105,10 @@ class ItemSetsEditor(QWidget):
 
     def set_browse_item(self, browse_item: Optional[Callable[[], Optional[str]]]) -> None:
         self._browse_item = browse_item
+
+    def set_icon_for_item(self, icon_for_item: Optional[Callable[[str], QIcon]]) -> None:
+        self._icon_for_item = icon_for_item
+        self._refresh_table()
 
     def set_item_sets(self, item_sets: List[dict]) -> None:
         self._loading = True
@@ -104,8 +132,8 @@ class ItemSetsEditor(QWidget):
             items = self._current().setdefault("items", [])
             row_count = min(len(items), self.table.rowCount())
             for row in range(row_count):
-                id_item = self.table.item(row, 0)
-                cnt_item = self.table.item(row, 1)
+                id_item = self.table.item(row, 1)
+                cnt_item = self.table.item(row, 2)
                 items[row]["itemId"] = id_item.text() if id_item else ""
                 try:
                     items[row]["count"] = int(cnt_item.text()) if cnt_item else 1
@@ -119,6 +147,45 @@ class ItemSetsEditor(QWidget):
             self._sets = [{"weight": 1, "items": []}]
         return self._sets[self._current_set]
 
+    def _icon(self, item_id: str) -> QIcon:
+        if self._icon_for_item:
+            return self._icon_for_item(item_id)
+        return QIcon()
+
+    def _refresh_preview(self, items: List[dict]) -> None:
+        while self._preview_row.count():
+            item = self._preview_row.takeAt(0)
+            w = item.widget()
+            if w is not None:
+                w.deleteLater()
+        if not items:
+            empty = QLabel("No items in this set")
+            empty.setStyleSheet("color: #888;")
+            self._preview_row.addWidget(empty)
+            self._preview_row.addStretch()
+            return
+        for it in items:
+            item_id = str(it.get("itemId", ""))
+            count = it.get("count", 1)
+            chip = QWidget()
+            chip.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+            chip_l = QVBoxLayout(chip)
+            chip_l.setContentsMargins(0, 0, 0, 0)
+            chip_l.setSpacing(2)
+            icon_lbl = QLabel()
+            icon_lbl.setFixedSize(48, 48)
+            icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            pix = self._icon(item_id).pixmap(48, 48)
+            icon_lbl.setPixmap(pix)
+            icon_lbl.setToolTip(item_id)
+            chip_l.addWidget(icon_lbl, alignment=Qt.AlignmentFlag.AlignCenter)
+            name = QLabel(f"×{count}")
+            name.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            name.setToolTip(item_id)
+            chip_l.addWidget(name)
+            self._preview_row.addWidget(chip)
+        self._preview_row.addStretch()
+
     def _refresh_table(self) -> None:
         self._loading = True
         cur = self._current()
@@ -128,10 +195,17 @@ class ItemSetsEditor(QWidget):
         for it in items:
             row = self.table.rowCount()
             self.table.insertRow(row)
-            self.table.setItem(row, 0, QTableWidgetItem(str(it.get("itemId", ""))))
+            item_id = str(it.get("itemId", ""))
+            icon_item = QTableWidgetItem()
+            icon_item.setFlags(Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable)
+            icon_item.setIcon(self._icon(item_id))
+            icon_item.setToolTip(item_id)
+            self.table.setItem(row, 0, icon_item)
+            self.table.setItem(row, 1, QTableWidgetItem(item_id))
             cnt = QTableWidgetItem(str(it.get("count", 1)))
             cnt.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-            self.table.setItem(row, 1, cnt)
+            self.table.setItem(row, 2, cnt)
+        self._refresh_preview(items)
         self._loading = False
 
     def _on_set_changed(self, one_based: int) -> None:
@@ -195,20 +269,26 @@ class ItemSetsEditor(QWidget):
         self._emit_change()
 
     def _cell_changed(self, row: int, col: int) -> None:
-        if self._loading:
+        if self._loading or col == 0:
             return
         items = self._current().setdefault("items", [])
         if row >= len(items):
             return
         item = self.table.item(row, col)
         text = item.text() if item else ""
-        if col == 0:
+        if col == 1:
             items[row]["itemId"] = text
+            icon_item = self.table.item(row, 0)
+            if icon_item is not None:
+                icon_item.setIcon(self._icon(text))
+                icon_item.setToolTip(text)
+            self._refresh_preview(items)
         else:
             try:
                 items[row]["count"] = int(text)
             except ValueError:
                 items[row]["count"] = 1
+            self._refresh_preview(items)
         self._emit_change()
 
     def _emit_change(self) -> None:

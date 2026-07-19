@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Callable, Dict, List, Optional, Union
 
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
@@ -28,6 +30,8 @@ from .widgets.rewards_editor import RewardsEditor
 
 AnyQuestRef = Union[QuestRef, WorldQuestRef]
 
+PORTRAIT_SIZE = 96
+
 
 class QuestForm(QWidget):
     def __init__(
@@ -37,6 +41,8 @@ class QuestForm(QWidget):
         lang_getter: Callable[[str], str],
         on_dirty: Callable[[], None],
         browse_item: Optional[Callable[[], Optional[str]]] = None,
+        icon_for_item: Optional[Callable[[str], QIcon]] = None,
+        portrait_for_role: Optional[Callable[[str], QPixmap]] = None,
     ) -> None:
         super().__init__()
         self._ranks = ranks
@@ -44,6 +50,9 @@ class QuestForm(QWidget):
         self._lang_getter = lang_getter
         self._on_dirty = on_dirty
         self._browse_item = browse_item
+        self._icon_for_item = icon_for_item
+        self._portrait_for_role = portrait_for_role
+        self._villager_display_names: Dict[str, str] = {}
         self._board_kind = "town"
         self._ref: Optional[AnyQuestRef] = None
         self._loading = False
@@ -57,12 +66,26 @@ class QuestForm(QWidget):
         self._layout = QVBoxLayout(container)
 
         id_box = QGroupBox("Identity")
-        id_form = QFormLayout(id_box)
+        id_outer = QHBoxLayout(id_box)
+        self.portrait_label = QLabel()
+        self.portrait_label.setFixedSize(PORTRAIT_SIZE, PORTRAIT_SIZE)
+        self.portrait_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.portrait_label.setStyleSheet(
+            "QLabel { background: #2a2a2a; border: 1px solid #555; border-radius: 6px; }"
+        )
+        self.portrait_label.setToolTip("Quest giver portrait")
+        id_outer.addWidget(self.portrait_label)
+
+        id_form = QFormLayout()
         self.villager_combo = QComboBox()
+        self.villager_combo.setIconSize(QSize(28, 28))
         self.villager_combo.addItems(villager_ids)
         self.villager_combo.currentTextChanged.connect(self._identity_changed)
         self._villager_row_label = QLabel("Villager")
         id_form.addRow(self._villager_row_label, self.villager_combo)
+        self.villager_name_label = QLabel("")
+        self.villager_name_label.setStyleSheet("font-weight: bold; font-size: 13px;")
+        id_form.addRow("", self.villager_name_label)
         self.type_combo = QComboBox()
         self.type_combo.addItems(["fetch", "hunt", "raid"])
         self.type_combo.currentTextChanged.connect(self._type_changed)
@@ -76,6 +99,7 @@ class QuestForm(QWidget):
         self.id_edit = QLineEdit()
         self.id_edit.editingFinished.connect(self._scalar_changed)
         id_form.addRow("ID", self.id_edit)
+        id_outer.addLayout(id_form, 1)
         self._layout.addWidget(id_box)
 
         common_box = QGroupBox("Common fields")
@@ -135,7 +159,9 @@ class QuestForm(QWidget):
         self.fetch_group = QGroupBox("Fetch — item sets")
         fetch_layout = QVBoxLayout(self.fetch_group)
         self.item_sets_editor = ItemSetsEditor(
-            on_change=self._nested_changed, browse_item=browse_item
+            on_change=self._nested_changed,
+            browse_item=browse_item,
+            icon_for_item=icon_for_item,
         )
         fetch_layout.addWidget(self.item_sets_editor)
         self._layout.addWidget(self.fetch_group)
@@ -155,7 +181,9 @@ class QuestForm(QWidget):
         rewards_box = QGroupBox("Rewards")
         rewards_layout = QVBoxLayout(rewards_box)
         self.rewards_editor = RewardsEditor(
-            on_change=self._nested_changed, browse_item=browse_item
+            on_change=self._nested_changed,
+            browse_item=browse_item,
+            icon_for_item=icon_for_item,
         )
         rewards_layout.addWidget(self.rewards_editor)
         self._layout.addWidget(rewards_box)
@@ -182,17 +210,54 @@ class QuestForm(QWidget):
         self.item_sets_editor.set_browse_item(browse_item)
         self.rewards_editor.set_browse_item(browse_item)
 
+    def set_icon_for_item(self, icon_for_item: Optional[Callable[[str], QIcon]]) -> None:
+        self._icon_for_item = icon_for_item
+        self.item_sets_editor.set_icon_for_item(icon_for_item)
+        self.rewards_editor.set_icon_for_item(icon_for_item)
+
+    def set_portrait_for_role(
+        self, portrait_for_role: Optional[Callable[[str], QPixmap]]
+    ) -> None:
+        self._portrait_for_role = portrait_for_role
+        self._refresh_portrait()
+
+    def set_villager_display_names(self, names: Dict[str, str]) -> None:
+        """Map npcRoleId → display name for the subtitle under the villager combo."""
+        self._villager_display_names = names
+        self._refresh_portrait()
+
+    def _refresh_portrait(self) -> None:
+        if self._board_kind == "world":
+            self.portrait_label.clear()
+            self.portrait_label.setText("—")
+            self.villager_name_label.setText("")
+            return
+        role = self.villager_combo.currentText()
+        names = getattr(self, "_villager_display_names", {})
+        display = names.get(role, "")
+        self.villager_name_label.setText(display)
+        if self._portrait_for_role and role:
+            pix = self._portrait_for_role(role)
+            self.portrait_label.setPixmap(pix)
+            self.portrait_label.setText("")
+        else:
+            self.portrait_label.clear()
+            self.portrait_label.setText("?")
+
     def set_board_kind(self, kind: str) -> None:
         self._board_kind = kind if kind in ("town", "world") else "town"
         is_world = self._board_kind == "world"
         self.villager_combo.setVisible(not is_world)
         self._villager_row_label.setVisible(not is_world)
+        self.villager_name_label.setVisible(not is_world)
+        self.portrait_label.setVisible(not is_world)
         self.world_type_note.setVisible(is_world)
         self.rank_combo.setVisible(not is_world)
         self._rank_row_label.setVisible(not is_world)
         self.target_edit.setVisible(not is_world)
         self._target_label.setVisible(not is_world)
         self.target_key_label.setVisible(not is_world)
+        self._refresh_portrait()
         if is_world:
             self.fetch_group.setVisible(False)
             self.hunt_group.setVisible(False)
@@ -222,10 +287,15 @@ class QuestForm(QWidget):
         cur = self.villager_combo.currentText()
         self.villager_combo.blockSignals(True)
         self.villager_combo.clear()
-        self.villager_combo.addItems(villager_ids)
+        for vid in villager_ids:
+            if self._portrait_for_role:
+                self.villager_combo.addItem(QIcon(self._portrait_for_role(vid)), vid)
+            else:
+                self.villager_combo.addItem(vid)
         if cur in villager_ids:
             self.villager_combo.setCurrentText(cur)
         self.villager_combo.blockSignals(False)
+        self._refresh_portrait()
 
     def load_quest(self, ref: Optional[AnyQuestRef]) -> None:
         self._loading = True
@@ -277,6 +347,7 @@ class QuestForm(QWidget):
             self.kill_sets_editor.set_kill_sets(e.get("killSets") or [])
             self.raid_sets_editor.set_raid_sets(e.get("raidSets") or [])
         self.rewards_editor.set_rewards(e.get("rewards") or [])
+        self._refresh_portrait()
         self._loading = False
 
     def pending_lang_texts(self) -> Dict[str, str]:
@@ -355,6 +426,7 @@ class QuestForm(QWidget):
         self.target_edit.setEnabled(quest_type in ("hunt", "raid"))
 
     def _identity_changed(self) -> None:
+        self._refresh_portrait()
         if self._loading:
             return
         self.rewards_editor.set_default_npc_role_id(self.villager_combo.currentText())

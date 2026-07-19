@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Union
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtGui import QAction, QIcon, QKeySequence, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
@@ -31,8 +31,12 @@ from PySide6.QtWidgets import (
 from ..config import AppConfig, detect_board_kind
 from ..io_json import load_quest_board, save_quest_board
 from ..io_lang import LangDocument, load_lang, save_lang
-from ..item_catalog import ItemRecord, merge_catalogs
+from ..item_catalog import ItemRecord, merge_catalogs, pick_icon_path_for_item
 from ..lang_keys import json_key_to_lang_key as town_json_to_lang
+from ..portrait_catalog import (
+    load_villager_records,
+    portrait_png_path,
+)
 from ..quest_model import (
     QuestBoardDocument,
     QuestFilter,
@@ -63,7 +67,8 @@ from ..world_quest_model import (
     validate_world_document,
 )
 from .item_browser_dialog import pick_item_id
-from .quest_form import QuestForm
+from .icon_cache import IconCache
+from .quest_form import QuestForm, PORTRAIT_SIZE
 from .quest_list import QuestListView
 
 AnyDoc = Union[QuestBoardDocument, WorldQuestBoardDocument]
@@ -201,6 +206,10 @@ class MainWindow(QMainWindow):
         self._removed_lang_json_keys: set[str] = set()
         self._item_roots: List[Path] = self._config.resolved_item_roots()
         self._catalog: Dict[str, ItemRecord] = {}
+        self._item_icons = IconCache(40)
+        self._portrait_icons = IconCache(36)
+        self._portrait_pixmaps = IconCache(PORTRAIT_SIZE)
+        self._villager_records = load_villager_records()
 
         self.setWindowTitle("Aetherhaven Quest Board Editor")
         self.resize(1280, 820)
@@ -208,6 +217,7 @@ class MainWindow(QMainWindow):
         self._build_menu()
         self._build_ui()
         self._rescan_catalog()
+        self._wire_visuals()
 
         if self._config.last_board_kind == "world":
             qb = self._config.resolved_world_board_path()
@@ -317,10 +327,33 @@ class MainWindow(QMainWindow):
             lang_getter=self._lang_text,
             on_dirty=self._mark_dirty,
             browse_item=self._browse_item,
+            icon_for_item=self._icon_for_item,
+            portrait_for_role=self._portrait_pixmap_for_role,
         )
         splitter.addWidget(self.quest_form)
         splitter.setStretchFactor(0, 2)
         splitter.setStretchFactor(1, 3)
+
+    def _wire_visuals(self) -> None:
+        names = {rid: rec.display_name for rid, rec in self._villager_records.items()}
+        self.quest_form.set_villager_display_names(names)
+        self.quest_form.set_icon_for_item(self._icon_for_item)
+        self.quest_form.set_portrait_for_role(self._portrait_pixmap_for_role)
+
+    def _icon_for_item(self, item_id: str) -> QIcon:
+        rec = self._catalog.get(item_id)
+        if rec is None:
+            return self._item_icons.icon_for_path(None)
+        path = pick_icon_path_for_item(rec, self._item_roots)
+        return self._item_icons.icon_for_path(path)
+
+    def _portrait_icon_for_role(self, role_id: str) -> QIcon:
+        path = portrait_png_path(role_id, self._villager_records)
+        return self._portrait_icons.icon_for_path(path)
+
+    def _portrait_pixmap_for_role(self, role_id: str) -> QPixmap:
+        path = portrait_png_path(role_id, self._villager_records)
+        return self._portrait_pixmaps.pixmap_for_path(path, PORTRAIT_SIZE)
 
     def _browse_item(self) -> Optional[str]:
         if not self._catalog:
@@ -334,6 +367,8 @@ class MainWindow(QMainWindow):
 
     def _rescan_catalog(self) -> None:
         self._catalog = merge_catalogs(self._item_roots)
+        self._item_icons = IconCache(40)
+        self.quest_form.set_icon_for_item(self._icon_for_item)
         self.statusBar().showMessage(
             f"Item catalog: {len(self._catalog)} items from {len(self._item_roots)} root(s)",
             5000,
@@ -486,6 +521,7 @@ class MainWindow(QMainWindow):
                 self._filtered_indices.append(idx)
                 title = resolve_world_title(self._lang_getter_for_filter, ref)
                 rows.append((ref.rank, ref.quest_type, ref.quest_id, title, idx))
+            self.quest_list.quest_model().set_rows(rows)
         else:
             vf = self.villager_filter.currentText()
             tf = self.type_filter.currentText()
@@ -501,6 +537,7 @@ class MainWindow(QMainWindow):
                 filt,
                 self._lang_getter_for_filter,
             )
+            icons: List[Optional[QIcon]] = []
             for ref in filtered:
                 try:
                     idx = self._all_refs.index(ref)
@@ -510,6 +547,7 @@ class MainWindow(QMainWindow):
                 title = resolve_title(self._lang_getter_for_filter, ref)
                 rows.append(
                     (
+                        "",
                         ref.rank,
                         ref.quest_type,
                         villager_short_label(ref.villager_id),
@@ -518,7 +556,8 @@ class MainWindow(QMainWindow):
                         idx,
                     )
                 )
-        self.quest_list.quest_model().set_rows(rows)
+                icons.append(self._portrait_icon_for_role(ref.villager_id))
+            self.quest_list.quest_model().set_rows(rows, icons)
         total = len(self._all_refs)
         self.count_label.setText(f"{len(rows)} / {total} quests")
 
