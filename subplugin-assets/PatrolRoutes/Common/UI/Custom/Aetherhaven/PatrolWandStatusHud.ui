@@ -1,10 +1,47 @@
 $C = "../Common.ui";
 
+@PatrolWandTabAnchor = Anchor(Width: 52, Height: 44, Right: 3, Bottom: -10);
+
+@PatrolWandTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@PatrolWandTabAnchor, Bottom: -6), IconAnchor: (Width: 22, Height: 22)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@PatrolWandTabAnchor, Bottom: -2), IconAnchor: (Width: 22, Height: 22)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@PatrolWandTabAnchor, Bottom: -4), IconAnchor: (Width: 22, Height: 22))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@PatrolWandTabAnchor, Bottom: 0),
+      IconAnchor: (Width: 24, Height: 24),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
 Group #PatrolWandStatusRoot {
   LayoutMode: Top;
+  Anchor: (Top: 72, Left: 20, Width: 480);
+
+  TabNavigation #PatrolWandModeTabs {
+    Anchor: (Height: 48, Left: 4, Right: 0);
+    Style: @PatrolWandTabsStyle;
+    SelectedTab: "Build";
+
+    TabButton {
+      Icon: "../location.png";
+      TooltipText: "Build route";
+      Id: "Build";
+    }
+
+    TabButton {
+      Icon: "../group_icon_256.png";
+      TooltipText: "Assign guard";
+      Id: "Assign";
+    }
+  }
 
   $C.@DecoratedContainer {
-    Anchor: (Top: 88, Left: 20, Width: 440);
+    Anchor: (Width: 480, Top: 4);
 
     #Title {
       Label #PatrolWandHudTitleText {
@@ -18,19 +55,10 @@ Group #PatrolWandStatusRoot {
       LayoutMode: Top;
       Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
 
-      Group #ModeBlock {
-        LayoutMode: Top;
+      Label #ModeHelp {
+        Text: " ";
+        Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
         Anchor: (Bottom: 10);
-        Label #ModeName {
-          Text: " ";
-          Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 17, RenderBold: true);
-          Anchor: (Bottom: 6);
-        }
-        Label #ModeHelp {
-          Text: " ";
-          Style: (...$C.@DefaultLabelStyle, TextColor: #dce4ec, FontSize: 14, Wrap: true);
-          Anchor: (Top: 2);
-        }
       }
 
       Label #RouteLine {
@@ -51,11 +79,11 @@ Group #PatrolWandStatusRoot {
       Label #GuardLine {
         Text: " ";
         Style: (...$C.@DefaultLabelStyle, TextColor: #c8d0d8, FontSize: 15, Wrap: true);
-        Anchor: (Bottom: 6);
+        Anchor: (Bottom: 8);
       }
-      Label #HintLine {
-        Text: " ";
-        Style: (...$C.@DefaultLabelStyle, TextColor: #98a0a8, FontSize: 13, Wrap: true);
+
+      Group #ControlRows {
+        LayoutMode: Top;
       }
     }
   }

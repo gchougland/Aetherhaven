@@ -380,6 +380,38 @@ public final class TownManager {
     }
 
     /**
+     * Returns another town whose territory would overlap a charter at {@code charterBlockX}/{@code charterBlockZ} with
+     * {@code charterTerritoryRadiusChunks}, or null if clear.
+     */
+    @Nullable
+    public TownRecord findTerritoryOverlapAtCharter(
+        @Nonnull String worldName,
+        int charterBlockX,
+        int charterBlockZ,
+        int charterTerritoryRadiusChunks,
+        @Nullable UUID excludeTownId
+    ) {
+        int ncx = ChunkUtil.chunkCoordinate(charterBlockX);
+        int ncz = ChunkUtil.chunkCoordinate(charterBlockZ);
+        for (TownRecord other : allTowns()) {
+            if (!worldName.equals(other.getWorldName())) {
+                continue;
+            }
+            if (excludeTownId != null && excludeTownId.equals(other.getTownId())) {
+                continue;
+            }
+            int ocx = ChunkUtil.chunkCoordinate(other.getCharterX());
+            int ocz = ChunkUtil.chunkCoordinate(other.getCharterZ());
+            int or = other.getTerritoryChunkRadius();
+            if (Math.abs(ncx - ocx) <= charterTerritoryRadiusChunks + or
+                && Math.abs(ncz - ocz) <= charterTerritoryRadiusChunks + or) {
+                return other;
+            }
+        }
+        return null;
+    }
+
+    /**
      * First town in this world whose territory contains the block column. Used when multiple towns could exist per
      * world (rare); deterministic order follows {@link #allTowns()}.
      */

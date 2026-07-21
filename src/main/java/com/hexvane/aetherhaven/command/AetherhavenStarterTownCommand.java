@@ -154,6 +154,7 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
                 world,
                 plugin,
                 actorUuid,
+                context.sender() != null ? context.sender().getUsername() : null,
                 origin,
                 facing,
                 new Random(seed)

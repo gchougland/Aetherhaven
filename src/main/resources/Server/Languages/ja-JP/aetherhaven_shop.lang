@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=キャンセル
 aetherhaven.shop.config.saved=店舗準備完了
 
 aetherhaven.shop.hud.title=店
+aetherhaven.shop.hud.closed=閉店 — 担当者が割り当てられていません
 aetherhaven.shop.hud.closedNight=夜間は閉店となります
 aetherhaven.shop.hud.soldOut=完売しました。再入荷は夜明けです。
 aetherhaven.shop.hud.emptyListing=販売品はありません

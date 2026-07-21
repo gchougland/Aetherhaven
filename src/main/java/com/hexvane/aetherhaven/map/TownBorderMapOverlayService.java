@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -480,6 +481,7 @@ public final class TownBorderMapOverlayService {
       hash = 31L * hash + town.getCharterX();
       hash = 31L * hash + town.getCharterZ();
       hash = 31L * hash + town.getTerritoryChunkRadius();
+      hash = 31L * hash + TownPortalTravelColor.resolveHex(town).hashCode();
     }
     return hash;
   }

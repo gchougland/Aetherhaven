@@ -102,6 +102,13 @@
               "Modify": { "_ExportStates": ["Combat"] }
             },
             {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
+              "Modify": {
+                "_ExportStates": ["Combat"],
+                "ViewRange": { "Compute": "ViewRange" }
+              }
+            },
+            {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"
             }
           ]
@@ -112,6 +119,13 @@
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Damage_Aggro",
               "Modify": { "_ExportStates": ["Combat"] }
+            },
+            {
+              "Reference": "Component_Instruction_Aetherhaven_Guard_Idle_Aggro",
+              "Modify": {
+                "_ExportStates": ["Combat"],
+                "ViewRange": { "Compute": "ViewRange" }
+              }
             },
             {
               "Reference": "Component_Instruction_Aetherhaven_Guard_Patrol_Seek"

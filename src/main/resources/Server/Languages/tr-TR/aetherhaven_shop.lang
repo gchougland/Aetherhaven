@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=İptal etmek
 aetherhaven.shop.config.saved=Dükkan yeri hazır
 
 aetherhaven.shop.hud.title=Mağaza
+aetherhaven.shop.hud.closed=Mağaza kapalı — atanmış çalışan yok
 aetherhaven.shop.hud.closedNight=Dükkan gece için kapalı.
 aetherhaven.shop.hud.soldOut=Tükendi — stoklar şafak vakti yenilenecek
 aetherhaven.shop.hud.emptyListing=Satılık bir şey yok

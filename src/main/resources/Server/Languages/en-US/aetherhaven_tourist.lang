@@ -1,2 +1,27 @@
 items.Aetherhaven_Tourist_Portal.name = Tourist portal
 items.Aetherhaven_Tourist_Portal.description = A magical platform that brings visitors to your town each morning.
+
+aetherhaven.tourist.portalTravel.title=Visitor portal network
+aetherhaven.tourist.portalTravel.intro=Choose another town to visit. Step on any visitor portal to open this list again.
+aetherhaven.tourist.portalTravel.allowInbound=Allow visitors to teleport here
+aetherhaven.tourist.portalTravel.allowInboundTooltip=When off, other players cannot travel to your town through visitor portals.
+aetherhaven.tourist.portalTravel.townColor=Town portal color
+aetherhaven.tourist.portalTravel.townColorTooltip=Tints your town in this list. Pick a preset color members will recognize on the travel icon.
+aetherhaven.tourist.portalTravel.chooseColor=Choose color
+aetherhaven.tourist.portalTravel.colorPickerTitle=Choose a town color
+aetherhaven.tourist.portalTravel.colorPickerHint=Tap a color for your town in the visitor portal list.
+aetherhaven.tourist.portalTravel.colorPickerClose=Close
+aetherhaven.tourist.portalTravel.destinationsHeader=Towns with visitor portals
+aetherhaven.tourist.portalTravel.destinationsEmpty=No other visitor portals are ready yet.
+aetherhaven.tourist.portalTravel.travelButton=Travel
+aetherhaven.tourist.portalTravel.statusHere=You are here
+aetherhaven.tourist.portalTravel.ownerLine=Owned by {owner}
+aetherhaven.tourist.portalTravel.statusOpen=Open to visitors
+aetherhaven.tourist.portalTravel.statusClosed=Not accepting visitors
+aetherhaven.tourist.portalTravel.hint={count} towns ready to visit
+aetherhaven.tourist.portalTravel.traveled=Welcome to {town}.
+aetherhaven.tourist.portalTravel.destinationUnavailable=That portal is no longer available.
+aetherhaven.tourist.portalTravel.destinationClosed=That town is not accepting visitors right now.
+aetherhaven.tourist.portalTravel.noPermission=You do not have permission to change this setting.
+aetherhaven.tourist.portalTravel.inboundEnabled=Your town now accepts visitor portal travel.
+aetherhaven.tourist.portalTravel.inboundDisabled=Your town no longer accepts visitor portal travel.

@@ -38,6 +38,9 @@ public final class PathGrounding {
             if (here == null || here == BlockType.EMPTY) {
                 continue;
             }
+            if (PathFoliageUtil.isFoliageBlock(here)) {
+                continue;
+            }
             // Rubble sits on soil; path should target the ground beneath, not the rubble top.
             if (PathRubbleUtil.isRubble(here)) {
                 continue;
@@ -46,16 +49,7 @@ public final class PathGrounding {
                 continue;
             }
             BlockType head = getBlockType(world, blockX, y + 1, blockZ);
-            if (head == null) {
-                continue;
-            }
-            if (head == BlockType.EMPTY) {
-                return y;
-            }
-            if (PathRubbleUtil.isRubble(head)) {
-                return y;
-            }
-            if (head.getMaterial() != BlockMaterial.Solid) {
+            if (PathFoliageUtil.isWalkSurfaceOverlay(head)) {
                 return y;
             }
         }

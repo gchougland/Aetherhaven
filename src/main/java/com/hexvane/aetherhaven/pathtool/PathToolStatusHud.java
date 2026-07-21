@@ -27,12 +27,13 @@ public final class PathToolStatusHud extends CustomUIHud {
     @Override
     protected void build(@Nonnull UICommandBuilder commandBuilder) {
         commandBuilder.append("Aetherhaven/PathToolStatusHud.ui");
+        AetherhavenUiLocalization.applyPathToolStatusHudTitle(commandBuilder, selector -> selector);
     }
 
     public void refresh(@Nonnull PathToolPlayerComponent st, @Nonnull AetherhavenPluginConfig cfg, @Nonnull PlayerRef playerRef) {
         UICommandBuilder b = new UICommandBuilder();
-        AetherhavenUiLocalization.applyPathToolStatusHudTitle(b, selector -> selector);
         PathToolGizmoMode mode = st.getGizmoMode();
+        b.set("#PathToolModeTabs.SelectedTab", st.modeTabId());
         b.set(
             "#ModeName.TextSpans",
             Message.translation(

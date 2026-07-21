@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.universe.world.World;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public final class PathPlannedCell {
         if (samples.isEmpty()) {
             return List.of();
         }
-        int w = Math.max(1, Math.min(8, pathWidthBlocks));
+        int w = Math.max(1, Math.min(PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS, pathWidthBlocks));
         Map<String, CellRole> bestRole = new HashMap<>();
         Map<String, Integer> bestLateral = new HashMap<>();
         for (PathSplineUtil.PathSample s : samples) {

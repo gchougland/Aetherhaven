@@ -32,8 +32,9 @@ public final class PathDebugPreviewUtil {
      */
     public static final float PATH_TOOL_DEBUG_HOLD_SECONDS = 48f;
 
-    public static final Vector3f COLOR_KEYFRAME = new Vector3f(0.92f, 0.92f, 0.95f);
-    public static final Vector3f COLOR_KEYFRAME_SEL = new Vector3f(1.0f, 1.0f, 1.0f);
+    public static final Vector3f COLOR_KEYFRAME = new Vector3f(0.78f, 0.82f, 0.88f);
+    public static final Vector3f COLOR_KEYFRAME_SEL = new Vector3f(1.0f, 0.72f, 0.12f);
+    public static final Vector3f COLOR_KEYFRAME_LOOK = new Vector3f(0.45f, 0.78f, 1.0f);
     public static final Vector3f COLOR_PATH_EDGE = new Vector3f(0.95f, 0.95f, 0.98f);
     public static final Vector3f COLOR_TANGENT = new Vector3f(0.88f, 0.9f, 0.95f);
 
@@ -46,6 +47,33 @@ public final class PathDebugPreviewUtil {
         player.getPacketHandler().write(new ClearDebugShapes());
     }
 
+    /** Default path control node cube half-extent (world units). */
+    public static final double PATH_CONTROL_NODE_CUBE_HALF = 0.16;
+
+    /** Matches in-world debug cube placement vs anchor Y (path nodes use {@link PathToolInteractions#blockTopCenter}). */
+    private static final double PATH_CONTROL_NODE_VISUAL_Y_EXTRA = 0.25;
+
+    /**
+     * Debug cube center Y for a path node anchor ({@link PathToolInteractions#blockTopCenter}). Spline lines use this so
+     * segments pass through the visible node cubes.
+     */
+    public static double pathNodeDebugCenterY(double nodeAnchorY, double cubeHalf) {
+        return nodeAnchorY + cubeHalf + PATH_CONTROL_NODE_VISUAL_Y_EXTRA;
+    }
+
+    public static double pathNodeDebugCenterY(double nodeAnchorY) {
+        return pathNodeDebugCenterY(nodeAnchorY, PATH_CONTROL_NODE_CUBE_HALF);
+    }
+
+    @Nonnull
+    public static Vector3d pathControlNodeLinePoint(@Nonnull Vector3d nodeAnchorPosition) {
+        return new Vector3d(
+            nodeAnchorPosition.x(),
+            pathNodeDebugCenterY(nodeAnchorPosition.y()),
+            nodeAnchorPosition.z()
+        );
+    }
+
     /**
      * Keyframe sphere and yaw direction segment.
      */
@@ -55,23 +83,49 @@ public final class PathDebugPreviewUtil {
         double yawDeg,
         boolean selected
     ) {
-        Vector3f c = selected ? COLOR_KEYFRAME_SEL : COLOR_KEYFRAME;
-        double srad = selected ? 0.36 : 0.3;
-        drawSphere(
-            player,
-            center,
-            c,
-            srad,
-            selected ? 0.9f : 0.8f
-        );
+        drawPathControlNode(player, center, yawDeg, selected, false);
+    }
+
+    /**
+     * Spline control node: cube marker and yaw handle.
+     */
+    public static void drawPathControlNode(
+        @Nonnull PlayerRef player,
+        @Nonnull Vector3d center,
+        double yawDeg,
+        boolean selected,
+        boolean lookAtHighlight
+    ) {
+        Vector3f c;
+        double half;
+        if (selected) {
+            c = COLOR_KEYFRAME_SEL;
+            half = 0.2;
+        } else if (lookAtHighlight) {
+            c = COLOR_KEYFRAME_LOOK;
+            half = 0.19;
+        } else {
+            c = COLOR_KEYFRAME;
+            half = PATH_CONTROL_NODE_CUBE_HALF;
+        }
+        double cx = center.x();
+        double cy = pathNodeDebugCenterY(center.y(), half);
+        double cz = center.z();
+        Matrix4d m = new Matrix4d();
+        m.identity();
+        m.translate(cx, cy, cz);
+        m.scale(half, half, half);
+        float opacity = selected ? 0.92f : lookAtHighlight ? 0.86f : 0.78f;
+        add(player, DebugShape.Cube, m, c, opacity, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
         Vector3d f = PathSplineUtil.forwardHorizontal(yawDeg);
-        double start = srad * 0.9 + 0.01;
+        double start = half * 0.85 + 0.02;
         double handleLen = 0.32;
+        double anchorY = pathNodeDebugCenterY(center.y(), half);
         double ax = center.x() + f.x() * start;
-        double ay = center.y() + f.y() * start;
+        double ay = anchorY + f.y() * start;
         double az = center.z() + f.z() * start;
         double bx = center.x() + f.x() * (start + handleLen);
-        double by = center.y() + f.y() * (start + handleLen);
+        double by = anchorY + f.y() * (start + handleLen);
         double bz = center.z() + f.z() * (start + handleLen);
         drawLine(
             player,
@@ -115,6 +169,53 @@ public final class PathDebugPreviewUtil {
     /**
      * Ghost footprint sitting on the block top face (slightly above y+1) so it is not buried inside solid terrain.
      */
+    private static final double NAV_NODE_CUBE_HALF = 0.22;
+    private static final double NAV_NODE_CUBE_HALF_SELECTED = 0.28;
+    private static final Vector3f COLOR_NAV_ENDPOINT = new Vector3f(0.98f, 0.82f, 0.2f);
+
+    /**
+     * Line endpoint Y for remove-mode nav previews ({@link #drawNavNodeCube}).
+     */
+    @Nonnull
+    public static Vector3d navNodeLinePoint(double x, double y, double z, boolean pathSelected) {
+        double half = pathSelected ? NAV_NODE_CUBE_HALF_SELECTED : NAV_NODE_CUBE_HALF;
+        return new Vector3d(x, y + half, z);
+    }
+
+    /**
+     * Small solid cube at a path nav waypoint (Remove mode and nav previews).
+     */
+    public static void drawNavNodeCube(
+        @Nonnull PlayerRef player,
+        double x,
+        double y,
+        double z,
+        @Nonnull Vector3f color,
+        boolean selected,
+        boolean endpoint
+    ) {
+        Vector3f c = endpoint ? blendToward(color, COLOR_NAV_ENDPOINT, 0.35f) : color;
+        double half = selected ? NAV_NODE_CUBE_HALF_SELECTED : NAV_NODE_CUBE_HALF;
+        double cx = x;
+        double cy = y + half;
+        double cz = z;
+        Matrix4d m = new Matrix4d();
+        m.identity();
+        m.translate(cx, cy, cz);
+        m.scale(half, half, half);
+        float opacity = selected ? 0.88f : 0.78f;
+        add(player, DebugShape.Cube, m, c, opacity, FLAG_SOLID_OVERLAY, PATH_TOOL_DEBUG_HOLD_SECONDS);
+    }
+
+    private static Vector3f blendToward(@Nonnull Vector3f base, @Nonnull Vector3f toward, float t) {
+        float u = Math.min(1f, Math.max(0f, t));
+        return new Vector3f(
+            base.x + (toward.x - base.x) * u,
+            base.y + (toward.y - base.y) * u,
+            base.z + (toward.z - base.z) * u
+        );
+    }
+
     public static void drawPlannedBlock(@Nonnull PlayerRef pr, int x, int y, int z, @Nonnull Vector3f color, @Nonnull com.hypixel.hytale.server.core.universe.world.World w) {
         if (w.getChunkIfInMemory(com.hypixel.hytale.math.util.ChunkUtil.indexChunkFromBlock(x, z)) == null) {
             return;

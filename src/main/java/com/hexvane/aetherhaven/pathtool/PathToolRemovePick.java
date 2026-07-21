@@ -45,25 +45,26 @@ public final class PathToolRemovePick {
             } catch (Exception e) {
                 continue;
             }
-            if (rec.undo != null && !rec.undo.isEmpty()) {
+            List<PathNavPoint> nav = PathToolNavPreviewUtil.navPointsForPreview(rec);
+            if (nav.size() >= 1) {
+                for (PathNavPoint p : nav) {
+                    if (p == null) {
+                        continue;
+                    }
+                    @Nullable
+                    Double t = rayHitSphere(origin, dx, dy, dz, maxDistance, p.x, p.y, p.z, NAV_PICK_RADIUS);
+                    if (t != null && t < bestT) {
+                        bestT = t;
+                        bestId = id;
+                    }
+                }
+            } else if (rec.undo != null && !rec.undo.isEmpty()) {
                 for (PathToolUndoCell c : rec.undo) {
                     if (c == null) {
                         continue;
                     }
                     @Nullable
                     Double t = rayHitSphere(origin, dx, dy, dz, maxDistance, c.x + 0.5, c.y + 0.5, c.z + 0.5, CELL_PICK_RADIUS);
-                    if (t != null && t < bestT) {
-                        bestT = t;
-                        bestId = id;
-                    }
-                }
-            } else if (rec.navNodes != null) {
-                for (PathNavPoint p : rec.navNodes) {
-                    if (p == null) {
-                        continue;
-                    }
-                    @Nullable
-                    Double t = rayHitSphere(origin, dx, dy, dz, maxDistance, p.x, p.y, p.z, NAV_PICK_RADIUS);
                     if (t != null && t < bestT) {
                         bestT = t;
                         bestId = id;

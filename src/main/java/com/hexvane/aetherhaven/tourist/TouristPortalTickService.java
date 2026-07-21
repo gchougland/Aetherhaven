@@ -1199,6 +1199,123 @@ public final class TouristPortalTickService {
         return true;
     }
 
+    /** Result of clearing visiting tourists for one town (same rules as {@link #purgeActiveTouristsInWorld}). */
+    public record TouristTownPurgeResult(int removed, int skippedProtected) {}
+
+    /**
+     * Removes active visiting tourists for a single town. Invited, housed, and citizen tourists are kept; guard
+     * entities are never removed.
+     */
+    @Nonnull
+    public static TouristTownPurgeResult purgeActiveTouristsInTown(
+        @Nonnull TownRecord town,
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!world.getName().equals(town.getWorldName())) {
+            return new TouristTownPurgeResult(0, 0);
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        ConstructionCatalog catalog = plugin.getConstructionCatalog();
+        int removed = 0;
+        int skippedProtected = 0;
+        Set<UUID> processedEntityUuids = new HashSet<>();
+        Set<String> processedCharacterIds = new HashSet<>();
+        boolean townChanged = false;
+        UUID townId = town.getTownId();
+
+        for (TouristRecord rec : new ArrayList<>(town.getTouristRecords())) {
+            UUID entityUuid = rec.getEntityUuid();
+            String characterId = rec.getCharacterId();
+            Ref<EntityStore> entityRef =
+                entityUuid != null ? store.getExternalData().getRefFromUUID(entityUuid) : null;
+            if (isGuardEntityForPurge(entityRef, store)) {
+                continue;
+            }
+            if (shouldProtectTouristFromPurge(town, rec, entityUuid, catalog)) {
+                skippedProtected++;
+                continue;
+            }
+            if (forcePurgeTourist(world, plugin, town, store, rec, entityRef)) {
+                removed++;
+                townChanged = true;
+                if (entityUuid != null) {
+                    processedEntityUuids.add(entityUuid);
+                }
+                if (characterId != null && !characterId.isBlank()) {
+                    processedCharacterIds.add(characterId.toLowerCase());
+                }
+            }
+        }
+
+        Map<String, TownsfolkExistenceService.LiveTownsfolkEntity> liveByCharacter =
+            TownsfolkExistenceService.buildLiveIndex(store);
+        for (TownsfolkExistenceService.LiveTownsfolkEntity live : liveByCharacter.values()) {
+            if (!TownsfolkAssignmentKinds.isTourist(live.assignmentKind())) {
+                continue;
+            }
+            String characterId = live.characterId();
+            if (characterId.isBlank()) {
+                continue;
+            }
+            if (processedCharacterIds.contains(characterId.toLowerCase())) {
+                continue;
+            }
+            UUID entityUuid = live.entityUuid();
+            if (entityUuid != null && processedEntityUuids.contains(entityUuid)) {
+                continue;
+            }
+            TownRecord liveTown;
+            if (live.townId() != null && live.townId().equals(townId)) {
+                liveTown = town;
+            } else if (live.townId() == null) {
+                TownRecord resolved = resolveTownForLiveTourist(tm, world, entityUuid, characterId);
+                if (resolved == null || !resolved.getTownId().equals(townId)) {
+                    continue;
+                }
+                liveTown = resolved;
+            } else {
+                continue;
+            }
+            if (isGuardEntityForPurge(live.ref(), store)) {
+                continue;
+            }
+            TouristRecord rec =
+                entityUuid != null
+                    ? findTouristRecord(liveTown, entityUuid)
+                    : findTouristRecord(liveTown, characterId);
+            if (shouldProtectTouristFromPurge(liveTown, rec, entityUuid, catalog)) {
+                skippedProtected++;
+                continue;
+            }
+            boolean changed = false;
+            if (rec != null) {
+                if (forcePurgeTourist(world, plugin, liveTown, store, rec, live.ref())) {
+                    removed++;
+                    changed = true;
+                }
+            } else if (live.ref() != null && live.ref().isValid()) {
+                store.removeEntity(live.ref(), RemoveReason.REMOVE);
+                TownsfolkSpawnService.release(world, plugin, characterId);
+                removed++;
+                changed = true;
+            }
+            if (changed) {
+                townChanged = true;
+                processedCharacterIds.add(characterId.toLowerCase());
+                if (entityUuid != null) {
+                    processedEntityUuids.add(entityUuid);
+                }
+            }
+        }
+
+        if (townChanged) {
+            tm.updateTown(town);
+        }
+        return new TouristTownPurgeResult(removed, skippedProtected);
+    }
+
     /**
      * Legacy tourist spawns that lost {@link TownVillagerBinding} / {@link TownsfolkCharacterBinding} but kept the
      * townsfolk NPC role — not reachable via tourist save rows or the live townsfolk index.

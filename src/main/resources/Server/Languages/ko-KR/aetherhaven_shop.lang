@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=취소
 aetherhaven.shop.config.saved=매장 준비 완료
 
 aetherhaven.shop.hud.title=가게
+aetherhaven.shop.hud.closed=영업 종료 — 배정된 직원 없음
 aetherhaven.shop.hud.closedNight=가게는 오늘 밤 영업을 종료합니다.
 aetherhaven.shop.hud.soldOut=품절되었습니다. 새벽에 재입고됩니다.
 aetherhaven.shop.hud.emptyListing=판매할 상품 없음

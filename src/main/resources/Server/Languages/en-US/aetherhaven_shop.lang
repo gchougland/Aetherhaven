@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=Cancel
 aetherhaven.shop.config.saved=Shop spot ready
 
 aetherhaven.shop.hud.title=Shop
+aetherhaven.shop.hud.closed=Shop closed — no worker assigned
 aetherhaven.shop.hud.closedNight=Shop closed for the night
 aetherhaven.shop.hud.soldOut=Sold out — restocks at dawn
 aetherhaven.shop.hud.emptyListing=Nothing for sale

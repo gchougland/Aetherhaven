@@ -1,0 +1,16 @@
+Group #WidthPreviewRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 4);
+
+  Group {
+    FlexWeight: 1;
+  }
+
+  Group #Cells {
+    LayoutMode: Left;
+  }
+
+  Group {
+    FlexWeight: 1;
+  }
+}

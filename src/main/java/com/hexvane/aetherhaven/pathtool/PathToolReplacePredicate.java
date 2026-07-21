@@ -102,11 +102,14 @@ public final class PathToolReplacePredicate {
     }
 
     /**
-     * When no explicit allowlist is set: all {@code Soil_*} (including {@code Soil_Grass}, {@code Soil_Grass_Deep},
-     * {@code Soil_Pathway}, other soils, and prior path output blocks) plus name patterns such as
-     * {@code *Dirt*}. Aetherhaven path output ids are not excluded — you can place over an existing path.
+     * When no explicit allowlist is set: all {@code Soil_*} (including {@code Soil_Grass_Sunny}, {@code Soil_Grass_Full},
+     * {@code Soil_Grass}, {@code Soil_Grass_Deep}, {@code Soil_Pathway}, other soils, and prior path output blocks) plus
+     * name patterns such as {@code *Dirt*}. Aetherhaven path output ids are not excluded — you can place over an existing path.
      */
     private static boolean defaultHeuristicSurfaceReplaceable(@Nonnull String id) {
+        if (id.startsWith("Soil_Grass")) {
+            return true;
+        }
         return id.startsWith("Soil_") || id.contains("Dirt");
     }
 

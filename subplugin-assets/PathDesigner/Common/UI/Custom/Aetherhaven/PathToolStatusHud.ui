@@ -1,10 +1,71 @@
 $C = "../Common.ui";
 
+@PathToolTabAnchor = Anchor(Width: 52, Height: 44, Right: 3, Bottom: -10);
+
+@PathToolTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@PathToolTabAnchor, Bottom: -6), IconAnchor: (Width: 22, Height: 22)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@PathToolTabAnchor, Bottom: -2), IconAnchor: (Width: 22, Height: 22)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@PathToolTabAnchor, Bottom: -4), IconAnchor: (Width: 22, Height: 22))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@PathToolTabAnchor, Bottom: 0),
+      IconAnchor: (Width: 24, Height: 24),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
 Group #PathToolStatusRoot {
   LayoutMode: Top;
+  Anchor: (Top: 72, Left: 20, Width: 520);
+
+  TabNavigation #PathToolModeTabs {
+    Anchor: (Height: 48, Left: 4, Right: 0);
+    Style: @PathToolTabsStyle;
+    SelectedTab: "Place";
+
+    TabButton {
+      Icon: "../location.png";
+      TooltipText: "Place";
+      Id: "Place";
+    }
+
+    TabButton {
+      Icon: "../move_icon_256.png";
+      TooltipText: "Move";
+      Id: "Move";
+    }
+
+    TabButton {
+      Icon: "../rotate_clockwise_256.png";
+      TooltipText: "Rotate";
+      Id: "Rotate";
+    }
+
+    TabButton {
+      Icon: "../bulldozer_icon_256.png";
+      TooltipText: "Remove";
+      Id: "Remove";
+    }
+
+    TabButton {
+      Icon: "../filter.png";
+      TooltipText: "Replace filter";
+      Id: "ReplaceFilter";
+    }
+
+    TabButton {
+      Icon: "../idea.png";
+      TooltipText: "Style designer";
+      Id: "StyleDesigner";
+    }
+  }
 
   $C.@DecoratedContainer {
-    Anchor: (Top: 88, Left: 20, Width: 460);
+    Anchor: (Width: 520, Top: 4);
 
     #Title {
       Label #PathToolHudTitleText {
@@ -19,6 +80,7 @@ Group #PathToolStatusRoot {
       Padding: (Left: 14, Right: 14, Top: 10, Bottom: 14);
 
       Label #ModeName {
+        Visible: false;
         Text: " ";
         Style: (...$C.@DefaultLabelStyle, TextColor: #b8d8ff, FontSize: 17, RenderBold: true);
         Anchor: (Bottom: 6);

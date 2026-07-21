@@ -5,6 +5,7 @@ aetherhaven.ui.plotCrafting.previewTitle = Preview
 aetherhaven.ui.plotCrafting.infoTitle = Building details
 aetherhaven.ui.plotCrafting.infoEmpty = Select a building to view its details.
 aetherhaven.ui.plotCrafting.infoGoldTitle = Gold costs
+aetherhaven.ui.plotCrafting.infoCountsAsTitle = Counts as for construction
 aetherhaven.ui.plotCrafting.infoRequiredModsTitle = Required mods
 aetherhaven.ui.plotCrafting.infoMaterialsTitle = Required materials
 aetherhaven.ui.plotCrafting.variantSectionTitle = Variants

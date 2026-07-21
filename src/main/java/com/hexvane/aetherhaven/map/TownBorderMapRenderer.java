@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.map;
 
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -14,9 +15,6 @@ import javax.annotation.Nullable;
 
 /** Paints axis-aligned town territory edges onto map tile pixels. */
 public final class TownBorderMapRenderer {
-    /** Hytale map pixels use ARGB: R in bits 24-31, G 16-23, B 8-15, A 0-7. */
-    private static final int OWN_TOWN_COLOR = (0xD4 << 24) | (0xAF << 16) | (0x37 << 8) | 0xFF;
-
     private static final float MIN_TOLERANCE = 1.5f;
 
     private TownBorderMapRenderer() {}
@@ -293,13 +291,6 @@ public final class TownBorderMapRenderer {
     }
 
     public static int townColor(@Nonnull TownRecord town, @Nullable UUID viewerTownId) {
-        if (viewerTownId != null && viewerTownId.equals(town.getTownId())) {
-            return OWN_TOWN_COLOR;
-        }
-        int hash = town.getTownId().hashCode();
-        int r = 0x60 + (hash & 0x7F);
-        int g = 0x90 + ((hash >> 8) & 0x5F);
-        int b = 0xC0 + ((hash >> 16) & 0x3F);
-        return (r << 24) | (g << 16) | (b << 8) | 0xFF;
+        return TownPortalTravelColor.toOpaqueArgb(town);
     }
 }

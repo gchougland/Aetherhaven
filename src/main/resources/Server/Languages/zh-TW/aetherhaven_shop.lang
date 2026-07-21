@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=取消
 aetherhaven.shop.config.saved=店舖位置已準備就緒
 
 aetherhaven.shop.hud.title=店鋪
+aetherhaven.shop.hud.closed=商店關閉 — 未分配工作人員
 aetherhaven.shop.hud.closedNight=商店當晚關門了。
 aetherhaven.shop.hud.soldOut=已售罄——黎明時分補貨
 aetherhaven.shop.hud.emptyListing=無商品出售

@@ -22,6 +22,9 @@ public final class PathToolStyleDefinition {
     public static final int STYLE_GRID_ROWS = 6;
     public static final int STYLE_GRID_SLOTS = STYLE_GRID_COLUMNS * STYLE_GRID_ROWS;
 
+    /** Maximum placed path width in blocks; matches {@link #STYLE_GRID_COLUMNS}. */
+    public static final int MAX_PATH_WIDTH_BLOCKS = STYLE_GRID_COLUMNS;
+
     private static final Gson GSON = new GsonBuilder().create();
     private static final Type LIST_TYPE = new TypeToken<List<PathToolStyleDefinition>>() {
     }.getType();
@@ -121,13 +124,16 @@ public final class PathToolStyleDefinition {
     public static final int CENTER_COLUMN = STYLE_GRID_COLUMNS / 2;
 
     /**
-     * Maps a placed-path lateral index to a chest column using outside-in rules: left path cells consume filled
-     * columns from the left edge inward, right cells from the right edge inward, and any interior cells use the middle
-     * column. When the path is narrower than the style, at least one cell always uses the middle column.
+     * Maps path lateral index (0 = left edge of the placed band) to a chest column. Left path cells consume filled
+     * columns from the left edge inward, right cells from the right edge inward, and any remaining interior cells use
+     * the middle designer column (column 4).
      */
     public int chestColumnForLateral(int lateralIndex, int pathWidthBlocks) {
-        int w = Math.max(1, Math.min(8, pathWidthBlocks));
+        int w = Math.max(1, Math.min(MAX_PATH_WIDTH_BLOCKS, pathWidthBlocks));
         int i = Math.max(0, Math.min(w - 1, lateralIndex));
+        if (w <= 1) {
+            return defaultSingleWidthColumn();
+        }
 
         int leftSlots = (w - 1) / 2;
         int rightSlots = (w - 1) / 2;
@@ -137,7 +143,10 @@ public final class PathToolStyleDefinition {
             if (i < leftFilled.size()) {
                 return leftFilled.get(i);
             }
-            return Math.min(i, CENTER_COLUMN - 1);
+            if (columnHasBlocks(getColumns(), CENTER_COLUMN)) {
+                return CENTER_COLUMN;
+            }
+            return leftFilled.isEmpty() ? 0 : leftFilled.get(leftFilled.size() - 1);
         }
         if (i >= w - rightSlots) {
             int rightIndex = (w - 1) - i;
@@ -145,7 +154,22 @@ public final class PathToolStyleDefinition {
             if (rightIndex < rightFilled.size()) {
                 return rightFilled.get(rightIndex);
             }
-            return Math.max(CENTER_COLUMN + 1, STYLE_GRID_COLUMNS - 1 - rightIndex);
+            if (columnHasBlocks(getColumns(), CENTER_COLUMN)) {
+                return CENTER_COLUMN;
+            }
+            return rightFilled.isEmpty() ? STYLE_GRID_COLUMNS - 1 : rightFilled.get(rightFilled.size() - 1);
+        }
+        return CENTER_COLUMN;
+    }
+
+    private int defaultSingleWidthColumn() {
+        List<Integer> leftFilled = filledSideColumns(true);
+        if (!leftFilled.isEmpty()) {
+            return leftFilled.get(0);
+        }
+        List<Integer> rightFilled = filledSideColumns(false);
+        if (!rightFilled.isEmpty()) {
+            return rightFilled.get(0);
         }
         return CENTER_COLUMN;
     }
@@ -178,7 +202,7 @@ public final class PathToolStyleDefinition {
     }
 
     /**
-     * Picks a block for a path cell using outside-in chest column mapping for {@code lateralIndex} and
+     * Picks a block for a path cell using the chest column mapped from {@code lateralIndex} and
      * {@code pathWidthBlocks}.
      */
     @Nonnull

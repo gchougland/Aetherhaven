@@ -36,6 +36,13 @@ $Sounds = "../Sounds.ui";
   Disabled: (Background: PatchStyle(TexturePath: "../move_icon_256.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
   Sounds: $Sounds.@ButtonsLight
 );
+@RescueTeleportButtonStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@TabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@TabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@TabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@TabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 // Default $C.@TextButton uses Primary.png with HorizontalBorder 80 (~172px min). Compact row buttons need Border 12.
 @PlotActionBtnBorder = 12;
@@ -137,6 +144,83 @@ $C.@PageOverlay {
           Label #Description {
             Anchor: (Left: 0, Right: 0, Bottom: 12);
             Style: (...$C.@DefaultLabelStyle, Wrap: true);
+          }
+
+          Group #TouristManifestRow {
+            LayoutMode: Top;
+            Visible: false;
+            Anchor: (Bottom: 12);
+
+            Label #TouristManifestHeader {
+              Style: (...$C.@DefaultLabelStyle, RenderBold: true);
+              Anchor: (Bottom: 6);
+            }
+
+            Label #TouristManifestEmpty {
+              Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
+              Anchor: (Bottom: 8);
+              Visible: false;
+            }
+
+            Group #TouristManifestScroll {
+              LayoutMode: TopScrolling;
+              ScrollbarStyle: $C.@DefaultScrollbarStyle;
+              Anchor: (Height: 220, Bottom: 8);
+
+              Group #TouristManifestRows {
+                LayoutMode: Top;
+              }
+            }
+
+            $C.@SecondaryTextButton #ClearVisitingTouristsButton {
+              Text: "";
+              Anchor: (Width: 200, Height: 36);
+            }
+
+            Group #VisitorPortalTravelRow {
+              LayoutMode: Top;
+              Anchor: (Top: 10);
+              Padding: (Horizontal: 8, Vertical: 8);
+              Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4);
+
+              Group #VisitorPortalTravelAllowRow {
+                LayoutMode: Left;
+                Anchor: (Bottom: 8);
+
+                $C.@CheckBox #VisitorPortalTravelToggle {}
+
+                Label #VisitorPortalTravelLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+                  Anchor: (Left: 11);
+                  FlexWeight: 1;
+                }
+              }
+
+              Group #VisitorPortalColorRow {
+                LayoutMode: Left;
+
+                TextButton #VisitorPortalColorPreviewIcon {
+                  Anchor: (Width: 32, Height: 32, Right: 10);
+                  Style: @RescueTeleportButtonStyle;
+                  Text: "";
+                  Disabled: true;
+                  HitTestVisible: false;
+                }
+
+                Label #VisitorPortalColorLabel {
+                  Text: "";
+                  Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8, Wrap: true);
+                  Anchor: (Right: 10);
+                  FlexWeight: 1;
+                }
+
+                $C.@SecondaryTextButton #ChooseVisitorPortalColorButton {
+                  Text: "";
+                  Anchor: (Width: 200, Height: 36);
+                }
+              }
+            }
           }
 
           Group #VillagerRow {
@@ -598,6 +682,46 @@ $C.@PageOverlay {
               FlexWeight: 1;
               Anchor: (Left: 8);
             }
+          }
+        }
+      }
+    }
+
+    Group #VisitorPortalColorPickerModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 400);
+
+        #Title {
+          Label #VisitorPortalColorPickerTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 16);
+
+          Label #VisitorPortalColorPickerHint {
+            Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, Wrap: true);
+            Anchor: (Bottom: 12);
+            Text: "";
+          }
+
+          Group #VisitorPortalColorPresetGrid {
+            LayoutMode: Top;
+            Anchor: (Bottom: 14);
+          }
+
+          $C.@CancelTextButton #VisitorPortalColorPickerCancelButton {
+            Text: "";
+            Anchor: (Width: 160, Height: 36);
           }
         }
       }

@@ -26,7 +26,6 @@ public final class PathCementService {
     private static final int SET_BLOCK = 10;
     /** Same tuning as plot prefab clears: breaks spawn normal drops/particles where applicable. */
     private static final int BREAK_SETTINGS = 10;
-    private static final int MAX_GRASS_CLEAR_ABOVE = 6;
     private static final int MAX_RUBBLE_CLEAR_ABOVE = 32;
     @Nonnull
     private static final RotationTuple FLAT = RotationTuple.NONE;
@@ -79,14 +78,14 @@ public final class PathCementService {
             int x = p.pos.x();
             int y = p.pos.y();
             int z = p.pos.z();
-            if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z, playerReplaceBlockIds)) {
-                continue;
-            }
             WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
             if (ch == null) {
                 continue;
             }
-            breakRubbleColumnAbove(world, x, y, z);
+            prepareColumnForPathSurface(world, x, y, z, undos, grassCleared);
+            if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z, playerReplaceBlockIds)) {
+                continue;
+            }
             int oldIdx = ch.getBlock(x, y, z);
             BlockType oldT = BlockType.getAssetMap().getAsset(oldIdx);
             if (oldT == null) {
@@ -104,14 +103,6 @@ public final class PathCementService {
             u.blockId = oldT.getId();
             u.rotationIndex = oldRot;
             undos.add(u);
-            clearPlantGrassColumnAbove(
-                world,
-                x,
-                y,
-                z,
-                undos,
-                grassCleared
-            );
         }
         return newShellRecord(undos);
     }
@@ -163,7 +154,7 @@ public final class PathCementService {
 
     @Nonnull
     private static PathPlannedCell.CellRole lateralRole(int lateralIndex, int pathWidthBlocks) {
-        int w = Math.max(1, Math.min(8, pathWidthBlocks));
+        int w = Math.max(1, Math.min(PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS, pathWidthBlocks));
         if (w < 3) {
             return PathPlannedCell.CellRole.Center;
         }
@@ -196,17 +187,24 @@ public final class PathCementService {
     }
 
     /**
-     * After placing path surface, removes decorative/tall plant grass ({@code *Plant_Grass*}) stacked above the cell so the
-     * path reads cleanly. Each removal is added to the same undo list as the path.
+     * Clears rubble, {@code Plant_Grass*}, and {@code Plant_Bush*} above the path surface before replace checks and
+     * placement so foliage never blocks {@link PathGrounding} or {@link WorldChunk#placeBlock}. Removals are undoable.
      */
     @SuppressWarnings({ "deprecation", "removal" })
-    /**
-     * Breaks rubble blocks stacked above the path surface (highest Y first) so {@link World#breakBlock} runs normal
-     * break rules instead of silently clearing with {@link WorldChunk#setBlock}.
-     */
-    private static void breakRubbleColumnAbove(@Nonnull World world, int x, int surfaceY, int z) {
+    private static void prepareColumnForPathSurface(
+        @Nonnull World world,
+        int x,
+        int surfaceY,
+        int z,
+        @Nonnull List<PathToolUndoCell> undos,
+        @Nonnull Set<String> alreadyCleared
+    ) {
         int top = Math.min(319, surfaceY + MAX_RUBBLE_CLEAR_ABOVE);
         for (int cy = top; cy > surfaceY; cy--) {
+            String k = x + ":" + cy + ":" + z;
+            if (alreadyCleared.contains(k)) {
+                continue;
+            }
             WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
             if (ch == null) {
                 break;
@@ -216,56 +214,44 @@ public final class PathCementService {
             if (bt == null || bt == BlockType.EMPTY) {
                 continue;
             }
+            if (!PathFoliageUtil.isClearableAbovePath(bt)) {
+                break;
+            }
+            String id = bt.getId();
             if (PathRubbleUtil.isRubble(bt)) {
                 world.breakBlock(x, cy, z, BREAK_SETTINGS);
+                alreadyCleared.add(k);
+                continue;
             }
+            if (PathFoliageUtil.isPlantBushId(id) || PathFoliageUtil.isPlantGrassId(id)) {
+                appendUndoCell(ch, x, cy, z, id, undos);
+                if (PathFoliageUtil.isPlantBushId(id)) {
+                    world.breakBlock(x, cy, z, BREAK_SETTINGS);
+                } else {
+                    ch.setBlock(x, cy, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK);
+                }
+                alreadyCleared.add(k);
+                continue;
+            }
+            break;
         }
     }
 
-    private static void clearPlantGrassColumnAbove(
-        @Nonnull World world,
+    @SuppressWarnings({ "deprecation", "removal" })
+    private static void appendUndoCell(
+        @Nonnull WorldChunk ch,
         int x,
-        int surfaceY,
+        int y,
         int z,
-        @Nonnull List<PathToolUndoCell> undos,
-        @Nonnull Set<String> alreadyCleared
+        @Nonnull String blockId,
+        @Nonnull List<PathToolUndoCell> undos
     ) {
-        for (int dy = 1; dy <= MAX_GRASS_CLEAR_ABOVE; dy++) {
-            int py = surfaceY + dy;
-            if (py < 0 || py >= 320) {
-                break;
-            }
-            String k = x + ":" + py + ":" + z;
-            if (alreadyCleared.contains(k)) {
-                continue;
-            }
-            WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
-            if (ch == null) {
-                break;
-            }
-            int idx = ch.getBlock(x, py, z);
-            BlockType bt = BlockType.getAssetMap().getAsset(idx);
-            if (bt == null || bt == BlockType.EMPTY) {
-                continue;
-            }
-            String id = bt.getId();
-            if (id == null) {
-                break;
-            }
-            if (id.contains("Plant_Grass")) {
-                int rot = chunkRotationIndex(ch, x, py, z);
-                PathToolUndoCell u = new PathToolUndoCell();
-                u.x = x;
-                u.y = py;
-                u.z = z;
-                u.blockId = id;
-                u.rotationIndex = rot;
-                undos.add(u);
-                ch.setBlock(x, py, z, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK);
-                alreadyCleared.add(k);
-            } else {
-                break;
-            }
-        }
+        PathToolUndoCell u = new PathToolUndoCell();
+        u.x = x;
+        u.y = y;
+        u.z = z;
+        u.blockId = blockId;
+        u.rotationIndex = chunkRotationIndex(ch, x, y, z);
+        undos.add(u);
     }
 }

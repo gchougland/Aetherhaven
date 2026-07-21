@@ -53,7 +53,50 @@ public final class TownPlayerLookup {
                 return pr.getUsername();
             }
         }
+        PlayerRef global = Universe.get().getPlayer(id);
+        if (global != null) {
+            return global.getUsername();
+        }
         String s = id.toString();
         return s.length() > 12 ? s.substring(0, 8) + "…" : s;
+    }
+
+    /** Owner name for UI: online username, else persisted {@link TownRecord#getOwnerUsername()}, else UUID fallback. */
+    @Nonnull
+    public static String ownerDisplayName(@Nonnull World world, @Nonnull TownRecord town) {
+        String online = resolveOnlineUsername(town.getOwnerUuid(), world);
+        if (online != null) {
+            return online;
+        }
+        String cached = town.getOwnerUsername();
+        if (cached != null && !cached.isBlank()) {
+            return cached.trim();
+        }
+        return displayNameForUuid(world, town.getOwnerUuid());
+    }
+
+    /** Persists {@link TownRecord#setOwnerUsername(String)} when the owner is online under a new name. */
+    public static void refreshOwnerUsernameIfOnline(
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager townManager
+    ) {
+        String online = resolveOnlineUsername(town.getOwnerUuid(), world);
+        if (online == null || online.equals(town.getOwnerUsername())) {
+            return;
+        }
+        town.setOwnerUsername(online);
+        townManager.updateTown(town);
+    }
+
+    @Nullable
+    private static String resolveOnlineUsername(@Nonnull UUID id, @Nonnull World world) {
+        for (PlayerRef pr : world.getPlayerRefs()) {
+            if (pr.getUuid().equals(id)) {
+                return pr.getUsername();
+            }
+        }
+        PlayerRef global = Universe.get().getPlayer(id);
+        return global != null ? global.getUsername() : null;
     }
 }

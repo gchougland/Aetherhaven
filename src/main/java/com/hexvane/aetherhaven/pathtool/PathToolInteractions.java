@@ -348,6 +348,14 @@ public final class PathToolInteractions {
                 return;
             }
         }
+        if (isPathLayoutEditMode(st.getGizmoMode())) {
+            @Nullable
+            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                PathToolWidthPage.open(playerRef, store, pr);
+            }
+            return;
+        }
         st.cyclePathWidth();
         send(
             playerRef,
@@ -378,12 +386,29 @@ public final class PathToolInteractions {
             context.getState().state = InteractionState.Failed;
             return;
         }
+        Store<EntityStore> store = commandBuffer.getStore();
         int n = plugin.getConfig().get().getPathToolStyleDefinitions().size();
         if (n <= 0) {
             context.getState().state = InteractionState.Failed;
             return;
         }
         st.clampPathStyleIndex(n);
+        if (isPathLayoutEditMode(st.getGizmoMode())) {
+            @Nullable
+            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                PathToolStylePickPage.open(playerRef, store, pr);
+            }
+            return;
+        }
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner && !PathToolStyleUi.isActivelyEditing(playerRef, store)) {
+            @Nullable
+            PlayerRef pr = commandBuffer.getComponent(playerRef, PlayerRef.getComponentType());
+            if (pr != null) {
+                PathToolStylePickPage.open(playerRef, store, pr);
+            }
+            return;
+        }
         st.cyclePathStyle(n);
         send(
             playerRef,
@@ -647,6 +672,12 @@ public final class PathToolInteractions {
         if (pr != null) {
             pr.sendMessage(message);
         }
+    }
+
+    private static boolean isPathLayoutEditMode(@Nonnull PathToolGizmoMode mode) {
+        return mode == PathToolGizmoMode.Commit
+            || mode == PathToolGizmoMode.Translate
+            || mode == PathToolGizmoMode.Rotate;
     }
 
     private static void pathToast(

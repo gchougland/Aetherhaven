@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=Скасувати
 aetherhaven.shop.config.saved=Готове місце для магазину
 
 aetherhaven.shop.hud.title=Магазин
+aetherhaven.shop.hud.closed=Магазин зачинено — працівника не призначено
 aetherhaven.shop.hud.closedNight=Магазин зачинено на ніч
 aetherhaven.shop.hud.soldOut=Розпродано — поповнення запасів на світанку
 aetherhaven.shop.hud.emptyListing=Нічого на продаж

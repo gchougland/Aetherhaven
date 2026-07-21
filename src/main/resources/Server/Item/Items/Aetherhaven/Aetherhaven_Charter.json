@@ -15,26 +15,38 @@
       {
         "Id": "Aetherhaven_TownPlanningDesk",
         "Type": "Crafting",
-        "Categories": ["Aetherhaven_TownPlanning"]
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
       }
     ]
   },
   "PlayerAnimationsId": "Block",
-  "Categories": ["Furniture.Beds", "Aetherhaven.All"],
+  "Categories": [
+    "Furniture.Beds",
+    "Aetherhaven.All"
+  ],
   "Set": "Aetherhaven",
-  "Icon": "Icons/ItemsGenerated/Furniture_Village_Tombstone.png",
+  "Icon": "Icons/ItemsGenerated/Aetherhaven_Charter.png",
   "IconProperties": {
-    "Rotation": [22.5, 45, 22.5],
-    "Scale": 0.445,
-    "Translation": [0, -22.7]
+    "Scale": 0.25,
+    "Rotation": [
+      22.5,
+      45,
+      22.5
+    ],
+    "Translation": [
+      0,
+      -44
+    ]
   },
   "BlockType": {
     "BlockParticleSetId": "Stone",
     "BlockSoundSetId": "Stone",
-    "CustomModel": "Blocks/Decorative_Sets/Village/Gravestone.blockymodel",
+    "CustomModel": "Blocks/town_charter.blockymodel",
     "CustomModelTexture": [
       {
-        "Texture": "Blocks/Decorative_Sets/Village/Gravestone_Texture.png",
+        "Texture": "Blocks/town_charter.png",
         "Weight": 1
       }
     ],
@@ -44,7 +56,7 @@
         "GatherType": "Unbreakable"
       }
     },
-    "HitboxType": "Tombstone_Village",
+    "HitboxType": "Aetherhaven_Charter",
     "Material": "Solid",
     "Opacity": "Transparent",
     "ParticleColor": "#797668",
@@ -64,16 +76,29 @@
         "Interactions": [
           {
             "Type": "OpenCustomUI",
-            "Page": { "Id": "AetherhavenCharterTown" }
+            "Page": {
+              "Id": "AetherhavenCharterTown"
+            }
           }
         ]
       }
     }
   },
-  "ResourceTypes": [{ "Id": "Fuel" }, { "Id": "Charcoal" }],
+  "ResourceTypes": [
+    {
+      "Id": "Fuel"
+    },
+    {
+      "Id": "Charcoal"
+    }
+  ],
   "Tags": {
-    "Type": ["Furniture"],
-    "Family": ["Aetherhaven"]
+    "Type": [
+      "Furniture"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
   },
   "ItemSoundSetId": "ISS_Blocks_Stone"
 }

@@ -38,6 +38,7 @@ public final class TownFoundingService {
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull UUID owner,
+        @Nullable String ownerUsername,
         @Nonnull Vector3i charterPos,
         @Nonnull Random random
     ) {
@@ -45,7 +46,11 @@ public final class TownFoundingService {
         if (tm.findTownForPlayerInWorld(owner) != null) {
             return null;
         }
-        TownRecord town = createRecord(world, plugin, tm, owner, charterPos, random);
+        int territoryRadius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());
+        if (tm.findTerritoryOverlapAtCharter(world.getName(), charterPos.x, charterPos.z, territoryRadius, null) != null) {
+            return null;
+        }
+        TownRecord town = createRecord(world, plugin, tm, owner, ownerUsername, charterPos, random);
         tm.putTown(town);
         spawnElder(world, town, tm);
         town.setElderSpawned(true);
@@ -61,6 +66,7 @@ public final class TownFoundingService {
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull UUID owner,
+        @Nullable String ownerUsername,
         @Nonnull Vector3i charterPos,
         @Nonnull Rotation yaw,
         @Nonnull Random random
@@ -69,7 +75,11 @@ public final class TownFoundingService {
         if (tm.findTownForPlayerInWorld(owner) != null) {
             return null;
         }
-        TownRecord town = createRecord(world, plugin, tm, owner, charterPos, random);
+        int territoryRadius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());
+        if (tm.findTerritoryOverlapAtCharter(world.getName(), charterPos.x, charterPos.z, territoryRadius, null) != null) {
+            return null;
+        }
+        TownRecord town = createRecord(world, plugin, tm, owner, ownerUsername, charterPos, random);
         tm.putTown(town);
         CharterRelocationService.LinkRepairResult linked =
             CharterRelocationService.repairCharterLink(world, town, yaw);
@@ -91,6 +101,7 @@ public final class TownFoundingService {
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownManager tm,
         @Nonnull UUID owner,
+        @Nullable String ownerUsername,
         @Nonnull Vector3i pos,
         @Nonnull Random random
     ) {
@@ -106,6 +117,9 @@ public final class TownFoundingService {
             System.currentTimeMillis()
         );
         town.setDisplayName(plugin.getTownNameCatalog().pickUniqueDisplayName(tm, random));
+        if (ownerUsername != null && !ownerUsername.isBlank()) {
+            town.setOwnerUsername(ownerUsername.trim());
+        }
         return town;
     }
 

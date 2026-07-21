@@ -1,11 +1,11 @@
 ---
-name: "Mitarbeiter für die Grundstücksvergabe"
+name: "Stab für Grundstücksauswahl"
 description: "Grundstücke beanspruchen und Gebäudegrundrisse abstempeln"
 author: Hexvane
 ---
 
 ![Plot placement staff](wiki/mechanic_plot_placement_staff.png)
 
-# Standortplaner
+# Stab für Grundstücksauswahl
 
-Mit diesem Planer wählst du den Standort für ein neues Grundstück. Rüste ihn aus, wähle ein Gebäude und platziere das Schild auf festem Boden.
+Mit diesem Stab wählst du den Standort für ein neues Grundstück. Rüste ihn aus, wähle ein Gebäude und platziere das Schild auf festem Boden.

@@ -2,7 +2,30 @@
 
 ## [2.5.0] - Unreleased
 
+### Added
 
+- **Path designer width and style menus** — While placing, moving, or rotating a path, **E** opens a width slider with a sample of how your current style will look across the path. **R** opens a list to pick a saved style instead of cycling blindly.
+- **Tourist portal visitor list** — On the tourist portal town records shelf, the Plot tab lists who is visiting town right now, with a short note for day visitors, invited guests, or people who already live there. **Send visitors home** clears out day visitors for your town only, the same idea as the tourist purge command. Invited guests, housed residents, and guards are left alone.
+- **Visitor portal network** — Stepping onto a visitor portal opens a list of every active portal in your world. Each entry shows the town name, who owns it, and whether visitors are welcome. Travel to another town in one click, or turn off **Allow visitors to teleport here** on the portal shelf or in the travel window so strangers cannot jump into your town. Each town can pick a **portal color** from preset swatches (tints the travel icon in the list and on the map border for other towns).
+
+### Changed
+
+- **Path designer on-screen help** — While you hold the path designer shovel, mode tabs at the top show Place, Move, Rotate, Remove, Replace filter, and Style designer. **Q** cycles modes in that same order.
+- **Path designer remove preview** — In Remove mode, saved paths show as orange waypoint markers and connecting lines (not a solid block outline), so you can see routes more clearly.
+- **Path width up to nine blocks** — Path width can now go up to nine blocks wide, matching the style designer chest grid.
+- **Patrol wand on screen help** — While you hold the patrol wand, the panel now matches the path designer shovel: **Build** and **Assign** tabs at the top, a short summary of what each mode does, and a clear list of which keys do what (add points, save a route, pick a guard, switch modes, and so on).
+- **Town charter look** — The town charter uses a dedicated tall sign model and texture (about four blocks high on a 1×1 footprint) with a custom collision shape and inventory icon, instead of the old village tombstone.
+- **Plot crafting building details** — Variant entries show a **Counts as for construction** line with the display names of the canonical buildings they satisfy (not raw construction ids).
+
+### Fixed
+
+- **Path styles on wide paths** — Left and right edges of a placed path now use your outer blocks from the style designer; the middle uses your center column, with inner columns filling in from the sides. The width preview matches what gets placed.
+- **Path replace filter** — Opening the replace-filter chest for the first time shows the usual grass and soil blocks already in the grid, including sunny and full grass variants.
+- **Path designer visuals** — Selected control points are gold, hovered ones blue, and unselected ones gray-white. White route lines in edit modes line up with the node markers; orange remove-mode lines line up with waypoint cubes. Width sample rows are centered in the width window.
+- **Paths through grass and bushes** — Placing a path clears tall grass and bushes above each replaced ground block before paving, so patches with plants on top should no longer be skipped at random. Bushes above the path are broken normally (drops included) and restore when you remove the path.
+- **Guards on patrol routes** — Guards assigned to a patrol route now fight hostile creatures they notice, the same as unassigned guards. They drop the patrol to deal with the threat, then resume walking the route when the fight is over. If an enemy pulls them too far from the route (about twenty blocks), they stop chasing and head back to their patrol.
+- **Shop spot HUD** — The “no worker assigned” closed state now resolves its translation instead of showing a raw language key.
+- **Multi-role workplace assignment** — Variant plots that count as more than one building type (for example a community stall that counts as both merchant shop and flower shop) now list the correct villagers when you assign each role, instead of reusing the first role’s list.
 
 ## [2.4.1] - 7/20/26
 

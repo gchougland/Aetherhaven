@@ -102,6 +102,12 @@ public final class PatrolWandPlayerComponent implements Component<EntityStore> {
         this.mode = mode;
     }
 
+    /** Tab id for {@link PatrolWandStatusHud} mode tabs (visual only). */
+    @Nonnull
+    public String modeTabId() {
+        return mode == PatrolWandMode.Build ? "Build" : "Assign";
+    }
+
     @Nullable
     public UUID getEditingRouteId() {
         return editingRouteId;

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.pathtool;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -57,7 +58,11 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         .add()
         .append(
             new KeyedCodec<>("PathWidth", Codec.INTEGER),
-            (c, w) -> c.pathWidthBlocks = w != null && w > 0 ? Math.max(1, Math.min(8, w)) : 5,
+            (c, w) ->
+                c.pathWidthBlocks =
+                    w != null && w > 0
+                        ? Math.max(1, Math.min(PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS, w))
+                        : 5,
             c -> c.pathWidthBlocks
         )
         .add()
@@ -144,15 +149,28 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         this.gizmoMode = gizmoMode;
     }
 
-    /** Cycles: Translate -> Rotate -> Commit -> Remove -> StyleDesigner -> ReplaceFilter -> Translate. */
+    /** Cycles: Place -> Move -> Rotate -> Remove -> Replace filter -> Style designer -> Place. */
     public void cycleGizmoMode() {
         this.gizmoMode = switch (gizmoMode) {
+            case Commit -> PathToolGizmoMode.Translate;
             case Translate -> PathToolGizmoMode.Rotate;
-            case Rotate -> PathToolGizmoMode.Commit;
-            case Commit -> PathToolGizmoMode.Remove;
-            case Remove -> PathToolGizmoMode.StyleDesigner;
-            case StyleDesigner -> PathToolGizmoMode.ReplaceFilter;
-            case ReplaceFilter -> PathToolGizmoMode.Translate;
+            case Rotate -> PathToolGizmoMode.Remove;
+            case Remove -> PathToolGizmoMode.ReplaceFilter;
+            case ReplaceFilter -> PathToolGizmoMode.StyleDesigner;
+            case StyleDesigner -> PathToolGizmoMode.Commit;
+        };
+    }
+
+    /** Tab id for {@link com.hexvane.aetherhaven.pathtool.PathToolStatusHud} mode tabs (visual only). */
+    @Nonnull
+    public String modeTabId() {
+        return switch (gizmoMode) {
+            case Commit -> "Place";
+            case Translate -> "Move";
+            case Rotate -> "Rotate";
+            case Remove -> "Remove";
+            case ReplaceFilter -> "ReplaceFilter";
+            case StyleDesigner -> "StyleDesigner";
         };
     }
 
@@ -191,13 +209,13 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     }
 
     public void setPathWidthBlocks(int blocks) {
-        this.pathWidthBlocks = Math.max(1, Math.min(8, blocks));
+        this.pathWidthBlocks = Math.max(1, Math.min(PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS, blocks));
     }
 
-    /** Cycles width: 1..8 -> 1. */
+    /** Cycles width: 1..{@link PathToolStyleDefinition#MAX_PATH_WIDTH_BLOCKS} -> 1. */
     public void cyclePathWidth() {
         int w = pathWidthBlocks + 1;
-        this.pathWidthBlocks = w > 8 ? 1 : w;
+        this.pathWidthBlocks = w > PathToolStyleDefinition.MAX_PATH_WIDTH_BLOCKS ? 1 : w;
     }
 
     public int getPathStyleIndex() {

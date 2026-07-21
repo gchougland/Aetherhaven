@@ -4,7 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.villager.TownVillagerBinding;
+import com.hexvane.aetherhaven.rts.RtsGuardCombatSupport;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -19,6 +19,7 @@ import com.hypixel.hytale.server.core.modules.time.TimeModule;
 import com.hypixel.hytale.server.core.modules.time.TimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.joml.Vector3d;
 /** Drives hired guards along assigned patrol routes using Seek and leash points. */
 public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
     private static final double ARRIVE_HORIZONTAL_SQ = 1.5 * 1.5;
+    private static final double PATROL_COMBAT_LEASH_HORIZONTAL_SQ = 20.0 * 20.0;
     private static final long PAUSE_MIN_MS = 2000L;
     private static final long PAUSE_MAX_MS = 4000L;
 
@@ -72,10 +74,6 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         if (npc == null || npc.getRole() == null) {
             return;
         }
-        String stateName = npc.getRole().getStateSupport().getStateName();
-        if (stateName.contains("Combat") || stateName.contains("Interaction")) {
-            return;
-        }
         UUIDComponent uc = chunk.getComponent(index, UUIDComponent.getComponentType());
         if (uc == null) {
             return;
@@ -87,6 +85,23 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         World world = store.getExternalData().getWorld();
         PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
         List<PatrolRouteRecord> assigned = reg.routesForGuard(uc.getUuid());
+        String stateName = npc.getRole().getStateSupport().getStateName();
+        if (stateName.contains("Combat") && !assigned.isEmpty()) {
+            GuardPatrolState combatPatrol = chunk.getComponent(index, GuardPatrolState.getComponentType());
+            TransformComponent tcCombat = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tcCombat != null) {
+                PatrolRouteRecord leashRoute = pickActiveRoute(assigned, combatPatrol != null ? combatPatrol : new GuardPatrolState());
+                if (leashRoute != null
+                    && PatrolRouteGeometry.minHorizontalDistanceSqToRoute(tcCombat.getPosition(), leashRoute)
+                        > PATROL_COMBAT_LEASH_HORIZONTAL_SQ) {
+                    abortPatrolCombat(ref, npc, commandBuffer);
+                }
+            }
+            return;
+        }
+        if (stateName.contains("Combat") || stateName.contains("Interaction")) {
+            return;
+        }
         if (assigned.isEmpty()) {
             if (stateName.contains("Patrol")) {
                 npc.getRole().getStateSupport().setState(ref, "Idle", null, commandBuffer);
@@ -186,6 +201,16 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         }
         int slot = patrol.getRouteSlot() % assigned.size();
         return assigned.get(slot);
+    }
+
+    private static void abortPatrolCombat(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull NPCEntity npc,
+        @Nonnull CommandBuffer<EntityStore> commandBuffer
+    ) {
+        RtsGuardCombatSupport.clearCombatTarget(npc, commandBuffer);
+        npc.getRole().getStateSupport().setState(ref, AetherhavenConstants.NPC_STATE_GUARD_PATROL, null, commandBuffer);
+        commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
     private static void ensurePatrolState(

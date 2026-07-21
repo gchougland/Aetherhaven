@@ -87,12 +87,31 @@ aetherhaven.pathTool.legendPageTitle=Path tool
 aetherhaven.pathTool.legendBlurb=Build a path, preview it, then place it. A status panel appears while you hold the tool.
 aetherhaven.pathTool.legendHotkeyAdd=Secondary on ground adds a node. Secondary while aiming a node removes it.
 aetherhaven.pathTool.legendHotkeyAim=Primary selects a node. In move mode, primary on ground moves the selected node.
-aetherhaven.pathTool.legendHotkeyUse=Q cycles mode: Move, Rotate, Place, Remove, Style designer. F changes by mode: nudge direction, place path, remove path, or open style manager. E cycles width. R cycles style.
+aetherhaven.pathTool.legendHotkeyUse=Q cycles mode: Place, Move, Rotate, Remove, Replace filter, Style designer. F changes by mode: nudge direction, place path, remove path, or open style manager. E sets width or saves your chest edits. R picks path style or saves when editing.
 aetherhaven.pathTool.legendHotkeyCrouchUse=Use Q to change mode instead of crouch.
-aetherhaven.pathTool.legendVisuals=Preview: white nodes and line, brown path, green edges. Remove mode shows placed paths in orange. Style designer opens a chest grid to build path styles.
+aetherhaven.pathTool.legendVisuals=Preview: white nodes and line, brown path, green edges. Remove mode shows orange nodes and lines on saved paths. Style designer opens a chest grid to build path styles.
 aetherhaven.pathTool.statusHeader=While holding the tool
 aetherhaven.pathTool.statusLine1=Toasts and chat when you add points, switch mode (Q), or cement in commit mode.
-aetherhaven.pathTool.statusLine2=Selection: aim at a sphere. Miss keeps your current selection. Q cycles mode; second ability cycles width; third ability cycles path style.
+aetherhaven.pathTool.statusLine2=Selection: aim at a node. Miss keeps your current selection. Q cycles mode. E opens width settings in Place, Move, or Rotate. R opens the style list in those modes.
+
+aetherhaven.pathTool.hudTabPlace=Place
+aetherhaven.pathTool.hudTabMove=Move
+aetherhaven.pathTool.hudTabRotate=Rotate
+aetherhaven.pathTool.hudTabRemove=Remove
+aetherhaven.pathTool.hudTabReplaceFilter=Replace filter
+aetherhaven.pathTool.hudTabStyleDesigner=Style designer
+
+aetherhaven.pathTool.widthPageTitle=Path width
+aetherhaven.pathTool.widthPagePreview=Sample rows show how blocks may look with your current style.
+aetherhaven.pathTool.widthPageSliderLabel=Width in blocks
+aetherhaven.pathTool.widthPageValue={w}
+aetherhaven.pathTool.widthPageApply=Apply
+aetherhaven.pathTool.widthPageCancel=Cancel
+
+aetherhaven.pathTool.stylePickTitle=Path style
+aetherhaven.pathTool.stylePickHint=Selected: {name}
+aetherhaven.pathTool.stylePickChoose=Use this style
+aetherhaven.pathTool.stylePickCancel=Cancel
 
 aetherhaven.pathTool.hudTitle=Path tool
 aetherhaven.pathTool.hudNameTranslate=Move
@@ -113,22 +132,22 @@ aetherhaven.pathTool.hudPlaceReminder=Switch to Place mode to place the path.
 aetherhaven.pathTool.hud.move.primary=Select a node, then click the ground to move it
 aetherhaven.pathTool.hud.move.secondary=Click the ground to add a node, or aim at a node to remove it
 aetherhaven.pathTool.hud.move.q=Next mode
-aetherhaven.pathTool.hud.move.e=Cycle path width
-aetherhaven.pathTool.hud.move.r=Cycle path style
+aetherhaven.pathTool.hud.move.e=Open path width settings
+aetherhaven.pathTool.hud.move.r=Choose path style
 
 aetherhaven.pathTool.hud.rotate.primary=Select a node
 aetherhaven.pathTool.hud.rotate.secondary=Click the ground to add a node, or aim at a node to remove it
 aetherhaven.pathTool.hud.rotate.f=Nudge the selected node direction
 aetherhaven.pathTool.hud.rotate.q=Next mode
-aetherhaven.pathTool.hud.rotate.e=Cycle path width
-aetherhaven.pathTool.hud.rotate.r=Cycle path style
+aetherhaven.pathTool.hud.rotate.e=Open path width settings
+aetherhaven.pathTool.hud.rotate.r=Choose path style
 
 aetherhaven.pathTool.hud.place.primary=Select a node
 aetherhaven.pathTool.hud.place.secondary=Click the ground to add a node, or aim at a node to remove it
 aetherhaven.pathTool.hud.place.f=Place the path
 aetherhaven.pathTool.hud.place.q=Next mode
-aetherhaven.pathTool.hud.place.e=Cycle path width
-aetherhaven.pathTool.hud.place.r=Cycle path style
+aetherhaven.pathTool.hud.place.e=Open path width settings
+aetherhaven.pathTool.hud.place.r=Choose path style
 
 aetherhaven.pathTool.hud.remove.primary=Select a path
 aetherhaven.pathTool.hud.remove.f=Remove the selected path
@@ -139,7 +158,7 @@ aetherhaven.pathTool.hud.styleDesigner.e=Cycle path width
 aetherhaven.pathTool.hud.styleDesigner.fContinue=Open the chest to keep editing
 aetherhaven.pathTool.hud.styleDesigner.eSave=Save the path style
 aetherhaven.pathTool.hud.styleDesigner.q=Next mode
-aetherhaven.pathTool.hud.styleDesigner.infoColumns=Left columns fill from the left edge in, right columns from the right edge in, and the middle column fills the path center
+aetherhaven.pathTool.hud.styleDesigner.infoColumns=Left columns fill from the left edge in, right columns from the right edge in. Path edges always use the outermost side blocks; cells between map inward from each side.
 aetherhaven.pathTool.hud.styleDesigner.infoRows=Stack blocks in a column to pick between them
 aetherhaven.pathTool.hud.styleDesigner.infoWeight=More of the same block in a column makes it show up more often
 
@@ -230,7 +249,7 @@ commands.aetherhaven.path.revert.id=Path id from chat when you placed the path
 commands.aetherhaven.path.navviz.desc=Debug: toggle path navigation debug lines
 
 items.Aetherhaven_Path_Tool.name=Path designer shovel
-items.Aetherhaven_Path_Tool.description=Designs paths for your town. Q cycles mode. Secondary adds or removes nodes. F places, removes, or opens the style manager depending on mode. E sets width. R sets style.
+items.Aetherhaven_Path_Tool.description=Designs paths for your town. Q cycles mode. Secondary adds or removes nodes. F places, removes, or opens the style manager depending on mode. E opens width settings in Place, Move, or Rotate. R opens the style list in those modes.
 
 items.Aetherhaven_Patrol_Wand.name=Patrol wand
 items.Aetherhaven_Patrol_Wand.description=Sets guard patrol routes for your town. Craft at the town planning desk. See the on screen legend while holding it.
@@ -250,6 +269,8 @@ aetherhaven.patrolWand.nameRouteSave=Save route
 aetherhaven.patrolWand.nameRouteCancel=Cancel
 
 aetherhaven.patrolWand.hudTitle=Patrol wand
+aetherhaven.patrolWand.hudDescBuild=Place points along the path you want guards to walk, then save the route.
+aetherhaven.patrolWand.hudDescAssign=Pick a saved route and put a guard on it.
 aetherhaven.patrolWand.hudNameBuild=Build route
 aetherhaven.patrolWand.hudNameAssign=Assign guard
 aetherhaven.patrolWand.hudHelpBuild=Right click ground to add a point. Right click a point to remove. F names and saves. R toggles closed loop. E starts fresh. Q switches mode.
@@ -262,7 +283,19 @@ aetherhaven.patrolWand.hudGuard=Guard: {guard}
 aetherhaven.patrolWand.hudGuardNone=No guard
 aetherhaven.patrolWand.hudGuardAssigned=Assigned
 aetherhaven.patrolWand.hudRouteNew=New route
+aetherhaven.patrolWand.hudRouteUnnamed=Route
 aetherhaven.patrolWand.hudHint=Build: add points, R loop, F name and save | Assign: F guard list | Q: mode | E: new route or clear guard
+
+aetherhaven.patrolWand.hud.build.secondary=Click the ground to add a point, or aim at a point to remove it
+aetherhaven.patrolWand.hud.build.primary=Click a point on a saved route to select it
+aetherhaven.patrolWand.hud.build.f=Name and save this route
+aetherhaven.patrolWand.hud.build.r=Toggle closed loop
+aetherhaven.patrolWand.hud.build.e=Start a new route
+aetherhaven.patrolWand.hud.build.q=Switch to assign mode
+aetherhaven.patrolWand.hud.assign.primary=Click a route point to select it
+aetherhaven.patrolWand.hud.assign.f=Choose a guard for this route
+aetherhaven.patrolWand.hud.assign.e=Remove the guard from this route
+aetherhaven.patrolWand.hud.assign.q=Switch to build mode
 
 aetherhaven.patrolWand.addedNode=Point added. {n} on this route.
 aetherhaven.patrolWand.removedNode=Point removed. {n} left on this route.

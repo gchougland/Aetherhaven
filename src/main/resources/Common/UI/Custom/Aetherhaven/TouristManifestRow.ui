@@ -1,0 +1,27 @@
+$C = "../Common.ui";
+
+Group #TouristManifestRow {
+  LayoutMode: Left;
+  Anchor: (Bottom: 4);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16);
+
+  AssetImage #Portrait {
+    Anchor: (Width: 36, Height: 36, Right: 8);
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+
+  Group #TextBlock {
+    LayoutMode: Top;
+    FlexWeight: 1;
+
+    Label #NameLabel {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
+    }
+
+    Label #StatusLabel {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 13, Wrap: true);
+      Visible: false;
+    }
+  }
+}

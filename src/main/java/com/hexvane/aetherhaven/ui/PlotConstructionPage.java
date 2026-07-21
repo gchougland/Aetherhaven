@@ -33,6 +33,7 @@ import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.Branch;
 import com.hexvane.aetherhaven.production.WorkplaceProductionUpgrades.PurchaseResult;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.restaurant.RestaurantUpgrades;
+import com.hexvane.aetherhaven.map.TownBorderMapOverlayService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.HouseResidentAssignment;
 import com.hexvane.aetherhaven.town.WorkplacePlotAssignment;
@@ -43,6 +44,9 @@ import com.hexvane.aetherhaven.town.TownMemberRole;
 import com.hexvane.aetherhaven.town.TownMembershipActions;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
+import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
+import com.hexvane.aetherhaven.tourist.TouristVisitManifest;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -106,6 +110,12 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private static final String HOUSE_RESIDENT_SLOT_ROWS = "#HouseResidentSlotScroll #HouseResidentSlotRows";
     private static final String WORKPLACE_WORKER_ROWS =
         "#WorkplaceWorkerPickerModal #WorkplaceWorkerListScroll #WorkplaceWorkerRows";
+    private static final String TOURIST_MANIFEST_ROWS = "#TouristManifestScroll #TouristManifestRows";
+    private static final int MAX_TOURIST_MANIFEST_ROWS = 48;
+    private static final String VP_COLOR_MODAL = "#VisitorPortalColorPickerModal";
+    private static final String VP_COLOR_GRID = VP_COLOR_MODAL + " #Content #VisitorPortalColorPresetGrid";
+    private static final String VP_COLOR_CHOOSE_BTN = "#ChooseVisitorPortalColorButton";
+    private static final String VP_COLOR_CANCEL_BTN = VP_COLOR_MODAL + " #Content #VisitorPortalColorPickerCancelButton";
 
     private final Ref<ChunkStore> blockRef;
     @Nonnull
@@ -136,6 +146,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private boolean houseResidentPickerOpen;
     /** Workplace worker picker modal open. */
     private boolean workplaceWorkerPickerOpen;
+    /** Visitor portal preset color picker modal. */
+    private boolean visitorPortalColorPickerOpen;
     /** {@link TownVillagerBinding} kind for the open workplace picker. */
     @Nullable
     private String workplacePickerResidentKind;
@@ -215,6 +227,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#PickUpPlotModal.Visible", !managementUi && pickUpPlotConfirmOpen);
         commandBuilder.set("#HouseResidentPickerModal.Visible", houseResidentPickerOpen);
         commandBuilder.set("#WorkplaceWorkerPickerModal.Visible", workplaceWorkerPickerOpen);
+        commandBuilder.set("#VisitorPortalColorPickerModal.Visible", visitorPortalColorPickerOpen);
 
         ConstructionDefinition def = resolveDefinition(store, ref);
         Player player = store.getComponent(ref, Player.getComponentType());
@@ -235,6 +248,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#VillagerRow.Visible", false);
             commandBuilder.set("#TreasuryRow.Visible", false);
             commandBuilder.set("#HouseResidentRow.Visible", false);
+            commandBuilder.set("#TouristManifestRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignRow.Visible", false);
             commandBuilder.set("#WorkplaceAssignBardRow.Visible", false);
             commandBuilder.set("#ProductionUpgradeTreeSlot.Visible", false);
@@ -378,10 +392,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 );
 
         List<String> gameplayIds = List.of();
-        String gameplayWorkplaceId = "";
         if (plugWork != null) {
             gameplayIds = plugWork.getConstructionCatalog().resolveGameplayConstructionIds(def.getId());
-            gameplayWorkplaceId = gameplayIds.isEmpty() ? "" : gameplayIds.get(0);
         }
         List<String> workplaceRoles =
             plugWork != null
@@ -409,8 +421,18 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 && completed
                 && plotTabActive
                 && gameplayIds.stream().anyMatch(AetherhavenConstants.CONSTRUCTION_PLOT_RESTAURANT::equals);
+        boolean showTouristManifest =
+            managementUi
+                && completed
+                && plotTabActive
+                && plugWork != null
+                && plugWork.getConstructionCatalog().matchesGameplayConstruction(
+                    def.getId(),
+                    AetherhavenConstants.CONSTRUCTION_PLOT_TOURIST_PORTAL
+                );
 
         commandBuilder.set("#HouseResidentRow.Visible", showHouseResident);
+        commandBuilder.set("#TouristManifestRow.Visible", showTouristManifest);
         commandBuilder.set("#WorkplaceAssignRow.Visible", showWorkplaceAssign && !nonBardRoles.isEmpty());
         commandBuilder.set("#WorkplaceAssignBardRow.Visible", showWorkplaceBard);
         commandBuilder.set("#WorkplaceAssignExtraRow.Visible", showWorkplaceExtra);
@@ -472,7 +494,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     eventBuilder,
                     townW,
                     plugWork,
-                    gameplayWorkplaceId,
+                    gameplayWorkplaceIdForRole(plugWork.getConstructionCatalog(), def.getId(), primaryResidentKind),
                     plotUuidMgmt,
                     primaryNpcRole,
                     primaryResidentKind,
@@ -497,7 +519,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     eventBuilder,
                     townW,
                     plugWork,
-                    gameplayWorkplaceId,
+                    gameplayWorkplaceIdForRole(plugWork.getConstructionCatalog(), def.getId(), extraKind),
                     plotUuidMgmt,
                     extraNpcRole,
                     extraKind,
@@ -517,7 +539,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     eventBuilder,
                     townW,
                     plugWork,
-                    gameplayWorkplaceId,
+                    gameplayWorkplaceIdForRole(
+                        plugWork.getConstructionCatalog(),
+                        def.getId(),
+                        TownVillagerBinding.KIND_BARD
+                    ),
                     plotUuidMgmt,
                     AetherhavenConstants.BARD_NPC_ROLE_ID,
                     TownVillagerBinding.KIND_BARD,
@@ -533,7 +559,11 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     eventBuilder,
                     townW,
                     plugWork,
-                    gameplayWorkplaceId,
+                    gameplayWorkplaceIdForRole(
+                        plugWork.getConstructionCatalog(),
+                        def.getId(),
+                        workplacePickerResidentKind
+                    ),
                     plotUuidMgmt,
                     workplacePickerFilterNpcRoleId,
                     workplacePickerResidentKind
@@ -602,6 +632,18 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 plotUuidMgmt,
                 townUuidMgmt,
                 plugWork
+            );
+        }
+
+        if (showTouristManifest && townUuidMgmt != null && plugWork != null) {
+            buildTouristManifestSection(
+                ref,
+                store,
+                commandBuilder,
+                eventBuilder,
+                townUuidMgmt,
+                plugWork,
+                playerUuid
             );
         }
 
@@ -715,6 +757,172 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 false
             );
         }
+    }
+
+    private void buildTouristManifestSection(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull UUID townUuid,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nullable UUID playerUuid
+    ) {
+        World world = store.getExternalData().getWorld();
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = tm.getTown(townUuid);
+        commandBuilder.clear(TOURIST_MANIFEST_ROWS);
+        if (town == null) {
+            commandBuilder.set("#TouristManifestEmpty.Visible", true);
+            commandBuilder.set("#TouristManifestScroll.Visible", false);
+            commandBuilder.set("#ClearVisitingTouristsButton.Visible", false);
+            commandBuilder.set("#VisitorPortalTravelRow.Visible", false);
+            return;
+        }
+        Store<EntityStore> entityStore = world.getEntityStore().getStore();
+        List<TouristVisitManifest.Row> rows = TouristVisitManifest.listRows(town, entityStore, plugin);
+        if (rows.isEmpty()) {
+            commandBuilder.set("#TouristManifestEmpty.Visible", true);
+            commandBuilder.set("#TouristManifestScroll.Visible", false);
+        } else {
+            commandBuilder.set("#TouristManifestEmpty.Visible", false);
+            commandBuilder.set("#TouristManifestScroll.Visible", true);
+            int n = Math.min(rows.size(), MAX_TOURIST_MANIFEST_ROWS);
+            for (int i = 0; i < n; i++) {
+                TouristVisitManifest.Row row = rows.get(i);
+                String rowPath = TOURIST_MANIFEST_ROWS + "[" + i + "]";
+                commandBuilder.append(TOURIST_MANIFEST_ROWS, "Aetherhaven/TouristManifestRow.ui");
+                commandBuilder.set(rowPath + " #Portrait.AssetPath", row.portraitPath());
+                commandBuilder.set(rowPath + " #NameLabel.TextSpans", Message.raw(row.label()));
+                commandBuilder.set(rowPath + " #StatusLabel.Visible", true);
+                commandBuilder.set(rowPath + " #StatusLabel.TextSpans", touristManifestStatus(row.kind()));
+            }
+        }
+        boolean canClear = playerUuid != null && town.playerCanPlacePlots(playerUuid);
+        commandBuilder.set("#ClearVisitingTouristsButton.Visible", canClear);
+        commandBuilder.set("#ClearVisitingTouristsButton.Disabled", !canClear);
+        commandBuilder.set("#VisitorPortalTravelRow.Visible", canClear);
+        if (canClear) {
+            commandBuilder.set("#VisitorPortalTravelToggle.Value", town.isAllowVisitorPortalTravel());
+            commandBuilder.set("#VisitorPortalTravelToggle.Disabled", false);
+            String portalColor = TownPortalTravelColor.resolveHex(town);
+            TownPortalTravelColor.applyTeleportIconTint(commandBuilder, "#VisitorPortalColorPreviewIcon", portalColor);
+            commandBuilder.set("#ChooseVisitorPortalColorButton.Disabled", false);
+            TownPortalTravelColorPickerUi.bindOpenButton(eventBuilder, VP_COLOR_CHOOSE_BTN);
+            TownPortalTravelColorPickerUi.bindCloseButton(eventBuilder, VP_COLOR_CANCEL_BTN);
+            if (visitorPortalColorPickerOpen) {
+                TownPortalTravelColorPickerUi.buildPresetGrid(
+                    commandBuilder,
+                    eventBuilder,
+                    VP_COLOR_GRID,
+                    TownPortalTravelColor.normalizePresetHex(portalColor)
+                );
+            }
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.ValueChanged,
+                "#VisitorPortalTravelToggle",
+                new EventData()
+                    .append("Action", "SetVisitorPortalTravel")
+                    .append("@AllowVisitorPortalTravel", "#VisitorPortalTravelToggle.Value"),
+                false
+            );
+        }
+        if (canClear) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#ClearVisitingTouristsButton",
+                new EventData().append("Action", "ClearVisitingTourists"),
+                false
+            );
+        }
+    }
+
+    private void handleSetVisitorPortalTravel(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Boolean allow
+    ) {
+        if (!managementUi || allow == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        TownRecord town = resolveManagementTown(store);
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelNoPermission")
+            );
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        town.setAllowVisitorPortalTravel(allow);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    private void handleSetVisitorPortalColorPick(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nullable String presetHex
+    ) {
+        if (!managementUi || presetHex == null) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        TownRecord town = resolveManagementTown(store);
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelNoPermission")
+            );
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownPortalTravelColor.applyStoredHex(town, presetHex);
+        AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).updateTown(town);
+        TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
+        visitorPortalColorPickerOpen = false;
+        UICommandBuilder cmd = new UICommandBuilder();
+        UIEventBuilder ev = new UIEventBuilder();
+        build(ref, cmd, ev, store);
+        sendUpdate(cmd, ev, false);
+    }
+
+    @Nonnull
+    private static Message touristManifestStatus(@Nonnull TouristVisitManifest.ManifestKind kind) {
+        return switch (kind) {
+            case VISITING ->
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestVisiting");
+            case INVITED ->
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestInvited");
+            case HOUSED ->
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestHoused");
+        };
     }
 
     private void buildManagementPlayersTab(
@@ -1047,6 +1255,61 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         sendUpdate(cmd, ev, false);
     }
 
+    private void handleClearVisitingTourists(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (!managementUi) {
+            return;
+        }
+        UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+        if (uc == null) {
+            return;
+        }
+        TownRecord town = resolveManagementTown(store);
+        if (town == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+            return;
+        }
+        if (!town.playerCanPlacePlots(uc.getUuid())) {
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTouristsNoPermission")
+            );
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        TownRecord townRun = town;
+        world.execute(
+            () -> {
+                if (isDismissed() || !ref.isValid()) {
+                    return;
+                }
+                Player player = store.getComponent(ref, Player.getComponentType());
+                if (player == null || player.getPageManager().getCustomPage() != this) {
+                    return;
+                }
+                Store<EntityStore> entityStore = world.getEntityStore().getStore();
+                TouristPortalTickService.TouristTownPurgeResult result =
+                    TouristPortalTickService.purgeActiveTouristsInTown(townRun, world, plugin, entityStore);
+                if (result.removed() <= 0) {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTouristsNone")
+                    );
+                } else {
+                    playerRef.sendMessage(
+                        Message
+                            .translation("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTouristsDone")
+                            .param("removed", String.valueOf(result.removed()))
+                            .param("skippedProtected", String.valueOf(result.skippedProtected()))
+                    );
+                }
+                refreshPage(ref, store);
+            }
+        );
+    }
+
     @Nullable
     private TownRecord resolveManagementTown(@Nonnull Store<EntityStore> store) {
         if (!managementUi) {
@@ -1082,6 +1345,34 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("SetVisitorPortalTravel")) {
+            handleSetVisitorPortalTravel(ref, store, data.allowVisitorPortalTravel);
+            return;
+        }
+        if (TownPortalTravelColorPickerUi.ACTION_OPEN.equalsIgnoreCase(data.action)) {
+            visitorPortalColorPickerOpen = true;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (TownPortalTravelColorPickerUi.ACTION_CLOSE.equalsIgnoreCase(data.action)) {
+            visitorPortalColorPickerOpen = false;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (TownPortalTravelColorPickerUi.ACTION_PICK.equalsIgnoreCase(data.action)) {
+            handleSetVisitorPortalColorPick(ref, store, data.presetHex);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("ClearVisitingTourists")) {
+            handleClearVisitingTourists(ref, store);
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("OpenHouseResidentPicker")) {
@@ -2724,6 +3015,19 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     }
 
     @Nonnull
+    private static String gameplayWorkplaceIdForRole(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull String plotConstructionId,
+        @Nonnull String residentKind
+    ) {
+        String mapped =
+            ProductionWorkplaceKinds.gameplayConstructionIdForResidentKind(catalog, plotConstructionId, residentKind);
+        if (mapped != null && !mapped.isBlank()) {
+            return mapped;
+        }
+        return catalog.resolveGameplayConstructionId(plotConstructionId);
+    }
+
     private static String workplaceRoleLabelKey(@Nonnull String residentKind) {
         return switch (residentKind.trim()) {
             case TownVillagerBinding.KIND_GUILD_MASTER ->
@@ -2780,6 +3084,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             .add()
             .append(new KeyedCodec<>("UpgradeBranch", Codec.STRING), (d, v) -> d.upgradeBranch = v, d -> d.upgradeBranch)
             .add()
+            .append(
+                new KeyedCodec<>("@AllowVisitorPortalTravel", Codec.BOOLEAN),
+                (d, v) -> d.allowVisitorPortalTravel = v,
+                d -> d.allowVisitorPortalTravel
+            )
+            .add()
+            .append(new KeyedCodec<>("PresetHex", Codec.STRING), (d, v) -> d.presetHex = v, d -> d.presetHex)
+            .add()
             .build();
 
         private String action;
@@ -2802,5 +3114,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         private Integer materialIndex;
         @Nullable
         private String upgradeBranch;
+        @Nullable
+        private Boolean allowVisitorPortalTravel;
+        @Nullable
+        private String presetHex;
     }
 }

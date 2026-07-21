@@ -35,6 +35,11 @@ public final class TownRecord {
     @SerializedName("ownerUuid")
     private String ownerUuid;
 
+    /** Last known username for {@link #ownerUuid} (for UI when the owner is offline). */
+    @Nullable
+    @SerializedName("ownerUsername")
+    private String ownerUsername;
+
     @SerializedName("worldName")
     private String worldName;
 
@@ -180,7 +185,19 @@ public final class TownRecord {
     @SerializedName("touristExecutedSpawnEpochMinutes")
     private List<Long> touristExecutedSpawnEpochMinutes = new ArrayList<>();
 
-    /** Entity UUID of guard targeted by active {@link com.hexvane.aetherhaven.AetherhavenConstants#QUEST_HOUSE_GUARD}. */
+    /**
+     * When false, other players cannot teleport to this town through the visitor portal network. Null or true allows
+     * visits.
+     */
+    @Nullable
+    @SerializedName("allowVisitorPortalTravel")
+    private Boolean allowVisitorPortalTravel;
+
+    /** Optional {@code #RRGGBB} tint for visitor portal travel icons. Null uses a default from the town id. */
+    @Nullable
+    @SerializedName("visitorPortalNetworkColor")
+    private String visitorPortalNetworkColor;
+
     @Nullable
     @SerializedName("guardHouseQuestTargetEntityUuid")
     private String guardHouseQuestTargetEntityUuid;
@@ -841,6 +858,19 @@ public final class TownRecord {
         return UUID.fromString(ownerUuid);
     }
 
+    @Nullable
+    public String getOwnerUsername() {
+        return ownerUsername;
+    }
+
+    public void setOwnerUsername(@Nullable String ownerUsername) {
+        if (ownerUsername == null || ownerUsername.isBlank()) {
+            this.ownerUsername = null;
+        } else {
+            this.ownerUsername = ownerUsername.trim();
+        }
+    }
+
     @Nonnull
     public String getWorldName() {
         return worldName != null ? worldName : "";
@@ -1069,6 +1099,24 @@ public final class TownRecord {
             touristRecords = new ArrayList<>();
         }
         return touristRecords;
+    }
+
+    /** True when other players may teleport to this town through the visitor portal network. */
+    public boolean isAllowVisitorPortalTravel() {
+        return allowVisitorPortalTravel == null || allowVisitorPortalTravel;
+    }
+
+    public void setAllowVisitorPortalTravel(boolean allowVisitorPortalTravel) {
+        this.allowVisitorPortalTravel = allowVisitorPortalTravel;
+    }
+
+    @Nullable
+    public String getVisitorPortalNetworkColor() {
+        return visitorPortalNetworkColor;
+    }
+
+    public void setVisitorPortalNetworkColor(@Nullable String visitorPortalNetworkColor) {
+        this.visitorPortalNetworkColor = visitorPortalNetworkColor;
     }
 
     public long getTouristSpawnPlannedDayEpochDay() {

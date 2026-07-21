@@ -1,0 +1,11 @@
+$C = "../Common.ui";
+
+Group #WidthPreviewCell {
+  LayoutMode: Center;
+  Anchor: (Width: 40, Height: 40, Right: 4);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 6, Color: #111722(0.85));
+
+  AssetImage #Icon {
+    Anchor: (Width: 32, Height: 32);
+  }
+}

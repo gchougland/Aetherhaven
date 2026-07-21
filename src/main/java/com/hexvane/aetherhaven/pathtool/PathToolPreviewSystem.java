@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.pathtool;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.config.PathToolStyleDefinition;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -16,9 +18,12 @@ import org.joml.Vector3f;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
+import com.hypixel.hytale.server.core.util.TargetUtil;
+import com.hypixel.hytale.math.vector.Transform;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -32,6 +37,9 @@ import javax.annotation.Nullable;
  */
 public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore> {
     private static final int MAX_PLANNED = 800;
+    private static final int MAX_NAV_SHAPES = 2400;
+    private static final double NODE_PICK_RADIUS = 0.45;
+    private static final double PICK_RAY_MAX = 128.0;
     private static final ConcurrentHashMap<UUID, Long> LAST_DEBUG_SIGNATURE = new ConcurrentHashMap<>();
     /** Same signature as debug preview; cleared whenever the path-tool HUD is removed so reopening always refreshes. */
     private static final ConcurrentHashMap<UUID, Long> LAST_HUD_SIGNATURE = new ConcurrentHashMap<>();
@@ -125,14 +133,17 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         if (uuidComp == null) {
             return;
         }
+        @Nullable
+        UUID hoveredNodeId = pickHoveredControlNode(st, ref, store);
+        long debugSig = PathToolPreviewSignature.compute(st, registryRevision, ref, store, hoveredNodeId);
         Long prev = LAST_DEBUG_SIGNATURE.get(playerUuid);
-        if (prev != null && prev == sig) {
+        if (prev != null && prev == debugSig) {
             return;
         }
-        LAST_DEBUG_SIGNATURE.put(playerUuid, sig);
+        LAST_DEBUG_SIGNATURE.put(playerUuid, debugSig);
         PathDebugPreviewUtil.clear(pr);
         if (st.getGizmoMode() == PathToolGizmoMode.Remove) {
-            drawCommittedPaths(pr, w, pathReg, st.getSelectedRemovePathId());
+            drawCommittedPaths(pr, pathReg, st.getSelectedRemovePathId());
             return;
         }
         if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner || st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
@@ -140,11 +151,14 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         }
         for (PathToolNode n : st.getNodes()) {
             boolean sel = n.getId().equals(st.getSelectedNodeId());
-            PathDebugPreviewUtil.drawMachinimaNode(
+            boolean look =
+                hoveredNodeId != null && hoveredNodeId.equals(n.getId()) && !sel;
+            PathDebugPreviewUtil.drawPathControlNode(
                 pr,
                 n.getPosition(),
                 n.getYawDeg(),
-                sel
+                sel,
+                look
             );
         }
         if (st.getNodes().size() < 2) {
@@ -159,8 +173,8 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             PathSplineUtil.PathSample b = samples.get(i + 1);
             PathDebugPreviewUtil.drawLine(
                 pr,
-                a.position,
-                b.position,
+                PathDebugPreviewUtil.pathControlNodeLinePoint(a.position),
+                PathDebugPreviewUtil.pathControlNodeLinePoint(b.position),
                 PathDebugPreviewUtil.COLOR_PATH_EDGE,
                 0.05
             );
@@ -176,11 +190,17 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         int c = 0;
         @Nullable
         java.util.Set<String> replaceArg = PathToolReplaceFilterResolver.nullableAllowlistForPredicate(ref, store, st);
+        var styles = cfg.getPathToolStyleDefinitions();
+        PathToolStyleDefinition activeStyle = null;
+        if (!styles.isEmpty()) {
+            activeStyle = styles.get(Math.floorMod(st.getPathStyleIndex(), styles.size()));
+        }
+        boolean columnStyleLayout = activeStyle != null && activeStyle.hasColumnLayout();
         for (PathPlannedCell.Planned cell : plan) {
             if (c++ > MAX_PLANNED) {
                 break;
             }
-            boolean isCenter = cell.role == PathPlannedCell.CellRole.Center;
+            boolean isCenter = columnStyleLayout || cell.role == PathPlannedCell.CellRole.Center;
             boolean ok = PathToolReplacePredicate.isReplaceable(cfg, w, cell.pos.x(), cell.pos.y(), cell.pos.z(), replaceArg);
             Vector3f col;
             if (isCenter) {
@@ -192,18 +212,48 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         }
     }
 
+    @Nullable
+    private static UUID pickHoveredControlNode(
+        @Nonnull PathToolPlayerComponent st,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PathToolGizmoMode mode = st.getGizmoMode();
+        if (mode != PathToolGizmoMode.Commit
+            && mode != PathToolGizmoMode.Translate
+            && mode != PathToolGizmoMode.Rotate) {
+            return null;
+        }
+        if (st.getNodes().isEmpty()) {
+            return null;
+        }
+        Transform look = TargetUtil.getLook(ref, store);
+        if (look == null) {
+            return null;
+        }
+        @Nullable
+        PathToolNode looked =
+            PathToolRayPick.pickNode(
+                look.getPosition(),
+                look.getDirection(),
+                PICK_RAY_MAX,
+                new ArrayList<>(st.getNodes()),
+                NODE_PICK_RADIUS
+            );
+        return looked != null ? looked.getId() : null;
+    }
+
     private static void drawCommittedPaths(
         @Nonnull PlayerRef pr,
-        @Nonnull World world,
         @Nonnull PathToolRegistry reg,
         @Nullable UUID selectedPathId
     ) {
-        int drawn = 0;
+        int shapes = 0;
         Vector3f normal = new Vector3f(0.85f, 0.45f, 0.12f);
         Vector3f selected = new Vector3f(0.98f, 0.88f, 0.15f);
         for (PathCommitRecord rec : reg.all()) {
-            if (rec == null) {
-                continue;
+            if (rec == null || shapes >= MAX_NAV_SHAPES) {
+                return;
             }
             boolean sel;
             try {
@@ -212,35 +262,33 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 sel = false;
             }
             Vector3f col = sel ? selected : normal;
-            if (rec.undo != null && !rec.undo.isEmpty()) {
-                for (PathToolUndoCell c : rec.undo) {
-                    if (c == null || drawn++ > MAX_PLANNED) {
-                        return;
-                    }
-                    PathDebugPreviewUtil.drawPlannedBlock(pr, c.x, c.y, c.z, col, world);
+            List<PathNavPoint> nav = PathToolNavPreviewUtil.navPointsForPreview(rec);
+            if (nav.size() < 2) {
+                continue;
+            }
+            for (int i = 0; i + 1 < nav.size() && shapes < MAX_NAV_SHAPES; i++) {
+                PathNavPoint a = nav.get(i);
+                PathNavPoint b = nav.get(i + 1);
+                if (a == null || b == null) {
+                    continue;
                 }
-            } else if (rec.navNodes != null && rec.navNodes.size() >= 2) {
-                for (int i = 0; i + 1 < rec.navNodes.size() && drawn < MAX_PLANNED; i++) {
-                    PathNavPoint a = rec.navNodes.get(i);
-                    PathNavPoint b = rec.navNodes.get(i + 1);
-                    if (a == null || b == null) {
-                        continue;
-                    }
-                    PathDebugPreviewUtil.drawLine(
-                        pr,
-                        new org.joml.Vector3d(a.x, a.y, a.z),
-                        new org.joml.Vector3d(b.x, b.y, b.z),
-                        col,
-                        0.08
-                    );
-                    drawn++;
+                PathDebugPreviewUtil.drawLine(
+                    pr,
+                    PathDebugPreviewUtil.navNodeLinePoint(a.x, a.y, a.z, sel),
+                    PathDebugPreviewUtil.navNodeLinePoint(b.x, b.y, b.z, sel),
+                    col,
+                    sel ? 0.09 : 0.07
+                );
+                shapes++;
+            }
+            for (int i = 0; i < nav.size() && shapes < MAX_NAV_SHAPES; i++) {
+                PathNavPoint p = nav.get(i);
+                if (p == null) {
+                    continue;
                 }
-                for (PathNavPoint p : rec.navNodes) {
-                    if (p == null || drawn++ > MAX_PLANNED) {
-                        return;
-                    }
-                    PathDebugPreviewUtil.drawPlannedBlock(pr, (int) Math.floor(p.x), (int) Math.floor(p.y), (int) Math.floor(p.z), col, world);
-                }
+                boolean endpoint = i == 0 || i == nav.size() - 1;
+                PathDebugPreviewUtil.drawNavNodeCube(pr, p.x, p.y, p.z, col, sel, endpoint);
+                shapes++;
             }
         }
     }

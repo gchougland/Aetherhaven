@@ -78,6 +78,16 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         Vector3i pos = new Vector3i(event.getTargetBlock());
+        int territoryRadius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());
+        TownRecord overlap = tm.findTerritoryOverlapAtCharter(world.getName(), pos.x, pos.z, territoryRadius, null);
+        if (overlap != null) {
+            event.setCancelled(true);
+            pr.sendMessage(
+                Message.translation("aetherhaven_common.aetherhaven.charter.tooCloseToTown")
+                    .param("name", overlap.getDisplayName())
+            );
+            return;
+        }
         world.execute(() -> finishCharterPlacement(world, pos, owner, pr, playerRef));
     }
 
@@ -113,7 +123,8 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
         }
 
         TownRecord record =
-            TownFoundingService.foundFromPlacedCharter(world, plugin, owner, pos, ThreadLocalRandom.current());
+            TownFoundingService.foundFromPlacedCharter(
+                world, plugin, owner, playerRef.getUsername(), pos, ThreadLocalRandom.current());
         if (record == null) {
             return;
         }

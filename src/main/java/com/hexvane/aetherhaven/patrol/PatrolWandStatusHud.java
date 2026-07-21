@@ -2,14 +2,18 @@ package com.hexvane.aetherhaven.patrol;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.ui.AetherhavenUiLocalization;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.entity.entities.player.hud.CustomUIHud;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class PatrolWandStatusHud extends CustomUIHud {
+    private static final String CONTROL_ROWS = "#ControlRows";
+    private static final String LANG_PREFIX = "aetherhaven_items.";
 
     public PatrolWandStatusHud(@Nonnull PlayerRef playerRef) {
         super(playerRef, AetherhavenConstants.PATROL_WAND_HUD_KEY, 0);
@@ -18,6 +22,7 @@ public final class PatrolWandStatusHud extends CustomUIHud {
     @Override
     protected void build(@Nonnull UICommandBuilder commandBuilder) {
         commandBuilder.append("Aetherhaven/PatrolWandStatusHud.ui");
+        AetherhavenUiLocalization.applyPatrolWandStatusHudTitle(commandBuilder, selector -> selector);
     }
 
     public void refresh(
@@ -26,65 +31,70 @@ public final class PatrolWandStatusHud extends CustomUIHud {
         @Nullable TownRecord town
     ) {
         UICommandBuilder b = new UICommandBuilder();
-        b.set(
-            "#PatrolWandHudTitleText.TextSpans",
-            Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudTitle")
-        );
-        b.set(
-            "#ModeName.TextSpans",
-            Message.translation(
-                st.getMode() == PatrolWandMode.Build
-                    ? "aetherhaven_items.aetherhaven.patrolWand.hudNameBuild"
-                    : "aetherhaven_items.aetherhaven.patrolWand.hudNameAssign"
-            )
-        );
+        PatrolWandMode mode = st.getMode();
+        b.set("#PatrolWandModeTabs.SelectedTab", st.modeTabId());
         b.set(
             "#ModeHelp.TextSpans",
             Message.translation(
-                st.getMode() == PatrolWandMode.Build
-                    ? "aetherhaven_items.aetherhaven.patrolWand.hudHelpBuild"
-                    : "aetherhaven_items.aetherhaven.patrolWand.hudHelpAssign"
+                mode == PatrolWandMode.Build
+                    ? LANG_PREFIX + "aetherhaven.patrolWand.hudDescBuild"
+                    : LANG_PREFIX + "aetherhaven.patrolWand.hudDescAssign"
             )
         );
-        String routeName;
+        Message routeName;
         if (selectedRoute != null) {
-            routeName = selectedRoute.safeDisplayName();
+            routeName = Message.raw(selectedRoute.safeDisplayName());
         } else if (st.getEditingRouteId() == null) {
-            routeName = "New route";
+            routeName = Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudRouteNew");
         } else {
-            routeName = "Route";
+            routeName = Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudRouteUnnamed");
         }
         b.set(
             "#RouteLine.TextSpans",
-            Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudRoute").param("name", routeName)
+            Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudRoute").param("name", routeName)
         );
-        b.set(
-            "#NodesLine.TextSpans",
-            Message
-                .translation("aetherhaven_items.aetherhaven.patrolWand.hudNodes")
-                .param("n", String.valueOf(st.getDraftNodes().size()))
-        );
-        boolean closedLoop =
-            st.getMode() == PatrolWandMode.Build
-                ? st.isDraftClosedLoop()
-                : selectedRoute != null && selectedRoute.isClosedLoop();
-        b.set(
-            "#LoopLine.TextSpans",
-            Message.translation(
-                closedLoop
-                    ? "aetherhaven_items.aetherhaven.patrolWand.hudLoopClosed"
-                    : "aetherhaven_items.aetherhaven.patrolWand.hudLoopOpen"
-            )
-        );
-        Message guardLine =
-            selectedRoute != null && selectedRoute.getAssignedGuardUuidParsed() != null
-                ? Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudGuardAssigned")
-                : Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudGuardNone");
-        b.set(
-            "#GuardLine.TextSpans",
-            Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudGuard").param("guard", guardLine)
-        );
-        b.set("#HintLine.TextSpans", Message.translation("aetherhaven_items.aetherhaven.patrolWand.hudHint"));
+        boolean buildMode = mode == PatrolWandMode.Build;
+        b.set("#NodesLine.Visible", buildMode);
+        b.set("#LoopLine.Visible", buildMode);
+        b.set("#GuardLine.Visible", !buildMode);
+        if (buildMode) {
+            b.set(
+                "#NodesLine.TextSpans",
+                Message
+                    .translation(LANG_PREFIX + "aetherhaven.patrolWand.hudNodes")
+                    .param("n", String.valueOf(st.getDraftNodes().size()))
+            );
+            boolean closedLoop = st.isDraftClosedLoop();
+            b.set(
+                "#LoopLine.TextSpans",
+                Message.translation(
+                    closedLoop
+                        ? LANG_PREFIX + "aetherhaven.patrolWand.hudLoopClosed"
+                        : LANG_PREFIX + "aetherhaven.patrolWand.hudLoopOpen"
+                )
+            );
+        } else {
+            Message guardLine =
+                selectedRoute != null && selectedRoute.getAssignedGuardUuidParsed() != null
+                    ? Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudGuardAssigned")
+                    : Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudGuardNone");
+            b.set(
+                "#GuardLine.TextSpans",
+                Message.translation(LANG_PREFIX + "aetherhaven.patrolWand.hudGuard").param("guard", guardLine)
+            );
+        }
+        b.clear(CONTROL_ROWS);
+        List<PatrolWandHudControls.Row> rows = PatrolWandHudControls.rowsFor(mode);
+        for (int i = 0; i < rows.size(); i++) {
+            PatrolWandHudControls.Row row = rows.get(i);
+            String base = CONTROL_ROWS + "[" + i + "]";
+            b.append(CONTROL_ROWS, "Aetherhaven/PathToolHudControlRow.ui");
+            b.set(base + " #KeyLabel.TextSpans", Message.raw(row.keyLabel()));
+            b.set(
+                base + " #DescLabel.TextSpans",
+                Message.translation(LANG_PREFIX + row.descriptionLangKey())
+            );
+        }
         this.update(false, b);
     }
 }

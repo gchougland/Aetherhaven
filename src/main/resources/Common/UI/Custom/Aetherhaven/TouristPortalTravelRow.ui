@@ -1,0 +1,59 @@
+$C = "../Common.ui";
+
+@PortalTeleportIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@PortalTeleportTintIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@PortalTeleportIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@PortalTeleportIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@PortalTeleportIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../teleport.png", Border: 0, Color: #ffffff), LabelStyle: (...@PortalTeleportIconLbl))
+);
+
+Group #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16);
+
+  TextButton #PortalTeleportIcon {
+    Anchor: (Width: 40, Height: 40, Right: 10);
+    Style: @PortalTeleportTintIconStyle;
+    Text: "";
+    Disabled: true;
+    HitTestVisible: false;
+  }
+
+  Group #TextBlock {
+    LayoutMode: Top;
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+
+    Label #TownName {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true);
+    }
+
+    Label #OwnerLine {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #b8a888, FontSize: 13, Wrap: true);
+    }
+
+    Label #StatusLine {
+      Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 13, Wrap: true);
+    }
+  }
+
+  AssetImage #ClosedIcon {
+    Visible: false;
+    Anchor: (Width: 28, Height: 28, Right: 8);
+    FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+  }
+
+  $C.@SmallSecondaryTextButton #TravelButton {
+    @Text = "";
+    Anchor: (Width: 108, Height: 36);
+  }
+}

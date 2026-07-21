@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=Отмена
 aetherhaven.shop.config.saved=Магазин готов к открытию
 
 aetherhaven.shop.hud.title=Магазин
+aetherhaven.shop.hud.closed=Магазин закрыт — работник не назначен
 aetherhaven.shop.hud.closedNight=Магазин закрыт на ночь
 aetherhaven.shop.hud.soldOut=Распродано — пополнение запасов на рассвете.
 aetherhaven.shop.hud.emptyListing=Ничего не продаётся

@@ -4,6 +4,7 @@ import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,7 +13,21 @@ import javax.annotation.Nullable;
 public final class PathToolReplaceFilterEditorHelper {
     public static final short CAPACITY = 27;
 
+    /** Shown in the replace-filter chest when the player has not saved a custom list (matches default replace rules). */
+    private static final List<String> DEFAULT_DISPLAY_BLOCK_IDS = List.of(
+        "Soil_Grass",
+        "Soil_Grass_Deep",
+        "Soil_Grass_Sunny",
+        "Soil_Grass_Full",
+        "Soil_Grass_Dry"
+    );
+
     private PathToolReplaceFilterEditorHelper() {}
+
+    @Nonnull
+    public static Set<String> defaultDisplayBlockIds() {
+        return new LinkedHashSet<>(DEFAULT_DISPLAY_BLOCK_IDS);
+    }
 
     @Nonnull
     public static SimpleItemContainer createContainer() {

@@ -38,7 +38,7 @@ items.Aetherhaven_Smokestack.description=Auf Schornsteinen und Dächern platzier
 benchCategories.aetherhaven.town_planning=Stadtplanung
 benchCategories.aetherhaven.plot_tokens=Plot-Tokens
 
-items.Aetherhaven_Plot_Placement_Tool.name=Mitarbeiter für die Grundstücksvergabe
+items.Aetherhaven_Plot_Placement_Tool.name=Stab für Grundstücksauswahl
 items.Aetherhaven_Plot_Placement_Tool.description=Bewahre das passende Grundstückssymbol in deinem Inventar auf. Benutze diesen Stab, während du auf den Boden zielst, um die Geisterform des Gebäudes zu sehen. Drehe und schiebe ihn, bis er passt, und bestätige dann, um das Grundstück zu sichern. Brich ab, um die Vorschau zu löschen, und benutze den Stab erneut, wenn du eine andere Stelle wählen möchtest.
 
 items.Aetherhaven_Wall_Wand.name=Wandstab
@@ -282,20 +282,20 @@ aetherhaven.patrolWand.toastCleared=Wache entfernt
 aetherhaven.patrolWand.toastNewRoute=Neue Route
 
 items.Aetherhaven_Plot_Token_Inn.name=Gasthaus-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Inn.description=Erforderlich im Inventar, um das Platzierungspersonal für den Gasthofgrundriss zu verwenden.
+items.Aetherhaven_Plot_Token_Inn.description=Im Inventar erforderlich, um den Gasthaus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Marktstand-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Market_Stall.description=Die Mitarbeiter der Grundstückszuweisung müssen die Grundfläche des Marktstandes festlegen.
+items.Aetherhaven_Plot_Token_Market_Stall.description=Im Inventar erforderlich, um den Marktstand-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 items.Aetherhaven_Plot_Token_Player_Shop.name=Spielerladen-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Player_Shop.description=Erforderlich, um den Grundriss des Spielerladens vom Grundstücksplatzierungspersonal zu platzieren.
+items.Aetherhaven_Plot_Token_Player_Shop.description=Im Inventar erforderlich, um den Spielerladen-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farmparzellen-Token
-items.Aetherhaven_Plot_Token_Farm.description=Erforderlich ist die Platzierung des Grundrisses der landwirtschaftlichen Parzelle durch das Parzellenzuweisungspersonal.
+items.Aetherhaven_Plot_Token_Farm.description=Im Inventar erforderlich, um den Farm-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token.name=Plot-Token
-items.Aetherhaven_Plot_Token.description=Platziert ein benutzerdefiniertes Stadtgebäude aus dem Plotplatzierungsteam. Jeder Token ist einem Gebäudetyp zugeordnet.
+items.Aetherhaven_Plot_Token.description=Platziert ein benutzerdefiniertes Stadtgebäude mit dem Stab für Grundstücksauswahl. Jede Marke ist einem Gebäudetyp zugeordnet.
 items.Aetherhaven_Plot_Token.instance.name={building} Plot-Token
-items.Aetherhaven_Plot_Token.instance.description=Erforderlich ist die Platzierung des {building}-Fußabdrucks durch das Personal für die Grundstücksplatzierung.
+items.Aetherhaven_Plot_Token.instance.description=Im Inventar erforderlich, um den {building}-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plotplan
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Eine spezielle Bauplanseite. Nutze sie, um an deiner Bauplanwerkbank ein neues Grundstück zu erstellen.
@@ -306,18 +306,18 @@ items.Aetherhaven_Plot_Creator_Staff.name=Mitarbeiter der Handlungserstellung
 items.Aetherhaven_Plot_Creator_Staff.description=Verwandle ein Gebäude in ein individuelles Stadtgebäude. Siehe die Anleitung im Stadtjournal. F startet den aktuellen Schritt oder führt eine Aktion aus. Klicke mit der rechten Maustaste, um Bereiche und Positionen festzulegen. Q/E: vorheriger/nächster Schritt. R: Abbruch.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Schmiedeladen-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Erforderlich, um den Grundriss der Schmiede anhand der Vorgaben des Grundstücksplatzierungspersonals zu platzieren.
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Im Inventar erforderlich, um den Schmiedeladen-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Park.name=Parkplatz-Token
-items.Aetherhaven_Plot_Token_Park.description=Die Zuweisung des Parkgrundrisses durch das Parzellenzuweisungspersonal ist erforderlich.
+items.Aetherhaven_Plot_Token_Park.description=Im Inventar erforderlich, um den Park-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=Touristenportal-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Tourist_Portal.description=Erforderlich, um den Fußabdruck des Touristenportals vom Grundstückszuweisungspersonal zu platzieren.
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=Im Inventar erforderlich, um den Touristenportal-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_House.name=Hausgrundstücksmarke
-items.Aetherhaven_Plot_Token_House.description=Die Mitarbeiter der Grundstückszuweisung müssen den Grundriss des gemeinsamen Hauses festlegen.
+items.Aetherhaven_Plot_Token_House.description=Im Inventar erforderlich, um den Haus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=Grundstücksmarke für das Rathaus
-items.Aetherhaven_Plot_Token_Town_Hall.description=Erforderlich, um den Grundriss des Rathauses anhand der Vorgaben des Grundstückszuweisungspersonals zu platzieren.
+items.Aetherhaven_Plot_Token_Town_Hall.description=Im Inventar erforderlich, um den Rathaus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=Gildenhallen-Grundstücksmarke
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Markiert die Stellen, an denen das Fertiggebäude der Gildenhalle errichtet werden kann. Hergestellt am Stadtplanungsschalter.

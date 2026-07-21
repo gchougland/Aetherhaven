@@ -88,6 +88,24 @@ public final class CharterRelocationService {
             );
             return false;
         }
+        TownRecord overlap =
+            tm.findTerritoryOverlapAtCharter(
+                world.getName(),
+                a.x,
+                a.z,
+                town.getTerritoryChunkRadius(),
+                town.getTownId()
+            );
+        if (overlap != null) {
+            sendError(
+                store,
+                ref,
+                "Too close to "
+                    + overlap.getDisplayName()
+                    + ". Your town border would overlap theirs."
+            );
+            return false;
+        }
         if (!isReplaceableForCharter(world, a.x, a.y, a.z)) {
             sendError(store, ref, "That spot is blocked. Choose an empty or replaceable block for the charter.");
             return false;

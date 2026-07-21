@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=Cancelar
 aetherhaven.shop.config.saved=Loja pronta
 
 aetherhaven.shop.hud.title=Comprar
+aetherhaven.shop.hud.closed=Loja fechada — nenhum funcionário designado
 aetherhaven.shop.hud.closedNight=Loja fechada para esta noite
 aetherhaven.shop.hud.soldOut=Esgotado — reposição ao amanhecer.
 aetherhaven.shop.hud.emptyListing=Nada à venda

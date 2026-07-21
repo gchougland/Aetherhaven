@@ -1962,6 +1962,14 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         b.set("#InfoBuildingMeta.TextSpans", Message.raw(meta));
         b.set("#InfoDescription.Visible", !description.isBlank());
         b.set("#InfoDescription.TextSpans", Message.raw(description));
+
+        List<String> countsAsLabels = resolveCountsAsDisplayLabels(catalog, definition);
+        boolean showCountsAs = !countsAsLabels.isEmpty();
+        b.set("#InfoCountsAsSection.Visible", showCountsAs);
+        if (showCountsAs) {
+            b.set("#InfoCountsAsValue.TextSpans", Message.raw(String.join("\n", countsAsLabels)));
+        }
+
         String buildCost = constructionGold + " gold to build from the town treasury";
         String goldDetails = moderationTab
             ? buildCost
@@ -2032,6 +2040,34 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
                 b.set(row + " #Count.TextSpans", Message.raw("×" + material.getCount()));
             }
         }
+    }
+
+    @Nonnull
+    private static List<String> resolveCountsAsDisplayLabels(
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable ConstructionDefinition definition
+    ) {
+        if (definition == null) {
+            return List.of();
+        }
+        List<String> countsAs = definition.getCountsAsConstructionIds();
+        if (countsAs.isEmpty()) {
+            return List.of();
+        }
+        List<String> labels = new ArrayList<>();
+        for (String alias : countsAs) {
+            String gameplayId = catalog.resolveGameplayConstructionId(alias);
+            ConstructionDefinition target = catalog.get(gameplayId);
+            if (target == null) {
+                target = catalog.get(alias);
+            }
+            if (target != null) {
+                labels.add(target.getDisplayName());
+            } else if (!gameplayId.isBlank()) {
+                labels.add(gameplayId);
+            }
+        }
+        return labels;
     }
 
     @Nonnull

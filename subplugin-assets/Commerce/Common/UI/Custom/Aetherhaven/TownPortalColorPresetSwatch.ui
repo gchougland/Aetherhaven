@@ -1,0 +1,42 @@
+$C = "../Common.ui";
+
+@SwatchHitLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@PortalColorSwatchHitStyle = TextButtonStyle(
+  Default: (Background: #000000(0.01), LabelStyle: (...@SwatchHitLbl)),
+  Hovered: (Background: #ffffff(0.14), LabelStyle: (...@SwatchHitLbl)),
+  Pressed: (Background: #ffffff(0.22), LabelStyle: (...@SwatchHitLbl)),
+  Disabled: (Background: #000000(0.01), LabelStyle: (...@SwatchHitLbl))
+);
+
+Group #Swatch {
+  LayoutMode: Full;
+  Anchor: (Width: 34, Height: 34, Right: 8, Bottom: 8);
+  Padding: (Full: 2);
+  Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 4, Color: #5a5248);
+
+  Group #ColorFill {
+    Anchor: (Full: 0);
+    Background: #888888;
+  }
+
+  Group #SelectedOutline {
+    Visible: false;
+    Anchor: (Full: 0);
+    Padding: (Full: 1);
+    Background: #f0e6d2;
+    HitTestVisible: false;
+  }
+
+  TextButton #PickButton {
+    Anchor: (Full: 0);
+    Style: @PortalColorSwatchHitStyle;
+    Text: "";
+    Padding: (Full: 0);
+  }
+}

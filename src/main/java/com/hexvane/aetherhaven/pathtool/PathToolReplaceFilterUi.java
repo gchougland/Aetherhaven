@@ -34,7 +34,11 @@ public final class PathToolReplaceFilterUi {
             return;
         }
         session = PathToolReplaceFilterSessions.getOrCreate(playerId);
-        PathToolReplaceFilterEditorHelper.loadBlockIdsIntoContainer(session.container, st.getReplaceFilterBlockIds());
+        Set<String> toLoad = st.getReplaceFilterBlockIds();
+        if (toLoad.isEmpty()) {
+            toLoad = PathToolReplaceFilterEditorHelper.defaultDisplayBlockIds();
+        }
+        PathToolReplaceFilterEditorHelper.loadBlockIdsIntoContainer(session.container, toLoad);
         session.editingActive = true;
         openChestWindow(ref, store, playerRef, session);
     }

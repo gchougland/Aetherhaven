@@ -39,6 +39,7 @@ aetherhaven.shop.config.cancel=Stornieren
 aetherhaven.shop.config.saved=Ladenplatz bereit
 
 aetherhaven.shop.hud.title=Geschäft
+aetherhaven.shop.hud.closed=Geschäft geschlossen — kein Mitarbeiter zugewiesen
 aetherhaven.shop.hud.closedNight=Das Geschäft ist für heute Abend geschlossen.
 aetherhaven.shop.hud.soldOut=Ausverkauft – Nachschub im Morgengrauen
 aetherhaven.shop.hud.emptyListing=Nichts zu verkaufen

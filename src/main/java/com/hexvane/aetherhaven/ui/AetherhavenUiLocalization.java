@@ -51,6 +51,17 @@ public final class AetherhavenUiLocalization {
         b.set("#ReconstructBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalBody"));
         b.set("#ReconstructBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalConfirm"));
         b.set("#ReconstructBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalCancel"));
+        b.set("#TouristManifestHeader.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestHeader"));
+        b.set("#TouristManifestEmpty.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.touristManifestEmpty"));
+        b.set("#ClearVisitingTouristsButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.clearVisitingTourists"));
+        b.set("#VisitorPortalTravelLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllow"));
+        b.set("#VisitorPortalTravelLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalTravelAllowTooltip"));
+        b.set("#VisitorPortalColorLabel.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColor"));
+        b.set("#VisitorPortalColorLabel.TooltipTextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.visitorPortalColorTooltip"));
+        b.set("#ChooseVisitorPortalColorButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.chooseColor"));
+        b.set("#VisitorPortalColorPickerTitle.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerTitle"));
+        b.set("#VisitorPortalColorPickerHint.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerHint"));
+        b.set("#VisitorPortalColorPickerCancelButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerClose"));
         b.set("#PickUpPlotModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalTitle"));
         b.set("#PickUpPlotModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalBody"));
         b.set("#PickUpPlotConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalConfirm"));
@@ -132,6 +143,13 @@ public final class AetherhavenUiLocalization {
         b.set(rowPath + " #ReviveButton.TextSpans", t("aetherhaven_ui_shell.aetherhaven.ui.gaiaStatue.revive"));
     }
 
+    public static void applyPatrolWandStatusHudTitle(
+        @Nonnull UICommandBuilder b,
+        @Nonnull java.util.function.Function<String, String> scoped
+    ) {
+        b.set(scoped.apply("#PatrolWandHudTitleText.TextSpans"), t("aetherhaven_items.aetherhaven.patrolWand.hudTitle"));
+    }
+
     public static void applyPatrolWandAssignGuardPage(@Nonnull UICommandBuilder b) {
         b.set("#PatrolAssignTitleText.TextSpans", t("aetherhaven_items.aetherhaven.patrolWand.assignPageTitle"));
     }
@@ -163,6 +181,21 @@ public final class AetherhavenUiLocalization {
         b.set("#TaxHallMissing.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.hallMissing"));
         b.set("#TitheTotalLabel.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.sheetTotalLabel"));
         b.set("#TaxResidentsHeader.TextSpans", t("aetherhaven_jewelry_geode.aetherhaven.ui.treasury.tax.residentsHeader"));
+    }
+
+    public static void applyTouristPortalTravelPage(@Nonnull UICommandBuilder b) {
+        b.set("#TravelTitleText.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.title"));
+        b.set("#TravelIntro.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.intro"));
+        b.set("#AllowInboundLabel.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.allowInbound"));
+        b.set("#AllowInboundLabel.TooltipTextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.allowInboundTooltip"));
+        b.set("#TownPortalColorLabel.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.townColor"));
+        b.set("#TownPortalColorLabel.TooltipTextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.townColorTooltip"));
+        b.set("#ChoosePortalColorButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.chooseColor"));
+        b.set("#PortalColorPickerTitle.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerTitle"));
+        b.set("#PortalColorPickerHint.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerHint"));
+        b.set("#PortalColorPickerCancelButton.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.colorPickerClose"));
+        b.set("#DestinationsHeader.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.destinationsHeader"));
+        b.set("#DestinationsEmpty.TextSpans", t("aetherhaven_tourist.aetherhaven.tourist.portalTravel.destinationsEmpty"));
     }
 
     public static void applyFeasts(@Nonnull UICommandBuilder b) {
@@ -391,6 +424,20 @@ public final class AetherhavenUiLocalization {
         b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleListCancel"));
     }
 
+    public static void applyPathToolWidthPage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolWidthTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.widthPageTitle"));
+        b.set("#PreviewLabel.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.widthPagePreview"));
+        b.set("#WidthLabel.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.widthPageSliderLabel"));
+        b.set("#ApplyButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.widthPageApply"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.widthPageCancel"));
+    }
+
+    public static void applyPathToolStylePickPage(@Nonnull UICommandBuilder b) {
+        b.set("#PathToolStylePickTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.stylePickTitle"));
+        b.set("#ChooseButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.stylePickChoose"));
+        b.set("#CancelButton.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.stylePickCancel"));
+    }
+
     public static void applyPathToolStyleNamePage(@Nonnull UICommandBuilder b) {
         b.set("#PathToolStyleNameTitleText.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameTitle"));
         b.set("#Hint.TextSpans", t("aetherhaven_items.aetherhaven.pathTool.styleNameHint"));
@@ -414,6 +461,7 @@ public final class AetherhavenUiLocalization {
         b.set("#BuildingInfoTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoTitle"));
         b.set("#BuildingInfoEmptyText.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoEmpty"));
         b.set("#InfoGoldTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoGoldTitle"));
+        b.set("#InfoCountsAsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoCountsAsTitle"));
         b.set("#InfoRequiredModsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoRequiredModsTitle"));
         b.set("#InfoMaterialsTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.infoMaterialsTitle"));
         b.set("#VariantSectionTitle.TextSpans", t("aetherhaven_plot_crafting.aetherhaven.ui.plotCrafting.variantSectionTitle"));

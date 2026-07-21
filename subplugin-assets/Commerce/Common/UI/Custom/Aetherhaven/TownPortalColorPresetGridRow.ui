@@ -1,0 +1,10 @@
+$C = "../Common.ui";
+
+Group #PortalColorPresetRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 6);
+
+  Group #Strip {
+    LayoutMode: Left;
+  }
+}

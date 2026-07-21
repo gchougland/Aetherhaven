@@ -93,6 +93,37 @@ public final class ProductionWorkplaceKinds {
         };
     }
 
+    /**
+     * Gameplay construction id whose permanent worker role is {@code residentKind} for this plot (variant counts-as
+     * lists, guild hall bard, etc.).
+     */
+    @Nullable
+    public static String gameplayConstructionIdForResidentKind(
+        @Nonnull ConstructionCatalog catalog,
+        @Nullable String plotStoredConstructionId,
+        @Nonnull String residentKind
+    ) {
+        String want = residentKind.trim();
+        if (want.isEmpty()) {
+            return null;
+        }
+        if (TownVillagerBinding.KIND_BARD.equals(want)) {
+            for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+                if (isMultiRoleWorkplace(gid)) {
+                    return gid;
+                }
+            }
+            return null;
+        }
+        for (String gid : catalog.resolveGameplayConstructionIds(plotStoredConstructionId)) {
+            String kind = residentBindingKindForGameplayConstruction(gid);
+            if (want.equals(kind)) {
+                return gid;
+            }
+        }
+        return null;
+    }
+
     @Nullable
     public static String residentBindingKindForGameplayConstruction(@Nullable String gameplayConstructionId) {
         if (gameplayConstructionId == null || gameplayConstructionId.isBlank()) {

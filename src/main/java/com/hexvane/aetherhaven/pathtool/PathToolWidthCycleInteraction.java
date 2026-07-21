@@ -17,14 +17,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * {@link InteractionType#Ability2}: cycles path width 1..8.
+ * {@link InteractionType#Ability2}: cycles path width 1..{@link com.hexvane.aetherhaven.config.PathToolStyleDefinition#MAX_PATH_WIDTH_BLOCKS}.
  */
 public final class PathToolWidthCycleInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<PathToolWidthCycleInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(PathToolWidthCycleInteraction.class, PathToolWidthCycleInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("Path tool: second ability — cycle path width (1-8).")
+            .documentation("Path tool: second ability — cycle path width (1-9).")
             .build();
 
     @Nonnull

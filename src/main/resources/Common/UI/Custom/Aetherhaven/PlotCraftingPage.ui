@@ -447,6 +447,23 @@ $C.@PageOverlay {
                 Text: "";
               }
 
+              Group #InfoCountsAsSection {
+                LayoutMode: Top;
+                Anchor: (Bottom: 12);
+                Visible: false;
+
+                Label #InfoCountsAsTitle {
+                  Style: (...@SectionTitle);
+                  Anchor: (Bottom: 4);
+                  Text: "";
+                }
+
+                Label #InfoCountsAsValue {
+                  Style: (...$C.@DefaultLabelStyle, TextColor: #c5d0dc, FontSize: 14, Wrap: true);
+                  Text: "";
+                }
+              }
+
               Group #InfoGoldCard {
                 LayoutMode: Top;
                 Padding: (Full: 9);

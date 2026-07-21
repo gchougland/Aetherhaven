@@ -12,7 +12,7 @@ Diese Seite zeigt dir auf dem Weg von einem leeren Fleckchen Erde zu einer Stadt
 
 1. Stelle an einer Werkbank einen **Stadtplanungstisch** her.
 
-2. Verwende den Tisch, um eine **Stadturkunde** und einen **Grundstücksplatzierungsstab** herzustellen.
+2. Verwende den Tisch, um eine **Stadturkunde** und einen **Stab für Grundstücksauswahl** herzustellen.
 
 3. Platziere die Urkunde dort, wo das Zentrum deiner Stadt sein soll. Deine Stadt erhält zunächst einen zufälligen Namen. Du kannst die Urkunde später öffnen, um sie umzubenennen.
 
@@ -26,7 +26,7 @@ Lyren bittet dich, die Herberge zu **bauen**. Das bedeutet konkret:
 
 1. Sprich mit Lyren und nimm die Quest an. Er gibt dir das **Gasthaus-Grundstückssymbol** (Grundstückssymbole für Bauquests erhältst du vom Questgeber, nicht vom Planungstisch).
 
-2. Rüste den **Grundstücksplatzierungsstab** aus und platziere den Grundriss des Gasthauses an der gewünschten Stelle.
+2. Rüste den **Stab für Grundstücksauswahl** aus und platziere den Grundriss des Gasthauses an der gewünschten Stelle.
 
 3. Bringe das benötigte Holz und die Steine zum Grundstücksschild und schließe den Bau ab.
 

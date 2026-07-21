@@ -1,14 +1,14 @@
 ---
-name: "Mitarbeiter der Handlungserstellung"
+name: "Stab für Grundstückserstellung"
 description: "Wandeln Sie ein Gebäude in eine benutzerdefinierte Stadtgebäudedefinition um"
 author: Hexvane
 ---
 
-# Mitarbeiter des Grundstückserstellers
+# Stab für Grundstückserstellung
 
-Der Mitarbeiter des Grundstückserstellers erfasst **benutzerdefinierte Gebäude**, die du in der Welt errichtet hast: Grundfläche, Spezialblöcke, Export von Fertigbauteilen, Kosten und (optional) ein aktives Grundstück in deiner Stadt. Die meisten Spieler sollten **Dekoration** oder **Variante** verwenden, nicht die vollständigen Arbeitsplatztypen weiter unten.
+Der Stab für Grundstückserstellung erfasst **benutzerdefinierte Gebäude**, die du in der Welt errichtet hast: Grundfläche, Spezialblöcke, Export von Fertigbauteilen, Kosten und (optional) ein aktives Grundstück in deiner Stadt. Die meisten Spieler sollten **Dekoration** oder **Variante** verwenden, nicht die vollständigen Arbeitsplatztypen weiter unten.
 
-Öffne dein **Stadtjournal → Anleitung → Mechaniken → Mitarbeiter des Grundstückserstellers** (diese Seite), um den Ablauf zu lernen. Im Spiel: Rüste den Mitarbeiter aus, drücke **F**, um zu starten oder das aktuelle Schrittfenster zu öffnen, **klicke mit der rechten Maustaste** auf Blöcke in der Welt, **Q** / **E** für den vorherigen/nächsten Schritt, **R** zum Abbrechen.
+Öffne dein **Stadtjournal → Anleitung → Mechaniken → Stab für Grundstückserstellung** (diese Seite), um den Ablauf zu lernen. Im Spiel: Rüste den Stab aus, drücke **F**, um zu starten oder das aktuelle Schrittfenster zu öffnen, **klicke mit der rechten Maustaste** auf Blöcke in der Welt, **Q** / **E** für den vorherigen/nächsten Schritt, **R** zum Abbrechen.
 
 ## Empfohlene Wege
 

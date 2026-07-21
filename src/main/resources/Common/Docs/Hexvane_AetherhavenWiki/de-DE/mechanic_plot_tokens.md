@@ -8,7 +8,7 @@ author: Hexvane
 
 # Grundstücksmarken
 
-**Grundstücksmarken** sind Gegenstände in deinem Inventar, mit denen du am **Grundstücksplatzierungsstab** einen Gebäudetyp auswählst und anschließend den Grundriss in der Welt platzierst.
+**Grundstücksmarken** sind Gegenstände in deinem Inventar, mit denen du am **Stab für Grundstücksauswahl** einen Gebäudetyp auswählst und anschließend den Grundriss in der Welt platzierst.
 
 ## Grundstückswerkbank
 
@@ -24,7 +24,7 @@ Manche Gebäude sind durch **Grundstückspläne** gesperrt, anstatt fertige Mark
 
 2. Öffne die Werkbank und stelle die Grundstücksmarke her (Materialien und Gold, wie bei anderen Marken).
 
-3. Rüste den **Grundstücksplatzierungsstab** aus und sichere die Position.
+3. Rüste den **Stab für Grundstücksauswahl** aus und sichere die Position.
 
 **Weiße, schwebende Geschenke** enthalten oft Baupläne. Grüne Geschenke enthalten meist Schmuck, rote Geschenke meist Möbel. Ballongeschenke sind seltener als zuvor.
 
