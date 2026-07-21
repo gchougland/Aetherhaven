@@ -179,9 +179,15 @@ public final class AetherhavenWorldRegistries {
         return WORLD_NPC_REGISTRIES.get(world.getName());
     }
 
+    /** Existing town manager only; does not load or create. Safe for HUD tick reads in instance worlds. */
+    @Nullable
+    public static TownManager getTownManagerIfLoaded(@Nonnull World world) {
+        return TOWN_MANAGERS.get(world.getName());
+    }
+
     @Nonnull
     public static TownManager getTownManager(@Nonnull World world) {
-        TownManager m = TOWN_MANAGERS.get(world.getName());
+        TownManager m = getTownManagerIfLoaded(world);
         if (m == null) {
             throw new IllegalStateException("TownManager not loaded for world " + world.getName());
         }

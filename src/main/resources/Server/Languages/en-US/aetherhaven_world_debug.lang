@@ -111,6 +111,7 @@ aetherhaven.debug.plots.reconstructChunks=Load all chunks around that building f
 aetherhaven.debug.plots.reconstructUnknown=Unknown construction for that plot.
 aetherhaven.debug.plots.reconstructPrefab=Prefab file missing for that building.
 aetherhaven.debug.plots.reconstructWall=Wall and decoration plots cannot be reconstructed with this command.
+aetherhaven.debug.plots.reconstructAnchor=Could not determine in-place prefab anchor for that plot.
 aetherhaven.debug.plots.reconstructFailed=Reconstruct failed. Check the server log.
 aetherhaven.debug.plots.diagnoseHeader=Plot link diagnose for {town}:
 aetherhaven.debug.plots.diagnoseLine=  {construction} {state} @ {x},{y},{z} links={link}

@@ -187,6 +187,18 @@ $C.@PageOverlay {
             Background: #5e512c(0.0);
           }
 
+          Group #ManagementPlotActions {
+            LayoutMode: Left;
+            Visible: false;
+            Anchor: (Bottom: 12);
+
+            $C.@SecondaryTextButton #ReconstructBuildingButton {
+              Anchor: (Width: 148, Height: 36);
+              Padding: (Horizontal: 10);
+              Text: "";
+            }
+          }
+
           Group #WorkplaceAssignRow {
             LayoutMode: Top;
             Visible: false;
@@ -490,6 +502,52 @@ $C.@PageOverlay {
             }
 
             $C.@CancelTextButton #MoveBuildingCancelButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
+        }
+      }
+    }
+
+    Group #ReconstructBuildingModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 420);
+
+        #Title {
+          Label #ReconstructBuildingModalTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #ReconstructBuildingModalText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #ReconstructBuildingConfirmButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #ReconstructBuildingCancelButton {
               Text: "";
               FlexWeight: 1;
               Anchor: (Left: 8);

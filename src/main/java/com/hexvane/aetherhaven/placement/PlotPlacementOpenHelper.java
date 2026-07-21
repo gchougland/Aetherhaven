@@ -74,16 +74,17 @@ public final class PlotPlacementOpenHelper {
         }
         Rotation yaw = plot.resolvePrefabYaw();
         ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
-        Vector3i anchor;
-        if (def != null) {
-            // Sign Y is terrain-snapped independently of building height; seed from stored prefab pose.
-            anchor = def.resolvePreviewSignAnchorWorld(plot.resolvePrefabAnchorWorld(def), yaw);
+        Vector3i signAnchor;
+        if (plot.hasStoredPrefabWorldAnchor()) {
+            signAnchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
+        } else if (def != null) {
+            signAnchor = def.resolvePreviewSignAnchorWorld(plot.resolvePrefabAnchorWorld(def), yaw);
         } else {
-            anchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
+            signAnchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
         }
         int steps = PlotPlacementSession.rotationStepsFromPrefabYaw(yaw);
         PlotPlacementSession session =
-            PlotPlacementSession.forRelocatingPlot(world, anchor, steps, plot.getConstructionId(), plotId);
+            PlotPlacementSession.forRelocatingPlot(world, signAnchor, steps, plot.getConstructionId(), plotId);
         PlotPlacementSessions.put(uc.getUuid(), session);
         return new PlotPlacementPage(playerRef, session);
     }

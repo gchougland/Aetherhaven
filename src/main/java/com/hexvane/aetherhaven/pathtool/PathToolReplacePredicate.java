@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.protocol.ItemResourceType;
@@ -27,6 +28,17 @@ public final class PathToolReplacePredicate {
         int y,
         int z
     ) {
+        return isReplaceable(cfg, world, x, y, z, null);
+    }
+
+    public static boolean isReplaceable(
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull World world,
+        int x,
+        int y,
+        int z,
+        @Nullable Set<String> playerBlockIds
+    ) {
         // Must not use World.getBlockType / getChunk here: they can loadChunkIfInMemory and tick chunk entities while the
         // entity store is already ticking (e.g. PathToolPreviewSystem), causing "Store is currently processing!".
         if (y < 0 || y >= 320) {
@@ -36,14 +48,28 @@ public final class PathToolReplacePredicate {
         if (chunk == null) {
             return false;
         }
-        return isReplaceable(cfg, BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z)));
+        return isReplaceable(cfg, BlockType.getAssetMap().getAsset(chunk.getBlock(x, y, z)), playerBlockIds);
     }
 
     public static boolean isReplaceable(@Nonnull AetherhavenPluginConfig cfg, @Nullable BlockType blockType) {
+        return isReplaceable(cfg, blockType, null);
+    }
+
+    public static boolean isReplaceable(
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nullable BlockType blockType,
+        @Nullable Set<String> playerBlockIds
+    ) {
         if (blockType == null || blockType == BlockType.EMPTY) {
             return false;
         }
         String id = blockType.getId();
+        if (playerBlockIds != null && !playerBlockIds.isEmpty()) {
+            if (playerBlockIds.contains(id) || alwaysReplaceablePathOutput(id)) {
+                return true;
+            }
+            return playerBlockIds.stream().anyMatch(stored -> storedMatchesWorldBlock(stored, id));
+        }
         Set<String> idAllow = new HashSet<>(parseCsv(cfg.getPathToolReplaceableBlockIds()));
         Set<String> rtAllow = new HashSet<>(parseCsv(cfg.getPathToolReplaceableResourceTypeIds()));
         if (idAllow.isEmpty() && rtAllow.isEmpty()) {
@@ -82,6 +108,40 @@ public final class PathToolReplacePredicate {
      */
     private static boolean defaultHeuristicSurfaceReplaceable(@Nonnull String id) {
         return id.startsWith("Soil_") || id.contains("Dirt");
+    }
+
+    private static boolean alwaysReplaceablePathOutput(@Nonnull String id) {
+        return id.equals(AetherhavenConstants.PATH_BLOCK_GRASS)
+            || id.equals(AetherhavenConstants.PATH_BLOCK_GRASS_DEEP)
+            || id.equals(AetherhavenConstants.PATH_BLOCK_PATHWAY)
+            || id.equals(AetherhavenConstants.PATH_BLOCK_MUD_DRY);
+    }
+
+    /** Matches block ids, item ids, and block-only assets saved in the replace-filter chest. */
+    private static boolean storedMatchesWorldBlock(@Nonnull String stored, @Nonnull String worldBlockId) {
+        if (stored.equals(worldBlockId)) {
+            return true;
+        }
+        @Nullable
+        BlockType storedBlock = BlockType.getAssetMap().getAsset(stored);
+        if (storedBlock != null && worldBlockId.equals(storedBlock.getId())) {
+            return true;
+        }
+        @Nullable
+        Item storedItem = Item.getAssetMap().getAsset(stored);
+        if (storedItem != null && storedItem.hasBlockType()) {
+            @Nullable
+            String blockId = storedItem.getBlockId();
+            if (blockId != null && worldBlockId.equals(blockId.trim())) {
+                return true;
+            }
+        }
+        @Nullable
+        Item worldItem = Item.getAssetMap().getAsset(worldBlockId);
+        if (worldItem != null && stored.equals(worldItem.getId())) {
+            return true;
+        }
+        return false;
     }
 
     @Nonnull

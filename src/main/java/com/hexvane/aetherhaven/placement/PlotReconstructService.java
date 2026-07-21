@@ -43,7 +43,8 @@ public final class PlotReconstructService {
         UNKNOWN_CONSTRUCTION,
         PREFAB_MISSING,
         WALL_OR_DECORATION,
-        PREFAB_FAILED
+        PREFAB_FAILED,
+        ANCHOR_UNKNOWN
     }
 
     @Nonnull
@@ -70,6 +71,21 @@ public final class PlotReconstructService {
             return ReconstructResult.PREFAB_MISSING;
         }
 
+        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
+        if (buffer == null) {
+            return ReconstructResult.PREFAB_MISSING;
+        }
+
+        int signX = plot.getSignX();
+        int signY = plot.getSignY();
+        int signZ = plot.getSignZ();
+        Rotation yaw = plot.resolvePrefabYaw();
+        PlotFootprintRecord oldFootprint = plot.toFootprint();
+        Vector3i anchor = PlotInPlacePrefabAnchor.resolveInPlaceAnchor(plot, yaw, buffer, oldFootprint);
+        if (anchor == null) {
+            return ReconstructResult.ANCHOR_UNKNOWN;
+        }
+
         UUID plotId = plot.getPlotId();
         LOGGER.atInfo().log(
             "Plot reconstruct town=%s plot=%s construction=%s actor=%s",
@@ -83,22 +99,13 @@ public final class PlotReconstructService {
             AssemblyWorldRegistry.remove(world, plotId);
         }
 
-        PlotFootprintRecord oldFootprint = plot.toFootprint();
         PoiRegistry poiReg = AetherhavenWorldRegistries.getOrCreatePoiRegistry(world, plugin);
         PlotBuildingRelocation.relocateTownNpcsOutOfFootprint(entityStore, town, oldFootprint);
         TownDissolutionService.clearPlotFromWorld(world, plugin, town, plot, entityStore, poiReg);
         plot.clearAssemblyPersistence();
 
-        Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
-        Rotation yaw = plot.resolvePrefabYaw();
-        if (anchor == null) {
-            Vector3i sign = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
-            anchor = def.resolvePrefabAnchorWorld(sign, yaw);
-        }
-
-        IPrefabBuffer buffer = PrefabBufferUtil.getCached(prefabPath);
         PlotFootprintRecord newFp = PlotFootprintUtil.computeFootprint(anchor, yaw, buffer);
-        plot.applySignAndFootprint(plot.getSignX(), plot.getSignY(), plot.getSignZ(), newFp);
+        plot.applySignAndFootprint(signX, signY, signZ, newFp);
         plot.setPrefabWorldPlacement(anchor.x, anchor.y, anchor.z, yaw);
 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);

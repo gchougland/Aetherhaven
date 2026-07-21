@@ -40,6 +40,8 @@ import com.hexvane.aetherhaven.villager.gift.VillagerGiftService;
 import com.hexvane.aetherhaven.ui.WorldQuestBoardPage;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcBinding;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcPlacementRecord;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcPlayerProgress;
+import com.hexvane.aetherhaven.worldnpc.WorldNpcRegistry;
 import com.hexvane.aetherhaven.worldnpc.WorldNpcReputationService;
 import com.hexvane.aetherhaven.worldnpc.WorldQuestProgressionService;
 import com.hypixel.hytale.builtin.crafting.CraftingPlugin;
@@ -332,6 +334,9 @@ public final class DialogueActionExecutor {
             return;
         }
         if (worldBinding(store, npcRef) != null || WorldQuestProgressionService.isWorldQuest(precheck)) {
+            if (!ensureWorldQuestActiveForDialogueComplete(plugin, world, pu.getUuid(), qid, precheck)) {
+                return;
+            }
             if (!WorldQuestProgressionService.advanceDialogueTurnIn(plugin, world, pu.getUuid(), qid)) {
                 return;
             }
@@ -365,7 +370,20 @@ public final class DialogueActionExecutor {
             return;
         }
         if (!town.hasQuestActive(qid)) {
-            return;
+            if (town.hasQuestCompleted(qid)) {
+                return;
+            }
+            if (precheck == null || !QuestProgressionService.allObjectivesComplete(plugin, town, qid)) {
+                return;
+            }
+            if (!town.playerCanAcceptQuests(pu.getUuid())) {
+                return;
+            }
+            UUID npcUuidForStart = npcUuidFromRef(store, npcRef);
+            town.addActiveQuest(qid);
+            QuestProgressionService.initialize(plugin, town, qid);
+            QuestLifecycleEffects.runOnStart(world, plugin, town, tm, precheck, npcUuidForStart);
+            tm.updateTown(town);
         }
         if (precheck != null && !QuestProgressionService.advanceDialogueTurnIn(plugin, town, qid)) {
             tm.updateTown(town);
@@ -474,7 +492,7 @@ public final class DialogueActionExecutor {
             tm.updateTown(town);
         }
         if (touristPromoteUuid != null) {
-            TouristPortalTickService.promoteTouristToCitizen(town, tm, touristPromoteUuid);
+            TouristPortalTickService.promoteTouristToCitizen(town, tm, touristPromoteUuid, world, store, plugin);
         }
         if (store != null && isInnVisitorJobQuestForResidentPromotion(qid)) {
             InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
@@ -522,6 +540,34 @@ public final class DialogueActionExecutor {
         }
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         return nu != null ? nu.getUuid() : null;
+    }
+
+    /**
+     * Rescue and similar trees use {@code complete_quest} without {@code start_quest}. When every objective is already
+     * satisfied (including zero-objective quests), activate once so completion can persist for inn pool gating.
+     */
+    private static boolean ensureWorldQuestActiveForDialogueComplete(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull UUID playerUuid,
+        @Nonnull String questId,
+        @Nullable QuestDefinition def
+    ) {
+        WorldNpcRegistry registry = AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin);
+        WorldNpcPlayerProgress progress = registry.getOrCreatePlayerProgress(playerUuid);
+        if (progress.hasQuestActive(questId)) {
+            return true;
+        }
+        if (progress.hasQuestCompleted(questId)) {
+            return false;
+        }
+        if (def == null || !WorldQuestProgressionService.isWorldQuest(def)) {
+            return false;
+        }
+        if (!WorldQuestProgressionService.allObjectivesComplete(plugin, progress, questId)) {
+            return false;
+        }
+        return WorldQuestProgressionService.startQuest(plugin, world, playerUuid, questId);
     }
 
     private static void giftVillager(

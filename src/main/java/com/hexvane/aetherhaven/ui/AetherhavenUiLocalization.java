@@ -46,6 +46,11 @@ public final class AetherhavenUiLocalization {
         b.set("#MoveBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalBody"));
         b.set("#MoveBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalConfirm"));
         b.set("#MoveBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalCancel"));
+        b.set("#ReconstructBuildingButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuilding"));
+        b.set("#ReconstructBuildingModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalTitle"));
+        b.set("#ReconstructBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalBody"));
+        b.set("#ReconstructBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalConfirm"));
+        b.set("#ReconstructBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalCancel"));
         b.set("#PickUpPlotModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalTitle"));
         b.set("#PickUpPlotModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalBody"));
         b.set("#PickUpPlotConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.pickUpPlotModalConfirm"));

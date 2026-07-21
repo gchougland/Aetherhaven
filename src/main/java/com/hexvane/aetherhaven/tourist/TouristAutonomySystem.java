@@ -69,8 +69,10 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
     private static final long SHOP_VISIT_MIN_MS = 20_000L;
     private static final long SHOP_VISIT_MAX_MS = 40_000L;
     private static final int SHOP_SPOTS_PER_VISIT_MAX = 2;
-    /** Chance a tourist buys one player listing after browsing a player shop (0–100). */
+    /** Chance a visiting tourist buys one player listing after browsing a player shop (0–100). */
     private static final int PLAYER_SHOP_BUY_CHANCE_PERCENT = 60;
+    /** Settled tourist citizens keep browsing towns, but buy from player shops less often. */
+    private static final int PLAYER_SHOP_BUY_CHANCE_CITIZEN_PERCENT = 20;
     private static final long POI_USE_MIN_MS = 15_000L;
     private static final long POI_USE_MAX_MS = 35_000L;
     private static final long SHOP_SPOT_BROWSE_MIN_MS = 5_000L;
@@ -1154,8 +1156,16 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         if (!ShopSpotPurchaseService.isPlayerShopPlot(plugin, town, plotId)) {
             return;
         }
+        int buyChancePercent = PLAYER_SHOP_BUY_CHANCE_PERCENT;
+        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
+        if (tb != null && !tb.getCharacterId().isBlank()) {
+            TouristRecord rec = TouristPortalTickService.findTouristRecord(town, tb.getCharacterId());
+            if (rec != null && rec.isCitizen()) {
+                buyChancePercent = PLAYER_SHOP_BUY_CHANCE_CITIZEN_PERCENT;
+            }
+        }
         Random random = new Random(now ^ ref.hashCode() ^ plotId.hashCode());
-        if (random.nextInt(100) >= PLAYER_SHOP_BUY_CHANCE_PERCENT) {
+        if (random.nextInt(100) >= buyChancePercent) {
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -1163,7 +1173,6 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         String buyerName = "A visitor";
-        TownsfolkCharacterBinding tb = store.getComponent(ref, TownsfolkCharacterBinding.getComponentType());
         if (tb != null && !tb.getCharacterId().isBlank()) {
             TownsfolkCharacterDefinition ch = plugin.getTownsfolkCharacterCatalog().byId(tb.getCharacterId().trim());
             if (ch != null && ch.getDisplayName() != null && !ch.getDisplayName().isBlank()) {
@@ -1334,11 +1343,25 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
             return;
         }
         if (autonomy.getVisitPlotUuid() != null) {
-            autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
-            autonomy.clearTravelWaypoints();
-            commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
-            clearAutonomyRoleState(ref, npc, commandBuffer);
-            return;
+            // Timed-out travel must not soft-enter VISIT while still outside the plot — that restarts a seek/teleport loop.
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            UUID visitPlotId = autonomy.getVisitPlotUuid();
+            PlotInstance plot = TouristDestinationResolver.findVisitPlot(town, visitPlotId);
+            if (tc != null
+                && plot != null
+                && TouristDestinationResolver.isInsidePlotFootprint(
+                    tc.getPosition().x,
+                    tc.getPosition().z,
+                    plot,
+                    TouristDestinationResolver.plotEdgePadding()
+                )) {
+                autonomy.setPhase(TouristAutonomyState.PHASE_VISIT);
+                autonomy.clearTravelWaypoints();
+                commandBuffer.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                clearAutonomyRoleState(ref, npc, commandBuffer);
+                return;
+            }
+            autonomy.clearVisitPlot();
         }
         autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
         autonomy.clearTravelWaypoints();
@@ -1411,7 +1434,7 @@ public final class TouristAutonomySystem extends EntityTickingSystem<EntityStore
         store.putComponent(ref, NPCEntity.getComponentType(), npc);
     }
 
-    private static void clearAutonomyRoleState(
+    public static void clearAutonomyRoleState(
         @Nonnull Ref<EntityStore> ref,
         @Nonnull NPCEntity npc,
         @Nonnull CommandBuffer<EntityStore> commandBuffer

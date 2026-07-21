@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.5.0] - Unreleased
+
+
+
+## [2.4.1] - 7/20/26
+
+### Added
+
+- **Reconstruct from town records** — On the **Plot** tab of the town records shelf, completed buildings now have a **Reconstruct** button (same permission as **Move building**). It clears the plot and rebuilds the latest version of that building **in the same spot**, without moving the plot sign. A confirmation explains that NPCs inside the footprint may be moved and you should grab valuables first. Walls and decoration plots are not supported here.
+- **Path tool replace filter** — On the path designer shovel, press **Q** until **Replace filter** (after Style designer). Press **F** to open a chest: put block items in the slots for ground types you allow the path to replace when placing. Press **E** to save; leave the chest empty to use the usual soil and dirt rules. Preview and placement respect your list (you can still replace existing path blocks when paving).
+
+### Changed
+
+- **Path waypoints without paving** — In **Place** mode, you can commit a path even when nothing under it can be swapped for path blocks (for example solid rock). Townsfolk still get navigation along your route; chat tells you when only waypoints were saved, not blocks. In **Remove** mode, those paths can be selected and deleted like paved ones.
+- **Moving buildings after file updates** — If a building was edited in the building editor staff but stayed in the same place in your town, opening **Move building** no longer shifts the placement preview to the wrong spot.
+
+### Fixed
+
+- **Dungeon and instance worlds** — Entering temporary adventure instances (such as the Forgotten Temple) no longer crashes the server when the town HUD refreshes. Your town journal HUD still works normally in your persistent home world.
+- **Rescue quest dialogue** — Finishing a villager rescue at the end of its dialogue (for example Rivet after Machinaria) now properly completes the rescue quest and records it on your town, so rescued characters can appear at the inn on the next visitor fill instead of vanishing after the cutscene.
+- **Housed tourist pile-up** — Invited tourist citizens no longer stall-teleport into a broken empty plot entry forever (outside-footprint entries are abandoned). They keep browsing destinations to keep the town lively, never leave via the portal, and buy from player shops less often than day visitors (~20% vs ~60%).
+
 ## [2.4.0] - 7/19/2026
 
 ### Added

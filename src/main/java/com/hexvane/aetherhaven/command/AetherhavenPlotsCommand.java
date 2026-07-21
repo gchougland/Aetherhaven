@@ -274,6 +274,8 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
                     playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.reconstructPrefab"));
                 case WALL_OR_DECORATION ->
                     playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.reconstructWall"));
+                case ANCHOR_UNKNOWN ->
+                    playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.reconstructAnchor"));
                 default ->
                     playerRef.sendMessage(Message.translation("aetherhaven_world_debug.aetherhaven.debug.plots.reconstructFailed"));
             }

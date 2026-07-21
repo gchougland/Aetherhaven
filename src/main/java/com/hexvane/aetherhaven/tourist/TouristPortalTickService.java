@@ -925,6 +925,17 @@ public final class TouristPortalTickService {
         @Nonnull TownManager tm,
         @Nonnull UUID entityUuid
     ) {
+        promoteTouristToCitizen(town, tm, entityUuid, null, null, null);
+    }
+
+    public static void promoteTouristToCitizen(
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull UUID entityUuid,
+        @Nullable World world,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
         for (TouristRecord rec : town.getTouristRecords()) {
             UUID u = rec.getEntityUuid();
             if (u != null && u.equals(entityUuid)) {
@@ -934,6 +945,23 @@ public final class TouristPortalTickService {
             }
         }
         tm.updateTown(town);
+        // Citizens keep tourist browsing so the town stays lively; they simply never leave via the portal.
+        if (world != null && store != null && plugin != null) {
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
+            if (ref != null && ref.isValid()) {
+                TouristAutonomyState autonomy = store.getComponent(ref, TouristAutonomyState.getComponentType());
+                if (autonomy == null) {
+                    autonomy = TouristAutonomyState.fresh(System.currentTimeMillis());
+                    store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                    NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
+                    if (npc != null) {
+                        TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
+                        store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
+                        store.putComponent(ref, NPCEntity.getComponentType(), npc);
+                    }
+                }
+            }
+        }
     }
 
     public static void lockTouristForInvite(@Nonnull TownRecord town, @Nonnull TownManager tm, @Nonnull UUID entityUuid) {

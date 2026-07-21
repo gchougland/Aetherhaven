@@ -114,7 +114,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         PathToolRegistry pathReg = AetherhavenWorldRegistries.getOrCreatePathToolRegistry(w, AetherhavenPlugin.get());
         long registryRevision = pathReg.revisionHash();
         UUID playerUuid = pr.getUuid();
-        long sig = PathToolPreviewSignature.compute(st, registryRevision);
+        long sig = PathToolPreviewSignature.compute(st, registryRevision, ref, store);
         Long prevHud = LAST_HUD_SIGNATURE.get(playerUuid);
         if (prevHud == null || prevHud != sig) {
             LAST_HUD_SIGNATURE.put(playerUuid, sig);
@@ -135,7 +135,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
             drawCommittedPaths(pr, w, pathReg, st.getSelectedRemovePathId());
             return;
         }
-        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner) {
+        if (st.getGizmoMode() == PathToolGizmoMode.StyleDesigner || st.getGizmoMode() == PathToolGizmoMode.ReplaceFilter) {
             return;
         }
         for (PathToolNode n : st.getNodes()) {
@@ -174,12 +174,14 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 cfg.getPathToolMaxRayDown()
             );
         int c = 0;
+        @Nullable
+        java.util.Set<String> replaceArg = PathToolReplaceFilterResolver.nullableAllowlistForPredicate(ref, store, st);
         for (PathPlannedCell.Planned cell : plan) {
             if (c++ > MAX_PLANNED) {
                 break;
             }
             boolean isCenter = cell.role == PathPlannedCell.CellRole.Center;
-            boolean ok = PathToolReplacePredicate.isReplaceable(cfg, w, cell.pos.x(), cell.pos.y(), cell.pos.z());
+            boolean ok = PathToolReplacePredicate.isReplaceable(cfg, w, cell.pos.x(), cell.pos.y(), cell.pos.z(), replaceArg);
             Vector3f col;
             if (isCenter) {
                 col = ok ? new Vector3f(0.5f, 0.32f, 0.12f) : new Vector3f(0.45f, 0.1f, 0.05f);
@@ -200,7 +202,7 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
         Vector3f normal = new Vector3f(0.85f, 0.45f, 0.12f);
         Vector3f selected = new Vector3f(0.98f, 0.88f, 0.15f);
         for (PathCommitRecord rec : reg.all()) {
-            if (rec == null || rec.undo == null) {
+            if (rec == null) {
                 continue;
             }
             boolean sel;
@@ -210,11 +212,35 @@ public final class PathToolPreviewSystem extends EntityTickingSystem<EntityStore
                 sel = false;
             }
             Vector3f col = sel ? selected : normal;
-            for (PathToolUndoCell c : rec.undo) {
-                if (c == null || drawn++ > MAX_PLANNED) {
-                    return;
+            if (rec.undo != null && !rec.undo.isEmpty()) {
+                for (PathToolUndoCell c : rec.undo) {
+                    if (c == null || drawn++ > MAX_PLANNED) {
+                        return;
+                    }
+                    PathDebugPreviewUtil.drawPlannedBlock(pr, c.x, c.y, c.z, col, world);
                 }
-                PathDebugPreviewUtil.drawPlannedBlock(pr, c.x, c.y, c.z, col, world);
+            } else if (rec.navNodes != null && rec.navNodes.size() >= 2) {
+                for (int i = 0; i + 1 < rec.navNodes.size() && drawn < MAX_PLANNED; i++) {
+                    PathNavPoint a = rec.navNodes.get(i);
+                    PathNavPoint b = rec.navNodes.get(i + 1);
+                    if (a == null || b == null) {
+                        continue;
+                    }
+                    PathDebugPreviewUtil.drawLine(
+                        pr,
+                        new org.joml.Vector3d(a.x, a.y, a.z),
+                        new org.joml.Vector3d(b.x, b.y, b.z),
+                        col,
+                        0.08
+                    );
+                    drawn++;
+                }
+                for (PathNavPoint p : rec.navNodes) {
+                    if (p == null || drawn++ > MAX_PLANNED) {
+                        return;
+                    }
+                    PathDebugPreviewUtil.drawPlannedBlock(pr, (int) Math.floor(p.x), (int) Math.floor(p.y), (int) Math.floor(p.z), col, world);
+                }
             }
         }
     }

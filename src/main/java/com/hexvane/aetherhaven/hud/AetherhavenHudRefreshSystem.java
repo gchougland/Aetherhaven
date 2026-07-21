@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
+import com.hexvane.aetherhaven.world.PersistentWorldSupport;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
@@ -104,8 +105,13 @@ public final class AetherhavenHudRefreshSystem
         renderedRevisionByPlayer.put(uuid.getUuid(), revision);
 
         WorldTimeResource time = store.getResource(WorldTimeResource.getResourceType());
-        TownManager townManager = AetherhavenWorldRegistries.getTownManager(world);
-        TownRecord town = townManager.findTownForPlayerInWorld(uuid.getUuid());
+        TownRecord town = null;
+        if (!PersistentWorldSupport.isTemporaryInstance(world)) {
+            TownManager townManager = AetherhavenWorldRegistries.getTownManagerIfLoaded(world);
+            if (townManager != null) {
+                town = townManager.findTownForPlayerInWorld(uuid.getUuid());
+            }
+        }
         var worldNpcRegistry = AetherhavenWorldRegistries.getWorldNpcRegistry(world);
         var worldProgress =
             worldNpcRegistry != null ? worldNpcRegistry.findPlayerProgress(uuid.getUuid()) : null;

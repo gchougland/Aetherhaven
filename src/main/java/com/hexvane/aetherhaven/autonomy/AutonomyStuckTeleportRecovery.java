@@ -153,10 +153,40 @@ public final class AutonomyStuckTeleportRecovery {
 
         if (autonomy.getPhase() == TouristAutonomyState.PHASE_TRAVEL
             || autonomy.getPhase() == TouristAutonomyState.PHASE_RETURNING) {
-            return new TouristRecoveryTarget(
-                new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ()),
-                false
-            );
+            Vector3d travelTarget =
+                new Vector3d(autonomy.getTargetX(), autonomy.getTargetY(), autonomy.getTargetZ());
+            UUID visitPlotId = autonomy.getVisitPlotUuid();
+            if (visitPlotId != null && autonomy.getPhase() == TouristAutonomyState.PHASE_TRAVEL) {
+                ConstructionCatalog catalog = plugin.getConstructionCatalog();
+                PlotInstance plot = TouristDestinationResolver.findVisitPlot(town, visitPlotId);
+                if (plot != null
+                    && !TouristDestinationResolver.isInsidePlotFootprint(
+                        travelTarget.x,
+                        travelTarget.z,
+                        plot,
+                        TouristDestinationResolver.plotEdgePadding()
+                    )) {
+                    // Broken entry (outside footprint) — abandon visit instead of snapping forever into empty ground.
+                    autonomy.clearVisitPlot();
+                    autonomy.setPhase(TouristAutonomyState.PHASE_IDLE);
+                    TouristPlotVisit pick =
+                        TouristDestinationResolver.pickVisitPlot(
+                            town,
+                            catalog,
+                            world,
+                            visitPlotId,
+                            new Random(nowMs ^ salt ^ 0x51EE71L)
+                        );
+                    if (pick != null) {
+                        return new TouristRecoveryTarget(
+                            new Vector3d(pick.entryX(), pick.entryY(), pick.entryZ()),
+                            false
+                        );
+                    }
+                    return null;
+                }
+            }
+            return new TouristRecoveryTarget(travelTarget, false);
         }
 
         UUID visitPlotId = autonomy.getVisitPlotUuid();

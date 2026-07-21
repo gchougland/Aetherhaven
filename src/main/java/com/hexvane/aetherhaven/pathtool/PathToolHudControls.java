@@ -12,6 +12,15 @@ public final class PathToolHudControls {
 
     @Nonnull
     public static List<Row> rowsFor(@Nonnull PathToolGizmoMode mode, boolean styleEditingActive) {
+        return rowsFor(mode, styleEditingActive, false);
+    }
+
+    @Nonnull
+    public static List<Row> rowsFor(
+        @Nonnull PathToolGizmoMode mode,
+        boolean styleEditingActive,
+        boolean replaceFilterEditingActive
+    ) {
         if (mode == PathToolGizmoMode.StyleDesigner && styleEditingActive) {
             return List.of(
                 row("F", "aetherhaven.pathTool.hud.styleDesigner.fContinue"),
@@ -20,6 +29,14 @@ public final class PathToolHudControls {
                 info("aetherhaven.pathTool.hud.styleDesigner.infoColumns"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoRows"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoWeight")
+            );
+        }
+        if (mode == PathToolGizmoMode.ReplaceFilter && replaceFilterEditingActive) {
+            return List.of(
+                row("F", "aetherhaven.pathTool.hud.replaceFilter.fContinue"),
+                row("E", "aetherhaven.pathTool.hud.replaceFilter.eSave"),
+                row("Q", "aetherhaven.pathTool.hud.replaceFilter.q"),
+                info("aetherhaven.pathTool.hud.replaceFilter.info")
             );
         }
         return rowsFor(mode);
@@ -63,6 +80,12 @@ public final class PathToolHudControls {
                 info("aetherhaven.pathTool.hud.styleDesigner.infoColumns"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoRows"),
                 info("aetherhaven.pathTool.hud.styleDesigner.infoWeight")
+            );
+            case ReplaceFilter -> List.of(
+                row("F", "aetherhaven.pathTool.hud.replaceFilter.f"),
+                row("E", "aetherhaven.pathTool.hud.replaceFilter.e"),
+                row("Q", "aetherhaven.pathTool.hud.replaceFilter.q"),
+                info("aetherhaven.pathTool.hud.replaceFilter.info")
             );
         };
     }

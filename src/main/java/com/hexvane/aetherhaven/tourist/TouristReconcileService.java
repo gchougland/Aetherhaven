@@ -424,13 +424,20 @@ public final class TouristReconcileService {
         }
         store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
 
-        if (autonomy.getPhase() == TouristAutonomyState.PHASE_IDLE && !rec.isInvitedToStay()) {
+        // Citizens also browse destinations; only skip the near-portal kick for invitees who may be settling.
+        if (autonomy.getPhase() == TouristAutonomyState.PHASE_IDLE) {
             boolean nearPortalWithoutVisit =
                 autonomy.getVisitPlotUuid() == null && isIdleNearPortal(world, plugin, store, ref, rec, autonomy);
             boolean staleIdle =
                 autonomy.getVisitPlotUuid() == null
                     && now >= autonomy.getNextDecisionEpochMs() + AetherhavenConstants.TOURIST_PORTAL_IDLE_KICK_MS;
-            if (nearPortalWithoutVisit || staleIdle || autonomy.getVisitPlotUuid() == null) {
+            boolean citizenBrowseKick =
+                (rec.isCitizen() || rec.isInvitedToStay())
+                    && autonomy.getVisitPlotUuid() == null
+                    && now >= autonomy.getNextDecisionEpochMs();
+            boolean visitingTouristKick =
+                !rec.isInvitedToStay() && (nearPortalWithoutVisit || staleIdle || autonomy.getVisitPlotUuid() == null);
+            if (visitingTouristKick || citizenBrowseKick) {
                 NPCEntity npc = store.getComponent(ref, NPCEntity.getComponentType());
                 if (npc != null) {
                     TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);

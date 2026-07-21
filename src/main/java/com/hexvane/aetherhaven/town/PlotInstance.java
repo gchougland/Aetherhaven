@@ -246,6 +246,18 @@ public final class PlotInstance {
         this.prefabYaw = yaw.name();
     }
 
+    public boolean hasStoredPrefabWorldAnchor() {
+        return prefabAnchorX != null && prefabAnchorY != null && prefabAnchorZ != null;
+    }
+
+    @Nonnull
+    public Vector3i getStoredPrefabWorldAnchor() {
+        if (!hasStoredPrefabWorldAnchor()) {
+            throw new IllegalStateException("plot has no stored prefab anchor");
+        }
+        return new Vector3i(prefabAnchorX, prefabAnchorY, prefabAnchorZ);
+    }
+
     /**
      * When registering a plot from the placement UI, the prefab yaw matches the sign block; needed so
      * {@link #resolvePrefabAnchorWorld(ConstructionDefinition)} can rotate {@code plotAnchorOffset} before the build

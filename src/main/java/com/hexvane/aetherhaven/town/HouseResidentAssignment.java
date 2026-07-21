@@ -125,7 +125,10 @@ public final class HouseResidentAssignment {
             }
             if (town.hasQuestActive(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK)
                 && residentUuid.equals(town.getQuestTargetEntityUuid(AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK))) {
-                TouristPortalTickService.promoteTouristToCitizen(town, tm, residentUuid);
+                TouristPortalTickService.promoteTouristToCitizen(town, tm, residentUuid, world, store, plugin);
+            } else if (TouristPortalTickService.findTouristRecord(town, residentUuid) != null) {
+                // Any housed tourist becomes a citizen and leaves portal tourist AI.
+                TouristPortalTickService.promoteTouristToCitizen(town, tm, residentUuid, world, store, plugin);
             }
             // Pool tourists (including promoted citizens) are tracked in touristRecords, not residentNpcRecords.
             if (TouristPortalTickService.findTouristRecord(town, residentUuid) == null) {

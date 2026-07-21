@@ -1,5 +1,8 @@
 package com.hexvane.aetherhaven.pathtool;
 
+import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.Store;
+import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 
@@ -8,14 +11,37 @@ public final class PathToolPreviewSignature {
     private PathToolPreviewSignature() {}
 
     public static long compute(@Nonnull PathToolPlayerComponent st) {
-        return compute(st, 0L);
+        return computeInternal(st, 0L, null, null);
     }
 
     public static long compute(@Nonnull PathToolPlayerComponent st, long registryRevision) {
+        return computeInternal(st, registryRevision, null, null);
+    }
+
+    public static long compute(
+        @Nonnull PathToolPlayerComponent st,
+        long registryRevision,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return computeInternal(st, registryRevision, ref, store);
+    }
+
+    private static long computeInternal(
+        @Nonnull PathToolPlayerComponent st,
+        long registryRevision,
+        @javax.annotation.Nullable Ref<EntityStore> ref,
+        @javax.annotation.Nullable Store<EntityStore> store
+    ) {
         long h = 5381;
         h = h * 33 + st.getGizmoMode().ordinal();
         h = h * 33 + st.getPathWidthBlocks();
         h = h * 33 + st.getPathStyleIndex();
+        if (ref != null && store != null) {
+            h = h * 33 + PathToolReplaceFilterResolver.effectiveBlockIds(ref, store, st).hashCode();
+        } else {
+            h = h * 33 + st.getReplaceFilterBlockIds().hashCode();
+        }
         h = h * 33 + st.getNodes().size();
         h = h * 33 + registryRevision;
         UUID sel = st.getSelectedNodeId();

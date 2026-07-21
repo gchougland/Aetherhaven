@@ -41,7 +41,7 @@ public final class PathCementService {
         int pathStyleIndex,
         int pathWidthBlocks
     ) {
-        return tryCement(world, cfg, plan, pathStyleIndex, pathWidthBlocks, ThreadLocalRandom.current());
+        return tryCement(world, cfg, plan, pathStyleIndex, pathWidthBlocks, null, ThreadLocalRandom.current());
     }
 
     /**
@@ -56,6 +56,19 @@ public final class PathCementService {
         int pathWidthBlocks,
         @Nonnull Random random
     ) {
+        return tryCement(world, cfg, plan, pathStyleIndex, pathWidthBlocks, null, random);
+    }
+
+    @Nullable
+    public static PathCommitRecord tryCement(
+        @Nonnull World world,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull List<PathPlannedCell.Planned> plan,
+        int pathStyleIndex,
+        int pathWidthBlocks,
+        @Nullable Set<String> playerReplaceBlockIds,
+        @Nonnull Random random
+    ) {
         if (plan.isEmpty()) {
             return null;
         }
@@ -66,7 +79,7 @@ public final class PathCementService {
             int x = p.pos.x();
             int y = p.pos.y();
             int z = p.pos.z();
-            if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z)) {
+            if (!PathToolReplacePredicate.isReplaceable(cfg, world, x, y, z, playerReplaceBlockIds)) {
                 continue;
             }
             WorldChunk ch = world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z));
@@ -100,9 +113,16 @@ public final class PathCementService {
                 grassCleared
             );
         }
-        if (undos.isEmpty()) {
-            return null;
-        }
+        return newShellRecord(undos);
+    }
+
+    @Nonnull
+    public static PathCommitRecord newShellRecord() {
+        return newShellRecord(new ArrayList<>());
+    }
+
+    @Nonnull
+    private static PathCommitRecord newShellRecord(@Nonnull List<PathToolUndoCell> undos) {
         PathCommitRecord rec = new PathCommitRecord();
         rec.id = UUID.randomUUID().toString();
         rec.createdMs = System.currentTimeMillis();

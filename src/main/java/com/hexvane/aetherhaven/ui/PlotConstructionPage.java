@@ -18,6 +18,8 @@ import com.hexvane.aetherhaven.plot.PlotSignBlock;
 import com.hexvane.aetherhaven.plot.PlotTokenIconSync;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
 import com.hexvane.aetherhaven.placement.PlotPlacementOpenHelper;
+import com.hexvane.aetherhaven.placement.PlotReconstructMessages;
+import com.hexvane.aetherhaven.placement.PlotReconstructService;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyBuildStartResult;
@@ -115,6 +117,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private int perkTreeTab;
     /** Move-building confirmation modal (management block, completed plot). */
     private boolean moveBuildingConfirmOpen;
+    /** Reconstruct-building confirmation modal (management block, completed plot). */
+    private boolean reconstructBuildingConfirmOpen;
     /** Pick-up plot confirmation modal (plot sign, blueprint plot). */
     private boolean pickUpPlotConfirmOpen;
     /** Open the move-building modal on the first {@link #build} (e.g. returning from town needs). */
@@ -207,6 +211,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#PlotTabContent.Visible", plotTabActive);
         commandBuilder.set("#PlayersTabContent.Visible", managementUi && managementTab == 1);
         commandBuilder.set("#MoveBuildingModal.Visible", managementUi && moveBuildingConfirmOpen);
+        commandBuilder.set("#ReconstructBuildingModal.Visible", managementUi && reconstructBuildingConfirmOpen);
         commandBuilder.set("#PickUpPlotModal.Visible", !managementUi && pickUpPlotConfirmOpen);
         commandBuilder.set("#HouseResidentPickerModal.Visible", houseResidentPickerOpen);
         commandBuilder.set("#WorkplaceWorkerPickerModal.Visible", workplaceWorkerPickerOpen);
@@ -237,6 +242,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             commandBuilder.set("#MaterialsProgress.Visible", false);
             commandBuilder.set("#MaterialsScroll.Visible", false);
             commandBuilder.set("#PlotActionRow.Visible", false);
+            commandBuilder.set("#ManagementPlotActions.Visible", false);
             commandBuilder.clear(MATERIALS_GRID);
             commandBuilder.set("#BuildButton.Disabled", true);
             commandBuilder.set("#PickUpPlotButton.Visible", false);
@@ -345,6 +351,17 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         boolean needsMoveTabsOk = managementUi && completed;
         commandBuilder.set("#TabNeedsButton.Disabled", !needsMoveTabsOk);
         commandBuilder.set("#TabMoveButton.Disabled", !needsMoveTabsOk);
+        TownRecord mgmtTown = managementUi ? resolveManagementTown(store) : null;
+        boolean canReconstruct =
+            managementUi
+                && completed
+                && plotTabActive
+                && !def.isWallSegment()
+                && !def.isDecorationPlot()
+                && playerUuid != null
+                && mgmtTown != null
+                && mgmtTown.playerCanPlacePlots(playerUuid);
+        commandBuilder.set("#ManagementPlotActions.Visible", canReconstruct);
         if (managementUi) {
             commandBuilder.set("#TabPlotButton.Disabled", managementTab == 0);
             commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
@@ -613,6 +630,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
 
         if (managementUi) {
             bindManagementTabEvents(eventBuilder, needsMoveTabsOk);
+            if (canReconstruct) {
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#ReconstructBuildingButton",
+                    new EventData().append("Action", "BeginReconstructBuilding"),
+                    false
+                );
+            }
             if (managementTab == 1) {
                 buildManagementPlayersTab(ref, store, commandBuilder, eventBuilder);
             } else {
@@ -630,6 +655,20 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 CustomUIEventBindingType.Activating,
                 "#MoveBuildingCancelButton",
                 new EventData().append("Action", "CancelMoveBuilding"),
+                false
+            );
+        }
+        if (managementUi && reconstructBuildingConfirmOpen) {
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#ReconstructBuildingConfirmButton",
+                new EventData().append("Action", "ConfirmReconstructBuilding"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#ReconstructBuildingCancelButton",
+                new EventData().append("Action", "CancelReconstructBuilding"),
                 false
             );
         }
@@ -1142,6 +1181,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             moveBuildingConfirmOpen = true;
+            reconstructBuildingConfirmOpen = false;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -1191,12 +1231,123 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             }
             return;
         }
+        if (data.action != null && data.action.equalsIgnoreCase("BeginReconstructBuilding")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState stReconBegin = resolvePlotState(store, ref);
+            if (stReconBegin != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            reconstructBuildingConfirmOpen = true;
+            moveBuildingConfirmOpen = false;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("CancelReconstructBuilding")) {
+            reconstructBuildingConfirmOpen = false;
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("ConfirmReconstructBuilding")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState stRecon = resolvePlotState(store, ref);
+            if (stRecon != PlotInstanceState.COMPLETE) {
+                reconstructBuildingConfirmOpen = false;
+                refreshPage(ref, store);
+                return;
+            }
+            UUIDComponent ucRecon = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (ucRecon == null) {
+                reconstructBuildingConfirmOpen = false;
+                refreshPage(ref, store);
+                return;
+            }
+            Store<ChunkStore> csRecon = blockRef.getStore();
+            ManagementBlock mbRecon = csRecon.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mbRecon == null || mbRecon.getPlotId().isBlank() || mbRecon.getTownId().isBlank()) {
+                reconstructBuildingConfirmOpen = false;
+                refreshPage(ref, store);
+                return;
+            }
+            UUID plotIdRecon;
+            UUID townIdRecon;
+            try {
+                plotIdRecon = UUID.fromString(mbRecon.getPlotId().trim());
+                townIdRecon = UUID.fromString(mbRecon.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                reconstructBuildingConfirmOpen = false;
+                refreshPage(ref, store);
+                return;
+            }
+            AetherhavenPlugin pluginRecon = AetherhavenPlugin.get();
+            if (pluginRecon == null) {
+                reconstructBuildingConfirmOpen = false;
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.pluginNotLoaded"));
+                refreshPage(ref, store);
+                return;
+            }
+            World worldRecon = store.getExternalData().getWorld();
+            TownManager tmRecon = AetherhavenWorldRegistries.getOrCreateTownManager(worldRecon, pluginRecon);
+            TownRecord townRecon = tmRecon.getTown(townIdRecon);
+            if (townRecon == null) {
+                reconstructBuildingConfirmOpen = false;
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.townNotFound"));
+                refreshPage(ref, store);
+                return;
+            }
+            if (!townRecon.playerCanPlacePlots(ucRecon.getUuid())) {
+                reconstructBuildingConfirmOpen = false;
+                playerRef.sendMessage(Message.translation("aetherhaven_common.aetherhaven.common.noMoveBuildingsPermission"));
+                refreshPage(ref, store);
+                return;
+            }
+            PlotInstance plotRecon = townRecon.findPlotById(plotIdRecon);
+            if (plotRecon == null) {
+                reconstructBuildingConfirmOpen = false;
+                refreshPage(ref, store);
+                return;
+            }
+            reconstructBuildingConfirmOpen = false;
+            refreshPage(ref, store);
+            AetherhavenPlugin pluginReconRun = pluginRecon;
+            TownRecord townReconRun = townRecon;
+            PlotInstance plotReconRun = plotRecon;
+            UUID actorUuid = ucRecon.getUuid();
+            worldRecon.execute(
+                () -> {
+                    if (isDismissed() || !ref.isValid()) {
+                        return;
+                    }
+                    Player playerRecon = store.getComponent(ref, Player.getComponentType());
+                    if (playerRecon == null || playerRecon.getPageManager().getCustomPage() != this) {
+                        return;
+                    }
+                    PlotReconstructService.ReconstructResult rr =
+                        PlotReconstructService.reconstruct(
+                            worldRecon, pluginReconRun, townReconRun, plotReconRun, actorUuid, store
+                        );
+                    playerRef.sendMessage(PlotReconstructMessages.forResult(rr));
+                    refreshPage(ref, store);
+                }
+            );
+            return;
+        }
         if (data.action != null && data.action.equalsIgnoreCase("SwitchTabPlot")) {
             if (!managementUi) {
                 return;
             }
             managementTab = 0;
             moveBuildingConfirmOpen = false;
+            reconstructBuildingConfirmOpen = false;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -1209,6 +1360,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
             }
             managementTab = 1;
             moveBuildingConfirmOpen = false;
+            reconstructBuildingConfirmOpen = false;
             UICommandBuilder cmd = new UICommandBuilder();
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
@@ -1385,6 +1537,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             moveBuildingConfirmOpen = false;
+            reconstructBuildingConfirmOpen = false;
             PlotInstanceState st = resolvePlotState(store, ref);
             if (st != PlotInstanceState.COMPLETE) {
                 return;
@@ -1585,6 +1738,10 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     }
 
     private void refreshPage(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        if (managementUi && !blockRef.isValid()) {
+            close();
+            return;
+        }
         UICommandBuilder cmd = new UICommandBuilder();
         UIEventBuilder ev = new UIEventBuilder();
         build(ref, cmd, ev, store);
@@ -1757,6 +1914,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
     private ConstructionDefinition resolveDefinition(@Nonnull Store<EntityStore> entityStore, @Nonnull Ref<EntityStore> playerRef) {
         AetherhavenPlugin p = AetherhavenPlugin.get();
         if (p == null) {
+            return null;
+        }
+        if (!blockRef.isValid()) {
             return null;
         }
         Store<ChunkStore> cs = blockRef.getStore();
@@ -2035,6 +2195,9 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         Store<ChunkStore> cs = blockRef.getStore();
 
         if (managementUi) {
+            if (!blockRef.isValid()) {
+                return PlotInstanceState.ASSEMBLING;
+            }
             ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
             if (mb == null || mb.getTownId().isBlank() || mb.getPlotId().isBlank()) {
                 return PlotInstanceState.COMPLETE;

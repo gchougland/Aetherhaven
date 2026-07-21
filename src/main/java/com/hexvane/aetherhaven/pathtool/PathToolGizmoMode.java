@@ -10,5 +10,7 @@ public enum PathToolGizmoMode {
     /** View and remove committed paths. */
     Remove,
     /** Open the in game path style manager. */
-    StyleDesigner
+    StyleDesigner,
+    /** Chest grid: block ids the path may replace (per player). */
+    ReplaceFilter
 }

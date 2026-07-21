@@ -52,4 +52,23 @@ public final class PlotFootprintUtil {
         }
         return new PlotFootprintRecord(b[0], b[1], b[2], b[3], b[4], b[5]);
     }
+
+    public static boolean hasSolidVoxels(@Nonnull Rotation yaw, @Nonnull IPrefabBuffer buffer) {
+        PrefabRotation pr = PrefabRotation.fromRotation(yaw);
+        Random random = new FastRandom();
+        PrefabBufferCall call = new PrefabBufferCall(random, pr);
+        final boolean[] any = { false };
+        buffer.forEach(
+            IPrefabBuffer.iterateAllColumns(),
+            (x, y, z, blockId, holder, supportValue, blockRotation, filler, t, fluidId, fluidLevel) -> {
+                if (filler == 0 && blockId != 0) {
+                    any[0] = true;
+                }
+            },
+            null,
+            null,
+            call
+        );
+        return any[0];
+    }
 }

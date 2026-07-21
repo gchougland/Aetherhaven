@@ -26,6 +26,16 @@
       "Texture": "Cosmetics/Head/WideGoggles_Textures/WideGoggles_Texture.png"
     }
   ],
+  "AnimationSets": {
+    "PonderDismissive": {
+      "Animations": [
+        {
+          "Animation": "NPC/Intelligent/Goblin/Animations/Flavor/Whisper.blockyanim",
+          "Looping": false
+        }
+      ]
+    }
+  },
   "Icon": "Icons/ModelsGenerated/Aetherhaven_Pyrotechnic.png",
   "IconProperties": {
     "Scale": 0.4,

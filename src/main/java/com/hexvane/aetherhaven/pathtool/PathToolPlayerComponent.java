@@ -14,7 +14,11 @@ import com.hypixel.hytale.component.Ref;
 import org.joml.Vector3d;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -69,6 +73,12 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
             c -> c.selectedRemovePathId
         )
         .add()
+        .append(
+            new KeyedCodec<>("ReplaceFilterBlockIds", Codec.STRING),
+            (c, s) -> c.replaceFilterBlockIdsCsv = s != null ? s : "",
+            c -> c.replaceFilterBlockIdsCsv != null ? c.replaceFilterBlockIdsCsv : ""
+        )
+        .add()
         .build();
 
     @Nullable
@@ -82,6 +92,8 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
     private UUID selectedNodeId;
     @Nullable
     private UUID selectedRemovePathId;
+    @Nonnull
+    private String replaceFilterBlockIdsCsv = "";
     @Nonnull
     private final List<PathToolNode> nodes = new ArrayList<>();
 
@@ -132,15 +144,46 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         this.gizmoMode = gizmoMode;
     }
 
-    /** Cycles: Translate -> Rotate -> Commit -> Remove -> StyleDesigner -> Translate. */
+    /** Cycles: Translate -> Rotate -> Commit -> Remove -> StyleDesigner -> ReplaceFilter -> Translate. */
     public void cycleGizmoMode() {
         this.gizmoMode = switch (gizmoMode) {
             case Translate -> PathToolGizmoMode.Rotate;
             case Rotate -> PathToolGizmoMode.Commit;
             case Commit -> PathToolGizmoMode.Remove;
             case Remove -> PathToolGizmoMode.StyleDesigner;
-            case StyleDesigner -> PathToolGizmoMode.Translate;
+            case StyleDesigner -> PathToolGizmoMode.ReplaceFilter;
+            case ReplaceFilter -> PathToolGizmoMode.Translate;
         };
+    }
+
+    /** Non-empty: only these block ids (plus path output blocks) may be replaced; empty uses server defaults. */
+    @Nonnull
+    public Set<String> getReplaceFilterBlockIds() {
+        return parseReplaceFilterCsv(replaceFilterBlockIdsCsv);
+    }
+
+    public void setReplaceFilterBlockIds(@Nonnull Set<String> ids) {
+        if (ids.isEmpty()) {
+            replaceFilterBlockIdsCsv = "";
+            return;
+        }
+        LinkedHashSet<String> sorted = new LinkedHashSet<>(ids);
+        replaceFilterBlockIdsCsv = String.join(",", sorted);
+    }
+
+    @Nonnull
+    private static Set<String> parseReplaceFilterCsv(@Nullable String csv) {
+        if (csv == null || csv.isBlank()) {
+            return Set.of();
+        }
+        LinkedHashSet<String> out = new LinkedHashSet<>();
+        for (String part : csv.split(",")) {
+            String t = part.trim();
+            if (!t.isEmpty()) {
+                out.add(t);
+            }
+        }
+        return Collections.unmodifiableSet(out);
     }
 
     public int getPathWidthBlocks() {
@@ -225,6 +268,7 @@ public final class PathToolPlayerComponent implements Component<EntityStore> {
         c.pathStyleIndex = this.pathStyleIndex;
         c.selectedNodeId = this.selectedNodeId;
         c.selectedRemovePathId = this.selectedRemovePathId;
+        c.replaceFilterBlockIdsCsv = this.replaceFilterBlockIdsCsv;
         c.nodes.addAll(this.nodes);
         return c;
     }

@@ -319,7 +319,7 @@ public final class TouristDestinationResolver {
             || AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL.equals(gid);
     }
 
-    @Nullable
+    @Nonnull
     private static double[] resolvePlotEntryPosition(
         @Nonnull World world,
         @Nonnull PlotInstance plot,
@@ -330,7 +330,7 @@ public final class TouristDestinationResolver {
 
         // Customer-facing tourist spots first — management/center dumps shoppers behind counters.
         double[] touristEntry = firstTouristVisitStandFromDef(world, anchor, yaw, def);
-        if (touristEntry != null) {
+        if (touristEntry != null && isInsidePlotFootprint(touristEntry[0], touristEntry[2], plot, plotEdgePadding())) {
             return touristEntry;
         }
 
@@ -338,15 +338,27 @@ public final class TouristDestinationResolver {
         if (visitorLocals != null && visitorLocals.length > 0) {
             int[] local = visitorLocals[0];
             if (local != null && local.length >= 3) {
-                return standFromLocal(world, anchor, yaw, local[0], local[1], local[2]);
+                double[] visitor = standFromLocal(world, anchor, yaw, local[0], local[1], local[2]);
+                if (isInsidePlotFootprint(visitor[0], visitor[2], plot, plotEdgePadding())) {
+                    return visitor;
+                }
             }
         }
 
         int[] management = def.getManagementBlockLocalPos();
         if (management != null && management.length >= 3) {
-            return standFromLocal(world, anchor, yaw, management[0], management[1], management[2] + 1);
+            double[] managementStand =
+                standFromLocal(world, anchor, yaw, management[0], management[1], management[2] + 1);
+            if (isInsidePlotFootprint(managementStand[0], managementStand[2], plot, plotEdgePadding())) {
+                return managementStand;
+            }
         }
 
+        return footprintCenterStand(world, plot);
+    }
+
+    @Nonnull
+    private static double[] footprintCenterStand(@Nonnull World world, @Nonnull PlotInstance plot) {
         PlotFootprintRecord footprint = plot.toFootprint();
         int cx = (footprint.getMinX() + footprint.getMaxX()) / 2;
         int cz = (footprint.getMinZ() + footprint.getMaxZ()) / 2;

@@ -42,6 +42,7 @@ public final class PathToolStatusHud extends CustomUIHud {
                     case Commit -> LANG_PREFIX + "aetherhaven.pathTool.hudNameCommit";
                     case Remove -> LANG_PREFIX + "aetherhaven.pathTool.hudNameRemove";
                     case StyleDesigner -> LANG_PREFIX + "aetherhaven.pathTool.hudNameStyleDesigner";
+                    case ReplaceFilter -> LANG_PREFIX + "aetherhaven.pathTool.hudNameReplaceFilter";
                 }
             )
         );
@@ -54,10 +55,14 @@ public final class PathToolStatusHud extends CustomUIHud {
                     case Commit -> LANG_PREFIX + "aetherhaven.pathTool.hudDescCommit";
                     case Remove -> LANG_PREFIX + "aetherhaven.pathTool.hudDescRemove";
                     case StyleDesigner -> LANG_PREFIX + "aetherhaven.pathTool.hudDescStyleDesigner";
+                    case ReplaceFilter -> LANG_PREFIX + "aetherhaven.pathTool.hudDescReplaceFilter";
                 }
             )
         );
-        boolean showEditStats = mode != PathToolGizmoMode.Remove && mode != PathToolGizmoMode.StyleDesigner;
+        boolean showEditStats =
+            mode != PathToolGizmoMode.Remove
+                && mode != PathToolGizmoMode.StyleDesigner
+                && mode != PathToolGizmoMode.ReplaceFilter;
         b.set("#StyleLine.Visible", showEditStats);
         b.set("#WidthLine.Visible", showEditStats);
         b.set("#NodesLine.Visible", showEditStats);
@@ -91,6 +96,7 @@ public final class PathToolStatusHud extends CustomUIHud {
         }
         b.clear(CONTROL_ROWS);
         boolean styleEditingActive = false;
+        boolean replaceFilterEditingActive = false;
         Ref<EntityStore> ref = playerRef.getReference();
         if (ref != null) {
             Store<EntityStore> store = ref.getStore();
@@ -99,8 +105,13 @@ public final class PathToolStatusHud extends CustomUIHud {
                 PathToolStyleSessions.Session session = PathToolStyleSessions.get(uc.getUuid());
                 styleEditingActive = session != null && session.editingActive;
             }
+            PathToolPlayerComponent pathSt = store.getComponent(ref, PathToolPlayerComponent.getComponentType());
+            if (pathSt != null) {
+                replaceFilterEditingActive = PathToolReplaceFilterUi.isActivelyEditing(ref, store);
+            }
         }
-        List<PathToolHudControls.Row> rows = PathToolHudControls.rowsFor(mode, styleEditingActive);
+        List<PathToolHudControls.Row> rows =
+            PathToolHudControls.rowsFor(mode, styleEditingActive, replaceFilterEditingActive);
         for (int i = 0; i < rows.size(); i++) {
             PathToolHudControls.Row row = rows.get(i);
             String base = CONTROL_ROWS + "[" + i + "]";
