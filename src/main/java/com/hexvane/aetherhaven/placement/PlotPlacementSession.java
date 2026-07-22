@@ -45,6 +45,12 @@ public final class PlotPlacementSession {
     private double birdsEyePanX;
     private double birdsEyePanZ;
 
+    @Nullable
+    private String clientPrefabPreviewPathKey;
+    private int clientPrefabPreviewRotationSteps = -1;
+    @Nullable
+    private PlotPlacementClientPrefabPreview.Payload clientPrefabPreviewPayload;
+
     public PlotPlacementSession(@Nonnull World world, @Nonnull Vector3i anchor, int rotationSteps, @Nonnull String constructionId) {
         this(world, anchor, rotationSteps, constructionId, null);
     }
@@ -196,5 +202,35 @@ public final class PlotPlacementSession {
 
     public double getBirdsEyePanZ() {
         return birdsEyePanZ;
+    }
+
+    @Nullable
+    public PlotPlacementClientPrefabPreview.Payload getClientPrefabPreviewPayload() {
+        return clientPrefabPreviewPayload;
+    }
+
+    @Nullable
+    public String getClientPrefabPreviewPathKey() {
+        return clientPrefabPreviewPathKey;
+    }
+
+    public int getClientPrefabPreviewRotationSteps() {
+        return clientPrefabPreviewRotationSteps;
+    }
+
+    public void setClientPrefabPreviewCache(
+        @Nonnull String prefabPathKey,
+        int rotationSteps,
+        @Nonnull PlotPlacementClientPrefabPreview.Payload payload
+    ) {
+        this.clientPrefabPreviewPathKey = prefabPathKey;
+        this.clientPrefabPreviewRotationSteps = (rotationSteps % 4 + 4) % 4;
+        this.clientPrefabPreviewPayload = payload;
+    }
+
+    public void clearClientPrefabPreviewCache() {
+        this.clientPrefabPreviewPathKey = null;
+        this.clientPrefabPreviewRotationSteps = -1;
+        this.clientPrefabPreviewPayload = null;
     }
 }

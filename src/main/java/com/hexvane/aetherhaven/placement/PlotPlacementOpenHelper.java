@@ -3,6 +3,12 @@ package com.hexvane.aetherhaven.placement;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.placement.CharterRelocationSessions;
+import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
+import com.hexvane.aetherhaven.placement.PlotPlacementSession;
+import com.hexvane.aetherhaven.placement.PlotPlacementSessions;
+import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
+import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
@@ -83,6 +89,7 @@ public final class PlotPlacementOpenHelper {
             signAnchor = new Vector3i(plot.getSignX(), plot.getSignY(), plot.getSignZ());
         }
         int steps = PlotPlacementSession.rotationStepsFromPrefabYaw(yaw);
+        PlotPlacementClientPrefabPreview.hide(playerRef);
         PlotPlacementSession session =
             PlotPlacementSession.forRelocatingPlot(world, signAnchor, steps, plot.getConstructionId(), plotId);
         PlotPlacementSessions.put(uc.getUuid(), session);
@@ -130,6 +137,7 @@ public final class PlotPlacementOpenHelper {
             PlotPreviewSpawner.clear(store, droppedCharter.getPreviewEntityRefs());
             PlotPlacementWireframeOverlay.clearFor(playerRef);
         }
+        PlotPlacementClientPrefabPreview.hide(playerRef);
         existing = new PlotPlacementSession(world, anchor, 0, cons);
         PlotPlacementSessions.put(uc.getUuid(), existing);
         return new PlotPlacementPage(playerRef, existing);
@@ -178,7 +186,7 @@ public final class PlotPlacementOpenHelper {
         World world = store.getExternalData().getWorld();
         world.execute(
             () -> {
-                PlotPreviewSpawner.clear(store, s.getPreviewEntityRefs());
+                PlotPlacementClientPrefabPreview.hide(pr);
                 PlotPlacementWireframeOverlay.clearFor(pr);
             }
         );

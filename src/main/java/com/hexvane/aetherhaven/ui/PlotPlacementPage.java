@@ -15,9 +15,9 @@ import com.hexvane.aetherhaven.placement.PlotPlacementCameraUtil;
 import com.hexvane.aetherhaven.placement.PlotBuildingRelocation;
 import com.hexvane.aetherhaven.placement.PlotPlacementNudgeUtil;
 import com.hexvane.aetherhaven.construction.assembly.PlotAssemblyPreviewSystem;
+import com.hexvane.aetherhaven.placement.PlotPlacementClientPrefabPreview;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
-import com.hexvane.aetherhaven.placement.PlotPreviewSpawner;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
@@ -78,6 +78,13 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     /** Coalesces {@link #scheduleRefreshPreview} when {@link #build} runs many times in one frame (avoids debug clear spam). */
     private int placementWireframeRefreshSerial;
+
+    @Nullable
+    private String lastPreviewConstructionId;
+    private int lastPreviewRotationSteps = -1;
+    @Nullable
+    private Vector3i lastPreviewOriginFloored;
+    private boolean clientPrefabPreviewActive;
 
     public PlotPlacementPage(@Nonnull PlayerRef playerRef, @Nonnull PlotPlacementSession session) {
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
@@ -236,6 +243,7 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
 
     @Override
     public void onDismiss(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
         super.onDismiss(ref, store);
         World world = store.getExternalData().getWorld();
         world.execute(
@@ -247,7 +255,6 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (!birdsEyeEnabled) {
                     return;
                 }
-                PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
                 if (pr != null) {
                     PlotPlacementCameraUtil.resetToPlayerCamera(pr);
                 }
@@ -788,8 +795,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 if (!ref.isValid()) {
                     return;
                 }
-                PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
                 PlayerRef prCancel = store.getComponent(ref, PlayerRef.getComponentType());
+                if (prCancel != null) {
+                    clearClientPrefabPreview(prCancel);
+                }
                 PlotPlacementWireframeOverlay.clearFor(prCancel);
                 UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                 if (uc != null) {
@@ -808,8 +817,10 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 if (tryPlace(ref, store)) {
-                    PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
                     PlayerRef prDone = store.getComponent(ref, PlayerRef.getComponentType());
+                    if (prDone != null) {
+                        clearClientPrefabPreview(prDone);
+                    }
                     PlotPlacementWireframeOverlay.clearFor(prDone);
                     UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
                     if (uc != null) {
@@ -831,20 +842,26 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         ConstructionDefinition def = plugin.getConstructionCatalog().get(session.getConstructionId());
         if (def == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            PlotPlacementWireframeOverlay.clearFor(pr);
+            if (pr != null) {
+                clearClientPrefabPreview(pr);
+                PlotPlacementWireframeOverlay.clearFor(pr);
+            }
             return;
         }
         IPrefabBuffer buf = resolvePrefabBuffer(def.getPrefabPath());
         if (buf == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            PlotPlacementWireframeOverlay.clearFor(pr);
+            if (pr != null) {
+                clearClientPrefabPreview(pr);
+                PlotPlacementWireframeOverlay.clearFor(pr);
+            }
             return;
         }
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
         if (uc == null) {
-            PlotPreviewSpawner.clear(store, session.getPreviewEntityRefs());
-            PlotPlacementWireframeOverlay.clearFor(pr);
+            if (pr != null) {
+                clearClientPrefabPreview(pr);
+                PlotPlacementWireframeOverlay.clearFor(pr);
+            }
             return;
         }
         World world = store.getExternalData().getWorld();
@@ -870,16 +887,60 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
                 );
         }
         boolean placementValid = placementErr == null;
-        try {
-            Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
-            PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
-            PlotPreviewSpawner.rebuild(store, prefabOrigin, session.getPrefabYaw(), buf, session.getPreviewEntityRefs());
-            if (pr != null) {
-                PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
-                PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
-            }
-        } finally {
+        Vector3i prefabOrigin = def.resolvePrefabAnchorWorld(session.getAnchor(), session.getPrefabYaw());
+        PlotFootprintRecord fp = PlotFootprintUtil.computeFootprint(prefabOrigin, session.getPrefabYaw(), buf);
+        if (pr != null) {
+            syncClientPrefabPreview(pr, def, prefabOrigin);
+            PlotPlacementWireframeOverlay.send(pr, fp, placementValid, town);
+            PlotAssemblyPreviewSystem.repaintFrontierAfterExternalDebugClear(ref, store);
         }
+    }
+
+    private void syncClientPrefabPreview(
+        @Nonnull PlayerRef pr,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Vector3i prefabOriginWorld
+    ) {
+        Vector3i floored = PlotPlacementClientPrefabPreview.flooredOrigin(prefabOriginWorld);
+        boolean needFull =
+            !clientPrefabPreviewActive
+                || !session.getConstructionId().equals(lastPreviewConstructionId)
+                || session.getRotationSteps() != lastPreviewRotationSteps;
+        if (needFull) {
+            boolean ok =
+                PlotPlacementClientPrefabPreview.sendFull(
+                    pr,
+                    def.getPrefabPath(),
+                    session.getRotationSteps(),
+                    prefabOriginWorld,
+                    session
+                );
+            if (!ok) {
+                clearClientPrefabPreview(pr);
+                return;
+            }
+            clientPrefabPreviewActive = true;
+            lastPreviewConstructionId = session.getConstructionId();
+            lastPreviewRotationSteps = session.getRotationSteps();
+            lastPreviewOriginFloored = floored;
+            return;
+        }
+        if (lastPreviewOriginFloored != null && lastPreviewOriginFloored.equals(floored)) {
+            return;
+        }
+        PlotPlacementClientPrefabPreview.sendPositionOnly(pr, prefabOriginWorld);
+        lastPreviewOriginFloored = floored;
+    }
+
+    private void clearClientPrefabPreview(@Nonnull PlayerRef pr) {
+        if (clientPrefabPreviewActive) {
+            PlotPlacementClientPrefabPreview.hide(pr);
+        }
+        clientPrefabPreviewActive = false;
+        lastPreviewConstructionId = null;
+        lastPreviewRotationSteps = -1;
+        lastPreviewOriginFloored = null;
+        PlotPlacementClientPrefabPreview.clearSessionCache(session);
     }
 
     /**

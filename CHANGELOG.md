@@ -15,6 +15,7 @@
 
 ### Changed
 
+- **Plot placement preview** — While placing a building with the plot placement tool, the full building preview is drawn on your client instead of spawning thousands of temporary blocks in the world. Moving and nudging the plot should feel much smoother on large buildings.
 - **Plot assembly sections** — Large buildings split into assembly sections automatically from prefab size (about 15 blocks per section on each axis by default). Tune with `AssemblySectionChunkSizeBlocks` in server config. Per-building section counts in plot JSON and the plot creator are removed.
 - **Floating gift boxes** — Balloon rewards use special gift boxes that disappear after you take everything out and close them. If you break one open, only the loot inside drops, not the box itself.
 - **Loot chest jewelry by adventure zone** — Randomized gem jewelry injected into world chests respects procedural zone tier: zone 1 only common and uncommon; zones 2–3 through epic (mythic); zone 4 has no common rolls and slightly higher rare, epic, and legendary weight. Glow rings (fixed mythic/legendary artifacts) are unchanged and can appear in any zone.
