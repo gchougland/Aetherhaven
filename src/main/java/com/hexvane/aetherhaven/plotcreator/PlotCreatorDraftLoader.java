@@ -28,12 +28,6 @@ public final class PlotCreatorDraftLoader {
         draft.setSelfBuildDaysInput(PlotCreatorService.formatSelfBuildDaysForField(def.getSelfBuildGameDays()));
         draft.setMaxHomeResidents(def.getMaxHomeResidents());
         draft.setMaxHomeResidentsInput(String.valueOf(def.getMaxHomeResidents()));
-        draft.setAssemblyPrefabSectionsPerAxis(def.getAssemblyPrefabSectionsPerAxis());
-        draft.setAssemblySectionsInput(
-            def.getAssemblyPrefabSectionsPerAxis() > 1
-                ? String.valueOf(def.getAssemblyPrefabSectionsPerAxis())
-                : null
-        );
         draft.setScheduleSharedUtilityPick(def.isScheduleSharedUtilityPick());
         draft.setTouristDestination(def.isTouristDestination());
         draft.setPlotTokenLockedByDefault(def.isPlotTokenLockedByDefault());

@@ -13,6 +13,8 @@ import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
+import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
@@ -1191,6 +1193,11 @@ public final class DialogueActionExecutor {
         if (playerUuid == null) {
             return;
         }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (binding != null && TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
+            GuardFollowPlayerSystem.startFollow(npcRef, store, playerUuid.getUuid());
+            return;
+        }
         VillagerFollowPlayerSystem.startFollow(npcRef, store, playerUuid.getUuid());
     }
 
@@ -1199,6 +1206,11 @@ public final class DialogueActionExecutor {
         @Nullable Ref<EntityStore> npcRef
     ) {
         if (npcRef == null || !npcRef.isValid()) {
+            return;
+        }
+        TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+        if (binding != null && TownVillagerBinding.KIND_GUARD.equals(binding.getKind())) {
+            GuardFollowPlayerSystem.stopFollow(npcRef, store, true);
             return;
         }
         VillagerFollowPlayerSystem.stopFollow(npcRef, store, true);

@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.town;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import org.joml.Vector3i;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.Rotation;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -126,14 +127,26 @@ public final class PlotInstance {
     private String assemblyOwnerUuid;
 
     /**
-     * When {@code > 1}, main assembly is split into an {@code N×N×N} grid of prefab-local sections ({@code N} per axis).
-     * Persisted for rehydrate; omitted or 1 for normal single-volume growth.
+     * Legacy uniform split ({@code N} per axis). Superseded by {@link #assemblySectionDivisionsX} and siblings; still read
+     * for in-flight saves from older versions.
      */
     @Nullable
     @SerializedName("assemblySectionDivisions")
     private Integer assemblySectionDivisions;
 
-    /** Flat index {@code 0..N³-1} (x + y·N + z·N²) of the section currently accepting frontier placements. */
+    @Nullable
+    @SerializedName("assemblySectionDivisionsX")
+    private Integer assemblySectionDivisionsX;
+
+    @Nullable
+    @SerializedName("assemblySectionDivisionsY")
+    private Integer assemblySectionDivisionsY;
+
+    @Nullable
+    @SerializedName("assemblySectionDivisionsZ")
+    private Integer assemblySectionDivisionsZ;
+
+    /** Flat index {@code 0..nx·ny·nz-1} (x + y·nx + z·nx·ny) of the section currently accepting frontier placements. */
     @Nullable
     @SerializedName("assemblyActiveSectionIndex")
     private Integer assemblyActiveSectionIndex;
@@ -573,12 +586,61 @@ public final class PlotInstance {
     }
 
     @Nullable
+    @Deprecated
     public Integer getAssemblySectionDivisions() {
         return assemblySectionDivisions;
     }
 
-    public void setAssemblySectionDivisions(@Nullable Integer divisionsPerAxis) {
-        this.assemblySectionDivisions = divisionsPerAxis;
+    /**
+     * Writes per-axis division counts for an in-flight assembly. When all are {@code 1}, clears split state.
+     */
+    public void setAssemblySectionDivisions(int divisionsX, int divisionsY, int divisionsZ) {
+        int nx = Math.max(1, divisionsX);
+        int ny = Math.max(1, divisionsY);
+        int nz = Math.max(1, divisionsZ);
+        if (nx <= 1 && ny <= 1 && nz <= 1) {
+            this.assemblySectionDivisions = null;
+            this.assemblySectionDivisionsX = null;
+            this.assemblySectionDivisionsY = null;
+            this.assemblySectionDivisionsZ = null;
+            return;
+        }
+        this.assemblySectionDivisions = null;
+        this.assemblySectionDivisionsX = nx > 1 ? nx : null;
+        this.assemblySectionDivisionsY = ny > 1 ? ny : null;
+        this.assemblySectionDivisionsZ = nz > 1 ? nz : null;
+    }
+
+    /**
+     * Fills {@code out[0..2]} with resolved X/Y/Z division counts (legacy uniform {@code assemblySectionDivisions}
+     * when new fields are absent).
+     */
+    public void resolveAssemblySectionDivisions(@Nonnull int[] out) {
+        if (out.length < 3) {
+            throw new IllegalArgumentException("out must have length >= 3");
+        }
+        if (assemblySectionDivisionsX != null || assemblySectionDivisionsY != null || assemblySectionDivisionsZ != null) {
+            out[0] = assemblySectionDivisionsX != null ? assemblySectionDivisionsX : 1;
+            out[1] = assemblySectionDivisionsY != null ? assemblySectionDivisionsY : 1;
+            out[2] = assemblySectionDivisionsZ != null ? assemblySectionDivisionsZ : 1;
+            return;
+        }
+        if (assemblySectionDivisions != null && assemblySectionDivisions > 1) {
+            int n = AssemblySectionMapper.clampAxisDivisions(assemblySectionDivisions);
+            out[0] = n;
+            out[1] = n;
+            out[2] = n;
+            return;
+        }
+        out[0] = 1;
+        out[1] = 1;
+        out[2] = 1;
+    }
+
+    public boolean hasAssemblySectionSplit() {
+        int[] d = new int[3];
+        resolveAssemblySectionDivisions(d);
+        return d[0] > 1 || d[1] > 1 || d[2] > 1;
     }
 
     public int getAssemblyActiveSectionIndex() {
@@ -598,6 +660,9 @@ public final class PlotInstance {
         this.assemblyPrefabId = null;
         this.assemblyOwnerUuid = null;
         this.assemblySectionDivisions = null;
+        this.assemblySectionDivisionsX = null;
+        this.assemblySectionDivisionsY = null;
+        this.assemblySectionDivisionsZ = null;
         this.assemblyActiveSectionIndex = null;
     }
 

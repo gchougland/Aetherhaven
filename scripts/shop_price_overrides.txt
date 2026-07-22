@@ -21,5 +21,7 @@ Aetherhaven_Gold_Coin = 1
 
 Aetherhaven_Geode = 50
 
+Aetherhaven_Mining_Bomb = 20
+
 # Modular bookshelf pieces are not sold at shop spots (set_* bookcases/bookshelves are fine)
 pattern:Furniture_Bookshelf_* = skip

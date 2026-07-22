@@ -196,6 +196,22 @@
           "next": null
         }
       ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_dialogue_guild_master.aetherhaven.dialogue.aetherhaven_guild_master.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.guild_master.50",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_guild_master_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

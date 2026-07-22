@@ -79,6 +79,11 @@ public final class AetherhavenConstants {
     /** Rare find; use on a befriendable villager for +10 reputation. */
     public static final String ITEM_HEARTBERRY = "Aetherhaven_Heartberry";
 
+    /** Throwable mining explosive; recipe from Pyrotechnic at 50 reputation. */
+    public static final String ITEM_MINING_BOMB = "Aetherhaven_Mining_Bomb";
+
+    public static final String ITEM_BATTLE_HORN = "Aetherhaven_Battle_Horn";
+
     public static final String ITEM_HUNTING_KNIFE = "Aetherhaven_Hunting_Knife";
 
     /**

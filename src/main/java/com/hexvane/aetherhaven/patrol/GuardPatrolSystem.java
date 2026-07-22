@@ -82,6 +82,9 @@ public final class GuardPatrolSystem extends EntityTickingSystem<EntityStore> {
         if (chunk.getComponent(index, GuardRtsCommandState.getComponentType()) != null) {
             return;
         }
+        if (GuardFollowPlayerSystem.shouldSkipPatrol(chunk.getComponent(index, GuardFollowPlayerState.getComponentType()))) {
+            return;
+        }
         World world = store.getExternalData().getWorld();
         PatrolRouteRegistry reg = AetherhavenWorldRegistries.getOrCreatePatrolRouteRegistry(world, plugin);
         List<PatrolRouteRecord> assigned = reg.routesForGuard(uc.getUuid());

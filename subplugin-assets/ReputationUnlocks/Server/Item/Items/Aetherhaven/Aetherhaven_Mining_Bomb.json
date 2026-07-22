@@ -1,0 +1,83 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_reputation_unlocks.items.Aetherhaven_Mining_Bomb.name",
+    "Description": "aetherhaven_reputation_unlocks.items.Aetherhaven_Mining_Bomb.description"
+  },
+  "Categories": [
+    "Items.Weapons",
+    "Aetherhaven.All"
+  ],
+  "Quality": "Uncommon",
+  "ItemLevel": 20,
+  "PlayerAnimationsId": "Item",
+  "Recipe": {
+    "TimeSeconds": 2,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Fire_Essence",
+        "Quantity": 3
+      },
+      {
+        "ItemId": "Ingredient_Bar_Iron",
+        "Quantity": 3
+      },
+      {
+        "ItemId": "Ingredient_Powder_Boom",
+        "Quantity": 4
+      }
+    ],
+    "OutputQuantity": 5,
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "Interactions": {
+    "Primary": {
+      "Interactions": [
+        "Bomb_Throw_Aetherhaven_Mining_Bomb"
+      ]
+    }
+  },
+  "IconProperties": {
+    "Scale": 0.87,
+    "Translation": [
+      -7.11,
+      -7.7
+    ],
+    "Rotation": [
+      4.685,
+      6.935,
+      315
+    ]
+  },
+  "Model": "NPC/Intelligent/Goblin/Models/Weapons/Bomb/Fire.blockymodel",
+  "Texture": "Items/Aetherhaven/Mining_Bomb.png",
+  "Icon": "Icons/ItemsGenerated/Mining_Bomb.png",
+  "Particles": [
+    {
+      "SystemId": "Fuse_Bomb",
+      "TargetNodeName": "Fuse_Lit",
+      "TargetEntityPart": "PrimaryItem"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Weapon"
+    ],
+    "Family": [
+      "Bomb",
+      "Aetherhaven"
+    ]
+  },
+  "Weapon": {},
+  "SoundEventId": "SFX_Bomb_Fuse",
+  "MaxStack": 16,
+  "Set": "Aetherhaven"
+}

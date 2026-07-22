@@ -7,6 +7,8 @@ import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
+import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
+import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.bard.BardDialogueSongs;
 import com.hexvane.aetherhaven.dialogue.DialogueWorldView;
 import com.hexvane.aetherhaven.dialogue.data.DialogueChoiceDefinition;
@@ -778,14 +780,28 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         @Nonnull Ref<EntityStore> playerRef,
         @Nonnull Store<EntityStore> store
     ) {
-        if (!"main_hub".equals(nodeId) || !VillagerFollowPlayerSystem.isEligibleCitizen(store, npcRef)) {
+        if (!"main_hub".equals(nodeId)) {
             return;
         }
         UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
         if (playerUuid == null) {
             return;
         }
-        boolean following = VillagerFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid());
+        boolean villagerEligible = VillagerFollowPlayerSystem.isEligibleCitizen(store, npcRef);
+        boolean guardEligible = false;
+        if (!villagerEligible && npcRef != null && npcRef.isValid()) {
+            TownRecord town = resolvePlayerTown(store, playerRef);
+            if (town != null) {
+                guardEligible = GuardFollowPlayerSystem.isEligibleGuard(store, npcRef, town.getTownId());
+            }
+        }
+        if (!villagerEligible && !guardEligible) {
+            return;
+        }
+        boolean following =
+            villagerEligible
+                ? VillagerFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid())
+                : GuardFollowPlayerSystem.isFollowingPlayer(store, npcRef, playerUuid.getUuid());
         DialogueChoiceDefinition follow = new DialogueChoiceDefinition();
         follow.setId(following ? "follow_stop" : "follow_start");
         follow.setText(following ? LANG_FOLLOW_STOP : LANG_FOLLOW_START);
@@ -804,6 +820,27 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             }
         }
         choices.add(insertAt, follow);
+    }
+
+    @Nullable
+    private static TownRecord resolvePlayerTown(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> playerRef
+    ) {
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return null;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return null;
+        }
+        World world = store.getExternalData().getWorld();
+        if (world == null) {
+            return null;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        return tm.findTownForPlayerInWorld(pu.getUuid());
     }
 
     @Nullable

@@ -90,9 +90,6 @@ public final class PlotCreatorDraft {
     private String maxHomeResidentsInput;
     /** When true, natural air in the footprint is saved as empty cells in the prefab. */
     private boolean saveEmptySpaces;
-    private int assemblyPrefabSectionsPerAxis = 1;
-    @Nullable
-    private String assemblySectionsInput;
     private boolean scheduleSharedUtilityPick;
     private boolean excludeFromTownJournal;
     /** When true, portal tourists may path here during the day. */
@@ -501,23 +498,6 @@ public final class PlotCreatorDraft {
         this.saveEmptySpaces = saveEmptySpaces;
     }
 
-    public int getAssemblyPrefabSectionsPerAxis() {
-        return assemblyPrefabSectionsPerAxis;
-    }
-
-    public void setAssemblyPrefabSectionsPerAxis(int assemblyPrefabSectionsPerAxis) {
-        this.assemblyPrefabSectionsPerAxis = assemblyPrefabSectionsPerAxis;
-    }
-
-    @Nullable
-    public String getAssemblySectionsInput() {
-        return assemblySectionsInput;
-    }
-
-    public void setAssemblySectionsInput(@Nullable String assemblySectionsInput) {
-        this.assemblySectionsInput = assemblySectionsInput;
-    }
-
     public boolean isScheduleSharedUtilityPick() {
         return scheduleSharedUtilityPick;
     }
@@ -621,6 +601,7 @@ public final class PlotCreatorDraft {
     public void setOriginalBuildingJsonSnapshot(@Nonnull java.util.Map<String, Object> snapshot) {
         originalBuildingJsonSnapshot.clear();
         originalBuildingJsonSnapshot.putAll(snapshot);
+        originalBuildingJsonSnapshot.remove("assemblyPrefabSectionsPerAxis");
     }
 
     @Nullable

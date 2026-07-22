@@ -1,0 +1,71 @@
+{
+  "Parent": "Projectile_Config_Bomb_Base",
+  "Model": "Aetherhaven_Mining_Bomb",
+  "Physics": {
+    "Type": "Standard",
+    "Gravity": 15,
+    "TerminalVelocityAir": 50,
+    "TerminalVelocityWater": 15,
+    "RotationMode": "VelocityRoll",
+    "Bounciness": 0,
+    "BounceCount": 0,
+    "AllowRolling": false,
+    "RollingFrictionFactor": 1,
+    "SticksVertically": true
+  },
+  "Interactions": {
+    "ProjectileSpawn": {
+      "Cooldown": {
+        "Cooldown": 0
+      },
+      "Interactions": [
+        {
+          "Type": "Simple",
+          "RunTime": 0
+        }
+      ]
+    },
+    "ProjectileHit": {
+      "Cooldown": {
+        "Cooldown": 0
+      },
+      "Rules": {
+        "Interrupting": [
+          "ProjectileSpawn"
+        ]
+      },
+      "Interactions": [
+        "Aetherhaven_Mining_Bomb_Explode",
+        {
+          "Type": "RemoveEntity",
+          "Entity": "User",
+          "Effects": {
+            "WorldSoundEventId": "SFX_Goblin_Lobber_Bomb_Death",
+            "LocalSoundEventId": "SFX_Goblin_Lobber_Bomb_Death"
+          }
+        }
+      ]
+    },
+    "ProjectileMiss": {
+      "Cooldown": {
+        "Cooldown": 0
+      },
+      "Rules": {
+        "Interrupting": [
+          "ProjectileSpawn"
+        ]
+      },
+      "Interactions": [
+        "Aetherhaven_Mining_Bomb_Explode",
+        {
+          "Type": "RemoveEntity",
+          "Entity": "User",
+          "Effects": {
+            "WorldSoundEventId": "SFX_Goblin_Lobber_Bomb_Death",
+            "LocalSoundEventId": "SFX_Goblin_Lobber_Bomb_Death"
+          }
+        }
+      ]
+    }
+  }
+}

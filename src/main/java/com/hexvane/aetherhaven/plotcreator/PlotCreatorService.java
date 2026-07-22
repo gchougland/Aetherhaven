@@ -4,7 +4,6 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.community.CommunitySubmissionService;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
-import com.hexvane.aetherhaven.construction.assembly.AssemblySectionMapper;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
 import com.hexvane.aetherhaven.placement.PlotPlacementWireframeOverlay;
 import com.hexvane.aetherhaven.plot.PlotTokenInventory;
@@ -666,21 +665,6 @@ public final class PlotCreatorService {
                 draft.setSelfBuildGameDays(days);
             } catch (NumberFormatException e) {
                 return "selfBuildDays";
-            }
-        }
-
-        String sectionsRaw = draft.getAssemblySectionsInput();
-        if (sectionsRaw == null || sectionsRaw.isBlank()) {
-            draft.setAssemblyPrefabSectionsPerAxis(1);
-        } else {
-            try {
-                int sections = Integer.parseInt(sectionsRaw.trim());
-                if (sections < 1 || sections > 16) {
-                    return "assemblySections";
-                }
-                draft.setAssemblyPrefabSectionsPerAxis(AssemblySectionMapper.clampAxisDivisions(sections));
-            } catch (NumberFormatException e) {
-                return "assemblySections";
             }
         }
 

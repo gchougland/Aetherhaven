@@ -334,16 +334,20 @@
     },
     "gift_confirm": {
       "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
-      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmPrompt",
+      "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmBody",
       "choices": [
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmYes",
           "actions": [
             {
-              "type": "gift_give"
+              "type": "gift_villager",
+              "reactionNodeLove": "gift_love",
+              "reactionNodeLike": "gift_like",
+              "reactionNodeNeutral": "gift_neutral",
+              "reactionNodeDislike": "gift_dislike"
             }
           ],
-          "next": "gift_result"
+          "next": "main_hub"
         },
         {
           "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.confirmNo",
@@ -351,13 +355,42 @@
         }
       ]
     },
-    "gift_result": {
+    "gift_love": {
       "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
-      "bodyMode": "gift_result",
-      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.main_hub.fallback",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.gift.love",
       "choices": [
         {
-          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.continue",
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_like": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.gift.like",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_neutral": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.gift.neutral",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
+          "next": "main_hub"
+        }
+      ]
+    },
+    "gift_dislike": {
+      "speaker": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.root.speaker",
+      "text": "aetherhaven_dialogue_chef.aetherhaven.dialogue.aetherhaven_chef.gift.dislike",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_gift.aetherhaven.dialogue.gift.back",
           "next": "main_hub"
         }
       ]

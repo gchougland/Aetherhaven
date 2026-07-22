@@ -69,11 +69,6 @@ public final class BuildingEditorJsonWriter {
         if (PlotBuildingKindRequirements.effectiveKinds(draft, null).contains(PlotBuildingKind.HOME)) {
             root.put("maxHomeResidents", draft.getMaxHomeResidents());
         }
-        if (draft.getAssemblyPrefabSectionsPerAxis() > 1) {
-            root.put("assemblyPrefabSectionsPerAxis", draft.getAssemblyPrefabSectionsPerAxis());
-        } else {
-            root.remove("assemblyPrefabSectionsPerAxis");
-        }
         if (!draft.getMaterials().isEmpty()) {
             root.put("materials", materialMaps(draft.getMaterials()));
         } else {
@@ -133,6 +128,7 @@ public final class BuildingEditorJsonWriter {
         if (draft.isDecorationOnly()) {
             root.put("excludeFromTownJournal", true);
         }
+        root.remove("assemblyPrefabSectionsPerAxis");
         // Never rewrite the original token id if the snapshot had one.
         if (!originalSnapshot.containsKey("plotTokenItemId")) {
             // leave unset; shipped defs always have one when present in snapshot

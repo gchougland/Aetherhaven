@@ -1,0 +1,33 @@
+{
+  "Type": "Serial",
+  "Interactions": [
+    {
+      "Type": "Simple",
+      "RunTime": 0.25,
+      "Effects": {
+        "ItemAnimationId": "Throw"
+      }
+    },
+    {
+      "Type": "ResetCooldown",
+      "Cooldown": {
+        "Cooldown": 1
+      }
+    },
+    {
+      "Type": "Projectile",
+      "Config": "Projectile_Config_Aetherhaven_Mining_Bomb",
+      "Next": {
+        "Type": "Simple",
+        "RunTime": 0.2
+      }
+    },
+    {
+      "Type": "ModifyInventory",
+      "ItemToRemove": {
+        "Id": "Aetherhaven_Mining_Bomb",
+        "Quantity": 1
+      }
+    }
+  ]
+}

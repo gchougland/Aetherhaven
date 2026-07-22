@@ -40,9 +40,6 @@ public final class PlotCreatorJsonWriter {
         if (PlotBuildingKindRequirements.effectiveKinds(draft, null).contains(PlotBuildingKind.HOME)) {
             root.put("maxHomeResidents", draft.getMaxHomeResidents());
         }
-        if (draft.getAssemblyPrefabSectionsPerAxis() > 1) {
-            root.put("assemblyPrefabSectionsPerAxis", draft.getAssemblyPrefabSectionsPerAxis());
-        }
         if (!draft.getMaterials().isEmpty()) {
             root.put("materials", materialMaps(draft.getMaterials()));
         }

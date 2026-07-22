@@ -1,0 +1,82 @@
+{
+  "TranslationProperties": {
+    "Name": "aetherhaven_reputation_unlocks.items.Aetherhaven_Battle_Horn.name",
+    "Description": "aetherhaven_reputation_unlocks.items.Aetherhaven_Battle_Horn.description"
+  },
+  "Categories": [
+    "Items.Weapons",
+    "Aetherhaven.All"
+  ],
+  "Quality": "Uncommon",
+  "ItemLevel": 20,
+  "MaxStack": 1,
+  "PlayerAnimationsId": {
+    "Parent": "Item",
+    "Animations": {
+      "TootHorn": {
+        "ThirdPerson": "Characters/Animations/TootHorn.blockyanim",
+        "FirstPerson": "Characters/Animations/TootHorn_FPS.blockyanim",
+        "Speed": 1,
+        "Looping": false
+      }
+    }
+  },
+  "Recipe": {
+    "TimeSeconds": 2,
+    "KnowledgeRequired": true,
+    "Input": [
+      {
+        "ItemId": "Ingredient_Bone_Fragment",
+        "Quantity": 20
+      },
+      {
+        "ItemId": "Ingredient_Bar_Gold",
+        "Quantity": 3
+      }
+    ],
+    "BenchRequirement": [
+      {
+        "Id": "Aetherhaven_TownPlanningDesk",
+        "Type": "Crafting",
+        "Categories": [
+          "Aetherhaven_TownPlanning"
+        ]
+      }
+    ]
+  },
+  "Interactions": {
+    "Secondary": "Root_Secondary_Aetherhaven_Battle_Horn"
+  },
+  "IconProperties": {
+    "Scale": 0.75,
+    "Translation": [
+      -4,
+      -6
+    ],
+    "Rotation": [
+      22,
+      45,
+      12
+    ]
+  },
+  "Model": "Items/Aetherhaven/BattleHorn.blockymodel",
+  "Texture": "Items/Aetherhaven/BattleHorn.png",
+  "Icon": "Icons/ItemsGenerated/BattleHorn.png",
+  "Particles": [
+    {
+      "SystemId": "Aetherhaven_Purification_Aura",
+      "TargetNodeName": "R-Horn2",
+      "TargetEntityPart": "PrimaryItem"
+    }
+  ],
+  "Tags": {
+    "Type": [
+      "Weapon"
+    ],
+    "Family": [
+      "Aetherhaven"
+    ]
+  },
+  "Set": "Aetherhaven",
+  "ItemSoundSetId": "ISS_Weapons_Wood"
+}

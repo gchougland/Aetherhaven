@@ -133,7 +133,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value")
                 .append("@SubmitToCommunity", "#SubmitToCommunityToggle.Value")
-                .append("@AssemblySections", "#AssemblySectionsField.Value")
                 .append("@StyleId", "#StyleIdField.Value"),
             false
         );
@@ -243,12 +242,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
-            "#AssemblySectionsField",
-            EventData.of("@AssemblySections", "#AssemblySectionsField.Value"),
-            false
-        );
-        eventBuilder.addEventBinding(
-            CustomUIEventBindingType.ValueChanged,
             "#StyleIdField",
             EventData.of("@StyleId", "#StyleIdField.Value"),
             false
@@ -291,8 +284,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#FloatingGiftBlueprintLabel.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint"));
         b.set("#FloatingGiftBlueprintHint.TextSpans", Message.translation(MSG + ".field.floatingGiftBlueprint.hint"));
         b.set("#SubmitToCommunityLabel.TextSpans", Message.translation(MSG + ".field.submitToCommunity"));
-        b.set("#AssemblySectionsLabel.TextSpans", Message.translation(MSG + ".field.assemblySections"));
-        b.set("#AssemblySectionsField.PlaceholderText", Message.translation(MSG + ".field.assemblySections"));
         b.set("#StyleIdLabel.TextSpans", Message.translation(MSG + ".field.styleId"));
         b.set("#StyleIdField.PlaceholderText", Message.translation(MSG + ".field.styleId.hint"));
     }
@@ -323,8 +314,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#PlotTokenLockedHint.Visible", false);
             b.set("#FloatingGiftBlueprintRow.Visible", false);
             b.set("#FloatingGiftBlueprintHint.Visible", false);
-            b.set("#AssemblySectionsLabel.Visible", false);
-            b.set("#AssemblySectionsField.Visible", false);
             b.set("#StyleIdLabel.Visible", false);
             b.set("#StyleIdField.Visible", false);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -363,8 +352,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#PlotTokenLockedHint.Visible", true);
             b.set("#FloatingGiftBlueprintRow.Visible", true);
             b.set("#FloatingGiftBlueprintHint.Visible", true);
-            b.set("#AssemblySectionsLabel.Visible", true);
-            b.set("#AssemblySectionsField.Visible", true);
             b.set("#StyleIdLabel.Visible", true);
             b.set("#StyleIdField.Visible", true);
             b.set("#OpenMaterialsButton.Visible", false);
@@ -399,8 +386,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedHint.Visible", false);
         b.set("#FloatingGiftBlueprintRow.Visible", false);
         b.set("#FloatingGiftBlueprintHint.Visible", false);
-        b.set("#AssemblySectionsLabel.Visible", false);
-        b.set("#AssemblySectionsField.Visible", false);
         b.set("#StyleIdLabel.Visible", false);
         b.set("#StyleIdField.Visible", false);
         b.set("#OpenMaterialsButton.Visible", false);
@@ -469,13 +454,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
         b.set("#FloatingGiftBlueprintToggle.Value", d.isFloatingGiftBlueprint());
         b.set("#SubmitToCommunityToggle.Value", d.isSubmitToCommunity());
-        if (d.getAssemblySectionsInput() != null) {
-            b.set("#AssemblySectionsField.Value", d.getAssemblySectionsInput());
-        } else if (d.getAssemblyPrefabSectionsPerAxis() > 1) {
-            b.set("#AssemblySectionsField.Value", String.valueOf(d.getAssemblyPrefabSectionsPerAxis()));
-        } else {
-            b.set("#AssemblySectionsField.Value", "1");
-        }
         if (d.getStyleId() != null) {
             b.set("#StyleIdField.Value", d.getStyleId());
         } else {
@@ -850,9 +828,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.submitToCommunity != null) {
             d.setSubmitToCommunity(data.submitToCommunity);
         }
-        if (data.assemblySections != null) {
-            d.setAssemblySectionsInput(data.assemblySections);
-        }
         if (data.styleId != null) {
             d.setStyleId(data.styleId);
         }
@@ -1002,8 +977,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 d -> d.submitToCommunity
             )
             .add()
-            .append(new KeyedCodec<>("@AssemblySections", Codec.STRING), (d, v) -> d.assemblySections = v, d -> d.assemblySections)
-            .add()
             .append(new KeyedCodec<>("@StyleId", Codec.STRING), (d, v) -> d.styleId = v, d -> d.styleId)
             .add()
             .build();
@@ -1042,8 +1015,6 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private Boolean floatingGiftBlueprint;
         @Nullable
         private Boolean submitToCommunity;
-        @Nullable
-        private String assemblySections;
         @Nullable
         private String styleId;
     }

@@ -50,5 +50,6 @@ public final class PatrolRoutesBootstrap {
         GuardPatrolState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new GuardFollowPlayerSystem(core));
     }
 }

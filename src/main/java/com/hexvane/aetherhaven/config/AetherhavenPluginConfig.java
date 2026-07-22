@@ -50,6 +50,15 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("AssemblySectionChunkSizeBlocks", Codec.INTEGER),
+            (o, v) -> o.assemblySectionChunkSizeBlocks = v,
+            o -> o.assemblySectionChunkSizeBlocks
+        )
+        .documentation(
+            "Prefabs split into assembly sections along each axis when wider than this many prefab-local blocks (default 15)."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("IgnoreVillagerRequirement", Codec.BOOLEAN),
             (o, v) -> o.ignoreVillagerRequirement = v,
             o -> o.ignoreVillagerRequirement
@@ -552,6 +561,7 @@ public final class AetherhavenPluginConfig {
     private long constructionMinIntervalMs = 25L;
     private long assemblyGameDayLengthMsOverride = 0L;
     private boolean passivePlotAssembly = true;
+    private int assemblySectionChunkSizeBlocks = 15;
     private boolean ignoreVillagerRequirement = false;
     private int defaultTerritoryChunkRadius = 8;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
@@ -664,6 +674,11 @@ public final class AetherhavenPluginConfig {
 
     public boolean isPassivePlotAssemblyEnabled() {
         return passivePlotAssembly;
+    }
+
+    /** Max prefab-local extent along one axis before that axis gains another assembly section. */
+    public int getAssemblySectionChunkSizeBlocks() {
+        return Math.max(1, assemblySectionChunkSizeBlocks);
     }
 
     public boolean isIgnoreVillagerRequirement() {
@@ -1463,6 +1478,7 @@ public final class AetherhavenPluginConfig {
         this.constructionMinIntervalMs = o.constructionMinIntervalMs;
         this.assemblyGameDayLengthMsOverride = o.assemblyGameDayLengthMsOverride;
         this.passivePlotAssembly = o.passivePlotAssembly;
+        this.assemblySectionChunkSizeBlocks = o.assemblySectionChunkSizeBlocks;
         this.ignoreVillagerRequirement = o.ignoreVillagerRequirement;
         this.defaultTerritoryChunkRadius = o.defaultTerritoryChunkRadius;
         this.villagerNeedsDecayPerSecond = o.villagerNeedsDecayPerSecond;

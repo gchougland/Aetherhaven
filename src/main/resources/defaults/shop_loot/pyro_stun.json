@@ -1,5 +1,5 @@
 {
   "entries": [
-    { "itemId": "Weapon_Bomb_Stun", "weight": 2, "stockMin": 25, "stockMax": 50 }
+    { "itemId": "Aetherhaven_Mining_Bomb", "weight": 2, "stockMin": 25, "stockMax": 50 }
   ]
 }

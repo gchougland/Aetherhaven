@@ -3,6 +3,8 @@ package com.hexvane.aetherhaven.autonomy;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.builder.BuilderConstructionAssistState;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -12,6 +14,7 @@ import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.RootDependency;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.tick.EntityTickingSystem;
+import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
@@ -54,6 +57,13 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         }
         String kind = binding.getKind();
         if (TownVillagerBinding.isVisitorKind(kind) || TownVillagerBinding.isRescueKind(kind)) {
+            return false;
+        }
+        if (TownVillagerBinding.KIND_GUARD.equals(kind)) {
+            return false;
+        }
+        TownsfolkCharacterBinding townsfolk = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        if (townsfolk != null && TownsfolkAssignmentKinds.isGuildHallAdventurer(townsfolk.getAssignmentKind())) {
             return false;
         }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
@@ -102,6 +112,7 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         }
         follow.startFollowing(playerUuid);
         store.putComponent(npcRef, VillagerFollowPlayerState.getComponentType(), follow);
+        clearFollowRecoveryTracking(store, npcRef);
     }
 
     public static void stopFollow(
@@ -114,6 +125,7 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
             VillagerFollowPlayerState cleared = (VillagerFollowPlayerState) follow.clone();
             cleared.clear();
             store.putComponent(npcRef, VillagerFollowPlayerState.getComponentType(), cleared);
+            clearFollowRecoveryTracking(store, npcRef);
         }
         NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
         if (npc != null) {
@@ -137,6 +149,7 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         VillagerFollowPlayerState cleared = (VillagerFollowPlayerState) follow.clone();
         cleared.clear();
         commandBuffer.putComponent(ref, VillagerFollowPlayerState.getComponentType(), cleared);
+        clearFollowRecoveryTracking(store, ref);
         long now = VillagerAutonomySystem.resolveAutonomyNowMs(store);
         VillagerAutonomySystem.clearAutonomySeekState(ref, npc, commandBuffer);
         if (resumeSchedule) {
@@ -213,6 +226,21 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
             return;
         }
 
+        if (FollowPlayerTeleportRecovery.tryRecover(
+            ref,
+            commandBuffer,
+            store,
+            npc,
+            playerPos,
+            npcPos,
+            horizSq,
+            FOLLOW_STOP_SQ,
+            FOLLOW_DISTANCE
+        )) {
+            VillagerAutonomySystem.applyAutonomyRoleState(ref, npc, commandBuffer);
+            return;
+        }
+
         Vector3d leash = standOffLeashPoint(playerPos, npcPos);
         npc.setLeashPoint(leash);
         commandBuffer.putComponent(ref, NPCEntity.getComponentType(), npc);
@@ -243,5 +271,15 @@ public final class VillagerFollowPlayerSystem extends EntityTickingSystem<Entity
         }
         double scale = FOLLOW_DISTANCE / horiz;
         return new Vector3d(playerPos.x + dx * scale, playerPos.y, playerPos.z + dz * scale);
+    }
+
+    private static void clearFollowRecoveryTracking(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> npcRef
+    ) {
+        UUIDComponent uc = store.getComponent(npcRef, UUIDComponent.getComponentType());
+        if (uc != null) {
+            FollowPlayerTeleportRecovery.clearTracking(uc.getUuid());
+        }
     }
 }

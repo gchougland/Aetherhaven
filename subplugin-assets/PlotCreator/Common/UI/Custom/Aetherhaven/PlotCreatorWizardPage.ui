@@ -220,18 +220,6 @@ $C.@PageOverlay {
         }
       }
 
-      Label #AssemblySectionsLabel {
-        Style: $C.@DefaultLabelStyle;
-        Text: "";
-        Anchor: (Bottom: 4);
-        Visible: false;
-      }
-
-      $C.@TextField #AssemblySectionsField {
-        Anchor: (Bottom: 10, Height: 36);
-        PlaceholderText: "";
-      }
-
       $C.@TextButton #OpenMaterialsButton {
         Anchor: (Bottom: 8, Height: 40);
         Text: "";

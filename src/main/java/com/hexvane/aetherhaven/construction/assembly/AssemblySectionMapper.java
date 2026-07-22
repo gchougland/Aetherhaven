@@ -9,12 +9,15 @@ import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /**
- * Splits prefab-local space into an {@code N×N×N} grid of assembly sections (one section finished at a time).
+ * Splits prefab-local space into a grid of assembly sections (one section finished at a time). Each axis may use a
+ * different division count.
  */
 public final class AssemblySectionMapper {
     private static final int MAX_AXIS = 16;
 
-    private final int n;
+    private final int nx;
+    private final int ny;
+    private final int nz;
     private final int minX;
     private final int maxX;
     private final int minY;
@@ -22,8 +25,20 @@ public final class AssemblySectionMapper {
     private final int minZ;
     private final int maxZ;
 
-    private AssemblySectionMapper(int n, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
-        this.n = n;
+    private AssemblySectionMapper(
+        int nx,
+        int ny,
+        int nz,
+        int minX,
+        int maxX,
+        int minY,
+        int maxY,
+        int minZ,
+        int maxZ
+    ) {
+        this.nx = nx;
+        this.ny = ny;
+        this.nz = nz;
         this.minX = minX;
         this.maxX = maxX;
         this.minY = minY;
@@ -39,57 +54,78 @@ public final class AssemblySectionMapper {
         return Math.min(MAX_AXIS, raw);
     }
 
-    @Nonnull
-    public static AssemblySectionMapper create(@Nonnull List<PendingBlock> pending, int sectionsPerAxis) {
-        int n = clampAxisDivisions(sectionsPerAxis);
-        if (n <= 1) {
-            throw new IllegalArgumentException("sectionsPerAxis must be >= 2");
+    public static int divisionsForSpan(int span, int chunkSize) {
+        int size = Math.max(1, chunkSize);
+        int s = Math.max(1, span);
+        if (s <= size) {
+            return 1;
         }
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        int minZ = Integer.MAX_VALUE;
-        int maxZ = Integer.MIN_VALUE;
-        for (PendingBlock pb : pending) {
-            int x = pb.x();
-            int y = pb.y();
-            int z = pb.z();
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-            minY = Math.min(minY, y);
-            maxY = Math.max(maxY, y);
-            minZ = Math.min(minZ, z);
-            maxZ = Math.max(maxZ, z);
-        }
-        if (minX == Integer.MAX_VALUE) {
-            minX = maxX = minY = maxY = minZ = maxZ = 0;
-        }
-        return new AssemblySectionMapper(n, minX, maxX, minY, maxY, minZ, maxZ);
+        return clampAxisDivisions((s + size - 1) / size);
     }
 
-    /** First flat index {@code 0..n³-1} that contains at least one pending cell. */
-    public static int firstOccupiedFlatSection(@Nonnull List<PendingBlock> pending, int sectionsPerAxis) {
-        int n = clampAxisDivisions(sectionsPerAxis);
-        if (n <= 1) {
-            return 0;
+    @Nonnull
+    public static AssemblySectionMapper create(
+        @Nonnull List<PendingBlock> pending,
+        int divisionsX,
+        int divisionsY,
+        int divisionsZ
+    ) {
+        int nx = clampAxisDivisions(divisionsX);
+        int ny = clampAxisDivisions(divisionsY);
+        int nz = clampAxisDivisions(divisionsZ);
+        if (nx <= 1 && ny <= 1 && nz <= 1) {
+            throw new IllegalArgumentException("at least one axis division must be >= 2");
         }
-        AssemblySectionMapper m = create(pending, n);
-        int vol = m.sectionCount();
+        Bounds b = scanBounds(pending);
+        return new AssemblySectionMapper(nx, ny, nz, b.minX, b.maxX, b.minY, b.maxY, b.minZ, b.maxZ);
+    }
+
+    @Nonnull
+    public static AssemblySectionMapper createAuto(@Nonnull List<PendingBlock> pending, int chunkSize) {
+        Bounds b = scanBounds(pending);
+        int nx = divisionsForSpan(b.maxX - b.minX + 1, chunkSize);
+        int ny = divisionsForSpan(b.maxY - b.minY + 1, chunkSize);
+        int nz = divisionsForSpan(b.maxZ - b.minZ + 1, chunkSize);
+        return create(pending, nx, ny, nz);
+    }
+
+    @Nullable
+    public static AssemblySectionMapper tryCreateAuto(@Nonnull List<PendingBlock> pending, int chunkSize) {
+        Bounds b = scanBounds(pending);
+        int nx = divisionsForSpan(b.maxX - b.minX + 1, chunkSize);
+        int ny = divisionsForSpan(b.maxY - b.minY + 1, chunkSize);
+        int nz = divisionsForSpan(b.maxZ - b.minZ + 1, chunkSize);
+        if (nx <= 1 && ny <= 1 && nz <= 1) {
+            return null;
+        }
+        return create(pending, nx, ny, nz);
+    }
+
+    /** First flat index {@code 0..sectionCount()-1} that contains at least one pending cell. */
+    public static int firstOccupiedFlatSection(@Nonnull List<PendingBlock> pending, @Nonnull AssemblySectionMapper mapper) {
+        int vol = mapper.sectionCount();
         for (int s = 0; s < vol; s++) {
-            if (m.sectionHasAnyCell(pending, s)) {
+            if (mapper.sectionHasAnyCell(pending, s)) {
                 return s;
             }
         }
         return 0;
     }
 
-    public int sectionsPerAxis() {
-        return n;
+    public int divisionsX() {
+        return nx;
+    }
+
+    public int divisionsY() {
+        return ny;
+    }
+
+    public int divisionsZ() {
+        return nz;
     }
 
     public int sectionCount() {
-        return n * n * n;
+        return nx * ny * nz;
     }
 
     public int flatSectionFor(@Nonnull PendingBlock pb) {
@@ -97,10 +133,10 @@ public final class AssemblySectionMapper {
     }
 
     public int flatSectionFor(int x, int y, int z) {
-        int sx = axisBin(x, minX, maxX);
-        int sy = axisBin(y, minY, maxY);
-        int sz = axisBin(z, minZ, maxZ);
-        return sx + sy * n + sz * n * n;
+        int sx = axisBin(x, minX, maxX, nx);
+        int sy = axisBin(y, minY, maxY, ny);
+        int sz = axisBin(z, minZ, maxZ, nz);
+        return sx + sy * nx + sz * nx * ny;
     }
 
     public boolean isCellInSection(@Nonnull PendingBlock pb, int flatSection) {
@@ -160,7 +196,8 @@ public final class AssemblySectionMapper {
         return true;
     }
 
-    private int axisBin(int value, int lo, int hi) {
+    private static int axisBin(int value, int lo, int hi, int divisionsOnAxis) {
+        int n = Math.max(1, divisionsOnAxis);
         int span = Math.max(1, hi - lo + 1);
         int rel = value - lo;
         if (rel <= 0) {
@@ -170,12 +207,29 @@ public final class AssemblySectionMapper {
         return Math.min(n - 1, bin);
     }
 
-    @Nullable
-    public static AssemblySectionMapper tryCreate(@Nonnull List<PendingBlock> pending, int sectionsPerAxis) {
-        int n = clampAxisDivisions(sectionsPerAxis);
-        if (n <= 1) {
-            return null;
+    private static Bounds scanBounds(@Nonnull List<PendingBlock> pending) {
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+        for (PendingBlock pb : pending) {
+            int x = pb.x();
+            int y = pb.y();
+            int z = pb.z();
+            minX = Math.min(minX, x);
+            maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y);
+            maxY = Math.max(maxY, y);
+            minZ = Math.min(minZ, z);
+            maxZ = Math.max(maxZ, z);
         }
-        return create(pending, n);
+        if (minX == Integer.MAX_VALUE) {
+            minX = maxX = minY = maxY = minZ = maxZ = 0;
+        }
+        return new Bounds(minX, maxX, minY, maxY, minZ, maxZ);
     }
+
+    private record Bounds(int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {}
 }

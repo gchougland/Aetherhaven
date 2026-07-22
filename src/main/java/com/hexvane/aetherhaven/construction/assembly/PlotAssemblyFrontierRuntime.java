@@ -73,7 +73,7 @@ public final class PlotAssemblyFrontierRuntime {
     public static PlotAssemblyFrontierRuntime create(
         @Nonnull List<PendingBlock> pending,
         @Nonnull PlotInstance plot,
-        int sectionsPerAxis
+        @Nullable AssemblySectionMapper sectionMapper
     ) {
         Long2IntOpenHashMap map = new Long2IntOpenHashMap();
         map.defaultReturnValue(-1);
@@ -100,9 +100,8 @@ public final class PlotAssemblyFrontierRuntime {
             }
         }
         IntOpenHashSet f = new IntOpenHashSet();
-        AssemblySectionMapper mapper = AssemblySectionMapper.tryCreate(pending, sectionsPerAxis);
         PlotAssemblyFrontierRuntime rt =
-            new PlotAssemblyFrontierRuntime(map, f, minX, maxX, minY, maxY, minZ, maxZ, mapper);
+            new PlotAssemblyFrontierRuntime(map, f, minX, maxX, minY, maxY, minZ, maxZ, sectionMapper);
         rt.rebuildFrontierFromPlot(pending, plot);
         return rt;
     }

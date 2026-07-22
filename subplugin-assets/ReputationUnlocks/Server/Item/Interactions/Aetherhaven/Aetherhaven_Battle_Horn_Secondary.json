@@ -1,0 +1,13 @@
+{
+  "Type": "Serial",
+  "Interactions": [
+    {
+      "Type": "ResetCooldown",
+      "Cooldown": {
+        "Cooldown": 3
+      }
+    },
+    "Aetherhaven_Battle_Horn_Summon",
+    "Aetherhaven_Battle_Horn_Charge"
+  ]
+}

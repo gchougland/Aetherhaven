@@ -1,0 +1,89 @@
+{
+  "Type": "Explode",
+  "Parent": "Explode_Generic_Blocks",
+  "RunTime": 0.1,
+  "Effects": {
+    "WorldSoundEventId": "SFX_Goblin_Lobber_Bomb_Death",
+    "LocalSoundEventId": "SFX_Goblin_Lobber_Bomb_Death",
+    "Particles": [
+      {
+        "SystemId": "Explosion_Medium",
+        "TargetEntityPart": "Entity"
+      }
+    ]
+  },
+  "Config": {
+    "DamageBlocks": true,
+    "BlockDamageRadius": 6,
+    "BlockDamageFalloff": 0.65,
+    "BlockDropChance": 1.0,
+    "SoundEventId": "SFX_Goblin_Lobber_Bomb_Death",
+    "Particles": [
+      {
+        "SystemId": "Explosion_Medium"
+      }
+    ],
+    "ItemTool": {
+      "Specs": [
+        {
+          "Power": 2,
+          "GatherType": "SoftBlocks"
+        },
+        {
+          "Power": 2,
+          "GatherType": "Soils"
+        },
+        {
+          "Power": 2,
+          "GatherType": "Woods"
+        },
+        {
+          "Power": 2,
+          "GatherType": "Rocks",
+          "Quality": 5
+        },
+        {
+          "Power": 2,
+          "GatherType": "Benches"
+        },
+        {
+          "Power": 1,
+          "GatherType": "VolcanicRocks"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreCopper"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreIron"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreSilver"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreGold"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreThorium"
+        },
+        {
+          "Power": 2,
+          "GatherType": "OreCobalt"
+        },
+        {
+          "Power": 1.5,
+          "GatherType": "OreAdamantite",
+          "Quality": 5
+        },
+        {
+          "Power": 0.5,
+          "GatherType": "OreMithril"
+        }
+      ]
+    }
+  }
+}

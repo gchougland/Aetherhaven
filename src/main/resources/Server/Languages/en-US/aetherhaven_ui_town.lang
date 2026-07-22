@@ -184,6 +184,8 @@ aetherhaven.reputation.reward.miner.50=You have dug beside me long enough. Take 
 aetherhaven.reputation.reward.miner.100=You know the weight of stone and the worth of a steady hand. This larger ring burns brighter. May it keep your path lit when the tunnels run deep.
 aetherhaven.reputation.reward.rancher.50=You have earned my trust with the herds. Here is a growth serum recipe. Mix it at the alchemist's bench from life essence, bone fragments, and blood petals.
 aetherhaven.reputation.reward.rancher.100=You know how to work a herd and read the land. I will show you how to forge a hunting knife at the weapons bench. It helps you pull more meat, hide, and feathers from the animals you hunt.
+aetherhaven.reputation.reward.pyrotechnic.50=Grubble trusts you with the good boom now. Here is how to mix a mining bomb at the town planning desk. Fire essence, iron bars, and boom powder. Throw it at rock and ore. It will not hurt you, and the blocks drop like you dug them.
+aetherhaven.reputation.reward.guild_master.50=You have earned my trust with the roster. Here is how to craft a battle horn at the town planning desk. Bone fragments and gold ingots. Blow it to call your guards to your side.
 
 # === Production building upgrades (town records shelf) ===
 aetherhaven.ui.productionUpgrades.heading=Building upgrades

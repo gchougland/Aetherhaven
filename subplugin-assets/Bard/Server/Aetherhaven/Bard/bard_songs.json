@@ -9,6 +9,13 @@
       "durationSeconds": 140
     },
     {
+      "id": "fishing_daze",
+      "displayLangKey": "aetherhaven_bard.songs.fishing_daze",
+      "musicTrack": "Music/Aetherhaven/Fishing_Daze.ogg",
+      "ambienceFxId": "Aetherhaven_Bard_Mus_Fishing_Daze",
+      "durationSeconds": 87
+    },
+    {
       "id": "beach_chillin",
       "displayLangKey": "aetherhaven_bard.songs.beach_chillin",
       "musicTrack": "Music/zUnused/BeachChillin.ogg",

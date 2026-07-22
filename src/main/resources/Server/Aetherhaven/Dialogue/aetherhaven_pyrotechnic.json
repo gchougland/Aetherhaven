@@ -368,6 +368,22 @@
           "next": "main_hub"
         }
       ]
+    },
+    "rep_reward_50": {
+      "speaker": "aetherhaven_dialogue_pyrotechnic.aetherhaven.dialogue.aetherhaven_pyrotechnic.rep_reward_50.speaker",
+      "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.pyrotechnic.50",
+      "actions": [
+        {
+          "type": "reputation_reward_grant",
+          "rewardId": "rep_pyrotechnic_50"
+        }
+      ],
+      "choices": [
+        {
+          "text": "aetherhaven_ui_town.aetherhaven.reputation.reward.continue",
+          "next": "main_hub"
+        }
+      ]
     }
   }
 }

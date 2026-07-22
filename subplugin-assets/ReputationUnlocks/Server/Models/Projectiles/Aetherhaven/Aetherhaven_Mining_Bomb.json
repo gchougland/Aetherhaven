@@ -1,0 +1,56 @@
+{
+  "Model": "NPC/Intelligent/Goblin/Models/Weapons/Bomb/Fire.blockymodel",
+  "Texture": "Items/Aetherhaven/Mining_Bomb.png",
+  "EyeHeight": 0.15,
+  "HitBox": {
+    "Max": {
+      "X": 0.15,
+      "Y": 0.15,
+      "Z": 0.15
+    },
+    "Min": {
+      "X": -0.15,
+      "Y": -0.15,
+      "Z": -0.15
+    }
+  },
+  "MinScale": 1,
+  "MaxScale": 1,
+  "Trails": [
+    {
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      },
+      "TargetNodeName": "Bomb",
+      "TrailId": "Bomb",
+      "RotationOffset": {
+        "Yaw": 90,
+        "Pitch": 0,
+        "Roll": 45
+      }
+    },
+    {
+      "PositionOffset": {
+        "X": 0,
+        "Y": 0,
+        "Z": 0
+      },
+      "TargetNodeName": "Bomb",
+      "TrailId": "Bomb",
+      "RotationOffset": {
+        "Yaw": 0,
+        "Pitch": 45,
+        "Roll": 90
+      }
+    }
+  ],
+  "Particles": [
+    {
+      "SystemId": "Fuse_Bomb",
+      "TargetNodeName": "Fuse_Lit"
+    }
+  ],
+  "AnimationSets": {}
+}

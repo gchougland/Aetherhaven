@@ -24,7 +24,6 @@
     "Wood_Ash_Branch_Long",
     "Wood_Ash_Trunk"
   ],
-  "assemblyPrefabSectionsPerAxis": 3,
   "rotationYaw": "None",
   "autonomyNavFloorYAboveMinY": 1,
   "autonomyNavMaxStandYSpanAboveMinY": 3,

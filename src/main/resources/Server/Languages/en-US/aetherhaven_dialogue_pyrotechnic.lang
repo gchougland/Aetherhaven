@@ -25,6 +25,8 @@ aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_building=The shop is st
 aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_shop_offer=Grubble, I want to help you open a proper shop in town.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.root.c_goodbye=That is all for now. Grubble, I will see you later.
 
+aetherhaven.dialogue.aetherhaven_pyrotechnic.rep_reward_50.speaker=Grubble Sparkmatch
+
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.speaker=Grubble Sparkmatch
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.body=Grubble cannot sell boom things from pockets forever. Folk get nervous. Need real shop with thick walls, good sign, shelf that does not wobble when small bomb sneezes. Grubble drew plans on fireproof paper. You build for town, Grubble gives you the page.
 aetherhaven.dialogue.aetherhaven_pyrotechnic.grubble_quest_shop.c0=We will get Grubble a shop.

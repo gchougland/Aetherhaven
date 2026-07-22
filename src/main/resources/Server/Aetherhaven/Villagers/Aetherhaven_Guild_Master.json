@@ -18,7 +18,16 @@
       "plot_town_hall"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_guild_master_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Battle_Horn"
+    }
+  ],
   "giftLoves": [
     "Weapon_Axe_Adamantite",
     "Weapon_Axe_Bone",

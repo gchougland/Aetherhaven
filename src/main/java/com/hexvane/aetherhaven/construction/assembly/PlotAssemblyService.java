@@ -304,12 +304,19 @@ public final class PlotAssemblyService {
         plot.setLastStateChangeEpochMs(wallNow);
         plot.resetAssemblyPlacementProgress();
         plot.resetAssemblyPassiveTimers();
-        int sectionAxis = def.getAssemblyPrefabSectionsPerAxis();
-        if (sectionAxis > 1) {
-            plot.setAssemblySectionDivisions(sectionAxis);
-            plot.setAssemblyActiveSectionIndex(AssemblySectionMapper.firstOccupiedFlatSection(placementOrder, sectionAxis));
+        int chunkSize = plugin.getConfig().get().getAssemblySectionChunkSizeBlocks();
+        AssemblySectionMapper sectionMapper = AssemblySectionMapper.tryCreateAuto(placementOrder, chunkSize);
+        if (sectionMapper != null) {
+            plot.setAssemblySectionDivisions(
+                sectionMapper.divisionsX(),
+                sectionMapper.divisionsY(),
+                sectionMapper.divisionsZ()
+            );
+            plot.setAssemblyActiveSectionIndex(
+                AssemblySectionMapper.firstOccupiedFlatSection(placementOrder, sectionMapper)
+            );
         } else {
-            plot.setAssemblySectionDivisions(null);
+            plot.setAssemblySectionDivisions(1, 1, 1);
             plot.setAssemblyActiveSectionIndex(null);
         }
         plot.setAssemblyPrefabId(prefabId);
@@ -336,8 +343,7 @@ public final class PlotAssemblyService {
                 slot,
                 def.getId()
             );
-        AssemblySectionMapper clearingMapper =
-            sectionAxis > 1 ? AssemblySectionMapper.create(placementOrder, sectionAxis) : null;
+        AssemblySectionMapper clearingMapper = sectionMapper;
         if (clearingMapper != null) {
             AssemblyObstructionUtil.clearSoftSkippedBlocksInFootprint(
                 world, job, clearingMapper, plot.getAssemblyActiveSectionIndex()
@@ -580,7 +586,11 @@ public final class PlotAssemblyService {
             registerClearingJob(world, tm, town, plot, job);
         } else {
             PlotAssemblyFrontierRuntime assemblyRt =
-                PlotAssemblyFrontierRuntime.create(placementOrder, plot, assemblySectionsPerAxisForPlot(plot));
+                PlotAssemblyFrontierRuntime.create(
+                    placementOrder,
+                    plot,
+                    sectionMapperFor(plot, placementOrder)
+                );
             AssemblyWorldRegistry.put(world, plot.getPlotId(), job, PlotAssemblyPhase.PLACING, assemblyRt, null, null);
             if (plot.getAssemblyStartEpochMs() == 0L) {
                 Instant simNow = entityStore.getResource(TimeResource.getResourceType()).getNow();
@@ -627,9 +637,11 @@ public final class PlotAssemblyService {
             job.buffer()
         );
         ConstructionPasteOps.clearNonPrefabFluidsInFootprint(world, job.anchor(), job.footprintCells(), chunkAccessor);
-        int ax = assemblySectionsPerAxisForPlot(plot);
-        if (ax > 1) {
-            plot.setAssemblyActiveSectionIndex(AssemblySectionMapper.firstOccupiedFlatSection(job.pendingBlocks(), ax));
+        AssemblySectionMapper sectionMapper = sectionMapperFor(plot, job.pendingBlocks());
+        if (sectionMapper != null) {
+            plot.setAssemblyActiveSectionIndex(
+                AssemblySectionMapper.firstOccupiedFlatSection(job.pendingBlocks(), sectionMapper)
+            );
             tm.updateTown(town);
         }
         if (plot.getAssemblyStartEpochMs() == 0L) {
@@ -639,7 +651,7 @@ public final class PlotAssemblyService {
             tm.updateTown(town);
         }
         PlotAssemblyFrontierRuntime assemblyRt =
-            PlotAssemblyFrontierRuntime.create(job.pendingBlocks(), plot, assemblySectionsPerAxisForPlot(plot));
+            PlotAssemblyFrontierRuntime.create(job.pendingBlocks(), plot, sectionMapperFor(plot, job.pendingBlocks()));
         AssemblyWorldRegistry.transitionToPlacing(world, job.plotId(), assemblyRt);
     }
 
@@ -1208,16 +1220,36 @@ public final class PlotAssemblyService {
     ) {
         PlotAssemblyFrontierRuntime rt = AssemblyWorldRegistry.frontierRuntime(world, job.plotId());
         if (rt == null) {
-            int ax = assemblySectionsPerAxisForPlot(plot);
-            rt = PlotAssemblyFrontierRuntime.create(pending, plot, ax);
+            rt =
+                PlotAssemblyFrontierRuntime.create(
+                    pending,
+                    plot,
+                    sectionMapperFor(plot, pending)
+                );
             AssemblyWorldRegistry.transitionToPlacing(world, job.plotId(), rt);
         }
         return rt;
     }
 
-    private static int assemblySectionsPerAxisForPlot(@Nonnull PlotInstance plot) {
-        Integer d = plot.getAssemblySectionDivisions();
-        return d != null && d > 1 ? AssemblySectionMapper.clampAxisDivisions(d) : 1;
+    private static int assemblySectionChunkSizeBlocks() {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin != null && plugin.getConfig() != null && plugin.getConfig().get() != null) {
+            return plugin.getConfig().get().getAssemblySectionChunkSizeBlocks();
+        }
+        return 15;
+    }
+
+    @Nullable
+    private static AssemblySectionMapper sectionMapperFor(
+        @Nonnull PlotInstance plot,
+        @Nonnull List<PendingBlock> pending
+    ) {
+        int[] d = new int[3];
+        plot.resolveAssemblySectionDivisions(d);
+        if (d[0] <= 1 && d[1] <= 1 && d[2] <= 1) {
+            return AssemblySectionMapper.tryCreateAuto(pending, assemblySectionChunkSizeBlocks());
+        }
+        return AssemblySectionMapper.create(pending, d[0], d[1], d[2]);
     }
 
     private static boolean maybeAdvanceAssemblySection(
@@ -1246,7 +1278,7 @@ public final class PlotAssemblyService {
 
     @Nullable
     private static AssemblySectionMapper clearingSectionMapper(@Nonnull PlotAssemblyJob job, @Nonnull PlotInstance plot) {
-        return AssemblySectionMapper.tryCreate(job.pendingBlocks(), assemblySectionsPerAxisForPlot(plot));
+        return sectionMapperFor(plot, job.pendingBlocks());
     }
 
     private static boolean clearingSectionHasAnyObstructedCell(
@@ -1382,14 +1414,14 @@ public final class PlotAssemblyService {
         }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        int ax = assemblySectionsPerAxisForPlot(plot);
+        AssemblySectionMapper mapper = sectionMapperFor(plot, pending);
         IntArrayList frontier =
-            ax > 1
+            mapper != null
                 ? PlotAssemblyFrontier.frontierIndicesForActiveSection(
                     pending,
                     placedSet,
                     plot.getAssemblyActiveSectionIndex(),
-                    AssemblySectionMapper.create(pending, ax)
+                    mapper
                 )
                 : PlotAssemblyFrontier.frontierIndices(pending, placedSet);
         for (int k = 0; k < frontier.size(); k++) {
@@ -1414,14 +1446,14 @@ public final class PlotAssemblyService {
         }
         IntOpenHashSet placedSet = new IntOpenHashSet();
         plot.fillAssemblyPlacedSet(placedSet, pending.size());
-        int ax = assemblySectionsPerAxisForPlot(plot);
+        AssemblySectionMapper mapper = sectionMapperFor(plot, pending);
         IntArrayList frontier =
-            ax > 1
+            mapper != null
                 ? PlotAssemblyFrontier.frontierIndicesForActiveSection(
                     pending,
                     placedSet,
                     plot.getAssemblyActiveSectionIndex(),
-                    AssemblySectionMapper.create(pending, ax)
+                    mapper
                 )
                 : PlotAssemblyFrontier.frontierIndices(pending, placedSet);
         for (int k = 0; k < frontier.size(); k++) {

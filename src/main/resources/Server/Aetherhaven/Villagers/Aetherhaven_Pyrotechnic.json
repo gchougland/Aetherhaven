@@ -15,7 +15,16 @@
       "q_pyrotechnic_rescue"
     ]
   },
-  "reputationMilestones": [],
+  "reputationMilestones": [
+    {
+      "rewardId": "rep_pyrotechnic_50",
+      "minReputation": 50,
+      "itemId": "",
+      "itemCount": 0,
+      "dialogueNodeId": "rep_reward_50",
+      "learnRecipeItemId": "Aetherhaven_Mining_Bomb"
+    }
+  ],
   "giftLoves": [
     "Weapon_Bomb",
     "Weapon_Bomb_Continuous",
@@ -24,6 +33,7 @@
     "Weapon_Bomb_Popberry",
     "Weapon_Bomb_Potion_Poison",
     "Weapon_Bomb_Stun",
+    "Aetherhaven_Mining_Bomb",
     "Weapon_Shortbow_Bomb",
     "Ingredient_Powder_Boom",
     "Plant_Crop_Mushroom_Boomshroom_Large",
