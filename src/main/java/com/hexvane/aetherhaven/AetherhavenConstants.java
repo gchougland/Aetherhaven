@@ -76,6 +76,9 @@ public final class AetherhavenConstants {
 
     public static final String ITEM_GROWTH_SERUM = "Aetherhaven_Growth_Serum";
 
+    /** Rare find; use on a befriendable villager for +10 reputation. */
+    public static final String ITEM_HEARTBERRY = "Aetherhaven_Heartberry";
+
     public static final String ITEM_HUNTING_KNIFE = "Aetherhaven_Hunting_Knife";
 
     /**

@@ -2,10 +2,8 @@ package com.hexvane.aetherhaven.jewelry;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
-import com.hexvane.aetherhaven.world.WorldZoneIndex;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -29,7 +27,6 @@ import javax.annotation.Nonnull;
 
 /**
  * Injects Aetherhaven bonus loot into Lootr per-player containers when a player has an open Lootr chest window.
- * Runs on the player entity so it does not depend on chunk-store block entities being tickable.
  */
 public final class LootrPerPlayerLootInjectPlayerSystem extends EntityTickingSystem<EntityStore> {
     @Nonnull
@@ -89,6 +86,9 @@ public final class LootrPerPlayerLootInjectPlayerSystem extends EntityTickingSys
             if (!(containerWindow.getItemContainer() instanceof SimpleItemContainer inv)) {
                 continue;
             }
+            if (LootrReflection.isPlaceholderContainer(inv)) {
+                continue;
+            }
 
             int x = containerWindow.getX();
             int y = containerWindow.getY();
@@ -97,7 +97,8 @@ public final class LootrPerPlayerLootInjectPlayerSystem extends EntityTickingSys
             if (chunkRef == null || !chunkRef.isValid()) {
                 continue;
             }
-            BlockComponentChunk blockComponentChunk = chunkComponentStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
+            BlockComponentChunk blockComponentChunk =
+                chunkComponentStore.getComponent(chunkRef, BlockComponentChunk.getComponentType());
             if (blockComponentChunk == null) {
                 continue;
             }
@@ -105,26 +106,32 @@ public final class LootrPerPlayerLootInjectPlayerSystem extends EntityTickingSys
             if (blockEntityRef == null || !blockEntityRef.isValid()) {
                 continue;
             }
-            Component<ChunkStore> lootrBlock = chunkComponentStore.getComponent(blockEntityRef, lootrType);
-            if (lootrBlock == null) {
+            Object lootBlock = chunkComponentStore.getComponent(blockEntityRef, lootrType);
+            if (lootBlock == null) {
                 continue;
             }
             BlockModule.BlockStateInfo state = chunkComponentStore.getComponent(blockEntityRef, BlockModule.BlockStateInfo.getComponentType());
             if (state == null) {
                 continue;
             }
-            String blockTypeId = LootrIntegration.resolveEligibleBlockTypeId(lootrBlock, chunkComponentStore, state);
+            if (!LootChestWorldGenerated.isWorldLootChest(chunkComponentStore, blockEntityRef)) {
+                if (LootrReflection.isSpawnerConvertedLootChest(lootBlock)) {
+                    chunkComponentStore.putComponent(
+                        blockEntityRef,
+                        LootChestWorldGenerated.getComponentType(),
+                        new LootChestWorldGenerated()
+                    );
+                } else {
+                    LootChestWorldGenerated.ensureTagged(chunkComponentStore, blockEntityRef);
+                }
+            }
+            String blockTypeId = LootrReflection.resolveEligibleBlockTypeId(lootBlock, chunkComponentStore, state);
             if (!LootChestBonusApplier.isEligibleForBlockId(blockTypeId, cfg)) {
                 continue;
             }
-            if (!LootChestWorldGenerated.isWorldLootChest(chunkComponentStore, blockEntityRef)) {
-                LootChestWorldGenerated.ensureTagged(chunkComponentStore, blockEntityRef);
-            }
 
-            LootrChestProcessedPlayers processed = chunkComponentStore.getComponent(
-                blockEntityRef,
-                LootrChestProcessedPlayers.getComponentType()
-            );
+            LootrChestProcessedPlayers processed =
+                chunkComponentStore.getComponent(blockEntityRef, LootrChestProcessedPlayers.getComponentType());
             if (processed == null) {
                 processed = new LootrChestProcessedPlayers();
                 chunkComponentStore.putComponent(blockEntityRef, LootrChestProcessedPlayers.getComponentType(), processed);
@@ -134,17 +141,14 @@ public final class LootrPerPlayerLootInjectPlayerSystem extends EntityTickingSys
             }
 
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
-            int zone = WorldZoneIndex.resolveAtBlock(world, x, z);
-            if (LootChestBonusApplier.applyAllToContainer(
+            if (LootChestBonusApplier.applyOpenContainerBonuses(
                 inv,
+                world,
+                chunkComponentStore,
+                state,
+                this.plugin,
                 cfg,
-                this.plugin.getConstructionCatalog(),
-                rnd,
-                zone,
-                false,
-                false,
-                false,
-                false
+                rnd
             )) {
                 injectedAny = true;
                 player.getWindowManager().markWindowChanged(window.getId());

@@ -55,6 +55,8 @@ public final class JewelryBootstrap {
         plugin.getChunkStoreRegistry().registerSystem(new LootChestWorldLootMarkSystem());
         plugin.getChunkStoreRegistry().registerSystem(new LootChestBonusInjectSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new LootChestOpenBonusInjectPlayerSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new LootrPerPlayerLootInjectPlayerSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new LootrIntegrationStartupSystem(core));
         core.registerJewelryNativeTooltipHooks();
         core.registerJewelryRarityBorderPackets();
     }

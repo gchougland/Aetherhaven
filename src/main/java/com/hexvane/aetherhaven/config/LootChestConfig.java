@@ -80,6 +80,12 @@ public final class LootChestConfig {
                 o -> o.gaiaDraughtBonuses
             )
             .add()
+            .append(
+                new KeyedCodec<>("HeartberryBonus", LootChestHeartberryBonusConfig.CODEC),
+                (o, v) -> o.heartberryBonus = v != null ? v : new LootChestHeartberryBonusConfig(),
+                o -> o.heartberryBonus
+            )
+            .add()
             .build();
 
     @Nullable
@@ -99,6 +105,8 @@ public final class LootChestConfig {
     private LootChestPlotBlueprintConfig plotBlueprint = new LootChestPlotBlueprintConfig();
     @Nonnull
     private LootChestGaiaDraughtBonusConfig gaiaDraughtBonuses = new LootChestGaiaDraughtBonusConfig();
+    @Nonnull
+    private LootChestHeartberryBonusConfig heartberryBonus = new LootChestHeartberryBonusConfig();
 
     public LootChestConfig() {}
 
@@ -156,6 +164,11 @@ public final class LootChestConfig {
     @Nonnull
     public LootChestGaiaDraughtBonusConfig getGaiaDraughtBonuses() {
         return gaiaDraughtBonuses != null ? gaiaDraughtBonuses : new LootChestGaiaDraughtBonusConfig();
+    }
+
+    @Nonnull
+    public LootChestHeartberryBonusConfig getHeartberryBonus() {
+        return heartberryBonus != null ? heartberryBonus : new LootChestHeartberryBonusConfig();
     }
 
     /** Town Journal: clamp to 0..1. */

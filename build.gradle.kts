@@ -26,6 +26,12 @@ val modEmbed: Configuration by configurations.creating {
 }
 
 dependencies {
+    // Optional dev-only API for LootrHytale (see libs/README.md). Never bundled in the release jar.
+    val lootrJar = layout.projectDirectory.file("libs/Lootr-0.2.11.jar")
+    if (lootrJar.asFile.exists()) {
+        compileOnly(files(lootrJar))
+    }
+
     // Core parser only. flexmark-all also embeds PDF/HTML converters (iText, OpenHTML) with tens of
     // thousands of extra classes that trigger CurseForge manual security review on upload.
     val flexmark = "com.vladsch.flexmark:flexmark:0.64.8"

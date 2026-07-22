@@ -106,7 +106,9 @@ public final class AetherhavenFeatureBootstrap {
         if (!jewelryStarted && AetherhavenFeatures.isLoaded(AetherhavenPluginIds.JEWELRY)) {
             JewelryNativeTooltipManager.refreshAllPlayers();
             JewelryGemTraits.validateStatIdsAtStartup();
-            LootrIntegration.registerIfAvailable(core);
+            if (LootrIntegration.tryInitialize()) {
+                LootrIntegration.registerIfAvailable(core);
+            }
             jewelryStarted = true;
         }
     }

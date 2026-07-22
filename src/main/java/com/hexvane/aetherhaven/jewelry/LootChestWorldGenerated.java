@@ -54,7 +54,7 @@ public final class LootChestWorldGenerated implements Component<ChunkStore> {
         return store.getComponent(blockEntityRef, getComponentType()) != null;
     }
 
-    /** Ensures dungeon Lootr wrappers are tagged when they never had a droplist mark at spawn. */
+    /** Tags Lootr dungeon chests when spawn marking missed (legacy compat). */
     public static void ensureTagged(@Nonnull Store<ChunkStore> store, @Nonnull Ref<ChunkStore> blockEntityRef) {
         if (!isWorldLootChest(store, blockEntityRef)) {
             store.putComponent(blockEntityRef, getComponentType(), new LootChestWorldGenerated());

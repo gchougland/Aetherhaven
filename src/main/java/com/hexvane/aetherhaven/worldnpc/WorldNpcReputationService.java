@@ -176,6 +176,37 @@ public final class WorldNpcReputationService {
         return true;
     }
 
+    /**
+     * Adds reputation without dialogue gift weekly limits (e.g. Heartberry).
+     *
+     * @return reputation actually gained, or 0 if none
+     */
+    public static int addReputationDelta(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String placementId,
+        int deltaReputation
+    ) {
+        if (deltaReputation <= 0) {
+            return 0;
+        }
+        WorldNpcRegistry registry = AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin);
+        WorldNpcPlayerProgress progress = registry.getOrCreatePlayerProgress(playerUuid);
+        VillagerReputationEntry entry = progress.reputationForPlacement(placementId);
+        entry.migrateIfNeeded();
+        int before = entry.getReputation();
+        int after = Math.max(0, Math.min(VillagerReputationService.MAX_REPUTATION, before + deltaReputation));
+        if (after == before) {
+            return 0;
+        }
+        entry.setReputation(after);
+        enqueueMilestones(plugin, world, progress, placementId, entry, before, after);
+        registry.markPlayerDirty();
+        WorldNpcPersistence.save(world, plugin, registry);
+        return after - before;
+    }
+
     private static void enqueueMilestones(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull World world,

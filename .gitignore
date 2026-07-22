@@ -33,6 +33,7 @@ build/
 
 ### Misc ###
 /run/
+/libs/*.jar
 /Docs/
 /.cursor/
 .cursorrules

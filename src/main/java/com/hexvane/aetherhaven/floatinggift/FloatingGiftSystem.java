@@ -322,6 +322,7 @@ public final class FloatingGiftSystem extends EntityTickingSystem<EntityStore> {
         if (!chunk.placeBlock(x, y, z, chestBlockId, rot, 10, false)) {
             return;
         }
+        FloatingGiftChestUtil.markDecoPlaced(world, x, y, z);
         if (world.getBlockType(x, y, z) == BlockType.EMPTY) {
             return;
         }

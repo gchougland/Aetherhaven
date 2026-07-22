@@ -9,9 +9,11 @@
 - **Visitor portal network** — Stepping onto a visitor portal opens a list of every active portal in your world. Each entry shows the town name, who owns it, and whether visitors are welcome. Travel to another town in one click, or turn off **Allow visitors to teleport here** on the portal shelf or in the travel window so strangers cannot jump into your town. Each town can pick a **portal color** from preset swatches (tints the travel icon in the list and on the map border for other towns).
 - **Loot chest plot blueprints** — World chest bonus rolls can add a random plot blueprint page (same unlock item as quests). Default chance is 30% per eligible chest (`LootChest.PlotBlueprint.Chance`). Bonuses also run the first time you open a chest if chunk-load injection missed it.
 - **Serah's draught quest** — *Roads Under The Dead* now finishes when you report back to the priestess at the Gaia altar after your hunt, before you receive Gaia's Draught and the crafting recipe.
+- **Heartberry** — A rare find in world loot chests. Use one on a villager you can befriend to grow closer by a full heart. They react with floating hearts like a gift they love. Does not count toward normal gift limits.
 
 ### Changed
 
+- **Floating gift boxes** — Balloon rewards use special gift boxes that disappear after you take everything out and close them. If you break one open, only the loot inside drops, not the box itself.
 - **Loot chest jewelry by adventure zone** — Randomized gem jewelry injected into world chests respects procedural zone tier: zone 1 only common and uncommon; zones 2–3 through epic (mythic); zone 4 has no common rolls and slightly higher rare, epic, and legendary weight. Glow rings (fixed mythic/legendary artifacts) are unchanged and can appear in any zone.
 - **Path designer on-screen help** — While you hold the path designer shovel, mode tabs at the top show Place, Move, Rotate, Remove, Replace filter, and Style designer. **Q** cycles modes in that same order.
 - **Path designer remove preview** — In Remove mode, saved paths show as orange waypoint markers and connecting lines (not a solid block outline), so you can see routes more clearly.

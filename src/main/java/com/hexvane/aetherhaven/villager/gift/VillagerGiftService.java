@@ -234,6 +234,16 @@ public final class VillagerGiftService {
         return new GiftApplyResult(true, tier, gotoNode, null);
     }
 
+    public static void playLoveGiftParticles(@Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store) {
+        playGiftEmotionParticles(npcRef, store, GiftPreference.LOVE);
+    }
+
+    public static void notifyReputationChange(
+        @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, int repDelta
+    ) {
+        notifyGiftReputationChange(playerRef, store, repDelta);
+    }
+
     private static void playGiftEmotionParticles(
         @Nonnull Ref<EntityStore> npcRef, @Nonnull Store<EntityStore> store, @Nonnull GiftPreference tier
     ) {

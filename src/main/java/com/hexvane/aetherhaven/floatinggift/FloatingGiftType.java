@@ -28,9 +28,9 @@ public enum FloatingGiftType {
     @Nonnull
     public String chestBlockId() {
         return switch (this) {
-            case REGULAR -> "Furniture_Christmas_Chest_Small_White";
-            case GREEN -> "Furniture_Christmas_Chest_Small_Green";
-            case RED -> "Furniture_Christmas_Chest_Small_Red";
+            case REGULAR -> FloatingGiftChestUtil.CHEST_WHITE;
+            case GREEN -> FloatingGiftChestUtil.CHEST_GREEN;
+            case RED -> FloatingGiftChestUtil.CHEST_RED;
         };
     }
 }

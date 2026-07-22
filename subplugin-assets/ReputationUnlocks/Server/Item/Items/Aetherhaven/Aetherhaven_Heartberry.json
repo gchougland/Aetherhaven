@@ -1,0 +1,54 @@
+{
+	"IconProperties": {
+		"Scale": 0.9,
+		"Rotation": [
+			22.5,
+			45,
+			22.5
+		],
+		"Translation": [
+			0,
+			-4
+		]
+	},
+	"Tags": {
+		"Type": [
+			"Ingredient"
+		],
+		"Family": [
+			"Aetherhaven"
+		]
+	},
+	"Icon": "Icons/ItemsGenerated/Heartberry_Heartberry.png",
+	"Categories": [
+		"Items.Ingredients",
+		"Aetherhaven.All"
+	],
+	"TranslationProperties": {
+		"Name": "aetherhaven_reputation_unlocks.items.Aetherhaven_Heartberry.name",
+		"Description": "aetherhaven_reputation_unlocks.items.Aetherhaven_Heartberry.description"
+	},
+	"MaxStack": 25,
+	"Quality": "Rare",
+	"ItemSoundSetId": "ISS_Items_Foliage",
+	"Set": "Aetherhaven",
+	"Model": "Items/Aetherhaven/Heartberry.blockymodel",
+	"Texture": "Items/Aetherhaven/Heartberry.png",
+	"PlayerAnimationsId": "Item",
+	"Interactions": {
+		"Use": {
+			"Interactions": [
+				{
+					"Type": "AetherhavenHeartberryUse"
+				}
+			]
+		}
+	},
+	"InteractionConfig": {
+		"UseDistance": {
+			"Adventure": 5,
+			"Creative": 6
+		},
+		"AllEntities": true
+	}
+}

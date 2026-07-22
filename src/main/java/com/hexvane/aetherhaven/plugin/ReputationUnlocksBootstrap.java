@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
 import com.hexvane.aetherhaven.gaiadraught.PendingCraftRecipeUnlockTickSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.growthserum.GrowthSerumUseInteraction;
+import com.hexvane.aetherhaven.heartberry.HeartberryUseInteraction;
 import com.hexvane.aetherhaven.huntingknife.HuntingKnifeBonusDropSystem;
 import com.hexvane.aetherhaven.plot.SprinklerBlock;
 import com.hexvane.aetherhaven.purification.PurificationPowderPlayerRemoveSystem;
@@ -60,6 +61,13 @@ public final class ReputationUnlocksBootstrap {
                 "AetherhavenGrowthSerumUse",
                 GrowthSerumUseInteraction.class,
                 GrowthSerumUseInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenHeartberryUse",
+                HeartberryUseInteraction.class,
+                HeartberryUseInteraction.CODEC
             );
         core
             .getCodecRegistry(Interaction.CODEC)

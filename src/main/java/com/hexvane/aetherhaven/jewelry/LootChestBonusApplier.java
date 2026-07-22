@@ -321,8 +321,29 @@ public final class LootChestBonusApplier {
     }
 
     /**
-     * Same rolls as natural chests on first open: core + supplemental (config chances, zone-aware gem jewelry).
-     * Ignores block-id filters and does not set {@link LootChestBonusApplied} or supplemental markers.
+     * Supplemental then core bonus rolls for an open chest inventory (Lootr per-player or vanilla after stash).
+     * Does not set chunk markers {@link LootChestBonusApplied} or {@link LootChestSupplementalBonusApplied}.
+     */
+    public static boolean applyOpenContainerBonuses(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull World world,
+        @Nonnull Store<ChunkStore> chunkStore,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd
+    ) {
+        int zone = resolveAdventureZoneIndex(world, chunkStore, state);
+        boolean changed = false;
+        changed |= syncJewelryInContainerForZone(inv, zone, cfg, rnd);
+        changed |= applySupplementalBonusesToContainer(inv, cfg, plugin.getConstructionCatalog(), rnd, false);
+        changed |= applyCoreBonusesToContainer(inv, cfg, rnd, zone, false, false);
+        return changed;
+    }
+
+    /**
+     * Same rolls as natural chests on first open (config chances, zone-aware gem jewelry). Ignores block-id filters
+     * and does not set chunk bonus markers.
      */
     public static boolean applyWorldChestBonusesDebug(
         @Nonnull World world,
@@ -337,26 +358,10 @@ public final class LootChestBonusApplier {
             StashGameplayConfig sg = StashGameplayConfig.getOrDefault(world.getGameplayConfig());
             StashPlugin.stash(state, c, sg.isClearContainerDropList());
         }
-        int zone = resolveAdventureZoneIndex(world, s, state);
-        boolean changed = false;
         SimpleItemContainer inv = c.getItemContainer();
+        boolean changed = false;
         if (inv != null) {
-            changed |= syncJewelryInContainerForZone(inv, zone, cfg, rnd);
-            changed |= applySupplementalBonusesToContainer(
-                inv,
-                cfg,
-                plugin.getConstructionCatalog(),
-                rnd,
-                false
-            );
-            changed |= applyCoreBonusesToContainer(
-                inv,
-                cfg,
-                rnd,
-                zone,
-                false,
-                false
-            );
+            changed = applyOpenContainerBonuses(inv, world, s, state, plugin, cfg, rnd);
         }
         state.markNeedsSaving(s);
         return changed;
@@ -515,6 +520,7 @@ public final class LootChestBonusApplier {
         boolean changed = false;
         changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaShardItemId(), cfg.getLootChestGaiaShardChance(), rnd, force);
         changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestGaiaCatalystItemId(), cfg.getLootChestGaiaCatalystChance(), rnd, force);
+        changed |= tryInjectOptionalItemRoll(inv, cfg.getLootChestHeartberryItemId(), cfg.getLootChestHeartberryChance(), rnd, force);
         return changed;
     }
 

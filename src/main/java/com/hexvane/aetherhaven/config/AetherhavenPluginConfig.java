@@ -1198,6 +1198,19 @@ public final class AetherhavenPluginConfig {
         return getLootChest().getGaiaDraughtBonuses().getCatalystItemId().trim();
     }
 
+    public double getLootChestHeartberryChance() {
+        double v = getLootChest().getHeartberryBonus().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
+    @Nonnull
+    public String getLootChestHeartberryItemId() {
+        return getLootChest().getHeartberryBonus().getItemId().trim();
+    }
+
     public double getJewelryRarityWeightCommon() {
         return Math.max(0.0, getJewelry().getRarityWeights().getCommon());
     }
