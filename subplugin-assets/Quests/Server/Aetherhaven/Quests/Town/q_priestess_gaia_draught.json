@@ -29,6 +29,12 @@
       "entityTagsAny": [
         "Undead"
       ]
+    },
+    {
+      "id": "report",
+      "kind": "dialogue_turn_in",
+      "text": "Return to Serah and report your hunt.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_priestess_gaia_draught.objective.report"
     }
   ],
   "rewards": [

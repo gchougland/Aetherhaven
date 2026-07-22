@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Reconciles each player's display from read-only snapshots. This ticking system sends UI packets but never writes
@@ -36,6 +37,8 @@ public final class AetherhavenHudRefreshSystem
     extends EntityTickingSystem<EntityStore>
     implements AetherhavenGameTimeSubscriber {
     private static final float PLAYER_VALUE_REFRESH_SECONDS = 0.5f;
+    @Nullable
+    private static volatile AetherhavenHudRefreshSystem active;
 
     @Nonnull
     private final AetherhavenHudSnapshotService snapshots;
@@ -50,6 +53,15 @@ public final class AetherhavenHudRefreshSystem
 
     public AetherhavenHudRefreshSystem(@Nonnull AetherhavenPlugin plugin) {
         snapshots = new AetherhavenHudSnapshotService(plugin);
+        active = this;
+    }
+
+    /** Forces pinned-quest HUD rows to reconcile on the next player tick (kill counts, turn-ins, etc.). */
+    public static void requestRefresh(@Nonnull World world) {
+        AetherhavenHudRefreshSystem system = active;
+        if (system != null) {
+            system.markWorldTimeChanged(world);
+        }
     }
 
     @Nonnull

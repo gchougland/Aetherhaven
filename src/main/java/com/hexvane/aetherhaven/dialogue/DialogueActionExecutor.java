@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
@@ -391,6 +392,7 @@ public final class DialogueActionExecutor {
         }
         UUID npcUuid = npcUuidFromRef(store, npcRef);
         applyQuestCompletion(world, plugin, town, tm, qid, playerRef, npcUuid, store);
+        com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem.requestRefresh(world);
         PlayerRef pr = store.getComponent(playerRef, PlayerRef.getComponentType());
         if (pr != null) {
             sendEventTitleBanner(
@@ -468,23 +470,16 @@ public final class DialogueActionExecutor {
         if (rewardPlayerRef != null
             && store != null
             && qid.trim().equals(AetherhavenConstants.QUEST_PRIESTESS_GAIA_DRAUGHT)) {
-            UUIDComponent pu = store.getComponent(rewardPlayerRef, UUIDComponent.getComponentType());
-            if (pu != null) {
-                GaiaDraughtService.unlockAndFill(town, pu.getUuid());
-                tm.updateTown(town);
-                // Grant on the next world tick so inventory sync cannot stall dialogue UI on the same frame.
-                world.execute(() -> {
-                    if (!rewardPlayerRef.isValid()) {
-                        return;
-                    }
-                    Store<EntityStore> liveStore = rewardPlayerRef.getStore();
-                    TownRecord liveTown = tm.findTownForPlayerInWorld(pu.getUuid());
-                    if (liveTown != null) {
-                        GaiaDraughtService.ensureDraughtStacksOrGrantFirst(rewardPlayerRef, liveStore, liveTown, pu.getUuid());
-                        tm.updateTown(liveTown);
-                    }
-                });
-            }
+            world.execute(() -> {
+                if (!rewardPlayerRef.isValid()) {
+                    return;
+                }
+                Store<EntityStore> liveStore = rewardPlayerRef.getStore();
+                Player player = liveStore.getComponent(rewardPlayerRef, Player.getComponentType());
+                if (player != null) {
+                    player.giveItem(GaiaDraughtMetadata.createFreshStack(true), rewardPlayerRef, liveStore);
+                }
+            });
         }
         tm.updateTown(town);
         if (guardPromoteUuid != null && store != null) {
@@ -934,25 +929,20 @@ public final class DialogueActionExecutor {
         @Nonnull Store<EntityStore> store,
         @Nullable Ref<EntityStore> npcRef
     ) {
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.REFILL
+        );
+        if (inv == null || target == null) {
             return;
         }
-        World world = store.getExternalData().getWorld();
-        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
+        ItemStack prev = inv.getItemStack(target.slot());
+        if (prev == null || prev.isEmpty()) {
             return;
         }
-        TownManager tm = owningTownManager(town, localTm);
-        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
-        if (!s.isUnlocked()) {
-            return;
-        }
-        GaiaDraughtService.refillToCapacity(town, pu.getUuid());
-        tm.updateTown(town);
-        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+        ItemStack next = GaiaDraughtMetadata.refillToCapacity(target.stack());
+        GaiaDraughtService.replaceStackInCombinedSlot(inv, target.slot(), prev, next);
     }
 
     private static void gaiaDraughtUpgradeShard(
@@ -971,13 +961,19 @@ public final class DialogueActionExecutor {
         if (town == null || pu == null) {
             return;
         }
-        TownManager tm = owningTownManager(town, localTm);
-        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.SHARD_UPGRADE
+        );
+        if (inv == null || target == null) {
+            return;
+        }
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
         if (!s.canApplyShardUpgrade()) {
             return;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null || !GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_SHARD_OF_GAIA, 1)) {
+        if (!GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_SHARD_OF_GAIA, 1)) {
             return;
         }
         boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
@@ -991,11 +987,15 @@ public final class DialogueActionExecutor {
         if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
             return;
         }
-        if (!GaiaDraughtService.tryApplyShardCapacityUpgrade(s)) {
+        ItemStack prev = inv.getItemStack(target.slot());
+        if (prev == null || prev.isEmpty()) {
             return;
         }
-        tm.updateTown(town);
-        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+        ItemStack next = GaiaDraughtMetadata.tryApplyShardUpgrade(target.stack());
+        if (next == prev) {
+            return;
+        }
+        GaiaDraughtService.replaceStackInCombinedSlot(inv, target.slot(), prev, next);
         UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_WORKBENCH_UPGRADE_COMPLETE);
     }
 
@@ -1015,13 +1015,19 @@ public final class DialogueActionExecutor {
         if (town == null || pu == null) {
             return;
         }
-        TownManager tm = owningTownManager(town, localTm);
-        GaiaDraughtState s = GaiaDraughtService.getOrCreate(town, pu.getUuid());
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.CATALYST_UPGRADE
+        );
+        if (inv == null || target == null) {
+            return;
+        }
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
         if (!s.canApplyCatalystUpgrade()) {
             return;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
-        if (inv == null || !GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_VERDANT_CATALYST, 1)) {
+        if (!GaiaDraughtService.hasItem(inv, AetherhavenConstants.ITEM_VERDANT_CATALYST, 1)) {
             return;
         }
         boolean allowTreasury = town.playerCanSpendTreasuryGold(pu.getUuid());
@@ -1035,11 +1041,15 @@ public final class DialogueActionExecutor {
         if (!GoldCoinPayment.trySpend(town, inv, cost, allowTreasury)) {
             return;
         }
-        if (!GaiaDraughtService.tryApplyCatalystHealTierUpgrade(s)) {
+        ItemStack prev = inv.getItemStack(target.slot());
+        if (prev == null || prev.isEmpty()) {
             return;
         }
-        tm.updateTown(town);
-        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, s);
+        ItemStack next = GaiaDraughtMetadata.tryApplyCatalystUpgrade(target.stack());
+        if (next == prev) {
+            return;
+        }
+        GaiaDraughtService.replaceStackInCombinedSlot(inv, target.slot(), prev, next);
         UiSoundEffects.play2dUi(playerRef, store, AetherhavenConstants.SFX_WORKBENCH_UPGRADE_COMPLETE);
     }
 

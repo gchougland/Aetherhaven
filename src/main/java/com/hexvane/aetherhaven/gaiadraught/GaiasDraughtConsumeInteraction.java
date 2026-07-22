@@ -3,10 +3,6 @@ package com.hexvane.aetherhaven.gaiadraught;
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.SubpluginInteractionGuard;
-import com.hexvane.aetherhaven.AetherhavenPlugin;
-import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
-import com.hexvane.aetherhaven.town.TownRecord;
-import com.hexvane.aetherhaven.town.TownManager;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -16,26 +12,24 @@ import com.hypixel.hytale.protocol.SoundCategory;
 import com.hypixel.hytale.protocol.WaitForDataFrom;
 import com.hypixel.hytale.server.core.asset.type.soundevent.config.SoundEvent;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
 import com.hypixel.hytale.server.core.universe.world.SoundUtil;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import javax.annotation.Nonnull;
 
 /**
- * Runs at the end of the potion-style {@code Charging} chain (secondary use): consumes one town charge, applies heal
- * tier, mirrors stack durability, plays consumed SFX. Charging + item {@code Consume} animation is handled by JSON.
+ * Runs at the end of the potion-style {@code Charging} chain (secondary use): consumes one charge from the held flask,
+ * applies heal tier, plays consumed SFX. Charging + item {@code Consume} animation is handled by JSON.
  */
 public final class GaiasDraughtConsumeInteraction extends SimpleInstantInteraction {
     @Nonnull
     public static final com.hypixel.hytale.codec.builder.BuilderCodec<GaiasDraughtConsumeInteraction> CODEC =
         com.hypixel.hytale.codec.builder.BuilderCodec
             .builder(GaiasDraughtConsumeInteraction.class, GaiasDraughtConsumeInteraction::new, SimpleInstantInteraction.CODEC)
-            .documentation("After drink animation: consume one Gaia's Draught charge from town data and apply heal.")
+            .documentation("After drink animation: consume one Gaia's Draught charge from the held stack and apply heal.")
             .build();
 
     @Nonnull
@@ -75,40 +69,19 @@ public final class GaiasDraughtConsumeInteraction extends SimpleInstantInteracti
             context.getState().state = InteractionState.Failed;
             return;
         }
-        Store<EntityStore> store = commandBuffer.getStore();
-        UUIDComponent uc = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (uc == null) {
+        ItemStack initialized = GaiaDraughtMetadata.ensureInitialized(inHand);
+        if (GaiaDraughtMetadata.getCharges(initialized) <= 0) {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
-        if (plugin == null) {
+        int healTier = GaiaDraughtMetadata.getHealTier(initialized);
+        ItemStack after = GaiaDraughtMetadata.withChargeConsumed(initialized);
+        if (!GaiaDraughtService.replaceDraughtInMainHand(playerRef, commandBuffer, inHand, after)) {
             context.getState().state = InteractionState.Failed;
             return;
         }
-        World world = store.getExternalData().getWorld();
-        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-        if (town == null) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        GaiaDraughtState st = town.getOrCreateGaiaDraughtState(uc.getUuid());
-        if (!st.isUnlocked() || st.getCharges() <= 0) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, st);
-        if (!GaiaDraughtService.tryConsumeOneCharge(town, uc.getUuid())) {
-            context.getState().state = InteractionState.Failed;
-            return;
-        }
-        tm.updateTown(town);
-        st = town.getOrCreateGaiaDraughtState(uc.getUuid());
-        GaiaDraughtService.applyDraughtHeal(playerRef, commandBuffer, st.getHealTier());
-        GaiaDraughtService.syncDraughtStacksInInventory(playerRef, store, st);
-        GaiaDraughtAmmoHudSupport.syncHeldDraughtAmmoHud(commandBuffer, playerRef, town, uc.getUuid());
-        playConsumedSound(playerRef, store);
+        GaiaDraughtService.applyDraughtHeal(playerRef, commandBuffer, healTier);
+        playConsumedSound(playerRef, commandBuffer.getStore());
     }
 
     private static void playConsumedSound(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {

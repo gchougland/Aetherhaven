@@ -2116,6 +2116,11 @@ public final class TownRecord {
         townSharedCraftRecipeItemIds.add(recipeItemId.trim());
     }
 
+    public boolean sharesCraftRecipeItem(@Nonnull String recipeItemId) {
+        migrateSharedRecipeUnlockFieldsIfNeeded();
+        return townSharedCraftRecipeItemIds.contains(recipeItemId.trim());
+    }
+
     public void queuePendingCraftRecipeUnlock(@Nonnull UUID playerUuid, @Nonnull String recipeItemId) {
         migrateSharedRecipeUnlockFieldsIfNeeded();
         String key = playerUuid.toString();

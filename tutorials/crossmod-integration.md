@@ -270,6 +270,47 @@ Add quest JSON under `Server/Aetherhaven/Quests/`. Same quest `id` overrides. Yo
 
 For an inn visitor shop arc, grant the shop with `grantPlotTokenConstructionId` or `grantPlotBlueprintConstructionId` matching the villager’s `workConstructionId`. The visitor is promoted when the shop plot completes (with that quest active or completed), not when the quest completes by itself.
 
+### Objective kinds (shop and housing)
+
+Copy **objective `kind` values** from bundled Aetherhaven quests (`subplugin-assets/Quests/Server/Aetherhaven/Quests/`). Do **not** use `"kind": "journal"` for build, assign, or dialogue turn-in steps on shop or housing arcs.
+
+Ordered objectives drive progression: events (plot placed, resident assigned, and so on) advance only the **current** non-journal step. Dialogue `complete_quest` completes the current step only when its kind is `dialogue_turn_in`. Using `journal` for the last step (or for steps before `assign_house_resident`) leaves the quest stuck on an earlier kind even when the player did the work and the turn-in line appears in dialogue.
+
+| Arc | Typical objective sequence |
+| --- | --- |
+| **Shop (plot token)** | `plot_token_received` → `construction_built` (`constructionId` = shop id) → `dialogue_turn_in` |
+| **Shop (blueprint)** | `plot_blueprint_received` → `plot_blueprint_learned` (`constructionId` = shop id) → `construction_built` → `dialogue_turn_in` |
+| **Housing** | `plot_token_received` → `construction_built` (`constructionId`: `plot_house`) → `assign_house_resident` (`npcRoleId` = your role) → `dialogue_turn_in` |
+
+Set `assignNpcRoleId` on housing quests to the villager role id. House dialogue turn-in should require `town_quest_active` plus `town_npc_home_resident_house` on the NPC the player is talking to (same pattern as `aetherhaven_blacksmith` / bundled `q_house_*` quests).
+
+Minimal housing quest (match fields to your villager):
+
+```json
+{
+  "id": "q_house_example",
+  "category": "housing",
+  "grantPlotTokenConstructionId": "plot_house",
+  "assignNpcRoleId": "YourMod_Fisherman",
+  "objectives": [
+    { "id": "token", "kind": "plot_token_received", "text": "..." },
+    {
+      "id": "build",
+      "kind": "construction_built",
+      "constructionId": "plot_house",
+      "text": "..."
+    },
+    {
+      "id": "assign",
+      "kind": "assign_house_resident",
+      "npcRoleId": "YourMod_Fisherman",
+      "text": "..."
+    },
+    { "id": "talk", "kind": "dialogue_turn_in", "text": "..." }
+  ]
+}
+```
+
 ## Quest board extensions
 
 Do not copy the full `quest_board.json`. Add a small file under `Server/Aetherhaven/QuestBoardExtensions/`:

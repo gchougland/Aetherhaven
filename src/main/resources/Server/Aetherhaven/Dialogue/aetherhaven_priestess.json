@@ -547,6 +547,11 @@
               },
               {
                 "type": "gaia_draught_charges_below_max"
+              },
+              {
+                "type": "item",
+                "itemId": "Aetherhaven_Gaias_Draught",
+                "count": 1
               }
             ]
           },

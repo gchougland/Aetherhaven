@@ -113,7 +113,8 @@ public final class AetherhavenHudSnapshotService {
                         HudQuestEntry.Source.STORY,
                         questId,
                         storyCatalog.titleMessage(worldQuestId),
-                        storyCatalog.objectivesMessage(worldQuestId, null, store, plugin)
+                        storyCatalog.objectivesMessage(worldQuestId, null, store, plugin),
+                        worldQuestId
                     )
                 );
             } else if (WorldQuestIds.isWorldBoardRow(questId) && worldProgress != null) {
@@ -131,7 +132,7 @@ public final class AetherhavenHudSnapshotService {
                     slot.getDescriptionLangKey() != null && !slot.getDescriptionLangKey().isBlank()
                         ? Message.translation(slot.getDescriptionLangKey())
                         : Message.raw("");
-                entries.add(new HudQuestEntry(HudQuestEntry.Source.QUEST_BOARD, questId, title, objective));
+                entries.add(new HudQuestEntry(HudQuestEntry.Source.QUEST_BOARD, questId, title, objective, slot.instanceIdOrEmpty()));
             } else if (town != null && QuestBoardService.isBoardJournalRow(questId)) {
                 String instanceId = QuestBoardService.parseJournalInstanceId(questId);
                 QuestBoardSlotRecord slot =
@@ -144,7 +145,8 @@ public final class AetherhavenHudSnapshotService {
                         HudQuestEntry.Source.QUEST_BOARD,
                         questId,
                         QuestBoardService.displayTitle(slot, town, store, boardCatalog),
-                        QuestBoardService.objectivesText(slot, town, store, boardCatalog)
+                        QuestBoardService.objectivesText(slot, town, store, boardCatalog),
+                        QuestBoardService.hudProgressKey(slot)
                     )
                 );
             } else if (town != null && activeStory.contains(questId)) {
@@ -153,7 +155,8 @@ public final class AetherhavenHudSnapshotService {
                         HudQuestEntry.Source.STORY,
                         questId,
                         storyCatalog.journalTitle(questId, town, store, plugin),
-                        storyCatalog.currentObjectiveMessage(questId, town, store, plugin)
+                        storyCatalog.currentObjectiveMessage(questId, town, store, plugin),
+                        storyCatalog.hudPinnedObjectiveKey(questId, town, plugin)
                     )
                 );
             }

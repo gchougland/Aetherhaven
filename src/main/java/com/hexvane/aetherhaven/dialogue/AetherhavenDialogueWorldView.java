@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.ui.GuardRoleLabels;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
@@ -376,51 +377,50 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
         TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
+        if (town == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        return s != null && s.isUnlocked();
+        if (townQuestCompleted(playerRef, store, AetherhavenConstants.QUEST_PRIESTESS_GAIA_DRAUGHT)) {
+            return true;
+        }
+        if (town.sharesCraftRecipeItem(AetherhavenConstants.ITEM_GAIAS_DRAUGHT)) {
+            return true;
+        }
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        return GaiaDraughtMetadata.hasAnyDraught(inv);
     }
 
     @Override
     public boolean gaiaDraughtChargesBelowCapacity(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
-        TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
+        if (townFor(playerRef, store) == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        return s != null && s.isUnlocked() && s.getCharges() < s.getCapacity();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        return GaiaDraughtMetadata.selectServiceTarget(inv, GaiaDraughtMetadata.ServiceKind.REFILL) != null;
     }
 
     @Override
     public boolean gaiaDraughtCapacityBelowMax(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
-        TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
+        if (townFor(playerRef, store) == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        return s != null && s.isUnlocked() && s.canApplyShardUpgrade();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        return GaiaDraughtMetadata.selectServiceTarget(inv, GaiaDraughtMetadata.ServiceKind.SHARD_UPGRADE) != null;
     }
 
     @Override
     public boolean gaiaDraughtHealTierBelowMax(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
-        TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
+        if (townFor(playerRef, store) == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        return s != null && s.isUnlocked() && s.canApplyCatalystUpgrade();
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        return GaiaDraughtMetadata.selectServiceTarget(inv, GaiaDraughtMetadata.ServiceKind.CATALYST_UPGRADE) != null;
     }
 
     @Override
@@ -432,11 +432,18 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (town == null || pu == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        if (s == null || !s.isUnlocked() || !s.canApplyShardUpgrade()) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.SHARD_UPGRADE
+        );
+        if (target == null) {
             return false;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
+        if (!s.canApplyShardUpgrade()) {
+            return false;
+        }
         if (inv == null) {
             return false;
         }
@@ -453,11 +460,18 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         if (town == null || pu == null) {
             return false;
         }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        if (s == null || !s.isUnlocked() || !s.canApplyCatalystUpgrade()) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.CATALYST_UPGRADE
+        );
+        if (target == null) {
             return false;
         }
-        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
+        if (!s.canApplyCatalystUpgrade()) {
+            return false;
+        }
         if (inv == null) {
             return false;
         }
@@ -469,15 +483,15 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     public long nextGaiaDraughtShardUpgradeGoldCost(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
-        TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
-            return 0L;
-        }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        if (s == null) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.SHARD_UPGRADE
+        );
+        if (target == null) {
             return AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(0);
         }
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
         s.ensureLegacyMigrated();
         return AetherhavenConstants.gaiaDraughtShardUpgradeGoldCost(s.getShardUpgradeCount());
     }
@@ -486,15 +500,15 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
     public long nextGaiaDraughtCatalystUpgradeGoldCost(
         @Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef
     ) {
-        TownRecord town = townFor(playerRef, store);
-        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
-        if (town == null || pu == null) {
-            return 0L;
-        }
-        GaiaDraughtState s = town.findGaiaDraughtState(pu.getUuid());
-        if (s == null) {
+        CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.EVERYTHING);
+        GaiaDraughtMetadata.ServiceTarget target = GaiaDraughtMetadata.selectServiceTarget(
+            inv,
+            GaiaDraughtMetadata.ServiceKind.CATALYST_UPGRADE
+        );
+        if (target == null) {
             return AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(0);
         }
+        GaiaDraughtState s = GaiaDraughtMetadata.readProgress(target.stack());
         s.ensureLegacyMigrated();
         return AetherhavenConstants.gaiaDraughtCatalystUpgradeGoldCost(s.getCatalystUpgradeCount());
     }

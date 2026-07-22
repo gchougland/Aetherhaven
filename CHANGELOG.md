@@ -8,6 +8,7 @@
 - **Tourist portal visitor list** — On the tourist portal town records shelf, the Plot tab lists who is visiting town right now, with a short note for day visitors, invited guests, or people who already live there. **Send visitors home** clears out day visitors for your town only, the same idea as the tourist purge command. Invited guests, housed residents, and guards are left alone.
 - **Visitor portal network** — Stepping onto a visitor portal opens a list of every active portal in your world. Each entry shows the town name, who owns it, and whether visitors are welcome. Travel to another town in one click, or turn off **Allow visitors to teleport here** on the portal shelf or in the travel window so strangers cannot jump into your town. Each town can pick a **portal color** from preset swatches (tints the travel icon in the list and on the map border for other towns).
 - **Loot chest plot blueprints** — World chest bonus rolls can add a random plot blueprint page (same unlock item as quests). Default chance is 30% per eligible chest (`LootChest.PlotBlueprint.Chance`). Bonuses also run the first time you open a chest if chunk-load injection missed it.
+- **Serah's draught quest** — *Roads Under The Dead* now finishes when you report back to the priestess at the Gaia altar after your hunt, before you receive Gaia's Draught and the crafting recipe.
 
 ### Changed
 
@@ -18,6 +19,7 @@
 - **Patrol wand on screen help** — While you hold the patrol wand, the panel now matches the path designer shovel: **Build** and **Assign** tabs at the top, a short summary of what each mode does, and a clear list of which keys do what (add points, save a route, pick a guard, switch modes, and so on).
 - **Town charter look** — The town charter uses a dedicated tall sign model and texture (about four blocks high on a 1×1 footprint) with a custom collision shape and inventory icon, instead of the old village tombstone.
 - **Plot crafting building details** — Variant entries show a **Counts as for construction** line with the display names of the canonical buildings they satisfy (not raw construction ids).
+- **Gaia's Draught** — Each flask keeps its own charges and upgrades, so you can store or trade them without losing progress. She can refill your flask or apply shard and catalyst upgrades to the one in your inventory. Remaining uses show on the usual durability bar.
 
 ### Fixed
 
@@ -28,6 +30,7 @@
 - **Guards on patrol routes** — Guards assigned to a patrol route now fight hostile creatures they notice, the same as unassigned guards. They drop the patrol to deal with the threat, then resume walking the route when the fight is over. If an enemy pulls them too far from the route (about twenty blocks), they stop chasing and head back to their patrol.
 - **Shop spot HUD** — The “no worker assigned” closed state now resolves its translation instead of showing a raw language key.
 - **Multi-role workplace assignment** — Variant plots that count as more than one building type (for example a community stall that counts as both merchant shop and flower shop) now list the correct villagers when you assign each role, instead of reusing the first role’s list.
+- **Roads Under The Dead HUD** — The pinned quest tracker now updates your undead kill count as you fight, and shows when it is time to return to Serah.
 
 ## [2.4.1] - 7/20/26
 

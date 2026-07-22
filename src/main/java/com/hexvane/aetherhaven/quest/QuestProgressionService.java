@@ -109,11 +109,18 @@ public final class QuestProgressionService {
         @Nonnull String questId
     ) {
         for (QuestObjective objective : def.objectivesOrEmpty()) {
+            if (isJournalObjective(objective)) {
+                continue;
+            }
             if (!isObjectiveComplete(town, questId, objective)) {
                 return objective;
             }
         }
         return null;
+    }
+
+    static boolean isJournalObjective(@Nonnull QuestObjective objective) {
+        return isKind(objective, "journal");
     }
 
     public static boolean allObjectivesComplete(

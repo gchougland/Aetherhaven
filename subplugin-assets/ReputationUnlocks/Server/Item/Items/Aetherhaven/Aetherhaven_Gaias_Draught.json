@@ -23,20 +23,16 @@
     "KnowledgeRequired": true,
     "Input": [
       {
-        "ResourceTypeId": "Crystal_Shards",
-        "Quantity": 6
-      },
-      {
-        "ItemId": "Ingredient_Bar_Gold",
-        "Quantity": 2
-      },
-      {
-        "ItemId": "Rock_Gem_Topaz",
+        "ItemId": "Aetherhaven_Shard_Of_Gaia",
         "Quantity": 1
       },
       {
-        "ItemId": "Ingredient_Life_Essence",
-        "Quantity": 3
+        "ItemId": "Aetherhaven_Verdant_Catalyst",
+        "Quantity": 1
+      },
+      {
+        "ItemId": "Ingredient_Bar_Gold",
+        "Quantity": 8
       }
     ],
     "BenchRequirement": [
@@ -109,14 +105,11 @@
   },
   "Icon": "Icons/ItemsGenerated/Aetherhaven_Gaias_Draught.png",
   "MaxStack": 1,
-  "MaxDurability": 6,
+  "MaxDurability": 1,
   "DurabilityLossOnDeath": false,
   "Quality": "Legendary",
   "Set": "Aetherhaven",
   "Consumable": true,
-  "DisplayEntityStatsHUD": [
-    "Ammo"
-  ],
   "Tags": {
     "Type": [
       "Potion"

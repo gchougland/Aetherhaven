@@ -9,7 +9,8 @@ public record HudQuestEntry(
     @Nonnull Source source,
     @Nonnull String id,
     @Nonnull Message title,
-    @Nonnull Message objectives
+    @Nonnull Message objectives,
+    @Nonnull String progressKey
 ) {
     public enum Source {
         STORY,
@@ -25,6 +26,6 @@ public record HudQuestEntry(
             + '\u0000'
             + Objects.toString(title.getAnsiMessage(), "")
             + '\u0000'
-            + Objects.toString(objectives.getAnsiMessage(), "");
+            + progressKey;
     }
 }

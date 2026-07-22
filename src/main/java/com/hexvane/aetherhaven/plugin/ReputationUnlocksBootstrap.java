@@ -5,9 +5,9 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtCraftSystem;
-import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryChangeSystem;
-import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventorySyncSystem;
+import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtInventoryNormalizeSystem;
 import com.hexvane.aetherhaven.gaiadraught.GaiasDraughtConsumeInteraction;
+import com.hexvane.aetherhaven.gaiadraught.PendingCraftRecipeUnlockTickSystem;
 import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.growthserum.GrowthSerumUseInteraction;
 import com.hexvane.aetherhaven.huntingknife.HuntingKnifeBonusDropSystem;
@@ -99,11 +99,9 @@ public final class ReputationUnlocksBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new PurificationPowderVisualizationSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new PurificationPowderPlayerRemoveSystem());
         plugin.getEntityStoreRegistry().registerSystem(new HuntingKnifeBonusDropSystem());
-        GaiaDraughtCraftSystem gaiaDraughtCraftSystem = new GaiaDraughtCraftSystem(core);
-        plugin.getEntityStoreRegistry().registerSystem(gaiaDraughtCraftSystem);
-        plugin.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem.Pre(gaiaDraughtCraftSystem));
-        plugin.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventoryChangeSystem());
-        plugin.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventorySyncSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new GaiaDraughtCraftSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new GaiaDraughtInventoryNormalizeSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new PendingCraftRecipeUnlockTickSystem(core));
     }
 
     @Nonnull

@@ -47,7 +47,8 @@ final class AetherhavenHudSupportTest {
             HudQuestEntry.Source.STORY,
             "short",
             com.hypixel.hytale.server.core.Message.raw("A short title"),
-            com.hypixel.hytale.server.core.Message.raw("One goal")
+            com.hypixel.hytale.server.core.Message.raw("One goal"),
+            "short:open"
         );
         HudQuestEntry longQuest = new HudQuestEntry(
             HudQuestEntry.Source.STORY,
@@ -55,7 +56,8 @@ final class AetherhavenHudSupportTest {
             com.hypixel.hytale.server.core.Message.raw("A long quest title that needs enough room to wrap cleanly"),
             com.hypixel.hytale.server.core.Message.raw(
                 "First detailed goal with useful progress\nSecond detailed goal with useful progress\nThird detailed goal"
-            )
+            ),
+            "long:open"
         );
 
         assertEquals(84, AetherhavenHud.questRowHeight(shortQuest));

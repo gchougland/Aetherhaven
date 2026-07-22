@@ -451,8 +451,11 @@ public final class QuestCatalog {
         QuestProgressionService.reconcile(plugin, town, questId);
         QuestDefinition def = get(questId);
         QuestObjective objective = QuestProgressionService.currentObjective(plugin, town, questId);
-        if (def == null || objective == null) {
+        if (def == null) {
             return Message.raw("");
+        }
+        if (objective == null) {
+            return hudObjectiveWhenAllGameplayComplete(questId, def, town, store, plugin);
         }
         String targetName = def.assignByEntity()
             ? QuestAssigneeDisplay.targetName(def, town, store, plugin)
@@ -467,6 +470,92 @@ public final class QuestCatalog {
             out = out.insert(Message.raw(" (" + Math.min(current, required) + "/" + required + ")"));
         }
         return out;
+    }
+
+    /**
+     * Stable key for HUD diffing. {@link Message#getAnsiMessage()} omits dynamic inserts such as kill counters, so
+     * pinned quest rows would otherwise skip UI updates when only progress changes.
+     */
+    @Nonnull
+    public String hudPinnedObjectiveKey(
+        @Nonnull String questId,
+        @Nonnull TownRecord town,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null) {
+            return "";
+        }
+        QuestProgressionService.reconcile(plugin, town, questId);
+        QuestDefinition def = get(questId);
+        if (def == null) {
+            return "";
+        }
+        QuestObjective current = QuestProgressionService.currentObjective(def, town, questId);
+        if (current != null) {
+            return objectiveProgressKey(questId, town, current);
+        }
+        for (QuestObjective objective : def.objectivesOrEmpty()) {
+            if (objective.kind() != null && "entity_kills".equalsIgnoreCase(objective.kind().trim())) {
+                return objectiveProgressKey(questId, town, objective);
+            }
+        }
+        return "complete";
+    }
+
+    @Nonnull
+    private static String objectiveProgressKey(
+        @Nonnull String questId,
+        @Nonnull TownRecord town,
+        @Nonnull QuestObjective objective
+    ) {
+        String id = objective.id() != null ? objective.id().trim() : "";
+        if (objective.kind() != null && "entity_kills".equalsIgnoreCase(objective.kind().trim()) && !id.isEmpty()) {
+            int required = Math.max(1, objective.killCount());
+            int current = town.getQuestKillCount(questId, id);
+            return id + ':' + Math.min(current, required) + '/' + required;
+        }
+        if (id.isEmpty()) {
+            return "open";
+        }
+        return id + ':' + (QuestProgressionService.isObjectiveComplete(town, questId, objective) ? "done" : "open");
+    }
+
+    @Nonnull
+    private Message hudObjectiveWhenAllGameplayComplete(
+        @Nonnull String questId,
+        @Nonnull QuestDefinition def,
+        @Nonnull TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        String targetName = def.assignByEntity() && plugin != null
+            ? QuestAssigneeDisplay.targetName(def, town, store, plugin)
+            : null;
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (o.kind() == null || !"entity_kills".equalsIgnoreCase(o.kind().trim())) {
+                continue;
+            }
+            if (o.id() == null || o.id().isBlank()) {
+                continue;
+            }
+            int required = Math.max(1, o.killCount());
+            int current = town.getQuestKillCount(questId, o.id().trim());
+            Message out = objectiveLineMessage(o, targetName);
+            return out.insert(Message.raw(" (" + Math.min(current, required) + "/" + required + ")"));
+        }
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (o.kind() != null && "dialogue_turn_in".equalsIgnoreCase(o.kind().trim())) {
+                if (!QuestProgressionService.isObjectiveComplete(town, questId, o)) {
+                    return objectiveLineMessage(o, targetName);
+                }
+            }
+        }
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (QuestProgressionService.isJournalObjective(o)) {
+                return objectiveLineMessage(o, targetName);
+            }
+        }
+        return Message.raw("");
     }
 
     @Nonnull

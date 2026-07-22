@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.hud.AetherhavenHudRefreshSystem;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.questboard.HuntQuestBoardHandler;
@@ -73,6 +74,7 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
             TownRecord raidTown = tm.getTown(raidBinding.getTownId());
             if (raidTown != null && processBoardRaidKills(victimRef, store, raidTown, victimUuid)) {
                 tm.updateTown(raidTown);
+                AetherhavenHudRefreshSystem.requestRefresh(world);
             }
         }
 
@@ -103,15 +105,14 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
                 continue;
             }
             changed |= QuestProgressionService.reconcile(plugin, town, qid);
-            QuestObjective currentObjective = QuestProgressionService.currentObjective(plugin, town, qid);
             for (QuestObjective obj : def.objectivesOrEmpty()) {
-                if (obj != currentObjective) {
-                    continue;
-                }
                 if (obj.id() == null || obj.kind() == null) {
                     continue;
                 }
                 if (!"entity_kills".equalsIgnoreCase(obj.kind().trim())) {
+                    continue;
+                }
+                if (QuestProgressionService.isObjectiveComplete(town, qid, obj)) {
                     continue;
                 }
                 if (!QuestEntityKillMatcher.matches(victimRef, store, obj)) {
@@ -132,6 +133,7 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
 
         if (changed) {
             tm.updateTown(town);
+            AetherhavenHudRefreshSystem.requestRefresh(world);
         }
     }
 

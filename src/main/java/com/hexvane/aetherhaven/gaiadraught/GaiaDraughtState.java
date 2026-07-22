@@ -4,9 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import javax.annotation.Nonnull;
 
 /**
- * Per player Gaia's Draught progression stored on {@link com.hexvane.aetherhaven.town.TownRecord}. Held flasks mirror
- * {@link #charges} / {@link #capacity} as stack durability (quantity stays 1); the ammo HUD reads the same values from
- * town via {@link GaiaDraughtAmmoHudSupport}.
+ * Gaia's Draught progression rules. Item stacks persist via {@link GaiaDraughtMetadata}; legacy town maps may still
+ * deserialize this type from old saves only.
  */
 public final class GaiaDraughtState {
     /** Base flask uses before any shard upgrades. */
@@ -138,12 +137,27 @@ public final class GaiaDraughtState {
 
     public boolean canApplyShardUpgrade() {
         ensureLegacyMigrated();
-        return unlocked && shardUpgradeCount < MAX_UPGRADES_PER_TYPE && getCapacity() < MAX_FLASK_CAPACITY;
+        return shardUpgradeCount < MAX_UPGRADES_PER_TYPE && getCapacity() < MAX_FLASK_CAPACITY;
     }
 
     public boolean canApplyCatalystUpgrade() {
         ensureLegacyMigrated();
-        return unlocked && catalystUpgradeCount < MAX_UPGRADES_PER_TYPE && getHealTier() < MAX_HEAL_TIER;
+        return catalystUpgradeCount < MAX_UPGRADES_PER_TYPE && getHealTier() < MAX_HEAL_TIER;
+    }
+
+    /** Loads upgrade fields from stack BSON (package use). */
+    static GaiaDraughtState fromStoredUpgrades(int healTier, int shardUpgrades, int catalystUpgrades) {
+        GaiaDraughtState s = createFresh();
+        s.setUnlocked(true);
+        s.shardUpgradeCount = Math.max(0, Math.min(MAX_UPGRADES_PER_TYPE, shardUpgrades));
+        s.catalystUpgradeCount = Math.max(0, Math.min(MAX_UPGRADES_PER_TYPE, catalystUpgrades));
+        s.healTier = Math.min(MAX_HEAL_TIER, Math.max(0, healTier));
+        if (s.catalystUpgradeCount <= 0 && s.healTier > 0) {
+            s.catalystUpgradeCount = Math.min(MAX_UPGRADES_PER_TYPE, s.healTier);
+        }
+        s.capacity = Math.min(MAX_FLASK_CAPACITY, DEFAULT_CAPACITY + s.shardUpgradeCount);
+        s.ensureLegacyMigrated();
+        return s;
     }
 
     public boolean tryApplyShardCapacityUpgrade() {

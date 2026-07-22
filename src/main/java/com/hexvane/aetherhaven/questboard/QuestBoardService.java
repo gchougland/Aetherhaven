@@ -804,4 +804,15 @@ public final class QuestBoardService {
     public static QuestRewardService.ReputationRewardPreview firstReputationReward(@Nonnull QuestBoardSlotRecord slot) {
         return QuestRewardService.firstQuestBoardReputationReward(slot.rewardsOrEmpty());
     }
+
+    @Nonnull
+    public static String hudProgressKey(@Nonnull QuestBoardSlotRecord slot) {
+        if (slot.isHuntQuest()) {
+            return slot.instanceIdOrEmpty() + ":hunt:" + slot.getHuntKillProgress() + '/' + slot.getHuntKillRequired();
+        }
+        if (slot.isRaidQuest()) {
+            return slot.instanceIdOrEmpty() + ":raid:" + slot.getRaidKillProgress() + '/' + slot.getRaidKillRequired();
+        }
+        return slot.instanceIdOrEmpty();
+    }
 }
