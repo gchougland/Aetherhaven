@@ -45,9 +45,8 @@ public final class LootChestPlotTokenConfig {
     @Nonnull
     private static String defaultNote() {
         return
-            "0..1 chance to add a single token into a free slot. Disabled when Chance is 0 or ItemId is empty."
-                + " Configure the real plot token id when the item is added to your data."
-                + " (Independent of jewelry and gold bonus rolls.)";
+            "Legacy plot token item roll (disabled by default). Plot blueprint pages are rolled via LootChest.PlotBlueprint."
+                + " Tokens are not injected into world loot chests anymore.";
     }
 
     public double getChance() {

@@ -32,7 +32,7 @@ public final class LootChestConfig {
                 o -> o.blockIdSubstrings
             )
             .documentation(
-                "Optional include filter: if non-blank, block type id must contain one substring. If blank, all item containers get bonuses."
+                "Optional extra filter on block type id (substring match). Bonuses only run on world loot chests that spawned with a Droplist; player-placed chests are never tagged."
             )
             .add()
             .append(
@@ -69,6 +69,12 @@ public final class LootChestConfig {
             )
             .add()
             .append(
+                new KeyedCodec<>("PlotBlueprint", LootChestPlotBlueprintConfig.CODEC),
+                (o, v) -> o.plotBlueprint = v != null ? v : new LootChestPlotBlueprintConfig(),
+                o -> o.plotBlueprint
+            )
+            .add()
+            .append(
                 new KeyedCodec<>("GaiaDraughtBonuses", LootChestGaiaDraughtBonusConfig.CODEC),
                 (o, v) -> o.gaiaDraughtBonuses = v != null ? v : new LootChestGaiaDraughtBonusConfig(),
                 o -> o.gaiaDraughtBonuses
@@ -90,6 +96,8 @@ public final class LootChestConfig {
     @Nonnull
     private LootChestPlotTokenConfig plotToken = new LootChestPlotTokenConfig();
     @Nonnull
+    private LootChestPlotBlueprintConfig plotBlueprint = new LootChestPlotBlueprintConfig();
+    @Nonnull
     private LootChestGaiaDraughtBonusConfig gaiaDraughtBonuses = new LootChestGaiaDraughtBonusConfig();
 
     public LootChestConfig() {}
@@ -97,9 +105,9 @@ public final class LootChestConfig {
     @Nonnull
     private static String defaultNote() {
         return
-            "World-load injection: leave BlockIdSubstrings empty to target every item-container block. Gold defaults to chance 1.0 so coins almost always show when there is room."
-                + " JewelryChance default 0.2 (20% per eligible chest)."
-                + " Use ExcludeBlockIdSubstrings to opt out a few block ids. ApplyInCreative: enable for testing in Creative."
+            "Bonus rolls apply only to dungeon/world chests (block entities that spawn with a Droplist). Player-placed storage is ignored."
+                + " BlockIdSubstrings optionally narrows by block type id. Gold defaults to chance 1.0 when there is room."
+                + " JewelryChance default 0.2. Use ExcludeBlockIdSubstrings to skip specific block ids. ApplyInCreative for testing."
                 + " (Built-in /droplist only simulates ItemDropList assets, not this injection.)";
     }
 
@@ -138,6 +146,11 @@ public final class LootChestConfig {
     @Nonnull
     public LootChestPlotTokenConfig getPlotToken() {
         return plotToken != null ? plotToken : new LootChestPlotTokenConfig();
+    }
+
+    @Nonnull
+    public LootChestPlotBlueprintConfig getPlotBlueprint() {
+        return plotBlueprint != null ? plotBlueprint : new LootChestPlotBlueprintConfig();
     }
 
     @Nonnull

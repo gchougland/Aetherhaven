@@ -1,11 +1,20 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot;
+import com.hexvane.aetherhaven.world.WorldZoneIndex;
+import com.hypixel.hytale.builtin.adventure.stash.StashGameplayConfig;
+import com.hypixel.hytale.builtin.adventure.stash.StashPlugin;
+import com.hypixel.hytale.component.ComponentType;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.server.core.asset.type.item.config.Item;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
 import com.hypixel.hytale.component.Store;
@@ -26,13 +35,14 @@ public final class LootChestBonusApplier {
         @Nonnull ItemContainerBlock c,
         @Nonnull AetherhavenPluginConfig cfg,
         @Nonnull ThreadLocalRandom rnd,
+        int adventureZoneIndex,
         boolean force
     ) {
         SimpleItemContainer inv = c.getItemContainer();
         if (inv == null) {
             return;
         }
-        if (tryInjectJewelryToContainer(inv, cfg, rnd, force)) {
+        if (tryInjectJewelryToContainer(inv, cfg, rnd, adventureZoneIndex, force)) {
             state.markNeedsSaving(s);
         }
     }
@@ -41,6 +51,7 @@ public final class LootChestBonusApplier {
         @Nonnull SimpleItemContainer inv,
         @Nonnull AetherhavenPluginConfig cfg,
         @Nonnull ThreadLocalRandom rnd,
+        int adventureZoneIndex,
         boolean force
     ) {
         if (!force) {
@@ -55,7 +66,7 @@ public final class LootChestBonusApplier {
         if (slot < 0) {
             return false;
         }
-        ItemStack bonus = JewelryChestLoot.rollForChest(rnd, cfg);
+        ItemStack bonus = JewelryChestLoot.rollForChest(rnd, cfg, adventureZoneIndex);
         if (ItemStack.isEmpty(bonus)) {
             return false;
         }
@@ -185,36 +196,310 @@ public final class LootChestBonusApplier {
         return tx.succeeded();
     }
 
-    public static void applyAll(
+    public static void tryInjectPlotBlueprint(
         @Nonnull Store<ChunkStore> s,
         @Nonnull BlockModule.BlockStateInfo state,
         @Nonnull ItemContainerBlock c,
         @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return;
+        }
+        if (tryInjectPlotBlueprintToContainer(inv, cfg, catalog, rnd, force)) {
+            state.markNeedsSaving(s);
+        }
+    }
+
+    public static boolean tryInjectPlotBlueprintToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        if (!force) {
+            if (cfg.getLootChestPlotBlueprintChance() <= 0.0) {
+                return false;
+            }
+            if (rnd.nextDouble() >= cfg.getLootChestPlotBlueprintChance()) {
+                return false;
+            }
+        }
+        if (!LootChestSupplementalLoot.canRollPlotBlueprint(catalog)) {
+            return false;
+        }
+        ItemStack stack = LootChestPlotBlueprintLoot.roll(catalog, rnd);
+        if (stack == null || ItemStack.isEmpty(stack)) {
+            return false;
+        }
+        short slot = randomEmptySlot(inv, rnd);
+        if (slot < 0) {
+            return false;
+        }
+        ItemStackSlotTransaction tx = inv.addItemStackToSlot(slot, stack);
+        return tx.succeeded();
+    }
+
+    public static void applyAll(
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull World world,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog catalog,
         @Nonnull ThreadLocalRandom rnd,
         boolean forceJewelry,
         boolean forceGold,
-        boolean forcePlot
+        boolean forcePlot,
+        boolean forcePlotBlueprint
     ) {
-        tryInjectJewelry(s, state, c, cfg, rnd, forceJewelry);
+        int zone = resolveAdventureZoneIndex(world, s, state);
+        tryInjectJewelry(s, state, c, cfg, rnd, zone, forceJewelry);
         tryInjectGoldCoins(s, state, c, cfg, rnd, forceGold);
-        tryInjectPlotToken(s, state, c, cfg, rnd, forcePlot);
+        tryInjectPlotBlueprint(s, state, c, cfg, catalog, rnd, forcePlotBlueprint);
         tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
+    }
+
+    public static boolean applyCoreBonusesToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        int adventureZoneIndex,
+        boolean forceJewelry,
+        boolean forceGold
+    ) {
+        boolean changed = false;
+        changed |= tryInjectJewelryToContainer(inv, cfg, rnd, adventureZoneIndex, forceJewelry);
+        changed |= tryInjectGoldCoinsToContainer(inv, cfg, rnd, forceGold);
+        return changed;
+    }
+
+    public static boolean applySupplementalBonusesToContainer(
+        @Nonnull SimpleItemContainer inv,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean force
+    ) {
+        boolean changed = false;
+        changed |= tryInjectPlotBlueprintToContainer(inv, cfg, catalog, rnd, force);
+        changed |= tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, force);
+        return changed;
     }
 
     public static boolean applyAllToContainer(
         @Nonnull SimpleItemContainer inv,
         @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ConstructionCatalog catalog,
         @Nonnull ThreadLocalRandom rnd,
+        int adventureZoneIndex,
         boolean forceJewelry,
         boolean forceGold,
-        boolean forcePlot
+        boolean forcePlot,
+        boolean forcePlotBlueprint
+    ) {
+        boolean changed =
+            applySupplementalBonusesToContainer(inv, cfg, catalog, rnd, forcePlotBlueprint || forcePlot);
+        changed |= applyCoreBonusesToContainer(inv, cfg, rnd, adventureZoneIndex, forceJewelry, forceGold);
+        return changed;
+    }
+
+    public static int resolveAdventureZoneIndex(
+        @Nonnull World world,
+        @Nonnull Store<ChunkStore> store,
+        @Nonnull BlockModule.BlockStateInfo bsi
+    ) {
+        LootChestBlockPosition.Coords coords = LootChestBlockPosition.resolve(store, bsi);
+        if (coords == null) {
+            return WorldZoneIndex.UNKNOWN_DEFAULT;
+        }
+        return WorldZoneIndex.resolveAtBlock(world, coords.blockX(), coords.blockZ());
+    }
+
+    /**
+     * Same rolls as natural chests on first open: core + supplemental (config chances, zone-aware gem jewelry).
+     * Ignores block-id filters and does not set {@link LootChestBonusApplied} or supplemental markers.
+     */
+    public static boolean applyWorldChestBonusesDebug(
+        @Nonnull World world,
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd
+    ) {
+        if (c.getDroplist() != null) {
+            StashGameplayConfig sg = StashGameplayConfig.getOrDefault(world.getGameplayConfig());
+            StashPlugin.stash(state, c, sg.isClearContainerDropList());
+        }
+        int zone = resolveAdventureZoneIndex(world, s, state);
+        boolean changed = false;
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv != null) {
+            changed |= syncJewelryInContainerForZone(inv, zone, cfg, rnd);
+            changed |= applySupplementalBonusesToContainer(
+                inv,
+                cfg,
+                plugin.getConstructionCatalog(),
+                rnd,
+                false
+            );
+            changed |= applyCoreBonusesToContainer(
+                inv,
+                cfg,
+                rnd,
+                zone,
+                false,
+                false
+            );
+        }
+        state.markNeedsSaving(s);
+        return changed;
+    }
+
+    /**
+     * Jewelry, gold, and zone sync at chunk load (catalog-independent). Sets {@link LootChestBonusApplied}.
+     */
+    public static boolean applyWorldChestCoreBonusesOnce(
+        @Nonnull World world,
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nullable String blockTypeId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd
+    ) {
+        ComponentType<ChunkStore, LootChestBonusApplied> appliedType = LootChestBonusApplied.getComponentType();
+        if (s.getComponent(blockRef, appliedType) != null) {
+            return false;
+        }
+        if (!LootChestWorldGenerated.isWorldLootChest(s, blockRef)) {
+            return false;
+        }
+        if (!isEligibleForBlockId(blockTypeId, cfg)) {
+            return false;
+        }
+        if (c.getDroplist() != null) {
+            StashGameplayConfig sg = StashGameplayConfig.getOrDefault(world.getGameplayConfig());
+            StashPlugin.stash(state, c, sg.isClearContainerDropList());
+        }
+        int zone = resolveAdventureZoneIndex(world, s, state);
+        boolean changed = false;
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv != null) {
+            changed |= syncJewelryInContainerForZone(inv, zone, cfg, rnd);
+            changed |= applyCoreBonusesToContainer(inv, cfg, rnd, zone, false, false);
+        }
+        s.putComponent(blockRef, appliedType, new LootChestBonusApplied());
+        state.markNeedsSaving(s);
+        return changed;
+    }
+
+    /**
+     * Plot blueprints and Gaia materials for world loot chests. Sets {@link LootChestSupplementalBonusApplied} after rolls are attempted.
+     */
+    public static boolean applyWorldChestSupplementalBonusesOnce(
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd
+    ) {
+        ComponentType<ChunkStore, LootChestSupplementalBonusApplied> supplementalType =
+            LootChestSupplementalBonusApplied.getComponentType();
+        LootChestSupplementalBonusApplied prior = s.getComponent(blockRef, supplementalType);
+        if (prior != null && prior.isCurrentPipeline()) {
+            return false;
+        }
+        if (prior != null) {
+            s.removeComponent(blockRef, supplementalType);
+        }
+        if (!LootChestWorldGenerated.isWorldLootChest(s, blockRef)) {
+            return false;
+        }
+        SimpleItemContainer inv = c.getItemContainer();
+        if (inv == null) {
+            return false;
+        }
+        boolean changed = applySupplementalBonusesToContainer(inv, cfg, plugin.getConstructionCatalog(), rnd, false);
+        s.putComponent(blockRef, supplementalType, new LootChestSupplementalBonusApplied());
+        state.markNeedsSaving(s);
+        return changed;
+    }
+
+    /**
+     * @deprecated Prefer {@link #applyWorldChestCoreBonusesOnce} + {@link #applyWorldChestSupplementalBonusesOnce}.
+     */
+    @Deprecated
+    public static boolean applyWorldChestBonusesOnce(
+        @Nonnull World world,
+        @Nonnull Store<ChunkStore> s,
+        @Nonnull Ref<ChunkStore> blockRef,
+        @Nonnull BlockModule.BlockStateInfo state,
+        @Nonnull ItemContainerBlock c,
+        @Nullable String blockTypeId,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd,
+        boolean forceAllRolls
+    ) {
+        boolean changed = applyWorldChestCoreBonusesOnce(world, s, blockRef, state, c, blockTypeId, plugin, cfg, rnd);
+        if (s.getComponent(blockRef, LootChestBonusApplied.getComponentType()) == null && !forceAllRolls) {
+            return changed;
+        }
+        changed |= applyWorldChestSupplementalBonusesOnce(s, blockRef, state, c, plugin, cfg, rnd);
+        return changed;
+    }
+
+    /** Re-rolls unappraised gem jewelry and fixes common-tier mistakes in zone 4+. */
+    public static boolean syncJewelryInContainerForZone(
+        @Nonnull SimpleItemContainer inv,
+        int adventureZoneIndex,
+        @Nonnull AetherhavenPluginConfig cfg,
+        @Nonnull ThreadLocalRandom rnd
     ) {
         boolean changed = false;
-        changed |= tryInjectJewelryToContainer(inv, cfg, rnd, forceJewelry);
-        changed |= tryInjectGoldCoinsToContainer(inv, cfg, rnd, forceGold);
-        changed |= tryInjectPlotTokenToContainer(inv, cfg, rnd, forcePlot);
-        changed |= tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, false);
+        for (short slot = 0; slot < inv.getCapacity(); slot++) {
+            ItemStack current = inv.getItemStack(slot);
+            if (ItemStack.isEmpty(current) || !JewelryItemIds.isJewelry(current.getItemId())) {
+                continue;
+            }
+            if (!JewelryPieceKind.isEnchanted(current.getItemId())) {
+                continue;
+            }
+            if (!needsLootChestJewelryReroll(current, adventureZoneIndex)) {
+                continue;
+            }
+            ItemStack rolled = JewelryMetadata.rerollLootChestStack(current, rnd, cfg, adventureZoneIndex);
+            if (rolled.equals(current)) {
+                continue;
+            }
+            ItemStackSlotTransaction tx = inv.replaceItemStackInSlot(slot, current, rolled);
+            if (tx.succeeded()) {
+                changed = true;
+            }
+        }
         return changed;
+    }
+
+    public static boolean needsLootChestJewelryReroll(@Nonnull ItemStack stack, int adventureZoneIndex) {
+        if (!JewelryPieceKind.isEnchanted(stack.getItemId())) {
+            return false;
+        }
+        JewelryRarity rarity = JewelryMetadata.readRarity(stack);
+        if (rarity == null) {
+            return true;
+        }
+        return adventureZoneIndex >= WorldZoneIndex.MAX && rarity == JewelryRarity.COMMON;
     }
 
     /**

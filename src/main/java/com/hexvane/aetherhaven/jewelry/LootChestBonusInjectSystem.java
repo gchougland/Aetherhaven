@@ -2,13 +2,11 @@ package com.hexvane.aetherhaven.jewelry;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
-import com.hypixel.hytale.builtin.adventure.stash.StashGameplayConfig;
-import com.hypixel.hytale.builtin.adventure.stash.StashPlugin;
 import com.hypixel.hytale.component.AddReason;
 import com.hypixel.hytale.component.CommandBuffer;
-import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
 import com.hypixel.hytale.component.dependency.Order;
@@ -94,27 +92,56 @@ public final class LootChestBonusInjectSystem extends RefSystem<ChunkStore> {
                     return;
                 }
                 ComponentType<ChunkStore, LootChestWorldLootPending> pendingType = LootChestWorldLootPending.getComponentType();
-                if (s.getComponent(ref, pendingType) == null) {
+                boolean pending = s.getComponent(ref, pendingType) != null;
+                ComponentType<ChunkStore, LootChestWorldGenerated> worldType = LootChestWorldGenerated.getComponentType();
+                if (!LootChestWorldGenerated.isWorldLootChest(s, ref)) {
+                    if (!pending) {
+                        return;
+                    }
+                    s.putComponent(ref, worldType, new LootChestWorldGenerated());
+                }
+                if (s.getComponent(ref, LootChestBonusApplied.getComponentType()) != null) {
+                    if (pending) {
+                        s.removeComponent(ref, pendingType);
+                    }
                     return;
                 }
                 if (world.getWorldConfig().getGameMode() == GameMode.Creative && !cfg.isLootChestApplyInCreative()) {
-                    s.removeComponent(ref, pendingType);
+                    if (pending) {
+                        s.removeComponent(ref, pendingType);
+                    }
                     return;
                 }
                 if (!LootChestBonusApplier.isEligibleForBlockId(blockTypeId, cfg)) {
-                    s.removeComponent(ref, pendingType);
+                    if (pending) {
+                        s.removeComponent(ref, pendingType);
+                    }
                     return;
                 }
-                if (c.getDroplist() != null) {
-                    StashGameplayConfig sg = StashGameplayConfig.getOrDefault(world.getGameplayConfig());
-                    StashPlugin.stash(state, c, sg.isClearContainerDropList());
-                }
                 ThreadLocalRandom rnd = ThreadLocalRandom.current();
-                LootChestBonusApplier.tryInjectJewelry(s, state, c, cfg, rnd, false);
-                LootChestBonusApplier.tryInjectGoldCoins(s, state, c, cfg, rnd, false);
-                LootChestBonusApplier.tryInjectPlotToken(s, state, c, cfg, rnd, false);
-                LootChestBonusApplier.tryInjectGaiaDraughtBonuses(s, state, c, cfg, rnd, false);
-                s.removeComponent(ref, pendingType);
+                LootChestBonusApplier.applyWorldChestSupplementalBonusesOnce(
+                    s,
+                    ref,
+                    state,
+                    c,
+                    this.plugin,
+                    cfg,
+                    rnd
+                );
+                LootChestBonusApplier.applyWorldChestCoreBonusesOnce(
+                    world,
+                    s,
+                    ref,
+                    state,
+                    c,
+                    blockTypeId,
+                    this.plugin,
+                    cfg,
+                    rnd
+                );
+                if (pending) {
+                    s.removeComponent(ref, pendingType);
+                }
             });
     }
 

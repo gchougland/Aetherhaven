@@ -3,8 +3,7 @@ package com.hexvane.aetherhaven.command;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
 import com.hexvane.aetherhaven.jewelry.LootChestBonusApplier;
-import com.hypixel.hytale.builtin.adventure.stash.StashGameplayConfig;
-import com.hypixel.hytale.builtin.adventure.stash.StashPlugin;
+import com.hexvane.aetherhaven.jewelry.LootChestSupplementalLoot;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.util.ChunkUtil;
@@ -15,7 +14,6 @@ import com.hypixel.hytale.server.core.command.system.basecommands.AbstractComman
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
-import com.hypixel.hytale.server.core.inventory.container.SimpleItemContainer;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.chunk.BlockComponentChunk;
@@ -29,9 +27,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Debug: apply the same Aetherhaven chest bonus rolls to the item container the player is looking at (independent of
- * block id filters). Uses {@link TargetUtil#getTargetBlock} and the same block resolution as the built-in stash
- * command (filler / multi-voxel).
+ * Debug: apply the same Aetherhaven chest bonus rolls as world injection (config chances, zone tier from chest
+ * position) to the item container the player is looking at. Ignores {@code LootChest.BlockIdSubstrings} filters.
  */
 public final class AetherhavenLootChestDebugCommand extends AbstractCommandCollection {
     public AetherhavenLootChestDebugCommand() {
@@ -75,20 +72,26 @@ public final class AetherhavenLootChestDebugCommand extends AbstractCommandColle
                 );
                 return;
             }
-            if (target.container().getDroplist() != null) {
-                StashGameplayConfig sg = StashGameplayConfig.getOrDefault(world.getGameplayConfig());
-                StashPlugin.stash(target.stateInfo(), target.container(), sg.isClearContainerDropList());
-            }
             ThreadLocalRandom rnd = ThreadLocalRandom.current();
-            Store<ChunkStore> cs = target.store();
-            BlockModule.BlockStateInfo bsi = target.stateInfo();
-            ItemContainerBlock c = target.container();
-            LootChestBonusApplier.applyAll(cs, bsi, c, cfg, rnd, true, true, true);
-            SimpleItemContainer inv = c.getItemContainer();
-            if (inv != null) {
-                LootChestBonusApplier.tryInjectGaiaDraughtBonusesToContainer(inv, cfg, rnd, true);
-            }
-            playerRef.sendMessage(Message.translation("aetherhaven_quests_portals.aetherhaven.debug.loot.bonusApplied"));
+            boolean changed = LootChestBonusApplier.applyWorldChestBonusesDebug(
+                world,
+                target.store(),
+                target.stateInfo(),
+                target.container(),
+                plugin,
+                cfg,
+                rnd
+            );
+            int pool = com.hexvane.aetherhaven.loot.LootChestPlotBlueprintLoot.listEligibleConstructionIds(
+                plugin.getConstructionCatalog()
+            ).size();
+            boolean ready = LootChestSupplementalLoot.isReadyToRoll(plugin, cfg);
+            playerRef.sendMessage(
+                Message.translation("aetherhaven_quests_portals.aetherhaven.debug.loot.bonusApplied")
+            );
+            playerRef.sendMessage(Message.raw(
+                "[debug-lootchest] supplementalReady=" + ready + " blueprintPool=" + pool + " containerChanged=" + changed
+            ));
         }
     }
 

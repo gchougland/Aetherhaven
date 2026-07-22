@@ -150,6 +150,51 @@ public final class JewelryMetadata {
         return applyRolledTraits(stack, rarity, false, rnd, cfg);
     }
 
+    /** Like {@link #ensureRolled(ItemStack)} but caps rolled tier by adventure zone for world chest injection. */
+    @Nonnull
+    public static ItemStack ensureRolledForLootChest(
+        @Nonnull ItemStack stack,
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull AetherhavenPluginConfig cfg,
+        int adventureZoneIndex
+    ) {
+        if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        BsonDocument root = readRoot(stack);
+        if (root != null && root.containsKey("traits")) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        JewelryGem gem = JewelryGem.fromItemId(stack.getItemId());
+        if (gem == null) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        JewelryRarity rarity = JewelryRarity.rollForAdventureZone(rnd, cfg, adventureZoneIndex);
+        return applyRolledTraits(stack, rarity, false, rnd, cfg);
+    }
+
+    /** Forces a new zone-aware rarity roll (used when fixing chest contents). */
+    @Nonnull
+    public static ItemStack rerollLootChestStack(
+        @Nonnull ItemStack stack,
+        @Nonnull ThreadLocalRandom rnd,
+        @Nonnull AetherhavenPluginConfig cfg,
+        int adventureZoneIndex
+    ) {
+        if (ItemStack.isEmpty(stack) || !JewelryItemIds.isJewelry(stack.getItemId())) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        if (!JewelryPieceKind.isEnchanted(stack.getItemId())) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        JewelryGem gem = JewelryGem.fromItemId(stack.getItemId());
+        if (gem == null) {
+            return syncInstanceDescriptionForTooltip(stack);
+        }
+        JewelryRarity rarity = JewelryRarity.rollForAdventureZone(rnd, cfg, adventureZoneIndex);
+        return applyRolledTraits(stack, rarity, false, rnd, cfg);
+    }
+
     /**
      * Crafts a new jewelry stack: rolls traits for {@code rarity}, marks appraised so the piece needs no further
      * appraisal.

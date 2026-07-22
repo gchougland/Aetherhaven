@@ -7,8 +7,10 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.dependency.Dependency;
-import com.hypixel.hytale.component.dependency.RootDependency;
+import com.hypixel.hytale.component.dependency.Order;
+import com.hypixel.hytale.component.dependency.SystemDependency;
 import com.hypixel.hytale.component.query.Query;
+import com.hypixel.hytale.component.system.ISystem;
 import com.hypixel.hytale.component.system.RefSystem;
 import com.hypixel.hytale.server.core.modules.block.BlockModule;
 import com.hypixel.hytale.server.core.modules.block.components.ItemContainerBlock;
@@ -16,10 +18,21 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
-/** Marks block entities that still have a droplist. */
+/** Marks block entities that still have a droplist (world loot chests), before Stash runs; sets {@link LootChestWorldGenerated}. */
 public final class LootChestWorldLootMarkSystem extends RefSystem<ChunkStore> {
+    private static final Class<? extends ISystem<ChunkStore>> STASH_SYSTEM_CLASS = loadStashSystemClass();
+
+    @SuppressWarnings("unchecked")
+    private static Class<? extends ISystem<ChunkStore>> loadStashSystemClass() {
+        try {
+            return (Class<? extends ISystem<ChunkStore>>) Class.forName("com.hypixel.hytale.builtin.adventure.stash.StashPlugin$StashSystem");
+        } catch (ClassNotFoundException e) {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+
     @Nonnull
-    private final Set<Dependency<ChunkStore>> dependencies = RootDependency.firstSet();
+    private final Set<Dependency<ChunkStore>> dependencies = Set.of(new SystemDependency<>(Order.BEFORE, STASH_SYSTEM_CLASS));
     @Nonnull
     private final ComponentType<ChunkStore, ItemContainerBlock> itemType = ItemContainerBlock.getComponentType();
     @Nonnull
@@ -52,6 +65,8 @@ public final class LootChestWorldLootMarkSystem extends RefSystem<ChunkStore> {
         if (c.getDroplist() == null) {
             return;
         }
+        ComponentType<ChunkStore, LootChestWorldGenerated> worldType = LootChestWorldGenerated.getComponentType();
+        commandBuffer.putComponent(ref, worldType, new LootChestWorldGenerated());
         commandBuffer.putComponent(ref, LootChestWorldLootPending.getComponentType(), new LootChestWorldLootPending());
     }
 

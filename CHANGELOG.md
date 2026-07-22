@@ -7,9 +7,11 @@
 - **Path designer width and style menus** — While placing, moving, or rotating a path, **E** opens a width slider with a sample of how your current style will look across the path. **R** opens a list to pick a saved style instead of cycling blindly.
 - **Tourist portal visitor list** — On the tourist portal town records shelf, the Plot tab lists who is visiting town right now, with a short note for day visitors, invited guests, or people who already live there. **Send visitors home** clears out day visitors for your town only, the same idea as the tourist purge command. Invited guests, housed residents, and guards are left alone.
 - **Visitor portal network** — Stepping onto a visitor portal opens a list of every active portal in your world. Each entry shows the town name, who owns it, and whether visitors are welcome. Travel to another town in one click, or turn off **Allow visitors to teleport here** on the portal shelf or in the travel window so strangers cannot jump into your town. Each town can pick a **portal color** from preset swatches (tints the travel icon in the list and on the map border for other towns).
+- **Loot chest plot blueprints** — World chest bonus rolls can add a random plot blueprint page (same unlock item as quests). Default chance is 30% per eligible chest (`LootChest.PlotBlueprint.Chance`). Bonuses also run the first time you open a chest if chunk-load injection missed it.
 
 ### Changed
 
+- **Loot chest jewelry by adventure zone** — Randomized gem jewelry injected into world chests respects procedural zone tier: zone 1 only common and uncommon; zones 2–3 through epic (mythic); zone 4 has no common rolls and slightly higher rare, epic, and legendary weight. Glow rings (fixed mythic/legendary artifacts) are unchanged and can appear in any zone.
 - **Path designer on-screen help** — While you hold the path designer shovel, mode tabs at the top show Place, Move, Rotate, Remove, Replace filter, and Style designer. **Q** cycles modes in that same order.
 - **Path designer remove preview** — In Remove mode, saved paths show as orange waypoint markers and connecting lines (not a solid block outline), so you can see routes more clearly.
 - **Path width up to nine blocks** — Path width can now go up to nine blocks wide, matching the style designer chest grid.

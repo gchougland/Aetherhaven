@@ -1,12 +1,17 @@
 package com.hexvane.aetherhaven.jewelry;
 
+import com.hexvane.aetherhaven.config.AetherhavenPluginConfig;
+import com.hexvane.aetherhaven.world.WorldZoneIndex;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.inventory.InventoryComponent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.inventory.container.CombinedItemContainer;
 import com.hypixel.hytale.server.core.inventory.transaction.ItemStackSlotTransaction;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,7 +45,7 @@ public final class JewelryInventoryTooltipSync {
                 if (ItemStack.isEmpty(current) || !JewelryItemIds.isJewelry(current.getItemId())) {
                     continue;
                 }
-                ItemStack synced = JewelryMetadata.ensureRolled(current);
+                ItemStack synced = syncJewelryStackForPlayer(current, playerRef, store);
                 if (synced.equals(current)) {
                     continue;
                 }
@@ -67,7 +72,7 @@ public final class JewelryInventoryTooltipSync {
         if (inv == null) {
             return;
         }
-        ItemStack synced = JewelryMetadata.ensureRolled(after);
+        ItemStack synced = syncJewelryStackForPlayer(after, playerRef, store);
         if (synced.equals(after)) {
             return;
         }
@@ -83,5 +88,33 @@ public final class JewelryInventoryTooltipSync {
         } finally {
             SYNCING.set(false);
         }
+    }
+
+    @Nonnull
+    private static ItemStack syncJewelryStackForPlayer(
+        @Nonnull ItemStack stack,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!JewelryPieceKind.isEnchanted(stack.getItemId())) {
+            return JewelryMetadata.ensureRolled(stack);
+        }
+        int zone = resolveAdventureZoneForPlayer(playerRef, store);
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        AetherhavenPluginConfig cfg = JewelryRolling.config();
+        if (LootChestBonusApplier.needsLootChestJewelryReroll(stack, zone)) {
+            return JewelryMetadata.rerollLootChestStack(stack, rnd, cfg, zone);
+        }
+        return JewelryMetadata.ensureRolledForLootChest(stack, rnd, cfg, zone);
+    }
+
+    private static int resolveAdventureZoneForPlayer(@Nonnull Ref<EntityStore> playerRef, @Nonnull Store<EntityStore> store) {
+        World world = store.getExternalData().getWorld();
+        TransformComponent transform = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (transform == null) {
+            return WorldZoneIndex.UNKNOWN_DEFAULT;
+        }
+        var pos = transform.getPosition();
+        return WorldZoneIndex.resolveAtBlock(world, (int) Math.floor(pos.x), (int) Math.floor(pos.z));
     }
 }

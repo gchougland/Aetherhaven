@@ -1164,6 +1164,14 @@ public final class AetherhavenPluginConfig {
         return getLootChest().getPlotToken().getItemId();
     }
 
+    public double getLootChestPlotBlueprintChance() {
+        double v = getLootChest().getPlotBlueprint().getChance();
+        if (v < 0.0) {
+            return 0.0;
+        }
+        return Math.min(v, 1.0);
+    }
+
     public double getLootChestGaiaShardChance() {
         double v = getLootChest().getGaiaDraughtBonuses().getShardChance();
         if (v < 0.0) {
