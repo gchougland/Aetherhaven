@@ -1,0 +1,20 @@
+{
+  "id": "grunk_stonebelly",
+  "displayName": "Grunk Stonebelly",
+  "gender": "male",
+  "race": "trork",
+  "modelAssetId": "Grunk_Stonebelly",
+  "personalityIds": [
+    "trork_stoneheart",
+    "blunt",
+    "grumpy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "low"
+}

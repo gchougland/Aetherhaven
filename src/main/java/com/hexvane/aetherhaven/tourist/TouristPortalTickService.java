@@ -323,7 +323,7 @@ public final class TouristPortalTickService {
         long epochDay
     ) {
         Set<String> exclude = activeCharacterIdsInTown(town, store);
-        String characterId = pickAvailableCharacter(plugin, world, exclude, portal, epochDay);
+        String characterId = pickAvailableCharacter(plugin, world, town, exclude, portal, epochDay);
         if (characterId == null) {
             return false;
         }
@@ -364,7 +364,7 @@ public final class TouristPortalTickService {
         UUID entityUuid = spawned.get().entityUuid();
         Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(entityUuid);
         if (ref == null || !ref.isValid()) {
-            TownsfolkSpawnService.release(world, plugin, characterId);
+            TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
             LOGGER.atWarning().log(
                 "Tourist spawn for %s in town %s produced uuid %s but entity ref is missing",
                 characterId,
@@ -403,7 +403,7 @@ public final class TouristPortalTickService {
         store.putComponent(ref, TouristAutonomyState.getComponentType(), autonomy);
         TouristAutonomySystem.kickInitialVisitOnSpawn(ref, store, plugin, autonomy, town, world);
 
-        TownsfolkExistenceService.purgeDuplicateEntities(world, store, characterId, entityUuid);
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, town.getTownId(), characterId, entityUuid);
         playPortalBurst(world, store, blockPos);
         return true;
     }
@@ -412,13 +412,15 @@ public final class TouristPortalTickService {
     private static String pickAvailableCharacter(
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull World world,
+        @Nonnull TownRecord town,
         @Nonnull Set<String> exclude,
         @Nonnull TouristPortalRecord portal,
         long epochDay
     ) {
         TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        List<String> available = pool.availableCharacterIds(catalog, TownsfolkAssignmentKinds.TOURIST);
+        List<String> available =
+            pool.availableCharacterIds(town.getTownId(), catalog, TownsfolkAssignmentKinds.TOURIST);
         List<String> candidates = new ArrayList<>();
         for (String id : available) {
             if (!exclude.contains(id)) {
@@ -734,7 +736,7 @@ public final class TouristPortalTickService {
         String characterId = rec.getCharacterId();
         if (!rec.isInvitedToStay() && !rec.isCitizen()) {
             if (characterId != null && !characterId.isBlank()) {
-                TownsfolkSpawnService.release(world, plugin, characterId);
+                TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
             }
         }
         UUID portalId = rec.getPortalId();
@@ -798,7 +800,7 @@ public final class TouristPortalTickService {
             }
         }
         if (characterId != null && !characterId.isBlank()) {
-            TownsfolkSpawnService.release(world, plugin, characterId);
+            TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
         }
         tm.updateTown(town);
 
@@ -1108,7 +1110,9 @@ public final class TouristPortalTickService {
                         skippedProtected++;
                     } else if (live.ref() != null && live.ref().isValid()) {
                         store.removeEntity(live.ref(), RemoveReason.REMOVE);
-                        TownsfolkSpawnService.release(world, plugin, characterId);
+                        if (entityUuid != null) {
+                            TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+                        }
                         removed++;
                     }
                     continue;
@@ -1139,7 +1143,7 @@ public final class TouristPortalTickService {
                 }
             } else if (live.ref() != null && live.ref().isValid()) {
                 store.removeEntity(live.ref(), RemoveReason.REMOVE);
-                TownsfolkSpawnService.release(world, plugin, characterId);
+                TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
                 removed++;
                 townChanged = true;
             }
@@ -1194,7 +1198,7 @@ public final class TouristPortalTickService {
         }
         String characterId = rec.getCharacterId();
         if (characterId != null && !characterId.isBlank()) {
-            TownsfolkSpawnService.release(world, plugin, characterId);
+            TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
         }
         return true;
     }
@@ -1297,7 +1301,7 @@ public final class TouristPortalTickService {
                 }
             } else if (live.ref() != null && live.ref().isValid()) {
                 store.removeEntity(live.ref(), RemoveReason.REMOVE);
-                TownsfolkSpawnService.release(world, plugin, characterId);
+                TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
                 removed++;
                 changed = true;
             }
@@ -1408,7 +1412,7 @@ public final class TouristPortalTickService {
         Set<UUID> trackedNpcUuids = buildTrackedNpcUuidsForWorld(tm, world);
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         int[] removed = {0};
-        List<String> releaseCharacterIds = new ArrayList<>();
+        List<UUID> releaseEntityUuids = new ArrayList<>();
         store.forEachChunk(
             Query.and(NPCEntity.getComponentType(), UUIDComponent.getComponentType()),
             (chunk, commandBuffer) -> {
@@ -1418,13 +1422,13 @@ public final class TouristPortalTickService {
                     pool,
                     trackedNpcUuids,
                     processedEntityUuids,
-                    releaseCharacterIds,
+                    releaseEntityUuids,
                     removed
                 );
             }
         );
-        for (String characterId : releaseCharacterIds) {
-            TownsfolkSpawnService.release(world, plugin, characterId);
+        for (UUID entityUuid : releaseEntityUuids) {
+            TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
         }
         return removed[0];
     }
@@ -1435,7 +1439,7 @@ public final class TouristPortalTickService {
         @Nonnull TownsfolkPoolState pool,
         @Nonnull Set<UUID> trackedNpcUuids,
         @Nonnull Set<UUID> processedEntityUuids,
-        @Nonnull List<String> releaseCharacterIds,
+        @Nonnull List<UUID> releaseEntityUuids,
         @Nonnull int[] removed
     ) {
         for (int i = 0; i < chunk.size(); i++) {
@@ -1467,8 +1471,8 @@ public final class TouristPortalTickService {
             }
             commandBuffer.removeEntity(ref, RemoveReason.REMOVE);
             TownsfolkPoolCheckoutRecord checkout = pool.checkoutForEntity(entityUuid);
-            if (checkout != null && checkout.getCharacterId() != null && !checkout.getCharacterId().isBlank()) {
-                releaseCharacterIds.add(checkout.getCharacterId());
+            if (checkout != null) {
+                releaseEntityUuids.add(entityUuid);
             }
             processedEntityUuids.add(entityUuid);
             removed[0]++;

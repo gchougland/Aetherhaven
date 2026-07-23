@@ -1,0 +1,18 @@
+{
+  "id": "skeleton_bonedry",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.skeleton_bonedry.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.skeleton_bonedry.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.skeleton_bonedry.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.skeleton_bonedry.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.skeleton_bonedry.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SIT": 1.15,
+    "FUN": 0.7,
+    "WORK": 0.9
+  },
+  "preferredScheduleLocations": [
+    "home"
+  ]
+}

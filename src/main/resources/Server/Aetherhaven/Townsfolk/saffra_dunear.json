@@ -1,0 +1,20 @@
+{
+  "id": "saffra_dunear",
+  "displayName": "Saffra Dunear",
+  "gender": "female",
+  "race": "feran",
+  "modelAssetId": "Saffra_Dunear",
+  "personalityIds": [
+    "feran_sunseeker",
+    "shy",
+    "bookworm"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue",
+  "speechVoiceId": "soft"
+}

@@ -133,7 +133,8 @@ public final class GuardHireService {
             return false;
         }
 
-        TownsfolkPoolCheckoutRecord checkout = TownsfolkExistenceService.checkoutForCharacter(world, plugin, tb.getCharacterId());
+        TownsfolkPoolCheckoutRecord checkout =
+            TownsfolkExistenceService.checkoutForCharacter(world, plugin, town.getTownId(), tb.getCharacterId());
         if (checkout == null) {
             LOGGER.atWarning().log("Cannot hire %s: missing townsfolk ledger entry", tb.getCharacterId());
             return false;
@@ -200,7 +201,7 @@ public final class GuardHireService {
         }
 
         store.removeEntity(npcRef, RemoveReason.REMOVE);
-        TownsfolkExistenceService.purgeDuplicateEntities(world, store, tb.getCharacterId(), newEntityUuid);
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, town.getTownId(), tb.getCharacterId(), newEntityUuid);
 
         Integer hiredSlot = town.getGuildHallAdventurerSlotByNpcId().get(adventurerUuid.toString());
         town.getGuildHallAdventurerNpcIds().removeIf(s -> adventurerUuid.toString().equalsIgnoreCase(s != null ? s.trim() : ""));

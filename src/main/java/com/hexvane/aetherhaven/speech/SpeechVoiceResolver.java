@@ -39,12 +39,16 @@ public final class SpeechVoiceResolver {
 
         String explicit = explicitVoiceId(npcRef, store, plugin);
         if (explicit != null) {
-            return catalog.requireOrDefault(explicit);
+            return catalog.requireOrDefault(
+                deepenVoiceForMale(explicitGender(npcRef, store, plugin), explicit)
+            );
         }
 
         String fromTownsfolk = townsfolkFallbackVoiceId(npcRef, store, plugin);
         if (fromTownsfolk != null) {
-            return catalog.requireOrDefault(fromTownsfolk);
+            return catalog.requireOrDefault(
+                deepenVoiceForMale(explicitGender(npcRef, store, plugin), fromTownsfolk)
+            );
         }
 
         String roleId = roleId(npcRef, store);
@@ -143,13 +147,10 @@ public final class SpeechVoiceResolver {
         }
 
         String r = race != null ? race.trim().toLowerCase(Locale.ROOT) : "";
-        if (r.contains("goblin")) {
-            sharp += 2;
-            high += 1;
-        } else if (r.contains("dark")) {
-            soft += 1;
-            sharp += 1;
-        } else if (r.contains("elf") || r.contains("sylvian")) {
+        if (menacingRace(r)) {
+            return "low";
+        }
+        if (r.contains("elf") || r.contains("sylvian")) {
             soft += 1;
             high += 1;
         }
@@ -160,16 +161,18 @@ public final class SpeechVoiceResolver {
             high += 1;
             low = Math.max(0, low - 1);
         } else if ("male".equals(g)) {
-            mid += 1;
-            low += 1;
+            mid += 2;
+            low += 3;
+            high = Math.max(0, high - 2);
+            soft = Math.max(0, soft - 2);
         }
 
         String voice = bestVoice(high, low, soft, sharp, mid);
         if ("female".equals(g) && "low".equals(voice) && low < 3) {
             voice = "soft";
         }
-        if ("male".equals(g) && "soft".equals(voice) && soft < 3 && high == 0) {
-            voice = "mid";
+        if ("male".equals(g)) {
+            voice = deepenVoiceForMale(g, voice);
         }
         if (voice.isEmpty()) {
             return hashVoiceId(characterId.isEmpty() ? "mid" : characterId);
@@ -206,5 +209,47 @@ public final class SpeechVoiceResolver {
             return "";
         }
         return npc.getRoleName().trim();
+    }
+
+    /** Townsfolk races that should use the deepest speech profile ({@code low}). */
+    private static boolean menacingRace(@Nonnull String raceLower) {
+        return raceLower.contains("skeleton")
+            || raceLower.contains("trork")
+            || raceLower.contains("outlander")
+            || raceLower.contains("goblin")
+            || raceLower.contains("darkelf");
+    }
+
+    @Nullable
+    private static String explicitGender(
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        if (plugin == null) {
+            return null;
+        }
+        TownsfolkCharacterBinding binding = store.getComponent(npcRef, TownsfolkCharacterBinding.getComponentType());
+        if (binding == null) {
+            return null;
+        }
+        TownsfolkCharacterDefinition character = plugin.getTownsfolkCharacterCatalog().byId(binding.getCharacterId());
+        return character != null ? character.getGender() : null;
+    }
+
+    /**
+     * Nudge male dialogue blips toward lower pitch profiles ({@code sharp}/{@code mid}/{@code low}).
+     * Pitch order: low &lt; sharp &lt; mid &lt; soft &lt; high.
+     */
+    @Nonnull
+    static String deepenVoiceForMale(@Nullable String gender, @Nonnull String voiceId) {
+        if (!"male".equals(gender != null ? gender.trim().toLowerCase(Locale.ROOT) : "")) {
+            return voiceId;
+        }
+        return switch (voiceId.trim().toLowerCase(Locale.ROOT)) {
+            case "high" -> "sharp";
+            case "soft" -> "mid";
+            default -> voiceId;
+        };
     }
 }

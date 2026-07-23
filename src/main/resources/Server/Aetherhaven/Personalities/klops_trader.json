@@ -1,0 +1,18 @@
+{
+  "id": "klops_trader",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.klops_trader.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.klops_trader.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.klops_trader.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.klops_trader.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.klops_trader.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.35,
+    "FUN": 0.9,
+    "SIT": 0.85
+  },
+  "preferredScheduleLocations": [
+    "shop"
+  ]
+}

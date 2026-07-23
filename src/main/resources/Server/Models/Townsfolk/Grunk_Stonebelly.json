@@ -1,0 +1,43 @@
+{
+  "Parent": "Trork",
+  "Texture": "NPC/Intelligent/Trork/Models/Model_Textures/Green.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Eyes/Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Eyes/Eyes_Textures/Orange.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Eyebrows/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Eyebrows/Eyebrows_Textures/Brown.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Chest.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Chest_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Hands.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Hands_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Feet.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Warrior/Feet_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Trork/Models/Attachments/Beards/SingleBraided.blockymodel",
+      "Texture": "NPC/Intelligent/Trork/Models/Attachments/Beards/SingleBraided_Textures/Brown.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Grunk_Stonebelly.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      -8,
+      -124
+    ]
+  }
+}

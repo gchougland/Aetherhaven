@@ -1,0 +1,51 @@
+{
+  "Parent": "Kweebec_Rootling",
+  "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Mouth.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Mouth.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Eyes.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Sapling/Models/Attachments/Cosmetics/Head/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Sapling/Models/Attachments/Cosmetics/Head/Eyebrows_Textures/Kweebec_Female.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Belt_Petalwear.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Belt_Petalwear.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Chest_Petalwear.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Kweebec_Rootling_Chest_Petalwear.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Hair_Flower.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Hair_Flower.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Headband_Sungwood.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Head/Kweebec_Rootling_Headband_Sungwood.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Hand/Kweebec_Rootling_Wristvine.blockymodel",
+      "Texture": "NPC/Intelligent/Kweebec_Rootling/Models/Attachments/Hand/Kweebec_Rootling_Wristvine.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Briar_Mosscap.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
+}

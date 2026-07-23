@@ -1,0 +1,44 @@
+{
+  "Parent": "Feran",
+  "Model": "NPC/Intelligent/Feran/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Feran/Models/Model_Ginger.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyes.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyes_Green_Dark.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Head/Eyebrows_Beige.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Feet.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Feet_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Hands.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Slave_Bracer_Hands_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Poncho.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Poncho_Brown.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Top_Fur.blockymodel",
+      "Texture": "NPC/Intelligent/Feran/Models/Attachments/Cosmetics/Top_Fur_Texture.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Zephyr_Sandtail.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -103
+    ]
+  }
+}

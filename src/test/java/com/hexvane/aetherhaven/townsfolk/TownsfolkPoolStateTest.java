@@ -21,9 +21,22 @@ class TownsfolkPoolStateTest {
         pool.checkout(record("neighbor", otherTown));
 
         assertEquals(2, pool.releaseForTown(dissolvedTown));
-        assertFalse(pool.isCheckedOut("guard"));
-        assertFalse(pool.isCheckedOut("tourist"));
-        assertTrue(pool.isCheckedOut("neighbor"));
+        assertFalse(pool.isCheckedOut(dissolvedTown, "guard"));
+        assertFalse(pool.isCheckedOut(dissolvedTown, "tourist"));
+        assertTrue(pool.isCheckedOut(otherTown, "neighbor"));
+    }
+
+    @Test
+    void sameCharacterIdCanCheckoutInTwoTowns() {
+        UUID townA = UUID.randomUUID();
+        UUID townB = UUID.randomUUID();
+        TownsfolkPoolState pool = new TownsfolkPoolState();
+        pool.checkout(record("shared_id", townA));
+        pool.checkout(record("shared_id", townB));
+
+        assertTrue(pool.isCheckedOut(townA, "shared_id"));
+        assertTrue(pool.isCheckedOut(townB, "shared_id"));
+        assertFalse(pool.isCheckedOut(townA, "other"));
     }
 
     private static TownsfolkPoolCheckoutRecord record(String characterId, UUID townId) {

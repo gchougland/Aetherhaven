@@ -50,10 +50,11 @@ public final class TownsfolkSpawnService {
     public static List<String> availableCharacterIds(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
         @Nonnull String assignmentKind
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        return pool.availableCharacterIds(plugin.getTownsfolkCharacterCatalog(), assignmentKind);
+        return pool.availableCharacterIds(townId, plugin.getTownsfolkCharacterCatalog(), assignmentKind);
     }
 
     @Nonnull
@@ -99,6 +100,7 @@ public final class TownsfolkSpawnService {
         String kind = assignmentKind.trim().toLowerCase();
         TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        UUID townId = town.getTownId();
 
         String characterId;
         if (preferredCharacterId != null && !preferredCharacterId.isBlank()) {
@@ -108,8 +110,8 @@ public final class TownsfolkSpawnService {
                 LOGGER.atWarning().log("Unknown townsfolk character id %s", characterId);
                 return Optional.empty();
             }
-            if (pool.isCheckedOut(characterId)) {
-                LOGGER.atWarning().log("Townsfolk %s already checked out", characterId);
+            if (pool.isCheckedOut(townId, characterId)) {
+                LOGGER.atWarning().log("Townsfolk %s already checked out in town %s", characterId, townId);
                 return Optional.empty();
             }
             if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
@@ -122,15 +124,15 @@ public final class TownsfolkSpawnService {
                 return Optional.empty();
             }
         } else if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
-            characterId = pool.pickRandomGuardEligibleCharacterId(catalog, random);
+            characterId = pool.pickRandomGuardEligibleCharacterId(townId, catalog, random);
             if (characterId == null) {
-                LOGGER.atWarning().log("No guard eligible townsfolk for guild hall in world %s", world.getName());
+                LOGGER.atWarning().log("No guard eligible townsfolk for guild hall in town %s", townId);
                 return Optional.empty();
             }
         } else {
-            characterId = pool.pickRandomAvailableCharacterId(catalog, kind, random);
+            characterId = pool.pickRandomAvailableCharacterId(townId, catalog, kind, random);
             if (characterId == null) {
-                LOGGER.atWarning().log("No available townsfolk for assignment %s in world %s", kind, world.getName());
+                LOGGER.atWarning().log("No available townsfolk for assignment %s in town %s", kind, townId);
                 return Optional.empty();
             }
         }
@@ -331,12 +333,23 @@ public final class TownsfolkSpawnService {
         if (!TownsfolkExistenceService.transferInstanceOnHire(world, plugin, cid, newUuid, town.getTownId())) {
             LOGGER.atFine().log("Respawned townsfolk %s without townsfolk ledger checkout update", cid);
         }
-        TownsfolkExistenceService.purgeDuplicateEntities(world, store, cid, newUuid);
+        TownsfolkExistenceService.purgeDuplicateEntities(world, store, town.getTownId(), cid, newUuid);
         return newUuid;
     }
 
-    public static void release(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull String characterId) {
-        TownsfolkExistenceService.releaseCharacter(world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.DESPAWN);
+    public static void release(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
+        @Nonnull String characterId
+    ) {
+        TownsfolkExistenceService.releaseCharacter(
+            world,
+            plugin,
+            townId,
+            characterId,
+            TownsfolkExistenceService.ReleaseReason.DESPAWN
+        );
     }
 
     public static void releaseByEntity(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull UUID entityUuid) {

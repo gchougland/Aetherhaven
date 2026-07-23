@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
-/** World-scoped ledger for townsfolk character existence (characterId is canonical). */
+/** Per-town ledger for townsfolk character checkouts (one slot per character per town). */
 public final class TownsfolkExistenceService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final double SLOT_OCCUPANCY_RADIUS_SQ = 1.5 * 1.5;
@@ -53,10 +53,11 @@ public final class TownsfolkExistenceService {
     public static boolean isCharacterOccupied(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
         @Nonnull String characterId
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        return pool.isCheckedOut(characterId.trim());
+        return pool.isCheckedOut(townId, characterId.trim());
     }
 
     public static void registerSpawn(
@@ -77,9 +78,9 @@ public final class TownsfolkExistenceService {
         @Nonnull UUID townId
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
+        TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(townId, characterId);
         if (checkout == null) {
-            LOGGER.atWarning().log("Hire transfer failed: no ledger entry for townsfolk %s", characterId);
+            LOGGER.atWarning().log("Hire transfer failed: no ledger entry for townsfolk %s in town %s", characterId, townId);
             return false;
         }
         checkout.setAssignmentKind(TownsfolkAssignmentKinds.GUARD);
@@ -93,13 +94,14 @@ public final class TownsfolkExistenceService {
     public static void releaseCharacter(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
         @Nonnull String characterId,
         @Nonnull ReleaseReason reason
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        if (pool.release(characterId)) {
+        if (pool.release(townId, characterId)) {
             TownsfolkPoolPersistence.save(world, plugin, pool);
-            LOGGER.atFine().log("Released townsfolk %s from ledger (%s)", characterId, reason);
+            LOGGER.atFine().log("Released townsfolk %s from town %s ledger (%s)", characterId, townId, reason);
         }
     }
 
@@ -111,8 +113,11 @@ public final class TownsfolkExistenceService {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         TownsfolkPoolCheckoutRecord rec = pool.checkoutForEntity(entityUuid);
         if (rec != null) {
-            pool.release(rec.getCharacterId());
-            TownsfolkPoolPersistence.save(world, plugin, pool);
+            UUID townId = parseUuid(rec.getTownId());
+            if (townId != null) {
+                pool.release(townId, rec.getCharacterId());
+                TownsfolkPoolPersistence.save(world, plugin, pool);
+            }
         }
     }
 
@@ -134,9 +139,10 @@ public final class TownsfolkExistenceService {
     public static TownsfolkPoolCheckoutRecord checkoutForCharacter(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId,
         @Nonnull String characterId
     ) {
-        return TownsfolkPoolPersistence.getOrLoad(world, plugin).checkoutForCharacter(characterId);
+        return TownsfolkPoolPersistence.getOrLoad(world, plugin).checkoutForCharacter(townId, characterId);
     }
 
     /**
@@ -151,39 +157,44 @@ public final class TownsfolkExistenceService {
         @Nonnull Store<EntityStore> store
     ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-        Map<String, LiveTownsfolkEntity> live = buildLiveIndex(store);
-        List<String> toRelease = new ArrayList<>();
+        List<TownsfolkPoolCheckoutRecord> toRelease = new ArrayList<>();
         for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
             String characterId = rec.getCharacterId();
             if (characterId.isBlank()) {
                 continue;
             }
+            UUID townId = parseUuid(rec.getTownId());
+            if (townId == null) {
+                toRelease.add(rec);
+                continue;
+            }
             if (TownsfolkAssignmentKinds.GUARD.equalsIgnoreCase(rec.getAssignmentKind().trim())) {
                 continue;
             }
-            if (live.containsKey(characterId)) {
-                continue;
-            }
-            // Guild hall roster is respawned from the pool each morning; stale ledger rows must not block picks.
-            if (TownsfolkAssignmentKinds.isGuildHallAdventurer(rec.getAssignmentKind())) {
-                toRelease.add(characterId);
-                continue;
-            }
             UUID ledgerUuid = parseUuid(rec.getEntityUuid());
-            if (ledgerUuid != null) {
-                Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
-                if (ref == null) {
-                    // Entity unloaded in another chunk — keep checkout until reconcile proves absence.
-                    continue;
-                }
-                if (ref.isValid()) {
-                    continue;
-                }
+            if (ledgerUuid == null) {
+                toRelease.add(rec);
+                continue;
             }
-            toRelease.add(characterId);
+            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
+            if (ref != null && ref.isValid()) {
+                continue;
+            }
+            if (TownsfolkAssignmentKinds.isGuildHallAdventurer(rec.getAssignmentKind())) {
+                toRelease.add(rec);
+                continue;
+            }
+            if (ref == null) {
+                // Entity unloaded in another chunk — keep checkout until reconcile proves absence.
+                continue;
+            }
+            toRelease.add(rec);
         }
-        for (String characterId : toRelease) {
-            pool.release(characterId);
+        for (TownsfolkPoolCheckoutRecord rec : toRelease) {
+            UUID townId = parseUuid(rec.getTownId());
+            if (townId != null) {
+                pool.release(townId, rec.getCharacterId());
+            }
         }
         if (!toRelease.isEmpty()) {
             TownsfolkPoolPersistence.save(world, plugin, pool);
@@ -192,12 +203,20 @@ public final class TownsfolkExistenceService {
     }
 
     @Nonnull
-    public static PoolSummary summarizePool(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+    public static PoolSummary summarizePool(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId
+    ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         int guard = 0;
         int adventurer = 0;
         int other = 0;
+        String townKey = townId.toString();
         for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
+            if (!townKey.equalsIgnoreCase(rec.getTownId().trim())) {
+                continue;
+            }
             String kind = rec.getAssignmentKind().trim().toLowerCase();
             if (TownsfolkAssignmentKinds.GUARD.equals(kind)) {
                 guard++;
@@ -207,7 +226,7 @@ public final class TownsfolkExistenceService {
                 other++;
             }
         }
-        return new PoolSummary(pool.getCheckouts().size(), guard, adventurer, other);
+        return new PoolSummary(guard + adventurer + other, guard, adventurer, other);
     }
 
     public record PoolSummary(int total, int guards, int guildAdventurers, int other) {}
@@ -297,16 +316,21 @@ public final class TownsfolkExistenceService {
     public static void purgeDuplicateEntities(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
+        @Nonnull UUID townId,
         @Nonnull String characterId,
         @Nonnull UUID canonicalUuid
     ) {
         List<UUID> duplicateUuids = new ArrayList<>();
         store.forEachChunk(
-            Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType()),
+            Query.and(TownsfolkCharacterBinding.getComponentType(), UUIDComponent.getComponentType(), TownVillagerBinding.getComponentType()),
             (archetypeChunk, commandBuffer) -> {
                 for (int i = 0; i < archetypeChunk.size(); i++) {
                     Ref<EntityStore> ref = archetypeChunk.getReferenceTo(i);
                     if (ref == null || !ref.isValid()) {
+                        continue;
+                    }
+                    TownVillagerBinding vb = archetypeChunk.getComponent(i, TownVillagerBinding.getComponentType());
+                    if (vb == null || !townId.equals(vb.getTownId())) {
                         continue;
                     }
                     TownsfolkCharacterBinding tb = archetypeChunk.getComponent(i, TownsfolkCharacterBinding.getComponentType());
@@ -388,7 +412,7 @@ public final class TownsfolkExistenceService {
                     if (characterId.isEmpty()) {
                         continue;
                     }
-                    TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
+                    TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(town.getTownId(), characterId);
                     boolean isStale =
                         checkout == null
                             || !TownsfolkAssignmentKinds.isGuildHallAdventurer(checkout.getAssignmentKind())
@@ -408,7 +432,7 @@ public final class TownsfolkExistenceService {
         boolean townChanged = false;
         for (StaleGuildHallAdventurer entry : stale) {
             despawnUuids.add(entry.entityUuid());
-            releaseCharacter(world, plugin, entry.characterId(), ReleaseReason.RECONCILE);
+            releaseByEntity(world, plugin, entry.entityUuid());
             String uuidStr = entry.entityUuid().toString();
             if (town.getGuildHallAdventurerNpcIds().removeIf(s -> s != null && uuidStr.equalsIgnoreCase(s.trim()))) {
                 townChanged = true;
@@ -502,15 +526,20 @@ public final class TownsfolkExistenceService {
 
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         Map<String, List<LiveTownsfolkEntity>> liveAll = buildLiveIndexAllInstances(store);
-        List<String> toRelease = new ArrayList<>();
+        List<TownsfolkPoolCheckoutRecord> toRelease = new ArrayList<>();
         boolean poolChanged = false;
 
         for (TownsfolkPoolCheckoutRecord rec : new ArrayList<>(pool.getCheckouts().values())) {
             String characterId = rec.getCharacterId();
-            List<LiveTownsfolkEntity> liveList = liveAll.get(characterId);
+            UUID townId = parseUuid(rec.getTownId());
+            if (townId == null || characterId.isBlank()) {
+                toRelease.add(rec);
+                continue;
+            }
+            List<LiveTownsfolkEntity> liveList = liveInstancesForTown(liveAll, townId, characterId);
             UUID ledgerUuid = parseUuid(rec.getEntityUuid());
 
-            if (liveList != null && !liveList.isEmpty()) {
+            if (!liveList.isEmpty()) {
                 UUID canonical = resolveCanonicalUuid(rec, liveList);
                 if (canonical != null && ledgerUuid != null && !canonical.equals(ledgerUuid)) {
                     rec.setEntityUuid(canonical.toString());
@@ -519,6 +548,7 @@ public final class TownsfolkExistenceService {
                 purgeDuplicateEntities(
                     world,
                     store,
+                    townId,
                     characterId,
                     canonical != null ? canonical : liveList.get(0).entityUuid()
                 );
@@ -526,20 +556,23 @@ public final class TownsfolkExistenceService {
             }
 
             if (ledgerUuid == null) {
-                toRelease.add(characterId);
+                toRelease.add(rec);
                 continue;
             }
 
             Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(ledgerUuid);
             if (ref != null && !ref.isValid()) {
-                toRelease.add(characterId);
+                toRelease.add(rec);
             }
             // ref == null: entity unloaded — keep ledger entry
         }
 
-        for (String characterId : toRelease) {
-            pool.release(characterId);
-            poolChanged = true;
+        for (TownsfolkPoolCheckoutRecord rec : toRelease) {
+            UUID townId = parseUuid(rec.getTownId());
+            if (townId != null && !rec.getCharacterId().isBlank()) {
+                pool.release(townId, rec.getCharacterId());
+                poolChanged = true;
+            }
         }
 
         if (poolChanged) {
@@ -627,6 +660,25 @@ public final class TownsfolkExistenceService {
         if (changed) {
             tm.updateTown(town);
         }
+    }
+
+    @Nonnull
+    private static List<LiveTownsfolkEntity> liveInstancesForTown(
+        @Nonnull Map<String, List<LiveTownsfolkEntity>> liveAll,
+        @Nonnull UUID townId,
+        @Nonnull String characterId
+    ) {
+        List<LiveTownsfolkEntity> list = liveAll.get(characterId.trim());
+        if (list == null || list.isEmpty()) {
+            return List.of();
+        }
+        List<LiveTownsfolkEntity> out = new ArrayList<>();
+        for (LiveTownsfolkEntity live : list) {
+            if (townId.equals(live.townId())) {
+                out.add(live);
+            }
+        }
+        return out;
     }
 
     @Nullable

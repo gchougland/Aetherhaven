@@ -1,0 +1,20 @@
+{
+  "id": "nell_clinkjar",
+  "displayName": "Nell Clinkjar",
+  "gender": "female",
+  "race": "klops",
+  "modelAssetId": "Nell_Clinkjar",
+  "personalityIds": [
+    "klops_trader",
+    "musical",
+    "impatient"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "high"
+}

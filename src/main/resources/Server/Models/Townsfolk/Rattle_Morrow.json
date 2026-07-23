@@ -1,0 +1,35 @@
+{
+  "Parent": "Skeleton",
+  "Texture": "NPC/Undead/Skeleton/Models/Model_Textures/Sand.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Head/Eyes/Eyes.blockymodel",
+      "Texture": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Head/Eyes/Eyes_Blue.png"
+    },
+    {
+      "Model": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Head/Band.blockymodel",
+      "Texture": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Head/Band_Texture.png"
+    },
+    {
+      "Model": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Chest/Tunic_Torn.blockymodel",
+      "Texture": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Chest/Tunic_Torn_Textures/Tunic_Torn_Brown.png"
+    },
+    {
+      "Model": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Legs/Pants_Large.blockymodel",
+      "Texture": "NPC/Undead/Skeleton/Models/Attachments/Cosmetics/Legs/Pants_Large_Textures/Beige_Torn.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Rattle_Morrow.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -110
+    ]
+  }
+}

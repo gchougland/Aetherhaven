@@ -1,0 +1,20 @@
+{
+  "id": "zephyr_sandtail",
+  "displayName": "Zephyr Sandtail",
+  "gender": "male",
+  "race": "feran",
+  "modelAssetId": "Zephyr_Sandtail",
+  "personalityIds": [
+    "feran_sunseeker",
+    "curious",
+    "adventurer"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "mid"
+}

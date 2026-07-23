@@ -1,0 +1,48 @@
+{
+  "Parent": "Klops",
+  "Model": "NPC/Intelligent/Klops/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Klops/Models/Model_Orange.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Backpack.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Backpack_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Tail/Tail.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Tail/Tail_Default.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Glasses.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Glasses_Blue.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Shoes.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Shoes_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Tunic.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Tunic_Brown.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Hat.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Merchant/Hat_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Head/Eyebrows/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Head/Eyebrows/Eyebrows_Black.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Pippin_Geargrin.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -90
+    ]
+  }
+}

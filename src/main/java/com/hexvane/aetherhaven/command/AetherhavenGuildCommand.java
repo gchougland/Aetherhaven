@@ -141,7 +141,8 @@ public final class AetherhavenGuildCommand extends AbstractCommandCollection {
                 return;
             }
             TownRecord town = townRes.townOrThrow();
-            TownsfolkExistenceService.PoolSummary summary = TownsfolkExistenceService.summarizePool(world, plugin);
+            TownsfolkExistenceService.PoolSummary summary =
+                TownsfolkExistenceService.summarizePool(world, plugin, town.getTownId());
             WorldTimeResource wtr = store.getResource(WorldTimeResource.getResourceType());
             long epochDay = wtr.getGameDateTime().toLocalDate().toEpochDay();
             ctx.sendMessage(

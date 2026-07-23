@@ -1,0 +1,18 @@
+{
+  "id": "trork_stoneheart",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.trork_stoneheart.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.trork_stoneheart.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.trork_stoneheart.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.trork_stoneheart.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.trork_stoneheart.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.25,
+    "FUN": 0.95,
+    "SIT": 1.1
+  },
+  "preferredScheduleLocations": [
+    "park"
+  ]
+}

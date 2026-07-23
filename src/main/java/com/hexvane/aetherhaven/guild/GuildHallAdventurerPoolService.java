@@ -131,7 +131,7 @@ public final class GuildHallAdventurerPoolService {
         }
         if (!GuildHallStaffing.hasGuildMasterAssigned(town, store, town.getTownId(), hallPlot.getPlotId())) {
             int cleared = clearAdventurersForHall(world, plugin, town, tm, store, hallPlot);
-            return new ForceRespawnResult(0, cleared, 0, 0, availableGuardEligibleCount(world, plugin));
+            return new ForceRespawnResult(0, cleared, 0, 0, availableGuardEligibleCount(world, plugin, town.getTownId()));
         }
         ConstructionDefinition hallDef = plugin.getConstructionCatalog().get(hallPlot.getConstructionId());
         if (hallDef == null) {
@@ -151,7 +151,7 @@ public final class GuildHallAdventurerPoolService {
         rollTodayAdventurerSlots(town, tm, spawnSlots.size(), epochDay);
 
         int spawned = fillEmptySlots(world, plugin, town, tm, store, hallPlot, spawnSlots, wtr);
-        int available = availableGuardEligibleCount(world, plugin);
+        int available = availableGuardEligibleCount(world, plugin, town.getTownId());
         return new ForceRespawnResult(reclaimed, despawned, town.getGuildHallAdventurerFilledSlots().size(), spawned, available);
     }
 
@@ -200,7 +200,13 @@ public final class GuildHallAdventurerPoolService {
             }
             String characterId = rec.getCharacterId();
             if (characterId != null && !characterId.isBlank()) {
-                TownsfolkExistenceService.releaseCharacter(world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.ADMIN);
+                TownsfolkExistenceService.releaseCharacter(
+                    world,
+                    plugin,
+                    town.getTownId(),
+                    characterId,
+                    TownsfolkExistenceService.ReleaseReason.ADMIN
+                );
             }
         }
         town.getHiredGuardRecords().clear();
@@ -208,10 +214,14 @@ public final class GuildHallAdventurerPoolService {
         return despawned;
     }
 
-    private static int availableGuardEligibleCount(@Nonnull World world, @Nonnull AetherhavenPlugin plugin) {
+    private static int availableGuardEligibleCount(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID townId
+    ) {
         TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
         TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
-        return pool.availableGuardEligibleCharacterIds(catalog).size();
+        return pool.availableGuardEligibleCharacterIds(townId, catalog).size();
     }
 
     private static void dedupeAdventurerIds(@Nonnull TownRecord town, @Nonnull TownManager tm) {
@@ -495,17 +505,12 @@ public final class GuildHallAdventurerPoolService {
         @Nullable String characterId,
         @Nullable UUID entityUuid
     ) {
-        if (characterId != null && !characterId.isBlank()) {
-            TownsfolkExistenceService.releaseCharacter(
-                world,
-                plugin,
-                characterId,
-                TownsfolkExistenceService.ReleaseReason.DESPAWN
-            );
-            return;
-        }
         if (entityUuid != null) {
             TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+            return;
+        }
+        if (characterId != null && !characterId.isBlank()) {
+            LOGGER.atWarning().log("Adventurer checkout release missing entity uuid for character %s", characterId);
         }
     }
 

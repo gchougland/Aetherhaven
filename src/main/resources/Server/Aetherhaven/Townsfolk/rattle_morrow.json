@@ -1,0 +1,20 @@
+{
+  "id": "rattle_morrow",
+  "displayName": "Rattle Morrow",
+  "gender": "male",
+  "race": "skeleton",
+  "modelAssetId": "Rattle_Morrow",
+  "personalityIds": [
+    "skeleton_bonedry",
+    "gloomy",
+    "cynical"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_mage",
+  "speechVoiceId": "low"
+}

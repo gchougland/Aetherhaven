@@ -92,9 +92,7 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
             town.getGuildHallAdventurerSlotByNpcId().remove(entityUuid.toString());
             TownsfolkCharacterBinding tb = store.getComponent(victimRef, TownsfolkCharacterBinding.getComponentType());
             if (tb != null) {
-                TownsfolkExistenceService.releaseCharacter(
-                    world, plugin, tb.getCharacterId(), TownsfolkExistenceService.ReleaseReason.DEATH
-                );
+                TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
             }
             tm.updateTown(town);
             TownVillagerDeathNotifier.notifyTownMembers(
@@ -269,9 +267,17 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         }
 
         if (characterId != null && !characterId.isBlank()) {
-            TownsfolkExistenceService.releaseCharacter(
-                world, plugin, characterId, TownsfolkExistenceService.ReleaseReason.DEATH
-            );
+            if (entityUuid != null) {
+                TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+            } else {
+                TownsfolkExistenceService.releaseCharacter(
+                    world,
+                    plugin,
+                    town.getTownId(),
+                    characterId,
+                    TownsfolkExistenceService.ReleaseReason.DEATH
+                );
+            }
         }
 
         clearHomeResident(town, entityUuid);
@@ -312,9 +318,17 @@ public final class VillagerDeathHandlerSystem extends DeathSystems.OnDeathSystem
         }
 
         if (characterId != null && !characterId.isBlank()) {
-            TownsfolkExistenceService.releaseCharacter(
-                world, AetherhavenPlugin.get(), characterId, TownsfolkExistenceService.ReleaseReason.DEATH
-            );
+            if (entityUuid != null) {
+                TownsfolkExistenceService.releaseByEntity(world, AetherhavenPlugin.get(), entityUuid);
+            } else {
+                TownsfolkExistenceService.releaseCharacter(
+                    world,
+                    AetherhavenPlugin.get(),
+                    town.getTownId(),
+                    characterId,
+                    TownsfolkExistenceService.ReleaseReason.DEATH
+                );
+            }
         }
 
         if (entityUuid != null) {

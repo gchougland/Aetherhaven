@@ -23,15 +23,19 @@ public final class TownsfolkPoolFile {
     private List<TownsfolkPoolCheckoutRecord> checkouts = new ArrayList<>();
 
     @Nonnull
-    public Map<String, TownsfolkPoolCheckoutRecord> checkoutsByCharacterId() {
+    public Map<String, TownsfolkPoolCheckoutRecord> checkoutsByLedgerKey() {
         Map<String, TownsfolkPoolCheckoutRecord> map = new LinkedHashMap<>();
         if (checkouts == null) {
             return map;
         }
         for (TownsfolkPoolCheckoutRecord r : checkouts) {
-            if (r != null && !r.getCharacterId().isBlank()) {
-                map.put(r.getCharacterId(), r);
+            if (r == null || r.getCharacterId().isBlank()) {
+                continue;
             }
+            if (TownsfolkPoolKeys.isBlankTownId(r.getTownId())) {
+                continue;
+            }
+            map.put(TownsfolkPoolKeys.checkoutKey(r.getTownId(), r.getCharacterId()), r);
         }
         return map;
     }

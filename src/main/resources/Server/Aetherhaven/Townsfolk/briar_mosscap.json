@@ -1,0 +1,20 @@
+{
+  "id": "briar_mosscap",
+  "displayName": "Briar Mosscap",
+  "gender": "female",
+  "race": "kweebec",
+  "modelAssetId": "Briar_Mosscap",
+  "personalityIds": [
+    "kweebec_forestfolk",
+    "gardener",
+    "cheerful"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "soft"
+}

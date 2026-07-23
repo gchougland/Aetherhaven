@@ -174,9 +174,12 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
         private final RequiredArg<String> characterIdArg =
             this.withRequiredArg("characterId", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.characterId.desc", ArgTypes.STRING);
         private final FlagArg despawnFlag = this.withFlagArg("despawn", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.despawn.desc");
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         ReleaseSubCommand() {
             super("release", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.release.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -191,9 +194,15 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             if (plugin == null) {
                 return;
             }
+            TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                ctx.sendMessage(townRes.error());
+                return;
+            }
+            TownRecord town = townRes.townOrThrow();
             String characterId = characterIdArg.get(ctx);
             TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
-            TownsfolkPoolCheckoutRecord rec = pool.checkoutForCharacter(characterId);
+            TownsfolkPoolCheckoutRecord rec = pool.checkoutForCharacter(town.getTownId(), characterId);
             if (rec == null) {
                 ctx.sendMessage(Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.release.notCheckedOut"));
                 return;
@@ -209,7 +218,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
                     // fall through
                 }
             }
-            TownsfolkSpawnService.release(world, plugin, characterId);
+            TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
             ctx.sendMessage(
                 Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.release.ok").param("id", characterId)
             );
@@ -219,9 +228,12 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
     private static final class ListSubCommand extends AbstractPlayerCommand {
         private final OptionalArg<String> assignmentArg =
             this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+        @Nonnull
+        private final DebugTownTargetArgs townTarget;
 
         ListSubCommand() {
             super("list", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.list.desc");
+            townTarget = DebugTownTargetArgs.registerOn(this);
         }
 
         @Override
@@ -236,17 +248,29 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             if (plugin == null) {
                 return;
             }
+            TownCommandResolution townRes = townTarget.resolve(ctx, world, store, ref, playerRef, false);
+            if (!townRes.isOk()) {
+                ctx.sendMessage(townRes.error());
+                return;
+            }
+            TownRecord town = townRes.townOrThrow();
             String filter = assignmentArg.provided(ctx) ? assignmentArg.get(ctx) : null;
             TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
             if (filter != null && !filter.isBlank()) {
-                List<String> available = TownsfolkSpawnService.availableCharacterIds(world, plugin, filter);
+                List<String> available = TownsfolkSpawnService.availableCharacterIds(world, plugin, town.getTownId(), filter);
                 ctx.sendMessage(
                     Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.list.available")
                         .param("assignment", filter)
                         .param("ids", String.join(", ", available))
                 );
             } else {
-                List<String> available = TownsfolkSpawnService.availableCharacterIds(world, plugin, TownsfolkAssignmentKinds.IDLE);
+                List<String> available =
+                    TownsfolkSpawnService.availableCharacterIds(
+                        world,
+                        plugin,
+                        town.getTownId(),
+                        TownsfolkAssignmentKinds.IDLE
+                    );
                 ctx.sendMessage(
                     Message.translation("aetherhaven_commands_help.commands.aetherhaven.townsfolk.list.availableIdle")
                         .param("ids", String.join(", ", available))
@@ -254,6 +278,9 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
             }
             StringBuilder checked = new StringBuilder();
             for (TownsfolkPoolCheckoutRecord rec : pool.getCheckouts().values()) {
+                if (!town.getTownId().toString().equalsIgnoreCase(rec.getTownId().trim())) {
+                    continue;
+                }
                 if (filter != null && !filter.isBlank() && !filter.equalsIgnoreCase(rec.getAssignmentKind())) {
                     continue;
                 }

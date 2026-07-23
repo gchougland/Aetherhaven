@@ -132,7 +132,7 @@ public final class TouristReconcileService {
                     Ref<EntityStore> leaveRef = refForRecord(town, store, liveByCharacter, rec);
                     if (leaveRef != null && leaveRef.isValid() && entityUuid != null) {
                         if (!repairTouristIdentity(leaveRef, store, plugin, town, rec)) {
-                            purgeBrokenTouristEntity(world, plugin, store, rec);
+                            purgeBrokenTouristEntity(world, plugin, store, town, rec);
                             it.remove();
                             changed = true;
                             released++;
@@ -144,7 +144,7 @@ public final class TouristReconcileService {
                     } else if (!rec.isInvitedToStay()) {
                         EntityPresence presence = EntityPresenceUtil.resolve(store, entityUuid);
                         if (EntityPresenceUtil.shouldFinalizeTouristLeaveForMissingEntity(presence)) {
-                            releaseStaleTouristRecord(world, plugin, rec);
+                            releaseStaleTouristRecord(world, plugin, town, rec);
                             it.remove();
                             changed = true;
                             released++;
@@ -156,7 +156,7 @@ public final class TouristReconcileService {
                 Ref<EntityStore> ref = refForRecord(town, store, liveByCharacter, rec);
                 if (ref != null && ref.isValid()) {
                     if (!repairTouristIdentity(ref, store, plugin, town, rec)) {
-                        purgeBrokenTouristEntity(world, plugin, store, rec);
+                        purgeBrokenTouristEntity(world, plugin, store, town, rec);
                         it.remove();
                         changed = true;
                         released++;
@@ -187,7 +187,7 @@ public final class TouristReconcileService {
                     releaseMissing,
                     townNpcChunksLoaded
                 )) {
-                    releaseStaleTouristRecord(world, plugin, rec);
+                    releaseStaleTouristRecord(world, plugin, town, rec);
                     it.remove();
                     changed = true;
                     released++;
@@ -308,11 +308,17 @@ public final class TouristReconcileService {
     private static void releaseStaleTouristRecord(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
         @Nonnull TouristRecord rec
     ) {
+        UUID entityUuid = rec.getEntityUuid();
+        if (entityUuid != null) {
+            TownsfolkExistenceService.releaseByEntity(world, plugin, entityUuid);
+            return;
+        }
         String characterId = rec.getCharacterId();
         if (!characterId.isBlank()) {
-            TownsfolkSpawnService.release(world, plugin, characterId);
+            TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
         }
     }
 
@@ -385,6 +391,7 @@ public final class TouristReconcileService {
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
         @Nonnull TouristRecord rec
     ) {
         UUID entityUuid = rec.getEntityUuid();
@@ -394,7 +401,7 @@ public final class TouristReconcileService {
                 store.removeEntity(ref, RemoveReason.REMOVE);
             }
         }
-        releaseStaleTouristRecord(world, plugin, rec);
+        releaseStaleTouristRecord(world, plugin, town, rec);
     }
 
     private static void ensureAutonomyAfterBind(
@@ -491,7 +498,7 @@ public final class TouristReconcileService {
                 if (entityUuid != null) {
                     TouristPortalTickService.despawnTourist(world, plugin, town, tm, store, entityUuid, null);
                 }
-                TownsfolkSpawnService.release(world, plugin, characterId);
+                TownsfolkSpawnService.release(world, plugin, town.getTownId(), characterId);
                 changed = true;
                 continue;
             }
@@ -640,8 +647,24 @@ public final class TouristReconcileService {
         if (entityUuid == null) {
             return;
         }
-        TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(characterId);
+        TownsfolkPoolCheckoutRecord checkout = pool.checkoutForCharacter(town.getTownId(), characterId);
         if (checkout == null) {
+            pool.checkout(
+                new TownsfolkPoolCheckoutRecord(
+                    characterId,
+                    town.getTownId().toString(),
+                    entityUuid.toString(),
+                    TownsfolkAssignmentKinds.TOURIST,
+                    ""
+                )
+            );
+            return;
+        }
+        if (!town.getTownId().toString().equalsIgnoreCase(checkout.getTownId())) {
+            UUID oldTownId = parseTownUuid(checkout.getTownId());
+            if (oldTownId != null) {
+                pool.release(oldTownId, characterId);
+            }
             pool.checkout(
                 new TownsfolkPoolCheckoutRecord(
                     characterId,
@@ -659,8 +682,14 @@ public final class TouristReconcileService {
         if (!TownsfolkAssignmentKinds.isTourist(checkout.getAssignmentKind())) {
             checkout.setAssignmentKind(TownsfolkAssignmentKinds.TOURIST);
         }
-        if (!town.getTownId().toString().equals(checkout.getTownId())) {
-            checkout.setTownId(town.getTownId().toString());
+    }
+
+    @Nullable
+    private static UUID parseTownUuid(@Nonnull String townIdStr) {
+        try {
+            return UUID.fromString(townIdStr.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
         }
     }
 }

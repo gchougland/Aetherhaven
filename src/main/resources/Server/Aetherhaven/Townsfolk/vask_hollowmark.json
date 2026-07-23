@@ -1,0 +1,20 @@
+{
+  "id": "vask_hollowmark",
+  "displayName": "Vask Hollowmark",
+  "gender": "male",
+  "race": "outlander",
+  "modelAssetId": "Vask_Hollowmark",
+  "personalityIds": [
+    "outlander_wildbound",
+    "stoic",
+    "fisher"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_archer",
+  "speechVoiceId": "low"
+}

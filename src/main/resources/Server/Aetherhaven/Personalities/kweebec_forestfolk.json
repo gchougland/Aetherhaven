@@ -1,0 +1,18 @@
+{
+  "id": "kweebec_forestfolk",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.kweebec_forestfolk.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.kweebec_forestfolk.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.kweebec_forestfolk.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.kweebec_forestfolk.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.kweebec_forestfolk.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.2,
+    "FUN": 1.15,
+    "SIT": 1.1
+  },
+  "preferredScheduleLocations": [
+    "park"
+  ]
+}

@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.5.0] - Unreleased
+## [2.5.0] - 7/22/2026
 
 ### Added
 
@@ -12,9 +12,12 @@
 - **Heartberry** — A rare find in world loot chests. Use one on a villager you can befriend to grow closer by a full heart. They react with floating hearts like a gift they love. Does not count toward normal gift limits.
 - **Mining bomb** — Grubble sells it at the bomb shop. At 50 friendship he teaches the recipe for the town planning desk. Throw it to blast rock and ore safely; blocks drop as if you mined them.
 - **Battle horn** — Lyra teaches the recipe at 50 friendship for the town planning desk. Hold right click to blow the horn and call loaded town guards. They follow you until dismissed and still fight hostiles.
+- **Bard song: Fishing Daze** — Elias can play **Fishing Daze by Dreadful Ditties**.
+- **Intelligent race townsfolk** — Eleven new pool characters: Kweebecs Briar Mosscap and Tumble Reedwhistle, Klops Pippin Geargrin and Nell Clinkjar, Slothians Momo Canopy and Haku Mistclaw, Ferans Zephyr Sandtail and Saffra Dunear, Outlander Vask Hollowmark, skeleton Rattle Morrow, and Trork Grunk Stonebelly. Each has a distinct look and race themed greetings.
 
 ### Changed
 
+- **Townsfolk character pool** — Each town keeps its own pool slots for hand designed townsfolk (tourists, guild hall adventurers, guards, and the like). The same catalog character can show up in more than one town, but only once per town.
 - **Plot placement preview** — While placing a building with the plot placement tool, the full building preview is drawn on your client instead of spawning thousands of temporary blocks in the world. Moving and nudging the plot should feel much smoother on large buildings.
 - **Plot assembly sections** — Large buildings split into assembly sections automatically from prefab size (about 15 blocks per section on each axis by default). Tune with `AssemblySectionChunkSizeBlocks` in server config. Per-building section counts in plot JSON and the plot creator are removed.
 - **Floating gift boxes** — Balloon rewards use special gift boxes that disappear after you take everything out and close them. If you break one open, only the loot inside drops, not the box itself.

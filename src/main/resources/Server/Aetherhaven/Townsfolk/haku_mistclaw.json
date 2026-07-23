@@ -1,0 +1,20 @@
+{
+  "id": "haku_mistclaw",
+  "displayName": "Haku Mistclaw",
+  "gender": "male",
+  "race": "slothian",
+  "modelAssetId": "Haku_Mistclaw",
+  "personalityIds": [
+    "slothian_canopy",
+    "stoic",
+    "foodie"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_knight",
+  "speechVoiceId": "mid"
+}

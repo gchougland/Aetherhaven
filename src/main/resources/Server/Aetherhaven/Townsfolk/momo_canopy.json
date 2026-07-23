@@ -1,0 +1,20 @@
+{
+  "id": "momo_canopy",
+  "displayName": "Momo Canopy",
+  "gender": "female",
+  "race": "slothian",
+  "modelAssetId": "Momo_Canopy",
+  "personalityIds": [
+    "slothian_canopy",
+    "lazy",
+    "homebody"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue",
+  "speechVoiceId": "soft"
+}

@@ -97,7 +97,7 @@ public final class VillagerTownResetService {
         InnPoolService.repairInnPoolForTown(world, plugin, town, tm, store, false);
         LinkedHashMap<UUID, CapturedNpc> captured = captureNpcs(town, store, plugin);
         InnPoolService.reconcileInnVisitorEntities(world, town, tm, store, true);
-        purgeLoadedTouristCitizenDuplicates(world, store, captured);
+        purgeLoadedTouristCitizenDuplicates(world, store, town, captured);
         int genericDupesPurged = 0;
         if (townHasPromotedTouristCitizen(town)) {
             genericDupesPurged = purgeDuplicateGenericTownsfolkResidents(store, town, captured.keySet());
@@ -659,13 +659,20 @@ public final class VillagerTownResetService {
     private static void purgeLoadedTouristCitizenDuplicates(
         @Nonnull World world,
         @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
         @Nonnull Map<UUID, CapturedNpc> captured
     ) {
         for (CapturedNpc c : captured.values()) {
             if (!c.poolTownsfolkCitizen() || c.poolCharacterId() == null || c.poolCharacterId().isBlank()) {
                 continue;
             }
-            TownsfolkExistenceService.purgeDuplicateEntities(world, store, c.poolCharacterId(), c.previousEntityUuid());
+            TownsfolkExistenceService.purgeDuplicateEntities(
+                world,
+                store,
+                town.getTownId(),
+                c.poolCharacterId(),
+                c.previousEntityUuid()
+            );
         }
     }
 

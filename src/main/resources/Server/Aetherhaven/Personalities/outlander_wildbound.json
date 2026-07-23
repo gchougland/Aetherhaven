@@ -1,0 +1,18 @@
+{
+  "id": "outlander_wildbound",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.outlander_wildbound.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.outlander_wildbound.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.outlander_wildbound.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.outlander_wildbound.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.outlander_wildbound.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "WORK": 1.1,
+    "FUN": 0.85,
+    "SIT": 1.05
+  },
+  "preferredScheduleLocations": [
+    "park"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "Parent": "Klops",
+  "Model": "NPC/Intelligent/Klops/Models/Model.blockymodel",
+  "Texture": "NPC/Intelligent/Klops/Models/Model_default.png",
+  "DefaultAttachments": [
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Head/Eyebrows/Eyebrows.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Head/Eyebrows/Eyebrows_White.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Tail/Tail.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Cosmetics/Tail/Tail_Default.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Gloves.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Gloves_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Goggles.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Goggles_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Hair-Miner.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Hair-Miner_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Helmet.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Helmet_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Shoes.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Shoes_Texture.png"
+    },
+    {
+      "Model": "NPC/Intelligent/Klops/Models/Attachments/Miner/Straps.blockymodel",
+      "Texture": "NPC/Intelligent/Klops/Models/Attachments/Miner/Straps_Texture.png"
+    }
+  ],
+  "Icon": "Icons/ModelsGenerated/Nell_Clinkjar.png",
+  "IconProperties": {
+    "Scale": 0.5,
+    "Rotation": [
+      0,
+      19,
+      0
+    ],
+    "Translation": [
+      0,
+      -90
+    ]
+  }
+}

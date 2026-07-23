@@ -1,0 +1,20 @@
+{
+  "id": "tumble_reedwhistle",
+  "displayName": "Tumble Reedwhistle",
+  "gender": "male",
+  "race": "kweebec",
+  "modelAssetId": "Tumble_Reedwhistle",
+  "personalityIds": [
+    "kweebec_forestfolk",
+    "curious",
+    "silly"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue",
+  "speechVoiceId": "sharp"
+}

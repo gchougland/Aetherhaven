@@ -1,0 +1,20 @@
+{
+  "id": "pippin_geargrin",
+  "displayName": "Pippin Geargrin",
+  "gender": "male",
+  "race": "klops",
+  "modelAssetId": "Pippin_Geargrin",
+  "personalityIds": [
+    "klops_trader",
+    "crafty",
+    "stingy"
+  ],
+  "allowedAssignmentKinds": [
+    "idle",
+    "tourist",
+    "guard"
+  ],
+  "befriendable": false,
+  "equipmentProfileId": "guard_rogue",
+  "speechVoiceId": "sharp"
+}

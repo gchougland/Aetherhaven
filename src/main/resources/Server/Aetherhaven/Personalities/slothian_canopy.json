@@ -1,0 +1,20 @@
+{
+  "id": "slothian_canopy",
+  "dialogueGreetingLangKeys": [
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.slothian_canopy.greeting.1",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.slothian_canopy.greeting.2",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.slothian_canopy.greeting.3",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.slothian_canopy.greeting.4",
+    "aetherhaven_townsfolk_personalities.aetherhaven.townsfolk.personality.slothian_canopy.greeting.5"
+  ],
+  "leisurePoiTagWeights": {
+    "SLEEP": 1.45,
+    "SIT": 1.35,
+    "FUN": 0.75,
+    "WORK": 0.55
+  },
+  "preferredScheduleLocations": [
+    "home",
+    "park"
+  ]
+}
