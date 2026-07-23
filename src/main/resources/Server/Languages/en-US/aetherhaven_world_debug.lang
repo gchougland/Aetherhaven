@@ -69,6 +69,14 @@ aetherhaven.debug.rep.milestoneLine=  {id} | {role} | {min} | {node}{items}{lear
 aetherhaven.debug.rep.granted=Granted reward {id}.
 aetherhaven.debug.rep.targetInvalid=Invalid villager.
 
+# Quest board, inn, and town rank debug
+aetherhaven.debug.questboard.rerollDone=Quest board refreshed.
+aetherhaven.debug.inn.rerollDone=Inn visitors refreshed.
+aetherhaven.debug.inn.notReady=Inn is not ready yet.
+aetherhaven.debug.inn.notLoaded=Inn is not loaded. Stand near the inn and try again.
+aetherhaven.debug.townrank.setDone=Town rank changed from {oldRank} to {rank} ({xp} XP).
+aetherhaven.debug.townrank.unknownRank=Unknown rank. Use E, D, C, B, A, S, SS, or SSS.
+
 # === Debug: gifts ===
 aetherhaven.debug.gift.resetDone=Reset gift limits on {entries} player–villager row(s) across {towns} town(s) in this world.
 aetherhaven.debug.gift.unknownRole=Unknown villager role: {role}

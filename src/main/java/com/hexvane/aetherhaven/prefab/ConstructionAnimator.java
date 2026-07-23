@@ -32,6 +32,7 @@ public final class ConstructionAnimator {
     private final World world;
     private final Vector3i origin;
     private final boolean force;
+    private final boolean preserveWater;
     private final ComponentAccessor<EntityStore> entityAccessor;
     private final List<PendingBlock> pendingBlocks;
     private final List<Holder<EntityStore>> prefabEntitiesInOrder;
@@ -50,6 +51,7 @@ public final class ConstructionAnimator {
         World world,
         Vector3i origin,
         boolean force,
+        boolean preserveWater,
         ComponentAccessor<EntityStore> entityAccessor,
         List<PendingBlock> pendingBlocks,
         List<Holder<EntityStore>> prefabEntitiesInOrder,
@@ -64,6 +66,7 @@ public final class ConstructionAnimator {
         this.world = world;
         this.origin = origin;
         this.force = force;
+        this.preserveWater = preserveWater;
         this.entityAccessor = entityAccessor;
         this.pendingBlocks = pendingBlocks;
         this.prefabEntitiesInOrder = prefabEntitiesInOrder;
@@ -81,6 +84,7 @@ public final class ConstructionAnimator {
         @Nonnull Vector3i origin,
         @Nonnull Rotation yaw,
         boolean force,
+        boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor,
         int blocksPerBatch,
@@ -88,7 +92,20 @@ public final class ConstructionAnimator {
         @Nullable Runnable onComplete
     ) {
         world.execute(
-            () -> startOnWorldThread(plugin, world, origin, yaw, force, bufferAccess, entityAccessor, blocksPerBatch, batchDelayMs, onComplete)
+            () ->
+                startOnWorldThread(
+                    plugin,
+                    world,
+                    origin,
+                    yaw,
+                    force,
+                    preserveWater,
+                    bufferAccess,
+                    entityAccessor,
+                    blocksPerBatch,
+                    batchDelayMs,
+                    onComplete
+                )
         );
     }
 
@@ -98,6 +115,7 @@ public final class ConstructionAnimator {
         Vector3i origin,
         Rotation yaw,
         boolean force,
+        boolean preserveWater,
         IPrefabBuffer bufferAccess,
         ComponentAccessor<EntityStore> entityAccessor,
         int blocksPerBatch,
@@ -111,26 +129,32 @@ public final class ConstructionAnimator {
         if (start.isCancelled()) {
             return;
         }
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         LocalCachedChunkAccessor chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
         ConstructionPasteOps.prepAssemblySite(
             world,
             origin,
             seq.pendingBlocks(),
             force,
+            preserveWater,
             seq.prefabRotation(),
-            bufferAccess
+            bufferAccess,
+            blockTypeMap
         );
         ConstructionPasteOps.clearNonPrefabFluidsInFootprint(
             world,
             origin,
             seq.pendingBlocks(),
-            chunkAccessor
+            preserveWater,
+            chunkAccessor,
+            blockTypeMap
         );
         ConstructionAnimator job = new ConstructionAnimator(
             plugin,
             world,
             origin,
             force,
+            preserveWater,
             entityAccessor,
             ConstructionPasteOps.withoutPureAirCells(seq.pendingBlocks()),
             seq.prefabEntitiesInOrder(),
@@ -153,7 +177,7 @@ public final class ConstructionAnimator {
         int placed = 0;
         while (index < pendingBlocks.size() && placed < blocksPerBatch) {
             PendingBlock pb = pendingBlocks.get(index);
-            if (!ConstructionPasteOps.placeOne(world, origin, pb, force, chunkAccessor, blockTypeMap)) {
+            if (!ConstructionPasteOps.placeOne(world, origin, pb, force, preserveWater, chunkAccessor, blockTypeMap)) {
                 chunkAccessor = ConstructionPasteOps.createAccessor(world, origin, bufferAccess);
                 plugin.scheduleOnWorld(world, this::runBatch, batchDelayMs);
                 return;
@@ -176,6 +200,7 @@ public final class ConstructionAnimator {
             origin,
             prefabRotation,
             prefabId,
+            preserveWater,
             bufferAccess,
             prefabEntitiesInOrder,
             entityAccessor

@@ -96,7 +96,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     private static final class GrantCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> idArg =
-            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", AetherhavenArgTypes.QUEST_ID);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -148,7 +148,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     private static final class CompleteCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> idArg =
-            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", AetherhavenArgTypes.QUEST_ID);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -192,7 +192,7 @@ public final class AetherhavenQuestDebugCommand extends AbstractCommandCollectio
     private static final class ClearCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> idArg =
-            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", ArgTypes.STRING);
+            this.withOptionalArg("questId", "aetherhaven_commands_help.commands.aetherhaven.questdebug.id.desc", AetherhavenArgTypes.QUEST_ID);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 

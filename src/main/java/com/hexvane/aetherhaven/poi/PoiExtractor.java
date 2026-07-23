@@ -107,6 +107,9 @@ public final class PoiExtractor {
         int wy = baseWy;
         int wz = baseWz;
         String expectedType = row.getBlockTypeId();
+        if (expectedType != null && isPlotCreatorEditorMarkerBlock(expectedType)) {
+            expectedType = null;
+        }
         if (expectedType != null) {
             Vector3i anchor = resolveAnchorForExpectedBlock(world, wx, wy, wz, expectedType);
             if (anchor == null) {
@@ -292,5 +295,12 @@ public final class PoiExtractor {
             return false;
         }
         return expectedIndex == map.getIndex(actualId);
+    }
+
+    private static boolean isPlotCreatorEditorMarkerBlock(@Nonnull String blockTypeId) {
+        return switch (blockTypeId.trim()) {
+            case "Editor_Empty", "Editor_Block", "Editor_Anchor" -> true;
+            default -> false;
+        };
     }
 }

@@ -159,6 +159,16 @@ public final class AetherhavenPluginConfig {
         )
         .add()
         .append(
+            new KeyedCodec<>("RaidMarchDebugLog", Codec.BOOLEAN),
+            (o, v) -> o.raidMarchDebugLog = v,
+            o -> o.raidMarchDebugLog
+        )
+        .documentation(
+            "When true, emits raid quest march diagnostics to the server log at INFO (never to players). "
+                + "Status lines are limited to once every 15 seconds per raid mob."
+        )
+        .add()
+        .append(
             new KeyedCodec<>("TreasuryMaxGoldTaxPerVillagerPerDay", Codec.INTEGER),
             (o, v) -> o.treasuryMaxGoldTaxPerVillagerPerDay = v,
             o -> o.treasuryMaxGoldTaxPerVillagerPerDay
@@ -617,6 +627,7 @@ public final class AetherhavenPluginConfig {
 
     private boolean villagerScheduleEnabled = true;
     private boolean villagerScheduleDebugLog = false;
+    private boolean raidMarchDebugLog = false;
 
     /** When true, plot creator staff and commands do not require explicit aetherhaven.plot.creator grants. */
     private boolean grantPlotCreatorPermissionToEveryone = true;
@@ -856,6 +867,10 @@ public final class AetherhavenPluginConfig {
 
     public boolean isVillagerScheduleDebugLog() {
         return villagerScheduleDebugLog;
+    }
+
+    public boolean isRaidMarchDebugLog() {
+        return raidMarchDebugLog;
     }
 
     public int getTreasuryMaxGoldTaxPerVillagerPerDay() {
@@ -1549,6 +1564,7 @@ public final class AetherhavenPluginConfig {
         this.innPoolMorningEndHour = o.innPoolMorningEndHour;
         this.villagerScheduleEnabled = o.villagerScheduleEnabled;
         this.villagerScheduleDebugLog = o.villagerScheduleDebugLog;
+        this.raidMarchDebugLog = o.raidMarchDebugLog;
         this.grantPlotCreatorPermissionToEveryone = o.grantPlotCreatorPermissionToEveryone;
         this.plotCreatorPlayerBuildingTypesOnly = o.plotCreatorPlayerBuildingTypesOnly;
         this.buildingEditorWriteRoot = o.buildingEditorWriteRoot != null ? o.buildingEditorWriteRoot : "";

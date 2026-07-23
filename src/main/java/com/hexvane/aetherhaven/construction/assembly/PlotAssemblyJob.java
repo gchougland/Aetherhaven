@@ -31,5 +31,6 @@ public record PlotAssemblyJob(
     int prefabId,
     /** Wall-clock ms between auto placements: (selfBuildGameDays * msPerGameDay) / N. */
     long slotWallMs,
+    boolean preserveWater,
     @Nonnull String constructionId
 ) {}

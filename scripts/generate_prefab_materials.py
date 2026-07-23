@@ -161,7 +161,7 @@ def lookup_rule(item_id: str, table: ConversionTable) -> ConversionRule | None:
 def normalize_block_to_item_id(raw_name: str) -> str | None:
     """
     Map a prefab block name to the item/block id players supply.
-    Strips leading '*', collapses *_State_Definitions_* variants, and maps *_Hollow to base id.
+    Strips leading '*', collapses *_State_Definitions_* variants, maps *_Hollow to base id, and maps *_Trunk_Full to *_Trunk.
     """
     name = raw_name.strip()
     if not name or name == "Empty":
@@ -175,6 +175,8 @@ def normalize_block_to_item_id(raw_name: str) -> str | None:
         base = name[: -len(_HOLLOW_SUFFIX)]
         if base:
             name = base
+    if "_Trunk_Full" in name:
+        name = name.replace("_Trunk_Full", "_Trunk")
     return name if name else None
 
 

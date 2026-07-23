@@ -1,11 +1,15 @@
 package com.hexvane.aetherhaven.rts;
 
+import com.hexvane.aetherhaven.patrol.GuardCombatClock;
+import com.hexvane.aetherhaven.patrol.GuardNpcAttackerMemory;
+import com.hexvane.aetherhaven.patrol.GuardPlayerProvokedTargets;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.builtin.tagset.config.NPCGroup;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.component.spatial.SpatialResource;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
@@ -26,6 +30,39 @@ public final class RtsHostileQuery {
     private static final String AGGRESSIVE_GROUP = "Aggressive";
     private static final String TOWNSFOLK_GROUP = "Aetherhaven_Townsfolk";
     private static final String RAID_GROUP = "Aetherhaven_Raid";
+    /**
+     * Vanilla NPC groups for factions that attack players but are omitted from {@code LivingWorld/Aggressive.json}
+     * (Outlander, Scarak). Guards check membership only in Java; we do not patch vanilla Aggressive assets.
+     */
+    private static final String[] EXTRA_AMBIENT_HOSTILE_GROUPS = {
+        "Outlander",
+        "Scarak",
+    };
+
+    /**
+     * Vanilla role ids for player-hostile NPCs that are not in the Aggressive group closure. Matched against
+     * {@link NPCEntity#getRoleName()}. Regenerate via {@code tools/audit_ambient_hostile_groups.py}.
+     */
+    private static final String[] EXTRA_AMBIENT_HOSTILE_ROLE_PATTERNS = {
+        "Golem_*",
+        "Spirit_*",
+        "Ghoul",
+        "Wraith",
+        "Wraith_*",
+        "Werewolf",
+        "Shadow_Knight",
+        "Hedera",
+        "Snapdragon",
+        "Molerat",
+        "Hound_Bleached",
+        "Larva_Void",
+        "Larva_Silk",
+        "Slug_Magma",
+        "Chicken_Undead",
+        "Cow_Undead",
+        "Pig_Undead",
+        "Dungeon_Scarak_*",
+    };
 
     /** Radius around a ground click to pick a hostile under the RTS cursor. */
     private static final double FOCUS_PICK_RADIUS = 6.0;
@@ -147,6 +184,376 @@ public final class RtsHostileQuery {
         return roleIndex < 0 || !npcInTownsfolkGroup(roleIndex);
     }
 
+    /**
+     * True when guards should auto engage {@code targetRef}: aggressive or raid creatures, anything fighting the
+     * guard or followed player, or anything the followed player recently hit (never random livestock or prey).
+     */
+    public static boolean isGuardThreatTarget(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        return isGuardThreatTarget(guardRef, targetRef, store, null);
+    }
+
+    public static boolean isGuardThreatTarget(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> protectedPlayerRef
+    ) {
+        if (!isValidNpcThreatCandidate(targetRef, guardRef, store)) {
+            return false;
+        }
+        if (isReactiveGuardThreat(guardRef, targetRef, store, protectedPlayerRef)) {
+            return true;
+        }
+        return isAmbientHostileCreature(targetRef, store);
+    }
+
+    private static boolean isValidNpcThreatCandidate(
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!targetRef.isValid() || targetRef.equals(guardRef)) {
+            return false;
+        }
+        if (store.getComponent(targetRef, Player.getComponentType()) != null) {
+            return false;
+        }
+        if (store.getComponent(targetRef, TownVillagerBinding.getComponentType()) != null) {
+            return false;
+        }
+        NPCEntity targetNpc = store.getComponent(targetRef, NPCEntity.getComponentType());
+        return targetNpc != null && targetNpc.getRole() != null;
+    }
+
+    /** Hostile creatures guards should notice without provocation (not livestock, prey, or critters). */
+    private static boolean isAmbientHostileCreature(@Nonnull Ref<EntityStore> targetRef, @Nonnull Store<EntityStore> store) {
+        NPCEntity targetNpc = store.getComponent(targetRef, NPCEntity.getComponentType());
+        if (targetNpc == null || targetNpc.getRole() == null) {
+            return false;
+        }
+        int roleIndex = targetNpc.getRole().getRoleIndex();
+        if (roleIndex >= 0 && npcInRaidGroup(roleIndex)) {
+            return true;
+        }
+        if (isAggressiveNpc(targetRef, store)) {
+            return true;
+        }
+        if (roleIndex >= 0) {
+            for (String group : EXTRA_AMBIENT_HOSTILE_GROUPS) {
+                if (npcInGroup(group, roleIndex)) {
+                    return true;
+                }
+            }
+        }
+        String roleName = targetNpc.getRoleName();
+        return roleName != null && !roleName.isEmpty() && matchesAmbientHostileRoleName(roleName);
+    }
+
+    static boolean matchesAmbientHostileRoleName(@Nonnull String roleName) {
+        for (String pattern : EXTRA_AMBIENT_HOSTILE_ROLE_PATTERNS) {
+            if (matchesRolePattern(roleName, pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean matchesRolePattern(@Nonnull String roleName, @Nonnull String pattern) {
+        if (pattern.endsWith("*") && !pattern.startsWith("*")) {
+            String prefix = pattern.substring(0, pattern.length() - 1);
+            return roleName.startsWith(prefix);
+        }
+        if (pattern.startsWith("*") && pattern.endsWith("*") && pattern.length() >= 2) {
+            return roleName.contains(pattern.substring(1, pattern.length() - 1));
+        }
+        return roleName.equals(pattern);
+    }
+
+    private static boolean isMarkedHostileAttacker(@Nonnull Ref<EntityStore> attackerRef, @Nonnull Store<EntityStore> store) {
+        try {
+            GuardNpcAttackerMemory memory = store.getResource(GuardNpcAttackerMemory.getResourceType());
+            return memory != null && memory.isMarkedAttacker(attackerRef, GuardCombatClock.nowMs(store));
+        } catch (IllegalStateException ignored) {
+            return false;
+        }
+    }
+
+    private static boolean isReactiveGuardThreat(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> protectedPlayerRef
+    ) {
+        if (isMarkedHostileAttacker(targetRef, store)) {
+            return true;
+        }
+        if (isRecentAttackerOnGuard(guardRef, targetRef, store)) {
+            return true;
+        }
+        if (protectedPlayerRef != null && isRecentAttackerOnPlayer(protectedPlayerRef, targetRef, store)) {
+            return true;
+        }
+        if (protectedPlayerRef != null
+            && isRecentVictimOfPlayer(protectedPlayerRef, targetRef, store)
+            && isGuardAttackableTarget(targetRef, store)) {
+            return true;
+        }
+        // Neutral livestock sets LockedTarget to the player while fleeing; that is not combat.
+        return protectedPlayerRef != null
+            && isNpcLockedOn(protectedPlayerRef, targetRef, store)
+            && isAmbientHostileCreature(targetRef, store);
+    }
+
+    /** True when {@code npcRef} recently dealt combat damage to {@code playerRef}. */
+    public static boolean isRecentAttackerOnPlayer(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!npcRef.isValid() || store.getComponent(playerRef, Player.getComponentType()) == null) {
+            return false;
+        }
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null) {
+            return false;
+        }
+        Ref<EntityStore> victim = npc.getDamageData().getMostDamagedVictim();
+        if (victim == null) {
+            return false;
+        }
+        return playerRef.equals(victim);
+    }
+
+    /** True when {@code playerRef} recently dealt combat damage to {@code npcRef}. */
+    public static boolean isRecentVictimOfPlayer(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!npcRef.isValid() || store.getComponent(playerRef, Player.getComponentType()) == null) {
+            return false;
+        }
+        UUIDComponent playerUuid = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (playerUuid != null) {
+            try {
+                GuardPlayerProvokedTargets provoked = store.getResource(GuardPlayerProvokedTargets.getResourceType());
+                if (provoked != null
+                    && provoked.isProvokedByPlayer(
+                        playerUuid.getUuid(),
+                        npcRef,
+                        GuardCombatClock.nowMs(store)
+                    )) {
+                    return true;
+                }
+            } catch (IllegalStateException ignored) {
+                // Resource not registered in this store context.
+            }
+        }
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null) {
+            return false;
+        }
+        Ref<EntityStore> attacker = npc.getDamageData().getMostDamagingAttacker();
+        if (attacker == null) {
+            attacker = npc.getDamageData().getAnyAttacker();
+        }
+        return playerRef.equals(attacker);
+    }
+
+    /** True when {@code threatRef} recently damaged {@code guardRef} (combat damage this tick window). */
+    public static boolean isRecentAttackerOnGuard(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> threatRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (!threatRef.isValid()) {
+            return false;
+        }
+        if (isMarkedHostileAttacker(threatRef, store)) {
+            return true;
+        }
+        NPCEntity guardNpc = store.getComponent(guardRef, NPCEntity.getComponentType());
+        if (guardNpc == null) {
+            return false;
+        }
+        Ref<EntityStore> attacker = guardNpc.getDamageData().getMostDamagingAttacker();
+        if (attacker == null) {
+            attacker = guardNpc.getDamageData().getAnyAttacker();
+        }
+        return threatRef.equals(attacker);
+    }
+
+    /** True when {@code npcRef}'s locked combat target is {@code targetRef}. */
+    public static boolean isNpcLockedOn(
+        @Nonnull Ref<EntityStore> targetRef,
+        @Nonnull Ref<EntityStore> npcRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        NPCEntity npc = store.getComponent(npcRef, NPCEntity.getComponentType());
+        if (npc == null || npc.getRole() == null) {
+            return false;
+        }
+        Ref<EntityStore> locked = npc.getRole()
+            .getMarkedEntitySupport()
+            .getMarkedEntityRef(RtsGuardCombatSupport.LOCKED_TARGET_SLOT);
+        return targetRef.equals(locked);
+    }
+
+    @Nullable
+    public static Ref<EntityStore> resolveGuardDamageAttacker(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Store<EntityStore> store
+    ) {
+        NPCEntity guardNpc = store.getComponent(guardRef, NPCEntity.getComponentType());
+        if (guardNpc == null) {
+            return null;
+        }
+        Ref<EntityStore> attacker = guardNpc.getDamageData().getMostDamagingAttacker();
+        if (attacker == null) {
+            attacker = guardNpc.getDamageData().getAnyAttacker();
+        }
+        if (attacker == null || !attacker.isValid()) {
+            return null;
+        }
+        if (store.getComponent(attacker, Player.getComponentType()) != null) {
+            return null;
+        }
+        return attacker;
+    }
+
+    /**
+     * Priority threat pick while a guard follows a player: guard's attacker, mob targeting the player,
+     * then nearest threat near the player, then near the guard.
+     */
+    @Nullable
+    public static Ref<EntityStore> resolveFollowPlayerThreat(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        double radius
+    ) {
+        Ref<EntityStore> guardAttacker = resolveGuardDamageAttacker(guardRef, store);
+        if (guardAttacker != null && isGuardThreatTarget(guardRef, guardAttacker, store, playerRef)) {
+            return guardAttacker;
+        }
+        Ref<EntityStore> playerFight = nearestNpcRecentVictimOfPlayer(guardRef, playerRef, store, radius);
+        if (playerFight != null) {
+            return playerFight;
+        }
+        Ref<EntityStore> targetingPlayer = nearestNpcLockedOnPlayer(guardRef, playerRef, store, radius);
+        if (targetingPlayer != null) {
+            return targetingPlayer;
+        }
+        TransformComponent playerTc = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (playerTc != null) {
+            Vector3d p = playerTc.getPosition();
+            Ref<EntityStore> nearPlayer = nearestGuardThreat(
+                store,
+                guardRef,
+                p.x,
+                p.y,
+                p.z,
+                radius,
+                guardRef,
+                playerRef
+            );
+            if (nearPlayer != null) {
+                return nearPlayer;
+            }
+        }
+        TransformComponent guardTc = store.getComponent(guardRef, TransformComponent.getComponentType());
+        if (guardTc == null) {
+            return null;
+        }
+        Vector3d g = guardTc.getPosition();
+        return nearestGuardThreat(store, guardRef, g.x, g.y, g.z, radius, guardRef, playerRef);
+    }
+
+    @Nullable
+    public static Ref<EntityStore> resolveAutonomousGuardThreat(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Store<EntityStore> store,
+        double radius
+    ) {
+        Ref<EntityStore> guardAttacker = resolveGuardDamageAttacker(guardRef, store);
+        if (guardAttacker != null && isGuardThreatTarget(guardRef, guardAttacker, store)) {
+            return guardAttacker;
+        }
+        TransformComponent guardTc = store.getComponent(guardRef, TransformComponent.getComponentType());
+        if (guardTc == null) {
+            return null;
+        }
+        Vector3d g = guardTc.getPosition();
+        return nearestGuardThreat(store, guardRef, g.x, g.y, g.z, radius, guardRef, null);
+    }
+
+    /**
+     * Engage without line of sight when the threat is actively fighting the guard or followed player.
+     */
+    public static boolean canEngageWithoutLineOfSight(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> threatRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> protectedPlayerRef
+    ) {
+        return isRecentAttackerOnGuard(guardRef, threatRef, store)
+            || (protectedPlayerRef != null && isRecentAttackerOnPlayer(protectedPlayerRef, threatRef, store))
+            || isMarkedHostileAttacker(threatRef, store)
+            || (protectedPlayerRef != null
+                && isRecentVictimOfPlayer(protectedPlayerRef, threatRef, store)
+                && isGuardAttackableTarget(threatRef, store))
+            || (protectedPlayerRef != null
+                && isNpcLockedOn(protectedPlayerRef, threatRef, store)
+                && isAmbientHostileCreature(threatRef, store));
+    }
+
+    @Nullable
+    public static Ref<EntityStore> nearestGuardThreat(
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> guardRef,
+        double centerX,
+        double centerY,
+        double centerZ,
+        double radius,
+        @Nullable Ref<EntityStore> lineOfSightObserverRef,
+        @Nullable Ref<EntityStore> protectedPlayerRef
+    ) {
+        SpatialResource<Ref<EntityStore>, EntityStore> spatial =
+            store.getResource(EntityModule.get().getEntitySpatialResourceType());
+        List<Ref<EntityStore>> hits = SpatialResource.getThreadLocalReferenceList();
+        spatial.getSpatialStructure().collect(new Vector3d(centerX, centerY, centerZ), radius, hits);
+        Ref<EntityStore> best = null;
+        double bestSq = Double.MAX_VALUE;
+        for (Ref<EntityStore> ref : hits) {
+            if (!ref.isValid() || !isGuardThreatTarget(guardRef, ref, store, protectedPlayerRef)) {
+                continue;
+            }
+            if (lineOfSightObserverRef != null
+                && !canEngageWithoutLineOfSight(guardRef, ref, store, protectedPlayerRef)
+                && !hasLineOfSight(lineOfSightObserverRef, ref, store)) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d p = tc.getPosition();
+            double dx = p.x - centerX;
+            double dy = p.y - centerY;
+            double dz = p.z - centerZ;
+            double sq = dx * dx + dy * dy + dz * dz;
+            if (sq <= radius * radius && sq < bestSq) {
+                bestSq = sq;
+                best = ref;
+            }
+        }
+        return best;
+    }
+
     /** True when {@code observerRef} has unobstructed line of sight to {@code targetRef}. */
     public static boolean hasLineOfSight(
         @Nonnull Ref<EntityStore> observerRef,
@@ -183,34 +590,10 @@ public final class RtsHostileQuery {
         double radius,
         @Nullable Ref<EntityStore> observerRef
     ) {
-        SpatialResource<Ref<EntityStore>, EntityStore> spatial =
-            store.getResource(EntityModule.get().getEntitySpatialResourceType());
-        List<Ref<EntityStore>> hits = SpatialResource.getThreadLocalReferenceList();
-        spatial.getSpatialStructure().collect(new Vector3d(centerX, centerY, centerZ), radius, hits);
-        Ref<EntityStore> best = null;
-        double bestSq = Double.MAX_VALUE;
-        for (Ref<EntityStore> ref : hits) {
-            if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
-                continue;
-            }
-            if (observerRef != null && !hasLineOfSight(observerRef, ref, store)) {
-                continue;
-            }
-            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
-            if (tc == null) {
-                continue;
-            }
-            Vector3d p = tc.getPosition();
-            double dx = p.x - centerX;
-            double dy = p.y - centerY;
-            double dz = p.z - centerZ;
-            double sq = dx * dx + dy * dy + dz * dz;
-            if (sq <= radius * radius && sq < bestSq) {
-                bestSq = sq;
-                best = ref;
-            }
+        if (observerRef == null || !observerRef.isValid()) {
+            return nearestAggressiveOnly(store, centerX, centerY, centerZ, radius, null);
         }
-        return best;
+        return nearestGuardThreat(store, observerRef, centerX, centerY, centerZ, radius, observerRef, null);
     }
 
     @Nullable
@@ -324,6 +707,123 @@ public final class RtsHostileQuery {
                 out.add(ref);
             }
         }
+    }
+
+    @Nullable
+    private static Ref<EntityStore> nearestNpcRecentVictimOfPlayer(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        double radius
+    ) {
+        List<Ref<EntityStore>> nearPlayer = collectNpcRefsNear(store, playerRef, radius);
+        Ref<EntityStore> best = null;
+        double bestSq = Double.MAX_VALUE;
+        TransformComponent playerTc = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (playerTc == null) {
+            return null;
+        }
+        Vector3d playerPos = playerTc.getPosition();
+        for (Ref<EntityStore> ref : nearPlayer) {
+            if (!isRecentVictimOfPlayer(playerRef, ref, store)) {
+                continue;
+            }
+            if (!isGuardThreatTarget(guardRef, ref, store, playerRef)) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d p = tc.getPosition();
+            double dx = p.x - playerPos.x;
+            double dy = p.y - playerPos.y;
+            double dz = p.z - playerPos.z;
+            double sq = dx * dx + dy * dy + dz * dz;
+            if (sq < bestSq) {
+                bestSq = sq;
+                best = ref;
+            }
+        }
+        return best;
+    }
+
+    @Nullable
+    private static Ref<EntityStore> nearestNpcLockedOnPlayer(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        double radius
+    ) {
+        List<Ref<EntityStore>> nearPlayer = collectNpcRefsNear(store, playerRef, radius);
+        Ref<EntityStore> best = null;
+        double bestSq = Double.MAX_VALUE;
+        TransformComponent playerTc = store.getComponent(playerRef, TransformComponent.getComponentType());
+        if (playerTc == null) {
+            return null;
+        }
+        Vector3d playerPos = playerTc.getPosition();
+        for (Ref<EntityStore> ref : nearPlayer) {
+            if (!isNpcLockedOn(playerRef, ref, store) || !isAmbientHostileCreature(ref, store)) {
+                continue;
+            }
+            if (!isGuardThreatTarget(guardRef, ref, store, playerRef)) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d p = tc.getPosition();
+            double dx = p.x - playerPos.x;
+            double dy = p.y - playerPos.y;
+            double dz = p.z - playerPos.z;
+            double sq = dx * dx + dy * dy + dz * dz;
+            if (sq < bestSq) {
+                bestSq = sq;
+                best = ref;
+            }
+        }
+        return best;
+    }
+
+    @Nullable
+    private static Ref<EntityStore> nearestAggressiveOnly(
+        @Nonnull Store<EntityStore> store,
+        double centerX,
+        double centerY,
+        double centerZ,
+        double radius,
+        @Nullable Ref<EntityStore> observerRef
+    ) {
+        SpatialResource<Ref<EntityStore>, EntityStore> spatial =
+            store.getResource(EntityModule.get().getEntitySpatialResourceType());
+        List<Ref<EntityStore>> hits = SpatialResource.getThreadLocalReferenceList();
+        spatial.getSpatialStructure().collect(new Vector3d(centerX, centerY, centerZ), radius, hits);
+        Ref<EntityStore> best = null;
+        double bestSq = Double.MAX_VALUE;
+        for (Ref<EntityStore> ref : hits) {
+            if (!ref.isValid() || !isAggressiveNpc(ref, store)) {
+                continue;
+            }
+            if (observerRef != null && !hasLineOfSight(observerRef, ref, store)) {
+                continue;
+            }
+            TransformComponent tc = store.getComponent(ref, TransformComponent.getComponentType());
+            if (tc == null) {
+                continue;
+            }
+            Vector3d p = tc.getPosition();
+            double dx = p.x - centerX;
+            double dy = p.y - centerY;
+            double dz = p.z - centerZ;
+            double sq = dx * dx + dy * dy + dz * dz;
+            if (sq <= radius * radius && sq < bestSq) {
+                bestSq = sq;
+                best = ref;
+            }
+        }
+        return best;
     }
 
     private static boolean npcInAggressiveGroup(int roleIndex) {

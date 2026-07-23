@@ -1,7 +1,9 @@
 package com.hexvane.aetherhaven.town;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
+import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.GuildHallAdventurerPoolService;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -13,6 +15,22 @@ import javax.annotation.Nullable;
 /** Who appears in town resident lists, uses needs, and pays flat townsfolk tax. */
 public final class TownResidentEligibility {
     private TownResidentEligibility() {}
+
+    /**
+     * House assignment picker: portal tourists and unhoused guards only appear after their housing quest is
+     * accepted and this NPC is the bound quest target.
+     */
+    public static boolean excludeFromHouseAssignmentPicker(@Nonnull TownRecord town, @Nonnull UUID entityUuid) {
+        if (TouristPortalTickService.isActivePortalTourist(town, entityUuid)
+            && !isQuestTargetForActiveQuest(town, entityUuid, AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK)) {
+            return true;
+        }
+        if (GuardHireService.isUnhousedHiredGuard(town, entityUuid)
+            && !isQuestTargetForActiveQuest(town, entityUuid, AetherhavenConstants.QUEST_HOUSE_GUARD)) {
+            return true;
+        }
+        return false;
+    }
 
     public static boolean excludeFromResidentLists(
         @Nonnull TownRecord town,
@@ -131,5 +149,13 @@ public final class TownResidentEligibility {
             return true;
         }
         return plugin.getTownsfolkCharacterCatalog().isTownsfolkRole(roleId);
+    }
+
+    private static boolean isQuestTargetForActiveQuest(
+        @Nonnull TownRecord town,
+        @Nonnull UUID entityUuid,
+        @Nonnull String questId
+    ) {
+        return town.hasQuestActive(questId) && entityUuid.equals(town.getQuestTargetEntityUuid(questId));
     }
 }

@@ -42,6 +42,21 @@ public final class TownJournalAdminService {
     }
 
     @Nonnull
+    public static PlotLinkReconcileService.PlotRepairReport repairSinglePlot(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull UUID plotId,
+        @Nonnull Store<EntityStore> store
+    ) {
+        PlotInstance plot = town.findPlotById(plotId);
+        if (plot == null) {
+            return new PlotLinkReconcileService.PlotRepairReport();
+        }
+        return PlotLinkReconcileService.repairPlotInstance(world, plugin, town, plot, store, true);
+    }
+
+    @Nonnull
     public static PlotLinkReconcileService.TownRepairReport repairPlots(
         @Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull TownRecord town
     ) {

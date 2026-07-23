@@ -229,6 +229,8 @@ aetherhaven.plotcreator.field.maxHomeResidents = Max residents (1-8)
 
 aetherhaven.plotcreator.field.saveEmptySpaces = Save empty spaces in prefab
 aetherhaven.plotcreator.field.saveEmptySpaces.hint = When on, air in your footprint is saved and clears those blocks when the building is assembled. When off, only solid blocks are saved and existing terrain is kept. Editor empty markers always clear blocks.
+aetherhaven.plotcreator.field.preserveWater = Keep water when building
+aetherhaven.plotcreator.field.preserveWater.hint = When on, water stays in prefab air spaces outside the build. Editor empty markers still clear water so you can hollow out interiors.
 aetherhaven.plotcreator.field.touristDestination = Visitors may stop here
 aetherhaven.plotcreator.field.touristDestination.hint = When on, portal visitors may walk to this building during the day.
 aetherhaven.plotcreator.field.plotTokenLocked = Plot token locked by default

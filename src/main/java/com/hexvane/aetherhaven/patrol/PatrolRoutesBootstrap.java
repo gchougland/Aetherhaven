@@ -46,10 +46,14 @@ public final class PatrolRoutesBootstrap {
     }
 
     public static void register(@Nonnull AetherhavenPlugin core, @Nonnull JavaPlugin plugin) {
+        GuardPlayerProvokedTargets.register(plugin.getEntityStoreRegistry());
+        GuardNpcAttackerMemory.register(plugin.getEntityStoreRegistry());
         PatrolWandPlayerComponent.register(plugin.getEntityStoreRegistry());
         GuardPatrolState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new PatrolWandPreviewSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardPatrolSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new GuardFollowPlayerSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new GuardAutonomousCombatSystem(core));
+        plugin.getEntityStoreRegistry().registerSystem(new GuardCombatProvocationDamageSystem());
     }
 }

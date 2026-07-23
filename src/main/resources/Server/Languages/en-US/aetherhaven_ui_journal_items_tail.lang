@@ -195,6 +195,13 @@ aetherhaven.ui.townJournal.plotRemoveConfirm=Yes, remove it
 aetherhaven.ui.townJournal.plotRemoveCancel=Keep it
 aetherhaven.ui.townJournal.removePlotAreaNotLoaded=Move closer to that building and try again.
 aetherhaven.ui.townJournal.removePlotFailed=Could not update the town list. Try again.
+aetherhaven.ui.townJournal.repairPlotTooltip=Fix missing shelves, safes, and work spots for this building. Stand near it first.
+aetherhaven.ui.townJournal.repairPlotOk=Fixed {count} spot(s) for that building.
+aetherhaven.ui.townJournal.repairPlotNothing=That building looks fine already.
+aetherhaven.ui.townJournal.repairPlotNotLoaded=Move closer to that building and try again.
+aetherhaven.ui.townJournal.repairPlotFailed=Could not repair that building. Try again when the area is fully loaded.
+aetherhaven.ui.townJournal.repairPlotSignAt=Plot sign is at {x} {y} {z}.
+aetherhaven.ui.townJournal.repairPlotSignFixed=Plot sign fixed. It is at {x} {y} {z}.
 
 # Legacy keys (other locales; unused in new UI)
 aetherhaven.ui.questjournal.title=Quest journal

@@ -1152,6 +1152,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         plots.sort((a, b) -> compareJournalPlots(plotCatalog, a, b));
         boolean canRemovePlots = town.playerCanRemovePlots(uc.getUuid());
+        boolean canRepairPlots = town.playerCanManageConstructions(uc.getUuid());
         java.util.Set<String> plotIconsEnsured = new java.util.HashSet<>();
         for (int i = 0; i < plots.size(); i++) {
             PlotInstance p = plots.get(i);
@@ -1177,7 +1178,21 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 commandBuilder.set(row + " #PlotIconHost.Visible", false);
                 AetherhavenUiItemGrids.setSingleSlotEmpty(commandBuilder, row + " #PlotTokenSlot");
             }
-            boolean areaLoaded = PlotFootprintChunkUtil.isPlotFullyLoaded(world, p);
+            boolean areaLoaded = PlotFootprintChunkUtil.isPlotRepairAreaLoaded(world, p);
+            commandBuilder.set(row + " #RepairPlot.Visible", canRepairPlots);
+            commandBuilder.set(
+                row + " #RepairPlot.TooltipTextSpans",
+                Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotTooltip")
+            );
+            if (canRepairPlots) {
+                commandBuilder.set(row + " #RepairPlot.Disabled", !areaLoaded);
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    row + " #RepairPlot",
+                    new EventData().append("Action", "RepairPlot").append("PlotId", p.getPlotId().toString()),
+                    false
+                );
+            }
             commandBuilder.set(row + " #RemovePlot.Visible", canRemovePlots);
             commandBuilder.set(
                 row + " #RemovePlot.TooltipTextSpans",
@@ -2334,6 +2349,89 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             UIEventBuilder ev = new UIEventBuilder();
             build(ref, cmd, ev, store);
             sendUpdate(cmd, ev, false);
+            return;
+        }
+        if (action.equalsIgnoreCase("RepairPlot")) {
+            String pid = data.plotId;
+            if (pid == null || pid.isBlank()) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (uc == null) {
+                return;
+            }
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
+            UUID plotUuid = tryParseUuid(pid);
+            PlotInstance plot = town != null && plotUuid != null ? town.findPlotById(plotUuid) : null;
+            if (town == null || plot == null || !town.playerCanManageConstructions(uc.getUuid())) {
+                return;
+            }
+            if (!PlotFootprintChunkUtil.isPlotRepairAreaLoaded(world, plot)) {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotNotLoaded")
+                );
+                return;
+            }
+            TownRecord townRun = town;
+            PlotInstance plotRun = plot;
+            world.execute(
+                () -> {
+                    if (isDismissed() || !ref.isValid()) {
+                        return;
+                    }
+                    PlotLinkReconcileService.PlotRepairReport rep =
+                        TownJournalAdminService.repairSinglePlot(world, plugin, townRun, plotRun.getPlotId(), store);
+                    if (rep.getSkippedChunkUnloaded() > 0) {
+                        playerRef.sendMessage(
+                            Message.translation(
+                                "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotNotLoaded"
+                            )
+                        );
+                        return;
+                    }
+                    if (rep.getFailed() > 0) {
+                        playerRef.sendMessage(
+                            Message.translation(
+                                "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotFailed"
+                            )
+                        );
+                        return;
+                    }
+                    if (rep.isBlueprintingPlot()) {
+                        String signMsgKey =
+                            rep.hadFixes()
+                                ? "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotSignFixed"
+                                : "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotSignAt";
+                        playerRef.sendMessage(
+                            Message.translation(signMsgKey)
+                                .param("x", String.valueOf(plotRun.getSignX()))
+                                .param("y", String.valueOf(plotRun.getSignY()))
+                                .param("z", String.valueOf(plotRun.getSignZ()))
+                        );
+                    } else if (rep.hadFixes()) {
+                        int fixes = rep.getRelinked() + rep.getPlacedBlocks();
+                        playerRef.sendMessage(
+                            Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotOk")
+                                .param("count", String.valueOf(fixes))
+                        );
+                    } else {
+                        playerRef.sendMessage(
+                            Message.translation(
+                                "aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.repairPlotNothing"
+                            )
+                        );
+                    }
+                    UICommandBuilder cmd = new UICommandBuilder();
+                    UIEventBuilder ev = new UIEventBuilder();
+                    build(ref, cmd, ev, store);
+                    sendUpdate(cmd, ev, false);
+                }
+            );
             return;
         }
         if (action.equalsIgnoreCase("BeginPlotRemoveConfirm")) {

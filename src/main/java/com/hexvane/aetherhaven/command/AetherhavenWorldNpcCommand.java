@@ -53,10 +53,10 @@ public final class AetherhavenWorldNpcCommand extends AbstractCommandCollection 
     private static final class PlaceCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", AetherhavenArgTypes.WORLD_NPC_PLACEMENT_ID);
         @Nonnull
         private final RequiredArg<String> roleArg =
-            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.role.desc", ArgTypes.STRING);
+            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.role.desc", AetherhavenArgTypes.VILLAGER_NPC_ROLE);
 
         PlaceCommand() {
             super("place", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.place.desc");
@@ -94,7 +94,7 @@ public final class AetherhavenWorldNpcCommand extends AbstractCommandCollection 
     private static final class EnsureCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", AetherhavenArgTypes.WORLD_NPC_PLACEMENT_ID);
 
         EnsureCommand() {
             super("ensure", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.ensure.desc");
@@ -125,7 +125,7 @@ public final class AetherhavenWorldNpcCommand extends AbstractCommandCollection 
     private static final class RemoveCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", AetherhavenArgTypes.WORLD_NPC_PLACEMENT_ID);
 
         RemoveCommand() {
             super("remove", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.remove.desc");
@@ -189,7 +189,7 @@ public final class AetherhavenWorldNpcCommand extends AbstractCommandCollection 
     private static final class TpCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", AetherhavenArgTypes.WORLD_NPC_PLACEMENT_ID);
 
         TpCommand() {
             super("tp", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.tp.desc");
@@ -224,7 +224,7 @@ public final class AetherhavenWorldNpcCommand extends AbstractCommandCollection 
     private static final class SetPoseCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.id.desc", AetherhavenArgTypes.WORLD_NPC_PLACEMENT_ID);
 
         SetPoseCommand() {
             super("setpose", "aetherhaven_commands_help.commands.aetherhaven.worldnpc.setpose.desc");

@@ -410,14 +410,37 @@ public final class PlotBlockStamper {
 
         Integer managementY = findBlockY(world, wx, wy, wz, AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID);
         if (managementY == null) {
-            LOGGER.atWarning().log(
-                "No %s in column %s,*,%s near y=%s",
-                AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID,
+            if (dryRun) {
+                return StampOutcome.STAMPED;
+            }
+            Vector3i cell = new Vector3i(wx, wy, wz);
+            Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+            if (blockYaw == Rotation.None) {
+                blockYaw = yaw;
+            }
+            RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+            int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+            ensureBlockPlaced(
+                world,
+                chunk,
                 wx,
+                wy,
                 wz,
-                wy
+                AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID,
+                rt,
+                rotationIndex
             );
-            return StampOutcome.BLOCK_MISSING;
+            managementY = findBlockY(world, wx, wy, wz, AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID);
+            if (managementY == null) {
+                LOGGER.atWarning().log(
+                    "Could not place %s at %s,%s,%s",
+                    AetherhavenConstants.MANAGEMENT_BLOCK_TYPE_ID,
+                    wx,
+                    wy,
+                    wz
+                );
+                return StampOutcome.FAILED;
+            }
         }
 
         if (!force) {
@@ -489,7 +512,30 @@ public final class PlotBlockStamper {
 
         Integer treasuryY = findBlockY(world, wx, wy, wz, AetherhavenConstants.TREASURY_BLOCK_TYPE_ID);
         if (treasuryY == null) {
-            return StampOutcome.BLOCK_MISSING;
+            if (dryRun) {
+                return StampOutcome.STAMPED;
+            }
+            Vector3i cell = new Vector3i(wx, wy, wz);
+            Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+            if (blockYaw == Rotation.None) {
+                blockYaw = yaw;
+            }
+            RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+            int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+            ensureBlockPlaced(
+                world,
+                chunk,
+                wx,
+                wy,
+                wz,
+                AetherhavenConstants.TREASURY_BLOCK_TYPE_ID,
+                rt,
+                rotationIndex
+            );
+            treasuryY = findBlockY(world, wx, wy, wz, AetherhavenConstants.TREASURY_BLOCK_TYPE_ID);
+            if (treasuryY == null) {
+                return StampOutcome.FAILED;
+            }
         }
 
         if (!force) {
@@ -561,7 +607,30 @@ public final class PlotBlockStamper {
 
         Integer safeY = findBlockY(world, wx, wy, wz, AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID);
         if (safeY == null) {
-            return StampOutcome.BLOCK_MISSING;
+            if (dryRun) {
+                return StampOutcome.STAMPED;
+            }
+            Vector3i cell = new Vector3i(wx, wy, wz);
+            Rotation blockYaw = PlotBlockRotationUtil.readBlockYaw(world, cell);
+            if (blockYaw == Rotation.None) {
+                blockYaw = yaw;
+            }
+            RotationTuple rt = RotationTuple.of(blockYaw, Rotation.None, Rotation.None);
+            int rotationIndex = PlotBlockRotationUtil.readBlockRotationIndex(world, cell);
+            ensureBlockPlaced(
+                world,
+                chunk,
+                wx,
+                wy,
+                wz,
+                AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID,
+                rt,
+                rotationIndex
+            );
+            safeY = findBlockY(world, wx, wy, wz, AetherhavenConstants.SHOP_SAFE_BLOCK_TYPE_ID);
+            if (safeY == null) {
+                return StampOutcome.FAILED;
+            }
         }
 
         if (!force) {

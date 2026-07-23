@@ -56,7 +56,8 @@
       "weight": 65
     },
     "hunt": {
-      "weight": 45
+      "weight": 45,
+      "goldCoinMultiplier": 1.5
     },
     "raid": {
       "weight": 20

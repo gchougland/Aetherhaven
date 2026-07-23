@@ -30,6 +30,7 @@ public final class PlotCreatorDraftLoader {
         draft.setMaxHomeResidentsInput(String.valueOf(def.getMaxHomeResidents()));
         draft.setScheduleSharedUtilityPick(def.isScheduleSharedUtilityPick());
         draft.setTouristDestination(def.isTouristDestination());
+        draft.setPreserveWater(def.isPreserveWater());
         draft.setPlotTokenLockedByDefault(def.isPlotTokenLockedByDefault());
         draft.setFloatingGiftBlueprint(def.isFloatingGiftBlueprint());
         draft.setExcludeFromTownJournal(def.isExcludeFromTownJournal());

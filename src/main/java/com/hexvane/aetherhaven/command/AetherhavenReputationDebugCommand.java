@@ -40,7 +40,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class SetSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", AetherhavenArgTypes.VILLAGER_TARGET);
         @Nonnull
         private final RequiredArg<Integer> reputationArg =
             this.withRequiredArg("value", "aetherhaven_commands_help.commands.aetherhaven.reputation.value.desc", ArgTypes.INTEGER);
@@ -113,7 +113,7 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class ListRewardsSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final OptionalArg<String> roleFilterArg =
-            this.withOptionalArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.roleFilter.desc", ArgTypes.STRING);
+            this.withOptionalArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.roleFilter.desc", AetherhavenArgTypes.VILLAGER_NPC_ROLE);
 
         ListRewardsSubCommand() {
             super("list", "aetherhaven_commands_help.commands.aetherhaven.reputation.reward.list.desc");
@@ -160,10 +160,10 @@ public final class AetherhavenReputationDebugCommand extends AbstractCommandColl
     private static final class GrantRewardSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.reputation.villagerTarget.desc", AetherhavenArgTypes.VILLAGER_TARGET);
         @Nonnull
         private final RequiredArg<String> rewardIdArg =
-            this.withRequiredArg("rewardId", "aetherhaven_commands_help.commands.aetherhaven.reputation.rewardId.desc", ArgTypes.STRING);
+            this.withRequiredArg("rewardId", "aetherhaven_commands_help.commands.aetherhaven.reputation.rewardId.desc", AetherhavenArgTypes.REWARD_ID);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 

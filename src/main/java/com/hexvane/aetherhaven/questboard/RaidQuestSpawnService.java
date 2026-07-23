@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.map.RaidQuestCompassCache;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownTerritoryClaims;
@@ -58,19 +59,37 @@ public final class RaidQuestSpawnService {
         List<String> spawnedUuids = new ArrayList<>();
         String instanceId = slot.instanceIdOrEmpty();
         UUID townId = town.getTownId();
+        RaidApproachDirection preferredDirection = slot.raidApproachDirectionEnum();
+        RaidApproachDirection waveDirection = null;
 
         for (int i = 0; i < roster.size(); i++) {
             String roleId = roster.get(i);
             String spawnRoleId = RaidQuestMarchRoles.spawnRoleFor(roleId);
-            RaidApproachDirection direction = slot.raidApproachDirectionEnum();
-            Vector3d pos = computeOutskirtsSpawnPosition(world, town, direction, rng, i);
-            if (pos == null) {
-                pos = computeFallbackSpawnPosition(world, town, direction, rng, i);
-            }
-            if (pos == null) {
+            RaidSpawnPositionFinder.Result spawn = RaidSpawnPositionFinder.findForMob(
+                world,
+                town,
+                preferredDirection,
+                waveDirection,
+                rng,
+                i
+            );
+            if (spawn == null) {
                 LOGGER.atWarning().log("Raid quest %s: no valid spawn position for %s", instanceId, roleId);
                 continue;
             }
+            if (waveDirection == null) {
+                waveDirection = spawn.direction();
+                if (waveDirection != preferredDirection) {
+                    slot.setRaidApproachDirection(waveDirection.id());
+                    LOGGER.atInfo().log(
+                        "Raid quest %s: switched approach from %s to %s after spawn search",
+                        instanceId,
+                        preferredDirection.id(),
+                        waveDirection.id()
+                    );
+                }
+            }
+            Vector3d pos = spawn.position();
             int roleIndex = npc.getIndex(spawnRoleId);
             if (roleIndex < 0) {
                 LOGGER.atWarning().log(
@@ -104,10 +123,24 @@ public final class RaidQuestSpawnService {
                 continue;
             }
             Ref<EntityStore> mobRef = pair.first();
+            NPCEntity spawnedNpc = store.getComponent(mobRef, NPCEntity.getComponentType());
+            UUIDComponent mobUuid = store.getComponent(mobRef, UUIDComponent.getComponentType());
+            if (spawnedNpc != null && mobUuid != null) {
+                RaidQuestMarchDebugLog.logSpawn(
+                    AetherhavenPlugin.get(),
+                    instanceId,
+                    roleId,
+                    spawnRoleId,
+                    mobUuid.getUuid(),
+                    spawnPos,
+                    marchTarget,
+                    spawnedNpc.getLeashPoint(),
+                    spawnedNpc
+                );
+            }
             RaidQuestMobBinding binding = new RaidQuestMobBinding(townId, instanceId);
             RaidQuestMarchUtil.bootstrapMarch(binding, spawnPos, marchTarget, marchNowMs);
             store.putComponent(mobRef, RaidQuestMobBinding.getComponentType(), binding);
-            UUIDComponent mobUuid = store.getComponent(mobRef, UUIDComponent.getComponentType());
             if (mobUuid != null) {
                 spawnedUuids.add(mobUuid.getUuid().toString());
             }
@@ -150,14 +183,24 @@ public final class RaidQuestSpawnService {
     }
 
     @Nonnull
+    public static Vector3d charterMarchTargetFromTown(@Nonnull TownRecord town) {
+        return new Vector3d(town.getCharterX() + 0.5, town.getCharterY(), town.getCharterZ() + 0.5);
+    }
+
+    /** Resolves a ground snapped charter target. Only call outside entity tick systems (quest accept / spawn). */
+    @Nonnull
     public static Vector3d charterMarchTarget(@Nonnull World world, @Nonnull TownRecord town) {
-        int charterX = town.getCharterX();
-        int charterZ = town.getCharterZ();
-        Vector3d pos = RaidSpawnGroundUtil.findSpawnPosition(world, charterX, charterZ, town.getCharterY());
+        Vector3d pos =
+            RaidSpawnGroundUtil.findSpawnPosition(
+                world,
+                town.getCharterX(),
+                town.getCharterZ(),
+                town.getCharterY()
+            );
         if (pos != null) {
             return pos;
         }
-        return new Vector3d(charterX + 0.5, town.getCharterY(), charterZ + 0.5);
+        return charterMarchTargetFromTown(town);
     }
 
     private static void configureRaidMobMarch(
@@ -171,94 +214,6 @@ public final class RaidQuestSpawnService {
         npcEntity.setLeashPoint(firstWaypoint);
         RaidQuestMarchUtil.applyMarchState(mobRef, npcEntity, store);
         store.putComponent(mobRef, NPCEntity.getComponentType(), npcEntity);
-    }
-
-    @Nullable
-    private static Vector3d computeOutskirtsSpawnPosition(
-        @Nonnull World world,
-        @Nonnull TownRecord town,
-        @Nonnull RaidApproachDirection direction,
-        @Nonnull Random rng,
-        int mobIndex
-    ) {
-        int cx = town.getCharterX();
-        int cz = town.getCharterZ();
-        int charterY = town.getCharterY();
-        TownTerritoryClaims.migrateIfNeeded(town);
-        int edgeBlocks = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town);
-        int baseDist = edgeBlocks + 16 + 8 + rng.nextInt(17) + mobIndex * 3;
-
-        for (int attempt = 0; attempt < 48; attempt++) {
-            int lateral = (attempt % 17) * 8 - 64 + rng.nextInt(5);
-            int along = baseDist - (attempt / 17) * 6;
-            if (along < 16) {
-                along = 16;
-            }
-            int bx = cx + direction.axisX() * along;
-            int bz = cz + direction.axisZ() * along;
-            if (direction.axisX() != 0) {
-                bz += lateral;
-            } else {
-                bx += lateral;
-            }
-            Vector3d pos = RaidSpawnGroundUtil.findSpawnPosition(world, bx, bz, charterY);
-            if (pos != null) {
-                return pos;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    private static Vector3d computeFallbackSpawnPosition(
-        @Nonnull World world,
-        @Nonnull TownRecord town,
-        @Nonnull RaidApproachDirection direction,
-        @Nonnull Random rng,
-        int mobIndex
-    ) {
-        int cx = town.getCharterX();
-        int cz = town.getCharterZ();
-        int charterY = town.getCharterY();
-        TownTerritoryClaims.migrateIfNeeded(town);
-        int edgeBlocks = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town);
-        int baseDist = edgeBlocks + 16 + 12 + mobIndex * 4;
-
-        for (int alongStep = 0; alongStep < 10; alongStep++) {
-            int along = baseDist - alongStep * 8;
-            if (along < 12) {
-                break;
-            }
-            for (int lateral = -80; lateral <= 80; lateral += 4) {
-                int bx = cx + direction.axisX() * along;
-                int bz = cz + direction.axisZ() * along;
-                if (direction.axisX() != 0) {
-                    bz += lateral;
-                } else {
-                    bx += lateral;
-                }
-                Vector3d pos = RaidSpawnGroundUtil.findSpawnPosition(world, bx, bz, charterY);
-                if (pos != null) {
-                    return pos;
-                }
-            }
-        }
-
-        for (int ring = 0; ring < 24; ring++) {
-            int dist = baseDist + ring * 2;
-            for (RaidApproachDirection dir : RaidApproachDirection.values()) {
-                if (dir != direction && rng.nextInt(3) != 0) {
-                    continue;
-                }
-                int bx = cx + dir.axisX() * dist;
-                int bz = cz + dir.axisZ() * dist;
-                Vector3d pos = RaidSpawnGroundUtil.findSpawnPosition(world, bx, bz, charterY);
-                if (pos != null) {
-                    return pos;
-                }
-            }
-        }
-        return null;
     }
 
     private static void removeEntityByUuidString(@Nonnull Store<EntityStore> store, @Nullable String uuidStr) {

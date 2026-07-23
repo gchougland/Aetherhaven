@@ -160,6 +160,11 @@ public final class QuestBoardCatalog {
         return w != null ? w.weight() : 0;
     }
 
+    public double goldCoinMultiplierForType(@Nonnull String typeId) {
+        QuestBoardQuestTypeWeightJson w = questTypes().get(typeId.trim());
+        return w != null ? w.goldCoinMultiplier() : 1.0;
+    }
+
     @Nullable
     public QuestBoardRankTierJson rankTier(@Nonnull String rankId) {
         String id = rankId.trim();

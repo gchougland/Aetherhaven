@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialItemIds;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.util.List;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public final class CustomBuildingsLoader {
                         gson.fromJson(new InputStreamReader(in, StandardCharsets.UTF_8), PrefabMaterialsFile.class);
                     if (file != null && file.constructionId != null && !file.constructionId.isBlank()) {
                         String cid = file.constructionId.trim();
-                        map.put(cid, file.materials != null ? List.copyOf(file.materials) : List.of());
+                        map.put(cid, PrefabMaterialItemIds.mergeNormalized(file.materials != null ? file.materials : List.of()));
                         ids.add(cid);
                     }
                 } catch (Exception e) {

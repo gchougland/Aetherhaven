@@ -241,7 +241,7 @@ tasks.withType<JavaCompile>().configureEach {
 
 tasks.test {
     useJUnitPlatform {
-        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc")
+        includeTags("wall-placement", "floating-gift", "map-marker", "autonomy", "schedule", "tourist", "entity", "town", "crossmod", "worldnpc", "raid", "questboard", "construction")
     }
     systemProperty(
         "java.util.logging.manager",

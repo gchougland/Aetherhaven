@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.community;
 
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,13 +20,63 @@ public final class CommunityBuildingValidator {
         return ID_PATTERN.matcher(id.trim().toLowerCase(Locale.ROOT)).matches();
     }
 
+    /** Same rules as marketplace {@code normalizeCommunityId}. */
+    @Nullable
+    public static String normalizeCommunityId(@Nullable String raw) {
+        if (raw == null || raw.isBlank()) {
+            return null;
+        }
+        String id =
+            raw.trim()
+                .toLowerCase(Locale.ROOT)
+                .replaceAll("[^a-z0-9_]", "_")
+                .replaceAll("_+", "_");
+        if (!id.startsWith(ID_PREFIX)) {
+            return null;
+        }
+        return isValidCommunityId(id) ? id : null;
+    }
+
+    /**
+     * Assigns the community catalog id the marketplace uses on upload ({@code assignCommunityCatalogId}).
+     */
     @Nonnull
-    public static String proposeId(@Nonnull String creatorUuid, @Nonnull String displayName) {
+    public static String assignCatalogId(
+        @Nullable String localBuildingId,
+        @Nullable String displayName,
+        @Nonnull UUID creatorUuid
+    ) {
+        String existing = normalizeCommunityId(localBuildingId);
+        if (existing != null) {
+            return existing;
+        }
+        String name = displayName != null ? displayName.trim() : "";
+        String localId = localBuildingId != null ? localBuildingId.trim() : "";
+        String slugSource = name;
+        if (slugSource.isEmpty()) {
+            slugSource =
+                localId.replaceFirst("^plot_", "")
+                    .replaceAll("(?i)[^a-z0-9]+", "_")
+                    .replaceAll("^_+|_+$", "");
+        }
+        if (slugSource.isEmpty()) {
+            slugSource = "building";
+        }
+        return proposeId(creatorUuid.toString(), slugSource);
+    }
+
+    @Nonnull
+    public static String prefabPathKeyForCommunityId(@Nonnull String communityId) {
+        return communityId.trim() + ".prefab.json";
+    }
+
+    @Nonnull
+    public static String proposeId(@Nonnull String creatorUuid, @Nonnull String slugOrDisplayName) {
         String shortUuid = creatorUuid.replace("-", "").toLowerCase(Locale.ROOT);
         if (shortUuid.length() > 8) {
             shortUuid = shortUuid.substring(0, 8);
         }
-        String slug = displayName
+        String slug = slugOrDisplayName
             .trim()
             .toLowerCase(Locale.ROOT)
             .replaceAll("[^a-z0-9]+", "_")

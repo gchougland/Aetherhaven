@@ -99,10 +99,10 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
     private static final class SetCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> targetArg =
-            this.withRequiredArg("target", "aetherhaven_commands_help.commands.aetherhaven.needs.target.desc", ArgTypes.STRING);
+            this.withRequiredArg("target", "aetherhaven_commands_help.commands.aetherhaven.needs.target.desc", AetherhavenArgTypes.VILLAGER_TARGET);
         @Nonnull
         private final RequiredArg<String> whichArg =
-            this.withRequiredArg("which", "aetherhaven_commands_help.commands.aetherhaven.needs.which.desc", ArgTypes.STRING);
+            this.withRequiredArg("which", "aetherhaven_commands_help.commands.aetherhaven.needs.which.desc", AetherhavenArgTypes.NEEDS_WHICH);
         @Nonnull
         private final RequiredArg<Float> valueArg =
             this.withRequiredArg("value", "aetherhaven_commands_help.commands.aetherhaven.needs.value.desc", ArgTypes.FLOAT);

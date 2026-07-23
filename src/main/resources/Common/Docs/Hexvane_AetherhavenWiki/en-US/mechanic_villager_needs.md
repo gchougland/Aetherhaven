@@ -20,10 +20,10 @@ Needs also tie into **taxes**. Each morning, residents pay gold into the treasur
 
 Finished buildings add **spots** villagers can use: beds, benches, counters, workbenches, and similar blocks. Think of each spot as a small action in the world.
 
-* **Beds** refill **energy** (including beds in houses at night).
-* **Benches and seats**, including park benches, refill **fun**.
-* **Kitchen counters, tables, and food storage** refill **hunger**.
-* **Workbenches and shop counters** are for the job. They do not refill hunger, energy, or fun by themselves.
+* **Beds** refill **energy** only (including beds in houses at night).
+* **Benches and seats** with a fun spot refill **fun** only, including park benches.
+* **Meal spots** (inn hearth, restaurant chairs, counters, and food storage) refill **hunger** only.
+* **Workbenches and shop counters** are for the job. They do not refill any need by themselves.
 
 Different plots place different spots. A farm has farming benches. An inn has beds and meal space. A park has outdoor benches meant for relaxing.
 

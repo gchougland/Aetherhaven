@@ -46,7 +46,7 @@ public final class GuardCombatCounterAttackSystem extends EntityTickingSystem<En
         if (targetRef == null || !targetRef.isValid()) {
             return;
         }
-        if (!RtsHostileQuery.isAggressiveNpc(targetRef, store)) {
+        if (!RtsHostileQuery.isGuardThreatTarget(guardRef, targetRef, store)) {
             return;
         }
         if (alreadyRemembersGuard(targetRef, guardRef, store)) {

@@ -145,6 +145,25 @@ $C.@PageOverlay {
         Anchor: (Bottom: 10);
       }
 
+      Group #PreserveWaterRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 10);
+
+        $C.@CheckBox #PreserveWaterToggle {}
+
+        Label #PreserveWaterLabel {
+          Text: "";
+          Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center, TextColor: #e8dcc8);
+          Anchor: (Left: 11);
+        }
+      }
+
+      Label #PreserveWaterHint {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+      }
+
       Group #TouristDestinationRow {
         LayoutMode: Left;
         Anchor: (Bottom: 10);

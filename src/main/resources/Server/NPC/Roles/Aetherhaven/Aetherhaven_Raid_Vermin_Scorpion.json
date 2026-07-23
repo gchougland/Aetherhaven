@@ -1,6 +1,6 @@
 {
   "Type": "Variant",
-  "Reference": "Template_Predator",
+  "Reference": "Template_Aetherhaven_Raid_Predator",
   "Modify": {
     "DropList": "Drop_Scorpion",
     "Appearance": "Scorpion",
@@ -13,8 +13,8 @@
     "AlertedRange": 10,
     "AlertedTime": [2, 2],
     "FleeIfNotThreatened": false,
-    "HardLeashDistance": 60,
-    "LeashDistance": 30,
+    "HardLeashDistance": 512,
+    "LeashDistance": 512,
     "LeashMinPlayerDistance": 5,
     "LeashTimer": [3, 3],
     "CombatBackOffAfterAttack": false,

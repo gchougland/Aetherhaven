@@ -2,12 +2,16 @@ package com.hexvane.aetherhaven.town;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
+import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.placement.CharterRelocationService;
 import com.hexvane.aetherhaven.placement.PlotPlacementCommit;
 import com.hexvane.aetherhaven.poi.PoiExtractor;
+import com.hexvane.aetherhaven.poi.marker.PoiMarkerDedupUtil;
 import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.plot.PlotBlockStamper;
+import com.hexvane.aetherhaven.plot.PlotImportantBlockRestorer;
 import com.hexvane.aetherhaven.shopspot.ShopSpotExtractor;
+import com.hexvane.aetherhaven.tourist.TouristPortalExtractor;
 import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -24,6 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.joml.Vector3i;
 
 /**
@@ -100,58 +105,7 @@ public final class PlotLinkReconcileService {
 
         applyCharterRepair(report, world, town);
         for (PlotInstance plot : town.getPlotInstances()) {
-            applyPlotSignRepair(report, world, town, plot);
-            if (plot.getState() != PlotInstanceState.COMPLETE) {
-                continue;
-            }
-            report.scanned++;
-            ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
-            if (def == null) {
-                report.failed++;
-                continue;
-            }
-            if (def.isWallSegment() || def.isDecorationPlot()) {
-                continue;
-            }
-            if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
-                report.skippedChunkUnloaded++;
-                continue;
-            }
-            Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
-            if (anchor == null) {
-                report.failed++;
-                continue;
-            }
-            Rotation yaw = plot.resolvePrefabYaw();
-            PlotBlockStamper.PlotBlockRepairResult blockResult =
-                PlotBlockStamper.verifyAndRepairPlot(world, town, plot, def, anchor, yaw);
-            report.relinked += blockResult.getRelinked();
-            report.alreadyOk += blockResult.getAlreadyOk();
-            report.skippedChunkUnloaded += blockResult.getSkippedChunkUnloaded();
-            report.failed += blockResult.getFailed();
-            for (String detail : blockResult.getDetails()) {
-                LOGGER.atInfo().log(
-                    "Plot repair town=%s plot=%s construction=%s: re-linked %s",
-                    town.getTownId(),
-                    plot.getPlotId(),
-                    plot.getConstructionId(),
-                    detail
-                );
-            }
-            if (blockResult.getRelinked() > 0 && entityStore != null) {
-                PoiExtractor.registerForCompletedBuild(
-                    plugin,
-                    world,
-                    entityStore,
-                    town,
-                    plot.getPlotId(),
-                    plot,
-                    def.getId(),
-                    anchor,
-                    yaw
-                );
-                ShopSpotExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plot.getPlotId(), plot);
-            }
+            mergePlotRepair(report, repairPlotInstance(world, plugin, town, plot, entityStore, false));
         }
 
         if (scanOrphans) {
@@ -163,32 +117,115 @@ public final class PlotLinkReconcileService {
         return report;
     }
 
-    private static void applyCharterRepair(
-        @Nonnull TownRepairReport report, @Nonnull World world, @Nonnull TownRecord town
+    /**
+     * Repairs one plot's important spots and town links. When {@code journalRepair} is true, missing blocks are
+     * restored and POI/shop/tourist registries are always refreshed (Town Journal hammer action).
+     */
+    @Nonnull
+    public static PlotRepairReport repairPlotInstance(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nullable Store<EntityStore> entityStore,
+        boolean journalRepair
     ) {
-        report.scanned++;
-        CharterRelocationService.LinkRepairResult result =
-            CharterRelocationService.repairCharterLink(world, town, Rotation.None);
-        switch (result) {
-            case ALREADY_OK -> report.alreadyOk++;
-            case RELINKED, PLACED -> {
-                report.relinked++;
-                LOGGER.atInfo().log(
-                    "Charter link repair town=%s at %s,%s,%s: %s",
-                    town.getTownId(),
-                    town.getCharterX(),
-                    town.getCharterY(),
-                    town.getCharterZ(),
-                    result.name()
-                );
-            }
-            case SKIPPED_CHUNK_UNLOADED -> report.skippedChunkUnloaded++;
-            case FAILED_BLOCKED, FAILED -> report.failed++;
+        PlotRepairReport report = new PlotRepairReport();
+        applyPlotSignRepairToPlotReport(report, world, town, plot);
+        if (plot.getState() == PlotInstanceState.BLUEPRINTING) {
+            report.blueprintingPlot = true;
+            return report;
         }
+        if (plot.getState() != PlotInstanceState.COMPLETE) {
+            return report;
+        }
+        report.scanned++;
+        ConstructionDefinition def = plugin.getConstructionCatalog().get(plot.getConstructionId());
+        if (def == null) {
+            report.failed++;
+            return report;
+        }
+        if (def.isWallSegment() || def.isDecorationPlot()) {
+            return report;
+        }
+        if (!PlotFootprintChunkUtil.isPlotFullyLoaded(world, plot)) {
+            report.skippedChunkUnloaded++;
+            return report;
+        }
+        Vector3i anchor = plot.resolvePrefabAnchorWorld(def);
+        if (anchor == null) {
+            report.failed++;
+            return report;
+        }
+        Rotation yaw = plot.resolvePrefabYaw();
+        if (journalRepair) {
+            report.placedBlocks +=
+                PlotImportantBlockRestorer.restoreMissingImportantBlocks(world, town, plot, def, anchor, yaw);
+        }
+        PlotBlockStamper.PlotBlockRepairResult blockResult =
+            PlotBlockStamper.verifyAndRepairPlot(world, town, plot, def, anchor, yaw);
+        report.relinked += blockResult.getRelinked();
+        report.alreadyOk += blockResult.getAlreadyOk();
+        report.skippedChunkUnloaded += blockResult.getSkippedChunkUnloaded();
+        report.failed += blockResult.getFailed();
+        for (String detail : blockResult.getDetails()) {
+            LOGGER.atInfo().log(
+                "Plot repair town=%s plot=%s construction=%s: re-linked %s",
+                town.getTownId(),
+                plot.getPlotId(),
+                plot.getConstructionId(),
+                detail
+            );
+        }
+        boolean registryRefresh =
+            journalRepair || blockResult.getRelinked() > 0 || report.placedBlocks > 0;
+        if (entityStore != null && registryRefresh) {
+            refreshPlotRegistries(plugin, world, entityStore, town, plot, def, anchor, yaw);
+        }
+        if (journalRepair && (report.relinked > 0 || report.placedBlocks > 0)) {
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            tm.updateTown(town);
+        }
+        return report;
     }
 
-    private static void applyPlotSignRepair(
-        @Nonnull TownRepairReport report,
+    private static void refreshPlotRegistries(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> entityStore,
+        @Nonnull TownRecord town,
+        @Nonnull PlotInstance plot,
+        @Nonnull ConstructionDefinition def,
+        @Nonnull Vector3i anchor,
+        @Nonnull Rotation yaw
+    ) {
+        PoiMarkerDedupUtil.dedupeInPlot(entityStore, plot);
+        PoiExtractor.registerForCompletedBuild(
+            plugin,
+            world,
+            entityStore,
+            town,
+            plot.getPlotId(),
+            plot,
+            def.getId(),
+            anchor,
+            yaw
+        );
+        ShopSpotExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plot.getPlotId(), plot);
+        TouristPortalExtractor.registerForCompletedBuild(world, plugin, entityStore, town, plot.getPlotId(), plot);
+        TeleporterWarpSanitizer.schedulePlotFootprintSanitize(world, plot.toFootprint());
+    }
+
+    private static void mergePlotRepair(@Nonnull TownRepairReport target, @Nonnull PlotRepairReport source) {
+        target.scanned += source.scanned;
+        target.relinked += source.relinked;
+        target.alreadyOk += source.alreadyOk;
+        target.skippedChunkUnloaded += source.skippedChunkUnloaded;
+        target.failed += source.failed;
+    }
+
+    private static void applyPlotSignRepairToPlotReport(
+        @Nonnull PlotRepairReport report,
         @Nonnull World world,
         @Nonnull TownRecord town,
         @Nonnull PlotInstance plot
@@ -217,6 +254,77 @@ public final class PlotLinkReconcileService {
             case NOT_APPLICABLE -> {
                 // handled above
             }
+        }
+    }
+
+    private static void applyCharterRepair(
+        @Nonnull TownRepairReport report, @Nonnull World world, @Nonnull TownRecord town
+    ) {
+        report.scanned++;
+        CharterRelocationService.LinkRepairResult result =
+            CharterRelocationService.repairCharterLink(world, town, Rotation.None);
+        switch (result) {
+            case ALREADY_OK -> report.alreadyOk++;
+            case RELINKED, PLACED -> {
+                report.relinked++;
+                LOGGER.atInfo().log(
+                    "Charter link repair town=%s at %s,%s,%s: %s",
+                    town.getTownId(),
+                    town.getCharterX(),
+                    town.getCharterY(),
+                    town.getCharterZ(),
+                    result.name()
+                );
+            }
+            case SKIPPED_CHUNK_UNLOADED -> report.skippedChunkUnloaded++;
+            case FAILED_BLOCKED, FAILED -> report.failed++;
+        }
+    }
+
+
+    public static final class PlotRepairReport {
+        private int scanned;
+        private int relinked;
+        private int alreadyOk;
+        private int skippedChunkUnloaded;
+        private int failed;
+        private int placedBlocks;
+        private boolean blueprintingPlot;
+
+        public boolean isBlueprintingPlot() {
+            return blueprintingPlot;
+        }
+
+        public int getScanned() {
+            return scanned;
+        }
+
+        public int getRelinked() {
+            return relinked;
+        }
+
+        public int getAlreadyOk() {
+            return alreadyOk;
+        }
+
+        public int getSkippedChunkUnloaded() {
+            return skippedChunkUnloaded;
+        }
+
+        public int getFailed() {
+            return failed;
+        }
+
+        public int getPlacedBlocks() {
+            return placedBlocks;
+        }
+
+        public boolean hadFixes() {
+            return relinked > 0 || placedBlocks > 0;
+        }
+
+        public boolean isNothingToDo() {
+            return !hadFixes() && failed == 0 && skippedChunkUnloaded == 0;
         }
     }
 

@@ -5,7 +5,6 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.FollowPlayerTeleportRecovery;
 import com.hexvane.aetherhaven.npc.NpcFaceVisuals;
 import com.hexvane.aetherhaven.rts.GuardRtsCommandState;
-import com.hexvane.aetherhaven.rts.RtsGuardCombatSupport;
 import com.hexvane.aetherhaven.rts.RtsGuardDirectory;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -259,7 +258,6 @@ public final class GuardFollowPlayerSystem extends EntityTickingSystem<EntitySto
         double horizSq = dx * dx + dz * dz;
 
         if (horizSq <= FOLLOW_STOP_SQ) {
-            RtsGuardCombatSupport.clearCombatTarget(npc, commandBuffer);
             return;
         }
 

@@ -111,6 +111,7 @@ public final class StarterTownBuildService {
             building.prefabAnchor(),
             building.yaw(),
             true,
+            definition.isPreserveWater(),
             buffer,
             world.getEntityStore().getStore(),
             Integer.MAX_VALUE,

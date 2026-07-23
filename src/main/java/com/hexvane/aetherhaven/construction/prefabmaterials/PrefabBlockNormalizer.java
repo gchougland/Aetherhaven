@@ -29,6 +29,7 @@ final class PrefabBlockNormalizer {
                 name = base;
             }
         }
+        name = PrefabMaterialItemIds.normalize(name);
         return name.isEmpty() ? null : name;
     }
 }

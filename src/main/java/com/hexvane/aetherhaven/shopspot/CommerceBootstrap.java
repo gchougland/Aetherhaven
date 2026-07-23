@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.shopspot;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.command.AetherhavenInnDebugCommand;
 import com.hexvane.aetherhaven.feast.FeastService;
 import com.hexvane.aetherhaven.inn.InnBellUseInteraction;
 import com.hexvane.aetherhaven.inn.InnPoolService;
@@ -112,6 +113,7 @@ public final class CommerceBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new ShopSpotDisplayTickSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new ShopSpotLookAtSystem(core));
         core.registerShopPriceTooltipPackets();
+        core.registerAetherhavenSubcommand(new AetherhavenInnDebugCommand());
     }
 
     @Nonnull

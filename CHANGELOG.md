@@ -4,13 +4,25 @@
 
 ### Added
 
+- **Debug commands for quest board, inn, and town rank** — World Editor tools: `/ah questboard reroll` refreshes guild hall board offers (keeps accepted quests), `/ah inn reroll` replaces unlocked inn visitors, and `/ah townrank set <rank>` sets town rank by tier (E through SSS). All support optional `--town` and `--player` targeting.
+- **Command tab completion** — Aetherhaven commands now suggest values while you type: construction ids, plot ids, town names, quest ids, villager roles, ranks, and other common arguments.
 - **Multi town membership** — You can still own only one town, but you may join other towns as a guest. Invites work even when the player already has a charter. Use the town picker at the top of the Town Journal when you belong to more than one town. Standing inside a town you belong to also sets context when you have not picked one yet.
 - **Chalk to Miner** Added chalk to the options for the Miner since chalk cobble can't be converted to chalk.
 - **Town territory and expansions** — Your town owns a set of map chunks, not just a fixed square. Members can be allowed or blocked from breaking blocks, placing blocks, harvesting, opening chests, and using doors inside that land. The world map border follows your actual claim shape. At a completed town hall, open town records and use the expand tab to pan the map and buy the next adjacent chunk. Cost rises each time (100 gold, then 200, and so on). Only the owner or members who may spend from the treasury can claim. New towns start with a smaller default starter area unless your server config already saved a different size. Server staff in the Admin group, or anyone with the `aetherhaven.town.territory.bypass` permission, can build in any town claim without joining that town.
 
+### Changed
+
+- **Town NPC death messages** — When a guard, villager, visitor, or other town linked NPC dies, town members see block coordinates and a short cause line (killed by whoever or whatever hurt them, or the damage type for falls and similar).
+- **Plot creator community submit** — Submit to community starts unchecked by default so a normal save stays on your server unless you turn it on. Server config can still set SubmitOnSaveDefault to opt in by default.
+
 ### Fixed
 
 - **Villager energy at work** — Finishing a use at a work POI no longer refills hunger, energy, or fun. Rest and meals come from beds, food spots, and similar POIs instead. (this was a bug)
+- **Community submit duplicate buildings** — Saving from the plot creator with Submit to community checked now stores one community catalog id locally instead of keeping a separate plot id that showed up twice on the plot crafting bench.
+- **Guard combat** — Hired guards on patrol or following you engage hostile creatures more reliably, fight back when hit, and defend you when something attacks you or locks onto you in follow mode. Multiple guards following you now join the same fight when you attack a creature or when one guard already engaged it. Quest raid mobs are detected via the mod raid group instead of overriding vanilla Aggressive assets.
+- **Raid quest spawning** — Raid waves search a wider area for dry land on the **surface** (heightmap plus open sky), load chunks before validating spawn spots, and automatically try another direction when the chosen side is blocked by water or cliffs.
+- **Raid march behavior** — Raid mobs march toward town again using a dedicated raid predator template with seek travel, plus march state reapplication each tick so they keep pathing toward staged waypoints.
+- **Raid quest tracking** — Raid mobs in unloaded chunks no longer get removed from the quest or compass when you approach from town. March waypoints are rebuilt when a raid mob chunk loads again.
 - **German town planning desk (de-DE)** — Updated German names for tools and benches at the town planning desk (building staves, plot placement staff, wall wand, path shovel, plot crafting bench, plot creator staff, and Fixing Stick) so they read consistently and match player feedback. Related UI and plot token text uses the new plot placement staff name.
 
 ## [2.5.0] - 7/22/2026

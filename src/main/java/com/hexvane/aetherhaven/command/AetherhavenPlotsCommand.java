@@ -14,7 +14,6 @@ import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
-import com.hypixel.hytale.server.core.command.system.arguments.system.OptionalArg;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
@@ -27,6 +26,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Plot instance listing and creative-only helpers (assembly skip, demolish, repair, reconstruct).
@@ -178,14 +178,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             this.withRequiredArg(
                 "constructionId",
                 "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.constructionId.desc",
-                ArgTypes.STRING
-            );
-        @Nonnull
-        private final OptionalArg<String> tailArg =
-            this.withOptionalArg(
-                "indexOrTown",
-                "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.tail.desc",
-                ArgTypes.GREEDY_STRING
+                AetherhavenArgTypes.CONSTRUCTION_ID
             );
         @Nonnull
         private final DebugTownTargetArgs townTarget;
@@ -194,6 +187,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             super("reconstruct", "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.desc");
             this.setPermissionGroups("hytale:WorldEditor");
             townTarget = DebugTownTargetArgs.registerOnWithTownNameAlias(this);
+            this.addUsageVariant(new ReconstructWithIndexVariant());
         }
 
         @Override
@@ -204,6 +198,71 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             @Nonnull PlayerRef playerRef,
             @Nonnull World world
         ) {
+            runReconstruct(
+                context,
+                store,
+                ref,
+                playerRef,
+                world,
+                townTarget,
+                context.get(constructionIdArg).trim(),
+                null
+            );
+        }
+
+        /** Same command with a required 1-based index when several plots share one construction id. */
+        private static final class ReconstructWithIndexVariant extends AbstractPlayerCommand {
+            private final RequiredArg<String> constructionIdArg =
+                this.withRequiredArg(
+                    "constructionId",
+                    "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.constructionId.desc",
+                    AetherhavenArgTypes.CONSTRUCTION_ID
+                );
+            private final RequiredArg<Integer> indexArg =
+                this.withRequiredArg(
+                    "index",
+                    "aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.index.desc",
+                    AetherhavenArgTypes.PLOT_INDEX
+                );
+            @Nonnull
+            private final DebugTownTargetArgs townTarget;
+
+            ReconstructWithIndexVariant() {
+                super("aetherhaven_commands_help.commands.aetherhaven.plots.reconstruct.withIndex.desc");
+                townTarget = DebugTownTargetArgs.registerOnWithTownNameAlias(this);
+            }
+
+            @Override
+            protected void execute(
+                @Nonnull CommandContext context,
+                @Nonnull Store<EntityStore> store,
+                @Nonnull Ref<EntityStore> ref,
+                @Nonnull PlayerRef playerRef,
+                @Nonnull World world
+            ) {
+                runReconstruct(
+                    context,
+                    store,
+                    ref,
+                    playerRef,
+                    world,
+                    townTarget,
+                    context.get(constructionIdArg).trim(),
+                    context.get(indexArg)
+                );
+            }
+        }
+
+        private static void runReconstruct(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world,
+            @Nonnull DebugTownTargetArgs townTarget,
+            @Nonnull String constructionId,
+            @Nullable Integer index
+        ) {
             AetherhavenPlugin plugin = AetherhavenPlugin.get();
             if (!AetherhavenDebugUtil.requireDebug(plugin, playerRef)) {
                 return;
@@ -212,24 +271,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
             if (uc == null) {
                 return;
             }
-            String constructionId = context.get(constructionIdArg).trim();
-            Integer index = null;
-            String townName = null;
-            if (context.provided(tailArg)) {
-                String tail = context.get(tailArg).trim();
-                if (!tail.isEmpty()) {
-                    try {
-                        index = Integer.parseInt(tail.split("\\s+")[0]);
-                        if (tail.contains(" ")) {
-                            townName = tail.substring(tail.indexOf(' ') + 1).trim();
-                        }
-                    } catch (NumberFormatException e) {
-                        townName = tail;
-                    }
-                }
-            }
-            TownCommandResolution townRes =
-                townTarget.resolve(context, world, store, ref, playerRef, false, townName);
+            TownCommandResolution townRes = townTarget.resolve(context, world, store, ref, playerRef, false);
             if (!townRes.isOk()) {
                 playerRef.sendMessage(townRes.error());
                 return;
@@ -333,7 +375,7 @@ public final class AetherhavenPlotsCommand extends AbstractCommandCollection {
     /** Creative: demolish one plot (same footprint/sign cleanup as town dissolve) and remove it from town data. */
     private static final class RemoveCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> plotIdArg =
-            this.withRequiredArg("plotId", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.plotId.desc", ArgTypes.STRING);
+            this.withRequiredArg("plotId", "aetherhaven_commands_help.commands.aetherhaven.plots.remove.plotId.desc", AetherhavenArgTypes.PLOT_ID);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 

@@ -7,7 +7,7 @@ Group #ShopSpotStatusRoot {
   LayoutMode: Top;
 
   $C.@DecoratedContainer {
-    Anchor: (Top: 88, Right: 20, Width: 420);
+    Anchor: (Top: 88, Left: 20, Width: 420);
 
     #Title {
       Label #ShopSpotHudTitle {

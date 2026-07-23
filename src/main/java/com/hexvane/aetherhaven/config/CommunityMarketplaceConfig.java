@@ -54,7 +54,7 @@ public final class CommunityMarketplaceConfig {
     private boolean enabled = true;
     private String apiBaseUrl = "https://aetherhaven.net";
     private int manifestRefreshMinutes = 5;
-    private boolean submitOnSaveDefault = true;
+    private boolean submitOnSaveDefault = false;
     private String moderatorUuidsRaw = "";
 
     public boolean isEnabled() {

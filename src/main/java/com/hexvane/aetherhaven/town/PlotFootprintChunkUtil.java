@@ -32,4 +32,19 @@ public final class PlotFootprintChunkUtil {
     public static boolean isPlotFullyLoaded(@Nonnull World world, @Nonnull PlotInstance plot) {
         return isFootprintFullyLoaded(world, plot.toFootprint());
     }
+
+    /** True when the chunk containing the plot sign block is loaded (enough for blueprinting repair). */
+    public static boolean isPlotSignChunkLoaded(@Nonnull World world, @Nonnull PlotInstance plot) {
+        int x = plot.getSignX();
+        int z = plot.getSignZ();
+        return world.getChunkIfInMemory(ChunkUtil.indexChunkFromBlock(x, z)) != null;
+    }
+
+    /** Full footprint for completed builds; plot sign chunk only while still blueprinting. */
+    public static boolean isPlotRepairAreaLoaded(@Nonnull World world, @Nonnull PlotInstance plot) {
+        if (plot.getState() == PlotInstanceState.BLUEPRINTING) {
+            return isPlotSignChunkLoaded(world, plot);
+        }
+        return isPlotFullyLoaded(world, plot);
+    }
 }

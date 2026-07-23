@@ -43,6 +43,31 @@ public final class RtsGuardCombatSupport {
         accessor.putComponent(guardRef, NPCEntity.getComponentType(), npc);
     }
 
+    /** Locks a threat and enters combat for patrol, follow, and idle guards. */
+    public static void engageAutonomousThreat(
+        @Nonnull Ref<EntityStore> guardRef,
+        @Nonnull NPCEntity npc,
+        @Nonnull Ref<EntityStore> threatRef,
+        @Nonnull ComponentAccessor<EntityStore> accessor,
+        @Nullable CommandBuffer<EntityStore> commandBuffer
+    ) {
+        lockCombatTarget(npc, threatRef, accessor);
+        promptCounterAttack(guardRef, threatRef, accessor, commandBuffer);
+        Role role = npc.getRole();
+        if (role == null) {
+            return;
+        }
+        ComponentAccessor<EntityStore> stateAccessor = commandBuffer != null ? commandBuffer : accessor;
+        if (!role.getStateSupport().getStateName().contains("Combat")) {
+            role.getStateSupport().setState(guardRef, "Combat", null, stateAccessor);
+        }
+        if (commandBuffer != null) {
+            commandBuffer.putComponent(guardRef, NPCEntity.getComponentType(), npc);
+        } else {
+            accessor.putComponent(guardRef, NPCEntity.getComponentType(), npc);
+        }
+    }
+
     public static void lockCombatTarget(
         @Nonnull NPCEntity npc,
         @Nonnull Ref<EntityStore> targetRef,
@@ -122,7 +147,7 @@ public final class RtsGuardCombatSupport {
             return;
         }
         Store<EntityStore> store = guardRef.getStore();
-        if (!RtsHostileQuery.isAggressiveNpc(hostileRef, store)) {
+        if (!RtsHostileQuery.isGuardThreatTarget(guardRef, hostileRef, store)) {
             return;
         }
         NPCEntity hostile = accessor.getComponent(hostileRef, NPCEntity.getComponentType());

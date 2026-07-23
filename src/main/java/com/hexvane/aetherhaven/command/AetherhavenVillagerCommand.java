@@ -158,7 +158,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     private static final class LocateSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.target.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.target.desc", AetherhavenArgTypes.VILLAGER_TARGET);
         @Nonnull
         private final OptionalArg<Boolean> teleportArg =
             this.withOptionalArg("teleport", "aetherhaven_commands_help.commands.aetherhaven.villager.teleport.desc", ArgTypes.BOOLEAN);
@@ -304,7 +304,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     private static final class RespawnSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> villagerArg =
-            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.target.desc", ArgTypes.STRING);
+            this.withRequiredArg("villager", "aetherhaven_commands_help.commands.aetherhaven.villager.target.desc", AetherhavenArgTypes.VILLAGER_TARGET);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -430,7 +430,7 @@ public final class AetherhavenVillagerCommand extends AbstractCommandCollection 
     private static final class PurgeSubCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> roleArg =
-            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.villager.purge.role.desc", ArgTypes.STRING);
+            this.withRequiredArg("role", "aetherhaven_commands_help.commands.aetherhaven.villager.purge.role.desc", AetherhavenArgTypes.VILLAGER_NPC_ROLE);
 
         PurgeSubCommand() {
             super("purge", "aetherhaven_commands_help.commands.aetherhaven.villager.purge.desc");

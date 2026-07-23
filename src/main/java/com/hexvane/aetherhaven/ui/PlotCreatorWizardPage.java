@@ -129,6 +129,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
                 .append("@SelfBuildDays", "#SelfBuildDaysField.Value")
                 .append("@MaxHomeResidents", "#MaxHomeResidentsField.Value")
                 .append("@SaveEmptySpaces", "#SaveEmptySpacesToggle.Value")
+                .append("@PreserveWater", "#PreserveWaterToggle.Value")
                 .append("@TouristDestination", "#TouristDestinationToggle.Value")
                 .append("@PlotTokenLocked", "#PlotTokenLockedToggle.Value")
                 .append("@FloatingGiftBlueprint", "#FloatingGiftBlueprintToggle.Value")
@@ -218,6 +219,12 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         );
         eventBuilder.addEventBinding(
             CustomUIEventBindingType.ValueChanged,
+            "#PreserveWaterToggle",
+            EventData.of("@PreserveWater", "#PreserveWaterToggle.Value"),
+            false
+        );
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
             "#TouristDestinationToggle",
             EventData.of("@TouristDestination", "#TouristDestinationToggle.Value"),
             false
@@ -277,6 +284,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#MaxHomeResidentsField.PlaceholderText", Message.translation(MSG + ".field.maxHomeResidents"));
         b.set("#SaveEmptySpacesLabel.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces"));
         b.set("#SaveEmptySpacesHint.TextSpans", Message.translation(MSG + ".field.saveEmptySpaces.hint"));
+        b.set("#PreserveWaterLabel.TextSpans", Message.translation(MSG + ".field.preserveWater"));
+        b.set("#PreserveWaterHint.TextSpans", Message.translation(MSG + ".field.preserveWater.hint"));
         b.set("#TouristDestinationLabel.TextSpans", Message.translation(MSG + ".field.touristDestination"));
         b.set("#TouristDestinationHint.TextSpans", Message.translation(MSG + ".field.touristDestination.hint"));
         b.set("#PlotTokenLockedLabel.TextSpans", Message.translation(MSG + ".field.plotTokenLocked"));
@@ -308,6 +317,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaxHomeResidentsField.Visible", false);
             b.set("#SaveEmptySpacesRow.Visible", false);
             b.set("#SaveEmptySpacesHint.Visible", false);
+            b.set("#PreserveWaterRow.Visible", false);
+            b.set("#PreserveWaterHint.Visible", false);
             b.set("#TouristDestinationRow.Visible", false);
             b.set("#TouristDestinationHint.Visible", false);
             b.set("#PlotTokenLockedRow.Visible", false);
@@ -346,6 +357,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaxHomeResidentsField.Visible", homeKind);
             b.set("#SaveEmptySpacesRow.Visible", true);
             b.set("#SaveEmptySpacesHint.Visible", true);
+            b.set("#PreserveWaterRow.Visible", true);
+            b.set("#PreserveWaterHint.Visible", true);
             b.set("#TouristDestinationRow.Visible", true);
             b.set("#TouristDestinationHint.Visible", true);
             b.set("#PlotTokenLockedRow.Visible", true);
@@ -380,6 +393,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         b.set("#MaxHomeResidentsField.Visible", false);
         b.set("#SaveEmptySpacesRow.Visible", false);
         b.set("#SaveEmptySpacesHint.Visible", false);
+        b.set("#PreserveWaterRow.Visible", false);
+        b.set("#PreserveWaterHint.Visible", false);
         b.set("#TouristDestinationRow.Visible", false);
         b.set("#TouristDestinationHint.Visible", false);
         b.set("#PlotTokenLockedRow.Visible", false);
@@ -450,6 +465,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaxHomeResidentsField.Value", String.valueOf(d.getMaxHomeResidents()));
         }
         b.set("#SaveEmptySpacesToggle.Value", d.isSaveEmptySpaces());
+        b.set("#PreserveWaterToggle.Value", d.isPreserveWater());
         b.set("#TouristDestinationToggle.Value", d.isTouristDestination());
         b.set("#PlotTokenLockedToggle.Value", d.isPlotTokenLockedByDefault());
         b.set("#FloatingGiftBlueprintToggle.Value", d.isFloatingGiftBlueprint());
@@ -816,6 +832,9 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         if (data.saveEmptySpaces != null) {
             d.setSaveEmptySpaces(data.saveEmptySpaces);
         }
+        if (data.preserveWater != null) {
+            d.setPreserveWater(data.preserveWater);
+        }
         if (data.touristDestination != null) {
             d.setTouristDestination(data.touristDestination);
         }
@@ -961,6 +980,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             .add()
             .append(new KeyedCodec<>("@SaveEmptySpaces", Codec.BOOLEAN), (d, v) -> d.saveEmptySpaces = v, d -> d.saveEmptySpaces)
             .add()
+            .append(new KeyedCodec<>("@PreserveWater", Codec.BOOLEAN), (d, v) -> d.preserveWater = v, d -> d.preserveWater)
+            .add()
             .append(new KeyedCodec<>("@TouristDestination", Codec.BOOLEAN), (d, v) -> d.touristDestination = v, d -> d.touristDestination)
             .add()
             .append(new KeyedCodec<>("@PlotTokenLocked", Codec.BOOLEAN), (d, v) -> d.plotTokenLocked = v, d -> d.plotTokenLocked)
@@ -1007,6 +1028,8 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
         private String maxHomeResidents;
         @Nullable
         private Boolean saveEmptySpaces;
+        @Nullable
+        private Boolean preserveWater;
         @Nullable
         private Boolean touristDestination;
         @Nullable

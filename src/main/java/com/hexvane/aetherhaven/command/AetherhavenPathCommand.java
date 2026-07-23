@@ -41,7 +41,7 @@ public final class AetherhavenPathCommand extends AbstractCommandCollection {
     private static final class RevertCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_items.commands.aetherhaven.path.revert.id", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_items.commands.aetherhaven.path.revert.id", AetherhavenArgTypes.PATH_COMMIT_ID);
 
         RevertCommand() {
             super("revert", "aetherhaven_items.commands.aetherhaven.path.revert.desc");

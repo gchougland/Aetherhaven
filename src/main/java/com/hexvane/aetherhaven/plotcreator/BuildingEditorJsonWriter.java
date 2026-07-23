@@ -121,6 +121,7 @@ public final class BuildingEditorJsonWriter {
         }
         putFlag(root, "scheduleSharedUtilityPick", draft.isScheduleSharedUtilityPick());
         putFlag(root, "touristDestination", draft.isTouristDestination());
+        putFlag(root, "preserveWater", draft.isPreserveWater());
         putFlag(root, "plotTokenLockedByDefault", draft.isPlotTokenLockedByDefault());
         putFlag(root, "floatingGiftBlueprint", draft.isFloatingGiftBlueprint());
         putFlag(root, "excludeFromTownJournal", draft.isExcludeFromTownJournal());

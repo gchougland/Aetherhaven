@@ -144,6 +144,7 @@ public final class PlotBuildingRelocation {
             prefabOrigin,
             session.getPrefabYaw(),
             true,
+            def.isPreserveWater(),
             buffer,
             store,
             INSTANT_BLOCKS_PER_BATCH,

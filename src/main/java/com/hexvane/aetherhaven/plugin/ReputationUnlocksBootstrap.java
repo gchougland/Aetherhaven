@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plugin;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.battlehorn.BattleHornChargeInteraction;
 import com.hexvane.aetherhaven.battlehorn.BattleHornSummonInteraction;
 import com.hexvane.aetherhaven.farming.SprinklerActivateInteraction;
 import com.hexvane.aetherhaven.farming.SprinklerWateringService;
@@ -69,6 +70,13 @@ public final class ReputationUnlocksBootstrap {
                 "AetherhavenBattleHornSummon",
                 BattleHornSummonInteraction.class,
                 BattleHornSummonInteraction.CODEC
+            );
+        core
+            .getCodecRegistry(Interaction.CODEC)
+            .register(
+                "AetherhavenBattleHornCharge",
+                BattleHornChargeInteraction.class,
+                BattleHornChargeInteraction.CODEC
             );
         core
             .getCodecRegistry(Interaction.CODEC)

@@ -128,7 +128,11 @@ aetherhaven.ui.villagerneeds.rescueDone=The selected resident was moved to you a
 aetherhaven.ui.villagerneeds.rescueNotTownResident=That resident is not part of this town.
 
 # Town NPC death (chat + server log)
-aetherhaven.town.villagerDeath.chat={name} ({category}) has died.
+aetherhaven.town.villagerDeath.chat={name} ({category}) has died at {location}. {cause}
+aetherhaven.town.villagerDeath.locationUnknown=unknown location
+aetherhaven.town.villagerDeath.causeByEntity=Killed by {source}.
+aetherhaven.town.villagerDeath.causeByDamage=Died from {damageType}.
+aetherhaven.town.villagerDeath.causeUnknown=Cause unknown.
 aetherhaven.town.citizenDawnRevival.chat={name} returned to the charter at dawn.
 aetherhaven.ui.reputation.label=Reputation
 aetherhaven.reputation.dailyTalkGain=+{amount} reputation (daily greeting)

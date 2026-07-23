@@ -39,13 +39,13 @@ public final class DebugTownTargetArgs {
             command.withOptionalArg(
                 "town",
                 "aetherhaven_commands_help.commands.aetherhaven.debug.townFlag.desc",
-                ArgTypes.GREEDY_STRING
+                AetherhavenArgTypes.TOWN_NAME
             );
         OptionalArg<String> player =
             command.withOptionalArg(
                 "player",
                 "aetherhaven_commands_help.commands.aetherhaven.debug.playerFlag.desc",
-                ArgTypes.STRING
+                AetherhavenArgTypes.ONLINE_PLAYER_NAME
             );
         return new DebugTownTargetArgs(town, player);
     }

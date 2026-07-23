@@ -108,6 +108,7 @@ public final class BuildingEditorSessionStarter {
             prefabOrigin,
             yaw,
             true,
+            def.isPreserveWater(),
             buffer,
             store,
             INSTANT_BLOCKS_PER_BATCH,

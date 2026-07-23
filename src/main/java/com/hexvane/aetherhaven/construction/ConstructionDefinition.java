@@ -114,6 +114,12 @@ public final class ConstructionDefinition {
     private boolean touristDestination;
 
     /**
+     * When true, assembly keeps existing world water in prefab air cells only (docks and piers). Editor empty still clears water.
+     */
+    @SerializedName("preserveWater")
+    private boolean preserveWater;
+
+    /**
      * Max villagers assignable on a house plot (town records shelf slots). Used for {@code plot_house} gameplay
      * constructions; omitted or {@code 0} means {@code 1}. Clamped to {@code 1..8}.
      */
@@ -467,6 +473,10 @@ public final class ConstructionDefinition {
 
     public boolean isTouristDestination() {
         return touristDestination;
+    }
+
+    public boolean isPreserveWater() {
+        return preserveWater;
     }
 
     /** @return prefab-local x,y,z of management block, or null if not configured */

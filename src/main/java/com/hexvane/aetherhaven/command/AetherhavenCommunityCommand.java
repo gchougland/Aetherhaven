@@ -31,7 +31,7 @@ public final class AetherhavenCommunityCommand extends AbstractCommandCollection
             this.withRequiredArg(
                 "constructionId",
                 "aetherhaven_commands_help.commands.aetherhaven.community.submit.constructionId",
-                ArgTypes.STRING
+                AetherhavenArgTypes.CUSTOM_BUILDING_ID
             );
 
         SubmitCommand() {

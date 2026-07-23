@@ -18,6 +18,14 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 
+@HammerRepairStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../hammer.png", Border: 0, Color: #ffffff), LabelStyle: (...@IconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../hammer.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@IconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../hammer.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@IconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../hammer.png", Border: 0, Color: #5c6a78(0.85)), LabelStyle: (...@IconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 Group #TownJournalPlotRow {
   LayoutMode: Left;
   Anchor: (Bottom: 8);
@@ -62,8 +70,17 @@ Group #TownJournalPlotRow {
   }
 
   Group {
-    LayoutMode: Middle;
-    Anchor: (Width: 44, Height: @TownPlotRowHeight, Left: 6);
+    LayoutMode: Left;
+    Anchor: (Width: 88, Height: @TownPlotRowHeight, Left: 6);
+
+    TextButton #RepairPlot {
+      Style: @HammerRepairStyle;
+      TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+      Anchor: (Width: 40, Height: 40, Right: 4);
+      Padding: (Full: 0);
+      Text: ".";
+      TooltipText: "";
+    }
 
     TextButton #RemovePlot {
       Style: @BulldozerRemoveStyle;

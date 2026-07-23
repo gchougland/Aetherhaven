@@ -18,7 +18,7 @@
           "Range": { "Compute": "ViewRange" },
           "LockOnTarget": true,
           "Filters": [
-            { "Type": "NPCGroup", "IncludeGroups": ["Aggressive"] },
+            { "Type": "NPCGroup", "IncludeGroups": ["Aggressive", "Aetherhaven_Raid"] },
             { "Type": "LineOfSight" }
           ],
           "Collector": { "Type": "CombatTargets" }

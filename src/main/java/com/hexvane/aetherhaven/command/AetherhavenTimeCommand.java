@@ -1,11 +1,9 @@
 package com.hexvane.aetherhaven.command;
 
-import com.hypixel.hytale.codec.validation.Validators;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.command.system.CommandContext;
 import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredArg;
-import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractWorldCommand;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
@@ -51,8 +49,7 @@ public final class AetherhavenTimeCommand extends AbstractCommandCollection {
     private static final class SetScheduleHourCommand extends AbstractWorldCommand {
         @Nonnull
         private final RequiredArg<Integer> hourArg =
-            this.withRequiredArg("hour", "aetherhaven_commands_help.commands.aetherhaven.time.hour.desc", ArgTypes.INTEGER)
-                .addValidator(Validators.range(0, 23));
+            this.withRequiredArg("hour", "aetherhaven_commands_help.commands.aetherhaven.time.hour.desc", AetherhavenArgTypes.GAME_HOUR);
 
         SetScheduleHourCommand() {
             super("aetherhaven_commands_help.commands.aetherhaven.time.set.desc");

@@ -156,6 +156,47 @@ public final class ConstructionPasteOps {
         return pb.blockId == 0 && pb.filler == 0 && pb.fluidId == 0;
     }
 
+    /**
+     * Prefab air cells only ({@link #isPureAirPrefabCell}): when {@code preserveWater} is on, existing world water is kept.
+     * Editor empty markers still clear water so interiors can be carved out.
+     */
+    public static boolean isPrefabWaterPreservingCell(@Nonnull PendingBlock pb) {
+        return isPureAirPrefabCell(pb);
+    }
+
+    public static boolean worldHasFluidAt(
+        @Nonnull World world,
+        int bx,
+        int by,
+        int bz,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        WorldChunk chunk = chunkAccessor.getNonTickingChunk(ChunkUtil.indexChunkFromBlock(bx, bz));
+        if (chunk == null || !chunk.getReference().isValid()) {
+            return false;
+        }
+        Ref<ChunkStore> section = sectionRefForBlockY(chunk, by);
+        if (section == null) {
+            return false;
+        }
+        FluidSection fluidSection = world.getChunkStore().getStore().getComponent(section, FluidSection.getComponentType());
+        return fluidSection != null && fluidSection.getFluidId(bx, by, bz) != 0;
+    }
+
+    public static boolean shouldPreserveWorldWaterAtPrefabCell(
+        boolean preserveWater,
+        @Nonnull PendingBlock pb,
+        @Nonnull World world,
+        int bx,
+        int by,
+        int bz,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        return preserveWater
+            && isPrefabWaterPreservingCell(pb)
+            && worldHasFluidAt(world, bx, by, bz, chunkAccessor);
+    }
+
     @Nonnull
     public static List<PendingBlock> withoutPureAirCells(@Nonnull List<PendingBlock> full) {
         return full.stream().filter(pb -> !isPureAirPrefabCell(pb)).collect(Collectors.toUnmodifiableList());
@@ -370,6 +411,22 @@ public final class ConstructionPasteOps {
         }
     }
 
+    /**
+     * Force-pastes one prefab cell at {@code origin + pb} when restoring missing important blocks on a completed plot.
+     */
+    public static boolean restoreSinglePrefabCell(
+        @Nonnull World world,
+        @Nonnull Vector3i origin,
+        @Nonnull PendingBlock pb,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor
+    ) {
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
+        if (isInteractiveBlockEntityOrigin(pb, blockTypeMap)) {
+            return placeInteractiveBlockEntityCell(world, origin, pb, blockTypeMap);
+        }
+        return placeOne(world, origin, pb, true, false, chunkAccessor, blockTypeMap);
+    }
+
     private static boolean placeInteractiveBlockEntityCell(
         @Nonnull World world,
         @Nonnull Vector3i origin,
@@ -511,7 +568,9 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull List<PendingBlock> footprint,
-        @Nonnull LocalCachedChunkAccessor chunkAccessor
+        boolean preserveWater,
+        @Nonnull LocalCachedChunkAccessor chunkAccessor,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         for (PendingBlock pb : footprint) {
             if (pb.fluidId() != 0) {
@@ -520,6 +579,9 @@ public final class ConstructionPasteOps {
             int bx = origin.x + pb.x();
             int by = origin.y + pb.y();
             int bz = origin.z + pb.z();
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                continue;
+            }
             applyPrefabFluidForCell(world, bx, by, bz, 0, 0, chunkAccessor);
         }
     }
@@ -529,8 +591,10 @@ public final class ConstructionPasteOps {
         @Nonnull Vector3i origin,
         @Nonnull List<PendingBlock> pending,
         boolean force,
+        boolean preserveWater,
         @Nonnull PrefabRotation prefabRotation,
-        @Nonnull IPrefabBuffer bufferAccess
+        @Nonnull IPrefabBuffer bufferAccess,
+        @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
         LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
         for (PendingBlock pb : pending) {
@@ -542,6 +606,9 @@ public final class ConstructionPasteOps {
                 continue;
             }
             if (pb.blockId == 0) {
+                if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                    continue;
+                }
                 if (force) {
                     chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
                 } else {
@@ -562,6 +629,7 @@ public final class ConstructionPasteOps {
         @Nonnull Vector3i origin,
         @Nonnull PendingBlock pb,
         boolean force,
+        boolean preserveWater,
         @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
@@ -588,6 +656,9 @@ public final class ConstructionPasteOps {
             return true;
         }
         if (pb.blockId == 0) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                return true;
+            }
             if (force) {
                 chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
             } else {
@@ -643,6 +714,7 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull Rotation yaw,
+        boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess
     ) {
         PrefabSequence seq = buildSequence(bufferAccess, yaw);
@@ -651,9 +723,9 @@ public final class ConstructionPasteOps {
         BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         for (int i = 0; i < cells.size(); i++) {
             PendingBlock pb = cells.get(i);
-            if (!forceSetSolid(world, origin, pb, chunkAccessor, blockTypeMap)) {
+            if (!forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap)) {
                 chunkAccessor = createAccessor(world, origin, bufferAccess);
-                forceSetSolid(world, origin, pb, chunkAccessor, blockTypeMap);
+                forceSetSolid(world, origin, pb, preserveWater, chunkAccessor, blockTypeMap);
             }
         }
     }
@@ -662,6 +734,7 @@ public final class ConstructionPasteOps {
         @Nonnull World world,
         @Nonnull Vector3i origin,
         @Nonnull PendingBlock pb,
+        boolean preserveWater,
         @Nonnull LocalCachedChunkAccessor chunkAccessor,
         @Nonnull BlockTypeAssetMap<String, BlockType> blockTypeMap
     ) {
@@ -673,6 +746,9 @@ public final class ConstructionPasteOps {
             return false;
         }
         if (pb.blockId() == 0) {
+            if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                return true;
+            }
             chunk.setBlock(bx, by, bz, BlockType.EMPTY_ID, BlockType.EMPTY, 0, 0, SET_BLOCK_SETTINGS_CLEAR);
             return true;
         }
@@ -729,11 +805,13 @@ public final class ConstructionPasteOps {
         @Nonnull Vector3i origin,
         @Nonnull PrefabRotation prefabRotation,
         int prefabId,
+        boolean preserveWater,
         @Nonnull IPrefabBuffer bufferAccess,
         @Nonnull List<Holder<EntityStore>> prefabEntitiesInOrder,
         @Nonnull ComponentAccessor<EntityStore> entityAccessor
     ) {
         LocalCachedChunkAccessor chunkAccessor = createAccessor(world, origin, bufferAccess);
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         PrefabBufferCall secondPassCall = new PrefabBufferCall(new Random(PREFAB_BUFFER_ITERATION_SEED), prefabRotation);
         bufferAccess.forEach(
             IPrefabBuffer.iterateAllColumns(),
@@ -741,6 +819,13 @@ public final class ConstructionPasteOps {
                 int bx = origin.x + x;
                 int by = origin.y + y;
                 int bz = origin.z + z;
+                if (fluidId == 0) {
+                    PendingBlock pb =
+                        new PendingBlock(x, y, z, blockId, holder, supportValue, blockRotation, filler, fluidId, fluidLevel);
+                    if (shouldPreserveWorldWaterAtPrefabCell(preserveWater, pb, world, bx, by, bz, chunkAccessor)) {
+                        return;
+                    }
+                }
                 applyPrefabFluidForCell(world, bx, by, bz, fluidId, fluidLevel, chunkAccessor);
             },
             null,

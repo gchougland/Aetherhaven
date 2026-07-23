@@ -945,6 +945,15 @@ public final class InnPoolService {
             return false;
         }
 
+        removeUnlockedInnVisitors(town, store);
+        town.setInnPoolLastMorningEpochDay(epochDay);
+        town.setInnPoolLastMorningGameDate(wtr.getGameDateTime().toLocalDate().toString());
+        tm.updateTown(town);
+        return true;
+    }
+
+    /** Removes unlocked inn pool visitors and despawns them. Quest locked visitors stay. */
+    private static void removeUnlockedInnVisitors(@Nonnull TownRecord town, @Nonnull Store<EntityStore> store) {
         for (String sid : new ArrayList<>(town.getInnPoolNpcIds())) {
             UUID u = parseUuid(sid);
             if (u == null) {
@@ -971,10 +980,72 @@ public final class InnPoolService {
                 store.removeEntity(ref, RemoveReason.REMOVE);
             }
         }
-        town.setInnPoolLastMorningEpochDay(epochDay);
-        town.setInnPoolLastMorningGameDate(wtr.getGameDateTime().toLocalDate().toString());
+    }
+
+    public enum RerollOutcome {
+        OK,
+        INN_NOT_READY,
+        INN_NOT_LOADED
+    }
+
+    @Nonnull
+    @SuppressWarnings("deprecation") // Store.isProcessing() is the only way to detect mid-tick writes
+    public static RerollOutcome rerollUnlockedVisitorsForTown(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store
+    ) {
+        if (store.isProcessing()) {
+            UUID townId = town.getTownId();
+            world.execute(
+                () -> {
+                    Store<EntityStore> liveStore =
+                        world.getEntityStore() != null ? world.getEntityStore().getStore() : null;
+                    if (liveStore == null) {
+                        return;
+                    }
+                    TownManager liveTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                    TownRecord liveTown = liveTm.getTown(townId);
+                    if (liveTown == null) {
+                        return;
+                    }
+                    rerollUnlockedVisitorsForTown(world, plugin, liveTown, liveTm, liveStore);
+                }
+            );
+            return RerollOutcome.OK;
+        }
+        if (!town.isInnActive()
+            || !town.hasQuestCompleted(AetherhavenConstants.QUEST_BUILD_INN)
+            || town.getInnkeeperEntityUuid() == null) {
+            return RerollOutcome.INN_NOT_READY;
+        }
+        PlotInstance innPlot =
+            InnPlotResolver.resolveInnPlotForVisitors(town, plugin.getConstructionCatalog(), store);
+        if (innPlot == null) {
+            return RerollOutcome.INN_NOT_READY;
+        }
+        ConstructionDefinition innDef = InnPlotResolver.resolveInnDefinition(plugin, innPlot);
+        if (innDef == null) {
+            return RerollOutcome.INN_NOT_READY;
+        }
+        int[][] spawnLocals = innDef.getVisitorSpawnLocals();
+        if (spawnLocals == null || spawnLocals.length < 1) {
+            return RerollOutcome.INN_NOT_READY;
+        }
+        if (!isInnManagementChunkLoaded(world, innPlot, innDef)) {
+            return RerollOutcome.INN_NOT_LOADED;
+        }
+        town.migrateInnFieldsIfNeeded();
+        dedupeInnPoolIds(town, tm);
+        autoLockQuestCriticalVisitors(town, tm, store);
+        removeUnlockedInnVisitors(town, store);
         tm.updateTown(town);
-        return true;
+        fillEmptyInnVisitorSlotsAtSpawns(world, plugin, town, tm, store, innPlot, innDef);
+        reconcileInnVisitorEntities(world, town, tm, store, false);
+        tm.updateTown(town);
+        return RerollOutcome.OK;
     }
 
     private static boolean isMorningForInnPool(

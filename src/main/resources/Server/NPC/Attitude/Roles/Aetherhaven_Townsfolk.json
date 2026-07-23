@@ -6,7 +6,8 @@
       "Player"
     ],
     "Hostile": [
-      "Aggressive"
+      "Aggressive",
+      "Aetherhaven_Raid"
     ]
   }
 }

@@ -31,7 +31,7 @@ public final class AetherhavenReplaceCharterCommand extends AbstractPlayerComman
         this.withOptionalArg(
             "townName",
             "aetherhaven_commands_help.commands.aetherhaven.replace_charter.townName.desc",
-            ArgTypes.GREEDY_STRING
+            AetherhavenArgTypes.TOWN_NAME
         );
 
     public AetherhavenReplaceCharterCommand() {

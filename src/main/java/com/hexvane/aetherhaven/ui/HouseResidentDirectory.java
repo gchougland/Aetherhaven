@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.town.HiredGuardRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
+import com.hexvane.aetherhaven.town.TownResidentEligibility;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkAssignmentKinds;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -118,6 +119,9 @@ public final class HouseResidentDirectory {
                 continue;
             }
             if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, guardUuid)) {
+                continue;
+            }
+            if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, guardUuid)) {
                 continue;
             }
             if (hideElsewhereHoused
@@ -232,6 +236,9 @@ public final class HouseResidentDirectory {
         @Nonnull UUID entityUuid
     ) {
         if (GuildHallAdventurerPoolService.isGuildHallAdventurer(town, entityUuid)) {
+            return true;
+        }
+        if (TownResidentEligibility.excludeFromHouseAssignmentPicker(town, entityUuid)) {
             return true;
         }
         TownsfolkCharacterBinding tb = chunk.getComponent(index, TownsfolkCharacterBinding.getComponentType());

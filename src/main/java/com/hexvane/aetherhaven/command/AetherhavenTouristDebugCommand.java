@@ -126,7 +126,7 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
             this.withOptionalArg(
                 "portal",
                 "aetherhaven_commands_help.commands.aetherhaven.tourist.spawn.portal.desc",
-                ArgTypes.STRING
+                AetherhavenArgTypes.TOURIST_PORTAL_ID
             );
         @Nonnull
         private final DebugTownTargetArgs townTarget;
@@ -155,13 +155,13 @@ public final class AetherhavenTouristDebugCommand extends AbstractCommandCollect
             this.withRequiredArg(
                 "characterId",
                 "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc",
-                ArgTypes.STRING
+                AetherhavenArgTypes.TOWNSFOLK_CHARACTER_ID
             );
         private final OptionalArg<String> portalArg =
             this.withOptionalArg(
                 "portal",
                 "aetherhaven_commands_help.commands.aetherhaven.tourist.spawn.portal.desc",
-                ArgTypes.STRING
+                AetherhavenArgTypes.TOURIST_PORTAL_ID
             );
         @Nonnull
         private final DebugTownTargetArgs townTarget;

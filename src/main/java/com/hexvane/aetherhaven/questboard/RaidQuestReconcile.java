@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil;
+import com.hexvane.aetherhaven.entity.EntityPresenceUtil.EntityPresence;
 import com.hexvane.aetherhaven.map.RaidQuestCompassCache;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
@@ -24,6 +26,11 @@ public final class RaidQuestReconcile {
     private static final ConcurrentHashMap<String, Long> LAST_RECONCILE_MS = new ConcurrentHashMap<>();
 
     private RaidQuestReconcile() {}
+
+    /** Only confirmed absences may drop tracking; unloaded chunks are not despawned. */
+    static boolean shouldDropRaidMob(@Nonnull EntityPresence presence) {
+        return EntityPresenceUtil.isConfirmedAbsent(presence);
+    }
 
     public static void maybeReconcileWorld(
         @Nonnull World world,
@@ -56,7 +63,7 @@ public final class RaidQuestReconcile {
                 if (!slot.isRaidQuest()) {
                     continue;
                 }
-                if (reconcileSlot(worldName, store, town, slot)) {
+                if (reconcileSlot(worldName, store, town, slot, plugin)) {
                     changedTowns.add(town);
                 }
             }
@@ -70,7 +77,8 @@ public final class RaidQuestReconcile {
         @Nonnull String worldName,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
-        @Nonnull QuestBoardSlotRecord slot
+        @Nonnull QuestBoardSlotRecord slot,
+        @Nonnull AetherhavenPlugin plugin
     ) {
         List<String> uuids = new ArrayList<>(slot.raidSpawnedEntityUuidsOrEmpty());
         if (uuids.isEmpty()) {
@@ -93,14 +101,28 @@ public final class RaidQuestReconcile {
                 changed = true;
                 continue;
             }
-            Ref<EntityStore> ref = store.getExternalData().getRefFromUUID(mobUuid);
-            if (ref != null && ref.isValid()) {
+            EntityPresence presence = EntityPresenceUtil.resolve(store, mobUuid);
+            if (EntityPresenceUtil.isLoadedLive(presence)) {
                 continue;
             }
-            RaidQuestCompassCache.removeMob(worldName, mobUuid);
-            it.remove();
+            if (!shouldDropRaidMob(presence)) {
+                if (presence == EntityPresence.UNKNOWN_UNLOADED) {
+                    RaidQuestMarchDebugLog.logReconcileSkipUnloaded(plugin, slot.instanceIdOrEmpty(), mobUuid);
+                }
+                continue;
+            }
             int need = slot.getRaidKillRequired();
             int progress = slot.getRaidKillProgress();
+            RaidQuestMarchDebugLog.logReconcileDrop(
+                plugin,
+                slot.instanceIdOrEmpty(),
+                mobUuid,
+                presence,
+                need,
+                progress
+            );
+            RaidQuestCompassCache.removeMob(worldName, mobUuid);
+            it.remove();
             slot.setRaidKillRequired(Math.max(progress, need - 1));
             changed = true;
         }

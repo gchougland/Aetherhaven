@@ -53,7 +53,12 @@ public final class HuntQuestBoardHandler implements QuestBoardQuestTypeHandler {
             slot.setDescriptionLangKey(entry.descriptionLangKey().trim());
         }
         slot.setRequiredItems(new ArrayList<>());
-        slot.setRewards(new ArrayList<>(entry.rewardsOrEmpty()));
+        slot.setRewards(
+            QuestBoardGoldRewardScaling.applyGoldCoinMultiplier(
+                entry.rewardsOrEmpty(),
+                catalog.goldCoinMultiplierForType(TYPE_ID)
+            )
+        );
         slot.setDaysLimit(entry.daysLimit());
         String rank = slot.getQuestRank() != null ? slot.getQuestRank() : "E";
         int xp = entry.rankXpReward() > 0 ? entry.rankXpReward() : catalog.defaultXpRewardForRank(rank);

@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialItemIds;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsLoader;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
@@ -93,7 +94,7 @@ public final class PrefabMaterialsCatalog {
             return;
         }
         List<MaterialRequirement> mats = file.materials != null ? file.materials : List.of();
-        map.put(file.constructionId.trim(), List.copyOf(mats));
+        map.put(file.constructionId.trim(), PrefabMaterialItemIds.mergeNormalized(mats));
     }
 
     @Nonnull

@@ -6,7 +6,7 @@
       ],
       "Looping": false,
       "StartDelay": 0,
-      "Volume": 0
+      "Volume": 6.0
     },
     {
       "Files": [
@@ -14,7 +14,7 @@
       ],
       "Looping": true,
       "StartDelay": 1.0,
-      "Volume": 0
+      "Volume": 6.0
     }
   ],
   "Parent": "SFX_Attn_Moderate"

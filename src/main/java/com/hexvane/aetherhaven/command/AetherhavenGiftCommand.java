@@ -103,7 +103,7 @@ public final class AetherhavenGiftCommand extends AbstractCommandCollection {
     private static final class FillHistoryCommand extends AbstractPlayerCommand {
         @Nonnull
         private final RequiredArg<String> roleArg =
-            this.withRequiredArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.gift.roleId.desc", ArgTypes.STRING);
+            this.withRequiredArg("roleId", "aetherhaven_commands_help.commands.aetherhaven.gift.roleId.desc", AetherhavenArgTypes.VILLAGER_NPC_ROLE);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 

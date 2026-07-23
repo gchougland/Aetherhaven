@@ -40,7 +40,7 @@ public final class AetherhavenPlotTokenCommand extends AbstractCommandCollection
 
     private static final class GiveCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> constructionIdArg =
-            this.withRequiredArg("constructionId", "aetherhaven_commands_help.commands.aetherhaven.plottoken.give.constructionId", ArgTypes.STRING);
+            this.withRequiredArg("constructionId", "aetherhaven_commands_help.commands.aetherhaven.plottoken.give.constructionId", AetherhavenArgTypes.CONSTRUCTION_ID);
         private final OptionalArg<Integer> amountArg =
             this.withOptionalArg("amount", "aetherhaven_commands_help.commands.aetherhaven.plottoken.give.amount", ArgTypes.INTEGER);
 
@@ -87,7 +87,7 @@ public final class AetherhavenPlotTokenCommand extends AbstractCommandCollection
 
     private static final class UnlockCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> constructionIdArg =
-            this.withRequiredArg("constructionId", "aetherhaven_commands_help.commands.aetherhaven.plottoken.unlock.constructionId", ArgTypes.STRING);
+            this.withRequiredArg("constructionId", "aetherhaven_commands_help.commands.aetherhaven.plottoken.unlock.constructionId", AetherhavenArgTypes.CONSTRUCTION_ID);
 
         UnlockCommand() {
             super("unlock", "aetherhaven_commands_help.commands.aetherhaven.plottoken.unlock.desc");

@@ -341,6 +341,7 @@ public final class PlotAssemblyService {
                 seq.prefabRotation(),
                 prefabId,
                 slot,
+                def.isPreserveWater(),
                 def.getId()
             );
         AssemblySectionMapper clearingMapper = sectionMapper;
@@ -566,6 +567,7 @@ public final class PlotAssemblyService {
                 seq.prefabRotation(),
                 prefabId,
                 slot,
+                def.isPreserveWater(),
                 def.getId()
             );
         AssemblySectionMapper clearingMapper = clearingSectionMapper(job, plot);
@@ -628,15 +630,25 @@ public final class PlotAssemblyService {
         }
         LocalCachedChunkAccessor chunkAccessor =
             ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
+        BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
         ConstructionPasteOps.prepAssemblySite(
             world,
             job.anchor(),
             job.footprintCells(),
             false,
+            job.preserveWater(),
             job.prefabRotation(),
-            job.buffer()
+            job.buffer(),
+            blockTypeMap
         );
-        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(world, job.anchor(), job.footprintCells(), chunkAccessor);
+        ConstructionPasteOps.clearNonPrefabFluidsInFootprint(
+            world,
+            job.anchor(),
+            job.footprintCells(),
+            job.preserveWater(),
+            chunkAccessor,
+            blockTypeMap
+        );
         AssemblySectionMapper sectionMapper = sectionMapperFor(plot, job.pendingBlocks());
         if (sectionMapper != null) {
             plot.setAssemblyActiveSectionIndex(
@@ -973,7 +985,7 @@ public final class PlotAssemblyService {
         boolean wroteBlock =
             !ConstructionPasteOps.isAssemblyPlacementNoOp(job.anchor(), pb, chunkAccessor, blockTypeMap);
         if (wroteBlock) {
-            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, chunkAccessor, blockTypeMap)) {
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pb, true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
                 rt.clearChunkAccessor();
                 return PlacementAdvanceOutcome.noProgress();
             }
@@ -1062,7 +1074,7 @@ public final class PlotAssemblyService {
         boolean borrowedCompletionBuffer = completionBuffer != job.buffer();
         try {
             // PrefabUtil-style force setBlock of every solid from a fresh buffer read (wall torches included).
-            ConstructionPasteOps.forcePasteAllSolids(world, job.anchor(), job.yaw(), completionBuffer);
+            ConstructionPasteOps.forcePasteAllSolids(world, job.anchor(), job.yaw(), job.preserveWater(), completionBuffer);
             ConstructionPasteOps.placeInteractiveBlockEntitiesFromPrefab(
                 world,
                 job.anchor(),
@@ -1074,6 +1086,7 @@ public final class PlotAssemblyService {
                 job.anchor(),
                 job.prefabRotation(),
                 job.prefabId(),
+                job.preserveWater(),
                 completionBuffer,
                 job.prefabEntitiesInOrder(),
                 entityStore
@@ -1180,9 +1193,9 @@ public final class PlotAssemblyService {
             if (!isChunkLoadedForBlock(world, job.anchor(), pending.get(i))) {
                 return false;
             }
-            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, chunkAccessor, blockTypeMap)) {
+            if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
                 chunkAccessor = ConstructionPasteOps.createAccessor(world, job.anchor(), job.buffer());
-                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, chunkAccessor, blockTypeMap)) {
+                if (!ConstructionPasteOps.placeOne(world, job.anchor(), pending.get(i), true, job.preserveWater(), chunkAccessor, blockTypeMap)) {
                     continue;
                 }
             }
@@ -1830,13 +1843,16 @@ public final class PlotAssemblyService {
             return false;
         }
         if (AssemblyWorldRegistry.phase(world, job.plotId()) == PlotAssemblyPhase.CLEARING) {
+            BlockTypeAssetMap<String, BlockType> blockTypeMap = BlockType.getAssetMap();
             ConstructionPasteOps.prepAssemblySite(
                 world,
                 job.anchor(),
                 job.footprintCells(),
                 true,
+                job.preserveWater(),
                 job.prefabRotation(),
-                job.buffer()
+                job.buffer(),
+                blockTypeMap
             );
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             beginPlacingPhase(world, plugin, entityStore, tm, town, plot, job);

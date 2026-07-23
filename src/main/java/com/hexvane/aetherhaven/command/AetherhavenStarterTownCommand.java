@@ -198,7 +198,7 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
 
     private static final class WithPreset extends AbstractPlayerCommand {
         private final RequiredArg<String> preset =
-            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", ArgTypes.STRING);
+            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", AetherhavenArgTypes.STARTER_TOWN_PRESET);
 
         WithPreset() {
             super("aetherhaven_commands_help.commands.aetherhaven.startertown.desc");
@@ -219,9 +219,9 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
 
     private static final class WithPresetAndLayout extends AbstractPlayerCommand {
         private final RequiredArg<String> preset =
-            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", ArgTypes.STRING);
+            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", AetherhavenArgTypes.STARTER_TOWN_PRESET);
         private final RequiredArg<String> layout =
-            this.withRequiredArg("layout", "aetherhaven_commands_help.commands.aetherhaven.startertown.layout", ArgTypes.STRING);
+            this.withRequiredArg("layout", "aetherhaven_commands_help.commands.aetherhaven.startertown.layout", AetherhavenArgTypes.STARTER_TOWN_LAYOUT);
 
         WithPresetAndLayout() {
             super("aetherhaven_commands_help.commands.aetherhaven.startertown.desc");
@@ -242,9 +242,9 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
 
     private static final class WithPresetLayoutAndSeed extends AbstractPlayerCommand {
         private final RequiredArg<String> preset =
-            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", ArgTypes.STRING);
+            this.withRequiredArg("preset", "aetherhaven_commands_help.commands.aetherhaven.startertown.preset", AetherhavenArgTypes.STARTER_TOWN_PRESET);
         private final RequiredArg<String> layout =
-            this.withRequiredArg("layout", "aetherhaven_commands_help.commands.aetherhaven.startertown.layout", ArgTypes.STRING);
+            this.withRequiredArg("layout", "aetherhaven_commands_help.commands.aetherhaven.startertown.layout", AetherhavenArgTypes.STARTER_TOWN_LAYOUT);
         private final RequiredArg<String> seed =
             this.withRequiredArg("seed", "aetherhaven_commands_help.commands.aetherhaven.startertown.seed", ArgTypes.STRING);
 

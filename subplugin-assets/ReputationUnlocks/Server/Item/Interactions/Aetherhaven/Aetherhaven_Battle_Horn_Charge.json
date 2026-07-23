@@ -1,12 +1,11 @@
 {
-  "Type": "Charging",
+  "Type": "AetherhavenBattleHornCharge",
   "AllowIndefiniteHold": true,
   "Effects": {
     "StartDelay": 0.9,
     "ItemAnimationId": "TootHorn",
     "ClearAnimationOnFinish": true,
     "ClearSoundEventOnFinish": true,
-    "WorldSoundEventId": "SFX_Aetherhaven_Battle_Horn_Hold",
     "LocalSoundEventId": "SFX_Aetherhaven_Battle_Horn_Hold"
   },
   "Failed": {

@@ -84,6 +84,9 @@ public final class AetherhavenConstants {
 
     public static final String ITEM_BATTLE_HORN = "Aetherhaven_Battle_Horn";
 
+    /** Attenuated mono horn for server broadcast while a player holds the battle horn. */
+    public static final String BATTLE_HORN_WORLD_SOUND_EVENT_ID = "SFX_Aetherhaven_Battle_Horn_World";
+
     public static final String ITEM_HUNTING_KNIFE = "Aetherhaven_Hunting_Knife";
 
     /**

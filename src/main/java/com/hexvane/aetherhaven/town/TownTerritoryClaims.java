@@ -431,4 +431,28 @@ public final class TownTerritoryClaims {
         max = Math.max(max, Math.abs(mm[3] - cz));
         return max;
     }
+
+    /**
+     * Blocks from charter to the outer claim border along one cardinal axis ({@code axisX}/{@code axisZ} is -1, 0, or
+     * 1). Used for raid spawns so approach distance follows the border on that side, not the farthest border town-wide.
+     */
+    public static int charterToClaimBorderAlong(@Nonnull TownRecord town, int axisX, int axisZ) {
+        int[] mm = new int[4];
+        claimBlockBounds(town, mm);
+        int cx = town.getCharterX();
+        int cz = town.getCharterZ();
+        if (axisX > 0) {
+            return Math.max(0, mm[2] - cx);
+        }
+        if (axisX < 0) {
+            return Math.max(0, cx - mm[0]);
+        }
+        if (axisZ > 0) {
+            return Math.max(0, mm[3] - cz);
+        }
+        if (axisZ < 0) {
+            return Math.max(0, cz - mm[1]);
+        }
+        return 0;
+    }
 }

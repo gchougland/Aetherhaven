@@ -91,7 +91,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
 
     private static final class SpawnSubCommand extends AbstractPlayerCommand {
         private final OptionalArg<String> assignmentArg =
-            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", AetherhavenArgTypes.TOWNSFOLK_ASSIGNMENT_KIND);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -118,9 +118,9 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
     /** {@code /aetherhaven townsfolk spawn female_elf_01} */
     private static final class SpawnWithIdCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", AetherhavenArgTypes.TOWNSFOLK_CHARACTER_ID);
         private final OptionalArg<String> assignmentArg =
-            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", AetherhavenArgTypes.TOWNSFOLK_ASSIGNMENT_KIND);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -146,9 +146,9 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
     /** {@code /aetherhaven townsfolk spawn female_elf_01 tourist} */
     private static final class SpawnWithIdAndAssignmentCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> idArg =
-            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", ArgTypes.STRING);
+            this.withRequiredArg("id", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.id.desc", AetherhavenArgTypes.TOWNSFOLK_CHARACTER_ID);
         private final RequiredArg<String> assignmentArg =
-            this.withRequiredArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+            this.withRequiredArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", AetherhavenArgTypes.TOWNSFOLK_ASSIGNMENT_KIND);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 
@@ -172,7 +172,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
 
     private static final class ReleaseSubCommand extends AbstractPlayerCommand {
         private final RequiredArg<String> characterIdArg =
-            this.withRequiredArg("characterId", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.characterId.desc", ArgTypes.STRING);
+            this.withRequiredArg("characterId", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.characterId.desc", AetherhavenArgTypes.TOWNSFOLK_CHARACTER_ID);
         private final FlagArg despawnFlag = this.withFlagArg("despawn", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.despawn.desc");
         @Nonnull
         private final DebugTownTargetArgs townTarget;
@@ -227,7 +227,7 @@ public final class AetherhavenTownsfolkCommand extends AbstractCommandCollection
 
     private static final class ListSubCommand extends AbstractPlayerCommand {
         private final OptionalArg<String> assignmentArg =
-            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", ArgTypes.STRING);
+            this.withOptionalArg("assignmentKind", "aetherhaven_commands_help.commands.aetherhaven.townsfolk.assignmentKind.desc", AetherhavenArgTypes.TOWNSFOLK_ASSIGNMENT_KIND);
         @Nonnull
         private final DebugTownTargetArgs townTarget;
 

@@ -64,7 +64,7 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
             this.withRequiredArg(
                 "constructionId",
                 "aetherhaven_commands_help.commands.aetherhaven.plotcreator.edit.constructionId",
-                ArgTypes.STRING
+                AetherhavenArgTypes.CUSTOM_BUILDING_ID
             );
 
         EditCommand() {
@@ -108,13 +108,13 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
             this.withRequiredArg(
                 "idOrPrefab",
                 "aetherhaven_commands_help.commands.aetherhaven.plotcreator.generateicon.idOrPrefab",
-                ArgTypes.STRING
+                AetherhavenArgTypes.CUSTOM_BUILDING_ID
             );
         private final OptionalArg<String> outputIdArg =
             this.withOptionalArg(
                 "outputId",
                 "aetherhaven_commands_help.commands.aetherhaven.plotcreator.generateicon.outputId",
-                ArgTypes.STRING
+                AetherhavenArgTypes.CUSTOM_BUILDING_ID
             );
 
         GenerateIconCommand() {

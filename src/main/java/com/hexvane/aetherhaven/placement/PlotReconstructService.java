@@ -125,6 +125,7 @@ public final class PlotReconstructService {
             anchor,
             yaw,
             true,
+            def.isPreserveWater(),
             buffer,
             entityStore,
             INSTANT_BLOCKS_PER_BATCH,

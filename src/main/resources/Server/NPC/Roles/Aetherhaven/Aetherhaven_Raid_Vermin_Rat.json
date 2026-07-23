@@ -1,6 +1,6 @@
 {
   "Type": "Variant",
-  "Reference": "Template_Predator",
+  "Reference": "Template_Aetherhaven_Raid_Predator",
   "Modify": {
     "DropList": "Drop_Rat",
     "Appearance": "Rat",
@@ -14,8 +14,8 @@
     "AlertedTime": [2, 3],
     "FleeIfNotThreatened": false,
     "FleeRange": 15,
-    "HardLeashDistance": 60,
-    "LeashDistance": 30,
+    "HardLeashDistance": 512,
+    "LeashDistance": 512,
     "CombatBehaviorDistance": 3,
     "CombatBackOffAfterAttack": false,
     "Attack": "Root_NPC_Rat_Attack",
@@ -24,7 +24,7 @@
     "CombatMovingRelativeSpeed": 0.6,
     "AlwaysSleepAtNight": false,
     "DayTimeNapWeight": 0,
-    "TimidDuringDay": true,
+    "TimidDuringDay": false,
     "DayFlavorAnimation": "IdlePassive",
     "NightFlavorAnimation": "IdlePassive",
     "IsMemory": true,

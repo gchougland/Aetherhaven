@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.worldnpc;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.questboard.QuestBoardGoldRewardScaling;
+import com.hexvane.aetherhaven.questboard.HuntQuestBoardHandler;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotState;
 import com.hexvane.aetherhaven.questboard.TownQuestBoardRank;
@@ -79,7 +81,13 @@ public final class WorldQuestBoardService {
             slot.setDaysLimit(entry.daysLimit());
             slot.setGenerationSeed(rng.nextLong());
             if (!entry.rewardsOrEmpty().isEmpty()) {
-                slot.setRewards(new ArrayList<>(entry.rewardsOrEmpty()));
+                double goldMultiplier =
+                    HuntQuestBoardHandler.TYPE_ID.equalsIgnoreCase(entry.questTypeOrFetch())
+                        ? plugin.getQuestBoardCatalog().goldCoinMultiplierForType(HuntQuestBoardHandler.TYPE_ID)
+                        : 1.0;
+                slot.setRewards(
+                    QuestBoardGoldRewardScaling.applyGoldCoinMultiplier(entry.rewardsOrEmpty(), goldMultiplier)
+                );
             }
             slots.add(slot);
         }

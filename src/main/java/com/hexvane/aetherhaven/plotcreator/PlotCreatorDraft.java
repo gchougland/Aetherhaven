@@ -90,6 +90,8 @@ public final class PlotCreatorDraft {
     private String maxHomeResidentsInput;
     /** When true, natural air in the footprint is saved as empty cells in the prefab. */
     private boolean saveEmptySpaces;
+    /** When true, assembly keeps world water in empty prefab spaces. */
+    private boolean preserveWater;
     private boolean scheduleSharedUtilityPick;
     private boolean excludeFromTownJournal;
     /** When true, portal tourists may path here during the day. */
@@ -496,6 +498,14 @@ public final class PlotCreatorDraft {
 
     public void setSaveEmptySpaces(boolean saveEmptySpaces) {
         this.saveEmptySpaces = saveEmptySpaces;
+    }
+
+    public boolean isPreserveWater() {
+        return preserveWater;
+    }
+
+    public void setPreserveWater(boolean preserveWater) {
+        this.preserveWater = preserveWater;
     }
 
     public boolean isScheduleSharedUtilityPick() {

@@ -4,11 +4,17 @@ import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.restaurant.PlotRestaurantState;
 import com.hexvane.aetherhaven.restaurant.RestaurantUpgrades;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/** Need restoration and USE duration by {@link PoiInteractionKind}. */
+/** Need restoration and USE duration by POI tags and {@link PoiInteractionKind}. */
 public final class PoiEffectTable {
+    private static final float GENERIC_EAT_HUNGER_RESTORE = 30f;
+    private static final float REST_ENERGY_RESTORE = 28f;
+    private static final float FUN_RESTORE = 22f;
+    private static final float CONTAINER_HUNGER_RESTORE = 18f;
+
     private PoiEffectTable() {}
 
     public static float useDurationSeconds(@Nonnull PoiInteractionKind kind) {
@@ -22,7 +28,7 @@ public final class PoiEffectTable {
     }
 
     public static float useDurationSeconds(@Nonnull PoiEntry poi, @Nullable PlotRestaurantState restaurantState) {
-        if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
+        if (isEatPoi(poi.getTags()) && poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
             return RestaurantUpgrades.serviceEatDurationSeconds(restaurantState.getServiceLevel());
         }
         return useDurationSeconds(poi.getInteractionKind());
@@ -33,45 +39,50 @@ public final class PoiEffectTable {
         applyUseComplete(needs, poi, null);
     }
 
+    /**
+     * Each POI restores at most one need meter. Tags decide the effect; {@link PoiInteractionKind} only affects
+     * duration and visuals (e.g. eat on a chair vs standing at the inn hearth).
+     */
     public static void applyUseComplete(
         @Nonnull VillagerNeeds needs,
         @Nonnull PoiEntry poi,
         @Nullable PlotRestaurantState restaurantState
     ) {
-        PoiInteractionKind k = poi.getInteractionKind();
-        switch (k) {
-            case SLEEP -> {
-                needs.setEnergy(Math.min(VillagerNeeds.MAX, needs.getEnergy() + 28f));
-                needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 6f));
-            }
-            case SIT -> {
-                if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
-                    needs.setHunger(VillagerNeeds.MAX);
-                } else if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
-                    float restore = RestaurantUpgrades.serviceHungerRestore(restaurantState.getServiceLevel());
-                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + restore));
-                } else if (poi.getTags().contains("EAT")) {
-                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 30f));
-                } else {
-                    needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));
-                }
-            }
-            case USE_BENCH -> {
-                if (poi.getTags().contains(AetherhavenConstants.POI_TAG_FEAST)) {
-                    needs.setHunger(VillagerNeeds.MAX);
-                } else if (poi.getTags().contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
-                    float restore = RestaurantUpgrades.serviceHungerRestore(restaurantState.getServiceLevel());
-                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + restore));
-                } else if (poi.getTags().contains("EAT")) {
-                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 30f));
-                } else {
-                    needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 22f));
-                    needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 4f));
-                }
-            }
-            case WORK_SURFACE -> { }
-            case USE_CONTAINER -> needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 18f));
-            default -> needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 8f));
+        Set<String> tags = poi.getTags();
+        if (tags.contains(AetherhavenConstants.POI_TAG_FEAST)) {
+            needs.setHunger(VillagerNeeds.MAX);
+            return;
         }
+        if (tags.contains("EAT")) {
+            float restore = GENERIC_EAT_HUNGER_RESTORE;
+            if (tags.contains(AetherhavenConstants.POI_TAG_RESTAURANT) && restaurantState != null) {
+                restore = RestaurantUpgrades.serviceHungerRestore(restaurantState.getServiceLevel());
+            }
+            needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + restore));
+            return;
+        }
+        if (poi.getInteractionKind() == PoiInteractionKind.USE_CONTAINER) {
+            needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + CONTAINER_HUNGER_RESTORE));
+            return;
+        }
+        if (isRestPoi(tags, poi.getInteractionKind())) {
+            needs.setEnergy(Math.min(VillagerNeeds.MAX, needs.getEnergy() + REST_ENERGY_RESTORE));
+            return;
+        }
+        if (isFunPoi(tags)) {
+            needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + FUN_RESTORE));
+        }
+    }
+
+    static boolean isEatPoi(@Nonnull Set<String> tags) {
+        return tags.contains("EAT") || tags.contains(AetherhavenConstants.POI_TAG_FEAST);
+    }
+
+    private static boolean isRestPoi(@Nonnull Set<String> tags, @Nonnull PoiInteractionKind kind) {
+        return tags.contains("SLEEP") || tags.contains("ENERGY") || kind == PoiInteractionKind.SLEEP;
+    }
+
+    private static boolean isFunPoi(@Nonnull Set<String> tags) {
+        return tags.contains("FUN");
     }
 }

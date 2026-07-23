@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.questboard;
 
+import com.hexvane.aetherhaven.autonomy.AutonomyStallTrackable;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -13,7 +14,7 @@ import javax.annotation.Nullable;
 import org.joml.Vector3d;
 
 /** Tags quest-board raid mobs so only their deaths count toward raid progress. */
-public final class RaidQuestMobBinding implements Component<EntityStore> {
+public final class RaidQuestMobBinding implements Component<EntityStore>, AutonomyStallTrackable {
     @Nonnull
     public static final BuilderCodec<RaidQuestMobBinding> CODEC =
         BuilderCodec.builder(RaidQuestMobBinding.class, RaidQuestMobBinding::new)
@@ -48,8 +49,18 @@ public final class RaidQuestMobBinding implements Component<EntityStore> {
     private double marchLeashX;
     private double marchLeashY;
     private double marchLeashZ;
+    private double marchTargetX;
+    private double marchTargetY;
+    private double marchTargetZ;
+    private boolean marchTargetSet;
     private long nextMarchAdvanceEpochMs;
     private boolean marchInitialized;
+    private transient double autonomySampleX = Double.NaN;
+    private transient double autonomySampleZ = Double.NaN;
+    private transient double autonomyAnchorX = Double.NaN;
+    private transient double autonomyAnchorZ = Double.NaN;
+    private transient double autonomyGoalDistSq = Double.NaN;
+    private transient int autonomyStallTicks;
 
     public RaidQuestMobBinding() {}
 
@@ -95,6 +106,84 @@ public final class RaidQuestMobBinding implements Component<EntityStore> {
         this.marchLeashZ = leash.z;
     }
 
+    public void setMarchTarget(@Nonnull Vector3d target) {
+        this.marchTargetX = target.x;
+        this.marchTargetY = target.y;
+        this.marchTargetZ = target.z;
+        this.marchTargetSet = true;
+    }
+
+    @Nonnull
+    public Vector3d getMarchTarget() {
+        return new Vector3d(marchTargetX, marchTargetY, marchTargetZ);
+    }
+
+    public boolean hasMarchTarget() {
+        return marchTargetSet;
+    }
+
+    @Override
+    public double getAutonomySampleX() {
+        return autonomySampleX;
+    }
+
+    @Override
+    public double getAutonomySampleZ() {
+        return autonomySampleZ;
+    }
+
+    @Override
+    public double getAutonomyAnchorX() {
+        return autonomyAnchorX;
+    }
+
+    @Override
+    public double getAutonomyAnchorZ() {
+        return autonomyAnchorZ;
+    }
+
+    @Override
+    public double getAutonomyGoalDistSq() {
+        return autonomyGoalDistSq;
+    }
+
+    @Override
+    public int getAutonomyStallTicks() {
+        return autonomyStallTicks;
+    }
+
+    @Override
+    public void setAutonomySamplePosition(double x, double z) {
+        autonomySampleX = x;
+        autonomySampleZ = z;
+    }
+
+    @Override
+    public void setAutonomyAnchorPosition(double x, double z) {
+        autonomyAnchorX = x;
+        autonomyAnchorZ = z;
+    }
+
+    @Override
+    public void setAutonomyGoalDistSq(double distSq) {
+        autonomyGoalDistSq = distSq;
+    }
+
+    @Override
+    public void setAutonomyStallTicks(int ticks) {
+        autonomyStallTicks = Math.max(0, ticks);
+    }
+
+    @Override
+    public void resetAutonomyStallTracking() {
+        autonomySampleX = Double.NaN;
+        autonomySampleZ = Double.NaN;
+        autonomyAnchorX = Double.NaN;
+        autonomyAnchorZ = Double.NaN;
+        autonomyGoalDistSq = Double.NaN;
+        autonomyStallTicks = 0;
+    }
+
     @Nullable
     @Override
     public Component<EntityStore> clone() {
@@ -102,8 +191,18 @@ public final class RaidQuestMobBinding implements Component<EntityStore> {
         copy.marchLeashX = marchLeashX;
         copy.marchLeashY = marchLeashY;
         copy.marchLeashZ = marchLeashZ;
+        copy.marchTargetX = marchTargetX;
+        copy.marchTargetY = marchTargetY;
+        copy.marchTargetZ = marchTargetZ;
+        copy.marchTargetSet = marchTargetSet;
         copy.nextMarchAdvanceEpochMs = nextMarchAdvanceEpochMs;
         copy.marchInitialized = marchInitialized;
+        copy.autonomySampleX = autonomySampleX;
+        copy.autonomySampleZ = autonomySampleZ;
+        copy.autonomyAnchorX = autonomyAnchorX;
+        copy.autonomyAnchorZ = autonomyAnchorZ;
+        copy.autonomyGoalDistSq = autonomyGoalDistSq;
+        copy.autonomyStallTicks = autonomyStallTicks;
         return copy;
     }
 }

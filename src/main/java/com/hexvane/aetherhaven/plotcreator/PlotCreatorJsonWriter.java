@@ -97,6 +97,9 @@ public final class PlotCreatorJsonWriter {
         if (draft.isTouristDestination()) {
             root.put("touristDestination", true);
         }
+        if (draft.isPreserveWater()) {
+            root.put("preserveWater", true);
+        }
         if (draft.isPlotTokenLockedByDefault()) {
             root.put("plotTokenLockedByDefault", true);
             if (draft.isFloatingGiftBlueprint()) {

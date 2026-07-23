@@ -130,11 +130,13 @@ public final class PlotCreatorPrefabExporter {
                     }
 
                     if ((block != 0 || fluid != 0 || includeEmpty) && (!skipEditorBlock || block != editorBlock)) {
-                        if (block == editorBlockPrefabAir || (block == 0 && fluid == 0)) {
-                            selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
-                        } else {
-                            selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
-                        }
+                    if (block == editorBlockPrefabAir) {
+                        selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                    } else if (block == 0 && fluid == 0) {
+                        selection.addBlockAtWorldPos(x, y, z, 0, 0, 0, 0);
+                    } else {
+                        selection.copyFromAtWorld(x, y, z, chunk, blockPhysics);
+                    }
                         // Match BuilderTools PrefabSaver: always write the fluid layer explicitly so fluid-only
                         // cells and editor-air cells keep their fluids (copyFromAtWorld alone is not enough for
                         // the editor-air branch).

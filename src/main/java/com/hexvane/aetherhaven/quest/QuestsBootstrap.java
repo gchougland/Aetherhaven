@@ -2,7 +2,9 @@ package com.hexvane.aetherhaven.quest;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.command.AetherhavenQuestBoardDebugCommand;
 import com.hexvane.aetherhaven.command.AetherhavenQuestDebugCommand;
+import com.hexvane.aetherhaven.command.AetherhavenTownRankDebugCommand;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
@@ -40,6 +42,8 @@ public final class QuestsBootstrap {
         plugin.getEntityStoreRegistry().registerSystem(new RaidQuestMarchSystem(core));
         plugin.getEntityStoreRegistry().registerSystem(new RaidHealthBarHudRefreshSystem(core));
         core.registerAetherhavenSubcommand(new AetherhavenQuestDebugCommand());
+        core.registerAetherhavenSubcommand(new AetherhavenQuestBoardDebugCommand());
+        core.registerAetherhavenSubcommand(new AetherhavenTownRankDebugCommand());
     }
 
     @Nonnull

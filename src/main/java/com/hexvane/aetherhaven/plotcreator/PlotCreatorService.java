@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.community.CommunitySubmissionService;
+import com.hexvane.aetherhaven.community.CommunitySubmitLocalSave;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.placement.PlotFootprintOverlayRefresh;
@@ -456,6 +457,21 @@ public final class PlotCreatorService {
         if (draft.isBuildingEditorMode()) {
             return saveAndFinishBuildingEditor(plugin, session, playerRef, draft);
         }
+        if (draft.isSubmitToCommunity() && plugin.getConfig().get().getCommunityMarketplace().isEnabled()) {
+            try {
+                String remapErr =
+                    CommunitySubmitLocalSave.prepareDraftForCommunitySubmit(plugin, draft, playerRef.getUuid());
+                if (remapErr != null) {
+                    playerRef.sendMessage(
+                        Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error." + remapErr)
+                    );
+                    return false;
+                }
+            } catch (Exception e) {
+                playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.saveFailed"));
+                return false;
+            }
+        }
         Path buildingFile = CustomBuildingsPaths.buildingFile(plugin.getDataDirectory(), draft.getConstructionId().trim());
         try {
             PlotCreatorJsonWriter.writeBuilding(buildingFile, draft);
@@ -712,6 +728,7 @@ public final class PlotCreatorService {
 
     /** Default plot creator community submit checkbox from {@code CommunityMarketplace.SubmitOnSaveDefault}. */
     public static void applyCommunityMarketplaceDefaults(@Nonnull PlotCreatorDraft draft) {
+        draft.setSubmitToCommunity(false);
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         if (plugin == null) {
             return;
