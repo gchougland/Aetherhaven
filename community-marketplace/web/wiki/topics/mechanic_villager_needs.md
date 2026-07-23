@@ -23,7 +23,7 @@ Finished buildings add **spots** villagers can use: beds, benches, counters, wor
 * **Beds** refill **energy** (including beds in houses at night).
 * **Benches and seats**, including park benches, refill **fun**.
 * **Kitchen counters, tables, and food storage** refill **hunger**.
-* **Workbenches and shop counters** during work hours give a small bump to **hunger** and **energy** while they work.
+* **Workbenches and shop counters** are for the job. They do not refill hunger, energy, or fun by themselves.
 
 Different plots place different spots. A farm has farming benches. An inn has beds and meal space. A park has outdoor benches meant for relaxing.
 

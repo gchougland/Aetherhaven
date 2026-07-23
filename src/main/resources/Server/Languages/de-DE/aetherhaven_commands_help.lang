@@ -114,8 +114,8 @@ commands.aetherhaven.time.dawn.success=Uhrzeit einstellen: {gameTime}
 commands.aetherhaven.time.noResource=Diese Welt verfügt über keine geladenen Zeitressourcen.
 
 commands.aetherhaven.walldebug.desc=Kreativ: Debug-Anweisungen zur Wandplatzierung im Chat
-commands.aetherhaven.walldebug.on.desc=Wandstab-Debugging aktivieren
-commands.aetherhaven.walldebug.off.desc=Wandstab-Debugging deaktivieren
+commands.aetherhaven.walldebug.on.desc=Stadtmauerstab-Debugging aktivieren
+commands.aetherhaven.walldebug.off.desc=Stadtmauerstab-Debugging deaktivieren
 commands.aetherhaven.walldebug.dump.desc=Aktuellen Sitzungsstatus des Wandzauberstabs drucken
 
 commands.aetherhaven.townsfolk.desc=Debuggen: Gemeinsame Stadtbewohner-NPCs erzeugen und verwalten

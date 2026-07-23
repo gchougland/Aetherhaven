@@ -13,6 +13,7 @@
         { "itemId": "Rock_Slate_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Basalt_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Calcite_Cobble", "ticks": 200, "maxStorage": 100 },
+        { "itemId": "Rock_Chalk", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Chalk_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Lime_Cobble", "ticks": 200, "maxStorage": 100 },
         { "itemId": "Rock_Volcanic_Cobble", "ticks": 200, "maxStorage": 100 },

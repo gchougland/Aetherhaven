@@ -1,6 +1,6 @@
 # Wall wand placement UI (en-US only)
 
-aetherhaven.ui.wallplacement.title=Wandstab
+aetherhaven.ui.wallplacement.title=Stadtmauerstab
 aetherhaven.ui.wallplacement.summary=Platziere die Mauerteile für deine Stadt. Mit den Richtungspfeilen platzierst du ein Schild und beginnst mit dem nächsten Teil. Sobald die Mauer fertig ist, wird die aktuelle Vorschau gespeichert und die Sitzung beendet. Baue jedes Schild wie die anderen Bauabschnitte.
 aetherhaven.ui.wallplacement.tips=Wähle eine Mauer, ein Tor oder einen Turm. Verwende die mittleren Pfeile, um den Startpunkt zu verschieben, und die Drehtaste, um ihn vor deiner ersten Platzierung zu drehen. Pfeile auf die richtige Stelle und setze den Lauf fort. „Mauer abschließen“ speichert die aktuelle Vorschau und beendet diese Sitzung (einschließlich eines Endturms). Kreativmodus: /ah walldebug on protokolliert jeden Schritt im Chat. Mit dem linken Steuerkreuz wählst du die Ansichtsseite. „Rückgängig“ entfernt das letzte Schild. „Abbrechen“ beendet diese Sitzung.
 aetherhaven.ui.wallplacement.place=Schild aufstellen

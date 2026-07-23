@@ -21,7 +21,7 @@ items.Aetherhaven_Charter.description=Hier kann man eine Stadt gründen. Jeder S
 
 items.Aetherhaven_Town_Planning_Desk.name=Stadtplanungsbüro
 items.Aetherhaven_Town_Planning_Desk.description=Stadtplanungsbank. Stadtpläne, Baustäbe, die Grundstückswerkbank und zugehörige Rezepte. An einer Werkbank herstellen.
-items.Aetherhaven_Plot_Crafting_Bench.name=Werkbank im Grundstück
+items.Aetherhaven_Plot_Crafting_Bench.name=Grundstückswerkbank
 items.Aetherhaven_Plot_Crafting_Bench.description=Stelle Bausteinmarken für Gebäude und Dekorationen her. Wähle damit ein Gebäude aus, sieh es dir in der Vorschau an und bezahle mit Gold, um eine Marke zu erhalten. Die Herstellung findest du an deinem Stadtplanungstisch.
 items.Aetherhaven_Charter_Amendments_Table.name=Tabelle der Chartaänderungen
 items.Aetherhaven_Charter_Amendments_Table.description=Dokumentiert, wie der Zehnte der Stadt berechnet wird und welchen Handel die Satzung fördert. Nutzt diese Funktion, um Änderungen zu ermöglichen, sobald die Bevölkerung dies befürwortet. Erstellt es an eurem Stadtplanungstisch; <color is="#ffa726">Ihr müsst den Plan kennen</color>.
@@ -38,10 +38,10 @@ items.Aetherhaven_Smokestack.description=Auf Schornsteinen und Dächern platzier
 benchCategories.aetherhaven.town_planning=Stadtplanung
 benchCategories.aetherhaven.plot_tokens=Plot-Tokens
 
-items.Aetherhaven_Plot_Placement_Tool.name=Stab für Grundstücksauswahl
+items.Aetherhaven_Plot_Placement_Tool.name=Gebäudeplatzierstab
 items.Aetherhaven_Plot_Placement_Tool.description=Bewahre das passende Grundstückssymbol in deinem Inventar auf. Benutze diesen Stab, während du auf den Boden zielst, um die Geisterform des Gebäudes zu sehen. Drehe und schiebe ihn, bis er passt, und bestätige dann, um das Grundstück zu sichern. Brich ab, um die Vorschau zu löschen, und benutze den Stab erneut, wenn du eine andere Stelle wählen möchtest.
 
-items.Aetherhaven_Wall_Wand.name=Wandstab
+items.Aetherhaven_Wall_Wand.name=Stadtmauerstab
 items.Aetherhaven_Wall_Wand.description=Umgeben Sie Ihre Stadt mit Steinmauern. Die sekundäre Nutzung ermöglicht eine Draufsicht auf Mauer-, Tor- und Turmelemente. Die primäre Nutzung auf einem bestehenden Element erlaubt es Ihnen, die Mauer zu erweitern oder zu entfernen. Jedes Element verwendet ein Grundstücksschild und wird wie andere Stadtgrundstücke gebaut.
 items.Aetherhaven_Token_Wall.name=Wandmarkierung
 items.Aetherhaven_Token_Wall.description=Wird während der Platzierung auf den Wandschildern angezeigt. Wird nicht aus Ihrem Inventar verwendet.
@@ -56,6 +56,9 @@ items.Aetherhaven_Poi_Tool.legendTitle=POI-Tool
 items.Aetherhaven_Poi_Tool.legendPrimary=Primär: Wählen Sie den nächstgelegenen POI in der Nähe des Blocks aus.
 items.Aetherhaven_Poi_Tool.legendSecondary=Sekundär: Ausgewählten POI in den Block verschieben
 items.Aetherhaven_Poi_Tool.legendUse=Verwendung: NPC-Pfadziel für ausgewählten POI festlegen (Anwendung bei POI-Blocklöschungen)
+
+items.Aetherhaven_Npc_Debug_Stick.name=Reparaturstab
+items.Aetherhaven_Npc_Debug_Stick.description=Schlage einen Dorfbewohner mit diesem Stab, um ihn zu reparieren. Schreibt einen Diagnosebericht in den Plugin-Datenordner (World Editor). Stelle ihn am Stadtplanungstisch aus 1 Stock her.
 
 aetherhaven.poiTool.legendTitle=POI-Tool
 aetherhaven.poiTool.legendModeCycle=F: Zwischen POI-Orten und Abenteurer-Orten wechseln
@@ -210,7 +213,7 @@ commands.aetherhaven.path.revert.desc=Einen platzierten Pfad mithilfe der ID aus
 commands.aetherhaven.path.revert.id=Pfad-ID aus dem Chat, als Sie den Pfad platziert haben
 commands.aetherhaven.path.navviz.desc=Debug: Pfadnavigations-Debug-Zeilen umschalten
 
-items.Aetherhaven_Path_Tool.name=Wegplanerschaufel
+items.Aetherhaven_Path_Tool.name=Routenplanschaufel
 items.Aetherhaven_Path_Tool.description=Entwirft Wege für deine Stadt. Q wechselt den Modus. Mit der sekundären Taste werden Knoten hinzugefügt oder entfernt. F platziert, entfernt oder öffnet den Stilmanager (je nach Modus). E legt die Breite fest. R legt den Stil fest.
 
 items.Aetherhaven_Patrol_Wand.name=Patrouillenstab
@@ -282,42 +285,42 @@ aetherhaven.patrolWand.toastCleared=Wache entfernt
 aetherhaven.patrolWand.toastNewRoute=Neue Route
 
 items.Aetherhaven_Plot_Token_Inn.name=Gasthaus-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Inn.description=Im Inventar erforderlich, um den Gasthaus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Inn.description=Im Inventar erforderlich, um den Gasthaus-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Market_Stall.name=Marktstand-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Market_Stall.description=Im Inventar erforderlich, um den Marktstand-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Market_Stall.description=Im Inventar erforderlich, um den Marktstand-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 items.Aetherhaven_Plot_Token_Player_Shop.name=Spielerladen-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Player_Shop.description=Im Inventar erforderlich, um den Spielerladen-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Player_Shop.description=Im Inventar erforderlich, um den Spielerladen-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Farm.name=Farmparzellen-Token
-items.Aetherhaven_Plot_Token_Farm.description=Im Inventar erforderlich, um den Farm-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Farm.description=Im Inventar erforderlich, um den Farm-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token.name=Plot-Token
-items.Aetherhaven_Plot_Token.description=Platziert ein benutzerdefiniertes Stadtgebäude mit dem Stab für Grundstücksauswahl. Jede Marke ist einem Gebäudetyp zugeordnet.
+items.Aetherhaven_Plot_Token.description=Platziert ein benutzerdefiniertes Stadtgebäude mit dem Gebäudeplatzierstab. Jede Marke ist einem Gebäudetyp zugeordnet.
 items.Aetherhaven_Plot_Token.instance.name={building} Plot-Token
-items.Aetherhaven_Plot_Token.instance.description=Im Inventar erforderlich, um den {building}-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token.instance.description=Im Inventar erforderlich, um den {building}-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Unlock_Page.name=Plotplan
 items.Aetherhaven_Plot_Token_Unlock_Page.description=Eine spezielle Bauplanseite. Nutze sie, um an deiner Bauplanwerkbank ein neues Grundstück zu erstellen.
 items.Aetherhaven_Plot_Token_Unlock_Page.instance.name=Plot-Vorlage: {building}
 items.Aetherhaven_Plot_Token_Unlock_Page.instance.description=Lesen Sie dies, um das Grundstück {building} an Ihrer Grundstückswerkbank dauerhaft freizuschalten.
 
-items.Aetherhaven_Plot_Creator_Staff.name=Mitarbeiter der Handlungserstellung
+items.Aetherhaven_Plot_Creator_Staff.name=Integrierstab
 items.Aetherhaven_Plot_Creator_Staff.description=Verwandle ein Gebäude in ein individuelles Stadtgebäude. Siehe die Anleitung im Stadtjournal. F startet den aktuellen Schritt oder führt eine Aktion aus. Klicke mit der rechten Maustaste, um Bereiche und Positionen festzulegen. Q/E: vorheriger/nächster Schritt. R: Abbruch.
 
 items.Aetherhaven_Plot_Token_Blacksmith_Shop.name=Schmiedeladen-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Im Inventar erforderlich, um den Schmiedeladen-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Blacksmith_Shop.description=Im Inventar erforderlich, um den Schmiedeladen-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Park.name=Parkplatz-Token
-items.Aetherhaven_Plot_Token_Park.description=Im Inventar erforderlich, um den Park-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Park.description=Im Inventar erforderlich, um den Park-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 items.Aetherhaven_Plot_Token_Tourist_Portal.name=Touristenportal-Grundstücksmarke
-items.Aetherhaven_Plot_Token_Tourist_Portal.description=Im Inventar erforderlich, um den Touristenportal-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Tourist_Portal.description=Im Inventar erforderlich, um den Touristenportal-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_House.name=Hausgrundstücksmarke
-items.Aetherhaven_Plot_Token_House.description=Im Inventar erforderlich, um den Haus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_House.description=Im Inventar erforderlich, um den Haus-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Town_Hall.name=Grundstücksmarke für das Rathaus
-items.Aetherhaven_Plot_Token_Town_Hall.description=Im Inventar erforderlich, um den Rathaus-Grundriss mit dem Stab für Grundstücksauswahl zu platzieren.
+items.Aetherhaven_Plot_Token_Town_Hall.description=Im Inventar erforderlich, um den Rathaus-Grundriss mit dem Gebäudeplatzierstab zu platzieren.
 
 items.Aetherhaven_Plot_Token_Guild_Hall.name=Gildenhallen-Grundstücksmarke
 items.Aetherhaven_Plot_Token_Guild_Hall.description=Markiert die Stellen, an denen das Fertiggebäude der Gildenhalle errichtet werden kann. Hergestellt am Stadtplanungsschalter.

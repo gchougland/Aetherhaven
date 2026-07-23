@@ -69,10 +69,7 @@ public final class PoiEffectTable {
                     needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 4f));
                 }
             }
-            case WORK_SURFACE -> {
-                needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 6f));
-                needs.setEnergy(Math.min(VillagerNeeds.MAX, needs.getEnergy() + 5f));
-            }
+            case WORK_SURFACE -> { }
             case USE_CONTAINER -> needs.setHunger(Math.min(VillagerNeeds.MAX, needs.getHunger() + 18f));
             default -> needs.setFun(Math.min(VillagerNeeds.MAX, needs.getFun() + 8f));
         }

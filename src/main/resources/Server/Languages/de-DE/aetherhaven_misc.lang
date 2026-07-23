@@ -23,13 +23,13 @@ aetherhaven.banner.reputation.unlock.primary=Entsperrt
 aetherhaven.banner.reputation.unlock.recipe={item}
 aetherhaven.banner.reputation.unlock.item={item} x{count}
 
-items.Aetherhaven_Building_Staff.name=Mitarbeiter des Kupfergebäudes
+items.Aetherhaven_Building_Staff.name=Kupferbaustab
 items.Aetherhaven_Building_Staff.description=Der Primärzauber sendet einen Führungsbolzen durch Blöcke zum nächstgelegenen Bauvorschau-Element in Reichweite. Halte den Sekundärzauber gedrückt und ziele durch Blöcke auf dieses Vorschau-Element, um nach kurzem Halten Baupunkte zu platzieren (Bauberechtigung für die Stadt). Füllt bis zu 3×3×3 markierte Baupunkte um dein Ziel herum gleichzeitig auf. Solange der Zauber gedrückt gehalten wird, erhältst du +150 maximales Mana; jeder platzierte Block kostet 1 Mana. Das Mana regeneriert sich schneller, wenn du den Sekundärzauber einige Sekunden lang nicht benutzt. Höherstufige Zauberstäbe gewähren mehr Mana und regenerieren es schneller. Die passive Bauplatzerstellung schreitet auch während deiner Abwesenheit fort.
-items.Aetherhaven_Building_Staff_Iron.name=Eisenbaupersonal
+items.Aetherhaven_Building_Staff_Iron.name=Eisenbaustab
 items.Aetherhaven_Building_Staff_Iron.description=Gleiches gilt für die Kupferbau-Fähigkeit. Sekundär füllt bis zu <color is="#4ade80">5×5×5</color> markierte Gebäudeknoten gleichzeitig. Solange die Fähigkeit aktiv ist, gewährt sie <color is="#60a5fa">+250 maximales Mana</color> und eine schnellere Manaregeneration; jeder platzierte Block kostet <color is="#60a5fa">1 Mana</color>.
-items.Aetherhaven_Building_Staff_Thorium.name=Mitarbeiter des Thoriumgebäudes
+items.Aetherhaven_Building_Staff_Thorium.name=Thoriumbaustab
 items.Aetherhaven_Building_Staff_Thorium.description=Gleiches gilt für die Kupferbau-Fähigkeit. Die Sekundärfähigkeit füllt bis zu <color is="#4ade80">7×7×7</color> markierte Gebäudeknoten gleichzeitig. Solange die Fähigkeit aktiv ist, gewährt sie <color is="#60a5fa">+400 maximales Mana</color> und eine schnellere Manaregeneration; jeder platzierte Block kostet <color is="#60a5fa">1 Mana</color>.
-items.Aetherhaven_Building_Staff_Cobalt.name=Mitarbeiter des Kobaltgebäudes
+items.Aetherhaven_Building_Staff_Cobalt.name=Kobaltbaustab
 items.Aetherhaven_Building_Staff_Cobalt.description=Gleiches gilt für die Kupferbau-Fähigkeit. Die Sekundärfähigkeit füllt bis zu <color is="#4ade80">9×9×9</color> markierte Gebäudeknoten gleichzeitig. Solange die Fähigkeit aktiv ist, gewährt sie <color is="#60a5fa">+600 maximales Mana</color> und eine schnellere Manaregeneration; jeder platzierte Block kostet <color is="#60a5fa">1 Mana</color>.
-items.Aetherhaven_Building_Staff_Adamantite.name=Adamantite Gebäudepersonal
+items.Aetherhaven_Building_Staff_Adamantite.name=Adamantitbaustab
 items.Aetherhaven_Building_Staff_Adamantite.description=Gleiches gilt für die Kupferbau-Fähigkeit. Sekundär füllt bis zu <color is="#4ade80">11×11×11</color> markierte Gebäudeknoten gleichzeitig. Solange die Fähigkeit aktiv ist, gewährt sie <color is="#60a5fa">+900 maximales Mana</color> und eine schnellere Manaregeneration; jeder platzierte Block kostet <color is="#60a5fa">1 Mana</color>.

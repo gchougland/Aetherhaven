@@ -1,6 +1,6 @@
 # Plot crafting bench UI
 
-aetherhaven.ui.plotCrafting.title=Werkbank im Grundstück
+aetherhaven.ui.plotCrafting.title=Grundstückswerkbank
 aetherhaven.ui.plotCrafting.previewTitle=Vorschau
 aetherhaven.ui.plotCrafting.variantSectionTitle=Varianten
 aetherhaven.ui.plotCrafting.variantIndex={current}/{total}

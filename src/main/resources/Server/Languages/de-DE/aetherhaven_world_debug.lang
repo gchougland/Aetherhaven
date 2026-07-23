@@ -133,6 +133,6 @@ aetherhaven.debug.tourist.plotLine={building} plot={plot} entry=({entryX},{entry
 aetherhaven.debug.tourist.poiLine=poi {x},{y},{z} kind={kind} tags={tags}
 
 # Wall wand placement debug (/ah walldebug)
-aetherhaven.debug.wall.on=Wandstab-Debugging EIN (Chat + Serverprotokoll).
-aetherhaven.debug.wall.off=Wandstab-Debugging AUS.
-aetherhaven.debug.wall.noSession=Keine aktive Wandstab-Sitzung. Schalten Sie zuerst den Wandstab ein.
+aetherhaven.debug.wall.on=Stadtmauerstab-Debugging EIN (Chat + Serverprotokoll).
+aetherhaven.debug.wall.off=Stadtmauerstab-Debugging AUS.
+aetherhaven.debug.wall.noSession=Keine aktive Stadtmauerstab-Sitzung. Schalten Sie zuerst den Stadtmauerstab ein.

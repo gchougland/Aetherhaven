@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.0] - Unreleased
+
+### Added
+
+- **Chalk to Miner** Added chalk to the options for the Miner since chalk cobble can't be converted to chalk.
+
+### Fixed
+
+- **Villager energy at work** — Finishing a use at a work POI no longer refills hunger, energy, or fun. Rest and meals come from beds, food spots, and similar POIs instead. (this was a bug)
+
+- **German town planning desk (de-DE)** — Updated German names for tools and benches at the town planning desk (building staves, plot placement staff, wall wand, path shovel, plot crafting bench, plot creator staff, and Fixing Stick) so they read consistently and match player feedback. Related UI and plot token text uses the new plot placement staff name.
+
 ## [2.5.0] - 7/22/2026
 
 ### Added
@@ -42,9 +54,6 @@
 - **Shop spot HUD** — The “no worker assigned” closed state now resolves its translation instead of showing a raw language key.
 - **Multi-role workplace assignment** — Variant plots that count as more than one building type (for example a community stall that counts as both merchant shop and flower shop) now list the correct villagers when you assign each role, instead of reusing the first role’s list.
 - **Roads Under The Dead HUD** — The pinned quest tracker now updates your undead kill count as you fight, and shows when it is time to return to Serah.
-- **Tourist move in items** — Accepting a visitor house quest now requires the requested items in your inventory, takes them when you agree, and no longer skips the gift step just because your town already has a house plot.
-- **Crossmod townsfolk plugin gate** — Townsfolk that require an optional partner mod match plugin ids case insensitively, so ids like `hexvane:Machinaria` work when the JSON used a different letter case.
-- **Dialogue item requirements** — Choices that need items show large item icons on the right (tourist move in gifts, quest board fetch turn ins, and any choice with `itemRequirements` in dialogue JSON). Rows with icons grow taller; other choices stay compact.
 
 ## [2.4.1] - 7/20/26
 
