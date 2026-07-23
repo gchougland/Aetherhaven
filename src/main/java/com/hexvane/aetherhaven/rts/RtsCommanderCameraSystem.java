@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -127,7 +128,7 @@ public final class RtsCommanderCameraSystem {
                 int overlap = com.hexvane.aetherhaven.AetherhavenConstants.RTS_TERRITORY_OVERLAP_BLOCKS;
                 int cx = town.getCharterX();
                 int cz = town.getCharterZ();
-                int r = town.getTerritoryChunkRadius() * 16 + overlap;
+                int r = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town) + overlap;
                 double minX = cx - r;
                 double maxX = cx + r;
                 double minZ = cz - r;

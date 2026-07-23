@@ -116,9 +116,8 @@ public final class ShopSpotPurchaseService {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotBuyOwnListing"));
             return false;
         }
-        TownRecord payerTown = tm.findTownForPlayerInWorld(buyer);
-        boolean allowTreasury =
-            payerTown != null && payerTown.getTownId().equals(record.getTownId());
+        TownRecord payerTown = ShopSpotBuyerPayment.buyerHomeTown(tm, buyer);
+        boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, buyer);
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
         if (!GoldCoinPayment.canAfford(payerTown, inv, totalCost, allowTreasury)) {
             notify(playerRef, store, commandBuffer, Message.translation(MSG + ".cannotAfford"));
@@ -248,6 +247,11 @@ public final class ShopSpotPurchaseService {
             return;
         }
         UUID playerUuid = uc.getUuid();
+        if (!town.hasMemberOrOwner(playerUuid)) {
+            notify(playerRef, commandBuffer, Message.translation(MSG + ".notTownMember"));
+            fail(context);
+            return;
+        }
         if (record.hasStock() && record.getSellerUuid() != null && record.getSellerUuid().equals(playerUuid)) {
             removeListing(playerRef, commandBuffer, context, world, plugin, registry, record, town, targetBlock);
             return;

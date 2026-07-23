@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.plot.PlotBlockRotationUtil;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -76,11 +77,13 @@ public final class CharterRelocationService {
         int ox = town.getCharterX();
         int oy = town.getCharterY();
         int oz = town.getCharterZ();
+        int deltaCx = ChunkUtil.chunkCoordinate(a.x) - ChunkUtil.chunkCoordinate(ox);
+        int deltaCz = ChunkUtil.chunkCoordinate(a.z) - ChunkUtil.chunkCoordinate(oz);
         if (a.x == ox && a.y == oy && a.z == oz) {
             sendError(store, ref, "Choose a different block than the current charter position.");
             return false;
         }
-        if (!tm.allPlotFootprintsFitTerritoryWithCharterAt(town, a.x, a.z)) {
+        if (!tm.allPlotFootprintsFitAfterClaimShift(town, deltaCx, deltaCz)) {
             sendError(
                 store,
                 ref,
@@ -88,14 +91,7 @@ public final class CharterRelocationService {
             );
             return false;
         }
-        TownRecord overlap =
-            tm.findTerritoryOverlapAtCharter(
-                world.getName(),
-                a.x,
-                a.z,
-                town.getTerritoryChunkRadius(),
-                town.getTownId()
-            );
+        TownRecord overlap = tm.findTerritoryOverlapAfterClaimShift(town, deltaCx, deltaCz);
         if (overlap != null) {
             sendError(
                 store,
@@ -123,6 +119,7 @@ public final class CharterRelocationService {
 
         world.breakBlock(ox, oy, oz, BREAK_SETTINGS);
 
+        TownTerritoryClaims.shiftAllClaims(town, deltaCx, deltaCz);
         town.setCharterPosition(a.x, a.y, a.z);
         tm.updateTown(town);
 

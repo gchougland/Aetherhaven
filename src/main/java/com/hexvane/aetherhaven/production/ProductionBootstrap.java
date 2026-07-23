@@ -5,10 +5,11 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
-import com.hexvane.aetherhaven.town.TownManager;
-import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.ProductionStoragePage;
 import com.hexvane.aetherhaven.ui.ProductionStorageUnlocksPage;
 import com.hypixel.hytale.protocol.BlockPosition;
@@ -54,8 +55,8 @@ public final class ProductionBootstrap {
                     return null;
                 }
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, p);
-                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-                if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
+                TownRecord town = tm.findTownContainingBlock(world.getName(), targetBlock.x, targetBlock.z);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, town, uc.getUuid())) {
                     return null;
                 }
                 PlotInstance plot = null;

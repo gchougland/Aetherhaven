@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.ShopSpotConfigPage;
 import com.hypixel.hytale.component.ArchetypeChunk;
@@ -82,6 +83,13 @@ public final class ShopSpotPlaceEventSystem extends EntityEventSystem<EntityStor
         if (pr == null) {
             event.setCancelled(true);
             return;
+        }
+
+        if (town != null && uc != null && !creative && !plotCreatorBounds) {
+            if (TownMemberBlockAccess.denyIfNotMember(pr, town, uc.getUuid())) {
+                event.setCancelled(true);
+                return;
+            }
         }
 
         UUID spotId = UUID.randomUUID();

@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.map.RaidQuestCompassCache;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.RemoveReason;
 import com.hypixel.hytale.component.Store;
@@ -183,7 +184,9 @@ public final class RaidQuestSpawnService {
         int cx = town.getCharterX();
         int cz = town.getCharterZ();
         int charterY = town.getCharterY();
-        int baseDist = (town.getTerritoryChunkRadius() + 1) * 16 + 8 + rng.nextInt(17) + mobIndex * 3;
+        TownTerritoryClaims.migrateIfNeeded(town);
+        int edgeBlocks = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town);
+        int baseDist = edgeBlocks + 16 + 8 + rng.nextInt(17) + mobIndex * 3;
 
         for (int attempt = 0; attempt < 48; attempt++) {
             int lateral = (attempt % 17) * 8 - 64 + rng.nextInt(5);
@@ -217,7 +220,9 @@ public final class RaidQuestSpawnService {
         int cx = town.getCharterX();
         int cz = town.getCharterZ();
         int charterY = town.getCharterY();
-        int baseDist = (town.getTerritoryChunkRadius() + 1) * 16 + 12 + mobIndex * 4;
+        TownTerritoryClaims.migrateIfNeeded(town);
+        int edgeBlocks = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town);
+        int baseDist = edgeBlocks + 16 + 12 + mobIndex * 4;
 
         for (int alongStep = 0; alongStep < 10; alongStep++) {
             int along = baseDist - alongStep * 8;

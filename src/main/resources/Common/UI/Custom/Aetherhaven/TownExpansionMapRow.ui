@@ -1,0 +1,6 @@
+Group {
+  LayoutMode: Left;
+  Group #MapGridCells {
+    LayoutMode: Left;
+  }
+}

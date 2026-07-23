@@ -41,6 +41,11 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
     private static final String FLAG_REVIVE = "reviveVillagers";
     private static final String FLAG_REMOVE_PLOTS = "removePlots";
     private static final String FLAG_USE_SHOP_SPOTS = "useShopSpots";
+    private static final String FLAG_BREAK_BLOCKS = "breakBlocks";
+    private static final String FLAG_PLACE_BLOCKS = "placeBlocks";
+    private static final String FLAG_HARVEST_BLOCKS = "harvestBlocks";
+    private static final String FLAG_OPEN_CONTAINERS = "openContainers";
+    private static final String FLAG_USE_DOORS = "useDoors";
 
     private final Ref<ChunkStore> managementBlockRef;
     @Nonnull
@@ -124,6 +129,11 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         bindToggle(eventBuilder, "#PermCbAbandonQuests", "TogglePermAbandonQuests");
         bindToggle(eventBuilder, "#PermCbReviveVillagers", "TogglePermReviveVillagers");
         bindToggle(eventBuilder, "#PermCbUseShopSpots", "TogglePermUseShopSpots");
+        bindToggle(eventBuilder, "#PermCbBreakBlocks", "TogglePermBreakBlocks");
+        bindToggle(eventBuilder, "#PermCbPlaceBlocks", "TogglePermPlaceBlocks");
+        bindToggle(eventBuilder, "#PermCbHarvestBlocks", "TogglePermHarvestBlocks");
+        bindToggle(eventBuilder, "#PermCbOpenContainers", "TogglePermOpenContainers");
+        bindToggle(eventBuilder, "#PermCbUseDoors", "TogglePermUseDoors");
 
         TownMemberPermissions p = town.getEffectiveMemberPermissions(targetPlayerUuid);
         setCheck(commandBuilder, "#PermCbPlacePlots", p.placePlots());
@@ -136,6 +146,11 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         setCheck(commandBuilder, "#PermCbAbandonQuests", p.abandonQuests());
         setCheck(commandBuilder, "#PermCbReviveVillagers", p.reviveVillagers());
         setCheck(commandBuilder, "#PermCbUseShopSpots", p.useShopSpots());
+        setCheck(commandBuilder, "#PermCbBreakBlocks", p.breakBlocks());
+        setCheck(commandBuilder, "#PermCbPlaceBlocks", p.placeBlocks());
+        setCheck(commandBuilder, "#PermCbHarvestBlocks", p.harvestBlocks());
+        setCheck(commandBuilder, "#PermCbOpenContainers", p.openContainers());
+        setCheck(commandBuilder, "#PermCbUseDoors", p.useDoors());
     }
 
     private static void setCheck(@Nonnull UICommandBuilder commandBuilder, @Nonnull String checkboxSelector, boolean on) {
@@ -235,6 +250,21 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
         if (a.equalsIgnoreCase("TogglePermUseShopSpots")) {
             return FLAG_USE_SHOP_SPOTS;
         }
+        if (a.equalsIgnoreCase("TogglePermBreakBlocks")) {
+            return FLAG_BREAK_BLOCKS;
+        }
+        if (a.equalsIgnoreCase("TogglePermPlaceBlocks")) {
+            return FLAG_PLACE_BLOCKS;
+        }
+        if (a.equalsIgnoreCase("TogglePermHarvestBlocks")) {
+            return FLAG_HARVEST_BLOCKS;
+        }
+        if (a.equalsIgnoreCase("TogglePermOpenContainers")) {
+            return FLAG_OPEN_CONTAINERS;
+        }
+        if (a.equalsIgnoreCase("TogglePermUseDoors")) {
+            return FLAG_USE_DOORS;
+        }
         return null;
     }
 
@@ -250,6 +280,11 @@ public final class TownMemberPermissionsPage extends AetherhavenInteractiveCusto
             case FLAG_ABANDON_QUESTS -> p.setAbandonQuests(on);
             case FLAG_REVIVE -> p.setReviveVillagers(on);
             case FLAG_USE_SHOP_SPOTS -> p.setUseShopSpots(on);
+            case FLAG_BREAK_BLOCKS -> p.setBreakBlocks(on);
+            case FLAG_PLACE_BLOCKS -> p.setPlaceBlocks(on);
+            case FLAG_HARVEST_BLOCKS -> p.setHarvestBlocks(on);
+            case FLAG_OPEN_CONTAINERS -> p.setOpenContainers(on);
+            case FLAG_USE_DOORS -> p.setUseDoors(on);
             default -> {
             }
         }

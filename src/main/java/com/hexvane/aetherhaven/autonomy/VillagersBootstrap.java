@@ -28,8 +28,12 @@ import com.hexvane.aetherhaven.villager.VillagerNeedsDecaySystem;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcTeleportGuardSystem;
 import com.hexvane.aetherhaven.villager.AetherhavenNpcUsedTeleporterGuardSystem;
 import com.hexvane.aetherhaven.world.WorldSpawnStaleChunkRefCleanupSystem;
-import com.hexvane.aetherhaven.plot.ManagementBlock;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
+import com.hexvane.aetherhaven.plot.ManagementBlock;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.BlockPosition;
@@ -73,12 +77,23 @@ public final class VillagersBootstrap {
                 if (mb == null || mb.getTownId().isBlank()) {
                     return null;
                 }
-                try {
-                    UUID townUuid = UUID.fromString(mb.getTownId().trim());
-                    return new VillagerNeedsOverviewPage(playerRef, townUuid);
-                } catch (IllegalArgumentException e) {
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
                     return null;
                 }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, tm, mb.getTownId(), playerUuid)) {
+                    return null;
+                }
+                UUID townUuid = TownMemberBlockAccess.parseTownId(mb.getTownId());
+                if (townUuid == null) {
+                    return null;
+                }
+                return new VillagerNeedsOverviewPage(playerRef, townUuid);
             }
         );
     }

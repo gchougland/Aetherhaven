@@ -170,6 +170,56 @@ $C.@PageOverlay {
                 Anchor: (Right: 30, Left: 11);
               }
             }
+            Group #MemberPermBreakBlocks {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbBreakBlocks {}
+              Label #CapBreakBlocks {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
+            Group #MemberPermPlaceBlocks {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbPlaceBlocks {}
+              Label #CapPlaceBlocks {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
+            Group #MemberPermHarvestBlocks {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbHarvestBlocks {}
+              Label #CapHarvestBlocks {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
+            Group #MemberPermOpenContainers {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbOpenContainers {}
+              Label #CapOpenContainers {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
+            Group #MemberPermUseDoors {
+              LayoutMode: Left;
+              Anchor: (Bottom: 6);
+              $C.@CheckBox #PermCbUseDoors {}
+              Label #CapUseDoors {
+                Text: "";
+                Style: (...$C.@DefaultLabelStyle, VerticalAlignment: Center);
+                Anchor: (Right: 30, Left: 11);
+              }
+            }
           }
         }
       }

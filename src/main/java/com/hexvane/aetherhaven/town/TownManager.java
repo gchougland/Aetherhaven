@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -69,6 +70,7 @@ public final class TownManager {
                 t.migrateLegacyPlotFootprintsIfNeeded();
                 t.migrateInnFieldsIfNeeded();
                 t.migrateTownSocialFieldsIfNeeded();
+                t.migrateTerritoryClaimsIfNeeded();
                 loaded.put(t.getTownId(), t);
             }
             byTownId.clear();
@@ -360,28 +362,20 @@ public final class TownManager {
         if (owned == null) {
             return null;
         }
-        int cx = ChunkUtil.chunkCoordinate(owned.getCharterX());
-        int cz = ChunkUtil.chunkCoordinate(owned.getCharterZ());
-        int r = owned.getTerritoryChunkRadius();
-        if (Math.abs(chunkX - cx) > r || Math.abs(chunkZ - cz) > r) {
+        if (!TownTerritoryClaims.contains(owned, chunkX, chunkZ)) {
             return null;
         }
         return owned;
     }
 
-    /** True if block position is inside the town's axis-aligned chunk square around the charter. */
+    /** True if block position is inside this town's claimed chunks. */
     public boolean isInsideTerritory(@Nonnull TownRecord town, int blockX, int blockZ) {
-        int cx = ChunkUtil.chunkCoordinate(town.getCharterX());
-        int cz = ChunkUtil.chunkCoordinate(town.getCharterZ());
-        int bx = ChunkUtil.chunkCoordinate(blockX);
-        int bz = ChunkUtil.chunkCoordinate(blockZ);
-        int r = town.getTerritoryChunkRadius();
-        return Math.abs(bx - cx) <= r && Math.abs(bz - cz) <= r;
+        return TownTerritoryClaims.containsBlock(town, blockX, blockZ);
     }
 
     /**
-     * Returns another town whose territory would overlap a charter at {@code charterBlockX}/{@code charterBlockZ} with
-     * {@code charterTerritoryRadiusChunks}, or null if clear.
+     * Returns another town whose claimed chunks intersect the starter square for a charter at
+     * {@code charterBlockX}/{@code charterBlockZ} with {@code charterTerritoryRadiusChunks}, or null if clear.
      */
     @Nullable
     public TownRecord findTerritoryOverlapAtCharter(
@@ -391,20 +385,13 @@ public final class TownManager {
         int charterTerritoryRadiusChunks,
         @Nullable UUID excludeTownId
     ) {
-        int ncx = ChunkUtil.chunkCoordinate(charterBlockX);
-        int ncz = ChunkUtil.chunkCoordinate(charterBlockZ);
+        LongSet candidate =
+            TownTerritoryClaims.buildStarterChunkIndexSet(charterBlockX, charterBlockZ, charterTerritoryRadiusChunks);
         for (TownRecord other : allTowns()) {
             if (!worldName.equals(other.getWorldName())) {
                 continue;
             }
-            if (excludeTownId != null && excludeTownId.equals(other.getTownId())) {
-                continue;
-            }
-            int ocx = ChunkUtil.chunkCoordinate(other.getCharterX());
-            int ocz = ChunkUtil.chunkCoordinate(other.getCharterZ());
-            int or = other.getTerritoryChunkRadius();
-            if (Math.abs(ncx - ocx) <= charterTerritoryRadiusChunks + or
-                && Math.abs(ncz - ocz) <= charterTerritoryRadiusChunks + or) {
+            if (TownTerritoryClaims.intersects(candidate, other, excludeTownId)) {
                 return other;
             }
         }
@@ -412,43 +399,67 @@ public final class TownManager {
     }
 
     /**
-     * First town in this world whose territory contains the block column. Used when multiple towns could exist per
-     * world (rare); deterministic order follows {@link #allTowns()}.
+     * After shifting this town's claims by {@code deltaChunkX}/{@code deltaChunkZ}, would any chunk overlap another
+     * town?
      */
     @Nullable
-    public TownRecord findTownContainingBlock(@Nonnull String worldName, int blockX, int blockZ) {
-        for (TownRecord t : allTowns()) {
-            if (!worldName.equals(t.getWorldName())) {
+    public TownRecord findTerritoryOverlapAfterClaimShift(
+        @Nonnull TownRecord town,
+        int deltaChunkX,
+        int deltaChunkZ
+    ) {
+        TownTerritoryClaims.migrateIfNeeded(town);
+        LongSet shifted = new it.unimi.dsi.fastutil.longs.LongOpenHashSet();
+        for (ClaimedTerritoryChunkRecord c : town.getClaimedTerritoryChunks()) {
+            shifted.add(ChunkUtil.indexChunk(c.getChunkX() + deltaChunkX, c.getChunkZ() + deltaChunkZ));
+        }
+        for (TownRecord other : allTowns()) {
+            if (!town.getWorldName().equals(other.getWorldName())) {
                 continue;
             }
-            if (isInsideTerritory(t, blockX, blockZ)) {
-                return t;
+            if (TownTerritoryClaims.intersects(shifted, other, town.getTownId())) {
+                return other;
             }
         }
         return null;
     }
 
     /**
-     * True if every registered plot footprint would still lie inside the territory when the charter were moved to
-     * {@code charterBlockX}/{@code charterBlockZ} (territory is the chunk-radius square centered on the charter).
+     * First town in this world whose claimed chunks contain the block column. Deterministic order follows
+     * {@link #allTowns()}.
      */
-    public boolean allPlotFootprintsFitTerritoryWithCharterAt(@Nonnull TownRecord town, int charterBlockX, int charterBlockZ) {
-        int ccx = ChunkUtil.chunkCoordinate(charterBlockX);
-        int ccz = ChunkUtil.chunkCoordinate(charterBlockZ);
-        int r = town.getTerritoryChunkRadius();
+    @Nullable
+    public TownRecord findTownContainingBlock(@Nonnull String worldName, int blockX, int blockZ) {
+        return TownTerritoryClaims.findTownContainingBlock(allTowns(), worldName, blockX, blockZ);
+    }
+
+    /**
+     * True if every registered plot footprint block would remain inside claims after shifting claims by
+     * {@code deltaChunkX}/{@code deltaChunkZ} with the charter (plots stay fixed in the world).
+     */
+    public boolean allPlotFootprintsFitAfterClaimShift(@Nonnull TownRecord town, int deltaChunkX, int deltaChunkZ) {
+        TownTerritoryClaims.migrateIfNeeded(town);
         for (PlotInstance plot : town.getPlotInstances()) {
             PlotFootprintRecord fp = plot.toFootprint();
             for (int x = fp.getMinX(); x <= fp.getMaxX(); x++) {
                 for (int z = fp.getMinZ(); z <= fp.getMaxZ(); z++) {
                     int bx = ChunkUtil.chunkCoordinate(x);
                     int bz = ChunkUtil.chunkCoordinate(z);
-                    if (Math.abs(bx - ccx) > r || Math.abs(bz - ccz) > r) {
+                    if (!TownTerritoryClaims.contains(town, bx - deltaChunkX, bz - deltaChunkZ)) {
                         return false;
                     }
                 }
             }
         }
         return true;
+    }
+
+    /** @deprecated use {@link #allPlotFootprintsFitAfterClaimShift} with charter chunk delta */
+    @Deprecated
+    public boolean allPlotFootprintsFitTerritoryWithCharterAt(@Nonnull TownRecord town, int charterBlockX, int charterBlockZ) {
+        int deltaCx = ChunkUtil.chunkCoordinate(charterBlockX) - ChunkUtil.chunkCoordinate(town.getCharterX());
+        int deltaCz = ChunkUtil.chunkCoordinate(charterBlockZ) - ChunkUtil.chunkCoordinate(town.getCharterZ());
+        return allPlotFootprintsFitAfterClaimShift(town, deltaCx, deltaCz);
     }
 
     public void putTown(@Nonnull TownRecord record) {

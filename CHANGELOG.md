@@ -5,6 +5,7 @@
 ### Added
 
 - **Chalk to Miner** Added chalk to the options for the Miner since chalk cobble can't be converted to chalk.
+- **Town territory and expansions** — Your town owns a set of map chunks, not just a fixed square. Members can be allowed or blocked from breaking blocks, placing blocks, harvesting, opening chests, and using doors inside that land. The world map border follows your actual claim shape. At a completed town hall, open town records and use the expand tab to pan the map and buy the next adjacent chunk. Cost rises each time (100 gold, then 200, and so on). Only the owner or members who may spend from the treasury can claim. New towns start with a smaller default starter area unless your server config already saved a different size. Server staff in the Admin group, or anyone with the `aetherhaven.town.territory.bypass` permission, can build in any town claim without joining that town.
 
 ### Fixed
 

@@ -69,6 +69,45 @@ public final class AetherhavenPluginConfig {
             (o, v) -> o.defaultTerritoryChunkRadius = v,
             o -> o.defaultTerritoryChunkRadius
         )
+        .documentation(
+            "Starter town territory is a square of (2×radius) chunks on each side (even width), centered on the charter."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("TerritoryExpansionFirstClaimCostGold", Codec.LONG),
+            (o, v) -> o.territoryExpansionFirstClaimCostGold = v,
+            o -> o.territoryExpansionFirstClaimCostGold
+        )
+        .documentation(
+            "Gold cost for the first 2×2 chunk land purchase beyond the starter territory (not counting starter radius chunks)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("TerritoryExpansionClaimCostIncrementGold", Codec.LONG),
+            (o, v) -> o.territoryExpansionClaimCostIncrementGold = v,
+            o -> o.territoryExpansionClaimCostIncrementGold
+        )
+        .documentation(
+            "Added to the first-claim cost for each 2×2 land purchase already made (second purchase = first + increment, third = first + 2×increment, …)."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("TerritoryExpansionClaimLimitEnabled", Codec.BOOLEAN),
+            (o, v) -> o.territoryExpansionClaimLimitEnabled = v,
+            o -> o.territoryExpansionClaimLimitEnabled
+        )
+        .documentation(
+            "When false (default), towns may buy unlimited 2×2 expansion land. When true, see MaxTerritoryExpansionClaimBlocks."
+        )
+        .add()
+        .append(
+            new KeyedCodec<>("MaxTerritoryExpansionClaimBlocks", Codec.INTEGER),
+            (o, v) -> o.maxTerritoryExpansionClaimBlocks = v,
+            o -> o.maxTerritoryExpansionClaimBlocks
+        )
+        .documentation(
+            "Max number of 2×2 land purchases allowed per town when TerritoryExpansionClaimLimitEnabled is true. Ignored when the limit toggle is false."
+        )
         .add()
         .append(
             new KeyedCodec<>("VillagerNeedsDecayPerSecond", Codec.FLOAT),
@@ -563,7 +602,11 @@ public final class AetherhavenPluginConfig {
     private boolean passivePlotAssembly = true;
     private int assemblySectionChunkSizeBlocks = 15;
     private boolean ignoreVillagerRequirement = false;
-    private int defaultTerritoryChunkRadius = 8;
+    private int defaultTerritoryChunkRadius = 6;
+    private long territoryExpansionFirstClaimCostGold = 20L;
+    private long territoryExpansionClaimCostIncrementGold = 20L;
+    private boolean territoryExpansionClaimLimitEnabled = false;
+    private int maxTerritoryExpansionClaimBlocks = 0;
     /** Hunger points (0..100 scale) drained per second of game time; energy/fun use lower multipliers in code. */
     private float villagerNeedsDecayPerSecond = 0.07f;
 
@@ -687,6 +730,22 @@ public final class AetherhavenPluginConfig {
 
     public int getDefaultTerritoryChunkRadius() {
         return Math.max(1, defaultTerritoryChunkRadius);
+    }
+
+    public long getTerritoryExpansionFirstClaimCostGold() {
+        return Math.max(0L, territoryExpansionFirstClaimCostGold);
+    }
+
+    public long getTerritoryExpansionClaimCostIncrementGold() {
+        return Math.max(0L, territoryExpansionClaimCostIncrementGold);
+    }
+
+    public boolean isTerritoryExpansionClaimLimitEnabled() {
+        return territoryExpansionClaimLimitEnabled;
+    }
+
+    public int getMaxTerritoryExpansionClaimBlocks() {
+        return Math.max(0, maxTerritoryExpansionClaimBlocks);
     }
 
     /**
@@ -1481,6 +1540,10 @@ public final class AetherhavenPluginConfig {
         this.assemblySectionChunkSizeBlocks = o.assemblySectionChunkSizeBlocks;
         this.ignoreVillagerRequirement = o.ignoreVillagerRequirement;
         this.defaultTerritoryChunkRadius = o.defaultTerritoryChunkRadius;
+        this.territoryExpansionFirstClaimCostGold = o.territoryExpansionFirstClaimCostGold;
+        this.territoryExpansionClaimCostIncrementGold = o.territoryExpansionClaimCostIncrementGold;
+        this.territoryExpansionClaimLimitEnabled = o.territoryExpansionClaimLimitEnabled;
+        this.maxTerritoryExpansionClaimBlocks = o.maxTerritoryExpansionClaimBlocks;
         this.villagerNeedsDecayPerSecond = o.villagerNeedsDecayPerSecond;
         this.innPoolMorningStartHour = o.innPoolMorningStartHour;
         this.innPoolMorningEndHour = o.innPoolMorningEndHour;

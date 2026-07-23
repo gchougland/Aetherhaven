@@ -58,6 +58,10 @@ public final class TownRecord {
     @SerializedName("territoryChunkRadius")
     private int territoryChunkRadius;
 
+    /** World chunks owned by this town; empty in legacy saves until migration fills the starter square. */
+    @SerializedName("claimedTerritoryChunks")
+    private List<ClaimedTerritoryChunkRecord> claimedTerritoryChunks = new ArrayList<>();
+
     @SerializedName("createdTimeEpochMs")
     private long createdTimeEpochMs;
 
@@ -909,6 +913,23 @@ public final class TownRecord {
 
     public void setTerritoryChunkRadius(int territoryChunkRadius) {
         this.territoryChunkRadius = territoryChunkRadius;
+    }
+
+    @Nonnull
+    public List<ClaimedTerritoryChunkRecord> getClaimedTerritoryChunks() {
+        if (claimedTerritoryChunks == null) {
+            claimedTerritoryChunks = new ArrayList<>();
+        }
+        return claimedTerritoryChunks;
+    }
+
+    @Nonnull
+    List<ClaimedTerritoryChunkRecord> getClaimedTerritoryChunksMutable() {
+        return getClaimedTerritoryChunks();
+    }
+
+    public void migrateTerritoryClaimsIfNeeded() {
+        TownTerritoryClaims.migrateIfNeeded(this);
     }
 
     public long getCreatedTimeEpochMs() {
@@ -2072,6 +2093,63 @@ public final class TownRecord {
             return false;
         }
         return getEffectiveMemberPermissions(playerUuid).useShopSpots();
+    }
+
+    public boolean playerCanBreakBlocks(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).breakBlocks();
+    }
+
+    public boolean playerCanPlaceBlocks(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).placeBlocks();
+    }
+
+    public boolean playerCanHarvestBlocks(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).harvestBlocks();
+    }
+
+    public boolean playerCanOpenContainers(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).openContainers();
+    }
+
+    public boolean playerCanUseDoors(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        if (!hasMemberOrOwner(playerUuid)) {
+            return false;
+        }
+        return getEffectiveMemberPermissions(playerUuid).useDoors();
+    }
+
+    public boolean playerCanClaimTerritoryExpansion(@Nonnull UUID playerUuid) {
+        if (getOwnerUuid().equals(playerUuid)) {
+            return true;
+        }
+        return playerCanSpendTreasuryGold(playerUuid);
     }
 
     /** Legacy: true if the player may place plots or manage constructions (any former "build" capability). */

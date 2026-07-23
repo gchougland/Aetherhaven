@@ -24,12 +24,17 @@ import com.hexvane.aetherhaven.time.AetherhavenGameTimeCoordinatorSystem;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeCursorResource;
 import com.hexvane.aetherhaven.time.AetherhavenGameTimeHub;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.ui.TownJournalPlayerInitSystem;
+import com.hexvane.aetherhaven.territory.TerritoryProtectionBootstrap;
 import com.hexvane.aetherhaven.tourist.TouristReconcileService;
 import com.hexvane.aetherhaven.town.ElderReconcileService;
 import com.hexvane.aetherhaven.ui.GaiaStatueRevivePage;
 import com.hexvane.aetherhaven.ui.QuestJournalPage;
+import com.hypixel.hytale.server.core.permissions.PermissionsModule;
+import com.hypixel.hytale.server.core.permissions.provider.HytalePermissionsProvider;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.ResourceType;
 import com.hypixel.hytale.component.Store;
@@ -48,7 +53,9 @@ import com.hypixel.hytale.server.core.universe.world.events.AddWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.AllWorldsLoadedEvent;
 import com.hypixel.hytale.server.core.universe.world.events.RemoveWorldEvent;
 import com.hypixel.hytale.server.core.universe.world.events.StartWorldEvent;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 /** Parent-plugin registrations shared by all Aetherhaven subplugins. */
@@ -58,6 +65,7 @@ public final class AetherhavenCoreBootstrap {
     private AetherhavenCoreBootstrap() {}
 
     public static void register(@Nonnull AetherhavenPlugin plugin) {
+        registerPermissions();
         logHstats(plugin);
         plugin.loadAndMigrateConfig();
         plugin.registerModCommonAssetDelivery();
@@ -96,6 +104,7 @@ public final class AetherhavenCoreBootstrap {
         PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
+        TerritoryProtectionBootstrap.register(plugin);
 
         AetherhavenHudRefreshSystem hudRefreshSystem = new AetherhavenHudRefreshSystem(plugin);
         plugin.getEntityStoreRegistry().registerSystem(hudRefreshSystem);
@@ -138,6 +147,17 @@ public final class AetherhavenCoreBootstrap {
         LOGGER.atInfo().log("Aetherhaven core v%s setup complete", plugin.getManifest().getVersion().toString());
     }
 
+    private static void registerPermissions() {
+        PermissionsModule.registerPermission(
+            AetherhavenConstants.PERMISSION_TOWN_TERRITORY_BYPASS,
+            HytalePermissionsProvider.GROUP_ADMIN
+        );
+        PermissionsModule.registerPermission(
+            AetherhavenConstants.PERMISSION_TOWN_ADMIN,
+            HytalePermissionsProvider.GROUP_ADMIN
+        );
+    }
+
     private static void scheduleTeleporterWarpSanitizeAfterLoad() {
         World world = Universe.get().getDefaultWorld();
         if (world == null) {
@@ -165,7 +185,17 @@ public final class AetherhavenCoreBootstrap {
                 if (target == null) {
                     return null;
                 }
-                return new GaiaStatueRevivePage(playerRef, target.blockRef(), target.blockWorldPos());
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                Ref<ChunkStore> blockRef = target.blockRef();
+                GaiaStatueBlock gb = blockRef.getStore().getComponent(blockRef, GaiaStatueBlock.getComponentType());
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (gb != null && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, gb.getTownId(), playerUuid)) {
+                    return null;
+                }
+                return new GaiaStatueRevivePage(playerRef, blockRef, target.blockWorldPos());
             }
         );
     }

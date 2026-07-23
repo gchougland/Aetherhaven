@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -131,13 +132,15 @@ public final class CharterTownPage extends AetherhavenInteractiveCustomUIPage<Ch
         commandBuilder.set("#OwnerOnlyHint.Visible", !owner);
         commandBuilder.set("#TownInfoSeparator.Visible", true);
         commandBuilder.set("#NameInput.Value", tr.getDisplayName());
+        TownTerritoryClaims.migrateIfNeeded(tr);
+        int claimedChunks = tr.getClaimedTerritoryChunks().size();
         commandBuilder.set(
             "#TownInfo.TextSpans",
             Message.translation("aetherhaven_common.aetherhaven.chartertown.townInfoBlock")
                 .param("name", tr.getDisplayName())
                 .param("id", townId.toString())
                 .param("tier", String.valueOf(tr.getTier()))
-                .param("radius", String.valueOf(tr.getTerritoryChunkRadius()))
+                .param("chunks", String.valueOf(claimedChunks))
                 .param("cx", String.valueOf(tr.getCharterX()))
                 .param("cy", String.valueOf(tr.getCharterY()))
                 .param("cz", String.valueOf(tr.getCharterZ()))

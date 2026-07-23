@@ -2,8 +2,10 @@ package com.hexvane.aetherhaven.map;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.ClaimedTerritoryChunkRecord;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.Ref;
@@ -44,9 +46,10 @@ import javax.annotation.Nullable;
  * Only overlays map chunks the client has already received.
  */
 public final class TownBorderMapOverlayService {
-  private static final long TICK_MS = 500L;
-  private static final int MAX_CHUNKS_PER_PLAYER_PER_TICK = 12;
-  private static final long MAX_TICK_BUDGET_NS = 15_000_000L;
+  private static final long TICK_MS = 750L;
+  private static final int MAX_CHUNKS_PER_PLAYER_PER_TICK = 10;
+  private static final long MAX_TICK_BUDGET_NS = 12_000_000L;
+  private static final int MAX_SORTED_CANDIDATES = 80;
 
   private static final ConcurrentHashMap<String, ScheduledFuture<?>> WORLD_TASKS = new ConcurrentHashMap<>();
   private static final ConcurrentHashMap<UUID, LongSet> LAST_OVERLAY_CHUNKS = new ConcurrentHashMap<>();
@@ -184,6 +187,7 @@ public final class TownBorderMapOverlayService {
           if (journal == null || !journal.isShowTownBordersOnMap()) {
             clearOverlays(world, player, playerRef, playerUuid);
           } else {
+            restorePristineOverlays(world, player, playerRef, playerUuid);
             PAINT_CACHE.remove(playerUuid);
             WorldBorderState borderState = worldBorderState(world);
             if (borderState.towns.isEmpty()) {
@@ -192,6 +196,69 @@ public final class TownBorderMapOverlayService {
             updatePlayerOverlays(world, player, playerRef, playerUuid, borderState);
           }
         });
+  }
+
+  /** Clears cached painted tiles and restores base map imagery for every viewer in this world. */
+  public static void invalidateOverlaysForWorld(@Nonnull World world) {
+    world.execute(
+        () -> {
+          for (PlayerRef pref : world.getPlayerRefs()) {
+            UUID uuid = pref.getUuid();
+            if (uuid == null) {
+              continue;
+            }
+            Ref<EntityStore> ref = pref.getReference();
+            if (ref == null || !ref.isValid()) {
+              continue;
+            }
+            Player player = ref.getStore().getComponent(ref, Player.getComponentType());
+            if (player == null) {
+              continue;
+            }
+            PlayerTownJournalState journal =
+                ref.getStore().getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (journal == null || !journal.isShowTownBordersOnMap()) {
+              continue;
+            }
+            restorePristineOverlays(world, player, pref, uuid);
+            PAINT_CACHE.remove(uuid);
+          }
+        });
+  }
+
+  private static void restorePristineOverlays(
+      @Nonnull World world,
+      @Nonnull Player player,
+      @Nonnull PlayerRef playerRef,
+      @Nonnull UUID playerUuid) {
+    LongSet previous = LAST_OVERLAY_CHUNKS.remove(playerUuid);
+    if (previous == null || previous.isEmpty()) {
+      return;
+    }
+    if (!playerRef.getPacketHandler().getChannel(NetworkChannel.WorldMap).isWritable()) {
+      return;
+    }
+    WorldMapManager mapManager = world.getWorldMapManager();
+    LongSet loaded = WorldMapTrackerCompat.getLoadedChunks(player);
+    List<MapChunk> toSend = new ArrayList<>();
+    for (long index : previous) {
+      if (!loaded.contains(index)) {
+        continue;
+      }
+      int cx = ChunkUtil.xOfChunkIndex(index);
+      int cz = ChunkUtil.zOfChunkIndex(index);
+      MapImage base = resolveMapImage(mapManager, cx, cz);
+      if (base == null) {
+        continue;
+      }
+      MapImage pristine = TownMapImagePixels.cloneImage(base);
+      if (pristine != null) {
+        toSend.add(new MapChunk(cx, cz, pristine));
+      }
+    }
+    if (!toSend.isEmpty()) {
+      playerRef.getPacketHandler().writeNoCache(new UpdateWorldMap(toSend.toArray(MapChunk[]::new), null, null));
+    }
   }
 
   private static void tickWorld(@Nonnull World world) {
@@ -285,6 +352,7 @@ public final class TownBorderMapOverlayService {
         state.perimeterChunks = perimeter.toLongArray();
         state.townsByPerimeterChunk = TownBorderMapRenderer.buildTownsByPerimeterChunk(towns);
         GEOMETRY_CACHE.remove(worldName);
+        PAINT_CACHE.clear();
       }
       return state;
     }
@@ -326,12 +394,12 @@ public final class TownBorderMapOverlayService {
     UUID viewerTownId = viewerTown != null ? viewerTown.getTownId() : null;
 
     LongSet loaded = WorldMapTrackerCompat.getLoadedChunks(player);
-    long[] candidates = intersectCandidates(loaded, borderState.perimeterChunks);
-    if (candidates.length == 0) {
+    long[] allCandidates = intersectCandidates(loaded, borderState.perimeterChunks);
+    if (allCandidates.length == 0) {
       return;
     }
 
-    sortCandidatesByDistance(player, candidates);
+    long[] workQueue = prioritizeNearestCandidates(player, allCandidates, MAX_SORTED_CANDIDATES);
 
     WorldMapManager mapManager = world.getWorldMapManager();
     long townsSignature = borderState.townsSignature;
@@ -344,10 +412,10 @@ public final class TownBorderMapOverlayService {
     Long2ObjectMap<CachedGeometry> geometryCache =
         GEOMETRY_CACHE.computeIfAbsent(world.getName(), ignored -> new Long2ObjectOpenHashMap<>());
 
-    LongOpenHashSet candidateSet = new LongOpenHashSet(candidates);
+    LongOpenHashSet candidateSet = new LongOpenHashSet(allCandidates);
     int sentThisTick = 0;
 
-    for (long index : candidates) {
+    for (long index : workQueue) {
       if (sentThisTick >= MAX_CHUNKS_PER_PLAYER_PER_TICK) {
         break;
       }
@@ -443,6 +511,53 @@ public final class TownBorderMapOverlayService {
     return out.toLongArray();
   }
 
+  private static long[] prioritizeNearestCandidates(
+      @Nonnull Player player, @Nonnull long[] candidates, int maxCount) {
+    if (candidates.length <= maxCount) {
+      sortCandidatesByDistance(player, candidates);
+      return candidates;
+    }
+    int playerChunkX = 0;
+    int playerChunkZ = 0;
+    Ref<EntityStore> ref = player.getReference();
+    if (ref != null && ref.isValid()) {
+      TransformComponent transform = ref.getStore().getComponent(ref, TransformComponent.getComponentType());
+      if (transform != null) {
+        playerChunkX = ChunkUtil.chunkCoordinate((int) transform.getPosition().x);
+        playerChunkZ = ChunkUtil.chunkCoordinate((int) transform.getPosition().z);
+      }
+    }
+    long[] nearest = new long[maxCount];
+    int[] bestDist = new int[maxCount];
+    Arrays.fill(bestDist, Integer.MAX_VALUE);
+    int filled = 0;
+    for (long index : candidates) {
+      int dx = ChunkUtil.xOfChunkIndex(index) - playerChunkX;
+      int dz = ChunkUtil.zOfChunkIndex(index) - playerChunkZ;
+      int dist = dx * dx + dz * dz;
+      if (filled < maxCount) {
+        nearest[filled] = index;
+        bestDist[filled] = dist;
+        filled++;
+        continue;
+      }
+      int worstSlot = 0;
+      for (int i = 1; i < maxCount; i++) {
+        if (bestDist[i] > bestDist[worstSlot]) {
+          worstSlot = i;
+        }
+      }
+      if (dist >= bestDist[worstSlot]) {
+        continue;
+      }
+      nearest[worstSlot] = index;
+      bestDist[worstSlot] = dist;
+    }
+    long[] out = filled < maxCount ? Arrays.copyOf(nearest, filled) : nearest;
+    sortCandidatesByDistance(player, out);
+    return out;
+  }
+
   private static void sortCandidatesByDistance(@Nonnull Player player, @Nonnull long[] candidates) {
     int playerChunkX = 0;
     int playerChunkZ = 0;
@@ -481,6 +596,11 @@ public final class TownBorderMapOverlayService {
       hash = 31L * hash + town.getCharterX();
       hash = 31L * hash + town.getCharterZ();
       hash = 31L * hash + town.getTerritoryChunkRadius();
+      TownTerritoryClaims.migrateIfNeeded(town);
+      for (ClaimedTerritoryChunkRecord c : town.getClaimedTerritoryChunks()) {
+        hash = 31L * hash + c.getChunkX();
+        hash = 31L * hash + c.getChunkZ();
+      }
       hash = 31L * hash + TownPortalTravelColor.resolveHex(town).hashCode();
     }
     return hash;

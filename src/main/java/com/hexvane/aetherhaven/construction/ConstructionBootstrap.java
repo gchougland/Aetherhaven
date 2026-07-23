@@ -36,6 +36,10 @@ import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hexvane.aetherhaven.scaffold.ScaffoldColumnCascadeBreakSystem;
 import com.hexvane.aetherhaven.scaffold.ScaffoldStackPlaceInteraction;
 import com.hexvane.aetherhaven.scaffold.ScaffoldUseExtendInteraction;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
+import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.CharterAmendmentsPage;
 import com.hexvane.aetherhaven.ui.CharterTownPage;
 import com.hexvane.aetherhaven.ui.PlotConstructionPage;
@@ -56,6 +60,7 @@ import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import org.joml.Vector3i;
 
@@ -112,6 +117,30 @@ public final class ConstructionBootstrap {
                 }
                 Ref<ChunkStore> blockRef = target.blockRef();
                 Vector3i blockWorld = target.blockWorldPos();
+                Store<ChunkStore> chunkStore = blockRef.getStore();
+                PlotSignBlock plotSign = chunkStore.getComponent(blockRef, PlotSignBlock.getComponentType());
+                if (plotSign == null || plotSign.getPlotId().isBlank()) {
+                    return null;
+                }
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                UUID plotUuid;
+                try {
+                    plotUuid = UUID.fromString(plotSign.getPlotId().trim());
+                } catch (IllegalArgumentException e) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.findTownOwningPlot(plotUuid);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, town, playerUuid)) {
+                    return null;
+                }
                 return new PlotConstructionPage(playerRef, blockRef, blockWorld, false);
             }
         );
@@ -136,6 +165,23 @@ public final class ConstructionBootstrap {
                 }
                 Ref<ChunkStore> blockRef = target.blockRef();
                 Vector3i blockWorld = target.blockWorldPos();
+                Store<ChunkStore> chunkStore = blockRef.getStore();
+                ManagementBlock mb = chunkStore.getComponent(blockRef, ManagementBlock.getComponentType());
+                if (mb == null || mb.getTownId().isBlank()) {
+                    return null;
+                }
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, tm, mb.getTownId(), playerUuid)) {
+                    return null;
+                }
                 return new PlotConstructionPage(playerRef, blockRef, blockWorld, true);
             }
         );
@@ -161,6 +207,19 @@ public final class ConstructionBootstrap {
                 if (blockRef == null || blockRef.getStore().getComponent(blockRef, CharterBlock.getComponentType()) == null) {
                     return null;
                 }
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                CharterBlock ch = blockRef.getStore().getComponent(blockRef, CharterBlock.getComponentType());
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (ch != null && TownMemberBlockAccess.denyIfNotMember(playerRef, tm, ch.getTownId(), playerUuid)) {
+                    return null;
+                }
                 return new CharterTownPage(playerRef, blockRef);
             }
         );
@@ -181,6 +240,19 @@ public final class ConstructionBootstrap {
                 BlockType bt = world.getBlockType(targetBlock.x, targetBlock.y, targetBlock.z);
                 if (bt == null || bt == BlockType.EMPTY
                     || !AetherhavenConstants.ITEM_CHARTER_AMENDMENTS_TABLE.equals(bt.getId())) {
+                    return null;
+                }
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                TownRecord town = tm.findTownContainingBlock(world.getName(), targetBlock.x, targetBlock.z);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, town, playerUuid)) {
                     return null;
                 }
                 return new CharterAmendmentsPage(playerRef);

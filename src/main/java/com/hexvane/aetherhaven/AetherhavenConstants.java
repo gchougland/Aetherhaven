@@ -269,6 +269,12 @@ public final class AetherhavenConstants {
     public static final String PERMISSION_TOWN_ADMIN = "aetherhaven.town.admin";
 
     /**
+     * Break, place, harvest, and use blocks inside any town claim without being a member. Operators (hytale:Admin) also
+     * bypass. Same effect as town admin for territory protection only.
+     */
+    public static final String PERMISSION_TOWN_TERRITORY_BYPASS = "aetherhaven.town.territory.bypass";
+
+    /**
      * Town Journal Settings tab: live config save and repair tools. Operators always have access; grant this permission
      * on a role for trusted server staff without full operator.
      */

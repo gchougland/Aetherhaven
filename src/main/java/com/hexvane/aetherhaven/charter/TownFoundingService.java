@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ResidentRegistryService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.NpcSpawnOriginUtil;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -120,6 +121,7 @@ public final class TownFoundingService {
         if (ownerUsername != null && !ownerUsername.isBlank()) {
             town.setOwnerUsername(ownerUsername.trim());
         }
+        TownTerritoryClaims.initializeStarterClaims(town);
         return town;
     }
 

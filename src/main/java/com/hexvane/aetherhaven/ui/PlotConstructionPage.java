@@ -49,6 +49,7 @@ import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.tourist.TouristVisitManifest;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hypixel.hytale.codec.Codec;
+import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
@@ -366,6 +367,17 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         commandBuilder.set("#TabNeedsButton.Disabled", !needsMoveTabsOk);
         commandBuilder.set("#TabMoveButton.Disabled", !needsMoveTabsOk);
         TownRecord mgmtTown = managementUi ? resolveManagementTown(store) : null;
+        boolean isTownHall =
+            AetherhavenConstants.CONSTRUCTION_PLOT_TOWN_HALL.equals(def.getId());
+        boolean showExpandTerritory =
+            managementUi
+                && completed
+                && isTownHall
+                && mgmtTown != null
+                && playerUuid != null
+                && mgmtTown.playerCanClaimTerritoryExpansion(playerUuid);
+        commandBuilder.set("#ExpandTerritoryButton.Visible", showExpandTerritory);
+        commandBuilder.set("#ExpandTerritoryButton.Disabled", !showExpandTerritory);
         boolean canReconstruct =
             managementUi
                 && completed
@@ -375,7 +387,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 && playerUuid != null
                 && mgmtTown != null
                 && mgmtTown.playerCanPlacePlots(playerUuid);
-        commandBuilder.set("#ManagementPlotActions.Visible", canReconstruct);
+        commandBuilder.set("#ManagementPlotActions.Visible", canReconstruct || showExpandTerritory);
         if (managementUi) {
             commandBuilder.set("#TabPlotButton.Disabled", managementTab == 0);
             commandBuilder.set("#TabPlayersButton.Disabled", managementTab == 1);
@@ -677,6 +689,14 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                     CustomUIEventBindingType.Activating,
                     "#ReconstructBuildingButton",
                     new EventData().append("Action", "BeginReconstructBuilding"),
+                    false
+                );
+            }
+            if (showExpandTerritory) {
+                eventBuilder.addEventBinding(
+                    CustomUIEventBindingType.Activating,
+                    "#ExpandTerritoryButton",
+                    new EventData().append("Action", "OpenTerritoryExpansion"),
                     false
                 );
             }
@@ -1821,6 +1841,49 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
                 return;
             }
             executePickUpPlot(store, ref);
+            return;
+        }
+        if (data.action != null && data.action.equalsIgnoreCase("OpenTerritoryExpansion")) {
+            if (!managementUi) {
+                return;
+            }
+            PlotInstanceState st = resolvePlotState(store, ref);
+            if (st != PlotInstanceState.COMPLETE) {
+                return;
+            }
+            Store<ChunkStore> cs = blockRef.getStore();
+            ManagementBlock mb = cs.getComponent(blockRef, ManagementBlock.getComponentType());
+            if (mb == null || mb.getTownId().isBlank()) {
+                return;
+            }
+            UUID townUuid;
+            try {
+                townUuid = UUID.fromString(mb.getTownId().trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            World world = store.getExternalData().getWorld();
+            if (plugin == null) {
+                return;
+            }
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = tm.getTown(townUuid);
+            UUID playerUuid = playerRef.getUuid();
+            if (town == null || playerUuid == null || !town.playerCanClaimTerritoryExpansion(playerUuid)) {
+                return;
+            }
+            int viewCx = ChunkUtil.chunkCoordinate(town.getCharterX());
+            int viewCz = ChunkUtil.chunkCoordinate(town.getCharterZ());
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player != null) {
+                player.getPageManager()
+                    .openCustomPage(
+                        ref,
+                        store,
+                        new TownExpansionPage(playerRef, blockRef, blockWorldPos, townUuid, viewCx, viewCz)
+                    );
+            }
             return;
         }
         if (data.action != null && data.action.equalsIgnoreCase("OpenTownNeeds")) {

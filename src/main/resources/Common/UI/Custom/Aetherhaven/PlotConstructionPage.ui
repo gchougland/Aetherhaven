@@ -121,7 +121,7 @@ $C.@PageOverlay {
             Style: @MgmtTabMoveStyle;
             TextTooltipStyle: $C.@DefaultTextTooltipStyle;
             FlexWeight: 1;
-            Anchor: (Height: 40, Width: 44);
+            Anchor: (Right: 4, Height: 40, Width: 44);
             Padding: (Full: 0);
             Text: ".";
             TooltipText: "";
@@ -272,14 +272,27 @@ $C.@PageOverlay {
           }
 
           Group #ManagementPlotActions {
-            LayoutMode: Left;
+            LayoutMode: Middle;
             Visible: false;
             Anchor: (Bottom: 12);
 
-            $C.@SecondaryTextButton #ReconstructBuildingButton {
-              Anchor: (Width: 148, Height: 36);
-              Padding: (Horizontal: 10);
-              Text: "";
+            Group {
+              LayoutMode: Left;
+
+              $C.@SecondaryTextButton #ReconstructBuildingButton {
+                FlexWeight: 1;
+                Anchor: (Height: 36);
+                Padding: (Horizontal: 12);
+                Text: "";
+              }
+
+              $C.@SecondaryTextButton #ExpandTerritoryButton {
+                FlexWeight: 1;
+                Anchor: (Height: 36, Left: 8);
+                Padding: (Horizontal: 12);
+                Text: "";
+                Visible: false;
+              }
             }
           }
 

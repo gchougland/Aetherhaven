@@ -47,6 +47,7 @@ public final class AetherhavenUiLocalization {
         b.set("#MoveBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalConfirm"));
         b.set("#MoveBuildingCancelButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.moveBuildingModalCancel"));
         b.set("#ReconstructBuildingButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuilding"));
+        b.set("#ExpandTerritoryButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.plotconstruction.expandTerritory"));
         b.set("#ReconstructBuildingModalTitle.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalTitle"));
         b.set("#ReconstructBuildingModalText.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalBody"));
         b.set("#ReconstructBuildingConfirmButton.TextSpans", t("aetherhaven_ui_town.aetherhaven.ui.plotconstruction.reconstructBuildingModalConfirm"));
@@ -81,6 +82,18 @@ public final class AetherhavenUiLocalization {
         b.set("#CapAbandonQuests.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.abandonQuests"));
         b.set("#CapReviveVillagers.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.reviveVillagers"));
         b.set("#CapUseShopSpots.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.useShopSpots"));
+        b.set("#CapBreakBlocks.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.breakBlocks"));
+        b.set("#CapPlaceBlocks.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.placeBlocks"));
+        b.set("#CapHarvestBlocks.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.harvestBlocks"));
+        b.set("#CapOpenContainers.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.openContainers"));
+        b.set("#CapUseDoors.TextSpans", t("aetherhaven_town.aetherhaven.ui.memberPermissions.useDoors"));
+    }
+
+    public static void applyTownExpansionPage(@Nonnull UICommandBuilder b) {
+        b.set("#ExpansionTitleText.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.title"));
+        b.set("#ExpansionSummary.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.summary"));
+        b.set("#ExpansionBackButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.back"));
+        b.set("#ExpansionClaimButton.TextSpans", t("aetherhaven_town.aetherhaven.ui.expansion.claimButton"));
     }
 
     public static void applyDifficultyPage(@Nonnull UICommandBuilder b) {

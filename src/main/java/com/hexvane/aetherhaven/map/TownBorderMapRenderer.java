@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.map;
 
+import com.hexvane.aetherhaven.town.ClaimedTerritoryChunkRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -62,20 +64,17 @@ public final class TownBorderMapRenderer {
     }
 
     private static void addPerimeterChunks(@Nonnull TownRecord town, @Nonnull LongSet out) {
-        int cx = ChunkUtil.chunkCoordinate(town.getCharterX());
-        int cz = ChunkUtil.chunkCoordinate(town.getCharterZ());
-        int r = town.getTerritoryChunkRadius();
-        int minX = cx - r;
-        int maxX = cx + r;
-        int minZ = cz - r;
-        int maxZ = cz + r;
-        for (int x = minX; x <= maxX; x++) {
-            out.add(ChunkUtil.indexChunk(x, minZ));
-            out.add(ChunkUtil.indexChunk(x, maxZ));
-        }
-        for (int z = minZ + 1; z < maxZ; z++) {
-            out.add(ChunkUtil.indexChunk(minX, z));
-            out.add(ChunkUtil.indexChunk(maxX, z));
+        TownTerritoryClaims.migrateIfNeeded(town);
+        LongSet owned = TownTerritoryClaims.toChunkIndexSet(town);
+        for (ClaimedTerritoryChunkRecord c : town.getClaimedTerritoryChunks()) {
+            int cx = c.getChunkX();
+            int cz = c.getChunkZ();
+            if (!owned.contains(ChunkUtil.indexChunk(cx, cz - 1))
+                || !owned.contains(ChunkUtil.indexChunk(cx, cz + 1))
+                || !owned.contains(ChunkUtil.indexChunk(cx - 1, cz))
+                || !owned.contains(ChunkUtil.indexChunk(cx + 1, cz))) {
+                out.add(ChunkUtil.indexChunk(cx, cz));
+            }
         }
     }
 
@@ -154,26 +153,35 @@ public final class TownBorderMapRenderer {
         @Nonnull IntArrayList pixels,
         @Nonnull IntArrayList owners
     ) {
-        int cx = ChunkUtil.chunkCoordinate(town.getCharterX());
-        int cz = ChunkUtil.chunkCoordinate(town.getCharterZ());
-        int r = town.getTerritoryChunkRadius();
-        float west = ChunkUtil.minBlock(cx - r);
-        float east = ChunkUtil.maxBlock(cx + r);
-        float north = ChunkUtil.minBlock(cz - r);
-        float south = ChunkUtil.maxBlock(cz + r);
-
-        rasterizeHorizontalEdge(
-            north, west, east, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
-            width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
-        rasterizeHorizontalEdge(
-            south, west, east, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
-            width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
-        rasterizeVerticalEdge(
-            west, north, south, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
-            width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
-        rasterizeVerticalEdge(
-            east, north, south, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
-            width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
+        TownTerritoryClaims.migrateIfNeeded(town);
+        for (ClaimedTerritoryChunkRecord c : town.getClaimedTerritoryChunks()) {
+            int cx = c.getChunkX();
+            int cz = c.getChunkZ();
+            float west = ChunkUtil.minBlock(cx);
+            float east = ChunkUtil.maxBlock(cx);
+            float north = ChunkUtil.minBlock(cz);
+            float south = ChunkUtil.maxBlock(cz);
+            if (!TownTerritoryClaims.contains(town, cx, cz - 1)) {
+                rasterizeHorizontalEdge(
+                    north, west, east, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
+                    width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
+            }
+            if (!TownTerritoryClaims.contains(town, cx, cz + 1)) {
+                rasterizeHorizontalEdge(
+                    south, west, east, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
+                    width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
+            }
+            if (!TownTerritoryClaims.contains(town, cx - 1, cz)) {
+                rasterizeVerticalEdge(
+                    west, north, south, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
+                    width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
+            }
+            if (!TownTerritoryClaims.contains(town, cx + 1, cz)) {
+                rasterizeVerticalEdge(
+                    east, north, south, chunkMinX, chunkMinZ, chunkMaxX, chunkMaxZ,
+                    width, height, scaleX, scaleZ, halfThickness, townIndex, claimed, pixelOwner, pixels, owners);
+            }
+        }
     }
 
     private static void rasterizeHorizontalEdge(

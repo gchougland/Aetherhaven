@@ -2,6 +2,7 @@ package com.hexvane.aetherhaven.economy;
 
 import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.command.AetherhavenTaxCommand;
 import com.hexvane.aetherhaven.placement.PlotConstructionBlockResolver;
 import com.hexvane.aetherhaven.plot.ShopSafeBlock;
@@ -10,6 +11,9 @@ import com.hexvane.aetherhaven.plugin.AetherhavenFeatures;
 import com.hexvane.aetherhaven.plugin.AetherhavenPluginIds;
 import com.hexvane.aetherhaven.plugin.GameTimeTickListener;
 import com.hexvane.aetherhaven.shop.ShopSafeUseInteraction;
+import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownMemberBlockAccess;
 import com.hexvane.aetherhaven.ui.TreasuryPage;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.protocol.BlockPosition;
@@ -18,9 +22,11 @@ import com.hypixel.hytale.server.core.modules.interaction.interaction.config.ser
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.plugin.JavaPlugin;
 import com.hypixel.hytale.server.core.universe.world.World;
+import com.hypixel.hytale.server.core.universe.world.storage.ChunkStore;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 
 public final class EconomyBootstrap {
@@ -47,6 +53,23 @@ public final class EconomyBootstrap {
                 PlotConstructionBlockResolver.PlotConstructionTarget target =
                     PlotConstructionBlockResolver.resolveForPlotUi(world, targetBlock, TreasuryBlock.getComponentType());
                 if (target == null) {
+                    return null;
+                }
+                AetherhavenPlugin plugin = AetherhavenPlugin.get();
+                if (plugin == null) {
+                    return null;
+                }
+                UUID playerUuid = playerRef.getUuid();
+                if (playerUuid == null) {
+                    return null;
+                }
+                Store<ChunkStore> chunkStore = target.blockRef().getStore();
+                TreasuryBlock tb = chunkStore.getComponent(target.blockRef(), TreasuryBlock.getComponentType());
+                if (tb == null || tb.getTownId().isBlank()) {
+                    return null;
+                }
+                TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+                if (TownMemberBlockAccess.denyIfNotMember(playerRef, tm, tb.getTownId(), playerUuid)) {
                     return null;
                 }
                 return new TreasuryPage(playerRef, target.blockRef());

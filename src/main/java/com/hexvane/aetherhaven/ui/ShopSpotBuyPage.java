@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.ui;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.shopspot.ShopPriceEntry;
+import com.hexvane.aetherhaven.shopspot.ShopSpotBuyerPayment;
 import com.hexvane.aetherhaven.shopspot.ShopSpotBlockInteractSupport;
 import com.hexvane.aetherhaven.shopspot.ShopSpotHudRefresh;
 import com.hexvane.aetherhaven.shopspot.ShopSpotOpenService;
@@ -192,9 +193,11 @@ public final class ShopSpotBuyPage extends AetherhavenInteractiveCustomUIPage<Sh
         }
         World world = store.getExternalData().getWorld();
         TownRecord payerTown =
-            AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
-        boolean allowTreasury =
-            payerTown != null && payerTown.getTownId().equals(record.getTownId());
+            ShopSpotBuyerPayment.buyerHomeTown(
+                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin),
+                uc.getUuid()
+            );
+        boolean allowTreasury = ShopSpotBuyerPayment.mayDebitBuyerTownTreasury(payerTown, uc.getUuid());
         CombinedItemContainer inv = InventoryComponent.getCombined(store, playerRef, InventoryComponent.HOTBAR_FIRST);
         return GoldCoinPayment.totalAvailable(payerTown, inv, allowTreasury);
     }

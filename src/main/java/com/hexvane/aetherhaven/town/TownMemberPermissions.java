@@ -41,6 +41,27 @@ public final class TownMemberPermissions {
     @Nullable
     private Boolean useShopSpots;
 
+    /** Break blocks in town territory; omitted in older saves defaults to allowed. */
+    @SerializedName("breakBlocks")
+    @Nullable
+    private Boolean breakBlocks;
+
+    @SerializedName("placeBlocks")
+    @Nullable
+    private Boolean placeBlocks;
+
+    @SerializedName("harvestBlocks")
+    @Nullable
+    private Boolean harvestBlocks;
+
+    @SerializedName("openContainers")
+    @Nullable
+    private Boolean openContainers;
+
+    @SerializedName("useDoors")
+    @Nullable
+    private Boolean useDoors;
+
     public TownMemberPermissions() {}
 
     public TownMemberPermissions(
@@ -53,7 +74,12 @@ public final class TownMemberPermissions {
         boolean abandonQuests,
         boolean reviveVillagers,
         boolean removePlots,
-        boolean useShopSpots
+        boolean useShopSpots,
+        boolean breakBlocks,
+        boolean placeBlocks,
+        boolean harvestBlocks,
+        boolean openContainers,
+        boolean useDoors
     ) {
         this.placePlots = placePlots;
         this.manageConstructions = manageConstructions;
@@ -65,18 +91,27 @@ public final class TownMemberPermissions {
         this.reviveVillagers = reviveVillagers;
         this.removePlots = removePlots;
         this.useShopSpots = useShopSpots;
+        this.breakBlocks = breakBlocks;
+        this.placeBlocks = placeBlocks;
+        this.harvestBlocks = harvestBlocks;
+        this.openContainers = openContainers;
+        this.useDoors = useDoors;
     }
 
     @Nonnull
     public static TownMemberPermissions fullMember() {
-        return new TownMemberPermissions(true, true, true, true, true, true, true, true, true, true);
+        return new TownMemberPermissions(true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
     }
 
     @Nonnull
     public static TownMemberPermissions fromRole(@Nonnull TownMemberRole role) {
         return switch (role) {
-            case BUILD -> new TownMemberPermissions(true, true, true, false, false, false, false, false, true, true);
-            case QUEST -> new TownMemberPermissions(false, false, false, false, true, true, true, false, false, false);
+            case BUILD -> new TownMemberPermissions(
+                true, true, true, false, false, false, false, false, true, true, true, true, true, true, true
+            );
+            case QUEST -> new TownMemberPermissions(
+                false, false, false, false, true, true, true, false, false, false, false, false, false, false, false
+            );
             case BOTH -> fullMember();
         };
     }
@@ -178,6 +213,61 @@ public final class TownMemberPermissions {
         this.useShopSpots = useShopSpots;
     }
 
+    public boolean breakBlocks() {
+        if (breakBlocks != null) {
+            return breakBlocks;
+        }
+        return placePlots || manageConstructions;
+    }
+
+    public void setBreakBlocks(boolean breakBlocks) {
+        this.breakBlocks = breakBlocks;
+    }
+
+    public boolean placeBlocks() {
+        if (placeBlocks != null) {
+            return placeBlocks;
+        }
+        return placePlots || manageConstructions;
+    }
+
+    public void setPlaceBlocks(boolean placeBlocks) {
+        this.placeBlocks = placeBlocks;
+    }
+
+    public boolean harvestBlocks() {
+        if (harvestBlocks != null) {
+            return harvestBlocks;
+        }
+        return placePlots || manageConstructions;
+    }
+
+    public void setHarvestBlocks(boolean harvestBlocks) {
+        this.harvestBlocks = harvestBlocks;
+    }
+
+    public boolean openContainers() {
+        if (openContainers != null) {
+            return openContainers;
+        }
+        return placePlots || manageConstructions;
+    }
+
+    public void setOpenContainers(boolean openContainers) {
+        this.openContainers = openContainers;
+    }
+
+    public boolean useDoors() {
+        if (useDoors != null) {
+            return useDoors;
+        }
+        return true;
+    }
+
+    public void setUseDoors(boolean useDoors) {
+        this.useDoors = useDoors;
+    }
+
     @Nonnull
     public TownMemberPermissions copy() {
         return new TownMemberPermissions(
@@ -190,7 +280,12 @@ public final class TownMemberPermissions {
             abandonQuests,
             reviveVillagers,
             removePlots,
-            useShopSpots()
+            useShopSpots(),
+            breakBlocks(),
+            placeBlocks(),
+            harvestBlocks(),
+            openContainers(),
+            useDoors()
         );
     }
 }

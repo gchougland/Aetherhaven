@@ -9,6 +9,7 @@ import com.hexvane.aetherhaven.rts.ui.RtsGuardRosterSupport;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.ComponentAccessor;
@@ -474,7 +475,7 @@ public final class RtsCommandService {
         int overlap = com.hexvane.aetherhaven.AetherhavenConstants.RTS_TERRITORY_OVERLAP_BLOCKS;
         int cx = town.getCharterX();
         int cz = town.getCharterZ();
-        int r = town.getTerritoryChunkRadius() * 16 + overlap;
+        int r = TownTerritoryClaims.maxCharterToClaimEdgeBlocks(town) + overlap;
         double minX = cx - r;
         double maxX = cx + r;
         double minZ = cz - r;

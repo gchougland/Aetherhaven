@@ -5,6 +5,8 @@
 # Plot / construction UI (keys use lowercase segments so client lookup matches % references)
 aetherhaven.ui.plotconstruction.title=Construction
 aetherhaven.ui.plotmanagement.title=Town Management
+aetherhaven.ui.plotmanagement.membersOnly=Only members of this town can use the town records shelf.
+aetherhaven.ui.town.membersOnly=Only members of this town can use that.
 aetherhaven.ui.plotmanagement.tabPlot=Plot
 aetherhaven.ui.plotmanagement.tabPlayers=Players
 aetherhaven.ui.plotmanagement.playersHint=Invite online players by name. Change roles or remove members below.
@@ -235,11 +237,11 @@ aetherhaven.ui.chartertown.dissolveCancel=Cancel
 aetherhaven.ui.chartertown.dissolved=Town dissolved: buildings cleared, villagers removed, charter destroyed.
 aetherhaven.ui.chartertown.moveCharter=Move charter
 aetherhaven.ui.chartertown.moveCharterTooltip=Move charter
-aetherhaven.ui.chartertown.moveCharterHint=Recenters your territory on a new charter block. You can only place where every building still fits inside the town border.
-aetherhaven.ui.chartertown.moveCharterConfirmText=You will position the new charter like plot placement (nudge and confirm). If any building would end up outside the territory, placement will be blocked.
+aetherhaven.ui.chartertown.moveCharterHint=Moves the charter and your claimed land with it. Every building must still sit inside your town border after the move.
+aetherhaven.ui.chartertown.moveCharterConfirmText=You will place the new charter like plot placement. If any building would sit outside your claimed chunks, placement is blocked.
 aetherhaven.ui.chartertown.moveCharterConfirm=Continue
 aetherhaven.ui.chartertown.moveCharterCancel=Cancel
-aetherhaven.ui.chartertown.charterMoved=Charter moved. Your territory is now centered on the new charter.
+aetherhaven.ui.chartertown.charterMoved=Charter moved. Your claimed land moved with it.
 aetherhaven.ui.chartertown.modalDissolveTitle=Dissolve town?
 aetherhaven.ui.chartertown.modalMoveTitle=Move charter?
 aetherhaven.ui.chartertown.modalCancel=Cancel

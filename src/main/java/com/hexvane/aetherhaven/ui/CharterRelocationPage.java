@@ -17,6 +17,7 @@ import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
 import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
+import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.component.Store;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -482,7 +483,11 @@ public final class CharterRelocationPage extends AetherhavenInteractiveCustomUIP
             placementErr = "Town not found.";
         } else if (!town.getOwnerUuid().equals(uc.getUuid())) {
             placementErr = "Only the town owner can move the charter.";
-        } else if (!tm.allPlotFootprintsFitTerritoryWithCharterAt(town, anchor.x, anchor.z)) {
+        } else if (!tm.allPlotFootprintsFitAfterClaimShift(
+            town,
+            ChunkUtil.chunkCoordinate(anchor.x) - ChunkUtil.chunkCoordinate(town.getCharterX()),
+            ChunkUtil.chunkCoordinate(anchor.z) - ChunkUtil.chunkCoordinate(town.getCharterZ())
+        )) {
             placementErr =
                 "Territory from this spot would not cover all your buildings. Move closer to your town.";
         } else if (!isReplaceable(world, anchor.x, anchor.y, anchor.z)) {
