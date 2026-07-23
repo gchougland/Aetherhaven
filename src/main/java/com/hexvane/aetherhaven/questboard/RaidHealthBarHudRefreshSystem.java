@@ -2,9 +2,12 @@ package com.hexvane.aetherhaven.questboard;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.ui.RaidHealthBarHud;
 import com.hexvane.aetherhaven.ui.RaidHealthBarHudSupport;
+import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Store;
@@ -61,8 +64,9 @@ public final class RaidHealthBarHudRefreshSystem extends EntityTickingSystem<Ent
             return;
         }
 
-        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin)
-            .findTownForPlayerInWorld(uuidComponent.getUuid());
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(store.getExternalData().getWorld(), plugin);
+        Ref<EntityStore> entityRef = chunk.getReferenceTo(index);
+        TownRecord town = TownPlayerResolution.resolveActiveTown(store.getExternalData().getWorld(), store, entityRef, tm);
         QuestBoardSlotRecord activeRaid = town != null ? findOngoingRaid(town, uuidComponent.getUuid()) : null;
 
         if (activeRaid == null) {

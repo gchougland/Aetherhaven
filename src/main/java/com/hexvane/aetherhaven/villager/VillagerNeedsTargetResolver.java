@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.villager;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -48,7 +50,8 @@ public final class VillagerNeedsTargetResolver {
             if (uc == null) {
                 return new Result(null, ResolveProblem.NO_TOWN);
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = TownPlayerResolution.resolveActiveTown(world, playerStore, playerRef, tm);
             if (town == null) {
                 return new Result(null, ResolveProblem.NO_TOWN);
             }

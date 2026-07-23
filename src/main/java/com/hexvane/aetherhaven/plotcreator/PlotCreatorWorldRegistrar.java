@@ -52,7 +52,7 @@ public final class PlotCreatorWorldRegistrar {
             return "incomplete";
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        TownRecord town = tm.findTownForOwnerInWorld(playerUuid);
         if (town == null) {
             return "noTown";
         }

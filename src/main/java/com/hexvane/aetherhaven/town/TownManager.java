@@ -187,22 +187,29 @@ public final class TownManager {
     }
 
     /**
-     * Town this player belongs to in this world: as owner or as a listed member (one affiliation per world).
+     * First town this player belongs to in this world (owner or member). Prefer {@link TownPlayerResolution}
+     * when the player may have multiple affiliations.
      */
     @Nullable
     public TownRecord findTownForPlayerInWorld(@Nonnull UUID playerUuid) {
+        List<TownRecord> all = findAllTownsForPlayerInWorld(playerUuid);
+        return all.isEmpty() ? null : all.get(0);
+    }
+
+    /** All towns in this world where the player is owner or listed member, stable display-name order. */
+    @Nonnull
+    public List<TownRecord> findAllTownsForPlayerInWorld(@Nonnull UUID playerUuid) {
+        List<TownRecord> out = new ArrayList<>();
         for (TownRecord t : byTownId.values()) {
             if (!world.getName().equals(t.getWorldName())) {
                 continue;
             }
-            if (t.getOwnerUuid().equals(playerUuid)) {
-                return t;
-            }
-            if (t.isMemberPlayer(playerUuid)) {
-                return t;
+            if (t.getOwnerUuid().equals(playerUuid) || t.isMemberPlayer(playerUuid)) {
+                out.add(t);
             }
         }
-        return null;
+        out.sort(TownPlayerResolution.affiliatedTownDisplayOrder());
+        return out;
     }
 
     /** True if the player is owner or member of any town in this world. */

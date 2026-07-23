@@ -57,7 +57,7 @@ public final class TouristReconcileService {
     /** Reconcile tourists once a town member is online so unloaded chunks are not mistaken for missing NPCs. */
     public static void onTownMemberPlayerReady(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull UUID playerUuid) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        TownRecord town = tm.findTownForOwnerInWorld(playerUuid);
         if (town == null) {
             return;
         }

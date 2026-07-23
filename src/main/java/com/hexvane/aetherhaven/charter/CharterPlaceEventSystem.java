@@ -71,7 +71,7 @@ public final class CharterPlaceEventSystem extends EntityEventSystem<EntityStore
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        if (tm.findTownForPlayerInWorld(owner) != null) {
+        if (tm.findTownForOwnerInWorld(owner) != null) {
             event.setCancelled(true);
             pr.sendMessage(Message.translation("aetherhaven_common.aetherhaven.charter.alreadyInTown"));
             return;

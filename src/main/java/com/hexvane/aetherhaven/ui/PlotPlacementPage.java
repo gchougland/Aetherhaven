@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -603,7 +604,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town =
+            TownPlayerResolution.resolveTownForPlotPlacement(tm, world.getName(), uc.getUuid(), session.getAnchor());
         if (town == null) {
             sendError(store, ref, "You need a town (place a charter) first.");
             return false;
@@ -866,7 +868,8 @@ public final class PlotPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town =
+            TownPlayerResolution.resolveTownForPlotPlacement(tm, world.getName(), uc.getUuid(), session.getAnchor());
         String placementErr;
         if (town == null) {
             placementErr = "You need a town (place a charter) first.";

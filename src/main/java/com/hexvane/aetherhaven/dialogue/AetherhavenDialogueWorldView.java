@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
@@ -78,7 +79,7 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
                 return null;
             }
         }
-        return AetherhavenWorldRegistries.findTownForPlayerAcrossWorlds(playerUuid, tm);
+        return TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
     }
 
     @Override

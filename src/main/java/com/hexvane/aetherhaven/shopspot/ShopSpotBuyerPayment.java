@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.shopspot;
 
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
 import java.util.UUID;
@@ -12,7 +13,7 @@ public final class ShopSpotBuyerPayment {
 
     @Nullable
     public static TownRecord buyerHomeTown(@Nonnull TownManager tm, @Nonnull UUID buyerUuid) {
-        return tm.findTownForPlayerInWorld(buyerUuid);
+        return TownPlayerResolution.resolveFallbackAffiliatedTown(tm, buyerUuid);
     }
 
     /** Treasury debited is always {@code buyerHomeTown}, never the shop's town unless the buyer belongs there. */

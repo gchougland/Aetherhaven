@@ -111,7 +111,7 @@ public final class AetherhavenStarterTownCommand extends AbstractPlayerCommand {
         Rotation facing = cardinalRotation(transform.getRotation().yaw());
         UUID actorUuid = uuidComponent.getUuid();
         TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = townManager.findTownForPlayerInWorld(actorUuid);
+        TownRecord town = townManager.findTownForOwnerInWorld(actorUuid);
         boolean createTown = town == null;
         TownRecord planningTown = town;
         if (planningTown == null) {

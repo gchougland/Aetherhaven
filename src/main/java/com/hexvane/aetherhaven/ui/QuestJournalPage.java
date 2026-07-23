@@ -45,6 +45,7 @@ import com.hexvane.aetherhaven.town.PlotLinkReconcileService;
 import com.hexvane.aetherhaven.town.TownDissolutionService;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownResidentEligibility;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
@@ -146,6 +147,74 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         super(playerRef, CustomPageLifetime.CanDismissOrCloseThroughInteraction, PageData.CODEC);
     }
 
+    @Nullable
+    private static TownRecord journalTown(
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid
+    ) {
+        if (plugin == null) {
+            return null;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+        if (journal != null) {
+            TownPlayerResolution.reconcileActiveTownId(tm, playerUuid, journal);
+        }
+        return TownPlayerResolution.resolveActiveTown(world, store, ref, tm, journal);
+    }
+
+    private void wireActiveTownSelector(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nonnull World world,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> ref,
+        @Nullable AetherhavenPlugin plugin,
+        @Nullable UUIDComponent uc,
+        @Nonnull PlayerTownJournalState stateForTabs
+    ) {
+        if (plugin == null || uc == null) {
+            commandBuilder.set("#ActiveTownRow.Visible", false);
+            return;
+        }
+        TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        List<TownRecord> affiliated = TownPlayerResolution.listAffiliatedTownsInWorld(tm, uc.getUuid());
+        if (affiliated.size() <= 1) {
+            commandBuilder.set("#ActiveTownRow.Visible", false);
+            return;
+        }
+        commandBuilder.set("#ActiveTownRow.Visible", true);
+        commandBuilder.set(
+            "#ActiveTownLabel.TextSpans",
+            Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.activeTownLabel")
+        );
+        ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
+        UUID self = uc.getUuid();
+        TownRecord active = journalTown(world, store, ref, plugin, self);
+        String selected = active != null ? active.getTownId().toString() : affiliated.get(0).getTownId().toString();
+        String ownedSuffix =
+            Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.activeTownOwnedSuffix")
+                .getAnsiMessage();
+        for (TownRecord t : affiliated) {
+            String label = t.getDisplayName();
+            if (t.getOwnerUuid().equals(self)) {
+                label = label + " (" + ownedSuffix + ")";
+            }
+            entries.add(new DropdownEntryInfo(LocalizableString.fromString(label), t.getTownId().toString()));
+        }
+        commandBuilder.set("#ActiveTownDropdown #Input.Entries", entries);
+        commandBuilder.set("#ActiveTownDropdown #Input.Value", selected);
+        eventBuilder.addEventBinding(
+            CustomUIEventBindingType.ValueChanged,
+            "#ActiveTownDropdown #Input",
+            new EventData().append("Action", "SelectActiveTown").append("@ActiveTownId", "#ActiveTownDropdown #Input.Value"),
+            false
+        );
+    }
+
     @Override
     public void build(
         @Nonnull Ref<EntityStore> ref,
@@ -202,6 +271,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         AetherhavenPlugin plugin = AetherhavenPlugin.get();
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
 
+        wireActiveTownSelector(commandBuilder, eventBuilder, world, store, ref, plugin, uc, stateForTabs);
+
         boolean abandonModalBlocking = false;
         if (abandonConfirmOpen && pendingAbandonQuestId != null && plugin != null && uc != null) {
             String pendingId = pendingAbandonQuestId.trim();
@@ -211,7 +282,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             boolean worldPending =
                 isActiveWorldJournalQuest(worldProgressModal, pendingId);
             TownRecord townModal =
-                AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+                journalTown(world, store, ref, plugin, uc.getUuid());
             boolean townPending =
                 townModal != null
                     && townModal.playerCanAbandonQuests(uc.getUuid())
@@ -240,7 +311,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             && pendingRemovePlotId != null
             && plugin != null
             && uc != null) {
-            TownRecord townPlot = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord townPlot = journalTown(world, store, ref, plugin, uc.getUuid());
             UUID plotUuid = tryParseUuid(pendingRemovePlotId);
             PlotInstance plotInst = townPlot != null && plotUuid != null ? townPlot.findPlotById(plotUuid) : null;
             if (townPlot != null
@@ -407,7 +478,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 setQuestsBlocked(commandBuilder, Message.translation("aetherhaven_common.aetherhaven.common.noPlayerId"));
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             WorldNpcPlayerProgress worldProgress =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
@@ -573,7 +644,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set("#JournalSettingsPlotDropdown #Input.Value", "");
             commandBuilder.set("#JournalSettingsPlotModalConfirm.Disabled", true);
         } else {
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
             entries.add(
                 new DropdownEntryInfo(
@@ -662,7 +733,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             commandBuilder.set("#JournalSettingsVillagerDropdown #Input.Entries", empty);
             commandBuilder.set("#JournalSettingsVillagerDropdown #Input.Value", "");
         } else {
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             ObjectArrayList<DropdownEntryInfo> entries = new ObjectArrayList<>();
             entries.add(
                 new DropdownEntryInfo(
@@ -940,7 +1011,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             String.valueOf(cfg.getShopSpotPlayerListingPricePercent())
         );
 
-        TownRecord town = uc != null ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = uc != null ? journalTown(world, store, ref, plugin, uc.getUuid()) : null;
         boolean tools = town != null;
         commandBuilder.set("#SettingsToolsRow1.Visible", tools);
         commandBuilder.set("#SettingsToolsRow2.Visible", tools);
@@ -1031,7 +1102,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             setTownTabBlocked(commandBuilder, Message.translation("aetherhaven_common.aetherhaven.common.noPlayerId"));
             return;
         }
-        TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
         if (town == null) {
             setTownTabBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
             return;
@@ -2003,6 +2074,40 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         if (action == null) {
             return;
         }
+        if (action.equalsIgnoreCase("SelectActiveTown")) {
+            if (data.activeTownId == null || data.activeTownId.isBlank()) {
+                return;
+            }
+            UUID townId;
+            try {
+                townId = UUID.fromString(data.activeTownId.trim());
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+            AetherhavenPlugin plugin = AetherhavenPlugin.get();
+            UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
+            if (plugin == null || uc == null) {
+                return;
+            }
+            World world = store.getExternalData().getWorld();
+            TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+            TownRecord town = tm.getTown(townId);
+            if (town == null || !town.hasMemberOrOwner(uc.getUuid())) {
+                return;
+            }
+            PlayerTownJournalState st = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (st == null) {
+                st = new PlayerTownJournalState();
+            }
+            st.setActiveTownId(townId);
+            store.putComponent(ref, PlayerTownJournalState.getComponentType(), st);
+            TownBorderMapOverlayService.refreshPlayer(world, uc.getUuid());
+            UICommandBuilder cmd = new UICommandBuilder();
+            UIEventBuilder ev = new UIEventBuilder();
+            build(ref, cmd, ev, store);
+            sendUpdate(cmd, ev, false);
+            return;
+        }
         if (action.equalsIgnoreCase("TownShowBordersToggle")) {
             if (data.checked == null) {
                 return;
@@ -2062,10 +2167,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 UUIDComponent uuid = store.getComponent(ref, UUIDComponent.getComponentType());
                 if (plugin != null && uuid != null) {
                     World w = store.getExternalData().getWorld();
-                    TownRecord town =
-                        AetherhavenWorldRegistries
-                            .getOrCreateTownManager(w, plugin)
-                            .findTownForPlayerInWorld(uuid.getUuid());
+                    TownRecord town = journalTown(w, store, ref, plugin, uuid.getUuid());
                     WorldNpcPlayerProgress worldProgress =
                         AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(w, plugin)
                             .getOrCreatePlayerProgress(uuid.getUuid());
@@ -2112,10 +2214,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             World world = store.getExternalData().getWorld();
-            TownRecord town =
-                AetherhavenWorldRegistries
-                    .getOrCreateTownManager(world, plugin)
-                    .findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             WorldNpcPlayerProgress worldProgress =
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
@@ -2208,7 +2307,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 AetherhavenWorldRegistries.getOrCreateWorldNpcRegistry(world, plugin)
                     .getOrCreatePlayerProgress(uc.getUuid());
             boolean worldOk = isActiveWorldJournalQuest(worldProgress, sel);
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             boolean townOk =
                 town != null
                     && town.playerCanAbandonQuests(uc.getUuid())
@@ -2251,7 +2350,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             UUID plotUuid = tryParseUuid(pid);
             if (town == null || plotUuid == null || town.findPlotById(plotUuid) == null || !town.playerCanRemovePlots(uc.getUuid())) {
                 return;
@@ -2291,7 +2390,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-            TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             UUID plotUuid = tryParseUuid(pid);
             PlotInstance plot = town != null && plotUuid != null ? town.findPlotById(plotUuid) : null;
             if (town == null || plot == null || !town.playerCanRemovePlots(uc.getUuid())) {
@@ -2573,7 +2672,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             if (town == null) {
                 return;
             }
@@ -2606,7 +2705,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             if (town == null) {
                 return;
             }
@@ -2636,7 +2735,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             if (town == null) {
                 return;
             }
@@ -2696,7 +2795,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             if (uc == null) {
                 return;
             }
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             if (town == null) {
                 return;
             }
@@ -2774,7 +2873,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 return;
             }
             World world = store.getExternalData().getWorld();
-            TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+            TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
             if (town == null) {
                 return;
             }
@@ -2813,7 +2912,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                     WorldQuestBoardService.abandonByInstanceId(world, plugin, uc.getUuid(), instanceId);
                 }
             } else {
-                TownRecord town = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin).findTownForPlayerInWorld(uc.getUuid());
+                TownRecord town = journalTown(world, store, ref, plugin, uc.getUuid());
                 if (town == null || !town.playerCanAbandonQuests(uc.getUuid())) {
                     abandonConfirmOpen = false;
                     pendingAbandonQuestId = null;
@@ -3057,6 +3156,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             .add()
             .append(new KeyedCodec<>("@HudQuestY", Codec.STRING), (d, v) -> d.hudQuestY = v, d -> d.hudQuestY)
             .add()
+            .append(new KeyedCodec<>("@ActiveTownId", Codec.STRING), (d, v) -> d.activeTownId = v, d -> d.activeTownId)
+            .add()
             .build();
 
         @Nullable
@@ -3139,5 +3240,7 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         private String hudQuestX;
         @Nullable
         private String hudQuestY;
+        @Nullable
+        private String activeTownId;
     }
 }

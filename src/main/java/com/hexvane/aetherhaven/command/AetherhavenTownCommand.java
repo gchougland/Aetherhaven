@@ -7,7 +7,8 @@ import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownMemberRole;
 import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hexvane.aetherhaven.town.TownMembershipActions;
-import com.hexvane.aetherhaven.town.TownPendingInvite;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
+import com.hexvane.aetherhaven.ui.PlayerTownJournalState;
 import com.hexvane.aetherhaven.town.TownPlayerLookup;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
@@ -25,8 +26,10 @@ import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.protocol.GameMode;
+import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class AetherhavenTownCommand extends AbstractCommandCollection {
     public AetherhavenTownCommand() {
@@ -136,7 +139,7 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
                     return;
                 }
             }
-            if (tm.isPlayerAffiliatedInWorld(self)) {
+            if (town.hasMemberOrOwner(self)) {
                 playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.alreadyInTown"));
                 return;
             }
@@ -308,6 +311,10 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
     }
 
     private static final class LeaveCommand extends AbstractPlayerCommand {
+        @Nonnull
+        private final OptionalArg<String> townArg =
+            this.withOptionalArg("townName", "aetherhaven_commands_help.commands.aetherhaven.town.townName.desc", ArgTypes.GREEDY_STRING);
+
         LeaveCommand() {
             super("leave", "aetherhaven_commands_help.commands.aetherhaven.town.leave.desc");
         }
@@ -330,9 +337,10 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
             }
             TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
             UUID self = uc.getUuid();
-            TownRecord town = tm.findTownForPlayerInWorld(self);
+            String townNameOpt =
+                context.provided(townArg) && !context.get(townArg).trim().isEmpty() ? context.get(townArg).trim() : null;
+            TownRecord town = resolveLeaveTargetTown(store, ref, playerRef, tm, self, townNameOpt);
             if (town == null) {
-                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.notInTown"));
                 return;
             }
             if (town.getOwnerUuid().equals(self)) {
@@ -344,9 +352,59 @@ public final class AetherhavenTownCommand extends AbstractCommandCollection {
                 return;
             }
             tm.updateTown(town);
+            TownPlayerResolution.clearActiveTownIdIfMatches(world, self, town.getTownId());
             playerRef.sendMessage(
                 Message.translation("aetherhaven_town.aetherhaven.town.leave.left").param("town", town.getDisplayName())
             );
+        }
+
+        @Nullable
+        private TownRecord resolveLeaveTargetTown(
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull TownManager tm,
+            @Nonnull UUID self,
+            @Nullable String townDisplayName
+        ) {
+            if (townDisplayName != null && !townDisplayName.isEmpty()) {
+                TownRecord named = tm.findTownByDisplayName(townDisplayName);
+                if (named == null) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.accept.err.noSuchTown"));
+                    return null;
+                }
+                if (!named.isMemberPlayer(self)) {
+                    playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.notMember"));
+                    return null;
+                }
+                return named;
+            }
+            List<TownRecord> guestTowns = new java.util.ArrayList<>();
+            for (TownRecord t : tm.findAllTownsForPlayerInWorld(self)) {
+                if (!t.getOwnerUuid().equals(self) && t.isMemberPlayer(self)) {
+                    guestTowns.add(t);
+                }
+            }
+            if (guestTowns.isEmpty()) {
+                playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.notInTown"));
+                return null;
+            }
+            if (guestTowns.size() == 1) {
+                return guestTowns.get(0);
+            }
+            PlayerTownJournalState journal = store.getComponent(ref, PlayerTownJournalState.getComponentType());
+            if (journal != null) {
+                UUID active = journal.getActiveTownId();
+                if (active != null) {
+                    for (TownRecord t : guestTowns) {
+                        if (t.getTownId().equals(active)) {
+                            return t;
+                        }
+                    }
+                }
+            }
+            playerRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.leave.specifyTownName"));
+            return null;
         }
     }
 }

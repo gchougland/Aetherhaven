@@ -30,6 +30,7 @@ import com.hexvane.aetherhaven.community.CommunityRequiredMods;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -436,7 +437,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
 
         if (!moderationTab) {
@@ -844,7 +845,7 @@ public final class PlotCraftingPage extends AetherhavenInteractiveCustomUIPage<P
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
 
         SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, CRAFT_COST, allowTreasury);

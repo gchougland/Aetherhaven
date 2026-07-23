@@ -12,6 +12,7 @@ import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -93,7 +94,7 @@ public final class QuestKillProgressSystem extends DeathSystems.OnDeathSystem {
         if (ku == null) {
             return;
         }
-        TownRecord town = tm.findTownForPlayerInWorld(ku.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, killerRef, tm);
         if (town == null) {
             return;
         }

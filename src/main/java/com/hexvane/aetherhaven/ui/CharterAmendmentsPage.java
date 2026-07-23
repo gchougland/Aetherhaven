@@ -56,7 +56,7 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
         if (town == null) {
             commandBuilder.set("#PopHint.TextSpans", Message.translation("aetherhaven_ui_town.aetherhaven.ui.charter.noTown"));
             return;
@@ -231,7 +231,7 @@ public final class CharterAmendmentsPage extends AetherhavenInteractiveCustomUIP
             return;
         }
         var tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownForOwnerInWorld(uc.getUuid());
             if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             return;
         }

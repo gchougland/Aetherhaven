@@ -22,6 +22,7 @@ import com.hexvane.aetherhaven.speech.NpcDialogueSpeech;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
@@ -717,7 +718,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        TownRecord town = resolvePlayerTown(store, ref);
         if (town == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return null;
         }
@@ -893,7 +894,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
     }
 
     @Nullable
-    private static TownRecord resolvePlayerTown(
+    private TownRecord resolvePlayerTown(
         @Nonnull Store<EntityStore> store,
         @Nonnull Ref<EntityStore> playerRef
     ) {
@@ -910,7 +911,16 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return null;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        return tm.findTownForPlayerInWorld(pu.getUuid());
+        if (npcRef != null && npcRef.isValid()) {
+            TownVillagerBinding binding = store.getComponent(npcRef, TownVillagerBinding.getComponentType());
+            if (binding != null) {
+                TownRecord npcTown = tm.getTown(binding.getTownId());
+                if (npcTown != null && npcTown.hasMemberOrOwner(pu.getUuid())) {
+                    return npcTown;
+                }
+            }
+        }
+        return TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
     }
 
     @Nullable
@@ -1067,7 +1077,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        TownRecord town = resolvePlayerTown(store, ref);
         if (town == null || !town.playerCanCompleteQuests(pu.getUuid())) {
             return;
         }

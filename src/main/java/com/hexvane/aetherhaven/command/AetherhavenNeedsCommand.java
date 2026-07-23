@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.command;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.AetherhavenVillagerHandle;
 import com.hexvane.aetherhaven.villager.VillagerNeeds;
@@ -136,10 +138,10 @@ public final class AetherhavenNeedsCommand extends AbstractCommandCollection {
                 () -> {
                     UUID target = null;
                     UUIDComponent playerUc = store.getComponent(ref, UUIDComponent.getComponentType());
+                    TownManager needsTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
                     TownRecord town =
                         playerUc != null
-                            ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin)
-                                .findTownForPlayerInWorld(playerUc.getUuid())
+                            ? TownPlayerResolution.resolveActiveTown(world, store, ref, needsTm)
                             : null;
                     // Prefer NPC role id / town villager resolution (same as other /ah commands).
                     if (town != null && !targetToken.equalsIgnoreCase("Elder")) {

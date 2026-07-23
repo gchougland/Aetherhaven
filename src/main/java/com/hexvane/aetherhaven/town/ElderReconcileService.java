@@ -33,7 +33,7 @@ public final class ElderReconcileService {
 
     public static void onTownMemberPlayerReady(@Nonnull World world, @Nonnull AetherhavenPlugin plugin, @Nonnull UUID playerUuid) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        TownRecord town = tm.findTownForOwnerInWorld(playerUuid);
         if (town == null) {
             return;
         }

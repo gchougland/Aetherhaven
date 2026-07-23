@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownSharedRecipeUnlockService;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -52,7 +53,7 @@ public final class PendingCraftRecipeUnlockTickSystem extends EntityTickingSyste
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
         if (town == null || !town.hasPendingCraftRecipeUnlocks(uc.getUuid())) {
             return;
         }

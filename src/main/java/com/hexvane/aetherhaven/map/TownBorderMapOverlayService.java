@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.ClaimedTerritoryChunkRecord;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.TownTerritoryClaims;
 import com.hexvane.aetherhaven.tourist.TownPortalTravelColor;
@@ -390,7 +391,19 @@ public final class TownBorderMapOverlayService {
     }
 
     TownManager townManager = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-    TownRecord viewerTown = townManager.findTownForPlayerInWorld(playerUuid);
+    TownRecord viewerTown = null;
+    Ref<EntityStore> viewerRef = player.getReference();
+    if (viewerRef != null && viewerRef.isValid()) {
+      Store<EntityStore> store = viewerRef.getStore();
+      PlayerTownJournalState journal = store.getComponent(viewerRef, PlayerTownJournalState.getComponentType());
+      if (journal != null) {
+        TownPlayerResolution.reconcileActiveTownId(townManager, playerUuid, journal);
+      }
+      viewerTown = TownPlayerResolution.resolveActiveTown(world, store, viewerRef, townManager, journal);
+    }
+    if (viewerTown == null) {
+      viewerTown = TownPlayerResolution.resolveFallbackAffiliatedTown(townManager, playerUuid);
+    }
     UUID viewerTownId = viewerTown != null ? viewerTown.getTownId() : null;
 
     LongSet loaded = WorldMapTrackerCompat.getLoadedChunks(player);

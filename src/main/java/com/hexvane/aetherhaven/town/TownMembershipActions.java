@@ -36,7 +36,7 @@ public final class TownMembershipActions {
         if (target.getUuid().equals(inviterUuid)) {
             return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.cannotInviteSelf");
         }
-        if (tm.isPlayerAffiliatedInWorld(target.getUuid())) {
+        if (town.hasMemberOrOwner(target.getUuid())) {
             return Message.translation("aetherhaven_town.aetherhaven.town.invite.err.alreadyInTown");
         }
         town.addPendingInvite(new TownPendingInvite(target.getUuid(), System.currentTimeMillis(), inviterUuid));
@@ -82,6 +82,7 @@ public final class TownMembershipActions {
             return Message.translation("aetherhaven_town.aetherhaven.town.kick.err.notMember");
         }
         tm.updateTown(town);
+        TownMembershipActionsSupport.clearActiveTownIfMember(world, tid, town.getTownId());
         String display = town.getDisplayName();
         target.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.kick.removedYou").param("town", display));
         actorRef.sendMessage(
@@ -185,6 +186,7 @@ public final class TownMembershipActions {
                 Message.translation("aetherhaven_town.aetherhaven.town.kick.removedYou").param("town", town.getDisplayName())
             );
         }
+        TownMembershipActionsSupport.clearActiveTownIfMember(world, memberUuid, town.getTownId());
         actorRef.sendMessage(Message.translation("aetherhaven_town.aetherhaven.town.kick.removedGeneric"));
         return null;
     }

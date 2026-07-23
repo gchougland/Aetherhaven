@@ -92,8 +92,7 @@ public final class InnBellUseInteraction extends SimpleBlockInteraction {
         }
 
         UUIDComponent uc = commandBuffer.getComponent(playerEntityRef, UUIDComponent.getComponentType());
-        TownRecord memberTown = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
-        if (memberTown == null || !memberTown.getTownId().equals(blockTown.getTownId())) {
+        if (uc == null || !blockTown.hasMemberOrOwner(uc.getUuid())) {
             sendFeedback(playerEntityRef, commandBuffer, "notAllowed");
             context.getState().state = InteractionState.Failed;
             return;

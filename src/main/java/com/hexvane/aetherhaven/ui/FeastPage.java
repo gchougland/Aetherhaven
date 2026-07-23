@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.inventory.InventoryMaterials;
 import com.hexvane.aetherhaven.reputation.VillagerReputationService;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -74,7 +75,7 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             commandBuilder.set("#RightTitle.TextSpans", Message.translation("aetherhaven_feasts_production.aetherhaven.ui.feast.noTown"));
             commandBuilder.set("#ConfirmFeast.Disabled", true);
@@ -237,7 +238,7 @@ public final class FeastPage extends AetherhavenInteractiveCustomUIPage<FeastPag
         if (uc == null || pr == null) {
             return;
         }
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
             if (town == null || !town.playerCanManageConstructions(uc.getUuid())) {
             return;
         }

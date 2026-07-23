@@ -5,6 +5,7 @@ import com.hexvane.aetherhaven.patrol.GuardFollowPlayerSystem;
 import com.hexvane.aetherhaven.rts.RtsGuardDirectory;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.CommandBuffer;
 import com.hypixel.hytale.component.Ref;
@@ -37,7 +38,7 @@ public final class BattleHornService {
             return;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, playerRef, tm);
         if (town == null || !town.hasMemberOrOwner(playerUuid)) {
             return;
         }
@@ -63,7 +64,7 @@ public final class BattleHornService {
             return null;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, playerRef, tm);
         if (town == null || !town.hasMemberOrOwner(pu.getUuid())) {
             return null;
         }

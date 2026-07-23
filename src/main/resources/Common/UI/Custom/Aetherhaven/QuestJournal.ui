@@ -7,6 +7,9 @@ $C = "../Common.ui";
 @ContentHeight = 630;
 @TabBodyHeight = 540;
 @RewardSlotSize = 48;
+@ActiveTownPanelOverlap = 0;
+@ActiveTownDropdownWidth = 420;
+@ActiveTownPanelWidth = 448;
 
 $C.@PageOverlay {
   LayoutMode: Top;
@@ -28,7 +31,11 @@ $C.@PageOverlay {
           Anchor: (Horizontal: 0);
           Padding: (Bottom: 12);
 
-          Group #TopNavStrip {
+          Group #TopNavColumn {
+            LayoutMode: Top;
+            Anchor: (Width: @MainWidth);
+
+            Group #TopNavStrip {
             LayoutMode: Middle;
             Anchor: (Width: @MainWidth);
             Padding: @NavStripPad;
@@ -74,6 +81,7 @@ $C.@PageOverlay {
                 Anchor: (Height: @NavTabHeight);
               }
             }
+          }
           }
         }
 
@@ -1017,11 +1025,49 @@ $C.@PageOverlay {
                 }
               }
             }
+          }
+        }
+      }
+
+      Group #ActiveTownRow {
+        LayoutMode: Middle;
+        Anchor: (Horizontal: 0, Top: @ActiveTownPanelOverlap);
+        Visible: false;
+
+        Group #ActiveTownPanel {
+          LayoutMode: Top;
+          Anchor: (Width: @ActiveTownPanelWidth);
+          Padding: (Top: 18, Bottom: 12, Horizontal: 14);
+          Background: (TexturePath: "../Common/ContainerPatch.png", Border: 23);
+
+          Label #ActiveTownLabel {
+            Anchor: (Bottom: 10, Horizontal: 0);
+            Style: (...$C.@DefaultLabelStyle, RenderBold: true, FontSize: 15, TextColor: #e8dcc4, HorizontalAlignment: Center);
+            Text: "";
+          }
+
+          Group #ActiveTownDropdownRow {
+            LayoutMode: Left;
+            Anchor: (Left: 0, Right: 0);
+
+            Group {
+              FlexWeight: 1;
+            }
+
+            Group #ActiveTownDropdown {
+              Anchor: (Width: @ActiveTownDropdownWidth, Height: 40);
+
+              $C.@DropdownBox #Input { @Anchor = (Left: 0, Right: 0); }
+            }
+
+            Group {
+              FlexWeight: 1;
             }
           }
         }
       }
     }
+  }
 
     Group #JournalAbandonModal {
       LayoutMode: Middle;

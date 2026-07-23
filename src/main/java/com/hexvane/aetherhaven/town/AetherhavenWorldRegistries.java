@@ -205,7 +205,7 @@ public final class AetherhavenWorldRegistries {
         @Nullable TownManager prefer
     ) {
         if (prefer != null) {
-            TownRecord local = prefer.findTownForPlayerInWorld(playerUuid);
+            TownRecord local = TownPlayerResolution.resolveFallbackAffiliatedTown(prefer, playerUuid);
             if (local != null) {
                 return local;
             }
@@ -214,7 +214,7 @@ public final class AetherhavenWorldRegistries {
             if (tm == prefer) {
                 continue;
             }
-            TownRecord t = tm.findTownForPlayerInWorld(playerUuid);
+            TownRecord t = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, playerUuid);
             if (t != null) {
                 return t;
             }

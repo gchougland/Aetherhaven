@@ -8,6 +8,7 @@ import com.hexvane.aetherhaven.geode.GeodeLootFiles;
 import com.hexvane.aetherhaven.geode.GeodeLootTable;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -165,7 +166,7 @@ public final class GeodeOpenPage extends AetherhavenInteractiveCustomUIPage<Geod
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
         SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
         if (paid == null) {

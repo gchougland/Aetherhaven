@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.jewelry.JewelryItemIds;
 import com.hexvane.aetherhaven.jewelry.JewelryMetadata;
@@ -281,7 +282,7 @@ public final class JewelryAppraisalPage extends AetherhavenInteractiveCustomUIPa
         TownManager tm =
             plugin != null ? AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin) : null;
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        TownRecord town = plugin != null && uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = plugin != null && uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
         SpendBreakdown paid = GoldCoinPayment.trySpendReturningBreakdown(town, inv, goldCost, allowTreasury);
         if (paid == null) {

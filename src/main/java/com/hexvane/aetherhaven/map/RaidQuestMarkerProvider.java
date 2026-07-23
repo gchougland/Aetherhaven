@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.protocol.packets.worldmap.MapMarker;
 import com.hypixel.hytale.server.core.Message;
@@ -38,7 +39,7 @@ public final class RaidQuestMarkerProvider implements WorldMapManager.MarkerProv
         UUID playerUuid = player.getUuid();
 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+        TownRecord town = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, playerUuid);
         if (town == null || !world.getName().equals(town.getWorldName())) {
             return;
         }

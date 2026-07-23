@@ -25,7 +25,7 @@ aetherhaven.common.invalidVillager=Invalid villager.
 
 # === Town & charter (founding, display name, charter item info) ===
 # Town / charter
-aetherhaven.charter.alreadyInTown=You are already part of a town in this world. Leave it before founding a new one.
+aetherhaven.charter.alreadyInTown=You already own a town in this world.
 aetherhaven.charter.notInPersistentWorld=You cannot found a town here. Return to your main world first.
 aetherhaven.charter.townFounded=Town founded: {name}. The Village Elder has arrived. Use the charter to rename the town.
 aetherhaven.charter.tooCloseToTown=Too close to {name}. Your town border would overlap theirs. Move farther away and try again.

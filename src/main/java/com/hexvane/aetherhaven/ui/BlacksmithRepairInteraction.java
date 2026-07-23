@@ -6,6 +6,7 @@ import com.hexvane.aetherhaven.economy.GoldCoinPayment;
 import com.hexvane.aetherhaven.economy.GoldCoinPayment.SpendBreakdown;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -91,7 +92,7 @@ public final class BlacksmithRepairInteraction extends ChoiceInteraction {
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
         UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
-        TownRecord town = uc != null ? tm.findTownForPlayerInWorld(uc.getUuid()) : null;
+        TownRecord town = uc != null ? TownPlayerResolution.resolveActiveTown(world, store, ref, tm) : null;
         boolean allowTreasury = uc != null && town != null && town.playerCanSpendTreasuryGold(uc.getUuid());
         if (!GoldCoinPayment.canAfford(town, inv, cost, allowTreasury)) {
             playerRef.sendMessage(Message.translation("aetherhaven_misc.aetherhaven.blacksmith.repair.insufficientGold").color("#ff5555"));

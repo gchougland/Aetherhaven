@@ -8,6 +8,8 @@ import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.WallSegmentRecord;
@@ -62,7 +64,7 @@ public final class WallPlacementEditHelper {
             return null;
         }
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             playerRef.sendMessage(Message.translation("aetherhaven_wall_placement.aetherhaven.ui.wallplacement.errorNeedTown"));
             return null;

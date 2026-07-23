@@ -8,10 +8,13 @@ import com.hypixel.hytale.component.Component;
 import com.hypixel.hytale.component.ComponentRegistryProxy;
 import com.hypixel.hytale.component.ComponentType;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownRecord;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -147,6 +150,12 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
                 c -> c.dialogueSpeechVolumePercent
             )
             .add()
+            .append(
+                new KeyedCodec<>("ActiveTownId", Codec.STRING),
+                (c, v) -> c.activeTownId = v != null ? v.trim() : "",
+                c -> c.activeTownId.isEmpty() ? null : c.activeTownId
+            )
+            .add()
             .build();
 
     @Nullable
@@ -200,6 +209,9 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
     /** 0–100; default 70. */
     private int dialogueSpeechVolumePercent = 70;
 
+    @Nonnull
+    private String activeTownId = "";
+
     public PlayerTownJournalState() {}
 
     @Nonnull
@@ -226,7 +238,37 @@ public final class PlayerTownJournalState implements Component<EntityStore> {
         c.hudPinnedQuests.addAll(hudPinnedQuests);
         c.dialogueSpeechEnabled = dialogueSpeechEnabled;
         c.dialogueSpeechVolumePercent = dialogueSpeechVolumePercent;
+        c.activeTownId = activeTownId;
         return c;
+    }
+
+    @Nullable
+    public UUID getActiveTownId() {
+        if (activeTownId.isEmpty()) {
+            return null;
+        }
+        try {
+            return UUID.fromString(activeTownId);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    public void setActiveTownId(@Nullable UUID townId) {
+        activeTownId = townId != null ? townId.toString() : "";
+    }
+
+    public void clearActiveTownId() {
+        activeTownId = "";
+    }
+
+    public boolean isActiveTownValid(@Nonnull TownManager tm, @Nonnull UUID playerUuid) {
+        UUID id = getActiveTownId();
+        if (id == null) {
+            return false;
+        }
+        TownRecord t = tm.getTown(id);
+        return t != null && t.hasMemberOrOwner(playerUuid);
     }
 
     @Nonnull

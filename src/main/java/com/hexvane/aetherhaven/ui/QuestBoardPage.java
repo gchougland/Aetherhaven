@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.questboard.QuestBoardSlotState;
 import com.hexvane.aetherhaven.questboard.TownQuestBoardRank;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.codec.Codec;
 import com.hypixel.hytale.codec.KeyedCodec;
@@ -82,7 +83,7 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         }
 
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             showBlocked(commandBuilder, Message.translation("aetherhaven_ui_shell.aetherhaven.ui.questJournal.needTown"));
             return;
@@ -351,7 +352,7 @@ public final class QuestBoardPage extends AetherhavenInteractiveCustomUIPage<Que
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             return;
         }

@@ -44,7 +44,7 @@ public final class TownFoundingService {
         @Nonnull Random random
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        if (tm.findTownForPlayerInWorld(owner) != null) {
+        if (tm.findTownForOwnerInWorld(owner) != null) {
             return null;
         }
         int territoryRadius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());
@@ -73,7 +73,7 @@ public final class TownFoundingService {
         @Nonnull Random random
     ) {
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        if (tm.findTownForPlayerInWorld(owner) != null) {
+        if (tm.findTownForOwnerInWorld(owner) != null) {
             return null;
         }
         int territoryRadius = TownManager.defaultTerritoryRadiusChunks(plugin.getConfig().get());

@@ -73,47 +73,47 @@ public final class QuestBoardOnlineDawnService {
             }
             LAST_ONLINE_DAWN_BY_PLAYER.put(playerUuid, currentDawn);
 
-            TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
-            if (town == null || !town.playerHasQuestPermission(playerUuid)) {
-                continue;
-            }
-
             Random rng = new Random(currentDawn ^ playerUuid.getMostSignificantBits());
-            QuestBoardService.refreshUnacceptedSlots(town, store, catalog, rng);
-            town.setQuestBoardLastRefreshOnlineDawnDay(currentDawn);
+            for (TownRecord town : tm.findAllTownsForPlayerInWorld(playerUuid)) {
+                if (!town.playerHasQuestPermission(playerUuid)) {
+                    continue;
+                }
 
-            List<String> posterUuids = new ArrayList<>();
-            for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
-                if (slot.stateEnum() != QuestBoardSlotState.OFFER) {
-                    continue;
-                }
-                String giver = slot.getGiverEntityUuid();
-                if (giver != null && !giver.isBlank()) {
-                    posterUuids.add(giver);
-                }
-            }
-            if (!posterUuids.isEmpty()) {
-                // Must match VillagerAutonomySystem decision clock (TimeResource), not wall-clock millis.
-                long nowMs = VillagerAutonomySystem.resolveAutonomyNowMs(store);
-                QuestBoardPostVisitQueue.enqueueOfferGiversForDawn(town.getTownId(), posterUuids, nowMs, currentDawn);
-            }
+                QuestBoardService.refreshUnacceptedSlots(town, store, catalog, rng);
+                town.setQuestBoardLastRefreshOnlineDawnDay(currentDawn);
 
-            boolean townChanged = true;
-            for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
-                if (!slot.isAccepted()) {
-                    continue;
+                List<String> posterUuids = new ArrayList<>();
+                for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
+                    if (slot.stateEnum() != QuestBoardSlotState.OFFER) {
+                        continue;
+                    }
+                    String giver = slot.getGiverEntityUuid();
+                    if (giver != null && !giver.isBlank()) {
+                        posterUuids.add(giver);
+                    }
                 }
-                String acceptor = slot.getAcceptedByPlayerUuid();
-                if (acceptor == null || !acceptor.equals(playerUuid.toString())) {
-                    continue;
+                if (!posterUuids.isEmpty()) {
+                    long nowMs = VillagerAutonomySystem.resolveAutonomyNowMs(store);
+                    QuestBoardPostVisitQueue.enqueueOfferGiversForDawn(town.getTownId(), posterUuids, nowMs, currentDawn);
                 }
-                slot.setOnlineDaysElapsed(slot.getOnlineDaysElapsed() + 1);
-                if (slot.getOnlineDaysElapsed() >= slot.getDaysLimit()) {
-                    QuestBoardService.failExpiredQuest(town, tm, slot, store, catalog, rng, pr);
+
+                boolean townChanged = true;
+                for (QuestBoardSlotRecord slot : town.getQuestBoardSlots()) {
+                    if (!slot.isAccepted()) {
+                        continue;
+                    }
+                    String acceptor = slot.getAcceptedByPlayerUuid();
+                    if (acceptor == null || !acceptor.equals(playerUuid.toString())) {
+                        continue;
+                    }
+                    slot.setOnlineDaysElapsed(slot.getOnlineDaysElapsed() + 1);
+                    if (slot.getOnlineDaysElapsed() >= slot.getDaysLimit()) {
+                        QuestBoardService.failExpiredQuest(town, tm, slot, store, catalog, rng, pr);
+                    }
                 }
-            }
-            if (townChanged) {
-                tm.updateTown(town);
+                if (townChanged) {
+                    tm.updateTown(town);
+                }
             }
         }
 

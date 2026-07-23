@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.rescue;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hypixel.hytale.component.ArchetypeChunk;
 import com.hypixel.hytale.component.CommandBuffer;
@@ -47,15 +48,16 @@ public final class RescueVillagerBreakBlockSystem extends EntityEventSystem<Enti
             return;
         }
         World world = store.getExternalData().getWorld();
+        Vector3i pos = event.getTargetBlock();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(pu.getUuid());
+        TownRecord town =
+            TownPlayerResolution.resolveAffiliatedTownAtBlock(tm, world.getName(), pu.getUuid(), pos.x, pos.z);
         if (town == null) {
             return;
         }
         if (town.hasQuestCompleted(trigger.rescueQuestId())) {
             return;
         }
-        Vector3i pos = event.getTargetBlock();
         UUID townId = town.getTownId();
         UUID breakerUuid = pu.getUuid();
         world.execute(() -> {

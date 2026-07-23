@@ -99,7 +99,7 @@ public final class TownCommandResolution {
     ) {
         String trimmed = townDisplayName != null ? townDisplayName.trim() : "";
         if (trimmed.isEmpty()) {
-            TownRecord t = tm.findTownForPlayerInWorld(senderUuid);
+            TownRecord t = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, senderUuid);
             if (t == null) {
                 return error(Message.translation("aetherhaven_town.aetherhaven.town.resolve.notInTown"));
             }
@@ -181,7 +181,7 @@ public final class TownCommandResolution {
                         .param("name", playerFlag.trim())
                 );
             }
-            TownRecord town = tm.findTownForPlayerInWorld(playerUuid);
+            TownRecord town = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, playerUuid);
             if (town == null) {
                 return error(
                     Message.translation("aetherhaven_town.aetherhaven.town.resolve.playerNoTown")
@@ -202,7 +202,7 @@ public final class TownCommandResolution {
             }
             return ok(town, town.getOwnerUuid().equals(senderUuid));
         }
-        TownRecord town = tm.findTownForPlayerInWorld(senderUuid);
+        TownRecord town = TownPlayerResolution.resolveFallbackAffiliatedTown(tm, senderUuid);
         if (town == null) {
             return error(Message.translation("aetherhaven_common.aetherhaven.common.noTownInWorld"));
         }

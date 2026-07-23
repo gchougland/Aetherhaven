@@ -299,6 +299,10 @@ public final class AetherhavenUiLocalization {
         b.set("#TabGuide.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.guide"));
         b.set("#TabQuests.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.quests"));
         b.set("#TabSettings.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.tab.settings"));
+        b.set(
+            "#ActiveTownLabel.TextSpans",
+            t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.activeTownLabel")
+        );
         b.set("#TownVillagersHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townVillagersHeading"));
         b.set("#TownPlotsHeading.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.townPlotsHeading"));
         b.set("#SettingsShowBordersLabel.TextSpans", t("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.showTownBorders"));

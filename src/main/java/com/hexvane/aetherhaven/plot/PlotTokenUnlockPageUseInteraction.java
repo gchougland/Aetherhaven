@@ -106,7 +106,7 @@ public final class PlotTokenUnlockPageUseInteraction extends SimpleInstantIntera
                 commandBuffer.getStore().getExternalData().getWorld(),
                 plugin
             );
-            TownRecord town = tm.findTownForPlayerInWorld(playerUuid.getUuid());
+            TownRecord town = tm.findTownForOwnerInWorld(playerUuid.getUuid());
             if (town != null && QuestProgressionService.onBlueprintLearned(plugin, town, constructionId)) {
                 tm.updateTown(town);
             }

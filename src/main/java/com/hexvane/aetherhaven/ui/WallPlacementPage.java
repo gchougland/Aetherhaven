@@ -23,6 +23,7 @@ import com.hexvane.aetherhaven.town.PlotFootprintRecord;
 import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.wall.WallCardinal;
 import com.hexvane.aetherhaven.wall.WallPieceGeometry;
@@ -393,7 +394,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                         return;
                     }
                     TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                    TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                    TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
                     if (town == null || !session.continueFromEditTarget(town, plotId, segmentId)) {
                         sendError(store, ref, Message.translation(MSG + ".errorNoWallHere"));
                         rebuild();
@@ -648,7 +649,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         String err;
         if (town == null) {
             err = "need town";
@@ -886,7 +887,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             return;
         }
@@ -916,7 +917,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
         if (town == null) {
             sendError(store, ref, Message.translation(MSG + ".errorNeedTown"));
             return false;
@@ -1045,7 +1046,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
                 if (town != null) {
                     WallPlacementRemoveService.removeWallPlot(world, plugin, town, undone.plotId, store);
                 }
@@ -1074,7 +1075,7 @@ public final class WallPlacementPage extends AetherhavenInteractiveCustomUIPage<
                     return;
                 }
                 TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-                TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+                TownRecord town = TownPlayerResolution.resolveTownAtPlayerOrActive(world, store, ref, tm);
                 if (town == null) {
                     scheduleCancel(ref, store);
                     return;

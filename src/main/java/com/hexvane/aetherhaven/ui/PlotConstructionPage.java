@@ -2140,7 +2140,7 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
+        TownRecord town = tm.findTownOwningPlot(plotId);
         if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
             return "Only the town owner can pick up this plot.";
         }
@@ -2187,8 +2187,8 @@ public final class PlotConstructionPage extends AetherhavenInteractiveCustomUIPa
         }
         World world = store.getExternalData().getWorld();
         TownManager tm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
-        TownRecord town = tm.findTownForPlayerInWorld(uc.getUuid());
-        if (town == null) {
+        TownRecord town = tm.findTownOwningPlot(plotId);
+        if (town == null || !town.getOwnerUuid().equals(uc.getUuid())) {
             return;
         }
         PlotInstance piPickup = town.findPlotById(plotId);

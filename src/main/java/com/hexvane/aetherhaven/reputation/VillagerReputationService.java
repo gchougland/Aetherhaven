@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.reputation;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
 import com.hexvane.aetherhaven.town.TownManager;
+import com.hexvane.aetherhaven.town.TownPlayerResolution;
 import com.hexvane.aetherhaven.town.TownRecord;
 import com.hexvane.aetherhaven.villager.TownVillagerBinding;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
@@ -42,7 +43,8 @@ public final class VillagerReputationService {
         if (uuidComp == null) {
             return null;
         }
-        return tm.findTownForPlayerInWorld(uuidComp.getUuid());
+        World world = store.getExternalData().getWorld();
+        return TownPlayerResolution.resolveActiveTown(world, store, playerRef, tm);
     }
 
     /**
