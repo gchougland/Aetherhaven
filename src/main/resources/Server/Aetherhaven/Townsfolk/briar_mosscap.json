@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 2
+    }
+  ]
 }

@@ -1,5 +1,6 @@
 package com.hexvane.aetherhaven.quest;
 
+import com.hexvane.aetherhaven.AetherhavenConstants;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
@@ -8,6 +9,7 @@ import com.hexvane.aetherhaven.town.PlotInstance;
 import com.hexvane.aetherhaven.town.PlotInstanceState;
 import com.hexvane.aetherhaven.town.ResidentNpcRecord;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -26,6 +28,7 @@ public final class QuestProgressionService {
     public static final String CONSTRUCTION_BUILT = "construction_built";
     public static final String ASSIGN_HOUSE_RESIDENT = "assign_house_resident";
     public static final String DIALOGUE_TURN_IN = "dialogue_turn_in";
+    public static final String TOURIST_MOVE_IN_ITEMS = "tourist_move_in_items";
 
     private QuestProgressionService() {}
 
@@ -71,7 +74,9 @@ public final class QuestProgressionService {
         boolean changed = false;
         for (int i = 0; i <= furthestProven; i++) {
             QuestObjective objective = objectives.get(i);
-            if (!isKillObjective(objective) && hasId(objective)) {
+            if (!isKillObjective(objective)
+                && hasId(objective)
+                && mayImputeObjectiveCompleteFromWorldState(def, objective)) {
                 changed |= town.completeQuestObjective(questId, objective.id());
             }
         }
@@ -86,7 +91,107 @@ public final class QuestProgressionService {
                 changed |= town.completeQuestObjective(questId, objective.id());
             }
         }
+        changed |= migrateTouristMoveInGiftFromLegacyTokenProgress(plugin, town, questId, def);
         return changed;
+    }
+
+    /** Saves that started the house quest before move in items: token progress implies gift was satisfied. */
+    private static boolean migrateTouristMoveInGiftFromLegacyTokenProgress(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull String questId,
+        @Nonnull QuestDefinition def
+    ) {
+        if (!AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK.equals(questId.trim())) {
+            return false;
+        }
+        if (!deferPlotTokenOnQuestStart(def)) {
+            return false;
+        }
+        if (!town.isQuestObjectiveComplete(questId, TouristMoveInRequirements.MOVE_IN_OBJECTIVE_ID)) {
+            for (QuestObjective o : def.objectivesOrEmpty()) {
+                if (isKind(o, PLOT_TOKEN_RECEIVED) && hasId(o) && town.isQuestObjectiveComplete(questId, o.id())) {
+                    return town.completeQuestObjective(questId, TouristMoveInRequirements.MOVE_IN_OBJECTIVE_ID);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Later durable progress (e.g. an existing house plot) must not skip player gated steps such as move in gifts or
+     * deferred plot tokens.
+     */
+    static boolean mayImputeObjectiveCompleteFromWorldState(
+        @Nonnull QuestDefinition def,
+        @Nonnull QuestObjective objective
+    ) {
+        if (isKind(objective, TOURIST_MOVE_IN_ITEMS)) {
+            return false;
+        }
+        if (isKind(objective, PLOT_TOKEN_RECEIVED) && deferPlotTokenOnQuestStart(def)) {
+            return false;
+        }
+        return true;
+    }
+
+    /** When the first gameplay objective is move in items, plot tokens are granted after delivery. */
+    public static boolean deferPlotTokenOnQuestStart(@Nullable QuestDefinition def) {
+        if (def == null) {
+            return false;
+        }
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (isJournalObjective(o)) {
+                continue;
+            }
+            return isKind(o, TOURIST_MOVE_IN_ITEMS);
+        }
+        return false;
+    }
+
+    public static boolean completeTouristMoveInItems(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull String questId
+    ) {
+        reconcile(plugin, town, questId);
+        QuestObjective current = currentObjective(plugin, town, questId);
+        if (current == null || !isKind(current, TOURIST_MOVE_IN_ITEMS) || !hasId(current)) {
+            return false;
+        }
+        if (!TouristMoveInRequirements.MOVE_IN_OBJECTIVE_ID.equalsIgnoreCase(current.id().trim())) {
+            return false;
+        }
+        return town.completeQuestObjective(questId, current.id());
+    }
+
+    public static boolean isQuestObjectiveComplete(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        reconcile(plugin, town, questId);
+        return town.isQuestObjectiveComplete(questId, objectiveId.trim());
+    }
+
+    public static boolean isQuestObjectiveIncomplete(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        QuestDefinition def = plugin.getQuestCatalog().get(questId);
+        if (def == null || !town.hasQuestActive(questId)) {
+            return false;
+        }
+        reconcile(plugin, town, questId);
+        for (QuestObjective o : def.objectivesOrEmpty()) {
+            if (o.id() != null && objectiveId.trim().equalsIgnoreCase(o.id().trim())) {
+                return !isObjectiveComplete(town, questId, o);
+            }
+        }
+        return false;
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.dialogue.data;
 
 import com.google.gson.JsonObject;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nonnull;
@@ -41,6 +42,12 @@ public final class DialogueChoiceDefinition {
      */
     @Nullable
     private String icon;
+    /**
+     * Items the player must hold for this choice (inventory check for grey-out; shown as icons on the choice row).
+     * When empty, the dialogue UI may infer requirements from {@link #icon} / actions (e.g. tourist move-in gifts).
+     */
+    @Nullable
+    private List<MaterialRequirement> itemRequirements;
     @Nullable
     private List<JsonObject> actions;
 
@@ -90,6 +97,18 @@ public final class DialogueChoiceDefinition {
     @Nullable
     public String getIcon() {
         return icon;
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> getItemRequirements() {
+        if (itemRequirements == null || itemRequirements.isEmpty()) {
+            return List.of();
+        }
+        return Collections.unmodifiableList(itemRequirements);
+    }
+
+    public void setItemRequirements(@Nullable List<MaterialRequirement> itemRequirements) {
+        this.itemRequirements = itemRequirements;
     }
 
     public void setIcon(@Nullable String icon) {

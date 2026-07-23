@@ -13,6 +13,12 @@
   },
   "objectives": [
     {
+      "id": "gift",
+      "kind": "tourist_move_in_items",
+      "text": "Bring the visitor what they asked for.",
+      "textLangKey": "aetherhaven_story_quests.aetherhaven.storyQuests.q_house_townsfolk.objective.gift"
+    },
+    {
       "id": "token",
       "kind": "plot_token_received",
       "text": "Talk to the visitor and take a house plot token.",

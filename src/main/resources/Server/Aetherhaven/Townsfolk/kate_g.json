@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Charcoal",
+      "count": 2
+    }
+  ]
 }

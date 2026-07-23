@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Motes_Light",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    }
+  ]
 }

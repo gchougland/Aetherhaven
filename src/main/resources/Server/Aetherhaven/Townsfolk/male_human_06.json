@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Pie_Meat",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 2
+    }
+  ]
 }

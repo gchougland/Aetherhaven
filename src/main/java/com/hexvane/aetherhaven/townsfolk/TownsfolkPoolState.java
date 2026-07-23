@@ -51,7 +51,9 @@ public final class TownsfolkPoolState {
         List<String> out = new ArrayList<>();
         for (TownsfolkCharacterDefinition def : catalog.allById().values()) {
             String id = def.getId();
-            if (!isCheckedOut(townId, id) && def.supportsAssignment(assignmentKind)) {
+            if (!isCheckedOut(townId, id)
+                && def.supportsAssignment(assignmentKind)
+                && TownsfolkCharacterAvailability.isEligibleForPoolDraw(def)) {
                 out.add(id);
             }
         }
@@ -81,7 +83,9 @@ public final class TownsfolkPoolState {
         List<String> out = new ArrayList<>();
         for (TownsfolkCharacterDefinition def : catalog.allById().values()) {
             String id = def.getId();
-            if (!isCheckedOut(townId, id) && def.supportsAssignment(TownsfolkAssignmentKinds.GUARD)) {
+            if (!isCheckedOut(townId, id)
+                && def.supportsAssignment(TownsfolkAssignmentKinds.GUARD)
+                && TownsfolkCharacterAvailability.isEligibleForPoolDraw(def)) {
                 out.add(id);
             }
         }

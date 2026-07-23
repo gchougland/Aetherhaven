@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Candy_Cane",
+      "count": 3
+    }
+  ]
 }

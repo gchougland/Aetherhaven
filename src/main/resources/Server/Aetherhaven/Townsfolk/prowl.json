@@ -15,5 +15,11 @@
     "guard"
   ],
   "befriendable": false,
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Kebab_Mushroom",
+      "count": 2
+    }
+  ]
 }

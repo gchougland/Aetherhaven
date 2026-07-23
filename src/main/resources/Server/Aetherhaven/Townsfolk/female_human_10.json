@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Bar_Iron",
+      "count": 1
+    }
+  ]
 }

@@ -14,5 +14,11 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Kebab_Vegetable",
+      "count": 2
+    }
+  ]
 }

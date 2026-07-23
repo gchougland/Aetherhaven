@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner;
 import com.hexvane.aetherhaven.asset.AetherhavenPackAssetScanner.PackJsonFile;
 import com.hexvane.aetherhaven.asset.ClasspathResourceScanner;
+import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterAvailability;
 import com.hypixel.hytale.logger.HytaleLogger;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -53,6 +54,11 @@ public final class TownsfolkCharacterCatalog {
                     LOGGER.atSevere().withCause(e).log("Failed to load townsfolk character %s", f.absolutePath());
                 }
             }
+            LOGGER.atInfo().log(
+                "Loaded %s townsfolk character definition(s) from %s asset pack file(s)",
+                byId.size(),
+                packFiles.size()
+            );
         } else {
             for (String path : ClasspathResourceScanner.listJsonFiles(classLoader, AetherhavenAssetPaths.townsfolkPrefix())) {
                 try (InputStream in = classLoader.getResourceAsStream(path)) {
@@ -63,8 +69,8 @@ public final class TownsfolkCharacterCatalog {
                     LOGGER.atSevere().withCause(e).log("Failed to load townsfolk character %s", path);
                 }
             }
+            LOGGER.atInfo().log("Loaded %s townsfolk character definition(s) from classpath", byId.size());
         }
-        LOGGER.atInfo().log("Loaded %s townsfolk character definition(s)", byId.size());
         return new TownsfolkCharacterCatalog(Collections.unmodifiableMap(byId));
     }
 
@@ -116,6 +122,23 @@ public final class TownsfolkCharacterCatalog {
         if (def.getModelAssetId().isEmpty()) {
             LOGGER.atWarning().log("Skipping townsfolk %s: modelAssetId is empty (%s)", id, label);
             return;
+        }
+        if (def.supportsAssignment("tourist") && def.getMoveInRequirements().isEmpty()) {
+            LOGGER.atWarning().log("Townsfolk %s allows tourist but has no moveInRequirements (%s)", id, label);
+        }
+        for (var req : def.getMoveInRequirements()) {
+            String itemId = req.getItemId();
+            if (itemId == null || itemId.isBlank()) {
+                LOGGER.atWarning().log("Townsfolk %s moveInRequirements entry missing itemId (%s)", id, label);
+            }
+        }
+        var pluginReq = def.getRequiresOptionalPlugin();
+        if (pluginReq != null && pluginReq.isComplete() && !TownsfolkCharacterAvailability.isOptionalPluginLoaded(pluginReq)) {
+            LOGGER.atInfo().log(
+                "Townsfolk %s requires plugin %s (not loaded; hidden from new pool draws)",
+                id,
+                pluginReq.displayId()
+            );
         }
         byId.put(id, def);
     }

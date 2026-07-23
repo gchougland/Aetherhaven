@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Crystal_White",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 2
+    }
+  ]
 }

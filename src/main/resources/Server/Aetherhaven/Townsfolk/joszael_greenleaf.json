@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 2
+    }
+  ]
 }

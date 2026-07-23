@@ -462,7 +462,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                 quests,
                 boardCatalog,
                 entityStore,
-                plugin
+                plugin,
+                ref
             );
 
             boolean canAbandon =
@@ -1685,7 +1686,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         @Nonnull QuestCatalog quests,
         @Nonnull QuestBoardCatalog boardCatalog,
         @Nonnull Store<EntityStore> entityStore,
-        @Nonnull AetherhavenPlugin plugin
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull Ref<EntityStore> viewerRef
     ) {
         if (WorldQuestIds.isWorldQuestRow(sel)) {
             String questId = WorldQuestIds.parseWorldQuestId(sel);
@@ -1695,21 +1697,19 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
             }
             commandBuilder.set("#QuestDetailTitle.TextSpans", quests.titleMessage(questId));
             commandBuilder.set("#QuestDetailDescription.TextSpans", quests.descriptionMessage(questId));
-            boolean hasSteps = quests.hasObjectives(questId);
-            commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
-            commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
-            if (hasSteps) {
-                commandBuilder.set(
-                    "#QuestStepsHeading.TextSpans",
-                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
-                );
-                commandBuilder.set(
-                    "#QuestStepsBody.TextSpans",
-                    quests.objectivesMessage(questId, null, entityStore, plugin)
+            applyQuestStepsHeading(commandBuilder, quests.hasObjectives(questId));
+            if (quests.hasObjectives(questId)) {
+                QuestJournalObjectivesUi.applyStoryQuest(
+                    commandBuilder,
+                    quests,
+                    questId,
+                    null,
+                    worldProgress,
+                    entityStore,
+                    plugin
                 );
             } else {
-                commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-                commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+                QuestJournalObjectivesUi.clear(commandBuilder);
             }
             applyQuestRewardPreview(commandBuilder, quests, questId);
             return;
@@ -1743,10 +1743,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                             .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
                     )
             );
-            commandBuilder.set("#QuestStepsHeading.Visible", false);
-            commandBuilder.set("#QuestStepsBody.Visible", false);
-            commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-            commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+            applyQuestStepsHeading(commandBuilder, false);
+            QuestJournalObjectivesUi.clear(commandBuilder);
             if (town != null) {
                 applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
             } else {
@@ -1776,15 +1774,14 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
                                 .param("days", String.valueOf(QuestBoardService.daysRemaining(boardSlot)))
                         )
                 );
-                commandBuilder.set("#QuestStepsHeading.Visible", true);
-                commandBuilder.set("#QuestStepsBody.Visible", true);
-                commandBuilder.set(
-                    "#QuestStepsHeading.TextSpans",
-                    Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
-                );
-                commandBuilder.set(
-                    "#QuestStepsBody.TextSpans",
-                    QuestBoardService.objectivesText(boardSlot, town, entityStore, boardCatalog)
+                applyQuestStepsHeading(commandBuilder, true);
+                QuestJournalObjectivesUi.applyBoardQuest(
+                    commandBuilder,
+                    boardSlot,
+                    town,
+                    entityStore,
+                    boardCatalog,
+                    viewerRef
                 );
                 applyBoardQuestRewardPreview(commandBuilder, boardSlot, entityStore, town);
             }
@@ -1796,23 +1793,33 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
         }
         commandBuilder.set("#QuestDetailTitle.TextSpans", quests.journalTitle(sel, town, entityStore, plugin));
         commandBuilder.set("#QuestDetailDescription.TextSpans", quests.journalDescription(sel, town, entityStore, plugin));
-        boolean hasSteps = quests.hasObjectives(sel);
-        commandBuilder.set("#QuestStepsHeading.Visible", hasSteps);
-        commandBuilder.set("#QuestStepsBody.Visible", hasSteps);
-        if (hasSteps) {
+        applyQuestStepsHeading(commandBuilder, quests.hasObjectives(sel));
+        if (quests.hasObjectives(sel)) {
+            QuestJournalObjectivesUi.applyStoryQuest(
+                commandBuilder,
+                quests,
+                sel,
+                town,
+                worldProgress,
+                entityStore,
+                plugin
+            );
+        } else {
+            QuestJournalObjectivesUi.clear(commandBuilder);
+        }
+        applyQuestRewardPreview(commandBuilder, quests, sel);
+    }
+
+    private static void applyQuestStepsHeading(@Nonnull UICommandBuilder commandBuilder, boolean visible) {
+        commandBuilder.set("#QuestStepsHeading.Visible", visible);
+        if (visible) {
             commandBuilder.set(
                 "#QuestStepsHeading.TextSpans",
                 Message.translation("aetherhaven_ui_journal_items_tail.aetherhaven.ui.townJournal.stepsHeading")
             );
-            commandBuilder.set(
-                "#QuestStepsBody.TextSpans",
-                quests.objectivesMessage(sel, town, entityStore, plugin)
-            );
         } else {
             commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-            commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
         }
-        applyQuestRewardPreview(commandBuilder, quests, sel);
     }
 
     private static void setQuestsBlocked(@Nonnull UICommandBuilder commandBuilder, @Nonnull Message msg) {
@@ -1826,10 +1833,8 @@ public final class QuestJournalPage extends AetherhavenInteractiveCustomUIPage<Q
     private static void clearQuestDetailPane(@Nonnull UICommandBuilder commandBuilder) {
         commandBuilder.set("#QuestDetailTitle.TextSpans", Message.raw(""));
         commandBuilder.set("#QuestDetailDescription.TextSpans", Message.raw(""));
-        commandBuilder.set("#QuestStepsHeading.Visible", false);
-        commandBuilder.set("#QuestStepsBody.Visible", false);
-        commandBuilder.set("#QuestStepsHeading.TextSpans", Message.raw(""));
-        commandBuilder.set("#QuestStepsBody.TextSpans", Message.raw(""));
+        applyQuestStepsHeading(commandBuilder, false);
+        QuestJournalObjectivesUi.clear(commandBuilder);
         commandBuilder.set("#RewardRow.Visible", false);
         commandBuilder.set("#RewardReputationLine.Visible", false);
         commandBuilder.set("#RewardReputationLine.TextSpans", Message.raw(""));

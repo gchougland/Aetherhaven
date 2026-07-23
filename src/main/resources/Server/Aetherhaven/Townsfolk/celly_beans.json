@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Bread",
+      "count": 3
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    }
+  ]
 }

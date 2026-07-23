@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Pie_Meat",
+      "count": 2
+    }
+  ]
 }

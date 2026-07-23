@@ -14,6 +14,7 @@ import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.quest.data.QuestReward;
 import com.hexvane.aetherhaven.town.TownRecord;
+import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.component.Store;
@@ -200,6 +201,7 @@ public final class QuestCatalog {
                 "construction_built",
                 "dialogue_turn_in",
                 "assign_house_resident",
+                "tourist_move_in_items",
                 "custom",
                 "entity_kills" -> true;
             default -> false;
@@ -409,7 +411,7 @@ public final class QuestCatalog {
                 out = out.insert(Message.raw("\n"));
             }
             QuestObjective o = lines.get(i);
-            Message lineMsg = objectiveLineMessage(o, targetName);
+            Message lineMsg = formatObjectiveLine(o, targetName, town, store, plugin, qid);
             boolean complete = town != null && QuestProgressionService.isObjectiveComplete(town, qid, o);
             out = out
                 .insert(Message.raw(objectiveStatusMarker(complete)))
@@ -460,7 +462,7 @@ public final class QuestCatalog {
         String targetName = def.assignByEntity()
             ? QuestAssigneeDisplay.targetName(def, town, store, plugin)
             : null;
-        Message out = objectiveLineMessage(objective, targetName);
+        Message out = objectiveLineMessage(objective, targetName, town, store, plugin, questId);
         if (objective.kind() != null
             && "entity_kills".equalsIgnoreCase(objective.kind().trim())
             && objective.id() != null
@@ -540,26 +542,45 @@ public final class QuestCatalog {
             }
             int required = Math.max(1, o.killCount());
             int current = town.getQuestKillCount(questId, o.id().trim());
-            Message out = objectiveLineMessage(o, targetName);
+            Message out = objectiveLineMessage(o, targetName, town, store, plugin, questId);
             return out.insert(Message.raw(" (" + Math.min(current, required) + "/" + required + ")"));
         }
         for (QuestObjective o : def.objectivesOrEmpty()) {
             if (o.kind() != null && "dialogue_turn_in".equalsIgnoreCase(o.kind().trim())) {
                 if (!QuestProgressionService.isObjectiveComplete(town, questId, o)) {
-                    return objectiveLineMessage(o, targetName);
+                    return objectiveLineMessage(o, targetName, town, store, plugin, questId);
                 }
             }
         }
         for (QuestObjective o : def.objectivesOrEmpty()) {
             if (QuestProgressionService.isJournalObjective(o)) {
-                return objectiveLineMessage(o, targetName);
+                return objectiveLineMessage(o, targetName, town, store, plugin, questId);
             }
         }
         return Message.raw("");
     }
 
     @Nonnull
-    private static Message objectiveLineMessage(@Nonnull QuestObjective o, @Nullable String targetName) {
+    public Message formatObjectiveLine(
+        @Nonnull QuestObjective o,
+        @Nullable String targetName,
+        @Nullable TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull String questId
+    ) {
+        return objectiveLineMessage(o, targetName, town, store, plugin, questId);
+    }
+
+    @Nonnull
+    private static Message objectiveLineMessage(
+        @Nonnull QuestObjective o,
+        @Nullable String targetName,
+        @Nullable TownRecord town,
+        @Nullable Store<EntityStore> store,
+        @Nullable AetherhavenPlugin plugin,
+        @Nonnull String questId
+    ) {
         Message lineMsg;
         if (o.textLangKey() != null && !o.textLangKey().isBlank()) {
             lineMsg = Message.translation(o.textLangKey().trim());
@@ -571,6 +592,16 @@ public final class QuestCatalog {
             if (o.textLangKey() == null || o.textLangKey().isBlank()) {
                 lineMsg = Message.raw(personalized);
             }
+        }
+        if (o.kind() != null
+            && QuestProgressionService.TOURIST_MOVE_IN_ITEMS.equalsIgnoreCase(o.kind().trim())
+            && plugin != null
+            && town != null) {
+            var reqs = TouristMoveInRequirements.forQuestTarget(plugin, town, store);
+            lineMsg =
+                lineMsg
+                    .param("item", TouristMoveInRequirements.primaryItemLabelMessage(reqs))
+                    .param("items", TouristMoveInRequirements.itemsLabelMessage(reqs));
         }
         return lineMsg;
     }

@@ -165,10 +165,9 @@ $C.@PageOverlay {
                     Text: "";
                   }
 
-                  Label #QuestStepsBody {
+                  Group #QuestStepsList {
+                    LayoutMode: Top;
                     Anchor: (Bottom: 14);
-                    Style: (...$C.@DefaultLabelStyle, Wrap: true, TextColor: #d8ccb8);
-                    Text: "";
                   }
 
                   Group #RewardBlock {

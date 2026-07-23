@@ -105,6 +105,7 @@ aetherhaven.storyQuests.q_house_rancher.objective.assign=Assign Thalen as reside
 aetherhaven.storyQuests.q_house_rancher.objective.talk=Talk to Thalen.
 aetherhaven.storyQuests.q_house_townsfolk.title=A home for a visitor
 aetherhaven.storyQuests.q_house_townsfolk.description=This visitor from the portal wants a house before they count as a full resident.
+aetherhaven.storyQuests.q_house_townsfolk.objective.gift=Bring the visitor what they asked for.
 aetherhaven.storyQuests.q_house_townsfolk.objective.token=Talk to the visitor and take a house plot token.
 aetherhaven.storyQuests.q_house_townsfolk.objective.build=Stake and build the house.
 aetherhaven.storyQuests.q_house_townsfolk.objective.assign=Assign this visitor on the house sign.

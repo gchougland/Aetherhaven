@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Kebab_Fruit",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    }
+  ]
 }

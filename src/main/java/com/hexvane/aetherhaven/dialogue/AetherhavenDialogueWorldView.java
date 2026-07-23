@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtMetadata;
 import com.hexvane.aetherhaven.gaiadraught.GaiaDraughtState;
 import com.hexvane.aetherhaven.gaiadraught.PlayerHealUtil;
 import com.hexvane.aetherhaven.quest.QuestCatalog;
+import com.hexvane.aetherhaven.quest.QuestProgressionService;
 import com.hexvane.aetherhaven.quest.data.QuestDefinition;
 import com.hexvane.aetherhaven.quest.data.QuestObjective;
 import com.hexvane.aetherhaven.town.AetherhavenWorldRegistries;
@@ -721,5 +722,52 @@ public final class AetherhavenDialogueWorldView implements DialogueWorldView {
         UUIDComponent nu = store.getComponent(npcRef, UUIDComponent.getComponentType());
         TownRecord town = townFor(playerRef, store);
         return nu != null && town != null && town.hasQuestCompletedForEntity(questId, nu.getUuid());
+    }
+
+    @Override
+    public boolean playerHasTouristMoveInItems(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        var requirements = com.hexvane.aetherhaven.tourist.TouristMoveInRequirements.forNpc(plugin, store, npcRef);
+        if (requirements.isEmpty()) {
+            TownRecord town = townFor(playerRef, store);
+            if (town != null) {
+                requirements = com.hexvane.aetherhaven.tourist.TouristMoveInRequirements.forQuestTarget(plugin, town, store);
+            }
+        }
+        if (requirements.isEmpty()) {
+            return false;
+        }
+        return com.hexvane.aetherhaven.tourist.TouristMoveInRequirements.playerHasAll(playerRef, store, requirements);
+    }
+
+    @Override
+    public boolean townQuestObjectiveIncomplete(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null) {
+            return false;
+        }
+        return QuestProgressionService.isQuestObjectiveIncomplete(plugin, town, questId, objectiveId);
+    }
+
+    @Override
+    public boolean townQuestObjectiveComplete(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        TownRecord town = townFor(playerRef, store);
+        if (town == null) {
+            return false;
+        }
+        return QuestProgressionService.isQuestObjectiveComplete(plugin, town, questId, objectiveId);
     }
 }

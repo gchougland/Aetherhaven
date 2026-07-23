@@ -14,5 +14,11 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Popcorn",
+      "count": 2
+    }
+  ]
 }

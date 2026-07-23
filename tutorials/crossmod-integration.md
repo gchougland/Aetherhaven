@@ -82,6 +82,31 @@ Same `npcRoleId` under `Villagers/` replaces the **whole** villager definition. 
 
 Item ids are appended (duplicates skipped). Put full gift lists on your own villager def when you own that role.
 
+## Townsfolk (optional mod characters)
+
+Townsfolk are hand designed characters that can appear as **tourists**, **guards**, or **guild hall adventurers** in Aetherhaven towns. They are separate from named **villagers** (inn workers with `npcRoleId` and dialogue trees).
+
+Ship in your asset pack:
+
+1. **Character definition** — `Server/Aetherhaven/Townsfolk/<characterId>.json` (same fields as Aetherhaven’s townsfolk: `modelAssetId`, `personalityIds`, `allowedAssignmentKinds`, optional `moveInRequirements` for tourist housing quests, optional `equipmentProfileId` for guards).
+2. **Model asset** — `Server/Models/Townsfolk/<ModelAssetId>.json` (global model catalog; `modelAssetId` must match the filename without `.json`). You can parent to `"Player"` or to your own base model and attach **vanilla player cosmetics** in `DefaultAttachments` (greyscale textures plus `GradientSet` / `GradientId` tints work the same as on human townsfolk).
+3. **Portrait** — `Common/Icons/ModelsGenerated/<ModelAssetId>.png`, referenced from the model JSON `Icon` field.
+4. **Personalities** — reuse Aetherhaven personality ids under `Server/Aetherhaven/Personalities/`, or add new ones in your pack plus English greeting lines in `Server/Languages/en-US/`.
+5. **Optional plugin gate** — when your character only makes sense with your mod installed, set:
+
+```json
+"requiresOptionalPlugin": {
+  "group": "hexvane",
+  "name": "YourModName"
+}
+```
+
+Use the same `group` and `name` as your plugin manifest (`Group` / `Name`). Matching is case insensitive at runtime.
+
+Aetherhaven still **loads** the definition (so existing save checkouts stay valid), but the character is **excluded from new pool draws** until that plugin is loaded and enabled. Example: Machinaria robot townsfolk `reginald_volt` and `copper_pin` use the shared `Machinaria_Robot_Base` model with cosmetic attachments.
+
+Tourists should include `moveInRequirements` (item ids the visitor asks for before accepting a house). See Aetherhaven’s townsfolk JSON for examples.
+
 ## Journal guide pages
 
 The town journal **Guide** tab walks markdown topics from Aetherhaven’s wiki tree (`welcome` → hubs like `villagers` / `mechanics`). Crossmod pages do **not** go under `Common/Docs/`; use the namespaced folders below so you do not replace Aetherhaven’s hubs.
@@ -169,6 +194,8 @@ Do **not** set `countsAsConstructionId` on the base itself. Variants created in 
 ### Patches (recommended for adding one option to a villager hub)
 
 `Server/Aetherhaven/DialoguePatches/*.json`:
+
+**Item requirements on choices** — Add an `itemRequirements` array (same shape as building materials: `itemId`, `count`) on any choice. The dialogue UI shows large item icons on the right, greys the row when the player’s inventory is short, and only enables the choice when they have everything. Tourist move in lines can keep `"icon": "move_in_item"` instead; requirements are inferred from the speaking townsfolk. Use `"whenFalse": "disabled"` with a `condition` when you also need quest or flag checks.
 
 ```json
 {

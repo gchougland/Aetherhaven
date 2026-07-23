@@ -14,5 +14,11 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Fish_Raw_Uncommon",
+      "count": 2
+    }
+  ]
 }

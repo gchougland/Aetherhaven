@@ -52,6 +52,40 @@ public final class InventoryMaterials {
         return true;
     }
 
+    /**
+     * Returns false when no requirement entry is actually checked (empty list or only invalid rows). Use for player
+     * gated flows such as tourist move in gifts.
+     */
+    public static boolean hasAllCheckedRequirements(
+        @Nonnull ItemContainer container,
+        @Nonnull List<MaterialRequirement> materials
+    ) {
+        if (materials.isEmpty()) {
+            return false;
+        }
+        boolean checkedAny = false;
+        for (MaterialRequirement m : materials) {
+            if (m.getCount() <= 0) {
+                continue;
+            }
+            if (m.getResourceTypeId() != null && !m.getResourceTypeId().isBlank()) {
+                checkedAny = true;
+                if (countResourceType(container, m.getResourceTypeId().trim()) < m.getCount()) {
+                    return false;
+                }
+                continue;
+            }
+            if (m.getItemId() == null || m.getItemId().isBlank()) {
+                continue;
+            }
+            checkedAny = true;
+            if (count(container, m.getItemId()) < m.getCount()) {
+                return false;
+            }
+        }
+        return checkedAny;
+    }
+
     public static void removeAll(@Nonnull ItemContainer container, @Nonnull List<MaterialRequirement> materials) {
         for (MaterialRequirement m : materials) {
             if (m.getCount() <= 0) {

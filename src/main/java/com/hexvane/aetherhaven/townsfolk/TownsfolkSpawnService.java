@@ -110,6 +110,13 @@ public final class TownsfolkSpawnService {
                 LOGGER.atWarning().log("Unknown townsfolk character id %s", characterId);
                 return Optional.empty();
             }
+            if (!TownsfolkCharacterAvailability.isEligibleForPoolDraw(def)) {
+                LOGGER.atWarning().log(
+                    "Townsfolk %s is not eligible (optional plugin requirement not satisfied)",
+                    characterId
+                );
+                return Optional.empty();
+            }
             if (pool.isCheckedOut(townId, characterId)) {
                 LOGGER.atWarning().log("Townsfolk %s already checked out in town %s", characterId, townId);
                 return Optional.empty();

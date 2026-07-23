@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Crystal_Yellow",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Wildmeat_Cooked",
+      "count": 1
+    }
+  ]
 }

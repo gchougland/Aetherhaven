@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Pie_Pumpkin",
+      "count": 1
+    },
+    {
+      "itemId": "Ingredient_Salt",
+      "count": 1
+    }
+  ]
 }

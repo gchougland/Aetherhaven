@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Fish_Grilled",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    }
+  ]
 }

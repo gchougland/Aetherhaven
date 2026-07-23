@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Bar_Bronze",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Stud_Iron",
+      "count": 2
+    }
+  ]
 }

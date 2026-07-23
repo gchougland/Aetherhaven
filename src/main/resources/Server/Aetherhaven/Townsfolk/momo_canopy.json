@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Vegetable_Cooked",
+      "count": 3
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 2
+    }
+  ]
 }

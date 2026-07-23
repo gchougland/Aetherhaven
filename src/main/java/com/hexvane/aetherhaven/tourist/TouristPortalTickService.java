@@ -36,6 +36,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Rotation3f;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
+import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.ParticleUtil;
 import com.hypixel.hytale.server.core.universe.world.World;
@@ -279,7 +280,7 @@ public final class TouristPortalTickService {
                 continue;
             }
             if (shouldConsumePlannedSpawnSlot(
-                spawnOneTourist(world, plugin, tm, store, town, portal, epochDay)
+                spawnOneTourist(world, plugin, tm, store, town, portal, epochDay, null) != null
             )) {
                 town.getTouristExecutedSpawnEpochMinutes().add(planned);
                 return true;
@@ -312,20 +313,196 @@ public final class TouristPortalTickService {
         return loaded.get(random.nextInt(loaded.size()));
     }
 
-    /** @return true when a tourist was spawned and recorded successfully */
-    private static boolean spawnOneTourist(
+    /** Outcome for {@link #spawnTouristAtPortalForTesting}. */
+    public enum TouristPortalManualSpawnOutcome {
+        SUCCESS,
+        NO_PORTAL,
+        PORTAL_CHUNK_UNLOADED,
+        NO_CHARACTER_AVAILABLE,
+        CHARACTER_NOT_AVAILABLE,
+        CHARACTER_ALREADY_ACTIVE,
+        SPAWN_FAILED
+    }
+
+    public record TouristPortalManualSpawnResult(
+        @Nonnull TouristPortalManualSpawnOutcome outcome,
+        @Nullable String characterId,
+        @Nullable UUID entityUuid,
+        @Nullable UUID portalId
+    ) {}
+
+    /**
+     * Spawns a visiting tourist through a portal using the same entity setup as scheduled portal spawns (pool checkout,
+     * {@link TouristRecord}, autonomy kick, portal burst). Does not consume a planned daily spawn slot.
+     */
+    @Nonnull
+    public static TouristPortalManualSpawnResult spawnTouristAtPortalForTesting(
         @Nonnull World world,
         @Nonnull AetherhavenPlugin plugin,
         @Nonnull TownManager tm,
         @Nonnull Store<EntityStore> store,
         @Nonnull TownRecord town,
         @Nonnull TouristPortalRecord portal,
-        long epochDay
+        @Nullable String forcedCharacterId
+    ) {
+        if (!isPortalChunkLoaded(world, portal)) {
+            return new TouristPortalManualSpawnResult(
+                TouristPortalManualSpawnOutcome.PORTAL_CHUNK_UNLOADED,
+                null,
+                null,
+                portal.getPortalId()
+            );
+        }
+        long epochDay = VillagerReputationService.currentGameEpochDay(store);
+        Set<String> exclude = activeCharacterIdsInTown(town, store);
+        String characterId;
+        if (forcedCharacterId != null && !forcedCharacterId.isBlank()) {
+            String forced = forcedCharacterId.trim();
+            if (exclude.contains(forced)) {
+                return new TouristPortalManualSpawnResult(
+                    TouristPortalManualSpawnOutcome.CHARACTER_ALREADY_ACTIVE,
+                    forced,
+                    null,
+                    portal.getPortalId()
+                );
+            }
+            if (!isCharacterAvailableForTouristSpawn(plugin, world, town, forced)) {
+                return new TouristPortalManualSpawnResult(
+                    TouristPortalManualSpawnOutcome.CHARACTER_NOT_AVAILABLE,
+                    forced,
+                    null,
+                    portal.getPortalId()
+                );
+            }
+            characterId = forced;
+        } else {
+            characterId = pickAvailableCharacter(plugin, world, town, exclude, portal, epochDay);
+            if (characterId == null) {
+                return new TouristPortalManualSpawnResult(
+                    TouristPortalManualSpawnOutcome.NO_CHARACTER_AVAILABLE,
+                    null,
+                    null,
+                    portal.getPortalId()
+                );
+            }
+        }
+        UUID entityUuid = spawnOneTourist(world, plugin, tm, store, town, portal, epochDay, characterId);
+        if (entityUuid == null) {
+            return new TouristPortalManualSpawnResult(
+                TouristPortalManualSpawnOutcome.SPAWN_FAILED,
+                characterId,
+                null,
+                portal.getPortalId()
+            );
+        }
+        return new TouristPortalManualSpawnResult(
+            TouristPortalManualSpawnOutcome.SUCCESS,
+            characterId,
+            entityUuid,
+            portal.getPortalId()
+        );
+    }
+
+    /**
+     * Picks a portal in the town for manual testing: explicit id, else the loaded portal nearest the player, else any
+     * loaded portal in the town.
+     */
+    @Nullable
+    public static TouristPortalRecord findPortalForManualSpawn(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Ref<EntityStore> nearRef,
+        @Nullable UUID portalId
+    ) {
+        TouristPortalRegistry registry = AetherhavenWorldRegistries.getOrCreateTouristPortalRegistry(world, plugin);
+        List<TouristPortalRecord> townPortals = registry.recordsForTown(town.getTownId());
+        if (townPortals.isEmpty()) {
+            return null;
+        }
+        if (portalId != null) {
+            for (TouristPortalRecord portal : townPortals) {
+                if (portalId.equals(portal.getPortalId()) && isPortalChunkLoaded(world, portal)) {
+                    return portal;
+                }
+            }
+            return null;
+        }
+        TransformComponent transform = store.getComponent(nearRef, TransformComponent.getComponentType());
+        if (transform == null) {
+            return firstLoadedPortal(world, townPortals);
+        }
+        Vector3d pos = transform.getPosition();
+        TouristPortalRecord best = null;
+        double bestDistSq = Double.MAX_VALUE;
+        for (TouristPortalRecord portal : townPortals) {
+            if (!isPortalChunkLoaded(world, portal)) {
+                continue;
+            }
+            Vector3d stand = TouristPortalBlockUtil.spawnFeetPosition(world, portal.getBlockPosition(), 0L);
+            double dx = stand.x - pos.x;
+            double dy = stand.y - pos.y;
+            double dz = stand.z - pos.z;
+            double distSq = dx * dx + dy * dy + dz * dz;
+            if (distSq < bestDistSq) {
+                bestDistSq = distSq;
+                best = portal;
+            }
+        }
+        return best != null ? best : firstLoadedPortal(world, townPortals);
+    }
+
+    @Nullable
+    private static TouristPortalRecord firstLoadedPortal(
+        @Nonnull World world,
+        @Nonnull List<TouristPortalRecord> townPortals
+    ) {
+        for (TouristPortalRecord portal : townPortals) {
+            if (isPortalChunkLoaded(world, portal)) {
+                return portal;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isCharacterAvailableForTouristSpawn(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull World world,
+        @Nonnull TownRecord town,
+        @Nonnull String characterId
+    ) {
+        TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
+        if (catalog.byId(characterId) == null) {
+            return false;
+        }
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        List<String> available =
+            pool.availableCharacterIds(town.getTownId(), catalog, TownsfolkAssignmentKinds.TOURIST);
+        return available.contains(characterId);
+    }
+
+    /** @return entity uuid when a tourist was spawned and recorded successfully */
+    @Nullable
+    private static UUID spawnOneTourist(
+        @Nonnull World world,
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull TownManager tm,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull TownRecord town,
+        @Nonnull TouristPortalRecord portal,
+        long epochDay,
+        @Nullable String forcedCharacterId
     ) {
         Set<String> exclude = activeCharacterIdsInTown(town, store);
-        String characterId = pickAvailableCharacter(plugin, world, town, exclude, portal, epochDay);
+        String characterId;
+        if (forcedCharacterId != null && !forcedCharacterId.isBlank()) {
+            characterId = forcedCharacterId.trim();
+        } else {
+            characterId = pickAvailableCharacter(plugin, world, town, exclude, portal, epochDay);
+        }
         if (characterId == null) {
-            return false;
+            return null;
         }
 
         Vector3i blockPos = portal.getBlockPosition();
@@ -358,7 +535,7 @@ public final class TouristPortalTickService {
                 null
             );
         if (spawned.isEmpty()) {
-            return false;
+            return null;
         }
 
         UUID entityUuid = spawned.get().entityUuid();
@@ -371,7 +548,7 @@ public final class TouristPortalTickService {
                 town.getTownId(),
                 entityUuid
             );
-            return false;
+            return null;
         }
 
         long spawnDawnDay = VillagerReputationService.currentGameEpochDay(store);
@@ -405,7 +582,7 @@ public final class TouristPortalTickService {
 
         TownsfolkExistenceService.purgeDuplicateEntities(world, store, town.getTownId(), characterId, entityUuid);
         playPortalBurst(world, store, blockPos);
-        return true;
+        return entityUuid;
     }
 
     @Nullable

@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_rogue",
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Spices",
+      "count": 1
+    }
+  ]
 }

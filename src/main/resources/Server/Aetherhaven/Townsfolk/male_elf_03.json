@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Crystal_Green",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Mushroom",
+      "count": 1
+    }
+  ]
 }

@@ -100,6 +100,77 @@ final class QuestProgressionServiceTest {
         ));
     }
 
+    @Test
+    void deferPlotTokenWhenMoveInItemsIsFirstGameplayObjective() {
+        QuestDefinition def = gson.fromJson(
+            """
+            {
+              "schemaVersion": 1,
+              "id": "ordered_test",
+              "objectives": [
+                {"id": "gift", "kind": "tourist_move_in_items", "text": "Gift."},
+                {"id": "token", "kind": "plot_token_received", "text": "Take token."}
+              ]
+            }
+            """,
+            QuestDefinition.class
+        );
+        assertTrue(QuestProgressionService.deferPlotTokenOnQuestStart(def));
+    }
+
+    @Test
+    void deferPlotTokenFalseWhenTokenIsFirstObjective() {
+        assertFalse(QuestProgressionService.deferPlotTokenOnQuestStart(definition()));
+    }
+
+    @Test
+    void moveInGiftObjectivePrecedesTokenInOrder() {
+        QuestDefinition def = gson.fromJson(
+            """
+            {
+              "schemaVersion": 1,
+              "id": "ordered_test",
+              "objectives": [
+                {"id": "gift", "kind": "tourist_move_in_items", "text": "Gift."},
+                {"id": "token", "kind": "plot_token_received", "text": "Take token."},
+                {"id": "build", "kind": "construction_built", "constructionId": "plot_house", "text": "Build."}
+              ]
+            }
+            """,
+            QuestDefinition.class
+        );
+        TownRecord town = new TownRecord();
+        town.initQuestObjectiveProgress(QUEST_ID, def.trackableObjectiveIds());
+        assertEquals("gift", current(def, town).id());
+        town.completeQuestObjective(QUEST_ID, "gift");
+        assertEquals("token", current(def, town).id());
+    }
+
+    @Test
+    void moveInGiftAndDeferredTokenAreNotImputedFromLaterWorldProgress() {
+        QuestDefinition def = gson.fromJson(
+            """
+            {
+              "schemaVersion": 1,
+              "id": "q_house_townsfolk",
+              "grantPlotTokenConstructionId": "plot_house",
+              "objectives": [
+                {"id": "gift", "kind": "tourist_move_in_items", "text": "Gift."},
+                {"id": "token", "kind": "plot_token_received", "text": "Take token."},
+                {"id": "build", "kind": "construction_built", "constructionId": "plot_house", "text": "Build."}
+              ]
+            }
+            """,
+            QuestDefinition.class
+        );
+        QuestObjective gift = def.objectivesOrEmpty().get(0);
+        QuestObjective token = def.objectivesOrEmpty().get(1);
+        QuestObjective build = def.objectivesOrEmpty().get(2);
+        assertFalse(QuestProgressionService.mayImputeObjectiveCompleteFromWorldState(def, gift));
+        assertFalse(QuestProgressionService.mayImputeObjectiveCompleteFromWorldState(def, token));
+        assertTrue(QuestProgressionService.mayImputeObjectiveCompleteFromWorldState(def, build));
+    }
+
     private QuestDefinition definition() {
         return gson.fromJson(
             """

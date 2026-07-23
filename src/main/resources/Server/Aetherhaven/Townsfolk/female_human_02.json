@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Cheese",
+      "count": 2
+    },
+    {
+      "itemId": "Food_Bread",
+      "count": 1
+    }
+  ]
 }

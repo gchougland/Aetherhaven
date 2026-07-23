@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Salad_Mushroom",
+      "count": 2
+    }
+  ]
 }

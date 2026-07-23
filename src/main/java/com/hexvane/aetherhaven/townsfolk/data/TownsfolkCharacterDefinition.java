@@ -1,6 +1,7 @@
 package com.hexvane.aetherhaven.townsfolk.data;
 
 import com.google.gson.annotations.SerializedName;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,6 +54,16 @@ public final class TownsfolkCharacterDefinition {
     @SerializedName("speechVoiceId")
     @Nullable
     private String speechVoiceId;
+
+    /** Items a tourist asks for before accepting the house quest ({@code q_house_townsfolk}). */
+    @SerializedName("moveInRequirements")
+    @Nullable
+    private List<MaterialRequirement> moveInRequirements;
+
+    /** When set, hide from new pool draws unless this plugin is loaded (crossmod townsfolk). */
+    @SerializedName("requiresOptionalPlugin")
+    @Nullable
+    private TownsfolkOptionalPluginRequirement requiresOptionalPlugin;
 
     @Nonnull
     public String getId() {
@@ -110,6 +121,19 @@ public final class TownsfolkCharacterDefinition {
     @Nullable
     public String getSpeechVoiceId() {
         return speechVoiceId != null && !speechVoiceId.isBlank() ? speechVoiceId.trim() : null;
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> getMoveInRequirements() {
+        if (moveInRequirements == null || moveInRequirements.isEmpty()) {
+            return List.of();
+        }
+        return Collections.unmodifiableList(new ArrayList<>(moveInRequirements));
+    }
+
+    @Nullable
+    public TownsfolkOptionalPluginRequirement getRequiresOptionalPlugin() {
+        return requiresOptionalPlugin;
     }
 
     public boolean supportsAssignment(@Nonnull String assignmentKind) {

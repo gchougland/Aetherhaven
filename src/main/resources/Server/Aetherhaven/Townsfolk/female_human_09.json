@@ -14,5 +14,15 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "high"
+  "speechVoiceId": "high",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Bread",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Flour",
+      "count": 1
+    }
+  ]
 }

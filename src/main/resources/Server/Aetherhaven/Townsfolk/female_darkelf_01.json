@@ -14,5 +14,11 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Crystal_Purple",
+      "count": 1
+    }
+  ]
 }

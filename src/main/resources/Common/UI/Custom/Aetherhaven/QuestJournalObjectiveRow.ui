@@ -1,0 +1,43 @@
+$C = "../Common.ui";
+
+@QuestStepItemSlotSize = 36;
+@QuestStepItemSlotSpacing = 4;
+@QuestStepItemSlotsPerRow = 4;
+@QuestStepItemGridWidth = @QuestStepItemSlotSize * @QuestStepItemSlotsPerRow + @QuestStepItemSlotSpacing * (@QuestStepItemSlotsPerRow - 1);
+
+Group #QuestJournalObjectiveRow {
+  LayoutMode: Left;
+  HitTestVisible: false;
+  Anchor: (Bottom: 6);
+
+  $C.@CheckBox #CheckBox {
+    Disabled: true;
+    HitTestVisible: false;
+    Anchor: (Right: 8, Width: 22, Height: 22);
+  }
+
+  Label #StepLabel {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #d8ccb8, FontSize: 13, Wrap: true, VerticalAlignment: Center);
+    HitTestVisible: false;
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+    Text: "";
+  }
+
+  Group #StepItemsPanel {
+    LayoutMode: Middle;
+    Visible: false;
+    Anchor: (Width: @QuestStepItemGridWidth, Height: @QuestStepItemSlotSize);
+
+    ItemGrid #StepItems {
+      Anchor: (Width: @QuestStepItemGridWidth, Height: @QuestStepItemSlotSize);
+      SlotsPerRow: @QuestStepItemSlotsPerRow;
+      Style: (
+        SlotSize: @QuestStepItemSlotSize,
+        SlotIconSize: @QuestStepItemSlotSize,
+        SlotSpacing: @QuestStepItemSlotSpacing,
+        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+      );
+    }
+  }
+}

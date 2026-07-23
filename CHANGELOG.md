@@ -14,6 +14,8 @@
 - **Battle horn** — Lyra teaches the recipe at 50 friendship for the town planning desk. Hold right click to blow the horn and call loaded town guards. They follow you until dismissed and still fight hostiles.
 - **Bard song: Fishing Daze** — Elias can play **Fishing Daze by Dreadful Ditties**.
 - **Intelligent race townsfolk** — Eleven new pool characters: Kweebecs Briar Mosscap and Tumble Reedwhistle, Klops Pippin Geargrin and Nell Clinkjar, Slothians Momo Canopy and Haku Mistclaw, Ferans Zephyr Sandtail and Saffra Dunear, Outlander Vask Hollowmark, skeleton Rattle Morrow, and Trork Grunk Stonebelly. Each has a distinct look and race themed greetings.
+- **Tourist move in gifts** — Portal visitors ask for specific items before they agree to a house quest. Each townsfolk wants something different. Bring what they asked for in dialogue, then build their home as before. Gifts are food, ingredients, and similar useful goods, not ancient dungeon furniture.
+- **Crossmod townsfolk** — Townsfolk definitions can require an optional plugin (`requiresOptionalPlugin`) so characters from partner mods only enter the tourist and guard pool when that mod is loaded.
 
 ### Changed
 
@@ -40,6 +42,9 @@
 - **Shop spot HUD** — The “no worker assigned” closed state now resolves its translation instead of showing a raw language key.
 - **Multi-role workplace assignment** — Variant plots that count as more than one building type (for example a community stall that counts as both merchant shop and flower shop) now list the correct villagers when you assign each role, instead of reusing the first role’s list.
 - **Roads Under The Dead HUD** — The pinned quest tracker now updates your undead kill count as you fight, and shows when it is time to return to Serah.
+- **Tourist move in items** — Accepting a visitor house quest now requires the requested items in your inventory, takes them when you agree, and no longer skips the gift step just because your town already has a house plot.
+- **Crossmod townsfolk plugin gate** — Townsfolk that require an optional partner mod match plugin ids case insensitively, so ids like `hexvane:Machinaria` work when the JSON used a different letter case.
+- **Dialogue item requirements** — Choices that need items show large item icons on the right (tourist move in gifts, quest board fetch turn ins, and any choice with `itemRequirements` in dialogue JSON). Rows with icons grow taller; other choices stay compact.
 
 ## [2.4.1] - 7/20/26
 

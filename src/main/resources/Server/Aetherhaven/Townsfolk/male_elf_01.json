@@ -14,5 +14,15 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Salad_Caesar",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Cheese",
+      "count": 1
+    }
+  ]
 }

@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_knight",
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Candy_Cane",
+      "count": 2
+    }
+  ]
 }

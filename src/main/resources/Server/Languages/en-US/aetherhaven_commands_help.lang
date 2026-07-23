@@ -149,6 +149,16 @@ commands.aetherhaven.guild.status.ok=Guild hall active={active} epochDay={epochD
 
 commands.aetherhaven.tourist.desc=Debug: tourist portal visit targets
 commands.aetherhaven.tourist.targets.desc=Debug: list tourist destination plots and optional POIs in your town
+commands.aetherhaven.tourist.spawn.desc=Debug: spawn a visiting tourist through a portal like the daily portal tick
+commands.aetherhaven.tourist.spawn.portal.desc=Portal UUID (optional; default is nearest loaded portal to you)
+aetherhaven.tourist.spawn.ok=Spawned tourist {id} at portal {portal} (entity {entity}).
+aetherhaven.tourist.spawn.noPortal=No visitor portal is loaded for that town. Stand near a portal or pass a valid portal id.
+aetherhaven.tourist.spawn.badPortalId=That portal id is not valid. Use a UUID from the portal block.
+aetherhaven.tourist.spawn.portalChunkUnloaded=That portal chunk is not loaded (portal {portal}).
+aetherhaven.tourist.spawn.noCharacter=No townsfolk are free to visit as tourists right now.
+aetherhaven.tourist.spawn.characterNotAvailable={id} is not free for a tourist visit (check pool or optional mod requirements).
+aetherhaven.tourist.spawn.characterActive={id} is already visiting this town.
+aetherhaven.tourist.spawn.failed=Could not spawn tourist {id} at the portal.
 commands.aetherhaven.tourist.purge.desc=Emergency: remove active visiting tourists in this world (keeps invited, housed, and citizen tourists; never removes guards)
 aetherhaven.tourist.purgeDone=Removed {removed} active tourist(s). Kept {skippedProtected} protected (invited/housed/citizen). Left {skippedGuards} hired guard(s) untouched.
 commands.aetherhaven.guild.notActive=Your town does not have an active guild hall

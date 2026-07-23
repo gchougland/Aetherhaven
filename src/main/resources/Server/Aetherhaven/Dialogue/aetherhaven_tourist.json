@@ -27,6 +27,27 @@
           "next": "tourist_house_offer"
         },
         {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give",
+          "icon": "move_in_item",
+          "visibilityCondition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_objective_incomplete",
+                "questId": "q_house_townsfolk",
+                "objectiveId": "gift"
+              }
+            ]
+          },
+          "condition": { "type": "player_has_tourist_move_in_items" },
+          "whenFalse": "disabled",
+          "disabledReason": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing",
+          "actions": [{ "type": "deliver_tourist_move_in_items" }],
+          "next": "tourist_house_gift_received"
+        },
+        {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish",
           "condition": {
             "type": "and",
@@ -41,12 +62,34 @@
           "next": "tourist_house_finish"
         },
         {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind_gift",
+          "condition": {
+            "type": "and",
+            "conditions": [
+              { "type": "town_quest_active", "questId": "q_house_townsfolk" },
+              { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_objective_incomplete",
+                "questId": "q_house_townsfolk",
+                "objectiveId": "gift"
+              }
+            ]
+          },
+          "whenFalse": "hide",
+          "next": "tourist_house_remind_gift"
+        },
+        {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind",
           "condition": {
             "type": "and",
             "conditions": [
               { "type": "town_quest_active", "questId": "q_house_townsfolk" },
               { "type": "npc_is_quest_target", "questId": "q_house_townsfolk" },
+              {
+                "type": "town_quest_objective_complete",
+                "questId": "q_house_townsfolk",
+                "objectiveId": "gift"
+              },
               {
                 "type": "not",
                 "condition": { "type": "town_npc_home_resident_house" }
@@ -85,17 +128,21 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept",
-          "condition": {
+          "icon": "move_in_item",
+          "visibilityCondition": {
             "type": "not",
             "condition": { "type": "town_quest_active", "questId": "q_house_townsfolk" }
           },
-          "whenFalse": "hide",
+          "condition": { "type": "player_has_tourist_move_in_items" },
+          "whenFalse": "disabled",
+          "disabledReason": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing",
           "actions": [
             {
               "type": "start_quest",
               "id": "q_house_townsfolk",
               "bindTargetEntity": true
-            }
+            },
+            { "type": "deliver_tourist_move_in_items" }
           ],
           "next": "tourist_house_accepted"
         },
@@ -111,6 +158,26 @@
       "choices": [
         {
           "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_gift_received": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_gift_received.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_gift_received.ok",
+          "next": null
+        }
+      ]
+    },
+    "tourist_house_remind_gift": {
+      "speaker": "",
+      "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind_gift.body",
+      "choices": [
+        {
+          "text": "aetherhaven_dialogue_tourist.aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind_gift.ok",
           "next": null
         }
       ]

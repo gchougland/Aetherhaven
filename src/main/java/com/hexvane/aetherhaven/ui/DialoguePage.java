@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.hexvane.aetherhaven.dialogue.DialogueActionBatchResult;
 import com.hexvane.aetherhaven.dialogue.DialogueActionExecutor;
 import com.hexvane.aetherhaven.dialogue.DialogueCatalog;
+import com.hexvane.aetherhaven.dialogue.DialogueChoiceItemRequirements;
 import com.hexvane.aetherhaven.dialogue.DialogueConditionEvaluator;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
@@ -26,6 +27,8 @@ import com.hexvane.aetherhaven.town.TownResidentDisplay;
 import com.hexvane.aetherhaven.townsfolk.TownsfolkCharacterBinding;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkCharacterDefinition;
 import com.hexvane.aetherhaven.townsfolk.data.TownsfolkGreetingPicker;
+import com.hexvane.aetherhaven.construction.MaterialRequirement;
+import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.villager.VillagerBefriendableResolver;
 import com.hexvane.aetherhaven.villager.data.VillagerDefinition;
 import com.hexvane.aetherhaven.villager.data.VillagerGreetingPicker;
@@ -452,7 +455,35 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             return Message.translation(GREETING_FALLBACK_LANG);
         }
         String body = node.getText() != null ? node.getText() : "";
-        return dialogueMessage(body);
+        return withTouristMoveInParams(ref, store, dialogueMessage(body), body);
+    }
+
+    @Nonnull
+    private Message withTouristMoveInParams(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull Message message,
+        @Nullable String translationKey
+    ) {
+        if (translationKey == null || !isTranslationKey(translationKey) || !usesTouristMoveInParams(translationKey)) {
+            return message;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null || npcRef == null || !npcRef.isValid()) {
+            return message;
+        }
+        var requirements = TouristMoveInRequirements.forNpc(plugin, store, npcRef);
+        return message
+            .param("item", TouristMoveInRequirements.primaryItemLabelMessage(requirements))
+            .param("items", TouristMoveInRequirements.itemsLabelMessage(requirements));
+    }
+
+    private static boolean usesTouristMoveInParams(@Nonnull String translationKey) {
+        return translationKey.contains("aetherhaven_dialogue_tourist")
+            && (translationKey.contains("_offer.")
+                || translationKey.contains("_accepted.")
+                || translationKey.contains("_remind_gift.")
+                || translationKey.contains("c_house_give"));
     }
 
     /**
@@ -517,6 +548,9 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                 .param("gold", Long.toString(gold))
                 .param("type", Message.translation(typeKey));
         }
+        if (usesTouristMoveInParams(text)) {
+            return withTouristMoveInParams(ref, store, m, text);
+        }
         return m;
     }
 
@@ -574,13 +608,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         int lastChoiceIndex = choices.isEmpty() ? -1 : choices.size() - 1;
         for (int i = 0; i < choices.size(); i++) {
             if (i == lastChoiceIndex && turnIn != null) {
-                uiSlot = appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
+                uiSlot = appendQuestBoardTurnInRow(ref, store, commandBuilder, eventBuilder, uiSlot, turnIn);
             }
             uiSlot =
                 appendDialogueChoiceRow(ref, store, commandBuilder, eventBuilder, choices.get(i), i, uiSlot);
         }
         if (turnIn != null && lastChoiceIndex < 0) {
-            appendQuestBoardTurnInRow(commandBuilder, eventBuilder, uiSlot, turnIn);
+            appendQuestBoardTurnInRow(ref, store, commandBuilder, eventBuilder, uiSlot, turnIn);
         }
     }
 
@@ -613,6 +647,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         }
         boolean disabled =
             visOnly != null ? !baseOk : !baseOk && "disabled".equalsIgnoreCase(wf);
+        List<MaterialRequirement> itemRequirements =
+            DialogueChoiceItemRequirements.resolve(ch, plugin, ref, store, npcRef);
+        boolean hasRequiredItems =
+            itemRequirements.isEmpty() || DialogueChoiceItemRequirements.playerHasAll(ref, store, itemRequirements);
+        if (!itemRequirements.isEmpty() && !hasRequiredItems) {
+            disabled = true;
+        }
         if (ch.isGiftDisableWhenNotAllowed()) {
             AetherhavenPlugin giftPlugin = AetherhavenPlugin.get();
             if (giftPlugin == null
@@ -629,7 +670,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
             Message reasonMsg = ch.isGiftDisableWhenNotAllowed()
                 ? dialogueWorldView.villagerGiftBlockMessage(ref, store, npcRef)
                 : null;
-            if (reasonMsg == null) {
+            if (reasonMsg == null && itemRequirements.isEmpty()) {
                 String reason = ch.getDisabledReason();
                 if (reason != null && !reason.isBlank()) {
                     reasonMsg = dialogueMessage(reason);
@@ -642,12 +683,13 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         } else {
             choiceLine = choiceTranslationMessage(ref, store, text);
         }
-        commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
+        commandBuilder.append(CHOICES_ROOT, DialogueChoiceRequirementsUi.rowDocument(itemRequirements));
         String sel = choiceRowSelector(uiSlot);
         commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
         commandBuilder.set(sel + ".Disabled", disabled);
         commandBuilder.set(sel + " #Text.Style.TextColor", disabled ? "#6d6658" : "#f0e6d2");
-        applyChoiceIcon(commandBuilder, sel, ch);
+        applyChoiceIcon(commandBuilder, sel, ch, itemRequirements);
+        DialogueChoiceRequirementsUi.applyItemGrid(commandBuilder, sel, itemRequirements);
         if (!disabled) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -689,10 +731,31 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         com.hexvane.aetherhaven.questboard.QuestBoardQuestTypeHandler handler =
             com.hexvane.aetherhaven.questboard.QuestBoardService.handlerFor(slot.getQuestType());
         boolean ready = handler != null && handler.hasRequiredItems(ref, store, slot);
-        return new QuestBoardTurnInRow(ready, slot.isHuntQuest(), slot.isRaidQuest());
+        List<MaterialRequirement> turnInItems = List.of();
+        if (com.hexvane.aetherhaven.questboard.FetchQuestBoardHandler.TYPE_ID.equalsIgnoreCase(slot.getQuestType())) {
+            turnInItems = fetchQuestTurnInMaterials(slot);
+        }
+        return new QuestBoardTurnInRow(ready, slot.isHuntQuest(), slot.isRaidQuest(), turnInItems);
+    }
+
+    @Nonnull
+    private static List<MaterialRequirement> fetchQuestTurnInMaterials(
+        @Nonnull com.hexvane.aetherhaven.questboard.QuestBoardSlotRecord slot
+    ) {
+        List<MaterialRequirement> out = new ArrayList<>();
+        for (com.hexvane.aetherhaven.questboard.QuestBoardItemRequirement req : slot.requiredItemsOrEmpty()) {
+            String itemId = req.itemIdOrEmpty();
+            if (itemId.isBlank()) {
+                continue;
+            }
+            out.add(MaterialRequirement.ofItem(itemId, Math.max(1, req.count())));
+        }
+        return List.copyOf(out);
     }
 
     private int appendQuestBoardTurnInRow(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull UIEventBuilder eventBuilder,
         int uiSlot,
@@ -706,7 +769,7 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                         ? "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnInHunt"
                         : "aetherhaven_ui_quest_board.aetherhaven.ui.questBoard.dialogue.turnIn"
             );
-        if (!turnIn.ready()) {
+        if (!turnIn.ready() && turnIn.turnInItems().isEmpty()) {
             choiceLine =
                 choiceLine
                     .insert(Message.raw("  "))
@@ -720,12 +783,14 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
                         )
                     );
         }
-        commandBuilder.append(CHOICES_ROOT, "Aetherhaven/DialogueChoiceRow.ui");
+        List<MaterialRequirement> itemRequirements = DialogueChoiceItemRequirements.resolve(turnIn.turnInItems());
+        commandBuilder.append(CHOICES_ROOT, DialogueChoiceRequirementsUi.rowDocument(itemRequirements));
         String sel = choiceRowSelector(uiSlot);
         commandBuilder.set(sel + " #Text.TextSpans", choiceLine);
         commandBuilder.set(sel + ".Disabled", !turnIn.ready());
         commandBuilder.set(sel + " #Text.Style.TextColor", turnIn.ready() ? "#f0e6d2" : "#6d6658");
         applyChoiceIconPath(commandBuilder, sel, ICON_QUEST);
+        DialogueChoiceRequirementsUi.applyItemGrid(commandBuilder, sel, itemRequirements);
         if (turnIn.ready()) {
             eventBuilder.addEventBinding(
                 CustomUIEventBindingType.Activating,
@@ -737,7 +802,12 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         return uiSlot + 1;
     }
 
-    private record QuestBoardTurnInRow(boolean ready, boolean huntQuest, boolean raidQuest) {}
+    private record QuestBoardTurnInRow(
+        boolean ready,
+        boolean huntQuest,
+        boolean raidQuest,
+        @Nonnull List<MaterialRequirement> turnInItems
+    ) {}
 
     @Nullable
     private static String npcRoleId(@Nonnull Store<EntityStore> store, @Nullable Ref<EntityStore> npcRef) {
@@ -913,11 +983,16 @@ public final class DialoguePage extends AetherhavenInteractiveCustomUIPage<Dialo
         };
     }
 
-    private static void applyChoiceIcon(
+    private void applyChoiceIcon(
         @Nonnull UICommandBuilder commandBuilder,
         @Nonnull String rowSelector,
-        @Nonnull DialogueChoiceDefinition ch
+        @Nonnull DialogueChoiceDefinition ch,
+        @Nonnull List<MaterialRequirement> itemRequirements
     ) {
+        if (!itemRequirements.isEmpty() && DialogueChoiceItemRequirements.isTouristMoveInChoice(ch)) {
+            applyChoiceIconPath(commandBuilder, rowSelector, ICON_QUEST);
+            return;
+        }
         applyChoiceIconPath(commandBuilder, rowSelector, choiceIconPath(ch));
     }
 

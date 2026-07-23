@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Motes_Light",
+      "count": 1
+    }
+  ]
 }

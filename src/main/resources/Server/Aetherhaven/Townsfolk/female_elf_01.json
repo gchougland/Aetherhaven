@@ -14,5 +14,15 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "soft"
+  "speechVoiceId": "soft",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Pie_Apple",
+      "count": 1
+    },
+    {
+      "itemId": "Food_Salad_Berry",
+      "count": 1
+    }
+  ]
 }

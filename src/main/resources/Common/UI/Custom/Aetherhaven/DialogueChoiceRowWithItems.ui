@@ -1,0 +1,52 @@
+$C = "../Common.ui";
+
+@DialogueItemSlotSize = 48;
+@DialogueItemSlotSpacing = 4;
+@DialogueItemSlotsPerRow = 4;
+@DialogueItemGridWidth = @DialogueItemSlotSize * @DialogueItemSlotsPerRow + @DialogueItemSlotSpacing * (@DialogueItemSlotsPerRow - 1);
+@DialogueItemGridHeight = @DialogueItemSlotSize;
+
+Button #Row {
+  LayoutMode: Left;
+  Anchor: (Bottom: 6);
+  Padding: (Horizontal: 10, Vertical: 8);
+  Style: (
+    Default: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16)),
+    Hovered: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.55))),
+    Pressed: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #ffffff(0.75))),
+    Disabled: (Background: (TexturePath: "../Common/OptionBackgroundPatch.png", Border: 16, Color: #000000(0.35)))
+  );
+
+  Group #ChoiceIconFrame {
+    LayoutMode: Middle;
+    Anchor: (Width: 24, Height: 24, Right: 8);
+
+    AssetImage #ChoiceIcon {
+      Anchor: (Width: 24, Height: 24);
+      Visible: false;
+      FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+    }
+  }
+
+  Label #Text {
+    Style: (...$C.@DefaultLabelStyle, TextColor: #f0e6d2, Wrap: true, VerticalAlignment: Center);
+    FlexWeight: 1;
+    Anchor: (Right: 8);
+  }
+
+  Group #ItemRequirementsPanel {
+    LayoutMode: Middle;
+    Anchor: (Width: @DialogueItemGridWidth, Height: @DialogueItemGridHeight);
+
+    ItemGrid #RequirementItems {
+      Anchor: (Width: @DialogueItemGridWidth, Height: @DialogueItemGridHeight);
+      SlotsPerRow: @DialogueItemSlotsPerRow;
+      Style: (
+        SlotSize: @DialogueItemSlotSize,
+        SlotIconSize: @DialogueItemSlotSize,
+        SlotSpacing: @DialogueItemSlotSpacing,
+        SlotBackground: "../Common/BlockSelectorSlotBackground.png"
+      );
+    }
+  }
+}

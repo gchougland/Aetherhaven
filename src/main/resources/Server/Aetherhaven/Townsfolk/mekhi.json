@@ -16,5 +16,11 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_archer",
-  "speechVoiceId": "sharp"
+  "speechVoiceId": "sharp",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Pie_Apple",
+      "count": 1
+    }
+  ]
 }

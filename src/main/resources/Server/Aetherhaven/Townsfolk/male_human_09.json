@@ -14,5 +14,15 @@
     "tourist"
   ],
   "befriendable": false,
-  "speechVoiceId": "low"
+  "speechVoiceId": "low",
+  "moveInRequirements": [
+    {
+      "itemId": "Ingredient_Bar_Copper",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Charcoal",
+      "count": 1
+    }
+  ]
 }

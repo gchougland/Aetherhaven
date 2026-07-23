@@ -286,6 +286,32 @@ public interface DialogueWorldView {
         return false;
     }
 
+    default boolean playerHasTouristMoveInItems(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        return false;
+    }
+
+    default boolean townQuestObjectiveIncomplete(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        return false;
+    }
+
+    default boolean townQuestObjectiveComplete(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String questId,
+        @Nonnull String objectiveId
+    ) {
+        return false;
+    }
+
     final class DefaultDialogueWorldView implements DialogueWorldView {
         @Override
         public boolean hasAchievement(@Nonnull String id) {

@@ -16,5 +16,15 @@
   ],
   "befriendable": false,
   "equipmentProfileId": "guard_mage",
-  "speechVoiceId": "mid"
+  "speechVoiceId": "mid",
+  "moveInRequirements": [
+    {
+      "itemId": "Food_Kebab_Vegetable",
+      "count": 2
+    },
+    {
+      "itemId": "Ingredient_Hay",
+      "count": 2
+    }
+  ]
 }

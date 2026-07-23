@@ -1,17 +1,26 @@
 aetherhaven.dialogue.aetherhaven_tourist.greeting_fallback=Hello there.
 
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house=Would you like to live here?
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give=Give {items}
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_give_missing=(need items in your inventory)
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_finish=Your house is ready.
+aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind_gift=About what I asked for...
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_remind=About my home...
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.c_house_waiting=About moving in...
 aetherhaven.dialogue.aetherhaven_tourist.main_hub.leave=Goodbye
 
-aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=I like your town. Would you find me a house? I would pay into the treasury each day once I have a bed.
-aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=I will find you a home
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.body=I like your town. I would stay if you bring me {items} first. Then we can talk about a house.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.accept=I will bring {items}
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_offer.decline=Maybe later
 
-aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Thank you. Stake a house plot, finish the build, then put my name on the house sign. Come back when I am living there.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.body=Thank you. Bring me {items} when you have them. After that I will give you a house plot token. Stake the plot, finish the build, put my name on the house sign, then come back when I am living there.
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_accepted.ok=Will do
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_gift_received.body=Perfect. Here is your house plot token. Stake the plot, finish the build, then put my name on the house sign.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_gift_received.ok=Will do
+
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind_gift.body=I am still waiting on {items}. Bring them when you can.
+aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind_gift.ok=Right
 
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.body=Have you found a house for me yet? Finish the build and pick me on the house sign.
 aetherhaven.dialogue.aetherhaven_tourist.tourist_house_remind.ok=Right

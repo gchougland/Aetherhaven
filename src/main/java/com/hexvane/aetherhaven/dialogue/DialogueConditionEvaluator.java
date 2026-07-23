@@ -180,6 +180,19 @@ public final class DialogueConditionEvaluator {
                 npcRef,
                 stringOrEmpty(o, "questId")
             );
+            case "player_has_tourist_move_in_items" -> worldView.playerHasTouristMoveInItems(playerRef, store, npcRef);
+            case "town_quest_objective_incomplete" -> worldView.townQuestObjectiveIncomplete(
+                playerRef,
+                store,
+                stringOrEmpty(o, "questId"),
+                stringOrEmpty(o, "objectiveId")
+            );
+            case "town_quest_objective_complete" -> worldView.townQuestObjectiveComplete(
+                playerRef,
+                store,
+                stringOrEmpty(o, "questId"),
+                stringOrEmpty(o, "objectiveId")
+            );
             case "npc_schedule_at_work" -> npcScheduleAtWork(store, npcRef);
             case "bard_can_offer_music" -> bardCanOfferMusic(store, npcRef);
             case "bard_is_performing" -> BardPerformanceService.isPerforming(store, npcRef);

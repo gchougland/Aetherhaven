@@ -10,6 +10,7 @@ import com.hexvane.aetherhaven.rescue.RescueVillagerDespawnEffects;
 import com.hexvane.aetherhaven.rescue.RescueVillagerTriggers;
 import com.hexvane.aetherhaven.guild.GuardHireService;
 import com.hexvane.aetherhaven.guild.VillagerDeathHandlerSystem;
+import com.hexvane.aetherhaven.tourist.TouristMoveInRequirements;
 import com.hexvane.aetherhaven.tourist.TouristPortalTickService;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.autonomy.VillagerFollowPlayerSystem;
@@ -155,6 +156,7 @@ public final class DialogueActionExecutor {
             case "stop_bard_song" -> stopBardSong(playerRef, store, npcRef);
             case "start_follow_player" -> startFollowPlayer(playerRef, store, npcRef);
             case "stop_follow_player" -> stopFollowPlayer(store, npcRef);
+            case "deliver_tourist_move_in_items" -> deliverTouristMoveInItems(playerRef, store, npcRef);
             default -> LOGGER.atWarning().log("Unknown dialogue action type: %s", type);
         }
     }
@@ -272,7 +274,8 @@ public final class DialogueActionExecutor {
             }
             QuestProgressionService.initialize(plugin, town, qid);
             QuestLifecycleEffects.runOnStart(world, plugin, town, tm, qdef, npcUuid);
-            if (QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+            if (!QuestProgressionService.deferPlotTokenOnQuestStart(qdef)
+                && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
                 QuestProgressionService.markStartGrant(
                     plugin,
                     town,
@@ -1214,6 +1217,70 @@ public final class DialogueActionExecutor {
             return;
         }
         VillagerFollowPlayerSystem.stopFollow(npcRef, store, true);
+    }
+
+    private static void deliverTouristMoveInItems(
+        @Nonnull Ref<EntityStore> playerRef,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        UUIDComponent pu = store.getComponent(playerRef, UUIDComponent.getComponentType());
+        if (pu == null) {
+            return;
+        }
+        TownManager localTm = AetherhavenWorldRegistries.getOrCreateTownManager(world, plugin);
+        TownRecord town = townForDialogue(playerRef, store, localTm, npcRef);
+        if (town == null || !town.playerCanCompleteQuests(pu.getUuid())) {
+            return;
+        }
+        String qid = AetherhavenConstants.QUEST_HOUSE_TOWNSFOLK;
+        if (!town.hasQuestActive(qid)) {
+            return;
+        }
+        if (!worldViewNpcIsQuestTarget(town, store, npcRef, qid)) {
+            return;
+        }
+        var requirements = TouristMoveInRequirements.forNpc(plugin, store, npcRef);
+        if (requirements.isEmpty()) {
+            requirements = TouristMoveInRequirements.forQuestTarget(plugin, town, store);
+        }
+        if (requirements.isEmpty()) {
+            return;
+        }
+        if (!TouristMoveInRequirements.playerHasAll(playerRef, store, requirements)) {
+            return;
+        }
+        if (!TouristMoveInRequirements.removeAll(playerRef, store, requirements)) {
+            return;
+        }
+        if (!QuestProgressionService.completeTouristMoveInItems(plugin, town, qid)) {
+            return;
+        }
+        QuestDefinition qdef = plugin.getQuestCatalog().get(qid);
+        if (qdef != null && QuestPlotTokenOnStart.grantIfConfigured(plugin, qdef, playerRef, store)) {
+            QuestProgressionService.markStartGrant(plugin, town, qid, QuestProgressionService.PLOT_TOKEN_RECEIVED);
+        }
+        TownManager tm = owningTownManager(town, localTm);
+        tm.updateTown(town);
+    }
+
+    private static boolean worldViewNpcIsQuestTarget(
+        @Nonnull TownRecord town,
+        @Nonnull Store<EntityStore> store,
+        @Nullable Ref<EntityStore> npcRef,
+        @Nonnull String questId
+    ) {
+        UUID npcUuid = npcUuidFromRef(store, npcRef);
+        if (npcUuid == null) {
+            return false;
+        }
+        UUID target = town.getQuestTargetEntityUuid(questId);
+        return target != null && target.equals(npcUuid);
     }
 
     private static void giveItem(
