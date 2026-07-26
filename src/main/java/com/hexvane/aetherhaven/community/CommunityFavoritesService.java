@@ -23,9 +23,12 @@ import javax.annotation.Nullable;
 public final class CommunityFavoritesService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new Gson();
-    private static final long CACHE_TTL_MS = 5 * 60_000L;
+    private static final long CACHE_TTL_MS = 15 * 60_000L;
+    private static final long FETCH_FAILURE_BACKOFF_MS = 90_000L;
 
     private static final ConcurrentHashMap<UUID, CachedFavorites> FAVORITES_CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Long> LAST_FETCH_ATTEMPT_MS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<UUID, Boolean> FETCH_IN_FLIGHT = new ConcurrentHashMap<>();
 
     private CommunityFavoritesService() {}
 
@@ -36,16 +39,29 @@ public final class CommunityFavoritesService {
         if (cached != null && now - cached.fetchedAtMs < CACHE_TTL_MS) {
             return cached.buildingIds;
         }
-        FetchResult remote = fetchFavoritesFromApi(plugin, playerUuid);
-        if (remote == null) {
+        Long lastAttempt = LAST_FETCH_ATTEMPT_MS.get(playerUuid);
+        if (cached == null && lastAttempt != null && now - lastAttempt < FETCH_FAILURE_BACKOFF_MS) {
+            return List.of();
+        }
+        if (FETCH_IN_FLIGHT.putIfAbsent(playerUuid, Boolean.TRUE) != null) {
             return cached != null ? cached.buildingIds : List.of();
         }
-        FAVORITES_CACHE.put(playerUuid, new CachedFavorites(List.copyOf(remote.buildingIds), now));
-        return remote.buildingIds;
+        try {
+            LAST_FETCH_ATTEMPT_MS.put(playerUuid, now);
+            FetchResult remote = fetchFavoritesFromApi(plugin, playerUuid);
+            if (remote == null) {
+                return cached != null ? cached.buildingIds : List.of();
+            }
+            FAVORITES_CACHE.put(playerUuid, new CachedFavorites(List.copyOf(remote.buildingIds), now));
+            return remote.buildingIds;
+        } finally {
+            FETCH_IN_FLIGHT.remove(playerUuid);
+        }
     }
 
     public static void invalidateCache(@Nonnull UUID playerUuid) {
         FAVORITES_CACHE.remove(playerUuid);
+        LAST_FETCH_ATTEMPT_MS.remove(playerUuid);
     }
 
     @Nullable

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -36,10 +38,13 @@ public final class CommunityCatalogService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
     private static final Gson GSON = new GsonBuilder().create();
     private static final int ICON_DOWNLOAD_PARALLELISM = 4;
+    private static final long FETCH_FAILURE_BACKOFF_MS = 90_000L;
 
     private final AetherhavenPlugin plugin;
     private final AtomicReference<List<CommunityManifestEntry>> cachedEntries = new AtomicReference<>(List.of());
     private volatile long lastFetchEpochMs;
+    private volatile long lastFetchAttemptMs;
+    private volatile boolean lastFetchIncludedPlayerContext;
     private final AtomicInteger iconFetchSerial = new AtomicInteger();
     private final ExecutorService iconExecutor =
         Executors.newFixedThreadPool(
@@ -73,11 +78,27 @@ public final class CommunityCatalogService {
         if (!isEnabled()) {
             return false;
         }
+        long now = System.currentTimeMillis();
         if (cachedEntries.get().isEmpty()) {
-            return true;
+            return now - lastFetchAttemptMs >= FETCH_FAILURE_BACKOFF_MS;
         }
         long refreshMs = plugin.getConfig().get().getCommunityMarketplace().getManifestRefreshMinutes() * 60_000L;
-        return System.currentTimeMillis() - lastFetchEpochMs >= refreshMs;
+        return now - lastFetchEpochMs >= refreshMs;
+    }
+
+    public boolean lastFetchIncludedPlayerContext() {
+        return lastFetchIncludedPlayerContext;
+    }
+
+    @Nonnull
+    public List<String> favoritedIdsFromCachedManifest() {
+        ObjectArrayList<String> ids = new ObjectArrayList<>();
+        for (CommunityManifestEntry entry : cachedEntries.get()) {
+            if (entry.isUserHasFavorited()) {
+                ids.add(entry.getId().trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        return ids;
     }
 
     @Nullable
@@ -105,16 +126,29 @@ public final class CommunityCatalogService {
 
     /** Fetches manifest metadata from the API (plot crafting refresh). Icons are loaded per visible page. */
     public boolean refreshFromApi() {
-        return fetchManifest();
+        return fetchManifest(null);
+    }
+
+    public boolean refreshFromApi(@Nullable UUID playerUuid) {
+        return fetchManifest(playerUuid);
     }
 
     public boolean fetchManifest() {
+        return fetchManifest(null);
+    }
+
+    public boolean fetchManifest(@Nullable UUID playerUuid) {
+        lastFetchAttemptMs = System.currentTimeMillis();
         if (!isEnabled()) {
             cachedEntries.set(List.of());
+            lastFetchIncludedPlayerContext = false;
             return false;
         }
         String base = plugin.getConfig().get().getCommunityMarketplace().getApiBaseUrl();
-        String json = CommunityHttpClient.getString(base + "/api/v1/manifest");
+        String json =
+            playerUuid != null
+                ? CommunityHttpClient.getString(base + "/api/v1/manifest", playerHeaders(playerUuid))
+                : CommunityHttpClient.getString(base + "/api/v1/manifest");
         if (json == null || json.isBlank()) {
             LOGGER.atWarning().log("Community manifest fetch failed from %s", base);
             return false;
@@ -124,12 +158,18 @@ public final class CommunityCatalogService {
             List<CommunityManifestEntry> entries = response != null && response.entries != null ? response.entries : List.of();
             cachedEntries.set(List.copyOf(entries));
             lastFetchEpochMs = System.currentTimeMillis();
+            lastFetchIncludedPlayerContext = playerUuid != null;
             LOGGER.atInfo().log("Community manifest loaded: %s entries", entries.size());
             return true;
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to parse community manifest");
             return false;
         }
+    }
+
+    @Nonnull
+    private static Map<String, String> playerHeaders(@Nonnull UUID playerUuid) {
+        return Map.of("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(Locale.ROOT));
     }
 
     /**

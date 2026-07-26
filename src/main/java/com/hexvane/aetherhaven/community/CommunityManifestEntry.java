@@ -65,6 +65,9 @@ public final class CommunityManifestEntry {
     @SerializedName("materials")
     private List<MaterialRequirement> materials;
 
+    @SerializedName("userHasFavorited")
+    private boolean userHasFavorited;
+
     @Nonnull
     public String getId() {
         return id != null ? id : "";
@@ -153,6 +156,10 @@ public final class CommunityManifestEntry {
     @Nonnull
     public List<MaterialRequirement> getMaterials() {
         return materials != null ? materials : List.of();
+    }
+
+    public boolean isUserHasFavorited() {
+        return userHasFavorited;
     }
 
     @Nonnull

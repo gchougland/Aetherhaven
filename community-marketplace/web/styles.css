@@ -672,8 +672,8 @@ main.wrap > section + section {
   font-size: 2.75rem;
 }
 
-.building-card img,
-.building-card .building-icon {
+.building-card .building-icon-wrap img,
+.building-card .building-icon-wrap .building-icon {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -809,45 +809,39 @@ main.wrap > section + section {
 
 .favorite-btn {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  padding: 0;
+  min-width: 2.5rem;
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text-muted);
   text-decoration: none;
   background: var(--bg-deep);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition:
+    color var(--transition),
     border-color var(--transition),
-    background var(--transition),
-    filter var(--transition);
+    background var(--transition);
 }
 
-.favorite-btn-icon {
-  display: block;
-  width: 18px;
-  height: 18px;
-  object-fit: contain;
-  opacity: 0.72;
-  filter: brightness(0) invert(1);
+.favorite-star {
+  font-size: 0.85rem;
+  line-height: 1;
 }
 
 .favorite-btn:hover {
+  color: var(--gold);
   border-color: var(--gold-dim);
 }
 
-.favorite-btn:hover .favorite-btn-icon {
-  opacity: 0.95;
-}
-
-.favorite-btn--active .favorite-btn-icon {
-  filter: none;
-  opacity: 1;
-}
-
 .favorite-btn--active {
+  color: var(--gold-bright);
   border-color: var(--gold);
   background: rgba(212, 175, 55, 0.12);
 }
@@ -1150,8 +1144,8 @@ main.wrap > section + section {
   font-size: 2.5rem;
 }
 
-.newest-carousel-card-media img,
-.newest-carousel-card-media .building-icon {
+.newest-carousel-card-media .building-icon-wrap img,
+.newest-carousel-card-media .building-icon-wrap .building-icon {
   width: 100%;
   height: 100%;
   object-fit: cover;

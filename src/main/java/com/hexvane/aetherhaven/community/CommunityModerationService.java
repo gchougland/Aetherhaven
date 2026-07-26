@@ -109,6 +109,25 @@ public final class CommunityModerationService {
         return cachedPending.isEmpty();
     }
 
+    public boolean isPendingCacheStale() {
+        if (!isMarketplaceEnabled()) {
+            return false;
+        }
+        if (lastFetchEpochMs <= 0L) {
+            return true;
+        }
+        long refreshMs = plugin.getConfig().get().getCommunityMarketplace().getManifestRefreshMinutes() * 60_000L;
+        return System.currentTimeMillis() - lastFetchEpochMs >= refreshMs;
+    }
+
+    /** Refreshes the pending queue metadata only when the cached list is stale. */
+    public void refreshPendingIfStale(@Nonnull UUID playerUuid) {
+        if (!isPendingCacheStale()) {
+            return;
+        }
+        refreshPending(playerUuid);
+    }
+
     /** Refreshes the pending queue metadata only (icons load per visible page). */
     public void refreshPending(@Nonnull UUID playerUuid) {
         if (!isModerator(playerUuid)) {

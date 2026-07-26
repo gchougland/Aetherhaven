@@ -191,9 +191,9 @@ function favoriteControlHtml(entry, canFavorite) {
   const active = entry.userHasFavorited ? " favorite-btn--active" : "";
   const label = entry.userHasFavorited ? "Remove from favorites" : "Add to favorites";
   if (!canFavorite) {
-    return `<a class="favorite-btn" href="/auth/login" title="Sign in to save favorites" aria-label="Sign in to save favorites" onclick="event.stopPropagation()"><img class="favorite-btn-icon" src="/assets/star.png" alt="" width="18" height="18" /></a>`;
+    return `<a class="favorite-btn" href="/auth/login" title="Sign in to save favorites" aria-label="Sign in to save favorites" onclick="event.stopPropagation()"><span class="favorite-star" aria-hidden="true">★</span></a>`;
   }
-  return `<button type="button" class="favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasFavorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><img class="favorite-btn-icon" src="/assets/star.png" alt="" width="18" height="18" /></button>`;
+  return `<button type="button" class="favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasFavorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="favorite-star" aria-hidden="true">★</span></button>`;
 }
 
 function formatDownloadCount(count) {

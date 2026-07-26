@@ -173,7 +173,8 @@ $C.@PageOverlay {
 
               AssetImage #ModerationTabIcon {
                 Anchor: (Width: 44, Height: 44);
-                AssetPath: "../cog.png";
+                AssetPath: "UI/Custom/cog.png";
+                FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
                 HitTestVisible: false;
               }
             }
