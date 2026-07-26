@@ -1,4 +1,31 @@
 $C = "../Common.ui";
+$Sounds = "../Sounds.ui";
+
+@EditorTabAnchor = Anchor(Width: 82, Height: 62, Right: 5, Bottom: -14);
+
+@EditorTabsStyle = TabNavigationStyle(
+  TabStyle: (
+    Default: (...$C.@TopTabStyle, Anchor: (...@EditorTabAnchor, Bottom: -8)),
+    Hovered: (...$C.@TopTabStyle, Anchor: (...@EditorTabAnchor, Bottom: -3)),
+    Pressed: (...$C.@TopTabStyle, Anchor: (...@EditorTabAnchor, Bottom: -6))
+  ),
+  SelectedTabStyle: (
+    Default: (
+      ...$C.@TopTabStyle,
+      Anchor: (...@EditorTabAnchor, Bottom: 0),
+      IconAnchor: (Width: 44, Height: 44),
+      Overlay: "../Common/TabSelectedOverlay.png"
+    )
+  )
+);
+
+@RefreshIconStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #ffffff), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Hovered: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #c5d0dc), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Pressed: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #8fa0b0), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Disabled: (Background: PatchStyle(TexturePath: "../rotate_clockwise_256.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (FontSize: 6, TextColor: #ffffff(0.01))),
+  Sounds: $Sounds.@ButtonsLight
+);
 
 @HintStyle = (
   FontSize: 12,
@@ -35,10 +62,61 @@ $C.@PageOverlay {
       LayoutMode: Top;
       Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
 
+      TabNavigation #EditorTabs {
+        Anchor: (Height: 66, Left: 0, Right: 0, Bottom: 8);
+        Style: @EditorTabsStyle;
+        SelectedTab: "All";
+
+        TabButton {
+          Icon: "../star.png";
+          TooltipText: "";
+          Id: "All";
+        }
+
+        TabButton {
+          Icon: "../group_icon_256.png";
+          TooltipText: "";
+          Id: "Mine";
+        }
+      }
+
+      Group #RefreshRow {
+        LayoutMode: Left;
+        Anchor: (Bottom: 8);
+        Visible: false;
+
+        TextButton #RefreshButton {
+          Style: @RefreshIconStyle;
+          Anchor: (Width: 36, Height: 36);
+          Text: "";
+        }
+
+        Label #RefreshLabel {
+          Style: (...@HintStyle, VerticalAlignment: Center);
+          Padding: (Left: 8);
+          Text: "";
+          FlexWeight: 1;
+        }
+      }
+
       Label #StepHint {
         Style: (...@HintStyle);
         Text: "";
         Anchor: (Bottom: 10);
+      }
+
+      Label #LoadingLabel {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
+      }
+
+      Label #EmptyLabel {
+        Style: (...@HintStyle);
+        Text: "";
+        Anchor: (Bottom: 10);
+        Visible: false;
       }
 
       Group #BuildingListScroll {

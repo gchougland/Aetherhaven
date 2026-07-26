@@ -31,8 +31,10 @@ public final class CustomBuildingIconAssetRegistry {
         String packId = new PluginIdentifier(plugin.getManifest()).toString();
         Path iconsDir = CustomBuildingsPaths.iconsDirectory(plugin.getDataDirectory());
         if (!Files.isDirectory(iconsDir)) {
+            pruneStaleRegisteredIcons(packId, iconsDir);
             return;
         }
+        pruneStaleRegisteredIcons(packId, iconsDir);
         List<CommonAsset> newlyRegistered = new ArrayList<>();
         try (Stream<Path> files = Files.list(iconsDir)) {
             files.filter(Files::isRegularFile)
@@ -47,6 +49,31 @@ public final class CustomBuildingIconAssetRegistry {
             LOGGER.atWarning().withCause(e).log("Failed to scan custom building icons at %s", iconsDir);
         }
         RuntimeCommonIconBroadcast.broadcast(newlyRegistered);
+    }
+
+    /** Removes registry entries for plot token icons whose PNG no longer exists on disk. */
+    private static void pruneStaleRegisteredIcons(@Nonnull String packId, @Nonnull Path iconsDir) {
+        String prefix = packId + "|Icons/ItemsGenerated/Aetherhaven_Token_";
+        List<String> stale = new ArrayList<>();
+        for (String cacheKey : REGISTERED_MTIMES.keySet()) {
+            if (!cacheKey.startsWith(prefix)) {
+                continue;
+            }
+            String assetName = cacheKey.substring(packId.length() + 1);
+            String fileName = assetName.substring("Icons/ItemsGenerated/".length());
+            if (!Files.isRegularFile(iconsDir.resolve(fileName))) {
+                stale.add(assetName);
+            }
+        }
+        for (String assetName : stale) {
+            RuntimeCommonIconBroadcast.unregisterSilently(packId, assetName, REGISTERED_MTIMES);
+        }
+    }
+
+    public static void unregisterIconForConstruction(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+        String packId = new PluginIdentifier(plugin.getManifest()).toString();
+        String assetName = RuntimeCommonIconBroadcast.assetNameForIconFileName(CustomBuildingsPaths.iconFileName(constructionId));
+        RuntimeCommonIconBroadcast.unregisterSilently(packId, assetName, REGISTERED_MTIMES);
     }
 
     public static void registerIconFile(@Nonnull AetherhavenPlugin plugin, @Nonnull Path iconFile) {

@@ -4,19 +4,26 @@
 
 ### Added
 
+- **Community submission building editor** — In Creative mode, the building editor staff now has a My submissions tab listing buildings you submitted to the marketplace. Edit your building and save to upload a new version. Pending submissions update in place. Live buildings send an update for review while the current version stays up until it is approved.
 - **Debug commands for quest board, inn, and town rank** — World Editor tools: `/ah questboard reroll` refreshes guild hall board offers (keeps accepted quests), `/ah inn reroll` replaces unlocked inn visitors, and `/ah townrank set <rank>` sets town rank by tier (E through SSS). All support optional `--town` and `--player` targeting.
 - **Command tab completion** — Aetherhaven commands now suggest values while you type: construction ids, plot ids, town names, quest ids, villager roles, ranks, and other common arguments.
 - **Multi town membership** — You can still own only one town, but you may join other towns as a guest. Invites work even when the player already has a charter. Use the town picker at the top of the Town Journal when you belong to more than one town. Standing inside a town you belong to also sets context when you have not picked one yet.
 - **Chalk to Miner** Added chalk to the options for the Miner since chalk cobble can't be converted to chalk.
+- **Keep water when building** — New plot creator option for docks, piers, and boat plots. When on, water stays in empty spaces around the build instead of being cleared during assembly. Editor empty markers still clear water inside the building so you can hollow out interiors.
 - **Town territory and expansions** — Your town owns a set of map chunks, not just a fixed square. Members can be allowed or blocked from breaking blocks, placing blocks, harvesting, opening chests, and using doors inside that land. The world map border follows your actual claim shape. At a completed town hall, open town records and use the expand tab to pan the map and buy the next adjacent chunk. Cost rises each time (100 gold, then 200, and so on). Only the owner or members who may spend from the treasury can claim. New towns start with a smaller default starter area unless your server config already saved a different size. Server staff in the Admin group, or anyone with the `aetherhaven.town.territory.bypass` permission, can build in any town claim without joining that town.
 
 ### Changed
 
+- **Shop spot status panel** — Moved to the top left so it no longer covers the clock in the top right.
 - **Town NPC death messages** — When a guard, villager, visitor, or other town linked NPC dies, town members see block coordinates and a short cause line (killed by whoever or whatever hurt them, or the damage type for falls and similar).
 - **Plot creator community submit** — Submit to community starts unchecked by default so a normal save stays on your server unless you turn it on. Server config can still set SubmitOnSaveDefault to opt in by default.
 
 ### Fixed
 
+- **House assignment picker** — Portal visitors and hired guards only show up when you can assign them to a house, after you accept their house quest. Assigning them early no longer skips those quest steps.
+- **Battle horn sound** — Other players nearby hear the horn when someone blows it, not just the person holding it.
+- **Plot signs over water** — Plot signs on boat plots and other water placements sit above the water surface instead of on the seabed.
+- **Prefab materials for tree trunks** — Buildings that use full tree trunk blocks in their design now ask for regular trunk blocks you can gather, not the full block version.
 - **Villager energy at work** — Finishing a use at a work POI no longer refills hunger, energy, or fun. Rest and meals come from beds, food spots, and similar POIs instead. (this was a bug)
 - **Community submit duplicate buildings** — Saving from the plot creator with Submit to community checked now stores one community catalog id locally instead of keeping a separate plot id that showed up twice on the plot crafting bench.
 - **Guard combat** — Hired guards on patrol or following you engage hostile creatures more reliably, fight back when hit, and defend you when something attacks you or locks onto you in follow mode. Multiple guards following you now join the same fight when you attack a creature or when one guard already engaged it. Quest raid mobs are detected via the mod raid group instead of overriding vanilla Aggressive assets.

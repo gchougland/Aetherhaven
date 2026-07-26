@@ -530,6 +530,12 @@ public final class GuildHallAdventurerPoolService {
             return 0;
         }
 
+        TownsfolkPoolState pool = TownsfolkPoolPersistence.getOrLoad(world, plugin);
+        TownsfolkCharacterCatalog catalog = plugin.getTownsfolkCharacterCatalog();
+        if (pool.availableGuardEligibleCharacterIds(town.getTownId(), catalog).isEmpty()) {
+            return 0;
+        }
+
         int spawned = 0;
         for (int slot : town.getGuildHallAdventurerFilledSlots()) {
             if (slot < 0 || slot >= spawnSlots.size()) {

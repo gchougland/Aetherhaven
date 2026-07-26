@@ -104,8 +104,29 @@ public final class CommunityHttpClient {
         @Nonnull String boundary,
         @Nonnull byte[] body
     ) {
+        return sendMultipart(url, "POST", headers, boundary, body);
+    }
+
+    @Nullable
+    public static String putMultipart(
+        @Nonnull String url,
+        @Nonnull Map<String, String> headers,
+        @Nonnull String boundary,
+        @Nonnull byte[] body
+    ) {
+        return sendMultipart(url, "PUT", headers, boundary, body);
+    }
+
+    @Nullable
+    private static String sendMultipart(
+        @Nonnull String url,
+        @Nonnull String method,
+        @Nonnull Map<String, String> headers,
+        @Nonnull String boundary,
+        @Nonnull byte[] body
+    ) {
         try {
-            HttpURLConnection http = open(url, "POST", headers);
+            HttpURLConnection http = open(url, method, headers);
             http.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
             http.setFixedLengthStreamingMode(body.length);
             try (OutputStream os = http.getOutputStream()) {
@@ -116,12 +137,12 @@ public final class CommunityHttpClient {
             String response = in != null ? new String(readAll(in), StandardCharsets.UTF_8) : "";
             http.disconnect();
             if (code < 200 || code >= 300) {
-                LOGGER.atWarning().log("Community POST %s failed: HTTP %s %s", url, code, response);
+                LOGGER.atWarning().log("Community %s %s failed: HTTP %s %s", method, url, code, response);
                 return null;
             }
             return response;
         } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("Community POST %s failed", url);
+            LOGGER.atWarning().withCause(e).log("Community %s %s failed", method, url);
             return null;
         }
     }
@@ -134,7 +155,7 @@ public final class CommunityHttpClient {
         http.setConnectTimeout(CONNECT_TIMEOUT_MS);
         http.setReadTimeout(READ_TIMEOUT_MS);
         http.setDoInput(true);
-        if ("POST".equals(method)) {
+        if ("POST".equals(method) || "PUT".equals(method)) {
             http.setDoOutput(true);
         }
         if (headers != null) {

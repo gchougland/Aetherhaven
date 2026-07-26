@@ -119,6 +119,10 @@ public final class PlotCreatorDraft {
     private boolean constructionIdUserEdited;
     /** Creative building-editor staff session (edit existing catalog buildings, merge-save). */
     private boolean buildingEditorMode;
+    /** Building editor session for a owned marketplace submission (auto upload on save). */
+    private boolean communitySubmissionEdit;
+    /** True when the edited submission was live on the marketplace when the session started. */
+    private boolean communitySubmissionApproved;
     /** Snapshot of the original building JSON for merge-save (keys not managed by the wizard are kept). */
     @Nonnull
     private final java.util.Map<String, Object> originalBuildingJsonSnapshot = new java.util.LinkedHashMap<>();
@@ -601,6 +605,22 @@ public final class PlotCreatorDraft {
 
     public void setBuildingEditorMode(boolean buildingEditorMode) {
         this.buildingEditorMode = buildingEditorMode;
+    }
+
+    public boolean isCommunitySubmissionEdit() {
+        return communitySubmissionEdit;
+    }
+
+    public void setCommunitySubmissionEdit(boolean communitySubmissionEdit) {
+        this.communitySubmissionEdit = communitySubmissionEdit;
+    }
+
+    public boolean isCommunitySubmissionApproved() {
+        return communitySubmissionApproved;
+    }
+
+    public void setCommunitySubmissionApproved(boolean communitySubmissionApproved) {
+        this.communitySubmissionApproved = communitySubmissionApproved;
     }
 
     @Nonnull

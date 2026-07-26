@@ -32,8 +32,8 @@ import com.hypixel.hytale.server.core.modules.time.WorldTimeResource;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -96,18 +96,18 @@ public final class TouristReconcileService {
                 TownTerritoryChunkUtil.isAnyTownNpcChunkLoaded(world, plugin, town);
             boolean changed = false;
             Set<String> seenCharacters = new HashSet<>();
-            Iterator<TouristRecord> it = town.getTouristRecords().iterator();
-            while (it.hasNext()) {
-                TouristRecord rec = it.next();
+            for (TouristRecord rec : new ArrayList<>(town.getTouristRecords())) {
                 String characterId = rec.getCharacterId();
                 if (characterId.isBlank()) {
-                    it.remove();
-                    changed = true;
+                    if (town.getTouristRecords().remove(rec)) {
+                        changed = true;
+                    }
                     continue;
                 }
                 if (seenCharacters.contains(characterId)) {
-                    it.remove();
-                    changed = true;
+                    if (town.getTouristRecords().remove(rec)) {
+                        changed = true;
+                    }
                     continue;
                 }
                 seenCharacters.add(characterId);
@@ -133,9 +133,10 @@ public final class TouristReconcileService {
                     if (leaveRef != null && leaveRef.isValid() && entityUuid != null) {
                         if (!repairTouristIdentity(leaveRef, store, plugin, town, rec)) {
                             purgeBrokenTouristEntity(world, plugin, store, town, rec);
-                            it.remove();
-                            changed = true;
-                            released++;
+                            if (town.getTouristRecords().remove(rec)) {
+                                changed = true;
+                                released++;
+                            }
                         } else {
                             TouristPortalTickService.sendTouristHomeOrFinalize(
                                 world, plugin, tm, store, town, rec, entityUuid
@@ -145,9 +146,10 @@ public final class TouristReconcileService {
                         EntityPresence presence = EntityPresenceUtil.resolve(store, entityUuid);
                         if (EntityPresenceUtil.shouldFinalizeTouristLeaveForMissingEntity(presence)) {
                             releaseStaleTouristRecord(world, plugin, town, rec);
-                            it.remove();
-                            changed = true;
-                            released++;
+                            if (town.getTouristRecords().remove(rec)) {
+                                changed = true;
+                                released++;
+                            }
                         }
                     }
                     continue;
@@ -157,9 +159,10 @@ public final class TouristReconcileService {
                 if (ref != null && ref.isValid()) {
                     if (!repairTouristIdentity(ref, store, plugin, town, rec)) {
                         purgeBrokenTouristEntity(world, plugin, store, town, rec);
-                        it.remove();
-                        changed = true;
-                        released++;
+                        if (town.getTouristRecords().remove(rec)) {
+                            changed = true;
+                            released++;
+                        }
                         continue;
                     }
                     UUIDComponent uc = store.getComponent(ref, UUIDComponent.getComponentType());
@@ -186,11 +189,12 @@ public final class TouristReconcileService {
                     presence,
                     releaseMissing,
                     townNpcChunksLoaded
-                )) {
+                )                ) {
                     releaseStaleTouristRecord(world, plugin, town, rec);
-                    it.remove();
-                    changed = true;
-                    released++;
+                    if (town.getTouristRecords().remove(rec)) {
+                        changed = true;
+                        released++;
+                    }
                 }
             }
             if (changed) {

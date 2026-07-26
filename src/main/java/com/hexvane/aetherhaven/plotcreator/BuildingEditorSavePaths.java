@@ -2,6 +2,8 @@ package com.hexvane.aetherhaven.plotcreator;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.asset.AetherhavenAssetPaths;
+import com.hexvane.aetherhaven.community.CommunityBuildingValidator;
+import com.hexvane.aetherhaven.community.CommunityPaths;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
 import com.hypixel.hytale.assetstore.AssetPack;
 import com.hypixel.hytale.server.core.asset.AssetModule;
@@ -20,6 +22,16 @@ public final class BuildingEditorSavePaths {
 
     @Nonnull
     public static Path resolveWriteRoot(@Nonnull AetherhavenPlugin plugin, @Nonnull String constructionId) {
+        String id = constructionId.trim();
+        if (CommunityBuildingValidator.isValidCommunityId(id)) {
+            Path dataDir = plugin.getDataDirectory().toAbsolutePath().normalize();
+            if (Files.isRegularFile(CustomBuildingsPaths.buildingFile(dataDir, id))) {
+                return dataDir;
+            }
+            if (Files.isRegularFile(CommunityPaths.buildingFile(dataDir, id))) {
+                return CommunityPaths.communityRoot(dataDir);
+            }
+        }
         String configured = plugin.getConfig().get().getBuildingEditorWriteRoot();
         if (configured != null && !configured.isBlank()) {
             Path root = Path.of(configured.trim()).toAbsolutePath().normalize();
@@ -84,6 +96,10 @@ public final class BuildingEditorSavePaths {
         Path dataFile = CustomBuildingsPaths.buildingFile(plugin.getDataDirectory(), id);
         if (Files.isRegularFile(dataFile)) {
             return dataFile;
+        }
+        Path communityFile = CommunityPaths.buildingFile(plugin.getDataDirectory(), id);
+        if (Files.isRegularFile(communityFile)) {
+            return communityFile;
         }
         return configured != null && Files.isRegularFile(configured) ? configured : null;
     }

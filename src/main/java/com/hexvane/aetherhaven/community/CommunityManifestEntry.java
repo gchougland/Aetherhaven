@@ -80,6 +80,11 @@ public final class CommunityManifestEntry {
         return creatorName != null && !creatorName.isBlank() ? creatorName : "Unknown";
     }
 
+    @Nonnull
+    public String getCreatorUuid() {
+        return creatorUuid != null ? creatorUuid.trim().toLowerCase(java.util.Locale.ROOT) : "";
+    }
+
     @Nullable
     public String getStyleId() {
         return styleId;

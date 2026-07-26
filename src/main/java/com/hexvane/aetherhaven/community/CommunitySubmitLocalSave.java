@@ -3,6 +3,7 @@ package com.hexvane.aetherhaven.community;
 import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsWriter;
+import com.hexvane.aetherhaven.plotcreator.CustomBuildingIconAssetRegistry;
 import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorDraft;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
@@ -53,7 +54,7 @@ public final class CommunitySubmitLocalSave {
 
         Path dataDir = plugin.getDataDirectory();
         movePrefabIfPresent(dataDir, draft.getPrefabPath(), communityId);
-        moveIconIfPresent(dataDir, localId, communityId);
+        moveIconIfPresent(plugin, dataDir, localId, communityId);
         movePrefabMaterialsIfPresent(dataDir, localId, communityId);
         deleteBuildingJsonIfPresent(dataDir, localId);
 
@@ -79,6 +80,7 @@ public final class CommunitySubmitLocalSave {
     }
 
     private static void moveIconIfPresent(
+        @Nonnull AetherhavenPlugin plugin,
         @Nonnull Path dataDir,
         @Nonnull String oldConstructionId,
         @Nonnull String communityId
@@ -90,6 +92,7 @@ public final class CommunitySubmitLocalSave {
         }
         Files.createDirectories(newIcon.getParent());
         Files.move(oldIcon, newIcon, StandardCopyOption.REPLACE_EXISTING);
+        CustomBuildingIconAssetRegistry.unregisterIconForConstruction(plugin, oldConstructionId);
     }
 
     private static void movePrefabMaterialsIfPresent(

@@ -33,6 +33,49 @@ public final class CommunitySubmissionService {
         @Nonnull String playerName,
         @Nonnull String constructionId
     ) {
+        return uploadSavedBuilding(plugin, playerUuid, playerName, constructionId, false);
+    }
+
+    @Nullable
+    public static String updateSavedBuilding(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String constructionId,
+        @Nonnull UpdateOutcome outcome
+    ) {
+        String error = uploadSavedBuilding(plugin, playerUuid, playerName, constructionId, true, outcome);
+        return error;
+    }
+
+    public static final class UpdateOutcome {
+        private boolean waitingForReview;
+
+        public boolean isWaitingForReview() {
+            return waitingForReview;
+        }
+    }
+
+    @Nullable
+    private static String uploadSavedBuilding(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String constructionId,
+        boolean update
+    ) {
+        return uploadSavedBuilding(plugin, playerUuid, playerName, constructionId, update, null);
+    }
+
+    @Nullable
+    private static String uploadSavedBuilding(
+        @Nonnull AetherhavenPlugin plugin,
+        @Nonnull UUID playerUuid,
+        @Nonnull String playerName,
+        @Nonnull String constructionId,
+        boolean update,
+        @Nullable UpdateOutcome outcome
+    ) {
         CommunityMarketplaceConfig cfg = plugin.getConfig().get().getCommunityMarketplace();
         if (!cfg.isEnabled()) {
             return "disabled";
@@ -67,12 +110,25 @@ public final class CommunitySubmissionService {
             headers.put("X-Player-Uuid", playerUuid.toString().trim().toLowerCase(java.util.Locale.ROOT));
             headers.put("X-Player-Name", playerName);
 
-            String url = cfg.getApiBaseUrl() + "/api/v1/submissions";
-            String response = CommunityHttpClient.postMultipart(url, headers, BOUNDARY, body);
+            String url =
+                cfg.getApiBaseUrl()
+                    + (update ? "/api/v1/submissions/" + constructionId.trim() : "/api/v1/submissions");
+            String response =
+                update
+                    ? CommunityHttpClient.putMultipart(url, headers, BOUNDARY, body)
+                    : CommunityHttpClient.postMultipart(url, headers, BOUNDARY, body);
             if (response == null) {
                 return "upload_failed";
             }
-            LOGGER.atInfo().log("Community submission uploaded for %s by %s", constructionId, playerUuid);
+            if (update && outcome != null) {
+                outcome.waitingForReview = parseWaitingForReview(response);
+            }
+            LOGGER.atInfo().log(
+                "Community submission %s for %s by %s",
+                update ? "updated" : "uploaded",
+                constructionId,
+                playerUuid
+            );
             return null;
         } catch (IOException e) {
             LOGGER.atWarning().withCause(e).log("Community submission failed for %s", constructionId);
@@ -82,18 +138,70 @@ public final class CommunitySubmissionService {
 
     /** Sends chat feedback for a submission result ({@code err == null} is success). */
     public static void notifyPlayer(@Nonnull PlayerRef playerRef, @Nullable String err) {
+        notifyPlayer(playerRef, err, false, false);
+    }
+
+    /** Sends chat feedback for a building editor community update. */
+    public static void notifyUpdatePlayer(
+        @Nonnull PlayerRef playerRef,
+        @Nullable String err,
+        boolean waitingForReview
+    ) {
+        notifyPlayer(playerRef, err, true, waitingForReview);
+    }
+
+    private static void notifyPlayer(
+        @Nonnull PlayerRef playerRef,
+        @Nullable String err,
+        boolean update,
+        boolean waitingForReview
+    ) {
         if (err == null) {
-            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity"));
+            if (update) {
+                playerRef.sendMessage(
+                    Message.translation(
+                        waitingForReview
+                            ? "aetherhaven_building_editor.aetherhaven.buildingeditor.success.submittedForReview"
+                            : "aetherhaven_building_editor.aetherhaven.buildingeditor.success.updatedSubmission"
+                    )
+                );
+            } else {
+                playerRef.sendMessage(
+                    Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.success.submittedCommunity")
+                );
+            }
             return;
         }
         if ("disabled".equals(err)) {
-            playerRef.sendMessage(Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityDisabled"));
+            playerRef.sendMessage(
+                Message.translation(
+                    update
+                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityDisabled"
+                        : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communityDisabled"
+                )
+            );
             return;
         }
         playerRef.sendMessage(
-            Message.translation("aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit")
+            Message.translation(
+                    update
+                        ? "aetherhaven_building_editor.aetherhaven.buildingeditor.error.communityUpdate"
+                        : "aetherhaven_plot_creator.aetherhaven.plotcreator.error.communitySubmit"
+                )
                 .param("reason", Message.raw(err))
         );
+    }
+
+    private static boolean parseWaitingForReview(@Nonnull String responseJson) {
+        try {
+            JsonObject root = GSON.fromJson(responseJson, JsonObject.class);
+            if (root == null || !root.has("action") || root.get("action").isJsonNull()) {
+                return false;
+            }
+            return "created_pending".equalsIgnoreCase(root.get("action").getAsString());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Nullable

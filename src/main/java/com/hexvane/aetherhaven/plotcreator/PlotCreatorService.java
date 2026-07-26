@@ -568,6 +568,23 @@ public final class PlotCreatorService {
         if (prefabPath != null && !prefabPath.isBlank()) {
             plugin.getPrefabMaterialsService().generateOne(id, prefabPath, writeRoot);
         }
+        if (draft.isCommunitySubmissionEdit() && plugin.getConfig().get().getCommunityMarketplace().isEnabled()) {
+            String playerName = playerRef.getUsername() != null ? playerRef.getUsername() : "Unknown";
+            CommunitySubmissionService.UpdateOutcome outcome = new CommunitySubmissionService.UpdateOutcome();
+            String submitErr =
+                CommunitySubmissionService.updateSavedBuilding(
+                    plugin,
+                    playerRef.getUuid(),
+                    playerName,
+                    id,
+                    outcome
+                );
+            boolean waitingForReview = draft.isCommunitySubmissionApproved() || outcome.isWaitingForReview();
+            CommunitySubmissionService.notifyUpdatePlayer(playerRef, submitErr, waitingForReview);
+            if (submitErr != null) {
+                return false;
+            }
+        }
         plugin.reloadConfigsAndAssetCatalogs();
         draft.setStep(PlotCreatorStep.DONE);
         playerRef.sendMessage(

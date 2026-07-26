@@ -63,6 +63,17 @@ public final class BuildingEditorSessionStarter {
         @Nonnull Store<EntityStore> store,
         @Nonnull String constructionId
     ) {
+        startFromConstructionId(playerRef, ref, store, constructionId, false, false);
+    }
+
+    public static void startFromConstructionId(
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String constructionId,
+        boolean communitySubmissionEdit,
+        boolean communitySubmissionApproved
+    ) {
         if (!requireCreative(playerRef, ref, store)) {
             return;
         }
@@ -102,6 +113,8 @@ public final class BuildingEditorSessionStarter {
 
         Vector3i signCopy = new Vector3i(signPos);
         Vector3i originCopy = new Vector3i(prefabOrigin);
+        boolean communityEdit = communitySubmissionEdit;
+        boolean communityApproved = communitySubmissionApproved;
         ConstructionAnimator.start(
             plugin,
             world,
@@ -126,7 +139,9 @@ public final class BuildingEditorSessionStarter {
                             buffer,
                             originCopy,
                             signCopy,
-                            yaw
+                            yaw,
+                            communityEdit,
+                            communityApproved
                         )
                 )
         );
@@ -142,7 +157,9 @@ public final class BuildingEditorSessionStarter {
         @Nonnull IPrefabBuffer buffer,
         @Nonnull Vector3i prefabOrigin,
         @Nonnull Vector3i signPos,
-        @Nonnull Rotation yaw
+        @Nonnull Rotation yaw,
+        boolean communitySubmissionEdit,
+        boolean communitySubmissionApproved
     ) {
         if (!ref.isValid()) {
             return;
@@ -153,6 +170,9 @@ public final class BuildingEditorSessionStarter {
         PlotCreatorDraft draft = session.getDraft();
         PlotCreatorDraftLoader.loadIntoDraft(draft, def);
         draft.setBuildingEditorMode(true);
+        draft.setCommunitySubmissionEdit(communitySubmissionEdit);
+        draft.setCommunitySubmissionApproved(communitySubmissionApproved);
+        draft.setEditingConstructionId(def.getId());
         draft.setConstructionIdUserEdited(true);
         draft.setSubmitToCommunity(false);
         draft.setLockedPrefabPathKey(def.getPrefabPath());

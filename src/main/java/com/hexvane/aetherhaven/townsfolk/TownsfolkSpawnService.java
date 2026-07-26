@@ -133,13 +133,13 @@ public final class TownsfolkSpawnService {
         } else if (TownsfolkAssignmentKinds.isGuildHallAdventurer(kind)) {
             characterId = pool.pickRandomGuardEligibleCharacterId(townId, catalog, random);
             if (characterId == null) {
-                LOGGER.atWarning().log("No guard eligible townsfolk for guild hall in town %s", townId);
+                LOGGER.atFine().log("No guard eligible townsfolk for guild hall in town %s", townId);
                 return Optional.empty();
             }
         } else {
             characterId = pool.pickRandomAvailableCharacterId(townId, catalog, kind, random);
             if (characterId == null) {
-                LOGGER.atWarning().log("No available townsfolk for assignment %s in town %s", kind, townId);
+                LOGGER.atFine().log("No available townsfolk for assignment %s in town %s", kind, townId);
                 return Optional.empty();
             }
         }

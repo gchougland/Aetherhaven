@@ -41,6 +41,11 @@ import {
   projectAdminRawMetadata,
   validateAdminRawFilePair,
 } from "./adminRawFiles.js";
+import {
+  listSlimSubmissionsForCreator,
+  resolveOwnerSubmissionFile,
+  updateOwnedSubmission,
+} from "./submissionUpdates.js";
 // sharp is loaded lazily inside processScreenshot so native-lib failures
 // do not crash startup before Railway's /api/v1/health check can succeed.
 
@@ -677,6 +682,26 @@ function sessionWebUser(req) {
   };
 }
 
+function inGamePlayerUser(req) {
+  return {
+    profileUuid: String(req.get("X-Player-Uuid") || "")
+      .trim()
+      .toLowerCase(),
+    profileUsername: String(req.get("X-Player-Name") || "")
+      .trim()
+      .toLowerCase(),
+  };
+}
+
+function requireInGamePlayer(req, res, next) {
+  const uuid = inGamePlayerUser(req).profileUuid;
+  if (!uuid || !UUID_RE.test(uuid)) {
+    res.status(400).json({ error: "player_uuid_required" });
+    return;
+  }
+  next();
+}
+
 function isOwnedByProfile(metaOrEntry, profileUuid) {
   if (!profileUuid) {
     return false;
@@ -1116,6 +1141,101 @@ app.post(
       res.status(400).json({ error: e.message || "submission_failed" });
     }
   }
+);
+
+app.get("/api/v1/my-submissions", requireInGamePlayer, (req, res) => {
+  const webUser = inGamePlayerUser(req);
+  res.json({ submissions: listSlimSubmissionsForCreator(storage, webUser, isOwnedByWebUser) });
+});
+
+app.get("/api/v1/my-submissions/:submissionId/building.json", requireInGamePlayer, (req, res) => {
+  const file = resolveOwnerSubmissionFile(
+    storage,
+    req.params.submissionId,
+    "building.json",
+    inGamePlayerUser(req),
+    isOwnedByWebUser,
+  );
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/api/v1/my-submissions/:submissionId/prefab.json", requireInGamePlayer, (req, res) => {
+  const file = resolveOwnerSubmissionFile(
+    storage,
+    req.params.submissionId,
+    "prefab.prefab.json",
+    inGamePlayerUser(req),
+    isOwnedByWebUser,
+  );
+  if (!file) {
+    res.status(404).json({ error: "not_found" });
+    return;
+  }
+  res.type("application/json").send(fs.readFileSync(file));
+});
+
+app.get("/api/v1/my-submissions/:submissionId/icon.png", requireInGamePlayer, (req, res) => {
+  const file = resolveOwnerSubmissionFile(
+    storage,
+    req.params.submissionId,
+    "icon.png",
+    inGamePlayerUser(req),
+    isOwnedByWebUser,
+  );
+  if (!file) {
+    res.status(404).end();
+    return;
+  }
+  res.type("image/png").send(fs.readFileSync(file));
+});
+
+app.put(
+  "/api/v1/submissions/:buildingId",
+  submissionRateLimit,
+  requireInGamePlayer,
+  upload.fields([
+    { name: "building", maxCount: 1 },
+    { name: "prefab", maxCount: 1 },
+    { name: "icon", maxCount: 1 },
+  ]),
+  (req, res) => {
+    const buildingFile = req.files?.building?.[0];
+    const prefabFile = req.files?.prefab?.[0];
+    const iconFile = req.files?.icon?.[0];
+    if (!buildingFile || !prefabFile) {
+      res.status(400).json({ error: "building_and_prefab_required" });
+      return;
+    }
+    const player = inGamePlayerUser(req);
+    const result = updateOwnedSubmission({
+      storage,
+      buildingId: req.params.buildingId,
+      creatorUuid: player.profileUuid,
+      creatorName: String(req.get("X-Player-Name") || "Unknown").trim(),
+      buildingFile,
+      prefabFile,
+      iconFile,
+      isOwnedByProfile,
+      normalizeDescription,
+      normalizeTags,
+    });
+    if (result.status === 201 && result.body?.action === "created_pending") {
+      notifyBuildingPending({
+        publicBaseUrl,
+        submissionId: result.body.submissionId,
+        proposedId: result.body.proposedId,
+        displayName: result.body.displayName || result.body.proposedId,
+        description: result.body.description || "",
+        creatorName: String(req.get("X-Player-Name") || "Unknown").trim(),
+        submittedAt: new Date().toISOString(),
+      }).catch(() => {});
+    }
+    res.status(result.status).json(result.body);
+  },
 );
 
 app.get("/api/v1/submissions/pending", requireAdminApiKey, (_req, res) => {

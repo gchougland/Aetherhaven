@@ -1,6 +1,8 @@
 package com.hexvane.aetherhaven.ui;
 
 import com.hexvane.aetherhaven.AetherhavenPlugin;
+import com.hexvane.aetherhaven.community.CommunityMySubmissionEntry;
+import com.hexvane.aetherhaven.community.CommunityMySubmissionsService;
 import com.hexvane.aetherhaven.construction.ConstructionCatalog;
 import com.hexvane.aetherhaven.construction.ConstructionDefinition;
 import com.hexvane.aetherhaven.plotcreator.BuildingEditorSessionStarter;
@@ -18,11 +20,14 @@ import com.hypixel.hytale.server.core.ui.builder.EventData;
 import com.hypixel.hytale.server.core.ui.builder.UICommandBuilder;
 import com.hypixel.hytale.server.core.ui.builder.UIEventBuilder;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
+import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -30,9 +35,22 @@ import javax.annotation.Nullable;
 public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage<BuildingEditorPage.PageData> {
     private static final String MSG = "aetherhaven_building_editor.aetherhaven.buildingeditor";
     private static final String ROWS = "#BuildingRows";
+    private static final String TAB_ALL = "All";
+    private static final String TAB_MINE = "Mine";
+
+    private enum Tab {
+        ALL,
+        MINE
+    }
 
     @Nonnull
     private String searchQuery = "";
+    @Nonnull
+    private Tab activeTab = Tab.ALL;
+    @Nonnull
+    private List<CommunityMySubmissionEntry> mySubmissions = List.of();
+    private boolean mySubmissionsLoaded;
+    private final AtomicBoolean mySubmissionsFetchInFlight = new AtomicBoolean();
     private boolean templateAppended;
 
     public BuildingEditorPage(@Nonnull PlayerRef playerRef) {
@@ -61,16 +79,63 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                 EventData.of("Action", "Close"),
                 false
             );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.SelectedTabChanged,
+                "#EditorTabs",
+                new EventData().append("Action", "TabChange").append("@SelectedTab", "#EditorTabs.SelectedTab"),
+                false
+            );
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                "#RefreshButton",
+                EventData.of("Action", "RefreshMine"),
+                false
+            );
         }
+
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        boolean marketplaceEnabled =
+            plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
+        boolean mineTab = activeTab == Tab.MINE;
+        boolean loadingMine = mineTab && mySubmissionsFetchInFlight.get();
+        boolean showMineEmpty = mineTab && mySubmissionsLoaded && filteredMineSubmissions().isEmpty();
+
         commandBuilder.set("#EditorTitleText.TextSpans", Message.translation(MSG + ".title"));
-        commandBuilder.set("#StepHint.TextSpans", Message.translation(MSG + ".hint.pick"));
+        commandBuilder.set(
+            "#StepHint.TextSpans",
+            Message.translation(mineTab ? MSG + ".hint.pickMine" : MSG + ".hint.pick")
+        );
+        commandBuilder.set("#StepHint.Visible", !loadingMine && !showMineEmpty);
+        commandBuilder.set("#LoadingLabel.Visible", loadingMine);
+        commandBuilder.set("#LoadingLabel.TextSpans", Message.translation(MSG + ".loadingMine"));
+        commandBuilder.set("#EmptyLabel.Visible", showMineEmpty);
+        commandBuilder.set("#EmptyLabel.TextSpans", Message.translation(MSG + ".emptyMine"));
         commandBuilder.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
         commandBuilder.set("#SearchInput.Value", searchQuery);
         commandBuilder.set("#SearchInput.PlaceholderText", Message.translation(MSG + ".searchPlaceholder"));
+        commandBuilder.set("#EditorTabs.SelectedTab", tabId(activeTab));
+        commandBuilder.set("#RefreshRow.Visible", mineTab && marketplaceEnabled);
+        commandBuilder.set("#RefreshLabel.TextSpans", Message.translation(MSG + ".refreshMine"));
+        commandBuilder.set("#RefreshButton.Disabled", loadingMine);
 
-        List<ConstructionDefinition> buildings = filteredBuildings();
         commandBuilder.clear(ROWS);
-        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (mineTab) {
+            buildMineRows(commandBuilder, eventBuilder, plugin);
+        } else {
+            buildAllRows(commandBuilder, eventBuilder, plugin);
+        }
+
+        if (mineTab && marketplaceEnabled && !mySubmissionsLoaded && !mySubmissionsFetchInFlight.get()) {
+            startMineSubmissionsFetch(ref, store);
+        }
+    }
+
+    private void buildAllRows(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<ConstructionDefinition> buildings = filteredBuildings();
         for (int i = 0; i < buildings.size(); i++) {
             ConstructionDefinition def = buildings.get(i);
             commandBuilder.append(ROWS, "Aetherhaven/BuildingEditorRow.ui");
@@ -90,6 +155,50 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                 false
             );
         }
+    }
+
+    private void buildMineRows(
+        @Nonnull UICommandBuilder commandBuilder,
+        @Nonnull UIEventBuilder eventBuilder,
+        @Nullable AetherhavenPlugin plugin
+    ) {
+        List<CommunityMySubmissionEntry> entries = filteredMineSubmissions();
+        for (int i = 0; i < entries.size(); i++) {
+            CommunityMySubmissionEntry entry = entries.get(i);
+            String catalogId = entry.catalogId();
+            commandBuilder.append(ROWS, "Aetherhaven/BuildingEditorRow.ui");
+            String row = ROWS + "[" + i + "]";
+            commandBuilder.set(row + " #SelectHilite.Visible", false);
+            commandBuilder.set(row + " #BuildingName.TextSpans", Message.raw(entry.getDisplayName()));
+            commandBuilder.set(row + " #BuildingId.TextSpans", mineRowDetailMessage(entry));
+            String iconPath =
+                plugin != null
+                    ? ConstructionTokenIconPath.forConstructionId(catalogId, plugin.getDataDirectory())
+                    : ConstructionTokenIconPath.forConstructionId(catalogId, null);
+            commandBuilder.set(row + " #IconBox #BuildingIcon.AssetPath", iconPath);
+            eventBuilder.addEventBinding(
+                CustomUIEventBindingType.Activating,
+                row + " #Select",
+                EventData.of("Action", "SelectMine").append("ConstructionId", catalogId),
+                false
+            );
+        }
+    }
+
+    @Nonnull
+    private Message mineRowDetailMessage(@Nonnull CommunityMySubmissionEntry entry) {
+        String statusKey =
+            entry.isUpdateWaiting()
+                ? MSG + ".status.updateWaiting"
+                : entry.isPending()
+                    ? MSG + ".status.pending"
+                    : entry.isRejected()
+                        ? MSG + ".status.rejected"
+                        : MSG + ".status.live";
+        return Message.translation(MSG + ".rowMine")
+            .param("id", entry.catalogId())
+            .param("version", entry.getVersion())
+            .param("status", Message.translation(statusKey));
     }
 
     @Nonnull
@@ -119,9 +228,34 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     }
 
     @Nonnull
+    private List<CommunityMySubmissionEntry> filteredMineSubmissions() {
+        List<CommunityMySubmissionEntry> out = new ArrayList<>();
+        String q = searchQuery.trim().toLowerCase(Locale.ROOT);
+        for (CommunityMySubmissionEntry entry : mySubmissions) {
+            if (!q.isEmpty()) {
+                String id = entry.catalogId().toLowerCase(Locale.ROOT);
+                String name = entry.getDisplayName().toLowerCase(Locale.ROOT);
+                if (!id.contains(q) && !name.contains(q)) {
+                    continue;
+                }
+            }
+            out.add(entry);
+        }
+        return out;
+    }
+
+    @Nonnull
     private static String displayName(@Nonnull ConstructionDefinition def) {
         String name = def.getDisplayName();
         return name != null && !name.isBlank() ? name : def.getId();
+    }
+
+    private static String tabId(@Nonnull Tab tab) {
+        return tab == Tab.MINE ? TAB_MINE : TAB_ALL;
+    }
+
+    private static Tab parseTab(@Nullable String tabId) {
+        return TAB_MINE.equalsIgnoreCase(tabId != null ? tabId.trim() : "") ? Tab.MINE : Tab.ALL;
     }
 
     private void refresh(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
@@ -129,6 +263,102 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         UIEventBuilder ev = new UIEventBuilder();
         build(ref, cmd, ev, store);
         sendUpdate(cmd, ev, false);
+    }
+
+    private void startMineSubmissionsFetch(@Nonnull Ref<EntityStore> ref, @Nonnull Store<EntityStore> store) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (plugin == null || pr == null || !mySubmissionsFetchInFlight.compareAndSet(false, true)) {
+            return;
+        }
+        refresh(ref, store);
+        World world = store.getExternalData().getWorld();
+        String playerName = pr.getUsername() != null ? pr.getUsername() : "Unknown";
+        CompletableFuture.runAsync(
+            () -> {
+                List<CommunityMySubmissionEntry> fetched =
+                    CommunityMySubmissionsService.fetchOwnedSubmissions(plugin, pr.getUuid(), playerName);
+                plugin.scheduleOnWorld(
+                    world,
+                    () -> {
+                        mySubmissionsFetchInFlight.set(false);
+                        if (!ref.isValid() || isDismissed() || activeTab != Tab.MINE) {
+                            return;
+                        }
+                        mySubmissions = fetched;
+                        mySubmissionsLoaded = true;
+                        refresh(ref, store);
+                    },
+                    1L
+                );
+            }
+        );
+    }
+
+    private void startMineEdit(
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String catalogId
+    ) {
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        PlayerRef pr = store.getComponent(ref, PlayerRef.getComponentType());
+        if (plugin == null || pr == null) {
+            return;
+        }
+        CommunityMySubmissionEntry entry = findMineEntry(catalogId);
+        if (entry == null) {
+            playerRef.sendMessage(Message.translation(MSG + ".error.unknownBuilding").param("id", catalogId));
+            return;
+        }
+        if (!mySubmissionsFetchInFlight.compareAndSet(false, true)) {
+            return;
+        }
+        World world = store.getExternalData().getWorld();
+        String playerName = pr.getUsername() != null ? pr.getUsername() : "Unknown";
+        boolean liveOnMarketplace = entry.hasLiveVersion();
+        CompletableFuture.runAsync(
+            () -> {
+                String err =
+                    CommunityMySubmissionsService.ensureLocalFilesForEdit(plugin, entry, pr.getUuid(), playerName);
+                plugin.scheduleOnWorld(
+                    world,
+                    () -> {
+                        mySubmissionsFetchInFlight.set(false);
+                        if (!ref.isValid() || isDismissed()) {
+                            return;
+                        }
+                        if (err != null) {
+                            playerRef.sendMessage(
+                                Message.translation(MSG + ".error.prepareMine")
+                                    .param("reason", Message.raw(err))
+                            );
+                            refresh(ref, store);
+                            return;
+                        }
+                        plugin.reloadConfigsAndAssetCatalogs();
+                        BuildingEditorSessionStarter.startFromConstructionId(
+                            playerRef,
+                            ref,
+                            store,
+                            catalogId,
+                            true,
+                            liveOnMarketplace
+                        );
+                    },
+                    1L
+                );
+            }
+        );
+    }
+
+    @Nullable
+    private CommunityMySubmissionEntry findMineEntry(@Nonnull String catalogId) {
+        for (CommunityMySubmissionEntry entry : mySubmissions) {
+            if (entry.catalogId().equalsIgnoreCase(catalogId.trim())) {
+                return entry;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -142,6 +372,22 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             refresh(ref, store);
             return;
         }
+        if ("TabChange".equals(data.action)) {
+            Tab next = parseTab(data.selectedTab);
+            if (next != activeTab) {
+                activeTab = next;
+                if (next == Tab.MINE) {
+                    mySubmissionsLoaded = false;
+                }
+                refresh(ref, store);
+            }
+            return;
+        }
+        if ("RefreshMine".equals(data.action)) {
+            mySubmissionsLoaded = false;
+            refresh(ref, store);
+            return;
+        }
         if ("Close".equals(data.action)) {
             Player player = store.getComponent(ref, Player.getComponentType());
             if (player != null) {
@@ -150,10 +396,11 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             return;
         }
         if ("Select".equals(data.action) && data.constructionId != null && !data.constructionId.isBlank()) {
-            // Do not setPage(None) here: that increments PageManager's custom-page ack counter, and opening
-            // Important Spots after paste increments again — Done/Close Data events stay ignored (Escape still works).
-            // openCustomPage in finishSessionAfterPaste replaces this page without the double-ack race.
             BuildingEditorSessionStarter.startFromConstructionId(playerRef, ref, store, data.constructionId);
+            return;
+        }
+        if ("SelectMine".equals(data.action) && data.constructionId != null && !data.constructionId.isBlank()) {
+            startMineEdit(ref, store, data.constructionId);
         }
     }
 
@@ -165,6 +412,8 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             .add()
             .append(new KeyedCodec<>("@SearchQuery", Codec.STRING), (d, v) -> d.searchQuery = v, d -> d.searchQuery)
             .add()
+            .append(new KeyedCodec<>("@SelectedTab", Codec.STRING), (d, v) -> d.selectedTab = v, d -> d.selectedTab)
+            .add()
             .build();
 
         @Nullable
@@ -173,5 +422,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         private String constructionId;
         @Nullable
         private String searchQuery;
+        @Nullable
+        private String selectedTab;
     }
 }

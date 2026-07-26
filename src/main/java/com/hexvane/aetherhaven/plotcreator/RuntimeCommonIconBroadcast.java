@@ -119,6 +119,24 @@ public final class RuntimeCommonIconBroadcast {
         }
     }
 
+    /**
+     * Drops a runtime plot token icon from {@link CommonAssetRegistry} when its PNG was renamed or removed.
+     */
+    public static void unregisterSilently(
+        @Nonnull String packId,
+        @Nonnull String assetName,
+        @Nonnull ConcurrentHashMap<String, Long> registeredMtimes
+    ) {
+        CommonAssetRegistry.removeCommonAssetByName(packId, assetName);
+        registeredMtimes.remove(packId + "|" + assetName);
+        invalidateRequiredAssetsCache();
+    }
+
+    @Nonnull
+    public static String assetNameForIconFileName(@Nonnull String iconFileName) {
+        return "Icons/ItemsGenerated/" + iconFileName;
+    }
+
     private static void invalidateRequiredAssetsCache(@Nonnull CommonAssetModule module) {
         if (ASSETS_CACHE_FIELD == null) {
             return;

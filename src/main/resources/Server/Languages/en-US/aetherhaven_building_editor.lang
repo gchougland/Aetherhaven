@@ -3,14 +3,28 @@
 aetherhaven.buildingeditor.title=Building editor
 aetherhaven.buildingeditor.searchPlaceholder=Search buildings
 aetherhaven.buildingeditor.hint.pick=Choose a building to load nearby. You can then change its shape and important spots.
+aetherhaven.buildingeditor.hint.pickMine=Choose one of your marketplace buildings to edit it.
 aetherhaven.buildingeditor.hint.loading=Loading {name}…
 aetherhaven.buildingeditor.hint.loaded=Loaded {name} ({id}). Mark and place important spots, then keep going with the usual steps until you save.
 aetherhaven.buildingeditor.button.close=Close
+aetherhaven.buildingeditor.loadingMine=Loading your buildings…
+aetherhaven.buildingeditor.emptyMine=You have not submitted any buildings yet.
+aetherhaven.buildingeditor.refreshMine=Refresh your buildings
+aetherhaven.buildingeditor.rowMine={id} · v{version} · {status}
+aetherhaven.buildingeditor.status.live=Live
+aetherhaven.buildingeditor.status.pending=Waiting for review
+aetherhaven.buildingeditor.status.updateWaiting=Update waiting for review
+aetherhaven.buildingeditor.status.rejected=Not approved
 
 aetherhaven.buildingeditor.error.creativeOnly=Creative mode only.
 aetherhaven.buildingeditor.error.unknownBuilding=No building found for {id}.
 aetherhaven.buildingeditor.error.wallNotSupported=Wall pieces cannot be edited with this staff.
 aetherhaven.buildingeditor.error.prefabMissing=Could not find the build shape for that building.
 aetherhaven.buildingeditor.error.pasteFailed=Could not load the building here. Try again from solid ground.
+aetherhaven.buildingeditor.error.communityDisabled=The community marketplace is turned off on this server.
+aetherhaven.buildingeditor.error.communityUpdate=Could not upload your building update: {reason}
+aetherhaven.buildingeditor.error.prepareMine=Could not prepare your building for editing: {reason}
 
 aetherhaven.buildingeditor.success.saved=Saved {id}.
+aetherhaven.buildingeditor.success.updatedSubmission=Your building was saved and updated.
+aetherhaven.buildingeditor.success.submittedForReview=Your building was saved and sent for review.
