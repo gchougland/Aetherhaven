@@ -188,12 +188,23 @@ function upvoteControlHtml(entry, canVote) {
 }
 
 function favoriteControlHtml(entry, canFavorite) {
-  const active = entry.userHasFavorited ? " favorite-btn--active" : "";
-  const label = entry.userHasFavorited ? "Remove from favorites" : "Add to favorites";
+  const favorited = Boolean(entry.userHasFavorited);
+  const active = favorited ? " upvote-btn--active" : "";
+  const star = favorited ? "★" : "☆";
+  const label = favorited ? "Remove from favorites" : "Add to favorites";
   if (!canFavorite) {
-    return `<a class="favorite-btn" href="/auth/login" title="Sign in to save favorites" aria-label="Sign in to save favorites" onclick="event.stopPropagation()"><span class="favorite-star" aria-hidden="true">★</span></a>`;
+    return `<a class="upvote-btn favorite-btn" href="/auth/login" title="Sign in to save favorites" aria-label="Sign in to save favorites" onclick="event.stopPropagation()"><span class="favorite-star" aria-hidden="true">☆</span></a>`;
   }
-  return `<button type="button" class="favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasFavorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="favorite-star" aria-hidden="true">★</span></button>`;
+  return `<button type="button" class="upvote-btn favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${favorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><span class="favorite-star" aria-hidden="true">${star}</span></button>`;
+}
+
+function buildingCardMediaHtml(entry, canVote) {
+  return `
+    <div class="building-card-media">
+      ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
+      <div class="building-card-overlay building-card-overlay--favorite">${favoriteControlHtml(entry, canVote)}</div>
+      <div class="building-card-overlay building-card-overlay--upvote">${upvoteControlHtml(entry, canVote)}</div>
+    </div>`;
 }
 
 function formatDownloadCount(count) {
@@ -303,9 +314,7 @@ function renderBuildingCard(entry, options = {}) {
   return `
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
-        ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        <div class="building-card-favorite">${favoriteControlHtml(entry, canVote)}</div>
-        <div class="building-card-upvote">${upvoteControlHtml(entry, canVote)}</div>
+        ${buildingCardMediaHtml(entry, canVote)}
       </div>
       <div class="building-card-body">
         <h3>${escapeHtml(entry.displayName)}</h3>
@@ -379,11 +388,15 @@ function applyFavoriteButtonState(buttonEl, favorited) {
   if (!buttonEl) {
     return;
   }
-  buttonEl.classList.toggle("favorite-btn--active", favorited);
+  buttonEl.classList.toggle("upvote-btn--active", favorited);
   buttonEl.setAttribute("aria-pressed", favorited ? "true" : "false");
   const label = favorited ? "Remove from favorites" : "Add to favorites";
   buttonEl.setAttribute("aria-label", label);
   buttonEl.setAttribute("title", label);
+  const starEl = buttonEl.querySelector(".favorite-star");
+  if (starEl) {
+    starEl.textContent = favorited ? "★" : "☆";
+  }
 }
 
 async function toggleFavorite(buildingId, buttonEl) {
@@ -478,9 +491,7 @@ function renderNewestCarouselCard(entry, options = {}) {
       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBuildingDetail('${escapeAttr(entry.id)}');}"
     >
       <div class="newest-carousel-card-media">
-        ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        <div class="building-card-favorite">${favoriteControlHtml(entry, catalogCanVote)}</div>
-        <div class="building-card-upvote">${upvoteControlHtml(entry, catalogCanVote)}</div>
+        ${buildingCardMediaHtml(entry, catalogCanVote)}
       </div>
       <div class="newest-carousel-card-body">
         <h4>${escapeHtml(entry.displayName)}</h4>

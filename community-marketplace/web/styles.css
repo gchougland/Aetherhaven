@@ -655,7 +655,13 @@ main.wrap > section + section {
   border-bottom: 1px solid var(--border);
 }
 
-.building-card .building-icon-wrap {
+.building-card-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.building-card-media .building-icon-wrap {
   width: 100%;
   height: 100%;
   border: none;
@@ -663,17 +669,17 @@ main.wrap > section + section {
   background: var(--bg-deep);
 }
 
-.building-card .building-icon-wrap--placeholder {
+.building-card-media .building-icon-wrap--placeholder {
   border: none;
   background: linear-gradient(145deg, #1a1012, var(--panel));
 }
 
-.building-card .building-icon-wrap--placeholder::before {
+.building-card-media .building-icon-wrap--placeholder::before {
   font-size: 2.75rem;
 }
 
-.building-card .building-icon-wrap img,
-.building-card .building-icon-wrap .building-icon {
+.building-card-media .building-icon-wrap img,
+.building-card-media .building-icon-wrap .building-icon {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -682,6 +688,46 @@ main.wrap > section + section {
   border: none;
   border-radius: 0;
   background: transparent;
+}
+
+.building-card-media .building-icon-wrap--cover .building-icon,
+.building-card-media .building-icon--cover {
+  image-rendering: auto;
+}
+
+.building-card-overlay {
+  position: absolute;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.building-card-overlay--favorite {
+  top: var(--space-sm);
+  left: var(--space-sm);
+}
+
+.building-card-overlay--upvote {
+  top: var(--space-sm);
+  right: var(--space-sm);
+}
+
+.building-card-media .upvote-btn,
+.building-card-media .favorite-btn {
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  background: rgba(12, 8, 8, 0.82);
+  backdrop-filter: blur(4px);
+}
+
+.building-card-media .upvote-btn:hover,
+.building-card-media .favorite-btn:hover {
+  background: rgba(12, 8, 8, 0.92);
+}
+
+.building-card-media .upvote-btn--active {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.18);
 }
 
 .building-card .gold-cost-icon {
@@ -706,43 +752,6 @@ main.wrap > section + section {
   margin: 0 0 var(--space-xs);
   font-size: 1rem;
   color: var(--text);
-}
-
-.building-card-header .building-card-favorite {
-  position: absolute;
-  top: var(--space-sm);
-  left: var(--space-sm);
-  z-index: 2;
-  pointer-events: auto;
-}
-
-.building-card-header .building-card-upvote {
-  position: absolute;
-  top: var(--space-sm);
-  right: var(--space-sm);
-  z-index: 2;
-  pointer-events: auto;
-}
-
-.building-card-header .upvote-btn,
-.building-card-header .favorite-btn {
-  margin: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  background: rgba(12, 8, 8, 0.82);
-  backdrop-filter: blur(4px);
-}
-
-.building-card-header .upvote-btn:hover,
-.building-card-header .favorite-btn:hover {
-  background: rgba(12, 8, 8, 0.92);
-}
-
-.building-card-header .upvote-btn--active {
-  background: rgba(212, 175, 55, 0.28);
-}
-
-.building-card-header .favorite-btn--active {
-  background: rgba(212, 175, 55, 0.28);
 }
 
 .building-icon-wrap {
@@ -808,47 +817,29 @@ main.wrap > section + section {
 }
 
 .favorite-btn {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.5rem;
-  padding: var(--space-xs) var(--space-sm);
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1.1;
-  color: var(--text-muted);
-  text-decoration: none;
-  background: var(--bg-deep);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition:
-    color var(--transition),
-    border-color var(--transition),
-    background var(--transition);
+  min-height: 2.75rem;
 }
 
 .favorite-star {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   line-height: 1;
+  color: inherit;
 }
 
-.favorite-btn:hover {
-  color: var(--gold);
-  border-color: var(--gold-dim);
+.building-card-media .favorite-btn .favorite-star {
+  color: var(--text-muted);
 }
 
-.favorite-btn--active {
+.building-card-media .favorite-btn.upvote-btn--active .favorite-star {
   color: var(--gold-bright);
-  border-color: var(--gold);
-  background: rgba(212, 175, 55, 0.12);
 }
 
-.favorite-btn:disabled {
-  opacity: 0.6;
-  cursor: wait;
+.favorite-btn:hover .favorite-star {
+  color: var(--gold);
+}
+
+.favorite-btn.upvote-btn--active:hover .favorite-star {
+  color: var(--gold-bright);
 }
 
 .upvote-arrow {
@@ -1125,6 +1116,12 @@ main.wrap > section + section {
   aspect-ratio: 16 / 10;
   background: var(--bg-deep);
   border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.newest-carousel-card-media .building-card-media {
+  position: absolute;
+  inset: 0;
 }
 
 .newest-carousel-card-media .building-icon-wrap {
@@ -1159,30 +1156,6 @@ main.wrap > section + section {
 .newest-carousel-card-media .building-icon-wrap--cover .building-icon,
 .newest-carousel-card-media .building-icon--cover {
   image-rendering: auto;
-}
-
-.newest-carousel-card-media .building-card-favorite {
-  position: absolute;
-  top: var(--space-sm);
-  left: var(--space-sm);
-  z-index: 2;
-  pointer-events: auto;
-}
-
-.newest-carousel-card-media .building-card-upvote {
-  position: absolute;
-  top: var(--space-sm);
-  right: var(--space-sm);
-  z-index: 2;
-  pointer-events: auto;
-}
-
-.newest-carousel-card-media .upvote-btn,
-.newest-carousel-card-media .favorite-btn {
-  margin: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-  background: rgba(12, 8, 8, 0.82);
-  backdrop-filter: blur(4px);
 }
 
 .newest-carousel-card-body {
@@ -1904,6 +1877,14 @@ body.modal-open {
 .building-modal-actions .favorite-btn {
   box-shadow: none;
   background: var(--bg-deep);
+}
+
+.building-modal-actions .favorite-btn .favorite-star {
+  color: var(--text-muted);
+}
+
+.building-modal-actions .favorite-btn.upvote-btn--active .favorite-star {
+  color: var(--gold-bright);
 }
 
 .building-modal-header .building-icon-wrap {
