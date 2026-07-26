@@ -187,6 +187,15 @@ function upvoteControlHtml(entry, canVote) {
   return `<button type="button" class="upvote-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleUpvote('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasUpvoted ? "true" : "false"}" aria-label="Upvote (${count})"><span class="upvote-arrow" aria-hidden="true">▲</span><span class="upvote-count">${count}</span></button>`;
 }
 
+function favoriteControlHtml(entry, canFavorite) {
+  const active = entry.userHasFavorited ? " favorite-btn--active" : "";
+  const label = entry.userHasFavorited ? "Remove from favorites" : "Add to favorites";
+  if (!canFavorite) {
+    return `<a class="favorite-btn" href="/auth/login" title="Sign in to save favorites" aria-label="Sign in to save favorites" onclick="event.stopPropagation()"><img class="favorite-btn-icon" src="/assets/star.png" alt="" width="18" height="18" /></a>`;
+  }
+  return `<button type="button" class="favorite-btn${active}" data-building-id="${escapeAttr(entry.id)}" onclick="event.stopPropagation(); toggleFavorite('${escapeAttr(entry.id)}', this)" aria-pressed="${entry.userHasFavorited ? "true" : "false"}" aria-label="${escapeAttr(label)}" title="${escapeAttr(label)}"><img class="favorite-btn-icon" src="/assets/star.png" alt="" width="18" height="18" /></button>`;
+}
+
 function formatDownloadCount(count) {
   const n = Number(count) || 0;
   if (n === 1) {
@@ -295,7 +304,10 @@ function renderBuildingCard(entry, options = {}) {
     <article class="${cardClass}" data-building-id="${escapeAttr(entry.id)}" ${openAttrs}>
       <div class="building-card-header">
         ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        ${upvoteControlHtml(entry, canVote)}
+        <div class="building-card-actions">
+          ${favoriteControlHtml(entry, canVote)}
+          ${upvoteControlHtml(entry, canVote)}
+        </div>
       </div>
       <div class="building-card-body">
         <h3>${escapeHtml(entry.displayName)}</h3>
@@ -327,6 +339,7 @@ async function toggleUpvote(buildingId, buttonEl) {
       alert(body.error || "Upvote failed");
       return;
     }
+    updateCatalogEntryVoteState(buildingId, body.userHasUpvoted, body.upvoteCount ?? 0);
     const active = body.userHasUpvoted;
     buttonEl.classList.toggle("upvote-btn--active", active);
     buttonEl.setAttribute("aria-pressed", active ? "true" : "false");
@@ -335,6 +348,72 @@ async function toggleUpvote(buildingId, buttonEl) {
       countEl.textContent = String(body.upvoteCount ?? 0);
     }
     buttonEl.setAttribute("aria-label", `Upvote (${body.upvoteCount ?? 0})`);
+  } finally {
+    buttonEl.disabled = false;
+  }
+}
+
+function updateCatalogEntryFavoriteState(buildingId, favorited) {
+  const entry = catalogEntriesById.get(buildingId);
+  if (entry) {
+    entry.userHasFavorited = favorited;
+  }
+  const listEntry = allCatalogEntries.find((e) => e.id === buildingId);
+  if (listEntry) {
+    listEntry.userHasFavorited = favorited;
+  }
+}
+
+function updateCatalogEntryVoteState(buildingId, upvoted, upvoteCount) {
+  const entry = catalogEntriesById.get(buildingId);
+  if (entry) {
+    entry.userHasUpvoted = upvoted;
+    entry.upvoteCount = upvoteCount;
+  }
+  const listEntry = allCatalogEntries.find((e) => e.id === buildingId);
+  if (listEntry) {
+    listEntry.userHasUpvoted = upvoted;
+    listEntry.upvoteCount = upvoteCount;
+  }
+}
+
+function applyFavoriteButtonState(buttonEl, favorited) {
+  if (!buttonEl) {
+    return;
+  }
+  buttonEl.classList.toggle("favorite-btn--active", favorited);
+  buttonEl.setAttribute("aria-pressed", favorited ? "true" : "false");
+  const label = favorited ? "Remove from favorites" : "Add to favorites";
+  buttonEl.setAttribute("aria-label", label);
+  buttonEl.setAttribute("title", label);
+}
+
+async function toggleFavorite(buildingId, buttonEl) {
+  if (!buttonEl || buttonEl.disabled) {
+    return;
+  }
+  buttonEl.disabled = true;
+  try {
+    const res = await fetch(`/api/buildings/${encodeURIComponent(buildingId)}/favorite`, { method: "POST" });
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (res.status === 401) {
+        window.location.href = "/auth/login";
+        return;
+      }
+      alert(body.error || "Favorite failed");
+      return;
+    }
+    updateCatalogEntryFavoriteState(buildingId, body.userHasFavorited);
+    applyFavoriteButtonState(buttonEl, body.userHasFavorited);
+    document.querySelectorAll(`.favorite-btn[data-building-id="${CSS.escape(buildingId)}"]`).forEach((el) => {
+      if (el !== buttonEl) {
+        applyFavoriteButtonState(el, body.userHasFavorited);
+      }
+    });
+    if (getCatalogFilterState().favoritesOnly && !body.userHasFavorited) {
+      applyCatalogFilters({ resetPage: false });
+    }
   } finally {
     buttonEl.disabled = false;
   }
@@ -402,7 +481,10 @@ function renderNewestCarouselCard(entry, options = {}) {
     >
       <div class="newest-carousel-card-media">
         ${buildingIconHtml(buildingCardImageUrl(entry), null, Boolean(entry.usesCoverImage))}
-        ${upvoteControlHtml(entry, catalogCanVote)}
+        <div class="building-card-actions">
+          ${favoriteControlHtml(entry, catalogCanVote)}
+          ${upvoteControlHtml(entry, catalogCanVote)}
+        </div>
       </div>
       <div class="newest-carousel-card-body">
         <h4>${escapeHtml(entry.displayName)}</h4>
@@ -714,6 +796,7 @@ function setupCatalogFilters() {
   const style = document.getElementById("catalogStyleFilter");
   const type = document.getElementById("catalogTypeFilter");
   const sort = document.getElementById("catalogSort");
+  const favoritesOnly = document.getElementById("catalogFavoritesOnly");
   const clear = document.getElementById("catalogClearFilters");
   const onFilterChange = () => applyCatalogFilters({ resetPage: true });
   search?.addEventListener("input", onFilterChange);
@@ -721,14 +804,20 @@ function setupCatalogFilters() {
   style?.addEventListener("change", onFilterChange);
   type?.addEventListener("change", onFilterChange);
   sort?.addEventListener("change", onFilterChange);
+  favoritesOnly?.addEventListener("change", onFilterChange);
   clear?.addEventListener("click", () => {
     if (search) search.value = "";
     if (author) author.value = "";
     if (style) style.value = "";
     if (type) type.value = "";
     if (sort) sort.value = "upvotes";
+    if (favoritesOnly) favoritesOnly.checked = false;
     applyCatalogFilters({ resetPage: true });
   });
+  const urlFavorites = new URLSearchParams(window.location.search).get("favorites") === "1";
+  if (favoritesOnly && urlFavorites) {
+    favoritesOnly.checked = true;
+  }
 }
 
 function uniqueSortedValues(values) {
@@ -767,6 +856,7 @@ function getCatalogFilterState() {
     author: String(document.getElementById("catalogAuthorFilter")?.value || ""),
     style: String(document.getElementById("catalogStyleFilter")?.value || ""),
     type: String(document.getElementById("catalogTypeFilter")?.value || ""),
+    favoritesOnly: Boolean(document.getElementById("catalogFavoritesOnly")?.checked),
   };
 }
 
@@ -822,6 +912,9 @@ function sortCatalogEntries(entries, sortMode) {
 }
 
 function entryMatchesCatalogFilters(entry, filters) {
+  if (filters.favoritesOnly && !entry.userHasFavorited) {
+    return false;
+  }
   if (filters.author && (entry.creatorName || "Unknown") !== filters.author) {
     return false;
   }
@@ -967,6 +1060,13 @@ function applyCatalogFilters({ resetPage = true } = {}) {
     return;
   }
   const filters = getCatalogFilterState();
+  const url = new URL(window.location.href);
+  if (filters.favoritesOnly) {
+    url.searchParams.set("favorites", "1");
+  } else {
+    url.searchParams.delete("favorites");
+  }
+  history.replaceState(null, "", url);
   filteredCatalogEntries = sortCatalogEntries(
     allCatalogEntries.filter((e) => entryMatchesCatalogFilters(e, filters)),
     getCatalogSortMode()
@@ -2166,8 +2266,14 @@ async function openBuildingDetail(buildingId) {
   content.innerHTML = `
     <div class="building-modal-header">
       ${buildingIconHtml(buildingCardImageUrl(entry), "building-icon building-icon--modal", Boolean(entry.usesCoverImage))}
-      <div>
-        <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
+      <div class="building-modal-header-main">
+        <div class="building-modal-title-row">
+          <h2 id="buildingDetailTitle">${escapeHtml(entry.displayName)}</h2>
+          <div class="building-card-actions building-modal-actions">
+            ${favoriteControlHtml(entry, catalogCanVote)}
+            ${upvoteControlHtml(entry, catalogCanVote)}
+          </div>
+        </div>
         <p class="meta">by ${escapeHtml(entry.creatorName || "Unknown")}</p>
         <p class="meta building-modal-id"><code>${escapeHtml(entry.id)}</code></p>
         <p class="meta">${formatBytes(entry.prefabBytes || 0)} · ${escapeHtml(formatDownloadCount(entry.downloadCount))} · v${escapeHtml(entry.version)}${modalGold ? ` · ${modalGold}` : ""}</p>

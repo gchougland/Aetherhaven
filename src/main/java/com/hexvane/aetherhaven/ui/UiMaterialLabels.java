@@ -62,4 +62,19 @@ public final class UiMaterialLabels {
     public static String displayLabelFor(@Nonnull MaterialRequirement line) {
         return materialLabelForUi("en-US", line);
     }
+
+    /** True when {@code server.resourceType.<id>.name} resolves for the given language. */
+    public static boolean hasResourceTypeLangLabel(@Nonnull String resourceTypeId) {
+        return hasResourceTypeLangLabel("en-US", resourceTypeId);
+    }
+
+    public static boolean hasResourceTypeLangLabel(@Nullable String language, @Nonnull String resourceTypeId) {
+        String id = resourceTypeId.trim();
+        if (id.isBlank()) {
+            return false;
+        }
+        String lang = language != null ? language : "en-US";
+        String resolved = I18nModule.get().getMessage(lang, "server.resourceType." + id + ".name");
+        return resolved != null && !resolved.isBlank();
+    }
 }

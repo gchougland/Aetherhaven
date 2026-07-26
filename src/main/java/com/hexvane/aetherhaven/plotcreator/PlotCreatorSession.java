@@ -20,6 +20,7 @@ public final class PlotCreatorSession {
     private int materialsPageIndex;
     private boolean materialsAutoFilled;
     private boolean materialsFillConfirmPending;
+    private boolean materialsSuggestConfirmPending;
     private boolean materialsClearConfirmPending;
     private boolean materialsChestOpen;
     /** True while the player is depositing real items from inventory into build costs. */
@@ -79,6 +80,14 @@ public final class PlotCreatorSession {
 
     public void setMaterialsFillConfirmPending(boolean materialsFillConfirmPending) {
         this.materialsFillConfirmPending = materialsFillConfirmPending;
+    }
+
+    public boolean isMaterialsSuggestConfirmPending() {
+        return materialsSuggestConfirmPending;
+    }
+
+    public void setMaterialsSuggestConfirmPending(boolean materialsSuggestConfirmPending) {
+        this.materialsSuggestConfirmPending = materialsSuggestConfirmPending;
     }
 
     public boolean isMaterialsClearConfirmPending() {

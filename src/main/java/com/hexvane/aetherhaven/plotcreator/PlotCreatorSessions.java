@@ -28,4 +28,24 @@ public final class PlotCreatorSessions {
     public static boolean has(@Nonnull UUID playerUuid) {
         return BY_PLAYER.containsKey(playerUuid);
     }
+
+    /** True when any active plot creator or building editor session targets this construction id. */
+    public static boolean isConstructionInActiveSession(@Nonnull String constructionId) {
+        String target = constructionId.trim().toLowerCase(java.util.Locale.ROOT);
+        if (target.isEmpty()) {
+            return false;
+        }
+        for (PlotCreatorSession session : BY_PLAYER.values()) {
+            PlotCreatorDraft draft = session.getDraft();
+            String id = draft.getConstructionId();
+            if (id != null && target.equals(id.trim().toLowerCase(java.util.Locale.ROOT))) {
+                return true;
+            }
+            String editing = draft.getEditingConstructionId();
+            if (editing != null && target.equals(editing.trim().toLowerCase(java.util.Locale.ROOT))) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -51,6 +51,21 @@ $Sounds = "../Sounds.ui";
   Sounds: $Sounds.@ButtonsLight
 );
 
+@ModerationTabIconLbl = (
+  FontSize: 6,
+  TextColor: #ffffff(0.01),
+  HorizontalAlignment: Center,
+  VerticalAlignment: Center
+);
+
+@ModerationTabButtonStyle = TextButtonStyle(
+  Default: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #ffffff), LabelStyle: (...@ModerationTabIconLbl)),
+  Hovered: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #c5d0dc), LabelStyle: (...@ModerationTabIconLbl)),
+  Pressed: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #8fa0b0), LabelStyle: (...@ModerationTabIconLbl)),
+  Disabled: (Background: PatchStyle(TexturePath: "../cog.png", Border: 0, Color: #5c6a78(0.45)), LabelStyle: (...@ModerationTabIconLbl)),
+  Sounds: $Sounds.@ButtonsLight
+);
+
 $C.@PageOverlay {
   LayoutMode: Middle;
 
@@ -98,33 +113,64 @@ $C.@PageOverlay {
         LayoutMode: Top;
         Anchor: (Width: 500, Right: 10);
 
-        TabNavigation #PlotCraftTabs {
+        Group #PlotCraftTabRow {
+          LayoutMode: Left;
           Anchor: (Height: 66, Left: 2, Right: 0);
-          Style: @PlotCraftTabsStyle;
-          SelectedTab: "Core";
 
-          TabButton {
-            Icon: "../star.png";
-            TooltipText: "Core buildings";
-            Id: "Core";
+          TabNavigation #PlotCraftTabs {
+            Anchor: (Height: 66);
+            Style: @PlotCraftTabsStyle;
+            SelectedTab: "Core";
+
+            TabButton {
+              Icon: "../house_icon_256.png";
+              TooltipText: "Core buildings";
+              Id: "Core";
+            }
+
+            TabButton {
+              Icon: "../decoration.png";
+              TooltipText: "Decorations";
+              Id: "Decorations";
+            }
+
+            TabButton {
+              Icon: "../star.png";
+              TooltipText: "Favorites";
+              Id: "Favorites";
+            }
+
+            TabButton {
+              Icon: "../group_icon_256.png";
+              TooltipText: "Community";
+              Id: "Community";
+            }
           }
 
-          TabButton {
-            Icon: "../decoration.png";
-            TooltipText: "Decorations";
-            Id: "Decorations";
+          Group {
+            FlexWeight: 1;
           }
 
-          TabButton {
-            Icon: "../group_icon_256.png";
-            TooltipText: "Community";
-            Id: "Community";
-          }
+          Group #ModerationTabHost {
+            LayoutMode: Full;
+            Anchor: (Width: 82, Height: 62, Vertical: 0);
 
-          TabButton {
-            Icon: "../star.png";
-            TooltipText: "Moderate";
-            Id: "Moderation";
+            Group #ModerationTabSelected {
+              Anchor: (Full: 0);
+              LayoutMode: Full;
+              Background: (TexturePath: "../Common/TabSelectedOverlay.png", Border: 0);
+              Visible: false;
+              HitTestVisible: false;
+            }
+
+            TextButton #ModerationTabButton {
+              Style: @ModerationTabButtonStyle;
+              TextTooltipStyle: $C.@DefaultTextTooltipStyle;
+              Anchor: (Width: 82, Height: 62);
+              Padding: (Full: 0);
+              Text: ".";
+              TooltipText: "Moderate";
+            }
           }
         }
 

@@ -51,6 +51,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
     private List<CommunityMySubmissionEntry> mySubmissions = List.of();
     private boolean mySubmissionsLoaded;
     private final AtomicBoolean mySubmissionsFetchInFlight = new AtomicBoolean();
+    private final AtomicBoolean mineEditInFlight = new AtomicBoolean();
     private boolean templateAppended;
 
     public BuildingEditorPage(@Nonnull PlayerRef playerRef) {
@@ -97,7 +98,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         boolean marketplaceEnabled =
             plugin != null && plugin.getConfig().get().getCommunityMarketplace().isEnabled();
         boolean mineTab = activeTab == Tab.MINE;
-        boolean loadingMine = mineTab && mySubmissionsFetchInFlight.get();
+        boolean loadingMine = mineTab && (mySubmissionsFetchInFlight.get() || mineEditInFlight.get());
         boolean showMineEmpty = mineTab && mySubmissionsLoaded && filteredMineSubmissions().isEmpty();
 
         commandBuilder.set("#EditorTitleText.TextSpans", Message.translation(MSG + ".title"));
@@ -116,7 +117,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
         commandBuilder.set("#EditorTabs.SelectedTab", tabId(activeTab));
         commandBuilder.set("#RefreshRow.Visible", mineTab && marketplaceEnabled);
         commandBuilder.set("#RefreshLabel.TextSpans", Message.translation(MSG + ".refreshMine"));
-        commandBuilder.set("#RefreshButton.Disabled", loadingMine);
+        commandBuilder.set("#RefreshButton.Disabled", loadingMine || mineEditInFlight.get());
 
         commandBuilder.clear(ROWS);
         if (mineTab) {
@@ -310,9 +311,10 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
             playerRef.sendMessage(Message.translation(MSG + ".error.unknownBuilding").param("id", catalogId));
             return;
         }
-        if (!mySubmissionsFetchInFlight.compareAndSet(false, true)) {
+        if (!mineEditInFlight.compareAndSet(false, true)) {
             return;
         }
+        refresh(ref, store);
         World world = store.getExternalData().getWorld();
         String playerName = pr.getUsername() != null ? pr.getUsername() : "Unknown";
         boolean liveOnMarketplace = entry.hasLiveVersion();
@@ -323,7 +325,7 @@ public final class BuildingEditorPage extends AetherhavenInteractiveCustomUIPage
                 plugin.scheduleOnWorld(
                     world,
                     () -> {
-                        mySubmissionsFetchInFlight.set(false);
+                        mineEditInFlight.set(false);
                         if (!ref.isValid() || isDismissed()) {
                             return;
                         }

@@ -511,6 +511,28 @@ main.wrap > section + section {
   color: var(--text-muted);
 }
 
+.catalog-filter--toggle {
+  flex: 0 0 auto;
+  min-width: auto;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: 1.25rem;
+}
+
+.catalog-filter--toggle input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--gold);
+}
+
+.catalog-filter--toggle span {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
 .catalog-toolbar input[type="search"],
 .catalog-toolbar select {
   width: 100%;
@@ -685,22 +707,34 @@ main.wrap > section + section {
   color: var(--text);
 }
 
-.building-card-header .upvote-btn {
+.building-card-header .building-card-actions {
   position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.building-card-header .upvote-btn,
+.building-card-header .favorite-btn {
   margin: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   background: rgba(12, 8, 8, 0.82);
   backdrop-filter: blur(4px);
 }
 
-.building-card-header .upvote-btn:hover {
+.building-card-header .upvote-btn:hover,
+.building-card-header .favorite-btn:hover {
   background: rgba(12, 8, 8, 0.92);
 }
 
 .building-card-header .upvote-btn--active {
+  background: rgba(212, 175, 55, 0.28);
+}
+
+.building-card-header .favorite-btn--active {
   background: rgba(212, 175, 55, 0.28);
 }
 
@@ -762,6 +796,57 @@ main.wrap > section + section {
 }
 
 .upvote-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.favorite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  text-decoration: none;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    border-color var(--transition),
+    background var(--transition),
+    filter var(--transition);
+}
+
+.favorite-btn-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: grayscale(1) brightness(0.75);
+  opacity: 0.85;
+}
+
+.favorite-btn:hover {
+  border-color: var(--gold-dim);
+}
+
+.favorite-btn:hover .favorite-btn-icon {
+  filter: grayscale(0.4) brightness(1);
+  opacity: 1;
+}
+
+.favorite-btn--active .favorite-btn-icon {
+  filter: none;
+  opacity: 1;
+}
+
+.favorite-btn--active {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.favorite-btn:disabled {
   opacity: 0.6;
   cursor: wait;
 }
@@ -1076,11 +1161,18 @@ main.wrap > section + section {
   image-rendering: auto;
 }
 
-.newest-carousel-card-media .upvote-btn {
+.newest-carousel-card-media .building-card-actions {
   position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.newest-carousel-card-media .upvote-btn,
+.newest-carousel-card-media .favorite-btn {
   margin: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   background: rgba(12, 8, 8, 0.82);
@@ -1781,6 +1873,29 @@ body.modal-open {
   align-items: flex-start;
   padding-right: 2rem;
   margin-bottom: var(--space-md);
+}
+
+.building-modal-header-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.building-modal-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.building-modal-actions {
+  position: static;
+  flex-shrink: 0;
+}
+
+.building-modal-actions .upvote-btn,
+.building-modal-actions .favorite-btn {
+  box-shadow: none;
+  background: var(--bg-deep);
 }
 
 .building-modal-header .building-icon-wrap {

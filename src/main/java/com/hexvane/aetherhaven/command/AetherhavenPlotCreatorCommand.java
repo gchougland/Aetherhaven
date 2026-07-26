@@ -7,6 +7,7 @@ import com.hexvane.aetherhaven.plotcreator.CustomBuildingsPaths;
 import com.hexvane.aetherhaven.plotcreator.PlotCreatorService;
 import com.hexvane.aetherhaven.plotcreator.icon.PlotCreatorIconExporter;
 import com.hexvane.aetherhaven.prefab.PrefabResolveUtil;
+import com.hexvane.aetherhaven.ui.LocalBuildingsPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -16,6 +17,7 @@ import com.hypixel.hytale.server.core.command.system.arguments.system.RequiredAr
 import com.hypixel.hytale.server.core.command.system.arguments.types.ArgTypes;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractCommandCollection;
 import com.hypixel.hytale.server.core.command.system.basecommands.AbstractPlayerCommand;
+import com.hypixel.hytale.server.core.entity.entities.Player;
 import com.hypixel.hytale.server.core.prefab.PrefabStore;
 import com.hypixel.hytale.server.core.prefab.selection.standard.BlockSelection;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
@@ -32,6 +34,7 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
         this.addSubCommand(new CancelCommand());
         this.addSubCommand(new EditCommand());
         this.addSubCommand(new GenerateIconCommand());
+        this.addSubCommand(new BuildingsCommand());
     }
 
     private static boolean requirePlotCreatorPermission(@Nonnull PlayerRef playerRef) {
@@ -205,6 +208,33 @@ public final class AetherhavenPlotCreatorCommand extends AbstractCommandCollecti
                     .param("path", iconFile.toString())
                     .param("asset", CustomBuildingsPaths.iconAssetPath(outputId))
             );
+        }
+    }
+
+    private static final class BuildingsCommand extends AbstractPlayerCommand {
+        BuildingsCommand() {
+            super("buildings", "aetherhaven_commands_help.commands.aetherhaven.plotcreator.buildings.desc");
+        }
+
+        @Override
+        protected void execute(
+            @Nonnull CommandContext context,
+            @Nonnull Store<EntityStore> store,
+            @Nonnull Ref<EntityStore> ref,
+            @Nonnull PlayerRef playerRef,
+            @Nonnull World world
+        ) {
+            if (!requirePlotCreatorPermission(playerRef)) {
+                return;
+            }
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            if (player.getPageManager().getCustomPage() != null) {
+                return;
+            }
+            player.getPageManager().openCustomPage(ref, store, new LocalBuildingsPage(playerRef));
         }
     }
 

@@ -13,6 +13,8 @@ import com.hexvane.aetherhaven.hud.AetherhavenHudSupport;
 import com.hexvane.aetherhaven.map.TeleporterWarpSanitizer;
 import com.hexvane.aetherhaven.npc.AetherhavenNpcRoleLoader;
 import com.hexvane.aetherhaven.plot.GaiaStatueBlock;
+import com.hexvane.aetherhaven.plot.ConstructionFavoritesPlayerInitSystem;
+import com.hexvane.aetherhaven.plot.PlayerConstructionFavoritesState;
 import com.hexvane.aetherhaven.plot.PlayerPlotTokenUnlockState;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPageUseInteraction;
 import com.hexvane.aetherhaven.plot.PlotTokenUnlockPlayerInitSystem;
@@ -102,8 +104,10 @@ public final class AetherhavenCoreBootstrap {
 
         PlayerTownJournalState.register(plugin.getEntityStoreRegistry());
         PlayerPlotTokenUnlockState.register(plugin.getEntityStoreRegistry());
+        PlayerConstructionFavoritesState.register(plugin.getEntityStoreRegistry());
         plugin.getEntityStoreRegistry().registerSystem(new TownJournalPlayerInitSystem());
         plugin.getEntityStoreRegistry().registerSystem(new PlotTokenUnlockPlayerInitSystem());
+        plugin.getEntityStoreRegistry().registerSystem(new ConstructionFavoritesPlayerInitSystem());
         TerritoryProtectionBootstrap.register(plugin);
 
         AetherhavenHudRefreshSystem hudRefreshSystem = new AetherhavenHudRefreshSystem(plugin);

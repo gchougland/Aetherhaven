@@ -4,6 +4,7 @@ import com.hexvane.aetherhaven.AetherhavenPlugin;
 import com.hexvane.aetherhaven.construction.MaterialRequirement;
 import com.hexvane.aetherhaven.construction.prefabmaterials.PrefabMaterialsService;
 import com.hexvane.aetherhaven.ui.PlotCreatorMaterialsPage;
+import com.hexvane.aetherhaven.ui.PlotCreatorResourceTypePickerPage;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.server.core.Message;
@@ -34,11 +35,29 @@ public final class PlotCreatorMaterialsActions {
     ) {
         if (!session.getDraft().getMaterials().isEmpty() && !session.isMaterialsFillConfirmPending()) {
             session.setMaterialsFillConfirmPending(true);
+            session.setMaterialsSuggestConfirmPending(false);
             playerRef.sendMessage(Message.translation(MSG + ".materials.confirmReplace"));
             return;
         }
         session.setMaterialsFillConfirmPending(false);
         tryAutoFillFromBuildShape(session, true);
+        if (session.getDraft().getMaterials().isEmpty()) {
+            playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
+        }
+    }
+
+    public static void requestSuggestResources(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef
+    ) {
+        if (!session.getDraft().getMaterials().isEmpty() && !session.isMaterialsSuggestConfirmPending()) {
+            session.setMaterialsSuggestConfirmPending(true);
+            session.setMaterialsFillConfirmPending(false);
+            playerRef.sendMessage(Message.translation(MSG + ".materials.confirmSuggestReplace"));
+            return;
+        }
+        session.setMaterialsSuggestConfirmPending(false);
+        trySuggestResources(session, true);
         if (session.getDraft().getMaterials().isEmpty()) {
             playerRef.sendMessage(Message.translation(MSG + ".materials.fillFailed"));
         }
@@ -75,6 +94,28 @@ public final class PlotCreatorMaterialsActions {
         }
         PrefabMaterialsService service = plugin.getPrefabMaterialsService();
         List<MaterialRequirement> materials = service.generateFromSessionPrefab(prefabPath, plugin.getDataDirectory());
+        if (materials.isEmpty()) {
+            return;
+        }
+        PlotCreatorMaterialsHelper.applyGeneratedMaterials(session, materials, true);
+    }
+
+    private static void trySuggestResources(@Nonnull PlotCreatorSession session, boolean overwrite) {
+        PlotCreatorDraft draft = session.getDraft();
+        if (!overwrite && !draft.getMaterials().isEmpty()) {
+            return;
+        }
+        String prefabPath = draft.getPrefabPath();
+        if (prefabPath == null || prefabPath.isBlank()) {
+            return;
+        }
+        AetherhavenPlugin plugin = AetherhavenPlugin.get();
+        if (plugin == null) {
+            return;
+        }
+        PrefabMaterialsService service = plugin.getPrefabMaterialsService();
+        List<MaterialRequirement> materials =
+            service.generateSuggestedResourcesFromSessionPrefab(prefabPath, plugin.getDataDirectory());
         if (materials.isEmpty()) {
             return;
         }
@@ -174,8 +215,43 @@ public final class PlotCreatorMaterialsActions {
         });
     }
 
+    public static void openResourceTypePicker(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store
+    ) {
+        session.getWorld().execute(() -> {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            closeOpenChestIfNeeded(session, player, ref, store);
+            player.getPageManager().openCustomPage(ref, store, new PlotCreatorResourceTypePickerPage(playerRef, session));
+        });
+    }
+
+    public static void addResourceTypeFromPicker(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull PlayerRef playerRef,
+        @Nonnull Ref<EntityStore> ref,
+        @Nonnull Store<EntityStore> store,
+        @Nonnull String resourceTypeId
+    ) {
+        session.getWorld().execute(() -> {
+            Player player = store.getComponent(ref, Player.getComponentType());
+            if (player == null) {
+                return;
+            }
+            PlotCreatorMaterialsHelper.addResourceType(session, resourceTypeId, 1);
+            PlotCreatorInteractions.refreshHud(playerRef, ref, store, session);
+            player.getPageManager().openCustomPage(ref, store, new PlotCreatorMaterialsPage(playerRef, session));
+        });
+    }
+
     public static void clearFillConfirm(@Nonnull PlotCreatorSession session) {
         session.setMaterialsFillConfirmPending(false);
+        session.setMaterialsSuggestConfirmPending(false);
         session.setMaterialsClearConfirmPending(false);
     }
 

@@ -78,7 +78,17 @@ $C.@PageOverlay {
         Text: "";
       }
 
+      $C.@TextButton #AddResourceTypeButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+      }
+
       $C.@TextButton #FillFromBuildShapeButton {
+        Anchor: (Bottom: 8, Height: 40);
+        Text: "";
+      }
+
+      $C.@TextButton #SuggestResourcesButton {
         Anchor: (Bottom: 8, Height: 40);
         Text: "";
       }

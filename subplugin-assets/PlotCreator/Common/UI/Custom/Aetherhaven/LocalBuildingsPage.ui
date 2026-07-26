@@ -1,0 +1,129 @@
+$C = "../Common.ui";
+
+@HintStyle = (
+  FontSize: 12,
+  TextColor: #8a8070,
+  Wrap: true
+);
+
+@IdStyle = (
+  FontSize: 11,
+  TextColor: #7a8e9c,
+  Wrap: true
+);
+
+$C.@PageOverlay {
+  LayoutMode: Top;
+
+  Group {
+    FlexWeight: 1;
+    Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+
+    Group {
+      LayoutMode: Middle;
+      Anchor: (Full: 0);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 560, Height: 620);
+
+        #Title {
+          Group {
+            LayoutMode: Left;
+            Label #PageTitleText {
+              Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+              Padding: (Horizontal: 19);
+              Text: "";
+              FlexWeight: 1;
+            }
+            $C.@HeaderSearch {}
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Top: 14, Left: 18, Right: 18, Bottom: 18);
+
+          Label #StepHint {
+            Style: (...@HintStyle);
+            Text: "";
+            Anchor: (Bottom: 10);
+          }
+
+          Label #EmptyLabel {
+            Style: (...@HintStyle);
+            Text: "";
+            Anchor: (Bottom: 10);
+            Visible: false;
+          }
+
+          Group #BuildingListScroll {
+            LayoutMode: TopScrolling;
+            ScrollbarStyle: $C.@DefaultScrollbarStyle;
+            FlexWeight: 1;
+            Anchor: (Bottom: 12);
+
+            Group #BuildingRows {
+              LayoutMode: Top;
+            }
+          }
+
+          Group #ButtonRow {
+            LayoutMode: Left;
+            Anchor: (Top: 8);
+
+            $C.@CancelTextButton #CloseButton {
+              Anchor: (Height: 40, Width: 110);
+              Text: "";
+            }
+          }
+        }
+      }
+    }
+
+    Group #RemoveConfirmModal {
+      LayoutMode: Middle;
+      Visible: false;
+      Anchor: (Top: 0, Left: 0, Right: 0, Bottom: 0);
+      Background: #000000(0.55);
+
+      $C.@DecoratedContainer {
+        Anchor: (Width: 440);
+
+        #Title {
+          Label #RemoveConfirmTitle {
+            Style: (...$C.@TitleStyle, HorizontalAlignment: Center);
+            Padding: (Horizontal: 12);
+            Text: "";
+          }
+        }
+
+        #Content {
+          LayoutMode: Top;
+          Padding: (Full: 18);
+
+          Label #RemoveConfirmText {
+            Anchor: (Bottom: 16);
+            Style: (...$C.@DefaultLabelStyle, Wrap: true);
+            Text: "";
+          }
+
+          Group {
+            LayoutMode: Left;
+
+            $C.@TextButton #RemoveConfirmButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Right: 8);
+            }
+
+            $C.@CancelTextButton #RemoveCancelButton {
+              Text: "";
+              FlexWeight: 1;
+              Anchor: (Left: 8);
+            }
+          }
+        }
+      }
+    }
+  }
+}

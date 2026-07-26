@@ -48,7 +48,9 @@ aetherhaven.plotcreator.hint.poiAlreadyRecorded = That activity spot is already 
 
 aetherhaven.plotcreator.button.save = Save building
 aetherhaven.plotcreator.button.addFromInventory = Add from inventory
+aetherhaven.plotcreator.button.addResourceType = Add resource type
 aetherhaven.plotcreator.button.useBuildShape = Use prefab materials
+aetherhaven.plotcreator.button.suggestResources = Suggest resources
 aetherhaven.plotcreator.button.clearPrefabMaterials = Clear build costs
 aetherhaven.plotcreator.button.materialsPrevPage = Previous
 aetherhaven.plotcreator.button.materialsNextPage = Next
@@ -56,9 +58,31 @@ aetherhaven.plotcreator.button.materialRemove = X
 
 aetherhaven.plotcreator.materials.pageLabel = Page {page} of {pages}
 aetherhaven.plotcreator.materials.emptyList = No build costs yet. Use prefab materials or add items from your inventory.
+aetherhaven.plotcreator.resourceTypePicker.title = Pick a resource type
+aetherhaven.plotcreator.resourceTypePicker.hint = Choose one to add to your build cost list.
 aetherhaven.plotcreator.materials.confirmReplace = Click Use prefab materials again to replace the current build costs.
+aetherhaven.plotcreator.materials.confirmSuggestReplace = Click Suggest resources again to replace the current build costs.
 aetherhaven.plotcreator.materials.confirmClear = Click Clear build costs again to remove all build costs.
 aetherhaven.plotcreator.materials.fillFailed = Could not fill build costs from your prefab. Save the build shape first.
+
+aetherhaven.plotcreator.localBuildings.title = Local buildings
+aetherhaven.plotcreator.localBuildings.hint = Remove custom buildings saved on this server. Placed copies are cleared too.
+aetherhaven.plotcreator.localBuildings.empty = No local custom buildings saved yet.
+aetherhaven.plotcreator.localBuildings.searchPlaceholder = Search by name or id
+aetherhaven.plotcreator.localBuildings.rowDetail = {id} · {count} placed
+aetherhaven.plotcreator.localBuildings.button.close = Close
+aetherhaven.plotcreator.localBuildings.button.remove = Remove
+aetherhaven.plotcreator.localBuildings.confirm.title = Remove building?
+aetherhaven.plotcreator.localBuildings.confirm.noPlots = Remove {name} from this server? You cannot undo this.
+aetherhaven.plotcreator.localBuildings.confirm.withPlots = {name} has {count} placed copies in the world. Remove the building and clear all copies?
+aetherhaven.plotcreator.localBuildings.confirm.remove = Remove
+aetherhaven.plotcreator.localBuildings.confirm.cancel = Keep
+aetherhaven.plotcreator.localBuildings.removed = Removed local building {id}.
+aetherhaven.plotcreator.localBuildings.removedUnloadedPlots = Cleared {count} saved plot records in unloaded worlds. Visit those worlds to finish clearing blocks.
+aetherhaven.plotcreator.localBuildings.error.notCustom = {id} is not a local custom building.
+aetherhaven.plotcreator.localBuildings.error.sessionActive = Finish or cancel your plot creator session before removing that building.
+aetherhaven.plotcreator.localBuildings.error.chunksNotLoaded = Load the areas around all placed copies of this building, then try again.
+aetherhaven.plotcreator.localBuildings.error.failed = Could not remove {id}. Try again.
 
 aetherhaven.plotcreator.field.displayName = Building name
 aetherhaven.plotcreator.field.description = Short description (optional)

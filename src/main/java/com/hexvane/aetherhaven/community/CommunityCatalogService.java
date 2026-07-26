@@ -335,6 +335,44 @@ public final class CommunityCatalogService {
     }
 
     @Nonnull
+    public List<PlotCraftingCatalog.GroupEntry> buildFavoritesGroupEntries(
+        @Nonnull Set<String> favoriteIds,
+        @Nonnull Set<String> activeStyleFilters,
+        @Nonnull Set<String> catalogGroupKeys
+    ) {
+        if (favoriteIds.isEmpty()) {
+            return List.of();
+        }
+        Set<String> normalized = new java.util.HashSet<>();
+        for (String id : favoriteIds) {
+            if (id != null && !id.isBlank()) {
+                normalized.add(id.trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        ObjectArrayList<PlotCraftingCatalog.GroupEntry> groups = new ObjectArrayList<>();
+        for (CommunityManifestEntry entry : cachedEntries.get()) {
+            String id = entry.getId().trim().toLowerCase(Locale.ROOT);
+            if (!normalized.contains(id) || catalogGroupKeys.contains(id)) {
+                continue;
+            }
+            if (!PlotBuildingStyles.matchesFilter(entry.getStyleId(), activeStyleFilters)) {
+                continue;
+            }
+            groups.add(
+                new PlotCraftingCatalog.GroupEntry(
+                    entry.getId(),
+                    entry.getDisplayName(),
+                    List.of(
+                        new PlotCraftingCatalog.VariantEntry(entry.getId(), entry.getDisplayName(), entry.prefabPathKey())
+                    )
+                )
+            );
+        }
+        groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
+        return groups;
+    }
+
+    @Nonnull
     private static Comparator<CommunityManifestEntry> comparatorFor(@Nonnull CommunityCatalogSort sort) {
         Comparator<CommunityManifestEntry> byName =
             Comparator.comparing(e -> e.getDisplayName().toLowerCase(Locale.ROOT));

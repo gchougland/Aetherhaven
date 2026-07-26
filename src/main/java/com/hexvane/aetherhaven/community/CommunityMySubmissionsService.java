@@ -74,10 +74,7 @@ public final class CommunityMySubmissionsService {
             return null;
         }
         if (entry.isApproved()) {
-            CommunityManifestEntry manifestEntry = plugin.getCommunityCatalogService().findEntry(catalogId);
-            if (manifestEntry == null && !plugin.getCommunityCatalogService().refreshFromApi()) {
-                manifestEntry = plugin.getCommunityCatalogService().findEntry(catalogId);
-            }
+            CommunityManifestEntry manifestEntry = resolveManifestEntry(plugin.getCommunityCatalogService(), catalogId);
             if (manifestEntry == null) {
                 return "download_failed";
             }
@@ -85,6 +82,19 @@ public final class CommunityMySubmissionsService {
             return installResultToError(result);
         }
         return downloadPendingSubmissionFiles(plugin, entry, playerUuid, playerName);
+    }
+
+    @Nullable
+    private static CommunityManifestEntry resolveManifestEntry(
+        @Nonnull CommunityCatalogService catalog,
+        @Nonnull String catalogId
+    ) {
+        CommunityManifestEntry manifestEntry = catalog.findEntry(catalogId);
+        if (manifestEntry != null) {
+            return manifestEntry;
+        }
+        catalog.refreshFromApi();
+        return catalog.findEntry(catalogId);
     }
 
     @Nonnull

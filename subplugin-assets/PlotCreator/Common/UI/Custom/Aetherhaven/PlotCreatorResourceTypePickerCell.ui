@@ -1,0 +1,36 @@
+$C = "../Common.ui";
+
+Group #PickerCell {
+  Anchor: (Width: 92, Height: 96, Right: 6, Bottom: 4);
+
+  Button #Select {
+    LayoutMode: Top;
+    Anchor: (Full: 0);
+    Style: (
+      Default: (Background: #000000(0)),
+      Hovered: (Background: #ffffff(0.06)),
+      Pressed: (Background: #ffffff(0.10)),
+      Disabled: (Background: #000000(0))
+    );
+
+    Group #IconFrame {
+      Anchor: (Width: 52, Height: 52, Bottom: 4);
+      LayoutMode: Full;
+      Background: #1a2530;
+      Padding: 2;
+      HitTestVisible: false;
+
+      AssetImage #Icon {
+        Anchor: (Full: 0);
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+        HitTestVisible: false;
+      }
+    }
+
+    Label #Name {
+      Style: (...$C.@DefaultLabelStyle, FontSize: 11, TextColor: #e8dcc8, Wrap: true, HorizontalAlignment: Center);
+      Anchor: (Height: 36);
+      HitTestVisible: false;
+    }
+  }
+}

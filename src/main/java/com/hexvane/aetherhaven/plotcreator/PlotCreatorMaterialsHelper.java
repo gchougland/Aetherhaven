@@ -119,6 +119,22 @@ public final class PlotCreatorMaterialsHelper {
         clampPageIndex(session);
     }
 
+    /** Adds or merges a resource type line in the draft build cost list. */
+    public static void addResourceType(
+        @Nonnull PlotCreatorSession session,
+        @Nonnull String resourceTypeId,
+        int amount
+    ) {
+        if (resourceTypeId.isBlank() || amount <= 0) {
+            return;
+        }
+        String id = resourceTypeId.trim();
+        List<MaterialRequirement> materials = session.getDraft().getMaterials();
+        mergeResourceTypeCount(materials, id, amount);
+        session.setMaterialsAutoFilled(false);
+        clampPageIndex(session);
+    }
+
     public static void clearAllMaterials(@Nonnull PlotCreatorSession session) {
         session.getDraft().getMaterials().clear();
         session.setMaterialsAutoFilled(false);
@@ -279,6 +295,22 @@ public final class PlotCreatorMaterialsHelper {
             }
         }
         materials.add(MaterialRequirement.ofItem(itemId, addCount));
+    }
+
+    private static void mergeResourceTypeCount(
+        @Nonnull List<MaterialRequirement> materials,
+        @Nonnull String resourceTypeId,
+        int addCount
+    ) {
+        for (int i = 0; i < materials.size(); i++) {
+            MaterialRequirement m = materials.get(i);
+            String rt = m.getResourceTypeId();
+            if (rt != null && resourceTypeId.equals(rt)) {
+                materials.set(i, MaterialRequirement.ofResourceType(resourceTypeId, m.getCount() + addCount));
+                return;
+            }
+        }
+        materials.add(MaterialRequirement.ofResourceType(resourceTypeId, addCount));
     }
 
     @Nonnull

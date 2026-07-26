@@ -373,7 +373,7 @@ public final class PlotCreatorWizardPage extends AetherhavenInteractiveCustomUIP
             b.set("#MaterialsPageRow.Visible", false);
             b.set("#ReviewSummary.Visible", false);
             b.set("#DetailHint.Visible", false);
-            b.set("#SubmitToCommunityRow.Visible", isCommunityMarketplaceEnabled());
+            b.set("#SubmitToCommunityRow.Visible", isCommunityMarketplaceEnabled() && !session.getDraft().isCommunitySubmissionEdit());
             return;
         }
         b.set("#DisplayNameField.Visible", step == PlotCreatorStep.IDENTITY);

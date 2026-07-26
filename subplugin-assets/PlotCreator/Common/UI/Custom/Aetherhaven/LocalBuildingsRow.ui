@@ -1,0 +1,46 @@
+$C = "../Common.ui";
+
+Group #LocalBuildingRow {
+  LayoutMode: Top;
+  Anchor: (Bottom: 4);
+
+  Group #RowShell {
+    LayoutMode: Left;
+    Padding: (Horizontal: 8, Vertical: 6);
+    Background: (TexturePath: "../Common/ContainerPanelPatch.png", Border: 8, Color: #1e2430(0.75));
+
+    Group #IconBox {
+      LayoutMode: Full;
+      Anchor: (Width: 48, Height: 48, Right: 10);
+      Background: #1a2530;
+      Padding: 2;
+
+      AssetImage #BuildingIcon {
+        Anchor: (Full: 0);
+        FallbackTexturePath: "UI/Custom/Pages/Memories/MissingIcon.png";
+      }
+    }
+
+    Group #BuildingText {
+      LayoutMode: Top;
+      FlexWeight: 1;
+      Anchor: (Vertical: 0);
+
+      Label #BuildingName {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #e8dcc8, FontSize: 17, Wrap: true);
+        Anchor: (Bottom: 2);
+        Text: "";
+      }
+
+      Label #BuildingDetail {
+        Style: (...$C.@DefaultLabelStyle, TextColor: #a89878, FontSize: 12, Wrap: true);
+        Text: "";
+      }
+    }
+
+    $C.@TextButton #RemoveButton {
+      Anchor: (Width: 104, Height: 36, Vertical: 0);
+      Text: "";
+    }
+  }
+}

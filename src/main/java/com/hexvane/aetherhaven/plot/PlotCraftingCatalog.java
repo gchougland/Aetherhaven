@@ -19,6 +19,7 @@ public final class PlotCraftingCatalog {
     public enum Tab {
         CORE,
         DECORATIONS,
+        FAVORITES,
         COMMUNITY,
         MODERATION
     }
@@ -60,6 +61,64 @@ public final class PlotCraftingCatalog {
             byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
         }
 
+        ObjectArrayList<GroupEntry> groups = new ObjectArrayList<>();
+        for (Map.Entry<String, ObjectArrayList<ConstructionDefinition>> e : byGroup.entrySet()) {
+            String groupKey = e.getKey();
+            List<ConstructionDefinition> defs = e.getValue();
+            defs.sort(variantOrder(groupKey));
+            ObjectArrayList<VariantEntry> variants = new ObjectArrayList<>();
+            for (ConstructionDefinition d : defs) {
+                variants.add(
+                    new VariantEntry(
+                        d.getId(),
+                        d.getDisplayName() != null && !d.getDisplayName().isBlank() ? d.getDisplayName() : d.getId(),
+                        d.getPrefabPath()
+                    )
+                );
+            }
+            if (!variants.isEmpty()) {
+                groups.add(new GroupEntry(groupKey, resolveGroupDisplayName(catalog, groupKey), variants));
+            }
+        }
+        groups.sort(Comparator.comparing(g -> g.displayName().toLowerCase(Locale.ROOT)));
+        return groups;
+    }
+
+    @Nonnull
+    public static List<GroupEntry> favoritesGroups(
+        @Nonnull ConstructionCatalog catalog,
+        @Nonnull Set<String> favoriteIds,
+        @Nonnull Set<String> activeStyleFilters
+    ) {
+        if (favoriteIds.isEmpty()) {
+            return List.of();
+        }
+        Set<String> normalized = new HashSet<>();
+        for (String id : favoriteIds) {
+            if (id != null && !id.isBlank()) {
+                normalized.add(id.trim().toLowerCase(Locale.ROOT));
+            }
+        }
+        if (normalized.isEmpty()) {
+            return List.of();
+        }
+        Map<String, ObjectArrayList<ConstructionDefinition>> byGroup = new Object2ObjectOpenHashMap<>();
+        for (ConstructionDefinition def : catalog.list()) {
+            if (!isCraftable(def)) {
+                continue;
+            }
+            if (!matchesStyleFilter(def, activeStyleFilters)) {
+                continue;
+            }
+            String groupKey = catalog.resolveGameplayConstructionId(def.getId());
+            if (groupKey.isBlank()) {
+                groupKey = def.getId();
+            }
+            if (!normalized.contains(groupKey.trim().toLowerCase(Locale.ROOT))) {
+                continue;
+            }
+            byGroup.computeIfAbsent(groupKey, k -> new ObjectArrayList<>()).add(def);
+        }
         ObjectArrayList<GroupEntry> groups = new ObjectArrayList<>();
         for (Map.Entry<String, ObjectArrayList<ConstructionDefinition>> e : byGroup.entrySet()) {
             String groupKey = e.getKey();

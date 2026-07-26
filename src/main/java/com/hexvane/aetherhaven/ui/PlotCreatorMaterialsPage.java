@@ -54,7 +54,9 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
 
     private void bindStaticButtons(@Nonnull UIEventBuilder eventBuilder) {
         bind(eventBuilder, "#AddFromInventoryButton", "AddFromInventory");
+        bind(eventBuilder, "#AddResourceTypeButton", "AddResourceType");
         bind(eventBuilder, "#FillFromBuildShapeButton", "FillFromBuildShape");
+        bind(eventBuilder, "#SuggestResourcesButton", "SuggestResources");
         bind(eventBuilder, "#ClearPrefabMaterialsButton", "ClearPrefabMaterials");
         bind(eventBuilder, "#MaterialsPrevPageButton", "MaterialsPrevPage");
         bind(eventBuilder, "#MaterialsNextPageButton", "MaterialsNextPage");
@@ -80,7 +82,9 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
         b.set("#StepHint.TextSpans", Message.translation(MSG + ".step.MATERIALS.hint"));
         b.set("#DetailHint.TextSpans", Message.translation(MSG + ".step.MATERIALS.detail"));
         b.set("#AddFromInventoryButton.TextSpans", Message.translation(MSG + ".button.addFromInventory"));
+        b.set("#AddResourceTypeButton.TextSpans", Message.translation(MSG + ".button.addResourceType"));
         b.set("#FillFromBuildShapeButton.TextSpans", Message.translation(MSG + ".button.useBuildShape"));
+        b.set("#SuggestResourcesButton.TextSpans", Message.translation(MSG + ".button.suggestResources"));
         b.set("#ClearPrefabMaterialsButton.TextSpans", Message.translation(MSG + ".button.clearPrefabMaterials"));
         b.set("#CloseButton.TextSpans", Message.translation(MSG + ".button.close"));
 
@@ -157,8 +161,17 @@ public final class PlotCreatorMaterialsPage extends AetherhavenInteractiveCustom
             PlotCreatorMaterialsActions.openManualDepositChest(session, playerRef, ref, store);
             return;
         }
+        if ("AddResourceType".equals(data.action)) {
+            PlotCreatorMaterialsActions.openResourceTypePicker(session, playerRef, ref, store);
+            return;
+        }
         if ("FillFromBuildShape".equals(data.action)) {
             PlotCreatorMaterialsActions.requestFillFromBuildShape(session, playerRef);
+            refreshIfOpen(ref, store);
+            return;
+        }
+        if ("SuggestResources".equals(data.action)) {
+            PlotCreatorMaterialsActions.requestSuggestResources(session, playerRef);
             refreshIfOpen(ref, store);
             return;
         }

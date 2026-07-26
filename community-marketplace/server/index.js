@@ -31,6 +31,7 @@ import { createSubmissionRateLimit } from "./submissionRateLimit.js";
 import { createVoteRateLimit } from "./voteRateLimit.js";
 import { createDownloadRateLimit } from "./downloadRateLimit.js";
 import { createVotes } from "./votes.js";
+import { createFavorites } from "./favorites.js";
 import { createDownloads } from "./downloads.js";
 import { notifyBuildingApproved, notifyBuildingPending } from "./discordNotify.js";
 import { processScreenshot, ScreenshotProcessingError } from "./imageProcessing.js";
@@ -72,6 +73,7 @@ const ADSENSE_SLOT_WIKI = (process.env.ADSENSE_SLOT_WIKI || "").trim();
 const dataDir = process.env.DATA_DIR || path.join(__dirname, "..", "data");
 const storage = createStorage(dataDir);
 const votes = createVotes(dataDir);
+const favorites = createFavorites(dataDir);
 const downloads = createDownloads(dataDir);
 const oidc = createOidc({
   issuer: process.env.HYTALE_OIDC_ISSUER || "https://connect.accounts.hytale.com",
@@ -407,10 +409,6 @@ function buildManifestEntry(id, meta, prefabBytes) {
   return entry;
 }
 
-/**
- * @param {string} buildingId
- * @returns {string}
- */
 function readApprovedCoverScreenshotId(buildingId) {
   try {
     const paths = storage.approvedPaths(buildingId);
@@ -422,6 +420,27 @@ function readApprovedCoverScreenshotId(buildingId) {
   } catch {
     return "";
   }
+}
+
+/** Keeps the marketplace card cover when approving an update to an already published building. */
+function resolvePreservedCoverScreenshotId(buildingId) {
+  const candidates = [];
+  const fromMeta = readApprovedCoverScreenshotId(buildingId);
+  if (fromMeta) {
+    candidates.push(fromMeta);
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((candidate) => candidate.id === buildingId);
+  const fromManifest = String(entry?.coverScreenshotId || "").trim();
+  if (fromManifest) {
+    candidates.push(fromManifest);
+  }
+  for (const coverScreenshotId of candidates) {
+    if (isValidCoverScreenshot(buildingId, coverScreenshotId)) {
+      return coverScreenshotId;
+    }
+  }
+  return "";
 }
 
 /**
@@ -566,6 +585,7 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
   }
 
   const approved = storage.approvedPaths(id);
+  const preservedCoverScreenshotId = resolvePreservedCoverScreenshotId(id);
   fs.mkdirSync(approved.dir, { recursive: true });
   fs.copyFileSync(path.join(pendingDir, "building.json"), approved.building);
   fs.copyFileSync(path.join(pendingDir, "prefab.prefab.json"), approved.prefab);
@@ -598,6 +618,9 @@ function approveSubmission(submissionId, requestedId, requiredModsOverride) {
     version: meta.version || "1",
   };
   approvedMeta.requiredMods = normalizeRequiredMods(approvedMeta.requiredMods);
+  if (preservedCoverScreenshotId) {
+    approvedMeta.coverScreenshotId = preservedCoverScreenshotId;
+  }
   fs.writeFileSync(approved.meta, JSON.stringify(approvedMeta, null, 2));
 
   const prefabBytes = fs.statSync(approved.prefab).size;
@@ -659,6 +682,7 @@ function deleteApprovedBuilding(buildingId) {
   manifest.version = (manifest.version || 0) + 1;
   storage.writeManifest(manifest);
   votes.removeBuilding(id);
+  favorites.removeBuilding(id);
   downloads.removeBuilding(id);
   return { status: 200, body: { id, status: "deleted" } };
 }
@@ -910,7 +934,7 @@ function sortCatalogEntries(entries) {
   });
 }
 
-function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = null) {
+function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = null, userFavorites = null) {
   const voteCounts = votes.getCounts();
   const downloadCounts = downloads.getCounts();
   return (manifest.entries || []).map((e) => {
@@ -966,8 +990,22 @@ function enrichManifestEntries(manifest, clientBlockIdVersion = 0, userVotes = n
     if (userVotes) {
       entry.userHasUpvoted = userVotes.has(e.id);
     }
+    if (userFavorites) {
+      entry.userHasFavorited = userFavorites.has(e.id);
+    }
     return entry;
   });
+}
+
+function profileUuidForManifest(req) {
+  const session = sessionProfileUuid(req);
+  if (session) {
+    return session;
+  }
+  const inGame = String(req.get("X-Player-Uuid") || "")
+    .trim()
+    .toLowerCase();
+  return UUID_RE.test(inGame) ? inGame : "";
 }
 
 function sendManifest(req, res) {
@@ -975,11 +1013,32 @@ function sendManifest(req, res) {
   const manifest = storage.readManifest();
   const voterUuid = sessionProfileUuid(req);
   const userVotes = voterUuid ? votes.getUserVotes(voterUuid) : null;
-  const entries = sortCatalogEntries(enrichManifestEntries(manifest, clientBlockIdVersion, userVotes));
+  const profileUuid = profileUuidForManifest(req);
+  const userFavorites = profileUuid ? favorites.getUserFavorites(profileUuid) : null;
+  const entries = sortCatalogEntries(
+    enrichManifestEntries(manifest, clientBlockIdVersion, userVotes, userFavorites)
+  );
   res.json({
     version: manifest.version,
     entries,
   });
+}
+
+function toggleBuildingFavorite(buildingId, profileUuid) {
+  const id = normalizeCommunityId(buildingId);
+  if (!id) {
+    return { status: 400, body: { error: "invalid_id" } };
+  }
+  const manifest = storage.readManifest();
+  const entry = (manifest.entries || []).find((e) => e.id === id);
+  if (!entry) {
+    return { status: 404, body: { error: "not_found" } };
+  }
+  if (!profileUuid) {
+    return { status: 400, body: { error: "profile_missing" } };
+  }
+  const result = favorites.toggleFavorite(id, profileUuid);
+  return { status: 200, body: result };
 }
 
 function toggleBuildingUpvote(buildingId, webUser) {
@@ -2381,6 +2440,26 @@ app.post("/api/v1/buildings/:id/download", downloadRateLimit, (req, res) => {
 
 app.post("/api/buildings/:id/upvote", requireWebUser, voteRateLimit, (req, res) => {
   const result = toggleBuildingUpvote(req.params.id, sessionWebUser(req));
+  res.status(result.status).json(result.body);
+});
+
+app.get("/api/me/favorites", (req, res) => {
+  const profileUuid = profileUuidForManifest(req);
+  if (!profileUuid) {
+    res.status(401).json({ error: "auth_required" });
+    return;
+  }
+  const buildingIds = [...favorites.getUserFavorites(profileUuid)];
+  res.json({ buildingIds });
+});
+
+app.post("/api/buildings/:id/favorite", requireWebUser, (req, res) => {
+  const result = toggleBuildingFavorite(req.params.id, sessionProfileUuid(req));
+  res.status(result.status).json(result.body);
+});
+
+app.post("/api/v1/buildings/:id/favorite", requireInGamePlayer, (req, res) => {
+  const result = toggleBuildingFavorite(req.params.id, inGamePlayerUser(req).profileUuid);
   res.status(result.status).json(result.body);
 });
 

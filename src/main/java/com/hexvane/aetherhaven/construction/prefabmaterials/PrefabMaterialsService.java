@@ -17,14 +17,23 @@ public final class PrefabMaterialsService {
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final PrefabMaterialsGenerator generator;
+    private final SuggestedResourceMaterialsGenerator suggestedGenerator;
 
-    public PrefabMaterialsService(@Nonnull PrefabMaterialsGenerator generator) {
+    public PrefabMaterialsService(
+        @Nonnull PrefabMaterialsGenerator generator,
+        @Nonnull SuggestedResourceMaterialsGenerator suggestedGenerator
+    ) {
         this.generator = generator;
+        this.suggestedGenerator = suggestedGenerator;
     }
 
     @Nonnull
     public static PrefabMaterialsService fromClassLoader(@Nonnull ClassLoader classLoader) {
-        return new PrefabMaterialsService(PrefabMaterialsGenerator.fromClasspath(classLoader));
+        PrefabMaterialConversionTable conversions = PrefabMaterialConversionTable.loadFromClasspath(classLoader);
+        return new PrefabMaterialsService(
+            new PrefabMaterialsGenerator(conversions),
+            new SuggestedResourceMaterialsGenerator(conversions)
+        );
     }
 
     /** Writes PrefabMaterials for every construction in the catalog that has a resolvable prefab. */
@@ -78,6 +87,23 @@ public final class PrefabMaterialsService {
             return generator.generateFromPrefabPath(prefabFile);
         } catch (Exception e) {
             LOGGER.atWarning().withCause(e).log("Failed to read prefab for materials: %s", prefabPathKey);
+            return List.of();
+        }
+    }
+
+    @Nonnull
+    public List<MaterialRequirement> generateSuggestedResourcesFromSessionPrefab(
+        @Nonnull String prefabPathKey,
+        @Nonnull Path dataDirectory
+    ) {
+        Path prefabFile = resolvePrefabFile(prefabPathKey, dataDirectory);
+        if (prefabFile == null || !Files.isRegularFile(prefabFile)) {
+            return List.of();
+        }
+        try {
+            return suggestedGenerator.generateFromPrefabPath(prefabFile);
+        } catch (Exception e) {
+            LOGGER.atWarning().withCause(e).log("Failed to read prefab for suggested resources: %s", prefabPathKey);
             return List.of();
         }
     }
